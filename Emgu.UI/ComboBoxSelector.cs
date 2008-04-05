@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Emgu.UI
+{
+    public partial class ComboBoxSelector : UserControl
+    {
+        public ComboBoxSelector()
+        {
+            InitializeComponent();
+            comboBox1.DataSourceChanged += new EventHandler(
+                delegate
+                {                  
+                    System.Collections.IEnumerable e = (System.Collections.IEnumerable)comboBox1.DataSource;
+
+                    int count = 0;
+                    if (e != null)
+                    {
+                        System.Collections.IEnumerator etr = e.GetEnumerator();
+                        etr.Reset();
+                        while (etr.MoveNext())
+                            count++;
+                    }
+
+                    ItemSizeLabel.Text = String.Format("{0}", count);
+                });
+            comboBox1.SelectedIndexChanged += new EventHandler(
+                delegate
+                {
+                    NextButton.Enabled = (comboBox1.SelectedIndex != comboBox1.Items.Count - 1);
+                    PreviousButton.Enabled = (comboBox1.SelectedIndex != 0);
+                    SelectedIndexLabel.Text = String.Format("{0}", comboBox1.SelectedIndex+1);
+                });
+        }
+
+        public ComboBox ComboBox
+        {
+            get
+            {
+                return comboBox1;
+            }
+        }
+
+        public void Clear()
+        {
+            comboBox1.DataSource = null;
+            comboBox1.SelectedIndex = -1;
+            NextButton.Enabled = false;
+            PreviousButton.Enabled = false;
+            comboBox1.Text = String.Empty;
+        }
+
+        private void NextButton_Click_1(object sender, EventArgs e)
+        {
+            comboBox1.SelectedIndex = comboBox1.SelectedIndex + 1;
+        }
+
+        private void PreviousButton_Click_1(object sender, EventArgs e)
+        {
+            comboBox1.SelectedIndex = comboBox1.SelectedIndex - 1;
+        }
+    }
+}

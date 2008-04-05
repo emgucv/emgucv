@@ -1,0 +1,168 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.CV</RootNamespace>
+    <AssemblyName>Emgu.CV</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Emgu.CV.xml</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Linux|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug Linux\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LINUX</DefineConstants>
+    <DocumentationFile>..\bin\Emgu.CV.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Linux|AnyCPU' ">
+    <OutputPath>bin\Release Linux\</OutputPath>
+    <DefineConstants>TRACE;LINUX</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\zlib.net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Array.cs" />
+    <Compile Include="CameraCalibration\CameraCalibration.cs" />
+    <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
+    <Compile Include="CameraCalibration\IntrinsicCameraParameters.cs" />
+    <Compile Include="Color\Bgr.cs" />
+    <Compile Include="Color\ColorInfo.cs" />
+    <Compile Include="Color\Gray.cs" />
+    <Compile Include="Color\Hls.cs" />
+    <Compile Include="Color\Hsv.cs" />
+    <Compile Include="Color\Lab.cs" />
+    <Compile Include="Color\Luv.cs" />
+    <Compile Include="Color\Xyz.cs" />
+    <Compile Include="Color\Ycc.cs" />
+    <Compile Include="Contour.cs" />
+    <Compile Include="MemStorage.cs" />
+    <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvContour.cs" />
+    <Compile Include="PInvoke\CvType\MCvFont.cs" />
+    <Compile Include="PInvoke\CvType\MCvHistogram.cs" />
+    <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
+    <Compile Include="PInvoke\CvType\MCvMat.cs" />
+    <Compile Include="PInvoke\CvType\MCvMatND.cs" />
+    <Compile Include="PInvoke\CvType\MCvMoments.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint2D32f.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint3D32f.cs" />
+    <Compile Include="PInvoke\CvType\MCvRect.cs" />
+    <Compile Include="PInvoke\CvType\MCvScalar.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeq.cs" />
+    <Compile Include="PInvoke\CvType\MCvSize.cs" />
+    <Compile Include="PInvoke\CvType\MCvSize2D32f.cs" />
+    <Compile Include="PInvoke\CvType\MCvSlice.cs" />
+    <Compile Include="PInvoke\CvType\MCvTermCriteria.cs" />
+    <Compile Include="PInvoke\CvType\MIplImage.cs" />
+    <Compile Include="RotationMatrix2D.cs" />
+    <Compile Include="CameraCalibration\RotationVector.cs" />
+    <Compile Include="Shape\Box2D.cs" />
+    <Compile Include="Capture\Capture.cs" />
+    <Compile Include="Capture\CaptureClient.cs" />
+    <Compile Include="Shape\Circle.cs" />
+    <Compile Include="Color\ColorType.cs" />
+    <Compile Include="Seq.cs" />
+    <Compile Include="ConvolutionKernelF.cs" />
+    <Compile Include="PInvoke\CvEnum.cs" />
+    <Compile Include="PInvoke\CvInvoke.cs" />
+    <Compile Include="Capture\DuplexCaptureCallback.cs" />
+    <Compile Include="Shape\Ellipse.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="HaarCascade.cs" />
+    <Compile Include="Histogram.cs" />
+    <Compile Include="Capture\ICapture.cs" />
+    <Compile Include="Capture\IDuplexCapture.cs" />
+    <Compile Include="Capture\IDuplexCaptureCallback.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="PointAndLine\Line2D.cs" />
+    <Compile Include="PointAndLine\LineSegment2D.cs" />
+    <Compile Include="PointAndLine\PointCollection.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Moment.cs" />
+    <Compile Include="PointAndLine\Point.cs" />
+    <Compile Include="PointAndLine\Point2D.cs" />
+    <Compile Include="PointAndLine\Point3D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Shape\Rectangle.cs" />
+    <Compile Include="TimedImage.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="VideoWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.Utils\Emgu.Utils.csproj">
+      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
+      <Name>Emgu.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Emgu.CV.License.txt" />
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

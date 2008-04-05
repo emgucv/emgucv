@@ -1,0 +1,190 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
+
+namespace Emgu.CV
+{
+    ///<summary>
+    ///The Array class that wrap around CvArr in OpenCV
+    ///</summary>
+    [DataContract]
+    public abstract class Array : UnmanagedObject
+    {
+        ///<summary> The pointer to the internal structure </summary>
+        [XmlIgnore]
+        public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+
+        ///<summary> The width of the Array </summary>
+        public abstract int Width { get; }
+        ///<summary> The height of the Array </summary>
+        public abstract int Height { get; }
+
+        /// <summary>
+        /// Calculates and returns the Euclidean dot product of two arrays.
+        /// src1•src2 = sumI(src1(I)*src2(I))
+        /// In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.
+        /// </summary>
+        /// <param name="src2">The other Array to apply dot product with</param>
+        /// <returns>src1•src2</returns>
+        public double DotProduct(Array src2)
+        {
+            return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
+        }
+
+        ///<summary> 
+        ///Set the element of the Array to <paramref name="val"/>
+        ///</summary>
+        ///<param name="val"> The value to be set for each element of the Array </param>
+        public void SetValue(double val)
+        {
+            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), IntPtr.Zero);
+        }
+
+        ///<summary>
+        ///Set the element of the Array to <paramref name="val"/>, using the <paramref name="mask"/>
+        ///</summary>
+        ///<param name="val">The value to be set</param>
+        ///<param name="mask">The mask for the operation</param>
+        public void SetValue(double val, Array mask)
+        {
+            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), mask.Ptr);
+        }
+
+        /// <summary>
+        /// Inplace multiply elements of the Array by <paramref name="scale"/>
+        /// </summary>
+        /// <param name="scale">The scale to be multiplyed</param>
+        public void _Mul(double scale)
+        {
+            CvInvoke.cvConvertScale(Ptr, Ptr, scale, 0.0);
+        }
+
+        /// <summary>
+        /// Inplace elementwise multiply the current Array with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to be elementwise multiplied with</param>
+        public void _Mul(Array src2)
+        {
+            CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
+        }
+
+        ///<summary> 
+        ///Inplace compute the complement for all Array Elements
+        ///</summary>
+        public void _Not()
+        {
+            CvInvoke.cvNot(Ptr, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace compute the elementwise maximum value with <paramref name="val"/>
+        /// </summary>
+        /// <param name="val">The value to be compare with</param>
+        public void _Max(double val)
+        {
+            CvInvoke.cvMaxS(Ptr, val, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace elementwise maximize the current Array with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to be elementwise maximized with this array</param>
+        public void _Max(Array src2)
+        {
+            CvInvoke.cvMax(Ptr, src2.Ptr, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace And operation with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to perform And operation</param>
+        public void _And(Array src2)
+        {
+            CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
+        }
+
+        /// <summary>
+        /// Inplace Or operation with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to perform And operation</param>
+        public void _Or(Array src2)
+        {
+            CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
+        }
+
+        ///<summary>
+        ///Inplace compute the elementwise minimum value 
+        ///</summary>
+        public void _Min(double val)
+        {
+            CvInvoke.cvMinS(Ptr, val, Ptr);
+        }
+
+        ///<summary> 
+        ///The norm of this Array 
+        ///</summary>
+        public double Norm
+        {
+            get
+            {
+                return CvInvoke.cvNorm(Ptr, IntPtr.Zero, 4, IntPtr.Zero);
+            }
+        }
+
+        /// <summary>
+        /// Inplace fills Array with uniformly distributed random numbers
+        /// </summary>
+        /// <param name="seed">Seed for the random number generator</param>
+        /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
+        /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
+        public void _RandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue)
+        {
+            CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_UNI, floorValue, ceilingValue);
+        }
+
+        /// <summary>
+        /// Inplace fills Array with normally distributed random numbers
+        /// </summary>
+        /// <param name="seed">Seed for the random number generator</param>
+        /// <param name="mean">the mean value of random numbers</param>
+        /// <param name="std"> the standard deviation of random numbers</param>
+        public void _RandNormal(UInt64 seed, MCvScalar mean, MCvScalar std)
+        {
+            CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, std);
+        }
+
+        ///<summary>
+        ///Determine if the size (width and height) of <i>this</i> Array
+        ///equals the size of <paramref name="src2"/>
+        ///</summary>
+        ///<param name="src2"> The other Array to compare size with</param>
+        ///<returns> True if the two Array has the same size</returns>
+        public bool EqualSize(Array src2)
+        {
+            return (Width == src2.Width && Height == src2.Height);
+        }
+
+        /// <summary>
+        /// Initializs scaled identity matrix
+        /// </summary>
+        /// <param name="value"></param>
+        public void _SetIdentity(MCvScalar value)
+        {
+            CvInvoke.cvSetIdentity(Ptr, value);
+        }
+
+        /// <summary>
+        /// sum of diagonal elements of the matrix 
+        /// </summary>
+        public MCvScalar Trace
+        {
+            get
+            {
+                return CvInvoke.cvTrace(Ptr);
+            }
+        }
+
+    };
+}
