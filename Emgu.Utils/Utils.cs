@@ -222,11 +222,11 @@ namespace Emgu
             return res;
         }
 
-        public static void CopyVector<D>(D[] data, IntPtr ptr)
+        public static void CopyVector<D>(D[] src, IntPtr dest)
         {
-            int size = Marshal.SizeOf( typeof(D) ) * data.Length;
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            Emgu.Utils.memcpy(ptr, handle.AddrOfPinnedObject(), size);
+            int size = Marshal.SizeOf( typeof(D) ) * src.Length;
+            GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
+            Emgu.Utils.memcpy(dest, handle.AddrOfPinnedObject(), size);
             handle.Free();
         }
 
