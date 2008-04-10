@@ -155,19 +155,6 @@ namespace Emgu
             
             return res.ToString();
         }
-
-        /// <summary>
-        /// Read a dicom file and convert it to XmlDocument
-        /// </summary>
-        /// <param name="fileName">The path of the dicom file that is going to be read</param>
-        /// <returns></returns>
-        public static XmlDocument DicomFileToXml(string fileName)
-        {
-            String output = CmdExecutor.execute("dcm2xml.exe", fileName);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(output);
-            return doc;
-        }
         
         /// <summary>
         /// Merges two byte vector into one
