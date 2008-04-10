@@ -8,7 +8,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.0"
-		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;"
+		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;{7C2C5325-8235-4A24-9C67-6BD79A4679E2}|Emgu.Utils.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
 		Debug.AspNetCompiler.PhysicalPath = "Emgu.CV.Example\WebDynamicImage\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\WebDynamicImage\"
