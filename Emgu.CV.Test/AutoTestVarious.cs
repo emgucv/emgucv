@@ -25,6 +25,16 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void Test_cvClipLine()
+        {
+            MCvPoint m1 = new MCvPoint(-1, 10);
+            MCvPoint m2 = new MCvPoint(100, 10);
+            int inside = CvInvoke.cvClipLine(new MCvSize(20, 20), ref m1, ref m2);
+            Assert.AreEqual(0, m1.x);
+            Assert.AreEqual(19, m2.x);
+        }
+
+        [Test]
         public void Test_Lookup()
         {
             double[] b = new double[4] { 0.0, 1.0, 2.0, 3.0 };
