@@ -1,10 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{2CE54A7B-8BB5-41A6-8A96-9D336C82C357}"
-	ProjectSection(SolutionItems) = preProject
-		lib\zlib.net.dll = lib\zlib.net.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Utils", "Emgu.Utils\Emgu.Utils.csproj", "{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.UI", "Emgu.UI\Emgu.UI.csproj", "{48D846E6-61A2-4B9C-83B1-DB73F977A626}"
