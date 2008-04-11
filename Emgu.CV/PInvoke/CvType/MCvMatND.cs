@@ -14,23 +14,23 @@ namespace Emgu.CV
         /// <summary>
         /// 
         /// </summary>
-        int type;
+        public int type;
         /// <summary>
         /// 
         /// </summary>
-        int dims;
+        public int dims;
         /// <summary>
         /// 
         /// </summary>
-        IntPtr refcount;
+        public IntPtr refcount;
         /// <summary>
         /// 
         /// </summary>
-        int hdr_refcount;
+        public int hdr_refcount;
         /// <summary>
         /// 
         /// </summary>
-        IntPtr data;
+        public IntPtr data;
         /// <summary>
         /// 
         /// </summary>
