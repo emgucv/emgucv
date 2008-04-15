@@ -23,8 +23,8 @@ namespace Emgu.CV
         /// <summary>
         /// 
         /// </summary>
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)CvEnum.GENERAL.CV_MAX_DIM)]
-        public IntPtr[] thresh;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)CvEnum.GENERAL.CV_MAX_DIM*2)]
+        public float[] thresh;
 
         /// <summary>
         /// 
