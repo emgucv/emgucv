@@ -82,6 +82,19 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Convert this sequence to array
+        /// </summary>
+        /// <returns>the array representation of this sequence</returns>
+        public T[] ToArray()
+        {
+            int total = Total;
+            T[] res = new T[total];
+            for (int i = 0; i < total; i++)
+                res[i] = this[i];
+            return res;
+        }
+
+        /// <summary>
         /// return an enumerator of the elements in the sequence
         /// </summary>
         /// <returns>an enumerator of the elements in the sequence</returns>
