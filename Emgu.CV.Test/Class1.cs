@@ -110,9 +110,10 @@ namespace Emgu.CV.Test
             List<Point2D<int>> pts = new List<Point2D<int>>();
             for (int i = 0; i <= 100; i++)
             {
-                Point2D<int> p = new Point2D<int>(r.Next(100) + 20, r.Next(300) + 50);
-                img.SetValue(p, new Gray(255.0));
-                pts.Add(p);
+                int x = r.Next(100) + 20; 
+                int y = r.Next(300) + 50;
+                img[y,x] = new Gray(255.0);
+                pts.Add(new Point2D<int>(x,y));
             }
 
             Ellipse<float> e = PointCollection<int>.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());

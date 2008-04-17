@@ -32,7 +32,7 @@ namespace Emgu.CV.Test
             for (int i = 0; i < img1.Width; i++)
                 for (int j = 0; j < img1.Height; j++)
                 {
-                    Bgr c = img1.GetValue(new Point2D<int>(i, j));
+                    Bgr c = img1[j,i];
                     Assert.AreEqual(8.0, c[0]);
                     Assert.AreEqual(1.0, c[1]);
                     Assert.AreEqual(2.0, c[2]);
@@ -50,7 +50,7 @@ namespace Emgu.CV.Test
                 img2._Max(120.0);
                 for (int i = 0; i < img2.Width; i++)
                     for (int j = 0; j < img2.Height; j++)
-                        Assert.GreaterOrEqual(img2.GetValue(new Point2D<int>(i, j)).Intensity, 120.0);
+                        Assert.GreaterOrEqual(img2[j,i].Intensity, 120.0);
             }
 
             using (Image<Gray, Byte> img2 = img1.Convert<Byte>(delegate(Byte f) { return (Byte)r.Next(255); }))
@@ -58,7 +58,7 @@ namespace Emgu.CV.Test
                 img2._Min(120.0);
                 for (int i = 0; i < img2.Width; i++)
                     for (int j = 0; j < img2.Height; j++)
-                        Assert.GreaterOrEqual(120.0, img2.GetValue(new Point2D<int>(i, j)).Intensity);
+                        Assert.GreaterOrEqual(120.0, img2[j,i].Intensity);
             }
 
             using (Image<Gray, Byte> img2 = img1.Convert<Byte>(delegate(Byte f) { return (Byte)r.Next(255); }))
@@ -68,8 +68,8 @@ namespace Emgu.CV.Test
                 for (int i = 0; i < img2.Width; i++)
                     for (int j = 0; j < img2.Height; j++)
                     {
-                        Assert.GreaterOrEqual(img4.GetValue(new Point2D<int>(i, j)).Intensity, img2.GetValue(new Point2D<int>(i, j)).Intensity);
-                        Assert.GreaterOrEqual(img4.GetValue(new Point2D<int>(i, j)).Intensity, img3.GetValue(new Point2D<int>(i, j)).Intensity);
+                        Assert.GreaterOrEqual(img4[j,i].Intensity, img2[j,i].Intensity);
+                        Assert.GreaterOrEqual(img4[j,i].Intensity, img3[j,i].Intensity);
                     }
             }
 
