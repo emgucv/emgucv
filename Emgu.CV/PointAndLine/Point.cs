@@ -29,6 +29,7 @@ namespace Emgu.CV
             _coordinate = new T[dimension];
             _coordinate.Initialize();
         }
+
         ///<summary> Create a point using the specific data</summary>
         ///<param name="data"> The array of data that define this point</param>
         public Point(T[] data)
