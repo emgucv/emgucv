@@ -68,7 +68,8 @@ namespace Emgu.CV.Test
                 for (int i = 0; i < img2.Width; i++)
                     for (int j = 0; j < img2.Height; j++)
                     {
-                        Assert.GreaterOrEqual(img4[j,i].Intensity, img2[j,i].Intensity);
+                        Point2D<int> location = new Point2D<int>(i, j);
+                        Assert.GreaterOrEqual(img4[location].Intensity, img2[location].Intensity);
                         Assert.GreaterOrEqual(img4[j,i].Intensity, img3[j,i].Intensity);
                     }
             }
