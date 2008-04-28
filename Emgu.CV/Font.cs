@@ -18,8 +18,8 @@ namespace Emgu.CV
         /// <param name="vscale">the vertical scale of the fonr</param>
         public Font(CvEnum.FONT type, double hscale, double vscale)
         {
-            _ptr = Marshal.AllocHGlobal(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvFont)));
-            CvInvoke.cvInitFont(_ptr, type, hscale, vscale, 0, 1, CvEnum.LINE_TYPE.EIGHT_CONNECTED);
+            m_ptr = Marshal.AllocHGlobal(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvFont)));
+            CvInvoke.cvInitFont(m_ptr, type, hscale, vscale, 0, 1, CvEnum.LINE_TYPE.EIGHT_CONNECTED);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Emgu.CV
         /// </summary>
         public IntPtr Ptr
         {
-            get { return _ptr; }
+            get { return m_ptr; }
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            Marshal.FreeHGlobal(_ptr);
+            Marshal.FreeHGlobal(m_ptr);
         }
     }
 }

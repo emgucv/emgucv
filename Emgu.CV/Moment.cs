@@ -13,14 +13,14 @@ namespace Emgu.CV
         /// <summary>
         /// A pointer to the CvMoment structure
         /// </summary>
-        public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+        public IntPtr Ptr { get { return m_ptr; } set { m_ptr = value; } }
 
         /// <summary>
         /// Create a CvMoment structure
         /// </summary>
         public Moment()
         {
-            _ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMoments)));
+            m_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMoments)));
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Emgu.CV
         /// </summary>
         public MCvMoments CvMoment
         {
-            get { return (MCvMoments)Marshal.PtrToStructure(_ptr, typeof(MCvMoments)); }
+            get { return (MCvMoments)Marshal.PtrToStructure(m_ptr, typeof(MCvMoments)); }
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            Marshal.FreeHGlobal(_ptr);
+            Marshal.FreeHGlobal(m_ptr);
         }
     }
 }

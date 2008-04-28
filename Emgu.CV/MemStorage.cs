@@ -14,7 +14,7 @@ namespace Emgu.CV
         /// </summary>
         public MemStorage()
         {
-            _ptr = CvInvoke.cvCreateMemStorage(0);
+            m_ptr = CvInvoke.cvCreateMemStorage(0);
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseMemStorage(ref _ptr);
+            CvInvoke.cvReleaseMemStorage(ref m_ptr);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Emgu.CV
         /// </summary>
         public IntPtr Ptr
         {
-            get { return _ptr;  }
+            get { return m_ptr;  }
         }
 
     }

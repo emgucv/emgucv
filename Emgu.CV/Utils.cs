@@ -9,7 +9,7 @@ namespace Emgu.CV
     /// <summary>
     /// Utilities class
     /// </summary>
-    public class Utils
+    public static class Utils
     {
         public static Image<Gray, D> ConvertToImage<D>(D[][] data)
         {

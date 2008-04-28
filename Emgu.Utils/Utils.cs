@@ -17,7 +17,7 @@ namespace Emgu
         /// <summary>
         /// A mothod that contains no input and returns nothing
         /// </summary>
-        public delegate void VoidMethod();
+        public delegate void Action();
 
         /// <summary>
         /// An Action that accepts two input and returns nothing
@@ -52,19 +52,11 @@ namespace Emgu
         /// <param name="o4">The fourth input parameter</param>
         public delegate void Action<TInput1, TInput2, TInput3, TInput4>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
 
-        public delegate TOutput Converter<TInput1, TInput2, TOutput>(TInput1 o1, TInput2 o2);
+        public delegate TOutput Func<TInput1, TInput2, TOutput>(TInput1 o1, TInput2 o2);
 
-        public delegate TOutput Converter<TInput1, TInput2, TInput3, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3);
+        public delegate TOutput Func<TInput1, TInput2, TInput3, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3);
 
-        public delegate TOutput Converter<TInput1, TInput2, TInput3, TInput4, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
-
-        public static T[] ArrayReverseCopy<T>(T[] inArray)
-        {
-            T[] res = new T[inArray.Length];
-            Array.Copy(inArray, res, inArray.Length);
-            Array.Reverse(res);
-            return res;
-        }
+        public delegate TOutput Func<TInput1, TInput2, TInput3, TInput4, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
 
         /// <summary>
         /// Convert an object to an xml document
@@ -170,7 +162,7 @@ namespace Emgu
             return c;
         }
 
-        public static TOutput[] Operate<TInput1, TInput2, TOutput>(TInput1[] param1, TInput2[] param2, Converter<TInput1, TInput2, TOutput> func)
+        public static TOutput[] Operate<TInput1, TInput2, TOutput>(TInput1[] param1, TInput2[] param2, Func<TInput1, TInput2, TOutput> func)
         {
             int size = param1.Length;
             if (size != param2.Length) 

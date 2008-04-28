@@ -31,8 +31,8 @@ namespace Emgu.CV
         {
 #if TEST_CAPTURE
 #else
-            _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
-            if (_ptr == IntPtr.Zero)
+            m_ptr = CvInvoke.cvCreateCameraCapture(camIndex);
+            if (m_ptr == IntPtr.Zero)
             {
                 throw new Emgu.Exception(Emgu.ExceptionHeader.MediumException, "Error: Unable to connect to camera");
             }
@@ -45,8 +45,8 @@ namespace Emgu.CV
         /// <param name="filename">The file name of the movie</param>
         public Capture(String filename)
         {
-            _ptr = CvInvoke.cvCreateFileCapture(filename);
-            if (_ptr == IntPtr.Zero)
+            m_ptr = CvInvoke.cvCreateFileCapture(filename);
+            if (m_ptr == IntPtr.Zero)
             {
                 throw new Emgu.Exception(Emgu.ExceptionHeader.MediumException, "Unable to create capture from file:" + filename);
             }
@@ -59,7 +59,7 @@ namespace Emgu.CV
         {
 #if TEST_CAPTURE
 #else
-            CvInvoke.cvReleaseCapture(ref _ptr);
+            CvInvoke.cvReleaseCapture(ref m_ptr);
 #endif
         }
 
@@ -90,7 +90,7 @@ namespace Emgu.CV
         /// <returns>The value of the specific property</returns>
         public double GetCaptureProperty(CvEnum.CAP_PROP index)
         {
-            return CvInvoke.cvGetCaptureProperty(_ptr, index);
+            return CvInvoke.cvGetCaptureProperty(m_ptr, index);
         }
 
         ///<summary> Capture a RGB image frame</summary>
@@ -106,7 +106,7 @@ namespace Emgu.CV
             return img;
 #else
 
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+            IntPtr img = CvInvoke.cvQueryFrame(m_ptr);
             Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width, Height);
             CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
             return res;
@@ -123,7 +123,7 @@ namespace Emgu.CV
 #if TEST_CAPTURE
             return QueryFrame().PyrDown();
 #else
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+            IntPtr img = CvInvoke.cvQueryFrame(m_ptr);
             Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width >> 1, Height >> 1);
             CvInvoke.cvPyrDown(img, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
             return res;
@@ -174,7 +174,7 @@ namespace Emgu.CV
         ///<returns> A timestamped Bgr image frame</returns>
         public TimedImage<Bgr, Byte> QueryTimedFrame()
         {
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+            IntPtr img = CvInvoke.cvQueryFrame(m_ptr);
             TimedImage<Bgr, Byte> res = new TimedImage<Bgr, Byte>(Width, Height);
             CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
             res.Timestamp = System.DateTime.Now;

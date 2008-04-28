@@ -14,7 +14,7 @@ namespace Emgu.CV
     {
         ///<summary> The pointer to the internal structure </summary>
         [XmlIgnore]
-        public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+        public IntPtr Ptr { get { return m_ptr; } set { m_ptr = value; } }
 
         ///<summary> The width of the Array </summary>
         public abstract int Width { get; }
@@ -39,7 +39,7 @@ namespace Emgu.CV
         ///<param name="val"> The value to be set for each element of the Array </param>
         public void SetValue(double val)
         {
-            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), IntPtr.Zero);
+            CvInvoke.cvSet( m_ptr, new MCvScalar(val, val, val, val), IntPtr.Zero);
         }
 
         ///<summary>
@@ -49,7 +49,7 @@ namespace Emgu.CV
         ///<param name="mask">The mask for the operation</param>
         public void SetValue(double val, Array mask)
         {
-            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), mask.Ptr);
+            CvInvoke.cvSet( m_ptr, new MCvScalar(val, val, val, val), mask.Ptr);
         }
 
         /// <summary>

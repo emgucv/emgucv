@@ -97,7 +97,7 @@ namespace Emgu.Data
         /// <returns>The sum of the two envelop</returns>
         public static Envelope3M<T> operator +(Envelope3M<T> e1, Envelope3M<T> e2)
         {
-            Utils.Converter<T, T, T> conv = delegate(T v1, T v2) { return (T) System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T)); };
+            Utils.Func<T, T, T> conv = delegate(T v1, T v2) { return (T) System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T)); };
 
             return new Envelope3M<T>( conv(e1.Min, e2.Min), conv(e1.Mean, e2.Mean), conv(e1.Max, e2.Max));
         }

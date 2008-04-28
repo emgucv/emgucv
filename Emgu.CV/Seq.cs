@@ -14,7 +14,7 @@ namespace Emgu.CV
         /// <summary>
         /// The pointer to the storage used by this sequence
         /// </summary>
-        protected MemStorage _stor;
+        protected MemStorage m_stor;
 
         /// <summary>
         /// Create an empty contour
@@ -22,7 +22,7 @@ namespace Emgu.CV
         /// <param name="storage"> The memory to be used for this contour</param>
         private Seq(MemStorage storage )
         {
-            _stor = storage;
+            m_stor = storage;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Emgu.CV
         public Seq(int seq_flag, MemStorage storage)
             : this (storage)
         {
-            _ptr = CvInvoke.cvCreateSeq(
+            m_ptr = CvInvoke.cvCreateSeq(
                 seq_flag, Marshal.SizeOf(typeof(MCvSeq)),
                 Marshal.SizeOf(typeof(T)),
                 storage.Ptr);
@@ -47,18 +47,18 @@ namespace Emgu.CV
         public Seq(IntPtr seq, MemStorage storage)
             : this(storage)
         {
-            _ptr = seq;
+            m_ptr = seq;
         }
 
         /// <summary>
         /// A Pointer to the storage used by this Seq
         /// </summary>
-        public MemStorage Storage { get { return _stor; } }
+        public MemStorage Storage { get { return m_stor; } }
 
         /// <summary>
         /// A Pointer to the sequence that represent this Seq
         /// </summary>
-        public IntPtr Ptr { get { return _ptr; } }
+        public IntPtr Ptr { get { return m_ptr; } }
 
         /// <summary>
         /// Get the MCvSeq structure
@@ -77,7 +77,7 @@ namespace Emgu.CV
         {
             get
             {
-                return (T)Marshal.PtrToStructure(CvInvoke.cvGetSeqElem(_ptr, index), typeof(T));
+                return (T)Marshal.PtrToStructure(CvInvoke.cvGetSeqElem(m_ptr, index), typeof(T));
             }
         }
 

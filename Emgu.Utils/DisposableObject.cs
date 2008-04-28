@@ -10,7 +10,7 @@ namespace Emgu
     public abstract class DisposableObject : IDisposable
     {
         ///<summary> Track whether Dispose has been called. </summary>
-        private bool _disposed;
+        private bool m_disposed;
 
         /// <summary>
         /// The dispose function that implements IDisposable interface
@@ -31,9 +31,9 @@ namespace Emgu
                 // Free other state (managed objects).
             }
             // Free your own state (unmanaged objects).
-            if (!_disposed)
+            if (!m_disposed)
             {
-                _disposed = true;
+                m_disposed = true;
                 FreeUnmanagedObjects();
             }
         }

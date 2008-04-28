@@ -12,7 +12,7 @@ namespace Emgu.CV
     ///<typeparam name="T"> The type of value for this point</typeparam>
     [DataContract]
     [Serializable]
-    public class Point<T> where T : IComparable, new()
+    public class Point<T> : IEquatable<Point<T>> where T : IComparable, new()
     {
         ///<summary> The internal representation of this point as an array</summary>
         protected T[] _coordinate;
@@ -59,7 +59,7 @@ namespace Emgu.CV
         /// <param name="p2">The second point to apply generic operation</param>
         /// <param name="convertor">The generic operator</param>
         /// <returns>The result of the generic operation</returns>
-        public Point<T3> Convert<T2, T3>(Point<T2> p2, Emgu.Utils.Converter<T, T2, T3> convertor)
+        public Point<T3> Convert<T2, T3>(Point<T2> p2, Emgu.Utils.Func<T, T2, T3> convertor)
             where T3 : IComparable, new()
             where T2 : IComparable, new()
         {
@@ -78,7 +78,7 @@ namespace Emgu.CV
         /// <typeparam name="T2">The type of the second point</typeparam>
         /// <param name="p2">The second point to apply generic operation</param>
         /// <param name="convertor">The generic operator</param>
-        public void _Convert<T2>(Point<T2> p2, Emgu.Utils.Converter<T, T2, T> convertor)
+        public void _Convert<T2>(Point<T2> p2, Emgu.Utils.Func<T, T2, T> convertor)
             where T2: IComparable, new ()
         {
             for (int i = 0; i < _coordinate.Length; i++)
@@ -222,7 +222,11 @@ namespace Emgu.CV
         }
 
         ///<summary> Return the specific element in this point</summary>
-        public T this[int index] { get { return _coordinate[index]; } set { _coordinate[index] = value; } }
+        public T this[int index] 
+        { 
+            get { return _coordinate[index]; } 
+            set { _coordinate[index] = value; } 
+        }
 
         /// <summary>
         /// Compare if the two point have equal dimension and value, if so, return true, otherwise, false

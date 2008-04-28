@@ -52,6 +52,7 @@ namespace Emgu.CV
         /// <param name="kernel">the values for the convolution kernel</param>
         /// <param name="center">the center for the convolution kernel</param>
         public ConvolutionKernelF(float[][] kernel, Point2D<int> center)
+            : base( Math.Max(kernel.Length, 2), Math.Max(kernel[0].Length, 2))
         {
             int rows = kernel.Length;
             int cols = kernel[0].Length;
@@ -69,7 +70,6 @@ namespace Emgu.CV
                 cols++;
             }
 
-            _ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
             Emgu.Utils.CopyMatrix(kernel, CvMat.data);
 
             _center = center;

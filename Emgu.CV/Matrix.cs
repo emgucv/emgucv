@@ -8,16 +8,26 @@ namespace Emgu.CV
     /// <summary> 
     /// The Matrix class that wrap around CvMat in OpenCV 
     /// </summary>
-    public class Matrix<D> : Array where D : new()
+    public class Matrix<D> : Array, IEquatable<Matrix<D>> where D : new()
     {
         /// <summary>
-        /// Create a matrix that point to null
+        /// Create a matrix of the specific rows and columns
         /// </summary>
-        protected Matrix()
+        /// <param name="rows">The number of rows (<b>height</b>)</param>
+        /// <param name="cols">The number of cols (<b>width</b>)</param>
+        public Matrix(int rows, int cols)
         {
-            _ptr = IntPtr.Zero;
+            m_ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
         }
 
+        ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
+        public Matrix(D[][] data)
+            : this(data.Length, data[0].Length)
+        {
+            Data = data;
+        }
+
+        #region Properties
         ///<summary> Get the depth representation for openCV</summary>
         protected CvEnum.MAT_DEPTH CvDepth
         {
@@ -49,23 +59,7 @@ namespace Emgu.CV
         /// The number of cols for this matrix
         /// </summary>
         public int Cols { get { return CvMat.width; } }
-
-        /// <summary>
-        /// Create a matrix of the specific rows and columns
-        /// </summary>
-        /// <param name="rows">The number of rows (<b>height</b>)</param>
-        /// <param name="cols">The number of cols (<b>width</b>)</param>
-        public Matrix(int rows, int cols)
-        {
-            _ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
-        }
-
-        ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
-        public Matrix(D[][] data)
-            : this(data.Length, data[0].Length)
-        {
-            Data = data;
-        }
+        #endregion
 
         /// <summary>
         /// Get or Set the data for this matrix
@@ -92,7 +86,7 @@ namespace Emgu.CV
         public Matrix<D> Transpose()
         {
             Matrix<D> res = new Matrix<D>(Cols, Rows);
-            CvInvoke.cvTranspose(_ptr, res._ptr);
+            CvInvoke.cvTranspose(m_ptr, res.m_ptr);
             return res;
         }
 
@@ -131,7 +125,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseMat(ref _ptr);
+            CvInvoke.cvReleaseMat(ref m_ptr);
         }
 
         /// <summary>

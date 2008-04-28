@@ -33,11 +33,9 @@ namespace Emgu.CV
         }
 
         ///<summary> A point on the line </summary>
-        ///<value> A point on the line </value>
         public Point2D<T> P1 { get { return _p1; } set { _p1 = value; } }
 
         ///<summary> An other point on the line </summary>
-        ///<value> An other point on the line </value>
         public Point2D<T> P2 { get { return _p2; } set { _p2 = value; } }
 
         ///<summary> The direction of the line, the norm of which is 1 </summary>

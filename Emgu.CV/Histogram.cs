@@ -29,7 +29,7 @@ namespace Emgu.CV
                 r[i] = e;
             }
             GCHandle handle = GCHandle.Alloc(binSizes, GCHandleType.Pinned);
-            _ptr = CvInvoke.cvCreateHist(_dimension, handle.AddrOfPinnedObject(), 0, r, 1);
+            m_ptr = CvInvoke.cvCreateHist(_dimension, handle.AddrOfPinnedObject(), 0, r, 1);
             handle.Free();
             foreach (IntPtr e in r)
                 Marshal.FreeHGlobal(e);
@@ -40,7 +40,7 @@ namespace Emgu.CV
         ///</summary>
         public void Clear()
         {
-            CvInvoke.cvClearHist(_ptr);
+            CvInvoke.cvClearHist(m_ptr);
         }
 
         ///<summary> 
@@ -56,7 +56,7 @@ namespace Emgu.CV
                     imgs,
                     delegate(Image<Gray, D> img) { return img.Ptr; });
 
-            CvInvoke.cvCalcHist(imgPtrs, _ptr, 1, IntPtr.Zero);
+            CvInvoke.cvCalcHist(imgPtrs, m_ptr, 1, IntPtr.Zero);
         }
 
         ///<summary> Back project the histogram into an gray scale image</summary>
@@ -71,7 +71,7 @@ namespace Emgu.CV
                     delegate(Image<Gray, D> img) { return img.Ptr; });
 
             Image<Gray, D> res = srcs[0].BlankClone();
-            CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
+            CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, m_ptr);
             return res;
         }
 
@@ -81,7 +81,7 @@ namespace Emgu.CV
         ///<param name="thresh">The threshold used to clear the bins</param>
         public void Threshold(double thresh)
         {
-            CvInvoke.cvThreshHist(_ptr, thresh);
+            CvInvoke.cvThreshHist(m_ptr, thresh);
         }
 
         ///<summary> Retrieve item counts for the specific bin </summary>
@@ -93,11 +93,11 @@ namespace Emgu.CV
             switch (binIndex.Length)
             {
                 case 1:
-                    return CvInvoke.cvQueryHistValue_1D(_ptr, binIndex[0]);
+                    return CvInvoke.cvQueryHistValue_1D(m_ptr, binIndex[0]);
                 case 2:
-                    return CvInvoke.cvQueryHistValue_2D(_ptr, binIndex[0], binIndex[1]);
+                    return CvInvoke.cvQueryHistValue_2D(m_ptr, binIndex[0], binIndex[1]);
                 case 3:
-                    return CvInvoke.cvQueryHistValue_3D(_ptr, binIndex[0], binIndex[1], binIndex[2]);
+                    return CvInvoke.cvQueryHistValue_3D(m_ptr, binIndex[0], binIndex[1], binIndex[2]);
                 default:
                     throw new Emgu.Exception(Emgu.ExceptionHeader.UnimplementedFunction, "Umimplemented Function");
             }
@@ -112,7 +112,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseHist(ref _ptr);
+            CvInvoke.cvReleaseHist(ref m_ptr);
         }
     }
 }

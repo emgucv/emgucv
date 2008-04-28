@@ -14,7 +14,7 @@ namespace Emgu.CV
         /// </summary>
         public IntPtr Ptr
         {
-            get { return _ptr; }
+            get { return m_ptr; }
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Emgu.CV
         /// <param name="isColor">true if this is a color video, false otherwise</param>
         public VideoWriter(String filename, int fps, Point2D<int> frameSize, bool isColor)
         {
-            _ptr = CvInvoke.cvCreateVideoWriter(filename, CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), fps, new MCvSize(frameSize.X, frameSize.Y), isColor);  
+            m_ptr = CvInvoke.cvCreateVideoWriter(filename, CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), fps, new MCvSize(frameSize.X, frameSize.Y), isColor);  
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Emgu.CV
             where C: ColorType, new()
             where D: new()
         {
-            CvInvoke.cvWriteFrame(_ptr, frame.Ptr);
+            CvInvoke.cvWriteFrame(m_ptr, frame.Ptr);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseVideoWriter(ref _ptr);
+            CvInvoke.cvReleaseVideoWriter(ref m_ptr);
         }
     }
 }
