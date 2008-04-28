@@ -17,7 +17,7 @@ namespace Emgu.CV
         /// <param name="cols">The number of cols (<b>width</b>)</param>
         public Matrix(int rows, int cols)
         {
-            m_ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
+            _ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
         }
 
         ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
@@ -86,7 +86,7 @@ namespace Emgu.CV
         public Matrix<D> Transpose()
         {
             Matrix<D> res = new Matrix<D>(Cols, Rows);
-            CvInvoke.cvTranspose(m_ptr, res.m_ptr);
+            CvInvoke.cvTranspose(_ptr, res._ptr);
             return res;
         }
 
@@ -125,7 +125,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseMat(ref m_ptr);
+            CvInvoke.cvReleaseMat(ref _ptr);
         }
 
         /// <summary>

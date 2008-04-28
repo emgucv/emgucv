@@ -12,7 +12,7 @@ namespace Emgu
         /// <summary>
         /// A pointer to the unmanaged object
         /// </summary>
-        protected IntPtr m_ptr;
+        protected IntPtr _ptr;
 
     }
 }
