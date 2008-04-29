@@ -41,7 +41,7 @@ namespace Emgu.CV
         /// Create a convolution kernel using the specific floating point matrix
         /// </summary>
         /// <param name="kernel">the values for the convolution kernel</param>
-        public ConvolutionKernelF(float[][] kernel)
+        public ConvolutionKernelF(float[,] kernel)
             : this(kernel, new Point2D<int>(-1, -1))
         {
         }
@@ -51,16 +51,16 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="kernel">the values for the convolution kernel</param>
         /// <param name="center">the center for the convolution kernel</param>
-        public ConvolutionKernelF(float[][] kernel, Point2D<int> center)
-            : base( Math.Max(kernel.Length, 2), Math.Max(kernel[0].Length, 2))
+        public ConvolutionKernelF(float[,] kernel, Point2D<int> center)
+            : base( Math.Max(kernel.GetLength(0), 2), Math.Max(kernel.GetLength(1), 2))
         {
-            int rows = kernel.Length;
-            int cols = kernel[0].Length;
+            int rows = kernel.GetLength(0);
+            int cols = kernel.GetLength(1);
             Debug.Assert(!(rows == 0 || cols == 0));
-
+            /*
             if (rows == 1)
             {
-                kernel = new float[2][] { kernel[0], new float[cols] };
+                kernel = new float[2, cols] { kernel[0], new float[cols] };
                 rows++;
             }
 
@@ -71,7 +71,9 @@ namespace Emgu.CV
             }
 
             Emgu.Utils.CopyMatrix(kernel, CvMat.data);
+            */
 
+            throw new System.Exception("Unimplemented"); 
             _center = center;
         }
 

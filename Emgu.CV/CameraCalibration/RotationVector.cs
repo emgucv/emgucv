@@ -26,10 +26,10 @@ namespace Emgu.CV
             : this()
         {
             Debug.Assert(value.Length == 3);
-            Data = new float[][] 
-                {   new float[] { value[0] }, 
-                    new float[] { value[1] }, 
-                    new float[] { value[2] }
+            Data = new float[,] 
+                {   { value[0] }, 
+                    { value[1] }, 
+                    { value[2] }
                 };
         }
 

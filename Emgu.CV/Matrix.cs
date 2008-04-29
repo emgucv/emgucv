@@ -10,19 +10,22 @@ namespace Emgu.CV
     /// </summary>
     public class Matrix<D> : Array, IEquatable<Matrix<D>> where D : new()
     {
+        private D[,] _array;
+        private GCHandle _dataHandle;
+
         /// <summary>
         /// Create a matrix of the specific rows and columns
         /// </summary>
         /// <param name="rows">The number of rows (<b>height</b>)</param>
         /// <param name="cols">The number of cols (<b>width</b>)</param>
         public Matrix(int rows, int cols)
+            :this( new D[rows, cols])
         {
-            _ptr = CvInvoke.cvCreateMat(rows, cols, CvDepth);
         }
 
         ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
-        public Matrix(D[][] data)
-            : this(data.Length, data[0].Length)
+        public Matrix(D[,] data)
+            //: this(data.Length, data[0].Length)
         {
             Data = data;
         }
@@ -64,21 +67,18 @@ namespace Emgu.CV
         /// <summary>
         /// Get or Set the data for this matrix
         /// </summary>
-        public D[][] Data
+        public D[,] Data
         {
             get
             {
-                MCvMat m = CvMat;
-                int rows = m.rows;
-                int cols = m.cols;
-                D[][] res = new D[rows][];
-                for (int i = 0; i < rows; res[i++] = new D[cols]) ;
-                Emgu.Utils.CopyMatrix(m.data, res);
-                return res;
+                return _array;
             }
             set
             {
-                Emgu.Utils.CopyMatrix(value, CvMat.data);
+                FreeUnmanagedObjects();
+                _array = value;
+                _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
+                _ptr = CvInvoke.cvMat(_array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject());
             }
         }
 
@@ -125,7 +125,8 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            CvInvoke.cvReleaseMat(ref _ptr);
+            if (_ptr != IntPtr.Zero) Marshal.Release(_ptr);
+            if (_dataHandle != null) _dataHandle.Free();
         }
 
         /// <summary>

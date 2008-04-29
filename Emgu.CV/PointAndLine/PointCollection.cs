@@ -156,10 +156,15 @@ namespace Emgu.CV
                 pts.Add(pt.Coordinate);
 
             Debug.Assert(pts.Count > 0);
+            int rows = pts.Count;
+            int cols = pts[0].Length;
 
-            Matrix<D> res = new Matrix<D>(pts.Count, pts[0].Length);
-            res.Data = pts.ToArray();
-            return res;
+            D[,] array = new D[rows,cols];
+            for (int i = 0; i <= rows; i++)
+                for (int j = 0; j <= cols; j++)
+                    array[i, j] = pts[i][j];
+
+            return  new Matrix<D>(array);
         }
 
         /// <summary>
