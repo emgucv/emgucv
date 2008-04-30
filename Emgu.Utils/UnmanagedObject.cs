@@ -12,7 +12,7 @@ namespace Emgu
         /// <summary>
         /// A pointer to the unmanaged object
         /// </summary>
-        protected IntPtr _ptr;
+        protected IntPtr _ptr = IntPtr.Zero;
 
     }
 }

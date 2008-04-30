@@ -19,7 +19,7 @@ namespace Emgu.CV.Test
         public void TestRotationMatrix2D()
         {
             RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
-            Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
+            //Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
         }
 
         public void GenerateLogo()

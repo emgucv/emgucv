@@ -52,53 +52,43 @@ namespace Emgu.CV
         /// <param name="kernel">the values for the convolution kernel</param>
         /// <param name="center">the center for the convolution kernel</param>
         public ConvolutionKernelF(float[,] kernel, Point2D<int> center)
-            : base( Math.Max(kernel.GetLength(0), 2), Math.Max(kernel.GetLength(1), 2))
+            : base()
         {
             int rows = kernel.GetLength(0);
             int cols = kernel.GetLength(1);
             Debug.Assert(!(rows == 0 || cols == 0));
-            /*
-            if (rows == 1)
+
+            if (rows == 1 || cols == 1)
             {
-                kernel = new float[2, cols] { kernel[0], new float[cols] };
-                rows++;
+                float[,] data = new float[Math.Max(2, rows), Math.Max(2, cols)];
+                for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < cols; j++)
+                        data[i, j] = kernel[i, j];
+                Data = data;
+            }
+            else
+            {
+                Data = kernel;
             }
 
-            if (cols == 1)
-            {
-                kernel = System.Array.ConvertAll<float[], float[]>(kernel, delegate(float[] fs) { return new float[2] { fs[0], 0.0f }; });
-                cols++;
-            }
-
-            Emgu.Utils.CopyMatrix(kernel, CvMat.data);
-            */
-
-            throw new System.Exception("Unimplemented"); 
             _center = center;
         }
 
         ///<summary> Return a filpped copy of the convolution kernel</summary>
-        ///<param name="horizontal">if the kernel to be flipped horizontally</param>
-        ///<param name="vertical">if the kernel to be flipped vertically</param>
+        ///<param name="flipType">The type of the flipping</param>
         ///<returns> The flipped copy of <i>this</i> image </returns>
-        public ConvolutionKernelF Flip(bool horizontal, bool vertical)
+        public ConvolutionKernelF Flip(CvEnum.FLIP flipType)
         {
-            int code = 0;
-            if (horizontal && !vertical) code = 1;
-            else if (!horizontal && vertical) code = 0;
-            else if (horizontal && vertical) code = -1;
-            else
-            {
-                throw new Emgu.Exception(
-                   Emgu.ExceptionHeader.CriticalException,
-                   "Must Flip in at least one of the dimension");
-            }
+            int code = 0; //flipType == Emgu.CV.CvEnum.FLIP.VERTICAL
+
+            if (flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
+            else if (flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
 
             ConvolutionKernelF res = new ConvolutionKernelF(Height, Width);
             CvInvoke.cvFlip(Ptr, res.Ptr, code);
 
-            res.Center.X = ( Center.X == -1 ? -1 : ( horizontal ? Width - Center.X -1 : Center.X) );
-            res.Center.Y = ( Center.Y == -1 ? -1 : ( vertical ? Height - Center.Y -1 : Center.Y));
+            res.Center.X = ( Center.X == -1 ? -1 : ( (flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? Width - Center.X -1 : Center.X) );
+            res.Center.Y = ( Center.Y == -1 ? -1 : ( (flipType & Emgu.CV.CvEnum.FLIP.VERTICAL) == Emgu.CV.CvEnum.FLIP.VERTICAL ? Height - Center.Y -1 : Center.Y));
             return res;
         }
 

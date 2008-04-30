@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace Emgu.CV
 {
@@ -11,7 +13,23 @@ namespace Emgu.CV
     public class Matrix<D> : Array, IEquatable<Matrix<D>> where D : new()
     {
         private D[,] _array;
+
+        /// <summary>
+        /// The pinned GcHandle to _array;
+        /// </summary>
         private GCHandle _dataHandle;
+
+        /// <summary>
+        /// Indicate if _dataHandle is set
+        /// </summary>
+        private bool _handleSet = false;
+
+        /// <summary>
+        /// The default constructor which allows Data to be set later on
+        /// </summary>
+        protected Matrix()
+        {
+        }
 
         /// <summary>
         /// Create a matrix of the specific rows and columns
@@ -25,14 +43,13 @@ namespace Emgu.CV
 
         ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
         public Matrix(D[,] data)
-            //: this(data.Length, data[0].Length)
         {
             Data = data;
         }
 
         #region Properties
         ///<summary> Get the depth representation for openCV</summary>
-        protected CvEnum.MAT_DEPTH CvDepth
+        protected static CvEnum.MAT_DEPTH CvDepth
         {
             get
             {
@@ -75,9 +92,14 @@ namespace Emgu.CV
             }
             set
             {
+                Debug.Assert(value != null, "The Array cannot be null");
+                
                 FreeUnmanagedObjects();
+                Debug.Assert(!_handleSet, "Handle should should be free");
+
                 _array = value;
                 _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
+                _handleSet = true;
                 _ptr = CvInvoke.cvMat(_array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject());
             }
         }
@@ -101,12 +123,22 @@ namespace Emgu.CV
             } 
         }
 
-        ///<summary> Obtain the value at the specific location</summary>
-        ///<param name="pt"> The specific location </param>
-        ///<returns> The value of the pixel at the specific location</returns>
-        public MCvScalar GetValue(Point2D<int> pt)
+        /// <summary>
+        /// Get or Set the value in the specific <paramref name="row"/> and <paramref name="col"/>
+        /// </summary>
+        /// <param name="row">the row of the element</param>
+        /// <param name="col">the col of the element</param>
+        /// <returns></returns>
+        public D this[int row, int col]
         {
-            return CvInvoke.cvGet2D(Ptr, pt.Y, pt.X);
+            get
+            {
+                return _array[row, col];
+            }
+            set
+            {
+                _array[row, col] = value;
+            }
         }
 
         /// <summary>
@@ -125,8 +157,17 @@ namespace Emgu.CV
         /// </summary>
         protected override void FreeUnmanagedObjects()
         {
-            if (_ptr != IntPtr.Zero) Marshal.Release(_ptr);
-            if (_dataHandle != null) _dataHandle.Free();
+            if (_ptr != IntPtr.Zero)
+            {
+                Marshal.Release(_ptr);
+                _ptr = IntPtr.Zero;
+            }
+
+            if (_handleSet)
+            {
+                _dataHandle.Free();
+                _handleSet = false;
+            };
         }
 
         /// <summary>
