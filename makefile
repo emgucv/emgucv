@@ -26,7 +26,7 @@ CV_SRC:
 	rm -rf src
 
 UI: 	FORCE
-	cd Emgu.UI; make bin; cp bin/Emgu.Utils.dll ../bin; cd ..;
+	cd Emgu.UI; make bin; cp bin/Emgu.UI.dll ../bin; cd ..;
 
 CVTest: CV UI $(CVTEST_SRC)
 	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/1.0/nunit.framework.dll -r:bin/Emgu.Utils.dll -r:bin/Emgu.UI.dll   -r:/usr/lib/mono/2.0/System.Windows.Forms.dll -r:/usr/lib/mono/2.0/System.Drawing.dll -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
