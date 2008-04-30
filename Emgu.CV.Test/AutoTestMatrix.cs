@@ -84,7 +84,7 @@ namespace Emgu.CV.Test
         }
         
         /*
-        [Test]
+       [Test]
         public void Test_XmlSerialize()
         {
             using ( Matrix<Byte> mat = new Matrix<byte>(50, 60))
