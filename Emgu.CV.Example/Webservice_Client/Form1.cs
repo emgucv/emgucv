@@ -73,7 +73,7 @@ namespace Webservice_Client
                                 {
                                     _lastCheckTime = DateTime.Now;
                                     _messages = String.Format("{0} FPS", _framesSinceLastCheckTime);
-                                    this.Invoke((Emgu.Utils.VoidMethod)UpdateMessage);
+                                    this.Invoke((Emgu.Utils.Action)UpdateMessage);
                                     _framesSinceLastCheckTime = 0;
                                 }
                                 _framesSinceLastCheckTime++;
