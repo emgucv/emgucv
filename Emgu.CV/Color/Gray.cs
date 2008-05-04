@@ -26,9 +26,10 @@ namespace Emgu.CV
         /// <returns>a positive value if greater, 0 if equal, negative value if smaller</returns>
         public virtual int CompareTo(System.Object obj)
         {
-            if (obj.GetType() == typeof(Gray))
+            Gray gray = obj as Gray;
+            if (gray != null)
             {
-                return Intensity.CompareTo(((Gray)obj).Intensity);
+                return Intensity.CompareTo( gray.Intensity);
             }
             throw new ArgumentException("object is not Gray");
         }
