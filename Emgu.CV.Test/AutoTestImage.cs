@@ -27,8 +27,7 @@ namespace Emgu.CV.Test
         [Test]
         public void Test_SetValue()
         {
-            Image<Bgr, Single> img1 = new Image<Bgr, float>(50, 20);
-            img1.SetValue(new Bgr(8.0, 1.0, 2.0));
+            Image<Bgr, Single> img1 = new Image<Bgr, float>(50, 20, new Bgr(8.0, 1.0, 2.0));
             for (int i = 0; i < img1.Width; i++)
                 for (int j = 0; j < img1.Height; j++)
                 {
