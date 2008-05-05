@@ -69,7 +69,7 @@ namespace Emgu.CV
         /// <param name="fileName">The source file name where error is encountered</param>
         /// <param name="line">The line number in the souce where error is encountered</param>
         public CvException(int status, String funcName, String errMsg, String fileName, int line)
-            : base(errMsg)
+            : base("OpenCV: " + errMsg)
         {
             _status = status;
             _functionName = funcName;
