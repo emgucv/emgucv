@@ -134,5 +134,22 @@ namespace Emgu.CV.Test
                 }
             }
         }
+
+        [Test]
+        public void TestException()
+        {
+            bool exceptionCaught = false;
+            Matrix<Byte> mat = new Matrix<byte>(20, 30);
+            try
+            {
+                double det =  mat.Det;
+            }
+            catch (System.Exception)
+            {
+                exceptionCaught = true;
+            }
+            Assert.IsTrue(exceptionCaught);
+
+        }
     }
 }

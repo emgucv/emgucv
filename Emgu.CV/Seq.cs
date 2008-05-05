@@ -183,7 +183,9 @@ namespace Emgu.CV
         {
         }
 
-        ///<summary> Get the area of the contour </summary>
+        ///<summary> 
+        /// Get the area of the contour 
+        ///</summary>
         public double Area
         {
             get
@@ -192,7 +194,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> Indicate if the coutour is a convex one </summary>
+        ///<summary> 
+        /// Indicate if the coutour is a convex one 
+        ///</summary>
         public bool Convex
         {
             get
@@ -201,7 +205,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> The perimeter of the sequence </summary>
+        ///<summary> 
+        /// The perimeter of the sequence 
+        ///</summary>
         public double Perimeter
         {
             get

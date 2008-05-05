@@ -10,7 +10,7 @@ namespace Emgu.CV
     /// <summary> 
     /// The Matrix class that wrap around CvMat in OpenCV 
     /// </summary>
-    public class Matrix<D> : Array, IEquatable<Matrix<D>> where D : new()
+    public class Matrix<D> : Array, IEquatable<Matrix<D>>, IXmlSerializable where D : new()
     {
         private D[,] _array;
 
@@ -32,12 +32,12 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create a matrix of the specific rows and columns
+        /// Create a matrix of the specific size
         /// </summary>
         /// <param name="rows">The number of rows (<b>height</b>)</param>
         /// <param name="cols">The number of cols (<b>width</b>)</param>
         public Matrix(int rows, int cols)
-            :this( new D[rows, cols])
+            : this(new D[rows, cols])
         {
         }
 
@@ -93,7 +93,7 @@ namespace Emgu.CV
             set
             {
                 Debug.Assert(value != null, "The Array cannot be null");
-                
+
                 FreeUnmanagedObjects();
                 Debug.Assert(!_handleSet, "Handle should should be free");
 
@@ -101,6 +101,25 @@ namespace Emgu.CV
                 _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
                 _handleSet = true;
                 _ptr = CvInvoke.cvMat(_array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject());
+            }
+        }
+
+        /// <summary>
+        /// Get or Set an Array of bytes that represent the data in this matrix
+        /// </summary>
+        public Byte[] Bytes
+        {
+            get
+            {
+                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * _array.Length;
+                Byte[] res = new Byte[size];
+                Marshal.Copy(_dataHandle.AddrOfPinnedObject(), res, 0, size);
+                return res;
+            }
+            set
+            {
+                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * _array.Length;
+                Marshal.Copy(value, 0, _dataHandle.AddrOfPinnedObject(), size);
             }
         }
 
@@ -115,12 +134,12 @@ namespace Emgu.CV
         /// <summary>
         /// The MCvMat structure format  
         /// </summary>
-        public MCvMat CvMat 
-        { 
-            get 
-            { 
-                return (MCvMat)Marshal.PtrToStructure(Ptr, typeof(MCvMat)); 
-            } 
+        public MCvMat CvMat
+        {
+            get
+            {
+                return (MCvMat)Marshal.PtrToStructure(Ptr, typeof(MCvMat));
+            }
         }
 
         /// <summary>
@@ -144,6 +163,7 @@ namespace Emgu.CV
         /// <summary>
         /// The function cvDet returns determinant of the square matrix
         /// </summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public double Det
         {
             get
@@ -173,6 +193,7 @@ namespace Emgu.CV
         /// <summary>
         /// Return the sum of the elements in this matrix
         /// </summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public double Sum
         {
             get
@@ -189,7 +210,7 @@ namespace Emgu.CV
         /// <returns>The comparison mask</returns>
         public Matrix<Byte> Cmp(Matrix<D> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
         {
-            Matrix<Byte> res = new Matrix<Byte>(Rows , Cols);
+            Matrix<Byte> res = new Matrix<Byte>(Rows, Cols);
             CvInvoke.cvCmp(Ptr, mat2.Ptr, res.Ptr, type);
             return res;
         }
@@ -208,5 +229,55 @@ namespace Emgu.CV
                 return (neqMask.Sum == 0.0);
             }
         }
+
+        #region IXmlSerializable Members
+        /// <summary>
+        /// Get the xml schema
+        /// </summary>
+        /// <returns>the xml schema</returns>
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
+            throw new System.Exception("The method or operation is not implemented.");
+        }
+
+        /// <summary>
+        /// Function to call when deserializing this object from XML
+        /// </summary>
+        /// <param name="reader">The xml reader</param>
+        public void ReadXml(System.Xml.XmlReader reader)
+        {
+            #region read the size of the matrix and assign storage 
+            reader.MoveToFirstAttribute();
+            int rows = reader.ReadContentAsInt();
+            reader.MoveToNextAttribute();
+            int cols = reader.ReadContentAsInt();
+            System.Xml.XmlNodeType type = reader.MoveToContent();
+            Data = new D[rows, cols];
+            #endregion 
+
+            #region decode the data from Xml and assign the value to the matrix
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * rows * cols;
+            Byte[] bytes = new Byte[size];
+            reader.ReadToFollowing("Bytes");
+            reader.ReadElementContentAsBase64(bytes, 0, bytes.Length);
+            Bytes = bytes;
+            #endregion 
+        }
+
+        /// <summary>
+        /// Function to call when serializing this object to XML 
+        /// </summary>
+        /// <param name="writer">The xml writer</param>
+        public void WriteXml(System.Xml.XmlWriter writer)
+        {
+            writer.WriteAttributeString("Rows", Rows.ToString());
+            writer.WriteAttributeString("Cols", Cols.ToString());
+            writer.WriteStartElement("Bytes");
+            Byte[] bytes = Bytes;
+            writer.WriteBase64(bytes, 0, bytes.Length);
+            writer.WriteEndElement();
+        }
+
+        #endregion
     }
 }

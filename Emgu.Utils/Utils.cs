@@ -111,12 +111,6 @@ namespace Emgu
                     delegate(T[] a) { return VectorToString<T>(a, columnToken); }));
         }
 
-        public static string FileTypeFromName(string fileName)
-        {
-            int startPos = fileName.LastIndexOf('.') + 1;
-            return fileName.Substring(startPos, fileName.Length - startPos);
-        }
-
         public static T[] StringToVector<T>(string input, string token) 
         {
             return Array.ConvertAll<String, T>(
@@ -214,6 +208,12 @@ namespace Emgu
             return res;
         }
 
+        /// <summary>
+        /// Copy a generic vector to the unmanaged memory
+        /// </summary>
+        /// <typeparam name="D">The type of the vector</typeparam>
+        /// <param name="src">the source vetor</param>
+        /// <param name="dest">pointer to the destination unmanaged memory</param>
         public static void CopyVector<D>(D[] src, IntPtr dest)
         {
             int size = Marshal.SizeOf( typeof(D) ) * src.Length;
@@ -225,13 +225,13 @@ namespace Emgu
         public static void CopyMatrix<D>(D[][] src, IntPtr dest)
         {
             int datasize = Marshal.SizeOf( typeof(D) );
-            int columnsize = datasize * src[0].Length;
+            int step = datasize * src[0].Length;
             int current = dest.ToInt32();
             
-            for (int i = 0; i < src.Length; i++, current += columnsize)
+            for (int i = 0; i < src.Length; i++, current += step)
             {
                 GCHandle handle = GCHandle.Alloc(src[i], GCHandleType.Pinned);
-                Emgu.Utils.memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), columnsize);
+                Emgu.Utils.memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
                 handle.Free();
             }
         }
@@ -239,13 +239,13 @@ namespace Emgu
         public static void CopyMatrix<D>(IntPtr src, D[][] dest)
         {
             int datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(D) );
-            int columnsize = datasize * dest[0].Length;
+            int step = datasize * dest[0].Length;
             int current = src.ToInt32();
 
-            for (int i = 0; i < dest.Length; i++, current += columnsize)
+            for (int i = 0; i < dest.Length; i++, current += step)
             {
                 GCHandle handle = GCHandle.Alloc(dest[i], GCHandleType.Pinned);
-                Emgu.Utils.memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), columnsize);
+                Emgu.Utils.memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), step);
                 handle.Free();
             }
         }

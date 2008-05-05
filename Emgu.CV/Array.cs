@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace Emgu.CV
 {
@@ -16,10 +17,41 @@ namespace Emgu.CV
         [XmlIgnore]
         public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
 
-        ///<summary> The width of the Array </summary>
+        #region properties
+        ///<summary> 
+        /// The width of the Array 
+        ///</summary>
         public abstract int Width { get; }
-        ///<summary> The height of the Array </summary>
+        
+        ///<summary> 
+        /// The height of the Array 
+        /// </summary>
         public abstract int Height { get; }
+
+        /// <summary>
+        /// sum of diagonal elements of the matrix 
+        /// </summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public MCvScalar Trace
+        {
+            get
+            {
+                return CvInvoke.cvTrace(Ptr);
+            }
+        }
+
+        ///<summary> 
+        ///The norm of this Array 
+        ///</summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public double Norm
+        {
+            get
+            {
+                return CvInvoke.cvNorm(Ptr, IntPtr.Zero, 4, IntPtr.Zero);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Calculates and returns the Euclidean dot product of two arrays.
@@ -33,6 +65,16 @@ namespace Emgu.CV
             return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
         }
 
+        #region Coping and filling
+        ///<summary>
+        /// Copy the current image to another one 
+        /// </summary>
+        /// <param name="dest"> The destination Array</param>
+        public void Copy(Array dest)
+        {
+            CvInvoke.cvCopy(Ptr, dest.Ptr, IntPtr.Zero);
+        }
+
         ///<summary> 
         ///Set the element of the Array to <paramref name="val"/>
         ///</summary>
@@ -43,94 +85,13 @@ namespace Emgu.CV
         }
 
         ///<summary>
-        ///Set the element of the Array to <paramref name="val"/>, using the <paramref name="mask"/>
+        ///Set the element of the Array to <paramref name="val"/>, using the specific <paramref name="mask"/>
         ///</summary>
         ///<param name="val">The value to be set</param>
         ///<param name="mask">The mask for the operation</param>
         public void SetValue(double val, Array mask)
         {
             CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), mask.Ptr);
-        }
-
-        /// <summary>
-        /// Inplace multiply elements of the Array by <paramref name="scale"/>
-        /// </summary>
-        /// <param name="scale">The scale to be multiplyed</param>
-        public void _Mul(double scale)
-        {
-            CvInvoke.cvConvertScale(Ptr, Ptr, scale, 0.0);
-        }
-
-        /// <summary>
-        /// Inplace elementwise multiply the current Array with <paramref name="src2"/>
-        /// </summary>
-        /// <param name="src2">The other array to be elementwise multiplied with</param>
-        public void _Mul(Array src2)
-        {
-            CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
-        }
-
-        ///<summary> 
-        ///Inplace compute the complement for all Array Elements
-        ///</summary>
-        public void _Not()
-        {
-            CvInvoke.cvNot(Ptr, Ptr);
-        }
-
-        /// <summary>
-        /// Inplace compute the elementwise maximum value with <paramref name="val"/>
-        /// </summary>
-        /// <param name="val">The value to be compare with</param>
-        public void _Max(double val)
-        {
-            CvInvoke.cvMaxS(Ptr, val, Ptr);
-        }
-
-        /// <summary>
-        /// Inplace elementwise maximize the current Array with <paramref name="src2"/>
-        /// </summary>
-        /// <param name="src2">The other array to be elementwise maximized with this array</param>
-        public void _Max(Array src2)
-        {
-            CvInvoke.cvMax(Ptr, src2.Ptr, Ptr);
-        }
-
-        /// <summary>
-        /// Inplace And operation with <paramref name="src2"/>
-        /// </summary>
-        /// <param name="src2">The other array to perform And operation</param>
-        public void _And(Array src2)
-        {
-            CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
-        }
-
-        /// <summary>
-        /// Inplace Or operation with <paramref name="src2"/>
-        /// </summary>
-        /// <param name="src2">The other array to perform And operation</param>
-        public void _Or(Array src2)
-        {
-            CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
-        }
-
-        ///<summary>
-        ///Inplace compute the elementwise minimum value 
-        ///</summary>
-        public void _Min(double val)
-        {
-            CvInvoke.cvMinS(Ptr, val, Ptr);
-        }
-
-        ///<summary> 
-        ///The norm of this Array 
-        ///</summary>
-        public double Norm
-        {
-            get
-            {
-                return CvInvoke.cvNorm(Ptr, IntPtr.Zero, 4, IntPtr.Zero);
-            }
         }
 
         /// <summary>
@@ -155,6 +116,70 @@ namespace Emgu.CV
             CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, std);
         }
 
+        /// <summary>
+        /// Initializs scaled identity matrix
+        /// </summary>
+        /// <param name="value"></param>
+        public void _SetIdentity(MCvScalar value)
+        {
+            CvInvoke.cvSetIdentity(Ptr, value);
+        }
+        #endregion
+
+        /// <summary>
+        /// Inplace multiply elements of the Array by <paramref name="scale"/>
+        /// </summary>
+        /// <param name="scale">The scale to be multiplyed</param>
+        public void _Mul(double scale)
+        {
+            CvInvoke.cvConvertScale(Ptr, Ptr, scale, 0.0);
+        }
+
+        /// <summary>
+        /// Inplace elementwise multiply the current Array with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to be elementwise multiplied with</param>
+        public void _Mul(Array src2)
+        {
+            CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
+        }
+
+        #region Comparison
+        ///<summary>
+        ///Inplace compute the elementwise minimum value 
+        ///</summary>
+        public void _Min(double val)
+        {
+            CvInvoke.cvMinS(Ptr, val, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace elementwise minimize the current Array with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to be elementwise minimized with this array</param>
+        public void _Min(Array src2)
+        {
+            CvInvoke.cvMin(Ptr, src2.Ptr, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace compute the elementwise maximum value with <paramref name="val"/>
+        /// </summary>
+        /// <param name="val">The value to be compare with</param>
+        public void _Max(double val)
+        {
+            CvInvoke.cvMaxS(Ptr, val, Ptr);
+        }
+
+        /// <summary>
+        /// Inplace elementwise maximize the current Array with <paramref name="src2"/>
+        /// </summary>
+        /// <param name="src2">The other array to be elementwise maximized with this array</param>
+        public void _Max(Array src2)
+        {
+            CvInvoke.cvMax(Ptr, src2.Ptr, Ptr);
+        }
+
         ///<summary>
         ///Determine if the size (width and height) of <i>this</i> Array
         ///equals the size of <paramref name="src2"/>
@@ -165,26 +190,36 @@ namespace Emgu.CV
         {
             return (Width == src2.Width && Height == src2.Height);
         }
+        #endregion
 
+        #region Inplace Logic Operators
         /// <summary>
-        /// Initializs scaled identity matrix
+        /// Inplace And operation with <paramref name="src2"/>
         /// </summary>
-        /// <param name="value"></param>
-        public void _SetIdentity(MCvScalar value)
+        /// <param name="src2">The other array to perform And operation</param>
+        public void _And(Array src2)
         {
-            CvInvoke.cvSetIdentity(Ptr, value);
+            CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
         }
 
         /// <summary>
-        /// sum of diagonal elements of the matrix 
+        /// Inplace Or operation with <paramref name="src2"/>
         /// </summary>
-        public MCvScalar Trace
+        /// <param name="src2">The other array to perform And operation</param>
+        public void _Or(Array src2)
         {
-            get
-            {
-                return CvInvoke.cvTrace(Ptr);
-            }
+            CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
         }
 
-    };
+        ///<summary> 
+        ///Inplace compute the complement for all Array Elements
+        ///</summary>
+        public void _Not()
+        {
+            CvInvoke.cvNot(Ptr, Ptr);
+        }
+        #endregion 
+
+
+    }
 }

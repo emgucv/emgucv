@@ -28,17 +28,19 @@ namespace Emgu.CV.Test
                 Assert.AreEqual(254.0, v);
         }
         
-        
+        /// <summary>
+        /// Test the matrix constructor that accepts a two dimensional array as input
+        /// </summary>
         [Test]
         public void Test_Data()
         {
-            Random r = new Random();
             Byte[,] data = new Byte[20, 30];
+            Random r = new Random();
             Byte[] bytes = new Byte[data.Length];
             r.NextBytes(bytes);
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
-                    data[i, j] = bytes[i * data.GetLength(1)];
+                    data[i, j] = bytes[i * data.GetLength(1)+ j];
 
             Matrix<Byte> m = new Matrix<byte>(data);
             Byte[,] data2 = m.Data;
@@ -51,49 +53,73 @@ namespace Emgu.CV.Test
                 }
         }
 
-        
+        /// <summary>
+        /// Test the matrix transpose function for matrix of Byte
+        /// </summary>
         [Test]
         public void Test_TransposeByteMatrix()
         {
-            Byte[,] data =  { { 0x1, 0x2, 0x3, 0x4, 0x5 } };
-            
-            using (Matrix<Byte> mat = new Matrix<Byte>(data))
+            using (Matrix<Byte> mat = new Matrix<Byte>(1, 10))
             {
-                Byte[,] data2 = mat.Transpose().Data;
+                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
 
-                for (int i = 0; i < data2.GetLength(0); i++)
-                    for (int j = 0; j < data2.GetLength(1); j++)
-                        Assert.AreEqual(data2[i,j], data[j,i]);
+                Matrix<Byte> matT = mat.Transpose();
+
+                for (int i = 0; i < matT.Rows; i++)
+                    for (int j = 0; j < matT.Cols; j++)
+                        Assert.AreEqual(matT[i, j], mat[j, i]);
             }
         }
 
-        
         [Test]
         public void Test_TransposeFloatMatrix()
         {
-            float[,] data = { { 1.0F, 2.0F, 3.0F, 4.0F, 5.0F } };
-
-            using (Matrix<float> mat = new Matrix<float>(data))
+            using (Matrix<float> mat = new Matrix<float>(1, 3))
             {
-                float[,] data2 = mat.Transpose().Data;
+                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(-1000.0), new MCvScalar(1000.0));
+                
+                Matrix<float> matT = mat.Transpose();
 
-                for (int i = 0; i < data2.GetLength(0); i++)
-                    for (int j = 0; j < data2.GetLength(1); j++)
-                        Assert.AreEqual(data2[i, j], data[j, i]);
+                for (int i = 0; i < matT.Rows; i++)
+                    for (int j = 0; j < matT.Cols; j++)
+                        Assert.AreEqual(matT[i, j], mat[j, i]);
             }
         }
         
-        /*
+        
        [Test]
-        public void Test_XmlSerialize()
+        public void Test_XmlSerializeAndDeserialize()
         {
             using ( Matrix<Byte> mat = new Matrix<byte>(50, 60))
             {
+                mat._RandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
                 XmlDocument doc = Emgu.Utils.XmlSerialize<Matrix<Byte>>(mat);
-
+                //Trace.WriteLine(doc.OuterXml);
+                
                 using (Matrix<Byte> mat2 = Emgu.Utils.XmlDeserialize<Matrix<Byte>>(doc))
                     Assert.IsTrue(mat.Equals(mat2));
+                
             }
-        }*/
+        }
+
+        [Test]
+        public void Test_StressTestMatrixGC()
+        {
+            int i = 0;
+            try
+            {
+                for (i = 0; i < 1000; i++)
+                {
+                    Matrix<Single> mat = new Matrix<float>(1000, 1000);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                //Trace.WriteLine(i);
+            }
+        }
     }
 }

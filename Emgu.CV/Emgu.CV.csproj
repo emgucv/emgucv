@@ -81,6 +81,7 @@
     <Compile Include="Color\Xyz.cs" />
     <Compile Include="Color\Ycc.cs" />
     <Compile Include="Contour.cs" />
+    <Compile Include="CvException.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading;
 
 namespace Emgu.CV.Test
 {
@@ -268,6 +269,16 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void Test_Rotation()
+        {
+            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80))
+            {
+                img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                img.Rotate(90, new Bgr());
+            }
+        }
+
+        [Test]
         public void Test_Constructor()
         {
             for (int i = 0; i < 20; i++)
@@ -285,6 +296,23 @@ namespace Emgu.CV.Test
                     Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
                 }
             }
+        }
+
+        [Test]
+        public void Test_ConvolutionAndLaplace()
+        {
+            Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
+            image._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
+
+            Image<Gray, float> laplace = image.Laplace(1);
+
+            float[,] k = {  {0, 1, 0},
+                            {1, -4, 1},
+                            {0, 1, 0}};
+            ConvolutionKernelF kernel = new ConvolutionKernelF(k);
+
+            Image<Gray, float> convoluted = image * kernel;
+            Assert.IsTrue(laplace.Equals(convoluted));
         }
     }
 }
