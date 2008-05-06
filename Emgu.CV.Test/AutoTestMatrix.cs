@@ -109,10 +109,10 @@ namespace Emgu.CV.Test
             int i = 0;
             //try
             {
-                for (i = 0; i < 1000; i++)
+                for (i = 0; i < 500; i++)
                 {
                     Matrix<Single> mat = new Matrix<float>(1000, 1000);
-                    Thread.Sleep(1);
+                    Thread.Sleep(5);
                 }
             }
             //catch (Exception)
