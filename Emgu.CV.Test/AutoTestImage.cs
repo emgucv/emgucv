@@ -187,11 +187,9 @@ namespace Emgu.CV.Test
         [Test]
         public void Test_Memory()
         {
-            for (int i = 0; i <= 100; i++)
+            for (int i = 0; i <= 1000; i++)
             {
-                using (Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500, new Bgr()))
-                {
-                }
+                Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000, new Bgr());
             }
         }
 
@@ -283,18 +281,14 @@ namespace Emgu.CV.Test
         {
             for (int i = 0; i < 20; i++)
             {
-                using (Image<Gray, Byte> img = new Image<Gray, Byte>(500, 500, new Gray()))
-                {
-                    Assert.AreEqual(0, System.Convert.ToInt32(img.Sum.Intensity));
-                }
+                Image<Gray, Byte> img = new Image<Gray, Byte>(500, 500, new Gray());
+                Assert.AreEqual(0, System.Convert.ToInt32(img.Sum.Intensity));
             }
 
             for (int i = 0; i < 20; i++)
             {
-                using (Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500, new Bgr()))
-                {
-                    Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
-                }
+                Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500, new Bgr());
+                Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
             }
         }
 

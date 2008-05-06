@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading;
 
 namespace Emgu.CV.Test
 {
@@ -106,17 +107,18 @@ namespace Emgu.CV.Test
         public void Test_StressTestMatrixGC()
         {
             int i = 0;
-            try
+            //try
             {
-                for (i = 0; i < 1000; i++)
+                for (i = 0; i < 2000; i++)
                 {
                     Matrix<Single> mat = new Matrix<float>(1000, 1000);
+                    Thread.Sleep(1);
                 }
             }
-            catch (Exception)
+            //catch (Exception)
             {
             }
-            finally
+            //finally
             {
                 //Trace.WriteLine(i);
             }
