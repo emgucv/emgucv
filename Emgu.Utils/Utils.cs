@@ -259,6 +259,11 @@ namespace Emgu
         [DllImport("kernel32.dll", EntryPoint="CopyMemory")]
         public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr LoadLibrary(String dllname);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool FreeLibrary(IntPtr handle);
     }
 }
 
