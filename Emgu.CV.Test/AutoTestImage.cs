@@ -33,9 +33,7 @@ namespace Emgu.CV.Test
                 for (int j = 0; j < img1.Height; j++)
                 {
                     Bgr c = img1[j,i];
-                    Assert.AreEqual(8.0, c[0]);
-                    Assert.AreEqual(1.0, c[1]);
-                    Assert.AreEqual(2.0, c[2]);
+                    Assert.IsTrue(c.Equals(new Bgr(8.0, 1.0, 2.0)));
                 }
         }
 
@@ -196,38 +194,33 @@ namespace Emgu.CV.Test
         [Test]
         public void Test_Conversion()
         {
-            using (Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100))
-            {
-                using (Image<Xyz, Single> img2 = img1.Convert<Xyz, Single>())
-                {
-                }
-            }
+            Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100);
+            Image<Xyz, Single> img2 = img1.Convert<Xyz, Single>();
         }
 
         [Test]
         public void Test_GenericSetColor()
         {
-            using (Image<Bgr, Byte> img1 = new Image<Bgr, Byte>(20, 40, new Bgr()))
-            {
-                int flag = 0;
+            Image<Bgr, Byte> img1 = new Image<Bgr, Byte>(20, 40, new Bgr());
 
-                using (Image<Bgr, Byte> img2 = img1.Convert<Byte>(
-                    delegate(Byte b)
-                    {
-                        return ((flag++ % 3) == 0) ? (Byte)255 : (Byte)0;
-                    }))
+            int flag = 0;
+
+            Image<Bgr, Byte> img2 = img1.Convert<Byte>(
+                delegate(Byte b)
                 {
-                    img1.SetValue(new Bgr(255, 0, 0));
+                    return ((flag++ % 3) == 0) ? (Byte)255 : (Byte)0;
+                });
 
-                    Assert.IsTrue(img1.Equals(img2));
-                }
-            }
+            img1.SetValue(new Bgr(255, 0, 0));
+
+            Assert.IsTrue(img1.Equals(img2));
         }
 
         [Test]
         public void Test_RuntimeSerialize()
         {
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80))
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
+
             using (MemoryStream ms = new MemoryStream())
             {
                 img._RandNormal( (ulong) DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
@@ -238,42 +231,43 @@ namespace Emgu.CV.Test
                 Byte[] bytes = ms.GetBuffer();
 
                 using (MemoryStream ms2 = new MemoryStream(bytes))
-                using (Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)formatter.Deserialize(ms2))
+                {
+                    Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)formatter.Deserialize(ms2);
                     Assert.IsTrue(img.Equals(img2));
+                }
             }
         }
 
         [Test]
         public void Test_getSize()
         {
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255)))
-            {
-                Point2D<int> size = img.Size;
-            }
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
+
+            Point2D<int> size = img.Size;
+
         }
 
         [Test]
         public void Test_XmlSerialize()
         {
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80))
-            {
-                img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
-                XmlDocument doc = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+            img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
-                using (Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc))
-                    Assert.IsTrue(img.Equals(img2));   
-            }
+            XmlDocument doc = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+
+            Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc);
+
+            Assert.IsTrue(img.Equals(img2));
         }
 
         [Test]
         public void Test_Rotation()
         {
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80))
-            {
-                img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-                img.Rotate(90, new Bgr());
-            }
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
+
+            img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img.Rotate(90, new Bgr());
         }
 
         [Test]
@@ -287,7 +281,7 @@ namespace Emgu.CV.Test
 
             for (int i = 0; i < 20; i++)
             {
-                Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500, new Bgr());
+                Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500);
                 Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
             }
         }
@@ -307,6 +301,18 @@ namespace Emgu.CV.Test
 
             Image<Gray, float> convoluted = image * kernel;
             Assert.IsTrue(laplace.Equals(convoluted));
+        }
+
+        public void Test_BitmapConstructor()
+        {
+            Image<Bgr, Byte> image = new Image<Bgr, byte>(200, 400);
+            image._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+
+            Bitmap bmp = image.ToBitmap();
+
+            Image<Bgr, Byte> image2 = new Image<Bgr, byte>(bmp);
+            Assert.IsTrue(image.Equals(image2));
+
         }
     }
 }

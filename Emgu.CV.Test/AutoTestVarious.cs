@@ -148,7 +148,7 @@ namespace Emgu.CV.Test
                 }
                 catch (CvException excpt)
                 {
-                    Assert.AreEqual(-201, excpt.Status);
+                    Assert.AreEqual(-201, excpt.Status); 
                     exceptionCaught = true;
                 }
                 Assert.IsTrue(exceptionCaught);

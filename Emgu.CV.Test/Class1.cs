@@ -71,7 +71,7 @@ namespace Emgu.CV.Test
         {
             Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
             Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt( 0.0+ x * x + y * y)); });
-            Application.Run(new ImageViewer(g2.ToBitmap()));
+            Application.Run(new ImageViewer(g2));
         }
 
         public void TestHorizontalLine()
@@ -81,7 +81,7 @@ namespace Emgu.CV.Test
             LineSegment2D<int> l1 = new LineSegment2D<int>(p1, p2);
             Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255,255,255));
             img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
-            Application.Run(new ImageViewer(img.AsBitmap()));
+            Application.Run(new ImageViewer(img));
         }
 
         public void TestRectangle()
@@ -99,14 +99,14 @@ namespace Emgu.CV.Test
             roi.Height /= 2.0;
             map.ROI = roi;
 
-            Application.Run(new ImageViewer(map.AsBitmap()));
+            Application.Run(new ImageViewer(map));
         }
 
         public void testEllipseFitting()
         {
             System.Random r = new Random();
 
-            Image<Gray, byte> img = new Image<Gray, byte>(400, 600, new Gray(0.0));
+            Image<Gray, byte> img = new Image<Gray, byte>(400, 400, new Gray(0.0));
             List<Point2D<int>> pts = new List<Point2D<int>>();
             for (int i = 0; i <= 100; i++)
             {
@@ -119,7 +119,7 @@ namespace Emgu.CV.Test
             Ellipse<float> e = PointCollection<int>.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
           
             img.Draw(e, new Gray(120.0), 1);
-            Application.Run(new ImageViewer(img.AsBitmap()));
+            Application.Run(new ImageViewer(img));
         }
 
         /*
@@ -154,11 +154,11 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img2 = img.Resize(100, 100, true))
             {
 
-                Application.Run(new ImageViewer(img2.ToBitmap()));
+                Application.Run(new ImageViewer(img2));
                 Rectangle<double> r = img2.ROI;
                 r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);
                 img2.ROI = r;
-                Application.Run(new ImageViewer(img2.ToBitmap()));
+                Application.Run(new ImageViewer(img2));
             }
         }
 
@@ -168,10 +168,10 @@ namespace Emgu.CV.Test
             Application.SetCompatibleTextRenderingDefault(false);
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
             {
-                Application.Run(new ImageViewer(img.ToBitmap()));
+                Application.Run(new ImageViewer(img));
                 Image<Gray, Byte>[] channels = img.Split();
                 foreach (Image<Gray, Byte> i in channels)
-                    Application.Run(new ImageViewer(i.ToBitmap()));
+                    Application.Run(new ImageViewer(i));
             }
         }
 
@@ -186,7 +186,7 @@ namespace Emgu.CV.Test
                     img.Draw("h.", f, new Point2D<int>(100, 10), new Gray(255.0));
                     img.Draw("a.", f, new Point2D<int>(100, 50), new Gray(255.0));
                 }
-                Application.Run(new ImageViewer(img.ToBitmap()));
+                Application.Run(new ImageViewer(img));
             }
         }
         
@@ -203,7 +203,7 @@ namespace Emgu.CV.Test
                 {
                     h.Accumulate(new Image<Gray, Byte>[1] { HSVs[0] });
                     using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
-                        Application.Run(new ImageViewer(bpj.ToBitmap()));
+                        Application.Run(new ImageViewer(bpj));
                 }
 
                 foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
@@ -217,7 +217,7 @@ namespace Emgu.CV.Test
                 Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5, false, 0);
                 foreach (Point2D<float> p in pts[0])
                     img.Draw<float>(new Circle<float>(p, 3.0f), new Gray(255.0), 1);
-                Application.Run(new ImageViewer(img.AsBitmap()));
+                Application.Run(new ImageViewer(img));
             }
         }
 
@@ -261,7 +261,7 @@ namespace Emgu.CV.Test
                                 foreach (Circle<float> c in cs)
                                     imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
 
-                            Application.Run(new ImageViewer(imageRGB.ToBitmap()));
+                            Application.Run(new ImageViewer(imageRGB));
 
                             bool applied = false;
                             foreach (Circle<float>[] cs in circles)
@@ -309,7 +309,7 @@ namespace Emgu.CV.Test
 
                 Eye<Byte> e = f.DetectEye()[0];
 
-                Application.Run(new ImageViewer(e.RGB.ToBitmap()));
+                Application.Run(new ImageViewer(e.RGB));
 
                 /*
                 Image<Rgb, Byte> res = f.RGB.BlankClone();
@@ -428,5 +428,11 @@ namespace Emgu.CV.Test
             TimeSpan timeSpan = DateTime.Now.Subtract(timeStart);
             Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
         }
+
+        public void Test_ImageViewer()
+        {
+            Application.Run(new ImageViewer(null));
+        }
+
     }
 }
