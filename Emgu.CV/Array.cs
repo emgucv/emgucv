@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -13,6 +14,16 @@ namespace Emgu.CV
     [DataContract]
     public abstract class Array : UnmanagedObject
     {
+        /// <summary>
+        /// The pinned GcHandle to _array;
+        /// </summary>
+        protected GCHandle _dataHandle;
+
+        /// <summary>
+        /// Indicate if _dataHandle is set
+        /// </summary>
+        protected bool _handleSet = false;
+
         ///<summary> The pointer to the internal structure </summary>
         [XmlIgnore]
         public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
@@ -143,6 +154,20 @@ namespace Emgu.CV
         {
             CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
         }
+
+        #region UnmanagedObject
+        /// <summary>
+        /// Free the _dataHandle if it is set
+        /// </summary>
+        protected override void FreeUnmanagedObjects()
+        {
+            if (_handleSet)
+            {
+                _dataHandle.Free();
+                _handleSet = false;
+            };
+        }
+        #endregion
 
         #region Comparison
         ///<summary>

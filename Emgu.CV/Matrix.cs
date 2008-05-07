@@ -14,16 +14,7 @@ namespace Emgu.CV
     {
         private D[,] _array;
 
-        /// <summary>
-        /// The pinned GcHandle to _array;
-        /// </summary>
-        private GCHandle _dataHandle;
-
-        /// <summary>
-        /// Indicate if _dataHandle is set
-        /// </summary>
-        private bool _handleSet = false;
-
+        #region Constructors
         /// <summary>
         /// The default constructor which allows Data to be set later on
         /// </summary>
@@ -46,6 +37,7 @@ namespace Emgu.CV
         {
             Data = data;
         }
+        #endregion
 
         #region Properties
         ///<summary> Get the depth representation for openCV</summary>
@@ -79,7 +71,6 @@ namespace Emgu.CV
         /// The number of cols for this matrix
         /// </summary>
         public int Cols { get { return CvMat.width; } }
-        #endregion
 
         /// <summary>
         /// Get or Set the data for this matrix
@@ -123,14 +114,6 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> Returns the transpose of this matrix</summary>
-        public Matrix<D> Transpose()
-        {
-            Matrix<D> res = new Matrix<D>(Cols, Rows);
-            CvInvoke.cvTranspose(_ptr, res._ptr);
-            return res;
-        }
-
         /// <summary>
         /// The MCvMat structure format  
         /// </summary>
@@ -140,6 +123,39 @@ namespace Emgu.CV
             {
                 return (MCvMat)Marshal.PtrToStructure(Ptr, typeof(MCvMat));
             }
+        }
+
+        /// <summary>
+        /// The function cvDet returns determinant of the square matrix
+        /// </summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public double Det
+        {
+            get
+            {
+                return CvInvoke.cvDet(Ptr);
+            }
+        }
+
+        /// <summary>
+        /// Return the sum of the elements in this matrix
+        /// </summary>
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public double Sum
+        {
+            get
+            {
+                return CvInvoke.cvSum(Ptr).v0;
+            }
+        }
+        #endregion
+
+        ///<summary> Returns the transpose of this matrix</summary>
+        public Matrix<D> Transpose()
+        {
+            Matrix<D> res = new Matrix<D>(Cols, Rows);
+            CvInvoke.cvTranspose(_ptr, res._ptr);
+            return res;
         }
 
         /// <summary>
@@ -160,18 +176,7 @@ namespace Emgu.CV
             }
         }
 
-        /// <summary>
-        /// The function cvDet returns determinant of the square matrix
-        /// </summary>
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public double Det
-        {
-            get
-            {
-                return CvInvoke.cvDet(Ptr);
-            }
-        }
-
+        #region UnmanagedObject
         /// <summary>
         /// Release the matrix and all the memory associate with it
         /// </summary>
@@ -183,25 +188,11 @@ namespace Emgu.CV
                 _ptr = IntPtr.Zero;
             }
 
-            if (_handleSet)
-            {
-                _dataHandle.Free();
-                _handleSet = false;
-            };
+            base.FreeUnmanagedObjects();
         }
+        #endregion
 
-        /// <summary>
-        /// Return the sum of the elements in this matrix
-        /// </summary>
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public double Sum
-        {
-            get
-            {
-                return CvInvoke.cvSum(Ptr).v0;
-            }
-        }
-
+        #region Comparison
         /// <summary>
         /// This function compare the current image with <paramref name="mat2"/> and returns the comparison mask
         /// </summary>
@@ -229,6 +220,7 @@ namespace Emgu.CV
                 return (neqMask.Sum == 0.0);
             }
         }
+        #endregion
 
         #region IXmlSerializable Members
         /// <summary>
