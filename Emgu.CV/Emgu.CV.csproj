@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -90,6 +90,12 @@
     <Compile Include="UI\ImageBox.Designer.cs">
       <DependentUpon>ImageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImageProperty.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ImageProperty.Designer.cs">
+      <DependentUpon>ImageProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ImageViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +182,9 @@
     <EmbeddedResource Include="UI\ImageBox.resx">
       <DependentUpon>ImageBox.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImageProperty.resx">
+      <DependentUpon>ImageProperty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>

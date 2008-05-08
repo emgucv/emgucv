@@ -29,37 +29,54 @@ namespace Emgu.CV
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.picturePanel = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.helloWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.operationStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.propertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageProperty1 = new Emgu.CV.UI.ImageProperty();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picturePanel.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 113);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(150, 37);
-            this.panel2.TabIndex = 1;
-            // 
             // picturePanel
             // 
-            this.picturePanel.Controls.Add(this.pictureBox);
+            this.picturePanel.Controls.Add(this.splitContainer1);
             this.picturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picturePanel.Location = new System.Drawing.Point(0, 0);
             this.picturePanel.Name = "picturePanel";
-            this.picturePanel.Size = new System.Drawing.Size(150, 113);
+            this.picturePanel.Size = new System.Drawing.Size(150, 150);
             this.picturePanel.TabIndex = 2;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.pictureBox);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.imageProperty1);
+            this.splitContainer1.Size = new System.Drawing.Size(150, 150);
+            this.splitContainer1.SplitterDistance = 112;
+            this.splitContainer1.TabIndex = 1;
             // 
             // pictureBox
             // 
@@ -68,17 +85,20 @@ namespace Emgu.CV
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(150, 113);
-            this.pictureBox.TabIndex = 0;
+            this.pictureBox.Size = new System.Drawing.Size(150, 112);
+            this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helloWorldToolStripMenuItem,
-            this.operationsToolStripMenuItem});
+            this.operationsToolStripMenuItem,
+            this.operationStackToolStripMenuItem,
+            this.propertyToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(166, 92);
             // 
             // helloWorldToolStripMenuItem
             // 
@@ -86,7 +106,7 @@ namespace Emgu.CV
             this.loadImageToolStripMenuItem,
             this.saveAsToolStripMenuItem});
             this.helloWorldToolStripMenuItem.Name = "helloWorldToolStripMenuItem";
-            this.helloWorldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.helloWorldToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.helloWorldToolStripMenuItem.Text = "File";
             // 
             // loadImageToolStripMenuItem
@@ -103,24 +123,57 @@ namespace Emgu.CV
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // operationsToolStripMenuItem
             // 
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
-            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.operationsToolStripMenuItem.Text = "Operations";
+            // 
+            // operationStackToolStripMenuItem
+            // 
+            this.operationStackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearToolStripMenuItem});
+            this.operationStackToolStripMenuItem.Name = "operationStackToolStripMenuItem";
+            this.operationStackToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.operationStackToolStripMenuItem.Text = "Operation Stack ";
+            // 
+            // clearToolStripMenuItem
+            // 
+            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // propertyToolStripMenuItem
+            // 
+            this.propertyToolStripMenuItem.Name = "propertyToolStripMenuItem";
+            this.propertyToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.propertyToolStripMenuItem.Text = "Property";
+            this.propertyToolStripMenuItem.Click += new System.EventHandler(this.propertyToolStripMenuItem_Click);
+            // 
+            // imageProperty1
+            // 
+            this.imageProperty1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageProperty1.Location = new System.Drawing.Point(0, 0);
+            this.imageProperty1.Name = "imageProperty1";
+            this.imageProperty1.Size = new System.Drawing.Size(150, 34);
+            this.imageProperty1.TabIndex = 0;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Image Files (*.jpg; *.bmp;*.png)|*.jpg;*.bmp;*.png|All Files(*.*)|*.*";
             // 
             // ImageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.picturePanel);
-            this.Controls.Add(this.panel2);
             this.Name = "ImageBox";
             this.picturePanel.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -129,9 +182,7 @@ namespace Emgu.CV
 
         #endregion
 
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel picturePanel;
-        private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem helloWorldToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadImageToolStripMenuItem;
@@ -139,6 +190,12 @@ namespace Emgu.CV
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem operationStackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.ToolStripMenuItem propertyToolStripMenuItem;
+        private Emgu.CV.UI.ImageProperty imageProperty1;
 
     }
 }
