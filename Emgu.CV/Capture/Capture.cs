@@ -2,13 +2,25 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+#if NET_2_0
+#else
 using System.ServiceModel;
+#endif
 
 namespace Emgu.CV
 {
     ///<summary> Create a image capture base on opencv's capture object </summary>
+#if NET_2_0
+#else
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class Capture : UnmanagedObject, ICapture, IDuplexCapture
+#endif
+    public class Capture : 
+        UnmanagedObject,
+#if NET_2_0
+#else
+        IDuplexCapture,
+#endif
+        ICapture
     {
         /// <summary>
         /// the width of this capture
@@ -130,6 +142,8 @@ namespace Emgu.CV
 #endif
         }
 
+#if NET_2_0
+#else
         /// <summary>
         /// Query a frame duplexly over WCF
         /// </summary>
@@ -169,6 +183,7 @@ namespace Emgu.CV
                 }*/
             }
         }
+#endif
 
         ///<summary> Capture Bgr image frame with timestamp</summary>
         ///<returns> A timestamped Bgr image frame</returns>
@@ -181,4 +196,5 @@ namespace Emgu.CV
             return res;
         }
     };
+
 }

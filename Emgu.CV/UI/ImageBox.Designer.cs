@@ -1,4 +1,4 @@
-namespace Emgu.CV
+namespace Emgu.CV.UI
 {
     partial class ImageBox
     {
@@ -75,7 +75,7 @@ namespace Emgu.CV
             // 
             this.splitContainer1.Panel2.Controls.Add(this.imageProperty1);
             this.splitContainer1.Size = new System.Drawing.Size(150, 150);
-            this.splitContainer1.SplitterDistance = 112;
+            this.splitContainer1.SplitterDistance = 83;
             this.splitContainer1.TabIndex = 1;
             // 
             // pictureBox
@@ -85,7 +85,7 @@ namespace Emgu.CV
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(150, 112);
+            this.pictureBox.Size = new System.Drawing.Size(150, 83);
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
@@ -156,7 +156,7 @@ namespace Emgu.CV
             this.imageProperty1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageProperty1.Location = new System.Drawing.Point(0, 0);
             this.imageProperty1.Name = "imageProperty1";
-            this.imageProperty1.Size = new System.Drawing.Size(150, 34);
+            this.imageProperty1.Size = new System.Drawing.Size(150, 63);
             this.imageProperty1.TabIndex = 0;
             // 
             // openFileDialog1

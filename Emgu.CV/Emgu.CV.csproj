@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -39,7 +39,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Linux|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug Linux\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;LINUX</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;LINUX;NET_2_0</DefineConstants>
     <DocumentationFile>..\bin\Emgu.CV.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +47,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Linux|AnyCPU' ">
     <OutputPath>bin\Release Linux\</OutputPath>
-    <DefineConstants>TRACE;LINUX</DefineConstants>
+    <DefineConstants>TRACE;LINUX;NET_2_0</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -159,6 +159,12 @@
     </Compile>
     <Compile Include="Shape\Rectangle.cs" />
     <Compile Include="TimedImage.cs" />
+    <Compile Include="UI\ParamInputDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ParamInputDlg.Designer.cs">
+      <DependentUpon>ParamInputDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="VideoWriter.cs" />
   </ItemGroup>
@@ -189,6 +195,10 @@
     <EmbeddedResource Include="UI\ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ParamInputDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ParamInputDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

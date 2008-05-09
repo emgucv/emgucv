@@ -1,75 +1,55 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForm", "Emgu.CV.Example\WindowsForm\WindowsForm.csproj", "{738D2087-13E5-4290-90E1-6E99C83C170D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForm", "..\..\Emgu.CV.Example\WindowsForm\WindowsForm.csproj", "{738D2087-13E5-4290-90E1-6E99C83C170D}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "C:\...\WebDynamicImage\", "Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
-	ProjectSection(WebsiteProperties) = preProject
-		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
-		Debug.AspNetCompiler.PhysicalPath = "Emgu.CV.Example\WebDynamicImage\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\WebDynamicImage\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/WebDynamicImage"
-		Release.AspNetCompiler.PhysicalPath = "Emgu.CV.Example\WebDynamicImage\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\WebDynamicImage\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "4336"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "Emgu.CV.Example\FaceDetection\FaceDetection.csproj", "{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\FaceDetection\FaceDetection.csproj", "{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Host", "Emgu.CV.Example\Webservice_Host\Webservice_Host.csproj", "{BDCC078C-8D14-47DC-850D-9D5731503AEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Host", "..\..\Emgu.CV.Example\Webservice_Host\Webservice_Host.csproj", "{BDCC078C-8D14-47DC-850D-9D5731503AEC}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Client", "Emgu.CV.Example\Webservice_Client\Webservice_Client.csproj", "{94C0C68E-E46F-4228-9DFF-148F9498BC0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Client", "..\..\Emgu.CV.Example\Webservice_Client\Webservice_Client.csproj", "{94C0C68E-E46F-4228-9DFF-148F9498BC0E}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HughLineAndCircleDetection", "Emgu.CV.Example\HughLineAndCircleDetection\HughLineAndCircleDetection.csproj", "{4A2817AD-1B82-48A9-A471-E6BB98801E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HughLineAndCircleDetection", "..\..\Emgu.CV.Example\HughLineAndCircleDetection\HughLineAndCircleDetection.csproj", "{4A2817AD-1B82-48A9-A471-E6BB98801E95}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture", "Emgu.CV.Example\CameraCapture\CameraCapture.csproj", "{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture", "..\..\Emgu.CV.Example\CameraCapture\CameraCapture.csproj", "{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV", "Emgu.CV\Emgu.CV.csproj", "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.csproj", "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Utils", "Emgu.Utils\Emgu.Utils.csproj", "{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Utils", "..\..\Emgu.Utils\Emgu.Utils.csproj", "{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -143,30 +123,6 @@ Global
 		{738D2087-13E5-4290-90E1-6E99C83C170D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{738D2087-13E5-4290-90E1-6E99C83C170D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{738D2087-13E5-4290-90E1-6E99C83C170D}.Release|x86.ActiveCfg = Release|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|.NET.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|.NET.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|Any CPU.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|Mixed Platforms.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug Linux|x86.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|.NET.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|.NET.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|Any CPU.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|Mixed Platforms.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|x86.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|.NET.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|.NET.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|Any CPU.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|Mixed Platforms.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|Mixed Platforms.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release Linux|x86.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|.NET.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|.NET.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|Any CPU.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|Mixed Platforms.Build.0 = Debug|.NET
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|x86.ActiveCfg = Debug|.NET
 		{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}.Debug Linux|.NET.ActiveCfg = Debug Linux|Any CPU
 		{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}.Debug Linux|Any CPU.ActiveCfg = Debug Linux|Any CPU
 		{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}.Debug Linux|Any CPU.Build.0 = Debug Linux|Any CPU

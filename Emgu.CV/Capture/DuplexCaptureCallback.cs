@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Emgu.CV
 {
+#if NET_2_0
+#else
     ///<summary>
     ///A simple implementation of the IDuplexCaptureCallback interface
     ///</summary>
@@ -37,4 +39,5 @@ namespace Emgu.CV
         public event EventHandler onFrameReceived;
 
     };
+#endif
 }

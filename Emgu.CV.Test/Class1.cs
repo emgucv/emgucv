@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Emgu.CV;
+using Emgu.CV.UI;
 using Emgu.UI;
 using System.Diagnostics;
 using System.Drawing;

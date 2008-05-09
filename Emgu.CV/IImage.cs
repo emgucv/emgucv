@@ -28,15 +28,32 @@ namespace Emgu.CV
 
         IImage PyrDown();
 
-        IImage Laplace();
+        IImage Laplace(int apertureSize);
 
         IImage ToGray();
 
-        ColorType Color
+        IImage Resize(int width, int height);
+
+        /// <summary>
+        /// The type of color for this image
+        /// </summary>
+        System.Type TypeOfColor
         {
             [ExposableMethod(Exposable = false)]
             get;
         }
+
+        /// <summary>
+        /// The type fo depth for this image
+        /// </summary>
+        System.Type TypeOfDepth
+        {
+            [ExposableMethod(Exposable = false)]
+            get;
+        }
+
+        [ExposableMethod(Exposable = false)]
+        ColorType GetColor(Point2D<int> position);
 
         [ExposableMethod(Exposable = false)]
         void Save(String fileName);

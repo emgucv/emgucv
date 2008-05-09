@@ -11,13 +11,6 @@ namespace Emgu.CV
     /// </summary>
     public static class Utils
     {
-        public static Image<Gray, D> ConvertToImage<D>(D[][] data)
-        {
-            Image<Gray, D> res = new Image<Gray, D>(data[0].Length, data.Length);
-            Emgu.Utils.CopyMatrix(data, res.MIplImage.imageData);
-            return res;
-        }
-
         /// <summary>
         /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
         /// </summary>

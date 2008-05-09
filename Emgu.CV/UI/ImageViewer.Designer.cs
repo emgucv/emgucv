@@ -1,4 +1,4 @@
-namespace Emgu.CV
+namespace Emgu.CV.UI
 {
     partial class ImageViewer
     {
@@ -28,7 +28,7 @@ namespace Emgu.CV
         /// </summary>
         private void InitializeComponent()
         {
-            this.imageBox1 = new Emgu.CV.ImageBox();
+            this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.SuspendLayout();
             // 
             // imageBox1

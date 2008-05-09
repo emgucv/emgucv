@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Emgu.CV
 {
@@ -11,7 +12,7 @@ namespace Emgu.CV
         ///<param name="fileName"> The name of the file that contains the HaarCascade object</param>
         public HaarCascade(String fileName)
         {
-            if (!System.IO.File.Exists(fileName))
+            if (!File.Exists(fileName))
             {
                 Emgu.Exception e = new Emgu.Exception(Emgu.ExceptionHeader.CriticalException,
                     String.Format("HaarCascade file {0} do not exist", fileName));

@@ -35,9 +35,13 @@ namespace Emgu.CV.UI
             this.label3 = new System.Windows.Forms.Label();
             this.mousePositionTextbox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.colorIntensityTextbox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.colorTypeTexbox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.colorDepthTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.operationStackTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -88,7 +92,7 @@ namespace Emgu.CV.UI
             this.mousePositionTextbox.Location = new System.Drawing.Point(91, 56);
             this.mousePositionTextbox.Name = "mousePositionTextbox";
             this.mousePositionTextbox.ReadOnly = true;
-            this.mousePositionTextbox.Size = new System.Drawing.Size(44, 20);
+            this.mousePositionTextbox.Size = new System.Drawing.Size(82, 20);
             this.mousePositionTextbox.TabIndex = 5;
             // 
             // label4
@@ -100,13 +104,13 @@ namespace Emgu.CV.UI
             this.label4.TabIndex = 6;
             this.label4.Text = "Intensity:";
             // 
-            // textBox2
+            // colorIntensityTextbox
             // 
-            this.textBox2.Location = new System.Drawing.Point(91, 80);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(44, 20);
-            this.textBox2.TabIndex = 7;
+            this.colorIntensityTextbox.Location = new System.Drawing.Point(91, 80);
+            this.colorIntensityTextbox.Name = "colorIntensityTextbox";
+            this.colorIntensityTextbox.ReadOnly = true;
+            this.colorIntensityTextbox.Size = new System.Drawing.Size(82, 20);
+            this.colorIntensityTextbox.TabIndex = 7;
             // 
             // label5
             // 
@@ -125,13 +129,53 @@ namespace Emgu.CV.UI
             this.colorTypeTexbox.Size = new System.Drawing.Size(38, 20);
             this.colorTypeTexbox.TabIndex = 9;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(88, 35);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(39, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Depth:";
+            // 
+            // colorDepthTextBox
+            // 
+            this.colorDepthTextBox.Location = new System.Drawing.Point(133, 32);
+            this.colorDepthTextBox.Name = "colorDepthTextBox";
+            this.colorDepthTextBox.ReadOnly = true;
+            this.colorDepthTextBox.Size = new System.Drawing.Size(40, 20);
+            this.colorDepthTextBox.TabIndex = 11;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 114);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(87, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Operation Stack:";
+            // 
+            // operationStackTextBox
+            // 
+            this.operationStackTextBox.Location = new System.Drawing.Point(8, 130);
+            this.operationStackTextBox.Multiline = true;
+            this.operationStackTextBox.Name = "operationStackTextBox";
+            this.operationStackTextBox.ReadOnly = true;
+            this.operationStackTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.operationStackTextBox.Size = new System.Drawing.Size(165, 56);
+            this.operationStackTextBox.TabIndex = 13;
+            // 
             // ImageProperty
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.operationStackTextBox);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.colorDepthTextBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.colorTypeTexbox);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.colorIntensityTextbox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.mousePositionTextbox);
             this.Controls.Add(this.label3);
@@ -140,7 +184,7 @@ namespace Emgu.CV.UI
             this.Controls.Add(this.widthTextbox);
             this.Controls.Add(this.label1);
             this.Name = "ImageProperty";
-            this.Size = new System.Drawing.Size(248, 127);
+            this.Size = new System.Drawing.Size(182, 189);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,8 +199,12 @@ namespace Emgu.CV.UI
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox mousePositionTextbox;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox colorIntensityTextbox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox colorTypeTexbox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox colorDepthTextBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox operationStackTextBox;
     }
 }

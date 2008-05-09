@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Emgu.CV
+namespace Emgu.CV.UI
 {
     public partial class ImageViewer : Form
     {

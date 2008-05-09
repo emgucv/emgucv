@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Emgu.CV;
 
 namespace Emgu.CV.UI
 {
@@ -15,7 +16,7 @@ namespace Emgu.CV.UI
             InitializeComponent();
         }
 
-        public int Width
+        public int ImageWidth
         {
             set
             {
@@ -23,7 +24,7 @@ namespace Emgu.CV.UI
             }
         }
 
-        public int Height
+        public int ImageHeight
         {
             set
             {
@@ -39,11 +40,36 @@ namespace Emgu.CV.UI
             }
         }
 
-        public Point2D<int> MousePosition
+        public Point2D<int> MousePositionOnImage
         {
             set
             {
                 mousePositionTextbox.Text = String.Format("[{0}, {1}]", value.X, value.Y);
+            }
+        }
+
+        public ColorType ColorIntensity
+        {
+            set
+            {
+                colorIntensityTextbox.Text = String.Format("[{0}]",
+                    value == null ? "" : String.Join(",", System.Array.ConvertAll<double, String>(value.Coordinate, System.Convert.ToString)));
+            }
+        }
+
+        public System.Type ColorDepth
+        {
+            set
+            {
+                colorDepthTextBox.Text = value.Name;
+            }
+        }
+
+        public String OperationStackText
+        {
+            set
+            {
+                operationStackTextBox.Text = value;
             }
         }
     }

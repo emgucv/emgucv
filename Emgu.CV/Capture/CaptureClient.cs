@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+#if NET_2_0
+#else
 using System.ServiceModel;
+#endif
 using System.Threading;
 
 namespace Emgu.CV
 {
-#if LINUX
+#if NET_2_0
     /*
         Since mono-olive do not support creation of DuplexChannelFactory, this class is disabled
     */
