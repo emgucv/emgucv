@@ -23,14 +23,6 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Returns the pointer to CvFont
-        /// </summary>
-        public IntPtr Ptr
-        {
-            get { return _ptr; }
-        }
-
-        /// <summary>
         /// Release the font object
         /// </summary>
         protected override void FreeUnmanagedObjects()

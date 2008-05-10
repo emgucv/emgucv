@@ -31,9 +31,6 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> A pointer to the internal CvHaarClassifierCascade structure </summary>
-        public IntPtr Ptr { get { return _ptr; } }
-
         /// <summary>
         /// Release the HaarCascade Object and all the memory associate with it
         /// </summary>

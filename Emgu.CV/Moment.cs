@@ -13,7 +13,7 @@ namespace Emgu.CV
         /// <summary>
         /// A pointer to the CvMoment structure
         /// </summary>
-        public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+        public new IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
 
         /// <summary>
         /// Create a CvMoment structure
@@ -73,7 +73,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// The function cvGetCentralMoment retrieves the central moment, which in case of image moments is defined as:
-        /// ?x_order,y_order=sumx,y(I(x,y)•(x-xc)x_order•(y-yc)y_order),
+        /// ?x_order,y_order=sumx,y(I(x,y)?x-xc)x_order?y-yc)y_order),
         /// where xc=M10/M00, yc=M01/M00 - coordinates of the gravity center
         /// </summary>
         /// <param name="x_order">x order of the retrieved moment, x_order &gt;= 0.</param>

@@ -25,13 +25,5 @@ namespace Emgu.CV
             CvInvoke.cvReleaseMemStorage(ref _ptr);
         }
 
-        /// <summary>
-        /// The Pointer to the storage
-        /// </summary>
-        public IntPtr Ptr
-        {
-            get { return _ptr;  }
-        }
-
     }
 }

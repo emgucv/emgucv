@@ -26,7 +26,7 @@ namespace Emgu.CV
 
         ///<summary> The pointer to the internal structure </summary>
         [XmlIgnore]
-        public IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+        public new IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
 
         #region properties
         ///<summary> 

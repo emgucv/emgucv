@@ -10,14 +10,6 @@ namespace Emgu.CV
     public class VideoWriter : UnmanagedObject
     {
         /// <summary>
-        /// A pointer to the cvVideoWriter structure
-        /// </summary>
-        public IntPtr Ptr
-        {
-            get { return _ptr; }
-        }
-
-        /// <summary>
         /// Create a video writer using the specific information
         /// </summary>
         /// <param name="filename">The name of the video file to be written to </param>

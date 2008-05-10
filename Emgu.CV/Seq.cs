@@ -56,11 +56,6 @@ namespace Emgu.CV
         public MemStorage Storage { get { return _stor; } }
 
         /// <summary>
-        /// A Pointer to the sequence that represent this Seq
-        /// </summary>
-        public IntPtr Ptr { get { return _ptr; } }
-
-        /// <summary>
         /// Get the MCvSeq structure
         /// </summary>
         public MCvSeq MCvSeq

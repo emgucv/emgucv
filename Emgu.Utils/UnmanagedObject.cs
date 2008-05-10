@@ -14,5 +14,26 @@ namespace Emgu
         /// </summary>
         protected IntPtr _ptr = IntPtr.Zero;
 
+        /// <summary>
+        /// Pointer to the unmanaged object
+        /// </summary>
+        public IntPtr Ptr
+        {
+            get
+            {
+                return _ptr;
+            }
+
+        }
+
+        /// <summary>
+        /// implicit operator for IntPtr
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static implicit operator IntPtr(UnmanagedObject obj)
+        {
+            return obj._ptr;
+        }
     }
 }
