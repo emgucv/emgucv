@@ -8,7 +8,10 @@ namespace Emgu.CV
 {
     ///<summary> A 3D point </summary>
     ///<typeparam name="T"> The type of value for this 3D point</typeparam>
+#if NET_2_0
+#else
     [DataContract]
+#endif
     public class Point3D<T> : Point2D<T> where T : IComparable, new()
     {
 

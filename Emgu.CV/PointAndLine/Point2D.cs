@@ -8,7 +8,10 @@ namespace Emgu.CV
 {
     ///<summary> A two dimensional point </summary>
     ///<typeparam name="T"> The type of value for this 2D point</typeparam>
+#if NET_2_0
+#else
     [DataContract]
+#endif
     [Serializable]
     public class Point2D<T> : Point<T> where T : IComparable, new() 
     {
