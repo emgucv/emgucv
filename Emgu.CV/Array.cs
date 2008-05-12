@@ -11,7 +11,10 @@ namespace Emgu.CV
     ///<summary>
     ///The Array class that wrap around CvArr in OpenCV
     ///</summary>
+#if NET_2_0
+#else
     [DataContract]
+#endif
     public abstract class Array : UnmanagedObject
     {
         /// <summary>

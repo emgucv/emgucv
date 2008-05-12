@@ -4,13 +4,19 @@ using System.Text;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+#if NET_2_0
+#else
 using System.ServiceModel;
+#endif
 
 namespace Emgu.CV
 {
     ///<summary> A multi dimension point</summary>
     ///<typeparam name="T"> The type of value for this point</typeparam>
+#if NET_2_0
+#else
     [DataContract]
+#endif
     [Serializable]
     public class Point<T> : IEquatable<Point<T>> where T : IComparable, new()
     {
