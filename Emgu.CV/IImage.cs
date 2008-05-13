@@ -22,7 +22,7 @@ namespace Emgu.CV
             get;
         }
 
-        IImage Not();
+        void _Not();
 
         IImage PyrUp();
 

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 using Emgu.CV;
+using Emgu.Reflection;
 
 namespace Emgu.CV.UI
 {
@@ -19,7 +20,7 @@ namespace Emgu.CV.UI
         private IImage _image;
         private IImage _displayedImage;
 
-        private Stack<ImageOperation> _operationStack;
+        private Stack<Operation<IImage>> _operationStack;
 
         /// <summary>
         /// Create a ImageBox
@@ -30,12 +31,12 @@ namespace Emgu.CV.UI
             //panel2.Height = 0;
             splitContainer1.Panel2Collapsed = true;
 
-            _operationStack = new Stack<ImageOperation>();
+            _operationStack = new Stack<Operation<IImage>>();
             
             AddOperationMenuItem();
         }
 
-        private void PushOperation(ImageOperation operation)
+        private void PushOperation(Operation<IImage> operation)
         {
             _operationStack.Push(operation);
             imageProperty1.OperationStackText = OperationStackToString();
@@ -52,7 +53,7 @@ namespace Emgu.CV.UI
         private String OperationStackToString()
         {
             List<String> opStr = new List<string>();
-            foreach (ImageOperation op in _operationStack)
+            foreach (Operation<IImage> op in _operationStack)
             {
                 opStr.Add(op.ToString());
             }
@@ -81,7 +82,7 @@ namespace Emgu.CV.UI
                         List<Object> paramList = new List<object>();
                         if (ParamInputDlg.GetParams(miRef, paramList))
                         {
-                            ImageOperation operation = new ImageOperation(miRef, paramList.ToArray());
+                            Operation<IImage> operation = new Operation<IImage>(miRef, paramList.ToArray());
                             PushOperation(operation);
                         }
                     }; 
@@ -106,11 +107,24 @@ namespace Emgu.CV.UI
 
                 if (displayedImage != null)
                 {
-                    ImageOperation[] ops = _operationStack.ToArray();
+                    Operation<IImage>[] ops = _operationStack.ToArray();
                     System.Array.Reverse(ops);
-                    foreach (ImageOperation operation in ops)
-                        displayedImage = operation.ProcessImage(displayedImage);
-
+                    foreach (Operation<IImage> operation in ops)
+                    {
+                        if (operation.Method.ReturnType == typeof(void))
+                        {
+                            //if the operation has return type of void, just execute the operation
+                            operation.ProcessMethod(displayedImage);
+                        }
+                        else if (operation.Method.ReturnType == typeof(IImage))
+                        {
+                            displayedImage = operation.ProcessMethod(displayedImage) as IImage;
+                        }
+                        else
+                        {
+                            throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
+                        }
+                    }
                     DisplayedImage = displayedImage;
                 }
 
@@ -183,44 +197,6 @@ namespace Emgu.CV.UI
                     if (atts.Length == 0 || ((ExposableMethodAttribute)atts[0]).Exposable)
                         yield return mi as MethodInfo;
                 }
-            }
-        }
-
-        private class ImageOperation
-        {
-            private MemberInfo _mi;
-
-            public MemberInfo Method
-            {
-                get { return _mi; }
-                set { _mi = value; }
-            }
-
-            private Object[] _parameters;
-
-            public Object[] Parameters
-            {
-                get { return _parameters; }
-                set { _parameters = value; }
-            }
-	
-            public ImageOperation(MemberInfo mi, Object[] parameters)
-            {
-                _mi = mi;
-                _parameters = parameters;
-            }
-
-            public IImage ProcessImage(IImage src)
-            {
-                Type IImageType = typeof(IImage);
-                return IImageType.InvokeMember(_mi.Name, BindingFlags.InvokeMethod, null, src, _parameters) as IImage;
-            }
-
-            public override string ToString()
-            {
-                return String.Format("{0}({1})",
-                    Method.Name,
-                    String.Join(", ", System.Array.ConvertAll<Object, String>( Parameters, System.Convert.ToString) ));
             }
         }
 

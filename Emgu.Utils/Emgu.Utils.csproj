@@ -150,6 +150,7 @@
     <Compile Include="DisposableObject.cs" />
     <Compile Include="Envelope.cs" />
     <Compile Include="Exception.cs" />
+    <Compile Include="Operation.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnmanagedObject.cs" />
