@@ -9,6 +9,9 @@ using System.Reflection;
 
 namespace Emgu.CV.UI
 {
+    /// <summary>
+    /// The dialog to ask user for parameters to the specific method
+    /// </summary>
     public partial class ParamInputDlg : Form
     {
         private bool _sucessed = false;
@@ -104,6 +107,29 @@ namespace Emgu.CV.UI
             }
         }
 
+        private static String ParseParameterName(ParameterInfo param)
+        {
+            String name = param.Name;
+
+            #region Add space before every upper case character
+            Char[] nameChars = name.ToCharArray();
+            List<Char> charList = new List<char>();
+            foreach (Char c in nameChars)
+            {
+                if (c.CompareTo('A') >= 0 && c.CompareTo('Z') <= 0)
+                {   //upper case char
+                    charList.Add(' ');
+                }
+                charList.Add(c);
+            }
+            name = new string(charList.ToArray());
+            #endregion
+
+            //convert the first letter to upper case
+            name = name.Substring(0, 1).ToUpper() + name.Substring(1);
+            return name;
+        }
+
         /// <summary>
         /// Create a panel for the specific parameter
         /// </summary>
@@ -116,26 +142,109 @@ namespace Emgu.CV.UI
             ParamInputPanel panel = new ParamInputPanel();
             panel.Height = 50;
             panel.Width = 400;
+            int textBoxStartX = 100, textBoxStartY = 10;
 
+            #region add the label for the parameter
             Label paramNameLabel = new Label();
-            paramNameLabel.Text = param.Name;
+            paramNameLabel.Text = ParseParameterName(param) + ":" ;
             paramNameLabel.AutoSize = true;
             panel.Controls.Add(paramNameLabel);
-            paramNameLabel.Location = new System.Drawing.Point(10, 10);
+            paramNameLabel.Location = new System.Drawing.Point(10, textBoxStartY);
+            #endregion
 
-            if (paramType == typeof(int))
+            if (paramType.IsEnum)
             {
-                //Do something here
-                TextBox inputTextBox = new TextBox();
-                panel.Controls.Add(inputTextBox);
-                inputTextBox.Location = new System.Drawing.Point(100, 10);
+                ComboBox combo = new ComboBox();
+                panel.Controls.Add(combo);
+                combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+                combo.Items.AddRange(Enum.GetNames(paramType));
+                combo.SelectedIndex = 0;
+
                 panel.GetParamFunction =
                     delegate()
                     {
                         Object o = null;
                         try
                         {
-                            o = System.Convert.ToInt32(inputTextBox.Text);
+                            o = Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                        return o;
+                    };
+            } else if (paramType == typeof(bool))
+            {
+                ComboBox combo = new ComboBox();
+                panel.Controls.Add(combo);
+                combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+                combo.Items.AddRange(new String[] { "True", "False" });
+                combo.SelectedIndex = 0;
+                panel.GetParamFunction =
+                    delegate()
+                    {
+                        Object o = null;
+                        try
+                        {
+                            o = combo.SelectedItem.ToString().Equals("True");
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                        return o;
+                    };
+            }
+            else if (paramType == typeof(int) || paramType == typeof(double))
+            {
+                //Create inpout box for the int paramater
+                TextBox inputTextBox = new TextBox();
+                panel.Controls.Add(inputTextBox);
+                inputTextBox.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+                inputTextBox.Text = "0";
+
+                panel.GetParamFunction =
+                    delegate()
+                    {
+                        Object o = null;
+                        try
+                        {
+                            o = System.Convert.ChangeType(inputTextBox.Text, paramType);
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                        return o;
+                    };
+            }
+            else if (paramType == typeof(MCvScalar))
+            {
+                TextBox[] inputBoxes = new TextBox[4];
+                int boxWidth = 40;
+
+                //Create input boxes for the scalar value
+                for (int i = 0; i < inputBoxes.Length; i++)
+                {
+                    inputBoxes[i] = new TextBox();
+                    panel.Controls.Add(inputBoxes[i]);
+                    inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+                    inputBoxes[i].Width = boxWidth;
+                    inputBoxes[i].Text = "0.0";
+                }
+                panel.GetParamFunction =
+                    delegate()
+                    {
+                        Object o = null;
+                        try
+                        {
+                            double[] values = new double[4];
+                            for (int i = 0; i < inputBoxes.Length; i++)
+                            {
+                                values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                            }
+                            o = new MCvScalar(values[0], values[1], values[2], values[3]);
                         }
                         catch (Exception)
                         {

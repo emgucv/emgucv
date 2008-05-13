@@ -41,5 +41,14 @@ namespace Emgu.Reflection
                 Method.Name,
                 String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
         }
+
+        public String ToCode(String instanceName)
+        {
+            String res = String.Format("{0}.{1}({2})",
+                instanceName,
+                Method.Name,
+                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+            return res;
+        }
     }
 }

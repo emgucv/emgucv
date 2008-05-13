@@ -1,5 +1,8 @@
 namespace Emgu.CV.UI
 {
+    /// <summary>
+    /// The control to display image properties
+    /// </summary>
     partial class ImageProperty
     {
         /// <summary> 

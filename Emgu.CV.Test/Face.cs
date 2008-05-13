@@ -63,7 +63,7 @@ namespace Emgu.CV.Test
         private Image<Gray, D> _s;
         private Image<Gray, D> _v;
         private Histogram _hueHtg;
-        private Seq<MCvContour> _skinContour;
+        //private Seq<MCvContour> _skinContour;
         private Rectangle<double> _rect;
         private HaarCascade _eyeCascade;
 
@@ -231,7 +231,7 @@ namespace Emgu.CV.Test
             if (_h != null) _h.Dispose();
             if (_s != null) _s.Dispose();
             if (_v != null) _v.Dispose();
-            if (_skinContour != null) _skinContour.Dispose();
+            //if (_skinContour != null) _skinContour.Dispose();
         }
     }
 }

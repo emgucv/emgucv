@@ -11,11 +11,17 @@ namespace Emgu.CV.UI
 {
     public partial class ImageProperty : UserControl
     {
+        /// <summary>
+        /// Create a ImageProperty control
+        /// </summary>
         public ImageProperty()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Set the width of the image
+        /// </summary>
         public int ImageWidth
         {
             set
@@ -24,6 +30,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the height of the image
+        /// </summary>
         public int ImageHeight
         {
             set
@@ -32,6 +41,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the Type of the color
+        /// </summary>
         public String ColorType
         {
             set
@@ -40,6 +52,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the mouse position over the image
+        /// </summary>
         public Point2D<int> MousePositionOnImage
         {
             set
@@ -48,6 +63,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the color intensity of the pixel on the image where is mouse is at
+        /// </summary>
         public ColorType ColorIntensity
         {
             set
@@ -57,6 +75,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the Depth of the image
+        /// </summary>
         public System.Type ColorDepth
         {
             set
@@ -65,6 +86,9 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Set the description of the operation stack
+        /// </summary>
         public String OperationStackText
         {
             set

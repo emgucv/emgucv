@@ -52,14 +52,22 @@ namespace Emgu.CV.UI
 
         private String OperationStackToString()
         {
+            String CSharpFunction = "public static IImage Function(IImage image)\r\n{{\r\n\t{0}\r\n\treturn image;\r\n}}";
             List<String> opStr = new List<string>();
             foreach (Operation<IImage> op in _operationStack)
             {
-                opStr.Add(op.ToString());
+                if (op.Method.ReturnType == typeof(void))
+                {
+                    opStr.Add(op.ToCode("image")+";");
+                }
+                else
+                {
+                    opStr.Add("image = " + op.ToCode("image")+";");
+                }
             }
             String[] sArray = opStr.ToArray();
             System.Array.Reverse(sArray);
-            return String.Join("->", sArray);
+            return String.Format(CSharpFunction, String.Join("\r\n\t", sArray));
         }
 
         private void AddOperationMenuItem()
@@ -152,7 +160,7 @@ namespace Emgu.CV.UI
                     imageProperty1.ImageHeight = _displayedImage.Height;
 
                     #region display the color type
-                    System.Type colorType = _displayedImage.TypeOfColor;
+                    Type colorType = _displayedImage.TypeOfColor;
                     Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfo), true);
                     if (colorAttributes.Length > 0)
                     {
