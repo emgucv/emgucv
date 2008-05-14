@@ -46,7 +46,7 @@ namespace Emgu.CV
             _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
             if (_ptr == IntPtr.Zero)
             {
-                throw new Emgu.Exception(Emgu.ExceptionHeader.MediumException, "Error: Unable to connect to camera");
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Medium, "Error: Unable to connect to camera");
             }
 #endif
         }
@@ -60,7 +60,7 @@ namespace Emgu.CV
             _ptr = CvInvoke.cvCreateFileCapture(filename);
             if (_ptr == IntPtr.Zero)
             {
-                throw new Emgu.Exception(Emgu.ExceptionHeader.MediumException, "Unable to create capture from file:" + filename);
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to create capture from file:" + filename);
             }
         }
 

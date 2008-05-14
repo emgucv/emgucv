@@ -4,13 +4,15 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV
 {
     /// <summary> 
     /// The Matrix class that wrap around CvMat in OpenCV 
     /// </summary>
-    public class Matrix<D> : Array, IEquatable<Matrix<D>>, IXmlSerializable where D : new()
+    [Serializable]
+    public class Matrix<D> : CvArray<D>, IEquatable<Matrix<D>> where D : new()
     {
         private D[,] _array;
 
@@ -51,7 +53,7 @@ namespace Emgu.CV
                     return CvEnum.MAT_DEPTH.CV_8U;
                 else
                 {
-                    throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "Unsupported matrix depth");
+                    throw new NotImplementedException("Unsupported matrix depth");                    
                 }
             }
         }
@@ -63,15 +65,12 @@ namespace Emgu.CV
         public override int Height { get { return CvMat.height; } }
 
         /// <summary>
-        /// The number of rows for this matrix
+        /// Get the underneath managed array
         /// </summary>
-        public int Rows { get { return CvMat.height; } }
-
-        /// <summary>
-        /// The number of cols for this matrix
-        /// </summary>
-        public int Cols { get { return CvMat.width; } }
-
+        public override System.Array ManagedArray
+        {
+            get { return _array; }
+        }
         /// <summary>
         /// Get or Set the data for this matrix
         /// </summary>
@@ -86,33 +85,16 @@ namespace Emgu.CV
                 Debug.Assert(value != null, "The Array cannot be null");
 
                 FreeUnmanagedObjects();
-                Debug.Assert(!_handleSet, "Handle should should be free");
+                Debug.Assert(!_dataHandle.IsAllocated , "Handle should should be free");
 
                 _array = value;
                 _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-                _handleSet = true;
+
                 _ptr = CvInvoke.cvMat(_array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject());
             }
         }
 
-        /// <summary>
-        /// Get or Set an Array of bytes that represent the data in this matrix
-        /// </summary>
-        public Byte[] Bytes
-        {
-            get
-            {
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * _array.Length;
-                Byte[] res = new Byte[size];
-                Marshal.Copy(_dataHandle.AddrOfPinnedObject(), res, 0, size);
-                return res;
-            }
-            set
-            {
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * _array.Length;
-                Marshal.Copy(value, 0, _dataHandle.AddrOfPinnedObject(), size);
-            }
-        }
+
 
         /// <summary>
         /// The MCvMat structure format  
@@ -176,6 +158,29 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Allocate data for the array
+        /// </summary>
+        /// <param name="rows">The number of rows</param>
+        /// <param name="cols">The number of columns</param>
+        protected override void AllocateData(int rows, int cols)
+        {
+            Data = new D[rows, cols];
+        }
+
+        #region Implement ISerializable interface
+        /// <summary>
+        /// Constructor used to deserialize runtime serialized object
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        public Matrix(SerializationInfo info, StreamingContext context)
+        {
+            DeserializeObjectData(info, context);
+        }
+
+        #endregion
+
         #region UnmanagedObject
         /// <summary>
         /// Release the matrix and all the memory associate with it
@@ -222,54 +227,5 @@ namespace Emgu.CV
         }
         #endregion
 
-        #region IXmlSerializable Members
-        /// <summary>
-        /// Get the xml schema
-        /// </summary>
-        /// <returns>the xml schema</returns>
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            throw new System.Exception("The method or operation is not implemented.");
-        }
-
-        /// <summary>
-        /// Function to call when deserializing this object from XML
-        /// </summary>
-        /// <param name="reader">The xml reader</param>
-        public void ReadXml(System.Xml.XmlReader reader)
-        {
-            #region read the size of the matrix and assign storage 
-            reader.MoveToFirstAttribute();
-            int rows = reader.ReadContentAsInt();
-            reader.MoveToNextAttribute();
-            int cols = reader.ReadContentAsInt();
-            System.Xml.XmlNodeType type = reader.MoveToContent();
-            Data = new D[rows, cols];
-            #endregion 
-
-            #region decode the data from Xml and assign the value to the matrix
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * rows * cols;
-            Byte[] bytes = new Byte[size];
-            reader.ReadToFollowing("Bytes");
-            reader.ReadElementContentAsBase64(bytes, 0, bytes.Length);
-            Bytes = bytes;
-            #endregion 
-        }
-
-        /// <summary>
-        /// Function to call when serializing this object to XML 
-        /// </summary>
-        /// <param name="writer">The xml writer</param>
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            writer.WriteAttributeString("Rows", Rows.ToString());
-            writer.WriteAttributeString("Cols", Cols.ToString());
-            writer.WriteStartElement("Bytes");
-            Byte[] bytes = Bytes;
-            writer.WriteBase64(bytes, 0, bytes.Length);
-            writer.WriteEndElement();
-        }
-
-        #endregion
     }
 }

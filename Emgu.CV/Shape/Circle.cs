@@ -51,7 +51,7 @@ namespace Emgu.CV
                 }
                 catch (Exception)
                 {
-                    throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "Unable to compute area");
+                    throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to compute area");
                 }
                 return a * a * Math.PI;
             }

@@ -52,7 +52,7 @@ namespace Emgu.CV.UI
 
         private String OperationStackToString()
         {
-            String CSharpFunction = "public static IImage Function(IImage image)\r\n{{\r\n\t{0}\r\n\treturn image;\r\n}}";
+            String CSharpFunction = "public static IImage Function(IImage image){0}{{{0}\t{1}{0}\treturn image;{0}}}";
             List<String> opStr = new List<string>();
             foreach (Operation<IImage> op in _operationStack)
             {
@@ -67,7 +67,7 @@ namespace Emgu.CV.UI
             }
             String[] sArray = opStr.ToArray();
             System.Array.Reverse(sArray);
-            return String.Format(CSharpFunction, String.Join("\r\n\t", sArray));
+            return String.Format(CSharpFunction, Environment.NewLine, String.Join(Environment.NewLine + "\t", sArray));
         }
 
         private void AddOperationMenuItem()
@@ -161,10 +161,10 @@ namespace Emgu.CV.UI
 
                     #region display the color type
                     Type colorType = _displayedImage.TypeOfColor;
-                    Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfo), true);
+                    Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true);
                     if (colorAttributes.Length > 0)
                     {
-                        ColorInfo info = (ColorInfo) colorAttributes[0];
+                        ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
                         imageProperty1.ColorType = info.ConversionCodeName;
                     }
                     #endregion 

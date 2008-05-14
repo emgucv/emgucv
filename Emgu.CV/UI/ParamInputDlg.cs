@@ -168,7 +168,7 @@ namespace Emgu.CV.UI
                         {
                             o = Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
                         }
-                        catch (Exception)
+                        catch (PrioritizedException)
                         {
                             return null;
                         }
@@ -189,14 +189,14 @@ namespace Emgu.CV.UI
                         {
                             o = combo.SelectedItem.ToString().Equals("True");
                         }
-                        catch (Exception)
+                        catch (PrioritizedException)
                         {
                             return null;
                         }
                         return o;
                     };
             }
-            else if (paramType == typeof(int) || paramType == typeof(double))
+            else if ( paramType == typeof(UInt64) || paramType == typeof(int) || paramType == typeof(double))
             {
                 //Create inpout box for the int paramater
                 TextBox inputTextBox = new TextBox();
@@ -212,7 +212,7 @@ namespace Emgu.CV.UI
                         {
                             o = System.Convert.ChangeType(inputTextBox.Text, paramType);
                         }
-                        catch (Exception)
+                        catch (PrioritizedException)
                         {
                             return null;
                         }
@@ -246,7 +246,7 @@ namespace Emgu.CV.UI
                             }
                             o = new MCvScalar(values[0], values[1], values[2], values[3]);
                         }
-                        catch (Exception)
+                        catch (PrioritizedException)
                         {
                             return null;
                         }

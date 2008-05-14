@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Emgu.CV
 {
@@ -18,7 +19,7 @@ namespace Emgu.CV
             _binSize = binSizes;
             _dimension = binSizes.Length;
             if (min.Length != _dimension || max.Length != _dimension)
-                throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "incompatible dimension");
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
 
             IntPtr[] r = new IntPtr[Dimension];
             for (int i = 0; i < _dimension; i++)
@@ -49,7 +50,7 @@ namespace Emgu.CV
         public void Accumulate<D>(Image<Gray, D>[] imgs)
         {
             if (imgs.Length != _dimension)
-                throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "incompatible dimension");
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
                 System.Array.ConvertAll<Image<Gray, D>, IntPtr>(
@@ -63,7 +64,7 @@ namespace Emgu.CV
         public Image<Gray, D> BackProject<D>(Image<Gray, D>[] srcs)
         {
             if (srcs.Length != _dimension)
-                throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "incompatible dimension");
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
                 System.Array.ConvertAll<Image<Gray,D>, IntPtr>(
@@ -88,7 +89,7 @@ namespace Emgu.CV
         public double Query(int[] binIndex)
         {
             if (binIndex.Length != _dimension)
-                throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "incompatible dimension");
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
 
             switch (binIndex.Length)
             {
@@ -99,7 +100,7 @@ namespace Emgu.CV
                 case 3:
                     return CvInvoke.cvQueryHistValue_3D(_ptr, binIndex[0], binIndex[1], binIndex[2]);
                 default:
-                    throw new Emgu.Exception(Emgu.ExceptionHeader.UnimplementedFunction, "Umimplemented Function");
+                    throw new NotImplementedException(String.Format("Retrive from {0} dimensional histogram is not implemented", binIndex.Length));
             }
         }
 

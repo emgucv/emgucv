@@ -72,7 +72,7 @@
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
     <Compile Include="CameraCalibration\IntrinsicCameraParameters.cs" />
     <Compile Include="Color\Bgr.cs" />
-    <Compile Include="Color\ColorInfo.cs" />
+    <Compile Include="Color\ColorInfoAttribute.cs" />
     <Compile Include="Color\Gray.cs" />
     <Compile Include="Color\Hls.cs" />
     <Compile Include="Color\Hsv.cs" />

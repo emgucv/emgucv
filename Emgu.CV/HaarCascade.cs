@@ -14,7 +14,7 @@ namespace Emgu.CV
         {
             if (!File.Exists(fileName))
             {
-                Emgu.Exception e = new Emgu.Exception(Emgu.ExceptionHeader.CriticalException,
+                Emgu.PrioritizedException e = new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical,
                     String.Format("HaarCascade file {0} do not exist", fileName));
                 e.Alert(true);
                 throw e;
@@ -24,7 +24,7 @@ namespace Emgu.CV
 
             if (_ptr == IntPtr.Zero)
             {
-                Emgu.Exception e = new Emgu.Exception(Emgu.ExceptionHeader.CriticalException,
+                Emgu.PrioritizedException e = new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical,
                     String.Format("Fail to create HaarCascade object: {0}", fileName));
                 e.Alert(true);
                 throw e;

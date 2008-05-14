@@ -66,7 +66,7 @@ namespace Emgu.CV.Test
                     }
                 })).Start();
             }
-            catch (Emgu.Exception excpt)
+            catch (Emgu.PrioritizedException excpt)
             {
                 excpt.AlertIfServere(true);
             }

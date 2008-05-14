@@ -224,7 +224,7 @@ namespace Emgu.CV.Test
             using (MemoryStream ms = new MemoryStream())
             {
                 img._RandNormal( (ulong) DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-                //Application.Run(new ImageViewer(img.ToBitmap()));
+
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                     formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 formatter.Serialize(ms, img);

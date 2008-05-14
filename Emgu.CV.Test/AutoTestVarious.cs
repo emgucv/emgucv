@@ -86,8 +86,8 @@ namespace Emgu.CV.Test
             //Trace.WriteLine(xdoc.OuterXml);
             Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(xdoc);
 
-            Byte[] a1 = img1.Binary;
-            Byte[] a2 = img2.Binary;
+            Byte[] a1 = img1.Bytes;
+            Byte[] a2 = img2.Bytes;
             Assert.AreEqual(a1.Length, a2.Length);
             for (int i = 0; i < a1.Length; i++)
             {

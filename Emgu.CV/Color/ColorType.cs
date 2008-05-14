@@ -16,9 +16,9 @@ namespace Emgu.CV
         public ColorType(int dimension) : base(dimension) { }
 
         /// <summary>
-        /// The equivalent of the Color value as MCvScalar type
+        /// The equivalent of MCvScalar value
         /// </summary>
-        public MCvScalar CvScalar
+        public MCvScalar MCvScalar
         {
             get
             {
@@ -31,6 +31,17 @@ namespace Emgu.CV
                 for (int i = 0; i < size; i++)
                     _coordinate[i] = value.v[i];
             }
+        }
+
+        
+        /// <summary>
+        /// To be removed in the next version
+        /// </summary>
+        [Obsolete("To be removed in the next version, use MCvScalar property instead")]
+        public MCvScalar CvScalar
+        {
+            get { return MCvScalar; }
+            set { MCvScalar = value; }
         }
     }
 }

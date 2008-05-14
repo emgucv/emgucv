@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Emgu
 {
@@ -52,10 +53,43 @@ namespace Emgu
         /// <param name="o4">The fourth input parameter</param>
         public delegate void Action<TInput1, TInput2, TInput3, TInput4>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
 
+        /// <summary>
+        /// Delegate similar to that in .Net 3.5
+        /// </summary>
+        /// <typeparam name="TInput1"></typeparam>
+        /// <typeparam name="TInput2"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="o1"></param>
+        /// <param name="o2"></param>
+        /// <returns></returns>
         public delegate TOutput Func<TInput1, TInput2, TOutput>(TInput1 o1, TInput2 o2);
 
+        /// <summary>
+        /// Delegate similar to that in .Net 3.5
+        /// </summary>
+        /// <typeparam name="TInput1"></typeparam>
+        /// <typeparam name="TInput2"></typeparam>
+        /// <typeparam name="TInput3"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="o1"></param>
+        /// <param name="o2"></param>
+        /// <param name="o3"></param>
+        /// <returns></returns>
         public delegate TOutput Func<TInput1, TInput2, TInput3, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3);
 
+        /// <summary>
+        /// Delegate similar to that in .Net 3.5
+        /// </summary>
+        /// <typeparam name="TInput1"></typeparam>
+        /// <typeparam name="TInput2"></typeparam>
+        /// <typeparam name="TInput3"></typeparam>
+        /// <typeparam name="TInput4"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="o1"></param>
+        /// <param name="o2"></param>
+        /// <param name="o3"></param>
+        /// <param name="o4"></param>
+        /// <returns></returns>
         public delegate TOutput Func<TInput1, TInput2, TInput3, TInput4, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
 
         /// <summary>
@@ -93,37 +127,7 @@ namespace Emgu
         public static T XmlStringDeserialize<T>(String xmlString)
         {
             return (T)(new XmlSerializer(typeof(T))).Deserialize(new StringReader(xmlString));
-        }
-
-        public static string VectorToString<T>(T[] a, string seperator)
-        {
-            return String.Join(
-                seperator, 
-                Array.ConvertAll<T, string>(a, delegate(T item) { return item.ToString(); }));
-        }
-
-        public static string MatrixToString<T>(T[][] mat, string columnToken, string rowToken)
-        {
-            return String.Join(
-                rowToken, 
-                Array.ConvertAll<T[], string>(
-                    mat,
-                    delegate(T[] a) { return VectorToString<T>(a, columnToken); }));
-        }
-
-        public static T[] StringToVector<T>(string input, string token) 
-        {
-            return Array.ConvertAll<String, T>(
-                input.Split(token.ToCharArray()),
-                delegate(String s) { return (T)Convert.ChangeType(s, typeof(T)); });
-        }
-
-        public static T[][] StringToMatrix<T>(string input, string columnToken, string rowToken)
-        {
-            return Array.ConvertAll<String, T[]>(
-                input.Split(rowToken.ToCharArray()),
-                delegate(string s) { return StringToVector<T>(s, columnToken); });
-        }      
+        }    
 
         /// <summary>
         /// Read a text file to an array of string, each row are seperated using by the input seperator
@@ -156,40 +160,65 @@ namespace Emgu
             return c;
         }
 
-        public static TOutput[] Operate<TInput1, TInput2, TOutput>(TInput1[] param1, TInput2[] param2, Func<TInput1, TInput2, TOutput> func)
-        {
-            int size = param1.Length;
-            if (size != param2.Length) 
-                throw new Emgu.Exception(Emgu.ExceptionHeader.CriticalException, "Array size do not match");
-            
-            TOutput[] res = new TOutput[size];
-            for (int i = 0; i < size; res[i] = func(param1[i], param2[i]), i++);
-            
-            return res;
-        }
-
-        public static T[] Evolve<T>(T start, Converter<T, bool> terminateCondition, Converter<T, T> evolveAction)
-        {
-            List<T> res = new List<T>();
-            T current = start;
-            while (terminateCondition(current))
-            {
-                res.Add(current);
-                current = evolveAction(current);
-            }
-            
-            return res.ToArray();
-        }
-
+        /// <summary>
+        /// Event argument that returns a string
+        /// </summary>
         public class StringEventArgs : EventArgs
         {
             private string _message;
-            public string Message { get { return _message; } }
+            /// <summary>
+            /// The message for this EventArgs
+            /// </summary>
+            public string Message 
+            { 
+                get { return _message; } 
+            }
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="msg">the message for this event</param>
             public StringEventArgs(string msg)
                 : base()
             {
                 _message = msg;
             }
+        }
+
+        /// <summary>
+        /// Call a command from command line
+        /// </summary>
+        /// <param name="execFileName">The name of the executable</param>
+        /// <param name="arguments">The arguments to the executeable</param>
+        /// <returns>The standard output</returns>
+        public static string ExecuteCmd(string execFileName, string arguments)
+        {
+            Process processor = new Process();
+
+            processor.StartInfo.FileName = execFileName;
+            processor.StartInfo.Arguments = arguments;
+            processor.StartInfo.UseShellExecute = false;
+            processor.StartInfo.RedirectStandardOutput = true;
+            processor.StartInfo.RedirectStandardError = true;
+
+            //string error = string.Empty;
+            try
+            {
+                processor.Start();
+            }
+            catch (Exception)
+            {
+                //error = e.Message;
+            }
+
+            //processor.BeginErrorReadLine();
+            //String error2 = processor.StandardError.ReadToEnd();
+            string output = processor.StandardOutput.ReadToEnd();
+
+            processor.WaitForExit();
+            processor.Close();
+
+            return output;
         }
 
         /// <summary>
@@ -211,9 +240,9 @@ namespace Emgu
         /// <summary>
         /// Copy a generic vector to the unmanaged memory
         /// </summary>
-        /// <typeparam name="D">The type of the vector</typeparam>
-        /// <param name="src">the source vetor</param>
-        /// <param name="dest">pointer to the destination unmanaged memory</param>
+        /// <typeparam name="D">The data type of the vector</typeparam>
+        /// <param name="src">The source vector</param>
+        /// <param name="dest">Pointer to the destination unmanaged memory</param>
         public static void CopyVector<D>(D[] src, IntPtr dest)
         {
             int size = Marshal.SizeOf( typeof(D) ) * src.Length;
@@ -222,6 +251,12 @@ namespace Emgu
             handle.Free();
         }
 
+        /// <summary>
+        /// Copy a jagged two dimensional array to the unmanaged memory
+        /// </summary>
+        /// <typeparam name="D">The data type of the jagged two dimensional</typeparam>
+        /// <param name="src">The src array</param>
+        /// <param name="dest">Pointer to the destination unmanaged memory</param>
         public static void CopyMatrix<D>(D[][] src, IntPtr dest)
         {
             int datasize = Marshal.SizeOf( typeof(D) );
@@ -236,6 +271,12 @@ namespace Emgu
             }
         }
 
+        /// <summary>
+        /// Copy a jagged two dimensional array from the unmanaged memory
+        /// </summary>
+        /// <typeparam name="D">The data type of the jagged two dimensional</typeparam>
+        /// <param name="src">The src array</param>
+        /// <param name="dest">Pointer to the destination unmanaged memory</param>
         public static void CopyMatrix<D>(IntPtr src, D[][] dest)
         {
             int datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(D) );
@@ -259,9 +300,19 @@ namespace Emgu
         [DllImport("kernel32.dll", EntryPoint="CopyMemory")]
         public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 
+        /// <summary>
+        /// Maps the specified executable module into the address space of the calling process.
+        /// </summary>
+        /// <param name="dllname">The name of the dll</param>
+        /// <returns>The handle to the library</returns>
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibrary(String dllname);
 
+        /// <summary>
+        /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
+        /// </summary>
+        /// <param name="handle">The handle to the library</param>
+        /// <returns>If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.</returns>
         [DllImport("kernel32.dll")]
         public static extern bool FreeLibrary(IntPtr handle);
     }

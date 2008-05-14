@@ -19,8 +19,6 @@ namespace Emgu
     public static class ExceptionEnviorment
     {
         private static ExceptionLevel _currentExceptionLevel = ExceptionLevel.Minor;
-
-        private static ExceptionDictionary _dic = new ExceptionDictionary();
         
         /// <summary>
         /// The current exception level
@@ -28,11 +26,6 @@ namespace Emgu
         [XmlAttribute("ExceptionLevel")]
         public static ExceptionLevel ExceptionLevel { get { return _currentExceptionLevel; } set { _currentExceptionLevel = value; } }
         
-        public static ExceptionDictionary ExceptionDictionary { get { return _dic; } }
-#if LINUX
-#else
-        public static SpeechSynthesizer Synthesizer = new SpeechSynthesizer(); 
-#endif
         }
 
     /// <summary>
@@ -62,80 +55,28 @@ namespace Emgu
         Critical = 5,
     }
 
-    public class ExceptionDetail
-    {
-        private int _level;
-
-        public int Level { get { return _level; } }
-
-        public ExceptionDetail(int level)
-        {
-            _level = level;
-        }
-    }
-
-    #region Define builtin exceptions
-    public enum ExceptionHeader
-    {
-        UnsupportedFileType,
-        UnimplementedFunction,
-        MinorException,
-        LowException, 
-        MediumException,
-        HighException,
-        CriticalException,
-    }
-
-    public class ExceptionDictionary : Dictionary<int, ExceptionDetail>
-    {
-        public ExceptionDictionary()
-            : base()
-        {
-            Add((int)ExceptionHeader.UnsupportedFileType,
-                new ExceptionDetail((int)ExceptionLevel.Medium));
-
-            Add((int)ExceptionHeader.LowException,
-                new ExceptionDetail((int)ExceptionLevel.Low));
-
-            Add((int)ExceptionHeader.MinorException,
-                new ExceptionDetail((int)ExceptionLevel.Minor));
-
-            Add((int)ExceptionHeader.MediumException,
-                new ExceptionDetail((int)ExceptionLevel.Medium));
-
-            Add((int)ExceptionHeader.HighException,
-                new ExceptionDetail((int)ExceptionLevel.High));
-
-            Add((int)ExceptionHeader.CriticalException,
-                new ExceptionDetail((int)ExceptionLevel.Critical));
-
-            Add((int)ExceptionHeader.UnimplementedFunction,
-                new ExceptionDetail((int)ExceptionLevel.Low));
-        }
-    }
-    #endregion
-
     /// <summary>
     /// The exception class used by Emgu programs
     /// </summary>
-    public class Exception : System.Exception
+    public class PrioritizedException : Exception
     {
-        private ExceptionHeader _exceptionHeader;
+        private ExceptionLevel _exceptionHeader;
 
         /// <summary>
         /// Create an exception with the specific header and message
         /// </summary>
         /// <param name="hdr"></param>
         /// <param name="message"></param>
-        public Exception(ExceptionHeader hdr, string message)
+        public PrioritizedException(ExceptionLevel hdr, string message)
             : base(message)
         {
             _exceptionHeader = hdr;
         }
 
-        public ExceptionDetail ExceptionBody { get { return ExceptionEnviorment.ExceptionDictionary[ (int)_exceptionHeader]; } }
-
-        public ExceptionHeader ExceptionHeader { get {return _exceptionHeader;}}
+        /// <summary>
+        /// The level of Exception
+        /// </summary>
+        public ExceptionLevel ExceptionLevel { get { return _exceptionHeader; } }
 
         /// <summary>
         /// Check if the severity of the current exception is greater or equal to the serverity of the Exception Enviorment
@@ -143,7 +84,7 @@ namespace Emgu
         /// <returns>True if the serverity is greater or equal to the one defined in the Exception Enviorment</returns>
         public bool isSevere()
         {
-            return ((int)ExceptionBody.Level >= (int) ExceptionEnviorment.ExceptionLevel);
+            return ((int)ExceptionLevel >= (int)ExceptionEnviorment.ExceptionLevel);
         }
 
         /// <summary>
@@ -152,10 +93,6 @@ namespace Emgu
         /// <param name="syn">If true, the operation is synchronous, otherwise, asynchronous</param>
         public void Alert(bool syn)
         {
-#if LINUX
-#else
-            ExceptionEnviorment.Synthesizer.SpeakAsync(Message);
-#endif
             if (syn)
                 MessageBox.Show(Message);
             else

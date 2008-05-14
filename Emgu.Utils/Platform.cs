@@ -7,7 +7,7 @@ namespace Emgu
     /// <summary>
     /// Provide information for the platform which is using 
     /// </summary>
-    public class Platform
+    public static class Platform
     {
         /// <summary>
         /// The operating system that is using

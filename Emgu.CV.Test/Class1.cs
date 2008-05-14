@@ -61,13 +61,6 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestPP()
-        {
-            int[] val = new int[4];
-            for (int i = 0; i < val.Length; val[i] = i + val[i++]) ;
-            Trace.WriteLine( Emgu.Utils.VectorToString<int>(val, ",") );
-        }
-
         public void TestConvert()
         {
             Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
@@ -401,9 +394,9 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> image = new Image<Bgr,byte>("lena.jpg");
             //Image<Rgb, Byte> image = new Image<Rgb, byte>(512, 512);
             DateTime t1 = DateTime.Now;
-            int l1 = image.Binary.Length;
+            int l1 = image.Bytes.Length;
             DateTime t2 = DateTime.Now;
-            int l2 = image.CompressedBinary.Length;
+            int l2 = image.CompressedBytes.Length;
             DateTime t3 = DateTime.Now;
             TimeSpan ts1 = t2.Subtract(t1);
             TimeSpan ts2 = t3.Subtract(t2);
@@ -413,9 +406,9 @@ namespace Emgu.CV.Test
             Trace.WriteLine(
                 String.Format(
                 "Original size: {0}; Compressed Size: {1}, Compression Ratio: {2}%", 
-                image.Binary.Length, 
-                image.CompressedBinary.Length,
-                image.CompressedBinary.Length * 100.0 / image.Binary.Length));
+                image.Bytes.Length, 
+                image.CompressedBytes.Length,
+                image.CompressedBytes.Length * 100.0 / image.Bytes.Length));
         }
 
         public void TestMarshalIplImage()

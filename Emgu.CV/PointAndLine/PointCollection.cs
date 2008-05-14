@@ -83,7 +83,6 @@ namespace Emgu.CV
         /// <returns>A pointer to the sequence</returns>
         public static Seq<MCvPoint2D32f> To2D32fSequence(MemStorage stor, IEnumerable<Point<D>> points)
         {
-
             Seq<MCvPoint2D32f> seq = new Seq<MCvPoint2D32f>(
                 CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
                 stor);

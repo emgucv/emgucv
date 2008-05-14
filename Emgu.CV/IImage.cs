@@ -64,6 +64,22 @@ namespace Emgu.CV
         /// <param name="iterations">the number of iterations for dilate</param>
         void _Dilate(int iterations);
 
+        /// <summary>
+        /// Inplace fills Array with uniformly distributed random numbers
+        /// </summary>
+        /// <param name="seed">Seed for the random number generator</param>
+        /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
+        /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
+        void _RandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue);
+
+        /// <summary>
+        /// Inplace fills Array with normally distributed random numbers
+        /// </summary>
+        /// <param name="seed">Seed for the random number generator</param>
+        /// <param name="mean">the mean value of random numbers</param>
+        /// <param name="std"> the standard deviation of random numbers</param>
+        void _RandNormal(UInt64 seed, MCvScalar mean, MCvScalar std);
+
         ///<summary>
         ///The function cvPyrUp performs up-sampling step of Gaussian pyramid decomposition. 
         ///First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 
@@ -115,6 +131,17 @@ namespace Emgu.CV
         ///<param name="threshLinking"> The threshold used for edge Linking</param>
         ///<returns> The edges found by the Canny edge detector</returns>
         IImage Canny(MCvScalar thresh, MCvScalar threshLinking);
+
+        /// <summary>
+        /// The function cvSobel calculates the image derivative by convolving the image with the appropriate kernel:
+        /// dst(x,y) = dxorder+yodersrc/dxxorder•dyyorder |(x,y)
+        /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
+        /// </summary>
+        /// <param name="xorder">Order of the derivative x</param>
+        /// <param name="yorder">Order of the derivative y</param>
+        /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size ×aperture_size separable kernel will be used to calculate the derivative.</param>
+        /// <returns>The result of the sobel edge detector</returns>
+        IImage Sobel(int xorder, int yorder, int apertureSize);
 
         ///<summary> Return a filpped copy of the current image</summary>
         ///<param name="flipType">The type of the flipping</param>
