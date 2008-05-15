@@ -39,7 +39,7 @@ namespace HughLineAndCircleDetection
                                 10 //gap between lines
                                 );
                 
-                for (int i = 0; i < stuff.Color.Dimension; i++)
+                for (int i = 0; i < new Bgr().Dimension; i++)
                 {
                     //set the color of the channel
                     Bgr channelColor = new Bgr();

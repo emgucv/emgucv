@@ -30,8 +30,8 @@ namespace Emgu.CV
         /// <param name="rows">The number of rows (<b>height</b>)</param>
         /// <param name="cols">The number of cols (<b>width</b>)</param>
         public Matrix(int rows, int cols)
-            : this(new D[rows, cols])
         {
+            AllocateData(rows, cols);
         }
 
         ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>

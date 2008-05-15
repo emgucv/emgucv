@@ -49,8 +49,7 @@ namespace Emgu.CV
         ///</summary>
         public void Accumulate<D>(Image<Gray, D>[] imgs)
         {
-            if (imgs.Length != _dimension)
-                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
+            Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
                 System.Array.ConvertAll<Image<Gray, D>, IntPtr>(
@@ -63,8 +62,8 @@ namespace Emgu.CV
         ///<summary> Back project the histogram into an gray scale image</summary>
         public Image<Gray, D> BackProject<D>(Image<Gray, D>[] srcs)
         {
-            if (srcs.Length != _dimension)
-                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
+            
+            Debug.Assert(srcs.Length == _dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
                 System.Array.ConvertAll<Image<Gray,D>, IntPtr>(

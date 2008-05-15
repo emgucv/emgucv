@@ -13,13 +13,8 @@ namespace Emgu.CV
         public HaarCascade(String fileName)
         {
             if (!File.Exists(fileName))
-            {
-                Emgu.PrioritizedException e = new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical,
-                    String.Format("HaarCascade file {0} do not exist", fileName));
-                e.Alert(true);
-                throw e;
-            }
-
+                throw new FileNotFoundException("File Not Found", fileName);
+            
             _ptr = CvInvoke.cvLoad(fileName, IntPtr.Zero, null, IntPtr.Zero);
 
             if (_ptr == IntPtr.Zero)

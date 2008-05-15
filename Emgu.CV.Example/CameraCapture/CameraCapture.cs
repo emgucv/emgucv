@@ -34,7 +34,7 @@ namespace CameraCapture
                     {
                         _capture = new Capture();
                     }
-                    catch (Emgu.Exception excpt)
+                    catch (Emgu.PrioritizedException excpt)
                     {
                         excpt.Alert(true);
                         return;
