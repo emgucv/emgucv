@@ -1,14 +1,8 @@
-//#define LINUX
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-#if LINUX
-#else
-using System.Speech;
-using System.Speech.Synthesis;
-#endif
 
 namespace Emgu
 {

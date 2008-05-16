@@ -4,10 +4,7 @@ using System.Text;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-#if NET_2_0
-#else
-using System.ServiceModel;
-#endif
+using System.ServiceModel;
 
 namespace Emgu.CV
 {
