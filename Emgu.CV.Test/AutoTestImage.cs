@@ -185,7 +185,7 @@ namespace Emgu.CV.Test
         [Test]
         public void Test_Memory()
         {
-            for (int i = 0; i <= 1000; i++)
+            for (int i = 0; i <= 500; i++)
             {
                 Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000, new Bgr());
             }
@@ -284,6 +284,9 @@ namespace Emgu.CV.Test
                 Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500);
                 Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
             }
+
+            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(3, 5);
+            Assert.AreEqual(img2.Data.GetLength(1), 4);
         }
 
         [Test]

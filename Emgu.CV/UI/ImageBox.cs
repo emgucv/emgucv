@@ -32,7 +32,7 @@ namespace Emgu.CV.UI
             splitContainer1.Panel2Collapsed = true;
 
             _operationStack = new Stack<Operation<IImage>>();
-            
+
             AddOperationMenuItem();
         }
 
@@ -58,11 +58,11 @@ namespace Emgu.CV.UI
             {
                 if (op.Method.ReturnType == typeof(void))
                 {
-                    opStr.Add(op.ToCode("image")+";");
+                    opStr.Add(op.ToCode("image") + ";");
                 }
                 else
                 {
-                    opStr.Add("image = " + op.ToCode("image")+";");
+                    opStr.Add("image = " + op.ToCode("image") + ";");
                 }
             }
             String[] sArray = opStr.ToArray();
@@ -76,8 +76,8 @@ namespace Emgu.CV.UI
             {
                 ToolStripMenuItem operationMenuItem = new ToolStripMenuItem();
                 operationMenuItem.Size = new System.Drawing.Size(152, 22);
-                operationMenuItem.Text = String.Format("{0}({1})", mi.Name, 
-                    String.Join(",", System.Array.ConvertAll<ParameterInfo, String>( mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; } )));
+                operationMenuItem.Text = String.Format("{0}({1})", mi.Name,
+                    String.Join(",", System.Array.ConvertAll<ParameterInfo, String>(mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; })));
 
                 //This is necessary to handle delegate with a loop
                 //Cause me lots of headache before reading the article on
@@ -93,7 +93,7 @@ namespace Emgu.CV.UI
                             Operation<IImage> operation = new Operation<IImage>(miRef, paramList.ToArray());
                             PushOperation(operation);
                         }
-                    }; 
+                    };
 
                 operationsToolStripMenuItem.DropDownItems.Add(operationMenuItem);
             }
@@ -110,33 +110,40 @@ namespace Emgu.CV.UI
             }
             set
             {
-                _image = value;
-                IImage displayedImage = _image;
-
-                if (displayedImage != null)
+                if (InvokeRequired)
                 {
-                    Operation<IImage>[] ops = _operationStack.ToArray();
-                    System.Array.Reverse(ops);
-                    foreach (Operation<IImage> operation in ops)
-                    {
-                        if (operation.Method.ReturnType == typeof(void))
-                        {
-                            //if the operation has return type of void, just execute the operation
-                            operation.ProcessMethod(displayedImage);
-                        }
-                        else if (operation.Method.ReturnType == typeof(IImage))
-                        {
-                            displayedImage = operation.ProcessMethod(displayedImage) as IImage;
-                        }
-                        else
-                        {
-                            throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
-                        }
-                    }
-                    DisplayedImage = displayedImage;
+                    this.Invoke(new MethodInvoker(delegate() { Image = value; }));
                 }
+                else
+                {
+                    _image = value;
+                    IImage displayedImage = _image;
 
-                operationsToolStripMenuItem.Enabled = (_image != null);
+                    if (displayedImage != null)
+                    {
+                        Operation<IImage>[] ops = _operationStack.ToArray();
+                        System.Array.Reverse(ops);
+                        foreach (Operation<IImage> operation in ops)
+                        {
+                            if (operation.Method.ReturnType == typeof(void))
+                            {
+                                //if the operation has return type of void, just execute the operation
+                                operation.ProcessMethod(displayedImage);
+                            }
+                            else if (operation.Method.ReturnType == typeof(IImage))
+                            {
+                                displayedImage = operation.ProcessMethod(displayedImage) as IImage;
+                            }
+                            else
+                            {
+                                throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
+                            }
+                        }
+                        DisplayedImage = displayedImage;
+                    }
+
+                    operationsToolStripMenuItem.Enabled = (_image != null);
+                }
             }
         }
 
@@ -167,10 +174,11 @@ namespace Emgu.CV.UI
                         ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
                         imageProperty1.ColorType = info.ConversionCodeName;
                     }
-                    #endregion 
+                    #endregion
 
                     imageProperty1.ColorDepth = _displayedImage.TypeOfDepth;
-                } 
+                }
+
             }
         }
 
@@ -230,7 +238,7 @@ namespace Emgu.CV.UI
                 if (EnableProperty)
                 {
                     // reset the image such that the property is updated
-                    Image = Image; 
+                    Image = Image;
                 }
             }
         }
@@ -245,13 +253,12 @@ namespace Emgu.CV.UI
 
                 if (DisplayedImage != null)
                 {
-                    location.X = Math.Min(e.X, DisplayedImage.Width-1);
-                    location.Y = Math.Min(e.Y, DisplayedImage.Height-1);
-                    
+                    location.X = Math.Min(e.X, DisplayedImage.Width - 1);
+                    location.Y = Math.Min(e.Y, DisplayedImage.Height - 1);
+
                     color = DisplayedImage.GetColor(location);
-                    
                 }
-                
+
                 imageProperty1.MousePositionOnImage = location;
                 imageProperty1.ColorIntensity = color;
             }

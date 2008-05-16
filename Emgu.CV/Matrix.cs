@@ -132,6 +132,15 @@ namespace Emgu.CV
         }
         #endregion
 
+        /// <summary>
+        /// Return a matrix of the same size with all elements equals 0
+        /// </summary>
+        /// <returns>A matrix of the same size with all elements equals 0</returns>
+        public Matrix<D> BlankClone()
+        {
+            return new Matrix<D>(Rows, Cols);
+        }
+
         ///<summary> Returns the transpose of this matrix</summary>
         public Matrix<D> Transpose()
         {
@@ -225,6 +234,7 @@ namespace Emgu.CV
                 return (neqMask.Sum == 0.0);
             }
         }
+
         #endregion
 
     }

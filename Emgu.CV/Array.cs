@@ -162,9 +162,28 @@ namespace Emgu.CV
         ///Set the element of the Array to <paramref name="val"/>
         ///</summary>
         ///<param name="val"> The value to be set for each element of the Array </param>
+        public void SetValue(MCvScalar val)
+        {
+            CvInvoke.cvSet( _ptr, val, IntPtr.Zero);
+        }
+
+        ///<summary> 
+        ///Set the element of the Array to <paramref name="val"/>
+        ///</summary>
+        ///<param name="val"> The value to be set for each element of the Array </param>
         public void SetValue(double val)
         {
-            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), IntPtr.Zero);
+            SetValue(new MCvScalar(val, val, val, val));
+        }
+
+        ///<summary>
+        ///Set the element of the Array to <paramref name="val"/>, using the specific <paramref name="mask"/>
+        ///</summary>
+        ///<param name="val">The value to be set</param>
+        ///<param name="mask">The mask for the operation</param>
+        public void SetValue(MCvScalar val, CvArray<Byte> mask)
+        {
+            CvInvoke.cvSet( _ptr, val, mask.Ptr);
         }
 
         ///<summary>
@@ -174,7 +193,7 @@ namespace Emgu.CV
         ///<param name="mask">The mask for the operation</param>
         public void SetValue(double val, CvArray<Byte> mask)
         {
-            CvInvoke.cvSet( _ptr, new MCvScalar(val, val, val, val), mask.Ptr);
+            SetValue(new MCvScalar(val, val, val, val), mask);
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace Emgu.CV.UI
         private ParamInputDlg(ParameterInfo[] paramInfo, List<Object> paramList)
         {
             InitializeComponent();
-            
+
             _paramPanelDictionary = new Dictionary<ParameterInfo, ParamInputPanel>();
             _pList = paramList;
             _paramInfo = paramInfo;
@@ -79,13 +79,29 @@ namespace Emgu.CV.UI
             private GetParamDelegate _getParamFunction;
             private String _paramName;
 
+            /// <summary>
+            /// Return the value of the parameter input panel, if unable to retrieve value, return null
+            /// </summary>
+            /// <returns>The value of the parameter input panel, if unable to retrieve value, return null</returns>
             public Object GetValue()
             {
-                return _getParamFunction();
+                Object o = null;
+                try
+                {
+                    o = _getParamFunction();
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                return o;
             }
 
             public delegate Object GetParamDelegate();
 
+            /// <summary>
+            /// The function used to obtain the parameter from this input panel
+            /// </summary>
             public GetParamDelegate GetParamFunction
             {
                 set
@@ -146,7 +162,7 @@ namespace Emgu.CV.UI
 
             #region add the label for the parameter
             Label paramNameLabel = new Label();
-            paramNameLabel.Text = ParseParameterName(param) + ":" ;
+            paramNameLabel.Text = ParseParameterName(param) + ":";
             paramNameLabel.AutoSize = true;
             panel.Controls.Add(paramNameLabel);
             paramNameLabel.Location = new System.Drawing.Point(10, textBoxStartY);
@@ -163,18 +179,10 @@ namespace Emgu.CV.UI
                 panel.GetParamFunction =
                     delegate()
                     {
-                        Object o = null;
-                        try
-                        {
-                            o = Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
-                        }
-                        catch (PrioritizedException)
-                        {
-                            return null;
-                        }
-                        return o;
+                        return Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
                     };
-            } else if (paramType == typeof(bool))
+            }
+            else if (paramType == typeof(bool))
             {
                 ComboBox combo = new ComboBox();
                 panel.Controls.Add(combo);
@@ -184,19 +192,10 @@ namespace Emgu.CV.UI
                 panel.GetParamFunction =
                     delegate()
                     {
-                        Object o = null;
-                        try
-                        {
-                            o = combo.SelectedItem.ToString().Equals("True");
-                        }
-                        catch (PrioritizedException)
-                        {
-                            return null;
-                        }
-                        return o;
+                        return combo.SelectedItem.ToString().Equals("True");
                     };
             }
-            else if ( paramType == typeof(UInt64) || paramType == typeof(int) || paramType == typeof(double))
+            else if (paramType == typeof(UInt64) || paramType == typeof(int) || paramType == typeof(double))
             {
                 //Create inpout box for the int paramater
                 TextBox inputTextBox = new TextBox();
@@ -207,16 +206,7 @@ namespace Emgu.CV.UI
                 panel.GetParamFunction =
                     delegate()
                     {
-                        Object o = null;
-                        try
-                        {
-                            o = System.Convert.ChangeType(inputTextBox.Text, paramType);
-                        }
-                        catch (PrioritizedException)
-                        {
-                            return null;
-                        }
-                        return o;
+                        return System.Convert.ChangeType(inputTextBox.Text, paramType);
                     };
             }
             else if (paramType == typeof(MCvScalar))
@@ -236,21 +226,12 @@ namespace Emgu.CV.UI
                 panel.GetParamFunction =
                     delegate()
                     {
-                        Object o = null;
-                        try
+                        double[] values = new double[4];
+                        for (int i = 0; i < inputBoxes.Length; i++)
                         {
-                            double[] values = new double[4];
-                            for (int i = 0; i < inputBoxes.Length; i++)
-                            {
-                                values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
-                            }
-                            o = new MCvScalar(values[0], values[1], values[2], values[3]);
+                            values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
                         }
-                        catch (PrioritizedException)
-                        {
-                            return null;
-                        }
-                        return o;
+                        return new MCvScalar(values[0], values[1], values[2], values[3]);
                     };
             }
             else
@@ -278,7 +259,7 @@ namespace Emgu.CV.UI
             ParamInputDlg dlg = new ParamInputDlg(parameters, paramList);
             dlg.ShowDialog();
             return dlg.Successed;
-            
+
             #endregion
         }
     }
