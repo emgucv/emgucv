@@ -285,8 +285,11 @@ namespace Emgu.CV.Test
                 Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
             }
 
-            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(3, 5);
+            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(1, 2);
             Assert.AreEqual(img2.Data.GetLength(1), 4);
+
+            Byte[, ,] data = new Byte[,,] { { { 255, 0, 0 } }, { { 0, 255, 0 } } };
+            Image<Bgr, Byte> img3 = new Image<Bgr, byte>(data);
         }
 
         [Test]
