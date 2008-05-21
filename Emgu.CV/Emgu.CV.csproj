@@ -165,6 +165,12 @@
     <Compile Include="UI\ParamInputDlg.Designer.cs">
       <DependentUpon>ParamInputDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\PropertyDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\PropertyDlg.Designer.cs">
+      <DependentUpon>PropertyDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="VideoWriter.cs" />
   </ItemGroup>
@@ -199,6 +205,10 @@
     <EmbeddedResource Include="UI\ParamInputDlg.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ParamInputDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\PropertyDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PropertyDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

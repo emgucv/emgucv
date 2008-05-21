@@ -14,8 +14,11 @@ namespace Emgu.CV
         /// Convert this image into Bitmap 
         /// </summary>
         /// <returns></returns>
-        [ExposableMethod(Exposable=false)]
-        Bitmap AsBitmap();
+        Bitmap Bitmap
+        {
+            [ExposableMethod(Exposable = false)]
+            get;
+        }
 
         /// <summary>
         /// The width of this image
@@ -202,7 +205,7 @@ namespace Emgu.CV
         /// <summary>
         /// The type fo depth for this image
         /// </summary>
-        System.Type TypeOfDepth
+        Type TypeOfDepth
         {
             [ExposableMethod(Exposable = false)]
             get;

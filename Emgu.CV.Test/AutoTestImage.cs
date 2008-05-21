@@ -311,7 +311,7 @@ namespace Emgu.CV.Test
 
         public void Test_BitmapConstructor()
         {
-            Image<Bgr, Byte> image = new Image<Bgr, byte>(200, 400);
+            Image<Bgr, Byte> image = new Image<Bgr, byte>(201, 401);
             image._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
 
             Bitmap bmp = image.ToBitmap();

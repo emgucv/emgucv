@@ -49,7 +49,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get or Set an Array of bytes that represent the data in this array
         /// </summary>
-        /// <remarks> Should only be used for serialization & deserialization</remarks>
+        /// <remarks> Should only be used for serialization &amp; deserialization</remarks>
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Byte[] Bytes
         {

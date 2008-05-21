@@ -19,6 +19,7 @@ namespace Emgu.CV.UI
     {
         private IImage _image;
         private IImage _displayedImage;
+        private PropertyDlg _propertyDlg;
 
         private Stack<Operation<IImage>> _operationStack;
 
@@ -28,8 +29,6 @@ namespace Emgu.CV.UI
         public ImageBox()
         {
             InitializeComponent();
-            //panel2.Height = 0;
-            splitContainer1.Panel2Collapsed = true;
 
             _operationStack = new Stack<Operation<IImage>>();
 
@@ -39,14 +38,16 @@ namespace Emgu.CV.UI
         private void PushOperation(Operation<IImage> operation)
         {
             _operationStack.Push(operation);
-            imageProperty1.OperationStackText = OperationStackToString();
+            ImageProperty panel = ImagePropertyPanel;
+            if (panel != null) panel.OperationStackText = OperationStackToString();
             Image = Image;
         }
 
         private void ClearOperation()
         {
             _operationStack.Clear();
-            imageProperty1.OperationStackText = OperationStackToString();
+            ImageProperty panel = ImagePropertyPanel;
+            if (panel != null) panel.OperationStackText = OperationStackToString();
             Image = Image;
         }
 
@@ -159,12 +160,12 @@ namespace Emgu.CV.UI
                 if (pictureBox.Width != _displayedImage.Width) pictureBox.Width = _displayedImage.Width;
                 if (pictureBox.Height != _displayedImage.Height) pictureBox.Height = _displayedImage.Height;
 
-                pictureBox.Image = _displayedImage.AsBitmap();
+                pictureBox.Image = _displayedImage.Bitmap;
 
                 if (EnableProperty)
                 {
-                    imageProperty1.ImageWidth = _displayedImage.Width;
-                    imageProperty1.ImageHeight = _displayedImage.Height;
+                    ImagePropertyPanel.ImageWidth = _displayedImage.Width;
+                    ImagePropertyPanel.ImageHeight = _displayedImage.Height;
 
                     #region display the color type
                     Type colorType = _displayedImage.TypeOfColor;
@@ -172,11 +173,11 @@ namespace Emgu.CV.UI
                     if (colorAttributes.Length > 0)
                     {
                         ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
-                        imageProperty1.ColorType = info.ConversionCodeName;
+                        ImagePropertyPanel.ColorType = info.ConversionCodeName;
                     }
                     #endregion
 
-                    imageProperty1.ColorDepth = _displayedImage.TypeOfDepth;
+                    ImagePropertyPanel.ColorDepth = _displayedImage.TypeOfDepth;
                 }
 
             }
@@ -226,19 +227,45 @@ namespace Emgu.CV.UI
             EnableProperty = !EnableProperty;
         }
 
+        private ImageProperty ImagePropertyPanel
+        {
+            get
+            {
+                return EnableProperty ? _propertyDlg.ImagePropertyPanel : null;
+            }
+        }
+
         private bool EnableProperty
         {
             get
             {
-                return !splitContainer1.Panel2Collapsed;
+                return _propertyDlg != null; 
             }
             set
             {
-                splitContainer1.Panel2Collapsed = !value;
-                if (EnableProperty)
-                {
+                if (value)
+                {   //this is a call to enable the property dlg
+                    if (_propertyDlg == null) _propertyDlg = new PropertyDlg();                    
+                    _propertyDlg.Show();
+
+                    _propertyDlg.FormClosed += 
+                        delegate(object sender, FormClosedEventArgs e ) 
+                        {   
+                            _propertyDlg = null;
+                        };
+
+                    ImagePropertyPanel.OperationStackText = OperationStackToString();
+
                     // reset the image such that the property is updated
                     Image = Image;
+                }
+                else
+                {
+                    if (_propertyDlg != null)
+                    {
+                        _propertyDlg.Close();
+                        _propertyDlg = null;
+                    }
                 }
             }
         }
@@ -259,8 +286,8 @@ namespace Emgu.CV.UI
                     color = DisplayedImage.GetColor(location);
                 }
 
-                imageProperty1.MousePositionOnImage = location;
-                imageProperty1.ColorIntensity = color;
+                ImagePropertyPanel.MousePositionOnImage = location;
+                ImagePropertyPanel.ColorIntensity = color;
             }
         }
     }
