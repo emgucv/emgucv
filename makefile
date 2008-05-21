@@ -20,8 +20,8 @@ CV_SRC:
 	install -d src/Solution/VS2008
 	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV_VS2005.sln src/Solution/VS2005_MonoDevelop/Emgu.CV_VS2005.sln
 	svn export ${SVN_URL}Solution/VS2008/Emgu.CV_VS2008.sln src/Solution/VS2008/Emgu.CV_VS2008.sln
-	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.Example_VS2005.sln src/Solution/VS2005_MonoDevelop/Emgu.CV_VS2005.sln
-	svn export ${SVN_URL}Solution/VS2008/Emgu.CV.Example_VS2008.sln src/Solution/VS2008/Emgu.CV_VS2008.sln
+	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.Example_VS2005.sln src/Solution/VS2005_MonoDevelop/Emgu.CV.Example_VS2005.sln
+	svn export ${SVN_URL}Solution/VS2008/Emgu.CV.Example_VS2008.sln src/Solution/VS2008/Emgu.CV.Example_VS2008.sln
 	svn export ${SVN_URL}Emgu.CV.Example src/Emgu.CV.Example
 	svn export ${SVN_URL}README.txt src/README.txt
 	install -d src/lib
@@ -36,7 +36,7 @@ CV_SRC:
 	svn export ${SVN_URL}lib/cxts001.dll src/bin/cxts001.dll
 	svn export ${SVN_URL}lib/libguide40.dll src/bin/libguide40.dll
 	svn export ${SVN_URL}lib/opencv.license.txt src/bin/opencv.license.txt
-	zip -r Emgu.CV-${VERSION}.source.zip src
+	zip -r Emgu.CV-${VERSION}.SourceAndExamples.zip src
 	rm -rf src
 
 UI: 	FORCE
