@@ -66,10 +66,11 @@ namespace CameraCapture
                             Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
                             Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(new Gray(100), new Gray(60));
 
-                            capturPicturebox.Image = frame.AsBitmap();
-                            smoothedGrayscalePicturebox.Image = smoothedGrayFrame.AsBitmap();
-                            cannyPicturebox.Image = cannyFrame.AsBitmap();
-                            grayscalePicturebox.Image = grayFrame.AsBitmap();
+                            captureImageBox.Image = frame;
+                            grayscaleImageBox.Image = grayFrame;
+                            smoothedGrayscaleImageBox.Image = smoothedGrayFrame;
+                            cannyImageBox.Image = cannyFrame;
+
                         }
                     }
                     );

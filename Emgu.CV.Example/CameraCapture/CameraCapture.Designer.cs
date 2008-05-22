@@ -35,19 +35,19 @@ namespace CameraCapture
             this.captureButton = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.capturPicturebox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.smoothedGrayscalePicturebox = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
-            this.grayscalePicturebox = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.cannyPicturebox = new System.Windows.Forms.PictureBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.captureImageBox = new Emgu.CV.UI.ImageBox();
+            this.grayscaleImageBox = new Emgu.CV.UI.ImageBox();
+            this.smoothedGrayscaleImageBox = new Emgu.CV.UI.ImageBox();
+            this.cannyImageBox = new Emgu.CV.UI.ImageBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -57,16 +57,12 @@ namespace CameraCapture
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.capturPicturebox)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.smoothedGrayscalePicturebox)).BeginInit();
             this.panel3.SuspendLayout();
             this.splitContainer4.Panel1.SuspendLayout();
             this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grayscalePicturebox)).BeginInit();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cannyPicturebox)).BeginInit();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -146,25 +142,16 @@ namespace CameraCapture
             // 
             // splitContainer3.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.capturPicturebox);
+            this.splitContainer3.Panel1.Controls.Add(this.captureImageBox);
             this.splitContainer3.Panel1.Controls.Add(this.panel1);
             // 
             // splitContainer3.Panel2
             // 
-            this.splitContainer3.Panel2.Controls.Add(this.smoothedGrayscalePicturebox);
+            this.splitContainer3.Panel2.Controls.Add(this.smoothedGrayscaleImageBox);
             this.splitContainer3.Panel2.Controls.Add(this.panel3);
             this.splitContainer3.Size = new System.Drawing.Size(411, 784);
             this.splitContainer3.SplitterDistance = 378;
             this.splitContainer3.TabIndex = 0;
-            // 
-            // capturPicturebox
-            // 
-            this.capturPicturebox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.capturPicturebox.Location = new System.Drawing.Point(0, 33);
-            this.capturPicturebox.Name = "capturPicturebox";
-            this.capturPicturebox.Size = new System.Drawing.Size(411, 345);
-            this.capturPicturebox.TabIndex = 1;
-            this.capturPicturebox.TabStop = false;
             // 
             // panel1
             // 
@@ -183,15 +170,6 @@ namespace CameraCapture
             this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Captured Image:";
-            // 
-            // smoothedGrayscalePicturebox
-            // 
-            this.smoothedGrayscalePicturebox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.smoothedGrayscalePicturebox.Location = new System.Drawing.Point(0, 36);
-            this.smoothedGrayscalePicturebox.Name = "smoothedGrayscalePicturebox";
-            this.smoothedGrayscalePicturebox.Size = new System.Drawing.Size(411, 366);
-            this.smoothedGrayscalePicturebox.TabIndex = 1;
-            this.smoothedGrayscalePicturebox.TabStop = false;
             // 
             // panel3
             // 
@@ -220,25 +198,16 @@ namespace CameraCapture
             // 
             // splitContainer4.Panel1
             // 
-            this.splitContainer4.Panel1.Controls.Add(this.grayscalePicturebox);
+            this.splitContainer4.Panel1.Controls.Add(this.grayscaleImageBox);
             this.splitContainer4.Panel1.Controls.Add(this.panel2);
             // 
             // splitContainer4.Panel2
             // 
-            this.splitContainer4.Panel2.Controls.Add(this.cannyPicturebox);
+            this.splitContainer4.Panel2.Controls.Add(this.cannyImageBox);
             this.splitContainer4.Panel2.Controls.Add(this.panel4);
             this.splitContainer4.Size = new System.Drawing.Size(427, 784);
             this.splitContainer4.SplitterDistance = 378;
             this.splitContainer4.TabIndex = 0;
-            // 
-            // grayscalePicturebox
-            // 
-            this.grayscalePicturebox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grayscalePicturebox.Location = new System.Drawing.Point(0, 33);
-            this.grayscalePicturebox.Name = "grayscalePicturebox";
-            this.grayscalePicturebox.Size = new System.Drawing.Size(427, 345);
-            this.grayscalePicturebox.TabIndex = 1;
-            this.grayscalePicturebox.TabStop = false;
             // 
             // panel2
             // 
@@ -258,15 +227,6 @@ namespace CameraCapture
             this.label2.TabIndex = 1;
             this.label2.Text = "Grayscale Image:";
             // 
-            // cannyPicturebox
-            // 
-            this.cannyPicturebox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cannyPicturebox.Location = new System.Drawing.Point(0, 35);
-            this.cannyPicturebox.Name = "cannyPicturebox";
-            this.cannyPicturebox.Size = new System.Drawing.Size(427, 367);
-            this.cannyPicturebox.TabIndex = 1;
-            this.cannyPicturebox.TabStop = false;
-            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.label4);
@@ -285,6 +245,42 @@ namespace CameraCapture
             this.label4.TabIndex = 0;
             this.label4.Text = "Canny Edges:";
             // 
+            // captureImageBox
+            // 
+            this.captureImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.captureImageBox.Image = null;
+            this.captureImageBox.Location = new System.Drawing.Point(0, 33);
+            this.captureImageBox.Name = "captureImageBox";
+            this.captureImageBox.Size = new System.Drawing.Size(411, 345);
+            this.captureImageBox.TabIndex = 1;
+            // 
+            // grayscaleImageBox
+            // 
+            this.grayscaleImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grayscaleImageBox.Image = null;
+            this.grayscaleImageBox.Location = new System.Drawing.Point(0, 33);
+            this.grayscaleImageBox.Name = "grayscaleImageBox";
+            this.grayscaleImageBox.Size = new System.Drawing.Size(427, 345);
+            this.grayscaleImageBox.TabIndex = 1;
+            // 
+            // smoothedGrayscaleImageBox
+            // 
+            this.smoothedGrayscaleImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.smoothedGrayscaleImageBox.Image = null;
+            this.smoothedGrayscaleImageBox.Location = new System.Drawing.Point(0, 36);
+            this.smoothedGrayscaleImageBox.Name = "smoothedGrayscaleImageBox";
+            this.smoothedGrayscaleImageBox.Size = new System.Drawing.Size(411, 366);
+            this.smoothedGrayscaleImageBox.TabIndex = 1;
+            // 
+            // cannyImageBox
+            // 
+            this.cannyImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cannyImageBox.Image = null;
+            this.cannyImageBox.Location = new System.Drawing.Point(0, 35);
+            this.cannyImageBox.Name = "cannyImageBox";
+            this.cannyImageBox.Size = new System.Drawing.Size(427, 367);
+            this.cannyImageBox.TabIndex = 1;
+            // 
             // CameraCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,19 +298,15 @@ namespace CameraCapture
             this.splitContainer3.Panel1.ResumeLayout(false);
             this.splitContainer3.Panel2.ResumeLayout(false);
             this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.capturPicturebox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.smoothedGrayscalePicturebox)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.splitContainer4.Panel1.ResumeLayout(false);
             this.splitContainer4.Panel2.ResumeLayout(false);
             this.splitContainer4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grayscalePicturebox)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cannyPicturebox)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.ResumeLayout(false);
@@ -327,21 +319,21 @@ namespace CameraCapture
         private System.Windows.Forms.Button captureButton;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.PictureBox capturPicturebox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox grayscalePicturebox;
         private System.Windows.Forms.Button flipHorizontalButton;
         private System.Windows.Forms.Button flipVerticalButton;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.PictureBox smoothedGrayscalePicturebox;
-        private System.Windows.Forms.PictureBox cannyPicturebox;
+        private Emgu.CV.UI.ImageBox captureImageBox;
+        private Emgu.CV.UI.ImageBox grayscaleImageBox;
+        private Emgu.CV.UI.ImageBox smoothedGrayscaleImageBox;
+        private Emgu.CV.UI.ImageBox cannyImageBox;
     }
 }
 

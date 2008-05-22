@@ -42,20 +42,20 @@ namespace HughLineAndCircleDetection
                 for (int i = 0; i < new Bgr().Dimension; i++)
                 {
                     //set the color of the channel
-                    Bgr channelColor = new Bgr();
-                    channelColor.Coordinate[i] = 255.0;
+                    Bgr colorOfCurrentChannel = new Bgr();
+                    colorOfCurrentChannel[i] = 255.0;
 
                     //draw the circles detected from the specific channel using its color
                     foreach (Circle<float> cir in circles[i])
-                        stuff.Draw<float>(cir, channelColor, 1);
+                        stuff.Draw<float>(cir, colorOfCurrentChannel, 1);
 
                     //draw the lines detected from the specific channel using its color
                     foreach (LineSegment2D<int> line in lines[i])
-                        stuff.Draw(line, channelColor, 1);
+                        stuff.Draw(line, colorOfCurrentChannel, 1);
                 }
 
                 //display the image
-                pictureBox1.Image = stuff.ToBitmap();
+                imageBox1.Image = stuff;
             }
         }
     }

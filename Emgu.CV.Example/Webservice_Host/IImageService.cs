@@ -11,6 +11,5 @@ namespace Webservice_Host
     {
         [OperationContract(IsOneWay=false) ]
         Image<Bgr, Byte> GrabFrame();
-        //int GrabFrame();
     }
 }

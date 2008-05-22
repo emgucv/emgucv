@@ -65,7 +65,7 @@ namespace Webservice_Client
                             {
                                 using (Image<Bgr, Byte> img = _imageGrabber.GrabFrame())
                                 {
-                                    pictureBox1.Image = img.ToBitmap(pictureBox1.Width, pictureBox1.Height);
+                                    imageBox1.Image = img.Resize(imageBox1.Width, imageBox1.Height);
                                 }
 
                                 TimeSpan ts = DateTime.Now.Subtract(_lastCheckTime);

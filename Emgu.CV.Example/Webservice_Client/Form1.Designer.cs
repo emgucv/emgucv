@@ -36,9 +36,8 @@ namespace Webservice_Client
             this.panel1 = new System.Windows.Forms.Panel();
             this.StatusTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -98,27 +97,26 @@ namespace Webservice_Client
             this.label2.TabIndex = 3;
             this.label2.Text = "Frame Rate:";
             // 
-            // pictureBox1
+            // imageBox1
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 86);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(520, 359);
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageBox1.Image = null;
+            this.imageBox1.Location = new System.Drawing.Point(0, 86);
+            this.imageBox1.Name = "imageBox1";
+            this.imageBox1.Size = new System.Drawing.Size(520, 359);
+            this.imageBox1.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(520, 445);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.imageBox1);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -129,9 +127,9 @@ namespace Webservice_Client
         private System.Windows.Forms.TextBox serviceUrlBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox StatusTextBox;
         private System.Windows.Forms.Label label2;
+        private Emgu.CV.UI.ImageBox imageBox1;
     }
 }
 
