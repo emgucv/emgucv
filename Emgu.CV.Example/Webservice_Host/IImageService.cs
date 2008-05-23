@@ -7,6 +7,7 @@ using System.ServiceModel;
 namespace Webservice_Host
 {
     [ServiceContract]
+    [XmlSerializerFormat]
     public interface IImageService
     {
         [OperationContract(IsOneWay=false) ]

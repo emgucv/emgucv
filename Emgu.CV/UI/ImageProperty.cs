@@ -44,11 +44,20 @@ namespace Emgu.CV.UI
         /// <summary>
         /// Set the Type of the color
         /// </summary>
-        public String ColorType
+        public Type TypeOfColor
         {
             set
             {
-                colorTypeTexbox.Text = value;
+                Object[] colorAttributes = value.GetCustomAttributes(typeof(ColorInfoAttribute), true);
+                if (colorAttributes.Length > 0)
+                {
+                    ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
+                    typeOfColorTexbox.Text = info.ConversionCodeName;
+                }
+                else
+                {
+                    typeOfColorTexbox.Text = "Unknown";
+                }
             }
         }
 
@@ -78,11 +87,11 @@ namespace Emgu.CV.UI
         /// <summary>
         /// Set the Depth of the image
         /// </summary>
-        public System.Type ColorDepth
+        public Type TypeOfDepth
         {
             set
             {
-                colorDepthTextBox.Text = value.Name;
+                typeOfDepthTextBox.Text = value.Name;
             }
         }
 
@@ -94,6 +103,17 @@ namespace Emgu.CV.UI
             set
             {
                 operationStackTextBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Set the frame rate
+        /// </summary>
+        public int FramesPerSecondText
+        {
+            set
+            {
+                fpsTextBox.Text = value.ToString();
             }
         }
     }

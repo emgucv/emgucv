@@ -13,7 +13,6 @@ namespace Emgu.CV
     ///<summary>
     ///The Array class that wrap around CvArr in OpenCV
     ///</summary>
-    [DataContract]
     public abstract class CvArray<D> : UnmanagedObject, IXmlSerializable, ISerializable
     {
         /// <summary>
@@ -22,7 +21,6 @@ namespace Emgu.CV
         protected GCHandle _dataHandle;
 
         ///<summary> The pointer to the internal structure </summary>
-        [XmlIgnore]
         public new IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
 
         #region properties
@@ -209,6 +207,16 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Inplace fills Array with uniformly distributed random numbers
+        /// </summary>
+        /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
+        /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
+        public void _RandUniform(MCvScalar floorValue, MCvScalar ceilingValue)
+        {
+            _RandUniform((UInt64) DateTime.Now.Ticks, floorValue, ceilingValue);
+        }
+
+        /// <summary>
         /// Inplace fills Array with normally distributed random numbers
         /// </summary>
         /// <param name="seed">Seed for the random number generator</param>
@@ -217,6 +225,16 @@ namespace Emgu.CV
         public void _RandNormal(UInt64 seed, MCvScalar mean, MCvScalar std)
         {
             CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, std);
+        }
+
+        /// <summary>
+        /// Inplace fills Array with normally distributed random numbers
+        /// </summary>
+        /// <param name="mean">the mean value of random numbers</param>
+        /// <param name="std"> the standard deviation of random numbers</param>
+        public void _RandNormal(MCvScalar mean, MCvScalar std)
+        {
+            _RandNormal( (UInt64) DateTime.Now.Ticks, mean, std);
         }
 
         /// <summary>

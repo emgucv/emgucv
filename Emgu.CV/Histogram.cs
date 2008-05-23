@@ -7,8 +7,10 @@ using System.Diagnostics;
 namespace Emgu.CV
 {
     ///<summary> 
-    ///ColorType Histogram 
+    /// Class Histogram 
     ///</summary>
+    ///<remarks><B>This is a Beta version</B></remarks>
+    //TODO: Improve the histogram class
     public class Histogram : UnmanagedObject
     {
         private int _dimension;

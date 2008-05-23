@@ -21,9 +21,6 @@ namespace Client
     {
         private RpcClient _client;
 
-        private DateTime _lastSecond;
-        private int _imageReceived;
-
         public ClientControl()
         {
             InitializeComponent();
@@ -49,20 +46,10 @@ namespace Client
                 _client.AddCaptureClient(":8084/Capture");
                 _client.AddSerialClient(":8083/Serial");
 
-                _lastSecond = DateTime.Now;
                 _client.Capture.onFrameReceived += new EventHandler(
                     delegate
                     {
-                        double delta_second = DateTime.Now.Subtract(_lastSecond).TotalMilliseconds;
-                        if (delta_second > 1000)
-                        {
-                            frameRateValue.Text = String.Format("{0}", _imageReceived);
-                            _lastSecond = DateTime.Now;
-                            _imageReceived = 0;
-                        }
-
-                        pictureBox1.Image = _client.Capture.CapturedImage.ToBitmap();
-                        _imageReceived++;
+                        imageBox1.Image = _client.Capture.CapturedImage;
                     });
 
                 _client.Serial.OnDataReceived += new EventHandler(

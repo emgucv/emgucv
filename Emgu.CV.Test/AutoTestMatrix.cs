@@ -145,5 +145,27 @@ namespace Emgu.CV.Test
                 //Trace.WriteLine(i);
             }
         }
+
+        /*
+        [Test]
+        public void Test_DataContractSerializer()
+        {
+            DataContractSerializer serializer = new DataContractSerializer(typeof(Image<Bgr, float>));
+            Image<Bgr, float> img1 = new Image<Bgr,float>(5, 3);
+
+            Byte[] bytes = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                serializer.WriteObject(ms, img1);
+                bytes = ms.ToArray();
+            }
+            Image<Bgr, float> img2;
+            DataContractSerializer deserializer = new DataContractSerializer(typeof(Image<Bgr, float>));
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                img2 = deserializer.ReadObject(ms) as Image<Bgr, float>;
+            }
+            Debug.Assert(img1.Equals(img2));
+        }*/
     }
 }

@@ -30,16 +30,13 @@ namespace Client
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.SerialBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.frameRateValue = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.serviceUrl = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.SuspendLayout();
             // 
             // button1
@@ -51,14 +48,6 @@ namespace Client
             this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 54);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(473, 313);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
             // 
             // textBox1
             // 
@@ -77,24 +66,6 @@ namespace Client
             this.SerialBox.ReadOnly = true;
             this.SerialBox.Size = new System.Drawing.Size(472, 71);
             this.SerialBox.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 374);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Frame Rate (FPS):";
-            // 
-            // frameRateValue
-            // 
-            this.frameRateValue.AutoSize = true;
-            this.frameRateValue.Location = new System.Drawing.Point(113, 374);
-            this.frameRateValue.Name = "frameRateValue";
-            this.frameRateValue.Size = new System.Drawing.Size(45, 13);
-            this.frameRateValue.TabIndex = 5;
-            this.frameRateValue.Text = "unkown";
             // 
             // label2
             // 
@@ -131,24 +102,29 @@ namespace Client
             this.label4.TabIndex = 9;
             this.label4.Text = "Serial Data:";
             // 
-            // Form1
+            // imageBox1
+            // 
+            this.imageBox1.Image = null;
+            this.imageBox1.Location = new System.Drawing.Point(13, 48);
+            this.imageBox1.Name = "imageBox1";
+            this.imageBox1.Size = new System.Drawing.Size(472, 338);
+            this.imageBox1.TabIndex = 10;
+            // 
+            // ClientControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(492, 569);
+            this.Controls.Add(this.imageBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.serviceUrl);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.frameRateValue);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.SerialBox);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "ClientControl";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,15 +133,13 @@ namespace Client
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox SerialBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label frameRateValue;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox serviceUrl;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private Emgu.CV.UI.ImageBox imageBox1;
     }
 }
 

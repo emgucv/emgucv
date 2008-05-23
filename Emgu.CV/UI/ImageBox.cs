@@ -24,6 +24,15 @@ namespace Emgu.CV.UI
         private Stack<Operation<IImage>> _operationStack;
 
         /// <summary>
+        /// one of the parameters used for caculating the frame rate
+        /// </summary>
+        private DateTime _counterStartTime;
+        /// <summary>
+        /// one of the parameters used for caculating the frame rate
+        /// </summary>
+        private int _imageReceivedSinceCounterStart;
+
+        /// <summary>
         /// Create a ImageBox
         /// </summary>
         public ImageBox()
@@ -35,6 +44,10 @@ namespace Emgu.CV.UI
             AddOperationMenuItem();
         }
 
+        /// <summary>
+        /// Push the specific operation onto the stack
+        /// </summary>
+        /// <param name="operation">The operation to be pushed onto the stack</param>
         private void PushOperation(Operation<IImage> operation)
         {
             _operationStack.Push(operation);
@@ -43,6 +56,9 @@ namespace Emgu.CV.UI
             Image = Image;
         }
 
+        /// <summary>
+        /// Remove all the operations from the stack
+        /// </summary>
         private void ClearOperation()
         {
             _operationStack.Clear();
@@ -118,9 +134,9 @@ namespace Emgu.CV.UI
                 else
                 {
                     _image = value;
-                    IImage displayedImage = _image;
+                    IImage imageToBeDisplayed = _image;
 
-                    if (displayedImage != null)
+                    if (imageToBeDisplayed != null)
                     {
                         Operation<IImage>[] ops = _operationStack.ToArray();
                         System.Array.Reverse(ops);
@@ -129,18 +145,18 @@ namespace Emgu.CV.UI
                             if (operation.Method.ReturnType == typeof(void))
                             {
                                 //if the operation has return type of void, just execute the operation
-                                operation.ProcessMethod(displayedImage);
+                                operation.ProcessMethod(imageToBeDisplayed);
                             }
                             else if (operation.Method.ReturnType == typeof(IImage))
                             {
-                                displayedImage = operation.ProcessMethod(displayedImage) as IImage;
+                                imageToBeDisplayed = operation.ProcessMethod(imageToBeDisplayed) as IImage;
                             }
                             else
                             {
                                 throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
                             }
                         }
-                        DisplayedImage = displayedImage;
+                        DisplayedImage = imageToBeDisplayed;
                     }
 
                     operationsToolStripMenuItem.Enabled = (_image != null);
@@ -167,19 +183,24 @@ namespace Emgu.CV.UI
                     ImagePropertyPanel.ImageWidth = _displayedImage.Width;
                     ImagePropertyPanel.ImageHeight = _displayedImage.Height;
 
-                    #region display the color type
-                    Type colorType = _displayedImage.TypeOfColor;
-                    Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true);
-                    if (colorAttributes.Length > 0)
+                    ImagePropertyPanel.TypeOfColor = _displayedImage.TypeOfColor;
+                    ImagePropertyPanel.TypeOfDepth = _displayedImage.TypeOfDepth;
+
+                    #region calculate the frame rate
+                    TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
+                    if (ts.TotalSeconds > 1)
                     {
-                        ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
-                        ImagePropertyPanel.ColorType = info.ConversionCodeName;
+                        ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
+                        //reset the counter
+                        _counterStartTime = DateTime.Now; 
+                        _imageReceivedSinceCounterStart = 0;
+                    }
+                    else
+                    {
+                        _imageReceivedSinceCounterStart++;
                     }
                     #endregion
-
-                    ImagePropertyPanel.ColorDepth = _displayedImage.TypeOfDepth;
                 }
-
             }
         }
 
@@ -263,13 +284,19 @@ namespace Emgu.CV.UI
                 {
                     if (_propertyDlg != null)
                     {
-                        _propertyDlg.Close();
-                        _propertyDlg = null;
+                        _propertyDlg.Focus();
+                        //_propertyDlg.Close();
+                        //_propertyDlg = null;
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Used for tracking the mouse position on the image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (EnableProperty)

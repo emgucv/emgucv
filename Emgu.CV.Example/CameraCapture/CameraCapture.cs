@@ -26,7 +26,7 @@ namespace CameraCapture
 
         private void captureButtonClick(object sender, EventArgs e)
         {
-            if (_captureThread == null) // if currently there is no capture
+            if (_captureThread == null) // if currently there is no capture thread running
             {
                 if (_capture == null)
                 {
@@ -84,7 +84,7 @@ namespace CameraCapture
             {
                 if (_captureThread != null)
                 {
-                    _captureThread.Abort();
+                    _captureThread.Abort(); 
                     _captureThread = null;
                 }
                 

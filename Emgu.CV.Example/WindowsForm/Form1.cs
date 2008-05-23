@@ -19,12 +19,11 @@ namespace WindowsForm
         {
             InitializeComponent();
 
-            #region create a frame grabbing thread and let it run in the background
+            //create a frame grabbing thread and let it run in the background
             _frameGrabber = 
                 new Thread( delegate() { while (true) imageBox1.Image = GrapFrame(); });
-            
             _frameGrabber.Start();
-            #endregion
+            
         }
 
         /// <summary>

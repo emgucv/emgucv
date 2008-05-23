@@ -15,10 +15,10 @@ namespace Webservice_Client
         {
             if (disposing && (components != null))
             {
-                ReleaseManaged();
+                
                 components.Dispose();
             }
-            ReleaseUnmanaged();
+            ReleaseResource();
             base.Dispose(disposing);
         }
 
@@ -34,8 +34,6 @@ namespace Webservice_Client
             this.serviceUrlBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.StatusTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -69,41 +67,22 @@ namespace Webservice_Client
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.StatusTextBox);
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.serviceUrlBox);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(520, 86);
+            this.panel1.Size = new System.Drawing.Size(520, 52);
             this.panel1.TabIndex = 4;
-            // 
-            // StatusTextBox
-            // 
-            this.StatusTextBox.Location = new System.Drawing.Point(106, 46);
-            this.StatusTextBox.Name = "StatusTextBox";
-            this.StatusTextBox.ReadOnly = true;
-            this.StatusTextBox.Size = new System.Drawing.Size(279, 20);
-            this.StatusTextBox.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 49);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Frame Rate:";
             // 
             // imageBox1
             // 
             this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageBox1.Image = null;
-            this.imageBox1.Location = new System.Drawing.Point(0, 86);
+            this.imageBox1.Location = new System.Drawing.Point(0, 52);
             this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(520, 359);
+            this.imageBox1.Size = new System.Drawing.Size(520, 393);
             this.imageBox1.TabIndex = 5;
             // 
             // Form1
@@ -127,8 +106,6 @@ namespace Webservice_Client
         private System.Windows.Forms.TextBox serviceUrlBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox StatusTextBox;
-        private System.Windows.Forms.Label label2;
         private Emgu.CV.UI.ImageBox imageBox1;
     }
 }
