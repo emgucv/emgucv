@@ -25,6 +25,14 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// The corresponding error string for the Status code
+        /// </summary>
+        public String ErrorStr
+        {
+            get { return CvInvoke.cvErrorStr(Status); }
+        }
+
+        /// <summary>
         /// The name of the function the error is encountered
         /// </summary>
         public string FunctionName
