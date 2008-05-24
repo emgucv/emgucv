@@ -19,7 +19,7 @@
 
         img._Not();
         
-        img.AsBitmap().Save(Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+        img.Bitmap.Save(Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
     }
     
     Response.End();
