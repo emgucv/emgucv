@@ -177,9 +177,14 @@ namespace Emgu.CV.Test
         public void Test_ConvertDepth()
         {
             Image<Gray, Byte> img1 = new Image<Gray, byte>(100, 100, new Gray(10.0));
+            img1._RandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
             Image<Gray, Single> img2 = img1.ConvertScale<Single>(2.0, 0.0);
             Image<Gray, Byte> img3 = img2.ConvertScale<Byte>(0.5, 0.0);
             Assert.IsTrue(img3.Equals(img1));
+
+            Image<Gray, Double> img4 = img1.Convert<Gray, Double>();
+            Image<Gray, Byte> img5 = img4.Convert<Gray, Byte>();
+            Assert.IsTrue(img5.Equals(img1));
         }
 
         [Test]
