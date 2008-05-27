@@ -15,7 +15,7 @@ namespace Emgu.RPC.Speech
     /// An implementation of a singleton speech service
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class SpeechService : ISpeechService, IDisposable
+    public class SpeechService : DisposableObject, ISpeechService
     {
 #if LINUX
         private const String LIB_FESTIVAL = "libFestival.so.1.96.0";
@@ -37,7 +37,6 @@ namespace Emgu.RPC.Speech
 #else
         private SpeechSynthesizer _synthesizer;
 #endif
-        private bool _isDisposed;
 
         public SpeechService()
         {
@@ -57,16 +56,12 @@ namespace Emgu.RPC.Speech
 #endif
         }
 
-        public void Dispose()
+        protected override void DisposeObject()
         {
-            if (!_isDisposed)
-            {
-                _isDisposed = true;
 #if LINUX
 #else
-                _synthesizer.Dispose();
+            _synthesizer.Dispose();
 #endif
-            }
         }
     }
 }

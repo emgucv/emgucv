@@ -427,6 +427,5 @@ namespace Emgu.CV.Test
         {
             Application.Run(new ImageViewer(null));
         }
-
     }
 }

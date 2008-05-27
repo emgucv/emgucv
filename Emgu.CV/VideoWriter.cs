@@ -37,7 +37,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the video writer and all the memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             CvInvoke.cvReleaseVideoWriter(ref _ptr);
         }

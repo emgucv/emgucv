@@ -13,12 +13,16 @@ namespace Emgu.CV.UI
     /// </summary>
     public partial class PropertyDlg : Form
     {
+        private ImageBox _imageBox;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public PropertyDlg()
+        public PropertyDlg(ImageBox imageBox)
         {
             InitializeComponent();
+            _imageBox = imageBox;
+            imageProperty1.ImageBox = _imageBox;
         }
 
         /// <summary>

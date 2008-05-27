@@ -6,17 +6,31 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.Reflection;
 
 namespace Emgu.CV.UI
 {
     public partial class ImageProperty : UserControl
     {
+        private ImageBox _imageBox;
+
+        /// <summary>
+        /// The parent imagebox for this property panel
+        /// </summary>
+        public ImageBox ImageBox
+        {
+            get { return _imageBox; }
+            set { _imageBox = value; }
+        }
+
         /// <summary>
         /// Create a ImageProperty control
         /// </summary>
         public ImageProperty()
         {
             InitializeComponent();
+            cSharpOperationStackView.Language = Emgu.Utils.ProgrammingLanguage.CSharp;
+            cPlusPlusoperationStackView.Language = Emgu.Utils.ProgrammingLanguage.CPlusPlus;
         }
 
         /// <summary>
@@ -98,11 +112,12 @@ namespace Emgu.CV.UI
         /// <summary>
         /// Set the description of the operation stack
         /// </summary>
-        public String OperationStackText
+        public Stack<Operation<IImage>> OperationStack
         {
             set
             {
-                operationStackTextBox.Text = value;
+                cSharpOperationStackView.SetOperationStack(value);
+                cPlusPlusoperationStackView.SetOperationStack(value);
             }
         }
 
@@ -115,6 +130,16 @@ namespace Emgu.CV.UI
             {
                 fpsTextBox.Text = value.ToString();
             }
+        }
+
+        private void clearStackBtn_Click(object sender, EventArgs e)
+        {
+            _imageBox.ClearOperation();
+        }
+
+        private void popStackButton_Click(object sender, EventArgs e)
+        {
+            _imageBox.PopOperation();
         }
     }
 }

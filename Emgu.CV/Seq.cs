@@ -174,7 +174,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the contour and all the memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
         }
 

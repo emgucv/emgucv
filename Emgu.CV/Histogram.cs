@@ -32,7 +32,7 @@ namespace Emgu.CV
                 r[i] = e;
             }
             GCHandle handle = GCHandle.Alloc(binSizes, GCHandleType.Pinned);
-            _ptr = CvInvoke.cvCreateHist(_dimension, handle.AddrOfPinnedObject(), 0, r, 1);
+            _ptr = CvInvoke.cvCreateHist(_dimension, handle.AddrOfPinnedObject(), 0, r, true);
             handle.Free();
             foreach (IntPtr e in r)
                 Marshal.FreeHGlobal(e);
@@ -112,7 +112,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the histogram and all memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             CvInvoke.cvReleaseHist(ref _ptr);
         }

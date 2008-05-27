@@ -149,7 +149,7 @@ namespace Emgu.CV
 
         #region Coping and filling
         ///<summary>
-        /// Copy the current image to another one 
+        /// Copy the current array to <paramref name="dest"/>
         /// </summary>
         /// <param name="dest"> The destination Array</param>
         public void Copy(CvArray<D> dest)
@@ -269,7 +269,7 @@ namespace Emgu.CV
         /// <summary>
         /// Free the _dataHandle if it is set
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             if (_dataHandle.IsAllocated)
             {

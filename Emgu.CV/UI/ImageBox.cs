@@ -48,43 +48,38 @@ namespace Emgu.CV.UI
         /// Push the specific operation onto the stack
         /// </summary>
         /// <param name="operation">The operation to be pushed onto the stack</param>
-        private void PushOperation(Operation<IImage> operation)
+        public void PushOperation(Operation<IImage> operation)
         {
             _operationStack.Push(operation);
             ImageProperty panel = ImagePropertyPanel;
-            if (panel != null) panel.OperationStackText = OperationStackToString();
+            if (panel != null) 
+                panel.OperationStack = _operationStack;
             Image = Image;
         }
 
         /// <summary>
         /// Remove all the operations from the stack
         /// </summary>
-        private void ClearOperation()
+        public void ClearOperation()
         {
             _operationStack.Clear();
             ImageProperty panel = ImagePropertyPanel;
-            if (panel != null) panel.OperationStackText = OperationStackToString();
+            if (panel != null) panel.OperationStack = _operationStack;
             Image = Image;
         }
 
-        private String OperationStackToString()
+        /// <summary>
+        /// Remove the last added operation from the stack
+        /// </summary>
+        public void PopOperation()
         {
-            String CSharpFunction = "public static IImage Function(IImage image){0}{{{0}\t{1}{0}\treturn image;{0}}}";
-            List<String> opStr = new List<string>();
-            foreach (Operation<IImage> op in _operationStack)
+            if (_operationStack.Count > 0)
             {
-                if (op.Method.ReturnType == typeof(void))
-                {
-                    opStr.Add(op.ToCode("image") + ";");
-                }
-                else
-                {
-                    opStr.Add("image = " + op.ToCode("image") + ";");
-                }
+                _operationStack.Pop();
+                ImageProperty panel = ImagePropertyPanel;
+                if (panel != null) panel.OperationStack = _operationStack;
+                Image = Image;
             }
-            String[] sArray = opStr.ToArray();
-            System.Array.Reverse(sArray);
-            return String.Format(CSharpFunction, Environment.NewLine, String.Join(Environment.NewLine + "\t", sArray));
         }
 
         private void AddOperationMenuItem()
@@ -100,14 +95,14 @@ namespace Emgu.CV.UI
                 //Cause me lots of headache before reading the article on
                 //http://decav.com/blogs/andre/archive/2007/11/18/wtf-quot-problems-quot-with-anonymous-delegates-linq-lambdas-and-quot-foreach-quot-or-quot-for-quot-loops.aspx
                 //I wishes MSFT handle this better
-                MethodInfo miRef = mi;
+                MethodInfo methodInfoRef = mi;
 
                 operationMenuItem.Click += delegate(Object o, EventArgs e)
                     {
                         List<Object> paramList = new List<object>();
-                        if (ParamInputDlg.GetParams(miRef, paramList))
+                        if (ParamInputDlg.GetParams(methodInfoRef, paramList))
                         {
-                            Operation<IImage> operation = new Operation<IImage>(miRef, paramList.ToArray());
+                            Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList.ToArray());
                             PushOperation(operation);
                         }
                     };
@@ -182,7 +177,6 @@ namespace Emgu.CV.UI
                 {
                     ImagePropertyPanel.ImageWidth = _displayedImage.Width;
                     ImagePropertyPanel.ImageHeight = _displayedImage.Height;
-
                     ImagePropertyPanel.TypeOfColor = _displayedImage.TypeOfColor;
                     ImagePropertyPanel.TypeOfDepth = _displayedImage.TypeOfDepth;
 
@@ -238,11 +232,6 @@ namespace Emgu.CV.UI
             }
         }
 
-        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ClearOperation();
-        }
-
         private void propertyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EnableProperty = !EnableProperty;
@@ -266,7 +255,7 @@ namespace Emgu.CV.UI
             {
                 if (value)
                 {   //this is a call to enable the property dlg
-                    if (_propertyDlg == null) _propertyDlg = new PropertyDlg();                    
+                    if (_propertyDlg == null) _propertyDlg = new PropertyDlg(this);                    
                     _propertyDlg.Show();
 
                     _propertyDlg.FormClosed += 
@@ -275,7 +264,7 @@ namespace Emgu.CV.UI
                             _propertyDlg = null;
                         };
 
-                    ImagePropertyPanel.OperationStackText = OperationStackToString();
+                    ImagePropertyPanel.OperationStack = _operationStack;
 
                     // reset the image such that the property is updated
                     Image = Image;
@@ -285,8 +274,6 @@ namespace Emgu.CV.UI
                     if (_propertyDlg != null)
                     {
                         _propertyDlg.Focus();
-                        //_propertyDlg.Close();
-                        //_propertyDlg = null;
                     }
                 }
             }

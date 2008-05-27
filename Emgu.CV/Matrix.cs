@@ -84,7 +84,7 @@ namespace Emgu.CV
             {
                 Debug.Assert(value != null, "The Array cannot be null");
 
-                FreeUnmanagedObjects();
+                DisposeObject();
                 Debug.Assert(!_dataHandle.IsAllocated , "Handle should should be free");
 
                 _array = value;
@@ -194,7 +194,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the matrix and all the memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
@@ -202,7 +202,7 @@ namespace Emgu.CV
                 _ptr = IntPtr.Zero;
             }
 
-            base.FreeUnmanagedObjects();
+            base.DisposeObject();
         }
         #endregion
 

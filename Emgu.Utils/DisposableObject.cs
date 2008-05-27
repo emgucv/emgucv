@@ -34,14 +34,14 @@ namespace Emgu
             if (!m_disposed)
             {
                 m_disposed = true;
-                FreeUnmanagedObjects();
+                DisposeObject();
             }
         }
 
         /// <summary>
         /// Function use to release _ptr object
         /// </summary>
-        protected abstract void FreeUnmanagedObjects();
+        protected abstract void DisposeObject();
 
         /// <summary>
         /// Destructor

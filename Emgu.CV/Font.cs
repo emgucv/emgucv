@@ -25,7 +25,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the font object
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             Marshal.FreeHGlobal(_ptr);
         }

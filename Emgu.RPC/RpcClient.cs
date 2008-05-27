@@ -8,11 +8,10 @@ using System.ServiceModel;
 
 namespace Emgu.RPC
 {
-    public class RpcClient: IDisposable
+    public class RpcClient: DisposableObject
     {
         private Uri _baseUri;
         private System.ServiceModel.Channels.Binding _binding;
-                private bool _disposed;
         private ISpeechService _speech;
         private CaptureClient _captureClient;
         private SerialClient _serialClient;
@@ -75,34 +74,10 @@ namespace Emgu.RPC
             }
         }
 
-        public void Dispose()
+        protected override void DisposeObject()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ///<summary> 
-        /// Release the capture and all the memory associate with it
-        ///</summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // Free other state (managed objects).
-            }
-            // Free your own state (unmanaged objects).
-            if (!_disposed)
-            {
-                _disposed = true;
-                if (_serialClient != null) _serialClient.Dispose();
-                if (_captureClient != null) _captureClient.Dispose();
-                
-            }
-        }
-
-        ~RpcClient()
-        {
-            Dispose(false);
+            if (_serialClient != null) _serialClient.Dispose();
+            if (_captureClient != null) _captureClient.Dispose();
         }
     }
 }

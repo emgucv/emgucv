@@ -123,10 +123,15 @@ namespace Emgu.CV.UI
             }
         }
 
+        /// <summary>
+        /// Get the name of the parameter
+        /// </summary>
+        /// <param name="param">the parameter</param>
+        /// <returns>the name of the parameter</returns>
         private static String ParseParameterName(ParameterInfo param)
         {
             String name = param.Name;
-
+            
             #region Add space before every upper case character
             Char[] nameChars = name.ToCharArray();
             List<Char> charList = new List<char>();

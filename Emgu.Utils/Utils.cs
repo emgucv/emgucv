@@ -13,8 +13,14 @@ namespace Emgu
     /// <summary>
     /// utilities functions for Emgu
     /// </summary>
-    public class Utils
+    public static class Utils
     {
+        public enum ProgrammingLanguage
+        {
+            CSharp,
+            CPlusPlus
+        }
+
         /// <summary>
         /// A mothod that contains no input and returns nothing
         /// </summary>

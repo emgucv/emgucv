@@ -29,7 +29,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the HaarCascade Object and all the memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             CvInvoke.cvReleaseHaarClassifierCascade(ref _ptr);
         }

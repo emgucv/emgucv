@@ -7,7 +7,6 @@ using System.Runtime.Serialization;
 namespace Emgu.CV
 {
     ///<summary> A rectangle </summary>
-    [DataContract]
     [Serializable]
     public class Rectangle<T> : Point2D<T> where T : IComparable, new()
     {
@@ -122,7 +121,13 @@ namespace Emgu.CV
         public Point2D<T> BottomRight { get { return new Point2D<T>(Right, Bottom); } }
 
         ///<summary> The area of the rectangle </summary>
-        public double Area { get { return Math.Abs(System.Convert.ToDouble(Width) * System.Convert.ToDouble(Height)); } }
+        public double Area 
+        { 
+            get 
+            { 
+                return Math.Abs(System.Convert.ToDouble(Width) * System.Convert.ToDouble(Height)); 
+            } 
+        }
 
         ///<summary> The CvRect representation of this rectangle </summary>
         [XmlIgnore]

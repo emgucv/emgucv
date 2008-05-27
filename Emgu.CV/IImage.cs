@@ -70,18 +70,16 @@ namespace Emgu.CV
         /// <summary>
         /// Inplace fills Array with uniformly distributed random numbers
         /// </summary>
-        /// <param name="seed">Seed for the random number generator</param>
         /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
         /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
-        void _RandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue);
+        void _RandUniform(MCvScalar floorValue, MCvScalar ceilingValue);
 
         /// <summary>
         /// Inplace fills Array with normally distributed random numbers
         /// </summary>
-        /// <param name="seed">Seed for the random number generator</param>
         /// <param name="mean">the mean value of random numbers</param>
         /// <param name="std"> the standard deviation of random numbers</param>
-        void _RandNormal(UInt64 seed, MCvScalar mean, MCvScalar std);
+        void _RandNormal(MCvScalar mean, MCvScalar std);
 
         ///<summary>
         ///The function cvPyrUp performs up-sampling step of Gaussian pyramid decomposition. 

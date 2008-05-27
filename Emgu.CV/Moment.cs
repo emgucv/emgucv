@@ -87,7 +87,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the CvMoment strucutre and all the memory associate with it
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             Marshal.FreeHGlobal(_ptr);
         }

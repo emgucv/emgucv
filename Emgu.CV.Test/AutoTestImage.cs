@@ -228,7 +228,7 @@ namespace Emgu.CV.Test
 
             using (MemoryStream ms = new MemoryStream())
             {
-                img._RandNormal( (ulong) DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                     formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -257,7 +257,7 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
-            img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
             XmlDocument doc = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
 
@@ -271,7 +271,7 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
-            img._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
             img.Rotate(90, new Bgr());
         }
 
@@ -301,7 +301,7 @@ namespace Emgu.CV.Test
         public void Test_ConvolutionAndLaplace()
         {
             Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
-            image._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
+            image._RandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
             Image<Gray, float> laplace = image.Laplace(1);
 
@@ -317,7 +317,7 @@ namespace Emgu.CV.Test
         public void Test_BitmapConstructor()
         {
             Image<Bgr, Byte> image = new Image<Bgr, byte>(201, 401);
-            image._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            image._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
 
             Bitmap bmp = image.ToBitmap();
 

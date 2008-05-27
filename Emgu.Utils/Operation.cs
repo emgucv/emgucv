@@ -68,14 +68,24 @@ namespace Emgu.Reflection
         /// <summary>
         /// Represent this operation as code
         /// </summary>
-        /// <param name="instanceName"></param>
         /// <returns></returns>
-        public String ToCode(String instanceName)
+        public String ToCode(Utils.ProgrammingLanguage language)
         {
-            String res = String.Format("{0}.{1}({2})",
-                instanceName,
-                Method.Name,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+            String res = String.Empty;
+            if (language == Utils.ProgrammingLanguage.CSharp)
+            {
+                res = String.Format("{0}.{1}({2})",
+                    "{instance}",
+                    Method.Name,
+                    String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+            }
+            else if (language == Utils.ProgrammingLanguage.CPlusPlus)
+            {
+                res = res = String.Format("{0}->{1}({2})",
+                    "{instance}",
+                    Method.Name,
+                    String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+            }
             return res;
         }
     }

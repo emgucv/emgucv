@@ -20,7 +20,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the storage
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
             CvInvoke.cvReleaseMemStorage(ref _ptr);
         }

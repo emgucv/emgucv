@@ -32,16 +32,5 @@ namespace Emgu.CV
                     _coordinate[i] = value.v[i];
             }
         }
-
-        
-        /// <summary>
-        /// To be removed in the next version
-        /// </summary>
-        [Obsolete("To be removed in the next version, use MCvScalar property instead")]
-        public MCvScalar CvScalar
-        {
-            get { return MCvScalar; }
-            set { MCvScalar = value; }
-        }
     }
 }

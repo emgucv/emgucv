@@ -65,7 +65,7 @@ namespace Emgu.CV
         /// <summary>
         /// Release the resource for this capture
         /// </summary>
-        protected override void FreeUnmanagedObjects()
+        protected override void DisposeObject()
         {
 #if TEST_CAPTURE
 #else

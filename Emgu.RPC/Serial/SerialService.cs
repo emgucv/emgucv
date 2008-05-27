@@ -11,7 +11,7 @@ namespace Emgu.RPC.Serial
     /// The service for a single serial port
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class SerialService : ISerialService, IDisposable
+    public class SerialService : DisposableObject, ISerialService
     {
         private static SerialPort _port;
 
@@ -51,14 +51,11 @@ namespace Emgu.RPC.Serial
                     }
                 }
                 callback.ReceiveData(data);
-                //OnDataReceived(this, new Emgu.Utils.StringEventArgs(data));
             });
             t.Start();
         }
 
-        //public event EventHandler OnDataReceived;
-
-        public virtual void Dispose()
+        protected override void DisposeObject()
         {
             _port.Close();
         }
