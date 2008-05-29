@@ -316,14 +316,18 @@ namespace Emgu.CV.Test
 
         public void Test_BitmapConstructor()
         {
-            Image<Bgr, Byte> image = new Image<Bgr, byte>(201, 401);
-            image._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-
-            Bitmap bmp = image.ToBitmap();
+            Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
+            image1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            Bitmap bmp = image1.ToBitmap();
 
             Image<Bgr, Byte> image2 = new Image<Bgr, byte>(bmp);
-            Assert.IsTrue(image.Equals(image2));
+            Assert.IsTrue(image1.Equals(image2));
 
+            Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
+            image3._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            bmp = image3.ToBitmap();
+            Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
+            Assert.IsTrue(image3.Equals(image4));
         }
     }
 }

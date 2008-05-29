@@ -1,7 +1,7 @@
 CC=gmcs
 CVTEST_SRC = Emgu.CV.Test/*.cs  
 SVN_URL = https://emgucv.svn.sourceforge.net/svnroot/emgucv/trunk/
-VERSION = 1.2.2.0
+VERSION = 1.3.0.0
 
 CV_RELEASE: Utils CV FORCE
 	install -d release; cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt lib/zlib.net.license.txt lib/zlib.net.dll bin/Emgu.CV.dll bin/Emgu.Utils.dll release; tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz; rm -rf release
@@ -12,16 +12,19 @@ Utils:  FORCE
 CV: Utils FORCE 
 	make -C Emgu.CV bin; cp Emgu.CV/bin/Emgu.CV.dll ./bin;
 
+UI: 	FORCE
+	cd Emgu.UI; make bin; cp bin/Emgu.UI.dll ../bin; cd ..;
+
 CV_SRC:
 	install -d src 
 	svn export ${SVN_URL}Emgu.CV src/Emgu.CV
 	svn export ${SVN_URL}Emgu.Utils src/Emgu.Utils
 	install -d src/Solution/VS2005_MonoDevelop
 	install -d src/Solution/VS2008
-	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV_VS2005.sln src/Solution/VS2005_MonoDevelop/Emgu.CV_VS2005.sln
-	svn export ${SVN_URL}Solution/VS2008/Emgu.CV_VS2008.sln src/Solution/VS2008/Emgu.CV_VS2008.sln
-	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.Example_VS2005.sln src/Solution/VS2005_MonoDevelop/Emgu.CV.Example_VS2005.sln
-	svn export ${SVN_URL}Solution/VS2008/Emgu.CV.Example_VS2008.sln src/Solution/VS2008/Emgu.CV.Example_VS2008.sln
+	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.sln src/Solution/VS2005_MonoDevelop/Emgu.CV.sln
+	svn export ${SVN_URL}Solution/VS2008/Emgu.CV.sln src/Solution/VS2008/Emgu.CV.sln
+	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.Example.sln src/Solution/VS2005_MonoDevelop/Emgu.CV.Example.sln
+	svn export ${SVN_URL}Solution/VS2008/Emgu.CV.Example.sln src/Solution/VS2008/Emgu.CV.Example.sln
 	svn export ${SVN_URL}Emgu.CV.Example src/Emgu.CV.Example
 	svn export ${SVN_URL}README.txt src/README.txt
 	install -d src/lib
@@ -36,11 +39,8 @@ CV_SRC:
 	svn export ${SVN_URL}lib/cxts001.dll src/bin/cxts001.dll
 	svn export ${SVN_URL}lib/libguide40.dll src/bin/libguide40.dll
 	svn export ${SVN_URL}lib/opencv.license.txt src/bin/opencv.license.txt
-	zip -r Emgu.CV-${VERSION}.SourceAndExamples.zip src
+	zip -r Emgu.CV.SourceAndExamples-${VERSION}.zip src
 	rm -rf src
-
-UI: 	FORCE
-	cd Emgu.UI; make bin; cp bin/Emgu.UI.dll ../bin; cd ..;
 
 CVTest: CV UI $(CVTEST_SRC)
 	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/nunit22/nunit.framework -r:bin/Emgu.Utils.dll -r:bin/Emgu.UI.dll   -r:System.Windows.Forms -r:System.Drawing -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
