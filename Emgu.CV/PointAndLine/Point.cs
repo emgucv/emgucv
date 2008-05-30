@@ -4,7 +4,8 @@ using System.Text;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using System.ServiceModel;
+using System.ServiceModel;
+
 
 namespace Emgu.CV
 {

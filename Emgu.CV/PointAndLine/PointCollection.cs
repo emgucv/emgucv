@@ -175,13 +175,11 @@ namespace Emgu.CV
         public static Line2D<float> Line2DFitting(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type)
         {
             float[] data = new float[6];
-            GCHandle handle2 = GCHandle.Alloc(data, GCHandleType.Pinned);
             using (MemStorage stor = new MemStorage())
             {
                 Seq<MCvPoint2D32f> seq = To2D32fSequence(stor, points);
-                CvInvoke.cvFitLine(seq.Ptr, type, 0.0, 0.01, 0.01, handle2.AddrOfPinnedObject());
+                CvInvoke.cvFitLine(seq.Ptr, type, 0.0, 0.01, 0.01, data);
             }
-            handle2.Free();
             Line2D<float> res = new Line2D<float>(new Point2D<float>(data[2], data[3]), new Point2D<float>(data[2] + data[0], data[3] + data[1]));
             return res;
         }

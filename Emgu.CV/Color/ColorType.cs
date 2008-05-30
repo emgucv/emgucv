@@ -32,5 +32,15 @@ namespace Emgu.CV
                     _coordinate[i] = value.v[i];
             }
         }
+
+        /// <summary>
+        /// implicit operator to MCvScalar
+        /// </summary>
+        /// <param name="point">The color</param>
+        /// <returns>MCvScalar</returns>
+        public static implicit operator MCvScalar(ColorType point)
+        {
+            return point.MCvScalar;
+        }
     }
 }

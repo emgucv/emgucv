@@ -244,6 +244,17 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void Test_SampleLine()
+        {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
+            img._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            Byte[,] buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(0, 100)));
+            for (int i = 0; i < 100; i++)
+                Assert.IsTrue(img[i, 0].Equals(new Bgr( buffer[i,0], buffer[i,1], buffer[i,2])));
+        }
+
+
+        [Test]
         public void Test_getSize()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
@@ -295,6 +306,13 @@ namespace Emgu.CV.Test
 
             Byte[, ,] data = new Byte[,,] { { { 255, 0, 0 } }, { { 0, 255, 0 } } };
             Image<Bgr, Byte> img3 = new Image<Bgr, byte>(data);
+        }
+
+        [Test]
+        public void Test_SubR()
+        {
+            Image<Bgr, Byte> img = new Image<Bgr, Byte>(101, 133);
+            Assert.IsTrue(img.Not().Equals(255 - img));
         }
 
         [Test]

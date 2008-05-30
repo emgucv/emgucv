@@ -4,13 +4,13 @@
         <assembly assemblyPath="..\bin\Emgu.Utils.dll" xmlCommentsPath="..\bin\Emgu.Utils.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
-        <namespaceSummaryItem name="" isDocumented="False">Emgu CV is ...</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu" isDocumented="True">Emgu Project</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Emgu CV namespace</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">camera calibration namespace</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris & Mac OS X. </namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu" isDocumented="True"> The namespace contains codes implmented by Emgu  </namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV" isDocumented="True"> Wrapper of Opencv image processing functions. Base functions (L1) can be found in CvInvoke class, enumerations can be found in Emgu.CV.Enum namespace.  </namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">C# functions for camera calibration</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Wrapped Opencv enumeration</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="True" />
-        <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">Emgu CV  user interface</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Data" isDocumented="True">Data namespace</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Reflection namespace</namespaceSummaryItem>
     </namespaceSummaries>

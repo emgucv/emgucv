@@ -66,7 +66,19 @@ namespace Emgu.CV
         /// <summary>
         /// The CvPoint representation of th is 2D point
         /// </summary>
+        [Obsolete("Will be removed in the next version, use MCvPoint instead")]
         public MCvPoint CvPoint
+        {
+            get
+            {
+                return MCvPoint;
+            }
+        }
+
+        /// <summary>
+        /// The CvPoint representation of th is 2D point
+        /// </summary>
+        public MCvPoint MCvPoint
         {
             get
             {
@@ -75,6 +87,15 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// implicit operator to MCvPoint
+        /// </summary>
+        /// <param name="point">The 2D point</param>
+        /// <returns>MCvPoint</returns>
+        public static implicit operator MCvPoint(Point2D<T> point)
+        {
+            return point.MCvPoint;
+        }
     };
 
 }

@@ -9,7 +9,6 @@ namespace Emgu.Data
     /// <summary>
     /// An envelope that contains the maximum and minimum value
     /// </summary>
-    [XmlRoot("Envelop")]
     public class Envelope<T> where T: IComparable, new()
     {
         private T _max;
@@ -61,7 +60,6 @@ namespace Emgu.Data
     /// <summary>
     /// An Envelope that contains the maximum, minimun and mean
     /// </summary>
-    [XmlRoot("Envelop3M")]
     public class Envelope3M<T> : Envelope<T> where T: IComparable, new()
     {
         private T _mean;
@@ -98,7 +96,6 @@ namespace Emgu.Data
         public static Envelope3M<T> operator +(Envelope3M<T> e1, Envelope3M<T> e2)
         {
             Utils.Func<T, T, T> conv = delegate(T v1, T v2) { return (T) System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T)); };
-
             return new Envelope3M<T>( conv(e1.Min, e2.Min), conv(e1.Mean, e2.Mean), conv(e1.Max, e2.Max));
         }
     }

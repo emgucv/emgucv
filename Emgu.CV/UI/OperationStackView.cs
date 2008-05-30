@@ -12,7 +12,7 @@ namespace Emgu.CV.UI
 {
     public partial class OperationStackView : UserControl
     {
-        private Stack<Operation<IImage>> _operationStack;
+        //private Stack<Operation<IImage>> _operationStack;
         private DataGridViewTextBoxColumn _codeColumn;
         private Emgu.Utils.ProgrammingLanguage _language;
         public OperationStackView()
