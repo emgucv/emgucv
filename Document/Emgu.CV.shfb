@@ -4,12 +4,15 @@
         <assembly assemblyPath="..\bin\Emgu.Utils.dll" xmlCommentsPath="..\bin\Emgu.Utils.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
-        <namespaceSummaryItem name="" isDocumented="False" />
-        <namespaceSummaryItem name="Emgu" isDocumented="True" />
-        <namespaceSummaryItem name="Emgu.CV" isDocumented="True" />
-        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True" />
+        <namespaceSummaryItem name="" isDocumented="False">Emgu CV is ...</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu" isDocumented="True">Emgu Project</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Emgu CV namespace</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">camera calibration namespace</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Enumeration</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="True" />
-        <namespaceSummaryItem name="Emgu.Data" isDocumented="True" />
+        <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">Emgu CV  user interface</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.Data" isDocumented="True">Data namespace</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Reflection namespace</namespaceSummaryItem>
     </namespaceSummaries>
     <ProjectSummary />
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
