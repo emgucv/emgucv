@@ -79,5 +79,18 @@ namespace Emgu.CV.CameraCalibration
             CvInvoke.cvProjectPoints2(pointMatrix.Ptr, extrin.RotationVector.Ptr, extrin.TranslationVector.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, res.Ptr, dpdrot, dpdt, dpdf, dpdc, dpddist);
             return res;
         }
+
+        /// <summary>
+        /// The function cvFindHomography finds perspective transformation H=||hij|| between the source and the destination planes
+        /// </summary>
+        /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
+        /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
+        /// <returns>Output 3x3 homography matrix. </returns>
+        public static Matrix<float> FindHomography( Matrix<float> srcPoints, Matrix<float> dstPoints)
+        {
+            Matrix<float> homography = new Matrix<float>(3, 3);
+            CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr);
+            return homography;
+        }
     }
 }
