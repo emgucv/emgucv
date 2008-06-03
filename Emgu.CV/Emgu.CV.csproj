@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -84,6 +84,7 @@
     <Compile Include="CvException.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
+    <Compile Include="MotionHistory.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
     <Compile Include="UI\ImageBox.cs">
       <SubType>UserControl</SubType>

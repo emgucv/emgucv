@@ -57,5 +57,13 @@ namespace Emgu.CV
         {
             get { return new Point2D<int>(width, height); }
         }
+
+        /// <summary>
+        /// Area of the CvRect
+        /// </summary>
+        public int Area
+        {
+            get { return width * height; }
+        }
     }
 }
