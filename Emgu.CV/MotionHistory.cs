@@ -4,6 +4,12 @@ using System.Text;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// The motion history class
+    /// </summary>
+    /// <remarks>
+    /// For example usage, take a look at the Motion Detection example
+    /// </remarks>
     public class MotionHistory
     {
         private int _bufferMax;
@@ -21,6 +27,14 @@ namespace Emgu.CV
 
         private Queue<Image<Gray, Byte>> _buffer;
 
+        /// <summary>
+        /// Create a motion history object
+        /// </summary>
+        /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
+        /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
+        /// <param name="mhiDuration">in second, the duration of motion history your wants to keep</param>
+        /// <param name="maxTimeDelta">in second, parameter for cvCalcMotionGradient</param>
+        /// <param name="minTimeDelta">in second, parameter for cvCalcMotionGradient</param>
         public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta)
         {
             _bufferMax = bufferCount;
@@ -32,6 +46,20 @@ namespace Emgu.CV
             _minTimeDelta = minTimeDelta;
         }
 
+        /// <summary>
+        /// Update the motion history with the specific image and current timestamp
+        /// </summary>
+        /// <param name="image">The image to be added to history</param>
+        public void Update(Image<Gray, Byte> image)
+        {
+            Update(image, DateTime.Now);
+        }
+
+        /// <summary>
+        /// Update the motion history with the specific image and the specific timestamp
+        /// </summary>
+        /// <param name="image">The image to be added to history</param>
+        /// <param name="timestamp">The timestamp the image is captured</param>
         public void Update(Image<Gray, Byte> image, DateTime timestamp)
         {
             _lastTime = timestamp;
@@ -57,6 +85,20 @@ namespace Emgu.CV
             CvInvoke.cvCalcMotionGradient(_mhi.Ptr, _mask.Ptr, _orientation.Ptr, _maxTimeDelta, _minTimeDelta, 3);
         }
 
+        /// <summary>
+        /// The motion mask
+        /// </summary>
+        public Image<Gray, Byte> Mask
+        {
+            get 
+            {
+                return _mask; 
+            }
+        }
+
+        /// <summary>
+        /// Get a sequence of motion component
+        /// </summary>
         public Seq<MCvConnectedComp> MotionComponents
         {
             get
@@ -71,6 +113,12 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Given a rectagle area of the motion, output the angle of the motion and the number of pixels that are considered to be motion pixel 
+        /// </summary>
+        /// <param name="motionRectangle">the rectangle area of the motion</param>
+        /// <param name="angle">the orientation of the motion</param>
+        /// <param name="motionPixelCount">number of points within silhoute ROI</param>
         public void MotionInfo(MCvRect motionRectangle, out double angle, out double motionPixelCount)
         {
             TimeSpan ts = _lastTime.Subtract(_initTime);
@@ -84,37 +132,14 @@ namespace Emgu.CV
             angle = CvInvoke.cvCalcGlobalOrientation(_orientation.Ptr, _mask.Ptr, _mhi.Ptr, ts.TotalSeconds, _mhiDuration);
             angle = 360.0 - angle; // adjust for images with top-left origin
 
+            // caculate number of points within silhoute ROI
             motionPixelCount = CvInvoke.cvNorm(_silh.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
 
+            // reset the ROI
             CvInvoke.cvResetImageROI(_mhi);
             CvInvoke.cvResetImageROI(_orientation);
             CvInvoke.cvResetImageROI(_mask);
             CvInvoke.cvResetImageROI(_silh);
-
         }
-
-        /*
-        public void MotionDirections(out MCvRect[] motionRects, out double[] angles, out double[] motionPixelCounts)
-        {
-            List<MCvRect> motionRectList = new List<MCvRect>();
-            List<double> angleList = new List<double>();
-            List<double> motionPixelCountList = new List<double>();
-            Seq<MCvConnectedComp> motions = MotionComponents;
-            Image<Gray, Byte> res = new Image<Gray, byte>(_mhi.Width, _mhi.Height);
-
-            foreach (MCvConnectedComp component in motions)
-            {
-                double angle, count;
-                MotionInfo(component.rect, out angle, out count);
-
-                motionRectList.Add(component.rect);
-                angleList.Add(angle);
-                motionPixelCountList.Add(count);
-            }
-
-            motionRects = motionRectList.ToArray();
-            angles = angleList.ToArray();
-            motionPixelCounts = motionPixelCountList.ToArray();
-        }*/
     }
 }

@@ -77,6 +77,34 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Multiply the current point with the specific value
+        /// </summary>
+        /// <param name="value">the value to multiply</param>
+        /// <returns>the multiplied point</returns>
+        public Point<T> Mul(T value)
+        {
+            Point<double> pt = Convert<double>();
+            double[] coordinate = pt.Coordinate;
+            double mul = (double) System.Convert.ChangeType(value, typeof(double));
+            for (int i = 0; i < coordinate.Length; i++)
+            {
+                coordinate[i] *= mul;
+            }
+            return pt.Convert<T>();
+        }
+
+        /// <summary>
+        /// Multiply the point with the specific value
+        /// </summary>
+        /// <param name="point">The point to multiply</param>
+        /// <param name="value">the value to multiply</param>
+        /// <returns>the multiplication result</returns>
+        public static Point<T> operator *(Point<T> point, T value)
+        {
+            return point.Mul(value);
+        }
+
+        /// <summary>
         /// Perform a generic operation between two points and store the result in the first point
         /// </summary>
         /// <typeparam name="T2">The type of the second point</typeparam>

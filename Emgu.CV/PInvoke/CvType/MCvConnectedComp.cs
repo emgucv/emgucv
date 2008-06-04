@@ -17,14 +17,19 @@ namespace Emgu.CV
         public double area;
 
         /// <summary>
-        /// gray scale value of the segmented component
+        /// scalar value
         /// </summary>
-        public float value;
+        public MCvScalar value;
 
         /// <summary>
         /// ROI of the segmented component
         /// </summary>
         public MCvRect rect;
+
+        /// <summary>
+        /// Pointer to the CvSeq
+        /// </summary>
+        public IntPtr contour;
     }
 
 }

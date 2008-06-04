@@ -15,16 +15,27 @@ namespace Emgu
     /// </summary>
     public static class Utils
     {
+        /// <summary>
+        /// The type of Programming languages
+        /// </summary>
         public enum ProgrammingLanguage
         {
+            /// <summary>
+            /// C#
+            /// </summary>
             CSharp,
+            /// <summary>
+            /// C++
+            /// </summary>
             CPlusPlus
         }
 
+        /*
         /// <summary>
         /// A mothod that contains no input and returns nothing
         /// </summary>
         public delegate void Action();
+        */
 
         /// <summary>
         /// An Action that accepts two input and returns nothing

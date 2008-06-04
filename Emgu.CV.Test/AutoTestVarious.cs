@@ -154,5 +154,21 @@ namespace Emgu.CV.Test
                 Assert.IsTrue(exceptionCaught);
             }
         }
+
+        [Test]
+        public void TestRectangle()
+        {
+            Matrix<Byte> mat = new Matrix<Byte>(1, 4);
+            mat._RandUniform(new MCvScalar(), new MCvScalar(255.0));
+
+            MCvRect rect1 = new MCvRect( (int)mat[0, 0], (int) mat[0, 1], (int) mat[0, 2], (int) mat[0, 3]);
+            Rectangle<double> rectangle = new Rectangle<double>(rect1);
+            MCvRect rect2 = rectangle.MCvRect;
+
+            Assert.AreEqual(rect1.x, rect2.x);
+            Assert.AreEqual(rect1.y, rect2.y);
+
+        }
+
     }
 }
