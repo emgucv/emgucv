@@ -130,7 +130,7 @@ namespace Emgu.CV
         {
             get
             {
-                return CvInvoke.cvNorm(Ptr, IntPtr.Zero, 4, IntPtr.Zero);
+                return CvInvoke.cvNorm(Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
             }
         }
         #endregion

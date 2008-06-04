@@ -84,7 +84,7 @@ namespace Emgu.CV
             angle = CvInvoke.cvCalcGlobalOrientation(_orientation.Ptr, _mask.Ptr, _mhi.Ptr, ts.TotalSeconds, _mhiDuration);
             angle = 360.0 - angle; // adjust for images with top-left origin
 
-            motionPixelCount = CvInvoke.cvNorm(_silh.Ptr, IntPtr.Zero, 1, IntPtr.Zero); // calculate number of points within silhouette ROI
+            motionPixelCount = CvInvoke.cvNorm(_silh.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
 
             CvInvoke.cvResetImageROI(_mhi);
             CvInvoke.cvResetImageROI(_orientation);
