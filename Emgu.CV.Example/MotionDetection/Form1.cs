@@ -38,7 +38,7 @@ namespace MotionDetection
                 _motionHistory = new MotionHistory(
                     6, //number of images to store in buffer, adjust it to fit your camera's frame rate
                     20, //0-255, the amount of pixel intensity change to consider it as motion pixel
-                    1.0, //in second, the duration of motion history your wants to keep
+                    1.0, //in second, the duration of motion history you wants to keep
                     0.05, //in second, parameter for cvCalcMotionGradient
                     0.5); //in second, parameter for cvCalcMotionGradient
 
@@ -57,10 +57,20 @@ namespace MotionDetection
                 //update the motion history
                 _motionHistory.Update(image.Convert<Gray, Byte>());
 
-                //get a copy of the motion mask
-                Image<Gray, Byte> motionMask = _motionHistory.Mask.Clone();
+                #region get a copy of the motion mask and enhance its color 
+                Image<Gray, Byte> motionMask = _motionHistory.Mask;
+                double[] minValues, maxValues;
+                MCvPoint[] minLoc, maxLoc;
+                motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
+                motionMask = motionMask * (255.0 / maxValues[0]);
+                #endregion 
 
-                //reduce the minimum area to detect smaller motion
+                //create the motion image 
+                Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Width, motionMask.Height);
+                //display the motion pixels in blue
+                CvInvoke.cvCvtPlaneToPix(motionMask, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, motionImage);
+
+                //Threshold to define a motion area, reduce it to detect smaller motion
                 double minArea = 100;
 
                 Seq<MCvConnectedComp> motionComponents = _motionHistory.MotionComponents;
@@ -78,22 +88,24 @@ namespace MotionDetection
                     //reject the area that contains too few motion
                     if (motionPixelCount / comp.area < 0.05) continue;
 
-                    DrawMotion(motionMask, comp.rect, angle);
+                    //Draw each individual motion in red
+                    DrawMotion(motionImage, comp.rect, angle, new Bgr(0, 0, 255.0));
                 }
 
-                //Display the amount of motions found on the current image
-                UpdateText( String.Format("Motions found: {0}", motionComponents.Total)) ;
                 
-                /*
                 // find and draw the overall motion angle
                 double overallAngle, overallMotionPixelCount;
                 _motionHistory.MotionInfo(motionMask.ROI.MCvRect, out overallAngle, out overallMotionPixelCount);
-                DrawMotion(motionMask, motionMask.ROI.MCvRect, overallAngle);
-                */
+                //DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(0, 255, 0));
+                
 
-                motionImageBox.Image = motionMask;
+                //Display the amount of motions found on the current image
+                UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
+                
+                motionImageBox.Image = motionImage;
 
                 //The following is optional, it force a garbage collection and free unused memory
+                //If removed the program consumes more memory but runs slightly faster
                 GC.Collect();
             }
         }
@@ -110,7 +122,7 @@ namespace MotionDetection
             }
         }
 
-        private static void DrawMotion(Image<Gray, Byte> image, MCvRect motionArea, double angle)
+        private static void DrawMotion(Image<Bgr, Byte> image, MCvRect motionArea, double angle, Bgr color)
         {
             int circleRadius = (int) (motionArea.width + motionArea.height) / 4;
 
@@ -124,11 +136,8 @@ namespace MotionDetection
                 circle.Center.Y + yDirection);
             LineSegment2D<int> line = new LineSegment2D<int>(circle.Center, pointOnCircle);
 
-            image.Draw(circle, new Gray(120.0), 1);
-            image.Draw(line, new Gray(120.0), 2);
-
-            //image.Draw(new Rectangle<double>( motionArea ), new Gray(120), -1);
-
+            image.Draw(circle, color, 1);
+            image.Draw(line, color, 2);
         }
 
         /// <summary>
