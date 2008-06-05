@@ -1,15 +1,15 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.Diagnostics;
 
-namespace Emgu.Data
+namespace Emgu.CV
 {
     /// <summary>
     /// An envelope that contains the maximum and minimum value
     /// </summary>
-    public class Envelope<T> where T: IComparable, new()
+    public class Envelope<T> where T : IComparable, new()
     {
         private T _max;
         private T _min;
@@ -17,9 +17,9 @@ namespace Emgu.Data
         /// <summary>
         /// Create an envelope with default value
         /// </summary>
-        public Envelope() 
-            : this(new T(), new T()) 
-        { 
+        public Envelope()
+            : this(new T(), new T())
+        {
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.Data
         /// <param name="max">The higher bound</param>
         public Envelope(T min, T max)
         {
-            _min = min; 
+            _min = min;
             _max = max;
             Debug.Assert(min.CompareTo(max) <= 0);
         }
@@ -60,7 +60,7 @@ namespace Emgu.Data
     /// <summary>
     /// An Envelope that contains the maximum, minimun and mean
     /// </summary>
-    public class Envelope3M<T> : Envelope<T> where T: IComparable, new()
+    public class Envelope3M<T> : Envelope<T> where T : IComparable, new()
     {
         private T _mean;
 
@@ -95,8 +95,8 @@ namespace Emgu.Data
         /// <returns>The sum of the two envelop</returns>
         public static Envelope3M<T> operator +(Envelope3M<T> e1, Envelope3M<T> e2)
         {
-            Utils.Func<T, T, T> conv = delegate(T v1, T v2) { return (T) System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T)); };
-            return new Envelope3M<T>( conv(e1.Min, e2.Min), conv(e1.Mean, e2.Mean), conv(e1.Max, e2.Max));
+            Emgu.Utils.Func<T, T, T> conv = delegate(T v1, T v2) { return (T)System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T)); };
+            return new Envelope3M<T>(conv(e1.Min, e2.Min), conv(e1.Mean, e2.Mean), conv(e1.Max, e2.Max));
         }
     }
 }
