@@ -4,17 +4,16 @@
         <assembly assemblyPath="..\bin\Emgu.Utils.dll" xmlCommentsPath="..\bin\Emgu.Utils.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
-        <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris & Mac OS X. </namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu" isDocumented="True"> The namespace contains codes implmented by Emgu  </namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV" isDocumented="True"> Wrapper of Opencv image processing functions. Base functions (L1) can be found in CvInvoke class, enumerations can be found in Emgu.CV.Enum namespace.  </namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">C# functions for camera calibration</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Wrapped Opencv enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu" isDocumented="True">Root namespace</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV image processing functions. Base functions (L1) can be found in CvInvoke class, enumerations can be found in Emgu.CV.Enum namespace.</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV enumeration</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="True" />
         <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.Data" isDocumented="True">Data namespace</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Reflection namespace</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</namespaceSummaryItem>
     </namespaceSummaries>
-    <ProjectSummary />
+    <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</ProjectSummary>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
@@ -33,12 +32,12 @@
     <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
-    <HelpTitle>Emgu Library Documentation</HelpTitle>
+    <HelpTitle>Emgu CV Library Documentation</HelpTitle>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <CopyrightHref />
-    <CopyrightText />
-    <FeedbackEMailAddress />
+    <CopyrightText>2008 Emgu, All Rights Reserved,</CopyrightText>
+    <FeedbackEMailAddress>huangcanming@hotmail.com</FeedbackEMailAddress>
     <HeaderText />
     <FooterText />
     <ProjectLinkType>Local</ProjectLinkType>
