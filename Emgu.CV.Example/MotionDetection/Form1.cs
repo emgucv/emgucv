@@ -61,7 +61,7 @@ namespace MotionDetection
                 Image<Gray, Byte> motionMask = _motionHistory.Mask.Clone();
 
                 //reduce the minimum area to detect smaller motion
-                double minArea = 10;
+                double minArea = 100;
 
                 Seq<MCvConnectedComp> motionComponents = _motionHistory.MotionComponents;
 
@@ -112,7 +112,7 @@ namespace MotionDetection
 
         private static void DrawMotion(Image<Gray, Byte> image, MCvRect motionArea, double angle)
         {
-            int circleRadius = (int) (motionArea.width + motionArea.height) / 2;
+            int circleRadius = (int) (motionArea.width + motionArea.height) / 4;
 
             Rectangle<int> rect = new Rectangle<int>(motionArea);
             Circle<int> circle = new Circle<int>(rect.Center, circleRadius);
@@ -125,9 +125,9 @@ namespace MotionDetection
             LineSegment2D<int> line = new LineSegment2D<int>(circle.Center, pointOnCircle);
 
             image.Draw(circle, new Gray(120.0), 1);
-            image.Draw(line, new Gray(120.0), 1);
+            image.Draw(line, new Gray(120.0), 2);
 
-            image.Draw(new Rectangle<double>( motionArea ), new Gray(120), -1);
+            //image.Draw(new Rectangle<double>( motionArea ), new Gray(120), -1);
 
         }
 

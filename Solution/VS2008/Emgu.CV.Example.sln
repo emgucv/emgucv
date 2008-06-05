@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV", "..\..\Emgu.CV\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Utils", "..\..\Emgu.Utils\Emgu.Utils.csproj", "{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Emgu.CV.Example\MotionDetection\MotionDetection.csproj", "{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
@@ -304,6 +306,30 @@ Global
 		{7C2C5325-8235-4A24-9C67-6BD79A4679E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7C2C5325-8235-4A24-9C67-6BD79A4679E2}.Release|x86.ActiveCfg = Release|x86
 		{7C2C5325-8235-4A24-9C67-6BD79A4679E2}.Release|x86.Build.0 = Release|x86
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|.NET.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug Linux|x86.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|.NET.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release Linux|x86.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|.NET.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
