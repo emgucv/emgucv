@@ -96,7 +96,7 @@ namespace MotionDetection
                 // find and draw the overall motion angle
                 double overallAngle, overallMotionPixelCount;
                 _motionHistory.MotionInfo(motionMask.ROI.MCvRect, out overallAngle, out overallMotionPixelCount);
-                //DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(0, 255, 0));
+                DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(0, 255, 0));
                 
 
                 //Display the amount of motions found on the current image

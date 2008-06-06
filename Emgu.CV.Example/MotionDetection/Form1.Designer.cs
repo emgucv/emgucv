@@ -34,7 +34,7 @@ namespace MotionDetection
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(344, 18);
+            this.label2.Location = new System.Drawing.Point(424, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 13);
             this.label2.TabIndex = 3;
@@ -43,7 +43,7 @@ namespace MotionDetection
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 383);
+            this.label3.Location = new System.Drawing.Point(12, 452);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 4;
@@ -52,9 +52,9 @@ namespace MotionDetection
             // motionImageBox
             // 
             this.motionImageBox.Image = null;
-            this.motionImageBox.Location = new System.Drawing.Point(339, 53);
+            this.motionImageBox.Location = new System.Drawing.Point(419, 53);
             this.motionImageBox.Name = "motionImageBox";
-            this.motionImageBox.Size = new System.Drawing.Size(335, 303);
+            this.motionImageBox.Size = new System.Drawing.Size(397, 353);
             this.motionImageBox.TabIndex = 2;
             // 
             // capturedImageBox
@@ -62,14 +62,14 @@ namespace MotionDetection
             this.capturedImageBox.Image = null;
             this.capturedImageBox.Location = new System.Drawing.Point(4, 53);
             this.capturedImageBox.Name = "capturedImageBox";
-            this.capturedImageBox.Size = new System.Drawing.Size(329, 303);
+            this.capturedImageBox.Size = new System.Drawing.Size(409, 353);
             this.capturedImageBox.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 405);
+            this.ClientSize = new System.Drawing.Size(841, 474);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.motionImageBox);
