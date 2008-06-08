@@ -332,6 +332,7 @@ namespace Emgu.CV.Test
             Assert.IsTrue(laplace.Equals(convoluted));
         }
 
+        [Test]
         public void Test_BitmapConstructor()
         {
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
@@ -347,5 +348,17 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
             Assert.IsTrue(image3.Equals(image4));
         }
+
+        [Test]
+        public void TestVideoWriter()
+        {
+            VideoWriter writer = new VideoWriter("tmp.avi", 2, 200, 100, true);
+            Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 100);
+            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(200, 100);
+            writer.WriteFrame(img1);
+            writer.WriteFrame(img2);
+            writer.Dispose();
+        }
+
     }
 }

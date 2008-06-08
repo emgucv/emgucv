@@ -16,9 +16,23 @@ namespace Emgu.CV
         /// <param name="fps">frame rate per second</param>
         /// <param name="frameSize">the size of the frame</param>
         /// <param name="isColor">true if this is a color video, false otherwise</param>
+        [Obsolete("To be removed in the next version, use other constructors instead")]
         public VideoWriter(String filename, int fps, Point2D<int> frameSize, bool isColor)
         {
             _ptr = CvInvoke.cvCreateVideoWriter(filename, CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), fps, new MCvSize(frameSize.X, frameSize.Y), isColor);  
+        }
+
+        /// <summary>
+        /// Create a video writer using the specific information
+        /// </summary>
+        /// <param name="filename">The name of the video file to be written to </param>
+        /// <param name="fps">frame rate per second</param>
+        /// <param name="width">the width of the frame</param>
+        /// <param name="height">the height of the frame</param>
+        /// <param name="isColor">true if this is a color video, false otherwise</param>
+        public VideoWriter(String filename, int fps, int width, int height, bool isColor)
+        {
+            _ptr = CvInvoke.cvCreateVideoWriter(filename, CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), fps, new MCvSize(width, height), isColor);
         }
 
         /// <summary>
