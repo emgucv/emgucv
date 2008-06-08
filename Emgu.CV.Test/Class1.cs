@@ -423,9 +423,17 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
         }
 
+        public void Test_ReadImage()
+        {
+            Application.Run(new ImageViewer(new Image<Gray, Byte>("lena.jpg")));
+            Application.Run(new ImageViewer(new Image<Bgr, Byte>("lena.jpg").Convert<Gray,Byte>()));
+        }
+
         public void Test_ImageViewer()
         {
             Application.Run(new ImageViewer(null));
         }
+
+       
     }
 }
