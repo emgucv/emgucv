@@ -8,10 +8,7 @@ using Emgu;
 namespace Emgu.CV
 {
     ///<summary> Create a image capture base on opencv's capture object </summary>
-#if NET_2_0
-#else
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-#endif
     public class Capture : 
         UnmanagedObject,
         IDuplexCapture,
