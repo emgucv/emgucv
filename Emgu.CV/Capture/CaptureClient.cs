@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-#if NET_2_0
-#else
 using System.ServiceModel;
-#endif
 using System.Threading;
 
 namespace Emgu.CV

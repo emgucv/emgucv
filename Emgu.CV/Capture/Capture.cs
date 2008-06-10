@@ -14,10 +14,7 @@ namespace Emgu.CV
 #endif
     public class Capture : 
         UnmanagedObject,
-#if NET_2_0
-#else
         IDuplexCapture,
-#endif
         ICapture
     {
         /// <summary>
@@ -140,8 +137,6 @@ namespace Emgu.CV
 #endif
         }
 
-#if NET_2_0
-#else
         /// <summary>
         /// Query a frame duplexly over WCF
         /// </summary>
@@ -181,7 +176,6 @@ namespace Emgu.CV
                 }*/
             }
         }
-#endif
 
         ///<summary> Capture Bgr image frame with timestamp</summary>
         ///<returns> A timestamped Bgr image frame</returns>

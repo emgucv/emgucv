@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-#if NET_2_0
-#else
 using System.ServiceModel;
-#endif
 
 namespace Emgu.CV
 {
-#if NET_2_0
-#else
     ///<summary>
     ///The interface for DuplexCaptureCallback
     ///</summary>
@@ -23,5 +18,4 @@ namespace Emgu.CV
         [OperationContract(IsOneWay = true)]
         void ReceiveFrame(Image<Bgr, Byte> img);
     };
-#endif
 }
