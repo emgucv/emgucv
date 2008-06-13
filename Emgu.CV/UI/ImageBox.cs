@@ -159,7 +159,10 @@ namespace Emgu.CV.UI
             }
         }
 
-        private IImage DisplayedImage
+        /// <summary>
+        /// The image that is being displayed. It's the Image following by some user defined image operation
+        /// </summary>
+        public IImage DisplayedImage
         {
             get
             {

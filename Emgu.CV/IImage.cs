@@ -149,6 +149,16 @@ namespace Emgu.CV
         ///<returns> The flipped copy of <i>this</i> image </returns>
         IImage Flip(CvEnum.FLIP flipType);
 
+        ///<summary> 
+        ///Split current IImage into an array of gray scale images where each element 
+        ///in the array represent a single color channel of the original image
+        ///</summary>
+        ///<returns> 
+        ///An array of gray scale images where each element 
+        ///in the array represent a single color channel of the original image 
+        ///</returns>
+        IImage[] Split();
+
         /// <summary>
         /// Rotate the image the specified angle
         /// </summary>
@@ -201,9 +211,18 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// The type fo depth for this image
+        /// The type of depth for this image
         /// </summary>
         Type TypeOfDepth
+        {
+            [ExposableMethod(Exposable = false)]
+            get;
+        }
+
+        /// <summary>
+        /// The number of color channels for this image
+        /// </summary>
+        int NumberOfChannel
         {
             [ExposableMethod(Exposable = false)]
             get;
@@ -216,6 +235,15 @@ namespace Emgu.CV
         /// <returns>The color value on the specific <paramref name="position"/></returns>
         [ExposableMethod(Exposable = false)]
         ColorType GetColor(Point2D<int> position);
+
+        /// <summary>
+        /// Get the pointer to the unmanaged memory
+        /// </summary>
+        IntPtr Ptr
+        {
+            [ExposableMethod(Exposable = false)]
+            get;
+        }
 
         /// <summary>
         /// Save the image to the specific <paramref name="fileName"/> 

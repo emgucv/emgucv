@@ -116,8 +116,8 @@ namespace Emgu.CV.UI
         {
             set
             {
-                cSharpOperationStackView.SetOperationStack(value);
-                cPlusPlusoperationStackView.SetOperationStack(value);
+                cSharpOperationStackView.DisplayOperationStack(value);
+                cPlusPlusoperationStackView.DisplayOperationStack(value);
             }
         }
 
@@ -140,6 +140,43 @@ namespace Emgu.CV.UI
         private void popStackButton_Click(object sender, EventArgs e)
         {
             _imageBox.PopOperation();
+        }
+
+        private void showHistogramButton_Click(object sender, EventArgs e)
+        {
+            IImage image = _imageBox.DisplayedImage;
+            if (image.TypeOfDepth == typeof(Byte))
+            {
+                IImage[] channels = image.Split();
+                HistogramViewer hviewer = new HistogramViewer();
+
+                int i = 0;
+                foreach (IImage channel in channels)
+                {
+                    int[] binSize = new int[1] { 256 };
+                    float[] min = new float[1] { 0f };
+                    float[] max = new float[1] { 0f };
+
+                    Histogram hist = new Histogram(binSize, min, max);
+                    hist.Accumulate(channels);
+
+                    //all the values of the histogram for the specific color channel
+                    Point2D<int>[] pts = new Point2D<int>[binSize[0]];
+
+                    for (int j = 0; j < binSize[0]; j++)
+                    {
+                        pts[j] = new Point2D<int>(j, (int)hist.Query(j));
+                    }
+                    hviewer.HistogramCtrl.AddHistogram("Channel " + i++, System.Drawing.Color.Black, pts);
+                    
+                }
+                hviewer.Show();
+
+            }
+            else
+            {
+                //TODO: handle non-byte depth
+            }
         }
     }
 }

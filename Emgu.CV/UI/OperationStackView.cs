@@ -10,11 +10,18 @@ using Emgu;
 
 namespace Emgu.CV.UI
 {
+    /// <summary>
+    /// A user control to display the operation stack
+    /// </summary>
     public partial class OperationStackView : UserControl
     {
         //private Stack<Operation<IImage>> _operationStack;
         private DataGridViewTextBoxColumn _codeColumn;
         private Emgu.Utils.ProgrammingLanguage _language;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OperationStackView()
         {
             InitializeComponent();
@@ -24,8 +31,12 @@ namespace Emgu.CV.UI
             _codeColumn.Width = 300;
             dataGridView1.Columns.Add(_codeColumn);
             dataGridView1.RowHeadersVisible = false;
+            _language = Emgu.Utils.ProgrammingLanguage.CSharp;
         }
 
+        /// <summary>
+        /// Set the programming language for this Operation Stack View
+        /// </summary>
         public Emgu.Utils.ProgrammingLanguage Language
         {
             set
@@ -34,7 +45,11 @@ namespace Emgu.CV.UI
             }
         }
 
-        public void SetOperationStack(Stack<Operation<IImage>> operationStack)
+        /// <summary>
+        /// Display the operation stack
+        /// </summary>
+        /// <param name="operationStack">The operation stack to be displayed</param>
+        public void DisplayOperationStack(Stack<Operation<IImage>> operationStack)
         {
             if (_language == Emgu.Utils.ProgrammingLanguage.CSharp)
             {

@@ -16,12 +16,20 @@ namespace Emgu.CV
         private int _dimension;
         private int[] _binSize;
 
+        /// <summary>
+        /// Creates a uniform histogram of the specified size
+        /// </summary>
+        /// <param name="binSizes">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
+        /// <param name="min">the lower boundaries of the bins</param>
+        /// <param name="max">the upper boundaries of the bins</param>
         public Histogram(int[] binSizes, float[] min, float[] max)
         {
             _binSize = binSizes;
             _dimension = binSizes.Length;
-            if (min.Length != _dimension || max.Length != _dimension)
-                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
+
+            Debug.Assert(
+                min.Length == _dimension && max.Length == _dimension,
+                "incompatible dimension");
 
             IntPtr[] r = new IntPtr[Dimension];
             for (int i = 0; i < _dimension; i++)
@@ -31,9 +39,7 @@ namespace Emgu.CV
                 Marshal.Copy(es, 0, e, 2);
                 r[i] = e;
             }
-            GCHandle handle = GCHandle.Alloc(binSizes, GCHandleType.Pinned);
-            _ptr = CvInvoke.cvCreateHist(_dimension, handle.AddrOfPinnedObject(), 0, r, true);
-            handle.Free();
+            _ptr = CvInvoke.cvCreateHist(_dimension, binSizes, 0, r, true);
             foreach (IntPtr e in r)
                 Marshal.FreeHGlobal(e);
         }
@@ -47,7 +53,7 @@ namespace Emgu.CV
         }
 
         ///<summary> 
-        /// Project the image to the histogram bins 
+        /// Project the images to the histogram bins 
         ///</summary>
         public void Accumulate<D>(Image<Gray, D>[] imgs)
         {
@@ -61,10 +67,23 @@ namespace Emgu.CV
             CvInvoke.cvCalcHist(imgPtrs, _ptr, 1, IntPtr.Zero);
         }
 
+        /// <summary>
+        /// Project the images to the histogram bins 
+        /// </summary>
+        /// <param name="imgs"></param>
+        public void Accumulate(IImage[] imgs)
+        {
+            Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
+            IntPtr[] imgPtrs =
+                System.Array.ConvertAll<IImage, IntPtr>(
+                    imgs,
+                    delegate(IImage img) { return img.Ptr; });
+            CvInvoke.cvCalcHist(imgPtrs, _ptr, 1, IntPtr.Zero);
+        }
+
         ///<summary> Back project the histogram into an gray scale image</summary>
         public Image<Gray, D> BackProject<D>(Image<Gray, D>[] srcs)
         {
-            
             Debug.Assert(srcs.Length == _dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
@@ -87,11 +106,11 @@ namespace Emgu.CV
         }
 
         ///<summary> Retrieve item counts for the specific bin </summary>
-        public double Query(int[] binIndex)
+        public double Query(params int[] binIndex)
         {
-            if (binIndex.Length != _dimension)
-                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "incompatible dimension");
-
+            Debug.Assert(binIndex.Length > 0, "Please specify at least one index");
+            Debug.Assert(binIndex.Length == Dimension, "incompatible dimension");
+          
             switch (binIndex.Length)
             {
                 case 1:
@@ -105,6 +124,9 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// The number of dimensions for the histogram
+        /// </summary>
         public int Dimension { get { return _dimension; } }
 
         public int[] BinSize { get { return _binSize; } }
@@ -115,6 +137,17 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             CvInvoke.cvReleaseHist(ref _ptr);
+        }
+
+        /// <summary>
+        /// Get the MCvHistogram structure from Ptr
+        /// </summary>
+        public MCvHistogram MCvHistogram
+        {
+            get
+            {
+                return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
+            }
         }
     }
 }

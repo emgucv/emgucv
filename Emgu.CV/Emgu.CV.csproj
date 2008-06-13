@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -61,6 +61,10 @@
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph, Version=4.6.4.31011, Culture=neutral, PublicKeyToken=02a83cbd123fcd60">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\ZedGraph.dll</HintPath>
+    </Reference>
     <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\zlib.net.dll</HintPath>
@@ -87,6 +91,18 @@
     <Compile Include="IImage.cs" />
     <Compile Include="MotionHistory.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
+    <Compile Include="UI\HistogramCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\HistogramCtrl.Designer.cs">
+      <DependentUpon>HistogramCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HistogramViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\HistogramViewer.Designer.cs">
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ImageBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -200,6 +216,14 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UI\HistogramCtrl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HistogramCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\HistogramViewer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\ImageBox.resx">
       <DependentUpon>ImageBox.cs</DependentUpon>
       <SubType>Designer</SubType>

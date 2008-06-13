@@ -51,6 +51,7 @@ namespace Emgu.CV.UI
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.clearStackBtn = new System.Windows.Forms.Button();
             this.popStackButton = new System.Windows.Forms.Button();
+            this.showHistogramButton = new System.Windows.Forms.Button();
             this.cSharpOperationStackView = new Emgu.CV.UI.OperationStackView();
             this.cPlusPlusoperationStackView = new Emgu.CV.UI.OperationStackView();
             this.tabControl1.SuspendLayout();
@@ -238,6 +239,16 @@ namespace Emgu.CV.UI
             this.popStackButton.UseVisualStyleBackColor = true;
             this.popStackButton.Click += new System.EventHandler(this.popStackButton_Click);
             // 
+            // showHistogramButton
+            // 
+            this.showHistogramButton.Location = new System.Drawing.Point(8, 92);
+            this.showHistogramButton.Name = "showHistogramButton";
+            this.showHistogramButton.Size = new System.Drawing.Size(218, 23);
+            this.showHistogramButton.TabIndex = 19;
+            this.showHistogramButton.Text = "Color Histogram (Not working)";
+            this.showHistogramButton.UseVisualStyleBackColor = true;
+            this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
+            // 
             // cSharpOperationStackView
             // 
             this.cSharpOperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -258,6 +269,7 @@ namespace Emgu.CV.UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.showHistogramButton);
             this.Controls.Add(this.popStackButton);
             this.Controls.Add(this.clearStackBtn);
             this.Controls.Add(this.tabControl1);
@@ -310,5 +322,6 @@ namespace Emgu.CV.UI
         private OperationStackView cPlusPlusoperationStackView;
         private System.Windows.Forms.Button clearStackBtn;
         private System.Windows.Forms.Button popStackButton;
+        private System.Windows.Forms.Button showHistogramButton;
     }
 }
