@@ -48,12 +48,12 @@ namespace Emgu.CV.UI
             this.fpsTextBox = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cSharpOperationStackView = new Emgu.CV.UI.OperationStackView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cPlusPlusoperationStackView = new Emgu.CV.UI.OperationStackView();
             this.clearStackBtn = new System.Windows.Forms.Button();
             this.popStackButton = new System.Windows.Forms.Button();
             this.showHistogramButton = new System.Windows.Forms.Button();
-            this.cSharpOperationStackView = new Emgu.CV.UI.OperationStackView();
-            this.cPlusPlusoperationStackView = new Emgu.CV.UI.OperationStackView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -208,6 +208,14 @@ namespace Emgu.CV.UI
             this.tabPage1.Text = "C#";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // cSharpOperationStackView
+            // 
+            this.cSharpOperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cSharpOperationStackView.Location = new System.Drawing.Point(3, 3);
+            this.cSharpOperationStackView.Name = "cSharpOperationStackView";
+            this.cSharpOperationStackView.Size = new System.Drawing.Size(313, 210);
+            this.cSharpOperationStackView.TabIndex = 0;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.cPlusPlusoperationStackView);
@@ -218,6 +226,14 @@ namespace Emgu.CV.UI
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "C++";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // cPlusPlusoperationStackView
+            // 
+            this.cPlusPlusoperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cPlusPlusoperationStackView.Location = new System.Drawing.Point(3, 3);
+            this.cPlusPlusoperationStackView.Name = "cPlusPlusoperationStackView";
+            this.cPlusPlusoperationStackView.Size = new System.Drawing.Size(313, 210);
+            this.cPlusPlusoperationStackView.TabIndex = 0;
             // 
             // clearStackBtn
             // 
@@ -231,9 +247,9 @@ namespace Emgu.CV.UI
             // 
             // popStackButton
             // 
-            this.popStackButton.Location = new System.Drawing.Point(140, 118);
+            this.popStackButton.Location = new System.Drawing.Point(124, 118);
             this.popStackButton.Name = "popStackButton";
-            this.popStackButton.Size = new System.Drawing.Size(84, 23);
+            this.popStackButton.Size = new System.Drawing.Size(100, 23);
             this.popStackButton.TabIndex = 18;
             this.popStackButton.Text = "Pop Operation";
             this.popStackButton.UseVisualStyleBackColor = true;
@@ -243,27 +259,11 @@ namespace Emgu.CV.UI
             // 
             this.showHistogramButton.Location = new System.Drawing.Point(8, 92);
             this.showHistogramButton.Name = "showHistogramButton";
-            this.showHistogramButton.Size = new System.Drawing.Size(218, 23);
+            this.showHistogramButton.Size = new System.Drawing.Size(149, 23);
             this.showHistogramButton.TabIndex = 19;
-            this.showHistogramButton.Text = "Color Histogram (Not working)";
+            this.showHistogramButton.Text = "Color Histogram";
             this.showHistogramButton.UseVisualStyleBackColor = true;
             this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
-            // 
-            // cSharpOperationStackView
-            // 
-            this.cSharpOperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cSharpOperationStackView.Location = new System.Drawing.Point(3, 3);
-            this.cSharpOperationStackView.Name = "cSharpOperationStackView";
-            this.cSharpOperationStackView.Size = new System.Drawing.Size(313, 210);
-            this.cSharpOperationStackView.TabIndex = 0;
-            // 
-            // cPlusPlusoperationStackView
-            // 
-            this.cPlusPlusoperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cPlusPlusoperationStackView.Location = new System.Drawing.Point(3, 3);
-            this.cPlusPlusoperationStackView.Name = "cPlusPlusoperationStackView";
-            this.cPlusPlusoperationStackView.Size = new System.Drawing.Size(313, 210);
-            this.cPlusPlusoperationStackView.TabIndex = 0;
             // 
             // ImageProperty
             // 

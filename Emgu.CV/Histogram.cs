@@ -31,17 +31,25 @@ namespace Emgu.CV
                 min.Length == _dimension && max.Length == _dimension,
                 "incompatible dimension");
 
-            IntPtr[] r = new IntPtr[Dimension];
+            GCHandle[] r = new GCHandle[Dimension];
+
+            float[][] ranges = new float[Dimension][];
+
             for (int i = 0; i < _dimension; i++)
             {
-                float[] es = new float[2] { min[i], max[i] };
-                IntPtr e = Marshal.AllocHGlobal(2 * sizeof(float));
-                Marshal.Copy(es, 0, e, 2);
-                r[i] = e;
+                ranges[i] = new float[2] { min[i], max[i] };
+                r[i] = GCHandle.Alloc(ranges[i], GCHandleType.Pinned);
             }
-            _ptr = CvInvoke.cvCreateHist(_dimension, binSizes, 0, r, true);
-            foreach (IntPtr e in r)
-                Marshal.FreeHGlobal(e);
+
+            _ptr = CvInvoke.cvCreateHist(
+                _dimension, 
+                binSizes, 
+                Emgu.CV.CvEnum.HIST_TYPE.CV_HIST_ARRAY, 
+                Array.ConvertAll<GCHandle, IntPtr>( r, delegate(GCHandle h) { return h.AddrOfPinnedObject();}),
+                true); 
+
+            foreach (GCHandle h in r)
+                h.Free();
         }
 
         ///<summary> 
@@ -55,16 +63,30 @@ namespace Emgu.CV
         ///<summary> 
         /// Project the images to the histogram bins 
         ///</summary>
+        ///<param name="imgs">image to project</param>
         public void Accumulate<D>(Image<Gray, D>[] imgs)
+        {
+            Accumulate<D>(imgs, null);
+        }
+
+        /// <summary>
+        /// Project the images to the histogram bins 
+        /// </summary>
+        /// <typeparam name="D">The depth of the image</typeparam>
+        /// <param name="imgs">image to project</param>
+        /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
+        public void Accumulate<D>(Image<Gray, D>[] imgs, Image<Gray, Byte> mask)
         {
             Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
 
-            IntPtr[] imgPtrs = 
+            IntPtr[] imgPtrs =
                 System.Array.ConvertAll<Image<Gray, D>, IntPtr>(
                     imgs,
                     delegate(Image<Gray, D> img) { return img.Ptr; });
 
-            CvInvoke.cvCalcHist(imgPtrs, _ptr, 1, IntPtr.Zero);
+            IntPtr maskPtr = mask == null ? IntPtr.Zero : mask.Ptr;
+
+            CvInvoke.cvCalcHist(imgPtrs, _ptr, true, maskPtr);
         }
 
         /// <summary>
@@ -78,10 +100,12 @@ namespace Emgu.CV
                 System.Array.ConvertAll<IImage, IntPtr>(
                     imgs,
                     delegate(IImage img) { return img.Ptr; });
-            CvInvoke.cvCalcHist(imgPtrs, _ptr, 1, IntPtr.Zero);
+            CvInvoke.cvCalcHist(imgPtrs, _ptr, true, IntPtr.Zero);
         }
 
-        ///<summary> Back project the histogram into an gray scale image</summary>
+        ///<summary> 
+        /// Back project the histogram into an gray scale image
+        ///</summary>
         public Image<Gray, D> BackProject<D>(Image<Gray, D>[] srcs)
         {
             Debug.Assert(srcs.Length == _dimension, "incompatible dimension");
@@ -137,6 +161,15 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             CvInvoke.cvReleaseHist(ref _ptr);
+        }
+
+        /// <summary>
+        ///  normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
+        /// </summary>
+        /// <param name="factor">the sum of the bins after normalization</param>
+        public void Normalize(double factor)
+        {
+            CvInvoke.cvNormalizeHist(Ptr, factor);
         }
 
         /// <summary>

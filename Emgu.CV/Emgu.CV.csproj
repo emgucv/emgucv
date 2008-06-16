@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Color\Bgra.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
@@ -89,8 +90,10 @@
     <Compile Include="Envelope.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
+    <Compile Include="Kalman.cs" />
     <Compile Include="MotionHistory.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
+    <Compile Include="PInvoke\CvType\MCvKalman.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>

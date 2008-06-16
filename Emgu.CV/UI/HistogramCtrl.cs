@@ -10,8 +10,14 @@ using Emgu.CV;
 
 namespace Emgu.CV.UI
 {
+    /// <summary>
+    /// The histogram control
+    /// </summary>
     public partial class HistogramCtrl : UserControl
     {
+        /// <summary>
+        /// Construct a histogram control
+        /// </summary>
         public HistogramCtrl()
         {
             InitializeComponent();
@@ -53,7 +59,12 @@ namespace Emgu.CV.UI
                                     ClientRectangle.Height - 20);
         }
 
-        // Build the Chart
+        /// <summary>
+        /// Add a plot of the histogram
+        /// </summary>
+        /// <param name="name">The name of the histogram</param>
+        /// <param name="color"></param>
+        /// <param name="values"></param>
         public void AddHistogram(String name, System.Drawing.Color color,  IEnumerable<Point2D<int>> values)
         {
             PointPairList list1 = new PointPairList();

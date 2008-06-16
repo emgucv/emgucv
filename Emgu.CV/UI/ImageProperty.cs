@@ -154,19 +154,24 @@ namespace Emgu.CV.UI
                 foreach (IImage channel in channels)
                 {
                     int[] binSize = new int[1] { 256 };
-                    float[] min = new float[1] { 0f };
-                    float[] max = new float[1] { 0f };
+                    float[] min = new float[1] { 0.0f };
+                    float[] max = new float[1] { 255.0f };
 
                     Histogram hist = new Histogram(binSize, min, max);
+                    hist.Clear(); //this is required since the initial histogram might contains random values
                     hist.Accumulate(channels);
 
                     //all the values of the histogram for the specific color channel
                     Point2D<int>[] pts = new Point2D<int>[binSize[0]];
 
+                    int sum = 0;
                     for (int j = 0; j < binSize[0]; j++)
                     {
-                        pts[j] = new Point2D<int>(j, (int)hist.Query(j));
+                        //TODO: find out why some time hist.query return negative number (hence Math.Max(0, ...) is required) 
+                        pts[j] = new Point2D<int>(j, (int)hist.Query(j) );
+                        sum += pts[j].Y;
                     }
+                    
                     hviewer.HistogramCtrl.AddHistogram("Channel " + i++, System.Drawing.Color.Black, pts);
                     
                 }
