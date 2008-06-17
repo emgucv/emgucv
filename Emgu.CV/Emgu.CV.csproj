@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -94,6 +94,8 @@
     <Compile Include="MotionHistory.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
     <Compile Include="PInvoke\CvType\MCvKalman.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
