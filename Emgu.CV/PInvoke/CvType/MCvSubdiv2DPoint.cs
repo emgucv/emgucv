@@ -9,7 +9,7 @@ namespace Emgu.CV
     public struct MCvSubdiv2DPoint
     {
         public int flags;
-        public IntPtr first;
+        public long first;
         public MCvPoint2D32f pt;
     }
 }
