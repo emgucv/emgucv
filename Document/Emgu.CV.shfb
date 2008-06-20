@@ -2,6 +2,7 @@
     <assemblies>
         <assembly assemblyPath="..\bin\Emgu.CV.dll" xmlCommentsPath="..\bin\Emgu.CV.xml" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.Utils.dll" xmlCommentsPath="..\bin\Emgu.Utils.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\lib\ZedGraph.dll" xmlCommentsPath="..\lib\ZedGraph.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</namespaceSummaryItem>
@@ -12,6 +13,7 @@
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
         <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</namespaceSummaryItem>
+        <namespaceSummaryItem name="ZedGraph" isDocumented="False" />
     </namespaceSummaries>
     <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris and Mac OS X.</ProjectSummary>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
