@@ -70,12 +70,12 @@ namespace Emgu.CV.UI
             PointPairList list1 = new PointPairList();
 
             foreach (Point2D<int> point in values)
-                list1.Add(point.X, point.Y);
-
+                if (point.Y != 0)
+                    list1.Add(point.X, point.Y);
+            
             // Generate a curve of color with diamond
             // symbols, and name in the legend
-            LineItem myCurve = zedGraphControl1.GraphPane.AddCurve(name,
-                  list1, color, SymbolType.Diamond);
+            zedGraphControl1.GraphPane.AddBar(name, list1, color);
 
             // Tell ZedGraph to refigure the
             // axes since the data have changed

@@ -222,12 +222,23 @@ namespace Emgu.CV
             return new Seq<T>(
                 CvInvoke.cvApproxPoly(
                 Ptr,
-                System.Runtime.InteropServices.Marshal.SizeOf(typeof(T)),
+                System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvSeq)),
                 storage.Ptr,
                 CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
                 accuracy,
                 0),
                 storage);
+        }
+
+        /// <summary>
+        /// The function cvApproxPoly approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
+        /// </summary>
+        /// <param name="accuracy">The desired approximation accuracy</param>
+        /// <returns>The approximated contour</returns>
+        public Seq<T> ApproxPoly(double accuracy)
+        {
+            MemStorage storage = new MemStorage();
+            return ApproxPoly(accuracy, storage);
         }
 
         ///<summary> The smallest Bouding Rectangle </summary>

@@ -69,8 +69,9 @@ namespace Emgu.CV
         /// </summary>
         public override System.Array ManagedArray
         {
-            get { return _array; }
+            get { return Data; }
         }
+
         /// <summary>
         /// Get or Set the data for this matrix
         /// </summary>
@@ -93,8 +94,6 @@ namespace Emgu.CV
                 _ptr = CvInvoke.cvMat(_array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject());
             }
         }
-
-
 
         /// <summary>
         /// The MCvMat structure format  
@@ -159,11 +158,11 @@ namespace Emgu.CV
         {
             get
             {
-                return _array[row, col];
+                return (D) System.Convert.ChangeType( CvInvoke.cvGetReal2D(Ptr, row, col) , typeof(D));
             }
             set
             {
-                _array[row, col] = value;
+                CvInvoke.cvSet2D(Ptr, row, col, new MCvScalar( System.Convert.ToDouble(value))); 
             }
         }
 

@@ -10,7 +10,10 @@ namespace Emgu.CV
     [Serializable]
     public class Rectangle<T> : Point2D<T> where T : IComparable, new()
     {
-        private Point2D<T> _size;
+        /// <summary>
+        /// The size: width &amp; height
+        /// </summary>
+        protected Point2D<T> _size;
 
         ///<summary> Create a rectangle with default values </summary>
         public Rectangle()
@@ -26,6 +29,16 @@ namespace Emgu.CV
         {
             _coordinate = center.Coordinate;
             _size = size;
+        }
+
+        ///<summary> Create a rectangle with the specific center, with and height</summary>
+        ///<param name="center"> The center of the rectangle</param>
+        ///<param name="width"> The width of the rectangle </param>
+        ///<param name="height"> The height of the rectangle </param>
+        public Rectangle(Point2D<T> center, T width, T height)
+        {
+            _coordinate = center.Coordinate;
+            _size = new Point2D<T>(width, height);
         }
 
         ///<summary> Create a rectangle with the specific left, right, top bottom corrdinates</summary>

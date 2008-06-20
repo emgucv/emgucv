@@ -199,5 +199,21 @@ namespace Emgu.CV
             }
             return res;
         }
+
+        public static LineSegment2D<D>[] PolyLine(Point2D<D>[] points)
+        {
+            LineSegment2D<D>[] res = new LineSegment2D<D>[points.Length];
+            int length = points.Length;
+            for (int i = 0; i < points.Length; i++)
+            {
+                res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
+            }
+            return res;
+        }
+
+        public static LineSegment2D<D>[] PolyLine(MCvPoint[] points)
+        {
+            return PolyLine(Array.ConvertAll<MCvPoint, Point2D<D>>(points, delegate(MCvPoint p) { Point2D<D> p2d =  new Point2D<D>(); p2d.MCvPoint = p; return p2d;}));
+        }
     };
 }

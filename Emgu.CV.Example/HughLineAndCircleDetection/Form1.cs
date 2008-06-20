@@ -18,7 +18,7 @@ namespace HughLineAndCircleDetection
             //Load the image from file
             Image<Bgr, Byte> stuff = new Image<Bgr, byte>("stuff.jpg");
 
-            // returns vectors of circles for each channel
+            // Obtain vectors of circles for each channel
             Circle<float>[][] circles = stuff.HughCircles(
                             new Bgr(200.0, 200.0, 200.0), //canny threshold 
                             new Bgr(100.0, 100.0, 100.0), //canny threshold linking
@@ -28,7 +28,7 @@ namespace HughLineAndCircleDetection
                             0 //max radius
                             );
 
-            // returns vectors of lines for each channel
+            // Obtain vectors of lines for each channel
             LineSegment2D<int>[][] lines = stuff.HughLines(
                             new Bgr(50.0, 50.0, 50.0), //canny threshold 
                             new Bgr(200.0, 200.0, 200.0), //canny threshold linking
@@ -40,7 +40,8 @@ namespace HughLineAndCircleDetection
                             );
 
             for (int i = 0; i < new Bgr().Dimension; i++)
-            {
+            {   //On the ith color channel, draw the detected object using the channel's color
+
                 //set the color of the channel
                 Bgr colorOfCurrentChannel = new Bgr();
                 colorOfCurrentChannel[i] = 255.0;

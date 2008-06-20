@@ -33,5 +33,18 @@ namespace Emgu.CV
             }
             throw new ArgumentException("object is not Gray");
         }
+
+        /// <summary>
+        /// Get the names for each channel
+        /// </summary>
+        public override String[] ChannelName
+        {
+            get
+            {
+                String[] res = new string[Dimension];
+                res[0] = "Gray";
+                return res;
+            }
+        }
     }
 }

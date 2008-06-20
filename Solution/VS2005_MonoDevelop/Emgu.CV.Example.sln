@@ -61,6 +61,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Em
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacialMouseControl", "..\..\Emgu.CV.Example\FacialMouseControl\FacialMouseControl.csproj", "{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
@@ -325,6 +331,30 @@ Global
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|x86.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|.NET.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug Linux|x86.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|.NET.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|Mixed Platforms.Build.0 = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release Linux|x86.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|.NET.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CAB0BE2A-D8B8-4643-A0CE-1B615F6208FA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

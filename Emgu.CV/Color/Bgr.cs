@@ -33,5 +33,20 @@ namespace Emgu.CV
         public double G { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
         ///<summary> The intensity of the R color channel </summary>
         public double R { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
+
+        /// <summary>
+        /// Get the names for each channel
+        /// </summary>
+        public override String[] ChannelName
+        {
+            get
+            {
+                String[] res = new string[Dimension];
+                res[0] = "Blue";
+                res[1] = "Green";
+                res[2] = "Red";
+                return res;
+            }
+        }
     };
 }

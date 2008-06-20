@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Color\Bgra.cs" />
+    <Compile Include="Contour.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
@@ -85,17 +86,18 @@
     <Compile Include="Color\Luv.cs" />
     <Compile Include="Color\Xyz.cs" />
     <Compile Include="Color\Ycc.cs" />
-    <Compile Include="Contour.cs" />
     <Compile Include="CvException.cs" />
     <Compile Include="Envelope.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
     <Compile Include="Kalman.cs" />
     <Compile Include="MotionHistory.cs" />
+    <Compile Include="PInvoke\CvType\MCvChain.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
     <Compile Include="PInvoke\CvType\MCvKalman.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
+    <Compile Include="Shape\Cross2D.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>

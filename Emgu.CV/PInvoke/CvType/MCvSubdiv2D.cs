@@ -5,29 +5,99 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Managed CvSubdiv2D structure
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct MCvSubdiv2D
     {
-        int flags;         /* micsellaneous flags */
-        int header_size;   /* size of sequence header */
-        IntPtr h_prev; /* previous sequence */
-        IntPtr h_next; /* next sequence */
-        IntPtr v_prev; /* 2nd previous sequence */
-        IntPtr v_next;  /* 2nd next sequence */
-        int total;          /* total number of elements */
-        int elem_size;      /* size of sequence element in bytes */
-        IntPtr block_max;      /* maximal bound of the last block */
-        IntPtr ptr;            /* current write pointer */
-        int delta_elems;    /* how many elements allocated when the seq grows */
-        IntPtr storage;    /* where the seq is stored */
-        IntPtr free_blocks;  /* free blocks list */
-        IntPtr first; /* pointer to the first sequence block */
-        IntPtr free_elems;
-        int active_count;
-        IntPtr edges;
-        int quad_edges;
-        int is_geometry_valid;
-        long recent_edge;
-        MCvPoint2D32f topleft;
-        MCvPoint2D32f bottomright;
+        ///<summary>
+        ///  micsellaneous flags 
+        ///</summary>
+        public int flags;
+        ///<summary>
+        ///  size of sequence header 
+        ///</summary>
+        public int header_size;
+        ///<summary>
+        ///  previous sequence 
+        ///</summary>
+        public IntPtr h_prev;
+        ///<summary>
+        ///  next sequence 
+        ///</summary>
+        public IntPtr h_next;
+        ///<summary>
+        ///  2nd previous sequence 
+        ///</summary>
+        public IntPtr v_prev;
+        ///<summary>
+        ///  2nd next sequence 
+        ///</summary>
+        public IntPtr v_next;
+        ///<summary>
+        ///  total number of elements 
+        ///</summary>
+        public int total;
+        ///<summary>
+        ///  size of sequence element in bytes 
+        ///</summary>
+        public int elem_size;
+        ///<summary>
+        ///  maximal bound of the last block 
+        ///</summary>
+        public IntPtr block_max;
+        ///<summary>
+        ///  current write pointer 
+        ///</summary>
+        public IntPtr ptr;
+        ///<summary>
+        ///  how many elements allocated when the seq grows 
+        ///</summary>
+        public int delta_elems;
+        ///<summary>
+        ///  where the seq is stored 
+        ///</summary>
+        public IntPtr storage;
+        ///<summary>
+        ///  free blocks list 
+        ///</summary>
+        public IntPtr free_blocks;
+        ///<summary>
+        ///  pointer to the first sequence block 
+        ///</summary>
+        public IntPtr first;
+        /// <summary>
+        /// 
+        /// </summary>
+        public IntPtr free_elems;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int active_count;
+        /// <summary>
+        /// 
+        /// </summary>
+        public long edges;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int quad_edges;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int is_geometry_valid;
+        /// <summary>
+        /// 
+        /// </summary>
+        public long recent_edge;
+        /// <summary>
+        /// 
+        /// </summary>
+        public MCvPoint2D32f topleft;
+        /// <summary>
+        /// 
+        /// </summary>
+        public MCvPoint2D32f bottomright;
     }
 }

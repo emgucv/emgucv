@@ -142,38 +142,45 @@ namespace Emgu.CV.UI
             _imageBox.PopOperation();
         }
 
+        private Point2D<int>[] SingleChannelImageToHistogramPoints(IImage channel)
+        {
+            int[] binSize = new int[1] { 256 };
+            float[] min = new float[1] { 0.0f };
+            float[] max = new float[1] { 255.0f };
+
+            using (Histogram hist = new Histogram(binSize, min, max))
+            {
+                hist.Clear(); //this is required since the initial histogram might contains random values
+                hist.Accumulate(new IImage[] { channel });
+
+                //all the values of the histogram for the specific color channel
+                Point2D<int>[] pts = new Point2D<int>[binSize[0]];
+                for (int binIndex = 0; binIndex < binSize[0]; binIndex++)
+                    pts[binIndex] = new Point2D<int>(binIndex, (int)hist.Query(binIndex));
+               
+                return pts;
+            }
+        }
+
         private void showHistogramButton_Click(object sender, EventArgs e)
         {
             IImage image = _imageBox.DisplayedImage;
             if (image.TypeOfDepth == typeof(Byte))
             {
+                System.Drawing.Color[] colors = new Color[] {
+                    Color.Blue,
+                    Color.Green,
+                    Color.Red};
+
                 IImage[] channels = image.Split();
                 HistogramViewer hviewer = new HistogramViewer();
 
-                int i = 0;
-                foreach (IImage channel in channels)
+                String[] channelNames = ((ColorType)Activator.CreateInstance(image.TypeOfColor) ).ChannelName;
+
+                for (int i = 0; i < channels.Length; i++)
                 {
-                    int[] binSize = new int[1] { 256 };
-                    float[] min = new float[1] { 0.0f };
-                    float[] max = new float[1] { 255.0f };
-
-                    Histogram hist = new Histogram(binSize, min, max);
-                    hist.Clear(); //this is required since the initial histogram might contains random values
-                    hist.Accumulate(channels);
-
-                    //all the values of the histogram for the specific color channel
-                    Point2D<int>[] pts = new Point2D<int>[binSize[0]];
-
-                    int sum = 0;
-                    for (int j = 0; j < binSize[0]; j++)
-                    {
-                        //TODO: find out why some time hist.query return negative number (hence Math.Max(0, ...) is required) 
-                        pts[j] = new Point2D<int>(j, (int)hist.Query(j) );
-                        sum += pts[j].Y;
-                    }
-                    
-                    hviewer.HistogramCtrl.AddHistogram("Channel " + i++, System.Drawing.Color.Black, pts);
-                    
+                    Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i]);
+                    hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
                 }
                 hviewer.Show();
 

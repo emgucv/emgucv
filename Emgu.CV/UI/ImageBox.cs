@@ -171,32 +171,35 @@ namespace Emgu.CV.UI
             set
             {
                 _displayedImage = value;
-                if (pictureBox.Width != _displayedImage.Width) pictureBox.Width = _displayedImage.Width;
-                if (pictureBox.Height != _displayedImage.Height) pictureBox.Height = _displayedImage.Height;
-
-                pictureBox.Image = _displayedImage.Bitmap;
-
-                if (EnableProperty)
+                if (_displayedImage != null)
                 {
-                    ImagePropertyPanel.ImageWidth = _displayedImage.Width;
-                    ImagePropertyPanel.ImageHeight = _displayedImage.Height;
-                    ImagePropertyPanel.TypeOfColor = _displayedImage.TypeOfColor;
-                    ImagePropertyPanel.TypeOfDepth = _displayedImage.TypeOfDepth;
+                    if (pictureBox.Width != _displayedImage.Width) pictureBox.Width = _displayedImage.Width;
+                    if (pictureBox.Height != _displayedImage.Height) pictureBox.Height = _displayedImage.Height;
 
-                    #region calculate the frame rate
-                    TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
-                    if (ts.TotalSeconds > 1)
+                    pictureBox.Image = _displayedImage.Bitmap;
+
+                    if (EnableProperty)
                     {
-                        ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
-                        //reset the counter
-                        _counterStartTime = DateTime.Now; 
-                        _imageReceivedSinceCounterStart = 0;
+                        ImagePropertyPanel.ImageWidth = _displayedImage.Width;
+                        ImagePropertyPanel.ImageHeight = _displayedImage.Height;
+                        ImagePropertyPanel.TypeOfColor = _displayedImage.TypeOfColor;
+                        ImagePropertyPanel.TypeOfDepth = _displayedImage.TypeOfDepth;
+
+                        #region calculate the frame rate
+                        TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
+                        if (ts.TotalSeconds > 1)
+                        {
+                            ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
+                            //reset the counter
+                            _counterStartTime = DateTime.Now;
+                            _imageReceivedSinceCounterStart = 0;
+                        }
+                        else
+                        {
+                            _imageReceivedSinceCounterStart++;
+                        }
+                        #endregion
                     }
-                    else
-                    {
-                        _imageReceivedSinceCounterStart++;
-                    }
-                    #endregion
                 }
             }
         }

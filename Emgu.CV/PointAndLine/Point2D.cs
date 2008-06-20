@@ -85,6 +85,11 @@ namespace Emgu.CV
                 Point2D<int> p = Convert<int>();
                 return new MCvPoint(p.X, p.Y);
             }
+            set
+            {
+                _coordinate[0] = (T) System.Convert.ChangeType(value.x, typeof(T));
+                _coordinate[1] = (T) System.Convert.ChangeType(value.y, typeof(T));
+            }
         }
 
         /// <summary>

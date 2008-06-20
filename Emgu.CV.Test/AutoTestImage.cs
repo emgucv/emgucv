@@ -350,6 +350,27 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void Test_SplitMerge()
+        {
+            Image<Bgr, Byte> img1 = new Image<Bgr, byte>(301, 234);
+            img1._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            Image<Gray, Byte>[] channels = img1.Split();
+
+            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(channels);
+            Assert.IsTrue(img1.Equals(img2));
+        }
+
+        [Test]
+        public void Test_Canny()
+        {
+            Image<Bgr, Byte> image = new Image<Bgr, byte>("stuff.jpg");
+            
+            //make sure canny works for multi channel image
+            Image<Bgr, Byte> image2 = image.Canny(new Bgr(200, 200, 200), new Bgr(100, 100, 100));
+         
+        }
+
+        [Test]
         public void TestVideoWriter()
         {
             VideoWriter writer = new VideoWriter("tmp.avi", 2, 200, 100, true);

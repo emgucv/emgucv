@@ -25,24 +25,25 @@ namespace Emgu.CV.Test
 
         public void GenerateLogo()
         {
-            using (Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0,0,0)))
-            using (Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0,0)))
-            {
-                Font f1 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
-                Font f2 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
+            Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
+            Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
 
-                semgu.Draw("Emgu", f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
-                semgu._Dilate(1);
+            Font f1 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
+            Font f2 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
 
-                scv.Draw("CV", f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
-                scv._Dilate(2);
+            semgu.Draw("Emgu", f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
+            semgu._Dilate(1);
 
-                using (Image<Bgr, Byte> logo = semgu.Or(scv))
-                {
-                    logo._Not();
-                    logo.Save("EmguCVLogo.jpg");
-                }
-            }
+            scv.Draw("CV", f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
+            scv._Dilate(2);
+
+            Image<Bgr, Byte> logoBgr = semgu.Or(scv);
+            Image<Gray, Byte> logoA = new Image<Gray,byte>(logoBgr.Width, logoBgr.Height);
+            logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
+            
+            logoBgr._Not();
+
+            logoBgr.Save("EmguCVLogo.jpg");
         }
 
         public void TestCvNamedWindow()
@@ -413,7 +414,7 @@ namespace Emgu.CV.Test
 
         public void TestMarshalIplImage()
         {
-            Image<Bgr, Single> image = new Image<Bgr, float>(2048, 1024);
+            Image<Bgr, Single> image = new Image<Bgr, float>(2041, 1023);
             DateTime timeStart = DateTime.Now;
             for (int i = 0; i < 10000; i++)
             {
@@ -434,6 +435,31 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(null));
         }
 
-       
+        public void Test_Contour()
+        {
+            Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
+            img._GaussianSmooth(3);
+            img = img.Canny(new Gray(80), new Gray(50));
+            Image<Gray, Byte> res = img.BlankClone();
+            res.SetValue(255);
+
+            Contour contour = img.FindContours();
+
+            while (contour != null)
+            {
+                Contour approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+
+                if ( approx.Convex && Math.Abs(approx.Area) > 20.0)
+                {
+                    MCvPoint[] vertices = approx.ToArray();
+                    
+                    LineSegment2D<int>[] edges = PointCollection<int>.PolyLine(vertices);
+
+                    res.DrawPolyline(vertices, true, new Gray(200), 1);
+                }
+                contour = contour.HNext;     
+            }
+            Application.Run(new ImageViewer(res));
+        }       
     }
 }

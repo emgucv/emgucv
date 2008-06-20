@@ -16,6 +16,22 @@ namespace Emgu.CV
         public ColorType(int dimension) : base(dimension) { }
 
         /// <summary>
+        /// Get the names for each channel
+        /// </summary>
+        public virtual String[] ChannelName
+        {
+            get
+            {
+                String[] res = new string[Dimension];
+                for (int i = 0; i < Dimension; i++)
+                {
+                    res[i] = "Channel " + i;
+                }
+                return res;
+            }
+        }
+
+        /// <summary>
         /// The equivalent of MCvScalar value
         /// </summary>
         public MCvScalar MCvScalar
