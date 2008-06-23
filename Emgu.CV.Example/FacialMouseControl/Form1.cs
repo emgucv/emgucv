@@ -107,6 +107,9 @@ namespace FacialMouseControl
                 }
                 #endregion 
 
+                //draw a yellow rectangle around the face
+                frame.Draw(biggestFace, new Bgr(255, 255, 0.0), 1);
+
                 //draw a green cross at the center of the biggest face
                 frame.Draw( 
                     new Cross2D<double>(biggestFace.Center, biggestFace.Width * 0.1, biggestFace.Height* 0.1), 

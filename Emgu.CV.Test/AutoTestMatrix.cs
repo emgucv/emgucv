@@ -15,10 +15,10 @@ using System.Threading;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public class AutoTestMatrix
+    public static class AutoTestMatrix
     {
         [Test]
-        public void Test_Not()
+        public static void TestNot()
         {
             Matrix<byte> m = new Matrix<byte>(10, 8);
             m.SetValue(1.0);
@@ -33,7 +33,7 @@ namespace Emgu.CV.Test
         /// Test the matrix constructor that accepts a two dimensional array as input
         /// </summary>
         [Test]
-        public void Test_Data()
+        public static void TestData()
         {
             Byte[,] data = new Byte[20, 30];
             Random r = new Random();
@@ -58,7 +58,7 @@ namespace Emgu.CV.Test
         /// Test the matrix transpose function for matrix of Byte
         /// </summary>
         [Test]
-        public void Test_TransposeByteMatrix()
+        public static void TestTransposeByteMatrix()
         {
             using (Matrix<Byte> mat = new Matrix<Byte>(1, 10))
             {
@@ -73,7 +73,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_TransposeFloatMatrix()
+        public static void TestTransposeFloatMatrix()
         {
             using (Matrix<float> mat = new Matrix<float>(1, 3))
             {
@@ -86,25 +86,24 @@ namespace Emgu.CV.Test
                         Assert.AreEqual(matT[i, j], mat[j, i]);
             }
         }
-        
-        
-       [Test]
-        public void Test_XmlSerializeAndDeserialize()
+
+        [Test]
+        public static void TestXmlSerializeAndDeserialize()
         {
-            using ( Matrix<Byte> mat = new Matrix<byte>(50, 60))
+            using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
             {
-                mat._RandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
+                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
                 XmlDocument doc = Emgu.Utils.XmlSerialize<Matrix<Byte>>(mat);
                 //Trace.WriteLine(doc.OuterXml);
-                
+
                 using (Matrix<Byte> mat2 = Emgu.Utils.XmlDeserialize<Matrix<Byte>>(doc))
                     Assert.IsTrue(mat.Equals(mat2));
-                
+
             }
         }
 
         [Test]
-        public void Test_RuntimeSerialize()
+        public static void TestRuntimeSerialize()
         {
             Matrix<Byte> mat = new Matrix<Byte>(100, 80);
 
@@ -126,7 +125,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_StressTestMatrixGC()
+        public static void TestStressTestMatrixGC()
         {
             int i = 0;
             //try
@@ -148,7 +147,7 @@ namespace Emgu.CV.Test
 
         /*
         [Test]
-        public void Test_DataContractSerializer()
+        public void TestDataContractSerializer()
         {
             DataContractSerializer serializer = new DataContractSerializer(typeof(Image<Bgr, float>));
             Image<Bgr, float> img1 = new Image<Bgr,float>(5, 3);

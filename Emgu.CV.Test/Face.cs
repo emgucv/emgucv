@@ -76,7 +76,7 @@ namespace Emgu.CV.Test
 
         public List<Eye<D>> DetectEye()
         {
-            Rectangle<double>[][] objects = GRAY.DetectHaarCascade(_eyeCascade);
+            Rectangle<double>[][] objects = Gray.DetectHaarCascade(_eyeCascade);
             List<Eye<D>> res = new List<Eye<D>>();
 
             foreach (Rectangle<double> o in objects[0])
@@ -92,7 +92,7 @@ namespace Emgu.CV.Test
         {
             get { return _rect; }
         }
-        public Image<Bgr, D> RGB
+        public Image<Bgr, D> Bgr
         {
             get
             {
@@ -100,7 +100,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public Image<Gray, D> GRAY
+        public Image<Gray, D> Gray
         {
             get
             {
@@ -109,7 +109,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public Image<Hsv, D> HSV
+        public Image<Hsv, D> Hsv
         {
             get
             {
@@ -124,7 +124,7 @@ namespace Emgu.CV.Test
             {
                 if (_h == null)
                 {
-                    Image<Gray, D>[] imgs = HSV.Split();
+                    Image<Gray, D>[] imgs = Hsv.Split();
                     _h = imgs[0];
                     _s = imgs[1];
                     _v = imgs[2];
@@ -138,7 +138,7 @@ namespace Emgu.CV.Test
             {
                 if (_s == null)
                 {
-                    Image<Gray, D>[] imgs = HSV.Split();
+                    Image<Gray, D>[] imgs = Hsv.Split();
                     _h = imgs[0];
                     _s = imgs[1];
                     _v = imgs[2];
@@ -152,7 +152,7 @@ namespace Emgu.CV.Test
             {
                 if (_h == null)
                 {
-                    Image<Gray, D>[] imgs = HSV.Split();
+                    Image<Gray, D>[] imgs = Hsv.Split();
                     _h = imgs[0];
                     _s = imgs[1];
                     _v = imgs[2];
@@ -179,7 +179,7 @@ namespace Emgu.CV.Test
         {
             get
             {
-                Image<Gray, D> skinMask = GRAY.BlankClone();
+                Image<Gray, D> skinMask = Gray.BlankClone();
 
                 //skinMask.Draw(SkinContour, new Gray(255.0), new Gray(120.0), -1);
 

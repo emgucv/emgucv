@@ -52,6 +52,7 @@ namespace Emgu
     /// <summary>
     /// The exception class used by Emgu programs
     /// </summary>
+    [Serializable]
     public class PrioritizedException : Exception
     {
         private ExceptionLevel _exceptionHeader;
@@ -76,7 +77,7 @@ namespace Emgu
         /// Check if the severity of the current exception is greater or equal to the serverity of the Exception Enviorment
         /// </summary>
         /// <returns>True if the serverity is greater or equal to the one defined in the Exception Enviorment</returns>
-        public bool isSevere()
+        public bool IsSevere()
         {
             return ((int)ExceptionLevel >= (int)ExceptionEnviorment.ExceptionLevel);
         }
@@ -84,10 +85,10 @@ namespace Emgu
         /// <summary>
         /// Alert regardness of the severity of the exception
         /// </summary>
-        /// <param name="syn">If true, the operation is synchronous, otherwise, asynchronous</param>
-        public void Alert(bool syn)
+        /// <param name="synchronous">If true, the operation is synchronous, otherwise, asynchronous</param>
+        public void Alert(bool synchronous)
         {
-            if (syn)
+            if (synchronous)
                 MessageBox.Show(Message);
             else
             {
@@ -102,7 +103,7 @@ namespace Emgu
         /// <param name="syn">If true, the operation is synchronous, otherwise, asynchronous</param>
         public void AlertIfServere(bool syn)
         {
-            if (isSevere())
+            if (IsSevere())
                 Alert(syn);
         }
 

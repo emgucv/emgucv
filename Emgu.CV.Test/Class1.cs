@@ -15,15 +15,15 @@ using System.Runtime.Serialization;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public class Tester
+    public static class Tester
     {
-        public void TestRotationMatrix2D()
+        public static void TestRotationMatrix2D()
         {
             RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
             //Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
         }
 
-        public void GenerateLogo()
+        public static void GenerateLogo()
         {
             Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
             Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
@@ -46,7 +46,7 @@ namespace Emgu.CV.Test
             logoBgr.Save("EmguCVLogo.jpg");
         }
 
-        public void TestCvNamedWindow()
+        public static void TestCvNamedWindow()
         {
             String win1 = "Test Window"; //The name of the window
             CvInvoke.cvNamedWindow(win1); //Create the window using the specific name
@@ -62,14 +62,14 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestConvert()
+        public static void TestConvert()
         {
             Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
             Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt( 0.0+ x * x + y * y)); });
             Application.Run(new ImageViewer(g2));
         }
 
-        public void TestHorizontalLine()
+        public static void TestHorizontalLine()
         {
             Point2D<int> p1 = new Point2D<int>(10, 10);
             Point2D<int> p2 = new Point2D<int>(20, 10);
@@ -79,7 +79,7 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(img));
         }
 
-        public void TestRectangle()
+        public static void TestRectangle()
         {
             Point2D<double> p1 = new Point2D<double>(1.1, 2.2);
             Point2D<double> p2 = new Point2D<double>(2.2, 4.4);
@@ -97,7 +97,7 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(map));
         }
 
-        public void testEllipseFitting()
+        public static void testEllipseFitting()
         {
             System.Random r = new Random();
 
@@ -134,14 +134,14 @@ namespace Emgu.CV.Test
             }
         }*/
 
-        public void CameraTest()
+        public static void CameraTest()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new TestCamera());
         }
 
-        public void TestImageLoader()
+        public static void TestImageLoader()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -157,7 +157,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestBgr()
+        public static void TestBgr()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -170,7 +170,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestFont()
+        public static void TestFont()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -184,8 +184,8 @@ namespace Emgu.CV.Test
                 Application.Run(new ImageViewer(img));
             }
         }
-        
-        public void TestHistogram()
+
+        public static void TestHistogram()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -205,7 +205,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestGoodFeature()
+        public static void TestGoodFeature()
         {
             using (Image<Gray, Byte> img = new Image<Gray, Byte>("stuff.jpg"))
             {
@@ -216,7 +216,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestSplitMerge()
+        public static void TestSplitMerge()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -287,7 +287,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        public void TestFaceDetect()
+        public static void TestFaceDetect()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -390,7 +390,7 @@ namespace Emgu.CV.Test
             #endregion
         }
 
-        public void TestCompression()
+        public static void TestCompression()
         {
             Image<Bgr, Byte> image = new Image<Bgr,byte>("lena.jpg");
             //Image<Rgb, Byte> image = new Image<Rgb, byte>(512, 512);
@@ -407,12 +407,12 @@ namespace Emgu.CV.Test
             Trace.WriteLine(
                 String.Format(
                 "Original size: {0}; Compressed Size: {1}, Compression Ratio: {2}%", 
-                image.Bytes.Length, 
-                image.CompressedBytes.Length,
-                image.CompressedBytes.Length * 100.0 / image.Bytes.Length));
+                l1, 
+                l2,
+                l2 * 100.0 / l1));
         }
 
-        public void TestMarshalIplImage()
+        public static void TestMarshalIplImage()
         {
             Image<Bgr, Single> image = new Image<Bgr, float>(2041, 1023);
             DateTime timeStart = DateTime.Now;
@@ -424,18 +424,18 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
         }
 
-        public void Test_ReadImage()
+        public static void TestReadImage()
         {
             Application.Run(new ImageViewer(new Image<Gray, Byte>("lena.jpg")));
             Application.Run(new ImageViewer(new Image<Bgr, Byte>("lena.jpg").Convert<Gray,Byte>()));
         }
 
-        public void Test_ImageViewer()
+        public static void TestImageViewer()
         {
             Application.Run(new ImageViewer(null));
         }
 
-        public void Test_Contour()
+        public static void TestContour()
         {
             Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
             img._GaussianSmooth(3);

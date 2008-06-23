@@ -90,7 +90,7 @@ namespace Emgu.CV
         /// <param name="rect">The rectangle to draw</param>
         /// <param name="color">The color for the rectangle</param>
         /// <param name="thickness">The thickness of the rectangle, any value less than or equal to 0 will result in a filled rectangle</param>
-        public void Draw<T>(Rectangle<T> rect, C color, int thickness) where T : IComparable, new()
+        public override void Draw<T>(Rectangle<T> rect, C color, int thickness) 
         {
             Point2D<double> p = rect.Size.Convert<double>();
             Point2D<double> size = new Point2D<double>(p.X / Resolution.X, p.Y / Resolution.Y );
@@ -104,7 +104,7 @@ namespace Emgu.CV
         /// <param name="line">The line to be draw</param>
         /// <param name="color">The color for the line</param>
         /// <param name="thickness">The thickness of the line</param>
-        public void Draw<T>(LineSegment2D<T> line, C color, int thickness) where T : IComparable, new()
+        public override void Draw<T>(LineSegment2D<T> line, C color, int thickness) 
         {
             Point2D<int> p1 = MapPoint<T>(line.P1).Convert<int>();
             Point2D<int> p2 = MapPoint<T>(line.P2).Convert<int>();

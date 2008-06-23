@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace Emgu.Reflection
+namespace Emgu
 {
     /// <summary>
     /// An operation contains a MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
@@ -60,7 +60,9 @@ namespace Emgu.Reflection
         /// <returns></returns>
         public override string ToString()
         {
-            return String.Format("{0}({1})",
+            return String.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                "{0}({1})",
                 Method.Name,
                 String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
         }

@@ -15,10 +15,10 @@ using System.Threading;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public class AutoTestImage
+    public static class AutoTestImage
     {
         [Test]
-        public void Test_RunningAvg()
+        public static void TestRunningAvg()
         {
             Image<Gray, Single> img1 = new Image<Gray, float>(100, 40, new Gray(100));
             Image<Gray, Single> img2 = new Image<Gray, float>(100, 40, new Gray(50));
@@ -26,7 +26,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_SetValue()
+        public static void TestSetValue()
         {
             Image<Bgr, Single> img1 = new Image<Bgr, float>(50, 20, new Bgr(8.0, 1.0, 2.0));
             for (int i = 0; i < img1.Width; i++)
@@ -38,7 +38,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_MinMax()
+        public static void TestMinMax()
         {
             Image<Gray, Byte> img1 = new Image<Gray, Byte>(50, 60);
             System.Random r = new Random();
@@ -87,7 +87,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void testGenericOperation()
+        public static void testGenericOperation()
         {
             Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
             img1.ROI = new Rectangle<double>(10, 50, 19, 1);
@@ -174,7 +174,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_ConvertDepth()
+        public static void TestConvertDepth()
         {
             Image<Gray, Byte> img1 = new Image<Gray, byte>(100, 100, new Gray(10.0));
             img1._RandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
@@ -188,7 +188,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Memory()
+        public static void TestMemory()
         {
             for (int i = 0; i <= 500; i++)
             {
@@ -197,14 +197,14 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Conversion()
+        public static void TestConversion()
         {
             Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100);
             Image<Xyz, Single> img2 = img1.Convert<Xyz, Single>();
         }
 
         [Test]
-        public void Test_GenericSetColor()
+        public static void TestGenericSetColor()
         {
             Image<Bgr, Byte> img1 = new Image<Bgr, Byte>(20, 40, new Bgr());
 
@@ -222,7 +222,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_RuntimeSerialize()
+        public static void TestRuntimeSerialize()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
@@ -244,7 +244,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_SampleLine()
+        public static void TestSampleLine()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
             img._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
@@ -255,7 +255,7 @@ namespace Emgu.CV.Test
 
 
         [Test]
-        public void Test_getSize()
+        public static void TestGetSize()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
 
@@ -264,7 +264,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_XmlSerialize()
+        public static void TestXmlSerialize()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
@@ -278,7 +278,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Rotation()
+        public static void TestRotation()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
@@ -287,7 +287,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Constructor()
+        public static void TestConstructor()
         {
             for (int i = 0; i < 20; i++)
             {
@@ -309,14 +309,14 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_SubR()
+        public static void TestSubR()
         {
             Image<Bgr, Byte> img = new Image<Bgr, Byte>(101, 133);
             Assert.IsTrue(img.Not().Equals(255 - img));
         }
 
         [Test]
-        public void Test_ConvolutionAndLaplace()
+        public static void TestConvolutionAndLaplace()
         {
             Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
             image._RandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
@@ -333,7 +333,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_BitmapConstructor()
+        public static void TestBitmapConstructor()
         {
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
             image1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
@@ -350,7 +350,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_SplitMerge()
+        public static void TestSplitMerge()
         {
             Image<Bgr, Byte> img1 = new Image<Bgr, byte>(301, 234);
             img1._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
@@ -361,7 +361,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Canny()
+        public static void TestCanny()
         {
             Image<Bgr, Byte> image = new Image<Bgr, byte>("stuff.jpg");
             
@@ -371,7 +371,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestVideoWriter()
+        public static void TestVideoWriter()
         {
             VideoWriter writer = new VideoWriter("tmp.avi", 2, 200, 100, true);
             Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 100);

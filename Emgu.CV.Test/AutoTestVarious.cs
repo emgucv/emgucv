@@ -14,10 +14,10 @@ using System.Runtime.Serialization;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public class AutoTestVarious
+    public static class AutoTestVarious
     {
         [Test]
-        public void Test_ColorEqual()
+        public static void TestColorEqual()
         {
             Bgr c1 = new Bgr(0.0, 0.0, 0.0);
             Bgr c2 = new Bgr(0.0, 0.0, 0.0);
@@ -25,7 +25,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_cvClipLine()
+        public static void TestCvClipLine()
         {
             MCvPoint m1 = new MCvPoint(-1, 10);
             MCvPoint m2 = new MCvPoint(100, 10);
@@ -35,7 +35,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Lookup()
+        public static void TestLookup()
         {
             double[] b = new double[4] { 0.0, 1.0, 2.0, 3.0 };
             double[] a = new double[4] { 1.0, 3.0, 2.0, 0.0 };
@@ -48,7 +48,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_LineFitting()
+        public static void TestLineFitting()
         {
             List<Point2D<float>> pts = new List<Point2D<float>>();
             
@@ -64,7 +64,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_Serialization()
+        public static void TestSerialization()
         {
             Rectangle<int> rec = new Rectangle<int>(-10, 10, 10, -2);
             XmlDocument xdoc = Emgu.Utils.XmlSerialize<Rectangle<int>>(rec);
@@ -99,7 +99,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void Test_RotationMatrix3D()
+        public static void TestRotationMatrix3D()
         {
             float[] rod = new float[] { 0.2f, 0.5f, 0.3f };
             RotationVector rodVec = new RotationVector(rod);
@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestContour()
+        public static void TestContour()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -136,7 +136,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestException()
+        public static void TestException()
         {
             for (int i = 0; i < 10; i++)
             {
@@ -156,7 +156,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestRectangle()
+        public static void TestRectangle()
         {
             Matrix<Byte> mat = new Matrix<Byte>(1, 4);
             mat._RandUniform(new MCvScalar(), new MCvScalar(255.0));
@@ -169,6 +169,5 @@ namespace Emgu.CV.Test
             Assert.AreEqual(rect1.y, rect2.y);
 
         }
-
     }
 }

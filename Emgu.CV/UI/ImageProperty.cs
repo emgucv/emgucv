@@ -6,7 +6,6 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.Reflection;
 
 namespace Emgu.CV.UI
 {
