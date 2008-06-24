@@ -149,10 +149,10 @@ namespace Emgu.CV
             get
             {
                 return new MCvRect(
-                    System.Convert.ToInt32(Left),
-                    System.Convert.ToInt32(Bottom),
-                    System.Convert.ToInt32(Width),
-                    System.Convert.ToInt32(Height));
+                    (int) Left,
+                    (int) Bottom,
+                    (int) Width,
+                    (int) Height);
             }
             set
             {

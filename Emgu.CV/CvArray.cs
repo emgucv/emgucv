@@ -377,7 +377,8 @@ namespace Emgu.CV
             int rows = reader.ReadContentAsInt();
             reader.MoveToNextAttribute();
             int cols = reader.ReadContentAsInt();
-            System.Xml.XmlNodeType type = reader.MoveToContent();
+            //System.Xml.XmlNodeType type = 
+            reader.MoveToContent();
             AllocateData(rows, cols);
             #endregion
 

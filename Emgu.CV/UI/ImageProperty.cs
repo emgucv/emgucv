@@ -111,13 +111,10 @@ namespace Emgu.CV.UI
         /// <summary>
         /// Set the description of the operation stack
         /// </summary>
-        public Stack<Operation<IImage>> OperationStack
+        public void SetOperationStack(Stack<Operation<IImage>> stack)
         {
-            set
-            {
-                cSharpOperationStackView.DisplayOperationStack(value);
-                cPlusPlusoperationStackView.DisplayOperationStack(value);
-            }
+            cSharpOperationStackView.DisplayOperationStack(stack);
+            cPlusPlusoperationStackView.DisplayOperationStack(stack);
         }
 
         /// <summary>

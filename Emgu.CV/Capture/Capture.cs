@@ -17,11 +17,11 @@ namespace Emgu.CV
         /// <summary>
         /// the width of this capture
         /// </summary>
-        private int _width = 0;
+        private int _width;
         /// <summary>
         /// the height of this capture
         /// </summary>
-        private int _height = 0;
+        private int _height;
 
         ///<summary> Create a capture using the default camera </summary>
         public Capture()

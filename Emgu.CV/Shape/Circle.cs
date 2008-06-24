@@ -45,14 +45,7 @@ namespace Emgu.CV
             get
             {
                 double a = 0.0;
-                try
-                {
-                    a = System.Convert.ToDouble(_radius);
-                }
-                catch (Exception)
-                {
-                    throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to compute area");
-                }
+                a = System.Convert.ToDouble(_radius);
                 return a * a * Math.PI;
             }
         }

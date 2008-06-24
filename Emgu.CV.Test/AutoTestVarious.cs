@@ -14,10 +14,10 @@ using System.Runtime.Serialization;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public static class AutoTestVarious
+    public class AutoTestVarious
     {
         [Test]
-        public static void TestColorEqual()
+        public void TestColorEqual()
         {
             Bgr c1 = new Bgr(0.0, 0.0, 0.0);
             Bgr c2 = new Bgr(0.0, 0.0, 0.0);
@@ -25,7 +25,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestCvClipLine()
+        public void TestCvClipLine()
         {
             MCvPoint m1 = new MCvPoint(-1, 10);
             MCvPoint m2 = new MCvPoint(100, 10);
@@ -35,36 +35,36 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestLookup()
+        public void TestLookup()
         {
             double[] b = new double[4] { 0.0, 1.0, 2.0, 3.0 };
             double[] a = new double[4] { 1.0, 3.0, 2.0, 0.0 };
             Point2D<double>[] pts = new Point2D<double>[b.Length];
             for (int i = 0; i < pts.Length; i++)
                 pts[i] = new Point2D<double>(b[i], a[i]);
-            
+
             Assert.AreEqual(2.5, PointCollection<double>.FirstDegreeInterpolate(pts, 1.5));
             Assert.AreEqual(-1, PointCollection<double>.FirstDegreeInterpolate(pts, 3.5));
         }
 
         [Test]
-        public static void TestLineFitting()
+        public void TestLineFitting()
         {
             List<Point2D<float>> pts = new List<Point2D<float>>();
-            
+
             pts.Add(new Point2D<float>(1.0f, 1.0f));
             pts.Add(new Point2D<float>(2.0f, 2.0f));
             pts.Add(new Point2D<float>(3.0f, 3.0f));
             pts.Add(new Point2D<float>(4.0f, 4.0f));
 
-            Line2D<float> res = PointCollection<float>.Line2DFitting( (IEnumerable<Point<float>>) pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2) ;
+            Line2D<float> res = PointCollection<float>.Line2DFitting((IEnumerable<Point<float>>)pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
 
             //check if the line is 45 degree from +x axis
             Assert.AreEqual(45.0, res.Direction.PointDegreeAngle);
         }
 
         [Test]
-        public static void TestSerialization()
+        public void TestSerialization()
         {
             Rectangle<int> rec = new Rectangle<int>(-10, 10, 10, -2);
             XmlDocument xdoc = Emgu.Utils.XmlSerialize<Rectangle<int>>(rec);
@@ -99,7 +99,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestRotationMatrix3D()
+        public void TestRotationMatrix3D()
         {
             float[] rod = new float[] { 0.2f, 0.5f, 0.3f };
             RotationVector rodVec = new RotationVector(rod);
@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestContour()
+        public void TestContour()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -136,7 +136,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestException()
+        public void TestException()
         {
             for (int i = 0; i < 10; i++)
             {
@@ -148,7 +148,7 @@ namespace Emgu.CV.Test
                 }
                 catch (CvException excpt)
                 {
-                    Assert.AreEqual(-201, excpt.Status); 
+                    Assert.AreEqual(-201, excpt.Status);
                     exceptionCaught = true;
                 }
                 Assert.IsTrue(exceptionCaught);
@@ -156,12 +156,12 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestRectangle()
+        public void TestRectangle()
         {
             Matrix<Byte> mat = new Matrix<Byte>(1, 4);
             mat._RandUniform(new MCvScalar(), new MCvScalar(255.0));
 
-            MCvRect rect1 = new MCvRect( (int)mat[0, 0], (int) mat[0, 1], (int) mat[0, 2], (int) mat[0, 3]);
+            MCvRect rect1 = new MCvRect((int)mat[0, 0], (int)mat[0, 1], (int)mat[0, 2], (int)mat[0, 3]);
             Rectangle<double> rectangle = new Rectangle<double>(rect1);
             MCvRect rect2 = rectangle.MCvRect;
 

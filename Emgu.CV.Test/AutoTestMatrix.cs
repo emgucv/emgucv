@@ -15,10 +15,10 @@ using System.Threading;
 namespace Emgu.CV.Test
 {
     [TestFixture]
-    public static class AutoTestMatrix
+    public class AutoTestMatrix
     {
         [Test]
-        public static void TestNot()
+        public void TestNot()
         {
             Matrix<byte> m = new Matrix<byte>(10, 8);
             m.SetValue(1.0);
@@ -28,12 +28,12 @@ namespace Emgu.CV.Test
             foreach (byte v in d2)
                 Assert.AreEqual(254.0, v);
         }
-        
+
         /// <summary>
         /// Test the matrix constructor that accepts a two dimensional array as input
         /// </summary>
         [Test]
-        public static void TestData()
+        public void TestData()
         {
             Byte[,] data = new Byte[20, 30];
             Random r = new Random();
@@ -41,7 +41,7 @@ namespace Emgu.CV.Test
             r.NextBytes(bytes);
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
-                    data[i, j] = bytes[i * data.GetLength(1)+ j];
+                    data[i, j] = bytes[i * data.GetLength(1) + j];
 
             Matrix<Byte> m = new Matrix<byte>(data);
             Byte[,] data2 = m.Data;
@@ -58,7 +58,7 @@ namespace Emgu.CV.Test
         /// Test the matrix transpose function for matrix of Byte
         /// </summary>
         [Test]
-        public static void TestTransposeByteMatrix()
+        public void TestTransposeByteMatrix()
         {
             using (Matrix<Byte> mat = new Matrix<Byte>(1, 10))
             {
@@ -73,12 +73,12 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestTransposeFloatMatrix()
+        public void TestTransposeFloatMatrix()
         {
             using (Matrix<float> mat = new Matrix<float>(1, 3))
             {
                 mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(-1000.0), new MCvScalar(1000.0));
-                
+
                 Matrix<float> matT = mat.Transpose();
 
                 for (int i = 0; i < matT.Rows; i++)
@@ -88,7 +88,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestXmlSerializeAndDeserialize()
+        public void TestXmlSerializeAndDeserialize()
         {
             using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
             {
@@ -103,7 +103,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestRuntimeSerialize()
+        public void TestRuntimeSerialize()
         {
             Matrix<Byte> mat = new Matrix<Byte>(100, 80);
 
@@ -125,7 +125,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestStressTestMatrixGC()
+        public void TestStressTestMatrixGC()
         {
             int i = 0;
             //try

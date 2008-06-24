@@ -14,7 +14,7 @@ namespace Emgu.CV.UI
     /// </summary>
     public partial class ParamInputDlg : Form
     {
-        private bool _sucessed = false;
+        private bool _sucessed;
         private Dictionary<ParameterInfo, ParamInputPanel> _paramPanelDictionary;
         private List<Object> _pList;
         private ParameterInfo[] _paramInfo;

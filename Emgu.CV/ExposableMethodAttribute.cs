@@ -8,7 +8,7 @@ namespace Emgu.CV
     /// Attribute used by ImageBox to generate Operation Menu
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class ExposableMethodAttribute : System.Attribute
+    public sealed class ExposableMethodAttribute : System.Attribute
     {
         private bool _exposable;
 

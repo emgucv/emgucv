@@ -14,7 +14,6 @@ namespace Emgu.UI
 
         public StatusField()
         {
-            _status = 0;
             InitializeComponent();
         }
         

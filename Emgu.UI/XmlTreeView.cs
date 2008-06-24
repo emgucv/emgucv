@@ -34,6 +34,10 @@ namespace Emgu.UI
                 AddNode(value.DocumentElement, treeView1.Nodes[0]);
                 treeView1.ExpandAll();
             }
+            get
+            {
+                return _doc;
+            }
         }
 
         private void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
@@ -64,7 +68,7 @@ namespace Emgu.UI
             }
         }
 
-        private String NodeToString(XmlNode node)
+        private static String NodeToString(XmlNode node)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(String.Format("{0} : {1} ", (node.Name).Trim(), node.Value));

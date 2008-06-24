@@ -52,7 +52,7 @@ namespace Emgu.CV.UI
             _operationStack.Push(operation);
             ImageProperty panel = ImagePropertyPanel;
             if (panel != null) 
-                panel.OperationStack = _operationStack;
+                panel.SetOperationStack( _operationStack );
             Image = Image;
         }
 
@@ -63,7 +63,7 @@ namespace Emgu.CV.UI
         {
             _operationStack.Clear();
             ImageProperty panel = ImagePropertyPanel;
-            if (panel != null) panel.OperationStack = _operationStack;
+            if (panel != null) panel.SetOperationStack( _operationStack );
             Image = Image;
         }
 
@@ -76,7 +76,7 @@ namespace Emgu.CV.UI
             {
                 _operationStack.Pop();
                 ImageProperty panel = ImagePropertyPanel;
-                if (panel != null) panel.OperationStack = _operationStack;
+                if (panel != null) panel.SetOperationStack( _operationStack );
                 Image = Image;
             }
         }
@@ -269,7 +269,7 @@ namespace Emgu.CV.UI
                             _propertyDlg = null;
                         };
 
-                    ImagePropertyPanel.OperationStack = _operationStack;
+                    ImagePropertyPanel.SetOperationStack( _operationStack );
 
                     // reset the image such that the property is updated
                     Image = Image;

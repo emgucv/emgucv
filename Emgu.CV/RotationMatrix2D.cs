@@ -7,6 +7,7 @@ namespace Emgu.CV
     /// <summary>
     /// A 2D rotation matrix
     /// </summary>
+    [Serializable]
     public class RotationMatrix2D: Matrix<float>
     {
         /// <summary>

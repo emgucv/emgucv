@@ -8,6 +8,7 @@ namespace Emgu.CV
     /// <summary>
     /// A 3D rotation matrix
     /// </summary>
+    [Serializable]
     public class RotationVector : Matrix<float>
     {
         /// <summary>

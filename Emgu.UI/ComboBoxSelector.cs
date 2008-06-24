@@ -26,7 +26,7 @@ namespace Emgu.UI
                             count++;
                     }
 
-                    ItemSizeLabel.Text = String.Format("{0}", count);
+                    ItemSizeLabel.Text = count.ToString();
                 });
             comboBox1.SelectedIndexChanged += new EventHandler(
                 delegate
