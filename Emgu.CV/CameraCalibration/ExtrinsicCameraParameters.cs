@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emgu.CV.CameraCalibration
+namespace Emgu.CV
 {
     /// <summary>
     /// The extrinsic camera parameters

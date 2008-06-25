@@ -20,6 +20,18 @@ namespace Emgu.CV
         public double Intensity { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
 
         /// <summary>
+        /// Check if two gray color are equal
+        /// </summary>
+        /// <param name="obj">the object to compare with</param>
+        /// <returns>true if <paramref name="obj"/> is Gray color with the same intensity</returns>
+        public override bool Equals(object obj)
+        {
+            Gray other = obj as Gray;
+            if (other == null) return false;
+            return Intensity.Equals(other.Intensity);
+        }
+
+        /// <summary>
         /// Compare method that implement IComparable interface
         /// </summary>
         /// <param name="obj">The other object to compare to</param>

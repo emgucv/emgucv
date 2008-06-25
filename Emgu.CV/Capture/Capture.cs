@@ -46,13 +46,13 @@ namespace Emgu.CV
         /// <summary>
         /// Create a capture from file
         /// </summary>
-        /// <param name="filename">The file name of the movie</param>
-        public Capture(String filename)
+        /// <param name="fileName">The file name of the movie</param>
+        public Capture(String fileName)
         {
-            _ptr = CvInvoke.cvCreateFileCapture(filename);
+            _ptr = CvInvoke.cvCreateFileCapture(fileName);
             if (_ptr == IntPtr.Zero)
             {
-                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to create capture from file:" + filename);
+                throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to create capture from file:" + fileName);
             }
         }
 

@@ -70,7 +70,7 @@ namespace Emgu.CV.UI
             PointPairList list1 = new PointPairList();
 
             foreach (Point2D<int> point in values)
-                if (point.Y != 0)
+                //if (point.Y != 0)
                     list1.Add(point.X, point.Y);
             
             // Generate a curve of color with diamond

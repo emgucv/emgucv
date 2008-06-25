@@ -145,10 +145,9 @@ namespace Emgu.CV.Test
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
-            using (Image<Bgr, Byte> img2 = img.Resize(100, 100, true))
+            using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
+            using (Image<Bgr, Single> img2 = img.Resize(100, 100, true))
             {
-
                 Application.Run(new ImageViewer(img2));
                 Rectangle<double> r = img2.ROI;
                 r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);

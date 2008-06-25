@@ -7,6 +7,7 @@ namespace Emgu.CV
     /// <summary>
     /// The default exception to be thrown when error encounter in Open CV 
     /// </summary>
+    [Serializable]
     public class CvException : System.Exception
     {
         private int _status;

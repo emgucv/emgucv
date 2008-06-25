@@ -81,6 +81,14 @@ namespace Emgu.CV
         /// <param name="std"> the standard deviation of random numbers</param>
         void _RandNormal(MCvScalar mean, MCvScalar std);
 
+        /// <summary>
+        /// Returns the min / max location and values for the image
+        /// </summary>
+        /// <returns>
+        /// Returns the min / max location and values for the image
+        /// </returns>
+        void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations);
+       
         ///<summary>
         ///The function cvPyrUp performs up-sampling step of Gaussian pyramid decomposition. 
         ///First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 

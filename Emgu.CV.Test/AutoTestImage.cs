@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Emgu.CV;
 using Emgu.UI;
+using Emgu.CV.UI;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -306,6 +307,8 @@ namespace Emgu.CV.Test
 
             Byte[, ,] data = new Byte[,,] { { { 255, 0, 0 } }, { { 0, 255, 0 } } };
             Image<Bgr, Byte> img3 = new Image<Bgr, byte>(data);
+
+            Image<Gray, Single> img4 = new Image<Gray, float>("stuff.jpg");
         }
 
         [Test]
@@ -335,6 +338,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestBitmapConstructor()
         {
+            #region test byte images
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
             image1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
             Bitmap bmp = image1.ToBitmap();
@@ -347,9 +351,15 @@ namespace Emgu.CV.Test
             bmp = image3.ToBitmap();
             Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
             Assert.IsTrue(image3.Equals(image4));
+            #endregion
 
-            Image<Bgr, Single> img5 = new Image<Bgr, float>(bmp);
+            #region test single images
+            Image<Bgr, Single> image5 = new Image<Bgr, Single>(201, 401);
+            image5._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            Bitmap bmp2 = image5.ToBitmap();
 
+            //Application.Run(new ImageViewer(new Image<Bgr, Single>(bmp2)));
+            #endregion
         }
 
         [Test]
@@ -390,12 +400,18 @@ namespace Emgu.CV.Test
         [Test]
         public void TestVideoWriter()
         {
-            VideoWriter writer = new VideoWriter("tmp.avi", 2, 200, 100, true);
-            Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 100);
-            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(200, 100);
-            writer.WriteFrame(img1);
-            writer.WriteFrame(img2);
-            writer.Dispose();
+            using (VideoWriter writer = new VideoWriter("tmp.avi", 2, 200, 100, true))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 100);
+                    img1._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+                    writer.WriteFrame(img1);
+                }
+            }
+
+            FileInfo fi = new FileInfo("tmp.avi");
+            Assert.AreNotEqual(fi.Length, 0);
         }
 
     }

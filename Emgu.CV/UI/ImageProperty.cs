@@ -138,11 +138,11 @@ namespace Emgu.CV.UI
             _imageBox.PopOperation();
         }
 
-        private Point2D<int>[] SingleChannelImageToHistogramPoints(IImage channel)
+        private static Point2D<int>[] SingleChannelImageToHistogramPoints(IImage channel, int numberOfBins, float minVal, float maxVal)
         {
-            int[] binSize = new int[1] { 256 };
-            float[] min = new float[1] { 0.0f };
-            float[] max = new float[1] { 255.0f };
+            int[] binSize = new int[1] { numberOfBins };
+            float[] min = new float[1] { minVal };
+            float[] max = new float[1] { maxVal };
 
             using (Histogram hist = new Histogram(binSize, min, max))
             {
@@ -161,30 +161,47 @@ namespace Emgu.CV.UI
         private void showHistogramButton_Click(object sender, EventArgs e)
         {
             IImage image = _imageBox.DisplayedImage;
-            if (image.TypeOfDepth == typeof(Byte))
-            {
-                System.Drawing.Color[] colors = new Color[] {
+            
+            System.Drawing.Color[] colors = new Color[] {
                     Color.Blue,
                     Color.Green,
                     Color.Red};
 
-                IImage[] channels = image.Split();
-                HistogramViewer hviewer = new HistogramViewer();
+            IImage[] channels = image.Split();
+            String[] channelNames = ((ColorType)Activator.CreateInstance(image.TypeOfColor)).ChannelName;
+            HistogramViewer hviewer = new HistogramViewer();
 
-                String[] channelNames = ((ColorType)Activator.CreateInstance(image.TypeOfColor) ).ChannelName;
-
+            if (image.TypeOfDepth == typeof(Byte))
+            {
                 for (int i = 0; i < channels.Length; i++)
                 {
-                    Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i]);
+                    Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, 0.0f, 255f);
                     hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
                 }
-                hviewer.Show();
-
             }
             else
             {
-                //TODO: handle non-byte depth
+                #region obtain the maximum and minimum color value
+                double[] minValues, maxValues;
+                MCvPoint[] minLocations, maxLocations;
+                image.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
+
+                double min = minValues[0], max = maxValues[0];
+                for (int i = 1; i < minValues.Length; i++)
+                {
+                    if (minValues[i] < min) min = minValues[i];
+                    if (maxValues[i] > max) max = maxValues[i];
+                }
+                #endregion
+
+                for (int i = 0; i < channels.Length; i++)
+                {
+                    Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, (float)min, (float)max);
+                    hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
+                }
             }
+            
+            hviewer.Show();
         }
     }
 }

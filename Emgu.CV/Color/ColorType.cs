@@ -13,7 +13,7 @@ namespace Emgu.CV
         /// Create a color type of certain dimension
         /// </summary>
         /// <param name="dimension"></param>
-        public ColorType(int dimension) : base(dimension) { }
+        protected ColorType(int dimension) : base(dimension) { }
 
         /// <summary>
         /// Get the names for each channel
