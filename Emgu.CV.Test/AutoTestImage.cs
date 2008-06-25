@@ -347,6 +347,9 @@ namespace Emgu.CV.Test
             bmp = image3.ToBitmap();
             Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
             Assert.IsTrue(image3.Equals(image4));
+
+            Image<Bgr, Single> img5 = new Image<Bgr, float>(bmp);
+
         }
 
         [Test]
