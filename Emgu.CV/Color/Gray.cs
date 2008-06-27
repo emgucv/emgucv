@@ -32,6 +32,15 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Returns the hash code for this color
+        /// </summary>
+        /// <returns>the hash code</returns>
+        public override int GetHashCode()
+        {
+            return Intensity.GetHashCode();
+        }
+
+        /// <summary>
         /// Compare method that implement IComparable interface
         /// </summary>
         /// <param name="obj">The other object to compare to</param>

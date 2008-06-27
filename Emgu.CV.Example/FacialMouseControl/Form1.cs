@@ -17,22 +17,12 @@ namespace FacialMouseControl
 
         private Thread _captureThread;
 
-        private bool _flipHorizontal;
+        //private bool _flipHorizontal;
         private HaarCascade _face;
 
         public Form1()
         {
             InitializeComponent();
-
-            //cv.dll needed to be load before creating HaarCascade object
-            //creating the following dummy will do the job
-            //a bug(?) in OpenCV
-            //see http://opencvlibrary.sourceforge.net/FaceDetection 
-            //after step 11 there is an explaination
-            using (Image<Gray, Byte> dummy = new Image<Gray, Byte>(1, 1))
-            {
-                dummy._Erode(1);
-            }
 
             //Read the HaarCascade object
             _face = new HaarCascade("haarcascades/haarcascade_frontalface_alt2.xml");
@@ -56,11 +46,6 @@ namespace FacialMouseControl
                     {
                         Image<Bgr, Byte> frame = _capture.QueryFrame();
 
-                        //determine if any fliping is required
-                        if (_flipHorizontal)
-                        {
-                            frame = frame.Flip(Emgu.CV.CvEnum.FLIP.HORIZONTAL);
-                        }
                         ProcessImage(frame);
                     }
                 }
@@ -129,7 +114,9 @@ namespace FacialMouseControl
                     int maxMouseSpeed = rect.Width / 20 ; 
                     MCvPoint p;
                     GetCursorPos(out p);
-                    SetCursorPos(p.x + (int)(maxMouseSpeed /2.0 * horizontalFraction ), p.y + (int)(maxMouseSpeed /2.0 * verticalFraction));
+                    p.x = Math.Min(Math.Max(0, p.x + (int)(maxMouseSpeed /2.0 * horizontalFraction )), rect.Width);
+                    p.y = Math.Min(Math.Max(0, p.x - (int)(maxMouseSpeed /2.0 * verticalFraction)), rect.Height);
+                    SetCursorPos(p.x, p.y);
                 }
             }
 
@@ -151,9 +138,9 @@ namespace FacialMouseControl
                 _capture.Dispose();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void flipHorizontalButton_Click(object sender, EventArgs e)
         {
-            _flipHorizontal = !_flipHorizontal;
+            if (_capture != null) _capture.FlipHorizontal = !_capture.FlipHorizontal;
         }
     }
 }

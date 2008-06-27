@@ -16,9 +16,6 @@ namespace CameraCapture
 
         private Thread _captureThread;
 
-        private bool _flipHorizontal;
-        private bool _flipVertical;
-
         public CameraCapture()
         {
             InitializeComponent();
@@ -46,20 +43,6 @@ namespace CameraCapture
                         while (true)
                         {
                             Image<Bgr, Byte> frame = _capture.QueryFrame();
-
-                            //determine if any fliping is required
-                            if (_flipVertical || _flipHorizontal)
-                            {
-                                Emgu.CV.CvEnum.FLIP flipType;
-                                if (_flipHorizontal && _flipVertical)
-                                    flipType = Emgu.CV.CvEnum.FLIP.VERTICAL | Emgu.CV.CvEnum.FLIP.HORIZONTAL;
-                                else if (_flipVertical)
-                                    flipType = Emgu.CV.CvEnum.FLIP.VERTICAL;
-                                else
-                                    flipType = Emgu.CV.CvEnum.FLIP.HORIZONTAL;
-
-                                frame = frame.Flip(flipType);
-                            }
                         
                             Image<Gray, Byte> grayFrame = frame.Convert<Gray, Byte>();
                             Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
@@ -103,12 +86,12 @@ namespace CameraCapture
 
         private void FlipHorizontalButtonClick(object sender, EventArgs e)
         {
-            _flipHorizontal = !_flipHorizontal;
+            if (_capture != null) _capture.FlipHorizontal = !_capture.FlipHorizontal;
         }
 
         private void FlipVerticalButtonClick(object sender, EventArgs e)
         {
-            _flipVertical = !_flipVertical;
+            if (_capture != null) _capture.FlipVertical = !_capture.FlipVertical;
         }
     }
 }

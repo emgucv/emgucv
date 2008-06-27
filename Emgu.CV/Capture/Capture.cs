@@ -23,6 +23,58 @@ namespace Emgu.CV
         /// </summary>
         private int _height;
 
+        /// <summary>
+        /// the type of flipping
+        /// </summary>
+        private CvEnum.FLIP _flipType = Emgu.CV.CvEnum.FLIP.NONE;
+
+        /// <summary>
+        /// Get and set the flip type
+        /// </summary>
+        public CvEnum.FLIP FlipType
+        {
+            get
+            {
+                return _flipType;
+            }
+            set
+            {
+                _flipType = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or Set if the captured image should be flipped horizontally
+        /// </summary>
+        public bool FlipHorizontal
+        {
+            get
+            {
+                return (_flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL;
+            }
+            set
+            {
+                if (value != FlipHorizontal)
+                    _flipType ^= Emgu.CV.CvEnum.FLIP.HORIZONTAL;
+            }
+        }
+
+        /// <summary>
+        /// Get or Set if the captured image should be flipped vertically
+        /// </summary>
+        public bool FlipVertical
+        {
+            get
+            {
+                return (_flipType & Emgu.CV.CvEnum.FLIP.VERTICAL) == Emgu.CV.CvEnum.FLIP.VERTICAL;
+            }
+            set
+            {
+                if (value != FlipVertical)
+                    _flipType ^= Emgu.CV.CvEnum.FLIP.VERTICAL;
+            }
+        }
+
         ///<summary> Create a capture using the default camera </summary>
         public Capture()
             : this(-1)
@@ -97,24 +149,40 @@ namespace Emgu.CV
             return CvInvoke.cvGetCaptureProperty(_ptr, index);
         }
 
+        #region implement ICapture
         ///<summary> Capture a RGB image frame</summary>
         ///<returns> A RGB image frame</returns>
         public virtual Image<Bgr, Byte> QueryFrame()
         {
 #if TEST_CAPTURE
-            Image<Bgr, Byte> img = new Image<Bgr, Byte>(1024, 800, new Bgr());
-            img.Draw(System.DateTime.Now.Ticks.ToString(),
+            Image<Bgr, Byte> tmp = new Image<Bgr, Byte>(320, 240, new Bgr());
+            tmp.Draw(System.DateTime.Now.Ticks.ToString(),
                 new Font( CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0),
                 new Point2D<int>(10, 50),
                 new Bgr(255.0, 255.0, 255.0));
-            return img;
+            IntPtr img = tmp;
+            Image<Bgr, Byte> res = tmp.BlankClone();
 #else
-
             IntPtr img = CvInvoke.cvQueryFrame(_ptr);
             Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width, Height);
-            CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
-            return res;
 #endif
+            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
+            {
+                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+                return res;
+            }
+            else
+            {
+                //code = 0 indicates vertical flip only
+                int code = 0;
+                //code = -1 indicates vertical and horizontal flip
+                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
+                //code = 1 indicates horizontal flip only
+                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
+                CvInvoke.cvFlip(img, res.Ptr, code);
+                return res;
+            }
+
         }
 
         ///<summary> 
@@ -130,8 +198,51 @@ namespace Emgu.CV
             IntPtr img = CvInvoke.cvQueryFrame(_ptr);
             Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width >> 1, Height >> 1);
             CvInvoke.cvPyrDown(img, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
-            return res;
+
+            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
+            {
+                return res;
+            }
+            else
+            {
+                //code = 0 indicates vertical flip only
+                int code = 0;
+                //code = -1 indicates vertical and horizontal flip
+                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
+                //code = 1 indicates horizontal flip only
+                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
+                CvInvoke.cvFlip(res.Ptr, res.Ptr, code);
+                return res;
+            }
 #endif
+        }
+        #endregion 
+
+        ///<summary> Capture Bgr image frame with timestamp</summary>
+        ///<returns> A timestamped Bgr image frame</returns>
+        public TimedImage<Bgr, Byte> QueryTimedFrame()
+        {
+            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+            TimedImage<Bgr, Byte> res = new TimedImage<Bgr, Byte>(Width, Height);
+
+            res.Timestamp = System.DateTime.Now;
+
+            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
+            {
+                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+                return res;
+            }
+            else
+            {
+                //code = 0 indicates vertical flip only
+                int code = 0;
+                //code = -1 indicates vertical and horizontal flip
+                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
+                //code = 1 indicates horizontal flip only
+                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
+                CvInvoke.cvFlip(img, res.Ptr, code);
+                return res;
+            }
         }
 
         /// <summary>
@@ -143,14 +254,7 @@ namespace Emgu.CV
 
             using (Image<Bgr, Byte> img = QueryFrame())
             {
-                //try
-                {
-                    callback.ReceiveFrame(img);
-                }
- /*             catch (System.Exception)
-                {
-                } 
- */
+                callback.ReceiveFrame(img);
             }
         }
 
@@ -163,27 +267,10 @@ namespace Emgu.CV
 
             using (Image<Bgr, Byte> img = QuerySmallFrame())
             {
-                //try
-                {
-                    callback.ReceiveFrame(img);
-                }
-                /*
-                catch (System.Exception)
-                {
-                }*/
+                callback.ReceiveFrame(img);
             }
         }
 
-        ///<summary> Capture Bgr image frame with timestamp</summary>
-        ///<returns> A timestamped Bgr image frame</returns>
-        public TimedImage<Bgr, Byte> QueryTimedFrame()
-        {
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
-            TimedImage<Bgr, Byte> res = new TimedImage<Bgr, Byte>(Width, Height);
-            CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
-            res.Timestamp = System.DateTime.Now;
-            return res;
-        }
     };
 
 }
