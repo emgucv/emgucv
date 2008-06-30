@@ -87,6 +87,7 @@
     <Compile Include="Color\Xyz.cs" />
     <Compile Include="Color\Ycc.cs" />
     <Compile Include="CvException.cs" />
+    <Compile Include="EigenObjectRecognizer.cs" />
     <Compile Include="Envelope.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />

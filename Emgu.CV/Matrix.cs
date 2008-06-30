@@ -34,10 +34,24 @@ namespace Emgu.CV
             AllocateData(rows, cols);
         }
 
-        ///<summary> Create a matrix using the specific <paramref>data</paramref></summary>
+        /// <summary> 
+        /// Create a matrix using the specific <paramref>data</paramref>
+        /// </summary>
         public Matrix(D[,] data)
         {
             Data = data;
+        }
+
+        /// <summary>
+        /// Create a matrix using the specific <paramref name="data"/>
+        /// </summary>
+        /// <param name="data">the data for this matrix</param>
+        public Matrix(D[] data)
+        {
+            D[,] mat = new D[data.Length, 1];
+            for (int i = 0; i < data.Length; i++)
+                mat[i, 0] = data[i];
+            Data = mat;
         }
         #endregion
 
