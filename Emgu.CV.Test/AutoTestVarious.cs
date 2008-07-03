@@ -175,7 +175,7 @@ namespace Emgu.CV.Test
         public void TestEigenObjects()
         {
             String[] fileNames = new string[] { "stuff.jpg", "squares.gif", "lena.jpg" };
-
+            String[] labels = new string[] { "1", "2", "3" };
             int width = 100, height = 100;
             MCvTermCriteria termCrit = new MCvTermCriteria(3, 0.001);
 
@@ -186,26 +186,13 @@ namespace Emgu.CV.Test
                     return new Image<Gray, Byte>(file).Resize(width, height);
                 });
 
-            EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
+            EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, labels, 500, ref termCrit);
             for (int i = 0; i < imgs.Length; i++)
             {
-                int index = imgRecognizer1.FindIndex(imgs[i]);
-                Assert.AreEqual(index, i);
+                Assert.AreEqual(i, imgRecognizer1.FindIndex(imgs[i]));
+                Assert.AreEqual((i+1).ToString(), imgRecognizer1.Recognize(imgs[i]));
             }
             #endregion
-
-            /*
-            termCrit = new MCvTermCriteria(3, 0.001);
-            EigenObjectRecognizer.GetImageCallback cb = delegate(int index)
-            {
-                return new Image<Gray, Byte>(fileNames[index]).Resize(100, 100);
-            };
-            EigenObjectRecognizer imgRecognizer2 = new EigenObjectRecognizer(fileNames.Length, cb, ref termCrit);
-            for (int i = 0; i < imgs.Length; i++)
-            {
-                int index = imgRecognizer2.FindIndex( cb(i) );
-                Assert.AreEqual(index, i);
-            }*/
         }
     }
 }
