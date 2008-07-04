@@ -392,11 +392,11 @@ namespace Emgu.CV.Test
         public void TestCompression()
         {
             Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
-            //Image<Rgb, Byte> image = new Image<Rgb, byte>(512, 512);
             DateTime t1 = DateTime.Now;
             int l1 = image.Bytes.Length;
             DateTime t2 = DateTime.Now;
-            int l2 = image.CompressedBytes.Length;
+            image.SerializationCompressionRatio = 9;
+            int l2 = image.Bytes.Length;
             DateTime t3 = DateTime.Now;
             TimeSpan ts1 = t2.Subtract(t1);
             TimeSpan ts2 = t3.Subtract(t2);
@@ -432,6 +432,24 @@ namespace Emgu.CV.Test
         public void TestImageViewer()
         {
             Application.Run(new ImageViewer(null));
+        }
+
+        public void TestDelaunay()
+        {
+            DelaunayTriangulation dt = new DelaunayTriangulation(new Rectangle<double>(new Point2D<double>(20, 20), 40, 40));
+            dt.Insert(new MCvPoint2D32f(12, 11));
+            dt.Insert(new MCvPoint2D32f(22, 3));
+            dt.Insert(new MCvPoint2D32f(20, 32));
+            /*
+            Seq<MCvQuadEdge2D> res = dt.QuadEdges;
+            foreach (MCvQuadEdge2D qEdge in res)
+            {
+                string str = qEdge.ToString();
+                MCvSubdiv2DEdge edge = qEdge.next[0];
+                MCvSubdiv2DPoint pOrg = edge.cvSubdiv2DEdgeOrg();
+                MCvSubdiv2DPoint pDst = edge.cvSubdiv2DEdgeDst();
+            }*/
+            dt.QuadEdges();
         }
 
         public void TestContour()

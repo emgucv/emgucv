@@ -87,6 +87,7 @@
     <Compile Include="Color\Xyz.cs" />
     <Compile Include="Color\Ycc.cs" />
     <Compile Include="CvException.cs" />
+    <Compile Include="DelaunayTriangulation.cs" />
     <Compile Include="EigenObjectRecognizer.cs" />
     <Compile Include="Envelope.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
@@ -96,7 +97,12 @@
     <Compile Include="PInvoke\CvType\MCvChain.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
     <Compile Include="PInvoke\CvType\MCvKalman.cs" />
+    <Compile Include="PInvoke\CvType\MCvQuadEdge2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
+    <Compile Include="PInvoke\CvType\MCvSet.cs" />
+    <Compile Include="PInvoke\CvType\MCvSetElem.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
     <Compile Include="Shape\Cross2D.cs" />
     <Compile Include="UI\HistogramCtrl.cs">

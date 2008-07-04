@@ -92,9 +92,9 @@ namespace Emgu.CV
         /// <param name="thickness">The thickness of the rectangle, any value less than or equal to 0 will result in a filled rectangle</param>
         public override void Draw<T>(Rectangle<T> rect, C color, int thickness) 
         {
-            Point2D<double> p = rect.Size.Convert<double>();
-            Point2D<double> size = new Point2D<double>(p.X / Resolution.X, p.Y / Resolution.Y );
-            base.Draw(new Rectangle<double>(MapPoint<T>(rect.Center), size), color, thickness);
+            double w = System.Convert.ToDouble(rect.Width);
+            double h = System.Convert.ToDouble(rect.Height);
+            base.Draw(new Rectangle<double>(MapPoint<T>(rect.Center), w/Resolution.X, h/Resolution.Y ), color, thickness);
         }
 
         /// <summary>

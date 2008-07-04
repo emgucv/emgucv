@@ -106,22 +106,22 @@ namespace Emgu.CV.Test
         public void TestRuntimeSerialize()
         {
             Matrix<Byte> mat = new Matrix<Byte>(100, 80);
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
+            Byte[] bytes;
             using (MemoryStream ms = new MemoryStream())
             {
                 mat._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                    formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 formatter.Serialize(ms, mat);
-                Byte[] bytes = ms.GetBuffer();
-
-                using (MemoryStream ms2 = new MemoryStream(bytes))
-                {
-                    Matrix<Byte> mat2 = (Matrix<Byte>)formatter.Deserialize(ms2);
-                    Assert.IsTrue(mat.Equals(mat2));
-                }
+                bytes = ms.GetBuffer();
             }
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+                Matrix<Byte> mat2 = (Matrix<Byte>)formatter.Deserialize(ms2);
+                Assert.IsTrue(mat.Equals(mat2));
+            }
+            
         }
 
         [Test]

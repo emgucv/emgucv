@@ -271,11 +271,16 @@ namespace Emgu.CV.Test
 
             img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
-            XmlDocument doc = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
-
-            Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc);
-
+            XmlDocument doc1 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+            Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc1);
             Assert.IsTrue(img.Equals(img2));
+
+            img.SerializationCompressionRatio = 9;
+            XmlDocument doc2 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+            Image<Bgr, Byte> img3 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc2);
+            Assert.IsTrue(img.Equals(img3));
+
+            //Assert.Greater(doc1.InnerXml.Length, doc2.InnerXml.Length);
         }
 
         [Test]

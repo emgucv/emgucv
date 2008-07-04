@@ -78,10 +78,11 @@ namespace Emgu.CV
         /// </summary>
         public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
 
+        
         /// <summary>
         /// The Size (width and height) of this rectangle
         /// </summary>
-        [DataMember]
+        [XmlIgnore]
         public Point2D<T> Size
         {
             get { return _size; }
@@ -97,7 +98,7 @@ namespace Emgu.CV
         }
 
         ///<summary> The width of the rectangle </summary>
-        [XmlIgnore]
+        [XmlAttribute("Width")]
         public T Width 
         { 
             get 
@@ -111,7 +112,7 @@ namespace Emgu.CV
         }
         
         ///<summary> The height of the rectangle </summary> 
-        [XmlIgnore]
+        [XmlAttribute("Height")]
         public T Height 
         { 
             get 
@@ -169,7 +170,7 @@ namespace Emgu.CV
         /// <returns>true if the two rectangle equals, false otherwise</returns>
         public bool Equals(Rectangle<T> rec)
         {
-            return base.Equals(rec) && Size.Equals(rec.Size);
+            return base.Equals(rec) && Width.Equals(rec.Width) && Height.Equals(rec.Height);
         }
     };
 }

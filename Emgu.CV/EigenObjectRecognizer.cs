@@ -3,19 +3,77 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV
 {
     /// <summary>
     /// An object recognizer using PCA (Principle Components Analysis)
     /// </summary>
-    public class EigenObjectRecognizer
+    [Serializable]    
+    public class EigenObjectRecognizer 
     {
         private Image<Gray, Single>[] _eigenImages;
         private Image<Gray, Single> _avgImage;
         private Matrix<float>[] _eigenValues;
         private string[] _labels;
         private double _simularityThreshold;
+
+        /// <summary>
+        /// Get the Eigen vectors that form the eigen space
+        /// </summary>
+        /// <remarks>The set method is primary used for deserialization, do not attemps to set it unless you know what you are doing</remarks>
+        public Image<Gray, Single>[] EigenImages
+        {
+            get { return _eigenImages; }
+            set { _eigenImages = value; }
+        }
+
+        /// <summary>
+        /// Get or set the labels for the corresponding training image
+        /// </summary>
+        public String[] Labels
+        {
+            get { return _labels; }
+            set { _labels = value; }
+        }
+
+        /// <summary>
+        /// Get or set the simularity threshold.
+        /// The smaller the number, the more likely an examined image will be treated as unrecognized object. 
+        /// Set it to a huge number (e.g. 5000) and the recognizer will always treated the examined image as one of the known object. 
+        /// </summary>
+        public double SimularityThreshold
+        {
+            get { return _simularityThreshold; }
+            set { _simularityThreshold = value; }
+        }
+
+        /// <summary>
+        /// Get the average Image. 
+        /// </summary>
+        /// <remarks>The set method is primary used for deserialization, do not attemps to set it unless you know what you are doing</remarks>
+        public Image<Gray, Single> AverageImage
+        {
+            get { return _avgImage; }
+            set { _avgImage = value; }
+        }
+
+        /// <summary>
+        /// Get the eigen values of each of the training image
+        /// </summary>
+        /// <remarks>The set method is primary used for deserialization, do not attemps to set it unless you know what you are doing</remarks>
+        public Matrix<float>[] EigenValues
+        {
+            get { return _eigenValues; }
+            set { _eigenValues = value; }
+        }
+
+        private EigenObjectRecognizer()
+        {
+        }
 
         /// <summary>
         /// Create an object recognizer using the specific tranning data and parameters
@@ -31,14 +89,24 @@ namespace Emgu.CV
         public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, double simularityThreshold, ref MCvTermCriteria termCrit)
         {
             Debug.Assert(images.Length == labels.Length, "The number of images should equals the number of labels");
-            Debug.Assert(simularityThreshold >= 0.0 && simularityThreshold <= 1.0, "Simularity threshold should always >= 0.0 and <= 1.0");
+            Debug.Assert(simularityThreshold >= 0.0, "Simularity threshold should always >= 0.0");
+            
             CalcEigenObjects(images, ref termCrit, out _eigenImages, out _avgImage);
+
+            /*
+            _avgImage.SerializationCompressionRatio = 9;
+
+            foreach (Image<Gray, Single> img in _eigenImages)
+                //Set the compression ration to best compression. The serialized object can therefore save spaces
+                img.SerializationCompressionRatio = 9;
+            */
 
             _eigenValues = Array.ConvertAll<Image<Gray, Byte>, Matrix<float>>(images,
                 delegate(Image<Gray, Byte> img)
                 {
                     return new Matrix<float>(EigenDecomposite(img, _eigenImages, _avgImage));
                 });
+
             _labels = labels;
 
             _simularityThreshold = simularityThreshold;
@@ -172,5 +240,6 @@ namespace Emgu.CV
             int index = FindIndex(image);
             return index == -1 ? String.Empty : _labels[index];
         }
+
     }
 }

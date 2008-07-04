@@ -76,9 +76,9 @@ namespace Emgu.CV
         /// </summary>
         public int active_count;
         /// <summary>
-        /// 
+        /// Pointer to CvSet
         /// </summary>
-        public long edges;
+        public IntPtr edges;
         /// <summary>
         /// 
         /// </summary>
@@ -90,7 +90,7 @@ namespace Emgu.CV
         /// <summary>
         /// 
         /// </summary>
-        public long recent_edge;
+        public MCvSubdiv2DEdge recent_edge;
         /// <summary>
         /// 
         /// </summary>

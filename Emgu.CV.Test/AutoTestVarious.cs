@@ -192,6 +192,35 @@ namespace Emgu.CV.Test
                 Assert.AreEqual(i, imgRecognizer1.FindIndex(imgs[i]));
                 Assert.AreEqual((i+1).ToString(), imgRecognizer1.Recognize(imgs[i]));
             }
+
+            XmlDocument xDoc = Emgu.Utils.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
+            EigenObjectRecognizer imgRecognizer2 = Emgu.Utils.XmlDeserialize<EigenObjectRecognizer>(xDoc);
+
+            for (int i = 0; i < imgs.Length; i++)
+            {
+                Assert.AreEqual(i, imgRecognizer2.FindIndex(imgs[i]));
+                Assert.AreEqual((i + 1).ToString(), imgRecognizer2.Recognize(imgs[i]));
+            }
+
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+
+            Byte[] bytes;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                formatter.Serialize(ms, imgRecognizer1);
+                bytes = ms.GetBuffer();
+            }
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+                EigenObjectRecognizer imgRecognizer3 = (EigenObjectRecognizer)formatter.Deserialize(ms2);
+                for (int i = 0; i < imgs.Length; i++)
+                {
+                    Assert.AreEqual(i, imgRecognizer3.FindIndex(imgs[i]));
+                    Assert.AreEqual((i + 1).ToString(), imgRecognizer3.Recognize(imgs[i]));
+                }
+            }
             #endregion
         }
     }

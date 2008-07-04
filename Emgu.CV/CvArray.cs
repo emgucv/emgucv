@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.IO.Compression;
 using zlib;
 
 namespace Emgu.CV
@@ -22,6 +23,22 @@ namespace Emgu.CV
 
         ///<summary> The pointer to the internal structure </summary>
         public new IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
+
+        private int _serializationCompressionRatio;
+
+        /// <summary>
+        /// Get or set the Compression Ratio for serialization. A number between 0 - 9. 
+        /// 0 means no compression at all, while 9 means best compression
+        /// </summary>
+        public int SerializationCompressionRatio
+        {
+            get { return _serializationCompressionRatio; }
+            set 
+            {
+                Debug.Assert(0 <= value && value <= 9, "Compression ratio must >=0 and <=9"); 
+                _serializationCompressionRatio = value; 
+            }
+        }
 
         #region properties
         ///<summary> 
@@ -54,14 +71,59 @@ namespace Emgu.CV
             get
             {
                 int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * ManagedArray.Length;
-                Byte[] res = new Byte[size];
-                Marshal.Copy(_dataHandle.AddrOfPinnedObject(), res, 0, size);
-                return res;
+                Byte[] data = new Byte[size];
+                Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
+
+                if (SerializationCompressionRatio == 0)
+                {
+                    return data;
+                }
+                else
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using(GZipStream  compressedStream = new GZipStream(ms , CompressionMode.Compress))
+                        //using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms, SerializationCompressionRatio))
+                        {
+                            compressedStream.Write(data, 0, data.Length);
+                            compressedStream.Flush();
+                        }
+                        return ms.ToArray();
+                    }
+                }
             }
             set
             {
+                Byte[] bytes;
                 int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * ManagedArray.Length;
-                Marshal.Copy(value, 0, _dataHandle.AddrOfPinnedObject(), size);
+
+                if (SerializationCompressionRatio == 0)
+                {
+                    bytes = value;
+                }
+                else
+                {   
+                    using (MemoryStream ms = new MemoryStream(value))
+                    {
+                        //ms.Position = 0;
+                        using (GZipStream stream = new GZipStream(ms, CompressionMode.Decompress))
+                        {
+                            bytes = new Byte[size];
+                            stream.Read(bytes, 0, size);
+                        }
+                    }
+                    /*
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (zlib.ZOutputStream stream = new zlib.ZOutputStream(ms))
+                        {
+                            stream.Write(value, 0, value.Length);
+                            bytes = ms.ToArray();
+                        }
+                    }*/
+                }
+
+                Marshal.Copy(bytes, 0, _dataHandle.AddrOfPinnedObject(), size);
             }
         }
 
@@ -76,39 +138,6 @@ namespace Emgu.CV
         /// <param name="rows">The number of rows</param>
         /// <param name="cols">The number of columns</param>
         protected abstract void AllocateData(int rows, int cols);
-
-        ///<summary>
-        ///The binary data in compressed format
-        ///</summary>
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Byte[] CompressedBytes
-        {
-            get
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    //GZipStream  compressedStream = new GZipStream(ms , CompressionMode.Compress);
-                    using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms, zlib.zlibConst.Z_BEST_COMPRESSION))
-                    {
-                        Byte[] data = Bytes;
-                        compressedStream.Write(data, 0, data.Length);
-                        compressedStream.Flush();
-                    }
-                    return ms.ToArray();
-                }
-            }
-            set
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms))
-                    {
-                        compressedStream.Write(value, 0, value.Length);
-                        Bytes = ms.ToArray();
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// sum of diagonal elements of the matrix 
@@ -373,21 +402,35 @@ namespace Emgu.CV
         public void ReadXml(System.Xml.XmlReader reader)
         {
             #region read the size of the matrix and assign storage
-            reader.MoveToFirstAttribute();
+            reader.MoveToAttribute("Rows");
             int rows = reader.ReadContentAsInt();
-            reader.MoveToNextAttribute();
+            reader.MoveToAttribute("Cols");
             int cols = reader.ReadContentAsInt();
-            //System.Xml.XmlNodeType type = 
-            reader.MoveToContent();
             AllocateData(rows, cols);
             #endregion
 
+            reader.MoveToAttribute("CompressionRatio");
+            SerializationCompressionRatio = reader.ReadContentAsInt();
+
             #region decode the data from Xml and assign the value to the matrix
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) *  ManagedArray.Length;
-            Byte[] bytes = new Byte[size];
+            reader.MoveToContent();
             reader.ReadToFollowing("Bytes");
-            reader.ReadElementContentAsBase64(bytes, 0, bytes.Length);
-            Bytes = bytes;
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) *  ManagedArray.Length;
+            if (SerializationCompressionRatio == 0)
+            {
+                Byte[] bytes = new Byte[size];
+                reader.ReadElementContentAsBase64(bytes, 0, bytes.Length);
+                Bytes = bytes;
+            }
+            else
+            {
+                int extraHeaderBytes = 20000;
+                Byte[] bytes = new Byte[size + extraHeaderBytes];
+                int countOfBytesRead = reader.ReadElementContentAsBase64(bytes, 0, bytes.Length);
+                Array.Resize<Byte>(ref bytes, countOfBytesRead);
+                Bytes = bytes;
+            }
+            //reader.MoveToElement();
             #endregion
         }
 
@@ -399,6 +442,8 @@ namespace Emgu.CV
         {
             writer.WriteAttributeString("Rows", Rows.ToString());
             writer.WriteAttributeString("Cols", Cols.ToString());
+            writer.WriteAttributeString("CompressionRatio", SerializationCompressionRatio.ToString());
+
             writer.WriteStartElement("Bytes");
             Byte[] bytes = Bytes;
             writer.WriteBase64(bytes, 0, bytes.Length);
@@ -416,7 +461,8 @@ namespace Emgu.CV
         {
             info.AddValue("Rows", Rows);
             info.AddValue("Cols", Cols);
-            info.AddValue("CompressedBinary", CompressedBytes);
+            info.AddValue("CompressionRatio", SerializationCompressionRatio);
+            info.AddValue("Bytes", Bytes);
         }
 
         /// <summary>
@@ -429,8 +475,8 @@ namespace Emgu.CV
             int rows = (int)info.GetValue("Rows", typeof(int));
             int cols = (int)info.GetValue("Cols", typeof(int));
             AllocateData(rows, cols);
-
-            CompressedBytes = (Byte[])info.GetValue("CompressedBinary", typeof(Byte[]));
+            SerializationCompressionRatio = (int)info.GetValue("CompressionRatio", typeof(int));
+            Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
         }
         #endregion
     }
