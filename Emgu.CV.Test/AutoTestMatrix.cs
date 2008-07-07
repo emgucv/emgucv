@@ -29,6 +29,15 @@ namespace Emgu.CV.Test
                 Assert.AreEqual(254.0, v);
         }
 
+        [Test]
+        public void TestCvInvoke()
+        {
+            IntPtr mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F);
+            CvInvoke.cvReleaseMat(ref mat);
+            mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.MAT_DEPTH.CV_32S);
+            CvInvoke.cvReleaseMat(ref mat);
+        }
+
         /// <summary>
         /// Test the matrix constructor that accepts a two dimensional array as input
         /// </summary>
