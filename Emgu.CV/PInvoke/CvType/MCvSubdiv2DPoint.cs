@@ -18,10 +18,11 @@ namespace Emgu.CV
         /// <summary>
         /// 
         /// </summary>
-        public long first;
+        public MCvSubdiv2DEdge first;
         /// <summary>
         /// 
         /// </summary>
         public MCvPoint2D32f pt;
+
     }
 }

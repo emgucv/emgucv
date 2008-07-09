@@ -9,9 +9,9 @@ namespace Emgu.CV
     /// A Map is similar to an Image, except that the location of the pixels is defined by 
     /// its area and resolution
     /// </summary>
-    /// <typeparam name="C">The color of this map</typeparam>
-    /// <typeparam name="D">The depth of this map</typeparam>
-    public class Map<C, D> : Image<C, D>  where C : ColorType, new() 
+    /// <typeparam name="TColor">The color of this map</typeparam>
+    /// <typeparam name="TDepth">The depth of this map</typeparam>
+    public class Map<TColor, TDepth> : Image<TColor, TDepth>  where TColor : ColorType, new() 
     {
         private Rectangle<double> _area;
 
@@ -22,7 +22,7 @@ namespace Emgu.CV
         /// <param name="area"></param>
         /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
         /// <param name="color"> The initial color of the map</param>
-        public Map(Rectangle<double> area, Point2D<double> resolution, C color)
+        public Map(Rectangle<double> area, Point2D<double> resolution, TColor color)
              : base(
                 System.Convert.ToInt32((area.Width) / resolution.X),
                 System.Convert.ToInt32((area.Height) / resolution.Y),
@@ -38,7 +38,7 @@ namespace Emgu.CV
         /// <param name="area"></param>
         /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
         public Map(Rectangle<double> area, Point2D<double> resolution)
-            : this(area, resolution, new C())
+            : this(area, resolution, new TColor())
         {
         }
 
@@ -47,7 +47,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="image">The image of this map</param>
         /// <param name="area">The area of this map</param>
-        public Map(Image<C, D> image, Rectangle<double> area)
+        public Map(Image<TColor, TDepth> image, Rectangle<double> area)
             : base(image.Width, image.Height)
         {
             image.Copy(this);
@@ -90,7 +90,7 @@ namespace Emgu.CV
         /// <param name="rect">The rectangle to draw</param>
         /// <param name="color">The color for the rectangle</param>
         /// <param name="thickness">The thickness of the rectangle, any value less than or equal to 0 will result in a filled rectangle</param>
-        public override void Draw<T>(Rectangle<T> rect, C color, int thickness) 
+        public override void Draw<T>(Rectangle<T> rect, TColor color, int thickness) 
         {
             double w = System.Convert.ToDouble(rect.Width);
             double h = System.Convert.ToDouble(rect.Height);
@@ -104,11 +104,45 @@ namespace Emgu.CV
         /// <param name="line">The line to be draw</param>
         /// <param name="color">The color for the line</param>
         /// <param name="thickness">The thickness of the line</param>
-        public override void Draw<T>(LineSegment2D<T> line, C color, int thickness) 
+        public override void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) 
         {
             Point2D<int> p1 = MapPoint<T>(line.P1).Convert<int>();
             Point2D<int> p2 = MapPoint<T>(line.P2).Convert<int>();
             base.Draw(new LineSegment2D<int>(p1, p2), color, thickness);
+        }
+
+        ///<summary> Draw a convex polygon of the specific color and thickness </summary>
+        ///<param name="polygon"> The convex polygon to be drawn</param>
+        ///<param name="color"> The color of the convex polygon </param>
+        ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
+        public override void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) 
+        {
+            MCvPoint[] pts = Array.ConvertAll<Point2D<T>, MCvPoint>(
+                polygon.Vertices,
+                delegate(Point2D<T> p)
+                {
+                    return MapPoint(p).MCvPoint;
+                });
+            if (thickness >= 0)
+                base.DrawPolyline(pts, true, color, thickness);
+            else
+                base.FillConvexPoly(pts, color);
+        }
+
+        /// <summary>
+        /// Draw the polyline defined by the array of 2D points
+        /// </summary>
+        /// <param name="pts">the points that defines the poly line</param>
+        /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
+        /// <param name="color">the color used for drawing</param>
+        /// <param name="thickness">the thinkness of the line</param>
+        public override void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness)
+        {
+            base.DrawPolyline<double>(
+                Array.ConvertAll<Point2D<T>, Point2D<double>>(pts, delegate(Point2D<T> p) { return MapPoint(p); }),
+                isClosed,
+                color,
+                thickness);
         }
 
         /// <summary>
@@ -117,17 +151,17 @@ namespace Emgu.CV
         /// <typeparam name="D2">The depth of the new Map</typeparam>
         /// <param name="converter">The converter that use the element from <i>this</i> map and the location of each pixel as input to compute the result</param>
         /// <returns> A new map where each element is obtained from converter</returns>
-        public Map<C, D2> Convert<D2>(Emgu.Utils.Func<D, double, double, D2> converter)
+        public Map<TColor, D2> Convert<D2>(Emgu.Utils.Func<TDepth, double, double, D2> converter)
         {
             double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Bottom;
 
-            Emgu.Utils.Func<D, int, int, D2> iconverter =
-                delegate(D data, int row, int col)
+            Emgu.Utils.Func<TDepth, int, int, D2> iconverter =
+                delegate(TDepth data, int row, int col)
                 {
                     //convert an int position to double position
                     return converter(data, col * rx + ox, row * ry + oy);
                 };
-            return new Map<C,D2>(base.Convert<D2>(iconverter), Area);
+            return new Map<TColor,D2>(base.Convert<D2>(iconverter), Area);
         }
     }
 }

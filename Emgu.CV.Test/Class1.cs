@@ -111,7 +111,7 @@ namespace Emgu.CV.Test
                 pts.Add(new Point2D<int>(x, y));
             }
 
-            Ellipse<float> e = PointCollection<int>.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
+            Ellipse<float> e = PointCollection.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
 
             img.Draw(e, new Gray(120.0), 1);
             Application.Run(new ImageViewer(img));
@@ -436,20 +436,27 @@ namespace Emgu.CV.Test
 
         public void TestDelaunay()
         {
-            DelaunayTriangulation dt = new DelaunayTriangulation(new Rectangle<double>(new Point2D<double>(20, 20), 40, 40));
-            dt.Insert(new MCvPoint2D32f(12, 11));
-            dt.Insert(new MCvPoint2D32f(22, 3));
-            dt.Insert(new MCvPoint2D32f(20, 32));
-            /*
-            Seq<MCvQuadEdge2D> res = dt.QuadEdges;
-            foreach (MCvQuadEdge2D qEdge in res)
+            Point2D<float>[] pts = new Point2D<float>[100];
+            float max = 600;
+            //Random r = new Random(312421);
+            Random r = new Random((int) (DateTime.Now.Ticks & 0x0000ffff));
+
+            for (int i = 0; i < pts.Length; i++)
+                pts[i] = new Point2D<float>( (float)r.NextDouble()*max, (float) r.NextDouble() * max);
+
+            DateTime t1 = DateTime.Now;
+            Triangle<float>[] triangles =  DelaunayTriangulation.Triangulate(pts);
+            TimeSpan ts = DateTime.Now.Subtract(t1);
+            Trace.WriteLine(ts.TotalMilliseconds);
+
+            Image<Gray, Byte> img = new Image<Gray, byte>( 600, 600);
+
+            foreach (Triangle<float> t in triangles)
             {
-                string str = qEdge.ToString();
-                MCvSubdiv2DEdge edge = qEdge.next[0];
-                MCvSubdiv2DPoint pOrg = edge.cvSubdiv2DEdgeOrg();
-                MCvSubdiv2DPoint pDst = edge.cvSubdiv2DEdgeDst();
-            }*/
-            dt.QuadEdges();
+                img.Draw(t, new Gray(80), 0);
+                img.Draw(t, new Gray(255.0), 1);
+            }
+            Application.Run(new ImageViewer(img));
         }
 
         public void TestContour()
@@ -470,13 +477,30 @@ namespace Emgu.CV.Test
                 {
                     MCvPoint[] vertices = approx.ToArray();
 
-                    LineSegment2D<int>[] edges = PointCollection<int>.PolyLine(vertices);
+                    LineSegment2D<int>[] edges = PointCollection.PolyLine<int>(vertices, true);
 
                     res.DrawPolyline(vertices, true, new Gray(200), 1);
                 }
                 contour = contour.HNext;
             }
             Application.Run(new ImageViewer(res));
+        }
+
+        private void Testmap()
+        {
+            Map<Gray, Byte> map = new Map<Gray, byte>(new Rectangle<double>(new Point2D<double>(0.0, 0.0), 10000, 12000), new Point2D<double>(100, 100));
+            Point2D<float>[] pts = new Point2D<float>[]
+            {
+                new Point2D<float>(3120, 2310),
+                new Point2D<float>(-220, -4120)
+            };
+            map.DrawPolyline<float>(pts, false, new Gray(255.0), 1);
+            Triangle<float> tri = new Triangle<float>(
+                new Point2D<float>(-1000.0f, 200.0f),
+                new Point2D<float>(-3000.0f, 200.0f),
+                new Point2D<float>(700f, 800.0f));
+            map.Draw(tri, new Gray(255), 1);
+            Application.Run(new Emgu.CV.UI.ImageViewer(map));
         }
     }
 }

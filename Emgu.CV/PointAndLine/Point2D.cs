@@ -101,6 +101,21 @@ namespace Emgu.CV
         {
             return point.MCvPoint;
         }
+
+        /// <summary>
+        /// Determine if the point is in a convex polygon
+        /// </summary>
+        /// <param name="polygon">the convex polygon</param>
+        /// <returns>true if the point is in the convex polygon; false otherwise </returns>
+        public bool InConvexPolygon(IConvexPolygon<T> polygon)
+        {
+            LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon.Vertices, true);
+            int side = edges[0].Side(this);
+            bool inside = true;
+            for (int i = 1; i < edges.Length; i++)
+                inside = (inside && (side == edges[i].Side(this)));
+            return inside;
+        }
     };
 
 }

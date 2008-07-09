@@ -47,5 +47,21 @@ namespace Emgu.CV
         {            
             CvInvoke.cvUseOptimized(enable? 1:0);
         }
+
+        /// <summary>
+        /// Determine if a small convex polygon is inside a larger convex polygon
+        /// </summary>
+        /// <typeparam name="T">The type of the depth</typeparam>
+        /// <param name="smallPolygon">the smaller polygon</param>
+        /// <param name="largePolygon">the larger polygon</param>
+        /// <returns>
+        /// true if the small convex polygon is inside the larger convex polygon;
+        /// false otherwise.
+        /// </returns>
+        public static bool IsConvexPolygonInConvexPolygon<T>(IConvexPolygon<T> smallPolygon, IConvexPolygon<T> largePolygon) where T : IComparable, new()
+        {
+            Point2D<T>[] vertices = smallPolygon.Vertices;
+            return Array.TrueForAll<Point2D<T>>(vertices, delegate(Point2D<T> v) { return v.InConvexPolygon(largePolygon); });
+        }
     }
 }

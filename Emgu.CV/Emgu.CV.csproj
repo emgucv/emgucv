@@ -14,6 +14,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>CV.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -105,6 +107,8 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
     <Compile Include="Shape\Cross2D.cs" />
+    <Compile Include="Shape\IConvexPolygon.cs" />
+    <Compile Include="Shape\Triangle.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -220,6 +224,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CV.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

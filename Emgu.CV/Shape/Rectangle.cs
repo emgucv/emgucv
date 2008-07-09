@@ -8,7 +8,7 @@ namespace Emgu.CV
 {
     ///<summary> A rectangle </summary>
     [Serializable]
-    public class Rectangle<T> : Point2D<T> where T : IComparable, new()
+    public class Rectangle<T> : Point2D<T>, IConvexPolygon<T> where T : IComparable, new()
     {
         /// <summary>
         /// The size: width &amp; height
@@ -41,7 +41,9 @@ namespace Emgu.CV
             _size = new Point2D<T>(width, height);
         }
 
-        ///<summary> Create a rectangle with the specific left, right, top bottom corrdinates</summary>
+        /// <summary> 
+        /// Create a rectangle with the specific left, right, top bottom corrdinates
+        /// </summary>
         public Rectangle(T left, T right, T top, T bottom)
         {
             _coordinate = new T[2] { 
@@ -54,7 +56,9 @@ namespace Emgu.CV
                 );
         }
 
-        ///<summary> Create a rectangle from a CvRect structure </summary>
+        ///<summary> 
+        /// Create a rectangle from a CvRect structure 
+        ///</summary>
         public Rectangle(MCvRect rect)
             : this()
         {
@@ -78,7 +82,6 @@ namespace Emgu.CV
         /// </summary>
         public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
 
-        
         /// <summary>
         /// The Size (width and height) of this rectangle
         /// </summary>
@@ -97,7 +100,7 @@ namespace Emgu.CV
             set { _coordinate = value.Coordinate; }
         }
 
-        ///<summary> The width of the rectangle </summary>
+        ///<summary> Get or Set the width of the rectangle </summary>
         [XmlAttribute("Width")]
         public T Width 
         { 
@@ -111,7 +114,7 @@ namespace Emgu.CV
             }
         }
         
-        ///<summary> The height of the rectangle </summary> 
+        ///<summary> Get or Set the height of the rectangle </summary> 
         [XmlAttribute("Height")]
         public T Height 
         { 
@@ -162,7 +165,6 @@ namespace Emgu.CV
             }
         }
 
-
         /// <summary>
         /// Compare two rectangle, if equal, return true, otherwise return false
         /// </summary>
@@ -172,5 +174,28 @@ namespace Emgu.CV
         {
             return base.Equals(rec) && Width.Equals(rec.Width) && Height.Equals(rec.Height);
         }
+
+        /// <summary>
+        /// Convert the current rectangle to different depth
+        /// </summary>
+        /// <typeparam name="T2">the depth type to convert to</typeparam>
+        /// <returns>The current rectangle in different depth</returns>
+        public new Rectangle<T2> Convert<T2>() where T2 : IComparable, new()
+        {
+            return new Rectangle<T2>(Center.Convert<T2>(), Size.Convert<T2>());
+        }
+
+        #region IConvexPolygon<T> Members
+        /// <summary>
+        /// Get the vertices of this triangle
+        /// </summary>
+        public Point2D<T>[] Vertices
+        {
+            get 
+            {
+                return new Point2D<T>[] { TopLeft, TopRight, BottomRight, BottomLeft };
+            }
+        }
+        #endregion
     };
 }

@@ -7,10 +7,8 @@ using System.Diagnostics;
 namespace Emgu.CV
 {
     ///<summary> 
-    /// Class Histogram 
+    /// Histogram 
     ///</summary>
-    ///<remarks><B>This is a Beta version</B></remarks>
-    //TODO: Improve the histogram class
     public class Histogram : UnmanagedObject
     {
         private int _dimension;
@@ -64,25 +62,25 @@ namespace Emgu.CV
         /// Project the images to the histogram bins 
         ///</summary>
         ///<param name="imgs">image to project</param>
-        public void Accumulate<D>(Image<Gray, D>[] imgs)
+        public void Accumulate<TDepth>(Image<Gray, TDepth>[] imgs)
         {
-            Accumulate<D>(imgs, null);
+            Accumulate<TDepth>(imgs, null);
         }
 
         /// <summary>
         /// Project the images to the histogram bins 
         /// </summary>
-        /// <typeparam name="D">The depth of the image</typeparam>
+        /// <typeparam name="TDepth">The type of depth of the image</typeparam>
         /// <param name="imgs">image to project</param>
         /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
-        public void Accumulate<D>(Image<Gray, D>[] imgs, Image<Gray, Byte> mask)
+        public void Accumulate<TDepth>(Image<Gray, TDepth>[] imgs, Image<Gray, Byte> mask)
         {
             Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs =
-                System.Array.ConvertAll<Image<Gray, D>, IntPtr>(
+                System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
                     imgs,
-                    delegate(Image<Gray, D> img) { return img.Ptr; });
+                    delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
             IntPtr maskPtr = mask == null ? IntPtr.Zero : mask.Ptr;
 
@@ -106,16 +104,16 @@ namespace Emgu.CV
         ///<summary> 
         /// Back project the histogram into an gray scale image
         ///</summary>
-        public Image<Gray, D> BackProject<D>(Image<Gray, D>[] srcs)
+        public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs)
         {
             Debug.Assert(srcs.Length == _dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
-                System.Array.ConvertAll<Image<Gray,D>, IntPtr>(
+                System.Array.ConvertAll<Image<Gray,TDepth>, IntPtr>(
                     srcs, 
-                    delegate(Image<Gray, D> img) { return img.Ptr; });
+                    delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
-            Image<Gray, D> res = srcs[0].BlankClone();
+            Image<Gray, TDepth> res = srcs[0].BlankClone();
             CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
             return res;
         }
@@ -149,10 +147,13 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// The number of dimensions for the histogram
+        /// Get the number of dimensions for the histogram
         /// </summary>
         public int Dimension { get { return _dimension; } }
 
+        /// <summary>
+        /// Get the size of the bins
+        /// </summary>
         public int[] BinSize { get { return _binSize; } }
 
         /// <summary>

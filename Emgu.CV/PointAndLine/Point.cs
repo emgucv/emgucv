@@ -263,12 +263,12 @@ namespace Emgu.CV
         /// <summary>
         /// Compare if the two point have equal dimension and value, if so, return true, otherwise, false
         /// </summary>
-        /// <param name="p2">The other point to compare with</param>
+        /// <param name="other">The other point to compare with</param>
         /// <returns>true if the two points equal, false otherwise</returns>
-        public bool Equals(Point<T> p2)
+        public bool Equals(Point<T> other)
         {
             T[] coor1 = Coordinate;
-            T[] coor2 = p2.Coordinate;
+            T[] coor2 = other.Coordinate;
             if (coor1.Length != coor2.Length) return false;
             for (int i = 0; i < coor1.Length; i++)
             {

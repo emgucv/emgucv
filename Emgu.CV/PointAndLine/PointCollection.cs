@@ -10,12 +10,12 @@ namespace Emgu.CV
     /// <summary>
     /// A collection of points
     /// </summary>
-    public class PointCollection<D> where D:IComparable, new()
+    public static class PointCollection
     {
         /// <summary>
         /// A comparator which compares only the X value of the point
         /// </summary>
-        private class XValueOfPointComparator : IComparer<Point<D>>
+        private class XValueOfPointComparator<D> : IComparer<Point<D>> where D : IComparable, new()
         {
             public int Compare(Point<D> p1, Point<D> p2)
             {
@@ -24,19 +24,15 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// A comparator for used in the indexor
-        /// </summary>
-        private static XValueOfPointComparator _xValueOfPointComparator = new XValueOfPointComparator();
-
-        /// <summary>
         /// Perform a first degree interpolation to lookup the y coordinate given the x coordinate
         /// </summary>
         /// <param name="points">The collection of points</param>
         /// <param name="index">the x coordinate</param>
         /// <returns>the y coordinate as the result of the first degree interpolation</returns>
-        public static D FirstDegreeInterpolate(Point2D<D>[] points, D index)
+        public static D FirstDegreeInterpolate<D>(Point2D<D>[] points, D index) where D : IComparable, new()
         {
-            int idx = System.Array.BinarySearch<Point<D>>( (Point<D>[]) points, (Point<D>) new Point2D<D>(index, new D()), _xValueOfPointComparator);
+            XValueOfPointComparator<D> comparator = new XValueOfPointComparator<D>();
+            int idx = System.Array.BinarySearch<Point<D>>((Point<D>[])points, (Point<D>)new Point2D<D>(index, new D()), comparator);
             if (idx >= 0)
             {   // an exact index is matched
                 return points[idx].Y;
@@ -68,7 +64,7 @@ namespace Emgu.CV
         /// <param name="points">The collection of points</param>
         /// <param name="indexes">the x coordinates</param>
         /// <returns>the y coordinates as the result of the first degree interpolation</returns>
-        public static D[] FirstDegreeInterpolate(Point2D<D>[] points, D[] indexes)
+        public static D[] FirstDegreeInterpolate<D>(Point2D<D>[] points, D[] indexes) where D : IComparable, new()
         {
             return System.Array.ConvertAll<D, D>(
                 indexes,
@@ -81,7 +77,7 @@ namespace Emgu.CV
         /// <param name="stor">The sotrage</param>
         /// <param name="points">The points to be converted to sequence</param>
         /// <returns>A pointer to the sequence</returns>
-        public static Seq<MCvPoint2D32f> To2D32fSequence(MemStorage stor, IEnumerable<Point<D>> points)
+        public static Seq<MCvPoint2D32f> To2D32fSequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : IComparable, new()
         {
             Seq<MCvPoint2D32f> seq = new Seq<MCvPoint2D32f>(
                 CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
@@ -115,7 +111,7 @@ namespace Emgu.CV
         /// <param name="stor">The sotrage</param>
         /// <param name="points">The points to be converted to sequence</param>
         /// <returns>A pointer to the sequence</returns>
-        public Seq<MCvPoint3D32f> To3D32Sequence(MemStorage stor, IEnumerable<Point<D>> points)
+        public static Seq<MCvPoint3D32f> To3D32Sequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : IComparable, new()
         {
             Seq<MCvPoint3D32f> seq = new Seq<MCvPoint3D32f>(
                 CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 3),
@@ -148,7 +144,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="points">The points which will be converted to matrix</param>
         /// <returns>the matrix representing the collection of points</returns>
-        public static Matrix<D> ToMatrix(IEnumerable< Point<D> > points)
+        public static Matrix<D> ToMatrix<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
         {
             List<D[]> pts = new List<D[]>();
             foreach (Point<D> pt in points)
@@ -158,12 +154,12 @@ namespace Emgu.CV
             int rows = pts.Count;
             int cols = pts[0].Length;
 
-            D[,] array = new D[rows,cols];
+            D[,] array = new D[rows, cols];
             for (int i = 0; i <= rows; i++)
                 for (int j = 0; j <= cols; j++)
                     array[i, j] = pts[i][j];
 
-            return  new Matrix<D>(array);
+            return new Matrix<D>(array);
         }
 
         /// <summary>
@@ -172,7 +168,7 @@ namespace Emgu.CV
         /// <param name="points">The points to be fitted</param>
         /// <param name="type">The type of the fitting</param>
         /// <returns>A 2D line</returns>
-        public static Line2D<float> Line2DFitting(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type)
+        public static Line2D<float> Line2DFitting<D>(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type) where D : IComparable, new()
         {
             float[] data = new float[6];
             using (MemStorage stor = new MemStorage())
@@ -189,7 +185,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="points">The points to be fitted</param>
         /// <returns>An ellipse</returns>
-        public static Ellipse<float> LeastSquareEllipseFitting(IEnumerable<Point<D>> points)
+        public static Ellipse<float> LeastSquareEllipseFitting<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
         {
             Ellipse<float> res = new Ellipse<float>();
             using (MemStorage stor = new MemStorage())
@@ -200,20 +196,44 @@ namespace Emgu.CV
             return res;
         }
 
-        public static LineSegment2D<D>[] PolyLine(Point2D<D>[] points)
+        /// <summary>
+        /// convert a series of points to LineSegment2D
+        /// </summary>
+        /// <typeparam name="D">the depth of the point</typeparam>
+        /// <param name="points">the array of points</param>
+        /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
+        /// <returns>array of LineSegment2D</returns>
+        public static LineSegment2D<D>[] PolyLine<D>(Point2D<D>[] points, bool closed) where D : IComparable, new()
         {
-            LineSegment2D<D>[] res = new LineSegment2D<D>[points.Length];
-            int length = points.Length;
-            for (int i = 0; i < points.Length; i++)
+            LineSegment2D<D>[] res;
+            if (closed)
             {
-                res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
+                int length = points.Length;
+                res = new LineSegment2D<D>[length];
+                for (int i = 0; i < length; i++)
+                    res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
+            }
+            else
+            {
+                res = new LineSegment2D<D>[points.Length - 1];
+                for (int i = 0; i < points.Length - 1; i++)
+                    res[i] = new LineSegment2D<D>(points[i], points[(i + 1)]);
             }
             return res;
         }
 
-        public static LineSegment2D<D>[] PolyLine(MCvPoint[] points)
+        /// <summary>
+        /// convert a series of MCvPoint to LineSegment2D
+        /// </summary>
+        /// <typeparam name="D">the depth of the point</typeparam>
+        /// <param name="points">the array of points</param>
+        /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
+        /// <returns>array of LineSegment2D</returns>
+        public static LineSegment2D<D>[] PolyLine<D>(MCvPoint[] points, bool closed) where D : IComparable, new()
         {
-            return PolyLine(Array.ConvertAll<MCvPoint, Point2D<D>>(points, delegate(MCvPoint p) { Point2D<D> p2d =  new Point2D<D>(); p2d.MCvPoint = p; return p2d;}));
+            return PolyLine(
+                Array.ConvertAll<MCvPoint, Point2D<D>>(points, delegate(MCvPoint p) { Point2D<D> p2d = new Point2D<D>(); p2d.MCvPoint = p; return p2d; }),
+                closed);
         }
     };
 }

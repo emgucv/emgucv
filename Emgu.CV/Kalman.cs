@@ -8,6 +8,7 @@ namespace Emgu.CV
     /// <summary>
     /// A Kalman filter object
     /// </summary>
+    /// <remarks>Beta: Non working version</remarks>
     public class Kalman : UnmanagedObject
     {
         /// <summary>

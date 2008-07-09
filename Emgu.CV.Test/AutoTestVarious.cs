@@ -44,8 +44,8 @@ namespace Emgu.CV.Test
             for (int i = 0; i < pts.Length; i++)
                 pts[i] = new Point2D<double>(b[i], a[i]);
 
-            Assert.AreEqual(2.5, PointCollection<double>.FirstDegreeInterpolate(pts, 1.5));
-            Assert.AreEqual(-1, PointCollection<double>.FirstDegreeInterpolate(pts, 3.5));
+            Assert.AreEqual(2.5, PointCollection.FirstDegreeInterpolate(pts, 1.5));
+            Assert.AreEqual(-1, PointCollection.FirstDegreeInterpolate(pts, 3.5));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Emgu.CV.Test
             pts.Add(new Point2D<float>(3.0f, 3.0f));
             pts.Add(new Point2D<float>(4.0f, 4.0f));
 
-            Line2D<float> res = PointCollection<float>.Line2DFitting((IEnumerable<Point<float>>)pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
+            Line2D<float> res = PointCollection.Line2DFitting((IEnumerable<Point<float>>)pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
 
             //check if the line is 45 degree from +x axis
             Assert.AreEqual(45.0, res.Direction.PointDegreeAngle);
@@ -222,6 +222,26 @@ namespace Emgu.CV.Test
                 }
             }
             #endregion
+        }
+        [Test]
+        public void TestPointInPolygon()
+        {
+            Triangle<float> tri = new Triangle<float>(
+                new Point2D<float>(-10, -10),
+                new Point2D<float>(0, 10),
+                new Point2D<float>(10, -10));
+
+            Rectangle<float> rect = new Rectangle<float>(
+                new Point2D<float>(0.0f, 0.0f),
+                10f, 10f);
+
+            Point2D<float> p1 = new Point2D<float>(0, 0);
+            Point2D<float> p2 = new Point2D<float>(-20, -20);
+            
+            Assert.IsTrue(p1.InConvexPolygon(tri));
+            Assert.IsTrue(p1.InConvexPolygon(rect));
+            Assert.IsFalse(p2.InConvexPolygon(tri));
+            Assert.IsFalse(p2.InConvexPolygon(rect));
         }
     }
 }

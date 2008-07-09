@@ -25,8 +25,8 @@ namespace Emgu.CV
             Matrix<float> translation = new Matrix<float>(3, 1);
             RotationVector rotation = new RotationVector();
 
-            Matrix<float> objectPointMatrix = PointCollection<float>.ToMatrix((IEnumerable<Point<float>>)objectPoints);
-            Matrix<float> imagePointMatrix = PointCollection<float>.ToMatrix((IEnumerable<Point<float>>)imagePoints);
+            Matrix<float> objectPointMatrix = PointCollection.ToMatrix((IEnumerable<Point<float>>)objectPoints);
+            Matrix<float> imagePointMatrix = PointCollection.ToMatrix((IEnumerable<Point<float>>)imagePoints);
 
             CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix.Ptr, imagePointMatrix.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
 
@@ -69,7 +69,7 @@ namespace Emgu.CV
             params Matrix<float>[] mats)
         {
             Matrix<float> res = new Matrix<float>(objectPoints.Length, 2);
-            Matrix<float> pointMatrix = PointCollection<float>.ToMatrix( (IEnumerable<Point<float>>) objectPoints );
+            Matrix<float> pointMatrix = PointCollection.ToMatrix( (IEnumerable<Point<float>>) objectPoints );
             IntPtr dpdrot = mats.Length > 0 ? mats[0].Ptr : IntPtr.Zero;
             IntPtr dpdt = mats.Length > 1 ? mats[1].Ptr : IntPtr.Zero;
             IntPtr dpdf = mats.Length > 2 ? mats[2].Ptr : IntPtr.Zero;

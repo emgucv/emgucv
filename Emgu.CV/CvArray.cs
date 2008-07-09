@@ -14,7 +14,7 @@ namespace Emgu.CV
     ///<summary>
     ///The Array class that wrap around CvArr in OpenCV
     ///</summary>
-    public abstract class CvArray<D> : UnmanagedObject, IXmlSerializable, ISerializable
+    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// The pinned GcHandle to _array;
@@ -70,7 +70,7 @@ namespace Emgu.CV
         {
             get
             {
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * ManagedArray.Length;
+                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
                 Byte[] data = new Byte[size];
                 Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
 
@@ -95,7 +95,7 @@ namespace Emgu.CV
             set
             {
                 Byte[] bytes;
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * ManagedArray.Length;
+                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
 
                 if (SerializationCompressionRatio == 0)
                 {
@@ -171,7 +171,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src2">The other Array to apply dot product with</param>
         /// <returns>src1•src2</returns>
-        public double DotProduct(CvArray<D> src2)
+        public double DotProduct(CvArray<TDepth> src2)
         {
             return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
         }
@@ -181,7 +181,7 @@ namespace Emgu.CV
         /// Copy the current array to <paramref name="dest"/>
         /// </summary>
         /// <param name="dest"> The destination Array</param>
-        public void Copy(CvArray<D> dest)
+        public void Copy(CvArray<TDepth> dest)
         {
             CvInvoke.cvCopy(Ptr, dest.Ptr, IntPtr.Zero);
         }
@@ -289,7 +289,7 @@ namespace Emgu.CV
         /// Inplace elementwise multiply the current Array with <paramref name="src2"/>
         /// </summary>
         /// <param name="src2">The other array to be elementwise multiplied with</param>
-        public void _Mul(CvArray<D> src2)
+        public void _Mul(CvArray<TDepth> src2)
         {
             CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
         }
@@ -320,7 +320,7 @@ namespace Emgu.CV
         /// Inplace elementwise minimize the current Array with <paramref name="src2"/>
         /// </summary>
         /// <param name="src2">The other array to be elementwise minimized with this array</param>
-        public void _Min(CvArray<D> src2)
+        public void _Min(CvArray<TDepth> src2)
         {
             CvInvoke.cvMin(Ptr, src2.Ptr, Ptr);
         }
@@ -338,7 +338,7 @@ namespace Emgu.CV
         /// Inplace elementwise maximize the current Array with <paramref name="src2"/>
         /// </summary>
         /// <param name="src2">The other array to be elementwise maximized with this array</param>
-        public void _Max(CvArray<D> src2)
+        public void _Max(CvArray<TDepth> src2)
         {
             CvInvoke.cvMax(Ptr, src2.Ptr, Ptr);
         }
@@ -360,7 +360,7 @@ namespace Emgu.CV
         /// Inplace And operation with <paramref name="src2"/>
         /// </summary>
         /// <param name="src2">The other array to perform And operation</param>
-        public void _And(CvArray<D> src2)
+        public void _And(CvArray<TDepth> src2)
         {
             CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
         }
@@ -369,7 +369,7 @@ namespace Emgu.CV
         /// Inplace Or operation with <paramref name="src2"/>
         /// </summary>
         /// <param name="src2">The other array to perform And operation</param>
-        public void _Or(CvArray<D> src2)
+        public void _Or(CvArray<TDepth> src2)
         {
             CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
         }
@@ -415,7 +415,7 @@ namespace Emgu.CV
             #region decode the data from Xml and assign the value to the matrix
             reader.MoveToContent();
             reader.ReadToFollowing("Bytes");
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) *  ManagedArray.Length;
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) *  ManagedArray.Length;
             if (SerializationCompressionRatio == 0)
             {
                 Byte[] bytes = new Byte[size];

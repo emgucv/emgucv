@@ -12,9 +12,9 @@ namespace Emgu.CV
     /// The Matrix class that wrap around CvMat in OpenCV 
     /// </summary>
     [Serializable]
-    public class Matrix<D> : CvArray<D>, IEquatable<Matrix<D>> where D : new()
+    public class Matrix<TDepth> : CvArray<TDepth>, IEquatable<Matrix<TDepth>> where TDepth : new()
     {
-        private D[,] _array;
+        private TDepth[,] _array;
 
         #region Constructors
         /// <summary>
@@ -37,7 +37,7 @@ namespace Emgu.CV
         /// <summary> 
         /// Create a matrix using the specific <paramref>data</paramref>
         /// </summary>
-        public Matrix(D[,] data)
+        public Matrix(TDepth[,] data)
         {
             Data = data;
         }
@@ -46,9 +46,9 @@ namespace Emgu.CV
         /// Create a matrix using the specific <paramref name="data"/>
         /// </summary>
         /// <param name="data">the data for this matrix</param>
-        public Matrix(D[] data)
+        public Matrix(TDepth[] data)
         {
-            D[,] mat = new D[data.Length, 1];
+            TDepth[,] mat = new TDepth[data.Length, 1];
             for (int i = 0; i < data.Length; i++)
                 mat[i, 0] = data[i];
             Data = mat;
@@ -61,9 +61,9 @@ namespace Emgu.CV
         {
             get
             {
-                if (typeof(D) == typeof(float))
+                if (typeof(TDepth) == typeof(float))
                     return CvEnum.MAT_DEPTH.CV_32F;
-                else if (typeof(D) == typeof(Byte))
+                else if (typeof(TDepth) == typeof(Byte))
                     return CvEnum.MAT_DEPTH.CV_8U;
                 else
                 {
@@ -89,7 +89,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get or Set the data for this matrix
         /// </summary>
-        public D[,] Data
+        public TDepth[,] Data
         {
             get
             {
@@ -149,15 +149,15 @@ namespace Emgu.CV
         /// Return a matrix of the same size with all elements equals 0
         /// </summary>
         /// <returns>A matrix of the same size with all elements equals 0</returns>
-        public Matrix<D> BlankClone()
+        public Matrix<TDepth> BlankClone()
         {
-            return new Matrix<D>(Rows, Cols);
+            return new Matrix<TDepth>(Rows, Cols);
         }
 
         ///<summary> Returns the transpose of this matrix</summary>
-        public Matrix<D> Transpose()
+        public Matrix<TDepth> Transpose()
         {
-            Matrix<D> res = new Matrix<D>(Cols, Rows);
+            Matrix<TDepth> res = new Matrix<TDepth>(Cols, Rows);
             CvInvoke.cvTranspose(_ptr, res._ptr);
             return res;
         }
@@ -168,11 +168,11 @@ namespace Emgu.CV
         /// <param name="row">the row of the element</param>
         /// <param name="col">the col of the element</param>
         /// <returns></returns>
-        public D this[int row, int col]
+        public TDepth this[int row, int col]
         {
             get
             {
-                return (D) System.Convert.ChangeType( CvInvoke.cvGetReal2D(Ptr, row, col) , typeof(D));
+                return (TDepth) System.Convert.ChangeType( CvInvoke.cvGetReal2D(Ptr, row, col) , typeof(TDepth));
             }
             set
             {
@@ -187,7 +187,7 @@ namespace Emgu.CV
         /// <param name="cols">The number of columns</param>
         protected override void AllocateData(int rows, int cols)
         {
-            Data = new D[rows, cols];
+            Data = new TDepth[rows, cols];
         }
 
         #region Implement ISerializable interface
@@ -226,7 +226,7 @@ namespace Emgu.CV
         /// <param name="mat2">the other matrix to compare with</param>
         /// <param name="type">comparison type</param>
         /// <returns>The comparison mask</returns>
-        public Matrix<Byte> Cmp(Matrix<D> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
+        public Matrix<Byte> Cmp(Matrix<TDepth> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
         {
             Matrix<Byte> res = new Matrix<Byte>(Rows, Cols);
             CvInvoke.cvCmp(Ptr, mat2.Ptr, res.Ptr, type);
@@ -238,7 +238,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="mat2">The other matrix to compare with</param>
         /// <returns>true if every element of this matrix equals elements in <paramref name="mat2"/></returns>
-        public bool Equals(Matrix<D> mat2)
+        public bool Equals(Matrix<TDepth> mat2)
         {
             if (!EqualSize(mat2)) return false;
 

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Wrapper CvSet structure
+    /// </summary>
     public struct MCvSet
     {
         ///<summary>

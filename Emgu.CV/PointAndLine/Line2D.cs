@@ -56,5 +56,25 @@ namespace Emgu.CV
             Point2D<double> dir = Direction;
             return (T)System.Convert.ChangeType((System.Convert.ToDouble(x) - p1.X) / dir.X * dir.Y + p1.Y, typeof(T));
         }
+
+        /// <summary>
+        /// Determin which side of the line the 2D point is at
+        /// </summary>
+        /// <param name="point">the point</param>
+        /// <returns>
+        /// 1 if on the right hand side;
+        /// 0 if on the line;
+        /// -1 if on the left hand side;
+        /// </returns>
+        public int Side(Point2D<T> point)
+        {
+            Point2D<double> p1 = P1.Convert<double>();
+            Point2D<double> p2 = P2.Convert<double>();
+            Point2D<double> p = point.Convert<double>();
+            double res = (p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y);
+            if (res > 0.0) return 1;
+            else if (res < 0.0) return -1;
+            else return 0;
+        }
     };
 }
