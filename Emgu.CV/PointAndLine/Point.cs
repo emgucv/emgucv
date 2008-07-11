@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
-
 namespace Emgu.CV
 {
     ///<summary> A multi dimension point</summary>
@@ -58,17 +57,17 @@ namespace Emgu.CV
         /// <summary>
         /// Perform a generic operation between two points and return the result
         /// </summary>
-        /// <typeparam name="T2">The type of the second point</typeparam>
-        /// <typeparam name="T3">The type of the resulting point</typeparam>
+        /// <typeparam name="TOther2">The type of the second point</typeparam>
+        /// <typeparam name="TOther3">The type of the resulting point</typeparam>
         /// <param name="p2">The second point to apply generic operation</param>
         /// <param name="convertor">The generic operator</param>
         /// <returns>The result of the generic operation</returns>
-        public Point<T3> Convert<T2, T3>(Point<T2> p2, Emgu.Utils.Func<T, T2, T3> convertor)
-            where T3 : IComparable, new()
-            where T2 : IComparable, new()
+        public Point<TOther3> Convert<TOther2, TOther3>(Point<TOther2> p2, Emgu.Utils.Func<T, TOther2, TOther3> convertor)
+            where TOther3 : IComparable, new()
+            where TOther2 : IComparable, new()
         {
             int d = Dimension;
-            Point<T3> res = new Point<T3>(d);
+            Point<TOther3> res = new Point<TOther3>(d);
             for (int i = 0; i < d; i++)
             {
                 res[i] = convertor(this[i], p2[i]);
@@ -107,11 +106,11 @@ namespace Emgu.CV
         /// <summary>
         /// Perform a generic operation between two points and store the result in the first point
         /// </summary>
-        /// <typeparam name="T2">The type of the second point</typeparam>
+        /// <typeparam name="TOther">The type of the second point</typeparam>
         /// <param name="p2">The second point to apply generic operation</param>
         /// <param name="convertor">The generic operator</param>
-        public void _Convert<T2>(Point<T2> p2, Emgu.Utils.Func<T, T2, T> convertor)
-            where T2: IComparable, new ()
+        public void _Convert<TOther>(Point<TOther> p2, Emgu.Utils.Func<T, TOther, T> convertor)
+            where TOther: IComparable, new ()
         {
             for (int i = 0; i < _coordinate.Length; i++)
                 _coordinate[i] = convertor(_coordinate[i], p2[i]);
@@ -123,12 +122,12 @@ namespace Emgu.CV
         ///<seealso cref="operator-"></seealso>
         ///<param name="other"> The other point to be added to <i>this</i></param> 
         ///<returns>The sum of the two point</returns>
-        public Point<T> Sub<T2>(Point<T2> other)
-            where T2: IComparable, new()
+        public Point<T> Sub<TOther>(Point<TOther> other)
+            where TOther: IComparable, new()
         {
-            return Convert<T2, T>(
+            return Convert<TOther, T>(
                 other,
-                delegate(T v1, T2 v2)
+                delegate(T v1, TOther v2)
                 {
                     return (T)System.Convert.ChangeType(System.Convert.ToDouble(v1) - System.Convert.ToDouble(v2), typeof(T));
                 });
@@ -137,14 +136,14 @@ namespace Emgu.CV
         /// <summary>
         /// Subtract <paramref name="other"/> from the current point
         /// </summary>
-        /// <typeparam name="T2">The type of the point to be substracted</typeparam>
+        /// <typeparam name="TOther">The type of the point to be substracted</typeparam>
         /// <param name="other">The point to be substracted</param>
-        public void _Sub<T2>(Point<T2> other)
-            where T2 : IComparable, new()
+        public void _Sub<TOther>(Point<TOther> other)
+            where TOther : IComparable, new()
         {
-            _Convert<T2>(
+            _Convert<TOther>(
                 other,
-                delegate(T v1, T2 v2)
+                delegate(T v1, TOther v2)
                 {
                     return (T)System.Convert.ChangeType(System.Convert.ToDouble(v1) - System.Convert.ToDouble(v2), typeof(T));
                 });
@@ -162,12 +161,12 @@ namespace Emgu.CV
 
         ///<summary> Sum the current point with another point and returns the result</summary>
         ///<seealso cref="operator+"></seealso>
-        public Point<T> Add<T2>(Point<T2> other)
-            where T2: IComparable, new()
+        public Point<T> Add<TOther>(Point<TOther> other)
+            where TOther: IComparable, new()
         {
-            return Convert<T2, T>(
+            return Convert<TOther, T>(
                 other,
-                delegate(T v1, T2 v2)
+                delegate(T v1, TOther v2)
                 {
                     return (T)System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T));
                 });
@@ -177,12 +176,12 @@ namespace Emgu.CV
         /// An the other point to the current point
         /// </summary>
         /// <param name="other">The point to be added to this</param>
-        public void _Add<T2>(Point<T2> other)
-            where T2 : IComparable, new()
+        public void _Add<TOther>(Point<TOther> other)
+            where TOther : IComparable, new()
         {
-            _Convert<T2>(
+            _Convert<TOther>(
                 other,
-                delegate(T v1, T2 v2)
+                delegate(T v1, TOther v2)
                 {
                     return (T)System.Convert.ChangeType(System.Convert.ToDouble(v1) + System.Convert.ToDouble(v2), typeof(T));
                 });
@@ -201,12 +200,12 @@ namespace Emgu.CV
 
         ///<summary> Convert this point to the specific type</summary>
         ///<returns> An equavailent point of the specific type</returns> 
-        public Point<T2> Convert<T2>() where T2 : IComparable, new()
+        public Point<TOther> Convert<TOther>() where TOther : IComparable, new()
         {
-            return new Point<T2>(
-                System.Array.ConvertAll<T, T2>(
+            return new Point<TOther>(
+                System.Array.ConvertAll<T, TOther>(
                     _coordinate, 
-                    delegate(T val) { return (T2)System.Convert.ChangeType(val, typeof(T2)); }));
+                    delegate(T val) { return (TOther)System.Convert.ChangeType(val, typeof(TOther)); }));
         }
 
         ///<summary> The norm of this point. e.g. sqrt(X^2 + Y^2 + ...) </summary>

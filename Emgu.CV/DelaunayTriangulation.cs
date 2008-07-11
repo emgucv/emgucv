@@ -28,9 +28,21 @@ namespace Emgu.CV
         /// Insert another point to the triangulation
         /// </summary>
         /// <param name="point">the point to be inserted</param>
-        public void Insert(MCvPoint2D32f point)
+        /// <returns>
+        /// true if the point is inserted into the triangulation;
+        /// false otherwise.
+        /// </returns>
+        public bool Insert(ref MCvPoint2D32f point)
         {
-            CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
+            try
+            {
+                CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
+                return true;
+            }
+            catch (CvException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -133,8 +145,10 @@ namespace Emgu.CV
             using (DelaunayTriangulation tri = new DelaunayTriangulation(roi))
             {
                 foreach (Point2D<float> p in points)
-                    tri.Insert(new MCvPoint2D32f(p.X, p.Y));
-
+                {
+                    MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
+                    tri.Insert(ref cvPoint);
+                }
                 return tri.GetCurrentTriangles();
             }
         }

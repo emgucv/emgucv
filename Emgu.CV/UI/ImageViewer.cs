@@ -14,17 +14,25 @@ namespace Emgu.CV.UI
     public partial class ImageViewer : Form
     {
         /// <summary>
-        /// Create a ImageViewer from the specific <paramref name="img"/>
+        /// Create an ImageViewer
         /// </summary>
-        /// <param name="image">The image to be displayed in this viewer</param>
-        public ImageViewer(IImage image)
+        public ImageViewer()
         {
             InitializeComponent();
-            imageBox1.Image = image;
         }
 
         /// <summary>
-        /// Create a ImageViewer from the specific <paramref name="img"/>, using <paramref name="windowName"/> as window name
+        /// Create an ImageViewer from the specific <paramref name="img"/>
+        /// </summary>
+        /// <param name="image">The image to be displayed in this viewer</param>
+        public ImageViewer(IImage image)
+            :this()
+        {
+            Image = image;
+        }
+
+        /// <summary>
+        /// Create an ImageViewer from the specific <paramref name="img"/>, using <paramref name="windowName"/> as window name
         /// </summary>
         /// <param name="image">The image to be displayed</param>
         /// <param name="windowName">The name of the window</param>
@@ -32,6 +40,23 @@ namespace Emgu.CV.UI
             : this(image)
         {
             this.Text = windowName;
+        }
+
+        /// <summary>
+        /// Get or Set the image in this ImageViewer
+        /// </summary>
+        public IImage Image
+        {
+            get
+            {
+                return imageBox1.Image;
+            }
+            set
+            {
+                this.Width = value.Width;
+                this.Height = value.Height;
+                imageBox1.Image = value;
+            }
         }
     }
 }

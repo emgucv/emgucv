@@ -106,9 +106,20 @@ namespace Emgu.CV
         /// <param name="thickness">The thickness of the line</param>
         public override void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) 
         {
-            Point2D<int> p1 = MapPoint<T>(line.P1).Convert<int>();
-            Point2D<int> p2 = MapPoint<T>(line.P2).Convert<int>();
-            base.Draw(new LineSegment2D<int>(p1, p2), color, thickness);
+            Point2D<double> p1 = MapPoint<T>(line.P1);
+            Point2D<double> p2 = MapPoint<T>(line.P2);
+            base.Draw(new LineSegment2D<double>(p1, p2), color, thickness);
+        }
+
+        ///<summary> Draw a Circle of the specific color and thickness </summary>
+        ///<param name="circle"> The circle to be drawn</param>
+        ///<param name="color"> The color of the circle </param>
+        ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+        public override void Draw<T>(Circle<T> circle, TColor color, int thickness) 
+        {
+            Point2D<double> center = MapPoint<T>(circle.Center);
+            double radius = System.Convert.ToDouble(circle.Radius) / Resolution.X;
+            base.Draw(new Circle<double>(center, radius), color, thickness);
         }
 
         ///<summary> Draw a convex polygon of the specific color and thickness </summary>
@@ -123,10 +134,22 @@ namespace Emgu.CV
                 {
                     return MapPoint(p).MCvPoint;
                 });
-            if (thickness >= 0)
+            if (thickness > 0)
                 base.DrawPolyline(pts, true, color, thickness);
             else
                 base.FillConvexPoly(pts, color);
+        }
+
+        /// <summary>
+        /// Draw the text using the specific font on the image
+        /// </summary>
+        /// <param name="message">The text message to be draw</param>
+        /// <param name="font">The font used for drawing</param>
+        /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
+        /// <param name="color">The color of the text</param>
+        public override void Draw<T>(String message, Font font, Point2D<T> bottomLeft, TColor color) 
+        {
+            base.Draw(message, font, MapPoint<T>(bottomLeft).Convert<int>(), color);
         }
 
         /// <summary>

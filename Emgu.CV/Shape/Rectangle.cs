@@ -178,11 +178,11 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the current rectangle to different depth
         /// </summary>
-        /// <typeparam name="T2">the depth type to convert to</typeparam>
+        /// <typeparam name="TOther">the depth type to convert to</typeparam>
         /// <returns>The current rectangle in different depth</returns>
-        public new Rectangle<T2> Convert<T2>() where T2 : IComparable, new()
+        public new Rectangle<TOther> Convert<TOther>() where TOther : IComparable, new()
         {
-            return new Rectangle<T2>(Center.Convert<T2>(), Size.Convert<T2>());
+            return new Rectangle<TOther>(Center.Convert<TOther>(), Size.Convert<TOther>());
         }
 
         #region IConvexPolygon<T> Members

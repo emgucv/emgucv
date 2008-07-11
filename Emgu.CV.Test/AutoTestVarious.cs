@@ -243,5 +243,14 @@ namespace Emgu.CV.Test
             Assert.IsFalse(p2.InConvexPolygon(tri));
             Assert.IsFalse(p2.InConvexPolygon(rect));
         }
+
+        [Test]
+        public void TestXmlSerialize()
+        {
+            Point2D<float> p = new Point2D<float>(0.0f, 0.0f);
+            XmlDocument xDoc = Emgu.Utils.XmlSerialize<Point2D<float>>(p);
+            Point2D<float> p2 = Emgu.Utils.XmlDeserialize<Point2D<float>>(xDoc);
+            Assert.IsTrue(p.Equals(p2));
+        }
     }
 }

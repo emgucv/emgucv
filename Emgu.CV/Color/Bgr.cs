@@ -22,6 +22,18 @@ namespace Emgu.CV
             _coordinate[2] = red;
         }
 
+        /// <summary>
+        /// Create a Bgr color using the System.Drawing.Color
+        /// </summary>
+        /// <param name="winColor">System.Drawing.Color</param>
+        public Bgr(System.Drawing.Color winColor)
+            : this()
+        {
+            _coordinate[0] = winColor.B;
+            _coordinate[1] = winColor.G;
+            _coordinate[2] = winColor.R;
+        }
+
         ///<summary> Create a BGR color using the default values (0.0, 0.0, 0.0)</summary>
         public Bgr()
             : base(3)
