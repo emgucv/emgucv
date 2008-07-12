@@ -1,8 +1,8 @@
 NAME = emgu-cv
-VERSION = 1.2.2.0
+VERSION = 1.3.0.0
 PKG_NAME = ${NAME}-${VERSION}
 LIB_NAME = Emgu.CV.dll
-MCS_FLAG= -d:LINUX -d:NET_2_0 -pkg:olive -r:System.Xml -r:System.Drawing -r:System.Windows.Forms -r:System.Data -target:library
+MCS_FLAG= -d:LINUX -d:NET_2_0 -pkg:olive -r:System.Xml -r:System.Drawing -r:System.Windows.Forms -r:System.Data -r:../lib/ZedGraph.dll -target:library
 MCS=gmcs ${MCS_FLAG} 
 SRC= *.cs  Properties/*.cs PInvoke/*.cs PInvoke/CvType/*.cs Shape/*.cs PointAndLine/*.cs Capture/*.cs Color/*.cs UI/*.cs
 INSTALL_DIR = var/lib
@@ -24,7 +24,7 @@ rpm: tar
 
 tar: 
 	install -d ${PKG_NAME}
-	tar -c CV.key makefile ${SRC} README | tar -x -C ${PKG_NAME}
+	tar -c CV.snk makefile ${SRC} README | tar -x -C ${PKG_NAME}
 	echo VERSION: ${VERSION} > ${PKG_NAME}/${PKG_NAME}.spec
 	cat ${NAME}.spec >> ${PKG_NAME}/${PKG_NAME}.spec
 	install -d ${PKG_NAME}/lib

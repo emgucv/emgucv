@@ -13,7 +13,7 @@ CV: Utils FORCE
 	make -C Emgu.CV bin; cp Emgu.CV/bin/Emgu.CV.dll ./bin;
 
 UI: 	FORCE
-	cd Emgu.UI; make bin; cp bin/Emgu.UI.dll ../bin; cd ..;
+	make -C Emgu.UI bin; cp Emgu.UI/bin/Emgu.UI.dll ./bin;
 
 CV_SRC:
 	install -d src 

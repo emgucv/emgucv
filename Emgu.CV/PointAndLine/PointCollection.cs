@@ -64,11 +64,11 @@ namespace Emgu.CV
         /// <param name="points">The collection of points</param>
         /// <param name="indexes">the x coordinates</param>
         /// <returns>the y coordinates as the result of the first degree interpolation</returns>
-        public static D[] FirstDegreeInterpolate<D>(Point2D<D>[] points, D[] indexes) where D : IComparable, new()
+        public static T[] FirstDegreeInterpolate<T>(Point2D<T>[] points, T[] indexes) where T : IComparable, new()
         {
-            return System.Array.ConvertAll<D, D>(
+            return System.Array.ConvertAll<T, T>(
                 indexes,
-                delegate(D d) { return FirstDegreeInterpolate(points, d); });
+                delegate(T d) { return FirstDegreeInterpolate<T>(points, d); });
         }
 
         /// <summary>
