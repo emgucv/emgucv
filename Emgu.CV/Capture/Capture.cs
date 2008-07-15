@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
+using System.Runtime.InteropServices;
 using Emgu;
 
 namespace Emgu.CV
@@ -14,6 +15,8 @@ namespace Emgu.CV
         IDuplexCapture,
         ICapture
     {
+        //private Type CaptureDepthType;
+
         /// <summary>
         /// the width of this capture
         /// </summary>
@@ -149,6 +152,13 @@ namespace Emgu.CV
             return CvInvoke.cvGetCaptureProperty(_ptr, index);
         }
 
+        /*
+        private Type GetImageDepthType(IntPtr img)
+        {
+            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
+            //if (iplImage.depth == 
+        }*/
+
         #region implement ICapture
         ///<summary> Capture a RGB image frame</summary>
         ///<returns> A RGB image frame</returns>
@@ -164,6 +174,7 @@ namespace Emgu.CV
             Image<Bgr, Byte> res = tmp.BlankClone();
 #else
             IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+
             Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width, Height);
 #endif
             if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
@@ -182,7 +193,6 @@ namespace Emgu.CV
                 CvInvoke.cvFlip(img, res.Ptr, code);
                 return res;
             }
-
         }
 
         ///<summary> 

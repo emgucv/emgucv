@@ -27,23 +27,22 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
             Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-
             Font f1 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
             Font f2 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
-
             semgu.Draw("Emgu", f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
             semgu._Dilate(1);
-
             scv.Draw("CV", f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
             scv._Dilate(2);
-
             Image<Bgr, Byte> logoBgr = semgu.Or(scv);
             Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
             logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
-
             logoBgr._Not();
-
-            logoBgr.Save("EmguCVLogo.jpg");
+            logoA._Not();
+            Image<Gray, Byte>[] channels = logoBgr.Split();
+            channels = new Image<Gray,byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0))};
+            Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
+            logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
+            logoBgra.Save("EmguCVLogo.gif");
         }
 
         public void TestCvNamedWindow()
@@ -167,6 +166,16 @@ namespace Emgu.CV.Test
                 foreach (Image<Gray, Byte> i in channels)
                     Application.Run(new ImageViewer(i));
             }
+        }
+
+        public void TestBgra()
+        {
+            Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
+            img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
+            Image<Gray, Byte>[] channels = img.Split();
+            foreach (Image<Gray, Byte> i in channels)
+                Application.Run(new ImageViewer(i));
+            Application.Run(new ImageViewer(img));
         }
 
         public void TestFont()
@@ -445,7 +454,7 @@ namespace Emgu.CV.Test
                 pts[i] = new Point2D<float>((float)r.NextDouble() * max, (float)r.NextDouble() * max);
 
             DateTime t1 = DateTime.Now;
-            Triangle<float>[] triangles = DelaunayTriangulation.Triangulate(pts);
+            Triangle<float>[] triangles = DelaunayTriangulation.GetDelaunayTriangles(pts);
             TimeSpan ts = DateTime.Now.Subtract(t1);
             Trace.WriteLine(ts.TotalMilliseconds);
 

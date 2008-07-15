@@ -30,7 +30,7 @@ namespace Emgu.CV
         /// <summary>
         /// pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16U, IPL_DEPTH_16S, IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported 
         /// </summary>
-        public int depth;
+        public CvEnum.IPL_DEPTH depth;
         /// <summary>
         /// ignored by OpenCV 
         /// </summary>

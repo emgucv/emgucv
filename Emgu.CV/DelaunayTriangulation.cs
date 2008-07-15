@@ -59,29 +59,47 @@ namespace Emgu.CV
             MCvSubdiv2DPoint v2 = e.cvSubdiv2DEdgeDst();
 
             MCvSubdiv2DEdge eLnext = e.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT);
-            MCvSubdiv2DPoint v4 = eLnext.cvSubdiv2DEdgeDst();
+            MCvSubdiv2DPoint v3 = eLnext.cvSubdiv2DEdgeDst();
             return new Triangle<float>(
                 new Point2D<float>(v1.pt.x, v1.pt.y),
-                new Point2D<float>(v4.pt.x, v4.pt.y),
+                new Point2D<float>(v3.pt.x, v3.pt.y),
                 new Point2D<float>(v2.pt.x, v2.pt.y));
         }
 
         /// <summary>
         /// It finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point.
         /// </summary>
-        /// <param name="pt">Input point</param>
+        /// <param name="point">Input point</param>
         /// <returns>returns the found subdivision vertex</returns>
-        private MCvSubdiv2DPoint FindNearestPoint2D(ref MCvPoint2D32f pt)
+        private MCvSubdiv2DPoint FindNearestPoint2D(ref MCvPoint2D32f point)
         {
-            IntPtr ptr = CvInvoke.cvFindNearestPoint2D(Ptr, pt);
-            return (MCvSubdiv2DPoint) Marshal.PtrToStructure(ptr, typeof(MCvSubdiv2DPoint));
+            IntPtr ptr = CvInvoke.cvFindNearestPoint2D(Ptr, point);
+            return (MCvSubdiv2DPoint)Marshal.PtrToStructure(ptr, typeof(MCvSubdiv2DPoint));
         }
 
         /// <summary>
-        /// Retruns the triangles in the current triangulation
+        /// Returns the triangles of the Delaunay's triangulation
         /// </summary>
-        /// <returns>The triangles in the current triangulation</returns>
-        public Triangle<float>[] GetCurrentTriangles()
+        /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
+        /// <returns>The result of the current triangulation</returns>
+        public Triangle<float>[] GetDelaunayTriangles()
+        {
+            List<Triangle<float>> triangleList = new List<Triangle<float>>();
+
+            Triangle<float>[] subdivisionTriangle = GetPlanarSubdivisionTriangles();
+            foreach (Triangle<float> tri in subdivisionTriangle)
+                if (Utils.IsConvexPolygonInConvexPolygon(tri, _roi))
+                    triangleList.Add(tri);
+
+            return triangleList.ToArray();
+        }
+
+        /// <summary>
+        /// Retruns the triangles subdivision of the current triangulation. 
+        /// </summary>
+        /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
+        /// <returns>The triangles subdivision in the current triangulation</returns>
+        public Triangle<float>[] GetPlanarSubdivisionTriangles()
         {
             List<Triangle<float>> triangleList = new List<Triangle<float>>();
 
@@ -98,16 +116,14 @@ namespace Emgu.CV
 
                 if (CvInvoke.CV_IS_SET_ELEM(edge))
                 {
-                    MCvQuadEdge2D qEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
+                    MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
 
-                    Triangle<float> tri1 = EdgeToTriangle(ref qEdge.next[0]);
-                    Triangle<float> tri2 = EdgeToTriangle(ref qEdge.next[2]);
-                    if ( Utils.IsConvexPolygonInConvexPolygon(tri1, _roi)
-                       && Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri1); }) < 0)
+                    Triangle<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
+                    if (Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri1); }) < 0)
                         triangleList.Add(tri1);
 
-                    if ( Utils.IsConvexPolygonInConvexPolygon(tri2, _roi)
-                        && Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri2); }) < 0)
+                    Triangle<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
+                    if (Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri2); }) < 0)
                         triangleList.Add(tri2);
                 }
 
@@ -126,31 +142,49 @@ namespace Emgu.CV
 
         #region static methods
         /// <summary>
-        /// Given an array of points, returns the delaunay's triangulation
+        ///  Find the Delaunay's triangulation from the given <paramref name="points"/>
         /// </summary>
         /// <param name="points">the points for triangulation</param>
+        /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
         /// <returns>The triangles as a result of the triangulation</returns>
-        public static Triangle<float>[] Triangulate(Point2D<float>[] points)
+        public static Triangle<float>[] GetDelaunayTriangles(IEnumerable<Point2D<float>> points)
+        {
+            using (DelaunayTriangulation tri = GetDelaunay(points))
+                return tri.GetDelaunayTriangles();
+        }
+
+        /// <summary>
+        ///  Find the Delaunay's plannar subdivision triangles from the given <paramref name="points"/>
+        /// </summary>
+        /// <param name="points">the points for triangulation</param>
+        /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
+        /// <returns>The triangles subdivision in the current triangulation</returns>
+        public static Triangle<float>[] GetPlanarSubdivisionTriangles(IEnumerable<Point2D<float>> points)
+        {
+            using (DelaunayTriangulation tri = GetDelaunay(points))
+                return tri.GetPlanarSubdivisionTriangles();
+        }
+
+        private static DelaunayTriangulation GetDelaunay(IEnumerable<Point2D<float>> points)
         {
             #region Find the region of interest
             Rectangle<double> roi;
             using (MemStorage storage = new MemStorage())
-            using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, (IEnumerable<Point<float>>)points))
+            using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>) p;})))
             {
                 MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
                 roi = new Rectangle<double>(cvRect);
             }
             #endregion
 
-            using (DelaunayTriangulation tri = new DelaunayTriangulation(roi))
+            DelaunayTriangulation tri = new DelaunayTriangulation(roi);
+             
+            foreach (Point2D<float> p in points)
             {
-                foreach (Point2D<float> p in points)
-                {
-                    MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
-                    tri.Insert(ref cvPoint);
-                }
-                return tri.GetCurrentTriangles();
+                MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
+                tri.Insert(ref cvPoint);
             }
+            return tri;
         }
         #endregion
 

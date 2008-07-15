@@ -30,12 +30,19 @@ namespace Emgu
             CPlusPlus
         }
 
-        /*
         /// <summary>
-        /// A mothod that contains no input and returns nothing
+        /// Convert on enumeration to another using the specific convertor
         /// </summary>
-        public delegate void Action();
-        */
+        /// <typeparam name="Tin">The input enumerator type</typeparam>
+        /// <typeparam name="Tout">The output enumerator type</typeparam>
+        /// <param name="inputs">the input enumerator</param>
+        /// <param name="convertor">the convertor that convert one enumeration to another</param>
+        /// <returns>An enumerator of <paramref name="Tout"/></returns>
+        public static IEnumerable<Tout> IEnumConvertor<Tin, Tout>(IEnumerable<Tin> inputs, System.Converter<Tin, Tout> convertor)
+        {
+            foreach (Tin obj in inputs)
+                yield return convertor(obj);
+        }
 
         /// <summary>
         /// An Action that accepts two input and returns nothing

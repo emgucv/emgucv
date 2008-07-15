@@ -53,7 +53,7 @@ namespace Emgu.CV
                 IntPtr ptr;
                 MIplImage mptr;
 
-                #region read the image into ptr ( color type - C, depth - Byte ) 
+                #region read the image into ptr ( color type - C, depth - Byte )
                 if (typeof(TColor) == typeof(Gray)) //color type is gray
                 {
                     ptr = CvInvoke.cvLoadImage(fileName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
@@ -463,7 +463,7 @@ namespace Emgu.CV
         ///<param name="cross"> The 2D Cross to be draw</param>
         ///<param name="color"> The color of the cross </param>
         ///<param name="thickness"> Must be &gt; 0 </param>
-        public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T: IComparable, new()
+        public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : IComparable, new()
         {
             Debug.Assert(thickness > 0, "Thickness should be > 0");
             if (thickness > 0)
@@ -477,7 +477,7 @@ namespace Emgu.CV
         ///<param name="line"> The line segment to be draw</param>
         ///<param name="color"> The color of the line segment </param>
         ///<param name="thickness"> The thickness of the line segment </param>
-        public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T: IComparable, new()
+        public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : IComparable, new()
         {
             Debug.Assert(thickness > 0, "Thickness should be > 0");
             if (thickness > 0)
@@ -527,7 +527,7 @@ namespace Emgu.CV
         /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
         /// <param name="color">the color used for drawing</param>
         /// <param name="thickness">the thinkness of the line</param>
-        public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T: IComparable, new() 
+        public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T : IComparable, new()
         {
             DrawPolyline(
                 Array.ConvertAll<Point2D<T>, MCvPoint>(pts, delegate(Point2D<T> p) { return p.MCvPoint; }),
@@ -708,7 +708,7 @@ namespace Emgu.CV
                 return res;
             }
         }
-        #endregion 
+        #endregion
 
         #region Hugh line and circles
         ///<summary> 
@@ -790,7 +790,7 @@ namespace Emgu.CV
                 return res;
             }
         }
-        #endregion 
+        #endregion
 
         #region Contour detection
         /// <summary>
@@ -848,7 +848,7 @@ namespace Emgu.CV
             }
             return new Contour(seq, stor);
         }
-        #endregion 
+        #endregion
         #endregion
 
         #region Indexer pixel access
@@ -912,10 +912,10 @@ namespace Emgu.CV
             {
                 MCvRect rec = CvInvoke.cvGetImageROI(ptr);
                 elementCount = (int)rec.width * ipl.nChannels;
-                byteWidth = (ipl.depth >> 3) * elementCount;
+                byteWidth = ((int) ipl.depth >> 3) * elementCount;
 
                 start += (int)rec.y * widthStep
-                        + (ipl.depth >> 3) * (int)rec.x;
+                        + ((int) ipl.depth >> 3) * (int)rec.x;
                 rows = (int)rec.height;
             }
             else
@@ -2069,30 +2069,21 @@ namespace Emgu.CV
             }
             set
             {
-                if (typeof(TColor) != typeof(Bgr) || typeof(TDepth) != typeof(Byte))
+                if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                 {
-                    using (Image<Bgr, Byte> tmp1 = new Image<Bgr, Byte>(value))
-                    using (Image<TColor, TDepth> tmp2 = tmp1.Convert<TColor, TDepth>())
-                    {
-                        DisposeObject();
-                        AllocateData(tmp2.Rows, tmp2.Cols);
-                        CvInvoke.cvCopy(tmp2.Ptr, Ptr, IntPtr.Zero);
-                    }
-                }
-                else
-                {   //This is an <Bgr, Byte> image
+                    #region Handling <Bgr, Byte> image
                     DisposeObject();
 
                     if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
                     {
+                        AllocateData(value.Height, value.Width);
+                        int rows = value.Height;
+
                         System.Drawing.Imaging.BitmapData data = value.LockBits(
                             new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
                             System.Drawing.Imaging.ImageLockMode.ReadOnly,
                             System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-                        AllocateData(value.Height, value.Width);
-
-                        int rows = value.Height;
                         int arrayWidthStep = Marshal.SizeOf(typeof(TDepth)) * new TColor().Dimension * _array.GetLength(1);
                         for (int i = 0; i < rows; i++)
                         {
@@ -2101,6 +2092,7 @@ namespace Emgu.CV
                                 (IntPtr)(data.Scan0.ToInt64() + i * data.Stride),
                                 data.Stride);
                         }
+                        value.UnlockBits(data);
                     }
                     else
                     {   //Other pixel format
@@ -2112,6 +2104,30 @@ namespace Emgu.CV
                                 CvInvoke.cvSet2D(_ptr, j, i, new MCvScalar(color.B, color.G, color.R));
                             }
                     }
+                    #endregion
+                } else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+                {
+                    #region Handling <Bgra, Byte> image
+                    AllocateData(value.Height, value.Width);
+                    for (int i = 0; i < value.Width; i++)
+                        for (int j = 0; j < value.Height; j++)
+                        {
+                            System.Drawing.Color color = value.GetPixel(i, j);
+                            CvInvoke.cvSet2D(_ptr, j, i, new MCvScalar(color.B, color.G, color.R, color.A));
+                        }
+                    #endregion
+                }
+                else
+                {
+                    #region Handling other image types
+                    using (Image<Bgr, Byte> tmp1 = new Image<Bgr, Byte>(value))
+                    using (Image<TColor, TDepth> tmp2 = tmp1.Convert<TColor, TDepth>())
+                    {
+                        DisposeObject();
+                        AllocateData(tmp2.Rows, tmp2.Cols);
+                        tmp2.Copy(this);
+                    }
+                    #endregion
                 }
             }
         }
@@ -2123,75 +2139,99 @@ namespace Emgu.CV
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
         public Bitmap ToBitmap()
         {
-            //TODO: Add logic to convert Bgra image type to Bitmap
             if (typeof(TColor) == typeof(Gray)) // if this is a gray scale image
             {
-                Image<Gray, Byte> temp = null;
-
-                #region convert it to depth of Byte if it is not
-                Image<Gray, Byte> img8UGray = this as Image<Gray, Byte>;
-                if (typeof(TDepth) != typeof(Byte))
+                if (typeof(TDepth) == typeof(Byte))
                 {
-                    temp = Convert<Gray, Byte>();
-                    img8UGray = temp;
+                    Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+                    System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                        new System.Drawing.Rectangle(0, 0, Width, Height),
+                        System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                        System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+                    Int64 dataPtr = data.Scan0.ToInt64();
+
+                    Int64 start;
+                    int elementCount, byteWidth, rows, widthStep;
+                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
+                    for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
+                        Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+
+                    bmp.UnlockBits(data);
+                    bmp.Palette = Utils.GrayscalePalette;
+
+                    return bmp;
                 }
-                #endregion
+                else
+                {
+                    using (Image<Gray, Byte> temp = Convert<Gray, Byte>())
+                    {
+                        return temp.ToBitmap();
+                    }
+                }
+            }
+            else if (typeof(TColor) == typeof(Bgra)) //if this is Bgra image
+            {
+                if (typeof(TDepth) == typeof(byte))
+                {
+                    Image<Bgra, Byte> img = this as Image<Bgra, Byte>;
+                    Image<Gray, Byte>[] channels = img.Split();
+                    channels = new Image<Gray, byte>[] { channels[3], channels[0], channels[1], channels[2] };
+                    Image<Bgra, Byte> img2 = new Image<Bgra, byte>(channels);
 
-                Bitmap image = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-                System.Drawing.Imaging.BitmapData data = image.LockBits(
-                    new System.Drawing.Rectangle(0, 0, Width, Height),
-                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-                Int64 dataPtr = data.Scan0.ToInt64();
+                    Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                         new System.Drawing.Rectangle(0, 0, Width, Height),
+                         System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    Int64 dataPtr = data.Scan0.ToInt64();
 
-                Int64 start;
-                int elementCount, byteWidth, rows, widthStep;
-                RoiParam(img8UGray.Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
-                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                    Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+                    Int64 start;
+                    int elementCount, byteWidth, rows, widthStep;
+                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
+                    for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
+                        Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
-                image.UnlockBits(data);
-
-                if (temp != null)
-                    temp.Dispose();
-
-                image.Palette = Utils.GrayscalePalette;
-
-                return image;
+                    bmp.UnlockBits(data);
+                    return bmp;
+                }
+                else
+                {
+                    using (Image<Bgra, Byte> tmp = Convert<Bgra, Byte>())
+                    {
+                        return tmp.ToBitmap();
+                    }
+                }
             }
             else //if this is a multiple channel image
             {
-                #region convert it to Bgr Byte image if it is not
-                Image<Bgr, Byte> img8UBgr = this as Image<Bgr, Byte>;
-                Image<Bgr, Byte> temp = null;
-                if (img8UBgr == null)
+                if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                 {
-                    temp = Convert<Bgr, Byte>();
-                    img8UBgr = temp;
+                    //create the bitmap and get the pointer to the data
+                    Bitmap image = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                    System.Drawing.Imaging.BitmapData data = image.LockBits(
+                        new System.Drawing.Rectangle(0, 0, Width, Height),
+                        System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                        System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                    Int64 dataPtr = data.Scan0.ToInt64();
+
+                    Int64 start;
+                    int elementCount, byteWidth, rows, widthStep;
+                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
+                    for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
+                        Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+
+                    image.UnlockBits(data);
+
+                    return image;
                 }
-                #endregion
-
-                //create the bitmap and get the pointer to the data
-                Bitmap image = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-                System.Drawing.Imaging.BitmapData data = image.LockBits(
-                    new System.Drawing.Rectangle(0, 0, Width, Height),
-                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                Int64 dataPtr = data.Scan0.ToInt64();
-
-                Int64 start;
-                int elementCount, byteWidth, rows, widthStep;
-                RoiParam(img8UBgr.Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
-                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                    Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
-
-                image.UnlockBits(data);
-
-                if (temp != null)
-                    temp.Dispose();
-
-                return image;
+                else
+                {
+                    using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
+                    {
+                        return temp.ToBitmap();
+                    }
+                }
             }
         }
 
@@ -2201,8 +2241,8 @@ namespace Emgu.CV
         ///<returns> This image in Bitmap format of the specific size</returns>
         public Bitmap ToBitmap(int width, int height)
         {
-            using (Image<TColor, TDepth> scaleImage = Resize(width, height))
-                return scaleImage.ToBitmap();
+            using (Image<TColor, TDepth> scaledImage = Resize(width, height))
+                return scaledImage.ToBitmap();
         }
         #endregion
 
@@ -3025,7 +3065,7 @@ namespace Emgu.CV
         #endregion
         #endregion
 
-        #region various 
+        #region various
         ///<summary> Return a filpped copy of the current image</summary>
         ///<param name="flipType">The type of the flipping</param>
         ///<returns> The flipped copy of <i>this</i> image </returns>
@@ -3034,7 +3074,7 @@ namespace Emgu.CV
             if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Clone();
 
             //code = 0 indicates vertical flip only
-            int code = 0; 
+            int code = 0;
             //code = -1 indicates vertical and horizontal flip
             if (flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
             //code = 1 indicates horizontal flip only
@@ -3098,7 +3138,7 @@ namespace Emgu.CV
             maxValues = new double[channelCount];
             minLocations = new MCvPoint[channelCount];
             maxLocations = new MCvPoint[channelCount];
-            
+
             if (channelCount == 1)
             {
                 CvInvoke.cvMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
@@ -3148,7 +3188,7 @@ namespace Emgu.CV
             //TODO: handle multiple channel as well
             CvInvoke.cvEqualizeHist(Ptr, Ptr);
         }
-        #endregion 
+        #endregion
 
         #region IImage
         Type IImage.TypeOfDepth

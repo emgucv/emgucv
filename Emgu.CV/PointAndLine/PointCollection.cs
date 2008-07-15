@@ -15,9 +15,9 @@ namespace Emgu.CV
         /// <summary>
         /// A comparator which compares only the X value of the point
         /// </summary>
-        private class XValueOfPointComparator<D> : IComparer<Point<D>> where D : IComparable, new()
+        private class XValueOfPointComparator<T> : IComparer<Point<T>> where T : IComparable, new()
         {
-            public int Compare(Point<D> p1, Point<D> p2)
+            public int Compare(Point<T> p1, Point<T> p2)
             {
                 return p1[0].CompareTo(p2[0]);
             }
@@ -29,10 +29,10 @@ namespace Emgu.CV
         /// <param name="points">The collection of points</param>
         /// <param name="index">the x coordinate</param>
         /// <returns>the y coordinate as the result of the first degree interpolation</returns>
-        public static D FirstDegreeInterpolate<D>(Point2D<D>[] points, D index) where D : IComparable, new()
+        public static T FirstDegreeInterpolate<T>(Point2D<T>[] points, T index) where T : IComparable, new()
         {
-            XValueOfPointComparator<D> comparator = new XValueOfPointComparator<D>();
-            int idx = System.Array.BinarySearch<Point<D>>((Point<D>[])points, (Point<D>)new Point2D<D>(index, new D()), comparator);
+            XValueOfPointComparator<T> comparator = new XValueOfPointComparator<T>();
+            int idx = System.Array.BinarySearch<Point<T>>((Point<T>[])points, (Point<T>)new Point2D<T>(index, new T()), comparator);
             if (idx >= 0)
             {   // an exact index is matched
                 return points[idx].Y;
@@ -53,7 +53,7 @@ namespace Emgu.CV
                     idx -= 2;
                 }
 
-                Line2D<D> line = new Line2D<D>(points[idx], points[idx + 1]);
+                Line2D<T> line = new Line2D<T>(points[idx], points[idx + 1]);
                 return line.YByX(index);
             }
         }

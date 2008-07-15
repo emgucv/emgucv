@@ -270,8 +270,9 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
             img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-
+            img.SerializationCompressionRatio = 9;
             XmlDocument doc1 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+            String str = doc1.OuterXml;
             Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc1);
             Assert.IsTrue(img.Equals(img2));
 
@@ -280,7 +281,11 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> img3 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc2);
             Assert.IsTrue(img.Equals(img3));
 
-            //Assert.Greater(doc1.InnerXml.Length, doc2.InnerXml.Length);
+            XmlDocument doc3 = new XmlDocument();
+            doc3.LoadXml(str);
+            Image<Bgr, Byte> img4 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc3);
+            Assert.IsTrue(img.Equals(img4));
+            
         }
 
         [Test]
@@ -362,8 +367,6 @@ namespace Emgu.CV.Test
             Image<Bgr, Single> image5 = new Image<Bgr, Single>(201, 401);
             image5._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
             Bitmap bmp2 = image5.ToBitmap();
-
-            //Application.Run(new ImageViewer(new Image<Bgr, Single>(bmp2)));
             #endregion
         }
 
