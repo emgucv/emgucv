@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV
@@ -51,5 +50,31 @@ namespace Emgu.CV
         /// type of line
         /// </summary>
         public int line_type;
+
+        /// <summary>
+        /// Create a Font of the specific type, horizontal scale and vertical scale
+        /// </summary>
+        /// <param name="type">The type of the font</param>
+        /// <param name="hscale">The horizontal scale of the font</param>
+        /// <param name="vscale">the vertical scale of the fonr</param>
+        public MCvFont(CvEnum.FONT type, double hscale, double vscale)
+            : this()
+        {
+            //_ptr = Marshal.AllocHGlobal(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvFont)));
+            CvInvoke.cvInitFont(ref this, type, hscale, vscale, 0, 1, CvEnum.LINE_TYPE.EIGHT_CONNECTED);
+        }
+
+        /// <summary>
+        /// Calculates the binding rectangle for the given text string when the font is used
+        /// </summary>
+        /// <param name="text">Input string</param>
+        /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
+        /// <returns>size of the text string. Height of the text does not include the height of character parts that are below the baseline</returns>
+        public MCvSize GetTextSize(string text, int baseline)
+        {
+            MCvSize size = new MCvSize();
+            CvInvoke.cvGetTextSize(text, ref this, ref size, ref baseline);
+            return size;
+        }
     }
 }

@@ -190,6 +190,71 @@ namespace Emgu.CV
             Data = new TDepth[rows, cols];
         }
 
+        /// <summary>
+        /// Get a submatrix corresponding to a specified rectangle
+        /// </summary>
+        /// <param name="rect">the rectangle area of the sub-matrix</param>
+        /// <returns>A submatrix corresponding to a specified rectangle</returns>
+        public Matrix<TDepth> GetSubMatrix(Rectangle<double> rect)
+        {
+            Matrix<TDepth> subMat = new Matrix<TDepth>();
+            subMat._array = _array;
+            IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+            subMat._ptr = CvInvoke.cvGetSubRect(_ptr, subPtr, rect.MCvRect);
+            return subMat;
+        }
+
+        /// <summary>
+        /// Get the specific row of the matrix
+        /// </summary>
+        /// <param name="row">the index of the row to be reterived</param>
+        /// <returns>the specific row of the matrix</returns>
+        public Matrix<TDepth> GetRow(int row)
+        {
+            return GetRows(row, row + 1, 1);
+        }
+
+        /// <summary>
+        /// Return the matrix corresponding to a specified row span of the input array
+        /// </summary>
+        /// <param name="startRow">Zero-based index of the starting row (inclusive) of the span</param>
+        /// <param name="endRow">Zero-based index of the ending row (exclusive) of the span</param>
+        /// <param name="deltaRow">Index step in the row span. That is, the function extracts every delta_row-th row from start_row and up to (but not including) end_row</param>
+        /// <returns>A matrix corresponding to a specified row span of the input array</returns>
+        public Matrix<TDepth> GetRows(int startRow, int endRow, int deltaRow)
+        {
+            Matrix<TDepth> subMat = new Matrix<TDepth>();
+            subMat._array = _array;
+            IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+            subMat._ptr = CvInvoke.cvGetRows(_ptr, subPtr, startRow, endRow, deltaRow);
+            return subMat;
+        }
+
+        /// <summary>
+        /// Get the specific column of the matrix
+        /// </summary>
+        /// <param name="col">the index of the column to be reterived</param>
+        /// <returns>the specific column of the matrix</returns>
+        public Matrix<TDepth> GetCol(int col)
+        {
+            return GetCols(col, col + 1);
+        }
+
+        /// <summary>
+        /// Get the Matrix, corresponding to a specified column span of the input array
+        /// </summary>
+        /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
+        /// <param name="startCol">Zero-based index of the selected column</param>
+        /// <returns>the specific column span of the matrix</returns>
+        public Matrix<TDepth> GetCols(int startCol, int endCol)
+        {
+            Matrix<TDepth> subMat = new Matrix<TDepth>();
+            subMat._array = _array;
+            IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+            subMat._ptr = CvInvoke.cvGetCols(_ptr, subPtr, startCol, endCol);
+            return subMat;
+        }
+
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -200,7 +265,6 @@ namespace Emgu.CV
         {
             DeserializeObjectData(info, context);
         }
-
         #endregion
 
         #region UnmanagedObject

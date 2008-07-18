@@ -23,8 +23,18 @@ namespace Emgu.CV
         {
             IntPtr ptr = (IntPtr)(edge.ToInt64() >> 2 << 2 );
             MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
-            MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(qe.pt[ (edge.ToInt64() & 3) ], typeof(MCvSubdiv2DPoint));
-            return pt;
+            IntPtr pointPtr =  qe.pt[ (edge.ToInt64() & 3) ];
+            if (pointPtr == IntPtr.Zero)
+            {
+                MCvSubdiv2DPoint pt = new MCvSubdiv2DPoint();
+                pt.flags = -1;
+                return pt; // return an invalid point
+            }
+            else
+            {
+                MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
+                return pt;
+            }
         }
         
         /// <summary>
@@ -35,15 +45,43 @@ namespace Emgu.CV
         {
             IntPtr ptr = (IntPtr) (edge.ToInt64() >> 2 << 2);
             MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure( ptr, typeof(MCvQuadEdge2D));
-            MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(qe.pt[ (edge.ToInt64() +2) & 3], typeof(MCvSubdiv2DPoint));
-            return pt;
+            IntPtr pointPtr = qe.pt[(edge.ToInt64() + 2) & 3];
+            if (pointPtr == IntPtr.Zero)
+            {
+                MCvSubdiv2DPoint pt = new MCvSubdiv2DPoint();
+                pt.flags = -1;
+                return pt; // return an invalid point
+            }
+            else
+            {
+                MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
+                return pt;
+            }
         }
 
         /// <summary>
-        /// similar to cvSubdiv2DGetEdge
+        /// Similar to cvSubdiv2DRotateEdge
         /// </summary>
-        /// <param name="type">the next edge type</param>
-        /// <returns>the next edge</returns>
+        /// <param name="rotate">
+        /// Specifies, which of edges of the same quad-edge as the input one to return, one of:
+        /// 0 - the input edge (e if e is the input edge) 
+        /// 1 - the rotated edge (eRot) 
+        /// 2 - the reversed edge (reversed e (in green)) 
+        /// 3 - the reversed rotated edge (reversed eRot (in green)) 
+        ///</param>
+        /// <returns>The rotated edge</returns>
+        public MCvSubdiv2DEdge cvSubdiv2DRotateEdge(int rotate)
+        {
+            MCvSubdiv2DEdge e = new MCvSubdiv2DEdge();
+            e.edge = new IntPtr((edge.ToInt64() & ~3) + ((edge.ToInt64() + rotate) & 3));
+            return e;
+        }
+
+        /// <summary>
+        /// Similar to cvSubdiv2DGetEdge
+        /// </summary>
+        /// <param name="type">The next edge type</param>
+        /// <returns>The next edge</returns>
         public MCvSubdiv2DEdge cvSubdiv2DGetEdge(CvEnum.CV_NEXT_EDGE_TYPE type)
         {
             IntPtr ptr = (IntPtr)(edge.ToInt64() >> 2 << 2);

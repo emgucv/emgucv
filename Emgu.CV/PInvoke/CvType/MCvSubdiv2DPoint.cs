@@ -12,9 +12,11 @@ namespace Emgu.CV
     public struct MCvSubdiv2DPoint
     {
         /// <summary>
-        /// 
+        /// If -1, this point is invalid;
+        /// If 1&gt;&gt;30, this point is a virtual point;
         /// </summary>
         public int flags;
+
         /// <summary>
         /// 
         /// </summary>
@@ -24,5 +26,15 @@ namespace Emgu.CV
         /// </summary>
         public MCvPoint2D32f pt;
 
+        /// <summary>
+        /// return if this is a valid point
+        /// </summary>
+        public bool isValid
+        {
+            get
+            {
+                return flags != -1;
+            }
+        }
     }
 }

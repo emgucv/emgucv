@@ -27,11 +27,11 @@ namespace Emgu.CV
             : base(3)
         { }
 
-        ///<summary> The intensity of the Y color channel </summary>
+        ///<summary> Get or set the intensity of the Y color channel </summary>
         public double Y { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
-        ///<summary> The intensity of the Cr color channel </summary>
+        ///<summary> Get or set the intensity of the Cr color channel </summary>
         public double Cr { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
-        ///<summary> The intensity of the Cb color channel </summary>
+        ///<summary> Get or set the intensity of the Cb color channel </summary>
         public double Cb { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
     };
 }

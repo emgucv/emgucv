@@ -252,5 +252,16 @@ namespace Emgu.CV.Test
             Point2D<float> p2 = Emgu.Utils.XmlDeserialize<Point2D<float>>(xDoc);
             Assert.IsTrue(p.Equals(p2));
         }
+
+        [Test]
+        public void TestTriangle()
+        {
+            Point2D<double> p1 = new Point2D<double>(0, 0);
+            Point2D<double> p2 = new Point2D<double>(1, 0);
+            Point2D<double> p3 = new Point2D<double>(0, 1);
+            Triangle<double> tri = new Triangle<double>(p1, p2, p3);
+            double epsilon = 1e-10;
+            Assert.IsTrue( Math.Abs(tri.Area - 0.5) < epsilon);
+        }
     }
 }

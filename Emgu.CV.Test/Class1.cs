@@ -27,11 +27,11 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
             Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-            Font f1 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
-            Font f2 = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
-            semgu.Draw("Emgu", f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
+            MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
+            MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
+            semgu.Draw("Emgu", ref f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
             semgu._Dilate(1);
-            scv.Draw("CV", f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
+            scv.Draw("CV", ref f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
             scv._Dilate(2);
             Image<Bgr, Byte> logoBgr = semgu.Or(scv);
             Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
@@ -51,9 +51,9 @@ namespace Emgu.CV.Test
             CvInvoke.cvNamedWindow(win1); //Create the window using the specific name
 
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) //Create an image of 400x200 of Blue color
-            using (Font f = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0)) //Create the font
             {
-                img.Draw("Hello, world", f, new Point2D<int>(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
+                MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0); //Create the font
+                img.Draw("Hello, world", ref f, new Point2D<int>(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
 
                 CvInvoke.cvShowImage(win1, img.Ptr); //Show the image
                 CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
@@ -184,10 +184,10 @@ namespace Emgu.CV.Test
             Application.SetCompatibleTextRenderingDefault(false);
             using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
             {
-                Font f = new Font(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
+                MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
                 {
-                    img.Draw("h.", f, new Point2D<int>(100, 10), new Gray(255.0));
-                    img.Draw("a.", f, new Point2D<int>(100, 50), new Gray(255.0));
+                    img.Draw("h.", ref f, new Point2D<int>(100, 10), new Gray(255.0));
+                    img.Draw("a.", ref f, new Point2D<int>(100, 50), new Gray(255.0));
                 }
                 Application.Run(new ImageViewer(img));
             }
@@ -445,7 +445,7 @@ namespace Emgu.CV.Test
 
         public void TestDelaunay()
         {
-            Point2D<float>[] pts = new Point2D<float>[100];
+            Point2D<float>[] pts = new Point2D<float>[5];
             float max = 600;
             //Random r = new Random(312421);
             Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
@@ -454,17 +454,33 @@ namespace Emgu.CV.Test
                 pts[i] = new Point2D<float>((float)r.NextDouble() * max, (float)r.NextDouble() * max);
 
             DateTime t1 = DateTime.Now;
-            Triangle<float>[] triangles = DelaunayTriangulation.GetDelaunayTriangles(pts);
+            List<Triangle<float>> triangles = PlanarSubdivision.GetDelaunayTriangles(pts);
+            List<VoronoiFacet> polygons = PlanarSubdivision.GetVoronoi(pts);
             TimeSpan ts = DateTime.Now.Subtract(t1);
             Trace.WriteLine(ts.TotalMilliseconds);
 
-            Image<Gray, Byte> img = new Image<Gray, byte>(600, 600);
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
+
+            foreach (VoronoiFacet poly in polygons)
+            {
+                MCvPoint[] points = Array.ConvertAll<Point2D<float>, MCvPoint>(poly.Vertices, delegate(Point2D<float> p) { return p.MCvPoint; });
+                /*
+                img.FillConvexPoly(
+                    points,
+                    new Bgr(r.NextDouble() * 120, r.NextDouble() * 120, r.NextDouble() * 120)
+                    );*/
+                img.DrawPolyline(points, true, new Bgr(255.0, 0, 0), 1);
+                img.Draw(new Circle<float>(poly.Point, 5), new Bgr(255, 255, 255), 0);
+                //img.DrawPolyline<float>(poly, true, new Bgr(0, 255, 0), 1);
+            }
 
             foreach (Triangle<float> t in triangles)
             {
-                img.Draw(t, new Gray(80), 0);
-                img.Draw(t, new Gray(255.0), 1);
+                //img.Draw(t, new Bgr(80, 80, 80), 0);
+                img.Draw(t, new Bgr(255.0, 255.0, 255.0), 1);
             }
+
+
             Application.Run(new ImageViewer(img));
         }
 

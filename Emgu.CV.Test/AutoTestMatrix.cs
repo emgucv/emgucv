@@ -154,6 +154,29 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestSubMatrix()
+        {
+            Matrix<float> mat = new Matrix<float>(30, 40);
+            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            Matrix<float> submat = mat.GetSubMatrix(new Rectangle<double>(5, 20, 20, 5));
+            for (int i = 0; i < 15; i++)
+                for (int j = 0; j < 15; j++)
+                    Assert.AreEqual(mat[i + 5, j + 5], submat[i, j]);
+
+            Matrix<float> secondRow = mat.GetRow(1);
+            for (int i = 0; i < mat.Cols; i++)
+            {
+                Assert.AreEqual(mat[1, i], secondRow[0, i]);
+            }
+
+            Matrix<float> thirdCol = mat.GetCol(2);
+            for (int i = 0; i < mat.Rows; i++)
+            {
+                Assert.AreEqual(mat[i, 2], thirdCol[i, 0]);
+            }
+        }
+
         /*
         [Test]
         public void TestDataContractSerializer()

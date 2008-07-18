@@ -34,11 +34,11 @@ namespace WindowsForm
         public Image<Bgr, Byte>  GrapFrame()
         {
             //Create an image of 300x200 with white background
-            Image<Bgr, Byte> img = new Image<Bgr, byte>( 300, 200,  new Bgr(255, 255, 255)); 
-
+            Image<Bgr, Byte> img = new Image<Bgr, byte>( 300, 200,  new Bgr(255, 255, 255));
+            MCvFont f = new MCvFont(FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
             img.Draw(
                 DateTime.Now.Ticks.ToString(), //draw the system clock tick 
-                new Emgu.CV.Font(FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0), //using the specific font
+                ref f, //using the specific font
                 new Point2D<int>(50, 150), //The bottom left posistion of the first character
                 new Bgr(0, 0, 0)); //The color of the font
             return img;            

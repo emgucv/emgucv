@@ -1,39 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
     /// <summary>
-    /// Managed Structure equivalent to CvPoint3D32f
+    /// Managed Structure equivalent to CvPoint3D64f
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct MCvPoint3D32f
+    public struct MCvPoint3D64f
     {
         /// <summary>
         /// x-coordinate
         /// </summary>
-        public float x;
+        public double x;
 
         /// <summary>
         /// y-coordinate
         /// </summary>
-        public float y;
+        public double y;
 
         /// <summary>
         /// z-coordinate
         /// </summary>
-        public float z;
+        public double z;
 
         /// <summary>
-        /// Create a MCvPoint3D32f structure with the specific x and y coordinates
+        /// Create a MCvPoint3D64f structure with the specific x and y coordinates
         /// </summary>
         /// <param name="x">x-coordinate</param>
         /// <param name="y">y-coordinate</param>
         /// <param name="z">z-coordinate</param>
-        public MCvPoint3D32f(float x, float y, float z)
+        public MCvPoint3D64f(double x, double y, double z)
         {
-            this.x = x; 
+            this.x = x;
             this.y = y;
             this.z = z;
         }

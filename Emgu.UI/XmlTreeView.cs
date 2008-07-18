@@ -9,21 +9,34 @@ using System.Xml;
 
 namespace Emgu.UI
 {
+    /// <summary>
+    /// Control to display xml document in a tree view
+    /// </summary>
     public partial class XmlTreeView : UserControl
     {
         private XmlDocument _doc;
 
+        /// <summary>
+        /// Create the XmlTreeView
+        /// </summary>
         public XmlTreeView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Create the tree view and display <paramref name="doc"/>
+        /// </summary>
+        /// <param name="doc">The xml document to be displayed</param>
         public XmlTreeView(XmlDocument doc)
             : this()
         {
             XmlDocument = doc;
         }
 
+        /// <summary>
+        /// Get or Set the xml document display in this control
+        /// </summary>
         public XmlDocument XmlDocument
         {
             set

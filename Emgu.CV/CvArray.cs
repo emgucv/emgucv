@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Diagnostics;
@@ -70,7 +69,7 @@ namespace Emgu.CV
         {
             get
             {
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
+                int size = Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
                 Byte[] data = new Byte[size];
                 Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
 
@@ -95,7 +94,7 @@ namespace Emgu.CV
             set
             {
                 Byte[] bytes;
-                int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
+                int size = Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
 
                 if (SerializationCompressionRatio == 0)
                 {
@@ -415,7 +414,7 @@ namespace Emgu.CV
             #region decode the data from Xml and assign the value to the matrix
             reader.MoveToContent();
             reader.ReadToFollowing("Bytes");
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(TDepth)) *  ManagedArray.Length;
+            int size = Marshal.SizeOf(typeof(TDepth)) *  ManagedArray.Length;
             if (SerializationCompressionRatio == 0)
             {
                 Byte[] bytes = new Byte[size];

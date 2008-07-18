@@ -28,13 +28,13 @@ namespace Emgu.CV
         /// <summary>
         /// Create a sequence using the specific <paramref name="seq_flag"/> and <paramref name="storage"/>
         /// </summary>
-        /// <param name="seq_flag">the sequence flag</param>
+        /// <param name="seqFlag">Flags of the created sequence. If the sequence is not passed to any function working with a specific type of sequences, the sequence value may be set to 0, otherwise the appropriate type must be selected from the list of predefined sequence types</param>
         /// <param name="storage">the storage</param>
-        public Seq(int seq_flag, MemStorage storage)
+        public Seq(int seqFlag, MemStorage storage)
             : this (storage)
         {
             _ptr = CvInvoke.cvCreateSeq(
-                seq_flag, Marshal.SizeOf(typeof(MCvSeq)),
+                seqFlag, Marshal.SizeOf(typeof(MCvSeq)),
                 Marshal.SizeOf(typeof(T)),
                 storage.Ptr);
         }

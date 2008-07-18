@@ -89,7 +89,6 @@
     <Compile Include="Color\Xyz.cs" />
     <Compile Include="Color\Ycc.cs" />
     <Compile Include="CvException.cs" />
-    <Compile Include="DelaunayTriangulation.cs" />
     <Compile Include="EigenObjectRecognizer.cs" />
     <Compile Include="Envelope.cs" />
     <Compile Include="ExposableMethodAttribute.cs" />
@@ -99,6 +98,8 @@
     <Compile Include="PInvoke\CvType\MCvChain.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
     <Compile Include="PInvoke\CvType\MCvKalman.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint2D64f.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint3D64f.cs" />
     <Compile Include="PInvoke\CvType\MCvQuadEdge2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
     <Compile Include="PInvoke\CvType\MCvSet.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
+    <Compile Include="PlannarSubdivision.cs" />
     <Compile Include="Shape\Cross2D.cs" />
     <Compile Include="Shape\IConvexPolygon.cs" />
     <Compile Include="Shape\Triangle.cs" />
@@ -172,7 +174,6 @@
     <Compile Include="PInvoke\CvInvoke.cs" />
     <Compile Include="Capture\DuplexCaptureCallback.cs" />
     <Compile Include="Shape\Ellipse.cs" />
-    <Compile Include="Font.cs" />
     <Compile Include="HaarCascade.cs" />
     <Compile Include="Histogram.cs" />
     <Compile Include="Capture\ICapture.cs" />
@@ -184,7 +185,6 @@
     <Compile Include="PointAndLine\PointCollection.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="Moment.cs" />
     <Compile Include="PointAndLine\Point.cs" />
     <Compile Include="PointAndLine\Point2D.cs" />
     <Compile Include="PointAndLine\Point3D.cs" />

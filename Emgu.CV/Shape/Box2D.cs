@@ -65,8 +65,8 @@ namespace Emgu.CV
 
             set
             {
-                X = (T)System.Convert.ChangeType(value.center.x, typeof(T));
-                Y = (T)System.Convert.ChangeType(value.center.y, typeof(T));
+                Center.X = (T)System.Convert.ChangeType(value.center.x, typeof(T));
+                Center.Y = (T)System.Convert.ChangeType(value.center.y, typeof(T));
                 Width = (T)System.Convert.ChangeType(value.size.width, typeof(T));
                 Height = (T)System.Convert.ChangeType(value.size.height, typeof(T));
                 _angle = System.Convert.ToDouble(value.angle);

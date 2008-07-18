@@ -9,7 +9,6 @@ namespace Emgu.CV
     ///</summary>
     public class Ellipse<T> : Box2D<T> where T : IComparable, new()
     {
-
         ///<summary> 
         ///Create an ellipse with default parameters
         ///</summary>

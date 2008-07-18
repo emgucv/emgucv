@@ -40,7 +40,7 @@ namespace Emgu.CV
         */ 
 
         /// <summary>
-        /// Enable or diable IPL optimization of opencv
+        /// Enable or diable IPL optimization for opencv
         /// </summary>
         /// <param name="enable">true to enable optimization, false to disable</param>
         public static void OptimizeCV(bool enable)

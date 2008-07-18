@@ -8,7 +8,7 @@ namespace Emgu.CV
 {
     ///<summary> A 3D point </summary>
     ///<typeparam name="T"> The type of value for this 3D point</typeparam>
-    [DataContract]
+    [Serializable]
     public class Point3D<T> : Point2D<T> where T : IComparable, new()
     {
 

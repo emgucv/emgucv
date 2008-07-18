@@ -39,12 +39,12 @@ namespace Emgu.CV
             : base(3)
         { }
 
-        ///<summary> The intensity of the B color channel </summary>
-        public double B { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
-        ///<summary> The intensity of the G color channel </summary>
-        public double G { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
-        ///<summary> The intensity of the R color channel </summary>
-        public double R { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
+        ///<summary> Get or set the intensity of the blue color channel </summary>
+        public double Blue { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
+        ///<summary> Get or set the intensity of the green color channel </summary>
+        public double Green { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
+        ///<summary> Get or set the intensity of the reg color channel </summary>
+        public double Red { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
 
         /// <summary>
         /// Get the names for each channel

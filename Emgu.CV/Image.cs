@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using System.IO;
@@ -329,9 +328,9 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// The depth value in opencv for this image
+        /// The equivalent depth type in opencv for this image
         /// </summary>
-        protected CvEnum.IPL_DEPTH CvDepth
+        public CvEnum.IPL_DEPTH CvDepth
         {
             get
             {
@@ -341,6 +340,8 @@ namespace Emgu.CV
                     return CvEnum.IPL_DEPTH.IPL_DEPTH_8U;
                 else if (typeof(TDepth) == typeof(Double))
                     return CvEnum.IPL_DEPTH.IPL_DEPTH_64F;
+                else if (typeof(TDepth) == typeof(SByte))
+                    return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8S;
                 else
                     throw new NotImplementedException("Unsupported image depth");
             }
@@ -619,13 +620,13 @@ namespace Emgu.CV
         /// <param name="font">The font used for drawing</param>
         /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
         /// <param name="color">The color of the text</param>
-        public virtual void Draw<T>(String message, Font font, Point2D<T> bottomLeft, TColor color) where T : IComparable, new()
+        public virtual void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) where T : IComparable, new()
         {
             CvInvoke.cvPutText(
                 Ptr,
                 message,
                 bottomLeft.MCvPoint,
-                font,
+                ref font,
                 color.MCvScalar);
         }
 
@@ -2031,6 +2032,21 @@ namespace Emgu.CV
                 bool grayByte = (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte));
                 bool bgrByte = (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte));
 
+#if LINUX
+                // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
+                // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
+                if (grayByte)
+                    return ToBitmap();
+                else
+                {
+                    Image<Bgra, Byte> res = Convert<Bgra, Byte>();
+                    CvInvoke.cvSetImageCOI(res.Ptr, 4);
+                    CvInvoke.cvSet(res.Ptr, new MCvScalar(255.0, 255.0, 255.0, 255.0), IntPtr.Zero);
+                    CvInvoke.cvSetImageCOI(res.Ptr, 0);
+                    return res.ToBitmap();
+                }
+#else
+                
                 if (!grayByte && !bgrByte) return ToBitmap();
 
                 IntPtr scan0;
@@ -2050,22 +2066,16 @@ namespace Emgu.CV
                     bmp.Palette = Utils.GrayscalePalette;
                     return bmp;
                 }
-                else //bgrByte
-                {
-#if Linux
-                    // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
-                    // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
-                    return ToBitmap();
-#else
-                    //Bgr byte    
+                else 
+                {   //Bgr byte    
                     return new Bitmap(
                         size.width,
                         size.height,
                         step,
                         System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                         scan0);
-#endif
                 }
+#endif
             }
             set
             {
@@ -2207,9 +2217,9 @@ namespace Emgu.CV
                 if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                 {
                     //create the bitmap and get the pointer to the data
-                    Bitmap image = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                    Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-                    System.Drawing.Imaging.BitmapData data = image.LockBits(
+                    System.Drawing.Imaging.BitmapData data = bmp.LockBits(
                         new System.Drawing.Rectangle(0, 0, Width, Height),
                         System.Drawing.Imaging.ImageLockMode.WriteOnly,
                         System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -2221,9 +2231,9 @@ namespace Emgu.CV
                     for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                         Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
-                    image.UnlockBits(data);
+                    bmp.UnlockBits(data);
 
-                    return image;
+                    return bmp;
                 }
                 else
                 {
@@ -3090,11 +3100,10 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1?s</param>
         /// <returns>spatial and central moments up to the third order</returns>
-        public Moment Moment(bool binary)
+        public MCvMoments Moments(bool binary)
         {
-            Moment m = new Moment();
-            int flag = binary ? 1 : 0;
-            CvInvoke.cvMoments(Ptr, m.Ptr, flag);
+            MCvMoments m = new MCvMoments();
+            CvInvoke.cvMoments(Ptr, ref m, binary ? 1 : 0);
             return m;
         }
 

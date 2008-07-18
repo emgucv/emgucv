@@ -10,10 +10,17 @@ namespace Emgu.CV
     {
         ///<summary> Create a Gray color with the given intensity</summary>
         ///<param name="intensity"> The intensity for this color </param>
-        public Gray(double intensity) : base(1) { _coordinate[0] = intensity; }
+        public Gray(double intensity) 
+            : this() 
+        { 
+            _coordinate[0] = intensity; 
+        }
 
         ///<summary> Create a Gray color with o intensity </summary>
-        public Gray() : base(1) { }
+        public Gray() 
+            : base(1) 
+        { 
+        }
 
         ///<summary> The intensity of the gray color </summary>
         ///<value> The intensity of the gray color</value>

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 
 namespace Emgu.CV
 {
     ///<summary> A two dimensional point </summary>
     ///<typeparam name="T"> The type of value for this 2D point</typeparam>
-    [DataContract]
     [Serializable]
     public class Point2D<T> : Point<T> where T : IComparable, new() 
     {
@@ -27,6 +27,7 @@ namespace Emgu.CV
         ///<param name="data"> An array of size 2</param>
         public Point2D(T[] data)
         {
+            Debug.Assert(data.Length == 2, "The array 'data' should have lentgth of 2");
             _coordinate = data;
         }
 

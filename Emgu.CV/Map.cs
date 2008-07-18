@@ -147,9 +147,9 @@ namespace Emgu.CV
         /// <param name="font">The font used for drawing</param>
         /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
         /// <param name="color">The color of the text</param>
-        public override void Draw<T>(String message, Font font, Point2D<T> bottomLeft, TColor color) 
+        public override void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) 
         {
-            base.Draw(message, font, MapPoint<T>(bottomLeft).Convert<int>(), color);
+            base.Draw(message, ref font, MapPoint<T>(bottomLeft).Convert<int>(), color);
         }
 
         /// <summary>

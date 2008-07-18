@@ -8,7 +8,7 @@ namespace Emgu.CV
     /// The Image which contains time stamp which specified what time this image is created 
     /// </summary>
     [Serializable]
-    public class TimedImage<C, D> : Image<C, D> where C : ColorType, new()
+    public class TimedImage<TColor, TDepth> : Image<TColor, TDepth> where TColor : ColorType, new()
     {
         private System.DateTime _timestamp;
 
@@ -27,7 +27,7 @@ namespace Emgu.CV
         ///<param name="width">The width of the image</param>
         ///<param name="height">The height of the image</param>
         ///<param name="value">The initial color of the image</param>
-        public TimedImage(int width, int height, C value)
+        public TimedImage(int width, int height, TColor value)
             : base(width, height, value)
         {
             _timestamp = DateTime.Now;

@@ -8,8 +8,10 @@ namespace Emgu.CV
 {
     ///<summary> A rectangle </summary>
     [Serializable]
-    public class Rectangle<T> : Point2D<T>, IConvexPolygon<T> where T : IComparable, new()
+    public class Rectangle<T> : IConvexPolygon<T> where T : IComparable, new()
     {
+        private Point2D<T> _center;
+
         /// <summary>
         /// The size: width &amp; height
         /// </summary>
@@ -27,7 +29,7 @@ namespace Emgu.CV
         ///<param name="size"> The size of the rectangle </param>
         public Rectangle(Point2D<T> center, Point2D<T> size)
         {
-            _coordinate = center.Coordinate;
+            _center = center;
             _size = size;
         }
 
@@ -37,7 +39,7 @@ namespace Emgu.CV
         ///<param name="height"> The height of the rectangle </param>
         public Rectangle(Point2D<T> center, T width, T height)
         {
-            _coordinate = center.Coordinate;
+            _center = center;
             _size = new Point2D<T>(width, height);
         }
 
@@ -46,10 +48,10 @@ namespace Emgu.CV
         /// </summary>
         public Rectangle(T left, T right, T top, T bottom)
         {
-            _coordinate = new T[2] { 
+            _center = new Point2D<T>( 
                 (T) System.Convert.ChangeType( (System.Convert.ToDouble(right) + System.Convert.ToDouble(left)) / 2.0, typeof(T)),
                 (T) System.Convert.ChangeType( (System.Convert.ToDouble(top) + System.Convert.ToDouble(bottom)) / 2.0, typeof(T))
-                };
+                );
             _size = new Point2D<T>(
                 (T)System.Convert.ChangeType(System.Convert.ToDouble(right) - System.Convert.ToDouble(left), typeof(T)),
                 (T)System.Convert.ChangeType(System.Convert.ToDouble(top) - System.Convert.ToDouble(bottom), typeof(T))
@@ -68,19 +70,19 @@ namespace Emgu.CV
         /// <summary>
         /// The left most coordinate
         /// </summary>
-        public T Left { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(X) - System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
+        public T Left { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.X) - System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
         /// <summary>
         /// The right most coordinate
         /// </summary>
-        public T Right { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(X) + System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
+        public T Right { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.X) + System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
         /// <summary>
         /// The top most coordinate
         /// </summary>
-        public T Top { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(Y) + System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
+        public T Top { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) + System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
         /// <summary>
         /// The bottom most coordinate
         /// </summary>
-        public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
+        public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
 
         /// <summary>
         /// The Size (width and height) of this rectangle
@@ -96,8 +98,8 @@ namespace Emgu.CV
         [XmlIgnore]
         public Point2D<T> Center
         {
-            get { return (Point2D<T>) this; }
-            set { _coordinate = value.Coordinate; }
+            get { return _center; }
+            set { _center = value; }
         }
 
         ///<summary> Get or Set the width of the rectangle </summary>
@@ -160,7 +162,7 @@ namespace Emgu.CV
             }
             set
             {
-                _coordinate = value.Center.Convert<T>().Coordinate;
+                _center = value.Center.Convert<T>();
                 _size = value.Size.Convert<T>();
             }
         }
@@ -172,7 +174,7 @@ namespace Emgu.CV
         /// <returns>true if the two rectangle equals, false otherwise</returns>
         public bool Equals(Rectangle<T> rec)
         {
-            return base.Equals(rec) && Width.Equals(rec.Width) && Height.Equals(rec.Height);
+            return Center.Equals(rec.Center) && Width.Equals(rec.Width) && Height.Equals(rec.Height);
         }
 
         /// <summary>
@@ -180,7 +182,7 @@ namespace Emgu.CV
         /// </summary>
         /// <typeparam name="TOther">the depth type to convert to</typeparam>
         /// <returns>The current rectangle in different depth</returns>
-        public new Rectangle<TOther> Convert<TOther>() where TOther : IComparable, new()
+        public Rectangle<TOther> Convert<TOther>() where TOther : IComparable, new()
         {
             return new Rectangle<TOther>(Center.Convert<TOther>(), Size.Convert<TOther>());
         }

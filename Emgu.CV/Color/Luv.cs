@@ -15,7 +15,7 @@ namespace Emgu.CV
         ///<param name="y"> The y value for this color </param>
         ///<param name="x"> The x value for this color </param>
         public Luv(double x, double y, double z)
-            : base(3)
+            : this()
         {
             _coordinate[0] = x;
             _coordinate[1] = y;

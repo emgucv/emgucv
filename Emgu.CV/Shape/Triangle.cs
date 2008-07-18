@@ -40,6 +40,28 @@ namespace Emgu.CV
             _vertices = new Point2D<T>[] { v1, v2, v3 };
         }
 
+
+        /// <summary>
+        /// Get the area of this triangle
+        /// </summary>
+        public double Area
+        {
+            get
+            {
+                Point2D<double>[] vertices = Array.ConvertAll<Point2D<T>, Point2D<double>>(Vertices, delegate(Point2D<T> p) { return p.Convert<double>(); });
+                LineSegment2D<double>[] edges =  PointCollection.PolyLine<double>(vertices, true);
+                double[] edgeLengths = Array.ConvertAll<LineSegment2D<double>, double>(edges, delegate(LineSegment2D<double> line) { return line.Length; });
+
+                #region use Heron's formula to find the area of the triangle
+                double a = edgeLengths[0];
+                double b = edgeLengths[1];
+                double c = edgeLengths[2];
+                double s = (a + b + c) / 2.0;
+                return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+                #endregion
+            }
+        }
+
         /// <summary>
         /// Compare two triangles and return true if equal
         /// </summary>
