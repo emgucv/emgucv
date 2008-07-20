@@ -62,10 +62,10 @@ namespace FacialMouseControl
         private static bool PointInRectangle(Point2D<double> point, Rectangle<double> rect)
         {
             return
-                (point.X > rect.X - rect.Width / 2.0) &&
-                (point.X < rect.X + rect.Width / 2.0) &&
-                (point.Y > rect.Y - rect.Height / 2.0) &&
-                (point.X < rect.Y + rect.Height / 2.0);
+                (point.X > rect.Center.X - rect.Width / 2.0) &&
+                (point.X < rect.Center.X + rect.Width / 2.0) &&
+                (point.Y > rect.Center.Y - rect.Height / 2.0) &&
+                (point.X < rect.Center.Y + rect.Height / 2.0);
         }
 
         public void ProcessImage(Image<Bgr, Byte> frame)
