@@ -177,6 +177,40 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestMinMax()
+        {
+            Matrix<float> mat = new Matrix<float>(30, 40);
+            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            double min, max;
+            MCvPoint minLoc, maxLoc;
+            mat.MinMax(out min, out max, out minLoc, out maxLoc);
+        }
+
+        [Test]
+        public void TestConcate()
+        {
+            Matrix<float> mat = new Matrix<float>(30, 40);
+            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+
+            Matrix<float> m1 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, 20, 0));
+            Matrix<float> m2 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, mat.Rows, 20));
+            Matrix<float> mat2 = m1.ConcateVertical(m2);
+            Assert.IsTrue(mat.Equals(mat2));
+
+            Matrix<float> m3 = mat.GetSubMatrix(new Rectangle<double>(0, 10, mat.Rows, 0));
+            Matrix<float> m4 = mat.GetSubMatrix(new Rectangle<double>(10, mat.Cols, mat.Rows, 0));
+            Matrix<float> mat3 = m3.ConcateHorizontal(m4);
+            Assert.IsTrue(mat.Equals(mat3));
+
+            Matrix<float> m5 = mat.GetRows(0, 5, 1);
+            Matrix<float> m6 = mat.GetRows(5, 6, 1);
+            Matrix<float> m7 = mat.GetRows(6, mat.Rows, 1);
+            Assert.IsTrue(mat.RemoveRows(5, 6).Equals(m5.ConcateVertical(m7)));
+            Assert.IsTrue(mat.RemoveRows(0, 1).Equals(mat.GetRows(1, mat.Rows, 1)));
+            Assert.IsTrue(mat.RemoveRows(mat.Rows - 1, mat.Rows).Equals(mat.GetRows(0, mat.Rows - 1, 1)));
+        }
+
         /*
         [Test]
         public void TestDataContractSerializer()

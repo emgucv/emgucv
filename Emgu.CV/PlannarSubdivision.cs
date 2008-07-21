@@ -242,7 +242,7 @@ namespace Emgu.CV
         /// <summary>
         ///  Find the Delaunay's triangulation from the given <paramref name="points"/>
         /// </summary>
-        /// <param name="points">the points for triangulation</param>
+        /// <param name="points">The points for triangulation</param>
         /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
         /// <returns>The triangles as a result of the triangulation</returns>
         public static List<Triangle<float>> GetDelaunayTriangles(IEnumerable<Point2D<float>> points)
@@ -251,6 +251,11 @@ namespace Emgu.CV
                 return tri.GetDelaunayTriangles();
         }
 
+        /// <summary>
+        /// Get the list of the voronoi facets from the given <paramref name="points"/>
+        /// </summary>
+        /// <param name="points">The points for computing the Voronoi diagram</param>
+        /// <returns>A list of Voronoi facet</returns>
         public static List<VoronoiFacet> GetVoronoi(IEnumerable<Point2D<float>> points)
         {
             using (PlanarSubdivision tri = GetSubdivision(points))
@@ -299,6 +304,11 @@ namespace Emgu.CV
     /// </summary>
     public class VoronoiFacet : IConvexPolygon<float>
     {
+        /// <summary>
+        /// Create a Voronoi facet using the specific <paramref name="point"/> and <paramref name="polyline"/>
+        /// </summary>
+        /// <param name="point">The point this facet associate with </param>
+        /// <param name="polyline">The points that defines the contour of this facet</param>
         public VoronoiFacet(Point2D<float> point, Point2D<float>[] polyline)
         {
             _point = point;

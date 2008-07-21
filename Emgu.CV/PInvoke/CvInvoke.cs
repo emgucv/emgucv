@@ -1756,6 +1756,21 @@ namespace Emgu.CV
         #endregion 
 
         /// <summary>
+        /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky’s algorithm. 
+        /// </summary>
+        /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
+        /// <param name="hull_storage">The destination array (CvMat*) or memory storage (CvMemStorage*) that will store the convex hull. If it is array, it should be 1d and have the same number of elements as the input array/sequence. On output the header is modified so to truncate the array downto the hull size</param>
+        /// <param name="orientation">Desired orientation of convex hull: CV_CLOCKWISE or CV_COUNTER_CLOCKWISE</param>
+        /// <param name="return_points">If non-zero, the points themselves will be stored in the hull instead of indices if hull_storage is array, or pointers if hull_storage is memory storage</param>
+        /// <returns>If hull_storage is memory storage, the function creates a sequence containing the hull points or pointers to them, depending on return_points value and returns the sequence on output</returns>
+        [DllImport(CV_LIBRARY)]
+        public static extern IntPtr cvConvexHull2(
+            IntPtr input,
+            IntPtr hull_storage,
+            CvEnum.ORIENTATION orientation,
+            int return_points);
+
+        /// <summary>
         /// Erodes the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the minimum is taken:
         /// dst=erode(src,element):  dst(x,y)=min((x',y') in element))src(x+x',y+y')
         ///The function supports the in-place mode. Erosion can be applied several (iterations) times. In case of color image each channel is processed independently.

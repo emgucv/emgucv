@@ -65,9 +65,11 @@ namespace Emgu.CV
                     return CvEnum.MAT_DEPTH.CV_32F;
                 else if (typeof(TDepth) == typeof(Byte))
                     return CvEnum.MAT_DEPTH.CV_8U;
+                else if (typeof(TDepth) == typeof(double))
+                    return CvEnum.MAT_DEPTH.CV_64F;
                 else
                 {
-                    throw new NotImplementedException("Unsupported matrix depth");                    
+                    throw new NotImplementedException("Unsupported matrix depth");
                 }
             }
         }
@@ -190,6 +192,7 @@ namespace Emgu.CV
             Data = new TDepth[rows, cols];
         }
 
+        #region Accessing Elements and sub-Arrays
         /// <summary>
         /// Get a submatrix corresponding to a specified rectangle
         /// </summary>
@@ -253,6 +256,93 @@ namespace Emgu.CV
             IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
             subMat._ptr = CvInvoke.cvGetCols(_ptr, subPtr, startCol, endCol);
             return subMat;
+        }
+        #endregion
+
+        /// <summary>
+        /// Return the matrix without a specified row span of the input array
+        /// </summary>
+        /// <param name="startRow">Zero-based index of the starting row (inclusive) of the span</param>
+        /// <param name="endRow">Zero-based index of the ending row (exclusive) of the span</param>
+        /// <returns></returns>
+        public Matrix<TDepth> RemoveRows(int startRow, int endRow)
+        {
+            if (startRow == 0)
+                return GetRows(endRow, Rows, 1);
+            else if (endRow == Rows)
+                return GetRows(0, startRow, 1);
+            else
+            {
+                using(Matrix<TDepth> upper = GetRows(0, startRow, 1))
+                using (Matrix<TDepth> lower = GetRows(endRow, Rows, 1))
+                {
+                    return upper.ConcateVertical(lower);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return the matrix without a specified column span of the input array
+        /// </summary>
+        /// <param name="startCol">Zero-based index of the starting column (inclusive) of the span</param>
+        /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
+        /// <returns></returns>
+        public Matrix<TDepth> RemoveCols(int startCol, int endCol)
+        {
+            if (startCol == 0)
+                return GetCols(endCol, Cols);
+            else if (endCol == Cols)
+                return GetCols(0, startCol);
+            else
+            {
+                using (Matrix<TDepth> upper = GetCols(0, startCol))
+                using (Matrix<TDepth> lower = GetCols(endCol, Cols))
+                {
+                    return upper.ConcateHorizontal(lower);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the min / max locations and values for the matrix
+        /// </summary>
+        public void MinMax(out double minValue, out double maxValue, out MCvPoint minLocation, out MCvPoint maxLocation)
+        {
+            minValue = 0; maxValue = 0;
+            minLocation = new MCvPoint(); maxLocation = new MCvPoint();
+            CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
+        }
+
+        /// <summary>
+        /// Concate the current matrix with another matrix vertically. If this matrix is n1 x m and <paramref name="otherMatrix"/> is n2 x m, the resulting matrix is (n1+n2) x m.
+        /// </summary>
+        /// <param name="otherMatrix">The other matrix to concate</param>
+        /// <returns>A new matrix that is the vertical concatening of this matrix and <paramref name="otheMatrix"/></returns>
+        public Matrix<TDepth> ConcateVertical(Matrix<TDepth> otherMatrix)
+        {
+            Debug.Assert(Cols == otherMatrix.Cols, "The number of columns must be the same when concatening matrices verticly.");
+            Matrix<TDepth> res = new Matrix<TDepth>(Rows + otherMatrix.Rows, Cols);
+            using (Matrix<TDepth> subUppper = res.GetRows(0, Rows, 1))
+                Copy(subUppper);
+            using (Matrix<TDepth> subLower = res.GetRows(Rows, res.Rows, 1))
+                otherMatrix.Copy(subLower);
+            return res;
+        }
+
+        /// <summary>
+        /// Concate the current matrix with another matrix horizontally. If this matrix is n x m1 and <paramref name="otherMatrix"/> is n x m2, the resulting matrix is n x (m1 + m2).
+        /// </summary>
+        /// <param name="otherMatrix">The other matrix to concate</param>
+        /// <returns>A new matrix that is the horizontal concatening of this matrix and <paramref name="otheMatrix"/></returns>
+        public Matrix<TDepth> ConcateHorizontal(Matrix<TDepth> otherMatrix)
+        {
+            Debug.Assert(Rows == otherMatrix.Rows, "The number of rows must be the same when concatening matrices horizontally.");
+            Matrix<TDepth> res = new Matrix<TDepth>(Rows, Cols+otherMatrix.Cols);
+            using (Matrix<TDepth> subLeft = res.GetCols(0, Cols))
+                Copy(subLeft);
+            using (Matrix<TDepth> subRight = res.GetCols(Cols, res.Cols))
+                otherMatrix.Copy(subRight);
+            return res;
         }
 
         #region Implement ISerializable interface
