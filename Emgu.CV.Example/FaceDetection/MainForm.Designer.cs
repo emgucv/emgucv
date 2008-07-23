@@ -1,6 +1,6 @@
 namespace FaceDetection
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,6 +33,7 @@ namespace FaceDetection
             // 
             // imageBox1
             // 
+            this.imageBox1.DisplayedImage = null;
             this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageBox1.Image = null;
             this.imageBox1.Location = new System.Drawing.Point(0, 0);
@@ -40,14 +41,14 @@ namespace FaceDetection
             this.imageBox1.Size = new System.Drawing.Size(751, 674);
             this.imageBox1.TabIndex = 0;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 674);
             this.Controls.Add(this.imageBox1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "MainForm";
+            this.Text = "Face Detection Example";
             this.ResumeLayout(false);
 
         }

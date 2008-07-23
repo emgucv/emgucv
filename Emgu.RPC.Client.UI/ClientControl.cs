@@ -59,6 +59,7 @@ namespace Client
                     });
 
                 button1.Text = "Stop";
+                
             }
             else
             {

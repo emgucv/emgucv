@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Emgu.CV
 {
-#if NET_2_0
+#if LINUX
     /*
         Since mono-olive do not support creation of DuplexChannelFactory, this class is disabled
     */

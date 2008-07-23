@@ -9,13 +9,13 @@ using Emgu.CV;
 
 namespace FaceDetection
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
-            Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"); //Read the image as a Bgr 8-bit image  
+            Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"); //Read the files as an 8-bit Bgr image  
             Image<Gray, Byte> gray = image.Convert<Gray, Byte>(); //Convert it to Grayscale
 
             //normalizes brightness and increases contrast of the image

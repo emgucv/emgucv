@@ -62,7 +62,6 @@ namespace Emgu.RPC
             if (_captureClient == null)
             {
                 _captureClient = new CaptureClient(_binding, _baseUri.ToString() + uri);
-                //_captureClient.Update = true;
             }
         }
 

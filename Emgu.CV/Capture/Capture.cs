@@ -152,12 +152,11 @@ namespace Emgu.CV
             return CvInvoke.cvGetCaptureProperty(_ptr, index);
         }
 
-        /*
-        private Type GetImageDepthType(IntPtr img)
+        private CvEnum.IPL_DEPTH GetImageDepthType(IntPtr img)
         {
             MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-            //if (iplImage.depth == 
-        }*/
+            return iplImage.depth; 
+        }
 
         #region implement ICapture
         ///<summary> Capture a RGB image frame</summary>
@@ -166,8 +165,9 @@ namespace Emgu.CV
         {
 #if TEST_CAPTURE
             Image<Bgr, Byte> tmp = new Image<Bgr, Byte>(320, 240, new Bgr());
+            MCvFont font = new MCvFont( CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
             tmp.Draw(System.DateTime.Now.Ticks.ToString(),
-                new Font( CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0),
+                ref font,
                 new Point2D<int>(10, 50),
                 new Bgr(255.0, 255.0, 255.0));
             IntPtr img = tmp;
@@ -262,10 +262,8 @@ namespace Emgu.CV
         {
             IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
 
-            using (Image<Bgr, Byte> img = QueryFrame())
-            {
-                callback.ReceiveFrame(img);
-            }
+            Image<Bgr, Byte> img = QueryFrame();
+            callback.ReceiveFrame(img);
         }
 
         /// <summary>
@@ -275,10 +273,8 @@ namespace Emgu.CV
         {
             IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
 
-            using (Image<Bgr, Byte> img = QuerySmallFrame())
-            {
-                callback.ReceiveFrame(img);
-            }
+            Image<Bgr, Byte> img = QuerySmallFrame();
+            callback.ReceiveFrame(img);
         }
 
     };

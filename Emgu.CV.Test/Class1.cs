@@ -443,47 +443,6 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(null));
         }
 
-        public void TestDelaunay()
-        {
-            Point2D<float>[] pts = new Point2D<float>[5];
-            float max = 600;
-            //Random r = new Random(312421);
-            Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
-
-            for (int i = 0; i < pts.Length; i++)
-                pts[i] = new Point2D<float>((float)r.NextDouble() * max, (float)r.NextDouble() * max);
-
-            DateTime t1 = DateTime.Now;
-            List<Triangle<float>> triangles = PlanarSubdivision.GetDelaunayTriangles(pts);
-            List<VoronoiFacet> polygons = PlanarSubdivision.GetVoronoi(pts);
-            TimeSpan ts = DateTime.Now.Subtract(t1);
-            Trace.WriteLine(ts.TotalMilliseconds);
-
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
-
-            foreach (VoronoiFacet poly in polygons)
-            {
-                MCvPoint[] points = Array.ConvertAll<Point2D<float>, MCvPoint>(poly.Vertices, delegate(Point2D<float> p) { return p.MCvPoint; });
-                /*
-                img.FillConvexPoly(
-                    points,
-                    new Bgr(r.NextDouble() * 120, r.NextDouble() * 120, r.NextDouble() * 120)
-                    );*/
-                img.DrawPolyline(points, true, new Bgr(255.0, 0, 0), 1);
-                img.Draw(new Circle<float>(poly.Point, 5), new Bgr(255, 255, 255), 0);
-                //img.DrawPolyline<float>(poly, true, new Bgr(0, 255, 0), 1);
-            }
-
-            foreach (Triangle<float> t in triangles)
-            {
-                //img.Draw(t, new Bgr(80, 80, 80), 0);
-                img.Draw(t, new Bgr(255.0, 255.0, 255.0), 1);
-            }
-
-
-            Application.Run(new ImageViewer(img));
-        }
-
         public void TestContour()
         {
             Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
@@ -529,6 +488,32 @@ namespace Emgu.CV.Test
             map.Draw(tri, new Gray(80), 0);
             map.Draw(tri, new Gray(255), 1);
             Application.Run(new Emgu.CV.UI.ImageViewer(map));
+        }
+
+        private void TestConvexHull()
+        {
+            Random r = new Random();
+            Point2D<float>[] pts = new Point2D<float>[40];
+            for (int i = 0; i < pts.Length; i++)
+            {
+                pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
+            }
+
+            MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }));
+
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
+            foreach (Point2D<float> p in pts)
+            {
+                img.Draw(new Circle<float>(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
+            }
+
+            MCvPoint[] convexHull = Array.ConvertAll<MCvPoint2D32f, MCvPoint>(hull, delegate(MCvPoint2D32f p) { return new MCvPoint((int)p.x, (int)p.y); });
+            img.DrawPolyline(
+                convexHull,
+                true, new Bgr(255.0, 0.0, 0.0), 1);
+
+            Application.Run(new ImageViewer(img));
+
         }
     }
 }

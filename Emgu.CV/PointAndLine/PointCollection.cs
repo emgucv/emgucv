@@ -235,5 +235,25 @@ namespace Emgu.CV
                 Array.ConvertAll<MCvPoint, Point2D<D>>(points, delegate(MCvPoint p) { Point2D<D> p2d = new Point2D<D>(); p2d.MCvPoint = p; return p2d; }),
                 closed);
         }
+
+        public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable< Point<D>> points) where D: IComparable, new()
+        {
+            using (MemStorage stor = new MemStorage())
+            using (Seq<MCvPoint2D32f> sequence = To2D32fSequence<D>(stor, points))
+            {
+                IntPtr hull = CvInvoke.cvConvexHull2(sequence.Ptr, stor.Ptr, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE, 1);
+                using (Seq<MCvPoint2D32f> hullSequence = new Seq<MCvPoint2D32f>(hull, stor))
+                {
+                    MCvPoint2D32f[] result = new MCvPoint2D32f[hullSequence.Total];
+                    int counter = 0;
+                    foreach (MCvPoint2D32f p in hullSequence)
+                    {
+                        result[counter++] = p;
+                    }
+                    return result;
+                }
+            }
+
+        }
     };
 }

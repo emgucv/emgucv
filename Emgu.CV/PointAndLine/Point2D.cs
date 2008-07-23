@@ -77,7 +77,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// The CvPoint representation of th is 2D point
+        /// The MCvPoint representation of this 2D point
         /// </summary>
         public MCvPoint MCvPoint
         {
@@ -90,6 +90,23 @@ namespace Emgu.CV
             {
                 _coordinate[0] = (T) System.Convert.ChangeType(value.x, typeof(T));
                 _coordinate[1] = (T) System.Convert.ChangeType(value.y, typeof(T));
+            }
+        }
+
+        /// <summary>
+        /// The MCvPoint2D32f representation of this 2D point
+        /// </summary>
+        public MCvPoint2D32f MCvPoint2D32f
+        {
+            get
+            {
+                Point2D<float> p = Convert<float>();
+                return new MCvPoint2D32f(p.X, p.Y);
+            }
+            set
+            {
+                _coordinate[0] = (T)System.Convert.ChangeType(value.x, typeof(T));
+                _coordinate[1] = (T)System.Convert.ChangeType(value.y, typeof(T));
             }
         }
 
@@ -110,7 +127,17 @@ namespace Emgu.CV
         /// <returns>true if the point is in the convex polygon; false otherwise </returns>
         public bool InConvexPolygon(IConvexPolygon<T> polygon)
         {
-            LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon.Vertices, true);
+            return InConvexPolygon(polygon.Vertices);
+        }
+
+        /// <summary>
+        /// Determine if the point is in a convex polygon
+        /// </summary>
+        /// <param name="polygon">the convex polygon</param>
+        /// <returns>true if the point is in the convex polygon; false otherwise </returns>
+        public bool InConvexPolygon(Point2D<T>[] polygon)
+        {
+            LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon, true);
             int side = edges[0].Side(this);
             bool inside = true;
             for (int i = 1; i < edges.Length; i++)
