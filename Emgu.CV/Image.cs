@@ -69,7 +69,7 @@ namespace Emgu.CV
                             new MCvSize(mptr.width, mptr.height),
                             (CvEnum.IPL_DEPTH)mptr.depth,
                             3);
-                        CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(new TColor(), new Bgr()));
+                        CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(TColor), typeof(Bgr)));
 
                         CvInvoke.cvReleaseImage(ref ptr);
                         ptr = tmp1;
@@ -1900,7 +1900,7 @@ namespace Emgu.CV
         #endregion
 
         #region Image color and depth conversion
-        private static CvEnum.COLOR_CONVERSION GetColorCvtCode(ColorType srcType, ColorType destType)
+        private static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
         {
             ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetType().GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
             ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetType().GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
@@ -1966,8 +1966,8 @@ namespace Emgu.CV
             }
             else
             {   //different color
-                Emgu.Utils.Action<IntPtr, IntPtr, TColor, TOtherColor> convertColor =
-                    delegate(IntPtr src, IntPtr dest, TColor c1, TOtherColor c2)
+                Emgu.Utils.Action<IntPtr, IntPtr, Type, Type> convertColor =
+                    delegate(IntPtr src, IntPtr dest, Type c1, Type c2)
                     {
                         try
                         {
@@ -1979,20 +1979,20 @@ namespace Emgu.CV
                             //if a direct conversion doesn't exist, apply a two step conversion
                             using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(Width, Height))
                             {
-                                CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(c1, new Bgr()));
-                                CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(new Bgr(), c2));
+                                CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(c1, typeof(Bgr)));
+                                CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), c2));
                             }
                         }
                     };
 
                 if (typeof(TDepth) == typeof(TOtherDepth))
                 {   //same depth
-                    convertColor(Ptr, res.Ptr, new TColor(), new TOtherColor());
+                    convertColor(Ptr, res.Ptr, typeof(TColor), typeof(TOtherColor));
                 }
                 else
                 {   //different depth
                     using (Image<TColor, TOtherDepth> tmp = Convert<TColor, TOtherDepth>())
-                        convertColor(tmp.Ptr, res.Ptr, new TColor(), new TOtherColor());
+                        convertColor(tmp.Ptr, res.Ptr, typeof(TColor), typeof(TOtherColor));
                 }
             }
 
