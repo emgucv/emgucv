@@ -23,7 +23,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc README
+%doc README.txt
 /var/lib/emgu/bin/Emgu.CV.dll
 
 %changelog
