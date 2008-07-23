@@ -1902,8 +1902,8 @@ namespace Emgu.CV
         #region Image color and depth conversion
         private static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
         {
-            ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetType().GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-            ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetType().GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+            ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+            ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
 
             String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodeName, destInfo.ConversionCodeName);
             return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
@@ -2039,11 +2039,11 @@ namespace Emgu.CV
                     return ToBitmap();
                 else
                 {
-                    Image<Bgra, Byte> res = Convert<Bgra, Byte>();
-                    CvInvoke.cvSetImageCOI(res.Ptr, 4);
-                    CvInvoke.cvSet(res.Ptr, new MCvScalar(255.0, 255.0, 255.0, 255.0), IntPtr.Zero);
-                    CvInvoke.cvSetImageCOI(res.Ptr, 0);
-                    return res.ToBitmap();
+                    //Image<Bgr, Byte> res = Convert<Bgr, Byte>();
+                    //CvInvoke.cvSetImageCOI(res.Ptr, 4);
+                    //CvInvoke.cvSet(res.Ptr, new MCvScalar(255.0, 255.0, 255.0, 255.0), IntPtr.Zero);
+                    //CvInvoke.cvSetImageCOI(res.Ptr, 0);
+                    return ToBitmap();
                 }
 #else
                 
