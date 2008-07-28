@@ -179,7 +179,7 @@ namespace Emgu.CV.Test
         {
             get
             {
-                Image<Gray, D> skinMask = Gray.BlankClone();
+                Image<Gray, D> skinMask = Gray.CopyBlank();
 
                 //skinMask.Draw(SkinContour, new Gray(255.0), new Gray(120.0), -1);
 

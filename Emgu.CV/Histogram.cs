@@ -113,7 +113,7 @@ namespace Emgu.CV
                     srcs, 
                     delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
-            Image<Gray, TDepth> res = srcs[0].BlankClone();
+            Image<Gray, TDepth> res = srcs[0].CopyBlank();
             CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
             return res;
         }

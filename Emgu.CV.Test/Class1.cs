@@ -448,7 +448,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
             img._GaussianSmooth(3);
             img = img.Canny(new Gray(80), new Gray(50));
-            Image<Gray, Byte> res = img.BlankClone();
+            Image<Gray, Byte> res = img.CopyBlank();
             res.SetValue(255);
 
             Contour contour = img.FindContours();

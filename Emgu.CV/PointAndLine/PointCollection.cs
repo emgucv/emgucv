@@ -236,12 +236,19 @@ namespace Emgu.CV
                 closed);
         }
 
-        public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable< Point<D>> points) where D: IComparable, new()
+        /// <summary>
+        /// Obtain the convex hull from the point collection
+        /// </summary>
+        /// <typeparam name="D">The type of depth for the point</typeparam>
+        /// <param name="points">The points to find convex hull from</param>
+        /// <param name="orientation">The orientation of the convex hull</param>
+        /// <returns>The array of points that forms the convex hull</returns>
+        public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable< Point<D>> points, CvEnum.ORIENTATION orientation) where D: IComparable, new()
         {
             using (MemStorage stor = new MemStorage())
             using (Seq<MCvPoint2D32f> sequence = To2D32fSequence<D>(stor, points))
             {
-                IntPtr hull = CvInvoke.cvConvexHull2(sequence.Ptr, stor.Ptr, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE, 1);
+                IntPtr hull = CvInvoke.cvConvexHull2(sequence.Ptr, stor.Ptr, orientation, 1);
                 using (Seq<MCvPoint2D32f> hullSequence = new Seq<MCvPoint2D32f>(hull, stor))
                 {
                     MCvPoint2D32f[] result = new MCvPoint2D32f[hullSequence.Total];

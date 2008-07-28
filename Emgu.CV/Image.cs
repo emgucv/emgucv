@@ -408,7 +408,7 @@ namespace Emgu.CV
         ///<returns> A clone of the image</returns>
         public Image<TColor, TDepth> Clone(Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvCopy(Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -417,7 +417,7 @@ namespace Emgu.CV
         ///<returns> A clone of the image</returns>
         public Image<TColor, TDepth> Clone()
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -432,12 +432,13 @@ namespace Emgu.CV
             CvInvoke.cvCopy(Ptr, dest.Ptr, mask.Ptr);
         }
 
+        
         /// <summary> 
         /// Create an image of the same size
         /// </summary>
         /// <remarks>The initial pixel in the image equals zero</remarks>
         /// <returns> The image of the same size</returns>
-        public Image<TColor, TDepth> BlankClone()
+        public Image<TColor, TDepth> CopyBlank()
         {
             return new Image<TColor, TDepth>(Width, Height);
         }
@@ -1026,7 +1027,7 @@ namespace Emgu.CV
         /// <returns>The result of the sobel edge detector</returns>
         public Image<TColor, TDepth> Sobel(int xorder, int yorder, int apertureSize)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
             return res;
         }
@@ -1055,7 +1056,7 @@ namespace Emgu.CV
         ///<returns> The edges found by the Canny edge detector</returns>
         public Image<TColor, TDepth> Canny(TColor thresh, TColor threshLinking)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             double[] t1 = thresh.Coordinate;
             double[] t2 = threshLinking.Coordinate;
             Emgu.Utils.Action<IntPtr, IntPtr, int> act =
@@ -1188,7 +1189,7 @@ namespace Emgu.CV
         ///<returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1201,7 +1202,7 @@ namespace Emgu.CV
         ///<returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1211,7 +1212,7 @@ namespace Emgu.CV
         ///<returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1222,7 +1223,7 @@ namespace Emgu.CV
         ///<returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(TColor val, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1234,7 +1235,7 @@ namespace Emgu.CV
         ///<returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvOr(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1244,7 +1245,7 @@ namespace Emgu.CV
         ///<returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvOr(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1254,7 +1255,7 @@ namespace Emgu.CV
         ///<returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvOrS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1264,7 +1265,7 @@ namespace Emgu.CV
         ///<returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(TColor val, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvOrS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1276,7 +1277,7 @@ namespace Emgu.CV
         ///<returns> The result of the XOR operation</returns>
         public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1289,7 +1290,7 @@ namespace Emgu.CV
         /// <returns>The result of the XOR operation</returns>
         public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1301,7 +1302,7 @@ namespace Emgu.CV
         /// <returns> The result of the XOR operation</returns>
         public Image<TColor, TDepth> Xor(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1314,7 +1315,7 @@ namespace Emgu.CV
         /// <returns> The result of the XOR operation</returns>
         public Image<TColor, TDepth> Xor(TColor val, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1326,7 +1327,7 @@ namespace Emgu.CV
         ///<returns> The complement image</returns>
         public Image<TColor, TDepth> Not()
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvNot(Ptr, res.Ptr);
             return res;
         }
@@ -1338,7 +1339,7 @@ namespace Emgu.CV
         ///<returns> An image where each pixel is the maximum of <i>this</i> image and the parameter image</returns>
         public Image<TColor, TDepth> Max(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvMax(Ptr, img2.Ptr, res.Ptr);
             return res;
         }
@@ -1348,7 +1349,7 @@ namespace Emgu.CV
         ///<returns> An image where each pixel is the maximum of <i>this</i> image and <paramref name="value"/></returns>
         public Image<TColor, TDepth> Max(double value)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvMaxS(Ptr, value, res.Ptr);
             return res;
         }
@@ -1358,7 +1359,7 @@ namespace Emgu.CV
         ///<returns> An image where each pixel is the minimum of <i>this</i> image and the parameter image</returns>
         public Image<TColor, TDepth> Min(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvMin(Ptr, img2.Ptr, res.Ptr);
             return res;
         }
@@ -1368,7 +1369,7 @@ namespace Emgu.CV
         ///<returns> An image where each pixel is the minimum of <i>this</i> image and <paramref name="value"/></returns>
         public Image<TColor, TDepth> Min(double value)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvMinS(Ptr, value, res.Ptr);
             return res;
         }
@@ -1512,7 +1513,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise subtracting img2 from the current image</returns>
         public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSub(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1523,7 +1524,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise subtrating img2 from the current image, using the specific mask</returns>
         public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSub(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1533,7 +1534,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise subtracting color 'val' from the current image</returns>
         public Image<TColor, TDepth> Sub(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSubS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1545,7 +1546,7 @@ namespace Emgu.CV
         /// <returns>val - this</returns>
         public Image<TColor, TDepth> SubR(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSubRS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1558,7 +1559,7 @@ namespace Emgu.CV
         /// <returns>val - this, with mask</returns>
         public Image<TColor, TDepth> SubR(TColor val, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSubRS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1570,7 +1571,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise adding img2 to the current image</returns>
         public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAdd(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1580,7 +1581,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise adding img2 to the current image, using the specific mask</returns>
         public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAdd(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
             return res;
         }
@@ -1589,7 +1590,7 @@ namespace Emgu.CV
         ///<returns> The result of elementwise adding color <paramref name="val"/> from the current image</returns>
         public Image<TColor, TDepth> Add(TColor val)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAddS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
             return res;
         }
@@ -1602,7 +1603,7 @@ namespace Emgu.CV
         ///<returns> this .* img2 * scale </returns>
         public Image<TColor, TDepth> Mul(Image<TColor, TDepth> img2, double scale)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvMul(Ptr, img2.Ptr, res.Ptr, scale);
             return res;
         }
@@ -1619,7 +1620,7 @@ namespace Emgu.CV
         ///<returns> The scaled image </returns>
         public Image<TColor, TDepth> Mul(double scale)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, 0.0);
             return res;
         }
@@ -1649,7 +1650,7 @@ namespace Emgu.CV
         ///</summary>
         public Image<TColor, TDepth> AddWeighted(Image<TColor, TDepth> img2, double alpha, double beta, double gamma)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAddWeighted(Ptr, alpha, img2.Ptr, beta, gamma, res.Ptr);
             return res;
         }
@@ -1673,7 +1674,7 @@ namespace Emgu.CV
         /// <returns>The power image</returns>
         public Image<TColor, TDepth> Pow(double power)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvPow(Ptr, res.Ptr, power);
             return res;
         }
@@ -1686,7 +1687,7 @@ namespace Emgu.CV
         /// <returns>The exponent image</returns>
         public Image<TColor, TDepth> Exp()
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvExp(Ptr, res.Ptr);
             return res;
         }
@@ -1732,7 +1733,7 @@ namespace Emgu.CV
         /// <returns>Natural logarithm of absolute value of every element of input array</returns>
         public Image<TColor, TDepth> Log()
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvLog(Ptr, res.Ptr);
             return res;
         }
@@ -1744,7 +1745,7 @@ namespace Emgu.CV
         ///<returns> The image that contains the absolute different value</returns>
         public Image<TColor, TDepth> AbsDiff(Image<TColor, TDepth> img2)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvAbsDiff(Ptr, img2.Ptr, res.Ptr);
             return res;
         }
@@ -2290,7 +2291,7 @@ namespace Emgu.CV
         ///<returns> The inpainted image </returns>
         public Image<TColor, TDepth> InPaint(Image<Gray, Byte> mask, double radius)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvInpaint(Ptr, mask.Ptr, res.Ptr, CvEnum.INPAINT_TYPE.CV_INPAINT_TELEA, radius);
             return res;
         }
@@ -2304,7 +2305,7 @@ namespace Emgu.CV
         ///<returns> The eroded image</returns>
         public Image<TColor, TDepth> Erode(int iterations)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvErode(Ptr, res.Ptr, IntPtr.Zero, iterations);
             return res;
         }
@@ -2316,7 +2317,7 @@ namespace Emgu.CV
         ///<returns> The dialated image</returns>
         public Image<TColor, TDepth> Dilate(int iterations)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvDilate(Ptr, res.Ptr, IntPtr.Zero, iterations);
             return res;
         }
@@ -2914,7 +2915,7 @@ namespace Emgu.CV
         /// <returns><paramref name="scale"/> / <paramref name="img1"/></returns>
         public static Image<TColor, TDepth> operator /(double scale, Image<TColor, TDepth> img1)
         {
-            Image<TColor, TDepth> res = img1.BlankClone();
+            Image<TColor, TDepth> res = img1.CopyBlank();
             CvInvoke.cvDiv(IntPtr.Zero, img1.Ptr, res.Ptr, scale);
             return res;
         }
@@ -2969,7 +2970,7 @@ namespace Emgu.CV
         ///<returns> The smoothed image</returns>
         public Image<TColor, TDepth> GaussianSmooth(int kernelWidth, int kernelHeight, double sigma)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvSmooth(Ptr, res.Ptr, CvEnum.SMOOTH_TYPE.CV_GAUSSIAN, kernelWidth, kernelHeight, sigma, 0);
             return res;
         }
@@ -3011,7 +3012,7 @@ namespace Emgu.CV
         ///<returns> dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </returns>
         public Image<TColor, TDepth> ThresholdToZero(TColor threshold)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             ThresholdBase(res, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO);
             return res;
         }
@@ -3019,14 +3020,14 @@ namespace Emgu.CV
         ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
         public Image<TColor, TDepth> ThresholdToZeroInv(TColor threshold)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             ThresholdBase(res, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO_INV);
             return res;
         }
         ///<summary> Threshold the image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise </summary>
         public Image<TColor, TDepth> ThresholdTrunc(TColor threshold)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             ThresholdBase(res, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TRUNC);
             return res;
         }
@@ -3034,7 +3035,7 @@ namespace Emgu.CV
         ///<summary> Threshold the image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </summary>
         public Image<TColor, TDepth> ThresholdBinary(TColor threshold, TColor maxValue)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             ThresholdBase(res, threshold, maxValue, CvEnum.THRESH.CV_THRESH_BINARY);
             return res;
         }
@@ -3042,7 +3043,7 @@ namespace Emgu.CV
         ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
         public Image<TColor, TDepth> ThresholdBinaryInv(TColor threshold, TColor maxValue)
         {
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             ThresholdBase(res, threshold, maxValue, CvEnum.THRESH.CV_THRESH_BINARY_INV);
             return res;
         }
@@ -3090,7 +3091,7 @@ namespace Emgu.CV
             //code = 1 indicates horizontal flip only
             else if (flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
 
-            Image<TColor, TDepth> res = BlankClone();
+            Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvFlip(Ptr, res.Ptr, code);
             return res;
         }

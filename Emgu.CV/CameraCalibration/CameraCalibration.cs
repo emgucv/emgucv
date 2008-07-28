@@ -48,7 +48,7 @@ namespace Emgu.CV
             where C: ColorType, new()
             where D: IComparable, new()
         {
-            Image<C, D> res = src.BlankClone();
+            Image<C, D> res = src.CopyBlank();
             CvInvoke.cvUndistort2(src.Ptr, res.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr);
             return res;
         }

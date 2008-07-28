@@ -71,9 +71,9 @@ namespace Emgu.CV
             }
             _buffer.Enqueue(image);
 
-            if (_silh == null) _silh = image.BlankClone();
+            if (_silh == null) _silh = image.CopyBlank();
             if (_mhi == null) _mhi = new Image<Gray, float>(image.Width, image.Height);
-            if (_mask == null) _mask = image.BlankClone();
+            if (_mask == null) _mask = image.CopyBlank();
             if (_orientation == null) _orientation = new Image<Gray, float>(image.Width, image.Height);
 
             CvInvoke.cvAbsDiff(image.Ptr, _buffer.Peek().Ptr, _silh.Ptr);
