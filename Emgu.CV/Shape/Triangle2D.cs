@@ -9,7 +9,7 @@ namespace Emgu.CV
     /// A triangle
     /// </summary>
     /// <typeparam name="T">The depth of the triangle</typeparam>
-    public class Triangle<T> : IConvexPolygon<T> where T: IComparable, new()
+    public class Triangle2D<T> : IConvexPolygon<T> where T: IComparable, new()
     {
         /// <summary>
         /// The vertices for this triangle
@@ -35,7 +35,7 @@ namespace Emgu.CV
         /// <param name="v1">The first vertex</param>
         /// <param name="v2">The second vertex</param>
         /// <param name="v3">The third vertex</param>
-        public Triangle(Point2D<T> v1, Point2D<T> v2, Point2D<T> v3 )
+        public Triangle2D(Point2D<T> v1, Point2D<T> v2, Point2D<T> v3 )
         {
             _vertices = new Point2D<T>[] { v1, v2, v3 };
         }
@@ -67,14 +67,14 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="tri">the other triangles to compare with</param>
         /// <returns>true if the two triangles equals, false otherwise</returns>
-        public bool Equals(Triangle<T> tri)
+        public bool Equals(Triangle2D<T> tri)
         {
             Point2D<T>[] v2 = tri.Vertices;
             Point2D<T>[] v1 = Vertices;
 
             bool res = true;
             foreach (Point2D<T> v in v1)
-                res = res && (Array.FindIndex<Point2D<T>>(v2, delegate(Point2D<T> value) { return v.Equals(value); }) >= 0);
+                res = res && Array.Exists<Point2D<T>>(v2, v.Equals) ;
 
             return res;
         }

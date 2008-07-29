@@ -45,7 +45,7 @@ namespace Emgu.CV
         public Image(String fileName)
         {
             FileInfo fi = new FileInfo(fileName);
-            String[] cvFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".png", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
+            String[] cvFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
             if (System.Array.Exists(cvFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
             {   //if the file can be imported from Open CV
 
@@ -101,7 +101,7 @@ namespace Emgu.CV
             }
             else
             {   //if the file format cannot be recognized by OpenCV 
-                String[] bmpFormats = new string[] { ".gif", ".exig" };
+                String[] bmpFormats = new string[] { ".gif", ".exig", ".png" };
                 if (System.Array.Exists(bmpFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
                 {
                     Bitmap = new Bitmap(fi.FullName);

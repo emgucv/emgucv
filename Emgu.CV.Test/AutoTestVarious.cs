@@ -226,7 +226,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestPointInPolygon()
         {
-            Triangle<float> tri = new Triangle<float>(
+            Triangle2D<float> tri = new Triangle2D<float>(
                 new Point2D<float>(-10, -10),
                 new Point2D<float>(0, 10),
                 new Point2D<float>(10, -10));
@@ -259,7 +259,7 @@ namespace Emgu.CV.Test
             Point2D<double> p1 = new Point2D<double>(0, 0);
             Point2D<double> p2 = new Point2D<double>(1, 0);
             Point2D<double> p3 = new Point2D<double>(0, 1);
-            Triangle<double> tri = new Triangle<double>(p1, p2, p3);
+            Triangle2D<double> tri = new Triangle2D<double>(p1, p2, p3);
             double epsilon = 1e-10;
             Assert.IsTrue( Math.Abs(tri.Area - 0.5) < epsilon);
         }

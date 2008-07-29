@@ -481,7 +481,7 @@ namespace Emgu.CV.Test
                 new Point2D<float>((float)center.X -220, (float) center.Y-4120)
             };
             map.DrawPolyline<float>(pts, false, new Gray(255.0), 1);
-            Triangle<float> tri = new Triangle<float>(
+            Triangle2D<float> tri = new Triangle2D<float>(
                 new Point2D<float>((float)center.X - 1000.0f, (float) center.Y+200.0f),
                 new Point2D<float>((float)center.X - 3000.0f, (float) center.Y+200.0f),
                 new Point2D<float>((float)center.X -700f, (float) center.Y+800.0f));
@@ -499,7 +499,7 @@ namespace Emgu.CV.Test
                 pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
             }
 
-            MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }));
+            MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
 
             Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
             foreach (Point2D<float> p in pts)

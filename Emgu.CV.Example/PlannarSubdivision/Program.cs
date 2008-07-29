@@ -30,7 +30,7 @@ namespace PlannarSubdivision
             #endregion
 
             //Obtain the delaunay's triangulation from the set of points;
-            List<Triangle<float>> delaunayTriangles = PlanarSubdivision.GetDelaunayTriangles(pts);
+            List<Triangle2D<float>> delaunayTriangles = PlanarSubdivision.GetDelaunayTriangles(pts);
 
             //Obtain the voronoi facets from the set of points
             List<VoronoiFacet> voronoiFacets = PlanarSubdivision.GetVoronoi(pts);
@@ -57,7 +57,7 @@ namespace PlannarSubdivision
             }
 
             //Draw the Delaunay triangulation
-            foreach (Triangle<float> triangles in delaunayTriangles)
+            foreach (Triangle2D<float> triangles in delaunayTriangles)
             {
                 img.Draw(triangles, new Bgr(255.0, 255.0, 255.0), 1);
             }

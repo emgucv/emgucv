@@ -206,17 +206,17 @@ namespace Emgu.CV
         public static LineSegment2D<D>[] PolyLine<D>(Point2D<D>[] points, bool closed) where D : IComparable, new()
         {
             LineSegment2D<D>[] res;
+            int length = points.Length;
             if (closed)
             {
-                int length = points.Length;
                 res = new LineSegment2D<D>[length];
                 for (int i = 0; i < length; i++)
                     res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
             }
             else
             {
-                res = new LineSegment2D<D>[points.Length - 1];
-                for (int i = 0; i < points.Length - 1; i++)
+                res = new LineSegment2D<D>[length - 1];
+                for (int i = 0; i < length - 1; i++)
                     res[i] = new LineSegment2D<D>(points[i], points[(i + 1)]);
             }
             return res;

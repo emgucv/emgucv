@@ -1658,6 +1658,31 @@ namespace Emgu.CV
         public static extern void cvPyrUp(IntPtr src, IntPtr dst, CvEnum.FILTER_TYPE filter);
 
         /// <summary>
+        /// The function cvPyrSegmentation implements image segmentation by pyramids. The pyramid builds up to the level level. The links between any pixel a on level i and its candidate father pixel b on the adjacent level are established if 
+        /// p(c(a),c(b))&gt;threshold1. After the connected components are defined, they are joined into several clusters. Any two segments A and B belong to the same cluster, if 
+        /// p(c(A),c(B))&gt;threshold2. The input image has only one channel, then 
+        /// p(c1,c2)=|c1-c2|. If the input image has three channels (red, green and blue), then 
+        /// p(c1,c2)=0.3*(c1r-c2r)+0.59 * (c1g-c2g)+0.11 *(c1b-c2b) . There may be more than one connected component per a cluster.
+        /// </summary>
+        /// <param name="src">The source image, should be 8-bit single-channel or 3-channel images </param>
+        /// <param name="dst">The destination image, should be 8-bit single-channel or 3-channel images, same size as src </param>
+        /// <param name="storage">Storage; stores the resulting sequence of connected components</param>
+        /// <param name="comp">Pointer to the output sequence of the segmented components</param>
+        /// <param name="level">Maximum level of the pyramid for the segmentation</param>
+        /// <param name="threshold1">Error threshold for establishing the links</param>
+        /// <param name="threshold2">Error threshold for the segments clustering</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvPyrSegmentation(
+            IntPtr src, 
+            IntPtr dst,
+            IntPtr storage, 
+            out IntPtr comp,
+            int level, 
+            double threshold1, 
+            double threshold2);
+
+
+        /// <summary>
         /// Creates an empty Delaunay subdivision, where 2d points can be added further using function cvSubdivDelaunay2DInsert. All the points to be added must be within the specified rectangle, otherwise a runtime error will be raised. 
         /// </summary>
         /// <param name="rect">Rectangle that includes all the 2d points that are to be added to subdivision.</param>
@@ -3295,6 +3320,27 @@ namespace Emgu.CV
             IntPtr avg, 
             IntPtr proj);
 
+        /// <summary>
+        /// Calculates disparity for stereo-pair 
+        /// </summary>
+        /// <param name="leftImage">Left image of stereo pair, rectified grayscale 8-bit image</param>
+        /// <param name="rightImage">Right image of stereo pair, rectified grayscale 8-bit image</param>
+        /// <param name="mode">Algorithm used to find a disparity</param>
+        /// <param name="depthImage">Destination depth image, grayscale 8-bit image that codes the scaled disparity, so that the zero disparity (corresponding to the points that are very far from the cameras) maps to 0, maximum disparity maps to 255.</param>
+        /// <param name="maxDisparity">Maximum possible disparity. The closer the objects to the cameras, the larger value should be specified here. Too big values slow down the process significantly</param>
+        /// <param name="param1">constant occlusion penalty</param>
+        /// <param name="param2">constant match reward</param>
+        /// <param name="param3">defines a highly reliable region (set of contiguous pixels whose reliability is at least param3)</param>
+        /// <param name="param4">defines a moderately reliable region</param>
+        /// <param name="param5">defines a slightly reliable region</param>
+        [DllImport(CVAUX_LIBRARY)]
+        public extern static void cvFindStereoCorrespondence(
+                   IntPtr leftImage, IntPtr rightImage,
+                   int     mode, IntPtr  depthImage,
+                   int     maxDisparity,
+                   double  param1, double  param2, double  param3,
+                   double  param4, double  param5  );
+        
         #endregion
         
     }

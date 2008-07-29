@@ -106,7 +106,7 @@ namespace Emgu.CV
         ///</summary>
         public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs)
         {
-            Debug.Assert(srcs.Length == _dimension, "incompatible dimension");
+            Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
 
             IntPtr[] imgPtrs = 
                 System.Array.ConvertAll<Image<Gray,TDepth>, IntPtr>(

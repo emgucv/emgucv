@@ -79,6 +79,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple3DReconstruction", "..\..\Emgu.CV.Example\Simple3DReconstruction\Simple3DReconstruction.csproj", "{170B122C-AAB8-4C95-AD59-0242B72B1662}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
@@ -471,6 +477,34 @@ Global
 		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.ActiveCfg = Release|Win32
 		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.Build.0 = Release|Win32
 		{32330110-727C-41A1-9377-6BA41002983D}.Release|x86.ActiveCfg = Release|Win32
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|.NET.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|Mixed Platforms.Build.0 = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|Win32.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug Linux|x86.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|.NET.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|Mixed Platforms.Build.0 = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|Win32.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release Linux|x86.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|.NET.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|Win32.ActiveCfg = Release|Any CPU
+		{170B122C-AAB8-4C95-AD59-0242B72B1662}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

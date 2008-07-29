@@ -63,5 +63,22 @@ namespace Emgu.CV
             Point2D<T>[] vertices = smallPolygon.Vertices;
             return Array.TrueForAll<Point2D<T>>(vertices, delegate(Point2D<T> v) { return v.InConvexPolygon(largePolygon); });
         }
+
+        public static Image<Gray, Byte> FindStereoCorrespondence(Image<Gray, Byte> leftImage, Image<Gray, Byte> rightImage, int maxDisparity)
+        {
+            Image<Gray, Byte> disparity = new Image<Gray, byte>(leftImage.Width, leftImage.Height);
+            CvInvoke.cvFindStereoCorrespondence(
+                leftImage.Ptr,
+                rightImage.Ptr,
+                0, //CV_DISPARITY_BIRCHFIELD
+                disparity,
+                maxDisparity,
+                25,
+                5,
+                12,
+                15,
+                25);
+            return disparity;
+        }
     }
 }

@@ -57,14 +57,14 @@ namespace Emgu.CV
             get { return (MCvSubdiv2D)Marshal.PtrToStructure(_ptr, typeof(MCvSubdiv2D)); }
         }
 
-        private Triangle<float> EdgeToTriangle(ref MCvSubdiv2DEdge e)
+        private Triangle2D<float> EdgeToTriangle(ref MCvSubdiv2DEdge e)
         {
             MCvSubdiv2DPoint v1 = e.cvSubdiv2DEdgeOrg();
             MCvSubdiv2DPoint v2 = e.cvSubdiv2DEdgeDst();
 
             MCvSubdiv2DEdge eLnext = e.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT);
             MCvSubdiv2DPoint v3 = eLnext.cvSubdiv2DEdgeDst();
-            return new Triangle<float>(
+            return new Triangle2D<float>(
                 new Point2D<float>(v1.pt.x, v1.pt.y),
                 new Point2D<float>(v3.pt.x, v3.pt.y),
                 new Point2D<float>(v2.pt.x, v2.pt.y));
@@ -138,12 +138,12 @@ namespace Emgu.CV
         /// </summary>
         /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
         /// <returns>The result of the current triangulation</returns>
-        public List<Triangle<float>> GetDelaunayTriangles()
+        public List<Triangle2D<float>> GetDelaunayTriangles()
         {
-            List<Triangle<float>> triangleList = new List<Triangle<float>>();
+            List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
 
-            List<Triangle<float>> subdivisionTriangle = GetPlanarSubdivisionDelaunayTriangles();
-            foreach (Triangle<float> tri in subdivisionTriangle)
+            List<Triangle2D<float>> subdivisionTriangle = GetPlanarSubdivisionDelaunayTriangles();
+            foreach (Triangle2D<float> tri in subdivisionTriangle)
                 if (Utils.IsConvexPolygonInConvexPolygon(tri, _roi))
                     triangleList.Add(tri);
 
@@ -197,9 +197,9 @@ namespace Emgu.CV
         /// </summary>
         /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
         /// <returns>The triangles subdivision in the current plannar subdivision</returns>
-        public List<Triangle<float>> GetPlanarSubdivisionDelaunayTriangles()
+        public List<Triangle2D<float>> GetPlanarSubdivisionDelaunayTriangles()
         {
-            List<Triangle<float>> triangleList = new List<Triangle<float>>();
+            List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
 
             MCvSeqReader reader = new MCvSeqReader();
             MCvSubdiv2D subdiv = MCvSubdiv2D;
@@ -216,12 +216,12 @@ namespace Emgu.CV
                 {
                     MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
 
-                    Triangle<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
-                    if (Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri1); }) < 0)
+                    Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
+                    if (!Array.Exists<Triangle2D<float>>(triangleList.ToArray(), tri1.Equals))
                         triangleList.Add(tri1);
 
-                    Triangle<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-                    if (Array.FindIndex<Triangle<float>>(triangleList.ToArray(), delegate(Triangle<float> existingTri) { return existingTri.Equals(tri2); }) < 0)
+                    Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
+                    if (!Array.Exists<Triangle2D<float>>(triangleList.ToArray(), tri2.Equals))
                         triangleList.Add(tri2);
                 }
 
@@ -245,7 +245,7 @@ namespace Emgu.CV
         /// <param name="points">The points for triangulation</param>
         /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
         /// <returns>The triangles as a result of the triangulation</returns>
-        public static List<Triangle<float>> GetDelaunayTriangles(IEnumerable<Point2D<float>> points)
+        public static List<Triangle2D<float>> GetDelaunayTriangles(IEnumerable<Point2D<float>> points)
         {
             using (PlanarSubdivision tri = GetSubdivision(points))
                 return tri.GetDelaunayTriangles();
@@ -268,7 +268,7 @@ namespace Emgu.CV
         /// <param name="points">the points for triangulation</param>
         /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
         /// <returns>The triangles subdivision in the current triangulation</returns>
-        public static List<Triangle<float>> GetPlanarSubdivisionTriangles(IEnumerable<Point2D<float>> points)
+        public static List<Triangle2D<float>> GetPlanarSubdivisionTriangles(IEnumerable<Point2D<float>> points)
         {
             using (PlanarSubdivision tri = GetSubdivision(points))
                 return tri.GetPlanarSubdivisionDelaunayTriangles();
