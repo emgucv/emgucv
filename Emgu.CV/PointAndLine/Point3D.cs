@@ -33,5 +33,5 @@ namespace Emgu.CV
         [XmlIgnore]
         public T Z { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
 
-    };
+    }
 }

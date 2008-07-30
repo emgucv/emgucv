@@ -8,15 +8,15 @@ using Emgu;
 
 namespace Emgu.CV
 {
-    ///<summary> Create a image capture base on opencv's capture object </summary>
+    /// <summary> 
+    /// Create a image capture base on opencv's capture object 
+    /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class Capture : 
         UnmanagedObject,
         IDuplexCapture,
         ICapture
     {
-        //private Type CaptureDepthType;
-
         /// <summary>
         /// the width of this capture
         /// </summary>
@@ -111,6 +111,7 @@ namespace Emgu.CV
             }
         }
 
+        #region implement UnmanagedObject
         /// <summary>
         /// Release the resource for this capture
         /// </summary>
@@ -121,6 +122,7 @@ namespace Emgu.CV
             CvInvoke.cvReleaseCapture(ref _ptr);
 #endif
         }
+        #endregion
 
         ///<summary> The width of this capture</summary>
         public int Width 
@@ -152,15 +154,39 @@ namespace Emgu.CV
             return CvInvoke.cvGetCaptureProperty(_ptr, index);
         }
 
-        private CvEnum.IPL_DEPTH GetImageDepthType(IntPtr img)
+        /// <summary> 
+        /// Capture a Gray image frame
+        /// </summary>
+        /// <returns> A Gray image frame</returns>
+        public virtual Image<Gray, Byte> QueryGrayFrame()
         {
+            IntPtr img = CvInvoke.cvQueryFrame(Ptr);
+
             MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-            return iplImage.depth; 
+
+            Image<Gray, Byte> res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
+            if (iplImage.nChannels == 3)
+            {
+                //if the image captured is Bgr, convert it to Grayscale
+                CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2GRAY);
+            }
+            else
+            {
+                //make a copy of the image
+                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+            }
+
+            //inplace flip the image if necessary
+            res._Flip(FlipType);
+
+            return res;
         }
 
         #region implement ICapture
-        ///<summary> Capture a RGB image frame</summary>
-        ///<returns> A RGB image frame</returns>
+        /// <summary> 
+        /// Capture a Bgr image frame
+        /// </summary>
+        /// <returns> A Bgr image frame</returns>
         public virtual Image<Bgr, Byte> QueryFrame()
         {
 #if TEST_CAPTURE
@@ -171,63 +197,43 @@ namespace Emgu.CV
                 new Point2D<int>(10, 50),
                 new Bgr(255.0, 255.0, 255.0));
             IntPtr img = tmp;
-            Image<Bgr, Byte> res = tmp.BlankClone();
 #else
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
-
-            Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width, Height);
+            IntPtr img = CvInvoke.cvQueryFrame(Ptr);
 #endif
-            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
+
+            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
+
+            Image<Bgr, Byte> res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
+            if (iplImage.nChannels == 1)
             {
-                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
-                return res;
+                //if the image captured is Grayscale, convert it to BGR
+                CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGR);   
             }
             else
             {
-                //code = 0 indicates vertical flip only
-                int code = 0;
-                //code = -1 indicates vertical and horizontal flip
-                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
-                //code = 1 indicates horizontal flip only
-                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
-                CvInvoke.cvFlip(img, res.Ptr, code);
-                return res;
+                //make a copy of the image
+                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
             }
+
+            //inplace flip the image if necessary
+            res._Flip(FlipType);
+
+            return res;
         }
 
         ///<summary> 
-        ///Capture a RGB image frame that is half width and half heigh. 
-        ///Internally, this is a cvQueryFrame operation follow by a cvPyrDown
+        ///Capture a Bgr image frame that is half width and half height.
         ///</summary>
-        ///<returns> A RGB image frame that is half width and half height</returns>
+        /// <remarks>Internally, this is a cvQueryFrame operation follow by a cvPyrDown</remarks>
+        ///<returns> A Bgr image frame that is half width and half height</returns>
         public virtual Image<Bgr, Byte> QuerySmallFrame()
         {
-#if TEST_CAPTURE
-            return QueryFrame().PyrDown();
-#else
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
-            Image<Bgr, Byte> res = new Image<Bgr, Byte>(Width >> 1, Height >> 1);
-            CvInvoke.cvPyrDown(img, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
-
-            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
-            {
-                return res;
-            }
-            else
-            {
-                //code = 0 indicates vertical flip only
-                int code = 0;
-                //code = -1 indicates vertical and horizontal flip
-                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
-                //code = 1 indicates horizontal flip only
-                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
-                CvInvoke.cvFlip(res.Ptr, res.Ptr, code);
-                return res;
-            }
-#endif
+            using (Image<Bgr, Byte> frame = QueryFrame())
+                return frame.PyrDown();
         }
         #endregion 
 
+        /*
         ///<summary> Capture Bgr image frame with timestamp</summary>
         ///<returns> A timestamped Bgr image frame</returns>
         public TimedImage<Bgr, Byte> QueryTimedFrame()
@@ -253,7 +259,7 @@ namespace Emgu.CV
                 CvInvoke.cvFlip(img, res.Ptr, code);
                 return res;
             }
-        }
+        }*/
 
         /// <summary>
         /// Query a frame duplexly over WCF
@@ -276,7 +282,5 @@ namespace Emgu.CV
             Image<Bgr, Byte> img = QuerySmallFrame();
             callback.ReceiveFrame(img);
         }
-
-    };
-
+    }
 }

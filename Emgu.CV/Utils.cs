@@ -64,6 +64,13 @@ namespace Emgu.CV
             return Array.TrueForAll<Point2D<T>>(vertices, delegate(Point2D<T> v) { return v.InConvexPolygon(largePolygon); });
         }
 
+        /// <summary>
+        /// Calculates disparity for stereo-pair 
+        /// </summary>
+        /// <param name="leftImage">Left image of stereo pair, rectified grayscale 8-bit image</param>
+        /// <param name="rightImage">Right image of stereo pair, rectified grayscale 8-bit image</param>
+        /// <param name="maxDisparity">Maximum possible disparity. The closer the objects to the cameras, the larger value should be specified here. Too big values slow down the process significantly</param>
+        /// <returns></returns>
         public static Image<Gray, Byte> FindStereoCorrespondence(Image<Gray, Byte> leftImage, Image<Gray, Byte> rightImage, int maxDisparity)
         {
             Image<Gray, Byte> disparity = new Image<Gray, byte>(leftImage.Width, leftImage.Height);

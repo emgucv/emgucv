@@ -20,6 +20,16 @@ namespace Emgu.CV
     {
         private TDepth[, ,] _array;
 
+        /// <summary>
+        /// File formats supported by opencv
+        /// </summary>
+        private static String[] _opencvFileFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
+
+        /// <summary>
+        /// File formats supported by bitmap
+        /// </summary>
+        private static String[] _bitmapFormats = new string[] { ".gif", ".exig", ".png" };
+
         #region constructors
 
         ///<summary>
@@ -45,8 +55,8 @@ namespace Emgu.CV
         public Image(String fileName)
         {
             FileInfo fi = new FileInfo(fileName);
-            String[] cvFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
-            if (System.Array.Exists(cvFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
+            
+            if (System.Array.Exists( _opencvFileFormats, fi.Extension.ToLower().Equals))
             {   //if the file can be imported from Open CV
 
                 IntPtr ptr;
@@ -101,8 +111,7 @@ namespace Emgu.CV
             }
             else
             {   //if the file format cannot be recognized by OpenCV 
-                String[] bmpFormats = new string[] { ".gif", ".exig", ".png" };
-                if (System.Array.Exists(bmpFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
+                if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
                 {
                     Bitmap = new Bitmap(fi.FullName);
                 }
@@ -857,9 +866,9 @@ namespace Emgu.CV
         /// <summary>
         /// Get or Set the color in the <paramref name="row"/>th row (y direction) and <paramref name="column"/>th column (x direction)
         /// </summary>
-        /// <param name="row">the row (y direction) of the pixel </param>
-        /// <param name="col">the column (x direction) of the pixel</param>
-        /// <returns>the color in the <paramref name="row"/>th row and <paramref name="column"/>th column</returns>
+        /// <param name="row">The zero-based row (y direction) of the pixel </param>
+        /// <param name="col">The zero-based column (x direction) of the pixel</param>
+        /// <returns>The color in the specific <paramref name="row"/> and <paramref name="column"/></returns>
         public TColor this[int row, int col]
         {
             get
@@ -883,13 +892,11 @@ namespace Emgu.CV
         {
             get
             {
-                TColor res = new TColor();
-                res.MCvScalar = CvInvoke.cvGet2D(Ptr, location.Y, location.X);
-                return res;
+                return this[location.Y, location.X];
             }
             set
             {
-                CvInvoke.cvSet2D(Ptr, location.Y, location.X, value.MCvScalar);
+                this[location.Y, location.X] = value;
             }
         }
         #endregion
@@ -1123,11 +1130,12 @@ namespace Emgu.CV
 
         #region Matching
         /// <summary>
-        /// The function cvMatchTemplate is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
+        /// The function cvMatchTemplate is similiar to cvCalcBackProjectPatch. 
+        /// It slids through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
         /// </summary>
         /// <param name="template">Searched template; must be not greater than the source image and the same data type as the image</param>
         /// <param name="method">Specifies the way the template must be compared with image regions </param>
-        /// <returns>The comparison result</returns>
+        /// <returns>The comparison result: width = this.Width - template.Width + 1; height = this.Height - template.Height + 1 </returns>
         public Image<TColor, TDepth> MatchTemplate(Image<TColor, TDepth> template, CvEnum.TM_TYPE method)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width - template.Width + 1, Height - template.Height + 1);
@@ -1142,21 +1150,21 @@ namespace Emgu.CV
         ///The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. 
         ///If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. 
         /// </summary>
-        /// <param name="c">Some existing contour</param>
+        /// <param name="contour">Some existing contour</param>
         /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
         /// <param name="beta">Weight[s] of curvature energy, similar to alpha.</param>
         /// <param name="gamma">Weight[s] of image energy, similar to alpha.</param>
         /// <param name="windowSize">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
         /// <param name="tc">Termination criteria</param>
-        /// <param name="storage"> the memory storage used by the resulting sequence</param>
+        /// <param name="storage">The memory storage used by the resulting sequence</param>
         /// <returns>The snake[d] contour</returns>
-        public Seq<MCvPoint> Snake(Seq<MCvPoint> c, float alpha, float beta, float gamma, Point2D<int> windowSize, MCvTermCriteria tc, MemStorage storage)
+        public Seq<MCvPoint> Snake(Seq<MCvPoint> contour, float alpha, float beta, float gamma, Point2D<int> windowSize, MCvTermCriteria tc, MemStorage storage)
         {
-            int count = c.Total;
+            int count = contour.Total;
 
             IntPtr points = Marshal.AllocHGlobal(count * 2 * sizeof(int));
 
-            CvInvoke.cvCvtSeqToArray(c.Ptr, points, new MCvSlice(0, 0x3fffffff));
+            CvInvoke.cvCvtSeqToArray(contour.Ptr, points, new MCvSlice(0, 0x3fffffff));
             CvInvoke.cvSnakeImage(
                 Ptr,
                 points,
@@ -2961,7 +2969,10 @@ namespace Emgu.CV
         ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
         ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
         ///<returns> The smoothed image</returns>
-        public Image<TColor, TDepth> GaussianSmooth(int kernelSize) { return GaussianSmooth(kernelSize, 0, 0); }
+        public Image<TColor, TDepth> GaussianSmooth(int kernelSize) 
+        { 
+            return GaussianSmooth(kernelSize, 0, 0); 
+        }
 
         ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
         ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
@@ -3084,16 +3095,35 @@ namespace Emgu.CV
         {
             if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Clone();
 
-            //code = 0 indicates vertical flip only
-            int code = 0;
-            //code = -1 indicates vertical and horizontal flip
-            if (flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
-            //code = 1 indicates horizontal flip only
-            else if (flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
-
+            int code =
+                //-1 indicates vertical and horizontal flip
+                flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+                //1 indicates horizontal flip only
+                flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+                //0 indicates vertical flip only
+                0; 
+            
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvFlip(Ptr, res.Ptr, code);
             return res;
+        }
+
+        ///<summary> Inplace flip the image</summary>
+        ///<param name="flipType">The type of the flipping</param>
+        ///<returns> The flipped copy of <i>this</i> image </returns>
+        public void _Flip(CvEnum.FLIP flipType)
+        {
+            if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
+            {
+                int code =
+                    //-1 indicates vertical and horizontal flip
+                    flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+                    //1 indicates horizontal flip only
+                    flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+                    //0 indicates vertical flip only
+                    0;
+                CvInvoke.cvFlip(Ptr, Ptr, code);
+            }
         }
 
         /// <summary>
@@ -3171,17 +3201,17 @@ namespace Emgu.CV
         public void Save(String fileName)
         {
             FileInfo fi = new FileInfo(fileName);
-            String[] cvFormats = new string[] { ".jpg", ".jpeg", ".png", ".bmp" };
-            if (System.Array.Exists(cvFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
+            
+            if (System.Array.Exists(_opencvFileFormats, fi.Extension.ToLower().Equals))
             {   //if the file can be imported from Open CV
                 CvInvoke.cvSaveImage(fileName, Ptr);
             }
             else
             {
-                String[] bmpFormats = new String[] { ".gif" };
-                if (System.Array.Exists(bmpFormats, delegate(String s) { return s.Equals(fi.Extension.ToLower()); }))
+                if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
                 {
-                    Bitmap.Save(fileName);
+                    using(Bitmap bmp = Bitmap)
+                        bmp.Save(fileName);
                 }
                 else
                 {

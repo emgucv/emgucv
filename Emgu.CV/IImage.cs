@@ -8,7 +8,7 @@ namespace Emgu.CV
     /// <summary>
     /// IImage interface
     /// </summary>
-    public interface IImage
+    public interface IImage : IDisposable
     {
         /// <summary>
         /// Convert this image into Bitmap 

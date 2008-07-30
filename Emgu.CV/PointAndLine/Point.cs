@@ -271,5 +271,5 @@ namespace Emgu.CV
             }
             return true;
         }
-    };
+    }
 }

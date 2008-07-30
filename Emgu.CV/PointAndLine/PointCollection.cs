@@ -26,7 +26,7 @@ namespace Emgu.CV
         /// <summary>
         /// Perform a first degree interpolation to lookup the y coordinate given the x coordinate
         /// </summary>
-        /// <param name="points">The collection of points</param>
+        /// <param name="points">The collection of points. Must be sorted by the x value.</param>
         /// <param name="index">the x coordinate</param>
         /// <returns>the y coordinate as the result of the first degree interpolation</returns>
         public static T FirstDegreeInterpolate<T>(Point2D<T>[] points, T index) where T : IComparable, new()
@@ -61,9 +61,9 @@ namespace Emgu.CV
         /// <summary>
         /// Perform a first degree interpolation to lookup the y coordinates given the x coordinates
         /// </summary>
-        /// <param name="points">The collection of points</param>
+        /// <param name="points">The collection of points, Must be sorted by x value</param>
         /// <param name="indexes">the x coordinates</param>
-        /// <returns>the y coordinates as the result of the first degree interpolation</returns>
+        /// <returns>The y coordinates as the result of the first degree interpolation</returns>
         public static T[] FirstDegreeInterpolate<T>(Point2D<T>[] points, T[] indexes) where T : IComparable, new()
         {
             return System.Array.ConvertAll<T, T>(

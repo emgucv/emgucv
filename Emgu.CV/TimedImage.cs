@@ -13,9 +13,9 @@ namespace Emgu.CV
         private System.DateTime _timestamp;
 
         ///<summary>
-        ///Create a blank Image of size one by one
+        ///Create a empty Image 
         ///</summary>
-        public TimedImage()
+        protected TimedImage()
             : base()
         {
             _timestamp = DateTime.Now;
@@ -34,8 +34,7 @@ namespace Emgu.CV
         }
 
         ///<summary>
-        ///Create a blank Image of the specified width, height, depth. 
-        ///<b>Warning</b>: The color is not initialized and could be random value 
+        ///Create an empty Image of the specified width and height
         ///</summary>
         ///<param name="width">The width of the image</param>
         ///<param name="height">The height of the image</param>
@@ -48,7 +47,7 @@ namespace Emgu.CV
         ///<summary> 
         ///The time this image is captured
         ///</summary>
-        public System.DateTime Timestamp
+        public DateTime Timestamp
         {
             get { return _timestamp; }
             set { _timestamp = value; }

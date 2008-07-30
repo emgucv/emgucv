@@ -264,7 +264,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="startRow">Zero-based index of the starting row (inclusive) of the span</param>
         /// <param name="endRow">Zero-based index of the ending row (exclusive) of the span</param>
-        /// <returns></returns>
+        /// <returns>The matrix without a specified row span of the input array</returns>
         public Matrix<TDepth> RemoveRows(int startRow, int endRow)
         {
             if (startRow == 0)
@@ -286,7 +286,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="startCol">Zero-based index of the starting column (inclusive) of the span</param>
         /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
-        /// <returns></returns>
+        /// <returns>The matrix without a specified column span of the input array</returns>
         public Matrix<TDepth> RemoveCols(int startCol, int endCol)
         {
             if (startCol == 0)
@@ -333,7 +333,7 @@ namespace Emgu.CV
         /// Concate the current matrix with another matrix horizontally. If this matrix is n x m1 and <paramref name="otherMatrix"/> is n x m2, the resulting matrix is n x (m1 + m2).
         /// </summary>
         /// <param name="otherMatrix">The other matrix to concate</param>
-        /// <returns>A new matrix that is the horizontal concatening of this matrix and <paramref name="otheMatrix"/></returns>
+        /// <returns>A matrix that is the horizontal concatening of this matrix and <paramref name="otheMatrix"/></returns>
         public Matrix<TDepth> ConcateHorizontal(Matrix<TDepth> otherMatrix)
         {
             Debug.Assert(Rows == otherMatrix.Rows, "The number of rows must be the same when concatening matrices horizontally.");
@@ -398,7 +398,7 @@ namespace Emgu.CV
 
             using (Matrix<Byte> neqMask = Cmp(mat2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
             {
-                return (neqMask.Sum == 0.0);
+                return CvInvoke.cvCountNonZero( neqMask.Ptr) == 0;
             }
         }
 

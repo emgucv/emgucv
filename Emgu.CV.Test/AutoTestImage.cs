@@ -422,5 +422,22 @@ namespace Emgu.CV.Test
             Assert.AreNotEqual(fi.Length, 0);
         }
 
+        [Test]
+        public void TestInplaceFlip()
+        {
+            Image<Bgr, byte> image = new Image<Bgr, byte>(20, 20);
+            image._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+
+            Image<Bgr, byte> imageOld = image.Clone();
+            image._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);
+
+            for (int i = 0; i < image.Rows; i++)
+                for (int j = 0; j < image.Cols; j++)
+                {
+                    Bgr c1 = image[i, j];
+                    Bgr c2 = imageOld[image.Rows -  i - 1, j ];
+                    Assert.IsTrue(c1.Equals(c2));
+                }
+        }
     }
 }

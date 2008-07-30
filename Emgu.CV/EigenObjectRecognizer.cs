@@ -78,8 +78,8 @@ namespace Emgu.CV
         /// <summary>
         /// Create an object recognizer using the specific tranning data and parameters
         /// </summary>
-        /// <param name="images">the images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
-        /// <param name="labels">the labels corresponding to the images</param>
+        /// <param name="images">The images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
+        /// <param name="labels">The labels corresponding to the images</param>
         /// <param name="simularityThreshold">
         /// The simmilarity threshold, [0, ~1000].
         /// The smaller the number, the more likely an examined image will be treated as unrecognized object. 
@@ -161,10 +161,10 @@ namespace Emgu.CV
         /// <summary>
         /// Decompose the image as eigen values, using the specific eigen vectors
         /// </summary>
-        /// <param name="src">the image to be decomposed</param>
-        /// <param name="eigenImages">the eigen images</param>
-        /// <param name="avg">the average images</param>
-        /// <returns>eigen values of the decomposed image</returns>
+        /// <param name="src">The image to be decomposed</param>
+        /// <param name="eigenImages">The eigen images</param>
+        /// <param name="avg">The average images</param>
+        /// <returns>Eigen values of the decomposed image</returns>
         public static float[] EigenDecomposite(Image<Gray, Byte> src, Image<Gray, Single>[] eigenImages, Image<Gray, Single> avg)
         {
             return CvInvoke.cvEigenDecomposite(
@@ -177,8 +177,8 @@ namespace Emgu.CV
         /// <summary>
         /// Given the eigen value, reconstruct the projected image
         /// </summary>
-        /// <param name="eigenValue">the eigen values</param>
-        /// <returns>the projected image</returns>
+        /// <param name="eigenValue">The eigen values</param>
+        /// <returns>The projected image</returns>
         public Image<Gray, Byte> EigenProjection(float[] eigenValue)
         {
             Image<Gray, Byte> res = new Image<Gray, byte>(_avgImage.Width, _avgImage.Height);

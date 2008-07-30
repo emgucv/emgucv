@@ -428,11 +428,11 @@ namespace Emgu.CV
 
         /// <summary>
         /// Divides one array by another:
-        /// dst(I)=scale?src1(I)/src2(I), if src1!=NULL
+        /// dst(I)=scale * src1(I)/src2(I), if src1!=NULL
         /// dst(I)=scale/src2(I),      if src1=NULL
         /// All the arrays must have the same type, and the same size (or ROI size)
         /// </summary>
-        /// <param name="src1">The first source array. If the pointer is NULL, the array is assumed to be all 1?s. </param>
+        /// <param name="src1">The first source array. If the pointer is NULL, the array is assumed to be all 1s. </param>
         /// <param name="src2">The second source array</param>
         /// <param name="dst">The destination array</param>
         /// <param name="scale">Optional scale factor </param>
@@ -441,7 +441,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// Calculates per-element product of two arrays:
-        /// dst(I)=scale?src1(I)?src2(I)
+        /// dst(I)=scale*src1(I)*src2(I)
         /// All the arrays must have the same type, and the same size (or ROI size)
         /// </summary>
         /// <param name="src1">The first source array. </param>
@@ -538,7 +538,7 @@ namespace Emgu.CV
         /// Calculates natural logarithm of absolute value of every element of input array:
         /// dst(I)=log(abs(src(I))), src(I)!=0
         /// dst(I)=C,  src(I)=0
-        /// Where C is large negative number (?-700 in the current implementation)
+        /// Where C is large negative number (-700 in the current implementation)
         /// </summary>
         /// <param name="src">The source array</param>
         /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
@@ -567,7 +567,7 @@ namespace Emgu.CV
         /// <summary>
         /// Calculates exponent of every element of input array:
         /// dst(I)=exp(src(I))
-        /// Maximum relative error is ?7e-6. Currently, the function converts denormalized values to zeros on output
+        /// Maximum relative error is 7e-6. Currently, the function converts denormalized values to zeros on output
         /// </summary>
         /// <param name="src">The source array</param>
         /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
@@ -662,7 +662,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// Calculates and returns the Euclidean dot product of two arrays.
-        /// src1?src2 = sumI(src1(I)*src2(I))
+        /// src1 dot src2 = sumI(src1(I)*src2(I))
         /// In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.
         /// </summary>
         /// <param name="src1">The first source array.</param>
@@ -797,7 +797,7 @@ namespace Emgu.CV
         /// Creates a memory storage and returns pointer to it. Initially the storage is empty. All fields of the header, except the block_size, are set to 0.
         /// </summary>
         /// <param name="block_size"></param>
-        /// <returns>Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is ?64K. </returns>
+        /// <returns>Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is 64K. </returns>
         [DllImport(CXCORE_LIBRARY)]
         public static extern IntPtr cvCreateMemStorage(int block_size);
 
@@ -1179,7 +1179,7 @@ namespace Emgu.CV
         /// <summary>
         /// Calculates the average value M of array elements, independently for each channel:
         ///N = sumI mask(I)!=0
-        ///Mc = 1/N ? sumI,mask(I)!=0 arr(I)c
+        ///Mc = 1/N * sumI,mask(I)!=0 arr(I)c
         ///If the array is IplImage and COI is set, the function processes the selected channel only and stores the average to the first scalar component (S0).
         /// </summary>
         /// <param name="arr">The array</param>
@@ -1253,7 +1253,7 @@ namespace Emgu.CV
         /// <param name="font_face">Font name identifier. Only a subset of Hershey fonts are supported now</param>
         /// <param name="hscale">Horizontal scale. If equal to 1.0f, the characters have the original width depending on the font type. If equal to 0.5f, the characters are of half the original width</param>
         /// <param name="vscale">Vertical scale. If equal to 1.0f, the characters have the original height depending on the font type. If equal to 0.5f, the characters are of half the original height</param>
-        /// <param name="shear">Approximate tangent of the character slope relative to the vertical line. Zero value means a non-italic font, 1.0f means ?45? slope, etc. thickness Thickness of lines composing letters outlines. The function cvLine is used for drawing letters</param>
+        /// <param name="shear">Approximate tangent of the character slope relative to the vertical line. Zero value means a non-italic font, 1.0f means 45 slope, etc. thickness Thickness of lines composing letters outlines. The function cvLine is used for drawing letters</param>
         /// <param name="thickness">Thickness of the text strokes</param>
         /// <param name="line_type">Type of the strokes</param>
         [DllImport(CXCORE_LIBRARY)]
@@ -1489,10 +1489,10 @@ namespace Emgu.CV
         /// 3. least-squares solution of overdetermined linear systems. This and previous is done by cvSolve function with CV_SVD method 
         /// 4. accurate calculation of different matrix characteristics such as rank (number of non-zero singular values), condition number (ratio of the largest singular value to the smallest one), determinant (absolute value of determinant is equal to the product of singular values). All the things listed in this item do not require calculation of U and V matrices. 
         /// </remarks>
-        /// <param name="A">Source M?N matrix</param>
-        /// <param name="W">Resulting singular value matrix (M?N or N?N) or vector (N?1). </param>
-        /// <param name="U">Optional left orthogonal matrix (M?M or M?N). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
-        /// <param name="V">Optional right orthogonal matrix (N?N)</param>
+        /// <param name="A">Source MxN matrix</param>
+        /// <param name="W">Resulting singular value matrix (MxN or NxN) or vector (Nx1). </param>
+        /// <param name="U">Optional left orthogonal matrix (MxM or MxN). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
+        /// <param name="V">Optional right orthogonal matrix (NxN)</param>
         /// <param name="flags">Operation flags</param>
         [DllImport(CXCORE_LIBRARY)]
         public static extern void cvSVD(IntPtr A, IntPtr W, IntPtr U, IntPtr V, CvEnum.SVD_TYPE flags);
@@ -1506,11 +1506,11 @@ namespace Emgu.CV
         public static extern double cvDet(IntPtr mat);
 
         /// <summary>
-        /// Checks that every array element is neither NaN nor ?Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
+        /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
         /// </summary>
         /// <param name="arr">The array to check.</param>
         /// <param name="flags">The operation flags, CHECK_NAN_INFINITY or combination of
-        /// CHECK_RANGE - if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor ?Infinity.
+        /// CHECK_RANGE - if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor Infinity.
         /// CHECK_QUIET - if set, the function does not raises an error if an element is invalid or out of range 
         /// </param>
         /// <param name="min_val">The inclusive lower boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
@@ -1594,7 +1594,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src">Source image</param>
         /// <param name="dst">Destination image</param>
-        /// <param name="map_matrix">2?3 transformation matrix</param>
+        /// <param name="map_matrix">2x3 transformation matrix</param>
         /// <param name="flags"> flags </param>
         /// <param name="fillval">A value used to fill outliers</param>
         [DllImport(CV_LIBRARY)]
@@ -1623,7 +1623,7 @@ namespace Emgu.CV
             double seg_thresh);
 
         /// <summary>
-        /// Calculates the general motion direction in the selected region and returns the angle between 0? and 360?. At first the function builds the orientation histogram and finds the basic orientation as a coordinate of the histogram maximum. After that the function calculates the shift relative to the basic orientation as a weighted sum of all orientation vectors: the more recent is the motion, the greater is the weight. The resultant angle is a circular sum of the basic orientation and the shift. 
+        /// Calculates the general motion direction in the selected region and returns the angle between 0 and 360. At first the function builds the orientation histogram and finds the basic orientation as a coordinate of the histogram maximum. After that the function calculates the shift relative to the basic orientation as a weighted sum of all orientation vectors: the more recent is the motion, the greater is the weight. The resultant angle is a circular sum of the basic orientation and the shift. 
         /// </summary>
         /// <param name="orientation">Motion gradient orientation image; calculated by the function cvCalcMotionGradient.</param>
         /// <param name="mask">Mask image. It may be a conjunction of valid gradient mask, obtained with cvCalcMotionGradient and mask of the region, whose direction needs to be calculated. </param>
@@ -1781,7 +1781,7 @@ namespace Emgu.CV
         #endregion 
 
         /// <summary>
-        /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky’s algorithm. 
+        /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky's algorithm. 
         /// </summary>
         /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
         /// <param name="hull_storage">The destination array (CvMat*) or memory storage (CvMemStorage*) that will store the convex hull. If it is array, it should be 1d and have the same number of elements as the input array/sequence. On output the header is modified so to truncate the array downto the hull size</param>
@@ -1802,7 +1802,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src">Source image. </param>
         /// <param name="dst">Destination image</param>
-        /// <param name="element">Structuring element used for erosion. If it is NULL, a 3?3 rectangular structuring element is used.</param>
+        /// <param name="element">Structuring element used for erosion. If it is NULL, a 3x3 rectangular structuring element is used.</param>
         /// <param name="iterations">Number of times erosion is applied.</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvErode(IntPtr src, IntPtr dst, IntPtr element, int iterations);
@@ -1813,7 +1813,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src">Source image</param>
         /// <param name="dst">Destination image</param>
-        /// <param name="element">Structuring element used for erosion. If it is NULL, a 3?3 rectangular structuring element is used</param>
+        /// <param name="element">Structuring element used for erosion. If it is NULL, a 3x3 rectangular structuring element is used</param>
         /// <param name="iterations">Number of times erosion is applied</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvDilate(IntPtr src, IntPtr dst, IntPtr element, int iterations);
@@ -1847,8 +1847,8 @@ namespace Emgu.CV
 
         /// <summary>
         /// Calculates weighted sum of input image image and the accumulator acc so that acc becomes a running average of frame sequence:
-        /// acc(x,y)=(1-?)?acc(x,y) + ??image(x,y) if mask(x,y)!=0
-        /// where ? (alpha) regulates update speed (how fast accumulator forgets about previous frames). 
+        /// acc(x,y)=(1-<paramref name="alpha"/>) * acc(x,y) + <paramref name="alpha"/> * image(x,y) if mask(x,y)!=0
+        /// where <paramref name="alpha"/> regulates update speed (how fast accumulator forgets about previous frames). 
         /// </summary>
         /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently). </param>
         /// <param name="acc">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point. </param>
@@ -1871,7 +1871,7 @@ namespace Emgu.CV
         /// <param name="param3">In case of Gaussian kernel this parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size:
         /// sigma = (n/2 - 1)*0.3 + 0.8, where n=param1 for horizontal kernel,
         /// n=param2 for vertical kernel.
-        /// With the standard sigma for small kernels (3?3 to 7?7) the performance is better. If param3 is not zero, while param1 and param2 are zeros, the kernel size is calculated from the sigma (to provide accurate enough operation). 
+        /// With the standard sigma for small kernels (3x3 to 7x7) the performance is better. If param3 is not zero, while param1 and param2 are zeros, the kernel size is calculated from the sigma (to provide accurate enough operation). 
         /// </param>
         /// <param name="param4">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction</param>
         [DllImport(CV_LIBRARY)]
@@ -1903,14 +1903,14 @@ namespace Emgu.CV
         /// <param name="dst">Destination image</param>
         /// <param name="xorder">Order of the derivative x </param>
         /// <param name="yorder">Order of the derivative y</param>
-        /// <param name="aperture_size">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size ?aperture_size separable kernel will be used to calculate the derivative. For aperture_size=1 3x1 or 1x3 kernel is used (Gaussian smoothing is not done). There is also special value CV_SCHARR (=-1) that corresponds to 3x3 Scharr filter that may give more accurate results than 3x3 Sobel. Scharr aperture is: 
+        /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, <paramref name="appertureSize"/> x <paramref name="appertureSize"/> separable kernel will be used to calculate the derivative. For aperture_size=1 3x1 or 1x3 kernel is used (Gaussian smoothing is not done). There is also special value CV_SCHARR (=-1) that corresponds to 3x3 Scharr filter that may give more accurate results than 3x3 Sobel. Scharr aperture is: 
         /// | -3 0  3|
         /// |-10 0 10|
         /// | -3 0  3|
         ///for x-derivative or transposed for y-derivative. 
         ///</param>
         [DllImport(CV_LIBRARY)]
-        public static extern void cvSobel(IntPtr src, IntPtr dst, int xorder, int yorder, int aperture_size);
+        public static extern void cvSobel(IntPtr src, IntPtr dst, int xorder, int yorder, int apertureSize);
 
         /// <summary>
         /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
@@ -2058,28 +2058,27 @@ namespace Emgu.CV
                   double max_value, CvEnum.THRESH threshold_type);
 
         /// <summary>
-        /// Transforms grayscale image to binary
-        /// image. Threshold calculated individually for each pixel. For the method
-        /// CV_ADAPTIVE_THRESH_MEAN_C it is a mean of block_size ? block_size pixel
-        /// neighborhood, subtracted by param1. For the method
-        /// CV_ADAPTIVE_THRESH_GAUSSIAN_C it is a weighted sum (gaussian) of block_size
-        /// ? block_size pixel neighborhood, subtracted by param1.
+        /// Transforms grayscale image to binary image. 
+        /// Threshold calculated individually for each pixel. 
+        /// For the method CV_ADAPTIVE_THRESH_MEAN_C it is a mean of <paramref name="blockSize"/> x <paramref name="blockSize"/> pixel
+        /// neighborhood, subtracted by param1. 
+        /// For the method CV_ADAPTIVE_THRESH_GAUSSIAN_C it is a weighted sum (gaussian) of <paramref name="blockSize"/> x <paramref name="blockSize"/> pixel neighborhood, subtracted by param1.
         /// </summary>
         /// <param name="src">Source array (single-channel, 8-bit of 32-bit floating point). </param>
         /// <param name="dst">Destination array; must be either the same type as src or 8-bit. </param>
-        /// <param name="max_value">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
-        /// <param name="adaptive_type">Adaptive_method </param>
-        /// <param name="threshold_type">Thresholding type </param>
-        /// <param name="block_size">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
+        /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+        /// <param name="adaptiveType">Adaptive_method </param>
+        /// <param name="thresholdType">Thresholding type </param>
+        /// <param name="blockSize">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
         /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvAdaptiveThreshold(
             IntPtr src,
             IntPtr dst,
-            double max_value,
-            CvEnum.ADAPTIVE_THRESHOLD_TYPE adaptive_type,
-            CvEnum.THRESH threshold_type,
-            int block_size,
+            double maxValue,
+            CvEnum.ADAPTIVE_THRESHOLD_TYPE adaptiveType,
+            CvEnum.THRESH thresholdType,
+            int blockSize,
             double param1);
 
         /// <summary>
@@ -2131,7 +2130,7 @@ namespace Emgu.CV
         /// <param name="scale_factor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
         /// <param name="min_neighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
         /// <param name="flags">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing</param>
-        /// <param name="min_size">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20?20 for face detection). </param>
+        /// <param name="min_size">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
         /// <returns>Rectangular regions in the given image that are likely to contain objects the cascade has been trained for</returns>
         [DllImport(CV_LIBRARY)]
         public static extern IntPtr cvHaarDetectObjects(IntPtr image, IntPtr cascade,
@@ -2142,7 +2141,7 @@ namespace Emgu.CV
         /// <summary>
         /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or NULL if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
         /// </summary>
-        /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1?s, zero pixels remain 0?s - that is image treated as binary. To get such a binary image from grayscale, one may use cvThreshold, cvAdaptiveThreshold or cvCanny. The function modifies the source image content</param>
+        /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1s, zero pixels remain 0s - that is image treated as binary. To get such a binary image from grayscale, one may use cvThreshold, cvAdaptiveThreshold or cvCanny. The function modifies the source image content</param>
         /// <param name="storage">Container of the retrieved contours</param>
         /// <param name="first_contour">Output parameter, will contain the pointer to the first outer contour</param>
         /// <param name="header_size">Size of the sequence header, &gt;=sizeof(CvChain) if method=CV_CHAIN_CODE, and &gt;=sizeof(CvContour) otherwise</param>
@@ -2224,36 +2223,41 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="arr">Image (1-channel or 3-channel with COI set) or polygon (CvSeq of points or a vector of points)</param>
         /// <param name="moments">Pointer to returned moment state structure</param>
-        /// <param name="binary">(For images only) If the flag is non-zero, all the zero pixel values are treated as zeroes, all the others are treated as 1?s</param>
+        /// <param name="binary">(For images only) If the flag is non-zero, all the zero pixel values are treated as zeroes, all the others are treated as 1s</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvMoments(IntPtr arr, ref MCvMoments moments, int binary);
 
         /// <summary>
-        /// Finds corners with big eigenvalues in the image. The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features.
+        /// Finds corners with big eigenvalues in the image. 
         /// </summary>
+        /// <remarks>
+        /// The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. 
+        /// Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). 
+        /// The next step is rejecting the corners with the minimal eigenvalue less than quality_level*max(eigImage(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features.
+        /// </remarks>
         /// <param name="image">The source 8-bit or floating-point 32-bit, single-channel image</param>
-        /// <param name="eig_image">Temporary floating-point 32-bit image of the same size as image</param>
-        /// <param name="temp_image">Another temporary image of the same size and same format as eig_image</param>
+        /// <param name="eigImage">Temporary floating-point 32-bit image of the same size as image</param>
+        /// <param name="tempImage">Another temporary image of the same size and same format as eig_image</param>
         /// <param name="corners">Output parameter. Detected corners</param>
-        /// <param name="corner_count">Output parameter. Number of detected corners</param>
-        /// <param name="quality_level">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-        /// <param name="min_distance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
+        /// <param name="cornerCount">Output parameter. Number of detected corners</param>
+        /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+        /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
         /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is NULL</param>
-        /// <param name="block_size">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-        /// <param name="use_harris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
-        /// <param name="k">Free parameter of Harris detector; used only if use_harris?0</param>
+        /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+        /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
+        /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvGoodFeaturesToTrack(
             IntPtr image,
-            IntPtr eig_image,
-            IntPtr temp_image,
+            IntPtr eigImage,
+            IntPtr tempImage,
             IntPtr corners,
-            ref int corner_count,
-            double quality_level,
-            double min_distance,
+            ref int cornerCount,
+            double qualityLevel,
+            double minDistance,
             IntPtr mask,
-            int block_size,
-            int use_harris,
+            int blockSize,
+            int useHarris,
             double k);
 
         /// <summary>
@@ -2396,11 +2400,11 @@ namespace Emgu.CV
             out MCvBox2D box);
 
         /// <summary>
-        /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size w?h with templ using the specified method and stores the comparison results to result
+        /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
         /// </summary>
         /// <param name="image">Image where the search is running. It should be 8-bit or 32-bit floating-point</param>
         /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
-        /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is W?H and templ is w?h then result must be W-w+1?H-h+1.</param>
+        /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
         /// <param name="method">Specifies the way the template must be compared with image regions </param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvMatchTemplate(
@@ -2590,7 +2594,7 @@ namespace Emgu.CV
                 MCvTermCriteria criteria);
 
         /// <summary>
-        /// Calculates optical flow for overlapped blocks block_size.width?block_size.height pixels each, thus the velocity fields are smaller than the original images. For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous=1)
+        /// Calculates optical flow for overlapped blocks block_size.width * block_size.height pixels each, thus the velocity fields are smaller than the original images. For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous=1)
         /// </summary>
         /// <param name="prev">First image, 8-bit, single-channel.</param>
         /// <param name="curr">Second image, 8-bit, single-channel. </param>
@@ -2598,7 +2602,7 @@ namespace Emgu.CV
         /// <param name="shift_size">Block coordinate increments. </param>
         /// <param name="max_range">Size of the scanned neighborhood in pixels around block.</param>
         /// <param name="use_previous">Uses previous (input) velocity field. </param>
-        /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) ? floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
+        /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
         /// <param name="vely">Vertical component of the optical flow of the same size velx, 32-bit floating-point, single-channel.</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvCalcOpticalFlowBM(
@@ -2648,7 +2652,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// Retrieves the spatial moment, which in case of image moments is defined as:
-        /// Mx_order,y_order=sumx,y(I(x,y)?xx_order?yy_order)
+        /// Mx_order,y_order=sumx,y(I(x,y) * xx_order * yy_order)
         /// where I(x,y) is the intensity of the pixel (x, y). 
         /// </summary>
         /// <param name="moments">The moment state</param>
@@ -2663,7 +2667,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// Retrieves the central moment, which in case of image moments is defined as:
-        /// ?x_order,y_order=sumx,y(I(x,y)?(x-xc)x_order?(y-yc)y_order),
+        /// Mu x_order,y_order=sumx,y(I(x,y) * (x-xc)x_order *(y-yc)y_order),
         /// where xc=M10/M00, yc=M01/M00 - coordinates of the gravity center
         /// </summary>
         /// <param name="moments">Pointer to the moment state structure</param>
@@ -2765,7 +2769,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="mhi">Motion history image</param>
         /// <param name="mask">Mask image; marks pixels where motion gradient data is correct. Output parameter.</param>
-        /// <param name="orientation">Motion gradient orientation image; contains angles from 0 to ~360?. </param>
+        /// <param name="orientation">Motion gradient orientation image; contains angles from 0 to ~360. </param>
         /// <param name="delta1">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2). </param>
         /// <param name="delta2">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2).</param>
         /// <param name="aperture_size">Aperture size of derivative operators used by the function: CV_SCHARR, 1, 3, 5 or 7 (see cvSobel). </param>
@@ -2779,7 +2783,7 @@ namespace Emgu.CV
             int aperture_size);
 
         /// <summary>
-        /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size?block_size neighborhood. Then, it stores
+        /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
         /// det(M) - k*trace(M)^2
         /// to the destination image. Corners in the image can be found as local maxima of the destination image.
         /// </summary>
@@ -2801,10 +2805,10 @@ namespace Emgu.CV
         /// Using these integral images, one may calculate sum, mean, standard deviation over arbitrary up-right or rotated rectangular region of the image in a constant time.
         /// It makes possible to do a fast blurring or fast block correlation with variable window size etc. In case of multi-channel images sums for each channel are accumulated independently. 
         /// </summary>
-        /// <param name="image">The source image, W?H, 8-bit or floating-point (32f or 64f) image.</param>
-        /// <param name="sum">The integral image, W+1?H+1, 32-bit integer or double precision floating-point (64f). </param>
-        /// <param name="sqsum">The integral image for squared pixel values, W+1?H+1, double precision floating-point (64f). </param>
-        /// <param name="tilted_sum">The integral for the image rotated by 45 degrees, W+1?H+1, the same data type as sum.</param>
+        /// <param name="image">The source image, WxH, 8-bit or floating-point (32f or 64f) image.</param>
+        /// <param name="sum">The integral image, W+1xH+1, 32-bit integer or double precision floating-point (64f). </param>
+        /// <param name="sqsum">The integral image for squared pixel values, W+1xH+1, double precision floating-point (64f). </param>
+        /// <param name="tilted_sum">The integral for the image rotated by 45 degrees, W+1xH+1, the same data type as sum.</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvIntegral(IntPtr image, IntPtr sum, IntPtr sqsum, IntPtr tilted_sum);
 
@@ -2814,8 +2818,8 @@ namespace Emgu.CV
         /// <param name="center">Center of the rotation in the source image. </param>
         /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner).</param>
         /// <param name="scale">Isotropic scale factor</param>
-        /// <param name="mapMatrix">Pointer to the destination 2?3 matrix</param>
-        /// <returns>Pointer to the destination 2?3 matrix</returns>
+        /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
+        /// <returns>Pointer to the destination 2x3 matrix</returns>
         [DllImport(CV_LIBRARY)]
         public static extern IntPtr cv2DRotationMatrix(
             MCvPoint2D32f center,
@@ -2839,17 +2843,22 @@ namespace Emgu.CV
             IntPtr mask);
 
         /// <summary>
-        /// Calculates the back project of the histogram. For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). For example, to find a red object in the picture, one may do the following: 
+        /// Calculates the back project of the histogram. 
+        /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
+        /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
+        /// </summary>
+        /// <example>
+        /// To find a red object in the picture, one may do the following: 
         /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
         /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
         /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
         /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
-        /// </summary>
+        /// </example>
         /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
-        /// <param name="back_project">Destination back projection image of the same type as the source images</param>
+        /// <param name="backProject">Destination back projection image of the same type as the source images</param>
         /// <param name="hist">Histogram</param>
         [DllImport(CV_LIBRARY)]
-        public static extern void cvCalcArrBackProject(IntPtr[] image, IntPtr back_project, IntPtr hist);
+        public static extern void cvCalcArrBackProject(IntPtr[] image, IntPtr backProject, IntPtr hist);
 
         /// <summary>
         /// The algorithm normalizes brightness and increases contrast of the image
@@ -2860,12 +2869,17 @@ namespace Emgu.CV
         public static extern void cvEqualizeHist(IntPtr src, IntPtr dst);
 
         /// <summary>
-        /// Calculates the back project of the histogram. For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). For example, to find a red object in the picture, one may do the following: 
+        /// Calculates the back project of the histogram. 
+        /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
+        /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
+        /// </summary>
+        /// <example>
+        /// To find a red object in the picture, one may do the following: 
         /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
         /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
         /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
         /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
-        /// </summary>
+        /// </example>
         /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
         /// <param name="back_project">Destination back projection image of the same type as the source images</param>
         /// <param name="hist">Histogram</param>
@@ -2873,7 +2887,9 @@ namespace Emgu.CV
         public static extern void cvCalcBackProject(IntPtr[] image, IntPtr back_project, IntPtr hist);
 
         /// <summary>
-        /// Releases the histogram (header and the data). The pointer to histogram is cleared by the function. If *hist pointer is already NULL, the function does nothing.
+        /// Releases the histogram (header and the data). 
+        /// The pointer to histogram is cleared by the function. 
+        /// If *hist pointer is already NULL, the function does nothing.
         /// </summary>
         /// <param name="hist">Double pointer to the released histogram</param>
         [DllImport(CV_LIBRARY)]
@@ -2884,33 +2900,33 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src">Source 8-bit single-channel (binary) image.</param>
         /// <param name="dst">Output image with calculated distances (32-bit floating-point, single-channel). </param>
-        /// <param name="distance_type">Type of distance; can be CV_DIST_L1, CV_DIST_L2, CV_DIST_C or CV_DIST_USER. </param>
-        /// <param name="mask_size">Size of distance transform mask; can be 3 or 5.
-        /// In case of CV_DIST_L1 or CV_DIST_C the parameter is forced to 3, because 3?3 mask gives the same result as 5?5 yet it is faster.</param>
-        /// <param name="user_mask">User-defined mask in case of user-defined distance.
-        /// It consists of 2 numbers (horizontal/vertical shift cost, diagonal shift cost) in case of 3?3 mask
-        /// and 3 numbers (horizontal/vertical shift cost, diagonal shift cost, knights move cost) in case of 5?5 mask.</param>
+        /// <param name="distanceType">Type of distance</param>
+        /// <param name="maskSize">Size of distance transform mask; can be 3 or 5.
+        /// In case of CV_DIST_L1 or CV_DIST_C the parameter is forced to 3, because 3x3 mask gives the same result as 5x5 yet it is faster.</param>
+        /// <param name="userMask">User-defined mask in case of user-defined distance.
+        /// It consists of 2 numbers (horizontal/vertical shift cost, diagonal shift cost) in case of 3x3 mask
+        /// and 3 numbers (horizontal/vertical shift cost, diagonal shift cost, knights move cost) in case of 5x5 mask.</param>
         /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst.</param>
         [DllImport(CV_LIBRARY)]
         public static extern void cvDistTransform(
             IntPtr src,
             IntPtr dst,
-            CvEnum.DIST_TYPE distance_type,
-            int mask_size,
-            float[] user_mask,
+            CvEnum.DIST_TYPE distanceType,
+            int maskSize,
+            float[] userMask,
             IntPtr labels);
 
         /// <summary>
         /// Fills a connected component with given color.
         /// </summary>
         /// <param name="src">Input 1- or 3-channel, 8-bit or floating-point image. It is modified by the function unless CV_FLOODFILL_MASK_ONLY flag is set.</param>
-        /// <param name="seed_point">The starting point.</param>
-        /// <param name="new_val">New value of repainted domain pixels.</param>
-        /// <param name="lo_diff">Maximal lower brightness/color difference
+        /// <param name="seedPoint">The starting point.</param>
+        /// <param name="newVal">New value of repainted domain pixels.</param>
+        /// <param name="loDiff">Maximal lower brightness/color difference
         /// between the currently observed pixel and one of its neighbor belong to the component
         /// or seed pixel to add the pixel to component.
         /// In case of 8-bit color images it is packed value.</param>
-        /// <param name="up_diff">Maximal upper brightness/color difference
+        /// <param name="upDiff">Maximal upper brightness/color difference
         /// between the currently observed pixel and one of its neighbor belong to the component
         /// or seed pixel to add the pixel to component.
         /// In case of 8-bit color images it is packed value.</param>
@@ -2932,10 +2948,10 @@ namespace Emgu.CV
         [DllImport(CV_LIBRARY)]
         public static extern void cvFloodFill(
             IntPtr src,
-            MCvPoint seed_point,
-            MCvScalar new_val,
-            MCvScalar lo_diff,
-            MCvScalar up_diff,
+            MCvPoint seedPoint,
+            MCvScalar newVal,
+            MCvScalar loDiff,
+            MCvScalar upDiff,
             out MCvConnectedComp comp,
             int flags,
             IntPtr mask);

@@ -300,6 +300,16 @@ namespace Emgu.CV.Test
             }
         }
 
+        public void TestHaarPerformance()
+        {
+            HaarCascade face = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
+            Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
+            DateTime startTime = DateTime.Now;
+            img.DetectHaarCascade(face);
+            TimeSpan detectionTime = DateTime.Now.Subtract(startTime);
+            Trace.WriteLine(String.Format( "Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, detectionTime.TotalMilliseconds)); 
+        }
+
         public void TestFaceDetect()
         {
             Application.EnableVisualStyles();
