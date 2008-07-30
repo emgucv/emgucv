@@ -43,6 +43,11 @@ namespace Emgu.CV.Test
             Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
             logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
             logoBgra.Save("EmguCVLogo.gif");
+
+            Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
+            for (int i = 0; i < 92; i++)
+                bg_header[i, 0] = new Bgr(210, 210 - i*0.4, 210 - i*0.9);
+            bg_header.Save("bg_header.gif");
         }
 
         public void TestCvNamedWindow()
