@@ -24,7 +24,7 @@ namespace Simple3DReconstruction
             Image<Bgr, Byte> rightImage = new Image<Bgr, byte>("right.png");
             Image<Gray, Byte> disparity = Utils.FindStereoCorrespondence(leftImage.Convert<Gray, Byte>(), rightImage.Convert<Gray, Byte>(), 200);
 
-            texture = leftImage.Convert<Gray, Byte>().Convert<Bgr, Byte>().Resize(512, 512);
+            texture = leftImage.Resize(512, 512).Rotate(90, new Bgr(0.0, 0.0, 0.0));
             
             imageBox1.Image = 255.0 - disparity.Resize(200, 200, true);
 
@@ -35,7 +35,7 @@ namespace Simple3DReconstruction
                 {
                     float r = ((float)row) / disparity.Rows - 0.5f;
                     float c = ((float)col) / disparity.Cols - 0.5f;
-                    return new Point3D<float>(r, c, (float)disparity[row, col].Intensity / 255.0f * 3.0f);
+                    return new Point3D<float>(r, c, ((float)disparity[row, col].Intensity / 255.0f) * 3.0f);
                 };
 
             for (int i = 0; i < disparity.Rows - 1; i++)
@@ -72,7 +72,7 @@ namespace Simple3DReconstruction
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
-            Gl.glOrtho(-0.5, 0.5, -0.5, 0.5, -2.0, 2.0);
+            Gl.glOrtho(-0.5, 0.5, -0.5, 0.5, -2.0, 3.0);
             #endregion
         }
 
@@ -98,9 +98,9 @@ namespace Simple3DReconstruction
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             Gl.glColor3f(0.5f, 0.5f, 0.5f);
             Gl.glPushMatrix();
-            //Gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-            angle += 1.0f;
-            Gl.glRotatef(angle, 0.0f, 1.0f, 0.0f);
+            Gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+            angle += 10.0f;
+            Gl.glRotatef(angle, 1.0f, 0.0f, 0.0f);
 
             Gl.glBegin(Gl.GL_TRIANGLES);
             foreach (Triangle3D<float> t in triangles)

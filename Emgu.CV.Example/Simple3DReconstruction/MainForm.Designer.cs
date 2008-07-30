@@ -17,8 +17,8 @@ namespace Simple3DReconstruction
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.imageBox1 = new Emgu.CV.UI.ImageBox();
-            this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -38,8 +38,8 @@ namespace Simple3DReconstruction
             // 
             this.splitContainer1.Panel2.Controls.Add(this.textBox1);
             this.splitContainer1.Panel2.Controls.Add(this.simpleOpenGlControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(472, 343);
-            this.splitContainer1.SplitterDistance = 236;
+            this.splitContainer1.Size = new System.Drawing.Size(780, 490);
+            this.splitContainer1.SplitterDistance = 390;
             this.splitContainer1.TabIndex = 1;
             // 
             // imageBox1
@@ -51,23 +51,6 @@ namespace Simple3DReconstruction
             this.imageBox1.Size = new System.Drawing.Size(212, 210);
             this.imageBox1.TabIndex = 1;
             // 
-            // simpleOpenGlControl1
-            // 
-            this.simpleOpenGlControl1.AccumBits = ((byte)(0));
-            this.simpleOpenGlControl1.AutoCheckErrors = false;
-            this.simpleOpenGlControl1.AutoFinish = false;
-            this.simpleOpenGlControl1.AutoMakeCurrent = true;
-            this.simpleOpenGlControl1.AutoSwapBuffers = true;
-            this.simpleOpenGlControl1.BackColor = System.Drawing.Color.Black;
-            this.simpleOpenGlControl1.ColorBits = ((byte)(32));
-            this.simpleOpenGlControl1.DepthBits = ((byte)(16));
-            this.simpleOpenGlControl1.Location = new System.Drawing.Point(14, 80);
-            this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
-            this.simpleOpenGlControl1.Size = new System.Drawing.Size(195, 185);
-            this.simpleOpenGlControl1.StencilBits = ((byte)(0));
-            this.simpleOpenGlControl1.TabIndex = 0;
-            this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.GlControl_Paint);
-            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(14, 13);
@@ -78,11 +61,28 @@ namespace Simple3DReconstruction
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = "The 3D object is currently invalid. Work in Progress ...";
             // 
+            // simpleOpenGlControl1
+            // 
+            this.simpleOpenGlControl1.AccumBits = ((byte)(0));
+            this.simpleOpenGlControl1.AutoCheckErrors = false;
+            this.simpleOpenGlControl1.AutoFinish = false;
+            this.simpleOpenGlControl1.AutoMakeCurrent = true;
+            this.simpleOpenGlControl1.AutoSwapBuffers = true;
+            this.simpleOpenGlControl1.BackColor = System.Drawing.Color.Black;
+            this.simpleOpenGlControl1.ColorBits = ((byte)(32));
+            this.simpleOpenGlControl1.DepthBits = ((byte)(16));
+            this.simpleOpenGlControl1.Location = new System.Drawing.Point(14, 99);
+            this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
+            this.simpleOpenGlControl1.Size = new System.Drawing.Size(360, 367);
+            this.simpleOpenGlControl1.StencilBits = ((byte)(0));
+            this.simpleOpenGlControl1.TabIndex = 0;
+            this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.GlControl_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 343);
+            this.ClientSize = new System.Drawing.Size(780, 490);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
