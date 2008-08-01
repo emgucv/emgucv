@@ -127,7 +127,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="point">Input point</param>
         /// <returns>returns the found subdivision vertex</returns>
-        private MCvSubdiv2DPoint FindNearestPoint2D(ref MCvPoint2D32f point)
+        public MCvSubdiv2DPoint FindNearestPoint2D(ref MCvPoint2D32f point)
         {
             IntPtr ptr = CvInvoke.cvFindNearestPoint2D(Ptr, point);
             return (MCvSubdiv2DPoint)Marshal.PtrToStructure(ptr, typeof(MCvSubdiv2DPoint));
@@ -183,7 +183,7 @@ namespace Emgu.CV
 
                     foreach (VoronoiFacet facet in facet1)
                         if (facet.Point.InConvexPolygon(_roi)
-                            && !Array.Exists<VoronoiFacet>(facetList.ToArray(), delegate(VoronoiFacet existingFacet) { return facet.Point.Equals(existingFacet.Point); }))
+                            && !facetList.Exists(delegate(VoronoiFacet existingFacet) { return facet.Point.Equals(existingFacet.Point); }))
                             facetList.Add(facet);
                 }
 
@@ -217,11 +217,11 @@ namespace Emgu.CV
                     MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
 
                     Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
-                    if (!Array.Exists<Triangle2D<float>>(triangleList.ToArray(), tri1.Equals))
+                    if (!triangleList.Exists(tri1.Equals))
                         triangleList.Add(tri1);
 
                     Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-                    if (!Array.Exists<Triangle2D<float>>(triangleList.ToArray(), tri2.Equals))
+                    if (!triangleList.Exists(tri2.Equals))
                         triangleList.Add(tri2);
                 }
 

@@ -16,7 +16,7 @@ namespace Emgu.CV
     public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
     {
         /// <summary>
-        /// The pinned GcHandle to _array;
+        /// The pinned GCHandle to _array;
         /// </summary>
         protected GCHandle _dataHandle;
 

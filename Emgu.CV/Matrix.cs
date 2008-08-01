@@ -102,7 +102,7 @@ namespace Emgu.CV
                 Debug.Assert(value != null, "The Array cannot be null");
 
                 DisposeObject();
-                Debug.Assert(!_dataHandle.IsAllocated , "Handle should should be free");
+                Debug.Assert(!_dataHandle.IsAllocated, "Handle should should be free");
 
                 _array = value;
                 _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
@@ -147,14 +147,27 @@ namespace Emgu.CV
         }
         #endregion
 
+        #region copy and clone
         /// <summary>
         /// Return a matrix of the same size with all elements equals 0
         /// </summary>
         /// <returns>A matrix of the same size with all elements equals 0</returns>
-        public Matrix<TDepth> BlankClone()
+        public Matrix<TDepth> CopyBlank()
         {
             return new Matrix<TDepth>(Rows, Cols);
         }
+
+        /// <summary>
+        /// Make a copy of this matrix
+        /// </summary>
+        /// <returns>A copy if this matrix</returns>
+        public Matrix<TDepth> Clone()
+        {
+            Matrix<TDepth> mat = new Matrix<TDepth>(Rows, Cols);
+            CvInvoke.cvCopy(Ptr, mat.Ptr, IntPtr.Zero);
+            return mat;
+        }
+        #endregion
 
         ///<summary> Returns the transpose of this matrix</summary>
         public Matrix<TDepth> Transpose()
@@ -174,11 +187,11 @@ namespace Emgu.CV
         {
             get
             {
-                return (TDepth) System.Convert.ChangeType( CvInvoke.cvGetReal2D(Ptr, row, col) , typeof(TDepth));
+                return (TDepth)System.Convert.ChangeType(CvInvoke.cvGetReal2D(Ptr, row, col), typeof(TDepth));
             }
             set
             {
-                CvInvoke.cvSet2D(Ptr, row, col, new MCvScalar( System.Convert.ToDouble(value))); 
+                CvInvoke.cvSet2D(Ptr, row, col, new MCvScalar(System.Convert.ToDouble(value)));
             }
         }
 
@@ -259,6 +272,7 @@ namespace Emgu.CV
         }
         #endregion
 
+        #region Removing rows or columns
         /// <summary>
         /// Return the matrix without a specified row span of the input array
         /// </summary>
@@ -273,7 +287,7 @@ namespace Emgu.CV
                 return GetRows(0, startRow, 1);
             else
             {
-                using(Matrix<TDepth> upper = GetRows(0, startRow, 1))
+                using (Matrix<TDepth> upper = GetRows(0, startRow, 1))
                 using (Matrix<TDepth> lower = GetRows(endRow, Rows, 1))
                 {
                     return upper.ConcateVertical(lower);
@@ -302,17 +316,9 @@ namespace Emgu.CV
                 }
             }
         }
-
-        /// <summary>
-        /// Returns the min / max locations and values for the matrix
-        /// </summary>
-        public void MinMax(out double minValue, out double maxValue, out MCvPoint minLocation, out MCvPoint maxLocation)
-        {
-            minValue = 0; maxValue = 0;
-            minLocation = new MCvPoint(); maxLocation = new MCvPoint();
-            CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
-        }
-
+        #endregion 
+        
+        #region Matrix convatenation
         /// <summary>
         /// Concate the current matrix with another matrix vertically. If this matrix is n1 x m and <paramref name="otherMatrix"/> is n2 x m, the resulting matrix is (n1+n2) x m.
         /// </summary>
@@ -337,13 +343,181 @@ namespace Emgu.CV
         public Matrix<TDepth> ConcateHorizontal(Matrix<TDepth> otherMatrix)
         {
             Debug.Assert(Rows == otherMatrix.Rows, "The number of rows must be the same when concatening matrices horizontally.");
-            Matrix<TDepth> res = new Matrix<TDepth>(Rows, Cols+otherMatrix.Cols);
+            Matrix<TDepth> res = new Matrix<TDepth>(Rows, Cols + otherMatrix.Cols);
             using (Matrix<TDepth> subLeft = res.GetCols(0, Cols))
                 Copy(subLeft);
             using (Matrix<TDepth> subRight = res.GetCols(Cols, res.Cols))
                 otherMatrix.Copy(subRight);
             return res;
         }
+        #endregion
+
+        /// <summary>
+        /// Returns the min / max locations and values for the matrix
+        /// </summary>
+        public void MinMax(out double minValue, out double maxValue, out MCvPoint minLocation, out MCvPoint maxLocation)
+        {
+            minValue = 0; maxValue = 0;
+            minLocation = new MCvPoint(); maxLocation = new MCvPoint();
+            CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
+        }
+
+        #region Addition
+        ///<summary> Elementwise add another matrix with the current matrix </summary>
+        ///<param name="mat2">The matrix to be added to the current matrix</param>
+        ///<returns> The result of elementwise adding mat2 to the current matrix</returns>
+        public Matrix<TDepth> Add(Matrix<TDepth> mat2)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvAdd(Ptr, mat2.Ptr, res.Ptr, IntPtr.Zero);
+            return res;
+        }
+
+        ///<summary> Elementwise add a color <paramref name="val"/> to the current matrix</summary>
+        ///<param name="val">The value to be added to the current matrix</param>
+        ///<returns> The result of elementwise adding <paramref name="val"/> from the current matrix</returns>
+        public Matrix<TDepth> Add(TDepth val)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvAddS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+            return res;
+        }
+        #endregion
+
+        #region Substraction
+        ///<summary> Elementwise substract another matrix from the current matrix </summary>
+        ///<param name="mat2"> The matrix to be substracted to the current matrix</param>
+        ///<returns> The result of elementwise substracting mat2 from the current matrix</returns>
+        public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvSub(Ptr, mat2.Ptr, res.Ptr, IntPtr.Zero);
+            return res;
+        }
+
+        ///<summary> Elementwise substract a color <paramref name="val"/> to the current matrix</summary>
+        ///<param name="val"> The value to be substracted from the current matrix</param>
+        ///<returns> The result of elementwise substracting <paramref name="val"/> from the current matrix</returns>
+        public Matrix<TDepth> Sub(TDepth val)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvSubS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+            return res;
+        }
+
+        /// <summary>
+        /// result = val - this
+        /// </summary>
+        /// <param name="val">The value which subtract this matrix</param>
+        /// <returns>val - this</returns>
+        public Matrix<TDepth> SubR(TDepth val)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvSubRS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+            return res;
+        }
+        #endregion
+
+        #region Multiplication
+        ///<summary> Multiply the current matrix with <paramref name="scale"/></summary>
+        ///<param name="scale">The scale to be multiplied</param>
+        ///<returns> The scaled matrix </returns>
+        public Matrix<TDepth> Mul(double scale)
+        {
+            Matrix<TDepth> res = CopyBlank();
+            CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, 0.0);
+            return res;
+        }
+
+        ///<summary> Multiply the current matrix with <paramref name="mat2"/></summary>
+        ///<param name="mat2">The matrix to be multiplied</param>
+        ///<returns> Result matrix of the multiplication </returns>
+        public Matrix<TDepth> Mul(Matrix<TDepth> mat2)
+        {
+            Matrix<TDepth> res = new Matrix<TDepth>(Rows, mat2.Cols);
+            CvInvoke.cvGEMM(Ptr, mat2.Ptr, 1.0, IntPtr.Zero, 0.0, res.Ptr, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+            return res;
+        }
+        #endregion 
+
+        #region Operator overload
+        /// <summary>
+        /// Elementwise add <paramref name="mat1"/> with <paramref name="val"/>
+        /// </summary>
+        /// <param name="mat1">The Matrix to be added</param>
+        /// <param name="val">The value to be added</param>
+        /// <returns>The matrix plus the value</returns>
+        public static Matrix<TDepth> operator +(Matrix<TDepth> mat1, double val)
+        {
+            return mat1.Add((TDepth)System.Convert.ChangeType(val, typeof(TDepth)));
+        }
+
+        /// <summary>
+        /// <paramref name="val"/> + <paramref name="mat1"/>
+        /// </summary>
+        /// <param name="mat1">The Matrix to be added</param>
+        /// <param name="val">The value to be added</param>
+        /// <returns>The matrix plus the value</returns>
+        public static Matrix<TDepth> operator +(double val, Matrix<TDepth> mat1)
+        {
+            return mat1.Add((TDepth)System.Convert.ChangeType(val, typeof(TDepth)));
+        }
+
+        /// <summary>
+        /// <paramref name="val"/> - <paramref name="mat1"/> 
+        /// </summary>
+        /// <param name="mat1">The Matrix to be subtracted</param>
+        /// <param name="val">The value to be subtracted</param>
+        /// <returns><paramref name="val"/> - <paramref name="mat1"/></returns>
+        public static Matrix<TDepth> operator -(double val, Matrix<TDepth> mat1)
+        {
+            return mat1.SubR((TDepth)System.Convert.ChangeType(val, typeof(TDepth)));
+        }
+
+        /// <summary>
+        /// <paramref name="mat1"/> - <paramref name="val"/> 
+        /// </summary>
+        /// <param name="mat1">The Matrix to be subtracted</param>
+        /// <param name="val">The value to be subtracted</param>
+        /// <returns><paramref name="mat1"/> - <paramref name="val"/></returns>
+        public static Matrix<TDepth> operator -(Matrix<TDepth> mat1, double val)
+        {
+            return mat1.Sub((TDepth)System.Convert.ChangeType(val, typeof(TDepth)));
+        }
+
+        /// <summary>
+        /// <paramref name="mat1"/> * <paramref name="val"/> 
+        /// </summary>
+        /// <param name="mat1">The Matrix to be multiplied</param>
+        /// <param name="val">The value to be multiplied</param>
+        /// <returns><paramref name="mat1"/> * <paramref name="val"/></returns>
+        public static Matrix<TDepth> operator *(Matrix<TDepth> mat1, double val)
+        {
+            return mat1.Mul(val);
+        }
+
+        /// <summary>
+        ///  <paramref name="val"/> * <paramref name="mat1"/> 
+        /// </summary>
+        /// <param name="mat1">The matrix to be multiplied</param>
+        /// <param name="val">The value to be multiplied</param>
+        /// <returns> <paramref name="val"/> * <paramref name="mat1"/> </returns>
+        public static Matrix<TDepth> operator *(double val, Matrix<TDepth> mat1)
+        {
+            return mat1.Mul(val);
+        }
+
+        /// <summary>
+        /// <paramref name="mat1"/> * <paramref name="mat2"/> 
+        /// </summary>
+        /// <param name="mat1">The Matrix to be multiplied</param>
+        /// <param name="mat2">The Matrix to be multiplied</param>
+        /// <returns><paramref name="mat1"/> * <paramref name="mat2"/></returns>
+        public static Matrix<TDepth> operator *(Matrix<TDepth> mat1, Matrix<TDepth> mat2)
+        {
+            return mat1.Mul(mat2);
+        }
+        #endregion
 
         #region Implement ISerializable interface
         /// <summary>
@@ -375,10 +549,10 @@ namespace Emgu.CV
 
         #region Comparison
         /// <summary>
-        /// This function compare the current image with <paramref name="mat2"/> and returns the comparison mask
+        /// This function compare the current matrix with <paramref name="mat2"/> and returns the comparison mask
         /// </summary>
-        /// <param name="mat2">the other matrix to compare with</param>
-        /// <param name="type">comparison type</param>
+        /// <param name="mat2">The other matrix to compare with</param>
+        /// <param name="type">Comparison type</param>
         /// <returns>The comparison mask</returns>
         public Matrix<Byte> Cmp(Matrix<TDepth> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
         {
@@ -398,7 +572,7 @@ namespace Emgu.CV
 
             using (Matrix<Byte> neqMask = Cmp(mat2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
             {
-                return CvInvoke.cvCountNonZero( neqMask.Ptr) == 0;
+                return CvInvoke.cvCountNonZero(neqMask.Ptr) == 0;
             }
         }
 

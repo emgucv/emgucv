@@ -103,9 +103,9 @@ namespace Emgu.CV.Test
         public void TestRotationMatrix3D()
         {
             float[] rod = new float[] { 0.2f, 0.5f, 0.3f };
-            RotationVector rodVec = new RotationVector(rod);
+            RotationVector3D rodVec = new RotationVector3D(rod);
 
-            RotationVector rodVec2 = new RotationVector();
+            RotationVector3D rodVec2 = new RotationVector3D();
             rodVec2.RotationMatrix = rodVec.RotationMatrix;
             Assert.IsTrue(rodVec.Equals(rodVec2));
         }
@@ -262,6 +262,16 @@ namespace Emgu.CV.Test
             Triangle2D<double> tri = new Triangle2D<double>(p1, p2, p3);
             double epsilon = 1e-10;
             Assert.IsTrue( Math.Abs(tri.Area - 0.5) < epsilon);
+        }
+
+        [Test]
+        public void GetBox2DPoints()
+        {
+            MCvBox2D box = new MCvBox2D();
+            box.center = new MCvPoint2D32f(3.0f, 2.0f);
+            box.size = new MCvSize2D32f(4.0f, 6.0f);
+            Point2D<float>[] vertices = box.Vertices;
+            Assert.IsTrue(vertices[0].Equals(new Point2D<float>(0.0f, 0.0f))); 
         }
     }
 }

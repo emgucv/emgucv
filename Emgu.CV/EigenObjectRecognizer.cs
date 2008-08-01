@@ -22,7 +22,7 @@ namespace Emgu.CV
         private double _simularityThreshold;
 
         /// <summary>
-        /// Get the Eigen vectors that form the eigen space
+        /// Get the eigen vectors that form the eigen space
         /// </summary>
         /// <remarks>The set method is primary used for deserialization, do not attemps to set it unless you know what you are doing</remarks>
         public Image<Gray, Single>[] EigenImages
@@ -119,7 +119,7 @@ namespace Emgu.CV
         /// <param name="trainingImages">The images used for training </param>
         /// <param name="termCrit">The criteria for tranning</param>
         /// <param name="eigenImages">The resulting eigen images</param>
-        /// <param name="avg">the resulting average image</param>
+        /// <param name="avg">The resulting average image</param>
         public static void CalcEigenObjects(Image<Gray, Byte>[] trainingImages, ref MCvTermCriteria termCrit, out Image<Gray, Single>[] eigenImages, out Image<Gray, Single> avg)
         {
             int width = trainingImages[0].Width;
@@ -228,18 +228,17 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Try to recognize the image an return a label
+        /// Try to recognize the image and return its label
         /// </summary>
-        /// <param name="image">the image to be recognized</param>
+        /// <param name="image">The image to be recognized</param>
         /// <returns>
-        /// Empty String, if not recognized;
-        /// Label of the corresponding image, if recognized
+        /// String.Empty, if not recognized;
+        /// Label of the corresponding image, otherwise
         /// </returns>
         public String Recognize(Image<Gray, Byte> image)
         {
             int index = FindIndex(image);
             return index == -1 ? String.Empty : _labels[index];
         }
-
     }
 }

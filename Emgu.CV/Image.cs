@@ -1615,6 +1615,7 @@ namespace Emgu.CV
             CvInvoke.cvMul(Ptr, img2.Ptr, res.Ptr, scale);
             return res;
         }
+
         ///<summary> Elementwise multiply <paramref name="img2"/> with the current image</summary>
         ///<param name="img2">The image to be elementwise multiplied to the current image</param>
         ///<returns> this .* img2 </returns>
@@ -1830,8 +1831,15 @@ namespace Emgu.CV
             return Rotate(angle, background, true);
         }
 
+        public Image<TColor, TDepth> WrapAffine(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+        {
+            Image<TColor, TDepth> res = CopyBlank();
+            CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
+            return res;
+        }
+
         /// <summary>
-        /// Rotate the image the specified angle
+        /// Rotate this image the specified <paramref name="angle"/>
         /// </summary>
         /// <param name="angle">The angle of rotation in degrees.</param>
         /// <param name="background">The color with wich to fill the background</param>
@@ -1842,11 +1850,10 @@ namespace Emgu.CV
             Image<TColor, TDepth> resultImage;
             if (crop)
             {
-                resultImage = new Image<TColor, TDepth>(Width, Height);
                 Point2D<float> center = new Point2D<float>(Width * 0.5f, Height * 0.5f);
                 using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
                 {
-                    CvInvoke.cvWarpAffine(Ptr, resultImage.Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background.MCvScalar);
+                    resultImage = WrapAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
                 }
             }
             else

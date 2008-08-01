@@ -32,9 +32,9 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
         /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
-        /// <param name="mhiDuration">in second, the duration of motion history your wants to keep</param>
-        /// <param name="maxTimeDelta">in second, parameter for cvCalcMotionGradient</param>
-        /// <param name="minTimeDelta">in second, parameter for cvCalcMotionGradient</param>
+        /// <param name="mhiDuration">In second, the duration of motion history your wants to keep</param>
+        /// <param name="maxTimeDelta">In second, parameter for cvCalcMotionGradient</param>
+        /// <param name="minTimeDelta">In second, parameter for cvCalcMotionGradient</param>
         public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta)
         {
             _bufferMax = bufferCount;

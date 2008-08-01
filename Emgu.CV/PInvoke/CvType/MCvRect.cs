@@ -43,7 +43,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Center of the CvRect
+        /// Center of the MCvRect
         /// </summary>
         public Point2D<double> Center
         {
@@ -51,7 +51,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Size of the CvRect
+        /// Size of the MCvRect
         /// </summary>
         public Point2D<int> Size
         {
@@ -59,7 +59,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Area of the CvRect
+        /// Area of the MCvRect
         /// </summary>
         public int Area
         {

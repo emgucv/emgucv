@@ -22,18 +22,18 @@ namespace Emgu.CV
         public IntPtr bins;
 
         /// <summary>
-        /// for uniform histograms 
+        /// For uniform histograms 
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)CvEnum.GENERAL.CV_MAX_DIM)]
         public Range[] thresh;
 
         /// <summary>
-        /// for non-uniform histograms
+        /// For non-uniform histograms
         /// </summary>
         public IntPtr thresh2;
 
         /// <summary>
-        /// embedded matrix header for array histograms
+        /// Embedded matrix header for array histograms
         /// </summary>
         public MCvMatND mat;
 
@@ -46,11 +46,11 @@ namespace Emgu.CV
             /// <summary>
             /// The min value of this bin
             /// </summary>
-            float min;
+            public float min;
             /// <summary>
             /// The max value of this bin
             /// </summary>
-            float max;
+            public float max;
         }
     }
 }

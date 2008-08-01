@@ -30,6 +30,18 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestArithmatic()
+        {
+            Matrix<byte> m = new Matrix<byte>(10, 8);
+            m._RandNormal(new MCvScalar(), new MCvScalar(30));
+            Matrix<byte> mMultiplied = m.Mul(2.0);
+
+            for (int i = 0; i < m.Rows; i++)
+                for (int j = 0; j < m.Cols; j++)
+                    Assert.AreEqual(m[i, j] * 2, mMultiplied[i, j]);
+        }
+
+        [Test]
         public void TestCvInvoke()
         {
             IntPtr mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F);

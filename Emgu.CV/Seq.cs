@@ -26,7 +26,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create a sequence using the specific <paramref name="seq_flag"/> and <paramref name="storage"/>
+        /// Create a sequence using the specific <paramref name="seqFlag"/> and <paramref name="storage"/>
         /// </summary>
         /// <param name="seqFlag">Flags of the created sequence. If the sequence is not passed to any function working with a specific type of sequences, the sequence value may be set to 0, otherwise the appropriate type must be selected from the list of predefined sequence types</param>
         /// <param name="storage">the storage</param>
@@ -162,17 +162,20 @@ namespace Emgu.CV
         /// <param name="slice">The part of the sequence to extract</param>
         /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is NULL, the function uses the storage containing the input sequence.</param>
         /// <param name="copy_data">The flag that indicates whether to copy the elements of the extracted slice </param>
-        /// <returns></returns>
+        /// <returns>A sequence that represents the specified slice of the input sequence</returns>
         public Seq<T> Slice(MCvSlice slice, MemStorage storage, bool copy_data)
         {
             return new Seq<T>(CvInvoke.cvSeqSlice(Ptr, slice, storage.Ptr, copy_data), storage);
         }
 
-        ///<summary> The number of vertices in the contour</summary>
-        public int Total { get { return ((MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq))).total; } }
+        ///<summary> Get the number of eelments in the sequence</summary>
+        public int Total
+        {
+            get { return ((MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq))).total; }
+        }
 
         /// <summary>
-        /// Release the contour and all the memory associate with it
+        /// Release the sequence and all the memory associate with it
         /// </summary>
         protected override void DisposeObject()
         {

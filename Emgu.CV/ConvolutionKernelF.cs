@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Emgu.CV
 {
     /// <summary>
-    /// The kernel that can be use as the parameter of the Convulution function in Image class
+    /// A convolution kernel 
     /// </summary>
     public class ConvolutionKernelF : Matrix<float>
     {
@@ -16,7 +16,7 @@ namespace Emgu.CV
         protected Point2D<int> _center;
 
         /// <summary>
-        /// Create a convolution kernel of the specific rows and cols
+        /// Create a convolution kernel with the specific rows and cols
         /// </summary>
         /// <param name="rows">The number of raws for the convolution kernel</param>
         /// <param name="cols">The number of columns for the convolution kernel</param>
@@ -74,7 +74,7 @@ namespace Emgu.CV
             _center = center;
         }
 
-        ///<summary> Return a filpped copy of the convolution kernel</summary>
+        ///<summary> Get a filpped copy of the convolution kernel</summary>
         ///<param name="flipType">The type of the flipping</param>
         ///<returns> The flipped copy of <i>this</i> image </returns>
         public ConvolutionKernelF Flip(CvEnum.FLIP flipType)

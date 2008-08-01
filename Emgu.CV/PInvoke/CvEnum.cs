@@ -411,6 +411,10 @@ namespace Emgu.CV.CvEnum
     public enum GEMM_TYPE
     {
         /// <summary>
+        /// Do not apply transpose to neither matrices
+        /// </summary>
+        CV_GEMM_DEFAULT = 0,
+        /// <summary>
         /// transpose src1
         /// </summary>
         CV_GEMM_A_T = 1,
@@ -1221,11 +1225,15 @@ namespace Emgu.CV.CvEnum
     public enum WARP
     {
         /// <summary>
-        /// fill all the destination image pixels. If some of them correspond to outliers in the source image, they are set to fillval.
+        /// Neither FILL_OUTLIERS nor CV_WRAP_INVERSE_MAP
+        /// </summary>
+        CV_WRAP_DEFAULT = 0,
+        /// <summary>
+        /// Fill all the destination image pixels. If some of them correspond to outliers in the source image, they are set to fillval.
         /// </summary>
         CV_WARP_FILL_OUTLIERS = 8,
         /// <summary>
-        /// indicates that matrix is inverse transform from destination image to source and, thus, can be used directly for pixel interpolation. Otherwise, the function finds the inverse transform from map_matrix.
+        /// Indicates that matrix is inverse transform from destination image to source and, thus, can be used directly for pixel interpolation. Otherwise, the function finds the inverse transform from map_matrix.
         /// </summary>
         CV_WARP_INVERSE_MAP = 16
     }

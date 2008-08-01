@@ -9,12 +9,12 @@ namespace Emgu.CV
     /// A 3D rotation matrix
     /// </summary>
     [Serializable]
-    public class RotationVector : Matrix<float>
+    public class RotationVector3D : Matrix<float>
     {
         /// <summary>
-        /// Create a (3x1) 3D rotation vector.
+        /// Create a 3D rotation vector (3x1 Matrix).
         /// </summary>
-        public RotationVector()
+        public RotationVector3D()
             : base(3, 1)
         {
         }
@@ -23,7 +23,7 @@ namespace Emgu.CV
         /// Create a rotation vector using the specific values
         /// </summary>
         /// <param name="value"></param>
-        public RotationVector(float[] value)
+        public RotationVector3D(float[] value)
             : this()
         {
             Debug.Assert(value.Length == 3, "Rotation Vector must have size = 3");

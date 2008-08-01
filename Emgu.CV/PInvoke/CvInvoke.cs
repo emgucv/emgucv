@@ -1578,18 +1578,6 @@ namespace Emgu.CV
 
         #region CV_LIBRARY
         /// <summary>
-        /// Finds perspective transformation H=||hij|| between the source and the destination planes
-        /// </summary>
-        /// <param name="src_points">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
-        /// <param name="dst_points">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
-        /// <param name="homography">Output 3x3 homography matrix.</param>
-        [DllImport(CV_LIBRARY)]
-        public static extern void cvFindHomography(
-            IntPtr src_points,
-            IntPtr dst_points,
-            IntPtr homography);
-
-        /// <summary>
         /// Transforms source image using the specified matrix
         /// </summary>
         /// <param name="src">Source image</param>
@@ -1604,6 +1592,21 @@ namespace Emgu.CV
             IntPtr map_matrix,
             int flags,
             MCvScalar fillval);
+
+        /// <summary>
+        /// Similar to other geometrical transformations, some interpolation method (specified by user) is used to extract pixels with non-integer coordinates.
+        /// </summary>
+        /// <param name="src">Source image</param>
+        /// <param name="dst">Destination image</param>
+        /// <param name="mapx">The map of x-coordinates (32fC1 image)</param>
+        /// <param name="mapy">The map of y-coordinates (32fC1 image)</param>
+        /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS </param>
+        /// <param name="fillval">A value used to fill outliers</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvRemap( IntPtr src, IntPtr dst,
+              IntPtr mapx, IntPtr mapy,
+              int flags,
+              MCvScalar fillval);
 
         /// <summary>
         /// Finds all the motion segments and marks them in seg_mask with individual values each (1,2,...). It also returns a sequence of CvConnectedComp structures, one per each motion components. After than the motion direction for every component can be calculated with cvCalcGlobalOrientation using extracted mask of the particular component (using cvCmp) 
@@ -1681,33 +1684,7 @@ namespace Emgu.CV
             double threshold1, 
             double threshold2);
 
-
-        /// <summary>
-        /// Creates an empty Delaunay subdivision, where 2d points can be added further using function cvSubdivDelaunay2DInsert. All the points to be added must be within the specified rectangle, otherwise a runtime error will be raised. 
-        /// </summary>
-        /// <param name="rect">Rectangle that includes all the 2d points that are to be added to subdivision.</param>
-        /// <param name="storage">Container for subdivision</param>
-        /// <returns></returns>
-        public static IntPtr cvCreateSubdivDelaunay2D(MCvRect rect, IntPtr storage)
-        {
-            IntPtr subdiv = cvCreateSubdiv2D( CvConst.CV_SEQ_KIND_SUBDIV2D, 
-                    Marshal.SizeOf(typeof(MCvSubdiv2D)),
-                    Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
-                    Marshal.SizeOf(typeof(MCvQuadEdge2D)),
-                    storage );
-
-            cvInitSubdivDelaunay2D( subdiv, rect );
-            return subdiv;
-        }
-
-        /// <summary>
-        /// Initializes Delaunay triangulation 
-        /// </summary>
-        /// <param name="subdiv"></param>
-        /// <param name="rect"></param>
-        [DllImport(CV_LIBRARY)]
-        public static extern void cvInitSubdivDelaunay2D( IntPtr subdiv, MCvRect rect );
-
+        #region Computational Geometry
         /// <summary>
         /// Finds minimum area rectangle that contains both input rectangles inside
         /// </summary>
@@ -1716,6 +1693,40 @@ namespace Emgu.CV
         /// <returns>The minimum area rectangle that contains both input rectangles inside</returns>
         [DllImport(CV_LIBRARY)]
         public static extern MCvRect cvMaxRect(ref MCvRect rect1, ref MCvRect rect2);
+
+        /// <summary>
+        /// Fits line to 2D or 3D point set 
+        /// </summary>
+        /// <param name="points">Sequence or array of 2D or 3D points with 32-bit integer or floating-point coordinates</param>
+        /// <param name="dist_type">The distance used for fitting </param>
+        /// <param name="param">Numerical parameter (C) for some types of distances, if 0 then some optimal value is chosen</param>
+        /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line),  0.01 would be a good default</param>
+        /// <param name="aeps">Sufficient accuracy for angle, 0.01 would be a good default</param>
+        /// <param name="line">The output line parameters. In case of 2d fitting it is array of 4 floats (vx, vy, x0, y0) where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is some point on the line. In case of 3D fitting it is array of 6 floats (vx, vy, vz, x0, y0, z0) where (vx, vy, vz) is a normalized vector collinear to the line and (x0, y0, z0) is some point on the line.</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvFitLine(
+            IntPtr points,
+            CvEnum.DIST_TYPE dist_type,
+            double param,
+            double reps,
+            double aeps,
+            [Out] float[] line);
+
+        /// <summary>
+        /// Calculates vertices of the input 2d box.
+        /// </summary>
+        /// <param name="box">The box</param>
+        /// <param name="pt">An array of size 8, where the coordinate for ith point is: [pt[i&gt;&gt;1], pt[(i&gt;&gt;1)+1]]</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvBoxPoints(MCvBox2D box, float[] pt );
+    
+        /// <summary>
+        /// Calculates ellipse that fits best (in least-squares sense) to a set of 2D points. The meaning of the returned structure fields is similar to those in cvEllipse except that size stores the full lengths of the ellipse axises, not half-lengths
+        /// </summary>
+        /// <param name="points">Sequence or array of points</param>
+        /// <returns>The ellipse that fits best (in least-squares sense) to a set of 2D points</returns>
+        [DllImport(CV_LIBRARY)]
+        public static extern MCvBox2D cvFitEllipse2(IntPtr points);
 
         /// <summary>
         /// Finds a circumscribed rectangle of the minimal area for 2D point set by building convex hull for the set and applying rotating calipers technique to the hull.
@@ -1736,7 +1747,50 @@ namespace Emgu.CV
         [DllImport(CV_LIBRARY)]
         public static extern int cvMinEnclosingCircle( IntPtr points, out MCvPoint2D32f center, out float radius );
 
+        /// <summary>
+        /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky's algorithm. 
+        /// </summary>
+        /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
+        /// <param name="hull_storage">The destination array (CvMat*) or memory storage (CvMemStorage*) that will store the convex hull. If it is array, it should be 1d and have the same number of elements as the input array/sequence. On output the header is modified so to truncate the array downto the hull size</param>
+        /// <param name="orientation">Desired orientation of convex hull: CV_CLOCKWISE or CV_COUNTER_CLOCKWISE</param>
+        /// <param name="return_points">If non-zero, the points themselves will be stored in the hull instead of indices if hull_storage is array, or pointers if hull_storage is memory storage</param>
+        /// <returns>If hull_storage is memory storage, the function creates a sequence containing the hull points or pointers to them, depending on return_points value and returns the sequence on output</returns>
+        [DllImport(CV_LIBRARY)]
+        public static extern IntPtr cvConvexHull2(
+            IntPtr input,
+            IntPtr hull_storage,
+            CvEnum.ORIENTATION orientation,
+            int return_points);
+
+        #endregion 
+
         #region Plannar Subdivisions
+        /// <summary>
+        /// Creates an empty Delaunay subdivision, where 2d points can be added further using function cvSubdivDelaunay2DInsert. All the points to be added must be within the specified rectangle, otherwise a runtime error will be raised. 
+        /// </summary>
+        /// <param name="rect">Rectangle that includes all the 2d points that are to be added to subdivision.</param>
+        /// <param name="storage">Container for subdivision</param>
+        /// <returns></returns>
+        public static IntPtr cvCreateSubdivDelaunay2D(MCvRect rect, IntPtr storage)
+        {
+            IntPtr subdiv = cvCreateSubdiv2D(CvConst.CV_SEQ_KIND_SUBDIV2D,
+                    Marshal.SizeOf(typeof(MCvSubdiv2D)),
+                    Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
+                    Marshal.SizeOf(typeof(MCvQuadEdge2D)),
+                    storage);
+
+            cvInitSubdivDelaunay2D(subdiv, rect);
+            return subdiv;
+        }
+
+        /// <summary>
+        /// Initializes Delaunay triangulation 
+        /// </summary>
+        /// <param name="subdiv"></param>
+        /// <param name="rect"></param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, MCvRect rect);
+
         /// <summary>
         /// Locates input point within subdivision. It finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point. 
         /// </summary>
@@ -1779,21 +1833,6 @@ namespace Emgu.CV
         public static extern void cvCalcSubdivVoronoi2D(IntPtr subdiv);
 
         #endregion 
-
-        /// <summary>
-        /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky's algorithm. 
-        /// </summary>
-        /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
-        /// <param name="hull_storage">The destination array (CvMat*) or memory storage (CvMemStorage*) that will store the convex hull. If it is array, it should be 1d and have the same number of elements as the input array/sequence. On output the header is modified so to truncate the array downto the hull size</param>
-        /// <param name="orientation">Desired orientation of convex hull: CV_CLOCKWISE or CV_COUNTER_CLOCKWISE</param>
-        /// <param name="return_points">If non-zero, the points themselves will be stored in the hull instead of indices if hull_storage is array, or pointers if hull_storage is memory storage</param>
-        /// <returns>If hull_storage is memory storage, the function creates a sequence containing the hull points or pointers to them, depending on return_points value and returns the sequence on output</returns>
-        [DllImport(CV_LIBRARY)]
-        public static extern IntPtr cvConvexHull2(
-            IntPtr input,
-            IntPtr hull_storage,
-            CvEnum.ORIENTATION orientation,
-            int return_points);
 
         /// <summary>
         /// Erodes the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the minimum is taken:
@@ -2260,6 +2299,72 @@ namespace Emgu.CV
             int useHarris,
             double k);
 
+        #region Camera Calibration
+        /// <summary>
+        /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
+        /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
+        /// </summary>
+        /// <param name="object_points">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
+        /// <param name="rotation_vector">The rotation vector, 1x3 or 3x1</param>
+        /// <param name="translation_vector">The translation vector, 1x3 or 3x1</param>
+        /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+        /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's</param>
+        /// <param name="image_points">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
+        /// <param name="dpdrot">Optional Nx3 matrix of derivatives of image points with respect to components of the rotation vector</param>
+        /// <param name="dpdt">Optional Nx3 matrix of derivatives of image points w.r.t. components of the translation vector</param>
+        /// <param name="dpdf">Optional Nx2 matrix of derivatives of image points w.r.t. fx and fy</param>
+        /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
+        /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvProjectPoints2(
+            IntPtr object_points,
+            IntPtr rotation_vector,
+            IntPtr translation_vector,
+            IntPtr intrinsic_matrix,
+            IntPtr distortion_coeffs,
+            IntPtr image_points,
+            IntPtr dpdrot,
+            IntPtr dpdt,
+            IntPtr dpdf,
+            IntPtr dpdc,
+            IntPtr dpddist);
+
+        /// <summary>
+        /// Finds perspective transformation H=||hij|| between the source and the destination planes
+        /// </summary>
+        /// <param name="src_points">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
+        /// <param name="dst_points">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
+        /// <param name="homography">Output 3x3 homography matrix.</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvFindHomography(
+            IntPtr src_points,
+            IntPtr dst_points,
+            IntPtr homography);
+
+        /// <summary>
+        /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
+        /// </summary>
+        /// <param name="object_points">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
+        /// <param name="image_points">The joint matrix of corresponding image points, 2xN or Nx2, where N is the total number of points in all views</param>
+        /// <param name="point_counts">Vector containing numbers of points in each particular view, 1xM or Mx1, where M is the number of a scene views</param>
+        /// <param name="image_size">Size of the image, used only to initialize intrinsic camera matrix</param>
+        /// <param name="intrinsic_matrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+        /// <param name="distortion_coeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
+        /// <param name="rotation_vectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
+        /// <param name="translation_vectors">The output 3xM or Mx3 array of translation vectors</param>
+        /// <param name="flags">Different flags</param>
+        [DllImport(CV_LIBRARY)]
+        public static extern void cvCalibrateCamera2( 
+            IntPtr object_points, 
+            IntPtr image_points,
+            IntPtr point_counts, 
+            MCvSize image_size,
+            IntPtr intrinsic_matrix, 
+            IntPtr distortion_coeffs,
+            IntPtr rotation_vectors, 
+            IntPtr translation_vectors,
+            int flags);
+
         /// <summary>
         /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
         /// </summary>
@@ -2312,34 +2417,18 @@ namespace Emgu.CV
             IntPtr distortion_coeffs);
 
         /// <summary>
-        /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
-        /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
+        /// Pre-computes the undistortion map - coordinates of the corresponding pixel in the distorted image for every pixel in the corrected image. Then, the map (together with input and output images) can be passed to cvRemap function. 
         /// </summary>
-        /// <param name="object_points">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
-        /// <param name="rotation_vector">The rotation vector, 1x3 or 3x1</param>
-        /// <param name="translation_vector">The translation vector, 1x3 or 3x1</param>
-        /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-        /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's</param>
-        /// <param name="image_points">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
-        /// <param name="dpdrot">Optional Nx3 matrix of derivatives of image points with respect to components of the rotation vector</param>
-        /// <param name="dpdt">Optional Nx3 matrix of derivatives of image points w.r.t. components of the translation vector</param>
-        /// <param name="dpdf">Optional Nx2 matrix of derivatives of image points w.r.t. fx and fy</param>
-        /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
-        /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
+        /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]</param>
+        /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. </param>
+        /// <param name="mapx">The output array of x-coordinates of the map</param>
+        /// <param name="mapy">The output array of y-coordinates of the map</param>
         [DllImport(CV_LIBRARY)]
-        public static extern void cvProjectPoints2(
-            IntPtr object_points,
-            IntPtr rotation_vector,
-            IntPtr translation_vector,
-            IntPtr intrinsic_matrix,
-            IntPtr distortion_coeffs,
-            IntPtr image_points,
-            IntPtr dpdrot,
-            IntPtr dpdt,
-            IntPtr dpdf,
-            IntPtr dpdc,
-            IntPtr dpddist);
+        public static extern void cvInitUndistortMap( IntPtr intrinsic_matrix,
+                         IntPtr distortion_coeffs,
+                         IntPtr mapx, IntPtr mapy );
 
+        #endregion
 
         /// <summary>
         /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]T, so that: 
@@ -2441,32 +2530,6 @@ namespace Emgu.CV
             MCvSize win,
             MCvTermCriteria criteria,
            [MarshalAs(UnmanagedType.I1)] bool calc_gradient);
-
-        /// <summary>
-        /// Fits line to 2D or 3D point set 
-        /// </summary>
-        /// <param name="points">Sequence or array of 2D or 3D points with 32-bit integer or floating-point coordinates</param>
-        /// <param name="dist_type">The distance used for fitting </param>
-        /// <param name="param">Numerical parameter (C) for some types of distances, if 0 then some optimal value is chosen</param>
-        /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line),  0.01 would be a good default</param>
-        /// <param name="aeps">Sufficient accuracy for angle, 0.01 would be a good default</param>
-        /// <param name="line">The output line parameters. In case of 2d fitting it is array of 4 floats (vx, vy, x0, y0) where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is some point on the line. In case of 3D fitting it is array of 6 floats (vx, vy, vz, x0, y0, z0) where (vx, vy, vz) is a normalized vector collinear to the line and (x0, y0, z0) is some point on the line.</param>
-        [DllImport(CV_LIBRARY)]
-        public static extern void cvFitLine(
-            IntPtr points,
-            CvEnum.DIST_TYPE dist_type,
-            double param,
-            double reps,
-            double aeps,
-            [Out] float[] line);
-
-        /// <summary>
-        /// Calculates ellipse that fits best (in least-squares sense) to a set of 2D points. The meaning of the returned structure fields is similar to those in cvEllipse except that size stores the full lengths of the ellipse axises, not half-lengths
-        /// </summary>
-        /// <param name="points">Sequence or array of points</param>
-        /// <returns>The ellipse that fits best (in least-squares sense) to a set of 2D points</returns>
-        [DllImport(CV_LIBRARY)]
-        public static extern MCvBox2D cvFitEllipse2(IntPtr points);
 
         /// <summary>
         /// The function cvCreateStructuringElementEx creates an structuring element.
