@@ -2050,6 +2050,7 @@ namespace Emgu.CV
 
 #if LINUX
                 // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
+                // See https://bugzilla.novell.com/show_bug.cgi?id=363431
                 // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
                 if (bgrByte)
                     return ToBitmap();
