@@ -273,5 +273,23 @@ namespace Emgu.CV.Test
             Point2D<float>[] vertices = box.Vertices;
             Assert.IsTrue(vertices[0].Equals(new Point2D<float>(0.0f, 0.0f))); 
         }
+
+        [Test]
+        public void TestGrayscaleBitmapConstructor()
+        {
+            Image<Bgra, Byte> img = new Image<Bgra, byte>(320, 240);
+            img._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
+            img.Save("tmp.png");
+
+            DateTime t0 = DateTime.Now;
+            Image<Bgra, Byte> img2 = new Image<Bgra, byte>("tmp.png");
+            //Trace.WriteLine(string.Format("Time: {0} milliseconds", DateTime.Now.Subtract(t0).TotalMilliseconds));
+            Assert.IsTrue(img.Equals(img2));
+
+            DateTime t1 = DateTime.Now;
+            Image<Gray, Byte> img3 = new Image<Gray, byte>("tmp.png");
+            //Trace.WriteLine(string.Format("Time: {0} milliseconds", DateTime.Now.Subtract(t1).TotalMilliseconds));
+            Assert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+        }
     }
 }

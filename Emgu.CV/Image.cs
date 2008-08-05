@@ -1932,19 +1932,25 @@ namespace Emgu.CV
         public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.ColorType, new()
         {
             Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Width, Height);
+            res.ConvertFrom(this);
+            return res;
+        }
 
+        private void ConvertFrom<TOtherColor, TOtherDepth>(Image<TOtherColor, TOtherDepth> img) where TOtherColor : Emgu.CV.ColorType, new()
+        {
             if (typeof(TColor) == typeof(TOtherColor))
-            {   //same color
+            {
+                #region same color
                 if (typeof(TDepth) == typeof(TOtherDepth))
                 {   //same depth
-                    CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
+                    CvInvoke.cvCopy(img.Ptr, Ptr, IntPtr.Zero);
                 }
                 else
                 {
                     //different depth
                     int channelCount = new TColor().Dimension;
-                    IntPtr src = Ptr;
-                    IntPtr dest = res.Ptr;
+                    IntPtr src = img.Ptr;
+                    IntPtr dest = Ptr;
                     Type t1 = typeof(TDepth);
                     Type t2 = typeof(TOtherDepth);
                     {
@@ -1979,40 +1985,40 @@ namespace Emgu.CV
                         }
                     }
                 }
+                #endregion
             }
             else
-            {   //different color
-                Emgu.Utils.Action<IntPtr, IntPtr, Type, Type> convertColor =
-                    delegate(IntPtr src, IntPtr dest, Type c1, Type c2)
-                    {
-                        try
-                        {
-                            // if the direct conversion exist, apply the conversion
-                            CvInvoke.cvCvtColor(src, dest, GetColorCvtCode(c1, c2));
-                        }
-                        catch (Exception)
-                        {
-                            //if a direct conversion doesn't exist, apply a two step conversion
-                            using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(Width, Height))
-                            {
-                                CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(c1, typeof(Bgr)));
-                                CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), c2));
-                            }
-                        }
-                    };
-
+            {
+                #region different color
                 if (typeof(TDepth) == typeof(TOtherDepth))
                 {   //same depth
-                    convertColor(Ptr, res.Ptr, typeof(TColor), typeof(TOtherColor));
+                    ConvertColor(img.Ptr, Ptr, typeof(TOtherColor), typeof(TColor), Width, Height);
                 }
                 else
                 {   //different depth
-                    using (Image<TColor, TOtherDepth> tmp = Convert<TColor, TOtherDepth>())
-                        convertColor(tmp.Ptr, res.Ptr, typeof(TColor), typeof(TOtherColor));
+                    using (Image<TColor, TOtherDepth> tmp = img.Convert<TColor, TOtherDepth>())
+                        ConvertColor(tmp.Ptr, Ptr, typeof(TOtherColor), typeof(TColor), Width, Height);
+                }
+                #endregion
+            }
+        }
+
+        private static void ConvertColor(IntPtr src, IntPtr dest, Type c1, Type c2, int width, int height)
+        {
+            try
+            {
+                // if the direct conversion exist, apply the conversion
+                CvInvoke.cvCvtColor(src, dest, GetColorCvtCode(c1, c2));
+            }
+            catch (Exception)
+            {
+                //if a direct conversion doesn't exist, apply a two step conversion
+                using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(width, height))
+                {
+                    CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(c1, typeof(Bgr)));
+                    CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), c2));
                 }
             }
-
-            return res;
         }
 
         ///<summary> Convert the current image to the specific depth, at the same time scale and shift the values of the pixel</summary>
@@ -2033,6 +2039,8 @@ namespace Emgu.CV
         #endregion
 
         #region Conversion with Bitmap
+
+
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -2087,67 +2095,78 @@ namespace Emgu.CV
             }
             set
             {
-                if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                #region reallocate memory if necessary
+                if (Ptr == IntPtr.Zero ||
+                    (Width != value.Width || Height != value.Height))
                 {
-                    #region Handling <Bgr, Byte> image
                     DisposeObject();
+                    AllocateData(value.Height, value.Width);
+                }
+                #endregion
 
-                    if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
-                    {
-                        AllocateData(value.Height, value.Width);
-                        int rows = value.Height;
-
-                        System.Drawing.Imaging.BitmapData data = value.LockBits(
-                            new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
-                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                            System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-                        int arrayWidthStep = Marshal.SizeOf(typeof(TDepth)) * new TColor().Dimension * _array.GetLength(1);
-                        for (int i = 0; i < rows; i++)
-                        {
-                            Emgu.Utils.memcpy(
-                                (IntPtr)(_dataHandle.AddrOfPinnedObject().ToInt64() + i * arrayWidthStep),
-                                (IntPtr)(data.Scan0.ToInt64() + i * data.Stride),
-                                data.Stride);
-                        }
-                        value.UnlockBits(data);
-                    }
+                if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+                {
+                    if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+                        CopyFromBitmap(value);
                     else
-                    {   //Other pixel format
-                        AllocateData(value.Height, value.Width);
+                    {
+                        using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                            ConvertFrom(tmp);
+                    }
+                }
+                else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                {
+                    if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                        CopyFromBitmap(value);
+                    else
+                    {
+                        using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                            ConvertFrom(tmp);
+                    }
+                }
+                else
+                {
+                    #region Handle other image type
+                    using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
+                    {
                         for (int i = 0; i < value.Width; i++)
                             for (int j = 0; j < value.Height; j++)
                             {
                                 System.Drawing.Color color = value.GetPixel(i, j);
-                                CvInvoke.cvSet2D(_ptr, j, i, new MCvScalar(color.B, color.G, color.R));
+                                CvInvoke.cvSet2D(tmp1.Ptr, j, i, new MCvScalar(color.B, color.G, color.R, color.A));
                             }
-                    }
-                    #endregion
-                } else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-                {
-                    #region Handling <Bgra, Byte> image
-                    AllocateData(value.Height, value.Width);
-                    for (int i = 0; i < value.Width; i++)
-                        for (int j = 0; j < value.Height; j++)
+
+                        using (Image<TColor, TDepth> tmp2 = tmp1.Convert<TColor, TDepth>())
                         {
-                            System.Drawing.Color color = value.GetPixel(i, j);
-                            CvInvoke.cvSet2D(_ptr, j, i, new MCvScalar(color.B, color.G, color.R, color.A));
+                            tmp2.Copy(this);
                         }
-                    #endregion
-                }
-                else
-                {
-                    #region Handling other image types
-                    using (Image<Bgr, Byte> tmp1 = new Image<Bgr, Byte>(value))
-                    using (Image<TColor, TDepth> tmp2 = tmp1.Convert<TColor, TDepth>())
-                    {
-                        DisposeObject();
-                        AllocateData(tmp2.Rows, tmp2.Cols);
-                        tmp2.Copy(this);
                     }
                     #endregion
                 }
             }
+        }
+
+        /// <summary>
+        /// Utility function for Bitmap Set property
+        /// </summary>
+        /// <param name="bmp"></param>
+        private void CopyFromBitmap(Bitmap bmp)
+        {
+            int rows = bmp.Height;
+            System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                bmp.PixelFormat);
+
+            int arrayWidthStep = Marshal.SizeOf(typeof(TDepth)) * new TColor().Dimension * _array.GetLength(1);
+            for (int i = 0; i < rows; i++)
+            {
+                Emgu.Utils.memcpy(
+                    (IntPtr)(_dataHandle.AddrOfPinnedObject().ToInt64() + i * arrayWidthStep),
+                    (IntPtr)(data.Scan0.ToInt64() + i * data.Stride),
+                    data.Stride);
+            }
+            bmp.UnlockBits(data);
         }
 
         /// <summary> 
