@@ -2051,18 +2051,10 @@ namespace Emgu.CV
 #if LINUX
                 // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
                 // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
-                if (grayByte)
+                if (bgrByte)
                     return ToBitmap();
-                else
-                {
-                    //Image<Bgr, Byte> res = Convert<Bgr, Byte>();
-                    //CvInvoke.cvSetImageCOI(res.Ptr, 4);
-                    //CvInvoke.cvSet(res.Ptr, new MCvScalar(255.0, 255.0, 255.0, 255.0), IntPtr.Zero);
-                    //CvInvoke.cvSetImageCOI(res.Ptr, 0);
-                    return ToBitmap();
-                }
 #else
-                
+#endif
                 if (!grayByte && !bgrByte) return ToBitmap();
 
                 IntPtr scan0;
@@ -2091,7 +2083,6 @@ namespace Emgu.CV
                         System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                         scan0);
                 }
-#endif
             }
             set
             {
