@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Drawing;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Permissions;
 
 namespace Emgu.CV
 {
@@ -257,6 +258,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="info">Serialization info</param>
         /// <param name="context">streaming context</param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -684,13 +686,13 @@ namespace Emgu.CV
                     delegate(IImage img, int channel)
                     {
                         IntPtr objects = CvInvoke.cvHaarDetectObjects(
-                        img.Ptr,
-                        haarObj.Ptr,
-                        stor.Ptr,
-                        scaleFactor,
-                        minNeighbors,
-                        flag,
-                        minSize);
+                            img.Ptr,
+                            haarObj.Ptr,
+                            stor.Ptr,
+                            scaleFactor,
+                            minNeighbors,
+                            flag,
+                            minSize);
 
                         int count = 0;
                         if (objects != IntPtr.Zero)
@@ -1480,19 +1482,6 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Count the non Zero elements for each channel
-        /// </summary>
-        /// <returns>Count the non Zero elements for each channel</returns>
-        public int[] CountNonzero()
-        {
-            return
-                ForEachChannel<int>(delegate(IntPtr channel, int channelNumber)
-                {
-                    return CvInvoke.cvCountNonZero(channel);
-                });
-        }
-
-        /// <summary>
         /// Compare two images, returns true if the each of the pixels are equal, false otherwise
         /// </summary>
         /// <param name="img2">The other image to compare with</param>
@@ -2039,8 +2028,6 @@ namespace Emgu.CV
         #endregion
 
         #region Conversion with Bitmap
-
-
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -2055,6 +2042,7 @@ namespace Emgu.CV
             {
                 bool grayByte = (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte));
                 bool bgrByte = (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte));
+                bool bgraByte = (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte));
 
 #if LINUX
                 // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
@@ -2064,7 +2052,7 @@ namespace Emgu.CV
                     return ToBitmap();
 #else
 #endif
-                if (!grayByte && !bgrByte) return ToBitmap();
+                if (!grayByte && !bgrByte && !bgraByte) return ToBitmap();
 
                 IntPtr scan0;
                 int step;
@@ -2083,13 +2071,22 @@ namespace Emgu.CV
                     bmp.Palette = Utils.GrayscalePalette;
                     return bmp;
                 }
-                else 
+                else if (bgrByte)
                 {   //Bgr byte    
                     return new Bitmap(
                         size.width,
                         size.height,
                         step,
                         System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                        scan0);
+                }
+                else
+                {   //Bgra byte
+                    return new Bitmap(
+                        size.width,
+                        size.height,
+                        step,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb,
                         scan0);
                 }
             }
@@ -3105,6 +3102,81 @@ namespace Emgu.CV
         #endregion
         #endregion
 
+        #region Statistic
+        /// <summary>
+        /// The function cvAvgSdv calculates the average value and standard deviation of array elements, independently for each channel
+        /// </summary>
+        /// <param name="avg">The avg color</param>
+        /// <param name="sdv">The standard deviation for each channel</param>
+        /// <param name="mask">The operation mask</param>
+        public void AvgSdv(out TColor avg, out MCvScalar sdv, Image<Gray, Byte> mask)
+        {
+            avg = new TColor();
+            MCvScalar avgScalar = new MCvScalar();
+            sdv = new MCvScalar();
+
+            CvInvoke.cvAvgSdv(Ptr, ref avgScalar, ref sdv, mask.Ptr);
+            avg.MCvScalar = avgScalar;
+        }
+
+        /// <summary>
+        /// The function cvAvgSdv calculates the average value and standard deviation of array elements, independently for each channel
+        /// </summary>
+        /// <param name="avg">The avg color</param>
+        /// <param name="sdv">The standard deviation for each channel</param>
+        public void AvgSdv(out TColor avg, out MCvScalar sdv)
+        {
+            avg = new TColor();
+            MCvScalar avgScalar = new MCvScalar();
+            sdv = new MCvScalar();
+
+            CvInvoke.cvAvgSdv(Ptr, ref avgScalar, ref sdv, IntPtr.Zero);
+            avg.MCvScalar = avgScalar;
+        }
+
+        /// <summary>
+        /// Count the non Zero elements for each channel
+        /// </summary>
+        /// <returns>Count the non Zero elements for each channel</returns>
+        public int[] CountNonzero()
+        {
+            return
+                ForEachChannel<int>(delegate(IntPtr channel, int channelNumber)
+                {
+                    return CvInvoke.cvCountNonZero(channel);
+                });
+        }
+
+        /// <summary>
+        /// Returns the min / max location and values for the image
+        /// </summary>
+        /// <returns>
+        /// Returns the min / max location and values for the image
+        /// </returns>
+        public void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations)
+        {
+            int channelCount = new TColor().Dimension;
+            minValues = new double[channelCount];
+            maxValues = new double[channelCount];
+            minLocations = new MCvPoint[channelCount];
+            maxLocations = new MCvPoint[channelCount];
+
+            if (channelCount == 1)
+            {
+                CvInvoke.cvMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
+            }
+            else
+            {
+                for (int i = 0; i < channelCount; i++)
+                {
+                    CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                    CvInvoke.cvMinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
+                }
+                CvInvoke.cvSetImageCOI(Ptr, 0);
+            }
+        }
+        #endregion
+
         #region various
         ///<summary> Return a filpped copy of the current image</summary>
         ///<param name="flipType">The type of the flipping</param>
@@ -3181,35 +3253,6 @@ namespace Emgu.CV
             CvInvoke.cvSplit(Ptr, a[0], a[1], a[2], a[3]);
 
             return res;
-        }
-
-        /// <summary>
-        /// Returns the min / max location and values for the image
-        /// </summary>
-        /// <returns>
-        /// Returns the min / max location and values for the image
-        /// </returns>
-        public void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations)
-        {
-            int channelCount = new TColor().Dimension;
-            minValues = new double[channelCount];
-            maxValues = new double[channelCount];
-            minLocations = new MCvPoint[channelCount];
-            maxLocations = new MCvPoint[channelCount];
-
-            if (channelCount == 1)
-            {
-                CvInvoke.cvMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
-            }
-            else
-            {
-                for (int i = 0; i < channelCount; i++)
-                {
-                    CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                    CvInvoke.cvMinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
-                }
-                CvInvoke.cvSetImageCOI(Ptr, 0);
-            }
         }
 
         /// <summary>

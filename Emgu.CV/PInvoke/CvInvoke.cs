@@ -1176,6 +1176,7 @@ namespace Emgu.CV
         [DllImport(CXCORE_LIBRARY)]
         public static extern void cvConvertScaleAbs(IntPtr src, IntPtr dst, double scale, double shift);
 
+        #region statistic
         /// <summary>
         /// Calculates the average value M of array elements, independently for each channel:
         ///N = sumI mask(I)!=0
@@ -1189,6 +1190,17 @@ namespace Emgu.CV
         public static extern MCvScalar cvAvg(IntPtr arr, IntPtr mask);
 
         /// <summary>
+        /// The function cvAvgSdv calculates the average value and standard deviation of array elements, independently for each channel
+        /// </summary>
+        /// <remarks>If the array is IplImage and COI is set, the function processes the selected channel only and stores the average and standard deviation to the first compoenents of output scalars (M0 and S0).</remarks>
+        /// <param name="arr">The array</param>
+        /// <param name="mean">Pointer to the mean value</param>
+        /// <param name="std_dev">Pointer to the standard deviation</param>
+        /// <param name="mask">The optional operation mask</param>
+        [DllImport(CXCORE_LIBRARY)]
+        public static extern void cvAvgSdv( IntPtr arr, ref MCvScalar mean, ref MCvScalar std_dev, IntPtr mask);
+
+        /// <summary>
         /// Calculates sum S of array elements, independently for each channel
         /// Sc = sumI arr(I)c
         /// If the array is IplImage and COI is set, the function processes the selected channel only and stores the sum to the first scalar component (S0).
@@ -1197,6 +1209,21 @@ namespace Emgu.CV
         /// <returns>The sum of arary elements</returns>
         [DllImport(CXCORE_LIBRARY)]
         public static extern MCvScalar cvSum(IntPtr arr);
+
+        /// <summary>
+        /// Reduces matrix to a vector by treating the matrix rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 
+        /// </summary>
+        /// <remarks>
+        /// The function can be used to compute horizontal and vertical projections of an raster image. 
+        /// In case of CV_REDUCE_SUM and CV_REDUCE_AVG the output may have a larger element bit-depth to preserve accuracy. 
+        /// And multi-channel arrays are also supported in these two reduction modes
+        /// </remarks>
+        /// <param name="src">The input matrix</param>
+        /// <param name="dst">The output single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
+        /// <param name="type">The reduction operation type</param>
+        [DllImport(CXCORE_LIBRARY)]
+        public static extern void cvReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_TYPE type);
+        #endregion 
 
         /// <summary>
         /// Releases the header and the image data.
@@ -1412,10 +1439,10 @@ namespace Emgu.CV
         /// <summary>
         /// Switches between the mode, where only pure C implementations from cxcore, OpenCV etc. are used, and the mode, where IPP and MKL functions are used if available. When cvUseOptimized(0) is called, all the optimized libraries are unloaded. The function may be useful for debugging, IPP&amp;MKL upgrade on the fly, online speed comparisons etc.  Note that by default the optimized plugins are loaded, so it is not necessary to call cvUseOptimized(1) in the beginning of the program (actually, it will only increase the startup time)
         /// </summary>
-        /// <param name="on_off">1 to turn on optimization, 0 to turn off</param>
+        /// <param name="optimize">1 to turn on optimization, 0 to turn off</param>
         /// <returns>The number of optimized functions loaded</returns>
         [DllImport(CXCORE_LIBRARY)]
-        public static extern int cvUseOptimized(int on_off);
+        public static extern int cvUseOptimized( [MarshalAs(UnmanagedType.I1)] bool optimize );
 
         /// <summary>
         /// Fills the destination array with uniformly or normally distributed random numbers.
@@ -1468,6 +1495,17 @@ namespace Emgu.CV
         /// <param name="roi_size">Output ROI size</param>
         [DllImport(CXCORE_LIBRARY)]
         public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out MCvSize roi_size);
+
+        /// <summary>
+        /// Calculates the product of src and its transposition.
+        /// The function evaluates dst=(src-delta)*(src-delta)^T if order=0, and dst=(src-delta)^T*(src-delta) otherwise.
+        /// </summary>
+        /// <param name="src">The source matrix</param>
+        /// <param name="dst">The destination matrix</param>
+        /// <param name="order">Order of multipliers</param>
+        /// <param name="delta">An optional array, subtracted from <paramref name="src"/> before multiplication</param>
+        [DllImport(CXCORE_LIBRARY)]
+        public static extern void cvMulTransposed( IntPtr src, IntPtr dst, int order, IntPtr delta );
 
         /// <summary>
         /// Returns sum of diagonal elements of the matrix <paramref name="src1"/>.

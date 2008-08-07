@@ -68,7 +68,30 @@ namespace Emgu.CV.CvEnum
     }
 
     /// <summary>
-    /// Type used for cvCmp Function
+    /// Type used for cvReduce function
+    /// </summary>
+    public enum REDUCE_TYPE
+    {
+        /// <summary>
+        /// The output is the sum of all the matrix rows/columns
+        /// </summary>
+        CV_REDUCE_SUM = 0,
+        /// <summary>
+        /// The output is the mean vector of all the matrix rows/columns
+        /// </summary>
+        CV_REDUCE_AVG = 1,
+        /// <summary>
+        /// The output is the maximum (column/row-wise) of all the matrix rows/columns
+        /// </summary>
+        CV_REDUCE_MAX = 2,
+        /// <summary>
+        /// The output is the minimum (column/row-wise) of all the matrix rows/columns
+        /// </summary>
+        CV_REDUCE_MIN = 3
+    }
+
+    /// <summary>
+    /// Type used for cvCmp function
     /// </summary>
     public enum CMP_TYPE
     {

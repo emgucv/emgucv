@@ -57,7 +57,7 @@ namespace Emgu.CV
             get { return (MCvSubdiv2D)Marshal.PtrToStructure(_ptr, typeof(MCvSubdiv2D)); }
         }
 
-        private Triangle2D<float> EdgeToTriangle(ref MCvSubdiv2DEdge e)
+        private static Triangle2D<float> EdgeToTriangle(ref MCvSubdiv2DEdge e)
         {
             MCvSubdiv2DPoint v1 = e.cvSubdiv2DEdgeOrg();
             MCvSubdiv2DPoint v2 = e.cvSubdiv2DEdgeDst();
@@ -70,7 +70,7 @@ namespace Emgu.CV
                 new Point2D<float>(v2.pt.x, v2.pt.y));
         }
 
-        private List<VoronoiFacet> EdgeToFacets(ref MCvQuadEdge2D quadEdge)
+        private static List<VoronoiFacet> EdgeToFacets(ref MCvQuadEdge2D quadEdge)
         {
             List<VoronoiFacet> facets = new List<VoronoiFacet>();
             MCvSubdiv2DEdge e1 = quadEdge.next[0].cvSubdiv2DRotateEdge(1);
@@ -92,7 +92,7 @@ namespace Emgu.CV
             return facets;
         }
 
-        private Point2D<float>[] EdgeToPoly(ref MCvSubdiv2DEdge e)
+        private static Point2D<float>[] EdgeToPoly(ref MCvSubdiv2DEdge e)
         {
             MCvSubdiv2DPoint v0 = e.cvSubdiv2DEdgeOrg();
             if (!v0.isValid) return null;

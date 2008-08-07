@@ -530,5 +530,28 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(img));
 
         }
+
+        public void TestKalman()
+        {
+            Matrix<float> initialState = new Matrix<float>(new float[] {0.5f, 0.5f});
+            
+            Matrix<float> stateTransitionMatrix = new Matrix<float>(2, 2);
+            stateTransitionMatrix._SetIdentity(new MCvScalar(1.0));
+
+            Matrix<float> controlMatrix = new Matrix<float>(new float[] { 0.0f, 0.0f });
+            
+            Matrix<float> measurementMatrix = new Matrix<float>(2, 2);
+            measurementMatrix._SetIdentity(new MCvScalar(1.0));
+            
+            Matrix<float> processNoise = new Matrix<float>(2, 2);
+            processNoise._SetIdentity(new MCvScalar(0.1));
+
+            Matrix<float> measurementNoise = new Matrix<float>(2, 2);
+            measurementMatrix._SetIdentity(new MCvScalar(0.1));
+
+            Kalman tracker = new Kalman(initialState, stateTransitionMatrix, measurementMatrix, processNoise, measurementNoise);
+            tracker.Predict( new Matrix<float>(new float[] {1.0f, 1.0f}));
+            Matrix<float> state =  tracker.PredictedState;
+        }
     }
 }

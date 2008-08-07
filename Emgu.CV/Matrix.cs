@@ -24,6 +24,16 @@ namespace Emgu.CV
         {
         }
 
+        /*
+        /// <summary>
+        /// Create a Matrix from the existing CvMat. The user is responsible for releasing the CvMat. 
+        /// </summary>
+        /// <param name="ptr">Pointer to the CvMat structure </param>
+        public Matrix(IntPtr ptr)
+        {
+            _ptr = ptr;
+        }*/
+
         /// <summary>
         /// Create a matrix of the specific size
         /// </summary>

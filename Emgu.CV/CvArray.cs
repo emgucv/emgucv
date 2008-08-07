@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.IO.Compression;
 using zlib;
+using System.Security.Permissions;
 
 namespace Emgu.CV
 {
@@ -19,9 +20,6 @@ namespace Emgu.CV
         /// The pinned GCHandle to _array;
         /// </summary>
         protected GCHandle _dataHandle;
-
-        ///<summary> The pointer to the internal structure </summary>
-        public new IntPtr Ptr { get { return _ptr; } set { _ptr = value; } }
 
         private int _serializationCompressionRatio;
 
@@ -40,6 +38,13 @@ namespace Emgu.CV
         }
 
         #region properties
+        ///<summary> The pointer to the internal structure </summary>
+        public new IntPtr Ptr
+        {
+            get { return _ptr; }
+            set { _ptr = value; }
+        }
+
         ///<summary> 
         /// The width of the Array 
         ///</summary>
@@ -174,6 +179,23 @@ namespace Emgu.CV
         {
             return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
         }
+
+        #region statistic
+        /// <summary>
+        /// Reduces matrix to a vector by treating the matrix rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 
+        /// </summary>
+        /// <remarks>
+        /// The function can be used to compute horizontal and vertical projections of an raster image. 
+        /// In case of CV_REDUCE_SUM and CV_REDUCE_AVG the output may have a larger element bit-depth to preserve accuracy. 
+        /// And multi-channel arrays are also supported in these two reduction modes
+        /// </remarks>
+        /// <param name="array1D">The destination single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
+        /// <param name="type">The reduction operation type</param>
+        public void Reduce<TDepth2>(CvArray<TDepth2> array1D, CvEnum.REDUCE_TYPE type)
+        {
+            CvInvoke.cvReduce(Ptr, array1D.Ptr, type);
+        }
+        #endregion
 
         #region Coping and filling
         ///<summary>
@@ -456,6 +478,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="info">Serialization info</param>
         /// <param name="context">Streaming context</param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Rows", Rows);

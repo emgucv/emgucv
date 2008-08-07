@@ -45,7 +45,7 @@ namespace Emgu.CV
         /// <param name="enable">true to enable optimization, false to disable</param>
         public static void OptimizeCV(bool enable)
         {            
-            CvInvoke.cvUseOptimized(enable? 1:0);
+            CvInvoke.cvUseOptimized(enable);
         }
 
         /// <summary>

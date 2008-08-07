@@ -9,8 +9,61 @@ namespace Emgu.CV
     /// A Kalman filter object
     /// </summary>
     /// <remarks>Beta: Non working version</remarks>
+    [Obsolete("Beta version, API not Finalized")]
     public class Kalman : UnmanagedObject
     {
+        /// <summary>
+        /// Create a Kalman Filter using the specific values
+        /// </summary>
+        /// <param name="initialState">The m x 1 matrix</param>
+        /// <param name="transitionMatrix">The m x m matrix (A) </param>
+        /// <param name="controlMatrix">The m x n matrix (B)</param>
+        /// <param name="measurementMatrix">The n x m matrix (H)</param>
+        /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
+        /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
+        public Kalman(
+            Matrix<float> initialState, 
+            Matrix<float> transitionMatrix, 
+            Matrix<float> controlMatrix, 
+            Matrix<float> measurementMatrix,
+            Matrix<float> processNoiseCovarianceMatrix,
+            Matrix<float> measurementNoiseCovarianceMatrix
+            ):
+            this(initialState.Rows, measurementMatrix.Rows, controlMatrix == null ? 0 : controlMatrix.Rows)
+        {
+            int sizeOfState = initialState.Rows;
+            int sizeOfMeasurement = measurementMatrix.Rows;
+            int sizeOfControl = controlMatrix == null ? 0 : controlMatrix.Rows;
+
+            PredictedState = initialState;
+            CorrectedState = initialState;
+            TransitionMatrix = transitionMatrix;
+            if (controlMatrix != null) ControlMatrix = controlMatrix;
+            MeasurementMatrix = measurementMatrix;
+            ProcessNoiseCovariance = processNoiseCovarianceMatrix;
+            MeasurementNoiseCovariance = measurementNoiseCovarianceMatrix;
+        }
+
+        /// <summary>
+        /// Create a Kalman Filter using the specific values
+        /// </summary>
+        /// <param name="initialState">The m x 1 matrix</param>
+        /// <param name="transitionMatrix">The m x m matrix (A) </param>
+        /// <param name="measurementMatrix">The n x m matrix (H)</param>
+        /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
+        /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
+        public Kalman(
+            Matrix<float> initialState,
+            Matrix<float> transitionMatrix,
+            Matrix<float> measurementMatrix,
+            Matrix<float> processNoiseCovarianceMatrix,
+            Matrix<float> measurementNoiseCovarianceMatrix
+            )
+            :
+            this(initialState, transitionMatrix, null, measurementMatrix, processNoiseCovarianceMatrix, measurementNoiseCovarianceMatrix)
+        {
+        }
+
         /// <summary>
         /// Allocates CvKalman and all its matrices and initializes them somehow. 
         /// </summary>
@@ -51,9 +104,9 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get the Prediction
+        /// Get or Set the Predicted State
         /// </summary>
-        public Matrix<float> Prediction
+        public Matrix<float> PredictedState
         {
             get
             {
@@ -62,6 +115,29 @@ namespace Emgu.CV
                 Matrix<float> res = new Matrix<float>(mat.rows, mat.cols);
                 CvInvoke.cvCopy(kalman.state_pre, res.Ptr, IntPtr.Zero);
                 return res;
+            }
+            set
+            {
+                CvInvoke.cvCopy(value.Ptr, MCvKalman.state_pre, IntPtr.Zero);
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the Corrected State
+        /// </summary>
+        public Matrix<float> CorrectedState
+        {
+            get
+            {
+                MCvKalman kalman = MCvKalman;
+                MCvMat mat = (MCvMat)Marshal.PtrToStructure(kalman.state_pre, typeof(MCvMat));
+                Matrix<float> res = new Matrix<float>(mat.rows, mat.cols);
+                CvInvoke.cvCopy(kalman.state_post, res.Ptr, IntPtr.Zero);
+                return res;
+            }
+            set
+            {
+                CvInvoke.cvCopy(value.Ptr, MCvKalman.state_post, IntPtr.Zero);
             }
         }
 
@@ -117,6 +193,14 @@ namespace Emgu.CV
             set
             {
                 CvInvoke.cvCopy(value.Ptr, MCvKalman.error_cov_post, IntPtr.Zero);
+            }
+        }
+
+        public Matrix<float> ControlMatrix
+        {
+            set
+            {
+                CvInvoke.cvCopy(value.Ptr, MCvKalman.control_matrix, IntPtr.Zero);
             }
         }
     }
