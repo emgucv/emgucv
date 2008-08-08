@@ -24,7 +24,7 @@ namespace Emgu.CV.Test
                 foreach (Rectangle<double> o in objects[0])
                 {
                     img.ROI = o;
-                    res.Add(new Face<D>(img.Clone(), o));
+                    res.Add(new Face<D>(img.Copy(), o));
                 }
                 img.ROI = null;
                 return res;
@@ -82,7 +82,7 @@ namespace Emgu.CV.Test
             foreach (Rectangle<double> o in objects[0])
             {
                 _image.ROI = o;
-                res.Add(new Eye<D>(_image.Clone(), o));
+                res.Add(new Eye<D>(_image.Copy(), o));
             }
             _image.ROI = null;
             return res;

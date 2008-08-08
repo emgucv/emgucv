@@ -19,7 +19,7 @@ namespace Emgu.CV
         private Image<Gray, Single> _avgImage;
         private Matrix<float>[] _eigenValues;
         private string[] _labels;
-        private double _simularityThreshold;
+        private double _eigenDistanceThreshold;
 
         /// <summary>
         /// Get the eigen vectors that form the eigen space
@@ -41,14 +41,14 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get or set the simularity threshold.
+        /// Get or set the eigen distance threshold.
         /// The smaller the number, the more likely an examined image will be treated as unrecognized object. 
         /// Set it to a huge number (e.g. 5000) and the recognizer will always treated the examined image as one of the known object. 
         /// </summary>
-        public double SimularityThreshold
+        public double EigenDistanceThreshold
         {
-            get { return _simularityThreshold; }
-            set { _simularityThreshold = value; }
+            get { return _eigenDistanceThreshold; }
+            set { _eigenDistanceThreshold = value; }
         }
 
         /// <summary>
@@ -80,16 +80,16 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="images">The images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
         /// <param name="labels">The labels corresponding to the images</param>
-        /// <param name="simularityThreshold">
-        /// The simmilarity threshold, [0, ~1000].
+        /// <param name="eigenDistanceThreshold">
+        /// The eigen distance threshold, [0, ~1000].
         /// The smaller the number, the more likely an examined image will be treated as unrecognized object. 
         /// Set it to a huge number (e.g. 5000) and the recognizer will always treated the examined image as one of the known object. 
         /// </param>
         /// <param name="termCrit">The criteria for recognizer training</param>
-        public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, double simularityThreshold, ref MCvTermCriteria termCrit)
+        public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, double eigenDistanceThreshold, ref MCvTermCriteria termCrit)
         {
             Debug.Assert(images.Length == labels.Length, "The number of images should equals the number of labels");
-            Debug.Assert(simularityThreshold >= 0.0, "Simularity threshold should always >= 0.0");
+            Debug.Assert(eigenDistanceThreshold >= 0.0, "Simularity threshold should always >= 0.0");
             
             CalcEigenObjects(images, ref termCrit, out _eigenImages, out _avgImage);
 
@@ -109,7 +109,7 @@ namespace Emgu.CV
 
             _labels = labels;
 
-            _simularityThreshold = simularityThreshold;
+            _eigenDistanceThreshold = eigenDistanceThreshold;
         }
 
         #region static methods
@@ -191,7 +191,23 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Given an image to be examined, find in the database the most similar image and return the index
+        /// Get the eigen distance between <paramref name="image"/> and every other image in the database
+        /// </summary>
+        /// <param name="image">The image to be compared from the training images</param>
+        /// <returns>An array of eigen distance from every image in the training images</returns>
+        public float[] GetEigenDistance(Image<Gray, Byte> image)
+        {
+            Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage));
+
+            return Array.ConvertAll<Matrix<float>, float>(_eigenValues,
+                delegate(Matrix<float> eigenValueI)
+                {
+                    return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+                });
+        }
+
+        /// <summary>
+        /// Given the <paramref name="image"/> to be examined, find in the database the most similar image and return the index
         /// </summary>
         /// <param name="image">The image to be searched from the database</param>
         /// <returns>
@@ -200,13 +216,7 @@ namespace Emgu.CV
         /// </returns>
         public int FindIndex(Image<Gray, Byte> image)
         {
-            Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage));
-
-            float[] dist = Array.ConvertAll<Matrix<float>, float>(_eigenValues,
-                delegate(Matrix<float> eigenValueI)
-                {
-                    return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-                });
+            float[] dist = GetEigenDistance(image);
 
             #region find the index that has minimum distance
             int index = 0;
@@ -220,8 +230,9 @@ namespace Emgu.CV
                 }
             }
             #endregion
+
             //If the minimum distance is grater than the threhold
-            if (minDist >= _simularityThreshold) 
+            if (minDist >= _eigenDistanceThreshold) 
                 return -1; //label this image as unrecognized object
 
             return index;//return the index of the recognized object

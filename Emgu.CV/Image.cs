@@ -413,20 +413,20 @@ namespace Emgu.CV
         }
 
         ///<summary> 
-        /// Make a clone of the image using a mask, if ROI is set, only copy the ROI 
+        /// Make a copy of the image using a mask, if ROI is set, only copy the ROI 
         /// </summary> 
-        /// <param name="mask">the mask for cloning</param>
-        ///<returns> A clone of the image</returns>
-        public Image<TColor, TDepth> Clone(Image<Gray, Byte> mask)
+        /// <param name="mask">the mask for coping</param>
+        ///<returns> A copy of the image</returns>
+        public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvCopy(Ptr, res.Ptr, mask.Ptr);
             return res;
         }
 
-        ///<summary> Make a clone of the image, if ROI is set, only copy the ROI</summary>
-        ///<returns> A clone of the image</returns>
-        public Image<TColor, TDepth> Clone()
+        ///<summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
+        ///<returns> A copy of the image</returns>
+        public Image<TColor, TDepth> Copy()
         {
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
@@ -443,7 +443,6 @@ namespace Emgu.CV
             CvInvoke.cvCopy(Ptr, dest.Ptr, mask.Ptr);
         }
 
-        
         /// <summary> 
         /// Create an image of the same size
         /// </summary>
@@ -452,6 +451,30 @@ namespace Emgu.CV
         public Image<TColor, TDepth> CopyBlank()
         {
             return new Image<TColor, TDepth>(Width, Height);
+        }
+
+        /// <summary>
+        /// Make a clone of the current image. All image data as well as the COI and ROI are cloned
+        /// </summary>
+        /// <returns>A clone of the current image. All image data as well as the COI and ROI are cloned</returns>
+        public Image<TColor, TDepth> Clone()
+        {
+            int coi = CvInvoke.cvGetImageCOI(Ptr); //get the COI for current image
+            Rectangle<double> roi = ROI; //get the ROI for current image
+
+            CvInvoke.cvSetImageCOI(Ptr, 0); //clear COI for current image
+            ROI = null; // clear ROI for current image
+
+            #region create a clone of the current image with the same COI and ROI
+            Image<TColor, TDepth> res = Copy();
+            CvInvoke.cvSetImageCOI(res.Ptr, coi);
+            res.ROI = roi;
+            #endregion
+
+            CvInvoke.cvSetImageCOI(Ptr, coi); //reset the COI for the current image
+            ROI = roi; // reset the ROI for the current image
+
+            return res;
         }
         #endregion
 
@@ -848,7 +871,7 @@ namespace Emgu.CV
                 sequenceHeaderSize = Marshal.SizeOf(typeof(MCvContour));
             }
 
-            using (Image<TColor, TDepth> imagecopy = Clone()) //since cvFindContours modifies the content of the source, we need to make a clone
+            using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
             {
                 CvInvoke.cvFindContours(
                     imagecopy.Ptr,
@@ -864,7 +887,25 @@ namespace Emgu.CV
         #endregion
         #endregion
 
-        #region Indexer pixel access
+        #region Indexer 
+        /// <summary>
+        /// Get the specific channel from the current image
+        /// </summary>
+        /// <param name="channel">The channel to get from the current image</param>
+        /// <returns>The specific channel of the current image</returns>
+        public Image<Gray, TDepth> this[int channel]
+        {
+            get
+            {
+                Image<Gray, TDepth> imageChannel = new Image<Gray, TDepth>(Width, Height);
+                int coi = CvInvoke.cvGetImageCOI(Ptr);
+                CvInvoke.cvSetImageCOI(Ptr, channel+1);
+                CvInvoke.cvCopy(Ptr, imageChannel, IntPtr.Zero);
+                CvInvoke.cvSetImageCOI(Ptr, coi);
+                return imageChannel;
+            }
+        }
+
         /// <summary>
         /// Get or Set the color in the <paramref name="row"/>th row (y direction) and <paramref name="column"/>th column (x direction)
         /// </summary>
@@ -1820,6 +1861,14 @@ namespace Emgu.CV
             return Rotate(angle, background, true);
         }
 
+        /// <summary>
+        /// Transforms source image using the specified matrix
+        /// </summary>
+        /// <param name="mapMatrix">2x3 transformation matrix</param>
+        /// <param name="interpolationType">Interpolation type</param>
+        /// <param name="warpType">Warp type</param>
+        /// <param name="backgroundColor">A value used to fill outliers</param>
+        /// <returns>The result of the transformation</returns>
         public Image<TColor, TDepth> WrapAffine(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -3183,7 +3232,7 @@ namespace Emgu.CV
         ///<returns> The flipped copy of <i>this</i> image </returns>
         public Image<TColor, TDepth> Flip(CvEnum.FLIP flipType)
         {
-            if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Clone();
+            if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Copy();
 
             int code =
                 //-1 indicates vertical and horizontal flip
@@ -3239,7 +3288,7 @@ namespace Emgu.CV
         public Image<Gray, TDepth>[] Split()
         {
             int channelCount = new TColor().Dimension;
-            if (channelCount == 1) return new Image<Gray, TDepth>[] { Clone() as Image<Gray, TDepth> };
+            if (channelCount == 1) return new Image<Gray, TDepth>[] { Copy() as Image<Gray, TDepth> };
 
             Image<Gray, TDepth>[] res = new Image<Gray, TDepth>[channelCount];
             IntPtr[] a = new IntPtr[4];

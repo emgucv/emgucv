@@ -9,6 +9,9 @@ namespace Emgu.UI
 {
     public partial class ComboBoxSelector : UserControl
     {
+        /// <summary>
+        /// Create a ComboBox Selector
+        /// </summary>
         public ComboBoxSelector()
         {
             InitializeComponent();
@@ -37,6 +40,9 @@ namespace Emgu.UI
                 });
         }
 
+        /// <summary>
+        /// Get the ComboBox in this control
+        /// </summary>
         public ComboBox ComboBox
         {
             get
@@ -45,6 +51,9 @@ namespace Emgu.UI
             }
         }
 
+        /// <summary>
+        /// Clear the combobox
+        /// </summary>
         public void Clear()
         {
             comboBox1.DataSource = null;

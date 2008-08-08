@@ -12,11 +12,17 @@ namespace Emgu.UI
     {
         private int _status;
 
+        /// <summary> 
+        /// A filed use to display the progress percentage
+        /// </summary>
         public StatusField()
         {
             InitializeComponent();
         }
         
+        /// <summary>
+        /// Get or Set the progress percentage
+        /// </summary>
         public int Status
         {
             get { return _status; }
@@ -28,6 +34,9 @@ namespace Emgu.UI
             }
         }
 
+        /// <summary>
+        /// Clear the progress percentage.
+        /// </summary>
         public void Clear()
         {
             _status = 0;

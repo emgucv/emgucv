@@ -9,23 +9,34 @@ using System.Threading;
 
 namespace Emgu.UI
 {
-    public partial class WaitDialog : Form
+    /// <summary>
+    /// A dialog that display a waiting box
+    /// </summary>
+    public partial class WaitingBoxDialog : Form
     {
         private bool _continute;
         private Thread _t;
 
+        /// <summary>
+        /// Close the dialog
+        /// </summary>
         public new void Close()
         {
             StopProgress();
             base.Close();
         }
 
-        public WaitDialog()
+        /// <summary>
+        /// Create the waiting box dialog
+        /// </summary>
+        public WaitingBoxDialog()
         {
             InitializeComponent();
-          
         }
 
+        /// <summary>
+        /// Start the progress
+        /// </summary>
         public void StartProgress()
         {   
             // if there are any current progress, stop it first
@@ -53,6 +64,9 @@ namespace Emgu.UI
             _t.Start();
         }
 
+        /// <summary>
+        /// stop the progress
+        /// </summary>
         public void StopProgress()
         {
             _continute = false;

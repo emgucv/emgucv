@@ -1,5 +1,8 @@
 namespace Emgu.UI
 {
+    /// <summary>
+    /// A control to display progress status
+    /// </summary>
     partial class StatusField
     {
         /// <summary> 

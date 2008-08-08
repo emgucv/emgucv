@@ -82,9 +82,8 @@ namespace Emgu.CV
         /// <returns>the array representation of this sequence</returns>
         public T[] ToArray()
         {
-            int total = Total;
-            T[] res = new T[total];
-            for (int i = 0; i < total; i++)
+            T[] res = new T[Total];
+            for (int i = 0; i < res.Length; i++)
                 res[i] = this[i];
             return res;
         }

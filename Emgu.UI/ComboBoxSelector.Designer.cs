@@ -1,5 +1,8 @@
 namespace Emgu.UI
 {
+    /// <summary>
+    /// A Combo Box Selector 
+    /// </summary>
     partial class ComboBoxSelector
     {
         /// <summary> 

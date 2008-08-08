@@ -10,6 +10,15 @@ namespace Emgu.CV
     /// </summary>
     public static class CameraCalibration
     {
+        /// <summary>
+        /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
+        /// </summary>
+        /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
+        /// <param name="imagePoints">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
+        /// <param name="imageSize">The size of the image, used only to initialize intrinsic camera matrix</param>
+        /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial value. The value is modified by this function.</param>
+        /// <param name="flags">Flags</param>
+        /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
         public static void CalibrateCamera(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints, ref MCvSize imageSize, IntrinsicCameraParameters intrinsicParam, int flags, out ExtrinsicCameraParameters[] extrinsicParams)
         {
             Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
@@ -140,7 +149,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Finds perspective transformation H=||hij|| between the source and the destination planes
+        /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
         /// </summary>
         /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
         /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
@@ -153,7 +162,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Finds perspective transformation H=||hij|| between the source and the destination planes
+        /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
         /// </summary>
         /// <param name="srcPoints">Point coordinates in the original plane</param>
         /// <param name="dstPoints">Point coordinates in the destination plane</param>

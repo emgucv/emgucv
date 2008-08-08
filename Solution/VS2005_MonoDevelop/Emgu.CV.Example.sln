@@ -73,6 +73,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlannarSubdivision", "..\..
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.Example\CPlusPlus\CPlusPlus2005.vcproj", "{32330110-727C-41A1-9377-6BA41002983D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
@@ -437,6 +443,34 @@ Global
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|Win32.ActiveCfg = Release|Any CPU
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|x86.ActiveCfg = Release|Any CPU
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|.NET.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|Any CPU.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|Mixed Platforms.Build.0 = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|Win32.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|Win32.Build.0 = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug Linux|x86.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|.NET.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Win32.Build.0 = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Debug|x86.ActiveCfg = Debug|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|.NET.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|Any CPU.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|Mixed Platforms.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|Mixed Platforms.Build.0 = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|Win32.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|Win32.Build.0 = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release Linux|x86.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|.NET.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.ActiveCfg = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.Build.0 = Release|Win32
+		{32330110-727C-41A1-9377-6BA41002983D}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

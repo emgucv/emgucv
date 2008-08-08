@@ -88,7 +88,17 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void testGenericOperation()
+        public void TestAvgSdv()
+        {
+            Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
+            img1._RandNormal(new MCvScalar(100), new MCvScalar(30));
+            Gray mean;
+            MCvScalar std;
+            img1.AvgSdv(out mean, out std);
+        }
+
+        [Test]
+        public void TestGenericOperation()
         {
             Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
             img1.ROI = new Rectangle<double>(10, 50, 19, 1);
@@ -389,7 +399,7 @@ namespace Emgu.CV.Test
             Image<Gray, Single> img2 = new Image<Gray, Single>(300, 200);
             img2._RandUniform(new MCvScalar(0), new MCvScalar(255));
 
-            Image<Gray, Single> img3 = img1.Clone();
+            Image<Gray, Single> img3 = img1.Copy();
             img3.Acc(img2);
 
             Assert.IsTrue(img3.Equals(img1 + img2));
@@ -428,7 +438,7 @@ namespace Emgu.CV.Test
             Image<Bgr, byte> image = new Image<Bgr, byte>(20, 20);
             image._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
-            Image<Bgr, byte> imageOld = image.Clone();
+            Image<Bgr, byte> imageOld = image.Copy();
             image._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);
 
             for (int i = 0; i < image.Rows; i++)

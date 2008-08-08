@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
     /// <summary>
-    /// A Kalman filter object
+    /// A Kalman Filter 
     /// </summary>
     /// <remarks>Beta: Non working version</remarks>
-    [Obsolete("Beta version, API not Finalized")]
+    [System.Obsolete("Beta version, API not Finalized")]
     public class Kalman : UnmanagedObject
     {
         /// <summary>
@@ -31,9 +31,9 @@ namespace Emgu.CV
             ):
             this(initialState.Rows, measurementMatrix.Rows, controlMatrix == null ? 0 : controlMatrix.Rows)
         {
-            int sizeOfState = initialState.Rows;
-            int sizeOfMeasurement = measurementMatrix.Rows;
-            int sizeOfControl = controlMatrix == null ? 0 : controlMatrix.Rows;
+            //int sizeOfState = initialState.Rows;
+            //int sizeOfMeasurement = measurementMatrix.Rows;
+            //int sizeOfControl = controlMatrix == null ? 0 : controlMatrix.Rows;
 
             PredictedState = initialState;
             CorrectedState = initialState;
@@ -196,6 +196,9 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Set the control matrix 
+        /// </summary>
         public Matrix<float> ControlMatrix
         {
             set

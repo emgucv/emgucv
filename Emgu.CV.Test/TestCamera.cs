@@ -52,7 +52,7 @@ namespace Emgu.CV.Test
                                     TimeSpan ts = DateTime.Now.Subtract(t1);
                                     Trace.WriteLine(ts.TotalMilliseconds);
 
-                                    using (Image<Bgr, Byte> res = f.Bgr.Clone())
+                                    using (Image<Bgr, Byte> res = f.Bgr.Copy())
                                     {
                                         //res.Draw(f.SkinContour, new Rgb(255.0, 255.0, 255.0), new Rgb(255.0, 255.0, 255.0), 1);
                                         pictureBox2.Image = res.ToBitmap();

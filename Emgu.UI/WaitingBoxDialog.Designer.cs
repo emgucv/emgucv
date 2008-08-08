@@ -1,6 +1,6 @@
 namespace Emgu.UI
 {
-    partial class WaitDialog
+    partial class WaitingBoxDialog
     {
         /// <summary>
         /// Required designer variable.
