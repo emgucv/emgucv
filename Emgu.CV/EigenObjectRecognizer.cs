@@ -195,7 +195,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="image">The image to be compared from the training images</param>
         /// <returns>An array of eigen distance from every image in the training images</returns>
-        public float[] GetEigenDistance(Image<Gray, Byte> image)
+        public float[] GetEigenDistances(Image<Gray, Byte> image)
         {
             Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage));
 
@@ -216,7 +216,7 @@ namespace Emgu.CV
         /// </returns>
         public int FindIndex(Image<Gray, Byte> image)
         {
-            float[] dist = GetEigenDistance(image);
+            float[] dist = GetEigenDistances(image);
 
             #region find the index that has minimum distance
             int index = 0;
