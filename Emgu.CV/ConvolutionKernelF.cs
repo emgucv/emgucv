@@ -16,7 +16,7 @@ namespace Emgu.CV
         protected Point2D<int> _center;
 
         /// <summary>
-        /// Create a convolution kernel with the specific rows and cols
+        /// Create a convolution kernel with the specific number of <paramref name="rows"/> and <paramref name="cols"/>
         /// </summary>
         /// <param name="rows">The number of raws for the convolution kernel</param>
         /// <param name="cols">The number of columns for the convolution kernel</param>

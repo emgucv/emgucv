@@ -170,11 +170,11 @@ namespace Emgu.CV
 
         /// <summary>
         /// Calculates and returns the Euclidean dot product of two arrays.
-        /// src1•src2 = sumI(src1(I)*src2(I))
-        /// In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.
+        /// src1 dot src2 = sumI(src1(I)*src2(I))
         /// </summary>
+        /// <remarks>In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||^2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.</remarks>
         /// <param name="src2">The other Array to apply dot product with</param>
-        /// <returns>src1•src2</returns>
+        /// <returns>src1 dot src2</returns>
         public double DotProduct(CvArray<TDepth> src2)
         {
             return CvInvoke.cvDotProduct(Ptr, src2.Ptr);

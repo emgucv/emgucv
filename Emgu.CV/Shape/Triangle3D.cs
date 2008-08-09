@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Emgu.CV
 {
     /// <summary>
-    /// A triangle
+    /// A 3D triangle
     /// </summary>
     /// <typeparam name="T">The depth of the triangle</typeparam>
     public class Triangle3D<T> where T : IComparable, new()
