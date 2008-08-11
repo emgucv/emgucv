@@ -1974,52 +1974,58 @@ namespace Emgu.CV
             return res;
         }
 
-        private void ConvertFrom<TOtherColor, TOtherDepth>(Image<TOtherColor, TOtherDepth> img) where TOtherColor : Emgu.CV.ColorType, new()
+        private void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.ColorType, new()
         {
-            if (typeof(TColor) == typeof(TOtherColor))
+            if (typeof(TColor) == typeof(TSrcColor))
             {
                 #region same color
-                if (typeof(TDepth) == typeof(TOtherDepth))
+                if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
-                    CvInvoke.cvCopy(img.Ptr, Ptr, IntPtr.Zero);
+                    CvInvoke.cvCopy(srcImage.Ptr, Ptr, IntPtr.Zero);
                 }
                 else
                 {
                     //different depth
                     int channelCount = new TColor().Dimension;
-                    IntPtr src = img.Ptr;
-                    IntPtr dest = Ptr;
-                    Type t1 = typeof(TDepth);
-                    Type t2 = typeof(TOtherDepth);
+                    Type dstDepth = typeof(TDepth);
+                    Type srcDepth = typeof(TSrcDepth);
                     {
-                        if (t1 == typeof(Single) && t2 == typeof(Byte))
+                        if (dstDepth == typeof(Byte) && srcDepth != typeof(Byte))
                         {
                             double min = 0.0, max = 0.0, scale, shift;
                             MCvPoint p1 = new MCvPoint();
                             MCvPoint p2 = new MCvPoint();
                             if (channelCount == 1)
                             {
-                                CvInvoke.cvMinMaxLoc(src, ref min, ref max, ref p1, ref p2, IntPtr.Zero);
+                                CvInvoke.cvMinMaxLoc(srcImage.Ptr, ref min, ref max, ref p1, ref p2, IntPtr.Zero);
                             }
                             else
                             {
                                 for (int i = 0; i < channelCount; i++)
                                 {
                                     double minForChannel = 0.0, maxForChannel = 0.0;
-                                    CvInvoke.cvSetImageCOI(src, i + 1);
-                                    CvInvoke.cvMinMaxLoc(src, ref minForChannel, ref maxForChannel, ref p1, ref p2, IntPtr.Zero);
+                                    CvInvoke.cvSetImageCOI(srcImage.Ptr, i + 1);
+                                    CvInvoke.cvMinMaxLoc(srcImage.Ptr, ref minForChannel, ref maxForChannel, ref p1, ref p2, IntPtr.Zero);
                                     min = Math.Min(min, minForChannel);
                                     max = Math.Max(max, maxForChannel);
                                 }
-                                CvInvoke.cvSetImageCOI(src, 0);
+                                CvInvoke.cvSetImageCOI(srcImage.Ptr, 0);
                             }
-                            scale = (max == min) ? 0.0 : 256.0 / (max - min);
-                            shift = (scale == 0) ? min : -min * scale;
-                            CvInvoke.cvConvertScaleAbs(src, dest, scale, shift);
+                            if (max <= 255.0 && min >= 0)
+                            {
+                                scale = 1.0;
+                                shift = 0.0;
+                            }
+                            else
+                            {
+                                scale = (max == min) ? 0.0 : 255.0 / (max - min);
+                                shift = (scale == 0) ? min : -min * scale;
+                            }
+                            CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
                         }
                         else
                         {
-                            CvInvoke.cvConvertScale(src, dest, 1.0, 0.0);
+                            CvInvoke.cvConvertScale(srcImage.Ptr, Ptr, 1.0, 0.0);
                         }
                     }
                 }
@@ -2028,33 +2034,35 @@ namespace Emgu.CV
             else
             {
                 #region different color
-                if (typeof(TDepth) == typeof(TOtherDepth))
+                if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
-                    ConvertColor(img.Ptr, Ptr, typeof(TOtherColor), typeof(TColor), Width, Height);
+
+                    ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Width, Height);
                 }
                 else
                 {   //different depth
-                    using (Image<TColor, TOtherDepth> tmp = img.Convert<TColor, TOtherDepth>())
-                        ConvertColor(tmp.Ptr, Ptr, typeof(TOtherColor), typeof(TColor), Width, Height);
+
+                    using (Image<TColor, TSrcDepth> tmp = srcImage.Convert<TColor, TSrcDepth>())
+                        ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Width, Height);
                 }
                 #endregion
             }
         }
 
-        private static void ConvertColor(IntPtr src, IntPtr dest, Type c1, Type c2, int width, int height)
+        private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, int width, int height)
         {
             try
             {
                 // if the direct conversion exist, apply the conversion
-                CvInvoke.cvCvtColor(src, dest, GetColorCvtCode(c1, c2));
+                CvInvoke.cvCvtColor(src, dest, GetColorCvtCode(srcColor, destColor));
             }
             catch (Exception)
             {
                 //if a direct conversion doesn't exist, apply a two step conversion
                 using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(width, height))
                 {
-                    CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(c1, typeof(Bgr)));
-                    CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), c2));
+                    CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(srcColor, typeof(Bgr)));
+                    CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), destColor));
                 }
             }
         }

@@ -3117,6 +3117,15 @@ namespace Emgu.CV
         public static extern double cvGetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP prop);
 
         /// <summary>
+        /// Sets the specified property of video capturing
+        /// </summary>
+        /// <param name="capture">Video capturing structure</param>
+        /// <param name="property_id">Property identifier</param>
+        /// <param name="value">Value of the property</param>
+        [DllImport(HIGHGUI_LIBRARY)]
+        public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP property_id, double value);
+
+        /// <summary>
         /// Loads an image from the specified file and returns the pointer to the loaded image. Currently the following file formats are supported: 
         /// Windows bitmaps - BMP, DIB; 
         /// JPEG files - JPEG, JPG, JPE; 

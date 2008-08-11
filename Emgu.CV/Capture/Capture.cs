@@ -154,6 +154,16 @@ namespace Emgu.CV
             return CvInvoke.cvGetCaptureProperty(_ptr, index);
         }
 
+        /// <summary>
+        /// Sets the specified property of video capturing
+        /// </summary>
+        /// <param name="property">Property identifier</param>
+        /// <param name="value">Value of the property</param>
+        public void SetCaptureProperty(CvEnum.CAP_PROP property, double value)
+        {
+            CvInvoke.cvSetCaptureProperty(Ptr, property, value);
+        }
+
         /// <summary> 
         /// Capture a Gray image frame
         /// </summary>

@@ -329,6 +329,10 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> img3 = new Image<Bgr, byte>(data);
 
             Image<Gray, Single> img4 = new Image<Gray, float>("stuff.jpg");
+            Image<Bgr, Single> img5 = new Image<Bgr, float>("stuff.jpg");
+
+            Bitmap bmp = new Bitmap("stuff.jpg");
+            Image<Bgr, Single> img6 = new Image<Bgr, float>(bmp);
         }
 
         [Test]
