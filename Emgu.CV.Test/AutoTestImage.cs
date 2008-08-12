@@ -211,7 +211,13 @@ namespace Emgu.CV.Test
         public void TestConversion()
         {
             Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100);
+            img1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+
             Image<Xyz, Single> img2 = img1.Convert<Xyz, Single>();
+
+            Image<Gray, Byte> img3 = img1.Convert<Gray, Byte>();
+
+            
         }
 
         [Test]

@@ -2041,8 +2041,7 @@ namespace Emgu.CV
                 }
                 else
                 {   //different depth
-
-                    using (Image<TColor, TSrcDepth> tmp = srcImage.Convert<TColor, TSrcDepth>())
+                    using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
                         ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Width, Height);
                 }
                 #endregion
