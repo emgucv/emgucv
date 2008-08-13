@@ -83,7 +83,7 @@ namespace Emgu
             }
             else if (language == Utils.ProgrammingLanguage.CPlusPlus)
             {
-                res = res = String.Format("{0}->{1}({2})",
+                res = String.Format("{0}->{1}({2})",
                     "{instance}",
                     Method.Name,
                     String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));

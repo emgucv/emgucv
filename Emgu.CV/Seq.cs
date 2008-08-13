@@ -63,6 +63,25 @@ namespace Emgu.CV
             get { return (MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq)); }
         }
 
+        public Box2D<int> GetMinAreaRect()
+        {
+            return GetMinAreaRect(null);
+        }
+
+        public Box2D<int> GetMinAreaRect(MemStorage stor)
+        {
+            Box2D<int> box = new Box2D<int>();
+            MCvBox2D cvbox = CvInvoke.cvMinAreaRect2(Ptr, stor == null ? IntPtr.Zero : stor.Ptr);
+            box.MCvBox2D = cvbox;
+            return box;
+        }
+
+        public Seq<T> GetConvexHull(CvEnum.ORIENTATION orientation, MemStorage stor)
+        {
+            IntPtr hull = CvInvoke.cvConvexHull2(Ptr, stor.Ptr, orientation, 1);
+            return new Seq<T>(hull, stor);
+        }
+
         /// <summary>
         /// Obtain the <paramref name="index"/> element in this sequence
         /// </summary>
@@ -261,5 +280,25 @@ namespace Emgu.CV
         {
             CvInvoke.cvClearSeq(Ptr);
         }
-    };
+
+        /// <summary>
+        /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
+        /// </summary>
+        /// <param name="point">The point to be tested</param>
+        /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
+        public double InContour(Point2D<float> point)
+        {
+           return CvInvoke.cvPointPolygonTest(Ptr, point.MCvPoint2D32f, 0);
+        }
+
+        /// <summary>
+        /// Determines the distance from the point to the contour
+        /// </summary>
+        /// <param name="point">The point to measured distance</param>
+        /// <returns>positive distance if inside; negative distance if outside; 0 if on the contour</returns>
+        public double Distance(Point2D<float> point)
+        {
+           return CvInvoke.cvPointPolygonTest(Ptr, point.MCvPoint2D32f, 1);
+        } 
+    }
 }

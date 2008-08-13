@@ -217,7 +217,6 @@ namespace Emgu.CV.Test
 
             Image<Gray, Byte> img3 = img1.Convert<Gray, Byte>();
 
-            
         }
 
         [Test]

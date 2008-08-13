@@ -76,5 +76,17 @@ namespace Emgu.CV
             else if (res < 0.0) return -1;
             else return 0;
         }
-    };
+
+        public double GetExteriorAngleDegree(Line2D<T> otherLine)
+        {
+            double angle1 = Direction.PointDegreeAngle;
+            double angle2 = otherLine.Direction.PointDegreeAngle;
+            double angle = angle2 - angle1;
+            return
+                angle <= -180.0 ? angle + 360 :
+                angle > 180.0 ? angle - 360 :
+                angle;
+
+        }
+    }
 }

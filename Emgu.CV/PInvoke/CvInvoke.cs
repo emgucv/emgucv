@@ -2044,6 +2044,19 @@ namespace Emgu.CV
         public static extern int cvCheckContourConvexity(IntPtr contour);
 
         /// <summary>
+        /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex). It returns positive, negative or zero value, correspondingly
+        /// </summary>
+        /// <param name="contour">Input contour</param>
+        /// <param name="pt">The point tested against the contour</param>
+        /// <param name="measure_dist">If != 0, the function estimates distance from the point to the nearest contour edge</param>
+        /// <returns>When measure_dist=0, the return value is &gt;0 (inside), &lt;0 (outside) and =0 (on edge), respectively. When measure_dist?0, it is a signed distance between the point and the nearest contour edge</returns>
+        [DllImport(CV_LIBRARY)]
+        public static extern double cvPointPolygonTest(
+            IntPtr contour,
+            MCvPoint2D32f pt,
+            int measure_dist);
+
+        /// <summary>
         /// Calculates area of the whole contour or contour section. 
         /// </summary>
         /// <param name="contour">Seq (sequence or array of vertices). </param>

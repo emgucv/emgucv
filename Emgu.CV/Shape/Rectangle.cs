@@ -19,9 +19,8 @@ namespace Emgu.CV
 
         ///<summary> Create a rectangle with default values </summary>
         public Rectangle()
-            : base()
+            : this(new Point2D<T>(), new Point2D<T>())
         {
-            _size = new Point2D<T>();
         }
 
         ///<summary> Create a rectangle with the specific center, with and height</summary>

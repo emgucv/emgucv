@@ -120,6 +120,9 @@ namespace Emgu.CV.Test
                 Rectangle<double> rect = new Rectangle<double>(10, 80, 50, 10);
                 img.Draw(rect, new Gray(255.0), -1);
 
+                Point2D<float> pIn = new Point2D<float>(60, 40);
+                Point2D<float> pOut = new Point2D<float>(80, 100);
+
                 using (MemStorage stor = new MemStorage())
                 {
                     Contour cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
@@ -132,6 +135,10 @@ namespace Emgu.CV.Test
                     rect2.Center.X -= 0.5;
                     rect2.Center.Y -= 0.5;
                     Assert.IsTrue(rect2.Equals(rect));
+                    Assert.Greater(cs.InContour(pIn), 0);
+                    Assert.Less(cs.InContour(pOut), 0);
+                    Assert.AreEqual(cs.Distance(pIn), 10);
+                    Assert.AreEqual(cs.Distance(pOut), -50); 
                 }
             }
         }
@@ -262,6 +269,18 @@ namespace Emgu.CV.Test
             Triangle2D<double> tri = new Triangle2D<double>(p1, p2, p3);
             double epsilon = 1e-10;
             Assert.IsTrue( Math.Abs(tri.Area - 0.5) < epsilon);
+        }
+
+        [Test]
+        public void TestLine()
+        {
+            Point2D<double> p1 = new Point2D<double>(0, 0);
+            Point2D<double> p2 = new Point2D<double>(1, 0);
+            Point2D<double> p3 = new Point2D<double>(0, 1);
+            LineSegment2D<double> l1 = new LineSegment2D<double>(p1, p2);
+            LineSegment2D<double> l2 = new LineSegment2D<double>(p1, p3);
+            double angle = l1.GetExteriorAngleDegree(l2);
+            Assert.AreEqual(angle, 90.0);
         }
 
         [Test]

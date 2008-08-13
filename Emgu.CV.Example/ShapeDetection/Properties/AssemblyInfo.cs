@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HughLineAndCircleDetection")]
+[assembly: AssemblyTitle("ShapeDetection")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("HughLineAndCircleDetection")]
-[assembly: AssemblyCopyright("Copyright © Emgu 2008")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ShapeDetection")]
+[assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0d5616f4-d8f5-4f7d-b66a-948b8092ce2c")]
+[assembly: Guid("8ddcb377-73f6-4dac-8129-fd8d7b673280")]
 
 // Version information for an assembly consists of the following four values:
 //

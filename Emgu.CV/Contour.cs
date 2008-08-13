@@ -107,6 +107,6 @@ namespace Emgu.CV
         {
             MemStorage storage = new MemStorage();
             return ApproxPoly(accuracy, storage);
-        }
+        }       
     }
 }

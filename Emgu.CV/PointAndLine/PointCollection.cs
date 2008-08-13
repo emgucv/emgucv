@@ -243,24 +243,14 @@ namespace Emgu.CV
         /// <param name="points">The points to find convex hull from</param>
         /// <param name="orientation">The orientation of the convex hull</param>
         /// <returns>The array of points that forms the convex hull</returns>
-        public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable< Point<D>> points, CvEnum.ORIENTATION orientation) where D: IComparable, new()
+        public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable<Point<D>> points, CvEnum.ORIENTATION orientation) where D : IComparable, new()
         {
             using (MemStorage stor = new MemStorage())
             using (Seq<MCvPoint2D32f> sequence = To2D32fSequence<D>(stor, points))
+            using (Seq<MCvPoint2D32f> hullSequence = sequence.GetConvexHull(orientation, stor))
             {
-                IntPtr hull = CvInvoke.cvConvexHull2(sequence.Ptr, stor.Ptr, orientation, 1);
-                using (Seq<MCvPoint2D32f> hullSequence = new Seq<MCvPoint2D32f>(hull, stor))
-                {
-                    MCvPoint2D32f[] result = new MCvPoint2D32f[hullSequence.Total];
-                    int counter = 0;
-                    foreach (MCvPoint2D32f p in hullSequence)
-                    {
-                        result[counter++] = p;
-                    }
-                    return result;
-                }
+                return hullSequence.ToArray();
             }
-
         }
-    };
+    }
 }

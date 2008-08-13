@@ -793,12 +793,18 @@ namespace Emgu.CV
         ///First apply Canny Edge Detector on the current image, 
         ///then apply Hugh transform to find circles 
         ///</summary>
-        public Circle<float>[][] HughCircles(TColor cannyThreshold, TColor cannyThresholdLinking, double dp, double minDist, int minRadius, int maxRadius)
+        ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
+        ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
+        ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
+        ///<param name="minRadius">Minimal radius of the circles to search for</param>
+        ///<param name="maxRadius">Maximal radius of the circles to search for</param>
+        ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+        public Circle<float>[][] HughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
         {
             using (MemStorage stor = new MemStorage())
             {
-                double[] c1 = cannyThreshold.Resize(4).Coordinate;
-                double[] c2 = cannyThresholdLinking.Resize(4).Coordinate;
+                double[] cannyThresh = cannyThreshold.Resize(4).Coordinate;
+                double[] accumulatorThresh = accumulatorThreshold.Resize(4).Coordinate;
                 Emgu.Utils.Func<IImage, int, Circle<float>[]> detector =
                     delegate(IImage img, int channel)
                     {
@@ -808,8 +814,8 @@ namespace Emgu.CV
                             CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT,
                             dp,
                             minDist,
-                            c1[channel],
-                            c2[channel],
+                            cannyThresh[channel],
+                            accumulatorThresh[channel],
                             minRadius,
                             maxRadius);
 
@@ -2212,12 +2218,12 @@ namespace Emgu.CV
                 bmp.PixelFormat);
 
             int arrayWidthStep = Marshal.SizeOf(typeof(TDepth)) * new TColor().Dimension * _array.GetLength(1);
-            for (int i = 0; i < rows; i++)
+
+            Int64 destAddress = _dataHandle.AddrOfPinnedObject().ToInt64();
+            Int64 srcAddress = data.Scan0.ToInt64();
+            for (int i = 0; i < rows; i++, destAddress += arrayWidthStep, srcAddress += data.Stride)
             {
-                Emgu.Utils.memcpy(
-                    (IntPtr)(_dataHandle.AddrOfPinnedObject().ToInt64() + i * arrayWidthStep),
-                    (IntPtr)(data.Scan0.ToInt64() + i * data.Stride),
-                    data.Stride);
+                Emgu.Utils.memcpy((IntPtr)destAddress, (IntPtr)srcAddress, data.Stride);
             }
             bmp.UnlockBits(data);
         }
@@ -2240,9 +2246,12 @@ namespace Emgu.CV
                         System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
                     Int64 dataPtr = data.Scan0.ToInt64();
 
-                    Int64 start;
-                    int elementCount, byteWidth, rows, widthStep;
-                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
+                    IntPtr startPtr;
+                    int widthStep;
+                    MCvSize size;
+                    CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
+                    Int64 start = startPtr.ToInt64(); 
+                    
                     for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                         Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
@@ -2275,9 +2284,12 @@ namespace Emgu.CV
                          System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     Int64 dataPtr = data.Scan0.ToInt64();
 
-                    Int64 start;
-                    int elementCount, byteWidth, rows, widthStep;
-                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
+                    IntPtr startPtr;
+                    int widthStep;
+                    MCvSize size;
+                    CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
+                    Int64 start = startPtr.ToInt64();
+
                     for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                         Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
@@ -2292,35 +2304,37 @@ namespace Emgu.CV
                     }
                 }
             }
-            else //if this is a multiple channel image
+            else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+            {   //if this is a Bgr Byte image
+
+                //create the bitmap and get the pointer to the data
+                Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                    new System.Drawing.Rectangle(0, 0, Width, Height),
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                Int64 dataPtr = data.Scan0.ToInt64();
+
+                IntPtr startPtr;
+                int widthStep;
+                MCvSize size;
+                CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
+
+                Int64 start = startPtr.ToInt64();
+
+                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
+                    Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+
+                bmp.UnlockBits(data);
+
+                return bmp;
+            }
+            else
             {
-                if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
                 {
-                    //create the bitmap and get the pointer to the data
-                    Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-                    System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                        new System.Drawing.Rectangle(0, 0, Width, Height),
-                        System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                        System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                    Int64 dataPtr = data.Scan0.ToInt64();
-
-                    Int64 start;
-                    int elementCount, byteWidth, rows, widthStep;
-                    RoiParam(Ptr, out start, out rows, out elementCount, out byteWidth, out widthStep);
-                    for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                        Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
-
-                    bmp.UnlockBits(data);
-
-                    return bmp;
-                }
-                else
-                {
-                    using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
-                    {
-                        return temp.ToBitmap();
-                    }
+                    return temp.ToBitmap();
                 }
             }
         }
@@ -2423,23 +2437,18 @@ namespace Emgu.CV
         #region generic operations
         ///<summary> perform an generic action based on each element of the Image</summary>
         public void Action(System.Action<TDepth> action)
-        {
-            MIplImage image1 = MIplImage;
-            Int64 data1 = image1.imageData.ToInt64();
-            int step1 = image1.widthStep;
-            int cols1 = image1.width * image1.nChannels;
+        {           
+            int cols1 = Width * new TColor().Dimension;
 
-            int sizeOfD = Marshal.SizeOf(typeof(TDepth));
-            int width1 = sizeOfD * cols1;
-            if (image1.roi != IntPtr.Zero)
-            {
-                Rectangle<double> rec = ROI;
-                data1 += (int)rec.Bottom * step1
-                        + sizeOfD * (int)rec.Left * image1.nChannels;
-            }
+            int step1;
+            IntPtr start; 
+            MCvSize roiSize;
+            CvInvoke.cvGetRawData(Ptr, out start, out step1, out roiSize);
+            Int64 data1 = start.ToInt64();
 
             TDepth[] row1 = new TDepth[cols1];
             GCHandle handle1 = GCHandle.Alloc(row1, GCHandleType.Pinned);
+            int width1 = Marshal.SizeOf(typeof(TDepth)) * cols1;
             for (int row = 0; row < Height; row++, data1 += step1)
             {
                 Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), new IntPtr(data1), width1);
