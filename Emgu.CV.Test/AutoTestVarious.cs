@@ -135,8 +135,8 @@ namespace Emgu.CV.Test
                     rect2.Center.X -= 0.5;
                     rect2.Center.Y -= 0.5;
                     Assert.IsTrue(rect2.Equals(rect));
-                    Assert.Greater(cs.InContour(pIn), 0);
-                    Assert.Less(cs.InContour(pOut), 0);
+                    Assert.AreEqual(cs.InContour(pIn), 100);
+                    Assert.AreEqual(cs.InContour(pOut), -100);
                     Assert.AreEqual(cs.Distance(pIn), 10);
                     Assert.AreEqual(cs.Distance(pOut), -50); 
                 }
