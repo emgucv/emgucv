@@ -479,8 +479,17 @@ namespace Emgu.CV
         #endregion
 
         #region Drawing functions
+        ///<summary> Draw a box of the specific color and thickness </summary>
+        ///<param name="box"> The box to be drawn</param>
+        ///<param name="color"> The color of the rectangle </param>
+        ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
+        public virtual void Draw<T>(Box2D<T> box, TColor color, int thickness) where T : IComparable, new()
+        {
+            Draw<float>(box.MCvBox2D, color, thickness);
+        }
+
         ///<summary> Draw an Rectangle of the specific color and thickness </summary>
-        ///<param name="rect"> The rectangle to be draw</param>
+        ///<param name="rect"> The rectangle to be drawn</param>
         ///<param name="color"> The color of the rectangle </param>
         ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
         public virtual void Draw<T>(Rectangle<T> rect, TColor color, int thickness) where T : IComparable, new()
@@ -496,7 +505,7 @@ namespace Emgu.CV
         }
 
         ///<summary> Draw a 2D Cross of the specific color and thickness </summary>
-        ///<param name="cross"> The 2D Cross to be draw</param>
+        ///<param name="cross"> The 2D Cross to be drawn</param>
         ///<param name="color"> The color of the cross </param>
         ///<param name="thickness"> Must be &gt; 0 </param>
         public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : IComparable, new()
@@ -751,6 +760,11 @@ namespace Emgu.CV
         ///Apply Hugh transform to find line segments. 
         ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
         ///</summary> 
+        ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
+        ///<param name="thetaResolution">Angle resolution measured in radians</param>
+        ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+        ///<param name="minLineWidth">Minimum width of a line</param>
+        ///<param name="gapBetweenLines">Minimum gap between lines</param>
         public LineSegment2D<int>[][] HughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
         {
             using (MemStorage stor = new MemStorage())

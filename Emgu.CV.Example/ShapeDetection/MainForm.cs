@@ -15,7 +15,7 @@ namespace ShapeDetection
         {
             InitializeComponent();
             DoShapeDetection();
-            textBox1.Text = "pic3.png";
+            textBox1.Text = "stuff.jpg";
         }
 
         public void DoShapeDetection()
@@ -23,26 +23,26 @@ namespace ShapeDetection
             if (textBox1.Text != String.Empty)
             {
                 Image<Bgr, Byte> img = new Image<Bgr, byte>(textBox1.Text).Resize(400, 400, true);
-                Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
-                Gray cannyThreshold = new Gray(150);
+                Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
+                Gray cannyThreshold = new Gray(180);
                 Gray cannyThresholdLinking = new Gray(120);
-                Gray circleAccumulatorThreshold = new Gray(200);
+                Gray circleAccumulatorThreshold = new Gray(120);
                 Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
 
                 Circle<float>[] circles = gray.HughCircles(
                     cannyThreshold,
                     circleAccumulatorThreshold,
-                    8.0, //Resolution of the accumulator used to detect centers of the circles
-                    1.0, //min distance 
-                    0, //min radius
+                    5.0, //Resolution of the accumulator used to detect centers of the circles
+                    10.0, //min distance 
+                    5, //min radius
                     0 //max radius
                     )[0]; //Get the circles from the first channel
 
                 LineSegment2D<int>[] lines = cannyEdges.HughLinesBinary(
                     1, //Distance resolution in pixel-related units
-                    Math.PI / 180.0, //Angle resolution measured in radians.
-                    30, //threshold
-                    50, //min Line width
+                    Math.PI / 45.0, //Angle resolution measured in radians.
+                    20, //threshold
+                    30, //min Line width
                     10 //gap between lines
                     )[0]; //Get the lines from the first channel
 

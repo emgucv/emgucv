@@ -72,5 +72,5 @@ namespace Emgu.CV
                 _angle = System.Convert.ToDouble(value.angle);
             }
         }
-    };
+    }
 }
