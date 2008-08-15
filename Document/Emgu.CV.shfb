@@ -1,4 +1,4 @@
-﻿<project schemaVersion="1.6.0.2">
+﻿<project schemaVersion="1.6.0.7">
     <assemblies>
         <assembly assemblyPath="..\bin\Emgu.CV.dll" xmlCommentsPath="..\bin\Emgu.CV.xml" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.Utils.dll" xmlCommentsPath="..\bin\Emgu.Utils.xml" commentsOnly="False" />
@@ -16,7 +16,7 @@
         <namespaceSummaryItem name="ZedGraph" isDocumented="False" />
     </namespaceSummaries>
     <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris and Mac OS X.</ProjectSummary>
-    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
@@ -25,12 +25,11 @@
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
+    <BuildLogFile path="" />
     <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
-    <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
     <CppCommentsFixup>True</CppCommentsFixup>
     <FrameworkVersion>3.0</FrameworkVersion>
-    <BinaryTOC>True</BinaryTOC>
-    <IncludeFavorites>False</IncludeFavorites>
+    <IndentHtml>False</IndentHtml>
     <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
@@ -39,9 +38,10 @@
     <Language>en-US</Language>
     <CopyrightHref />
     <CopyrightText>2008 Emgu, All Rights Reserved,</CopyrightText>
-    <FeedbackEMailAddress>huangcanming@hotmail.com</FeedbackEMailAddress>
-    <HeaderText />
-    <FooterText />
+    <FeedbackEMailAddress />
+    <FeedbackEMailLinkText />
+    <HeaderText>http://www.emgu.com/wiki</HeaderText>
+    <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
     <ProjectLinkType>Local</ProjectLinkType>
     <SdkLinkType>Msdn</SdkLinkType>
     <SdkLinkTarget>Blank</SdkLinkTarget>
@@ -49,7 +49,11 @@
     <NamingMethod>Guid</NamingMethod>
     <SyntaxFilters>Standard</SyntaxFilters>
     <ShowFeedbackControl>False</ShowFeedbackControl>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>False</IncludeFavorites>
+    <CollectionTocStyle>Hierarchical</CollectionTocStyle>
+    <IncludeStopWordList>True</IncludeStopWordList>
+    <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <ContentSiteMap path="" />
-    <TopicFileTransform path="" />
 </project>
