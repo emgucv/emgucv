@@ -9,5 +9,5 @@ if exist %RELEASE-NAME% rm -rf %RELEASE-NAME%
 mkdir %RELEASE-FOLDER%
 mkdir %RELEASE-NAME%
 cp Emgu.CV\README.txt Emgu.CV\Emgu.CV.License.txt Emgu.CV\bin\Release\Emgu.CV.dll Emgu.Utils\bin\Release\Emgu.Utils.dll lib\zlib.net.dll lib\zlib.net.license.txt %RELEASE-NAME%
-zip -r %RELEASE_FOLDER%/%RELEASE-ZIP% %RELEASE-NAME% 
+zip -r %RELEASE-FOLDER%/%RELEASE-ZIP% %RELEASE-NAME% 
 set RELEASE-NAME=
