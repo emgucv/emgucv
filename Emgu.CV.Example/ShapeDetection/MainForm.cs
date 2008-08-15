@@ -14,15 +14,15 @@ namespace ShapeDetection
         public MainForm()
         {
             InitializeComponent();
-            DoShapeDetection();
-            textBox1.Text = "stuff.jpg";
+
+            fileNameTextBox.Text = "pic3.png";
         }
 
-        public void DoShapeDetection()
+        public void PerformShapeDetection()
         {
-            if (textBox1.Text != String.Empty)
+            if (fileNameTextBox.Text != String.Empty)
             {
-                Image<Bgr, Byte> img = new Image<Bgr, byte>(textBox1.Text).Resize(400, 400, true);
+                Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, true);
                 Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
                 Gray cannyThreshold = new Gray(180);
                 Gray cannyThresholdLinking = new Gray(120);
@@ -109,7 +109,7 @@ namespace ShapeDetection
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            DoShapeDetection();
+            PerformShapeDetection();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -117,7 +117,7 @@ namespace ShapeDetection
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK || result == DialogResult.Yes)
             {
-                textBox1.Text = openFileDialog1.FileName;
+                fileNameTextBox.Text = openFileDialog1.FileName;
             }
         }
     }

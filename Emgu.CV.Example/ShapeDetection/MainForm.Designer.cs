@@ -47,7 +47,7 @@ namespace ShapeDetection
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.fileNameTextBox = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,7 +66,7 @@ namespace ShapeDetection
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.fileNameTextBox);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -269,12 +269,12 @@ namespace ShapeDetection
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(49, 14);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(215, 20);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.fileNameTextBox.Location = new System.Drawing.Point(49, 14);
+            this.fileNameTextBox.Name = "textBox1";
+            this.fileNameTextBox.ReadOnly = true;
+            this.fileNameTextBox.Size = new System.Drawing.Size(215, 20);
+            this.fileNameTextBox.TabIndex = 2;
+            this.fileNameTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // MainForm
             // 
@@ -326,7 +326,7 @@ namespace ShapeDetection
         private Emgu.CV.UI.ImageBox circleImageBox;
         private Emgu.CV.UI.ImageBox triangleRectangleImageBox;
         private Emgu.CV.UI.ImageBox lineImageBox;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
