@@ -6,11 +6,11 @@ using System.ServiceModel;
 
 namespace Webservice_Host
 {
-    [ServiceContract]
-    [XmlSerializerFormat]
-    public interface IImageService
-    {
-        [OperationContract(IsOneWay=false) ]
-        Image<Bgr, Byte> GrabFrame();
-    }
+   [ServiceContract]
+   [XmlSerializerFormat]
+   public interface IImageService
+   {
+      [OperationContract(IsOneWay = false)]
+      Image<Bgr, Byte> GrabFrame();
+   }
 }

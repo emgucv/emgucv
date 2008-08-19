@@ -30,7 +30,7 @@ array<Image<Bgr^, Byte>^>^ ImageProcessor::ProcessImage()
 	//another image to be displayed on the RHS of the GUI
 	imageArray[1] = gcnew Image<Bgr^, Byte>(imageArray[0]->Width, imageArray[0]->Height);
 	//fill the image with random colors of mean 50 and standard deviation of 10;
-	imageArray[1]->_RandNormal(MCvScalar(50.0, 50.0, 50.0), MCvScalar(10.0, 10.0, 10.0));
+	imageArray[1]->SetRandNormal(MCvScalar(50.0, 50.0, 50.0), MCvScalar(10.0, 10.0, 10.0));
 	imageArray[1] = imageArray[0] - imageArray[1]; //add the noise to the image
 	//---- End of Image Processing in Emgu CV.
 

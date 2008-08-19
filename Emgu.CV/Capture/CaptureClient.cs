@@ -12,79 +12,80 @@ namespace Emgu.CV
     */
 #else
 
-    /// <summary>
-    /// A Camera capture client that use DuplexCaptureCallback to request image from the server
-    /// </summary>
-    public class CaptureClient : DuplexCaptureCallback, IDisposable
-    {
-        private IDuplexCapture _capture;
-        private DuplexChannelFactory<IDuplexCapture> _captureFactory;
-        private volatile bool _disposed;
-        
-        /// <summary>
-        /// Create a capture client with the specific binding and url
-        /// </summary>
-        /// <param name="binding">The binding for this client</param>
-        /// <param name="url">The url of the server</param>
-        public CaptureClient(System.ServiceModel.Channels.Binding binding, string url)
-            : base()
-        {
-            _captureFactory = new DuplexChannelFactory<IDuplexCapture>(
-                 typeof(DuplexCaptureCallback),
-                 binding);
+   /// <summary>
+   /// A Camera capture client that use DuplexCaptureCallback to request image from the server
+   /// </summary>
+   public class CaptureClient : DuplexCaptureCallback, IDisposable
+   {
+      private IDuplexCapture _capture;
+      private DuplexChannelFactory<IDuplexCapture> _captureFactory;
+      private volatile bool _disposed;
 
-            _capture = _captureFactory.CreateChannel(
-                new InstanceContext(this),
-                new EndpointAddress(url));
+      /// <summary>
+      /// Create a capture client with the specific binding and url
+      /// </summary>
+      /// <param name="binding">The binding for this client</param>
+      /// <param name="url">The url of the server</param>
+      public CaptureClient(System.ServiceModel.Channels.Binding binding, string url)
+         : base()
+      {
+         _captureFactory = new DuplexChannelFactory<IDuplexCapture>(
+              typeof(DuplexCaptureCallback),
+              binding);
 
-            this.onFrameReceived += new EventHandler(
-                delegate {
-                    if (!_disposed)
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture); 
-                }); //signal that data has been received
+         _capture = _captureFactory.CreateChannel(
+             new InstanceContext(this),
+             new EndpointAddress(url));
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture); 
-        }
+         this.onFrameReceived += new EventHandler(
+             delegate
+             {
+                if (!_disposed)
+                   ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture);
+             }); //signal that data has been received
 
-        private static void CaptureImage(Object capture)
-        {
-            ((IDuplexCapture)capture).DuplexQueryFrame();
-        }
+         ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture);
+      }
 
-        /// <summary>
-        /// Dispose function
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+      private static void CaptureImage(Object capture)
+      {
+         ((IDuplexCapture)capture).DuplexQueryFrame();
+      }
 
-        ///<summary> 
-        /// Release the capture and all the memory associate with it
-        ///</summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // Free other state (managed objects).
-            }
-            // Free your own state (unmanaged objects).
-            if (!_disposed)
-            {
-                _disposed = true;
-                _captureFactory.Close();
-            }
-        }
+      /// <summary>
+      /// Dispose function
+      /// </summary>
+      public void Dispose()
+      {
+         Dispose(true);
+         GC.SuppressFinalize(this);
+      }
 
-        /// <summary>
-        /// Destructor
-        /// </summary>
-        ~CaptureClient()
-        {
-            Dispose(false);
-        }
+      ///<summary> 
+      /// Release the capture and all the memory associate with it
+      ///</summary>
+      protected virtual void Dispose(bool disposing)
+      {
+         if (disposing)
+         {
+            // Free other state (managed objects).
+         }
+         // Free your own state (unmanaged objects).
+         if (!_disposed)
+         {
+            _disposed = true;
+            _captureFactory.Close();
+         }
+      }
 
-    }
+      /// <summary>
+      /// Destructor
+      /// </summary>
+      ~CaptureClient()
+      {
+         Dispose(false);
+      }
+
+   }
 #endif
 }

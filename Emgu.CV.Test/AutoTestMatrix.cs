@@ -33,7 +33,7 @@ namespace Emgu.CV.Test
         public void TestArithmatic()
         {
             Matrix<byte> m = new Matrix<byte>(10, 8);
-            m._RandNormal(new MCvScalar(), new MCvScalar(30));
+            m.SetRandNormal(new MCvScalar(), new MCvScalar(30));
             Matrix<byte> mMultiplied = m.Mul(2.0);
 
             for (int i = 0; i < m.Rows; i++)
@@ -83,7 +83,7 @@ namespace Emgu.CV.Test
         {
             using (Matrix<Byte> mat = new Matrix<Byte>(1, 10))
             {
-                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
+                mat.SetRandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
 
                 Matrix<Byte> matT = mat.Transpose();
 
@@ -98,7 +98,7 @@ namespace Emgu.CV.Test
         {
             using (Matrix<float> mat = new Matrix<float>(1, 3))
             {
-                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(-1000.0), new MCvScalar(1000.0));
+                mat.SetRandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(-1000.0), new MCvScalar(1000.0));
 
                 Matrix<float> matT = mat.Transpose();
 
@@ -113,7 +113,7 @@ namespace Emgu.CV.Test
         {
             using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
             {
-                mat._RandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
+                mat.SetRandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
                 XmlDocument doc = Emgu.Utils.XmlSerialize<Matrix<Byte>>(mat);
                 //Trace.WriteLine(doc.OuterXml);
 
@@ -133,7 +133,7 @@ namespace Emgu.CV.Test
             Byte[] bytes;
             using (MemoryStream ms = new MemoryStream())
             {
-                mat._RandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                mat.SetRandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
                 formatter.Serialize(ms, mat);
                 bytes = ms.GetBuffer();
             }
@@ -170,7 +170,7 @@ namespace Emgu.CV.Test
         public void TestSubMatrix()
         {
             Matrix<float> mat = new Matrix<float>(30, 40);
-            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
             Matrix<float> submat = mat.GetSubMatrix(new Rectangle<double>(5, 20, 20, 5));
             for (int i = 0; i < 15; i++)
                 for (int j = 0; j < 15; j++)
@@ -193,7 +193,7 @@ namespace Emgu.CV.Test
         public void TestMinMax()
         {
             Matrix<float> mat = new Matrix<float>(30, 40);
-            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
             double min, max;
             MCvPoint minLoc, maxLoc;
             mat.MinMax(out min, out max, out minLoc, out maxLoc);
@@ -203,7 +203,7 @@ namespace Emgu.CV.Test
         public void TestConcate()
         {
             Matrix<float> mat = new Matrix<float>(30, 40);
-            mat._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
 
             Matrix<float> m1 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, 20, 0));
             Matrix<float> m2 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, mat.Rows, 20));

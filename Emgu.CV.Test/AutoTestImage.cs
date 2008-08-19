@@ -91,7 +91,7 @@ namespace Emgu.CV.Test
         public void TestAvgSdv()
         {
             Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
-            img1._RandNormal(new MCvScalar(100), new MCvScalar(30));
+            img1.SetRandNormal(new MCvScalar(100), new MCvScalar(30));
             Gray mean;
             MCvScalar std;
             img1.AvgSdv(out mean, out std);
@@ -188,7 +188,7 @@ namespace Emgu.CV.Test
         public void TestConvertDepth()
         {
             Image<Gray, Byte> img1 = new Image<Gray, byte>(100, 100, new Gray(10.0));
-            img1._RandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+            img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
             Image<Gray, Single> img2 = img1.ConvertScale<Single>(2.0, 0.0);
             Image<Gray, Byte> img3 = img2.ConvertScale<Byte>(0.5, 0.0);
             Assert.IsTrue(img3.Equals(img1));
@@ -211,7 +211,7 @@ namespace Emgu.CV.Test
         public void TestConversion()
         {
             Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100);
-            img1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            img1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
 
             Image<Xyz, Single> img2 = img1.Convert<Xyz, Single>();
 
@@ -244,7 +244,7 @@ namespace Emgu.CV.Test
 
             using (MemoryStream ms = new MemoryStream())
             {
-                img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                     formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -263,7 +263,7 @@ namespace Emgu.CV.Test
         public void TestSampleLine()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
-            img._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
             Byte[,] buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(0, 100)));
             for (int i = 0; i < 100; i++)
                 Assert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
@@ -284,7 +284,7 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
-            img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
             img.SerializationCompressionRatio = 9;
             XmlDocument doc1 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
             String str = doc1.OuterXml;
@@ -308,7 +308,7 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
-            img._RandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
             img.Rotate(90, new Bgr());
         }
 
@@ -351,7 +351,7 @@ namespace Emgu.CV.Test
         public void TestConvolutionAndLaplace()
         {
             Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
-            image._RandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
+            image.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
             Image<Gray, float> laplace = image.Laplace(1);
 
@@ -369,14 +369,14 @@ namespace Emgu.CV.Test
         {
             #region test byte images
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
-            image1._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
             Bitmap bmp = image1.ToBitmap();
 
             Image<Bgr, Byte> image2 = new Image<Bgr, byte>(bmp);
             Assert.IsTrue(image1.Equals(image2));
 
             Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
-            image3._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            image3.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
             bmp = image3.ToBitmap();
             Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
             Assert.IsTrue(image3.Equals(image4));
@@ -384,7 +384,7 @@ namespace Emgu.CV.Test
 
             #region test single images
             Image<Bgr, Single> image5 = new Image<Bgr, Single>(201, 401);
-            image5._RandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
             Bitmap bmp2 = image5.ToBitmap();
             #endregion
         }
@@ -393,7 +393,7 @@ namespace Emgu.CV.Test
         public void TestSplitMerge()
         {
             Image<Bgr, Byte> img1 = new Image<Bgr, byte>(301, 234);
-            img1._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            img1.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
             Image<Gray, Byte>[] channels = img1.Split();
 
             Image<Bgr, Byte> img2 = new Image<Bgr, byte>(channels);
@@ -404,9 +404,9 @@ namespace Emgu.CV.Test
         public void TestAcc()
         {
             Image<Gray, Single> img1 = new Image<Gray, Single>(300, 200);
-            img1._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            img1.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
             Image<Gray, Single> img2 = new Image<Gray, Single>(300, 200);
-            img2._RandUniform(new MCvScalar(0), new MCvScalar(255));
+            img2.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
 
             Image<Gray, Single> img3 = img1.Copy();
             img3.Acc(img2);
@@ -432,7 +432,7 @@ namespace Emgu.CV.Test
                 for (int i = 0; i < 100; i++)
                 {
                     Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 100);
-                    img1._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+                    img1.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
                     writer.WriteFrame(img1);
                 }
             }
@@ -445,7 +445,7 @@ namespace Emgu.CV.Test
         public void TestInplaceFlip()
         {
             Image<Bgr, byte> image = new Image<Bgr, byte>(20, 20);
-            image._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
             Image<Bgr, byte> imageOld = image.Copy();
             image._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);

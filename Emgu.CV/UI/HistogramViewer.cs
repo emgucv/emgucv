@@ -8,28 +8,28 @@ using System.Windows.Forms;
 
 namespace Emgu.CV.UI
 {
-    /// <summary>
-    /// A view for histogram
-    /// </summary>
-    public partial class HistogramViewer : Form
-    {
-        /// <summary>
-        /// Constructor for histogram viewer
-        /// </summary>
-        public HistogramViewer()
-        {
-            InitializeComponent();
-        }
+   /// <summary>
+   /// A view for histogram
+   /// </summary>
+   public partial class HistogramViewer : Form
+   {
+      /// <summary>
+      /// Constructor for histogram viewer
+      /// </summary>
+      public HistogramViewer()
+      {
+         InitializeComponent();
+      }
 
-        /// <summary>
-        /// Get the histogram control of this viewer
-        /// </summary>
-        public HistogramCtrl HistogramCtrl
-        {
-            get
-            {
-                return histogramCtrl1;
-            }
-        }
-    }
+      /// <summary>
+      /// Get the histogram control of this viewer
+      /// </summary>
+      public HistogramCtrl HistogramCtrl
+      {
+         get
+         {
+            return histogramCtrl1;
+         }
+      }
+   }
 }

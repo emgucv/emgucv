@@ -5,206 +5,345 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
-    /// <summary>
-    /// A Kalman Filter 
-    /// </summary>
-    /// <remarks>Beta: Non working version</remarks>
-    [System.Obsolete("Beta version, API not Finalized")]
-    public class Kalman : UnmanagedObject
-    {
-        /// <summary>
-        /// Create a Kalman Filter using the specific values
-        /// </summary>
-        /// <param name="initialState">The m x 1 matrix</param>
-        /// <param name="transitionMatrix">The m x m matrix (A) </param>
-        /// <param name="controlMatrix">The m x n matrix (B)</param>
-        /// <param name="measurementMatrix">The n x m matrix (H)</param>
-        /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
-        /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
-        public Kalman(
-            Matrix<float> initialState, 
-            Matrix<float> transitionMatrix, 
-            Matrix<float> controlMatrix, 
-            Matrix<float> measurementMatrix,
-            Matrix<float> processNoiseCovarianceMatrix,
-            Matrix<float> measurementNoiseCovarianceMatrix
-            ):
-            this(initialState.Rows, measurementMatrix.Rows, controlMatrix == null ? 0 : controlMatrix.Rows)
-        {
-            //int sizeOfState = initialState.Rows;
-            //int sizeOfMeasurement = measurementMatrix.Rows;
-            //int sizeOfControl = controlMatrix == null ? 0 : controlMatrix.Rows;
+   /// <summary>
+   /// A Kalman Filter 
+   /// </summary>
+   public class Kalman 
+   {
+      private Matrix<float> _statePre;
+      private Matrix<float> _statePost;
+      private Matrix<float> _transitionMatrix;
+      private Matrix<float> _processNoiseCov;
+      private Matrix<float> _measurementMatrix;
+      private Matrix<float> _measurementNoiseCov;
+      private Matrix<float> _errorCovPre;
+      private Matrix<float> _errorCovPost;
+      private Matrix<float> _gain;
+      private Matrix<float> _controlMatrix;
+      private Matrix<float> _temp1;
+      private Matrix<float> _temp2;
+      private Matrix<float> _temp3;
+      private Matrix<float> _temp4;
+      private Matrix<float> _temp5;
 
-            PredictedState = initialState;
-            CorrectedState = initialState;
-            TransitionMatrix = transitionMatrix;
-            if (controlMatrix != null) ControlMatrix = controlMatrix;
-            MeasurementMatrix = measurementMatrix;
-            ProcessNoiseCovariance = processNoiseCovarianceMatrix;
-            MeasurementNoiseCovariance = measurementNoiseCovarianceMatrix;
-        }
+      private MCvKalman _kalman;
 
-        /// <summary>
-        /// Create a Kalman Filter using the specific values
-        /// </summary>
-        /// <param name="initialState">The m x 1 matrix</param>
-        /// <param name="transitionMatrix">The m x m matrix (A) </param>
-        /// <param name="measurementMatrix">The n x m matrix (H)</param>
-        /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
-        /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
-        public Kalman(
-            Matrix<float> initialState,
-            Matrix<float> transitionMatrix,
-            Matrix<float> measurementMatrix,
-            Matrix<float> processNoiseCovarianceMatrix,
-            Matrix<float> measurementNoiseCovarianceMatrix
-            )
-            :
-            this(initialState, transitionMatrix, null, measurementMatrix, processNoiseCovarianceMatrix, measurementNoiseCovarianceMatrix)
-        {
-        }
+      /// <summary>
+      /// Create a Kalman Filter using the specific values
+      /// </summary>
+      /// <param name="initialState">The m x 1 matrix</param>
+      /// <param name="transitionMatrix">The m x m matrix (A) </param>
+      /// <param name="controlMatrix">The m x n matrix (B)</param>
+      /// <param name="measurementMatrix">The n x m matrix (H)</param>
+      /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
+      /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
+      public Kalman(
+          Matrix<float> initialState,
+          Matrix<float> transitionMatrix,
+          Matrix<float> controlMatrix,
+          Matrix<float> measurementMatrix,
+          Matrix<float> processNoiseCovarianceMatrix,
+          Matrix<float> measurementNoiseCovarianceMatrix
+          )
+         : this(
+         initialState.Rows,
+         measurementMatrix.Rows,
+         controlMatrix == null ? 0 : controlMatrix.Rows)
+      {
+         PredictedState = initialState.Clone();
+         CorrectedState = initialState.Clone();
+         TransitionMatrix = transitionMatrix;
+         if (controlMatrix != null) ControlMatrix = controlMatrix;
+         MeasurementMatrix = measurementMatrix;
+         ProcessNoiseCovariance = processNoiseCovarianceMatrix;
+         MeasurementNoiseCovariance = measurementNoiseCovarianceMatrix;
+      }
 
-        /// <summary>
-        /// Allocates CvKalman and all its matrices and initializes them somehow. 
-        /// </summary>
-        /// <param name="dynam_params">dimensionality of the state vector</param>
-        /// <param name="measure_params">dimensionality of the measurement vector </param>
-        /// <param name="control_params">dimensionality of the control vector </param>
-        public Kalman(int dynam_params, int measure_params, int control_params)
-        {
-            _ptr = CvInvoke.cvCreateKalman(dynam_params, measure_params, control_params);
-        }
+      /// <summary>
+      /// Create a Kalman Filter using the specific values
+      /// </summary>
+      /// <param name="initialState">The m x 1 matrix</param>
+      /// <param name="transitionMatrix">The m x m matrix (A) </param>
+      /// <param name="measurementMatrix">The n x m matrix (H)</param>
+      /// <param name="processNoiseCovarianceMatrix">The n x n matrix (Q)</param>
+      /// <param name="measurementNoiseCovarianceMatrix">The m x m matrix (R)</param>
+      public Kalman(
+          Matrix<float> initialState,
+          Matrix<float> transitionMatrix,
+          Matrix<float> measurementMatrix,
+          Matrix<float> processNoiseCovarianceMatrix,
+          Matrix<float> measurementNoiseCovarianceMatrix
+          )
+         :
+          this(initialState, transitionMatrix, null, measurementMatrix, processNoiseCovarianceMatrix, measurementNoiseCovarianceMatrix)
+      {
+      }
 
-        /// <summary>
-        /// Release the memory associated to kalman
-        /// </summary>
-        protected override void DisposeObject()
-        {
-            CvInvoke.cvReleaseKalman(ref _ptr);
-        }
+      /// <summary>
+      /// Allocates CvKalman and all its matrices and initializes them somehow. 
+      /// </summary>
+      /// <param name="dynamParams">dimensionality of the state vector</param>
+      /// <param name="measureParams">dimensionality of the measurement vector </param>
+      /// <param name="controlParams">dimensionality of the control vector </param>
+      public Kalman(int dynamParams, int measureParams, int controlParams)
+      {
+         _kalman.DP = dynamParams;
+         _kalman.MP = measureParams;
+         _kalman.CP = controlParams;
 
-        /// <summary>
-        /// Get the MCvKalman structure
-        /// </summary>
-        public MCvKalman MCvKalman
-        {
-            get
-            {
-                return (MCvKalman)Marshal.PtrToStructure(Ptr, typeof(MCvKalman));
-            }
-        }
+         PredictedState = new Matrix<float>(dynamParams, 1);
 
-        /// <summary>
-        /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
-        /// </summary>
-        /// <param name="control">the control vector</param>
-        public void Predict(Matrix<float> control)
-        {
-            CvInvoke.cvKalmanPredict(_ptr, control.Ptr);
-        }
+         CorrectedState = new Matrix<float>(dynamParams, 1);
 
-        /// <summary>
-        /// Get or Set the Predicted State
-        /// </summary>
-        public Matrix<float> PredictedState
-        {
-            get
-            {
-                MCvKalman kalman = MCvKalman; 
-                MCvMat mat = (MCvMat) Marshal.PtrToStructure( kalman.state_pre, typeof(MCvMat));
-                Matrix<float> res = new Matrix<float>(mat.rows, mat.cols);
-                CvInvoke.cvCopy(kalman.state_pre, res.Ptr, IntPtr.Zero);
-                return res;
-            }
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.state_pre, IntPtr.Zero);
-            }
-        }
+         TransitionMatrix = new Matrix<float>(dynamParams, dynamParams);
+         TransitionMatrix.SetIdentity();
+        
+         ProcessNoiseCovariance = new Matrix<float>(dynamParams, dynamParams);
+         ProcessNoiseCovariance.SetIdentity();
 
-        /// <summary>
-        /// Get or Set the Corrected State
-        /// </summary>
-        public Matrix<float> CorrectedState
-        {
-            get
-            {
-                MCvKalman kalman = MCvKalman;
-                MCvMat mat = (MCvMat)Marshal.PtrToStructure(kalman.state_pre, typeof(MCvMat));
-                Matrix<float> res = new Matrix<float>(mat.rows, mat.cols);
-                CvInvoke.cvCopy(kalman.state_post, res.Ptr, IntPtr.Zero);
-                return res;
-            }
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.state_post, IntPtr.Zero);
-            }
-        }
+         MeasurementMatrix = new Matrix<float>(measureParams, dynamParams);
 
-        /// <summary>
-        /// Set the measurement matrix
-        /// </summary>
-        public Matrix<float> MeasurementMatrix
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.measurement_matrix, IntPtr.Zero);
-            }
-        }
+         MeasurementNoiseCovariance = new Matrix<float>(measureParams, measureParams);
+         MeasurementNoiseCovariance.SetIdentity();
 
-        /// <summary>
-        /// Set the state transition matrix
-        /// </summary>
-        public Matrix<float> TransitionMatrix
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.transition_matrix, IntPtr.Zero);
-            }
-        }
+         ErrorCovariancePre = new Matrix<float>(dynamParams, dynamParams);
 
-        /// <summary>
-        /// Set the process noise covariance matrix
-        /// </summary>
-        public Matrix<float> ProcessNoiseCovariance
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.process_noise_cov, IntPtr.Zero);
-            }
-        }
+         ErrorCovariancePost = new Matrix<float>(dynamParams, dynamParams);
 
-        /// <summary>
-        /// Set the measurement noise covariance matrix
-        /// </summary>
-        public Matrix<float> MeasurementNoiseCovariance
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.measurement_noise_cov, IntPtr.Zero);
-            }
-        }
+         Gain = new Matrix<float>(dynamParams, measureParams);
 
-        /// <summary>
-        /// Set the posteriori error estimate covariance matrix
-        /// </summary>
-        public Matrix<float> ErrorCovariancePost
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.error_cov_post, IntPtr.Zero);
-            }
-        }
+         if (controlParams > 0)
+         {
+            ControlMatrix = new Matrix<float>(dynamParams, controlParams);
+         }
 
-        /// <summary>
-        /// Set the control matrix 
-        /// </summary>
-        public Matrix<float> ControlMatrix
-        {
-            set
-            {
-                CvInvoke.cvCopy(value.Ptr, MCvKalman.control_matrix, IntPtr.Zero);
-            }
-        }
-    }
+         _temp1 = new Matrix<float>(dynamParams, dynamParams);
+         _kalman.temp1 = _temp1.Ptr;
+         _temp2 = new Matrix<float>(measureParams, dynamParams);
+         _kalman.temp2 = _temp2.Ptr;
+         _temp3 = new Matrix<float>(measureParams, measureParams);
+         _kalman.temp3 = _temp3.Ptr;
+         _temp4 = new Matrix<float>(measureParams, dynamParams);
+         _kalman.temp4 = _temp4.Ptr;
+         _temp5 = new Matrix<float>(measureParams, 1);
+         _kalman.temp5 = _temp5.Ptr;
+
+         //_kalman.Temp1 = _temp1.MCvMat.data;
+         //_kalman.Temp2 = _temp2.MCvMat.data;
+
+      }
+
+      /// <summary>
+      /// Get the MCvKalman structure
+      /// </summary>
+      public MCvKalman MCvKalman
+      {
+         get
+         {
+            return _kalman;
+         }
+      }
+
+      /// <summary>
+      /// Estimates the subsequent stochastic model state by its current state and stores it at PredictedState
+      /// </summary>
+      /// <param name="control">the control vector</param>
+      /// <returns>The predicted state</returns>
+      public Matrix<float> Predict(Matrix<float> control)
+      {
+         IntPtr controlPtr = control == null ? IntPtr.Zero : control.Ptr;
+         CvInvoke.cvKalmanPredict(ref _kalman, controlPtr);
+         return PredictedState;
+      }
+
+      /// <summary>
+      /// Adjusts stochastic model state on the basis of the given measurement of the model state
+      /// </summary>
+      /// <remarks>The function stores adjusted state at kalman->state_post and returns it on output</remarks>
+      /// <param name="measurement">The measurement data</param>
+      /// <returns>The corrected state</returns>
+      public Matrix<float> Correct(Matrix<float> measurement)
+      {
+         CvInvoke.cvKalmanCorrect(ref _kalman, measurement.Ptr);
+         return CorrectedState;
+      }
+
+      /// <summary>
+      /// Estimates the subsequent stochastic model state by its current state
+      /// </summary>
+      /// <returns>The predicted state</returns>
+      public Matrix<float> Predict()
+      {
+         return Predict(null);
+      }
+
+      /// <summary>
+      /// Get or Set the Predicted State
+      /// </summary>
+      public Matrix<float> PredictedState
+      {
+         get
+         {
+            return _statePre;
+         }
+         set
+         {
+            _statePre = value;
+            _kalman.state_pre = value.Ptr;
+            _kalman.PosterState = value.MCvMat.data;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the Corrected State
+      /// </summary>
+      public Matrix<float> CorrectedState
+      {
+         get
+         {
+            return _statePost;
+         }
+         set
+         {
+            _statePost = value;
+            _kalman.state_post = value.Ptr;
+            _kalman.PriorState = value.MCvMat.data;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the measurement matrix
+      /// </summary>
+      public Matrix<float> MeasurementMatrix
+      {
+         set
+         {
+            _measurementMatrix = value;
+            _kalman.measurement_matrix = value.Ptr;
+            _kalman.MeasurementMatr = value.MCvMat.data;
+         }
+         get
+         {
+            return _measurementMatrix;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the state transition matrix
+      /// </summary>
+      public Matrix<float> TransitionMatrix
+      {
+         set
+         {
+            _transitionMatrix = value;
+            _kalman.transition_matrix = value.Ptr;
+            _kalman.DynamMatr = value.MCvMat.data;
+         }
+         get
+         {
+            return _transitionMatrix;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the process noise covariance matrix
+      /// </summary>
+      public Matrix<float> ProcessNoiseCovariance
+      {
+         set
+         {
+            _processNoiseCov = value;
+            _kalman.process_noise_cov = value.Ptr;
+            _kalman.PNCovariance = value.MCvMat.data;
+         }
+         get
+         {
+            return _processNoiseCov;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the measurement noise covariance matrix
+      /// </summary>
+      public Matrix<float> MeasurementNoiseCovariance
+      {
+         set
+         {
+            _measurementNoiseCov = value;
+            _kalman.measurement_noise_cov = value.Ptr;
+            _kalman.MNCovariance = value.MCvMat.data;
+         }
+         get
+         {
+            return _measurementNoiseCov;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the posteriori error estimate covariance matrix
+      /// </summary>
+      public Matrix<float> ErrorCovariancePost
+      {
+         set
+         {
+            _errorCovPost = value;
+            _kalman.error_cov_post = value.Ptr;
+            _kalman.PosterErrorCovariance = value.MCvMat.data;
+         }
+         get
+         {
+            return _errorCovPost;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the prior error convariance matrix
+      /// </summary>
+      public Matrix<float> ErrorCovariancePre
+      {
+         set
+         {
+            _errorCovPre = value;
+            _kalman.error_cov_pre = value.Ptr;
+            _kalman.PriorErrorCovariance = value.MCvMat.data;
+         }
+         get
+         {
+            return _errorCovPre;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the control matrix 
+      /// </summary>
+      public Matrix<float> ControlMatrix
+      {
+         set
+         {
+            _controlMatrix = value;
+            _kalman.control_matrix = value.Ptr;
+         }
+         get
+         {
+            return _controlMatrix;
+         }
+      }
+
+      /// <summary>
+      /// Get or Set the Kalman Gain
+      /// </summary>
+      public Matrix<float> Gain
+      {
+         set
+         {
+            _gain = value;
+            _kalman.gain = value.Ptr;
+            _kalman.KalmGainMatr = value.MCvMat.data;
+         }
+         get
+         {
+            return _gain;
+         }
+      }
+   }
 }

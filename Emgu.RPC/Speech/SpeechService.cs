@@ -11,12 +11,12 @@ using System.Speech.Synthesis;
 
 namespace Emgu.RPC.Speech
 {
-    /// <summary>
-    /// An implementation of a singleton speech service
-    /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class SpeechService : DisposableObject, ISpeechService
-    {
+   /// <summary>
+   /// An implementation of a singleton speech service
+   /// </summary>
+   [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+   public class SpeechService : DisposableObject, ISpeechService
+   {
 #if LINUX
         private const String LIB_FESTIVAL = "libFestival.so.1.96.0";
         /// <summary>
@@ -35,33 +35,33 @@ namespace Emgu.RPC.Speech
         [DllImport(LIB_FESTIVAL)]
         private extern static int festival_say_text([MarshalAs(UnmanagedType.LPStr)] String text); 
 #else
-        private SpeechSynthesizer _synthesizer;
+      private SpeechSynthesizer _synthesizer;
 #endif
 
-        public SpeechService()
-        {
+      public SpeechService()
+      {
 #if LINUX
             festival_initialize(1, 210000);
 #else
-            _synthesizer = new SpeechSynthesizer();
+         _synthesizer = new SpeechSynthesizer();
 #endif
-        }
+      }
 
-        public void Speak(String sentences)
-        {
+      public void Speak(String sentences)
+      {
 #if LINUX
             festival_say_text(sentences);
 #else
-            _synthesizer.SpeakAsync(sentences);
+         _synthesizer.SpeakAsync(sentences);
 #endif
-        }
+      }
 
-        protected override void DisposeObject()
-        {
+      protected override void DisposeObject()
+      {
 #if LINUX
 #else
-            _synthesizer.Dispose();
+         _synthesizer.Dispose();
 #endif
-        }
-    }
+      }
+   }
 }

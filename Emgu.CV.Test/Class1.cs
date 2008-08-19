@@ -11,333 +11,334 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
-    [TestFixture]
-    public class Tester
-    {
-        public void TestRotationMatrix2D()
-        {
-            RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
-            //Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
-        }
+   [TestFixture]
+   public class Tester
+   {
+      public void TestRotationMatrix2D()
+      {
+         RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
+         //Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
+      }
 
-        public void GenerateLogo()
-        {
-            Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-            Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-            MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
-            MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
-            semgu.Draw("Emgu", ref f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
-            semgu._Dilate(1);
-            scv.Draw("CV", ref f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
-            scv._Dilate(2);
-            Image<Bgr, Byte> logoBgr = semgu.Or(scv);
-            Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
-            logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
-            logoBgr._Not();
-            logoA._Not();
-            Image<Gray, Byte>[] channels = logoBgr.Split();
-            channels = new Image<Gray,byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0))};
-            Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
-            logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
-            logoBgra.Save("EmguCVLogo.gif");
+      public void GenerateLogo()
+      {
+         Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
+         Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
+         MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
+         MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
+         semgu.Draw("Emgu", ref f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
+         semgu._Dilate(1);
+         scv.Draw("CV", ref f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
+         scv._Dilate(2);
+         Image<Bgr, Byte> logoBgr = semgu.Or(scv);
+         Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
+         logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
+         logoBgr._Not();
+         logoA._Not();
+         Image<Gray, Byte>[] channels = logoBgr.Split();
+         channels = new Image<Gray, byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0)) };
+         Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
+         logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
+         logoBgra.Save("EmguCVLogo.gif");
 
-            Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
-            for (int i = 0; i < 92; i++)
-                bg_header[i, 0] = new Bgr(210, 210 - i*0.4, 210 - i*0.9);
-            bg_header.Save("bg_header.gif");
-        }
+         Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
+         for (int i = 0; i < 92; i++)
+            bg_header[i, 0] = new Bgr(210, 210 - i * 0.4, 210 - i * 0.9);
+         bg_header.Save("bg_header.gif");
+      }
 
-        public void TestCvNamedWindow()
-        {
-            String win1 = "Test Window"; //The name of the window
-            CvInvoke.cvNamedWindow(win1); //Create the window using the specific name
+      public void TestCvNamedWindow()
+      {
+         String win1 = "Test Window"; //The name of the window
+         CvInvoke.cvNamedWindow(win1); //Create the window using the specific name
 
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) //Create an image of 400x200 of Blue color
-            {
-                MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0); //Create the font
-                img.Draw("Hello, world", ref f, new Point2D<int>(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) //Create an image of 400x200 of Blue color
+         {
+            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0); //Create the font
+            img.Draw("Hello, world", ref f, new Point2D<int>(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
 
-                CvInvoke.cvShowImage(win1, img.Ptr); //Show the image
-                CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
-                CvInvoke.cvDestroyWindow(win1); //Destory the window
-            }
-        }
+            CvInvoke.cvShowImage(win1, img.Ptr); //Show the image
+            CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
+            CvInvoke.cvDestroyWindow(win1); //Destory the window
+         }
+      }
 
-        public void TestConvert()
-        {
-            Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
-            Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
-            Application.Run(new ImageViewer(g2));
-        }
+      public void TestConvert()
+      {
+         Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
+         Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
+         Application.Run(new ImageViewer(g2));
+      }
 
-        public void TestHorizontalLine()
-        {
-            Point2D<int> p1 = new Point2D<int>(10, 10);
-            Point2D<int> p2 = new Point2D<int>(20, 10);
-            LineSegment2D<int> l1 = new LineSegment2D<int>(p1, p2);
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
-            img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
+      public void TestHorizontalLine()
+      {
+         Point2D<int> p1 = new Point2D<int>(10, 10);
+         Point2D<int> p2 = new Point2D<int>(20, 10);
+         LineSegment2D<int> l1 = new LineSegment2D<int>(p1, p2);
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
+         img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
+         Application.Run(new ImageViewer(img));
+      }
+
+      public void TestRectangle()
+      {
+         Point2D<double> p1 = new Point2D<double>(1.1, 2.2);
+         Point2D<double> p2 = new Point2D<double>(2.2, 4.4);
+         Rectangle<double> rect = new Rectangle<double>();
+         rect.Center = p1;
+         rect.Size = p2;
+
+         Map<Gray, Byte> map = new Map<Gray, Byte>(new Rectangle<double>(new Point2D<double>(2.0, 4.0), new Point2D<double>(4.0, 8.0)), new Point2D<double>(0.1, 0.1), new Gray(255.0));
+         map.Draw<double>(rect, new Gray(0.0), 1);
+
+         Rectangle<double> roi = map.ROI;
+         roi.Height /= 2.0;
+         map.ROI = roi;
+
+         Application.Run(new ImageViewer(map));
+      }
+
+      public void testEllipseFitting()
+      {
+         System.Random r = new Random();
+
+         Image<Gray, byte> img = new Image<Gray, byte>(400, 400, new Gray(0.0));
+         List<Point2D<int>> pts = new List<Point2D<int>>();
+         for (int i = 0; i <= 100; i++)
+         {
+            int x = r.Next(100) + 20;
+            int y = r.Next(300) + 50;
+            img[y, x] = new Gray(255.0);
+            pts.Add(new Point2D<int>(x, y));
+         }
+
+         Ellipse<float> e = PointCollection.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
+
+         img.Draw(e, new Gray(120.0), 1);
+         Application.Run(new ImageViewer(img));
+      }
+
+      /*
+      public void TestIpp()
+      {
+          Trace.WriteLine(String.Format("Ipp Used: {0}", Emgu.CV.Utils.IppUsed()));
+      }*/
+
+      /*
+      [Test]
+      public void TestRandom()
+      {
+          using (Image<Bgr, byte> img = new Image<Bgr, byte>(50, 50))
+          {
+              img.SetRandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
+              Application.Run(new ImageViewer(img.ToBitmap()));
+          }
+      }*/
+
+      public void CameraTest()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         Application.Run(new TestCamera());
+      }
+
+      public void TestImageLoader()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
+         using (Image<Bgr, Single> img2 = img.Resize(100, 100, true))
+         {
+            Application.Run(new ImageViewer(img2));
+            Rectangle<double> r = img2.ROI;
+            r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);
+            img2.ROI = r;
+            Application.Run(new ImageViewer(img2));
+         }
+      }
+
+      public void TestBgr()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
+         {
             Application.Run(new ImageViewer(img));
-        }
-
-        public void TestRectangle()
-        {
-            Point2D<double> p1 = new Point2D<double>(1.1, 2.2);
-            Point2D<double> p2 = new Point2D<double>(2.2, 4.4);
-            Rectangle<double> rect = new Rectangle<double>();
-            rect.Center = p1;
-            rect.Size = p2;
-
-            Map<Gray, Byte> map = new Map<Gray, Byte>(new Rectangle<double>(new Point2D<double>(2.0, 4.0), new Point2D<double>(4.0, 8.0)), new Point2D<double>(0.1, 0.1), new Gray(255.0));
-            map.Draw<double>(rect, new Gray(0.0), 1);
-
-            Rectangle<double> roi = map.ROI;
-            roi.Height /= 2.0;
-            map.ROI = roi;
-
-            Application.Run(new ImageViewer(map));
-        }
-
-        public void testEllipseFitting()
-        {
-            System.Random r = new Random();
-
-            Image<Gray, byte> img = new Image<Gray, byte>(400, 400, new Gray(0.0));
-            List<Point2D<int>> pts = new List<Point2D<int>>();
-            for (int i = 0; i <= 100; i++)
-            {
-                int x = r.Next(100) + 20;
-                int y = r.Next(300) + 50;
-                img[y, x] = new Gray(255.0);
-                pts.Add(new Point2D<int>(x, y));
-            }
-
-            Ellipse<float> e = PointCollection.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
-
-            img.Draw(e, new Gray(120.0), 1);
-            Application.Run(new ImageViewer(img));
-        }
-
-        /*
-        public void TestIpp()
-        {
-            Trace.WriteLine(String.Format("Ipp Used: {0}", Emgu.CV.Utils.IppUsed()));
-        }*/
-
-        /*
-        [Test]
-        public void TestRandom()
-        {
-            using (Image<Bgr, byte> img = new Image<Bgr, byte>(50, 50))
-            {
-                img._RandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
-                Application.Run(new ImageViewer(img.ToBitmap()));
-            }
-        }*/
-
-        public void CameraTest()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TestCamera());
-        }
-
-        public void TestImageLoader()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
-            using (Image<Bgr, Single> img2 = img.Resize(100, 100, true))
-            {
-                Application.Run(new ImageViewer(img2));
-                Rectangle<double> r = img2.ROI;
-                r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);
-                img2.ROI = r;
-                Application.Run(new ImageViewer(img2));
-            }
-        }
-
-        public void TestBgr()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
-            {
-                Application.Run(new ImageViewer(img));
-                Image<Gray, Byte>[] channels = img.Split();
-                foreach (Image<Gray, Byte> i in channels)
-                    Application.Run(new ImageViewer(i));
-            }
-        }
-
-        public void TestBgra()
-        {
-            Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
-            img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
             Image<Gray, Byte>[] channels = img.Split();
             foreach (Image<Gray, Byte> i in channels)
-                Application.Run(new ImageViewer(i));
+               Application.Run(new ImageViewer(i));
+         }
+      }
+
+      public void TestBgra()
+      {
+         Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
+         img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
+         Image<Gray, Byte>[] channels = img.Split();
+         foreach (Image<Gray, Byte> i in channels)
+            Application.Run(new ImageViewer(i));
+         Application.Run(new ImageViewer(img));
+      }
+
+      public void TestFont()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
+         {
+            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
+            {
+               img.Draw("h.", ref f, new Point2D<int>(100, 10), new Gray(255.0));
+               img.Draw("a.", ref f, new Point2D<int>(100, 50), new Gray(255.0));
+            }
             Application.Run(new ImageViewer(img));
-        }
+         }
+      }
 
-        public void TestFont()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
+      public void TestHistogram()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
+         using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
+         {
+            Image<Gray, Byte>[] HSVs = img2.Split();
+
+            using (Histogram h = new Histogram(new int[1] { 20 }, new float[1] { 0.0f }, new float[1] { 180.0f }))
             {
-                MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
-                {
-                    img.Draw("h.", ref f, new Point2D<int>(100, 10), new Gray(255.0));
-                    img.Draw("a.", ref f, new Point2D<int>(100, 50), new Gray(255.0));
-                }
-                Application.Run(new ImageViewer(img));
+               h.Accumulate(new Image<Gray, Byte>[1] { HSVs[0] });
+               using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
+                  Application.Run(new ImageViewer(bpj));
             }
-        }
 
-        public void TestHistogram()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
-            using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
+            foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
+         }
+      }
+
+      public void TestGoodFeature()
+      {
+         using (Image<Gray, Byte> img = new Image<Gray, Byte>("stuff.jpg"))
+         {
+            Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5, false, 0);
+            foreach (Point2D<float> p in pts[0])
+               img.Draw<float>(new Circle<float>(p, 3.0f), new Gray(255.0), 1);
+            Application.Run(new ImageViewer(img));
+         }
+      }
+
+      public void TestSplitMerge()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
+         {
+            using (Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>())
             {
-                Image<Gray, Byte>[] HSVs = img2.Split();
+               Image<Gray, Byte>[] imgs = imgHsv.Split();
+               using (Image<Hsv, Byte> imgHsv2 = new Image<Hsv, Byte>(imgs))
+               {
+                  using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
+                  {
+                     LineSegment2D<int>[][] lines = imgHsv2.HughLines(
+                         new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
+                         1, Math.PI / 180.0, 50, 50, 10);
 
-                using (Histogram h = new Histogram(new int[1] { 20 }, new float[1] { 0.0f }, new float[1] { 180.0f }))
-                {
-                    h.Accumulate(new Image<Gray, Byte>[1] { HSVs[0] });
-                    using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
-                        Application.Run(new ImageViewer(bpj));
-                }
+                     Circle<float>[][] circles = img.HughCircles(
+                         new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
+                         4.0, 1.0, 0, 0);
 
-                foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
-            }
-        }
+                     for (int i = 0; i < lines[0].Length; i++)
+                     {
+                        imageRGB.Draw(lines[0][i], new Bgr(255.0, 0.0, 0.0), 1);
+                     }
 
-        public void TestGoodFeature()
-        {
-            using (Image<Gray, Byte> img = new Image<Gray, Byte>("stuff.jpg"))
-            {
-                Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5, false, 0);
-                foreach (Point2D<float> p in pts[0])
-                    img.Draw<float>(new Circle<float>(p, 3.0f), new Gray(255.0), 1);
-                Application.Run(new ImageViewer(img));
-            }
-        }
+                     for (int i = 0; i < lines[1].Length; i++)
+                     {
+                        imageRGB.Draw(lines[1][i], new Bgr(0.0, 255.0, 0.0), 1);
+                     }
 
-        public void TestSplitMerge()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
-            {
-                using (Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>())
-                {
-                    Image<Gray, Byte>[] imgs = imgHsv.Split();
-                    using (Image<Hsv, Byte> imgHsv2 = new Image<Hsv, Byte>(imgs))
-                    {
-                        using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
+                     for (int i = 0; i < lines[2].Length; i++)
+                     {
+                        imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
+                     }
+
+                     foreach (Circle<float>[] cs in circles)
+                        foreach (Circle<float> c in cs)
+                           imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
+
+                     Application.Run(new ImageViewer(imageRGB));
+
+                     bool applied = false;
+                     foreach (Circle<float>[] cs in circles)
+                        foreach (Circle<float> c in cs)
                         {
-                            LineSegment2D<int>[][] lines = imgHsv2.HughLines(
-                                new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
-                                1, Math.PI / 180.0, 50, 50, 10);
+                           if (!applied)
+                           {
+                              Circle<float> cir = c;
+                              cir.Radius += 30;
+                              using (Image<Gray, Byte> mask = new Image<Gray, Byte>(imageRGB.Width, imageRGB.Height, new Gray(0.0)))
+                              {
+                                 mask.Draw(cir, new Gray(255.0), -1);
 
-                            Circle<float>[][] circles = img.HughCircles(
-                                new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
-                                4.0, 1.0, 0, 0);
+                                 using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
+                                 {
 
-                            for (int i = 0; i < lines[0].Length; i++)
-                            {
-                                imageRGB.Draw(lines[0][i], new Bgr(255.0, 0.0, 0.0), 1);
-                            }
-
-                            for (int i = 0; i < lines[1].Length; i++)
-                            {
-                                imageRGB.Draw(lines[1][i], new Bgr(0.0, 255.0, 0.0), 1);
-                            }
-
-                            for (int i = 0; i < lines[2].Length; i++)
-                            {
-                                imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
-                            }
-
-                            foreach (Circle<float>[] cs in circles)
-                                foreach (Circle<float> c in cs)
-                                    imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
-
-                            Application.Run(new ImageViewer(imageRGB));
-
-                            bool applied = false;
-                            foreach (Circle<float>[] cs in circles)
-                                foreach (Circle<float> c in cs)
-                                {
-                                    if (!applied)
-                                    {
-                                        Circle<float> cir = c;
-                                        cir.Radius += 30;
-                                        using (Image<Gray, Byte> mask = new Image<Gray, Byte>(imageRGB.Width, imageRGB.Height, new Gray(0.0)))
-                                        {
-                                            mask.Draw(cir, new Gray(255.0), -1);
-
-                                            using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
-                                            {
-
-                                            }
-                                        }
-                                        applied = true;
-                                    }
-                                }
+                                 }
+                              }
+                              applied = true;
+                           }
                         }
-                    }
+                  }
+               }
 
-                    foreach (Image<Gray, Byte> i in imgs)
-                        i.Dispose();
-                }
+               foreach (Image<Gray, Byte> i in imgs)
+                  i.Dispose();
             }
-        }
+         }
+      }
 
-        public void TestHaarPerformance()
-        {
-            HaarCascade face = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
-            Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
-            DateTime startTime = DateTime.Now;
-            img.DetectHaarCascade(face);
-            TimeSpan detectionTime = DateTime.Now.Subtract(startTime);
-            Trace.WriteLine(String.Format( "Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, detectionTime.TotalMilliseconds)); 
-        }
+      public void TestHaarPerformance()
+      {
+         HaarCascade face = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
+         Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
+         DateTime startTime = DateTime.Now;
+         img.DetectHaarCascade(face);
+         TimeSpan detectionTime = DateTime.Now.Subtract(startTime);
+         Trace.WriteLine(String.Format("Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, detectionTime.TotalMilliseconds));
+      }
 
-        public void TestFaceDetect()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+      public void TestFaceDetect()
+      {
+         Application.EnableVisualStyles();
+         Application.SetCompatibleTextRenderingDefault(false);
 
-            using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
-            using (Image<Bgr, Byte> smooth = image.GaussianSmooth(7))
-            {
-                DateTime t1 = DateTime.Now;
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (Image<Bgr, Byte> smooth = image.GaussianSmooth(7))
+         {
+            DateTime t1 = DateTime.Now;
 
-                FaceDetector fd = new FaceDetector();
-                Face<Byte> f = fd.Detect(smooth)[0];
-                TimeSpan ts = DateTime.Now.Subtract(t1);
-                Trace.WriteLine(ts.TotalMilliseconds);
+            FaceDetector fd = new FaceDetector();
+            Face<Byte> f = fd.Detect(smooth)[0];
+            TimeSpan ts = DateTime.Now.Subtract(t1);
+            Trace.WriteLine(ts.TotalMilliseconds);
 
-                Eye<Byte> e = f.DetectEye()[0];
+            Eye<Byte> e = f.DetectEye()[0];
 
-                Application.Run(new ImageViewer(e.RGB));
+            Application.Run(new ImageViewer(e.RGB));
 
-                /*
-                Image<Rgb, Byte> res = f.RGB.BlankClone();
-                res.Draw(f.SkinContour, new Rgb(255.0, 255.0, 255.0), new Rgb(255.0, 255.0, 255.0), -1);
-                Application.Run(new ImageViewer(res.ToBitmap()));
-                */
-            }
-
-            #region old code
             /*
+            Image<Rgb, Byte> res = f.RGB.BlankClone();
+            res.Draw(f.SkinContour, new Rgb(255.0, 255.0, 255.0), new Rgb(255.0, 255.0, 255.0), -1);
+            Application.Run(new ImageViewer(res.ToBitmap()));
+            */
+         }
+
+         #region old code
+         /*
             using (HaarCascade h = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml"))
             using (Image<Rgb> image = Emgu.CV.Utils.LoadRGBImage("lena.jpg"))
             using (Image<Gray> gray = image.ConvertColor<Gray>())
@@ -410,148 +411,199 @@ namespace Emgu.CV.Test
                     }
                 }
             }*/
-            #endregion
-        }
+         #endregion
+      }
 
-        public void TestCompression()
-        {
-            Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
-            DateTime t1 = DateTime.Now;
-            int l1 = image.Bytes.Length;
-            DateTime t2 = DateTime.Now;
-            image.SerializationCompressionRatio = 9;
-            int l2 = image.Bytes.Length;
-            DateTime t3 = DateTime.Now;
-            TimeSpan ts1 = t2.Subtract(t1);
-            TimeSpan ts2 = t3.Subtract(t2);
-            Trace.WriteLine(String.Format("Image Size: {0} x {1}", image.Width, image.Height));
-            Trace.WriteLine(String.Format("T1: {0}, T2: {1}, Delta: {2}", ts1.TotalMilliseconds, ts2.TotalMilliseconds, ts2.TotalMilliseconds - ts1.TotalMilliseconds));
+      public void TestCompression()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
+         DateTime t1 = DateTime.Now;
+         int l1 = image.Bytes.Length;
+         DateTime t2 = DateTime.Now;
+         image.SerializationCompressionRatio = 9;
+         int l2 = image.Bytes.Length;
+         DateTime t3 = DateTime.Now;
+         TimeSpan ts1 = t2.Subtract(t1);
+         TimeSpan ts2 = t3.Subtract(t2);
+         Trace.WriteLine(String.Format("Image Size: {0} x {1}", image.Width, image.Height));
+         Trace.WriteLine(String.Format("T1: {0}, T2: {1}, Delta: {2}", ts1.TotalMilliseconds, ts2.TotalMilliseconds, ts2.TotalMilliseconds - ts1.TotalMilliseconds));
 
-            Trace.WriteLine(
-                String.Format(
-                "Original size: {0}; Compressed Size: {1}, Compression Ratio: {2}%",
-                l1,
-                l2,
-                l2 * 100.0 / l1));
-        }
+         Trace.WriteLine(
+             String.Format(
+             "Original size: {0}; Compressed Size: {1}, Compression Ratio: {2}%",
+             l1,
+             l2,
+             l2 * 100.0 / l1));
+      }
 
-        public void TestMarshalIplImage()
-        {
-            Image<Bgr, Single> image = new Image<Bgr, float>(2041, 1023);
-            DateTime timeStart = DateTime.Now;
-            for (int i = 0; i < 10000; i++)
+      public void TestMarshalIplImage()
+      {
+         Image<Bgr, Single> image = new Image<Bgr, float>(2041, 1023);
+         DateTime timeStart = DateTime.Now;
+         for (int i = 0; i < 10000; i++)
+         {
+            MIplImage img = image.MIplImage;
+         }
+         TimeSpan timeSpan = DateTime.Now.Subtract(timeStart);
+         Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
+      }
+
+      public void TestReadImage()
+      {
+         Application.Run(new ImageViewer(new Image<Gray, Byte>("lena.jpg")));
+         Application.Run(new ImageViewer(new Image<Bgr, Byte>("lena.jpg").Convert<Gray, Byte>()));
+      }
+
+      public void TestImageViewer()
+      {
+         Application.Run(new ImageViewer(null));
+      }
+
+      public void TestContour()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
+         img._GaussianSmooth(3);
+         img = img.Canny(new Gray(80), new Gray(50));
+         Image<Gray, Byte> res = img.CopyBlank();
+         res.SetValue(255);
+
+         Contour contour = img.FindContours();
+
+         while (contour != null)
+         {
+            Contour approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+
+            if (approx.Convex && Math.Abs(approx.Area) > 20.0)
             {
-                MIplImage img = image.MIplImage;
+               MCvPoint[] vertices = approx.ToArray();
+
+               LineSegment2D<int>[] edges = PointCollection.PolyLine<int>(vertices, true);
+
+               res.DrawPolyline(vertices, true, new Gray(200), 1);
             }
-            TimeSpan timeSpan = DateTime.Now.Subtract(timeStart);
-            Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
-        }
+            contour = contour.HNext;
+         }
+         Application.Run(new ImageViewer(res));
+      }
 
-        public void TestReadImage()
-        {
-            Application.Run(new ImageViewer(new Image<Gray, Byte>("lena.jpg")));
-            Application.Run(new ImageViewer(new Image<Bgr, Byte>("lena.jpg").Convert<Gray, Byte>()));
-        }
+      private void Testmap()
+      {
+         Point2D<double> center = new Point2D<double>(-110032, -110032);
 
-        public void TestImageViewer()
-        {
-            Application.Run(new ImageViewer(null));
-        }
-
-        public void TestContour()
-        {
-            Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-            img._GaussianSmooth(3);
-            img = img.Canny(new Gray(80), new Gray(50));
-            Image<Gray, Byte> res = img.CopyBlank();
-            res.SetValue(255);
-
-            Contour contour = img.FindContours();
-
-            while (contour != null)
-            {
-                Contour approx = contour.ApproxPoly(contour.Perimeter * 0.05);
-
-                if (approx.Convex && Math.Abs(approx.Area) > 20.0)
-                {
-                    MCvPoint[] vertices = approx.ToArray();
-
-                    LineSegment2D<int>[] edges = PointCollection.PolyLine<int>(vertices, true);
-
-                    res.DrawPolyline(vertices, true, new Gray(200), 1);
-                }
-                contour = contour.HNext;
-            }
-            Application.Run(new ImageViewer(res));
-        }
-
-        private void Testmap()
-        {
-            Point2D<double> center = new Point2D<double>(-110032, -110032);
-
-            Map<Gray, Byte> map = new Map<Gray, byte>(new Rectangle<double>(center, 10000, 12000), new Point2D<double>(100, 100));
-            Point2D<float>[] pts = new Point2D<float>[]
+         Map<Gray, Byte> map = new Map<Gray, byte>(new Rectangle<double>(center, 10000, 12000), new Point2D<double>(100, 100));
+         Point2D<float>[] pts = new Point2D<float>[]
             {
                 new Point2D<float>( (float)center.X + 3120,(float) center.Y + 2310),
                 new Point2D<float>((float)center.X -220, (float) center.Y-4120)
             };
-            map.DrawPolyline<float>(pts, false, new Gray(255.0), 1);
-            Triangle2D<float> tri = new Triangle2D<float>(
-                new Point2D<float>((float)center.X - 1000.0f, (float) center.Y+200.0f),
-                new Point2D<float>((float)center.X - 3000.0f, (float) center.Y+200.0f),
-                new Point2D<float>((float)center.X -700f, (float) center.Y+800.0f));
-            map.Draw(tri, new Gray(80), 0);
-            map.Draw(tri, new Gray(255), 1);
-            Application.Run(new Emgu.CV.UI.ImageViewer(map));
-        }
+         map.DrawPolyline<float>(pts, false, new Gray(255.0), 1);
+         Triangle2D<float> tri = new Triangle2D<float>(
+             new Point2D<float>((float)center.X - 1000.0f, (float)center.Y + 200.0f),
+             new Point2D<float>((float)center.X - 3000.0f, (float)center.Y + 200.0f),
+             new Point2D<float>((float)center.X - 700f, (float)center.Y + 800.0f));
+         map.Draw(tri, new Gray(80), 0);
+         map.Draw(tri, new Gray(255), 1);
+         Application.Run(new Emgu.CV.UI.ImageViewer(map));
+      }
 
-        private void TestConvexHull()
-        {
-            Random r = new Random();
-            Point2D<float>[] pts = new Point2D<float>[40];
-            for (int i = 0; i < pts.Length; i++)
+      private void TestConvexHull()
+      {
+         Random r = new Random();
+         Point2D<float>[] pts = new Point2D<float>[40];
+         for (int i = 0; i < pts.Length; i++)
+         {
+            pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
+         }
+
+         MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
+         foreach (Point2D<float> p in pts)
+         {
+            img.Draw(new Circle<float>(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
+         }
+
+         MCvPoint[] convexHull = Array.ConvertAll<MCvPoint2D32f, MCvPoint>(hull, delegate(MCvPoint2D32f p) { return new MCvPoint((int)p.x, (int)p.y); });
+         img.DrawPolyline(
+             convexHull,
+             true, new Bgr(255.0, 0.0, 0.0), 1);
+
+         Application.Run(new ImageViewer(img));
+
+      }
+
+      public void TestKalman()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100);
+
+         // state is (phi, delta_phi) - angle and angle increment 
+         Matrix<float> state = new Matrix<float>(2, 1);
+
+         // start with random position and velocity
+         state.SetRandNormal(new MCvScalar(0.0), new MCvScalar(0.1));
+
+         #region initialize Kalman filter
+         Kalman tracker = new Kalman(2, 1, 0);
+         tracker.TransitionMatrix.Data = new float[,] { { 1, 1 }, { 0, 1 } }; // phi_t = phi_{t-1} + delta_phi
+         tracker.MeasurementMatrix.SetIdentity(); //the measurement is [ phi, delta_phi ]
+         tracker.ProcessNoiseCovariance.SetIdentity(new MCvScalar(1.0e-5));
+         tracker.MeasurementNoiseCovariance.SetIdentity(new MCvScalar(1.0e-1));
+         tracker.ErrorCovariancePost.SetIdentity();
+         #endregion 
+
+         System.Converter<double, Point2D<float>> angleToPoint =
+            delegate(double radianAngle)
             {
-                pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
-            }
+               return new Point2D<float>(
+                  (float)(img.Width / 2 + img.Width / 3 * Math.Cos(radianAngle)),
+                  (float)(img.Height / 2 - img.Width / 3 * Math.Sin(radianAngle)));
+            };
 
-            MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+         Emgu.Utils.Action<Point2D<float>, Bgr> drawCross =
+           delegate(Point2D<float> point, Bgr color)
+           {
+              img.Draw(new Cross2D<float>(point, 3, 3), color, 1);
+           };
 
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
-            foreach (Point2D<float> p in pts)
-            {
-                img.Draw(new Circle<float>(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
-            }
+         CvInvoke.cvNamedWindow("Kalman");
 
-            MCvPoint[] convexHull = Array.ConvertAll<MCvPoint2D32f, MCvPoint>(hull, delegate(MCvPoint2D32f p) { return new MCvPoint((int)p.x, (int)p.y); });
-            img.DrawPolyline(
-                convexHull,
-                true, new Bgr(255.0, 0.0, 0.0), 1);
+         while (true)
+         {
+            Point2D<float> statePoint = angleToPoint(state[0, 0]);
 
-            Application.Run(new ImageViewer(img));
+            #region predict point position
+            Matrix<float> prediction = tracker.Predict();
+            Point2D<float> predictPoint = angleToPoint(prediction[0, 0]);
+            #endregion
 
-        }
+            #region generate synthetic measurement
+            Matrix<float> measurementNoise = new Matrix<float>(1, 1);
+            measurementNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(tracker.MeasurementNoiseCovariance[0, 0])));
+            Matrix<float> measurement = tracker.MeasurementMatrix * state + measurementNoise;
+            Point2D<float> measurementPoint = angleToPoint(measurement[0, 0]);
+            #endregion
 
-        public void TestKalman()
-        {
-            Matrix<float> initialState = new Matrix<float>(new float[] {0.5f, 0.5f});
-            
-            Matrix<float> stateTransitionMatrix = new Matrix<float>(2, 2);
-            stateTransitionMatrix._SetIdentity(new MCvScalar(1.0));
+            #region draw the state, prediction and the measurement
+            img.SetValue(new Bgr()); //clear the image
+            drawCross(statePoint, new Bgr(Color.White));
+            drawCross(measurementPoint, new Bgr(Color.Red));
+            drawCross(predictPoint, new Bgr(Color.Green));
+            img.Draw(new LineSegment2D<float>(statePoint, predictPoint), new Bgr(Color.Magenta), 1);
+            #endregion
 
-            Matrix<float> controlMatrix = new Matrix<float>(new float[] { 0.0f, 0.0f });
-            
-            Matrix<float> measurementMatrix = new Matrix<float>(2, 2);
-            measurementMatrix._SetIdentity(new MCvScalar(1.0));
-            
-            Matrix<float> processNoise = new Matrix<float>(2, 2);
-            processNoise._SetIdentity(new MCvScalar(0.1));
+            // adjust Kalman filter state 
+            tracker.Correct(measurement);
 
-            Matrix<float> measurementNoise = new Matrix<float>(2, 2);
-            measurementMatrix._SetIdentity(new MCvScalar(0.1));
+            #region update synthetic state
+            Matrix<float> processNoise = new Matrix<float>(2, 1);
+            processNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(tracker.ProcessNoiseCovariance[0, 0])));
+            state = tracker.TransitionMatrix * state + processNoise;
+            #endregion
 
-            Kalman tracker = new Kalman(initialState, stateTransitionMatrix, measurementMatrix, processNoise, measurementNoise);
-            tracker.Predict( new Matrix<float>(new float[] {1.0f, 1.0f}));
-            Matrix<float> state =  tracker.PredictedState;
-        }
-    }
+            CvInvoke.cvShowImage("Kalman", img);
+            int code = CvInvoke.cvWaitKey(100);
+            if (code > 0) break;
+         }
+      }
+   }
 }

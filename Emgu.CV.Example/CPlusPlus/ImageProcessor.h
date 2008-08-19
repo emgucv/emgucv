@@ -3,12 +3,12 @@
 
 namespace CPlusPlus 
 {
-	using namespace Emgu::CV;
-	using namespace System;
+   using namespace Emgu::CV;
+   using namespace System;
 
-	public ref class ImageProcessor
-	{
-	public:
-		static array<Emgu::CV::Image<Bgr^, Byte>^>^ ProcessImage();
-	};
+   public ref class ImageProcessor
+   {
+   public:
+      static array<Emgu::CV::Image<Bgr^, Byte>^>^ ProcessImage();
+   };
 }

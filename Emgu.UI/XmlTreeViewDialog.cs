@@ -9,27 +9,27 @@ using System.Xml;
 
 namespace Emgu.UI
 {
-    /// <summary>
-    /// Display an xml document in a tree view dialog
-    /// </summary>
-    public partial class XmlTreeViewDialog : Form
-    {
-        /// <summary>
-        /// Create the tree view dialog
-        /// </summary>
-        public XmlTreeViewDialog()
-        {
-            InitializeComponent();
-        }
+   /// <summary>
+   /// Display an xml document in a tree view dialog
+   /// </summary>
+   public partial class XmlTreeViewDialog : Form
+   {
+      /// <summary>
+      /// Create the tree view dialog
+      /// </summary>
+      public XmlTreeViewDialog()
+      {
+         InitializeComponent();
+      }
 
-        /// <summary>
-        /// Create the tree view dialog to display the <paramref name="doc"/>
-        /// </summary>
-        /// <param name="doc">The document to be displayed</param>
-        public XmlTreeViewDialog(XmlDocument doc)
-            :this()
-        {
-            xmlTreeView1.XmlDocument = doc;
-        }
-    }
+      /// <summary>
+      /// Create the tree view dialog to display the <paramref name="doc"/>
+      /// </summary>
+      /// <param name="doc">The document to be displayed</param>
+      public XmlTreeViewDialog(XmlDocument doc)
+         : this()
+      {
+         xmlTreeView1.XmlDocument = doc;
+      }
+   }
 }

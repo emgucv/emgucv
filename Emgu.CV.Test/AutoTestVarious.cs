@@ -167,7 +167,7 @@ namespace Emgu.CV.Test
         public void TestRectangle()
         {
             Matrix<Byte> mat = new Matrix<Byte>(1, 4);
-            mat._RandUniform(new MCvScalar(), new MCvScalar(255.0));
+            mat.SetRandUniform(new MCvScalar(), new MCvScalar(255.0));
 
             MCvRect rect1 = new MCvRect((int)mat[0, 0], (int)mat[0, 1], (int)mat[0, 2], (int)mat[0, 3]);
             Rectangle<double> rectangle = new Rectangle<double>(rect1);
@@ -297,7 +297,7 @@ namespace Emgu.CV.Test
         public void TestGrayscaleBitmapConstructor()
         {
             Image<Bgra, Byte> img = new Image<Bgra, byte>(320, 240);
-            img._RandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
+            img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
             img.Save("tmp.png");
 
             DateTime t0 = DateTime.Now;

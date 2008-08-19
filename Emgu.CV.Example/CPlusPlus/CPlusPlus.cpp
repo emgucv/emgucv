@@ -9,11 +9,11 @@ using namespace CPlusPlus;
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
 {
-	// Enabling Windows XP visual effects before any controls are created
-	Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false); 
+   // Enabling Windows XP visual effects before any controls are created
+   Application::EnableVisualStyles();
+   Application::SetCompatibleTextRenderingDefault(false); 
 
-	// Create the main window and run it
-	Application::Run(gcnew MainForm(ImageProcessor::ProcessImage() ));
-	return 0;
+   // Create the main window and run it
+   Application::Run(gcnew MainForm(ImageProcessor::ProcessImage() ));
+   return 0;
 }

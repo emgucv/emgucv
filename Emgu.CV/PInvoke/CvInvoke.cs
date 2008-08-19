@@ -732,11 +732,11 @@ namespace Emgu.CV
       /// <returns></returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvInitImageHeader(
-         IntPtr image, 
-         MCvSize size, 
+         IntPtr image,
+         MCvSize size,
          int depth,
-         int channels, 
-         int origin, 
+         int channels,
+         int origin,
          int align);
 
       /// <summary>
@@ -767,11 +767,11 @@ namespace Emgu.CV
       /// <returns></returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvInitMatHeader(
-         IntPtr mat, 
-         int rows, 
-         int cols, 
+         IntPtr mat,
+         int rows,
+         int cols,
          CV.CvEnum.MAT_DEPTH type,
-         IntPtr data, 
+         IntPtr data,
          int step);
 
       /// <summary>
@@ -1173,12 +1173,12 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvCircle(
-         IntPtr img, 
-         MCvPoint center, 
-         int radius, 
+         IntPtr img,
+         MCvPoint center,
+         int radius,
          MCvScalar color,
-         int thickness, 
-         [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType, 
+         int thickness,
+         [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
          int shift);
 
       /// <summary>
@@ -1439,11 +1439,11 @@ namespace Emgu.CV
       /// <param name="mask">The optional mask that is used to select a subarray</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvMinMaxLoc(
-         IntPtr arr, 
-         ref double minVal, 
+         IntPtr arr,
+         ref double minVal,
          ref double maxVal,
-         ref MCvPoint minLoc, 
-         ref MCvPoint maxLoc, 
+         ref MCvPoint minLoc,
+         ref MCvPoint maxLoc,
          IntPtr mask);
 
       /// <summary>
@@ -1847,7 +1847,7 @@ namespace Emgu.CV
       /// <param name="image">The input 8-bit 3-channel image</param>
       /// <param name="markers">The input/output 32-bit single-channel image (map) of markers. </param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvWatershed( IntPtr image, IntPtr markers );
+      public static extern void cvWatershed(IntPtr image, IntPtr markers);
 
       #region Computational Geometry
       /// <summary>
@@ -3055,15 +3055,16 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments hu_moments);
 
+      #region Kalman Filter
       /// <summary>
       /// Allocates CvKalman and all its matrices and initializes them somehow. 
       /// </summary>
-      /// <param name="dynam_params">dimensionality of the state vector</param>
-      /// <param name="measure_params">dimensionality of the measurement vector </param>
-      /// <param name="control_params">dimensionality of the control vector </param>
+      /// <param name="dynamParams">dimensionality of the state vector</param>
+      /// <param name="measureParams">dimensionality of the measurement vector </param>
+      /// <param name="controlParams">dimensionality of the control vector </param>
       /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvCreateKalman(int dynam_params, int measure_params, int control_params);
+      public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
 
       /// <summary>
       /// Adjusts stochastic model state on the basis of the given measurement of the model state.
@@ -3076,14 +3077,34 @@ namespace Emgu.CV
       public static extern IntPtr cvKalmanCorrect(IntPtr kalman, IntPtr measurement);
 
       /// <summary>
+      /// Adjusts stochastic model state on the basis of the given measurement of the model state.
+      /// The function stores adjusted state at kalman->state_post and returns it on output
+      /// </summary>
+      /// <param name="kalman">Pointer to the structure to be updated</param>
+      /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
+      /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvKalmanCorrect(ref MCvKalman kalman, IntPtr measurement);
+
+      /// <summary>
       /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
       /// The function returns the estimated state
       /// </summary>
       /// <param name="kalman">Kalman filter state</param>
-      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (control_params=0). </param>
+      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
       /// <returns>the estimated state</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvKalmanPredict(IntPtr kalman, IntPtr control);
+
+      /// <summary>
+      /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
+      /// The function returns the estimated state
+      /// </summary>
+      /// <param name="kalman">Kalman filter state</param>
+      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
+      /// <returns>the estimated state</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvKalmanPredict(ref MCvKalman kalman, IntPtr control);
 
       /// <summary>
       /// Releases the structure CvKalman and all underlying matrices
@@ -3091,6 +3112,7 @@ namespace Emgu.CV
       /// <param name="kalman">reference of the pointer to the Kalman filter structure.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvReleaseKalman(ref IntPtr kalman);
+      #endregion
 
       /// <summary>
       /// Updates the motion history image as following:
