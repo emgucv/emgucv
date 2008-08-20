@@ -40,8 +40,8 @@
     <CopyrightText>2008 Emgu, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress />
     <FeedbackEMailLinkText />
-    <HeaderText>http://www.emgu.com/wiki</HeaderText>
-    <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
+    <HeaderText>&lt;p&gt;&lt;h3&gt;&lt;a href=http://www.emgu.com/wiki &gt;Emgu CV Wiki&lt;/a&gt;&lt;/h3&gt;&lt;/p&gt;</HeaderText>
+    <FooterText>For questions and discussions please visit &lt;a href=http://www.emgu.com/forum&gt;Emgu CV Discussion Forum&lt;/href&gt;</FooterText>
     <ProjectLinkType>Local</ProjectLinkType>
     <SdkLinkType>Msdn</SdkLinkType>
     <SdkLinkTarget>Blank</SdkLinkTarget>
