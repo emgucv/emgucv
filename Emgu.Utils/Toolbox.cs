@@ -8,27 +8,13 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace Emgu
+namespace Emgu.Util
 {
    /// <summary>
    /// utilities functions for Emgu
    /// </summary>
-   public static class Utils
+   public static class Toolbox
    {
-      /// <summary>
-      /// The type of Programming languages
-      /// </summary>
-      public enum ProgrammingLanguage
-      {
-         /// <summary>
-         /// C#
-         /// </summary>
-         CSharp,
-         /// <summary>
-         /// C++
-         /// </summary>
-         CPlusPlus
-      }
 
       /// <summary>
       /// Convert on enumeration to another using the specific convertor
@@ -271,7 +257,7 @@ namespace Emgu
       {
          int size = Marshal.SizeOf(typeof(D)) * src.Length;
          GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
-         Emgu.Utils.memcpy(dest, handle.AddrOfPinnedObject(), size);
+         memcpy(dest, handle.AddrOfPinnedObject(), size);
          handle.Free();
       }
 
@@ -290,7 +276,7 @@ namespace Emgu
          for (int i = 0; i < src.Length; i++, current += step)
          {
             GCHandle handle = GCHandle.Alloc(src[i], GCHandleType.Pinned);
-            Emgu.Utils.memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
+            memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
             handle.Free();
          }
       }
@@ -310,7 +296,7 @@ namespace Emgu
          for (int i = 0; i < dest.Length; i++, current += step)
          {
             GCHandle handle = GCHandle.Alloc(dest[i], GCHandleType.Pinned);
-            Emgu.Utils.memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), step);
+            memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), step);
             handle.Free();
          }
       }

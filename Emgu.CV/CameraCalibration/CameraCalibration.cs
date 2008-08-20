@@ -86,8 +86,8 @@ namespace Emgu.CV
          Matrix<float> translation = new Matrix<float>(3, 1);
          RotationVector3D rotation = new RotationVector3D();
 
-         Matrix<float> objectPointMatrix = PointCollection.ToMatrix(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         Matrix<float> imagePointMatrix = PointCollection.ToMatrix(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(imagePoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         Matrix<float> objectPointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         Matrix<float> imagePointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(imagePoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
 
          CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix.Ptr, imagePointMatrix.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
 
@@ -133,7 +133,7 @@ namespace Emgu.CV
           IntrinsicCameraParameters intrin,
           params Matrix<float>[] mats)
       {
-         Matrix<float> pointMatrix = PointCollection.ToMatrix(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         Matrix<float> pointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
          IntPtr dpdrot = mats.Length > 0 ? mats[0].Ptr : IntPtr.Zero;
          IntPtr dpdt = mats.Length > 1 ? mats[1].Ptr : IntPtr.Zero;
          IntPtr dpdf = mats.Length > 2 ? mats[2].Ptr : IntPtr.Zero;
@@ -169,8 +169,8 @@ namespace Emgu.CV
       /// <returns>The 3x3 homography matrix. </returns>
       public static Matrix<float> FindHomography(Point2D<float>[] srcPoints, Point2D<float>[] dstPoints)
       {
-         Matrix<float> srcPointMatrix = PointCollection.ToMatrix<float>(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(srcPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         Matrix<float> srcPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(srcPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
          return FindHomography(srcPointMatrix, dstPointMatrix);
       }
    }

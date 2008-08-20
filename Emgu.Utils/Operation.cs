@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace Emgu
+namespace Emgu.Util
 {
    /// <summary>
-   /// An operation contains a MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
+   /// An operation contains the MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
    /// </summary>
    /// <typeparam name="T">The type of instance this operation applies to</typeparam>
    public class Operation<T>
@@ -71,17 +71,17 @@ namespace Emgu
       /// Represent this operation as code
       /// </summary>
       /// <returns></returns>
-      public String ToCode(Utils.ProgrammingLanguage language)
+      public String ToCode(TypeEnum.ProgrammingLanguage language)
       {
          String res = String.Empty;
-         if (language == Utils.ProgrammingLanguage.CSharp)
+         if (language == TypeEnum.ProgrammingLanguage.CSharp)
          {
             res = String.Format("{0}.{1}({2})",
                 "{instance}",
                 Method.Name,
                 String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
          }
-         else if (language == Utils.ProgrammingLanguage.CPlusPlus)
+         else if (language == TypeEnum.ProgrammingLanguage.CPlusPlus)
          {
             res = String.Format("{0}->{1}({2})",
                 "{instance}",

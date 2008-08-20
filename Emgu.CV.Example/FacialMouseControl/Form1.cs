@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.Util;
 using System.Threading;
 using System.Runtime.InteropServices;
 
@@ -33,7 +34,7 @@ namespace FacialMouseControl
             {
                _capture = new Capture();
             }
-            catch (Emgu.PrioritizedException excpt)
+            catch (PrioritizedException excpt)
             {
                excpt.Alert(true);
                return;

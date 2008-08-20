@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.Util;
 using System.Threading;
 
 namespace CameraCapture
@@ -31,7 +32,7 @@ namespace CameraCapture
                {
                   _capture = new Capture();
                }
-               catch (Emgu.PrioritizedException excpt)
+               catch (PrioritizedException excpt)
                {
                   excpt.Alert(true);
                   return;

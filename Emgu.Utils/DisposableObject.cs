@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emgu
+namespace Emgu.Util
 {
    /// <summary>
    /// An abstract class that wrap around a disposable object

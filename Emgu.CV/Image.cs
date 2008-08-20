@@ -107,7 +107,7 @@ namespace Emgu.CV
             mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
 
             //TODO: fix the following to handle the case when input image has non 4-align byte in a row
-            Emgu.Utils.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
+            Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
             #endregion
          }
          else
@@ -369,26 +369,58 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> The average color of this image </summary>
+      /// <summary>
+      /// Get the average value on this image
+      /// </summary>
+      [Obsolete("User GetAverage() instead, will be removed in the next version")]
       public TColor Average
       {
          get
          {
-            TColor res = new TColor();
-            res.MCvScalar = CvInvoke.cvAvg(Ptr, IntPtr.Zero);
-            return res;
+            return GetAverage();
          }
       }
 
-      ///<summary> The sum for each color channel </summary>
+      /// <summary>
+      /// Get the sum for each color channel 
+      /// </summary>
+      [Obsolete("User GetSum() instead, will be removed in the next version")]
       public TColor Sum
       {
          get
          {
-            TColor res = new TColor();
-            res.MCvScalar = CvInvoke.cvSum(Ptr);
-            return res;
+            return GetSum();
          }
+      }
+
+      /// <summary>
+      /// Get the average value on this image
+      /// </summary>
+      /// <returns>The average color of the image</returns>
+      public TColor GetAverage()
+      {
+         return GetAverage(null);
+      }
+
+      /// <summary>
+      /// Get the average value on this image, using the specific mask
+      /// </summary>
+      /// <param name="mask">The mask for find the average value</param>
+      /// <returns>The average color of the masked area</returns>
+      public TColor GetAverage(Image<Gray, Byte> mask)
+      {
+         TColor res = new TColor();
+         res.MCvScalar = CvInvoke.cvAvg(Ptr, mask == null ? IntPtr.Zero : mask.Ptr);
+         return res;
+      }
+
+      ///<summary> The sum for each color channel </summary>
+      ///<returns> The sum for each color channel </returns>
+      public TColor GetSum()
+      {
+         TColor res = new TColor();
+         res.MCvScalar = CvInvoke.cvSum(Ptr);
+         return res;
       }
       #endregion
 
@@ -674,18 +706,50 @@ namespace Emgu.CV
              color.MCvScalar);
       }
 
-      ///<summary> Draw the contour with the specific color and thickness </summary>
-      public void Draw(Seq<MCvPoint> c, TColor external_color, TColor hole_color, int thickness)
+      /// <summary>
+      /// draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+      /// </summary>
+      /// <param name="c">Pointer to the first contour</param>
+      /// <param name="externalColor">Color of the external contours</param>
+      /// <param name="holeColor">Color of internal contours (holes). </param>
+      /// <param name="maxLevel">
+      /// Maximal level for drawn contours. 
+      /// If 0, only contour is drawn. 
+      /// If 1, the contour and all contours after it on the same level are drawn. 
+      /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
+      /// </param>
+      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+      public void Draw(Seq<MCvPoint> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
+      {
+         MCvPoint offset = new MCvPoint();
+         Draw(c, externalColor, holeColor, maxLevel, thickness, ref offset);
+      }
+
+      /// <summary>
+      /// draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+      /// </summary>
+      /// <param name="c">Pointer to the first contour</param>
+      /// <param name="externalColor">Color of the external contours</param>
+      /// <param name="holeColor">Color of internal contours (holes). </param>
+      /// <param name="maxLevel">
+      /// Maximal level for drawn contours. 
+      /// If 0, only contour is drawn. 
+      /// If 1, the contour and all contours after it on the same level are drawn. 
+      /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
+      /// </param>
+      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+      /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
+      public void Draw(Seq<MCvPoint> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, ref MCvPoint offset)
       {
          CvInvoke.cvDrawContours(
              Ptr,
              c.Ptr,
-             external_color,
-             hole_color,
-             0,
+             externalColor,
+             holeColor,
+             maxLevel,
              thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
-             new MCvPoint(0, 0));
+             offset);
       }
       #endregion
 
@@ -714,7 +778,7 @@ namespace Emgu.CV
       {
          using (MemStorage stor = new MemStorage())
          {
-            Emgu.Utils.Func<IImage, int, Rectangle<double>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, Rectangle<double>[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
@@ -769,7 +833,7 @@ namespace Emgu.CV
       {
          using (MemStorage stor = new MemStorage())
          {
-            Emgu.Utils.Func<IImage, int, LineSegment2D<int>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, LineSegment2D<int>[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
@@ -819,7 +883,7 @@ namespace Emgu.CV
          {
             double[] cannyThresh = cannyThreshold.Resize(4).Coordinate;
             double[] accumulatorThresh = accumulatorThreshold.Resize(4).Coordinate;
-            Emgu.Utils.Func<IImage, int, Circle<float>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, Circle<float>[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
@@ -909,7 +973,9 @@ namespace Emgu.CV
 
       #region Indexer
       /// <summary>
-      /// Get the specific channel from the current image
+      /// Get or Set the specific channel of the current image. 
+      /// For Get operation, a copy of the specific channel is returned.
+      /// For Set operation, the specific channel is copied to this image.
       /// </summary>
       /// <param name="channel">The channel to get from the current image</param>
       /// <returns>The specific channel of the current image</returns>
@@ -923,6 +989,13 @@ namespace Emgu.CV
             CvInvoke.cvCopy(Ptr, imageChannel, IntPtr.Zero);
             CvInvoke.cvSetImageCOI(Ptr, coi);
             return imageChannel;
+         }
+         set
+         {
+            IntPtr[] channels = new IntPtr[4];
+            channels.Initialize();
+            channels[channel] = value.Ptr;
+            CvInvoke.cvCvtPlaneToPix(channels[0], channels[1], channels[2], channels[3], Ptr);
          }
       }
 
@@ -1008,7 +1081,7 @@ namespace Emgu.CV
       /// <typeparam name="R">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private R[] ForEachChannel<R>(Emgu.Utils.Func<IntPtr, int, R> conv)
+      private R[] ForEachChannel<R>( Emgu.Util.Toolbox.Func<IntPtr, int, R> conv)
       {
          int channelCount = new TColor().Dimension;
          R[] res = new R[channelCount];
@@ -1032,7 +1105,7 @@ namespace Emgu.CV
       /// <typeparam name="R">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private R[] ForEachDuplicateChannel<R>(Emgu.Utils.Func<IImage, int, R> conv)
+      private R[] ForEachDuplicateChannel<R>(Emgu.Util.Toolbox.Func<IImage, int, R> conv)
       {
          int channelCount = new TColor().Dimension;
          R[] res = new R[channelCount];
@@ -1060,7 +1133,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>
       /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
       /// <param name="dest">The destination image</param>
-      private void ForEachDuplicateChannel<TOtherDepth>(Emgu.Utils.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
+      private void ForEachDuplicateChannel<TOtherDepth>(Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
       {
          int channelCount = new TColor().Dimension;
          if (channelCount == 1)
@@ -1129,7 +1202,7 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = CopyBlank();
          double[] t1 = thresh.Coordinate;
          double[] t2 = threshLinking.Coordinate;
-         Emgu.Utils.Action<IntPtr, IntPtr, int> act =
+         Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dest, int channel)
              {
                 CvInvoke.cvCanny(src, dest, t1[channel], t2[channel], 3);
@@ -1159,7 +1232,7 @@ namespace Emgu.CV
          using (Image<Gray, Single> eig_image = new Image<Gray, float>(Width, Height))
          using (Image<Gray, Single> tmp_image = new Image<Gray, float>(Width, Height))
          {
-            Emgu.Utils.Func<IImage, int, Point2D<float>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, Point2D<float>[]> detector =
                 delegate(IImage img, int channel)
                 {
                    int corner_count = maxFeaturesPerChannel;
@@ -1467,7 +1540,7 @@ namespace Emgu.CV
          Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
 
          /*
-         Emgu.Utils.Action<IntPtr, IntPtr, int> comparator = 
+         Emgu.Toolbox.Action<IntPtr, IntPtr, int> comparator = 
              delegate(IntPtr src, IntPtr dest, int channelIndex)
              {
 
@@ -1721,7 +1794,18 @@ namespace Emgu.CV
       ///<param name="alpha">the weight of <paramref name="img"/></param>
       public void RunningAvg(Image<TColor, TDepth> img, double alpha)
       {
-         CvInvoke.cvRunningAvg(img.Ptr, Ptr, alpha, IntPtr.Zero);
+         RunningAvg(img, alpha, null);
+      }
+
+      ///<summary> 
+      /// Update Running Average. <i>this</i> = (1-alpha)*<i>this</i> + alpha*img, using the mask
+      ///</summary>
+      ///<param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
+      ///<param name="alpha">The weight of <paramref name="img"/></param>
+      ///<param name="mask">The mask for the running average</param>
+      public void RunningAvg(Image<TColor, TDepth> img, double alpha, Image<Gray, Byte> mask)
+      {
+         CvInvoke.cvRunningAvg(img.Ptr, Ptr, alpha, mask == null? IntPtr.Zero : mask.Ptr);
       }
 
       /// <summary>
@@ -1741,7 +1825,7 @@ namespace Emgu.CV
       /// <summary>
       /// calculates exponent of every element of input array:
       /// dst(I)=exp(src(I))
-      /// Maximum relative error is ?7e-6. Currently, the function converts denormalized values to zeros on output.
+      /// Maximum relative error is ~7e-6. Currently, the function converts denormalized values to zeros on output.
       /// </summary>
       /// <returns>The exponent image</returns>
       public Image<TColor, TDepth> Exp()
@@ -2237,7 +2321,7 @@ namespace Emgu.CV
          Int64 srcAddress = data.Scan0.ToInt64();
          for (int i = 0; i < rows; i++, destAddress += arrayWidthStep, srcAddress += data.Stride)
          {
-            Emgu.Utils.memcpy((IntPtr)destAddress, (IntPtr)srcAddress, data.Stride);
+            Emgu.Util.Toolbox.memcpy((IntPtr)destAddress, (IntPtr)srcAddress, data.Stride);
          }
          bmp.UnlockBits(data);
       }
@@ -2267,7 +2351,7 @@ namespace Emgu.CV
                Int64 start = startPtr.ToInt64();
 
                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                  Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+                  Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
                bmp.UnlockBits(data);
                bmp.Palette = Utils.GrayscalePalette;
@@ -2305,7 +2389,7 @@ namespace Emgu.CV
                Int64 start = startPtr.ToInt64();
 
                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                  Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+                  Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
                bmp.UnlockBits(data);
                return bmp;
@@ -2338,7 +2422,7 @@ namespace Emgu.CV
             Int64 start = startPtr.ToInt64();
 
             for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-               Emgu.Utils.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+               Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
             bmp.UnlockBits(data);
 
@@ -2465,7 +2549,7 @@ namespace Emgu.CV
          int width1 = Marshal.SizeOf(typeof(TDepth)) * cols1;
          for (int row = 0; row < Height; row++, data1 += step1)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), new IntPtr(data1), width1);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), new IntPtr(data1), width1);
             System.Array.ForEach(row1, action);
          }
          handle1.Free();
@@ -2477,7 +2561,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth">The depth of the second image</typeparam>
       /// <param name="img2">The second image to perform action on</param>
       /// <param name="action">An action such that the first parameter is the a single channel of a pixel from the first image, the second parameter is the corresponding channel of the correspondind pixel from the second image </param>
-      public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Emgu.Utils.Action<TDepth, TOtherDepth> action)
+      public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Emgu.Util.Toolbox.Action<TDepth, TOtherDepth> action)
       {
          Debug.Assert(EqualSize(img2));
 
@@ -2496,8 +2580,8 @@ namespace Emgu.CV
 
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
-            Emgu.Utils.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
             for (int col = 0; col < cols1; action(row1[col], row2[col]), col++) ;
          }
          handle1.Free();
@@ -2505,7 +2589,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image</summary> 
-      public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Emgu.Utils.Func<TDepth, int, int, TOtherDepth> converter)
+      public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Emgu.Util.Toolbox.Func<TDepth, int, int, TOtherDepth> converter)
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
@@ -2526,9 +2610,9 @@ namespace Emgu.CV
 
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
             for (int col = 0; col < cols1; row2[col] = converter(row1[col], row, col / nchannel), col++) ;
-            Emgu.Utils.memcpy((IntPtr)data2, handle2.AddrOfPinnedObject(), width2);
+            Emgu.Util.Toolbox.memcpy((IntPtr)data2, handle2.AddrOfPinnedObject(), width2);
          }
          handle1.Free();
          handle2.Free();
@@ -2555,9 +2639,9 @@ namespace Emgu.CV
          GCHandle handle2 = GCHandle.Alloc(row2, GCHandleType.Pinned);
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
             for (int col = 0; col < cols1; row2[col] = converter(row1[col]), col++) ;
-            Emgu.Utils.memcpy((IntPtr)data2, handle2.AddrOfPinnedObject(), width2);
+            Emgu.Util.Toolbox.memcpy((IntPtr)data2, handle2.AddrOfPinnedObject(), width2);
          }
          handle1.Free();
          handle2.Free();
@@ -2565,7 +2649,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the two image</summary>
-      public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Emgu.Utils.Func<TDepth, TDepth2, TDepth3> converter)
+      public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3> converter)
       {
          Debug.Assert(EqualSize(img2), "Image size do not match");
 
@@ -2592,10 +2676,10 @@ namespace Emgu.CV
 
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2, data3 += step3)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
-            Emgu.Utils.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
             for (int col = 0; col < cols1; row3[col] = converter(row1[col], row2[col]), col++) ;
-            Emgu.Utils.memcpy((IntPtr)data3, handle3.AddrOfPinnedObject(), width3);
+            Emgu.Util.Toolbox.memcpy((IntPtr)data3, handle3.AddrOfPinnedObject(), width3);
          }
 
          handle1.Free();
@@ -2606,7 +2690,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the three image</summary>
-      public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Emgu.Utils.Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
+      public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3), "Image size do not match");
 
@@ -2639,13 +2723,13 @@ namespace Emgu.CV
 
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2, data3 += step3, data4 += step4)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
-            Emgu.Utils.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
-            Emgu.Utils.memcpy(handle3.AddrOfPinnedObject(), (IntPtr)data3, width3);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
+            Emgu.Util.Toolbox.memcpy(handle3.AddrOfPinnedObject(), (IntPtr)data3, width3);
 
             for (int col = 0; col < cols1; row4[col] = converter(row1[col], row2[col], row3[col]), col++) ;
 
-            Emgu.Utils.memcpy((IntPtr)data4, handle4.AddrOfPinnedObject(), width4);
+            Emgu.Util.Toolbox.memcpy((IntPtr)data4, handle4.AddrOfPinnedObject(), width4);
          }
          handle1.Free();
          handle2.Free();
@@ -2656,7 +2740,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the four image</summary>
-      public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Emgu.Utils.Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
+      public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3) && EqualSize(img4), "Image size do not match");
 
@@ -2695,13 +2779,13 @@ namespace Emgu.CV
 
          for (int row = 0; row < height1; row++, data1 += step1, data2 += step2, data3 += step3, data4 += step4, data5 += step5)
          {
-            Emgu.Utils.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
-            Emgu.Utils.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
-            Emgu.Utils.memcpy(handle3.AddrOfPinnedObject(), (IntPtr)data3, width3);
-            Emgu.Utils.memcpy(handle4.AddrOfPinnedObject(), (IntPtr)data4, width4);
+            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), (IntPtr)data1, width1);
+            Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), (IntPtr)data2, width2);
+            Emgu.Util.Toolbox.memcpy(handle3.AddrOfPinnedObject(), (IntPtr)data3, width3);
+            Emgu.Util.Toolbox.memcpy(handle4.AddrOfPinnedObject(), (IntPtr)data4, width4);
 
             for (int col = 0; col < cols1; row5[col] = converter(row1[col], row2[col], row3[col], row4[col]), col++) ;
-            Emgu.Utils.memcpy((IntPtr)data5, handle5.AddrOfPinnedObject(), width5);
+            Emgu.Util.Toolbox.memcpy((IntPtr)data5, handle5.AddrOfPinnedObject(), width5);
          }
          handle1.Free();
          handle2.Free();
@@ -3030,7 +3114,7 @@ namespace Emgu.CV
       {
          bool isFloat = (typeof(TDepth) == typeof(Single));
 
-         Emgu.Utils.Action<IntPtr, IntPtr, int> act =
+         Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dest, int channel)
              {
                 IntPtr srcFloat = src;
@@ -3105,7 +3189,7 @@ namespace Emgu.CV
       {
          double[] t = threshold.Resize(4).Coordinate;
          double[] m = max_value.Resize(4).Coordinate;
-         Emgu.Utils.Action<IntPtr, IntPtr, int> act =
+         Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dst, int channel)
              {
                 CvInvoke.cvThreshold(src, dst, t[channel], m[channel], thresh_type);

@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using zlib;
 using System.Security.Permissions;
+using Emgu.Util;
 
 namespace Emgu.CV
 {

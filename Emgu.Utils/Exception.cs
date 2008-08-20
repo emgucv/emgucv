@@ -4,12 +4,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace Emgu
+namespace Emgu.Util
 {
    /// <summary>
    /// The exception enviormental information for Emgu class librarys
    /// </summary>
-   [XmlRoot("ExceptionEnviorment")]
    public static class ExceptionEnviorment
    {
       private static ExceptionLevel _currentExceptionLevel = ExceptionLevel.Minor;

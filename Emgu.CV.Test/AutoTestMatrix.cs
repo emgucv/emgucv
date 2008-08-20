@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Emgu.CV;
 using Emgu.UI;
+using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -114,10 +115,10 @@ namespace Emgu.CV.Test
             using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
             {
                 mat.SetRandUniform((ulong)DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
-                XmlDocument doc = Emgu.Utils.XmlSerialize<Matrix<Byte>>(mat);
+                XmlDocument doc = Toolbox.XmlSerialize<Matrix<Byte>>(mat);
                 //Trace.WriteLine(doc.OuterXml);
 
-                using (Matrix<Byte> mat2 = Emgu.Utils.XmlDeserialize<Matrix<Byte>>(doc))
+                using (Matrix<Byte> mat2 = Toolbox.XmlDeserialize<Matrix<Byte>>(doc))
                     Assert.IsTrue(mat.Equals(mat2));
 
             }

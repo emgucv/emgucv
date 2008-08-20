@@ -4,6 +4,7 @@ using System.Text;
 using System.ServiceModel;
 using System.IO.Ports;
 using System.Threading;
+using Emgu.Util;
 
 namespace Emgu.RPC.Serial
 {

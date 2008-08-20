@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
+using Emgu.Util;
+
 #if LINUX
 using System.Runtime.InteropServices;
 #else

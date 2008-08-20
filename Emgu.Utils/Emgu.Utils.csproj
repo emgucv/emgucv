@@ -7,15 +7,15 @@
     <ProjectGuid>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.Utils</RootNamespace>
-    <AssemblyName>Emgu.Utils</AssemblyName>
+    <RootNamespace>Emgu.Util</RootNamespace>
+    <AssemblyName>Emgu.Util</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Utils.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Util.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.Utils.XML</DocumentationFile>
+    <DocumentationFile>..\bin\Emgu.Util.XML</DocumentationFile>
     <OutputType>Library</OutputType>
     <AssemblyName>Emgu.Utils</AssemblyName>
     <RootNamespace>Emgu.Utils</RootNamespace>
@@ -154,11 +154,12 @@
     <Compile Include="Operation.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Toolbox.cs" />
+    <Compile Include="TypeEnum.cs" />
     <Compile Include="UnmanagedObject.cs" />
-    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Utils.snk" />
+    <None Include="Util.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.UI;
+using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -21,7 +22,7 @@ namespace Emgu.CV.Test
       public void TestRotationMatrix2D()
       {
          RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
-         //Trace.WriteLine(Emgu.Utils.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
+         //Trace.WriteLine(Emgu.Toolbox.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
       }
 
       public void GenerateLogo()
@@ -125,7 +126,7 @@ namespace Emgu.CV.Test
       /*
       public void TestIpp()
       {
-          Trace.WriteLine(String.Format("Ipp Used: {0}", Emgu.CV.Utils.IppUsed()));
+          Trace.WriteLine(String.Format("Ipp Used: {0}", Emgu.CV.Toolbox.IppUsed()));
       }*/
 
       /*
@@ -340,7 +341,7 @@ namespace Emgu.CV.Test
          #region old code
          /*
             using (HaarCascade h = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml"))
-            using (Image<Rgb> image = Emgu.CV.Utils.LoadRGBImage("lena.jpg"))
+            using (Image<Rgb> image = Emgu.CV.Toolbox.LoadRGBImage("lena.jpg"))
             using (Image<Gray> gray = image.ConvertColor<Gray>())
             using (Image<Gray> small = gray.Scale(gray.Width / 2, gray.Height / 2))
             using (Image<Rgb> colorSmall = image.Scale(gray.Width / 2, gray.Height / 2))
@@ -515,7 +516,7 @@ namespace Emgu.CV.Test
             pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
          }
 
-         MCvPoint2D32f[] hull = PointCollection.ConvexHull(Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+         MCvPoint2D32f[] hull = PointCollection.ConvexHull(Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
          foreach (Point2D<float> p in pts)
@@ -559,7 +560,7 @@ namespace Emgu.CV.Test
                   (float)(img.Height / 2 - img.Width / 3 * Math.Sin(radianAngle)));
             };
 
-         Emgu.Utils.Action<Point2D<float>, Bgr> drawCross =
+         Toolbox.Action<Point2D<float>, Bgr> drawCross =
            delegate(Point2D<float> point, Bgr color)
            {
               img.Draw(new Cross2D<float>(point, 3, 3), color, 1);

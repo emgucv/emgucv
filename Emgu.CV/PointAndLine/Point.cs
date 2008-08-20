@@ -58,7 +58,7 @@ namespace Emgu.CV
       /// <param name="p2">The second point to apply generic operation</param>
       /// <param name="convertor">The generic operator</param>
       /// <returns>The result of the generic operation</returns>
-      public Point<TOther3> Convert<TOther2, TOther3>(Point<TOther2> p2, Emgu.Utils.Func<T, TOther2, TOther3> convertor)
+      public Point<TOther3> Convert<TOther2, TOther3>(Point<TOther2> p2, Emgu.Util.Toolbox.Func<T, TOther2, TOther3> convertor)
          where TOther3 : IComparable, new()
          where TOther2 : IComparable, new()
       {
@@ -105,7 +105,7 @@ namespace Emgu.CV
       /// <typeparam name="TOther">The type of the second point</typeparam>
       /// <param name="p2">The second point to apply generic operation</param>
       /// <param name="convertor">The generic operator</param>
-      public void _Convert<TOther>(Point<TOther> p2, Emgu.Utils.Func<T, TOther, T> convertor)
+      public void _Convert<TOther>(Point<TOther> p2, Emgu.Util.Toolbox.Func<T, TOther, T> convertor)
           where TOther : IComparable, new()
       {
          for (int i = 0; i < _coordinate.Length; i++)

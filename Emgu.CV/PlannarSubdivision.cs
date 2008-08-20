@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -279,7 +280,7 @@ namespace Emgu.CV
          #region Find the region of interest
          Rectangle<double> roi;
          using (MemStorage storage = new MemStorage())
-         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Utils.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>)p; })))
+         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>)p; })))
          {
             MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
             roi = new Rectangle<double>(cvRect);

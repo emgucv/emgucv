@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 using Emgu.CV;
+using Emgu.Util;
 
 namespace Emgu.CV.UI
 {

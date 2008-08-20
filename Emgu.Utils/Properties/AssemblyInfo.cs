@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Emgu.Utils")]
+[assembly: AssemblyTitle("Emgu.Util")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("Emgu.Utils")]
+[assembly: AssemblyProduct("Emgu.Util")]
 [assembly: AssemblyCopyright("Copyright © Emgu 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyFileVersion("1.1.0.0")]
 
-//[assembly: AssemblyKeyFile("Utils.key")]
+//[assembly: AssemblyKeyFile("Toolbox.key")]

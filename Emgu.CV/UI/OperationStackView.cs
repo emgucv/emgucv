@@ -5,7 +5,8 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using Emgu;
+using Emgu.Util;
+using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.UI
 {
@@ -14,9 +15,8 @@ namespace Emgu.CV.UI
    /// </summary>
    public partial class OperationStackView : UserControl
    {
-      //private Stack<Operation<IImage>> _operationStack;
       private DataGridViewTextBoxColumn _codeColumn;
-      private Emgu.Utils.ProgrammingLanguage _language;
+      private ProgrammingLanguage _language;
 
       /// <summary>
       /// Constructor
@@ -30,13 +30,13 @@ namespace Emgu.CV.UI
          _codeColumn.Width = 300;
          dataGridView1.Columns.Add(_codeColumn);
          dataGridView1.RowHeadersVisible = false;
-         _language = Emgu.Utils.ProgrammingLanguage.CSharp;
+         _language = ProgrammingLanguage.CSharp;
       }
 
       /// <summary>
       /// Set the programming language for this Operation Stack View
       /// </summary>
-      public Emgu.Utils.ProgrammingLanguage Language
+      public ProgrammingLanguage Language
       {
          set
          {
@@ -50,12 +50,12 @@ namespace Emgu.CV.UI
       /// <param name="operationStack">The operation stack to be displayed</param>
       public void DisplayOperationStack(Stack<Operation<IImage>> operationStack)
       {
-         if (_language == Emgu.Utils.ProgrammingLanguage.CSharp)
+         if (_language == ProgrammingLanguage.CSharp)
          {
             topLabel.Text = "public static IImage Function(IImage image)\r\n{";
             bottomLabel.Text = "}";
          }
-         else if (_language == Emgu.Utils.ProgrammingLanguage.CPlusPlus)
+         else if (_language == ProgrammingLanguage.CPlusPlus)
          {
             topLabel.Text = "public static IImage^ Function(IImage^ image)\r\n{";
             bottomLabel.Text = "}";
@@ -78,7 +78,7 @@ namespace Emgu.CV.UI
          {
             String str = op.ToCode(_language).Replace("{instance}", "image");
 
-            if (_language == Emgu.Utils.ProgrammingLanguage.CSharp || _language == Emgu.Utils.ProgrammingLanguage.CPlusPlus)
+            if (_language == ProgrammingLanguage.CSharp || _language == ProgrammingLanguage.CPlusPlus)
             {
                if (op.Method.ReturnType == typeof(void))
                {

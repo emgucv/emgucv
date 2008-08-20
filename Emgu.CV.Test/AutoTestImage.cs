@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.UI;
 using Emgu.CV.UI;
+using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -286,19 +287,19 @@ namespace Emgu.CV.Test
 
             img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
             img.SerializationCompressionRatio = 9;
-            XmlDocument doc1 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
+            XmlDocument doc1 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
             String str = doc1.OuterXml;
-            Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc1);
+            Image<Bgr, Byte> img2 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc1);
             Assert.IsTrue(img.Equals(img2));
 
             img.SerializationCompressionRatio = 9;
-            XmlDocument doc2 = Emgu.Utils.XmlSerialize<Image<Bgr, Byte>>(img);
-            Image<Bgr, Byte> img3 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc2);
+            XmlDocument doc2 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
+            Image<Bgr, Byte> img3 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc2);
             Assert.IsTrue(img.Equals(img3));
 
             XmlDocument doc3 = new XmlDocument();
             doc3.LoadXml(str);
-            Image<Bgr, Byte> img4 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(doc3);
+            Image<Bgr, Byte> img4 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc3);
             Assert.IsTrue(img.Equals(img4));
             
         }

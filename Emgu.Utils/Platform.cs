@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.Util.TypeEnum;
 
-namespace Emgu
+namespace Emgu.Util
 {
    /// <summary>
    /// Provide information for the platform which is using 
@@ -27,20 +28,5 @@ namespace Emgu
             }
          }
       }
-   }
-
-   /// <summary>
-   /// Type of operating system
-   /// </summary>
-   public enum OS
-   {
-      /// <summary>
-      /// Windows
-      /// </summary>
-      Windows,
-      /// <summary>
-      /// Linux
-      /// </summary>
-      Linux
    }
 }

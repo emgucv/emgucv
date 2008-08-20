@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.UI;
+using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -68,24 +69,24 @@ namespace Emgu.CV.Test
         public void TestSerialization()
         {
             Rectangle<int> rec = new Rectangle<int>(-10, 10, 10, -2);
-            XmlDocument xdoc = Emgu.Utils.XmlSerialize<Rectangle<int>>(rec);
+            XmlDocument xdoc = Toolbox.XmlSerialize<Rectangle<int>>(rec);
             //Trace.WriteLine(xdoc.OuterXml);
-            rec = Emgu.Utils.XmlDeserialize<Rectangle<int>>(xdoc);
+            rec = Toolbox.XmlDeserialize<Rectangle<int>>(xdoc);
 
             Point2D<double> pt2d = new Point2D<double>(12.0, 5.5);
-            xdoc = Emgu.Utils.XmlSerialize<Point2D<double>>(pt2d);
+            xdoc = Toolbox.XmlSerialize<Point2D<double>>(pt2d);
             //Trace.WriteLine(xdoc.OuterXml);
-            pt2d = Emgu.Utils.XmlDeserialize<Point2D<double>>(xdoc);
+            pt2d = Toolbox.XmlDeserialize<Point2D<double>>(xdoc);
 
             Circle<float> cir = new Circle<float>(new Point2D<float>(0.0f, 1.0f), 2.8f);
-            xdoc = Emgu.Utils.XmlSerialize<Circle<float>>(cir);
+            xdoc = Toolbox.XmlSerialize<Circle<float>>(cir);
             //Trace.WriteLine(xdoc.OuterXml);
-            cir = Emgu.Utils.XmlDeserialize<Circle<float>>(xdoc);
+            cir = Toolbox.XmlDeserialize<Circle<float>>(xdoc);
 
             Image<Bgr, Byte> img1 = new Image<Bgr, byte>("stuff.jpg");
-            xdoc = Emgu.Utils.XmlSerialize(img1);
+            xdoc = Toolbox.XmlSerialize(img1);
             //Trace.WriteLine(xdoc.OuterXml);
-            Image<Bgr, Byte> img2 = Emgu.Utils.XmlDeserialize<Image<Bgr, Byte>>(xdoc);
+            Image<Bgr, Byte> img2 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(xdoc);
 
             Byte[] a1 = img1.Bytes;
             Byte[] a2 = img2.Bytes;
@@ -138,7 +139,8 @@ namespace Emgu.CV.Test
                     Assert.AreEqual(cs.InContour(pIn), 100);
                     Assert.AreEqual(cs.InContour(pOut), -100);
                     Assert.AreEqual(cs.Distance(pIn), 10);
-                    Assert.AreEqual(cs.Distance(pOut), -50); 
+                    Assert.AreEqual(cs.Distance(pOut), -50);
+                    img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
                 }
             }
         }
@@ -182,7 +184,7 @@ namespace Emgu.CV.Test
         public void TestEigenObjects()
         {
             String[] fileNames = new string[] { "stuff.jpg", "squares.gif", "lena.jpg" };
-            String[] labels = new string[] { "1", "2", "3" };
+            
             int width = 100, height = 100;
             MCvTermCriteria termCrit = new MCvTermCriteria(3, 0.001);
 
@@ -193,25 +195,22 @@ namespace Emgu.CV.Test
                     return new Image<Gray, Byte>(file).Resize(width, height);
                 });
 
-            EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, labels, 500, ref termCrit);
+            EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
             for (int i = 0; i < imgs.Length; i++)
             {
-                Assert.AreEqual(i, imgRecognizer1.FindIndex(imgs[i]));
-                Assert.AreEqual((i+1).ToString(), imgRecognizer1.Recognize(imgs[i]));
+                Assert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]));
             }
 
-            XmlDocument xDoc = Emgu.Utils.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
-            EigenObjectRecognizer imgRecognizer2 = Emgu.Utils.XmlDeserialize<EigenObjectRecognizer>(xDoc);
+            XmlDocument xDoc = Toolbox.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
+            EigenObjectRecognizer imgRecognizer2 = Toolbox.XmlDeserialize<EigenObjectRecognizer>(xDoc);
 
             for (int i = 0; i < imgs.Length; i++)
             {
-                Assert.AreEqual(i, imgRecognizer2.FindIndex(imgs[i]));
-                Assert.AreEqual((i + 1).ToString(), imgRecognizer2.Recognize(imgs[i]));
+                Assert.AreEqual(i.ToString(), imgRecognizer2.Recognize(imgs[i]));
             }
 
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                 formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
 
             Byte[] bytes;
             using (MemoryStream ms = new MemoryStream())
@@ -224,8 +223,7 @@ namespace Emgu.CV.Test
                 EigenObjectRecognizer imgRecognizer3 = (EigenObjectRecognizer)formatter.Deserialize(ms2);
                 for (int i = 0; i < imgs.Length; i++)
                 {
-                    Assert.AreEqual(i, imgRecognizer3.FindIndex(imgs[i]));
-                    Assert.AreEqual((i + 1).ToString(), imgRecognizer3.Recognize(imgs[i]));
+                    Assert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]));
                 }
             }
             #endregion
@@ -255,8 +253,8 @@ namespace Emgu.CV.Test
         public void TestXmlSerialize()
         {
             Point2D<float> p = new Point2D<float>(0.0f, 0.0f);
-            XmlDocument xDoc = Emgu.Utils.XmlSerialize<Point2D<float>>(p);
-            Point2D<float> p2 = Emgu.Utils.XmlDeserialize<Point2D<float>>(xDoc);
+            XmlDocument xDoc = Toolbox.XmlSerialize<Point2D<float>>(p);
+            Point2D<float> p2 = Toolbox.XmlDeserialize<Point2D<float>>(xDoc);
             Assert.IsTrue(p.Equals(p2));
         }
 

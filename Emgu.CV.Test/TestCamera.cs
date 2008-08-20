@@ -5,9 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Emgu.CV;
 using System.Threading;
 using System.Diagnostics;
+using Emgu.CV;
+using Emgu.Util;
 
 namespace Emgu.CV.Test
 {
@@ -66,7 +67,7 @@ namespace Emgu.CV.Test
                     }
                 })).Start();
             }
-            catch (Emgu.PrioritizedException excpt)
+            catch (PrioritizedException excpt)
             {
                 excpt.AlertIfServere(true);
             }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.Util;
 using System.Threading;
 
 namespace MotionDetection
@@ -27,14 +28,14 @@ namespace MotionDetection
             {
                _capture = new Capture();
             }
-            catch (Emgu.PrioritizedException excpt)
+            catch (PrioritizedException excpt)
             {   //show errors if there is any
                excpt.Alert(false);
             }
          }
 
-         if (_capture != null)
-         {   //if camera capture successfully created
+         if (_capture != null) //if camera capture has been successfully created
+         {   
             _motionHistory = new MotionHistory(
                 6, //number of images to store in buffer, adjust it to fit your camera's frame rate
                 20, //0-255, the amount of pixel intensity change to consider it as motion pixel
@@ -51,7 +52,7 @@ namespace MotionDetection
       {
          while (true)
          {
-            Image<Bgr, Byte> image = _capture.QuerySmallFrame().PyrUp(); //noise reduced image
+            Image<Bgr, Byte> image = _capture.QuerySmallFrame().PyrUp(); //reduce noise from the image
             capturedImageBox.Image = image;
 
             //update the motion history
@@ -59,7 +60,7 @@ namespace MotionDetection
 
             #region get a copy of the motion mask and enhance its color
             Image<Gray, Byte> motionMask = _motionHistory.Mask;
-            double[] minValues, maxValues;
+            double[] minValues, maxValues; 
             MCvPoint[] minLoc, maxLoc;
             motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
             motionMask = motionMask * (255.0 / maxValues[0]);
@@ -67,10 +68,10 @@ namespace MotionDetection
 
             //create the motion image 
             Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Width, motionMask.Height);
-            //display the motion pixels in blue
-            CvInvoke.cvCvtPlaneToPix(motionMask, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, motionImage);
-
-            //Threshold to define a motion area, reduce it to detect smaller motion
+            //display the motion pixels in blue (first channel)
+            motionImage[0] = motionMask;
+            
+            //Threshold to define a motion area, reduce the value to detect smaller motion
             double minArea = 100;
 
             Seq<MCvConnectedComp> motionComponents = _motionHistory.MotionComponents;
@@ -89,19 +90,18 @@ namespace MotionDetection
                if (motionPixelCount / comp.area < 0.05) continue;
 
                //Draw each individual motion in red
-               DrawMotion(motionImage, comp.rect, angle, new Bgr(0, 0, 255.0));
+               DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
             }
-
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
             _motionHistory.MotionInfo(motionMask.ROI.MCvRect, out overallAngle, out overallMotionPixelCount);
-            DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(0, 255, 0));
-
+            DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(Color.Green));
 
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
 
+            //Display the image of the motion
             motionImageBox.Image = motionImage;
 
             //The following is optional, it force a garbage collection and free unused memory

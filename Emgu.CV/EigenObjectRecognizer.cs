@@ -75,15 +75,45 @@ namespace Emgu.CV
       {
       }
 
+
+      /// <summary>
+      /// Create an object recognizer using the specific tranning data and parameters, it will always return the most similar object
+      /// </summary>
+      /// <param name="images">The images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
+      /// <param name="termCrit">The criteria for recognizer training</param>
+      public EigenObjectRecognizer(Image<Gray, Byte>[] images, ref MCvTermCriteria termCrit)
+         : this(images, GenerateLabels(images.Length), ref termCrit)
+      {
+      }
+
+      private static String[] GenerateLabels(int size)
+      {
+         String[] labels = new string[size];
+         for (int i = 0; i < size; i++)
+            labels[i] = i.ToString();
+         return labels;
+      }
+
+      /// <summary>
+      /// Create an object recognizer using the specific tranning data and parameters, it will always return the most similar object
+      /// </summary>
+      /// <param name="images">The images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
+      /// <param name="labels">The labels corresponding to the images</param>
+      /// <param name="termCrit">The criteria for recognizer training</param>
+      public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, ref MCvTermCriteria termCrit)
+         : this(images, labels, 0, ref termCrit)
+      {
+      }
+
       /// <summary>
       /// Create an object recognizer using the specific tranning data and parameters
       /// </summary>
       /// <param name="images">The images used for training, each of them should be the same size. It's recommended the images are histogram normalized</param>
       /// <param name="labels">The labels corresponding to the images</param>
       /// <param name="eigenDistanceThreshold">
-      /// The eigen distance threshold, [0, ~1000].
+      /// The eigen distance threshold, (0, ~1000].
       /// The smaller the number, the more likely an examined image will be treated as unrecognized object. 
-      /// Set it to a huge number (e.g. 5000) and the recognizer will always treated the examined image as one of the known object. 
+      /// If the threshold is &lt; 0, the recognizer will always treated the examined image as one of the known object. 
       /// </param>
       /// <param name="termCrit">The criteria for recognizer training</param>
       public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, double eigenDistanceThreshold, ref MCvTermCriteria termCrit)
@@ -207,35 +237,27 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Given the <paramref name="image"/> to be examined, find in the database the most similar image and return the index
+      /// Given the <paramref name="image"/> to be examined, find in the database the most similar object, return the index and the eigen distance
       /// </summary>
       /// <param name="image">The image to be searched from the database</param>
-      /// <returns>
-      /// -1, if such none of the images in the database is similar to the given image;
-      /// n, the index of the image in database that is most similar to the gicen image
-      /// </returns>
-      public int FindIndex(Image<Gray, Byte> image)
+      /// <param name="index">The index of the most similar object</param>
+      /// <param name="eigenDistance">The eigen distance of the most similar object</param>
+      /// <param name="label">The label of the specific image</param>
+      public void FindMostSimilarObject(Image<Gray, Byte> image, out int index, out float eigenDistance, out String label)
       {
          float[] dist = GetEigenDistances(image);
 
-         #region find the index that has minimum distance
-         int index = 0;
-         float minDist = dist[0];
+         index = 0;
+         eigenDistance = dist[0];
          for (int i = 1; i < dist.Length; i++)
          {
-            if (dist[i] < minDist)
+            if (dist[i] < eigenDistance)
             {
                index = i;
-               minDist = dist[i];
+               eigenDistance = dist[i];
             }
          }
-         #endregion
-
-         //If the minimum distance is grater than the threhold
-         if (minDist >= _eigenDistanceThreshold)
-            return -1; //label this image as unrecognized object
-
-         return index;//return the index of the recognized object
+         label = Labels[index];
       }
 
       /// <summary>
@@ -248,8 +270,12 @@ namespace Emgu.CV
       /// </returns>
       public String Recognize(Image<Gray, Byte> image)
       {
-         int index = FindIndex(image);
-         return index == -1 ? String.Empty : _labels[index];
+         int index;
+         float eigenDistance;
+         String label;
+         FindMostSimilarObject(image, out index, out eigenDistance, out label);
+
+         return (_eigenDistanceThreshold <= 0 || eigenDistance < _eigenDistanceThreshold )  ? _labels[index] : String.Empty;
       }
    }
 }

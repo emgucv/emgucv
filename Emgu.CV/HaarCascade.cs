@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -19,7 +20,7 @@ namespace Emgu.CV
 
          if (_ptr == IntPtr.Zero)
          {
-            Emgu.PrioritizedException e = new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical,
+            PrioritizedException e = new PrioritizedException(ExceptionLevel.Critical,
                 String.Format("Fail to create HaarCascade object: {0}", fileName));
             e.Alert(true);
             throw e;

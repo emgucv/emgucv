@@ -4,6 +4,7 @@ using System.Text;
 using Emgu.RPC.Serial;
 using Emgu.RPC.Speech;
 using Emgu.CV;
+using Emgu.Util;
 using System.ServiceModel;
 
 namespace Emgu.RPC

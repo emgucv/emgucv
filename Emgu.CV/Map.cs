@@ -174,11 +174,11 @@ namespace Emgu.CV
       /// <typeparam name="D2">The depth of the new Map</typeparam>
       /// <param name="converter">The converter that use the element from <i>this</i> map and the location of each pixel as input to compute the result</param>
       /// <returns> A new map where each element is obtained from converter</returns>
-      public Map<TColor, D2> Convert<D2>(Emgu.Utils.Func<TDepth, double, double, D2> converter)
+      public Map<TColor, D2> Convert<D2>(Emgu.Util.Toolbox.Func<TDepth, double, double, D2> converter)
       {
          double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Bottom;
 
-         Emgu.Utils.Func<TDepth, int, int, D2> iconverter =
+         Emgu.Util.Toolbox.Func<TDepth, int, int, D2> iconverter =
              delegate(TDepth data, int row, int col)
              {
                 //convert an int position to double position

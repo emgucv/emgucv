@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
 using System.Runtime.InteropServices;
-using Emgu;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -93,7 +93,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
          if (_ptr == IntPtr.Zero)
          {
-            throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Medium, "Error: Unable to connect to camera");
+            throw new PrioritizedException(ExceptionLevel.Medium, "Error: Unable to connect to camera");
          }
 #endif
       }
@@ -107,7 +107,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
          {
-            throw new Emgu.PrioritizedException(Emgu.ExceptionLevel.Critical, "Unable to create capture from file:" + fileName);
+            throw new PrioritizedException(ExceptionLevel.Critical, "Unable to create capture from file:" + fileName);
          }
       }
 

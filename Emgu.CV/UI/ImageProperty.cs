@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.Util;
+using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.UI
 {
@@ -28,8 +30,8 @@ namespace Emgu.CV.UI
       public ImageProperty()
       {
          InitializeComponent();
-         cSharpOperationStackView.Language = Emgu.Utils.ProgrammingLanguage.CSharp;
-         cPlusPlusoperationStackView.Language = Emgu.Utils.ProgrammingLanguage.CPlusPlus;
+         cSharpOperationStackView.Language = ProgrammingLanguage.CSharp;
+         cPlusPlusoperationStackView.Language = ProgrammingLanguage.CPlusPlus;
       }
 
       /// <summary>
