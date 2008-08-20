@@ -1,10 +1,10 @@
 %define _unpackaged_files_terminate_build 0
-Summary: The emgu cv components
-Name: emgu-cv
+Summary: A cross platform .NET wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C Sharp, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux & Mac OS X. 
+Name: emgu cv
 Release: 1
 License: GPL
 Group: Emgu
-URL: www.emgu.com 
+URL: http://www.emgu.com/wiki 
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_topdir}/BUILD/%{name}-%{version}
 
