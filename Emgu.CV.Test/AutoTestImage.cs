@@ -120,7 +120,7 @@ namespace Emgu.CV.Test
 
             Image<Gray, Single> img5 = img3.AbsDiff(img4);
             DateTime t4 = DateTime.Now;
-            double sum1 = img5.Sum.Intensity;
+            double sum1 = img5.GetSum().Intensity;
             DateTime t5 = DateTime.Now;
             Single sum2 = 0.0f;
             img5.Action(delegate(Single v) { sum2 += v; });
@@ -319,13 +319,13 @@ namespace Emgu.CV.Test
             for (int i = 0; i < 20; i++)
             {
                 Image<Gray, Byte> img = new Image<Gray, Byte>(500, 500, new Gray());
-                Assert.AreEqual(0, System.Convert.ToInt32(img.Sum.Intensity));
+                Assert.AreEqual(0, System.Convert.ToInt32(img.GetSum().Intensity));
             }
 
             for (int i = 0; i < 20; i++)
             {
                 Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500);
-                Assert.IsTrue(img.Sum.Equals(new Bgr(0.0, 0.0, 0.0)));
+                Assert.IsTrue(img.GetSum().Equals(new Bgr(0.0, 0.0, 0.0)));
             }
 
             Image<Bgr, Byte> img2 = new Image<Bgr, byte>(1, 2);

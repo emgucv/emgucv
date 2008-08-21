@@ -83,9 +83,9 @@
       <Project>{12DE4DD2-A3AD-4431-96DC-B1607E58800A}</Project>
       <Name>Emgu.RPC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.Utils\Emgu.Utils.csproj">
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
       <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
-      <Name>Emgu.Utils</Name>
+      <Name>Emgu.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
