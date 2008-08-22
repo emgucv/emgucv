@@ -1,6 +1,6 @@
 %define _unpackaged_files_terminate_build 0
-Summary: The emgu utils components
-Name: emgu-utils
+Summary: The emgu utility components
+Name: emgu-util
 Release: 1
 License: GPL
 Group: Emgu
@@ -24,17 +24,17 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc README
-/var/lib/emgu/bin/Emgu.Utils.dll
+/var/lib/emgu/bin/Emgu.Util.dll
 
 %changelog
 * Mon Dec 31 2007 Canming Huang <canming@devel.emgu.com> - 
 - Initial build.
 
 %post
-gacutil -i /var/lib/emgu/bin/Emgu.Utils.dll
+gacutil -i /var/lib/emgu/bin/Emgu.Util.dll
 
 %preun
-gacutil -u Emgu.Utils
+gacutil -u Emgu.Util
 
 
 
