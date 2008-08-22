@@ -8,6 +8,6 @@ if exist %RELEASE-ZIP% rm -f %RELEASE-ZIP%
 
 mkdir %RELEASE-FOLDER%
 mkdir %RELEASE-NAME%
-cp Emgu.CV\README.txt Emgu.CV\Emgu.CV.License.txt Emgu.CV\bin\Release\Emgu.CV.dll Emgu.Utils\bin\Release\Emgu.Utils.dll lib\zlib.net.dll lib\zlib.net.license.txt %RELEASE-NAME%
+cp Emgu.CV\README.txt Emgu.CV\Emgu.CV.License.txt Emgu.CV\bin\Release\Emgu.CV.dll Emgu.Utils\bin\Release\Emgu.Util.dll lib\zlib.net.dll lib\zlib.net.license.txt %RELEASE-NAME%
 zip -r %RELEASE-FOLDER%/%RELEASE-ZIP% %RELEASE-NAME% 
 set RELEASE-NAME=
