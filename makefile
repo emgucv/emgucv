@@ -3,13 +3,13 @@ CVTEST_SRC = Emgu.CV.Test/*.cs
 SVN_URL = https://emgucv.svn.sourceforge.net/svnroot/emgucv/trunk/
 VERSION = 1.3.0.0
 
-CV_RELEASE: Utils CV FORCE
-	install -d release; cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt lib/zlib.net.license.txt lib/zlib.net.dll bin/Emgu.CV.dll bin/Emgu.Utils.dll release; tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz; rm -rf release
+CV_RELEASE: Util CV FORCE
+	install -d release; cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt lib/zlib.net.license.txt lib/zlib.net.dll bin/Emgu.CV.dll bin/Emgu.Util.dll release; tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz; rm -rf release
 
-Utils:  FORCE  
-	make -C Emgu.Utils bin; cp Emgu.Utils/bin/Emgu.Utils.dll ./bin;
+Util:  FORCE  
+	make -C Emgu.Util bin; cp Emgu.Util/bin/Emgu.Util.dll ./bin;
 
-CV: Utils FORCE 
+CV: Util FORCE 
 	make -C Emgu.CV bin; cp Emgu.CV/bin/Emgu.CV.dll ./bin;
 
 UI: 	FORCE
@@ -18,7 +18,7 @@ UI: 	FORCE
 CV_SRC:
 	install -d src 
 	svn export ${SVN_URL}Emgu.CV src/Emgu.CV
-	svn export ${SVN_URL}Emgu.Utils src/Emgu.Utils
+	svn export ${SVN_URL}Emgu.Util src/Emgu.Util
 	install -d src/Solution/VS2005_MonoDevelop
 	install -d src/Solution/VS2008
 	svn export ${SVN_URL}Solution/VS2005_MonoDevelop/Emgu.CV.sln src/Solution/VS2005_MonoDevelop/Emgu.CV.sln
@@ -43,7 +43,7 @@ CV_SRC:
 	rm -rf src
 
 CVTest: CV UI $(CVTEST_SRC)
-	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/nunit22/nunit.framework -r:bin/Emgu.Utils.dll -r:bin/Emgu.UI.dll   -r:System.Windows.Forms -r:System.Drawing -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
+	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/nunit22/nunit.framework -r:bin/Emgu.Util.dll -r:bin/Emgu.UI.dll   -r:System.Windows.Forms -r:System.Drawing -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
 
 Test: CVTest
 	cd bin; nunit-console2 Emgu.CV.Test.dll; cd ..
