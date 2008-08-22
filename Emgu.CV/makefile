@@ -11,11 +11,11 @@ PKG_DIR = ${EMGU_DIR}/bin
 
 bin: ${SRC}
 	install -d bin
-	${MCS} -r:../lib/ZedGraph.dll -r:../lib/zlib.net.dll -r:../bin/Emgu.Utils.dll $(SRC) -out:bin/${LIB_NAME}
+	${MCS} -r:../lib/ZedGraph.dll -r:../lib/zlib.net.dll -r:../bin/Emgu.Util.dll $(SRC) -out:bin/${LIB_NAME}
 
 rpmbin: 
 	install -d ${PKG_DIR}
-	$(MCS) -r:lib/ZedGraph.dll -r:lib/zlib.net.dll -r:lib/Emgu.Utils.dll $(SRC) -out:${PKG_DIR}/${LIB_NAME}
+	$(MCS) -r:lib/ZedGraph.dll -r:lib/zlib.net.dll -r:lib/Emgu.Util.dll $(SRC) -out:${PKG_DIR}/${LIB_NAME}
 
 rpm: tar
 	rpmbuild -tb ${PKG_NAME}.tar.gz
@@ -28,7 +28,7 @@ tar:
 	echo VERSION: ${VERSION} > ${PKG_NAME}/${PKG_NAME}.spec
 	cat ${NAME}.spec >> ${PKG_NAME}/${PKG_NAME}.spec
 	install -d ${PKG_NAME}/lib
-	install ../bin/Emgu.Utils.dll ../lib/zlib.net.dll ../lib/ZedGraph.dll ${PKG_NAME}/lib
+	install ../bin/Emgu.Util.dll ../lib/zlib.net.dll ../lib/ZedGraph.dll ${PKG_NAME}/lib
 	tar -czf ${PKG_NAME}.tar.gz ${PKG_NAME}
 	rm -rf ${PKG_NAME}
 
