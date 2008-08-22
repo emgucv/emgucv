@@ -30,6 +30,7 @@ namespace Emgu.Util
             yield return convertor(obj);
       }
 
+      #region delegates
       /// <summary>
       /// An Action that accepts two input and returns nothing
       /// </summary>
@@ -101,7 +102,9 @@ namespace Emgu.Util
       /// <param name="o4"></param>
       /// <returns></returns>
       public delegate TOutput Func<TInput1, TInput2, TInput3, TInput4, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
+      #endregion
 
+      #region xml serilization and deserialization
       /// <summary>
       /// Convert an object to an xml document
       /// </summary>
@@ -138,6 +141,7 @@ namespace Emgu.Util
       {
          return (T)(new XmlSerializer(typeof(T))).Deserialize(new StringReader(xmlString));
       }
+      #endregion
 
       /// <summary>
       /// Read a text file to an array of string, each row are seperated using by the input seperator
@@ -170,6 +174,7 @@ namespace Emgu.Util
          return c;
       }
 
+      /*
       /// <summary>
       /// Event argument that returns a string
       /// </summary>
@@ -193,7 +198,7 @@ namespace Emgu.Util
          {
             _message = msg;
          }
-      }
+      }*/
 
       /// <summary>
       /// Call a command from command line
@@ -231,6 +236,7 @@ namespace Emgu.Util
          return output;
       }
 
+      #region memory copy
       /// <summary>
       /// Convert some generic vector to vector of Bytes
       /// </summary>
@@ -309,6 +315,7 @@ namespace Emgu.Util
       /// <param name="len">the number of bytes to be copied</param>
       [DllImport("kernel32.dll", EntryPoint = "CopyMemory")]
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
+      #endregion
 
       /// <summary>
       /// Maps the specified executable module into the address space of the calling process.

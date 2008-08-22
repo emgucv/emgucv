@@ -707,7 +707,19 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+      /// </summary>
+      /// <param name="c">Pointer to the contour</param>
+      /// <param name="color">Color of the contour</param>
+      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+      public void Draw(Seq<MCvPoint> c, TColor color, int thickness)
+      {
+         MCvPoint offset = new MCvPoint();
+         Draw(c, color, color, 0, thickness, ref offset);
+      }
+
+      /// <summary>
+      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
       /// </summary>
       /// <param name="c">Pointer to the first contour</param>
       /// <param name="externalColor">Color of the external contours</param>
@@ -726,7 +738,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
       /// </summary>
       /// <param name="c">Pointer to the first contour</param>
       /// <param name="externalColor">Color of the external contours</param>
@@ -766,7 +778,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvHaarDetectObjects finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
+      /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
       /// </summary>
       /// <param name="haarObj">Haar classifier cascade in internal representation</param>
       /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
@@ -1160,7 +1172,7 @@ namespace Emgu.CV
 
       #region Gradient, Edges and Features
       /// <summary>
-      /// The function cvSobel calculates the image derivative by convolving the image with the appropriate kernel:
+      /// Calculates the image derivative by convolving the image with the appropriate kernel:
       /// dst(x,y) = dxorder+yodersrc/dxxorder?dyyorder |(x,y)
       /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
       /// </summary>
@@ -1176,7 +1188,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvLaplace calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
+      /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
       /// dst(x,y) = d2src/dx2 + d2src/dy2
       /// Specifying aperture_size=1 gives the fastest variant that is equal to convolving the image with the following kernel:
       ///
@@ -1213,15 +1225,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvGoodFeaturesToTrack finds corners with big eigenvalues in the image. The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features
+      /// Finds corners with big eigenvalues in the image. 
       /// </summary>
+      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
       /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
       /// <param name="quality_level">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
       /// <param name="min_distance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
       /// <param name="block_size">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="use_harris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
       /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
-      /// <returns></returns>
+      /// <returns>The good features for each channel</returns>
       public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double quality_level, double min_distance, int block_size, bool use_harris, double k)
       {
          int channelCount = new TColor().Dimension;
@@ -1266,8 +1279,7 @@ namespace Emgu.CV
 
       #region Matching
       /// <summary>
-      /// The function cvMatchTemplate is similiar to cvCalcBackProjectPatch. 
-      /// It slids through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
+      /// The function slids through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
       /// </summary>
       /// <param name="template">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
@@ -1282,16 +1294,14 @@ namespace Emgu.CV
 
       #region Object tracking
       /// <summary>
-      /// The function cvSnakeImage updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
-      ///The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. 
-      ///If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. 
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
       /// </summary>
       /// <param name="contour">Some existing contour</param>
       /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
       /// <param name="beta">Weight[s] of curvature energy, similar to alpha.</param>
       /// <param name="gamma">Weight[s] of image energy, similar to alpha.</param>
       /// <param name="windowSize">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
-      /// <param name="tc">Termination criteria</param>
+      /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
       /// <param name="storage">The memory storage used by the resulting sequence</param>
       /// <returns>The snake[d] contour</returns>
       public Seq<MCvPoint> Snake(Seq<MCvPoint> contour, float alpha, float beta, float gamma, Point2D<int> windowSize, MCvTermCriteria tc, MemStorage storage)
@@ -2450,9 +2460,9 @@ namespace Emgu.CV
 
       #region Pyramids
       ///<summary>
-      ///The function PyrDown performs downsampling step of Gaussian pyramid decomposition. 
-      ///First it convolves <i>this</i> image with the specified filter and then downsamples the image 
-      ///by rejecting even rows and columns.
+      /// Performs downsampling step of Gaussian pyramid decomposition. 
+      /// First it convolves <i>this</i> image with the specified filter and then downsamples the image 
+      /// by rejecting even rows and columns.
       ///</summary>
       ///<returns> The downsampled image</returns>
       public Image<TColor, TDepth> PyrDown()
@@ -2463,10 +2473,10 @@ namespace Emgu.CV
       }
 
       ///<summary>
-      ///The function cvPyrUp performs up-sampling step of Gaussian pyramid decomposition. 
-      ///First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 
-      ///result with the specified filter multiplied by 4 for interpolation. 
-      ///So the resulting image is four times larger than the source image.
+      /// Performs up-sampling step of Gaussian pyramid decomposition. 
+      /// First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 
+      /// result with the specified filter multiplied by 4 for interpolation. 
+      /// So the resulting image is four times larger than the source image.
       ///</summary>
       ///<returns> The upsampled image</returns>
       public Image<TColor, TDepth> PyrUp()
@@ -3267,7 +3277,7 @@ namespace Emgu.CV
 
       #region Statistic
       /// <summary>
-      /// The function cvAvgSdv calculates the average value and standard deviation of array elements, independently for each channel
+      /// Calculates the average value and standard deviation of array elements, independently for each channel
       /// </summary>
       /// <param name="avg">The avg color</param>
       /// <param name="sdv">The standard deviation for each channel</param>
@@ -3283,7 +3293,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvAvgSdv calculates the average value and standard deviation of array elements, independently for each channel
+      /// Calculates the average value and standard deviation of array elements, independently for each channel
       /// </summary>
       /// <param name="avg">The avg color</param>
       /// <param name="sdv">The standard deviation for each channel</param>

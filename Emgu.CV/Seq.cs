@@ -270,26 +270,43 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvApproxPoly approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
+      /// Approximates one curves and returns the approximation result
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
       /// <param name="storage"> The storage the resulting sequence use</param>
       /// <returns>The approximated contour</returns>
       public Seq<T> ApproxPoly(double accuracy, MemStorage storage)
       {
+         return ApproxPoly(accuracy, 0, storage);
+      }
+
+      /// <summary>
+      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
+      /// </summary>
+      /// <param name="accuracy">The desired approximation accuracy</param>
+      /// <param name="storage"> The storage the resulting sequence use</param>
+      /// <param name="maxLevel">
+      /// Maximal level for sequence approximation. 
+      /// If 0, only sequence is arrpoximated. 
+      /// If 1, the sequence and all sequence after it on the same level are approximated. 
+      /// If 2, all sequence after and all sequence one level below the contours are approximated, etc. If the value is negative, the function does not approximate the sequence following after contour but draws child sequences of sequence up to abs(maxLevel)-1 level
+      /// </param>
+      /// <returns>The approximated contour</returns>
+      public Seq<T> ApproxPoly(double accuracy, int maxLevel, MemStorage storage)
+      {
          return new Seq<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
-             System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvSeq)),
+             System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvContour)),
              storage.Ptr,
              CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
              accuracy,
-             0),
+             maxLevel),
              storage);
       }
 
       /// <summary>
-      /// The function cvApproxPoly approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
+      /// Approximates one curve and returns the approximation result. 
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
       /// <returns>The approximated contour</returns>
@@ -311,7 +328,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvClearSeq removes all elements from the sequence. The function does not return the memory to the storage, but this memory is reused later when new elements are added to the sequence. This function time complexity is O(1). 
+      /// Removes all elements from the sequence. The function does not return the memory to the storage, but this memory is reused later when new elements are added to the sequence. This function time complexity is O(1). 
       /// </summary>
       public void Clear()
       {
