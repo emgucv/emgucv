@@ -27,8 +27,8 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Emgu.Util.XML</DocumentationFile>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
@@ -40,9 +40,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
+    <AssemblyName>Emgu.Util</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>..\bin\Emgu.Util.xml</DocumentationFile>
@@ -56,8 +56,8 @@
     <ErrorReport>prompt</ErrorReport>
     <DocumentationFile>bin\x86\Debug\Emgu.Util.xml</DocumentationFile>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -71,9 +71,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
+    <AssemblyName>Emgu.Util</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
@@ -87,8 +87,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -98,13 +98,13 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug Linux\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\x86\Debug\Emgu.Utils.XML</DocumentationFile>
+    <DocumentationFile>bin\x86\Debug\Emgu.Util.XML</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -118,9 +118,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
+    <AssemblyName>Emgu.Util</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
@@ -134,9 +134,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <OutputType>Library</OutputType>
-    <AssemblyName>Emgu.Utils</AssemblyName>
+    <AssemblyName>Emgu.Util</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <RootNamespace>Emgu.Utils</RootNamespace>
+    <RootNamespace>Emgu.Util</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
