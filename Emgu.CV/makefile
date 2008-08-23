@@ -10,8 +10,7 @@ EMGU_DIR = ${INSTALL_DIR}/emgu
 PKG_DIR = ${EMGU_DIR}/bin
 
 bin: ${SRC}
-	install -d bin
-	${MCS} -r:../lib/ZedGraph.dll -r:../lib/zlib.net.dll -r:../bin/Emgu.Util.dll $(SRC) -out:bin/${LIB_NAME}
+	${MCS} -r:../lib/ZedGraph.dll -r:../lib/zlib.net.dll -r:../bin/Emgu.Util.dll $(SRC) -out:../bin/${LIB_NAME}
 
 rpmbin: 
 	install -d ${PKG_DIR}

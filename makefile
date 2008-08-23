@@ -11,10 +11,10 @@ CV_RELEASE: Util CV FORCE
 	install -d release; cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt lib/zlib.net.license.txt lib/zlib.net.dll bin/Emgu.CV.dll bin/Emgu.Util.dll release; tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz; rm -rf release
 
 Util:  FORCE  
-	make -C Emgu.$@ bin; cp Emgu.$@/bin/Emgu.$@.dll ./bin;
+	make -C Emgu.$@ bin; 
 
 CV: Util FORCE 
-	make -C Emgu.$@ bin; cp Emgu.$@/bin/Emgu.$@.dll ./bin;
+	make -C Emgu.$@ bin;
 
 UI: 	FORCE
 	make -C Emgu.$@ bin; cp Emgu.$@/bin/Emgu.$@.dll ./bin;

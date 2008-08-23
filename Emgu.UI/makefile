@@ -9,8 +9,7 @@ EMGU_DIR = ${INSTALL_DIR}/emgu
 PKG_DIR = ${EMGU_DIR}/bin
 
 bin: ${UI_SRC}
-	install -d bin
-	${MCS} ${UI_SRC} -out:bin/Emgu.UI.dll
+	${MCS} ${UI_SRC} -out:../bin/Emgu.UI.dll
 
 rpmbin: 
 	install -d ${PKG_DIR}
