@@ -2499,6 +2499,30 @@ namespace Emgu.CV
       #endregion
 
       #region Morphological Operations
+      /// <summary>
+      /// Perform advanced morphological transformations using erosion and dilation as basic operations.
+      /// </summary>
+      /// <param name="element">Structuring element</param>
+      /// <param name="operation">Type of morphological operation</param>
+      /// <param name="iterations">Number of times erosion and dilation are applied</param>
+      /// <returns>The result of the morphological operation</returns>
+      public Image<TColor, TDepth> MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
+      {
+         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> temp = null;
+         IntPtr tempPtr = IntPtr.Zero;
+         if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT)
+         {
+            temp = CopyBlank();
+            tempPtr = temp.Ptr;
+         }
+
+         CvInvoke.cvMorphologyEx(Ptr, res.Ptr, tempPtr, element.Ptr, operation, iterations);
+
+         if (temp != null) temp.Dispose();
+         return res;
+      }
+
       ///<summary>
       ///Erodes <i>this</i> image using a 3x3 rectangular structuring element.
       ///Erosion are applied serveral (iterations) times
@@ -2521,6 +2545,29 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = CopyBlank();
          CvInvoke.cvDilate(Ptr, res.Ptr, IntPtr.Zero, iterations);
          return res;
+      }
+
+      /// <summary>
+      /// Perform inplace advanced morphological transformations using erosion and dilation as basic operations.
+      /// </summary>
+      /// <param name="element">Structuring element</param>
+      /// <param name="operation">Type of morphological operation</param>
+      /// <param name="iterations">Number of times erosion and dilation are applied</param>
+      public void _MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
+      {
+         Image<TColor, TDepth> temp = null;
+         IntPtr tempPtr = IntPtr.Zero;
+         if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT 
+            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
+            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT)
+         {
+            temp = CopyBlank();
+            tempPtr = temp.Ptr;
+         }
+
+         CvInvoke.cvMorphologyEx(Ptr, Ptr, tempPtr, element.Ptr, operation, iterations);
+
+         if (temp != null) temp.Dispose();
       }
 
       ///<summary>

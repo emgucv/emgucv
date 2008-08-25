@@ -2825,12 +2825,12 @@ namespace Emgu.CV
       /// <param name="iterations">Number of times erosion and dilation are applied.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvMorphologyEx(
-      IntPtr src,
-      IntPtr dst,
-      IntPtr temp,
-      IntPtr element,
-      CvEnum.CV_MORPH_OP operation,
-      int iterations);
+         IntPtr src,
+         IntPtr dst,
+         IntPtr temp,
+         IntPtr element,
+         CvEnum.CV_MORPH_OP operation,
+         int iterations);
 
       /// <summary>
       /// Creates a histogram of the specified size and returns the pointer to the created histogram. If the array ranges is 0, the histogram bin ranges must be specified later via The function cvSetHistBinRanges, though cvCalcHist and cvCalcBackProject may process 8-bit images without setting bin ranges, they assume equally spaced in 0..255 bins
