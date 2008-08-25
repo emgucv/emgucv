@@ -33,19 +33,19 @@ CV_SRC:
 	svn export ${SVN_URL}${VS2008_FOLDER}Emgu.CV.Example.sln src/${VS2008_FOLDER}Emgu.CV.Example.sln
 	svn export ${SVN_URL}Emgu.CV.Example src/Emgu.CV.Example
 	svn export ${SVN_URL}README.txt src/README.txt
-	svn export ${SVN_URL}lib/zlib.net.dll src/lib/zlib.net.dll
-	svn export ${SVN_URL}lib/zlib.net.license.txt src/lib/zlib.net.license.txt	
-	svn export ${SVN_URL}lib/ZedGraph.dll src/lib/ZedGraph.dll
-	svn export ${SVN_URL}lib/ZedGraph.license.txt src/lib/ZedGraph.license.txt	
+	cp lib/zlib.net.dll src/lib/zlib.net.dll
+	cp lib/zlib.net.license.txt src/lib/zlib.net.license.txt	
+	cp lib/ZedGraph.dll src/lib/ZedGraph.dll
+	cp lib/ZedGraph.license.txt src/lib/ZedGraph.license.txt	
 
-	svn export ${SVN_URL}lib/cv100.dll src/bin/cv100.dll
-	svn export ${SVN_URL}lib/cxcore100.dll src/bin/cxcore100.dll
-	svn export ${SVN_URL}lib/cvaux100.dll src/bin/cvaux100.dll
-	svn export ${SVN_URL}lib/cvcam100.dll src/bin/cvcam100.dll
-	svn export ${SVN_URL}lib/highgui100.dll src/bin/highgui100.dll
-	svn export ${SVN_URL}lib/cxts001.dll src/bin/cxts001.dll
-	svn export ${SVN_URL}lib/libguide40.dll src/bin/libguide40.dll
-	svn export ${SVN_URL}lib/opencv.license.txt src/bin/opencv.license.txt
+	cp lib/cv100.dll src/bin/cv100.dll
+	cp lib/cxcore100.dll src/bin/cxcore100.dll
+	cp lib/cvaux100.dll src/bin/cvaux100.dll
+	cp lib/cvcam100.dll src/bin/cvcam100.dll
+	cp lib/highgui100.dll src/bin/highgui100.dll
+	cp lib/cxts001.dll src/bin/cxts001.dll
+	cp lib/libguide40.dll src/bin/libguide40.dll
+	cp lib/opencv.license.txt src/bin/opencv.license.txt
 	zip -r Emgu.CV.SourceAndExamples-${VERSION}.zip src
 	rm -rf src
 
