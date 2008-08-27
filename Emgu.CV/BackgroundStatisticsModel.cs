@@ -56,7 +56,7 @@ namespace Emgu.CV
       /// <summary>
       /// Obtain the current background
       /// </summary>
-      public Image<Bgr, Byte> BackGround
+      public Image<Bgr, Byte> Background
       {
          get
          {
