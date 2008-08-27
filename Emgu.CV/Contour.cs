@@ -41,6 +41,12 @@ namespace Emgu.CV
             MCvContour seq = MCvContour;
             return seq.h_next == IntPtr.Zero ? null : new Contour(seq.h_next, Storage);
          }
+         set
+         {
+            MCvContour seq = MCvContour;
+            seq.h_next = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
+         }
       }
 
       /// <summary>
@@ -52,6 +58,12 @@ namespace Emgu.CV
          {
             MCvContour seq = MCvContour;
             return seq.h_prev == IntPtr.Zero ? null : new Contour(seq.h_prev, Storage);
+         }
+         set
+         {
+            MCvContour seq = MCvContour;
+            seq.h_prev = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
          }
       }
 
@@ -65,6 +77,12 @@ namespace Emgu.CV
             MCvContour seq = MCvContour;
             return seq.v_next == IntPtr.Zero ? null : new Contour(seq.v_next, Storage);
          }
+         set
+         {
+            MCvContour seq = MCvContour;
+            seq.v_next = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
+         }
       }
 
       /// <summary>
@@ -76,6 +94,12 @@ namespace Emgu.CV
          {
             MCvContour seq = MCvContour;
             return seq.v_prev == IntPtr.Zero ? null : new Contour(seq.v_prev, Storage);
+         }
+         set
+         {
+            MCvContour seq = MCvContour;
+            seq.v_prev = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
          }
       }
 

@@ -318,5 +318,29 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
          Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
+
+      [Test]
+      public void TestBGModel()
+      {
+         int width = 300;
+         int height = 400;
+         Image<Bgr, Byte> bg = new Image<Bgr,byte>(width, height);
+         bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
+
+         Image<Bgr, Byte> img1 = bg.Copy();
+         img1.Draw(new Rectangle<double>(new Point2D<double>(width>>1, height >>1), width/10, height/10), new Bgr(Color.Red), -1);
+
+         Image<Bgr, Byte> img2 = bg.Copy();
+         img2.Draw(new Rectangle<double>(new Point2D<double>(width>>1 + 10 , height >>1), width/10, height/10), new Bgr(Color.Red), -1);
+
+         BackgroundStatisticsModel model1 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+         model1.Update(img2);
+
+         BackgroundStatisticsModel model2 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
+         model2.Update(img2);
+
+         //Application.Run(new ImageViewer(model2.Foreground));
+         //Application.Run(new ImageViewer(model.BackGround));
+      }
    }
 }

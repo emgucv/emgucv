@@ -173,6 +173,12 @@ namespace Emgu.CV
             MCvSeq seq = MCvSeq;
             return seq.h_next == IntPtr.Zero ? null : new Seq<T>(seq.h_next, Storage);
          }
+         set
+         {
+            MCvSeq seq = MCvSeq;
+            seq.h_next = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
+         }
       }
 
       /// <summary>
@@ -185,6 +191,13 @@ namespace Emgu.CV
             MCvSeq seq = MCvSeq;
             return seq.h_prev == IntPtr.Zero ? null : new Seq<T>(seq.h_prev, Storage);
          }
+         set
+         {
+            MCvSeq seq = MCvSeq;
+            seq.h_prev = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
+         }
+
       }
 
       /// <summary>
@@ -197,6 +210,12 @@ namespace Emgu.CV
             MCvSeq seq = MCvSeq;
             return seq.v_next == IntPtr.Zero ? null : new Seq<T>(seq.v_next, Storage);
          }
+         set
+         {
+            MCvSeq seq = MCvSeq;
+            seq.v_next = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
+         }
       }
 
       /// <summary>
@@ -208,6 +227,12 @@ namespace Emgu.CV
          {
             MCvSeq seq = MCvSeq;
             return seq.v_prev == IntPtr.Zero ? null : new Seq<T>(seq.v_prev, Storage);
+         }
+         set
+         {
+            MCvSeq seq = MCvSeq;
+            seq.v_prev = value == null ? IntPtr.Zero : value.Ptr;
+            Marshal.StructureToPtr(seq, _ptr, false);
          }
       }
 

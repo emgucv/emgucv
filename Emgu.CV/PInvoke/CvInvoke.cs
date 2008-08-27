@@ -3593,6 +3593,7 @@ namespace Emgu.CV
         public delegate int CvCallBack(int index, IntPtr buffer, ref MUserData user_data);
         */
 
+      #region Eigen Objects
       #region cvEigenDecomposite function
       /// <summary>
       /// Calculates all decomposition coefficients for the input object using the previously calculated eigen objects basis and the averaged object
@@ -3734,6 +3735,21 @@ namespace Emgu.CV
             float[] coeffs,
             IntPtr avg,
             IntPtr proj);
+      #endregion
+
+      #region background statistic
+      /// <summary>
+      /// Create a Gaussian background model
+      /// </summary>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static IntPtr cvCreateGaussianBGModel(IntPtr img, IntPtr param);
+
+      /// <summary>
+      /// Create a background model
+      /// </summary>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
+      #endregion
 
       /// <summary>
       /// Calculates disparity for stereo-pair 
