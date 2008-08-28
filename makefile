@@ -6,10 +6,15 @@ VS2005_FOLDER=Solution/VS2005_MonoDevelop/
 VS2008_FOLDER=Solution/VS2008/
 CV_DLLS=cv100.dll cxcore100.dll cvaux100.dll cvcam100.dll highgui100.dll cxts001.dll libguide40.dll opencv.license.txt
 LIB_DLLS=zlib.net.dll zlib.net.license.txt ZedGraph.dll ZedGraph.license.txt
-CV_CHECKOUT=Emgu.CV Emgu.Util ${VS2005_FOLDER}Emgu.CV.sln ${VS2005_FOLDER}Emgu.CV.Example.sln ${VS2008_FOLDER}Emgu.CV.sln ${VS2008_FOLDER}Emgu.CV.Example.sln Emgu.CV.Example README.txt 
+FILE_TO_COPY=README.txt ${VS2005_FOLDER}Emgu.CV.sln ${VS2008_FOLDER}Emgu.CV.sln ${VS2005_FOLDER}Emgu.CV.Example.sln ${VS2008_FOLDER}Emgu.CV.Example.sln
+CV_CHECKOUT=Emgu.CV Emgu.Util Emgu.CV.Example  
 
 CV_RELEASE: Util CV FORCE
-	install -d release; cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt lib/zlib.net.license.txt lib/zlib.net.dll bin/Emgu.CV.dll bin/Emgu.Util.dll release; tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz; rm -rf release
+	install -d release 
+	cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt bin/Emgu.CV.dll bin/Emgu.Util.dll release 
+	$(foreach dll, $(LIB_DLLS), cp lib/$(dll) release;)
+	tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz
+	rm -rf release
 
 Util:  FORCE  
 	make -C Emgu.$@ bin; 
@@ -28,14 +33,8 @@ CV_SRC:
 	install -d src/bin
 	$(foreach dll, ${LIB_DLLS}, cp lib/${dll} src/lib/;)
 	$(foreach dll, ${CV_DLLS}, cp lib/${dll} src/bin/;)
-	svn export ${SVN_URL}Emgu.CV src/Emgu.CV
-	svn export ${SVN_URL}Emgu.Util src/Emgu.Util
-	svn export ${SVN_URL}Emgu.CV.Example src/Emgu.CV.Example
-	cp ${VS2005_FOLDER}Emgu.CV.sln src/${VS2005_FOLDER}Emgu.CV.sln
-	cp ${VS2008_FOLDER}Emgu.CV.sln src/${VS2008_FOLDER}Emgu.CV.sln
-	cp ${VS2005_FOLDER}Emgu.CV.Example.sln src/${VS2005_FOLDER}Emgu.CV.Example.sln
-	cp ${VS2008_FOLDER}Emgu.CV.Example.sln src/${VS2008_FOLDER}Emgu.CV.Example.sln
-	cp README.txt src/README.txt
+	$(foreach folder, ${CV_CHECKOUT}, svn export ${SVN_URL}${folder} src/${folder};)
+	$(foreach file, ${FILE_TO_COPY}, cp ${file} src/${file};)
 	zip -r Emgu.CV.SourceAndExamples-${VERSION}.zip src
 	rm -rf src
 
@@ -46,9 +45,3 @@ Test: CVTest
 	cd bin; nunit-console2 Emgu.CV.Test.dll; cd ..
 
 FORCE:
-
-
-
-
-
-
