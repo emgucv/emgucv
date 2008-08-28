@@ -137,8 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
+				AdditionalDependencies="cv.lib cvaux.lib cxcore.lib highgui.lib $(NOINHERIT)"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(ProjectDir)opencv\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				EntryPointSymbol="main"
