@@ -17,7 +17,7 @@ namespace Emgu.CV
    /// <typeparam name="TColor">Color type of this image</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, Single or Double)</typeparam>
    [Serializable]
-   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : ColorType, new()
+   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, ICloneable, IEquatable<Image<TColor, TDepth>> where TColor : ColorType, new()
    {
       private TDepth[, ,] _array;
 
@@ -1093,7 +1093,7 @@ namespace Emgu.CV
       /// <typeparam name="R">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private R[] ForEachChannel<R>( Emgu.Util.Toolbox.Func<IntPtr, int, R> conv)
+      private R[] ForEachChannel<R>(Emgu.Util.Toolbox.Func<IntPtr, int, R> conv)
       {
          int channelCount = new TColor().Dimension;
          R[] res = new R[channelCount];
@@ -1229,52 +1229,122 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
       /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-      /// <param name="quality_level">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-      /// <param name="min_distance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-      /// <param name="block_size">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-      /// <param name="use_harris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
+      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+      /// <returns>The good features for each channel</returns>
+      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
+      {
+         return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, false, 0);
+      }
+
+      /// <summary>
+      /// Finds corners with big eigenvalues in the image. 
+      /// </summary>
+      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
+      /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
+      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+      /// <param name="k">Free parameter of Harris detector. If provided, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal. </param>
+      /// <returns>The good features for each channel</returns>
+      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
+      {
+         return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
+      }
+
+      /// <summary>
+      /// Finds corners with big eigenvalues in the image. 
+      /// </summary>
+      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
+      /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
+      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+      /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
       /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
       /// <returns>The good features for each channel</returns>
-      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double quality_level, double min_distance, int block_size, bool use_harris, double k)
+      private Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
       {
          int channelCount = new TColor().Dimension;
          Point2D<float>[][] res = new Point2D<float>[channelCount][];
 
          float[,] coors = new float[maxFeaturesPerChannel, 2];
 
-         using (Image<Gray, Single> eig_image = new Image<Gray, float>(Width, Height))
-         using (Image<Gray, Single> tmp_image = new Image<Gray, float>(Width, Height))
+         using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
+         using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
          {
             Emgu.Util.Toolbox.Func<IImage, int, Point2D<float>[]> detector =
                 delegate(IImage img, int channel)
                 {
-                   int corner_count = maxFeaturesPerChannel;
+                   int cornercount = maxFeaturesPerChannel;
                    GCHandle handle = GCHandle.Alloc(coors, GCHandleType.Pinned);
                    CvInvoke.cvGoodFeaturesToTrack(
                        img.Ptr,
-                       eig_image.Ptr,
-                       tmp_image.Ptr,
+                       eigImage.Ptr,
+                       tmpImage.Ptr,
                        handle.AddrOfPinnedObject(),
-                       ref corner_count,
-                       quality_level,
-                       min_distance,
+                       ref cornercount,
+                       qualityLevel,
+                       minDistance,
                        IntPtr.Zero,
-                       block_size,
-                       use_harris ? 1 : 0,
+                       blockSize,
+                       useHarris ? 1 : 0,
                        k);
                    handle.Free();
 
-                   Point2D<float>[] pts = new Point2D<float>[corner_count];
-                   for (int i = 0; i < corner_count; i++)
+                   Point2D<float>[] pts = new Point2D<float>[cornercount];
+                   for (int i = 0; i < cornercount; i++)
                       pts[i] = new Point2D<float>(coors[i, 0], coors[i, 1]);
                    return pts;
                 };
 
             res = ForEachDuplicateChannel(detector);
          }
-
          return res;
       }
+
+      /// <summary>
+      /// Iterates to find the sub-pixel accurate location of corners, or radial saddle points
+      /// </summary>
+      /// <param name="corners">Initial coordinates of the input corners</param>
+      /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
+      /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
+      /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
+      /// <returns>Refined corner coordinates</returns>
+      public Point2D<float>[][] FindCornerSubPix(
+         Point2D<float>[][] corners,
+         MCvSize win,
+         MCvSize zeroZone,
+         MCvTermCriteria criteria)
+      {
+         int channelCount = new TColor().Dimension;
+         Point2D<float>[][] res = new Point2D<float>[channelCount][];
+
+         Emgu.Util.Toolbox.Func<IImage, int, Point2D<float>[]> detector =
+             delegate(IImage img, int channel)
+             {
+                Point2D<float>[] ptsForCurrentChannel = corners[channel];
+                int cornerCount = ptsForCurrentChannel.Length;
+                float[,] coors = new float[cornerCount, 2];
+                for (int i = 0; i < cornerCount; i++)
+                {
+                   Point2D<float> pt = ptsForCurrentChannel[i];
+                   coors[i, 0] = pt.X;
+                   coors[i, 1] = pt.Y;
+                }
+
+                CvInvoke.cvFindCornerSubPix(img.Ptr, coors, cornerCount, win, zeroZone, criteria);
+
+                Point2D<float>[] pts = new Point2D<float>[cornerCount];
+                for (int i = 0; i < cornerCount; i++)
+                   pts[i] = new Point2D<float>(coors[i, 0], coors[i, 1]);
+                return pts;
+             };
+         res = ForEachDuplicateChannel(detector);
+         return res;
+      }
+
       #endregion
 
       #region Matching
@@ -1815,7 +1885,7 @@ namespace Emgu.CV
       ///<param name="mask">The mask for the running average</param>
       public void RunningAvg(Image<TColor, TDepth> img, double alpha, Image<Gray, Byte> mask)
       {
-         CvInvoke.cvRunningAvg(img.Ptr, Ptr, alpha, mask == null? IntPtr.Zero : mask.Ptr);
+         CvInvoke.cvRunningAvg(img.Ptr, Ptr, alpha, mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       /// <summary>
@@ -2557,7 +2627,7 @@ namespace Emgu.CV
       {
          Image<TColor, TDepth> temp = null;
          IntPtr tempPtr = IntPtr.Zero;
-         if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT 
+         if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT)
          {
@@ -3439,9 +3509,9 @@ namespace Emgu.CV
       /// <summary>
       /// Calculates spatial and central moments up to the third order and writes them to moments. The moments may be used then to calculate gravity center of the shape, its area, main axises and various shape characeteristics including 7 Hu invariants.
       /// </summary>
-      /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1?s</param>
+      /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1's</param>
       /// <returns>spatial and central moments up to the third order</returns>
-      public MCvMoments Moments(bool binary)
+      public MCvMoments GetMoments(bool binary)
       {
          MCvMoments m = new MCvMoments();
          CvInvoke.cvMoments(Ptr, ref m, binary ? 1 : 0);
@@ -3622,5 +3692,14 @@ namespace Emgu.CV
       }
       #endregion
 
+
+      #region ICloneable Members
+
+      object ICloneable.Clone()
+      {
+         return Clone();
+      }
+
+      #endregion
    }
 }

@@ -222,12 +222,14 @@ namespace Emgu.CV.Test
 
       public void TestGoodFeature()
       {
-         using (Image<Gray, Byte> img = new Image<Gray, Byte>("stuff.jpg"))
+         using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
          {
-            Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5, false, 0);
-            foreach (Point2D<float> p in pts[0])
-               img.Draw<float>(new Circle<float>(p, 3.0f), new Gray(255.0), 1);
-            Application.Run(new ImageViewer(img));
+            Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
+            Point2D<float>[][] ptsSub = img.FindCornerSubPix(pts, new MCvSize(5, 5), new MCvSize(-1, -1), new MCvTermCriteria(20, 0.0001));
+
+            foreach (Point2D<float> p in ptsSub[0])
+               img.Draw<float>(new Circle<float>(p, 3.0f), new Bgr(255, 0, 0), 1);
+            //Application.Run(new ImageViewer(img));
          }
       }
 

@@ -459,5 +459,15 @@ namespace Emgu.CV.Test
                     Assert.IsTrue(c1.Equals(c2));
                 }
         }
+
+       [Test]
+       public void TestMoment()
+       {
+          Image<Gray, byte> image = new Image<Gray, byte>(100, 200);
+          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+          image.ThresholdToZero(new Gray(120));
+          MCvMoments moment = image.GetMoments(true);
+
+       }
     }
 }

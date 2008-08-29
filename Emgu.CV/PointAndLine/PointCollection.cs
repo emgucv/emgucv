@@ -146,6 +146,16 @@ namespace Emgu.CV
       /// <returns>the matrix representing the collection of points</returns>
       public static Matrix<D> ToMatrix<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
       {
+         return new Matrix<D>(ToArray(points));
+      }
+
+      /// <summary>
+      /// Convert a collection of N Points to an (N x k) array, k is determined by the dimension of the first point
+      /// </summary>
+      /// <param name="points">The points which will be converted to array</param>
+      /// <returns>the array representing the collection of points</returns>
+      public static D[,] ToArray<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
+      {
          List<D[]> pts = new List<D[]>();
          foreach (Point<D> pt in points)
             pts.Add(pt.Coordinate);
@@ -158,8 +168,7 @@ namespace Emgu.CV
          for (int i = 0; i <= rows; i++)
             for (int j = 0; j <= cols; j++)
                array[i, j] = pts[i][j];
-
-         return new Matrix<D>(array);
+         return array;
       }
 
       /// <summary>

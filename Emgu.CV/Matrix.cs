@@ -12,7 +12,7 @@ namespace Emgu.CV
    /// The Matrix class that wrap around CvMat in OpenCV 
    /// </summary>
    [Serializable]
-   public class Matrix<TDepth> : CvArray<TDepth>, IEquatable<Matrix<TDepth>> where TDepth : new()
+   public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>> where TDepth : new()
    {
       private TDepth[,] _array;
 
@@ -113,6 +113,7 @@ namespace Emgu.CV
 
             if (_ptr == IntPtr.Zero)
                _ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+
             if (_dataHandle.IsAllocated)
                _dataHandle.Free(); //free the data handle
             Debug.Assert(!_dataHandle.IsAllocated, "Handle should be free");
@@ -613,5 +614,14 @@ namespace Emgu.CV
 
       #endregion
 
+
+      #region ICloneable Members
+
+      object ICloneable.Clone()
+      {
+         return Clone();
+      }
+
+      #endregion
    }
 }

@@ -36,8 +36,12 @@ namespace Emgu.CV
          _coordinate = data;
       }
 
-      ///<summary> The array representation of this point, <remark>warning: changing the value of this array also change the position of the point </remark></summary>
-      [DataMember]
+      ///<summary> 
+      /// The array representation of this point, 
+      ///</summary>
+      ///<remark>
+      /// warning: changing the value of this array also change the position of the point 
+      ///</remark>
       public T[] Coordinate
       {
          get { return _coordinate; }

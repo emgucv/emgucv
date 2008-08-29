@@ -65,9 +65,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The CvPoint representation of th is 2D point
+      /// The CvPoint representation of this 2D point
       /// </summary>
       [Obsolete("Will be removed in the next version, use MCvPoint instead")]
+      [XmlIgnore]
       public MCvPoint CvPoint
       {
          get
@@ -79,6 +80,7 @@ namespace Emgu.CV
       /// <summary>
       /// The MCvPoint representation of this 2D point
       /// </summary>
+      [XmlIgnore]
       public MCvPoint MCvPoint
       {
          get
@@ -96,6 +98,7 @@ namespace Emgu.CV
       /// <summary>
       /// The MCvPoint2D32f representation of this 2D point
       /// </summary>
+      [XmlIgnore]
       public MCvPoint2D32f MCvPoint2D32f
       {
          get

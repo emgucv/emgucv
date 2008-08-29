@@ -8,7 +8,7 @@ namespace Emgu.CV
    /// The motion history class
    /// </summary>
    /// <remarks>
-   /// For example usage, take a look at the Motion Detection example
+   /// For help on using this class, take a look at the Motion Detection example
    /// </remarks>
    public class MotionHistory
    {

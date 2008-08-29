@@ -9,14 +9,13 @@ namespace Emgu.CV
    /// <summary>
    /// Create a background statistics model
    /// </summary>
-   [Obsolete("Beta version, API might change in the future")]
    public class BackgroundStatisticsModel : UnmanagedObject
    {
       /// <summary>
       /// Create a BGStatModel
       /// </summary>
-      /// <param name="img"></param>
-      /// <param name="type"></param>
+      /// <param name="img">The image used for initiating the statistic model</param>
+      /// <param name="type">The type of the statistics model</param>
       public BackgroundStatisticsModel(Image<Bgr, Byte> img, Emgu.CV.CvEnum.BG_STAT_TYPE type)
       {
          if (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL)
@@ -54,7 +53,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Obtain the current background
+      /// Get the current background
       /// </summary>
       public Image<Bgr, Byte> Background
       {
@@ -69,7 +68,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Obtain a mask for the current forground
+      /// Get a mask of the current forground
       /// </summary>
       public Image<Gray, Byte> Foreground
       {

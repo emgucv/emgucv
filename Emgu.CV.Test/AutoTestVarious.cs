@@ -141,6 +141,9 @@ namespace Emgu.CV.Test
                Assert.AreEqual(cs.Distance(pIn), 10);
                Assert.AreEqual(cs.Distance(pOut), -50);
                img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
+
+               MCvMoments moment = cs.GetMoments();
+               Assert.IsTrue(moment.GravityCenter.Equals(rect2.Center));
             }
          }
       }
