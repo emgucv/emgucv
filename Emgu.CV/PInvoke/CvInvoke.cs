@@ -1581,17 +1581,17 @@ namespace Emgu.CV
 
       /// <summary>
       /// transforms every element of src (by treating it as 2D or 3D vector) in the following way:
-      /// (x, y, z) -> (x’/w, y’/w, z’/w) or
-      /// (x, y) -> (x’/w, y’/w),
+      /// (x, y, z) -> (x?/w, y?/w, z?/w) or
+      /// (x, y) -> (x?/w, y?/w),
       /// where
-      /// (x’, y’, z’, w’) = mat4x4*(x, y, z, 1) or
-      /// (x’, y’, w’) = mat3x3*(x, y, 1)
-      /// and w = w’   if w’!=0,
+      /// (x?, y?, z?, w?) = mat4x4*(x, y, z, 1) or
+      /// (x?, y?, w?) = mat3x3*(x, y, 1)
+      /// and w = w?   if w?!=0,
       ///        inf  otherwise
       /// </summary>
       /// <param name="src">The source three-channel floating-point array</param>
       /// <param name="dst">The destination three-channel floating-point array</param>
-      /// <param name="mat">3×3 or 4×4 transformation matrix</param>
+      /// <param name="mat">3?3 or 4?4 transformation matrix</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvPerspectiveTransform(IntPtr src, IntPtr dst, IntPtr mat);
 
