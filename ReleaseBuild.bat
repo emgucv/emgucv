@@ -4,7 +4,7 @@ set RELEASE-ZIP=%RELEASE-NAME%.zip
 
 C:\WINDOWS\Microsoft.NET\Framework\v3.5\MSBuild.exe Solution\VS2008\Emgu.CV.sln /property:Configuration=Release
 if exist %RELEASE-FOLDER% rm -rf %RELEASE-FOLDER%
-if exist %RELEASE-ZIP% rm -f %RELEASE-ZIP%
+if exist %RELEASE-NAME% rm -f %RELEASE-NAME%
 
 mkdir %RELEASE-FOLDER%
 mkdir %RELEASE-NAME%
