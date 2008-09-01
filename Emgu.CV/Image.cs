@@ -1264,7 +1264,7 @@ namespace Emgu.CV
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
       /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
       /// <returns>The good features for each channel</returns>
-      private Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
+      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
       {
          int channelCount = new TColor().Dimension;
          Point2D<float>[][] res = new Point2D<float>[channelCount][];
