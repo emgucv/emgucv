@@ -23,7 +23,7 @@ CV: Util FORCE
 	make -C Emgu.$@ bin;
 
 UI: 	FORCE
-	make -C Emgu.$@ bin; cp Emgu.$@/bin/Emgu.$@.dll ./bin;
+	make -C Emgu.$@ bin; 
 
 CV_SRC:
 	install -d src 
@@ -39,7 +39,7 @@ CV_SRC:
 	rm -rf src
 
 CVTest: CV UI $(CVTEST_SRC)
-	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/nunit22/nunit.framework -r:bin/Emgu.Util.dll -r:bin/Emgu.UI.dll   -r:System.Windows.Forms -r:System.Drawing -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
+	$(CC) -target:library -r:System.Data -r:/usr/lib/mono/nunit22/nunit.framework -r:bin/Emgu.Util.dll -r:bin/Emgu.UI.dll -r:System.Windows.Forms -r:System.Drawing -r:bin/Emgu.CV.dll $(CVTEST_SRC) -out:bin/Emgu.CV.Test.dll 
 
 Test: CVTest
 	cd bin; nunit-console2 Emgu.CV.Test.dll; cd ..
