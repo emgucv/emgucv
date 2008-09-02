@@ -145,6 +145,13 @@ namespace Emgu.CV.Test
                MCvMoments moment = cs.GetMoments();
                Assert.IsTrue(moment.GravityCenter.Equals(rect2.Center));
             }
+
+            using (MemStorage stor = new MemStorage())
+            {
+               Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
+               Contour c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Assert.AreEqual(c, null);
+            }
          }
       }
 
@@ -327,14 +334,14 @@ namespace Emgu.CV.Test
       {
          int width = 300;
          int height = 400;
-         Image<Bgr, Byte> bg = new Image<Bgr,byte>(width, height);
+         Image<Bgr, Byte> bg = new Image<Bgr, byte>(width, height);
          bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
 
          Image<Bgr, Byte> img1 = bg.Copy();
-         img1.Draw(new Rectangle<double>(new Point2D<double>(width>>1, height >>1), width/10, height/10), new Bgr(Color.Red), -1);
+         img1.Draw(new Rectangle<double>(new Point2D<double>(width >> 1, height >> 1), width / 10, height / 10), new Bgr(Color.Red), -1);
 
          Image<Bgr, Byte> img2 = bg.Copy();
-         img2.Draw(new Rectangle<double>(new Point2D<double>(width>>1 + 10 , height >>1), width/10, height/10), new Bgr(Color.Red), -1);
+         img2.Draw(new Rectangle<double>(new Point2D<double>(width >> 1 + 10, height >> 1), width / 10, height / 10), new Bgr(Color.Red), -1);
 
          BackgroundStatisticsModel model1 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
          model1.Update(img2);
@@ -344,6 +351,41 @@ namespace Emgu.CV.Test
 
          //Application.Run(new ImageViewer(model2.Foreground));
          //Application.Run(new ImageViewer(model.BackGround));
+      }
+
+      [Test]
+      public void TestVideoWriter()
+      {
+         int numberOfFrames = 1000;
+         int width = 300;
+         int height = 200;
+         using (VideoWriter writer = new VideoWriter("tmp.avi", 2, width, height, true))
+         {
+            for (int i = 0; i < numberOfFrames; i++)
+            {
+               Image<Bgr, Byte> img1 = new Image<Bgr, byte>(width, height);
+               img1.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+               writer.WriteFrame(img1);
+            }
+         }
+
+         FileInfo fi = new FileInfo("tmp.avi");
+         Assert.AreNotEqual(fi.Length, 0);
+
+         using (Capture capture = new Capture("tmp.avi"))
+         {
+            Image<Bgr, Byte> img2 = capture.QueryFrame();
+            int count = 0;
+            while (img2 != null)
+            {
+               Assert.AreEqual(img2.Width, width);
+               Assert.AreEqual(img2.Height, height);
+               img2 = capture.QueryFrame();
+               count++;
+            }
+            Assert.AreEqual(numberOfFrames, count);
+         }
+         File.Delete(fi.FullName);
       }
    }
 }

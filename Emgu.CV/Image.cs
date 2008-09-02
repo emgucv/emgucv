@@ -108,13 +108,16 @@ namespace Emgu.CV
 
             //TODO: fix the following to handle the case when input image has non 4-align byte in a row
             Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
+            
+            CvInvoke.cvReleaseImage(ref ptr);
             #endregion
          }
          else
          {   //if the file format cannot be recognized by OpenCV 
             if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
             {
-               Bitmap = new Bitmap(fi.FullName);
+               using(Bitmap bmp = new Bitmap(fi.FullName))
+                  Bitmap = bmp;
             }
             else
                throw new FileLoadException(String.Format("Unable to load file of type {0}", fi.Extension));
@@ -926,32 +929,41 @@ namespace Emgu.CV
 
       #region Contour detection
       /// <summary>
-      /// Find contours
+      /// Find a list of contours using simple approximation method.
       /// </summary>
-      /// <returns>Contours</returns>
+      /// <returns>
+      /// Contour if there is any;
+      /// null if no contour is found
+      /// </returns>
       public Contour FindContours()
       {
          return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
       }
 
       /// <summary>
-      /// Find contours
+      /// Find contours 
       /// </summary>
       /// <param name="method">The type of approximation method</param>
       /// <param name="type">The retrival type</param>
-      /// <returns>Contours</returns>
+      /// <returns>
+      /// Contour if there is any;
+      /// null if no contour is found
+      /// </returns>
       public Contour FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
       {
          return FindContours(method, type, new MemStorage());
       }
 
       /// <summary>
-      /// Find contours
+      /// Find contours using the specific memory storage
       /// </summary>
       /// <param name="method">The type of approximation method</param>
       /// <param name="type">The retrival type</param>
       /// <param name="stor">The storage used by the sequences</param>
-      /// <returns>Contours</returns>
+      /// <returns>
+      /// Contour if there is any;
+      /// null if no contour is found
+      /// </returns>
       public Contour FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
       {
          IntPtr seq = IntPtr.Zero;
@@ -977,6 +989,8 @@ namespace Emgu.CV
                 type,
                 method,
                 new MCvPoint(0, 0));
+            if (seq == IntPtr.Zero)
+               return null;
          }
          return new Contour(seq, stor);
       }

@@ -210,6 +210,10 @@ namespace Emgu.CV
 #else
          IntPtr img = CvInvoke.cvQueryFrame(Ptr);
 #endif
+         if (img == IntPtr.Zero)
+         {
+            return null;
+         }
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 

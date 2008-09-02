@@ -16,6 +16,8 @@ namespace Emgu.CV
    {
       private TDepth[,] _array;
 
+      private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMat));
+
       #region Constructors
       /// <summary>
       /// The default constructor which allows Data to be set later on
@@ -112,11 +114,14 @@ namespace Emgu.CV
             Debug.Assert(value != null, "The Array cannot be null");
 
             if (_ptr == IntPtr.Zero)
-               _ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+            {
+               _ptr = Marshal.AllocHGlobal(_sizeOfHeader);
+               GC.AddMemoryPressure(_sizeOfHeader);
+            }
 
             if (_dataHandle.IsAllocated)
                _dataHandle.Free(); //free the data handle
-            Debug.Assert(!_dataHandle.IsAllocated, "Handle should be free");
+            Debug.Assert(!_dataHandle.IsAllocated, "Handle should be freed");
 
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
@@ -576,6 +581,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             Marshal.Release(_ptr);
+            GC.RemoveMemoryPressure(_sizeOfHeader);
             _ptr = IntPtr.Zero;
          }
 
