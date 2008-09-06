@@ -21,11 +21,38 @@ namespace Emgu.CV
       /// Start the Delaunay's triangulation in the specific region of interest.
       /// </summary>
       /// <param name="roi">The region of interest of the triangulation</param>
-      public PlanarSubdivision(Rectangle<double> roi)
+      public PlanarSubdivision(Rectangle<float> roi)
       {
          _storage = new MemStorage();
          _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi.MCvRect, _storage);
-         _roi = roi.Convert<float>();
+         _roi = roi;
+      }
+
+      /// <summary>
+      /// Create a planar subdivision from the given points. The ROI is computed as the minimun bounding Rectangle for the input points
+      /// </summary>
+      /// <param name="points">The points for this planar subdivision</param>
+      public PlanarSubdivision(IEnumerable<Point2D<float>> points)
+      {
+         #region Find the region of interest
+         Rectangle<float> roi;
+         using (MemStorage storage = new MemStorage())
+         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>)p; })))
+         {
+            MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
+            roi = new Rectangle<float>(cvRect);
+         }
+         #endregion
+
+         _storage = new MemStorage();
+         _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi.MCvRect, _storage);
+         _roi = roi;
+
+         foreach (Point2D<float> p in points)
+         {
+            MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
+            Insert(ref cvPoint);
+         }
       }
 
       /// <summary>
@@ -141,14 +168,7 @@ namespace Emgu.CV
       /// <returns>The result of the current triangulation</returns>
       public List<Triangle2D<float>> GetDelaunayTriangles()
       {
-         List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
-
-         List<Triangle2D<float>> subdivisionTriangle = GetPlanarSubdivisionDelaunayTriangles();
-         foreach (Triangle2D<float> tri in subdivisionTriangle)
-            if (Utils.IsConvexPolygonInConvexPolygon(tri, _roi))
-               triangleList.Add(tri);
-
-         return triangleList;
+         return GetDelaunayTriangles(false);
       }
 
       /// <summary>
@@ -198,7 +218,7 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
-      public List<Triangle2D<float>> GetPlanarSubdivisionDelaunayTriangles()
+      public List<Triangle2D<float>> GetDelaunayTriangles(bool includeVirtualPoints)
       {
          List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
 
@@ -218,17 +238,46 @@ namespace Emgu.CV
                MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
 
                Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
-               if (!triangleList.Exists(tri1.Equals))
-                  triangleList.Add(tri1);
+               if (!triangleList.Exists(tri1.Equals) && !IsPolygonInsideTriangle(tri1, _roi))
+               {
+                     triangleList.Add(tri1);
+               }
 
                Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-               if (!triangleList.Exists(tri2.Equals))
-                  triangleList.Add(tri2);
+               if (!triangleList.Exists(tri2.Equals) && !IsPolygonInsideTriangle(tri1, _roi))
+               {
+                     triangleList.Add(tri2);
+               }
             }
 
             CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader);
          }
-         return triangleList;
+
+         if (includeVirtualPoints)
+         {
+            return triangleList;
+         } else
+         {
+            return triangleList.FindAll(
+               delegate(Triangle2D<float> tri) 
+               { return Utils.IsConvexPolygonInConvexPolygon(tri, _roi); });
+         }
+      }
+
+      /// <summary>
+      /// Determine if a polygon is inside a triangle
+      /// </summary>
+      /// <param name="triangle">The triangle</param>
+      /// <param name="polygon">The polygon</param>
+      /// <returns>True if the polygon is inside the triangle; false otherwise</returns>
+      private static bool IsPolygonInsideTriangle(Triangle2D<float> triangle, IConvexPolygon<float> polygon )
+      {
+         bool allTriangleVerticesOutside = true;
+         foreach (Point2D<float> pt in triangle.Vertices)
+         {
+            allTriangleVerticesOutside &= (!pt.InConvexPolygon(polygon));
+         }
+         return allTriangleVerticesOutside;
       }
 
       /// <summary>
@@ -238,66 +287,6 @@ namespace Emgu.CV
       {
          _storage.Dispose();
       }
-
-      #region static methods
-      /// <summary>
-      ///  Find the Delaunay's triangulation from the given <paramref name="points"/>
-      /// </summary>
-      /// <param name="points">The points for triangulation</param>
-      /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
-      /// <returns>The triangles as a result of the triangulation</returns>
-      public static List<Triangle2D<float>> GetDelaunayTriangles(IEnumerable<Point2D<float>> points)
-      {
-         using (PlanarSubdivision tri = GetSubdivision(points))
-            return tri.GetDelaunayTriangles();
-      }
-
-      /// <summary>
-      /// Get the list of the voronoi facets from the given <paramref name="points"/>
-      /// </summary>
-      /// <param name="points">The points for computing the Voronoi diagram</param>
-      /// <returns>A list of Voronoi facet</returns>
-      public static List<VoronoiFacet> GetVoronoi(IEnumerable<Point2D<float>> points)
-      {
-         using (PlanarSubdivision tri = GetSubdivision(points))
-            return tri.GetVoronoiFacets();
-      }
-
-      /// <summary>
-      ///  Find the Delaunay's plannar subdivision triangles from the given <paramref name="points"/>
-      /// </summary>
-      /// <param name="points">the points for triangulation</param>
-      /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
-      /// <returns>The triangles subdivision in the current triangulation</returns>
-      public static List<Triangle2D<float>> GetPlanarSubdivisionTriangles(IEnumerable<Point2D<float>> points)
-      {
-         using (PlanarSubdivision tri = GetSubdivision(points))
-            return tri.GetPlanarSubdivisionDelaunayTriangles();
-      }
-
-      private static PlanarSubdivision GetSubdivision(IEnumerable<Point2D<float>> points)
-      {
-         #region Find the region of interest
-         Rectangle<double> roi;
-         using (MemStorage storage = new MemStorage())
-         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>)p; })))
-         {
-            MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
-            roi = new Rectangle<double>(cvRect);
-         }
-         #endregion
-
-         PlanarSubdivision tri = new PlanarSubdivision(roi);
-
-         foreach (Point2D<float> p in points)
-         {
-            MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
-            tri.Insert(ref cvPoint);
-         }
-         return tri;
-      }
-      #endregion
-
    }
 
    /// <summary>

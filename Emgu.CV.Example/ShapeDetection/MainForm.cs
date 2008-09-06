@@ -51,9 +51,9 @@ namespace ShapeDetection
             List<Box2D<int>> boxList = new List<Box2D<int>>();
 
             using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
-               for (Contour contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
+               for (Contour<MCvPoint> contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
                {
-                  Contour currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
+                  Contour<MCvPoint> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
 
                   if (contours.Area > 250) //only consider contours with area greater than 250
                   {

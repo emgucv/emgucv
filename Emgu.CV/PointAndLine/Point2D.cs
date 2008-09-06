@@ -65,19 +65,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The CvPoint representation of this 2D point
-      /// </summary>
-      [Obsolete("Will be removed in the next version, use MCvPoint instead")]
-      [XmlIgnore]
-      public MCvPoint CvPoint
-      {
-         get
-         {
-            return MCvPoint;
-         }
-      }
-
-      /// <summary>
       /// The MCvPoint representation of this 2D point
       /// </summary>
       [XmlIgnore]
@@ -137,14 +124,22 @@ namespace Emgu.CV
       /// Determine if the point is in a convex polygon
       /// </summary>
       /// <param name="polygon">the convex polygon</param>
-      /// <returns>true if the point is in the convex polygon; false otherwise </returns>
+      /// <returns>true if the point is in/on the convex polygon; false otherwise </returns>
       public bool InConvexPolygon(Point2D<T>[] polygon)
       {
          LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon, true);
          int side = edges[0].Side(this);
+
          bool inside = true;
          for (int i = 1; i < edges.Length; i++)
-            inside = (inside && (side == edges[i].Side(this)));
+         {
+            int currentSide = edges[i].Side(this);
+            if (side == 0) side = currentSide;
+            
+            inside &= (side == currentSide || currentSide == 0); 
+
+            if (!inside) return inside; //if not inside, imediately return
+         }
          return inside;
       }
    }

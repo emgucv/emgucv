@@ -33,6 +33,18 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a contour of the specific kind, tyoe and flag
+      /// </summary>
+      /// <param name="kind">the kind of the sequence</param>
+      /// <param name="eltype">the type of the sequence</param>
+      /// <param name="flag">the flag of the sequence</param>
+      /// <param name="stor">the storage</param>
+      public Seq(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind,  CvEnum.SEQ_FLAG flag, MemStorage stor)
+         : this( ((int)kind | (int)eltype | (int)flag), stor)
+      {
+      }
+
+      /// <summary>
       /// Create a sequence using the specific <paramref name="storage"/>
       /// </summary>
       /// <param name="storage">the storage</param>
@@ -60,6 +72,18 @@ namespace Emgu.CV
          _stor = storage;
       }
       #endregion 
+
+      /// <summary>
+      /// Push the data to the sequence
+      /// </summary>
+      /// <param name="data">The data to be push into the sequence</param>
+      public void Push(T data)
+      {
+         IntPtr dataCopy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+         Marshal.StructureToPtr(data, dataCopy, false);
+         CvInvoke.cvSeqPush(Ptr, dataCopy);
+         Marshal.FreeHGlobal(dataCopy);
+      }
 
       /// <summary>
       /// A Pointer to the storage used by this Seq
@@ -251,7 +275,7 @@ namespace Emgu.CV
       ///<summary> Get the number of eelments in the sequence</summary>
       public int Total
       {
-         get { return ((MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq))).total; }
+         get { return MCvSeq.total; }
       }
 
       /// <summary>

@@ -18,6 +18,15 @@ namespace Emgu.CV
 
       private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMat));
 
+      private void AllocateHeader()
+      {
+         if (_ptr == IntPtr.Zero)
+         {
+            _ptr = Marshal.AllocHGlobal(_sizeOfHeader);
+            GC.AddMemoryPressure(_sizeOfHeader);
+         }
+      }
+
       #region Constructors
       /// <summary>
       /// The default constructor which allows Data to be set later on
@@ -113,11 +122,7 @@ namespace Emgu.CV
          {
             Debug.Assert(value != null, "The Array cannot be null");
 
-            if (_ptr == IntPtr.Zero)
-            {
-               _ptr = Marshal.AllocHGlobal(_sizeOfHeader);
-               GC.AddMemoryPressure(_sizeOfHeader);
-            }
+            AllocateHeader();
 
             if (_dataHandle.IsAllocated)
                _dataHandle.Free(); //free the data handle
@@ -234,8 +239,8 @@ namespace Emgu.CV
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
-         IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
-         subMat._ptr = CvInvoke.cvGetSubRect(_ptr, subPtr, rect.MCvRect);
+         subMat.AllocateHeader();
+         subMat._ptr = CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect.MCvRect);
          return subMat;
       }
 
@@ -260,8 +265,8 @@ namespace Emgu.CV
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
-         IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
-         subMat._ptr = CvInvoke.cvGetRows(_ptr, subPtr, startRow, endRow, deltaRow);
+         subMat.AllocateHeader();
+         subMat._ptr = CvInvoke.cvGetRows(_ptr, subMat.Ptr, startRow, endRow, deltaRow);
          return subMat;
       }
 
@@ -285,9 +290,32 @@ namespace Emgu.CV
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
-         IntPtr subPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
-         subMat._ptr = CvInvoke.cvGetCols(_ptr, subPtr, startCol, endCol);
+         subMat.AllocateHeader();
+         subMat._ptr = CvInvoke.cvGetCols(_ptr, subMat.Ptr, startCol, endCol);
          return subMat;
+      }
+
+      /// <summary>
+      /// Return the specific diagonal elements of this matrix
+      /// </summary>
+      /// <param name="diag">Array diagonal. Zero corresponds to the main diagonal, -1 corresponds to the diagonal above the main etc., 1 corresponds to the diagonal below the main etc</param>
+      /// <returns>The specific diagonal elements of this matrix</returns>
+      public Matrix<TDepth> GetDiag(int diag)
+      {
+         Matrix<TDepth> subMat = new Matrix<TDepth>();
+         subMat._array = _array;
+         subMat.AllocateHeader();
+         subMat._ptr = CvInvoke.cvGetDiag(_ptr, subMat.Ptr, diag);
+         return subMat;
+      }
+
+      /// <summary>
+      /// Return the main diagonal element of this matrix
+      /// </summary>
+      /// <returns>The main diagonal element of this matrix</returns>
+      public Matrix<TDepth> GetDiag()
+      {
+         return GetDiag(0);
       }
       #endregion
 

@@ -644,6 +644,22 @@ namespace Emgu.CV.CvEnum
       CV_RETR_TREE = 3
    }
 
+   internal static class SeqConst
+   {
+      /// <summary>
+      /// The bit to shift for SEQ_ELTYPE
+      /// </summary>
+      public const int CV_SEQ_ELTYPE_BITS = 9;
+      /// <summary>
+      /// The bits to shift for SEQ_KIND
+      /// </summary>
+      public const int CV_SEQ_KIND_BITS = 3;
+      /// <summary>
+      /// The bits to shift for SEQ_FLAG
+      /// </summary>
+      public const int CV_SEQ_FLAG_SHIFT = CV_SEQ_KIND_BITS + CV_SEQ_ELTYPE_BITS;
+   }
+
    /// <summary>
    /// CV_SEQ_ELTYPE
    /// </summary>
@@ -694,6 +710,56 @@ namespace Emgu.CV.CvEnum
       ///</summary>
       CV_SEQ_ELTYPE_POINT3D = MAT_DEPTH.CV_32F + 2 << 3
 
+   }
+
+   /// <summary>
+   /// The kind of sequence available
+   /// </summary>
+   public enum SEQ_KIND
+   {
+      /// <summary>
+      /// generic (unspecified) kind of sequence 
+      /// </summary>
+      CV_SEQ_KIND_GENERIC = (0 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      /// <summary>
+      /// dense sequence subtypes 
+      /// </summary>
+      CV_SEQ_KIND_CURVE = (1 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      /// <summary>
+      /// dense sequence subtypes 
+      /// </summary>
+      CV_SEQ_KIND_BIN_TREE = (2 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      /// <summary>
+      /// sparse sequence (or set) subtypes 
+      /// </summary>
+      CV_SEQ_KIND_GRAPH = (3 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      /// <summary>
+      /// sparse sequence (or set) subtypes 
+      /// </summary>
+      CV_SEQ_KIND_SUBDIV2D = (4 << SeqConst.CV_SEQ_ELTYPE_BITS)
+   }
+
+   /// <summary>
+   /// Sequence flag
+   /// </summary>
+   public enum SEQ_FLAG
+   {
+      /// <summary>
+      /// close sequence
+      /// </summary>
+      CV_SEQ_FLAG_CLOSED = (1 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      /// <summary>
+      /// 
+      /// </summary>
+      CV_SEQ_FLAG_SIMPLE = (2 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      /// <summary>
+      /// 
+      /// </summary>
+      CV_SEQ_FLAG_CONVEX = (4 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      /// <summary>
+      /// 
+      /// </summary>
+      CV_SEQ_FLAG_HOLE = (8 << SeqConst.CV_SEQ_FLAG_SHIFT)
    }
 
    /// <summary>

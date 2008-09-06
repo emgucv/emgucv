@@ -126,7 +126,7 @@ namespace Emgu.CV.Test
 
             using (MemStorage stor = new MemStorage())
             {
-               Contour cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Contour<MCvPoint> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
                Assert.AreEqual(rect.Area, cs.Area);
                Assert.IsTrue(cs.Convex);
                Assert.AreEqual(rect.Width * 2 + rect.Height * 2, cs.Perimeter);
@@ -149,7 +149,7 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
-               Contour c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Contour<MCvPoint> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
                Assert.AreEqual(c, null);
             }
          }
@@ -257,6 +257,21 @@ namespace Emgu.CV.Test
          Assert.IsTrue(p1.InConvexPolygon(rect));
          Assert.IsFalse(p2.InConvexPolygon(tri));
          Assert.IsFalse(p2.InConvexPolygon(rect));
+
+         /*
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MCvPoint2D32f> contour = new Seq<MCvPoint2D32f>(
+               CvEnum.SEQ_ELTYPE.CV_SEQ_ELTYPE_GENERIC,
+               CvEnum.SEQ_KIND.CV_SEQ_KIND_CURVE, 
+               CvEnum.SEQ_FLAG.CV_SEQ_FLAG_CLOSED, 
+               stor);
+            foreach (Point2D<float> p in tri.Vertices)
+            {
+               contour.Push(p.MCvPoint2D32f);
+            }
+            Assert.IsTrue(contour.InContour(p1) > 0);
+         }*/
       }
 
       [Test]
@@ -351,6 +366,27 @@ namespace Emgu.CV.Test
 
          //Application.Run(new ImageViewer(model2.Foreground));
          //Application.Run(new ImageViewer(model.BackGround));
+      }
+
+      [Test]
+      public void TestPlannarSubdivision()
+      {
+         Point2D<float>[] points = new Point2D<float>[3];
+         Random r = new Random((int) DateTime.Now.Ticks);
+         for (int i = 0; i < points.Length; i++)
+         {
+            points[i] = new Point2D<float>((float) (r.NextDouble() * 20), (float) (r.NextDouble() * 20));
+         }
+
+         PlanarSubdivision division = new PlanarSubdivision(points);
+
+         List<Triangle2D<float>> triangles = division.GetDelaunayTriangles(true);
+
+         foreach (Triangle2D<float> t in triangles)
+         {
+            bool hasLargeTriangle = triangles.Exists(delegate(Triangle2D<float> t2) { return  !t2.Equals(t) && Utils.IsConvexPolygonInConvexPolygon(t2, t); });
+            Assert.IsFalse(hasLargeTriangle);
+         }
       }
 
       [Test]

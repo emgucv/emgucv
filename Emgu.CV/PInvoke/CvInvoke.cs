@@ -1108,6 +1108,17 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// returns the header, corresponding to a specified diagonal of the input array
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="submat">Pointer to the resulting sub-array header</param>
+      /// <param name="diag">Array diagonal. Zero corresponds to the main diagonal, -1 corresponds to the diagonal above the main etc., 1 corresponds to the diagonal below the main etc</param>
+      /// <returns>Pointer to the resulting sub-array header</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvGetDiag( IntPtr arr, IntPtr submat, int diag );
+
+
+      /// <summary>
       /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.
       /// </summary>
       /// <param name="img">Image where the circle is drawn</param>
@@ -1707,6 +1718,84 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
+      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
+      /// angle(I)=atan( y(I)/x(I) )
+      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
+      /// </summary>
+      /// <param name="x">The array of x-coordinates </param>
+      /// <param name="y">The array of y-coordinates</param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360°). </param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvCartToPolar(
+         IntPtr x,
+         IntPtr y,
+         IntPtr magnitude,
+         IntPtr angle,
+         int angleInDegrees);
+
+      /// <summary>
+      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
+      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
+      /// angle(I)=atan( y(I)/x(I) )
+      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
+      /// </summary>
+      /// <param name="x">The array of x-coordinates </param>
+      /// <param name="y">The array of y-coordinates</param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360°). </param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      public static void cvCartToPolar(
+         IntPtr x,
+         IntPtr y,
+         IntPtr magnitude,
+         IntPtr angle,
+         bool angleInDegrees)
+      {
+         cvCartToPolar(x, y, magnitude, angle, angleInDegrees ? 1 : 0);
+      }
+
+      /// <summary>
+      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
+      /// x(I)=magnitude(I)*cos(angle(I)),
+      /// y(I)=magnitude(I)*sin(angle(I))
+      /// </summary>
+      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="angle">The array of angles, whether in radians or degrees</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvPolarToCart(
+         IntPtr magnitude,
+         IntPtr angle,
+         IntPtr x,
+         IntPtr y,
+         int angleInDegrees);
+
+      /// <summary>
+      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
+      /// x(I)=magnitude(I)*cos(angle(I)),
+      /// y(I)=magnitude(I)*sin(angle(I))
+      /// </summary>
+      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="angle">The array of angles, whether in radians or degrees</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      public static void cvPolarToCart(
+         IntPtr magnitude,
+         IntPtr angle,
+         IntPtr x,
+         IntPtr y,
+         bool angleInDegrees)
+      {
+         cvPolarToCart(magnitude, angle, x, y, angleInDegrees ? 1 : 0);
+      }
+
+      /// <summary>
       /// Initializes scaled identity matrix:
       /// arr(i,j)=value if i=j,
       /// 0 otherwise
@@ -1715,6 +1804,16 @@ namespace Emgu.CV
       /// <param name="value">The value to assign to the diagonal elements.</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvSetIdentity(IntPtr mat, MCvScalar value);
+
+      /// <summary>
+      /// Initializes the matrix as following:
+      /// arr(i,j)=(end-start)*(i*cols(arr)+j)/(cols(arr)*rows(arr))
+      /// </summary>
+      /// <param name="mat">The matrix to initialize. It should be single-channel 32-bit, integer or floating-point</param>
+      /// <param name="start">The lower inclusive boundary of the range</param>
+      /// <param name="end">The upper exclusive boundary of the range</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvRange( IntPtr mat, double start, double end );
 
       /// <summary>
       /// Fills output variables with low-level information about the array data. All output parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with ROI set, parameters of ROI are returned. 
@@ -2003,7 +2102,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvCreateSubdivDelaunay2D(MCvRect rect, IntPtr storage)
       {
-         IntPtr subdiv = cvCreateSubdiv2D(CvConst.CV_SEQ_KIND_SUBDIV2D,
+         IntPtr subdiv = cvCreateSubdiv2D( (int) CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
                  Marshal.SizeOf(typeof(MCvSubdiv2D)),
                  Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
                  Marshal.SizeOf(typeof(MCvQuadEdge2D)),
@@ -3840,18 +3939,4 @@ namespace Emgu.CV
 
    }
 
-   /// <summary>
-   /// Constants defined in OpenCV
-   /// </summary>
-   public static class CvConst
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      public static int CV_SEQ_ELTYPE_BITS = 9;
-      /// <summary>
-      /// 
-      /// </summary>
-      public static int CV_SEQ_KIND_SUBDIV2D = 4 << CV_SEQ_ELTYPE_BITS;
-   }
 }

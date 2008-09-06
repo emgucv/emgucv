@@ -470,11 +470,11 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
 
-         Contour contour = img.FindContours();
+         Contour<MCvPoint> contour = img.FindContours();
 
          while (contour != null)
          {
-            Contour approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+            Contour<MCvPoint> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
 
             if (approx.Convex && Math.Abs(approx.Area) > 20.0)
             {

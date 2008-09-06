@@ -375,30 +375,6 @@ namespace Emgu.CV
       /// <summary>
       /// Get the average value on this image
       /// </summary>
-      [Obsolete("User GetAverage() instead, will be removed in the next version")]
-      public TColor Average
-      {
-         get
-         {
-            return GetAverage();
-         }
-      }
-
-      /// <summary>
-      /// Get the sum for each color channel 
-      /// </summary>
-      [Obsolete("User GetSum() instead, will be removed in the next version")]
-      public TColor Sum
-      {
-         get
-         {
-            return GetSum();
-         }
-      }
-
-      /// <summary>
-      /// Get the average value on this image
-      /// </summary>
       /// <returns>The average color of the image</returns>
       public TColor GetAverage()
       {
@@ -935,7 +911,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour FindContours()
+      public Contour<MCvPoint> FindContours()
       {
          return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
       }
@@ -949,7 +925,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
+      public Contour<MCvPoint> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
       {
          return FindContours(method, type, new MemStorage());
       }
@@ -964,7 +940,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
+      public Contour<MCvPoint> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
       {
          IntPtr seq = IntPtr.Zero;
 
@@ -992,7 +968,7 @@ namespace Emgu.CV
             if (seq == IntPtr.Zero)
                return null;
          }
-         return new Contour(seq, stor);
+         return new Contour<MCvPoint>(seq, stor);
       }
       #endregion
       #endregion
