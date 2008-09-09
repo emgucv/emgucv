@@ -401,13 +401,19 @@ namespace Emgu.CV
       /// <param name="value">Subtracted scalar</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed. </param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSubS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
+      public static void cvSubS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         CvInvoke.cvAddS(
+            src, 
+            new MCvScalar(-value.v0, -value.v1, -value.v2, -value.v3),
+            dst, 
+            mask);
+      }
 
       /// <summary>
       /// Subtracts every element of source array from a scalar:
-      ///dst(I)=value-src(I) if mask(I)!=0
-      ///All the arrays must have the same type, except the mask, and the same size (or ROI size)
+      /// dst(I)=value-src(I) if mask(I)!=0
+      /// All the arrays must have the same type, except the mask, and the same size (or ROI size)
       /// </summary>
       /// <param name="src">The source array</param>
       /// <param name="value">Subtracted scalar</param>

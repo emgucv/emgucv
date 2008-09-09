@@ -345,10 +345,12 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestSubR()
+      public void TestSub()
       {
          Image<Bgr, Byte> img = new Image<Bgr, Byte>(101, 133);
          Assert.IsTrue(img.Not().Equals(255 - img));
+
+         Image<Bgr, Byte> img2 = img - 10;
       }
 
       [Test]
