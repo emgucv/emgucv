@@ -390,6 +390,15 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGetModuleInfo()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 100);
+         img.Sobel(1, 0, 3);
+         String plugin, module;
+         Utils.GetModuleInfo(out plugin, out module);
+      }
+
+      [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 1000;

@@ -15,7 +15,6 @@ namespace Emgu.Util
    /// </summary>
    public static class Toolbox
    {
-
       /// <summary>
       /// Convert on enumeration to another using the specific convertor
       /// </summary>
@@ -332,6 +331,15 @@ namespace Emgu.Util
       /// <returns>If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.</returns>
       [DllImport("kernel32.dll")]
       public static extern bool FreeLibrary(IntPtr handle);
+
+      /// <summary>
+      /// Adds a directory to the search path used to locate DLLs for the application
+      /// </summary>
+      /// <param name="path">The directory to be searched for DLLs</param>
+      /// <returns>True if success</returns>
+      [DllImport("kernel32.dll")]
+      public static extern bool SetDllDirectory(String path);
+
    }
 }
 

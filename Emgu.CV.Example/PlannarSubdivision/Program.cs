@@ -31,13 +31,16 @@ namespace PlannarSubdivision
             pts[i] = new Point2D<float>((float)r.NextDouble() * maxValue, (float)r.NextDouble() * maxValue);
          #endregion
 
-         PlanarSubdivision subdivision = new PlanarSubdivision(pts);
+         List<Triangle2D<float>> delaunayTriangles;
+         List<VoronoiFacet> voronoiFacets;
+         using (PlanarSubdivision subdivision = new PlanarSubdivision(pts))
+         {
+            //Obtain the delaunay's triangulation from the set of points;
+            delaunayTriangles = subdivision.GetDelaunayTriangles();
 
-         //Obtain the delaunay's triangulation from the set of points;
-         List<Triangle2D<float>> delaunayTriangles = subdivision.GetDelaunayTriangles();
-
-         //Obtain the voronoi facets from the set of points
-         List<VoronoiFacet> voronoiFacets = subdivision.GetVoronoiFacets();
+            //Obtain the voronoi facets from the set of points
+            voronoiFacets = subdivision.GetVoronoiFacets();
+         }
 
          //create an image for display purpose
          Image<Bgr, Byte> img = new Image<Bgr, byte>((int)maxValue, (int) maxValue);

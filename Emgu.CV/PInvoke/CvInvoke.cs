@@ -32,11 +32,72 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
+         /*
+#if LINUX
+#else
+         System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+         Emgu.Util.Toolbox.SetDllDirectory(System.IO.Path.GetDirectoryName(asm.Location));
+#endif
+         */
+
          //Use the custome error handler
          cvRedirectError(DefaultCvErrorHandler, IntPtr.Zero, IntPtr.Zero);
       }
 
       #region CXCORE_LIBRARY
+
+      /// <summary>
+      /// Returns information about one of or all of the registered modules
+      /// </summary>
+      /// <param name="moduleName">Name of the module of interest, or NULL, which means all the modules.</param>
+      /// <param name="version">Information about the module(s), including version</param>
+      /// <param name="loadedAddonPlugins">The list of names and versions of the optimized plugins that CXCORE was able to find and load</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvGetModuleInfo( 
+         IntPtr moduleName,
+         ref IntPtr version,
+         ref IntPtr loadedAddonPlugins );
+
+      #region Memory Management
+      /*
+      private static IntPtr DefaultCvAllocFunc(uint size, IntPtr UserData)
+      {
+         GC.AddMemoryPressure(size);
+         return Marshal.AllocHGlobal((int)size);
+      }
+
+      private static int DefaultCvFreeFunc(IntPtr ptr, IntPtr userData)
+      {
+      }*/
+
+      /// <summary>
+      /// Delegate used to allocate data by OpenCV
+      /// </summary>
+      /// <param name="size">Size of the memory to allocate</param>
+      /// <param name="userData">User data that is transparetly passed to the custom functions</param>
+      /// <returns>Pointer to the allocated memort</returns>
+      public delegate IntPtr CvAllocFunc(uint size, IntPtr userData);
+
+      /// <summary>
+      /// Delegate used to dellocate OpenCV memory
+      /// </summary>
+      /// <param name="ptr">The memory to dellocate</param>
+      /// <param name="userData">User data that is transparetly passed to the custom functions</param>
+      /// <returns></returns>
+      public delegate int CvFreeFunc(IntPtr ptr, IntPtr userData);
+
+      /// <summary>
+      /// The function cvSetMemoryManager sets user-defined memory managment functions (substitutors for malloc and free) that will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage)
+      /// </summary>
+      /// <param name="alloc_func">Allocation function</param>
+      /// <param name="free_func">Deallocation function</param>
+      /// <param name="userdata">User data that is transparetly passed to the custom functions</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetMemoryManager( CvAllocFunc alloc_func,
+                         CvFreeFunc free_func,
+                         IntPtr userdata );
+
+      #endregion
 
       #region Error handling
       /// <summary>

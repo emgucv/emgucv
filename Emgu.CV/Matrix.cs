@@ -608,7 +608,7 @@ namespace Emgu.CV
       {
          if (_ptr != IntPtr.Zero)
          {
-            Marshal.Release(_ptr);
+            Marshal.FreeHGlobal(_ptr);
             GC.RemoveMemoryPressure(_sizeOfHeader);
             _ptr = IntPtr.Zero;
          }

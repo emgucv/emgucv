@@ -196,7 +196,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
-			RelativePathToProject="..\..\Emgu.Utils\Emgu.Utils.csproj"
+			RelativePathToProject="..\..\Emgu.Util\Emgu.Util.csproj"
 		/>
 	</References>
 	<Files>

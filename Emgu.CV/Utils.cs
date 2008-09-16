@@ -29,16 +29,21 @@ namespace Emgu.CV
          }
       }
 
-      /*
-      public static void GetModuleInfo()
+      /// <summary>
+      /// Returns information about one of or all of the registered modules
+      /// </summary>
+      /// <param name="pluginName">The list of names and versions of the optimized plugins that CXCORE was able to find and load</param>
+      /// <param name="versionName">Information about the module(s), including version</param>
+      public static void GetModuleInfo(out String pluginName, out String versionName)
       {
-                      IntPtr version = IntPtr.Zero;
-      IntPtr plugin_info = IntPtr.Zero;
-      CvInvoke.cvGetModuleInfo(0, ref version, ref plugin_info);
-      return (plugin_info != 0 && strstr(plugin_info, "ipp") != 0);
-      }
-      */
+         IntPtr version = IntPtr.Zero;
+         IntPtr plugin_info = IntPtr.Zero;
+         CvInvoke.cvGetModuleInfo(IntPtr.Zero, ref version, ref plugin_info);
 
+         pluginName = Marshal.PtrToStringAnsi(plugin_info);
+         versionName = Marshal.PtrToStringAnsi(version);
+      }
+      
       /// <summary>
       /// Enable or diable IPL optimization for opencv
       /// </summary>

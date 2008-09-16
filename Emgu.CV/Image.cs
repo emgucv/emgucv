@@ -307,13 +307,13 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///The width of the image ( number of pixels in the x direction),
+      ///Get the width of the image ( number of pixels in the x direction),
       ///if ROI is set, the width of the ROI 
       ///</summary>
       public override int Width { get { return isROISet ? (int)ROI.Width : Marshal.ReadInt32(Ptr, IplImageOffset.width); } }
 
       ///<summary> 
-      ///The height of the image ( number of pixels in the y direction ),
+      ///Get the height of the image ( number of pixels in the y direction ),
       ///if ROI is set, the height of the ROI 
       ///</summary> 
       public override int Height { get { return isROISet ? (int)ROI.Height : Marshal.ReadInt32(Ptr, IplImageOffset.height); } }
@@ -327,9 +327,7 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      /// The size of the internal iplImage structure, regardness of the ROI of this image: X -- Width; Y -- Height.
-      /// When a new size is assigned to this property, the original image is resized (the ROI is resized as well when 
-      /// available)
+      /// Get the size of the internal iplImage structure, regardness of the ROI of this image: X -- Width; Y -- Height.
       ///</summary>
       public Point2D<int> Size
       {
@@ -342,7 +340,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The equivalent depth type in opencv for this image
+      /// Get the equivalent opencv depth type for this image
       /// </summary>
       public CvEnum.IPL_DEPTH CvDepth
       {
@@ -393,8 +391,7 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> The sum for each color channel </summary>
-      ///<returns> The sum for each color channel </returns>
+      ///<summary>Get the sum for each color channel </summary>
       public TColor GetSum()
       {
          TColor res = new TColor();
@@ -515,7 +512,7 @@ namespace Emgu.CV
              0);
       }
 
-      ///<summary> Draw a 2D Cross of the specific color and thickness </summary>
+      ///<summary> Draw a 2D Cross using the specific color and thickness </summary>
       ///<param name="cross"> The 2D Cross to be drawn</param>
       ///<param name="color"> The color of the cross </param>
       ///<param name="thickness"> Must be &gt; 0 </param>
@@ -529,8 +526,8 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> Draw a line segment of the specific color and thickness </summary>
-      ///<param name="line"> The line segment to be draw</param>
+      ///<summary> Draw a line segment using the specific color and thickness </summary>
+      ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thickness"> The thickness of the line segment </param>
       public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : IComparable, new()
@@ -547,8 +544,8 @@ namespace Emgu.CV
                 0);
       }
 
-      ///<summary> Draw a convex polygon of the specific color and thickness </summary>
-      ///<param name="polygon"> The convex polygon to be draw</param>
+      ///<summary> Draw a convex polygon using the specific color and thickness </summary>
+      ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the triangle </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : IComparable, new()
@@ -569,8 +566,8 @@ namespace Emgu.CV
       /// <summary>
       /// Fill the convex polygon with the specific color
       /// </summary>
-      /// <param name="pts">the array of points that define the convex polygon</param>
-      /// <param name="color">the color to fill the polygon with</param>
+      /// <param name="pts">The array of points that define the convex polygon</param>
+      /// <param name="color">The color to fill the polygon with</param>
       public void FillConvexPoly(MCvPoint[] pts, TColor color)
       {
          CvInvoke.cvFillConvexPoly(Ptr, pts, pts.Length, color.MCvScalar, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
@@ -1162,8 +1159,7 @@ namespace Emgu.CV
 
       #region Gradient, Edges and Features
       /// <summary>
-      /// Calculates the image derivative by convolving the image with the appropriate kernel:
-      /// dst(x,y) = dxorder+yodersrc/dxxorder?dyyorder |(x,y)
+      /// Calculates the image derivative by convolving the image with the appropriate kernel
       /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
       /// </summary>
       /// <param name="xorder">Order of the derivative x</param>
@@ -1178,8 +1174,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
-      /// dst(x,y) = d2src/dx2 + d2src/dy2
+      /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator.
       /// Specifying aperture_size=1 gives the fastest variant that is equal to convolving the image with the following kernel:
       ///
       /// |0  1  0|

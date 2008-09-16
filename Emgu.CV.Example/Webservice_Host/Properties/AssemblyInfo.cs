@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Webservice_Host")]
+[assembly: AssemblyTitle("Web Service (Host)")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("Webservice_Host")]
+[assembly: AssemblyProduct("Web Service (Host)")]
 [assembly: AssemblyCopyright("Copyright © Emgu 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
