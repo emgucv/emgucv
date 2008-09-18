@@ -399,6 +399,15 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestCrossProduct()
+      {
+         Point3D<float> p1 = new Point3D<float>(1.0f, 0.0f, 0.0f);
+         Point3D<float> p2 = new Point3D<float>(0.0f, 1.0f, 0.0f);
+         Point3D<float> p3 = p1.CrossProduct(p2);
+         Assert.AreEqual(new Point3D<float>(0.0f, 0.0f, 1.0f), p3);
+      }
+
+      [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 1000;

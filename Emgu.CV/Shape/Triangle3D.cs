@@ -30,6 +30,21 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Get the normal of this triangle
+      /// </summary>
+      public Point3D<double> Normal
+      {
+         get
+         {
+            Matrix<T>[] vertices = Array.ConvertAll<Point3D<T>, Matrix<T>>( Vertices, delegate(Point3D<T> p) { return new Matrix<T>(p.Coordinate);});
+            Matrix<T> result = new Matrix<T>(3, 1);
+            CvInvoke.cvCrossProduct((vertices[1] - vertices[0]), (vertices[2] - vertices[1]), result);
+
+            return (new Point3D<T>(result[0,0], result[1,0], result[2, 0])).Normalized;
+         }
+      }
+
+      /// <summary>
       /// Create a triangle using the specific vertices
       /// </summary>
       /// <param name="v1">The first vertex</param>

@@ -117,54 +117,54 @@ namespace Emgu.CV
       /// <summary>
       /// offset of nSize
       /// </summary>
-      public const int nSize = 0;
+      public static readonly int nSize = 0;
       /// <summary>
       /// Offset of ID
       /// </summary>
-      public const int ID = nSize + sizeof(int);
+      public static readonly int ID = (int)Marshal.OffsetOf(typeof(MIplImage), "ID");
       /// <summary>
       /// Offset of nchannels
       /// </summary>
-      public const int nChannels = ID + sizeof(int);
+      public static readonly int nChannels = (int)Marshal.OffsetOf(typeof(MIplImage), "nChannels");
       /// <summary>
       /// Offset of alpha Channel
       /// </summary>
-      public const int alphaChannel = nChannels + sizeof(int);
+      public static readonly int alphaChannel = (int)Marshal.OffsetOf(typeof(MIplImage), "alphaChannel");
       /// <summary>
       /// Offset of depth
       /// </summary>
-      public const int depth = alphaChannel + sizeof(int);
+      public static readonly int depth = (int)Marshal.OffsetOf(typeof(MIplImage), "depth");
       /// <summary>
       /// Offset of colorModel
       /// </summary>
-      public const int colorModel = depth + sizeof(int);
+      public static readonly int colorModel = (int)Marshal.OffsetOf(typeof(MIplImage), "colorModel");
       /// <summary>
       /// Offset of channelSeq
       /// </summary>
-      public const int channelSeq = colorModel + 4 * sizeof(Byte);
+      public static readonly int channelSeq = (int)Marshal.OffsetOf(typeof(MIplImage), "channelSeq");
       /// <summary>
       /// Offset of dataOrder
       /// </summary>
-      public const int dataOrder = channelSeq + 4 * sizeof(Byte);
+      public static readonly int dataOrder = (int)Marshal.OffsetOf(typeof(MIplImage), "dataOrder");
       /// <summary>
       /// Offset of origin
       /// </summary>
-      public const int origin = dataOrder + sizeof(int);
+      public static readonly int origin = (int)Marshal.OffsetOf(typeof(MIplImage), "origin");
       /// <summary>
       /// Offset of align
       /// </summary>
-      public const int align = origin + sizeof(int);
+      public static readonly int align = (int)Marshal.OffsetOf(typeof(MIplImage), "align");
       /// <summary>
       /// Offset of width
       /// </summary>
-      public const int width = align + sizeof(int);
+      public static readonly int width = (int)Marshal.OffsetOf(typeof(MIplImage), "width");
       /// <summary>
       /// Offset of height
       /// </summary>
-      public const int height = width + sizeof(int);
+      public static readonly int height = (int) Marshal.OffsetOf(typeof(MIplImage), "height");
       /// <summary>
       /// Offset of roi
       /// </summary>
-      public const int roi = height + sizeof(int);
+      public static readonly int roi = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
    }
 }

@@ -83,9 +83,11 @@ namespace Emgu.CV
                  imgs,
                  delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
-         IntPtr maskPtr = mask == null ? IntPtr.Zero : mask.Ptr;
-
-         CvInvoke.cvCalcHist(imgPtrs, _ptr, true, maskPtr);
+         CvInvoke.cvCalcHist(
+            imgPtrs, 
+            _ptr, 
+            true, 
+            mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       /// <summary>
@@ -103,7 +105,7 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      /// Back project the histogram into an gray scale image
+      /// Backproject the histogram into an gray scale image
       ///</summary>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs)
       {

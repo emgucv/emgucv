@@ -986,6 +986,53 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Assign the new value to the particular element of single-channel array
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="idx0">The first zero-based component of the element index </param>
+      /// <param name="value">The assigned value </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetReal1D(IntPtr arr, int idx0, double value);
+
+      /// <summary>
+      /// Assign the new value to the particular element of single-channel array
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="idx0">The first zero-based component of the element index </param>
+      /// <param name="idx1">The second zero-based component of the element index </param>
+      /// <param name="value">The assigned value </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetReal2D(IntPtr arr, int idx0, int idx1, double value);
+
+      /// <summary>
+      /// Assign the new value to the particular element of single-channel array
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="idx0">The first zero-based component of the element index </param>
+      /// <param name="idx1">The second zero-based component of the element index </param>
+      /// <param name="idx2">The third zero-based component of the element index </param>
+      /// <param name="value">The assigned value </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetReal3D(IntPtr arr, int idx0, int idx1, int idx2, double value);
+
+      /// <summary>
+      /// Assign the new value to the particular element of single-channel array
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="idx">Array of the element indices </param>
+      /// <param name="value">The assigned value </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetRealND(IntPtr arr, int[] idx, double value);
+
+      /// <summary>
+      /// clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="idx">Array of the element indices </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvClearND(IntPtr arr, int[] idx);
+
+      /// <summary>
       /// Assign the new value to the particular element of array
       /// </summary>
       /// <param name="arr">Input array. </param>
@@ -1658,18 +1705,29 @@ namespace Emgu.CV
           CvEnum.GEMM_TYPE tABC);
 
       /// <summary>
-      /// transforms every element of src (by treating it as 2D or 3D vector) in the following way:
-      /// (x, y, z) -> (x?/w, y?/w, z?/w) or
-      /// (x, y) -> (x?/w, y?/w),
+      /// Performs matrix transformation of every element of array src and stores the results in dst
+      /// Both source and destination arrays should have the same depth and the same size or selected ROI size. transmat and shiftvec should be real floating-point matrices.
+      /// </summary>
+      /// <param name="src">The first source array</param>
+      /// <param name="dst">The destination array</param>
+      /// <param name="transmat">Transformation matrix</param>
+      /// <param name="shiftvec">Optional shift vector</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvTransform( IntPtr src, IntPtr dst, IntPtr transmat, IntPtr shiftvec);
+
+      /// <summary>
+      /// Transforms every element of src (by treating it as 2D or 3D vector) in the following way:
+      /// (x, y, z) -> (x'/w, y'/w, z'/w) or
+      /// (x, y) -> (x'/w, y'/w),
       /// where
-      /// (x?, y?, z?, w?) = mat4x4*(x, y, z, 1) or
-      /// (x?, y?, w?) = mat3x3*(x, y, 1)
-      /// and w = w?   if w?!=0,
+      /// (x', y', z', w') = mat4x4 * (x, y, z, 1) or
+      /// (x', y', w') = mat3x3 * (x, y, 1)
+      /// and w = w'   if w'!=0,
       ///        inf  otherwise
       /// </summary>
       /// <param name="src">The source three-channel floating-point array</param>
       /// <param name="dst">The destination three-channel floating-point array</param>
-      /// <param name="mat">3?3 or 4?4 transformation matrix</param>
+      /// <param name="mat">3x3 or 4x4 transformation matrix</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvPerspectiveTransform(IntPtr src, IntPtr dst, IntPtr mat);
 

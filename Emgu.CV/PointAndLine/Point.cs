@@ -223,7 +223,9 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> Return a normalized point (aka. the direction) </summary>  
+      /// <summary> 
+      /// Return a normalized point (aka. the direction) 
+      /// </summary>  
       public Point<double> Normalized
       {
          get
@@ -274,6 +276,15 @@ namespace Emgu.CV
             if (coor1[i].CompareTo(coor2[i]) != 0) return false;
          }
          return true;
+      }
+
+      /// <summary>
+      /// Convert this point to matrix
+      /// </summary>
+      /// <returns>A matrix that represent this point</returns>
+      public Matrix<T> ToMatrix()
+      {
+         return new Matrix<T>(_coordinate);
       }
    }
 }
