@@ -165,10 +165,20 @@ namespace Emgu.CV
          int cols = pts[0].Length;
 
          D[,] array = new D[rows, cols];
-         for (int i = 0; i <= rows; i++)
-            for (int j = 0; j <= cols; j++)
+         for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
                array[i, j] = pts[i][j];
          return array;
+      }
+
+      public static Point2D<D>[] FromArray<D>(D[,] values) where D : IComparable, new()
+      {
+         Point2D<D>[] res = new Point2D<D>[values.GetLength(0)];
+         for (int i = 0; i < res.Length; i++)
+         {
+            res[i] = new Point2D<D>(values[i, 0], values[i, 1]);
+         }
+         return res;
       }
 
       /// <summary>

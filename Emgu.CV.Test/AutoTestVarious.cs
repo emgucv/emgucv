@@ -408,6 +408,49 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestOpticalFlow()
+      {
+         #region prepare synthetic image for testing
+         //Create a random object
+         Image<Gray, Byte> randomObj = new Image<Gray, byte>(50, 50);
+         randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+
+         //Draw the object in image1 center at (100, 100);
+         Image<Gray, Byte> prevImg = new Image<Gray, byte>(300, 200);
+         Rectangle<double> objectLocation = new Rectangle<double>(new Point2D<double>(100, 100), 50, 50);
+         prevImg.ROI = objectLocation;
+         randomObj.Copy(prevImg, null);
+         prevImg.ROI = null;
+
+         //Draw the object in image2 center at (102, 103);
+         Image<Gray, Byte> currImg = new Image<Gray, byte>(300, 200);
+         objectLocation.Center += new Point2D<double>(2, 3);
+         currImg.ROI = objectLocation;
+         randomObj.Copy(currImg, null);
+         currImg.ROI = null;
+         #endregion
+
+         Point2D<float>[] prevFeature = new Point2D<float>[] { new Point2D<float>(100f, 100f) };
+
+         Point2D<float>[] currFeature;
+         Byte[] status;
+         float[] trackError;
+
+         DateTime t = DateTime.Now;
+
+         OpticalFlow.PyrLK(
+            prevImg, currImg, prevFeature, new MCvSize(10, 10), 3, new MCvTermCriteria(10, 0.01),
+            out currFeature, out status, out trackError);
+
+         Trace.WriteLine(String.Format(
+            "prev: ({0}, {1}); curr: ({2}, {3}); Time: {4} milliseconds",
+            prevFeature[0].X, prevFeature[0].Y,
+            currFeature[0].X, currFeature[0].Y,
+            DateTime.Now.Subtract(t).TotalMilliseconds));
+
+      }
+
+      [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 1000;

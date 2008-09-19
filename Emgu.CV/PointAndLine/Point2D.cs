@@ -142,5 +142,39 @@ namespace Emgu.CV
          }
          return inside;
       }
+
+      #region operator overload
+      /// <summary>
+      /// Add the 2nd point from the 1st point and returns the result
+      /// </summary>
+      /// <param name="p1">The point to be added</param>
+      /// <param name="p2">The point to be added</param>
+      /// <returns>The sum of the points</returns>
+      public static Point2D<T> operator +(Point2D<T> p1, Point2D<T> p2)
+      {
+         return new Point2D<T>(p1.Add(p2).Coordinate);
+      }
+
+      /// <summary>
+      /// Multiply the point with the specific value
+      /// </summary>
+      /// <param name="point">The point to multiply</param>
+      /// <param name="value">the value to multiply</param>
+      /// <returns>the multiplication result</returns>
+      public static Point2D<T> operator *(Point2D<T> point, T value)
+      {
+         return new Point2D<T>( point.Mul(value).Coordinate );
+      }
+
+      ///<summary>
+      ///Subtract the 2nd point from the 1st point and returns the result
+      ///</summary>
+      ///<param name="p1"> The point to subtract value from </param>
+      ///<param name="p2"> The value to be subtracted from p1 </param>
+      public static Point2D<T> operator -(Point2D<T> p1, Point2D<T> p2)
+      {
+         return new Point2D<T>(p1.Sub(p2).Coordinate);
+      }
+      #endregion 
    }
 }

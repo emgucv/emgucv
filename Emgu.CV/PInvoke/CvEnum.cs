@@ -1518,6 +1518,10 @@ namespace Emgu.CV.CvEnum
    public enum LKFLOW_TYPE
    {
       /// <summary>
+      /// The default type
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
       /// Pyramid for the first frame is precalculated before the call
       /// </summary>
       CV_LKFLOW_PYR_A_READY = 1,

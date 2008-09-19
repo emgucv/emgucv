@@ -427,7 +427,6 @@ namespace Emgu.CV.Test
 
          //make sure canny works for multi channel image
          Image<Bgr, Byte> image2 = image.Canny(new Bgr(200, 200, 200), new Bgr(100, 100, 100));
-
       }
 
       [Test]

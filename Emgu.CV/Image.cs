@@ -420,6 +420,16 @@ namespace Emgu.CV
          SetValue(color.MCvScalar, mask);
       }
 
+      /// <summary>
+      /// Copy the masked area of this image to destination
+      /// </summary>
+      /// <param name="dest">the destination to copy to</param>
+      /// <param name="mask">the mask for copy</param>
+      public void Copy(Image<TColor, TDepth> dest, Image<Gray, Byte> mask)
+      {
+         CvInvoke.cvCopy(Ptr, dest.Ptr, mask == null ? IntPtr.Zero : mask.Ptr);
+      }
+
       ///<summary> 
       /// Make a copy of the image using a mask, if ROI is set, only copy the ROI 
       /// </summary> 
@@ -428,7 +438,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvCopy(Ptr, res.Ptr, mask.Ptr);
+         Copy(res, mask);
          return res;
       }
 
@@ -436,19 +446,7 @@ namespace Emgu.CV
       ///<returns> A copy of the image</returns>
       public Image<TColor, TDepth> Copy()
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
-         return res;
-      }
-
-      /// <summary>
-      /// Copy the masked area of this image to destination
-      /// </summary>
-      /// <param name="dest">the destination to copy to</param>
-      /// <param name="mask">the mask for copy</param>
-      public void Copy(Image<TColor, TDepth> dest, Image<Gray, Byte> mask)
-      {
-         CvInvoke.cvCopy(Ptr, dest.Ptr, mask.Ptr);
+         return Copy(null);
       }
 
       /// <summary> 

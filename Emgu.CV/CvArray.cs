@@ -233,7 +233,7 @@ namespace Emgu.CV
       ///<param name="mask">The mask for the operation</param>
       public void SetValue(MCvScalar val, CvArray<Byte> mask)
       {
-         CvInvoke.cvSet(_ptr, val, mask.Ptr);
+         CvInvoke.cvSet(_ptr, val, mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       ///<summary>

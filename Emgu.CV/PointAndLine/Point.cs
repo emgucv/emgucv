@@ -93,17 +93,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Multiply the point with the specific value
-      /// </summary>
-      /// <param name="point">The point to multiply</param>
-      /// <param name="value">the value to multiply</param>
-      /// <returns>the multiplication result</returns>
-      public static Point<T> operator *(Point<T> point, T value)
-      {
-         return point.Mul(value);
-      }
-
-      /// <summary>
       /// Perform a generic operation between two points and store the result in the first point
       /// </summary>
       /// <typeparam name="TOther">The type of the second point</typeparam>
@@ -149,16 +138,6 @@ namespace Emgu.CV
              });
       }
 
-      ///<summary>
-      ///Subtract the 2nd point from the 1st point and returns the result
-      ///</summary>
-      ///<param name="p1"> The point to subtract value from </param>
-      ///<param name="p2"> The value to be subtracted from p1 </param>
-      public static Point<T> operator -(Point<T> p1, Point<T> p2)
-      {
-         return p1.Sub(p2);
-      }
-
       ///<summary> Sum the current point with another point and returns the result</summary>
       ///<seealso cref="operator+"></seealso>
       public Point<T> Add<TOther>(Point<TOther> other)
@@ -187,6 +166,7 @@ namespace Emgu.CV
              });
       }
 
+      #region operator overload
       /// <summary>
       /// Add the 2nd point from the 1st point and returns the result
       /// </summary>
@@ -197,6 +177,28 @@ namespace Emgu.CV
       {
          return p1.Add(p2);
       }
+
+      /// <summary>
+      /// Multiply the point with the specific value
+      /// </summary>
+      /// <param name="point">The point to multiply</param>
+      /// <param name="value">the value to multiply</param>
+      /// <returns>the multiplication result</returns>
+      public static Point<T> operator *(Point<T> point, T value)
+      {
+         return point.Mul(value);
+      }
+
+      ///<summary>
+      ///Subtract the 2nd point from the 1st point and returns the result
+      ///</summary>
+      ///<param name="p1"> The point to subtract value from </param>
+      ///<param name="p2"> The value to be subtracted from p1 </param>
+      public static Point<T> operator -(Point<T> p1, Point<T> p2)
+      {
+         return p1.Sub(p2);
+      }
+      #endregion 
 
       ///<summary> Convert this point to the specific type</summary>
       ///<returns> An equavailent point of the specific type</returns> 
