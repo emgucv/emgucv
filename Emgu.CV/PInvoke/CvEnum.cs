@@ -1536,6 +1536,30 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Type of chessboard calibration
+   /// </summary>
+   [Flags]
+   public enum CALIB_CB_TYPE
+   {
+      /// <summary>
+      /// Default type
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Use adaptive thresholding to convert the image to black-n-white, rather than a fixed threshold level (computed from the average image brightness)
+      /// </summary>
+      ADAPTIVE_THRESH  = 1,
+      /// <summary>
+      /// Normalize the image using cvNormalizeHist before applying fixed or adaptive thresholding.
+      /// </summary>
+      NORMALIZE_IMAGE  = 2,
+      /// <summary>
+      /// Use additional criteria (like contour area, perimeter, square-like shape) to filter out false quads that are extracted at the contour retrieval stage
+      /// </summary>
+      FILTER_QUADS     = 4 
+   }
+
+   /// <summary>
    /// IO type for eigen object related functions
    /// </summary>
    public enum EIGOBJ_TYPE

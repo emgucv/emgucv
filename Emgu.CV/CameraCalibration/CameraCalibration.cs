@@ -173,5 +173,60 @@ namespace Emgu.CV
          Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
          return FindHomography(srcPointMatrix, dstPointMatrix);
       }
+
+      /// <summary>
+      /// attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
+      /// </summary>
+      /// <param name="image">Source chessboard view</param>
+      /// <param name="pattern_size">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The corners detected</param>
+      /// <param name="flags">Various operation flags</param>
+      /// <returns>If the chess board pattern is found</returns>
+      public static bool FindChessboardCorners(
+         Image<Gray, Byte> image,
+         MCvSize pattern_size,
+         CvEnum.CALIB_CB_TYPE flags,
+         out Point2D<float>[] corners)
+      {
+         float[,] cornersCoordinates = new float[pattern_size.width * pattern_size.height, 2];
+         int cornerCount = 0;
+
+         bool patternFound =
+         CvInvoke.cvFindChessboardCorners(
+            image.Ptr,
+            pattern_size,
+            cornersCoordinates,
+            ref cornerCount,
+            flags) != 0; 
+
+         corners = new Point2D<float>[cornerCount];
+         for (int i = 0; i < corners.Length; i++)
+         {
+            corners[i] = new Point2D<float>(cornersCoordinates[i, 0], cornersCoordinates[i, 1]);
+         }
+
+         return patternFound;
+      }
+
+      /// <summary>
+      ///  Draws the individual chessboard corners detected (as red circles) in case if the board was not found (patternWasFound== false) or the colored corners connected with lines when the board was found (patternWasFound == true). 
+      /// </summary>
+      /// <param name="image">The destination image</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The array of corners detected</param>
+      /// <param name="patternWasFound">Result of FindChessboardCorners</param>
+      public static void DrawChessboardCorners(
+         Image<Gray, Byte> image,
+         MCvSize patternSize,
+         Point2D<float>[] corners,
+         bool patternWasFound)
+      {
+         CvInvoke.cvDrawChessboardCorners(
+            image.Ptr,
+            patternSize, 
+            PointCollection.ToArray<float>(corners), 
+            corners.Length, 
+            patternWasFound ? 1 : 0);
+      }
    }
 }

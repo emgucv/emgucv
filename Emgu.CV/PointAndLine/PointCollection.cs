@@ -171,6 +171,12 @@ namespace Emgu.CV
          return array;
       }
 
+      /// <summary>
+      /// Get an array of Point2D from a 2D array of values
+      /// </summary>
+      /// <typeparam name="D">The type of the point</typeparam>
+      /// <param name="values">The 2D array of values, size of Nx2</param>
+      /// <returns>An array of Point2D</returns>
       public static Point2D<D>[] FromArray<D>(D[,] values) where D : IComparable, new()
       {
          Point2D<D>[] res = new Point2D<D>[values.GetLength(0)];

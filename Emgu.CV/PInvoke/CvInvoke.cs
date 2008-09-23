@@ -2910,6 +2910,37 @@ namespace Emgu.CV
                        IntPtr distortion_coeffs,
                        IntPtr mapx, IntPtr mapy);
 
+      /// <summary>
+      /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
+      /// </summary>
+      /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The output array of corners detected</param>
+      /// <param name="cornerCount">The output corner counter. If it is not NULL, the function stores there the number of corners found</param>
+      /// <param name="flags">Various operation flags</param>
+      /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
+      /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
+      [DllImport(CV_LIBRARY)]
+      public static extern int cvFindChessboardCorners( 
+               IntPtr image, 
+               MCvSize patternSize,
+               float[,] corners, 
+               ref int cornerCount,
+               CvEnum.CALIB_CB_TYPE flags);
+
+      /// <summary>
+      /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
+      /// </summary>
+      /// <param name="image">The destination image; it must be 8-bit color image</param>
+      /// <param name="pattern_size">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The array of corners detected</param>
+      /// <param name="count">The number of corners</param>
+      /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvDrawChessboardCorners(IntPtr image, MCvSize pattern_size,
+                              float[,] corners, int count,
+                              int patternWasFound);
+
       #endregion
 
       /// <summary>
@@ -3179,14 +3210,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First image, 8-bit, single-channel.</param>
       /// <param name="curr">Second image, 8-bit, single-channel.</param>
-      /// <param name="win_size">Size of the averaging window used for grouping pixels. </param>
+      /// <param name="winSize">Size of the averaging window used for grouping pixels. </param>
       /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvCalcOpticalFlowLK(
               IntPtr prev,
               IntPtr curr,
-              MCvSize win_size,
+              MCvSize winSize,
               IntPtr velx,
               IntPtr vely);
 
@@ -3195,7 +3226,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First image, 8-bit, single-channel</param>
       /// <param name="curr">Second image, 8-bit, single-channel</param>
-      /// <param name="use_previous">Uses previous (input) velocity field</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field</param>
       /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
       /// <param name="lambda">Lagrangian multiplier</param>
@@ -3204,7 +3235,7 @@ namespace Emgu.CV
       public static extern void cvCalcOpticalFlowHS(
               IntPtr prev,
               IntPtr curr,
-              int use_previous,
+              int usePrevious,
               IntPtr velx,
               IntPtr vely,
               double lambda,
@@ -3215,20 +3246,20 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First image, 8-bit, single-channel.</param>
       /// <param name="curr">Second image, 8-bit, single-channel. </param>
-      /// <param name="block_size">Size of basic blocks that are compared.</param>
-      /// <param name="shift_size">Block coordinate increments. </param>
-      /// <param name="max_range">Size of the scanned neighborhood in pixels around block.</param>
-      /// <param name="use_previous">Uses previous (input) velocity field. </param>
+      /// <param name="blockSize">Size of basic blocks that are compared.</param>
+      /// <param name="shiftSize">Block coordinate increments. </param>
+      /// <param name="maxRange">Size of the scanned neighborhood in pixels around block.</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field. </param>
       /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
       /// <param name="vely">Vertical component of the optical flow of the same size velx, 32-bit floating-point, single-channel.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvCalcOpticalFlowBM(
               IntPtr prev,
               IntPtr curr,
-              MCvSize block_size,
-              MCvSize shift_size,
-              MCvSize max_range,
-              int use_previous,
+              MCvSize blockSize,
+              MCvSize shiftSize,
+              MCvSize maxRange,
+              int usePrevious,
               IntPtr velx,
               IntPtr vely);
 
@@ -3238,30 +3269,30 @@ namespace Emgu.CV
       /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
       /// <param name="prev">First frame, at time t. </param>
       /// <param name="curr">Second frame, at time t + dt .</param>
-      /// <param name="prev_pyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
-      /// <param name="curr_pyr">Similar to prev_pyr, used for the second frame. </param>
-      /// <param name="prev_features">Array of points for which the flow needs to be found. </param>
-      /// <param name="curr_features">Array of 2D points containing calculated new positions of input </param>
+      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
+      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
       /// <param name="count">Number of feature points.</param>
-      /// <param name="win_size">Size of the search window of each pyramid level.</param>
+      /// <param name="winSize">Size of the search window of each pyramid level.</param>
       /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
       /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
-      /// <param name="track_error">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
+      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
       /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
       /// <param name="flags">Miscellaneous flags</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvCalcOpticalFlowPyrLK(
           IntPtr prev,
           IntPtr curr,
-          IntPtr prev_pyr,
-          IntPtr curr_pyr,
-          float[,] prev_features,
-          float[,] curr_features,
+          IntPtr prevPyr,
+          IntPtr currPyr,
+          float[,] prevFeatures,
+          float[,] currFeatures,
           int count,
-          MCvSize win_size,
+          MCvSize winSize,
           int level,
           Byte[] status,
-          float[] track_error,
+          float[] trackError,
           MCvTermCriteria criteria,
           CvEnum.LKFLOW_TYPE flags);
 
@@ -4029,12 +4060,16 @@ namespace Emgu.CV
       /// <summary>
       /// Create a Gaussian background model
       /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="param">Parameters for the background model</param>
       [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateGaussianBGModel(IntPtr img, IntPtr param);
+      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, IntPtr param);
 
       /// <summary>
       /// Create a background model
       /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="param">Parameters for the background model</param>
       [DllImport(CVAUX_LIBRARY)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
       #endregion

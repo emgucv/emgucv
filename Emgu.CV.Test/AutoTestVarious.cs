@@ -451,6 +451,30 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestChessboardCalibration()
+      {
+         MCvSize patternSize = new MCvSize(6, 6);
+
+         Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("chessBoard.jpg");
+         Point2D<float>[] corners;
+         bool patternFound = 
+            CameraCalibration.FindChessboardCorners(
+            chessboardImage,
+            patternSize,
+            Emgu.CV.CvEnum.CALIB_CB_TYPE.ADAPTIVE_THRESH | Emgu.CV.CvEnum.CALIB_CB_TYPE.NORMALIZE_IMAGE | Emgu.CV.CvEnum.CALIB_CB_TYPE.FILTER_QUADS,
+            out corners);
+
+         chessboardImage.FindCornerSubPix(
+            new Point2D<float>[][] { corners }, 
+            new MCvSize(10, 10), 
+            new MCvSize(-1, -1), 
+            new MCvTermCriteria(0.05));
+
+         CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
+         //Application.Run(new ImageViewer(chessboardImage));
+      }
+
+      [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 1000;
