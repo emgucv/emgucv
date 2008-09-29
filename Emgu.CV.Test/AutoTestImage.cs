@@ -235,6 +235,19 @@ namespace Emgu.CV.Test
 
          img1.SetValue(new Bgr(255, 0, 0));
 
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(800, 800);
+         img.SetValue(255);
+         Image<Bgr, Byte> mask = new Image<Bgr, byte>(img.Width, img.Height);
+         mask.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255)); //file the mask with random color
+
+         DateTime startTime = DateTime.Now;
+         Image<Bgr, Byte> imgMasked = img.Convert<Byte, Byte>(mask, 
+            delegate(Byte byteFromImg, Byte byteFromMask)
+            {
+               return byteFromMask > (Byte) 120 ? byteFromImg : (Byte) 0;
+            });
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+
          Assert.IsTrue(img1.Equals(img2));
       }
 

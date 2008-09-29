@@ -2183,25 +2183,6 @@ namespace Emgu.CV
       public static extern MCvBox2D cvFitEllipse2(IntPtr points);
 
       /// <summary>
-      /// Finds a circumscribed rectangle of the minimal area for 2D point set by building convex hull for the set and applying rotating calipers technique to the hull.
-      /// </summary>
-      /// <param name="points">Sequence or array of points</param>
-      /// <param name="storage">temporary memory storage</param>
-      /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern MCvBox2D cvMinAreaRect2(IntPtr points, IntPtr storage);
-
-      /// <summary>
-      /// Finds the minimal circumscribed circle for 2D point set using iterative algorithm. It returns nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)
-      /// </summary>
-      /// <param name="points">Sequence or array of 2D points</param>
-      /// <param name="center">Output parameter. The center of the enclosing circle</param>
-      /// <param name="radius">Output parameter. The radius of the enclosing circle.</param>
-      /// <returns>Nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)</returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern int cvMinEnclosingCircle(IntPtr points, out MCvPoint2D32f center, out float radius);
-
-      /// <summary>
       /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky's algorithm. 
       /// </summary>
       /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
@@ -2337,18 +2318,6 @@ namespace Emgu.CV
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvInpaint(IntPtr src, IntPtr mask, IntPtr dst, CvEnum.INPAINT_TYPE flags, double inpaintRadius);
-
-      /// <summary>
-      /// Calculates weighted sum of input image image and the accumulator acc so that acc becomes a running average of frame sequence:
-      /// acc(x,y)=(1-<paramref name="alpha"/>) * acc(x,y) + <paramref name="alpha"/> * image(x,y) if mask(x,y)!=0
-      /// where <paramref name="alpha"/> regulates update speed (how fast accumulator forgets about previous frames). 
-      /// </summary>
-      /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently). </param>
-      /// <param name="acc">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point. </param>
-      /// <param name="alpha">Weight of input image</param>
-      /// <param name="mask">Optional operation mask</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvRunningAvg(IntPtr image, IntPtr acc, double alpha, IntPtr mask);
 
       /// <summary>
       /// Smooths image using one of several methods. Every of the methods has some features and restrictions listed below
@@ -2492,6 +2461,33 @@ namespace Emgu.CV
       {
          return cvPointPolygonTest(contour, pt, measureDist ? 1 : 0);
       }
+
+      /// <summary>
+      /// Finds a circumscribed rectangle of the minimal area for 2D point set by building convex hull for the set and applying rotating calipers technique to the hull.
+      /// </summary>
+      /// <param name="points">Sequence or array of points</param>
+      /// <param name="storage">temporary memory storage</param>
+      /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern MCvBox2D cvMinAreaRect2(IntPtr points, IntPtr storage);
+
+      /// <summary>
+      /// Finds the minimal circumscribed circle for 2D point set using iterative algorithm. It returns nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)
+      /// </summary>
+      /// <param name="points">Sequence or array of 2D points</param>
+      /// <param name="center">Output parameter. The center of the enclosing circle</param>
+      /// <param name="radius">Output parameter. The radius of the enclosing circle.</param>
+      /// <returns>Nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern int cvMinEnclosingCircle(IntPtr points, out MCvPoint2D32f center, out float radius);
+
+      /// <summary>
+      /// Calculates 2D pair-wise geometrical histogram (PGH), described in [Iivarinen97], for the contour. The algorithm considers every pair of the contour edges. The angle between the edges and the minimum/maximum distances are determined for every pair. To do this each of the edges in turn is taken as the base, while the function loops through all the other edges. When the base edge and any other edge are considered, the minimum and maximum distances from the points on the non-base edge and line of the base edge are selected. The angle between the edges defines the row of the histogram in which all the bins that correspond to the distance between the calculated minimum and maximum distances are incremented (that is, the histogram is transposed relatively to [Iivarninen97] definition). The histogram can be used for contour matching
+      /// </summary>
+      /// <param name="contour">Input contour. Currently, only integer point coordinates are allowed</param>
+      /// <param name="hist">Calculated histogram; must be two-dimensional</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
       /// <summary>
       /// Calculates area of the whole contour or contour section. 
@@ -3328,6 +3324,7 @@ namespace Emgu.CV
           int xOrder,
           int yOrder);
 
+      #region Accumulation of Background Statistics
       /// <summary>
       /// Adds the whole image or its selected region to accumulator sum
       /// </summary>
@@ -3336,6 +3333,38 @@ namespace Emgu.CV
       /// <param name="mask">Optional operation mask</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvAcc(IntPtr image, IntPtr sum, IntPtr mask);
+
+      /// <summary>
+      /// Adds the input image image or its selected region, raised to power 2, to the accumulator sqsum
+      /// </summary>
+      /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently)</param>
+      /// <param name="sqsum">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point</param>
+      /// <param name="mask">Optional operation mask</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvSquareAcc(IntPtr image, IntPtr sqsum, IntPtr mask);
+
+      /// <summary>
+      /// Adds product of 2 images or thier selected regions to accumulator acc
+      /// </summary>
+      /// <param name="image1">First input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently)</param>
+      /// <param name="image2">Second input image, the same format as the first one</param>
+      /// <param name="acc">Accumulator of the same number of channels as input images, 32-bit or 64-bit floating-point</param>
+      /// <param name="mask">Optional operation mask</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvMultiplyAcc(IntPtr image1, IntPtr image2, IntPtr acc, IntPtr mask);
+
+      /// <summary>
+      /// Calculates weighted sum of input image image and the accumulator acc so that acc becomes a running average of frame sequence:
+      /// acc(x,y)=(1-<paramref name="alpha"/>) * acc(x,y) + <paramref name="alpha"/> * image(x,y) if mask(x,y)!=0
+      /// where <paramref name="alpha"/> regulates update speed (how fast accumulator forgets about previous frames). 
+      /// </summary>
+      /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently). </param>
+      /// <param name="acc">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point. </param>
+      /// <param name="alpha">Weight of input image</param>
+      /// <param name="mask">Optional operation mask</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvRunningAvg(IntPtr image, IntPtr acc, double alpha, IntPtr mask);
+      #endregion
 
       /// <summary>
       /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. The rotation matrix R, corresponding to the rotation vector r.

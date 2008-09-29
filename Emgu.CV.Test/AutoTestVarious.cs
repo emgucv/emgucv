@@ -408,6 +408,35 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestMatchTemplate()
+      {
+         #region prepare synthetic image for testing
+         int templWidth = 50;
+         int templHeight = 50;
+         Point2D<double> templCenter = new Point2D<double>(120, 100);
+
+         //Create a random object
+         Image<Bgr, Byte> randomObj = new Image<Bgr, byte>(templWidth, templHeight);
+         randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+
+         //Draw the object in image1 center at templCenter;
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
+         Rectangle<double> objectLocation = new Rectangle<double>(templCenter, 50, 50);
+         img.ROI = objectLocation;
+         randomObj.Copy(img, null);
+         img.ROI = null;
+         #endregion
+         
+         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
+         double[] minVal, maxVal;
+         MCvPoint[] minLoc, maxLoc;
+         match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+
+         Assert.AreEqual(minLoc[0].x, templCenter.X - templWidth / 2);
+         Assert.AreEqual(minLoc[0].y, templCenter.Y - templHeight / 2);
+      }
+
+      [Test]
       public void TestOpticalFlow()
       {
          #region prepare synthetic image for testing
@@ -472,6 +501,15 @@ namespace Emgu.CV.Test
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
          //Application.Run(new ImageViewer(chessboardImage));
+      }
+
+      [Test]
+      public void TestFillConvexPolygon()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 200);
+         Rectangle<double> rect = new Rectangle<double>(new Point2D<double>(100, 100), 50, 50);
+         img.Draw((IConvexPolygon<double>)rect, new Bgr(Color.Blue), 0);
+         //Application.Run(new ImageViewer(img));
       }
 
       [Test]

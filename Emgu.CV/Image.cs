@@ -1337,9 +1337,9 @@ namespace Emgu.CV
       /// <param name="template">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <returns>The comparison result: width = this.Width - template.Width + 1; height = this.Height - template.Height + 1 </returns>
-      public Image<TColor, TDepth> MatchTemplate(Image<TColor, TDepth> template, CvEnum.TM_TYPE method)
+      public Image<Gray, Single> MatchTemplate(Image<TColor, TDepth> template, CvEnum.TM_TYPE method)
       {
-         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width - template.Width + 1, Height - template.Height + 1);
+         Image<Gray, Single> res = new Image<Gray, Single>(Width - template.Width + 1, Height - template.Height + 1);
          CvInvoke.cvMatchTemplate(Ptr, template.Ptr, res.Ptr, method);
          return res;
       }
