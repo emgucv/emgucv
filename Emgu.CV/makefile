@@ -1,5 +1,5 @@
 NAME = emgu-cv
-VERSION = 1.3.0.0
+VERSION = 1.4.0.0
 PKG_NAME = ${NAME}-${VERSION}
 LIB_NAME = Emgu.CV.dll
 MCS_FLAG= -d:LINUX -pkg:olive -r:System.Xml -r:System.Drawing -r:System.Windows.Forms -r:System.Data  -target:library
