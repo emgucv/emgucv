@@ -24,6 +24,7 @@ namespace Emgu.CV
 
       ///<summary> The intensity of the gray color </summary>
       ///<value> The intensity of the gray color</value>
+      [DisplayColor(122, 122, 122)]
       public double Intensity { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
 
       /// <summary>
@@ -60,19 +61,6 @@ namespace Emgu.CV
             return Intensity.CompareTo(gray.Intensity);
          }
          throw new ArgumentException("object is not Gray");
-      }
-
-      /// <summary>
-      /// Get the names for each channel
-      /// </summary>
-      public override String[] ChannelName
-      {
-         get
-         {
-            String[] res = new string[Dimension];
-            res[0] = "Gray";
-            return res;
-         }
       }
    }
 }

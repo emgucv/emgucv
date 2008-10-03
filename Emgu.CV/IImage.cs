@@ -87,8 +87,9 @@ namespace Emgu.CV
       /// <returns>
       /// Returns the min / max location and values for the image
       /// </returns>
+      [ExposableMethod(Exposable = false)]
       void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations);
-
+      
       ///<summary>
       ///The function cvPyrUp performs up-sampling step of Gaussian pyramid decomposition. 
       ///First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 

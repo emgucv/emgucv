@@ -37,10 +37,10 @@ namespace Emgu.CV
       /// <summary>
       /// Create a contour of the specific kind, tyoe and flag
       /// </summary>
-      /// <param name="kind">the kind of the sequence</param>
-      /// <param name="eltype">the type of the sequence</param>
-      /// <param name="flag">the flag of the sequence</param>
-      /// <param name="stor">the storage</param>
+      /// <param name="kind">The kind of the sequence</param>
+      /// <param name="eltype">The type of the sequence</param>
+      /// <param name="flag">The flag of the sequence</param>
+      /// <param name="stor">The storage</param>
       public Contour(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind,  CvEnum.SEQ_FLAG flag, MemStorage stor)
          : this( ((int)kind | (int)eltype | (int)flag), stor)
       {
@@ -49,9 +49,9 @@ namespace Emgu.CV
       /// <summary>
       /// Create a contour using the specific <paramref name="storage"/>
       /// </summary>
-      /// <param name="storage">the storage</param>
+      /// <param name="storage">The storage to be used</param>
       public Contour(MemStorage storage)
-         : this(0, storage)
+         : this((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON , storage)
       {
       }
 

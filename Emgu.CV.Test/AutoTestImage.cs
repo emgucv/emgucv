@@ -469,5 +469,33 @@ namespace Emgu.CV.Test
          MCvMoments moment = image.GetMoments(true);
 
       }
+
+      [Test]
+      public void TestSnake()
+      {
+         Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray());
+         
+            Point2D<double> center = new Point2D<double>(50, 50);
+            double width = 20;
+            double height = 40;
+            Rectangle<double> rect = new Rectangle<double>(center, width, height);
+            img.Draw(rect, new Gray(255.0), -1);
+
+            using (MemStorage stor = new MemStorage())
+            {
+               Seq<MCvPoint> pts = new Seq<MCvPoint>((int) CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+               pts.Push(new MCvPoint(20, 20));
+               pts.Push(new MCvPoint(20, 80));
+               pts.Push(new MCvPoint(80, 80));
+               pts.Push(new MCvPoint(80, 20));
+
+               Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
+               Seq<MCvPoint> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new MCvSize(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+
+               img.Draw(pts, new Gray(120), 1);
+               img.Draw(snake, new Gray(80), 2);
+               //Application.Run(new ImageViewer(img));
+            }
+       }
    }
 }

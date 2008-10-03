@@ -28,10 +28,15 @@ namespace Emgu.CV
       { }
 
       ///<summary> Get or set the intensity of the z color channel </summary>
+      [DisplayColor(122, 122, 122)]
       public double X { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
+
       ///<summary> Get or set the intensity of the y color channel </summary>
+      [DisplayColor(122, 122, 122)]
       public double Y { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
+
       ///<summary> Get or set the intensity of the x color channel </summary>
+      [DisplayColor(122, 122, 122)]
       public double Z { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
    }
 }

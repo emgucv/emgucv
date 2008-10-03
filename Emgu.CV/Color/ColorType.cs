@@ -22,10 +22,48 @@ namespace Emgu.CV
       {
          get
          {
+            List<String> channelNames = new List<string>();
+            foreach (System.Reflection.PropertyInfo pInfo in GetType().GetProperties())
+            {
+               Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
+               if (displayAtts.Length > 0)
+               {
+                  channelNames.Add(pInfo.Name);
+               }
+            }
+            if (channelNames.Count > 0) return channelNames.ToArray();
+
             String[] res = new string[Dimension];
             for (int i = 0; i < Dimension; i++)
             {
                res[i] = "Channel " + i;
+            }
+            return res;
+         }
+      }
+
+      /// <summary>
+      /// Get the display color for each channel
+      /// </summary>
+      public virtual System.Drawing.Color[] ChannelColor
+      {
+         get
+         {
+            List<System.Drawing.Color> channelColor = new List<System.Drawing.Color>();
+            foreach (System.Reflection.PropertyInfo pInfo in GetType().GetProperties())
+            {
+               Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
+               if (displayAtts.Length > 0)
+               {
+                  channelColor.Add( ((DisplayColorAttribute) displayAtts[0]).DisplayColor );
+               }
+            }
+            if (channelColor.Count > 0) return channelColor.ToArray();
+
+            System.Drawing.Color[] res = new System.Drawing.Color[Dimension];
+            for (int i = 0; i < Dimension; i++)
+            {
+               res[i] = System.Drawing.Color.Gray;
             }
             return res;
          }

@@ -45,7 +45,7 @@ namespace Emgu.CV
       public int layer_count;
 
       /// <summary>
-      /// storage for “foreground_regions”
+      /// storage for foreground_regions
       /// </summary>
       public IntPtr storage;
 

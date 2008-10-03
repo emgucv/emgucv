@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Emgu.CV.UI
 {
@@ -15,24 +16,45 @@ namespace Emgu.CV.UI
    public partial class ParamInputDlg : Form
    {
       private bool _sucessed;
-      private Dictionary<ParameterInfo, ParamInputPanel> _paramPanelDictionary;
-      private List<Object> _pList;
+
+      /// <summary>
+      /// The List of parameter values
+      /// </summary>
+      private Object[] _paramValue;
+
+      /// <summary>
+      /// The array of parameter info
+      /// </summary>
       private ParameterInfo[] _paramInfo;
 
-      private ParamInputDlg(ParameterInfo[] paramInfo, List<Object> paramList)
+      private ParamInputPanel[] _paramPanel;
+
+      /// <summary>
+      /// Get the parameters obtained by this parameter input dialog
+      /// </summary>
+      public Object[] Parameters
+      {
+         get
+         {
+            return _paramValue;
+         }
+      }
+
+      private ParamInputDlg(ParameterInfo[] paramInfo, Object[] paramList)
       {
          InitializeComponent();
 
-         _paramPanelDictionary = new Dictionary<ParameterInfo, ParamInputPanel>();
-         _pList = paramList;
+         _paramValue = new object[paramInfo.Length];
+
          _paramInfo = paramInfo;
+         _paramPanel = new ParamInputPanel[paramInfo.Length];
 
          for (int i = 0; i < paramInfo.Length; i++)
          {
-            ParamInputPanel panel = CreatePanelForParameter(paramInfo[i]);
+            ParamInputPanel panel = CreatePanelForParameter(paramInfo[i], paramList == null? null : paramList[i]);
             parameterInputPanel.Controls.Add(panel);
             panel.Location = new Point(0, i * panel.Height);
-            _paramPanelDictionary.Add(paramInfo[i], panel);
+            _paramPanel[i] = panel;
          }
       }
 
@@ -49,21 +71,20 @@ namespace Emgu.CV.UI
       private void okButton_Click(object sender, EventArgs e)
       {
          bool valid = true;
-         _pList.Clear();
 
-         foreach (ParameterInfo pi in _paramInfo)
+         for (int i = 0; i < _paramInfo.Length; i++)
          {
-            ParamInputPanel panel = _paramPanelDictionary[pi];
+            ParamInputPanel panel = _paramPanel[i];
             Object value = panel.GetValue();
             if (value == null)
             {
                valid = false;
-               MessageBox.Show("Parameter {0} is invalid.", pi.Name);
+               MessageBox.Show("Parameter {0} is invalid.", panel.Name);
                break;
             }
             else
             {
-               _pList.Add(value);
+               _paramValue[i] = value;
             }
          }
 
@@ -155,8 +176,9 @@ namespace Emgu.CV.UI
       /// Create a panel for the specific parameter
       /// </summary>
       /// <param name="param">the parameter to create panel for</param>
+      /// <param name="defaultValue">The default value for the parameter</param>
       /// <returns>the panel</returns>
-      private static ParamInputPanel CreatePanelForParameter(ParameterInfo param)
+      private static ParamInputPanel CreatePanelForParameter(ParameterInfo param, object defaultValue)
       {
          Type paramType = param.ParameterType;
 
@@ -206,7 +228,7 @@ namespace Emgu.CV.UI
             TextBox inputTextBox = new TextBox();
             panel.Controls.Add(inputTextBox);
             inputTextBox.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
-            inputTextBox.Text = "0";
+            inputTextBox.Text = defaultValue == null? "0" : defaultValue.ToString();
 
             panel.GetParamFunction =
                 delegate()
@@ -250,20 +272,29 @@ namespace Emgu.CV.UI
       /// Obtain the parameters for <paramref name="method"/> and put them in <paramref name="paramList"/>
       /// </summary>
       /// <param name="method">The method to Obtain parameters from</param>
-      /// <param name="paramList">The list that will be used as the storage for the retrieved parameters</param>
+      /// <param name="defaultParam">The list that will be used as the storage for the retrieved parameters, if it contains elements, those elements will be used as default value</param>
       /// <returns>True if successed, false otherwise</returns>
-      public static bool GetParams(MethodInfo method, List<Object> paramList)
+      public static Object[] GetParams(MethodInfo method, Object[] defaultParam)
       {
          ParameterInfo[] parameters = method.GetParameters();
 
          //if the method requires no parameter, simply return true
-         if (parameters.Length == 0) return true;
+         if (parameters.Length == 0)
+         {
+            return new object[0];
+         }
 
          #region Handle the cases where at least one parameter is required as input
-
-         ParamInputDlg dlg = new ParamInputDlg(parameters, paramList);
+         ParamInputDlg dlg = new ParamInputDlg(parameters, defaultParam);
          dlg.ShowDialog();
-         return dlg.Successed;
+         if (dlg.Successed)
+         {
+            return dlg.Parameters;
+         }
+         else
+         {
+            return null;
+         }
 
          #endregion
       }

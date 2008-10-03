@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
@@ -127,7 +128,9 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Contour<MCvPoint> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(MCvPoint)));
                Assert.AreEqual(rect.Area, cs.Area);
+
                Assert.IsTrue(cs.Convex);
                Assert.AreEqual(rect.Width * 2 + rect.Height * 2, cs.Perimeter);
                Rectangle<double> rect2 = cs.BoundingRectangle;
@@ -145,7 +148,7 @@ namespace Emgu.CV.Test
                MCvMoments moment = cs.GetMoments();
                Assert.IsTrue(moment.GravityCenter.Equals(rect2.Center));
             }
-
+            
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
@@ -153,6 +156,11 @@ namespace Emgu.CV.Test
                Assert.AreEqual(c, null);
             }
          }
+         
+         int s1 = Marshal.SizeOf(typeof(MCvSeq));
+         int s2 = Marshal.SizeOf(typeof(MCvContour));
+         int sizeRect = Marshal.SizeOf(typeof(MCvRect));
+         Assert.AreEqual(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)), s2);
       }
 
       [Test]

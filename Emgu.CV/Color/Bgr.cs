@@ -40,25 +40,16 @@ namespace Emgu.CV
       { }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
+      [DisplayColor(255, 0, 0)]
       public double Blue { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
+
       ///<summary> Get or set the intensity of the green color channel </summary>
+      [DisplayColor(0, 255, 0)]
       public double Green { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
+
       ///<summary> Get or set the intensity of the reg color channel </summary>
+      [DisplayColor(0, 0, 255)]
       public double Red { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
 
-      /// <summary>
-      /// Get the names for each channel
-      /// </summary>
-      public override String[] ChannelName
-      {
-         get
-         {
-            String[] res = new string[Dimension];
-            res[0] = "Blue";
-            res[1] = "Green";
-            res[2] = "Red";
-            return res;
-         }
-      }
    }
 }

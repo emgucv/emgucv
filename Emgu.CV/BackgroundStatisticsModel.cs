@@ -42,7 +42,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the CvBGStatModel structure
+      /// Get the MCvBGStatModel structure
       /// </summary>
       public MCvBGStatModel MCvBGStatModel
       {
@@ -53,7 +53,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the current background
+      /// Get a copy of the current background
       /// </summary>
       public Image<Bgr, Byte> Background
       {
@@ -68,7 +68,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get a mask of the current forground
+      /// Get a copy of the mask for the current forground
       /// </summary>
       public Image<Gray, Byte> Foreground
       {

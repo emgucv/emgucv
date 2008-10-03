@@ -668,7 +668,7 @@ namespace Emgu.CV.CvEnum
       ///<summary>
       ///  (x,y) 
       ///</summary>
-      CV_SEQ_ELTYPE_POINT = MAT_DEPTH.CV_32S + 1 << 3,
+      CV_SEQ_ELTYPE_POINT = (((int)MAT_DEPTH.CV_32S) + (((2) - 1) << 3)) ,
       ///<summary>  
       ///freeman code: 0..7 
       ///</summary>
@@ -770,24 +770,24 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT_SET = (0 | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
+      CV_SEQ_POINT_SET = (SEQ_KIND.CV_SEQ_KIND_GENERIC | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT3D_SET = (0 | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT3D),
+      CV_SEQ_POINT3D_SET = (SEQ_KIND.CV_SEQ_KIND_GENERIC | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT3D),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POLYLINE = (1 << 9 | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
+      CV_SEQ_POLYLINE = (SEQ_KIND.CV_SEQ_KIND_CURVE | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POLYGON = (1 << 12 | CV_SEQ_POLYLINE),
+      CV_SEQ_POLYGON = (SEQ_FLAG.CV_SEQ_FLAG_CLOSED | CV_SEQ_POLYLINE),
       //CV_SEQ_CONTOUR         =CV_SEQ_POLYGON,
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_SIMPLE_POLYGON = (2 << 12 | CV_SEQ_POLYGON)
+      CV_SEQ_SIMPLE_POLYGON = (SEQ_FLAG.CV_SEQ_FLAG_SIMPLE | CV_SEQ_POLYGON)
    }
 
    /// <summary>

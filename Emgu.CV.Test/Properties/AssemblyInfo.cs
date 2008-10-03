@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
 [assembly: AssemblyProduct("CvTest")]
-[assembly: AssemblyCopyright("Copyright © Emgu 2007")]
+[assembly: AssemblyCopyright("Copyright © Emgu 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

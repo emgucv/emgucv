@@ -164,13 +164,11 @@ namespace Emgu.CV.UI
       {
          IImage image = _imageBox.DisplayedImage;
 
-         System.Drawing.Color[] colors = new Color[] {
-                    Color.Blue,
-                    Color.Green,
-                    Color.Red};
-
          IImage[] channels = image.Split();
-         String[] channelNames = ((ColorType)Activator.CreateInstance(image.TypeOfColor)).ChannelName;
+         ColorType typeOfColor = ((ColorType)Activator.CreateInstance(image.TypeOfColor));
+         String[] channelNames = typeOfColor.ChannelName;
+         System.Drawing.Color[] colors = typeOfColor.ChannelColor;
+
          HistogramViewer hviewer = new HistogramViewer();
 
          if (image.TypeOfDepth == typeof(Byte))
@@ -180,6 +178,7 @@ namespace Emgu.CV.UI
                Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, 0.0f, 255f);
                hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
             }
+            hviewer.HistogramCtrl.Paint();
          }
          else
          {

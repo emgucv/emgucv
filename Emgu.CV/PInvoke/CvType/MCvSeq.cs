@@ -8,6 +8,7 @@ namespace Emgu.CV
    /// <summary>
    /// Managed structure equivalent to CvSeq
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvSeq
    {
       ///<summary>

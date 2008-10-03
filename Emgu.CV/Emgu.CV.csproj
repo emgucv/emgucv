@@ -76,6 +76,7 @@
     <Compile Include="BackgroundStatisticsModel.cs" />
     <Compile Include="CameraCalibration\RotationVector3D.cs" />
     <Compile Include="Color\Bgra.cs" />
+    <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Contour.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />

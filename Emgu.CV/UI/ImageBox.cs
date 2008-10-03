@@ -54,7 +54,19 @@ namespace Emgu.CV.UI
          ImageProperty panel = ImagePropertyPanel;
          if (panel != null)
             panel.SetOperationStack(_operationStack);
-         Image = Image;
+
+         try
+         {
+            Image = Image;
+         }
+         catch (Exception e)
+         {
+            _operationStack.Pop();
+            if (panel != null)
+               panel.SetOperationStack(_operationStack);
+            Image = Image;
+            throw (e);
+         }
       }
 
       /// <summary>
@@ -99,12 +111,39 @@ namespace Emgu.CV.UI
 
             operationMenuItem.Click += delegate(Object o, EventArgs e)
                 {
-                   List<Object> paramList = new List<object>();
-                   if (ParamInputDlg.GetParams(methodInfoRef, paramList))
+                   /*
+                   Object[] paramList = null;
+                   paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
+                   if (paramList != null)
                    {
-                      Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList.ToArray());
-                      PushOperation(operation);
-                   }
+                      Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList);
+                      try
+                      {
+                         PushOperation(operation);
+                      }
+                      catch (Exception expt)
+                      {
+                         MessageBox.Show(expt.InnerException.Message);
+                      }
+                   }*/
+                   Object[] paramList = null;
+                   do
+                   {
+                      paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
+                      if (paramList != null)
+                      {
+                         Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList);
+                         try
+                         {
+                            PushOperation(operation);
+                            paramList = null;
+                         }
+                         catch (Exception expt)
+                         {
+                            MessageBox.Show(expt.InnerException.Message);
+                         }
+                      }
+                   } while (paramList != null);
                 };
 
             operationsToolStripMenuItem.DropDownItems.Add(operationMenuItem);

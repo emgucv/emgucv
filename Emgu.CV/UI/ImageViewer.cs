@@ -53,8 +53,11 @@ namespace Emgu.CV.UI
          }
          set
          {
-            this.Width = value.Width + 8;
-            this.Height = value.Height + 32;
+            if (value != null)
+            {
+               this.Width = value.Width + 8;
+               this.Height = value.Height + 32;
+            }
             imageBox1.Image = value;
          }
       }

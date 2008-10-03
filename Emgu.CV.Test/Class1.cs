@@ -103,7 +103,7 @@ namespace Emgu.CV.Test
          Application.Run(new ImageViewer(map));
       }
 
-      public void testEllipseFitting()
+      public void TestEllipseFitting()
       {
          System.Random r = new Random();
 
@@ -489,7 +489,7 @@ namespace Emgu.CV.Test
          Application.Run(new ImageViewer(res));
       }
 
-      private void Testmap()
+      private void TestMap()
       {
          Point2D<double> center = new Point2D<double>(-110032, -110032);
 

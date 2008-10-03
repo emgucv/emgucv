@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Permissions;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -1357,35 +1358,31 @@ namespace Emgu.CV
       /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
       /// <param name="storage">The memory storage used by the resulting sequence</param>
       /// <returns>The snake[d] contour</returns>
-      public Seq<MCvPoint> Snake(Seq<MCvPoint> contour, float alpha, float beta, float gamma, Point2D<int> windowSize, MCvTermCriteria tc, MemStorage storage)
+      public Contour<MCvPoint> Snake(Seq<MCvPoint> contour, float alpha, float beta, float gamma, MCvSize windowSize, MCvTermCriteria tc, MemStorage storage)
       {
          int count = contour.Total;
 
-         IntPtr points = Marshal.AllocHGlobal(count * 2 * sizeof(int));
-
-         CvInvoke.cvCvtSeqToArray(contour.Ptr, points, new MCvSlice(0, 0x3fffffff));
+         int[,] points = new int[count, 2];
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvCvtSeqToArray(contour.Ptr, handle.AddrOfPinnedObject(), new MCvSlice(0, 0x3fffffff));
          CvInvoke.cvSnakeImage(
              Ptr,
-             points,
+             handle.AddrOfPinnedObject(),
              count,
              new float[1] { alpha },
              new float[1] { beta },
              new float[1] { gamma },
              1,
-             new MCvSize(windowSize.X, windowSize.Y),
+             windowSize,
              tc,
              true);
-         IntPtr rSeq = CvInvoke.cvCreateSeq(
-             (int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON,
-             Marshal.SizeOf(typeof(MCvContour)),
-             Marshal.SizeOf(typeof(MCvPoint)),
-             storage.Ptr);
 
-         CvInvoke.cvSeqPushMulti(rSeq, points, count, false);
-         Marshal.FreeHGlobal(points);
+         Contour<MCvPoint> rSeq = new Contour<MCvPoint>(storage);
 
-         return new Seq<MCvPoint>(rSeq, storage);
+         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject() , count, false);
+         handle.Free();
 
+         return rSeq;
       }
       #endregion
 
@@ -1975,12 +1972,12 @@ namespace Emgu.CV
          return data;
       }
 
-      ///<summary>
+      /// <summary>
       /// Scale the image to the specific size 
       /// </summary>
-      ///<param name="width">The width of the returned image.</param>
-      ///<param name="height">The height of the returned image.</param>
-      ///<returns>The resized image</returns>
+      /// <param name="width">The width of the returned image.</param>
+      /// <param name="height">The height of the returned image.</param>
+      /// <returns>The resized image</returns>
       public Image<TColor, TDepth> Resize(int width, int height)
       {
          Image<TColor, TDepth> imgScale = new Image<TColor, TDepth>(width, height);
@@ -2007,7 +2004,7 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary>
+      /// <summary>
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
       /// <returns>The scaled image</returns>
@@ -2653,16 +2650,14 @@ namespace Emgu.CV
          MCvSize roiSize;
          CvInvoke.cvGetRawData(Ptr, out start, out step1, out roiSize);
          Int64 data1 = start.ToInt64();
-
-         TDepth[] row1 = new TDepth[cols1];
-         GCHandle handle1 = GCHandle.Alloc(row1, GCHandleType.Pinned);
          int width1 = Marshal.SizeOf(typeof(TDepth)) * cols1;
+
+         using (PinnedArray<TDepth> row1 = new PinnedArray<TDepth>(cols1))
          for (int row = 0; row < Height; row++, data1 += step1)
          {
-            Emgu.Util.Toolbox.memcpy(handle1.AddrOfPinnedObject(), new IntPtr(data1), width1);
-            System.Array.ForEach(row1, action);
+            Emgu.Util.Toolbox.memcpy(row1.AddrOfPinnedObject(), new IntPtr(data1), width1);
+            System.Array.ForEach(row1.Array, action);
          }
-         handle1.Free();
       }
 
       /// <summary>
