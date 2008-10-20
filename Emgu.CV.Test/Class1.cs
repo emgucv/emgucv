@@ -320,7 +320,7 @@ namespace Emgu.CV.Test
          Application.SetCompatibleTextRenderingDefault(false);
 
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
-         using (Image<Bgr, Byte> smooth = image.GaussianSmooth(7))
+         using (Image<Bgr, Byte> smooth = image.SmoothGaussian(7))
          {
             DateTime t1 = DateTime.Now;
 
@@ -465,7 +465,7 @@ namespace Emgu.CV.Test
       public void TestContour()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-         img._GaussianSmooth(3);
+         img.SmoothGaussian(3);
          img = img.Canny(new Gray(80), new Gray(50));
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
@@ -535,23 +535,109 @@ namespace Emgu.CV.Test
 
       }
 
+      private class SyntheticData
+      {
+         private Matrix<float> _state;
+         private Matrix<float> _transitionMatrix;
+         private Matrix<float> _measurementNoise;
+         private Matrix<float> _processNoise;
+         private Matrix<float> _errorCovariancePost;
+         private Matrix<float> _measurementMatrix;
+         public Matrix<float> MeasurementMatrix
+         {
+            get
+            {
+               return _measurementMatrix;
+            }
+         }
+         public Matrix<float> TransitionMatrix
+         {
+            get
+            {
+               return _transitionMatrix;
+            }
+         }
+
+         public Matrix<float> State
+         {
+            get
+            {
+               return _state;
+            }
+         }
+         public Matrix<float> MeasurementNoise
+         {
+            get
+            {
+               return _measurementNoise;
+            }
+         }
+         public Matrix<float> ProcessNoise
+         {
+            get
+            {
+               return _processNoise;
+            }
+         }
+         public Matrix<float> ErrorCovariancePost
+         {
+            get
+            {
+               return _errorCovariancePost;
+            }
+         }
+
+         public SyntheticData()
+         {
+            _state = new Matrix<float>(2, 1);
+            // start with random position and velocity
+            //_state.SetRandNormal(new MCvScalar(0.0), new MCvScalar(1.0));
+            _state[0, 0] = 0.0f;
+            _state[1, 0] = 0.05f;
+
+            _measurementNoise = new Matrix<float>(1, 1);
+            _measurementNoise.SetIdentity(new MCvScalar(1.0e-2));
+            _processNoise = new Matrix<float>(2, 2);
+            _processNoise.SetIdentity(new MCvScalar(1.0e-5));
+            _errorCovariancePost = new Matrix<float>(2, 2);
+            _errorCovariancePost.SetIdentity();
+            _transitionMatrix = new Matrix<float>(new float[,] { { 1, 1 }, { 0, 1 } }); // phi_t = phi_{t-1} + delta_phi
+            _measurementMatrix = new Matrix<float>(new float[,] { {1, 0}});
+            _measurementMatrix.SetIdentity(); //the measurement is [ phi ]
+         }
+
+         public Matrix<float> GetMeasurement()
+         {
+            Matrix<float> measurementNoise = new Matrix<float>(1, 1);
+            measurementNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(MeasurementNoise[0, 0])));
+            return MeasurementMatrix * _state + measurementNoise;
+         }
+
+         public void GoToNextState()
+         {
+            Matrix<float> processNoise = new Matrix<float>(2, 1);
+            processNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(ProcessNoise[0, 0])));
+            _state = TransitionMatrix * _state + processNoise;
+         }
+      }
+
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100);
 
-         // state is (phi, delta_phi) - angle and angle increment 
-         Matrix<float> state = new Matrix<float>(2, 1);
+         SyntheticData syntheticData = new SyntheticData();
 
-         // start with random position and velocity
-         state.SetRandNormal(new MCvScalar(0.0), new MCvScalar(0.1));
+         // state is (phi, delta_phi) - angle and angle increment 
+         Matrix<float> state = new Matrix<float>(new float[] { 0.0f, 0.0f}); //initial guess
 
          #region initialize Kalman filter
          Kalman tracker = new Kalman(2, 1, 0);
-         tracker.TransitionMatrix.Data = new float[,] { { 1, 1 }, { 0, 1 } }; // phi_t = phi_{t-1} + delta_phi
-         tracker.MeasurementMatrix.SetIdentity(); //the measurement is [ phi, delta_phi ]
-         tracker.ProcessNoiseCovariance.SetIdentity(new MCvScalar(1.0e-5));
-         tracker.MeasurementNoiseCovariance.SetIdentity(new MCvScalar(1.0e-1));
-         tracker.ErrorCovariancePost.SetIdentity();
+         tracker.TransitionMatrix = syntheticData.TransitionMatrix;
+         tracker.MeasurementMatrix = syntheticData.MeasurementMatrix;
+         tracker.ProcessNoiseCovariance = syntheticData.ProcessNoise;
+         tracker.MeasurementNoiseCovariance = syntheticData.MeasurementNoise;
+         tracker.ErrorCovariancePost = syntheticData.ErrorCovariancePost;
+         tracker.CorrectedState = state;
          #endregion 
 
          System.Converter<double, Point2D<float>> angleToPoint =
@@ -572,40 +658,34 @@ namespace Emgu.CV.Test
 
          while (true)
          {
-            Point2D<float> statePoint = angleToPoint(state[0, 0]);
-
-            #region predict point position
-            Matrix<float> prediction = tracker.Predict();
-            Point2D<float> predictPoint = angleToPoint(prediction[0, 0]);
-            #endregion
-
-            #region generate synthetic measurement
-            Matrix<float> measurementNoise = new Matrix<float>(1, 1);
-            measurementNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(tracker.MeasurementNoiseCovariance[0, 0])));
-            Matrix<float> measurement = tracker.MeasurementMatrix * state + measurementNoise;
-            Point2D<float> measurementPoint = angleToPoint(measurement[0, 0]);
-            #endregion
-
-            #region draw the state, prediction and the measurement
-            img.SetValue(new Bgr()); //clear the image
-            drawCross(statePoint, new Bgr(Color.White));
-            drawCross(measurementPoint, new Bgr(Color.Red));
-            drawCross(predictPoint, new Bgr(Color.Green));
-            img.Draw(new LineSegment2D<float>(statePoint, predictPoint), new Bgr(Color.Magenta), 1);
-            #endregion
-
+            Matrix<float> measurement = syntheticData.GetMeasurement();
             // adjust Kalman filter state 
             tracker.Correct(measurement);
 
-            #region update synthetic state
-            Matrix<float> processNoise = new Matrix<float>(2, 1);
-            processNoise.SetRandNormal(new MCvScalar(), new MCvScalar(Math.Sqrt(tracker.ProcessNoiseCovariance[0, 0])));
-            state = tracker.TransitionMatrix * state + processNoise;
+            tracker.Predict();
+
+            #region draw the state, prediction and the measurement
+            Point2D<float> statePoint = angleToPoint(tracker.CorrectedState[0, 0]);
+            Point2D<float> predictPoint = angleToPoint(tracker.PredictedState[0, 0]);
+            Point2D<float> measurementPoint = angleToPoint(measurement[0, 0]);
+
+            img.SetValue(new Bgr()); //clear the image
+            drawCross(statePoint, new Bgr(Color.White)); //draw current state in White
+            drawCross(measurementPoint, new Bgr(Color.Red)); //draw the measurement in Red
+            drawCross(predictPoint, new Bgr(Color.Green)); //draw the prediction (the next state) in green 
+            img.Draw(new LineSegment2D<float>(statePoint, predictPoint), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position 
+
+            Trace.WriteLine(String.Format("Velocity: {0}", tracker.CorrectedState[1, 0]));
             #endregion
+
+            syntheticData.GoToNextState();
 
             CvInvoke.cvShowImage("Kalman", img);
             int code = CvInvoke.cvWaitKey(100);
-            if (code > 0) break;
+            if (code > 0)
+            {
+               break;
+            }
          }
       }
    }

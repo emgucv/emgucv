@@ -41,7 +41,7 @@ namespace Emgu.CV.Test
                   {
                      using (Image<Bgr, Byte> frame = c.QueryFrame())
                      using (Image<Bgr, Byte> flip = frame.Flip(CvEnum.FLIP.HORIZONTAL))
-                     using (Image<Bgr, Byte> smooth = flip.GaussianSmooth(5))
+                     using (Image<Bgr, Byte> smooth = flip.SmoothGaussian(5))
                      {
                         DateTime t1 = DateTime.Now;
 

@@ -1165,9 +1165,9 @@ namespace Emgu.CV
       /// <param name="yorder">Order of the derivative y</param>
       /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size xaperture_size separable kernel will be used to calculate the derivative.</param>
       /// <returns>The result of the sobel edge detector</returns>
-      public Image<TColor, TDepth> Sobel(int xorder, int yorder, int apertureSize)
+      public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
          CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
          return res;
       }
@@ -3214,7 +3214,100 @@ namespace Emgu.CV
       #endregion
 
       #region Filters
-      ///<summary> performs a convolution using the provided kernel </summary>
+      /// <summary>
+      /// Summation over a pixel param1 x param2 neighborhood with subsequent scaling by 1/(param1 x param2)
+      /// </summary>
+      /// <param name="width">The width of the window</param>
+      /// <param name="height">The height of the window</param>
+      /// <returns>The result of blur</returns>
+      public Image<TColor, TDepth> SmoothBlur(int width, int height)
+      {
+         return SmoothBlur(width, height, true);
+      }
+
+      /// <summary>
+      /// Summation over a pixel param1 x param2 neighborhood. If scale is true, the result is subsequent scaled by 1/(param1 x param2)
+      /// </summary>
+      /// <param name="width">The width of the window</param>
+      /// <param name="height">The height of the window</param>
+      /// <param name="scale">If true, the result is subsequent scaled by 1/(param1 x param2)</param>
+      /// <returns>The result of blur</returns>
+      public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
+      {
+         Emgu.CV.CvEnum.SMOOTH_TYPE type = scale ?  Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR : Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR_NO_SCALE;
+         Image<TColor, TDepth> res = CopyBlank();
+         CvInvoke.cvSmooth(Ptr, res.Ptr, type, width, height, 0.0, 0.0);
+         return res;
+      }
+
+      /// <summary>
+      /// Finding median of <paramref name="size"/>x<paramref name="size"/> neighborhood 
+      /// </summary>
+      /// <param name="size">The size (width &amp; height) of the window</param>
+      /// <returns>The result of mediam smooth</returns>
+      public Image<TColor, TDepth> SmoothMedian(int size)
+      {
+         Image<TColor, TDepth> res = CopyBlank();
+         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SMOOTH_TYPE.CV_MEDIAN, size, size, 0, 0);
+         return res;
+      }
+
+      /// <summary>
+      /// Applying bilateral 3x3 filtering
+      /// </summary>
+      /// <param name="colorSigma">Color sigma</param>
+      /// <param name="spaceSigma">Space sigma</param>
+      /// <returns>The result of bilateral smooth</returns>
+      public Image<TColor, TDepth> SmoothBilatral(int colorSigma, int spaceSigma)
+      {
+         Image<TColor, TDepth> res = CopyBlank();
+         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BILATERAL, colorSigma, spaceSigma, 0, 0);
+         return res;
+      }
+
+      #region Gaussian Smooth
+      ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
+      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
+      ///<returns> The smoothed image</returns>
+      public Image<TColor, TDepth> SmoothGaussian(int kernelSize)
+      {
+         return SmoothGaussian(kernelSize, 0, 0, 0);
+      }
+
+      ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
+      ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
+      ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
+      ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimwnsion</param>
+      ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimwnsion</param>
+      ///<returns> The smoothed image</returns>
+      public Image<TColor, TDepth> SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
+      {
+         Image<TColor, TDepth> res = CopyBlank();
+         CvInvoke.cvSmooth(Ptr, res.Ptr, CvEnum.SMOOTH_TYPE.CV_GAUSSIAN, kernelWidth, kernelHeight, sigma1, sigma2);
+         return res;
+      }
+
+      ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
+      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
+      public void _SmoothGaussian(int kernelSize)
+      {
+         _SmoothGaussian(kernelSize, 0, 0, 0);
+      }
+
+      ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
+      ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
+      ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
+      ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimwnsion</param>
+      ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimwnsion</param>
+      public void _SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
+      {
+         CvInvoke.cvSmooth(Ptr, Ptr, CvEnum.SMOOTH_TYPE.CV_GAUSSIAN, kernelWidth, kernelHeight, sigma1, sigma2);
+      }
+
+      ///<summary> 
+      ///performs a convolution using the provided kernel 
+      ///</summary>
+      ///<param name="kernel"> The convolution kernel</param>
       public Image<TColor, Single> Convolution(ConvolutionKernelF kernel)
       {
          bool isFloat = (typeof(TDepth) == typeof(Single));
@@ -3248,42 +3341,6 @@ namespace Emgu.CV
          return res;
       }
 
-      #region Gaussian Smooth
-      ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
-      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
-      ///<returns> The smoothed image</returns>
-      public Image<TColor, TDepth> GaussianSmooth(int kernelSize)
-      {
-         return GaussianSmooth(kernelSize, 0, 0);
-      }
-
-      ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
-      ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
-      ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
-      ///<param name="sigma"> The standard deviation of the Gaussian kernel</param>
-      ///<returns> The smoothed image</returns>
-      public Image<TColor, TDepth> GaussianSmooth(int kernelWidth, int kernelHeight, double sigma)
-      {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, CvEnum.SMOOTH_TYPE.CV_GAUSSIAN, kernelWidth, kernelHeight, sigma, 0);
-         return res;
-      }
-
-      ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
-      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
-      public void _GaussianSmooth(int kernelSize)
-      {
-         _GaussianSmooth(kernelSize, 0, 0);
-      }
-
-      ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
-      ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
-      ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
-      ///<param name="sigma"> The standard deviation of the Gaussian kernel</param>
-      public void _GaussianSmooth(int kernelWidth, int kernelHeight, double sigma)
-      {
-         CvInvoke.cvSmooth(Ptr, Ptr, CvEnum.SMOOTH_TYPE.CV_GAUSSIAN, kernelWidth, kernelHeight, sigma, 0);
-      }
       #endregion
 
       #region Threshold methods
@@ -3631,11 +3688,6 @@ namespace Emgu.CV
          return (IImage)Rotate(angle, backgroundColor, crop);
       }
 
-      IImage IImage.Flip(CvEnum.FLIP flipType)
-      {
-         return (IImage)Flip(flipType);
-      }
-
       IImage IImage.DFT(CvEnum.CV_DXT type, int nonzeroRows)
       {
          return (IImage)DFT(type, nonzeroRows);
@@ -3669,7 +3721,6 @@ namespace Emgu.CV
          }
       }
       #endregion
-
 
       #region ICloneable Members
 

@@ -153,18 +153,17 @@ namespace Emgu.CV
       /// <returns>The result of the sobel edge detector</returns>
       IImage Sobel(int xorder, int yorder, int apertureSize);
 
-      ///<summary> Return a filpped copy of the current image</summary>
+      ///<summary>Flip the image inplace</summary>
       ///<param name="flipType">The type of the flipping</param>
-      ///<returns> The flipped copy of <i>this</i> image </returns>
-      IImage Flip(CvEnum.FLIP flipType);
+      void _Flip(CvEnum.FLIP flipType);
 
       ///<summary> 
-      ///Split current IImage into an array of gray scale images where each element 
-      ///in the array represent a single color channel of the original image
+      /// Split current IImage into an array of gray scale images where each element 
+      /// in the array represent a single color channel of the original image
       ///</summary>
       ///<returns> 
-      ///An array of gray scale images where each element 
-      ///in the array represent a single color channel of the original image 
+      /// An array of gray scale images where each element 
+      /// in the array represent a single color channel of the original image 
       ///</returns>
       IImage[] Split();
 
@@ -178,7 +177,7 @@ namespace Emgu.CV
       IImage Rotate(double angle, MCvScalar background, bool crop);
 
       /// <summary>
-      /// performs forward or inverse transform of 1D or 2D floating-point array
+      /// Performs forward or inverse transform of 1D or 2D floating-point array
       /// </summary>
       /// <param name="type">Transformation flags</param>
       /// <param name="nonzeroRows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT</param>
@@ -186,7 +185,7 @@ namespace Emgu.CV
       IImage DFT(CvEnum.CV_DXT type, int nonzeroRows);
 
       /// <summary>
-      /// performs forward or inverse transform of 2D floating-point image
+      /// Performs forward or inverse transform of 2D floating-point image
       /// </summary>
       /// <param name="type">Transformation flags</param>
       /// <returns>The result of DCT</returns>
