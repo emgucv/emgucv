@@ -1,0 +1,138 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{48D846E6-61A2-4B9C-83B1-DB73F977A626}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.UI</RootNamespace>
+    <AssemblyName>Emgu.UI</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>UI.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Emgu.UI.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Linux|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug Linux\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Linux|AnyCPU' ">
+    <OutputPath>bin\Release Linux\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\bin\Emgu.UI.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComboBoxSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ComboBoxSelector.Designer.cs">
+      <DependentUpon>ComboBoxSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusField.Designer.cs">
+      <DependentUpon>StatusField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingBoxDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaitingBoxDialog.Designer.cs">
+      <DependentUpon>WaitingBoxDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XmlTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="XmlTreeView.Designer.cs">
+      <DependentUpon>XmlTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XmlTreeViewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XmlTreeViewDialog.Designer.cs">
+      <DependentUpon>XmlTreeViewDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XmlViewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XmlViewDialog.Designer.cs">
+      <DependentUpon>XmlViewDialog.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ComboBoxSelector.resx">
+      <DependentUpon>ComboBoxSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusField.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>StatusField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaitingBoxDialog.resx">
+      <DependentUpon>WaitingBoxDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlTreeView.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>XmlTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlTreeViewDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>XmlTreeViewDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlViewDialog.resx">
+      <DependentUpon>XmlViewDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UI.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
