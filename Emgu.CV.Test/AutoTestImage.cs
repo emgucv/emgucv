@@ -381,6 +381,12 @@ namespace Emgu.CV.Test
 
          Image<Gray, float> convoluted = image * kernel;
          Assert.IsTrue(laplace.Equals(convoluted));
+
+         /*
+         Matrix<float> kernel1D = new Matrix<float>(new float[] { 1.0f, -2.0f, 1.0f });
+         Image<Gray, float> result = new Image<Gray, float>(image.Width, image.Height);
+         CvInvoke.cvFilter2D(image, result, kernel1D, new MCvPoint(-1, -1));
+         */
       }
 
       [Test]
@@ -468,6 +474,21 @@ namespace Emgu.CV.Test
          image.ThresholdToZero(new Gray(120));
          MCvMoments moment = image.GetMoments(true);
 
+      }
+
+      [Test]
+      public void TESTSURF()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
+         MemStorage stor = new MemStorage();
+
+         MCvSURFParams parameters = new MCvSURFParams(500, true);
+
+         IntPtr keypoints = new IntPtr(), descriptor = new IntPtr();
+         CvInvoke.cvExtractSURF(img.Ptr, IntPtr.Zero, ref keypoints, ref descriptor, stor, parameters);
+
+         Seq<MCvSURFPoint> keypointSeq = new Seq<MCvSURFPoint>(keypoints, stor);
+         int l = keypointSeq.Total;
       }
 
       [Test]

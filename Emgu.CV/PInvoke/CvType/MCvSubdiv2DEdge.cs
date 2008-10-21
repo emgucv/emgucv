@@ -8,6 +8,7 @@ namespace Emgu.CV
    /// <summary>
    /// Wrapped CvSubdiv2DEdge structure
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvSubdiv2DEdge
    {
       /// <summary>

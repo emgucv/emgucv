@@ -1237,6 +1237,18 @@ namespace Emgu.CV
          return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
       }
 
+      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      {
+         MemStorage stor = new MemStorage();
+         MCvSURFParams param = new MCvSURFParams(hessianThreshold, false);
+
+         IntPtr keypointsPtr = new IntPtr();
+         IntPtr descriptorPtr = new IntPtr();
+         CvInvoke.cvExtractSURF(Ptr, mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
+         keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+         descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+      }
+
       /// <summary>
       /// Finds corners with big eigenvalues in the image. 
       /// </summary>
