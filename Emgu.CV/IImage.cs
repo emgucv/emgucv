@@ -210,41 +210,6 @@ namespace Emgu.CV
       IImage ToByte();
 
       /// <summary>
-      /// The type of color for this image
-      /// </summary>
-      Type TypeOfColor
-      {
-         [ExposableMethod(Exposable = false)]
-         get;
-      }
-
-      /// <summary>
-      /// The type of depth for this image
-      /// </summary>
-      Type TypeOfDepth
-      {
-         [ExposableMethod(Exposable = false)]
-         get;
-      }
-
-      /// <summary>
-      /// The number of color channels for this image
-      /// </summary>
-      int NumberOfChannel
-      {
-         [ExposableMethod(Exposable = false)]
-         get;
-      }
-
-      /// <summary>
-      /// Obtain the color from the specific location on the image
-      /// </summary>
-      /// <param name="position">The location of the pixel</param>
-      /// <returns>The color value on the specific <paramref name="position"/></returns>
-      [ExposableMethod(Exposable = false)]
-      ColorType GetColor(Point2D<int> position);
-
-      /// <summary>
       /// Get the pointer to the unmanaged memory
       /// </summary>
       IntPtr Ptr
@@ -252,12 +217,13 @@ namespace Emgu.CV
          [ExposableMethod(Exposable = false)]
          get;
       }
-
+      
       /// <summary>
       /// Save the image to the specific <paramref name="fileName"/> 
       /// </summary>
       /// <param name="fileName">The file name of the image</param>
       [ExposableMethod(Exposable = false)]
       void Save(String fileName);
+      
    }
 }

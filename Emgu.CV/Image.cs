@@ -3760,21 +3760,6 @@ namespace Emgu.CV
       #endregion
 
       #region IImage
-      Type IImage.TypeOfDepth
-      {
-         get
-         {
-            return typeof(TDepth);
-         }
-      }
-
-      Type IImage.TypeOfColor
-      {
-         get
-         {
-            return typeof(TColor);
-         }
-      }
 
       IImage IImage.PyrUp()
       {
@@ -3804,11 +3789,6 @@ namespace Emgu.CV
       IImage IImage.Resize(double scale)
       {
          return (IImage)Resize(scale);
-      }
-
-      ColorType IImage.GetColor(Point2D<int> location)
-      {
-         return (ColorType)this[location];
       }
 
       IImage IImage.Canny(MCvScalar thresh, MCvScalar threshLinking)
@@ -3856,14 +3836,6 @@ namespace Emgu.CV
       IImage[] IImage.Split()
       {
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
-      }
-
-      int IImage.NumberOfChannel
-      {
-         get
-         {
-            return new TColor().Dimension;
-         }
       }
       #endregion
 

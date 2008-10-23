@@ -221,8 +221,9 @@ namespace Emgu.CV.UI
                {
                   ImagePropertyPanel.ImageWidth = _displayedImage.Width;
                   ImagePropertyPanel.ImageHeight = _displayedImage.Height;
-                  ImagePropertyPanel.TypeOfColor = _displayedImage.TypeOfColor;
-                  ImagePropertyPanel.TypeOfDepth = _displayedImage.TypeOfDepth;
+                  Type imageType = Toolbox.GetBaseType(_displayedImage.GetType(), "Image`2");
+                  ImagePropertyPanel.TypeOfColor = imageType.GetGenericArguments()[0];
+                  ImagePropertyPanel.TypeOfDepth = imageType.GetGenericArguments()[1];
 
                   #region calculate the frame rate
                   TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
