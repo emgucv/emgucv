@@ -1775,7 +1775,7 @@ namespace Emgu.CV
       /// <param name="dst">The destination matrix</param>
       /// <param name="method">Inversion method</param>
       /// <returns></returns>
-      [DllImport(CV_LIBRARY)]
+      [DllImport(CXCORE_LIBRARY)]
       public static extern double cvInvert(IntPtr src, IntPtr dst, CvEnum.INVERT_METHOD method);
 
       /// <summary>

@@ -19,6 +19,19 @@ namespace Emgu.CV.Test
    public class AutoTestMatrix
    {
       [Test]
+      public void TestInvert()
+      {
+         Matrix<Single> m = new Matrix<Single>(3, 3);
+         Matrix<Single> mInvert = new Matrix<Single>(3, 3);
+
+         m.SetIdentity();
+
+         CvInvoke.cvInvert(m, mInvert, Emgu.CV.CvEnum.INVERT_METHOD.CV_LU);
+
+         Assert.IsTrue(m.Equals(mInvert));
+      }
+
+      [Test]
       public void TestNot()
       {
          Matrix<byte> m = new Matrix<byte>(10, 8);
