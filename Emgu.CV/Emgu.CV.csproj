@@ -109,6 +109,8 @@
     <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
     <Compile Include="PInvoke\CvType\MCvSet.cs" />
     <Compile Include="PInvoke\CvType\MCvSetElem.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoBMState.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoGCState.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />

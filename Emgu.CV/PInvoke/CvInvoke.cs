@@ -2813,7 +2813,7 @@ namespace Emgu.CV
           double k);
 
       /// <summary>
-      /// Finds robust features in the image, as described in [Bay06]. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
       /// <param name="image">The input 8-bit grayscale image</param>
       /// <param name="mask">The optional input 8-bit mask. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
@@ -4173,6 +4173,7 @@ namespace Emgu.CV
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
       #endregion
 
+      /*
       /// <summary>
       /// Calculates disparity for stereo-pair 
       /// </summary>
@@ -4193,7 +4194,7 @@ namespace Emgu.CV
                    int maxDisparity,
                    double param1, double param2, double param3,
                    double param4, double param5);
-
+      */
       #endregion
 
    }

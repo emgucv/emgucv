@@ -648,7 +648,6 @@ namespace Emgu.CV
 
       #endregion
 
-
       #region ICloneable Members
 
       object ICloneable.Clone()

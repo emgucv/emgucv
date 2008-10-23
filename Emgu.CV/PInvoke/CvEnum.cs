@@ -1635,4 +1635,23 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_COUNTER_CLOCKWISE = 2
    }
+
+   /// <summary>
+   /// Stereo Block Matching type
+   /// </summary>
+   public enum STEREO_BM_TYPE
+   {
+      /// <summary>
+      /// Basic type
+      /// </summary>
+      CV_STEREO_BM_BASIC = 0,
+      /// <summary>
+      /// Fish eye
+      /// </summary>
+      CV_STEREO_BM_FISH_EYE = 1,
+      /// <summary>
+      /// Narrow
+      /// </summary>
+      CV_STEREO_BM_NARROW = 2
+   }
 }

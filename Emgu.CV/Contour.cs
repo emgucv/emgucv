@@ -26,8 +26,8 @@ namespace Emgu.CV
       /// <param name="seqFlag">Flags of the created contour. If the contour is not passed to any function working with a specific type of sequences, the sequence value may be set to 0, otherwise the appropriate type must be selected from the list of predefined contour types</param>
       /// <param name="storage">the storage</param>
       public Contour(int seqFlag, MemStorage storage)
+         : this(IntPtr.Zero, storage)
       {
-         _stor = storage;
          _ptr = CvInvoke.cvCreateSeq(
              seqFlag, Marshal.SizeOf(typeof(MCvContour)),
              Marshal.SizeOf(typeof(T)),
@@ -35,7 +35,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create a contour of the specific kind, tyoe and flag
+      /// Create a contour of the specific kind, type and flag
       /// </summary>
       /// <param name="kind">The kind of the sequence</param>
       /// <param name="eltype">The type of the sequence</param>
@@ -175,7 +175,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvApproxPoly approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
+      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
       /// <returns>The approximated contour</returns>

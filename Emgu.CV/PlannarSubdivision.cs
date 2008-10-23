@@ -12,8 +12,8 @@ namespace Emgu.CV
    /// </summary>
    public class PlanarSubdivision : UnmanagedObject
    {
-      private MemStorage _storage;
-      private Rectangle<float> _roi;
+      private readonly MemStorage _storage;
+      private readonly Rectangle<float> _roi;
 
       private bool _isVoronoiDirty;
 
@@ -50,7 +50,7 @@ namespace Emgu.CV
 
          foreach (Point2D<float> p in points)
          {
-            MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
+            MCvPoint2D32f cvPoint = p.MCvPoint2D32f;
             Insert(ref cvPoint);
          }
       }
@@ -101,6 +101,7 @@ namespace Emgu.CV
       private static List<VoronoiFacet> EdgeToFacets(ref MCvQuadEdge2D quadEdge)
       {
          List<VoronoiFacet> facets = new List<VoronoiFacet>();
+
          MCvSubdiv2DEdge e1 = quadEdge.next[0].cvSubdiv2DRotateEdge(1);
          Point2D<float>[] p1 = EdgeToPoly(ref e1);
          if (p1 != null)
@@ -129,23 +130,16 @@ namespace Emgu.CV
          Point2D<float> startPoint = new Point2D<float>(v0.pt.x, v0.pt.y);
          list.Add(startPoint);
 
-         MCvSubdiv2DEdge currentEdge = e;
-         bool stop = false;
-         while (!stop)
+         for (MCvSubdiv2DEdge currentEdge = e; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.isValid) return null;
 
             Point2D<float> currentPoint = new Point2D<float>(v.pt.x, v.pt.y);
             if (currentPoint.Equals(startPoint))
-            {
-               stop = true;
-            }
-            else
-            {
-               list.Add(currentPoint);
-               currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT);
-            }
+               break;
+
+            list.Add(currentPoint);
          }
          return list.ToArray();
       }

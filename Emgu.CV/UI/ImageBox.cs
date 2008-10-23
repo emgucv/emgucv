@@ -337,12 +337,24 @@ namespace Emgu.CV.UI
 
             ColorType color = null;
 
-            if (DisplayedImage != null)
+            IImage img = DisplayedImage;
+
+            if (img != null)
             {
                location.X = Math.Min(e.X, DisplayedImage.Width - 1);
                location.Y = Math.Min(e.Y, DisplayedImage.Height - 1);
 
-               color = DisplayedImage.GetColor(location);
+               Type t = img.GetType();
+               MethodInfo indexers = t.GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
+               if (indexers != null)
+               {
+                  color = indexers.Invoke(img, new object[2] { location.Y, location.X }) as ColorType;
+                  //color = DisplayedImage.GetColor(location);
+               }
+               else
+               {
+                  color = new Bgra();
+               }
             }
 
             ImagePropertyPanel.MousePositionOnImage = location;

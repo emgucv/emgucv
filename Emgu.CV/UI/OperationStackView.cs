@@ -89,12 +89,10 @@ namespace Emgu.CV.UI
                   str = "image = " + str + ";";
                }
             }
-
             ops.Add(str);
          }
-         string[] res = ops.ToArray();
-         Array.Reverse(res);
-         return res;
+         ops.Reverse();
+         return ops.ToArray();
       }
    }
 }

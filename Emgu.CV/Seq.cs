@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// <summary>
       /// The pointer to the storage used by this sequence
       /// </summary>
-      protected MemStorage _stor;
+      protected readonly MemStorage _stor;
 
       #region Constructors
       /// <summary>
@@ -33,12 +33,12 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create a contour of the specific kind, tyoe and flag
+      /// Create a contour of the specific kind, type and flag
       /// </summary>
-      /// <param name="kind">the kind of the sequence</param>
-      /// <param name="eltype">the type of the sequence</param>
-      /// <param name="flag">the flag of the sequence</param>
-      /// <param name="stor">the storage</param>
+      /// <param name="kind">The kind of the sequence</param>
+      /// <param name="eltype">The type of the sequence</param>
+      /// <param name="flag">The flag of the sequence</param>
+      /// <param name="stor">The storage</param>
       public Seq(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind,  CvEnum.SEQ_FLAG flag, MemStorage stor)
          : this( ((int)kind | (int)eltype | (int)flag), stor)
       {

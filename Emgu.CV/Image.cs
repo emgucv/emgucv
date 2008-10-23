@@ -33,7 +33,6 @@ namespace Emgu.CV
       private static String[] _bitmapFormats = new string[] { ".gif", ".exig", ".png" };
 
       #region constructors
-
       ///<summary>
       ///Create an empty Image
       ///</summary>
@@ -115,7 +114,7 @@ namespace Emgu.CV
          }
          else
          {   //if the file format cannot be recognized by OpenCV 
-            if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
+            if (Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
             {
                using(Bitmap bmp = new Bitmap(fi.FullName))
                   Bitmap = bmp;
@@ -1237,17 +1236,151 @@ namespace Emgu.CV
          return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
       }
 
+      #region SURF
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="hessianThreshold">
+      /// only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of basic descriptors</param>
+      public void ExtractSURF(double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      {
+         ExtractSURF(null, hessianThreshold, out keypoints, out descriptors);
+      }
+
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="hessianThreshold">
+      /// only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of basic descriptors</param>
       public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
       {
-         MemStorage stor = new MemStorage();
          MCvSURFParams param = new MCvSURFParams(hessianThreshold, false);
 
-         IntPtr keypointsPtr = new IntPtr();
-         IntPtr descriptorPtr = new IntPtr();
-         CvInvoke.cvExtractSURF(Ptr, mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
-         keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+         MemStorage stor = new MemStorage();
+         IntPtr descriptorPtr;
+         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+
          descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
       }
+
+      /// <summary>
+      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="hessianThreshold">
+      /// only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of extended descriptors</param>
+      public void ExtractSURF(double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      {
+         ExtractSURF(null, hessianThreshold, out keypoints, out descriptors);
+      }
+
+      /// <summary>
+      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="hessianThreshold">
+      /// only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of extended descriptors</param>
+      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      {
+         MCvSURFParams param = new MCvSURFParams(hessianThreshold, true);
+
+         MemStorage stor = new MemStorage();
+         IntPtr descriptorPtr;
+         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+
+         descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+      }
+
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="hessianThreshold">
+      /// Only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="nOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled (3 by default)
+      /// </param>
+      /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of basic descriptors</param>
+      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      {
+         MCvSURFParams param = new MCvSURFParams();
+         param.hessianThreshold = hessianThreshold;
+         param.extended = 0;
+         param.nOctaves = nOctaves;
+         param.nOctaveLayers = nOctaveLayers;
+
+         MemStorage stor = new MemStorage();
+         IntPtr descriptorPtr;
+         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+
+         descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+      }
+
+      /// <summary>
+      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="hessianThreshold">
+      /// Only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="nOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled (3 by default)
+      /// </param>
+      /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
+      /// <param name="keypoints">The sequence of keypoints</param>
+      /// <param name="descriptors">The sequence of extended descriptors</param>
+      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      {
+         MCvSURFParams param = new MCvSURFParams();
+         param.hessianThreshold = hessianThreshold;
+         param.extended = 1;
+         param.nOctaves = nOctaves;
+         param.nOctaveLayers = nOctaveLayers;
+
+         MemStorage stor = new MemStorage();
+         IntPtr descriptorPtr;
+         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+
+         descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+      }
+
+      private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
+      {
+         IntPtr keypointsPtr = new IntPtr();
+         descriptorPtr = new IntPtr();
+         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
+         keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+      }
+      #endregion 
 
       /// <summary>
       /// Finds corners with big eigenvalues in the image. 

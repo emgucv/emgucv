@@ -261,6 +261,35 @@ namespace Emgu.CV.UI
                    return new MCvScalar(values[0], values[1], values[2], values[3]);
                 };
          }
+         /*
+         else if (paramType.IsSubclassOf(typeof(ColorType)))
+         {
+            TextBox[] inputBoxes = new TextBox[4];
+            int boxWidth = 40;
+
+            //Create input boxes for the scalar value
+            for (int i = 0; i < inputBoxes.Length; i++)
+            {
+               inputBoxes[i] = new TextBox();
+               panel.Controls.Add(inputBoxes[i]);
+               inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+               inputBoxes[i].Width = boxWidth;
+               inputBoxes[i].Text = "0.0";
+            }
+            panel.GetParamFunction =
+                delegate()
+                {
+                   double[] values = new double[4];
+                   for (int i = 0; i < inputBoxes.Length; i++)
+                   {
+                      values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                   }
+                   
+                   ColorType color = Activator.CreateInstance(paramType) as ColorType;
+                   color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
+                   return color;
+                };
+         }*/
          else
          {
             throw new NotSupportedException(String.Format("Parameter type '{0}' is not supported", paramType.Name));

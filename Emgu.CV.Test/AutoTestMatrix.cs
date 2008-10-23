@@ -31,6 +31,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestInvert()
+      {
+         Matrix<float> m = new Matrix<float>(3, 3);
+         m.SetIdentity();
+         Matrix<float> mInvert = new Matrix<float>(3, 3);
+         CvInvoke.cvInvert(m, mInvert, Emgu.CV.CvEnum.INVERT_METHOD.CV_LU);
+         Assert.AreEqual(m, mInvert);
+      }
+
+      [Test]
       public void TestArithmatic()
       {
          Matrix<byte> m = new Matrix<byte>(10, 8);

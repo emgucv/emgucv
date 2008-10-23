@@ -40,16 +40,28 @@ namespace Emgu.CV
       public float hessian;
    }
 
+   /// <summary>
+   /// The basic SURF descriptor (64 elements)
+   /// </summary>
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvSURFDescriptor
    {
+      /// <summary>
+      /// The 64 elements of the descriptor
+      /// </summary>
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
       public float[] values;
    }
 
+   /// <summary>
+   /// The Extended SURF descriptor (128 elements)
+   /// </summary>
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvSURFDescriptorExtended
    {
+      /// <summary>
+      /// The 128 elements of the descriptor
+      /// </summary>
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
       public float[] values;
    }

@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// Create a MCvSURFParams using the specific values
       /// </summary>
       /// <param name="hessianThresh">      
-      /// only features with keypoint.hessian larger than that are extracted.
+      /// Only features with keypoint.hessian larger than that are extracted.
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
@@ -39,14 +39,14 @@ namespace Emgu.CV
       public int extended;
 
       /// <summary>
-      /// only features with keypoint.hessian larger than that are extracted.
+      /// Only features with keypoint.hessian larger than that are extracted.
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </summary>
       public double hessianThreshold;
 
       /// <summary>
-      /// the number of octaves to be used for extraction.
+      /// The number of octaves to be used for extraction.
       /// With each next octave the feature size is doubled (3 by default)
       /// </summary>
       public int nOctaves;

@@ -477,18 +477,26 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TESTSURF()
+      public void TestSURF()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-         MemStorage stor = new MemStorage();
+         Seq<MCvSURFPoint> keypointSeq1;
+         Seq<MCvSURFDescriptor> descriptorSeq1;
+         img.ExtractSURF(500, out keypointSeq1, out descriptorSeq1);
 
-         MCvSURFParams parameters = new MCvSURFParams(500, true);
+         Assert.AreEqual(keypointSeq1.Total, descriptorSeq1.Total);
 
-         IntPtr keypoints = new IntPtr(), descriptor = new IntPtr();
-         CvInvoke.cvExtractSURF(img.Ptr, IntPtr.Zero, ref keypoints, ref descriptor, stor, parameters);
+         MCvSURFPoint p1 = keypointSeq1[0];
+         MCvSURFDescriptor d1 = descriptorSeq1[0];
+         double temp = p1.hessian + d1.values[0];
 
-         Seq<MCvSURFPoint> keypointSeq = new Seq<MCvSURFPoint>(keypoints, stor);
-         int l = keypointSeq.Total;
+         Seq<MCvSURFPoint> keypointSeq2;
+         Seq<MCvSURFDescriptorExtended> descriptorSeq2;
+         img.ExtractSURF(500, out keypointSeq2, out descriptorSeq2);
+         Assert.AreEqual(keypointSeq2.Total, descriptorSeq2.Total);
+         MCvSURFPoint p2 = keypointSeq2[0];
+         MCvSURFDescriptorExtended d2 = descriptorSeq2[0];
+         temp = p2.hessian + d2.values[0];
       }
 
       [Test]
