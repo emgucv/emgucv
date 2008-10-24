@@ -122,6 +122,7 @@
     <Compile Include="Shape\Triangle2D.cs" />
     <Compile Include="Shape\Triangle3D.cs" />
     <Compile Include="StructuringElementEx.cs" />
+    <Compile Include="SURFFeature.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>

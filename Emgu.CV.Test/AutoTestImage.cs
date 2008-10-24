@@ -479,24 +479,51 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSURF()
       {
-         Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-         Seq<MCvSURFPoint> keypointSeq1;
-         Seq<MCvSURFDescriptor> descriptorSeq1;
-         img.ExtractSURF(500, out keypointSeq1, out descriptorSeq1);
+         Image<Gray, Byte> objectImage = new Image<Gray, byte>("box.png");
+         objectImage.Resize(400, 400, true);
+         DateTime t1 = DateTime.Now;
+         SURFFeature[] objectFeatures = objectImage.ExtractSURF(500);
+         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
-         Assert.AreEqual(keypointSeq1.Total, descriptorSeq1.Total);
+         Image<Gray, Byte> image = new Image<Gray, byte>("box_in_scene.png");
+         image.Resize(400, 400, true);
+         t1 = DateTime.Now;
+         SURFFeature[] imageFeatires = image.ExtractSURF(500);
+         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
-         MCvSURFPoint p1 = keypointSeq1[0];
-         MCvSURFDescriptor d1 = descriptorSeq1[0];
-         double temp = p1.hessian + d1.values[0];
+         Image<Gray, Byte> res = new Image<Gray,byte>(Math.Max( objectImage.Width, image.Width), objectImage.Height + image.Height);
+         res.ROI = new Rectangle<double>(0, objectImage.Width, objectImage.Height, 0);
+         objectImage.Copy(res, null);
+         res.ROI = new Rectangle<double>(0, image.Width, objectImage.Height + image.Height, objectImage.Height);
+         image.Copy(res, null);
+         res.ROI = null;
 
-         Seq<MCvSURFPoint> keypointSeq2;
-         Seq<MCvSURFDescriptorExtended> descriptorSeq2;
-         img.ExtractSURF(500, out keypointSeq2, out descriptorSeq2);
-         Assert.AreEqual(keypointSeq2.Total, descriptorSeq2.Total);
-         MCvSURFPoint p2 = keypointSeq2[0];
-         MCvSURFDescriptorExtended d2 = descriptorSeq2[0];
-         temp = p2.hessian + d2.values[0];
+         t1 = DateTime.Now;
+
+         List<Point2D<float>> list1 = new List<Point2D<float>>();
+         List<Point2D<float>> list2 = new List<Point2D<float>>();
+         foreach (SURFFeature f in objectFeatures)
+         {
+            SURFFeature match;
+            double distance;
+            f.FindBestMatch(imageFeatires, 1.0e6, out match, out distance);
+
+            if (match != null)
+            {
+               Point2D<float> p1 = new Point2D<float>((float)f.Point.pt.x, (float)f.Point.pt.y);
+               Point2D<float> p2 = new Point2D<float>((float)match.Point.pt.x, (float) match.Point.pt.y);
+               list1.Add(p1);
+               list2.Add(p2);
+            }
+         }
+
+         //CameraCalibration.FindHomography(list1.ToArray(), list2.ToArray(), 
+         //p2.Y += objectImage.Height;
+         //res.Draw(new LineSegment2D<int>(p1, p2), new Gray(0), 1);
+
+         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
+
+         Application.Run(new ImageViewer(res.Resize(100, 100, true)));
       }
 
       [Test]

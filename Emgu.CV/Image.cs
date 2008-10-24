@@ -1237,6 +1237,7 @@ namespace Emgu.CV
       }
 
       #region SURF
+      
       /// <summary>
       /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
@@ -1245,11 +1246,9 @@ namespace Emgu.CV
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of basic descriptors</param>
-      public void ExtractSURF(double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      public SURFFeature[] ExtractSURF(double hessianThreshold)
       {
-         ExtractSURF(null, hessianThreshold, out keypoints, out descriptors);
+         return ExtractSURF(null, hessianThreshold);
       }
 
       /// <summary>
@@ -1261,17 +1260,28 @@ namespace Emgu.CV
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of basic descriptors</param>
-      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold)
       {
          MCvSURFParams param = new MCvSURFParams(hessianThreshold, false);
 
-         MemStorage stor = new MemStorage();
-         IntPtr descriptorPtr;
-         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr;
+            Seq<MCvSURFPoint> keypoints;
+            Seq<MCvSURFDescriptor> descriptors;
+            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
 
-         descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+            descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+
+            SURFFeature[] res = new SURFFeature[keypoints.Total];
+            for (int i = 0; i < res.Length; i++)
+            {
+               MCvSURFPoint p = keypoints[i];
+               MCvSURFDescriptor d = descriptors[i];
+               res[i] = new SURFFeature(ref p, ref d);
+            }
+            return res;
+         }
       }
 
       /// <summary>
@@ -1282,11 +1292,9 @@ namespace Emgu.CV
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of extended descriptors</param>
-      public void ExtractSURF(double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      public SURFFeatureExtended[] ExtractSURFExtended(double hessianThreshold)
       {
-         ExtractSURF(null, hessianThreshold, out keypoints, out descriptors);
+         return ExtractSURFExtended(null, hessianThreshold);
       }
 
       /// <summary>
@@ -1298,17 +1306,28 @@ namespace Emgu.CV
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of extended descriptors</param>
-      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      public SURFFeatureExtended[] ExtractSURFExtended(Image<Gray, Byte> mask, double hessianThreshold)
       {
          MCvSURFParams param = new MCvSURFParams(hessianThreshold, true);
 
-         MemStorage stor = new MemStorage();
-         IntPtr descriptorPtr;
-         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr;
+            Seq<MCvSURFPoint> keypoints;
+            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
 
-         descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+            Seq<MCvSURFDescriptorExtended> descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+
+            SURFFeatureExtended[] res = new SURFFeatureExtended[keypoints.Total];
+            for (int i = 0; i < res.Length; i++)
+            {
+               MCvSURFPoint p = keypoints[i];
+               MCvSURFDescriptorExtended d = descriptors[i];
+               res[i] = new SURFFeatureExtended(ref p, ref d);
+            }
+
+            return res;
+         }
       }
 
       /// <summary>
@@ -1325,9 +1344,7 @@ namespace Emgu.CV
       /// With each next octave the feature size is doubled (3 by default)
       /// </param>
       /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of basic descriptors</param>
-      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptor> descriptors)
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers)
       {
          MCvSURFParams param = new MCvSURFParams();
          param.hessianThreshold = hessianThreshold;
@@ -1335,11 +1352,24 @@ namespace Emgu.CV
          param.nOctaves = nOctaves;
          param.nOctaveLayers = nOctaveLayers;
 
-         MemStorage stor = new MemStorage();
-         IntPtr descriptorPtr;
-         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr;
+            Seq<MCvSURFPoint> keypoints;
+            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
 
-         descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+            Seq<MCvSURFDescriptor> descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
+
+            SURFFeature[] res = new SURFFeature[keypoints.Total];
+            for (int i = 0; i < res.Length; i++)
+            {
+               MCvSURFPoint p = keypoints[i];
+               MCvSURFDescriptor d = descriptors[i];
+               res[i] = new SURFFeature(ref p, ref d);
+            }
+
+            return res;
+         }
       }
 
       /// <summary>
@@ -1356,9 +1386,7 @@ namespace Emgu.CV
       /// With each next octave the feature size is doubled (3 by default)
       /// </param>
       /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
-      /// <param name="keypoints">The sequence of keypoints</param>
-      /// <param name="descriptors">The sequence of extended descriptors</param>
-      public void ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers, out Seq<MCvSURFPoint> keypoints, out Seq<MCvSURFDescriptorExtended> descriptors)
+      public SURFFeatureExtended[] ExtractSURFExtended(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers)
       {
          MCvSURFParams param = new MCvSURFParams();
          param.hessianThreshold = hessianThreshold;
@@ -1366,11 +1394,24 @@ namespace Emgu.CV
          param.nOctaves = nOctaves;
          param.nOctaveLayers = nOctaveLayers;
 
-         MemStorage stor = new MemStorage();
-         IntPtr descriptorPtr;
-         ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr;
+            Seq<MCvSURFPoint> keypoints;
+            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
 
-         descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+            Seq<MCvSURFDescriptorExtended>  descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
+
+            SURFFeatureExtended[] res = new SURFFeatureExtended[keypoints.Total];
+            for (int i = 0; i < res.Length; i++)
+            {
+               MCvSURFPoint p = keypoints[i];
+               MCvSURFDescriptorExtended d = descriptors[i];
+               res[i] = new SURFFeatureExtended(ref p, ref d);
+            }
+
+            return res;
+         }
       }
 
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
@@ -3486,6 +3527,41 @@ namespace Emgu.CV
          return res;
       }
 
+      /// <summary>
+      /// Calculates integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      public void Integral(out Image<TColor, double> sum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, IntPtr.Zero, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Calculates integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      /// <param name="squareSum">The integral image for squared pixel values</param>
+      public void Integral(out Image<TColor, double> sum, out Image<TColor, double> squareSum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         squareSum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// calculates one or more integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      /// <param name="squareSum">The integral image for squared pixel values</param>
+      /// <param name="titledSum">The integral for the image rotated by 45 degrees</param>
+      public void Integral(out Image<TColor, double> sum, out Image<TColor, double> squareSum, out Image<TColor, double> titledSum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         squareSum = new Image<TColor, double>(Width + 1, Height + 1);
+         titledSum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, titledSum.Ptr);
+      }
       #endregion
 
       #region Threshold methods

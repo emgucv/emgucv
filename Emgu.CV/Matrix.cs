@@ -70,8 +70,11 @@ namespace Emgu.CV
       public Matrix(TDepth[] data)
       {
          TDepth[,] mat = new TDepth[data.Length, 1];
-         for (int i = 0; i < data.Length; i++)
-            mat[i, 0] = data[i];
+         GCHandle hdl1 = GCHandle.Alloc(data, GCHandleType.Pinned);
+         GCHandle hdl2 = GCHandle.Alloc(mat, GCHandleType.Pinned);
+         Emgu.Util.Toolbox.memcpy(hdl2.AddrOfPinnedObject(), hdl1.AddrOfPinnedObject(), data.Length * Marshal.SizeOf(typeof(TDepth)));
+         hdl1.Free();
+         hdl2.Free();
          Data = mat;
       }
       #endregion

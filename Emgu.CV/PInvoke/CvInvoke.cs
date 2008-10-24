@@ -12,6 +12,7 @@ namespace Emgu.CV
    /// </summary>
    public static class CvInvoke
    {
+      private const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
 
 #if LINUX
       private const string CXCORE_LIBRARY = "libcxcore.so.1";
@@ -24,7 +25,6 @@ namespace Emgu.CV
       private const string CV_LIBRARY = "cv110.dll";
       private const string HIGHGUI_LIBRARY = "highgui110.dll";
       private const string CVAUX_LIBRARY = "cvaux110.dll";
-      //private const string CVCAM_LIBRARY = "cvcam100.dll";
 #endif
 
       /// <summary>
@@ -923,9 +923,9 @@ namespace Emgu.CV
       /// <returns>Loaded object from file</returns>
       [DllImport(CXCORE_LIBRARY, EntryPoint = "cvLoad")]
       private static extern IntPtr _cvLoad(
-          [MarshalAs(UnmanagedType.LPStr)] String fileName,
+          [MarshalAs(_stringMarshalType)] String fileName,
           IntPtr memstorage,
-          [MarshalAs(UnmanagedType.LPStr)] String name,
+          [MarshalAs(_stringMarshalType)] String name,
           IntPtr real_name);
 
       /// <summary>
@@ -3926,18 +3926,6 @@ namespace Emgu.CV
       public static extern int cvWriteFrame(IntPtr writer, IntPtr image);
 
       #endregion
-
-      /*
-      #region CVCAM_LIBRARY
-      /// <summary>
-      /// Get the number of cameras available
-      /// </summary>
-      /// <returns></returns>
-      [DllImport(CVCAM_LIBRARY)]
-      public static extern int cvcamGetCamerasCount();
-
-      #endregion
-      */
 
       #region CV MACROS
 
