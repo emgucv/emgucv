@@ -1654,4 +1654,23 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_STEREO_BM_NARROW = 2
    }
+
+   /// <summary>
+   /// Type of cvHomography method
+   /// </summary>
+   public enum HOMOGRAPHY_METHOD
+   {
+      /// <summary>
+      /// regular method using all the point pairs
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Least-Median robust method
+      /// </summary>
+      LMEDS  = 4,
+      /// <summary>
+      /// RANSAC-based robust method
+      /// </summary>
+      RANSAC = 8
+   }
 }

@@ -149,15 +149,40 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
+      /// Use all points to find perspective transformation H=||h_ij|| between the source and the destination planes
       /// </summary>
       /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <returns>The 3x3 homography matrix. </returns>
       public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints)
       {
+         return FindHomography(srcPoints, dstPoints, Emgu.CV.CvEnum.HOMOGRAPHY_METHOD.DEFAULT, 0.0);
+      }
+
+      /// <summary>
+      /// Use RANDSAC to finds perspective transformation H=||h_ij|| between the source and the destination planes
+      /// </summary>
+      /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
+      /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
+      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
+      /// <returns>The 3x3 homography matrix. </returns>
+      public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints, double ransacReprojThreshold)
+      {
+         return FindHomography(srcPoints, dstPoints, CvEnum.HOMOGRAPHY_METHOD.RANSAC, ransacReprojThreshold);
+      }
+
+      /// <summary>
+      /// Use the specific method to find perspective transformation H=||h_ij|| between the source and the destination planes 
+      /// </summary>
+      /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
+      /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
+      /// <param name="method">FindHomography method</param>
+      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
+      /// <returns>The 3x3 homography matrix. </returns>
+      public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints, CvEnum.HOMOGRAPHY_METHOD method, double ransacReprojThreshold)
+      {
          Matrix<float> homography = new Matrix<float>(3, 3);
-         CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr);
+         CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero);
          return homography;
       }
 
@@ -166,12 +191,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="srcPoints">Point coordinates in the original plane</param>
       /// <param name="dstPoints">Point coordinates in the destination plane</param>
+      /// <param name="method">FindHomography method</param>
+      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(Point2D<float>[] srcPoints, Point2D<float>[] dstPoints)
+      public static Matrix<float> FindHomography(Point2D<float>[] srcPoints, Point2D<float>[] dstPoints, CvEnum.HOMOGRAPHY_METHOD method, double ransacReprojThreshold)
       {
          Matrix<float> srcPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(srcPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
          Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         return FindHomography(srcPointMatrix, dstPointMatrix);
+         return FindHomography(srcPointMatrix, dstPointMatrix, method, ransacReprojThreshold);
       }
 
       /// <summary>

@@ -1237,177 +1237,40 @@ namespace Emgu.CV
       }
 
       #region SURF
-      
       /// <summary>
       /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
-      /// <param name="hessianThreshold">
-      /// only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      public SURFFeature[] ExtractSURF(double hessianThreshold)
+      /// <param name="param">The SURF parameters</param>
+      public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
       {
-         return ExtractSURF(null, hessianThreshold);
+         return ExtractSURF(null, ref param);
       }
 
       /// <summary>
       /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
       /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="hessianThreshold">
-      /// only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold)
+      /// <param name="param">The SURF parameters</param>
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
       {
-         MCvSURFParams param = new MCvSURFParams(hessianThreshold, false);
-
          using (MemStorage stor = new MemStorage())
          {
             IntPtr descriptorPtr;
             Seq<MCvSURFPoint> keypoints;
-            Seq<MCvSURFDescriptor> descriptors;
             ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
-
-            descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
 
             SURFFeature[] res = new SURFFeature[keypoints.Total];
+
+            int elementsInDescriptor = param.extended == 0 ? 64 : 128;
+            int bytesToCopy = elementsInDescriptor * sizeof(float);
+
             for (int i = 0; i < res.Length; i++)
             {
                MCvSURFPoint p = keypoints[i];
-               MCvSURFDescriptor d = descriptors[i];
-               res[i] = new SURFFeature(ref p, ref d);
-            }
-            return res;
-         }
-      }
-
-      /// <summary>
-      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="hessianThreshold">
-      /// only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      public SURFFeatureExtended[] ExtractSURFExtended(double hessianThreshold)
-      {
-         return ExtractSURFExtended(null, hessianThreshold);
-      }
-
-      /// <summary>
-      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="hessianThreshold">
-      /// only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      public SURFFeatureExtended[] ExtractSURFExtended(Image<Gray, Byte> mask, double hessianThreshold)
-      {
-         MCvSURFParams param = new MCvSURFParams(hessianThreshold, true);
-
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr descriptorPtr;
-            Seq<MCvSURFPoint> keypoints;
-            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
-
-            Seq<MCvSURFDescriptorExtended> descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
-
-            SURFFeatureExtended[] res = new SURFFeatureExtended[keypoints.Total];
-            for (int i = 0; i < res.Length; i++)
-            {
-               MCvSURFPoint p = keypoints[i];
-               MCvSURFDescriptorExtended d = descriptors[i];
-               res[i] = new SURFFeatureExtended(ref p, ref d);
-            }
-
-            return res;
-         }
-      }
-
-      /// <summary>
-      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="hessianThreshold">
-      /// Only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      /// <param name="nOctaves">
-      /// The number of octaves to be used for extraction.
-      /// With each next octave the feature size is doubled (3 by default)
-      /// </param>
-      /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
-      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers)
-      {
-         MCvSURFParams param = new MCvSURFParams();
-         param.hessianThreshold = hessianThreshold;
-         param.extended = 0;
-         param.nOctaves = nOctaves;
-         param.nOctaveLayers = nOctaveLayers;
-
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr descriptorPtr;
-            Seq<MCvSURFPoint> keypoints;
-            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
-
-            Seq<MCvSURFDescriptor> descriptors = new Seq<MCvSURFDescriptor>(descriptorPtr, stor);
-
-            SURFFeature[] res = new SURFFeature[keypoints.Total];
-            for (int i = 0; i < res.Length; i++)
-            {
-               MCvSURFPoint p = keypoints[i];
-               MCvSURFDescriptor d = descriptors[i];
-               res[i] = new SURFFeature(ref p, ref d);
-            }
-
-            return res;
-         }
-      }
-
-      /// <summary>
-      /// Finds robust features in the image (extended descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="hessianThreshold">
-      /// Only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      /// <param name="nOctaves">
-      /// The number of octaves to be used for extraction.
-      /// With each next octave the feature size is doubled (3 by default)
-      /// </param>
-      /// <param name="nOctaveLayers">The number of layers within each octave (4 by default) </param>
-      public SURFFeatureExtended[] ExtractSURFExtended(Image<Gray, Byte> mask, double hessianThreshold, int nOctaves, int nOctaveLayers)
-      {
-         MCvSURFParams param = new MCvSURFParams();
-         param.hessianThreshold = hessianThreshold;
-         param.extended = 1;
-         param.nOctaves = nOctaves;
-         param.nOctaveLayers = nOctaveLayers;
-
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr descriptorPtr;
-            Seq<MCvSURFPoint> keypoints;
-            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
-
-            Seq<MCvSURFDescriptorExtended>  descriptors = new Seq<MCvSURFDescriptorExtended>(descriptorPtr, stor);
-
-            SURFFeatureExtended[] res = new SURFFeatureExtended[keypoints.Total];
-            for (int i = 0; i < res.Length; i++)
-            {
-               MCvSURFPoint p = keypoints[i];
-               MCvSURFDescriptorExtended d = descriptors[i];
-               res[i] = new SURFFeatureExtended(ref p, ref d);
+               float[,] descriptor = new float[elementsInDescriptor, 1];
+               GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
+               Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
+               res[i] = new SURFFeature(ref p, descriptor);
             }
 
             return res;

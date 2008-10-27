@@ -2880,12 +2880,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src_points">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
       /// <param name="dst_points">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
-      /// <param name="homography">Output 3x3 homography matrix.</param>
+      /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
+      /// <param name="method">The type of the method</param>
+      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
+      /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindHomography(
-          IntPtr src_points,
-          IntPtr dst_points,
-          IntPtr homography);
+         IntPtr src_points,
+         IntPtr dst_points,
+         IntPtr homography,
+         CvEnum.HOMOGRAPHY_METHOD method,
+         double ransacReprojThreshold,
+         IntPtr mask);
 
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views

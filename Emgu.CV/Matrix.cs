@@ -580,6 +580,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// <paramref name="mat1"/> / <paramref name="val"/> 
+      /// </summary>
+      /// <param name="mat1">The Matrix to be divided</param>
+      /// <param name="val">The value to be divided</param>
+      /// <returns><paramref name="mat1"/> / <paramref name="val"/></returns>
+      public static Matrix<TDepth> operator /(Matrix<TDepth> mat1, double val)
+      {
+         return mat1.Mul(1.0 / val);
+      }
+
+      /// <summary>
       /// <paramref name="mat1"/> * <paramref name="mat2"/> 
       /// </summary>
       /// <param name="mat1">The Matrix to be multiplied</param>

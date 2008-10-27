@@ -40,6 +40,7 @@ namespace Emgu.CV
       public float hessian;
    }
 
+   /*
    /// <summary>
    /// The basic SURF descriptor (64 elements)
    /// </summary>
@@ -64,5 +65,5 @@ namespace Emgu.CV
       /// </summary>
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
       public float[] values;
-   }
+   }*/
 }
