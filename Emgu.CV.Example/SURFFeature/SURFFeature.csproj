@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SURFFeature</RootNamespace>
+    <AssemblyName>SURFFeature</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SURFFeature.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.csproj">
+      <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
+      <Name>Emgu.CV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.csproj">
+      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
+      <Name>Emgu.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="box.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="box_in_scene.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

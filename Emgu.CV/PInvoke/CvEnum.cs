@@ -1673,4 +1673,31 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       RANSAC = 8
    }
+
+   /// <summary>
+   /// The result type of cvSubdiv2DLocate.
+   /// </summary>
+   public enum Subdiv2DPointLocationType
+   {
+      /// <summary>
+      /// One of input arguments is invalid.
+      /// </summary>
+      ERROR = -2,
+      /// <summary>
+      /// Point is outside the subdivision reference rectangle
+      /// </summary>
+      OUTSIDE_RECT = -1,
+      /// <summary>
+      /// Point falls into some facet
+      /// </summary>
+      INSIDE = 0,
+      /// <summary>
+      /// Point coincides with one of subdivision vertices
+      /// </summary>
+      VERTEX = 1,
+      /// <summary>
+      /// Point falls onto the edge
+      /// </summary>
+      ON_EDGE = 2
+   }
 }

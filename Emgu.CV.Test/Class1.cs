@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
-   [TestFixture]
    public class Tester
    {
       public void TestRotationMatrix2D()

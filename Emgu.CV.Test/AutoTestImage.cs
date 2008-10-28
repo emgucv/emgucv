@@ -241,10 +241,10 @@ namespace Emgu.CV.Test
          mask.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255)); //file the mask with random color
 
          DateTime startTime = DateTime.Now;
-         Image<Bgr, Byte> imgMasked = img.Convert<Byte, Byte>(mask, 
+         Image<Bgr, Byte> imgMasked = img.Convert<Byte, Byte>(mask,
             delegate(Byte byteFromImg, Byte byteFromMask)
             {
-               return byteFromMask > (Byte) 120 ? byteFromImg : (Byte) 0;
+               return byteFromMask > (Byte)120 ? byteFromImg : (Byte)0;
             });
          Trace.WriteLine(String.Format("Time used: {0} milliseconds", DateTime.Now.Subtract(startTime).TotalMilliseconds));
 
@@ -493,7 +493,7 @@ namespace Emgu.CV.Test
          SURFFeature[] imageFeatures = image.ExtractSURF(ref param2);
          Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
-         Image<Gray, Byte> res = new Image<Gray,byte>(Math.Max( objectImage.Width, image.Width), objectImage.Height + image.Height);
+         Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
          res.ROI = new Rectangle<double>(0, objectImage.Width, objectImage.Height, 0);
          objectImage.Copy(res, null);
          res.ROI = new Rectangle<double>(0, image.Width, objectImage.Height + image.Height, objectImage.Height);
@@ -505,7 +505,7 @@ namespace Emgu.CV.Test
          List<Point2D<float>> list2 = new List<Point2D<float>>();
          foreach (SURFFeature f in objectFeatures)
          {
-            double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeatures, 
+            double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeatures,
                delegate(SURFFeature imgFeature)
                {
                   if (imgFeature.Point.laplacian != f.Point.laplacian)
@@ -515,12 +515,12 @@ namespace Emgu.CV.Test
 
             int closestIndex = 0;
             int secondClosestIndex = 0;
-            
+
             for (int i = 0; i < distance.Length; i++)
             {
                if (distance[i] >= 0)
                {
-                  if (distance[i] < distance[closestIndex] || distance[closestIndex] == -1 )
+                  if (distance[i] < distance[closestIndex] || distance[closestIndex] == -1)
                   {
                      secondClosestIndex = closestIndex;
                      closestIndex = i;
@@ -561,7 +561,7 @@ namespace Emgu.CV.Test
 
          Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
-         Application.Run(new ImageViewer(res.Resize(200, 200, true)));
+         //Application.Run(new ImageViewer(res.Resize(200, 200, true)));
       }
 
       private Point2D<double> HomographyTransform(Point2D<double> p, Matrix<float> homographyMatrix)
@@ -569,7 +569,7 @@ namespace Emgu.CV.Test
          Matrix<float> pMat = new Matrix<float>(p.Convert<float>().Resize(3).Coordinate);
          pMat[2, 0] = 1.0f;
          pMat = homographyMatrix * pMat;
-         pMat = pMat  / (double)pMat[2, 0];
+         pMat = pMat / (double)pMat[2, 0];
          return new Point2D<double>((double)pMat[0, 0], (double)pMat[1, 0]);
       }
 
@@ -577,28 +577,28 @@ namespace Emgu.CV.Test
       public void TestSnake()
       {
          Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray());
-         
-            Point2D<double> center = new Point2D<double>(50, 50);
-            double width = 20;
-            double height = 40;
-            Rectangle<double> rect = new Rectangle<double>(center, width, height);
-            img.Draw(rect, new Gray(255.0), -1);
 
-            using (MemStorage stor = new MemStorage())
-            {
-               Seq<MCvPoint> pts = new Seq<MCvPoint>((int) CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
-               pts.Push(new MCvPoint(20, 20));
-               pts.Push(new MCvPoint(20, 80));
-               pts.Push(new MCvPoint(80, 80));
-               pts.Push(new MCvPoint(80, 20));
+         Point2D<double> center = new Point2D<double>(50, 50);
+         double width = 20;
+         double height = 40;
+         Rectangle<double> rect = new Rectangle<double>(center, width, height);
+         img.Draw(rect, new Gray(255.0), -1);
 
-               Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
-               Seq<MCvPoint> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new MCvSize(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MCvPoint> pts = new Seq<MCvPoint>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+            pts.Push(new MCvPoint(20, 20));
+            pts.Push(new MCvPoint(20, 80));
+            pts.Push(new MCvPoint(80, 80));
+            pts.Push(new MCvPoint(80, 20));
 
-               img.Draw(pts, new Gray(120), 1);
-               img.Draw(snake, new Gray(80), 2);
-               //Application.Run(new ImageViewer(img));
-            }
-       }
+            Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
+            Seq<MCvPoint> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new MCvSize(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+
+            img.Draw(pts, new Gray(120), 1);
+            img.Draw(snake, new Gray(80), 2);
+            //Application.Run(new ImageViewer(img));
+         }
+      }
    }
 }

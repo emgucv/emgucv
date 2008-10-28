@@ -148,7 +148,7 @@ namespace Emgu.CV.Test
                MCvMoments moment = cs.GetMoments();
                Assert.IsTrue(moment.GravityCenter.Equals(rect2.Center));
             }
-            
+
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
@@ -156,7 +156,7 @@ namespace Emgu.CV.Test
                Assert.AreEqual(c, null);
             }
          }
-         
+
          int s1 = Marshal.SizeOf(typeof(MCvSeq));
          int s2 = Marshal.SizeOf(typeof(MCvContour));
          int sizeRect = Marshal.SizeOf(typeof(MCvRect));
@@ -289,7 +289,7 @@ namespace Emgu.CV.Test
          {
             Point3D<float> p = new Point3D<float>(points3D[i, 0], points3D[i, 1], points3D[i, 2]);
             Matrix<float> p3D = new Matrix<float>(p.Coordinate);
-            Matrix<float> pProjected = rotation * p3D + translation ;
+            Matrix<float> pProjected = rotation * p3D + translation;
             pProjected = pProjected * (focalLength / (-pProjected[2, 0]));
             imagePoint[i, 0] = pProjected[0, 0];
             imagePoint[i, 1] = pProjected[1, 0];
@@ -318,7 +318,7 @@ namespace Emgu.CV.Test
 
          IntPtr posit = CvInvoke.cvCreatePOSITObject(points3D, points3D.GetLength(0));
 
-         #region caculate the image point assuming we know the rotation and translation 
+         #region caculate the image point assuming we know the rotation and translation
          RotationVector3D realRotVec = new RotationVector3D(new float[3] { 0.01f, 0.02f, 0.03f });
          Matrix<float> realRotMat = realRotVec.RotationMatrix;
          Matrix<float> realTransVec = new Matrix<float>(new float[3] { 0.0f, 0.0f, -50.0f });
@@ -327,7 +327,7 @@ namespace Emgu.CV.Test
 
          RotationVector3D rotVecGuess = new RotationVector3D(new float[3] { 0.03f, 0.01f, 0.02f });
          Matrix<float> rotMatGuess = rotVecGuess.RotationMatrix;
-         float[] rotFVecGuess = new float[] {rotMatGuess[0, 0], rotMatGuess[1, 0], rotMatGuess[2, 0], rotMatGuess[0, 1], rotMatGuess[1, 1], rotMatGuess[2, 1], rotMatGuess[0, 2] , rotMatGuess[1, 2] , rotMatGuess[2, 2]};
+         float[] rotFVecGuess = new float[] { rotMatGuess[0, 0], rotMatGuess[1, 0], rotMatGuess[2, 0], rotMatGuess[0, 1], rotMatGuess[1, 1], rotMatGuess[2, 1], rotMatGuess[0, 2], rotMatGuess[1, 2], rotMatGuess[2, 2] };
          float[] tranFVecGuess = new float[] { 0, 0, 5 };
          CvInvoke.cvPOSIT(posit, imagePoint, 0.5, new MCvTermCriteria(200, 1.0e-5), rotFVecGuess, tranFVecGuess);
          Matrix<float> rotMatEst = new Matrix<float>(new float[,] { 
@@ -344,8 +344,8 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < projectionFromEst.GetLength(0); i++)
          {
-            float x = imagePoint[i, 0] - projectionFromEst[i,0];
-            float y = imagePoint[i, 1] - projectionFromEst[i,1];
+            float x = imagePoint[i, 0] - projectionFromEst[i, 0];
+            float y = imagePoint[i, 1] - projectionFromEst[i, 1];
             Trace.WriteLine(String.Format("Projection Distance: {0}", Math.Sqrt(x * x + y * y)));
          }
 
@@ -447,24 +447,112 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestPlannarSubdivision()
+      public void TestPlannarSubdivision1()
       {
-         Point2D<float>[] points = new Point2D<float>[3];
-         Random r = new Random((int) DateTime.Now.Ticks);
+         int pointCount = 1000;
+
+         #region generate random points
+         Point2D<float>[] points = new Point2D<float>[pointCount];
+         Random r = new Random((int)DateTime.Now.Ticks);
          for (int i = 0; i < points.Length; i++)
          {
-            points[i] = new Point2D<float>((float) (r.NextDouble() * 20), (float) (r.NextDouble() * 20));
+            points[i] = new Point2D<float>((float)(r.NextDouble() * 20), (float)(r.NextDouble() * 20));
          }
+         #endregion
 
+         DateTime t1 = DateTime.Now;
          PlanarSubdivision division = new PlanarSubdivision(points);
 
-         List<Triangle2D<float>> triangles = division.GetDelaunayTriangles(true);
+         List<Triangle2D<float>> triangles = division.GetDelaunayTriangles(false);
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", DateTime.Now.Subtract(t1).TotalMilliseconds, triangles.Count));
+
+         t1 = DateTime.Now;
+         division = new PlanarSubdivision(points);
+
+         List<VoronoiFacet> facets = division.GetVoronoiFacets();
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", DateTime.Now.Subtract(t1).TotalMilliseconds, facets.Count));
 
          foreach (Triangle2D<float> t in triangles)
          {
-            bool hasLargeTriangle = triangles.Exists(delegate(Triangle2D<float> t2) { return  !t2.Equals(t) && Utils.IsConvexPolygonInConvexPolygon(t2, t); });
-            Assert.IsFalse(hasLargeTriangle);
+            int equalCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return t2.Equals(t); }).Count;
+            Assert.AreEqual(1, equalCount, "Triangle duplicates");
+
+            int overlapCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return Utils.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
+            Assert.AreEqual(1, overlapCount, "Triangle overlaps");
          }
+      }
+
+      [Test]
+      public void TestPlannarSubdivision2()
+      {
+         Point2D<float>[] pts = new Point2D<float>[33];
+
+         pts[0] = new Point2D<float>(224, 432);
+         pts[1] = new Point2D<float>(368, 596);
+         pts[2] = new Point2D<float>(316, 428);
+         pts[3] = new Point2D<float>(244, 596);
+         pts[4] = new Point2D<float>(224, 436);
+         pts[5] = new Point2D<float>(224, 552);
+         pts[6] = new Point2D<float>(276, 568);
+         pts[7] = new Point2D<float>(308, 472);
+         pts[8] = new Point2D<float>(316, 588);
+         pts[9] = new Point2D<float>(368, 536);
+         pts[10] = new Point2D<float>(332, 428);
+         pts[11] = new Point2D<float>(124, 380);
+         pts[12] = new Point2D<float>(180, 400);
+         pts[13] = new Point2D<float>(148, 360);
+         pts[14] = new Point2D<float>(148, 416);
+         pts[15] = new Point2D<float>(128, 372);
+         pts[16] = new Point2D<float>(124, 392);
+         pts[17] = new Point2D<float>(136, 412);
+         pts[18] = new Point2D<float>(156, 416);
+         pts[19] = new Point2D<float>(176, 404);
+         pts[20] = new Point2D<float>(180, 384);
+         pts[21] = new Point2D<float>(168, 364);
+         pts[22] = new Point2D<float>(260, 104);
+         pts[23] = new Point2D<float>(428, 124);
+         pts[24] = new Point2D<float>(328, 32);
+         pts[25] = new Point2D<float>(320, 200);
+         pts[26] = new Point2D<float>(268, 76);
+         pts[27] = new Point2D<float>(264, 144);
+         pts[28] = new Point2D<float>(316, 196);
+         pts[29] = new Point2D<float>(384, 196);
+         pts[30] = new Point2D<float>(424, 136);
+         pts[31] = new Point2D<float>(412, 68);
+         pts[32] = new Point2D<float>(348, 32);
+
+         #region Find the region of interest
+         Rectangle<float> roi;
+         using (MemStorage storage = new MemStorage())
+         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; })))
+         {
+            MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
+            roi = new Rectangle<float>(cvRect);
+         }
+         #endregion
+
+         PlanarSubdivision subdiv = new PlanarSubdivision(roi);
+         for (int i = 0; i < pts.Length; i++)
+         {
+            MCvPoint2D32f ptToInsert = pts[i].MCvPoint2D32f;
+
+            {
+               MCvSubdiv2DEdge? edge;
+               MCvSubdiv2DPoint? point;
+               CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(ref ptToInsert, out edge, out point);
+               if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.ON_EDGE)
+               {
+                  //you might want to store the points which is not inserted here.
+                  //or alternatively, add some random noise to the point and re-insert it again.
+                  continue;
+               }
+            }
+
+            subdiv.Insert(ref ptToInsert);
+         }
+
+         List<VoronoiFacet> facets = subdiv.GetVoronoiFacets();
+
       }
 
       [Test]
@@ -504,7 +592,7 @@ namespace Emgu.CV.Test
          randomObj.Copy(img, null);
          img.ROI = null;
          #endregion
-         
+
          Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
          double[] minVal, maxVal;
          MCvPoint[] minLoc, maxLoc;
@@ -564,7 +652,7 @@ namespace Emgu.CV.Test
 
          Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("chessBoard.jpg");
          Point2D<float>[] corners;
-         bool patternFound = 
+         bool patternFound =
             CameraCalibration.FindChessboardCorners(
             chessboardImage,
             patternSize,
@@ -572,9 +660,9 @@ namespace Emgu.CV.Test
             out corners);
 
          chessboardImage.FindCornerSubPix(
-            new Point2D<float>[][] { corners }, 
-            new MCvSize(10, 10), 
-            new MCvSize(-1, -1), 
+            new Point2D<float>[][] { corners },
+            new MCvSize(10, 10),
+            new MCvSize(-1, -1),
             new MCvTermCriteria(0.05));
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);

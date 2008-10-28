@@ -2261,6 +2261,19 @@ namespace Emgu.CV
       public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, MCvPoint2D32f pt);
 
       /// <summary>
+      /// Locates input point within subdivision
+      /// </summary>
+      /// <param name="subdiv">Plannar subdivision</param>
+      /// <param name="pt">The point to locate</param>
+      /// <param name="edge">The output edge the point falls onto or right to</param>
+      /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
+      /// <returns>The type of location for the point</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, MCvPoint2D32f pt,
+                                           out IntPtr edge,
+                                           ref IntPtr vertex);
+
+      /// <summary>
       /// Calculates coordinates of virtual points. All virtual points corresponding to some vertex of original subdivision form (when connected together) a boundary of Voronoi cell of that point
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
