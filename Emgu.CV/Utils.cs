@@ -69,6 +69,7 @@ namespace Emgu.CV
          return Array.TrueForAll<Point2D<T>>(vertices, delegate(Point2D<T> v) { return v.InConvexPolygon(largePolygon); });
       }
 
+      /*
       /// <summary>
       /// Calculates disparity for stereo-pair 
       /// </summary>
@@ -91,6 +92,6 @@ namespace Emgu.CV
              15,
              25);
          return disparity;
-      }
+      }*/
    }
 }

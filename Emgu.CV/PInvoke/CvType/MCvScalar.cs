@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -9,7 +10,7 @@ namespace Emgu.CV
    /// Managed structure equivalent to CvScalar 
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvScalar
+   public struct MCvScalar : ICodeGenerable
    {
       /// <summary>
       /// The scalar value
@@ -38,5 +39,22 @@ namespace Emgu.CV
          v2 = values.Length > 2 ? values[2] : 0.0;
          v3 = values.Length > 3 ? values[3] : 0.0;
       }
+
+
+
+      #region ICodeGenerable Members
+      /// <summary>
+      /// Return the code to generate this MCvScalar from specific language
+      /// </summary>
+      /// <param name="language">The programming language to generate code from</param>
+      /// <returns>The code to generate this MCvScalar from specific language</returns>
+      public string ToCode(Emgu.Util.TypeEnum.ProgrammingLanguage language)
+      {
+         return (language == Emgu.Util.TypeEnum.ProgrammingLanguage.CSharp || language == Emgu.Util.TypeEnum.ProgrammingLanguage.CPlusPlus) ?
+            String.Format("new MCvScalar({0}, {1}, {2}, {3})", v0, v1, v2, v3) :
+            ToString();
+      }
+
+      #endregion
    }
 }

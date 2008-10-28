@@ -9,7 +9,7 @@ namespace Emgu.Util
    /// An operation contains the MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
    /// </summary>
    /// <typeparam name="T">The type of instance this operation applies to</typeparam>
-   public class Operation<T>
+   public class Operation<T> : ICodeGenerable
    {
       private MethodInfo _mi;
 
@@ -79,16 +79,24 @@ namespace Emgu.Util
             res = String.Format("{0}.{1}({2})",
                 "{instance}",
                 Method.Name,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, delegate(Object p) { return  ParameterToCode(p, language);} )));
          }
          else if (language == TypeEnum.ProgrammingLanguage.CPlusPlus)
          {
             res = String.Format("{0}->{1}({2})",
                 "{instance}",
                 Method.Name,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, System.Convert.ToString)));
+                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, delegate(Object p) { return  ParameterToCode(p, language);} )));
          }
          return res;
       }
+
+      private String ParameterToCode(Object Parameters, TypeEnum.ProgrammingLanguage language)
+      {
+         ICodeGenerable gen = Parameters as ICodeGenerable;
+         return gen == null ? System.Convert.ToString(Parameters) :
+            gen.ToCode(language);
+      }
+
    }
 }

@@ -72,11 +72,10 @@ namespace Emgu.CV
          Point2D<T>[] v2 = tri.Vertices;
          Point2D<T>[] v1 = Vertices;
 
-         bool res = true;
          foreach (Point2D<T> v in v1)
-            res = res && Array.Exists<Point2D<T>>(v2, v.Equals);
-
-         return res;
+            if (!Array.Exists<Point2D<T>>(v2, v.Equals)) return false;
+         
+         return true;
       }
    }
 }

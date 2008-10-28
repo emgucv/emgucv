@@ -13,7 +13,7 @@ using Emgu.Util;
 namespace Emgu.CV
 {
    ///<summary>
-   ///The Array class that wrap around CvArr in OpenCV
+   ///Wrapped CvArr pointer 
    ///</summary>
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
    {

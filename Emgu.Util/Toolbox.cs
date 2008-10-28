@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Emgu.Util
 {
@@ -233,6 +234,24 @@ namespace Emgu.Util
          processor.Close();
 
          return output;
+      }
+
+      /// <summary>
+      /// Use reflection to find the base type. If such type do not exist, null is returned
+      /// </summary>
+      /// <param name="currentType">The type to search from</param>
+      /// <param name="baseclassName">The name of the base class to search</param>
+      /// <returns>The base type</returns>
+      public static Type GetBaseType(Type currentType, String baseclassName)
+      {
+         if (currentType.Name.Equals(baseclassName))
+            return currentType;
+
+         Type baseType = currentType.BaseType;
+         if (baseType == null)
+            return baseType;
+
+         return GetBaseType(baseType, baseclassName);
       }
 
       #region memory copy

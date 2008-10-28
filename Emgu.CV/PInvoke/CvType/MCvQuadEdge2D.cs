@@ -9,6 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// Quad-edge of planar subdivision
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvQuadEdge2D
    {
       /// <summary>

@@ -70,8 +70,11 @@ namespace Emgu.CV
       public Matrix(TDepth[] data)
       {
          TDepth[,] mat = new TDepth[data.Length, 1];
-         for (int i = 0; i < data.Length; i++)
-            mat[i, 0] = data[i];
+         GCHandle hdl1 = GCHandle.Alloc(data, GCHandleType.Pinned);
+         GCHandle hdl2 = GCHandle.Alloc(mat, GCHandleType.Pinned);
+         Emgu.Util.Toolbox.memcpy(hdl2.AddrOfPinnedObject(), hdl1.AddrOfPinnedObject(), data.Length * Marshal.SizeOf(typeof(TDepth)));
+         hdl1.Free();
+         hdl2.Free();
          Data = mat;
       }
       #endregion
@@ -577,6 +580,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// <paramref name="mat1"/> / <paramref name="val"/> 
+      /// </summary>
+      /// <param name="mat1">The Matrix to be divided</param>
+      /// <param name="val">The value to be divided</param>
+      /// <returns><paramref name="mat1"/> / <paramref name="val"/></returns>
+      public static Matrix<TDepth> operator /(Matrix<TDepth> mat1, double val)
+      {
+         return mat1.Mul(1.0 / val);
+      }
+
+      /// <summary>
       /// <paramref name="mat1"/> * <paramref name="mat2"/> 
       /// </summary>
       /// <param name="mat1">The Matrix to be multiplied</param>
@@ -647,7 +661,6 @@ namespace Emgu.CV
       }
 
       #endregion
-
 
       #region ICloneable Members
 

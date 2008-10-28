@@ -182,12 +182,12 @@ CVAPI(void) cvSetMouseCallback( const char* window_name, CvMouseCallback on_mous
 #define CV_LOAD_IMAGE_GRAYSCALE   0
 /* ?, color */
 #define CV_LOAD_IMAGE_COLOR       1
-/* any depth, ? */ 
+/* any depth, ? */
 #define CV_LOAD_IMAGE_ANYDEPTH    2
 /* ?, any color */
 #define CV_LOAD_IMAGE_ANYCOLOR    4
 
-/* load image from file 
+/* load image from file
   iscolor can be a combination of above flags where CV_LOAD_IMAGE_UNCHANGED
   overrides the other flags
   using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
@@ -200,7 +200,7 @@ CVAPI(CvMat*) cvLoadImageM( const char* filename, int iscolor CV_DEFAULT(CV_LOAD
 CVAPI(int) cvSaveImage( const char* filename, const CvArr* image );
 
 #define CV_CVTIMG_FLIP      1
-#define CV_CVTIMG_SWAP_RB   2 
+#define CV_CVTIMG_SWAP_RB   2
 /* utility function: convert one image to another with optional vertical flip */
 CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
 
@@ -227,6 +227,7 @@ CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
 #define CV_CAP_V4L2     200
 
 #define CV_CAP_FIREWARE 300   // IEEE 1394 drivers
+#define CV_CAP_FIREWIRE 300
 #define CV_CAP_IEEE1394 300
 #define CV_CAP_DC1394   300
 #define CV_CAP_CMU1394  300
@@ -240,15 +241,19 @@ CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
 
 #define CV_CAP_QT       500   // QuickTime
 
+#define CV_CAP_UNICAP   600   // Unicap drivers
+
+#define CV_CAP_DSHOW    700   // DirectShow (via videoInput)
+
 /* start capturing frames from camera: index = camera_index + domain_offset (CV_CAP_*) */
 CVAPI(CvCapture*) cvCreateCameraCapture( int index );
 
-/* grab a frame, return 1 on success, 0 on fail. 
-  this function is thought to be fast               */  
+/* grab a frame, return 1 on success, 0 on fail.
+  this function is thought to be fast               */
 CVAPI(int) cvGrabFrame( CvCapture* capture );
 
-/* get the frame grabbed with cvGrabFrame(..) 
-  This function may apply some frame processing like 
+/* get the frame grabbed with cvGrabFrame(..)
+  This function may apply some frame processing like
   frame decompression, flipping etc.
   !!!DO NOT RELEASE or MODIFY the retrieved frame!!! */
 CVAPI(IplImage*) cvRetrieveFrame( CvCapture* capture );
@@ -267,7 +272,7 @@ CVAPI(void) cvReleaseCapture( CvCapture** capture );
 #define CV_CAP_PROP_FRAME_HEIGHT   4
 #define CV_CAP_PROP_FPS            5
 #define CV_CAP_PROP_FOURCC         6
-#define CV_CAP_PROP_FRAME_COUNT    7 
+#define CV_CAP_PROP_FRAME_COUNT    7
 #define CV_CAP_PROP_FORMAT         8
 #define CV_CAP_PROP_MODE           9
 #define CV_CAP_PROP_BRIGHTNESS    10
@@ -288,10 +293,16 @@ typedef struct CvVideoWriter CvVideoWriter;
 #define CV_FOURCC(c1,c2,c3,c4)  \
     (((c1)&255) + (((c2)&255)<<8) + (((c3)&255)<<16) + (((c4)&255)<<24))
 
+#define CV_FOURCC_PROMPT -1  /* Open Codec Selection Dialog (Windows only) */
+#define CV_FOURCC_DEFAULT -1 /* Use default codec for specified filename (Linux only) */
+
 /* initialize video file writer */
 CVAPI(CvVideoWriter*) cvCreateVideoWriter( const char* filename, int fourcc,
                                            double fps, CvSize frame_size,
                                            int is_color CV_DEFAULT(1));
+
+//CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
+//                                                   int is_color CV_DEFAULT(1));
 
 /* write frame to video file */
 CVAPI(int) cvWriteFrame( CvVideoWriter* writer, const IplImage* image );
@@ -418,7 +429,7 @@ CV_INLINE IplROI RectToROI( RECT r )
 #endif /* __cplusplus */
 
 
-#if defined __cplusplus && (!defined WIN32 || !defined (__GNUC__))
+#if defined __cplusplus && (!defined WIN32 || !defined (__GNUC__)) && !defined CV_NO_CVV_IMAGE
 
 #define CImage CvvImage
 

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// Wrapper to the CvBGStatModel
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvBGStatModel
    {
       /// <summary>

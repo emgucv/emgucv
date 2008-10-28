@@ -18,14 +18,9 @@ namespace Emgu.CV
       /// <param name="type">The type of the statistics model</param>
       public BackgroundStatisticsModel(Image<Bgr, Byte> img, Emgu.CV.CvEnum.BG_STAT_TYPE type)
       {
-         if (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL)
-         {
-            _ptr = CvInvoke.cvCreateFGDStatModel(img, IntPtr.Zero);
-         }
-         else
-         {
-            _ptr = CvInvoke.cvCreateGaussianBGModel(img, IntPtr.Zero);
-         }
+         _ptr = (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL) ?
+            CvInvoke.cvCreateFGDStatModel(img, IntPtr.Zero)
+            : CvInvoke.cvCreateGaussianBGModel(img, IntPtr.Zero);
       }
 
       private delegate int UpdateFunction(IntPtr img, IntPtr statModel);

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// Managed CvKalman structure
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvKalman
    {
       ///<summary>

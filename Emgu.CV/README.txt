@@ -1,10 +1,12 @@
-Version 1.3.0.0
+Version 1.4
 
 For online documentation please visit
-http://www.emgu.com/wiki/files/1.3.0.0/Index.html
+http://www.emgu.com/wiki/files/1.4.0.0/Index.html
 
 For tutorials and helps please visit the Emgu CV wiki 
 http://www.emgu.com/wiki/
 
 For questions and discussions please visit the Emgu CV forum
 http://www.emgu.com/forum/
+
+* Please note that even though SURF is included in Emgu CV, it can be only used for non-commercial application. For more information please visit http://www.vision.ee.ethz.ch/~surf/download.html

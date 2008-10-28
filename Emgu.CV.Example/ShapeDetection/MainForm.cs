@@ -23,11 +23,13 @@ namespace ShapeDetection
          if (fileNameTextBox.Text != String.Empty)
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, true);
+
+            //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
+            
             Gray cannyThreshold = new Gray(180);
             Gray cannyThresholdLinking = new Gray(120);
             Gray circleAccumulatorThreshold = new Gray(120);
-            Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
 
             Circle<float>[] circles = gray.HughCircles(
                 cannyThreshold,
@@ -38,6 +40,7 @@ namespace ShapeDetection
                 0 //max radius
                 )[0]; //Get the circles from the first channel
 
+            Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
             LineSegment2D<int>[] lines = cannyEdges.HughLinesBinary(
                 1, //Distance resolution in pixel-related units
                 Math.PI / 45.0, //Angle resolution measured in radians.
@@ -57,7 +60,7 @@ namespace ShapeDetection
 
                   if (contours.Area > 250) //only consider contours with area greater than 250
                   {
-                     if (currentContour.Total == 3) //The contour has 3 vertices
+                     if (currentContour.Total == 3) //The contour has 3 vertices, it is a triangle
                      {
                         Point2D<int>[] pts = Array.ConvertAll<MCvPoint, Point2D<int>>(currentContour.ToArray(), delegate(MCvPoint p) { return new Point2D<int>(p.x, p.y); });
                         triangleList.Add(new Triangle2D<int>(pts[0], pts[1], pts[2]));
@@ -88,22 +91,28 @@ namespace ShapeDetection
 
             originalImageBox.Image = img;
 
+            #region draw triangles and rectangles
             Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
             foreach (Triangle2D<int> triangle in triangleList)
                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
             foreach (Box2D<int> box in boxList)
                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
             triangleRectangleImageBox.Image = triangleRectangleImage;
+            #endregion 
 
+            #region draw circles
             Image<Bgr, Byte> circleImage = img.CopyBlank();
             foreach (Circle<float> circle in circles)
                circleImage.Draw(circle, new Bgr(Color.Brown), 2);
             circleImageBox.Image = circleImage;
+            #endregion
 
+            #region draw lines
             Image<Bgr, Byte> lineImage = img.CopyBlank();
             foreach (LineSegment2D<int> line in lines)
                lineImage.Draw(line, new Bgr(Color.Green), 2);
             lineImageBox.Image = lineImage;
+            #endregion
          }
       }
 

@@ -12,11 +12,12 @@ namespace Emgu.CV
    /// </summary>
    public class PlanarSubdivision : UnmanagedObject
    {
-      private MemStorage _storage;
-      private Rectangle<float> _roi;
+      private readonly MemStorage _storage;
+      private readonly Rectangle<float> _roi;
 
       private bool _isVoronoiDirty;
 
+      #region constructor
       /// <summary>
       /// Start the Delaunay's triangulation in the specific region of interest.
       /// </summary>
@@ -33,6 +34,16 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The points for this planar subdivision</param>
       public PlanarSubdivision(IEnumerable<Point2D<float>> points)
+         : this(points, false)
+      {
+      }
+
+      /// <summary>
+      /// Create a planar subdivision from the given points. The ROI is computed as the minimun bounding Rectangle for the input points
+      /// </summary>
+      /// <param name="silent">If true, any exception during insert will be ignored</param>
+      /// <param name="points">The points for this planar subdivision</param>
+      public PlanarSubdivision(IEnumerable<Point2D<float>> points, bool silent)
       {
          #region Find the region of interest
          Rectangle<float> roi;
@@ -48,33 +59,55 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi.MCvRect, _storage);
          _roi = roi;
 
-         foreach (Point2D<float> p in points)
+         if (silent)
          {
-            MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
-            Insert(ref cvPoint);
+            foreach (Point2D<float> p in points)
+            {
+               MCvPoint2D32f cvPoint = p.MCvPoint2D32f;
+               try
+               {
+                  Insert(ref cvPoint);
+               }
+               catch (Exception)
+               { }
+            }
          }
+         else
+         {
+            foreach (Point2D<float> p in points)
+            {
+               MCvPoint2D32f cvPoint = p.MCvPoint2D32f;
+               Insert(ref cvPoint);
+            }
+         }
+      }
+      #endregion
+
+      /// <summary>
+      /// Insert a point to the triangulation. If the point is already inserted, no changes will be made.
+      /// </summary>
+      /// <param name="point">The point to be inserted</param>
+      public void Insert(ref MCvPoint2D32f point)
+      {
+         IntPtr ptr = CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
+         _isVoronoiDirty = true;
       }
 
       /// <summary>
-      /// Insert another point to the triangulation
+      /// Locates input point within subdivision
       /// </summary>
-      /// <param name="point">the point to be inserted</param>
-      /// <returns>
-      /// True if the point is inserted into the triangulation;
-      /// False otherwise.
-      /// </returns>
-      public bool Insert(ref MCvPoint2D32f point)
+      /// <param name="pt">The point to locate</param>
+      /// <param name="subdiv2DEdge">The output edge the point falls onto or right to</param>
+      /// <param name="subdiv2DPoint">Optional output vertex double pointer the input point coincides with</param>
+      /// <returns>The type of location for the point</returns>
+      public CvEnum.Subdiv2DPointLocationType Locate(ref MCvPoint2D32f pt, out MCvSubdiv2DEdge? subdiv2DEdge, out MCvSubdiv2DPoint? subdiv2DPoint)
       {
-         try
-         {
-            CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
-            _isVoronoiDirty = true;
-            return true;
-         }
-         catch (CvException)
-         {
-            return false;
-         }
+         IntPtr edge, vertex = new IntPtr();
+         CvEnum.Subdiv2DPointLocationType res = CvInvoke.cvSubdiv2DLocate(Ptr, pt, out edge, ref vertex);
+
+         subdiv2DEdge = (edge == IntPtr.Zero) ? null : (MCvSubdiv2DEdge?)Marshal.PtrToStructure(edge, typeof(MCvSubdiv2DEdge));
+         subdiv2DPoint = (vertex == IntPtr.Zero) ? null : (MCvSubdiv2DPoint?)Marshal.PtrToStructure(vertex, typeof(MCvSubdiv2DPoint));
+         return res;
       }
 
       /// <summary>
@@ -101,6 +134,7 @@ namespace Emgu.CV
       private static List<VoronoiFacet> EdgeToFacets(ref MCvQuadEdge2D quadEdge)
       {
          List<VoronoiFacet> facets = new List<VoronoiFacet>();
+
          MCvSubdiv2DEdge e1 = quadEdge.next[0].cvSubdiv2DRotateEdge(1);
          Point2D<float>[] p1 = EdgeToPoly(ref e1);
          if (p1 != null)
@@ -129,23 +163,16 @@ namespace Emgu.CV
          Point2D<float> startPoint = new Point2D<float>(v0.pt.x, v0.pt.y);
          list.Add(startPoint);
 
-         MCvSubdiv2DEdge currentEdge = e;
-         bool stop = false;
-         while (!stop)
+         for (MCvSubdiv2DEdge currentEdge = e; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.isValid) return null;
 
             Point2D<float> currentPoint = new Point2D<float>(v.pt.x, v.pt.y);
             if (currentPoint.Equals(startPoint))
-            {
-               stop = true;
-            }
-            else
-            {
-               list.Add(currentPoint);
-               currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT);
-            }
+               break;
+
+            list.Add(currentPoint);
          }
          return list.ToArray();
       }
@@ -183,6 +210,8 @@ namespace Emgu.CV
             _isVoronoiDirty = false;
          }
 
+         Dictionary<String, VoronoiFacet> facetDict = new Dictionary<string, VoronoiFacet>();
+        
          List<VoronoiFacet> facetList = new List<VoronoiFacet>();
 
          MCvSeqReader reader = new MCvSeqReader();
@@ -203,9 +232,18 @@ namespace Emgu.CV
                List<VoronoiFacet> facet1 = EdgeToFacets(ref quadEdge);
 
                foreach (VoronoiFacet facet in facet1)
-                  if (facet.Point.InConvexPolygon(_roi)
-                      && !facetList.Exists(delegate(VoronoiFacet existingFacet) { return facet.Point.Equals(existingFacet.Point); }))
-                     facetList.Add(facet);
+               {
+                  if (facet.Point.InConvexPolygon(_roi))
+                  {
+                     Point2D<float> p = facet.Point;
+                     String key = String.Format("{0},{1}", p.X, p.Y);
+                     if (!facetDict.ContainsKey(key))
+                     {
+                        facetDict.Add(key, facet);
+                        facetList.Add(facet);
+                     }
+                  }
+               }
             }
 
             CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader);
@@ -214,12 +252,50 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Insert the triangle into the dictionary. If the triangle already exist, return false. Otherwise return true.
+      /// </summary>
+      /// <param name="tri">The triangle to insert</param>
+      /// <param name="triangleDic">The triangle dictionary</param>
+      /// <remarks>A helper method for GetDelaunayTriangles function</remarks>
+      /// <returns>If the triangle already exist, return false. Otherwise return true.</returns>
+      private bool InsertTriangleToDictionary(Triangle2D<float> tri, Dictionary<string, List<Triangle2D<float>>> triangleDic)
+      {
+         String key = string.Empty;
+         foreach (Point2D<float> p in tri.Vertices)
+         {
+            key = String.Format("{0},{1}", p.X, p.Y);
+            if (triangleDic.ContainsKey(key))
+            {
+               List<Triangle2D<float>> otherTriangles = triangleDic[key];
+               foreach (Triangle2D<float> t2 in otherTriangles)
+               {
+                  if (tri.Equals(t2)) return false;
+               }
+            }
+         }
+
+         if (!triangleDic.ContainsKey(key))
+         {
+            List<Triangle2D<float>> newList = new List<Triangle2D<float>>();
+            newList.Add(tri);
+            triangleDic.Add(key, newList);
+         }
+         else
+         {
+            triangleDic[key].Add(tri);
+         }
+         return true;
+      }
+
+      /// <summary>
       /// Retruns the triangles subdivision of the current planar subdivision. 
       /// </summary>
-      /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points</remarks>
+      /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points, if you do not want those points, set <param name="includeVirtualPoints"> to false</param></remarks>
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
       public List<Triangle2D<float>> GetDelaunayTriangles(bool includeVirtualPoints)
       {
+         Dictionary<string, List<Triangle2D<float>>> triangleDic = new Dictionary<string, List<Triangle2D<float>>>();
+
          List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
 
          MCvSeqReader reader = new MCvSeqReader();
@@ -238,15 +314,16 @@ namespace Emgu.CV
                MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
 
                Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
-               if (!triangleList.Exists(tri1.Equals) && !IsPolygonInsideTriangle(tri1, _roi))
+
+               if (InsertTriangleToDictionary(tri1, triangleDic))
                {
-                     triangleList.Add(tri1);
+                  triangleList.Add(tri1);
                }
 
                Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-               if (!triangleList.Exists(tri2.Equals) && !IsPolygonInsideTriangle(tri1, _roi))
+               if (InsertTriangleToDictionary(tri2, triangleDic))
                {
-                     triangleList.Add(tri2);
+                  triangleList.Add(tri2);
                }
             }
 

@@ -33,7 +33,6 @@ namespace Emgu.CV
       private static String[] _bitmapFormats = new string[] { ".gif", ".exig", ".png" };
 
       #region constructors
-
       ///<summary>
       ///Create an empty Image
       ///</summary>
@@ -115,7 +114,7 @@ namespace Emgu.CV
          }
          else
          {   //if the file format cannot be recognized by OpenCV 
-            if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
+            if (Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
             {
                using(Bitmap bmp = new Bitmap(fi.FullName))
                   Bitmap = bmp;
@@ -1236,6 +1235,56 @@ namespace Emgu.CV
       {
          return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
       }
+
+      #region SURF
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="param">The SURF parameters</param>
+      public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
+      {
+         return ExtractSURF(null, ref param);
+      }
+
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="param">The SURF parameters</param>
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr;
+            Seq<MCvSURFPoint> keypoints;
+            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+
+            SURFFeature[] res = new SURFFeature[keypoints.Total];
+
+            int elementsInDescriptor = param.extended == 0 ? 64 : 128;
+            int bytesToCopy = elementsInDescriptor * sizeof(float);
+
+            for (int i = 0; i < res.Length; i++)
+            {
+               MCvSURFPoint p = keypoints[i];
+               float[,] descriptor = new float[elementsInDescriptor, 1];
+               GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
+               Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
+               res[i] = new SURFFeature(ref p, descriptor);
+            }
+
+            return res;
+         }
+      }
+
+      private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
+      {
+         IntPtr keypointsPtr = new IntPtr();
+         descriptorPtr = new IntPtr();
+         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
+         keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+      }
+      #endregion 
 
       /// <summary>
       /// Finds corners with big eigenvalues in the image. 
@@ -3341,6 +3390,41 @@ namespace Emgu.CV
          return res;
       }
 
+      /// <summary>
+      /// Calculates integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      public void Integral(out Image<TColor, double> sum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, IntPtr.Zero, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Calculates integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      /// <param name="squareSum">The integral image for squared pixel values</param>
+      public void Integral(out Image<TColor, double> sum, out Image<TColor, double> squareSum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         squareSum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// calculates one or more integral images for the source image
+      /// </summary>
+      /// <param name="sum">The integral image</param>
+      /// <param name="squareSum">The integral image for squared pixel values</param>
+      /// <param name="titledSum">The integral for the image rotated by 45 degrees</param>
+      public void Integral(out Image<TColor, double> sum, out Image<TColor, double> squareSum, out Image<TColor, double> titledSum)
+      {
+         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         squareSum = new Image<TColor, double>(Width + 1, Height + 1);
+         titledSum = new Image<TColor, double>(Width + 1, Height + 1);
+         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, titledSum.Ptr);
+      }
       #endregion
 
       #region Threshold methods
@@ -3615,21 +3699,6 @@ namespace Emgu.CV
       #endregion
 
       #region IImage
-      Type IImage.TypeOfDepth
-      {
-         get
-         {
-            return typeof(TDepth);
-         }
-      }
-
-      Type IImage.TypeOfColor
-      {
-         get
-         {
-            return typeof(TColor);
-         }
-      }
 
       IImage IImage.PyrUp()
       {
@@ -3659,11 +3728,6 @@ namespace Emgu.CV
       IImage IImage.Resize(double scale)
       {
          return (IImage)Resize(scale);
-      }
-
-      ColorType IImage.GetColor(Point2D<int> location)
-      {
-         return (ColorType)this[location];
       }
 
       IImage IImage.Canny(MCvScalar thresh, MCvScalar threshLinking)
@@ -3711,14 +3775,6 @@ namespace Emgu.CV
       IImage[] IImage.Split()
       {
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
-      }
-
-      int IImage.NumberOfChannel
-      {
-         get
-         {
-            return new TColor().Dimension;
-         }
       }
       #endregion
 

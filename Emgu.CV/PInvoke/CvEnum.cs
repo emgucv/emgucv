@@ -1635,4 +1635,69 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_COUNTER_CLOCKWISE = 2
    }
+
+   /// <summary>
+   /// Stereo Block Matching type
+   /// </summary>
+   public enum STEREO_BM_TYPE
+   {
+      /// <summary>
+      /// Basic type
+      /// </summary>
+      CV_STEREO_BM_BASIC = 0,
+      /// <summary>
+      /// Fish eye
+      /// </summary>
+      CV_STEREO_BM_FISH_EYE = 1,
+      /// <summary>
+      /// Narrow
+      /// </summary>
+      CV_STEREO_BM_NARROW = 2
+   }
+
+   /// <summary>
+   /// Type of cvHomography method
+   /// </summary>
+   public enum HOMOGRAPHY_METHOD
+   {
+      /// <summary>
+      /// regular method using all the point pairs
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Least-Median robust method
+      /// </summary>
+      LMEDS  = 4,
+      /// <summary>
+      /// RANSAC-based robust method
+      /// </summary>
+      RANSAC = 8
+   }
+
+   /// <summary>
+   /// The result type of cvSubdiv2DLocate.
+   /// </summary>
+   public enum Subdiv2DPointLocationType
+   {
+      /// <summary>
+      /// One of input arguments is invalid.
+      /// </summary>
+      ERROR = -2,
+      /// <summary>
+      /// Point is outside the subdivision reference rectangle
+      /// </summary>
+      OUTSIDE_RECT = -1,
+      /// <summary>
+      /// Point falls into some facet
+      /// </summary>
+      INSIDE = 0,
+      /// <summary>
+      /// Point coincides with one of subdivision vertices
+      /// </summary>
+      VERTEX = 1,
+      /// <summary>
+      /// Point falls onto the edge
+      /// </summary>
+      ON_EDGE = 2
+   }
 }

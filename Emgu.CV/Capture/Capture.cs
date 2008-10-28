@@ -104,6 +104,11 @@ namespace Emgu.CV
       /// <param name="fileName">The file name of the movie</param>
       public Capture(String fileName)
       {
+         System.IO.FileInfo info = new System.IO.FileInfo(fileName);
+         if (!info.Exists)
+         {
+            throw new System.IO.FileNotFoundException(String.Format("The file: {0} cannot be found", fileName));
+         }
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
          {

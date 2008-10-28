@@ -12,6 +12,7 @@ namespace Emgu.CV
    /// </summary>
    public static class CvInvoke
    {
+      private const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
 
 #if LINUX
       private const string CXCORE_LIBRARY = "libcxcore.so.1";
@@ -20,11 +21,10 @@ namespace Emgu.CV
       private const string CVAUX_LIBRARY = "libcvaux.so.1";
       private const string CVCAM_LIBRARY = "libcvaux.so.1";
 #else
-      private const string CXCORE_LIBRARY = "cxcore100.dll";
-      private const string CV_LIBRARY = "cv100.dll";
-      private const string HIGHGUI_LIBRARY = "highgui100.dll";
-      private const string CVAUX_LIBRARY = "cvaux100.dll";
-      private const string CVCAM_LIBRARY = "cvcam100.dll";
+      private const string CXCORE_LIBRARY = "cxcore110.dll";
+      private const string CV_LIBRARY = "cv110.dll";
+      private const string HIGHGUI_LIBRARY = "highgui110.dll";
+      private const string CVAUX_LIBRARY = "cvaux110.dll";
 #endif
 
       /// <summary>
@@ -923,9 +923,9 @@ namespace Emgu.CV
       /// <returns>Loaded object from file</returns>
       [DllImport(CXCORE_LIBRARY, EntryPoint = "cvLoad")]
       private static extern IntPtr _cvLoad(
-          [MarshalAs(UnmanagedType.LPStr)] String fileName,
+          [MarshalAs(_stringMarshalType)] String fileName,
           IntPtr memstorage,
-          [MarshalAs(UnmanagedType.LPStr)] String name,
+          [MarshalAs(_stringMarshalType)] String name,
           IntPtr real_name);
 
       /// <summary>
@@ -2261,6 +2261,19 @@ namespace Emgu.CV
       public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, MCvPoint2D32f pt);
 
       /// <summary>
+      /// Locates input point within subdivision
+      /// </summary>
+      /// <param name="subdiv">Plannar subdivision</param>
+      /// <param name="pt">The point to locate</param>
+      /// <param name="edge">The output edge the point falls onto or right to</param>
+      /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
+      /// <returns>The type of location for the point</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, MCvPoint2D32f pt,
+                                           out IntPtr edge,
+                                           ref IntPtr vertex);
+
+      /// <summary>
       /// Calculates coordinates of virtual points. All virtual points corresponding to some vertex of original subdivision form (when connected together) a boundary of Voronoi cell of that point
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
@@ -2812,6 +2825,39 @@ namespace Emgu.CV
           int useHarris,
           double k);
 
+      /// <summary>
+      /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="image">The input 8-bit grayscale image</param>
+      /// <param name="mask">The optional input 8-bit mask. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="keypoints">The output parameter; double pointer to the sequence of keypoints. This will be the sequence of MCvSURFPoint structures</param>
+      /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is NULL, the descriptors are not computed</param>
+      /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
+      /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvExtractSURF( 
+         IntPtr image, IntPtr mask,
+         ref IntPtr keypoints, 
+         ref IntPtr descriptors,
+         IntPtr storage, 
+         MCvSURFParams parameters );
+
+      /// <summary>
+      /// Create a CvSURFParams using the specific values
+      /// </summary>
+      /// <param name="hessianThreshold">      
+      /// only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="extended">      
+      /// 0 means basic descriptors (64 elements each),
+      /// 1 means extended descriptors (128 elements each)
+      /// </param>
+      /// <returns>The MCvSURFParams structure</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern MCvSURFParams cvSURFParams(double hessianThreshold, int extended);
+
       #region Camera Calibration
       /// <summary>
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
@@ -2847,12 +2893,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src_points">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
       /// <param name="dst_points">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
-      /// <param name="homography">Output 3x3 homography matrix.</param>
+      /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
+      /// <param name="method">The type of the method</param>
+      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
+      /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindHomography(
-          IntPtr src_points,
-          IntPtr dst_points,
-          IntPtr homography);
+         IntPtr src_points,
+         IntPtr dst_points,
+         IntPtr homography,
+         CvEnum.HOMOGRAPHY_METHOD method,
+         double ransacReprojThreshold,
+         IntPtr mask);
 
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
@@ -3894,16 +3946,6 @@ namespace Emgu.CV
 
       #endregion
 
-      #region CVCAM_LIBRARY
-      /// <summary>
-      /// Get the number of cameras available
-      /// </summary>
-      /// <returns></returns>
-      [DllImport(CVCAM_LIBRARY)]
-      public static extern int cvcamGetCamerasCount();
-
-      #endregion
-
       #region CV MACROS
 
       /// <summary>
@@ -4138,6 +4180,7 @@ namespace Emgu.CV
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
       #endregion
 
+      /*
       /// <summary>
       /// Calculates disparity for stereo-pair 
       /// </summary>
@@ -4158,7 +4201,7 @@ namespace Emgu.CV
                    int maxDisparity,
                    double param1, double param2, double param3,
                    double param4, double param5);
-
+      */
       #endregion
 
    }

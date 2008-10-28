@@ -109,15 +109,20 @@
     <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
     <Compile Include="PInvoke\CvType\MCvSet.cs" />
     <Compile Include="PInvoke\CvType\MCvSetElem.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoBMState.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoGCState.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
+    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="PlannarSubdivision.cs" />
     <Compile Include="Shape\Cross2D.cs" />
     <Compile Include="Shape\IConvexPolygon.cs" />
     <Compile Include="Shape\Triangle2D.cs" />
     <Compile Include="Shape\Triangle3D.cs" />
     <Compile Include="StructuringElementEx.cs" />
+    <Compile Include="SURFFeature.cs" />
     <Compile Include="UI\HistogramCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>

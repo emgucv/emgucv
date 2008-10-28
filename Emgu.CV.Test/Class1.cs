@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
-   [TestFixture]
    public class Tester
    {
       public void TestRotationMatrix2D()
@@ -461,6 +460,28 @@ namespace Emgu.CV.Test
       {
          Application.Run(new ImageViewer(null));
       }
+
+      /*
+      public void TestArrayChangeDimension()
+      {
+         float[] vec = new float[10];
+         for (int i = 0; i < vec.Length; i++)
+            vec[i] = (float)i;
+
+         float[,] vec2 = new float[vec.Length, 1];
+
+         GCHandle hdl1 = GCHandle.Alloc(vec, GCHandleType.Pinned);
+         GCHandle hdl2 = GCHandle.Alloc(vec2, GCHandleType.Pinned);
+         Emgu.Util.Toolbox.memcpy(hdl1.AddrOfPinnedObject(), hdl2.AddrOfPinnedObject(), vec.Length * Marshal.SizeOf(typeof(float)));
+         hdl1.Free();
+         hdl2.Free();
+         //Array.Copy(vec, vec2, vec.Length);
+
+         for (int i = 0; i < vec.Length; i++)
+         {
+            Assert.AreEqual(vec[i], vec2[i, 0]);
+         }
+      }*/
 
       public void TestContour()
       {
