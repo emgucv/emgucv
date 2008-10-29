@@ -130,17 +130,15 @@ namespace Emgu.CV
          LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon, true);
          int side = edges[0].Side(this);
 
-         bool inside = true;
          for (int i = 1; i < edges.Length; i++)
          {
             int currentSide = edges[i].Side(this);
             if (side == 0) side = currentSide;
-            
-            inside &= (side == currentSide || currentSide == 0); 
 
-            if (!inside) return inside; //if not inside, imediately return
+            if (!(side == currentSide || currentSide == 0))
+               return false;
          }
-         return inside;
+         return true;
       }
 
       #region operator overload

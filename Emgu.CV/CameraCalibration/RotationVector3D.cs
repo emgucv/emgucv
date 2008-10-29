@@ -24,14 +24,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="value"></param>
       public RotationVector3D(float[] value)
-         : this()
+         : base(value)
       {
          Debug.Assert(value.Length == 3, "Rotation Vector must have size = 3");
-         Data = new float[,] 
-                {   { value[0] }, 
-                    { value[1] }, 
-                    { value[2] }
-                };
       }
 
       /// <summary>

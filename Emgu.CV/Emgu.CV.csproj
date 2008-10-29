@@ -225,7 +225,7 @@
     <Compile Include="UI\PropertyDlg.Designer.cs">
       <DependentUpon>PropertyDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="VideoWriter.cs" />
   </ItemGroup>
   <ItemGroup>

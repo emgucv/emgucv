@@ -179,11 +179,11 @@ namespace Emgu.CV.UI
                      if (operation.Method.ReturnType == typeof(void))
                      {
                         //if the operation has return type of void, just execute the operation
-                        operation.ProcessMethod(imageToBeDisplayed);
+                        operation.InvokeMethod(imageToBeDisplayed);
                      }
                      else if (operation.Method.ReturnType == typeof(IImage))
                      {
-                        imageToBeDisplayed = operation.ProcessMethod(imageToBeDisplayed) as IImage;
+                        imageToBeDisplayed = operation.InvokeMethod(imageToBeDisplayed) as IImage;
                      }
                      else
                      {

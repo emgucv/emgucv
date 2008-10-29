@@ -337,10 +337,11 @@ namespace Emgu.CV
          {
             return triangleList.FindAll(
                delegate(Triangle2D<float> tri) 
-               { return Utils.IsConvexPolygonInConvexPolygon(tri, _roi); });
+               { return Util.IsConvexPolygonInConvexPolygon(tri, _roi); });
          }
       }
 
+      /*
       /// <summary>
       /// Determine if a polygon is inside a triangle
       /// </summary>
@@ -355,7 +356,7 @@ namespace Emgu.CV
             allTriangleVerticesOutside &= (!pt.InConvexPolygon(polygon));
          }
          return allTriangleVerticesOutside;
-      }
+      }*/
 
       /// <summary>
       /// Release the storage related to this triangulation

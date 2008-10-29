@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// Utilities class
    /// </summary>
-   public static class Utils
+   public static class Util
    {
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed

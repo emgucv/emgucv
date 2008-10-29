@@ -2337,7 +2337,7 @@ namespace Emgu.CV
                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed,
                    scan0
                    );
-               bmp.Palette = Utils.GrayscalePalette;
+               bmp.Palette = Util.GrayscalePalette;
                return bmp;
             }
             else if (bgrByte)
@@ -2463,7 +2463,7 @@ namespace Emgu.CV
                   Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
                bmp.UnlockBits(data);
-               bmp.Palette = Utils.GrayscalePalette;
+               bmp.Palette = Util.GrayscalePalette;
 
                return bmp;
             }

@@ -477,7 +477,7 @@ namespace Emgu.CV.Test
             int equalCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return t2.Equals(t); }).Count;
             Assert.AreEqual(1, equalCount, "Triangle duplicates");
 
-            int overlapCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return Utils.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
+            int overlapCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
             Assert.AreEqual(1, overlapCount, "Triangle overlaps");
          }
       }
@@ -561,7 +561,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 100);
          img.Sobel(1, 0, 3);
          String plugin, module;
-         Utils.GetModuleInfo(out plugin, out module);
+         Util.GetModuleInfo(out plugin, out module);
       }
 
       [Test]

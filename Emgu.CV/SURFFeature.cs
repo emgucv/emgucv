@@ -23,7 +23,7 @@ namespace Emgu.CV
       private Matrix<float> _descriptor;
 
       /// <summary>
-      /// The SURF descriptor as a matrix
+      /// The SURF descriptor as a matrix (A 64x1 matrix for regular descriptor; A 128x1 matrix for extended descriptor)
       /// </summary>
       public Matrix<float> Descriptor
       {

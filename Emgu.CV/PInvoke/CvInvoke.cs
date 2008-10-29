@@ -1851,7 +1851,7 @@ namespace Emgu.CV
       /// <param name="x">The array of x-coordinates </param>
       /// <param name="y">The array of y-coordinates</param>
       /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360°). </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvCartToPolar(
@@ -1870,7 +1870,7 @@ namespace Emgu.CV
       /// <param name="x">The array of x-coordinates </param>
       /// <param name="y">The array of y-coordinates</param>
       /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360°). </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       public static void cvCartToPolar(
          IntPtr x,

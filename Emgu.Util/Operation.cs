@@ -36,8 +36,8 @@ namespace Emgu.Util
       /// <summary>
       /// Craete an operation using the specific method and parameters
       /// </summary>
-      /// <param name="mi"></param>
-      /// <param name="parameters"></param>
+      /// <param name="mi">The method info</param>
+      /// <param name="parameters">The parameters for this method</param>
       public Operation(MethodInfo mi, Object[] parameters)
       {
          _mi = mi;
@@ -49,7 +49,7 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="instance">The instance to call the method</param>
       /// <returns></returns>
-      public Object ProcessMethod(T instance)
+      public Object InvokeMethod(T instance)
       {
          return typeof(T).InvokeMember(_mi.Name, BindingFlags.InvokeMethod, null, instance, _parameters);
       }
