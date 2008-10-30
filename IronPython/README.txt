@@ -17,6 +17,6 @@ http://www.codeplex.com/IronPython
 
 7. From the IronPython command line, run the following command:
  a. Import EmguInit
- b. from Emgu import *
+ b. from EmguInit import *
 
 8. You are ready to go.
