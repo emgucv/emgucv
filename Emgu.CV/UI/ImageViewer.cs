@@ -61,5 +61,14 @@ namespace Emgu.CV.UI
             imageBox1.Image = value;
          }
       }
+
+      /// <summary>
+      /// Create a ImageViewer with the specific image and show it.
+      /// </summary>
+      /// <param name="image">The image to be displayed in ImageViewer</param>
+      public static void Show(IImage image)
+      {
+         Application.Run(new ImageViewer(image));
+      }
    }
 }

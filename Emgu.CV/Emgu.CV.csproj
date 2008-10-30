@@ -136,7 +136,7 @@
       <DependentUpon>HistogramViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ImageBox.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\ImageBox.Designer.cs">
       <DependentUpon>ImageBox.cs</DependentUpon>

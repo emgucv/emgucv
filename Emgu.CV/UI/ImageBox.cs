@@ -15,7 +15,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// An image box is a user control that is similar to picture box, but display Emgu CV IImage and provides enhenced functionalities.
    /// </summary>
-   public partial class ImageBox : UserControl
+   public partial class ImageBox : PictureBox
    {
       private IImage _image;
       private IImage _displayedImage;
@@ -36,6 +36,7 @@ namespace Emgu.CV.UI
       /// Create a ImageBox
       /// </summary>
       public ImageBox()
+         : base()
       {
          InitializeComponent();
 
@@ -153,7 +154,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Set the image for this image box
       /// </summary>
-      public IImage Image
+      public new IImage Image
       {
          get
          {
@@ -212,10 +213,10 @@ namespace Emgu.CV.UI
             _displayedImage = value;
             if (_displayedImage != null)
             {
-               if (pictureBox.Width != _displayedImage.Width) pictureBox.Width = _displayedImage.Width;
-               if (pictureBox.Height != _displayedImage.Height) pictureBox.Height = _displayedImage.Height;
+               if (Width != _displayedImage.Width) Width = _displayedImage.Width;
+               if (Height != _displayedImage.Height) Height = _displayedImage.Height;
 
-               pictureBox.Image = _displayedImage.Bitmap;
+               base.Image = _displayedImage.Bitmap;
 
                if (EnableProperty)
                {
