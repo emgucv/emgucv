@@ -11,12 +11,12 @@ http://www.codeplex.com/IronPython
 
 4. Copy Emgu.CV.dll, Emgu.Util.dll, ZedGraph.dll and zlib.net.dll to the same Folder
 
-5. Copy Emgu.py to the same Folder
+5. Copy EmguInit.py to the same Folder
 
 6. Run the ipy.exe program. (On Mono, call "mono ipy.exe") 
 
 7. From the IronPython command line, run the following command:
- a. Import Emgu
+ a. Import EmguInit
  b. from Emgu import *
 
 8. You are ready to go.
