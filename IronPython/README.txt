@@ -7,7 +7,7 @@ http://www.codeplex.com/IronPython
 
 3. Install the OpenCV 
  a. On Windows, copy the required OpenCV 1.1 dlls to the same Folder, please remember to install MSVCRT 8.0 as well
- b. On Linux, just install OpenCv
+ b. On Linux, just install OpenCV package
 
 4. Copy Emgu.CV.dll, Emgu.Util.dll, ZedGraph.dll and zlib.net.dll to the same Folder
 
