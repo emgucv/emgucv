@@ -70,5 +70,15 @@ namespace Emgu.CV.UI
       {
          Application.Run(new ImageViewer(image));
       }
+
+      /// <summary>
+      /// Create a ImageViewer with the specific image and show it.
+      /// </summary>
+      /// <param name="image">The image to be displayed in ImageViewer</param>
+      /// <param name="windowName">The name of the window</param>
+      public static void Show(IImage image, String windowName)
+      {
+         Application.Run(new ImageViewer(image, windowName));
+      }
    }
 }
