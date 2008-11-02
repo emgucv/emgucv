@@ -63,6 +63,19 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Returns the centroid of this triangle
+      /// </summary>
+      public Point2D<double> Centeroid
+      {
+         get
+         {
+            Point2D<double>[] vertices = Array.ConvertAll<Point2D<T>, Point2D<double>>(Vertices, delegate(Point2D<T> p) { return p.Convert<double>(); });
+            Point2D<double> v0 = vertices[0], v1 = vertices[1], v2 = vertices[2];
+            return new Point2D<double>((v0.X + v1.X + v2.X) / 3.0, (v0.Y + v1.Y + v2.Y) / 3.0);
+         }
+      }
+
+      /// <summary>
       /// Compare two triangles and return true if equal
       /// </summary>
       /// <param name="tri">the other triangles to compare with</param>
