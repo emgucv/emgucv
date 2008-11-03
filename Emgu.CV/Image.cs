@@ -2082,10 +2082,55 @@ namespace Emgu.CV
       /// <param name="warpType">Warp type</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WrapAffine(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      public Image<TColor, TDepth> WarpAffine(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         return WarpAffine(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
+      }
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="mapMatrix">2x3 transformation matrix</param>
+      /// <param name="width">The width of the resulting image</param>
+      /// <param name="height">the height of the resulting image</param>
+      /// <param name="interpolationType">Interpolation type</param>
+      /// <param name="warpType">Warp type</param>
+      /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <returns>The result of the transformation</returns>
+      public Image<TColor, TDepth> WarpAffine(Matrix<float> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      {
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
+         return res;
+      }
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="mapMatrix">3x3 transformation matrix</param>
+      /// <param name="interpolationType">Interpolation type</param>
+      /// <param name="warpType">Warp type</param>
+      /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <returns>The result of the transformation</returns>
+      public Image<TColor, TDepth> WarpPerspective(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      {
+         return WarpPerspective(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
+      }
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="mapMatrix">3x3 transformation matrix</param>
+      /// <param name="width">The width of the resulting image</param>
+      /// <param name="height">the height of the resulting image</param>
+      /// <param name="interpolationType">Interpolation type</param>
+      /// <param name="warpType">Warp type</param>
+      /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <returns>The result of the transformation</returns>
+      public Image<TColor, TDepth> WarpPerspective(Matrix<float> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      {
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
+         CvInvoke.cvWarpPerspective(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
          return res;
       }
 
@@ -2104,7 +2149,7 @@ namespace Emgu.CV
             Point2D<float> center = new Point2D<float>(Width * 0.5f, Height * 0.5f);
             using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
             {
-               resultImage = WrapAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
+               resultImage = WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
             }
          }
          else

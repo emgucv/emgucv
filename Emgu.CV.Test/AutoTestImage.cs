@@ -600,5 +600,12 @@ namespace Emgu.CV.Test
             //Application.Run(new ImageViewer(img));
          }
       }
+
+      [Test]
+      public void TestDFT()
+      {
+         int i = CvInvoke.cvGetOptimalDFTSize(201);
+         i = i + 1 - 1;
+      }
    }
 }

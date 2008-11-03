@@ -643,6 +643,25 @@ namespace Emgu.CV
       public static extern void cvDFT(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags, int nonzero_rows);
 
       /// <summary>
+      /// Returns the minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. 
+      /// </summary>
+      /// <param name="size0">Vector size</param>
+      /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern int cvGetOptimalDFTSize(int size0);
+ 
+      /// <summary>
+      /// Performs per-element multiplication of the two CCS-packed or complex matrices that are results of real or complex Fourier transform. 
+      /// </summary>
+      /// <param name="src1">The first source array</param>
+      /// <param name="src2">The second source array</param>
+      /// <param name="dst">The destination array of the same type and the same size of the sources</param>
+      /// <param name="flags"></param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvMulSpectrums( IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.MUL_SPECTRUMS_TYPE flags );
+
+
+      /// <summary>
       /// Performs forward or inverse transform of 1D or 2D floating-point array
       /// </summary>
       /// <param name="src">Source array, real 1D or 2D array</param>
@@ -3618,6 +3637,23 @@ namespace Emgu.CV
       public static extern void cvIntegral(IntPtr image, IntPtr sum, IntPtr sqsum, IntPtr tilted_sum);
 
       /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="map_matrix">3×3 transformation matrix</param>
+      /// <param name="flags"></param>
+      /// <param name="fillval">A value used to fill outliers</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvWarpPerspective( 
+         IntPtr src, 
+         IntPtr dst, 
+         IntPtr map_matrix,
+         int flags,
+         MCvScalar fillval);
+
+
+      /// <summary>
       /// Calculates rotation matrix
       /// </summary>
       /// <param name="center">Center of the rotation in the source image. </param>
@@ -3631,6 +3667,8 @@ namespace Emgu.CV
           double angle,
           double scale,
           IntPtr mapMatrix);
+
+
 
       /// <summary>
       /// Calculates the histogram of one or more single-channel images. The elements of a tuple that is used to increment a histogram bin are taken at the same location from the corresponding input images.

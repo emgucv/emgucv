@@ -210,7 +210,7 @@ namespace Emgu.CV
             _isVoronoiDirty = false;
          }
 
-         Dictionary<String, VoronoiFacet> facetDict = new Dictionary<string, VoronoiFacet>();
+         Dictionary<String, string> facetDict = new Dictionary<string, string>();
         
          List<VoronoiFacet> facetList = new List<VoronoiFacet>();
 
@@ -236,10 +236,8 @@ namespace Emgu.CV
                   if (facet.Point.InConvexPolygon(_roi))
                   {
                      Point2D<float> p = facet.Point;
-                     String key = String.Format("{0},{1}", p.X, p.Y);
-                     if (!facetDict.ContainsKey(key))
+                     if (InsertPoint2DToDictionary(p, facetDict))
                      {
-                        facetDict.Add(key, facet);
                         facetList.Add(facet);
                      }
                   }
@@ -251,40 +249,24 @@ namespace Emgu.CV
          return facetList;
       }
 
+      
       /// <summary>
-      /// Insert the triangle into the dictionary. If the triangle already exist, return false. Otherwise return true.
+      /// Insert the point into the dictionary. If the point already exist, return false. Otherwise return true.
       /// </summary>
-      /// <param name="tri">The triangle to insert</param>
-      /// <param name="triangleDic">The triangle dictionary</param>
-      /// <remarks>A helper method for GetDelaunayTriangles function</remarks>
-      /// <returns>If the triangle already exist, return false. Otherwise return true.</returns>
-      private bool InsertTriangleToDictionary(Triangle2D<float> tri, Dictionary<string, List<Triangle2D<float>>> triangleDic)
+      /// <param name="pt">The point to insert</param>
+      /// <param name="dic">The point dictionary</param>
+      /// <returns>If the point already exist, return false. Otherwise return true.</returns>
+      private static bool InsertPoint2DToDictionary<T>(Point2D<T> pt, Dictionary<string, string> dic) where T: IComparable, new() 
       {
-         String key = string.Empty;
-         foreach (Point2D<float> p in tri.Vertices)
+         string key = String.Format("{0},{1}", pt.X.ToString(), pt.Y.ToString());
+         if (dic.ContainsKey(key)) 
          {
-            key = String.Format("{0},{1}", p.X, p.Y);
-            if (triangleDic.ContainsKey(key))
-            {
-               List<Triangle2D<float>> otherTriangles = triangleDic[key];
-               foreach (Triangle2D<float> t2 in otherTriangles)
-               {
-                  if (tri.Equals(t2)) return false;
-               }
-            }
-         }
-
-         if (!triangleDic.ContainsKey(key))
+            return false;
+         } else
          {
-            List<Triangle2D<float>> newList = new List<Triangle2D<float>>();
-            newList.Add(tri);
-            triangleDic.Add(key, newList);
+            dic.Add(key, null);
+            return true;
          }
-         else
-         {
-            triangleDic[key].Add(tri);
-         }
-         return true;
       }
 
       /// <summary>
@@ -294,7 +276,7 @@ namespace Emgu.CV
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
       public List<Triangle2D<float>> GetDelaunayTriangles(bool includeVirtualPoints)
       {
-         Dictionary<string, List<Triangle2D<float>>> triangleDic = new Dictionary<string, List<Triangle2D<float>>>();
+         Dictionary<string, string> triangleDic = new Dictionary<string, string>();
 
          List<Triangle2D<float>> triangleList = new List<Triangle2D<float>>();
 
@@ -315,13 +297,13 @@ namespace Emgu.CV
 
                Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
 
-               if (InsertTriangleToDictionary(tri1, triangleDic))
+               if (InsertPoint2DToDictionary(tri1.Centeroid, triangleDic))
                {
                   triangleList.Add(tri1);
                }
 
                Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-               if (InsertTriangleToDictionary(tri2, triangleDic))
+               if (InsertPoint2DToDictionary(tri2.Centeroid, triangleDic))
                {
                   triangleList.Add(tri2);
                }

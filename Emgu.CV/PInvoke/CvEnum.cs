@@ -495,7 +495,7 @@ namespace Emgu.CV.CvEnum
    public enum INTER
    {
       /// <summary>
-      /// 
+      /// The default type
       /// </summary>
       CV_INTER_NN = 0,
       /// <summary>
@@ -1018,6 +1018,25 @@ namespace Emgu.CV.CvEnum
       CV_DIST_HUBER = 7,
    }
 
+   /// <summary>
+   /// The types for cvMulSpectrums
+   /// </summary>
+   [Flags]
+   public enum MUL_SPECTRUMS_TYPE
+   {
+      /// <summary>
+      /// The default type
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
+      /// </summary>
+      CV_DXT_ROWS = 4,
+      /// <summary>
+      /// Conjugate the second argument of cvMulSpectrums
+      /// </summary>
+      CV_DXT_MUL_CONJ =8
+   }
 
    /// <summary>
    /// Flag used for cvDFT
