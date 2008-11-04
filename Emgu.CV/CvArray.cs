@@ -18,6 +18,11 @@ namespace Emgu.CV
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
    {
       /// <summary>
+      /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
+      /// </summary>
+      public static String[] OpencvFileFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
+
+      /// <summary>
       /// The pinned GCHandle to _array;
       /// </summary>
       protected GCHandle _dataHandle;
@@ -414,6 +419,25 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      /// <summary>
+      /// Save the CvArray as image
+      /// </summary>
+      /// <param name="fileName">The name of the image to save</param>
+      public virtual void Save(String fileName)
+      {
+         FileInfo fi = new FileInfo(fileName);
+
+         if (System.Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
+         {
+            //if the file can be imported from Open CV
+            CvInvoke.cvSaveImage(fileName, Ptr);
+         }
+         else
+         {
+            throw new NotImplementedException(String.Format("Saving to {0} Format is not implemented", fi.Extension));
+         }
+      }
 
       #region IXmlSerializable Members
 

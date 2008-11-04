@@ -414,5 +414,16 @@ namespace Emgu.CV
          CvInvoke.cvMoments(Ptr, ref moment, 0);
          return moment;
       }
+
+      /// <summary>
+      /// Compare the shape of the current contour with <paramref name="objectToMatch"/> 
+      /// </summary>
+      /// <param name="objectToMatch">The object to match</param>
+      /// <param name="method">contour matching method</param>
+      /// <returns>The degree of the similarity</returns>
+      public double MatchShapes(Seq<T> objectToMatch, CvEnum.CONTOURS_MATCH_TYPE method)
+      {
+         return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
+      }
    }
 }

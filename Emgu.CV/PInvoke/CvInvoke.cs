@@ -2970,6 +2970,33 @@ namespace Emgu.CV
                         IntPtr status);
 
       /// <summary>
+      /// computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
+      /// </summary>
+      /// <param name="calibMatr">The matrix of intrinsic parameters</param>
+      /// <param name="imgWidth">Image width in pixels</param>
+      /// <param name="imgHeight">Image height in pixels</param>
+      /// <param name="apertureWidth">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="apertureHeight">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="fovx">Field of view angle in x direction in degrees</param>
+      /// <param name="fovy">Field of view angle in y direction in degrees </param>
+      /// <param name="focalLength">Focal length in realworld units </param>
+      /// <param name="principalPoint">The principal point in realworld units </param>
+      /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalibrationMatrixValues( 
+         IntPtr calibMatr,
+         int imgWidth, 
+         int imgHeight,
+         double apertureWidth, 
+         double apertureHeight,
+         ref double fovx, 
+         ref double fovy,
+         ref double focalLength,
+         ref MCvPoint2D64f principalPoint,
+         ref double pixelAspectRatio);
+
+
+      /// <summary>
       /// Estimates extrinsic camera parameters using known intrinsic parameters and and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error
       /// </summary>
       /// <param name="object_points">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
@@ -3116,6 +3143,22 @@ namespace Emgu.CV
           IntPtr templ,
           IntPtr result,
           CvEnum.TM_TYPE method);
+
+      /// <summary>
+      /// Compares two shapes. The 3 implemented methods all use Hu moments
+      /// </summary>
+      /// <param name="object1">First contour or grayscale image</param>
+      /// <param name="object2">Second contour or grayscale image</param>
+      /// <param name="method">Comparison method</param>
+      /// <param name="parameter">Method-specific parameter (is not used now)</param>
+      /// <returns></returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvMatchShapes(
+         IntPtr object1,
+         IntPtr object2,
+         CvEnum.CONTOURS_MATCH_TYPE method,
+         double parameter);
+
 
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.

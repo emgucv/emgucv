@@ -22,7 +22,6 @@ namespace Emgu.CV
          {
             PrioritizedException e = new PrioritizedException(ExceptionLevel.Critical,
                 String.Format("Fail to create HaarCascade object: {0}", fileName));
-            e.Alert(true);
             throw e;
          }
       }

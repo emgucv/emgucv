@@ -23,14 +23,9 @@ namespace Emgu.CV
       private TDepth[, ,] _array;
 
       /// <summary>
-      /// File formats supported by opencv
+      /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
       /// </summary>
-      private static String[] _opencvFileFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".bmp", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".tiff", ".tif", ".exr", ".jp2" };
-
-      /// <summary>
-      /// File formats supported by bitmap
-      /// </summary>
-      private static String[] _bitmapFormats = new string[] { ".gif", ".exig", ".png" };
+      public static String[] BitmapFormats = new string[] { ".gif", ".exig", ".png" };
 
       #region constructors
       ///<summary>
@@ -57,7 +52,7 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (System.Array.Exists(_opencvFileFormats, fi.Extension.ToLower().Equals))
+         if (System.Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
          {   //if the file can be imported from Open CV
 
             IntPtr ptr;
@@ -114,7 +109,7 @@ namespace Emgu.CV
          }
          else
          {   //if the file format cannot be recognized by OpenCV 
-            if (Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
+            if (Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
             {
                using(Bitmap bmp = new Bitmap(fi.FullName))
                   Bitmap = bmp;
@@ -2232,8 +2227,23 @@ namespace Emgu.CV
          return res;
       }
 
-      private void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.ColorType, new()
+      /// <summary>
+      /// Convert the source image to the current image, if the size are different, the current image will be a resized version of the srcImage. 
+      /// </summary>
+      /// <typeparam name="TSrcColor">The color type of the source image</typeparam>
+      /// <typeparam name="TSrcDepth">The color depth of the source image</typeparam>
+      /// <param name="srcImage">The sourceImage</param>
+      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.ColorType, new()
       {
+         if (srcImage.Width != Width || srcImage.Height != Height)
+         {  //if the size of the source image do not match the size of the current image
+            using (Image<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Width, Height))
+            {
+               ConvertFrom(tmp);
+               return;
+            }
+         }
+
          if (typeof(TColor) == typeof(TSrcColor))
          {
             #region same color
@@ -3713,24 +3723,17 @@ namespace Emgu.CV
       /// Save this image to the specific file
       /// </summary>
       /// <param name="fileName">The name of the file to be saved to</param>
-      public void Save(String fileName)
+      public override void Save(String fileName)
       {
          FileInfo fi = new FileInfo(fileName);
-
-         if (System.Array.Exists(_opencvFileFormats, fi.Extension.ToLower().Equals))
-         {   //if the file can be imported from Open CV
-            CvInvoke.cvSaveImage(fileName, Ptr);
-         }
-         else if (System.Array.Exists(_bitmapFormats, fi.Extension.ToLower().Equals))
+         if (System.Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
          {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName);
-         }
-         else
+         } else
          {
-            throw new NotImplementedException(String.Format("Saving to {0} Format is not implemented", fi.Extension));
+            base.Save(fileName);
          }
-
       }
 
       /// <summary>

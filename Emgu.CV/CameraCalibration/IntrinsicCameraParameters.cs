@@ -13,7 +13,10 @@ namespace Emgu.CV
       private Matrix<float> _distortionCoeffs;
 
       /// <summary>
-      /// Get or Set the DistortionCoeffs ( as a 3x1 matrix )
+      /// Get or Set the DistortionCoeffs ( as a 5x1 (default) or 4x1 matrix ). 
+      /// The ordering of the distortion coefficients is the following:
+      /// (k1, k2, p1, p2[, k3]).
+      /// That is, the first 2 radial distortion coefficients are followed by 2 tangential distortion coefficients and then, optionally, by the third radial distortion coefficients. Such ordering is used to keep backward compatibility with previous versions of OpenCV
       /// </summary>
       public Matrix<float> DistortionCoeffs
       {
@@ -22,7 +25,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get or Set the intrinsic matrix
+      /// Get or Set the intrinsic matrix (3x3)
       /// </summary>
       public Matrix<float> IntrinsicMatrix
       {
@@ -36,7 +39,7 @@ namespace Emgu.CV
       public IntrinsicCameraParameters()
       {
          _intrinsicMatrix = new Matrix<float>(3, 3);
-         _distortionCoeffs = new Matrix<float>(3, 1);
+         _distortionCoeffs = new Matrix<float>(5, 1);
       }
 
       /// <summary>
@@ -52,5 +55,37 @@ namespace Emgu.CV
          mapy = new Matrix<float>(height, width);
          CvInvoke.cvInitUndistortMap(IntrinsicMatrix.Ptr, DistortionCoeffs.Ptr, mapx, mapy);
       }
+
+      /// <summary>
+      /// computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
+      /// </summary>
+      /// <param name="imgWidth">Image width in pixels</param>
+      /// <param name="imgHeight">Image height in pixels</param>
+      /// <param name="apertureWidth">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="apertureHeight">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="fovx">Field of view angle in x direction in degrees</param>
+      /// <param name="fovy">Field of view angle in y direction in degrees </param>
+      /// <param name="focalLength">Focal length in realworld units </param>
+      /// <param name="principalPoint">The principal point in realworld units </param>
+      /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
+      public void GetIntrinsicMatrixValues(
+         int imgWidth,
+         int imgHeight,
+         double apertureWidth,
+         double apertureHeight,
+         out double fovx,
+         out double fovy,
+         out double focalLength,
+         out MCvPoint2D64f principalPoint,
+         out double pixelAspectRatio)
+      {
+         fovx = 0;
+         fovy = 0;
+         focalLength = 0;
+         principalPoint = new MCvPoint2D64f();
+         pixelAspectRatio = 0;
+         CvInvoke.cvCalibrationMatrixValues(_intrinsicMatrix.Ptr, imgWidth, imgHeight, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
+      }
+
    }
 }
