@@ -164,6 +164,12 @@ namespace Emgu.CV.UI
       {
          IImage image = _imageBox.DisplayedImage;
 
+         if (image == null)
+         {
+            MessageBox.Show("Please load an image first");
+            return;
+         }
+
          IImage[] channels = image.Split();
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          ColorType typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as ColorType;

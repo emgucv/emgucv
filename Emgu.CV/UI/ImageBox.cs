@@ -23,6 +23,8 @@ namespace Emgu.CV.UI
 
       private Stack<Operation<IImage>> _operationStack;
 
+      //private double _zoomLevel = 1.0;
+
       /// <summary>
       /// one of the parameters used for caculating the frame rate
       /// </summary>
@@ -250,9 +252,16 @@ namespace Emgu.CV.UI
          DialogResult res = openFileDialog1.ShowDialog();
          if (res == DialogResult.OK)
          {
-            String filename = openFileDialog1.FileName;
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(filename);
-            Image = img;
+            try
+            {
+               String filename = openFileDialog1.FileName;
+               Image<Bgr, Byte> img = new Image<Bgr, byte>(filename);
+               Image = img;
+            }
+            catch (Exception excpt)
+            {
+               MessageBox.Show(excpt.Message);
+            }
          }
       }
 
@@ -261,8 +270,15 @@ namespace Emgu.CV.UI
          DialogResult res = saveFileDialog1.ShowDialog();
          if (res == DialogResult.OK)
          {
-            String filename = saveFileDialog1.FileName;
-            _image.Save(filename);
+            try
+            {
+               String filename = saveFileDialog1.FileName;
+               _image.Save(filename);
+            }
+            catch (Exception excpt)
+            {
+               MessageBox.Show(excpt.Message);
+            }
          }
       }
 
@@ -331,7 +347,7 @@ namespace Emgu.CV.UI
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+      private void onMouseMove(object sender, MouseEventArgs e)
       {
          if (EnableProperty)
          {
@@ -351,7 +367,6 @@ namespace Emgu.CV.UI
                if (indexers != null)
                {
                   color = indexers.Invoke(img, new object[2] { location.Y, location.X }) as ColorType;
-                  //color = DisplayedImage.GetColor(location);
                }
                else
                {

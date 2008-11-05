@@ -28,26 +28,26 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.histogramCtrl1 = new Emgu.CV.UI.HistogramCtrl();
-            this.SuspendLayout();
-            // 
-            // histogramCtrl1
-            // 
-            this.histogramCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.histogramCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.histogramCtrl1.Name = "histogramCtrl1";
-            this.histogramCtrl1.Size = new System.Drawing.Size(372, 284);
-            this.histogramCtrl1.TabIndex = 0;
-            // 
-            // HistogramViewer
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(372, 284);
-            this.Controls.Add(this.histogramCtrl1);
-            this.Name = "HistogramViewer";
-            this.Text = "HistogramViewer";
-            this.ResumeLayout(false);
+           this.histogramCtrl1 = new Emgu.CV.UI.HistogramCtrl();
+           this.SuspendLayout();
+           // 
+           // histogramCtrl1
+           // 
+           this.histogramCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+           this.histogramCtrl1.Location = new System.Drawing.Point(0, 0);
+           this.histogramCtrl1.Name = "histogramCtrl1";
+           this.histogramCtrl1.Size = new System.Drawing.Size(372, 284);
+           this.histogramCtrl1.TabIndex = 0;
+           // 
+           // HistogramViewer
+           // 
+           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+           this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+           this.ClientSize = new System.Drawing.Size(372, 284);
+           this.Controls.Add(this.histogramCtrl1);
+           this.Name = "HistogramViewer";
+           this.Text = "Color Histogram ";
+           this.ResumeLayout(false);
 
         }
 

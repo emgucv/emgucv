@@ -25,7 +25,7 @@ namespace Emgu.CV
       /// <summary>
       /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
       /// </summary>
-      public static String[] BitmapFormats = new string[] { ".gif", ".exig", ".png" };
+      public static String[] BitmapFormats = new string[] { ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
 
       #region constructors
       ///<summary>
@@ -349,6 +349,12 @@ namespace Emgu.CV
                return CvEnum.IPL_DEPTH.IPL_DEPTH_64F;
             else if (typeof(TDepth) == typeof(SByte))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8S;
+            else if (typeof(TDepth) == typeof(UInt16))
+               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16U;
+            else if (typeof(TDepth) == typeof(Int16))
+               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16S;
+            else if (typeof(TDepth) == typeof(Int32))
+               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32S;
             else
                throw new NotImplementedException("Unsupported image depth");
          }
@@ -2450,17 +2456,18 @@ namespace Emgu.CV
                #region Handle other image type
                using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
                {
+                  Byte[, ,] data = tmp1.Data;
                   for (int i = 0; i < value.Width; i++)
                      for (int j = 0; j < value.Height; j++)
                      {
                         System.Drawing.Color color = value.GetPixel(i, j);
-                        CvInvoke.cvSet2D(tmp1.Ptr, j, i, new MCvScalar(color.B, color.G, color.R, color.A));
+                        data[j, i, 0] = color.B;
+                        data[j, i, 1] = color.G;
+                        data[j, i, 2] = color.R;
+                        data[j, i, 3] = color.A;
                      }
 
-                  using (Image<TColor, TDepth> tmp2 = tmp1.Convert<TColor, TDepth>())
-                  {
-                     tmp2.Copy(this);
-                  }
+                  ConvertFrom<Bgra, Byte>(tmp1);
                }
                #endregion
             }

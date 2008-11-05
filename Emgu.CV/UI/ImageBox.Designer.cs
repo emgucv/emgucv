@@ -89,8 +89,12 @@ namespace Emgu.CV.UI
            // 
            // openFileDialog1
            // 
-           this.openFileDialog1.FileName = "openFileDialog1";
            this.openFileDialog1.Filter = "Image Files (*.jpg; *.bmp;*.png)|*.jpg;*.bmp;*.png|All Files(*.*)|*.*";
+           this.openFileDialog1.Title = "Open Image File";
+           // 
+           // saveFileDialog1
+           // 
+           this.saveFileDialog1.Title = "File Saving";
            // 
            // ImageBox
            // 
@@ -99,7 +103,7 @@ namespace Emgu.CV.UI
            this.Dock = System.Windows.Forms.DockStyle.Fill;
            this.Size = new System.Drawing.Size(150, 150);
            this.TabIndex = 2;
-           this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+           this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.onMouseMove);
            this.contextMenuStrip1.ResumeLayout(false);
            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
            this.ResumeLayout(false);
