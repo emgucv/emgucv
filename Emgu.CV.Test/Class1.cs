@@ -71,7 +71,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
          Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
-         Application.Run(new ImageViewer(g2));
+         ImageViewer.Show(g2);
       }
 
       public void TestHorizontalLine()
@@ -81,7 +81,7 @@ namespace Emgu.CV.Test
          LineSegment2D<int> l1 = new LineSegment2D<int>(p1, p2);
          Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
          img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
-         Application.Run(new ImageViewer(img));
+         ImageViewer.Show(img);
       }
 
       public void TestRectangle()
@@ -98,28 +98,27 @@ namespace Emgu.CV.Test
          Rectangle<double> roi = map.ROI;
          roi.Height /= 2.0;
          map.ROI = roi;
-
-         Application.Run(new ImageViewer(map));
+         ImageViewer.Show(map);
       }
 
       public void TestEllipseFitting()
       {
          System.Random r = new Random();
 
-         Image<Gray, byte> img = new Image<Gray, byte>(400, 400, new Gray(0.0));
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
          List<Point2D<int>> pts = new List<Point2D<int>>();
          for (int i = 0; i <= 100; i++)
          {
             int x = r.Next(100) + 20;
             int y = r.Next(300) + 50;
-            img[y, x] = new Gray(255.0);
+            img[y, x] = new Bgr(255.0, 255.0, 255.0);
             pts.Add(new Point2D<int>(x, y));
          }
 
          Ellipse<float> e = PointCollection.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
 
-         img.Draw(e, new Gray(120.0), 1);
-         Application.Run(new ImageViewer(img));
+         img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
+         ImageViewer.Show(img);
       }
 
       /*
@@ -157,7 +156,7 @@ namespace Emgu.CV.Test
             Rectangle<double> r = img2.ROI;
             r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);
             img2.ROI = r;
-            Application.Run(new ImageViewer(img2));
+            ImageViewer.Show(img2);
          }
       }
 

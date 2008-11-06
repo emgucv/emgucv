@@ -649,7 +649,7 @@ namespace Emgu.CV
       ///<param name="ellipse"> The ellipse to be draw</param>
       ///<param name="color"> The color of the ellipse </param>
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
-      public void Draw(Ellipse<float> ellipse, TColor color, int thickness)
+      public void Draw<T>(Ellipse<T> ellipse, TColor color, int thickness) where T : IComparable, new()
       {
          CvInvoke.cvEllipse(
              Ptr,
@@ -2448,6 +2448,54 @@ namespace Emgu.CV
                else
                {
                   using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                     ConvertFrom(tmp);
+               }
+            }
+            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format1bppIndexed)
+            {
+               if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
+               {
+                  int rows = value.Height;
+                  int cols = value.Width;
+                  System.Drawing.Imaging.BitmapData data = value.LockBits(
+                      new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
+                      System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                      value.PixelFormat);
+
+                  int fullByteCount = cols >> 3;
+                  int partialBitCount = cols & 7;
+
+                  int mask = 1 << 7; 
+
+                  Int64 srcAddress = data.Scan0.ToInt64();
+                  Byte[, ,] imagedata = Data as Byte[, ,];
+
+                  using (PinnedArray<Byte> rowbuffer = new PinnedArray<byte>(fullByteCount + (partialBitCount == 0 ? 0 : 1)))
+                  {
+                     IntPtr destAddress = rowbuffer.AddrOfPinnedObject();
+                     Byte[] row = rowbuffer.Array;
+
+                     for (int i = 0; i < rows; i++, srcAddress += data.Stride)
+                     {
+                        Emgu.Util.Toolbox.memcpy(destAddress, (IntPtr)srcAddress, data.Stride);
+                       
+                        int v = 0;
+                        for (int j = 0; j < cols; j++, v = v << 1)
+                        {
+                           if ((j & 7) == 0)
+                           {  //fetch the next byte 
+                              v = row[j >> 3];
+                           }  
+                           imagedata[i, j, 0] =  (v & mask) == 0 ? (Byte)0 : (Byte) 255;
+                        }
+                     }
+                  }
+                  value.UnlockBits(data);
+
+               }
+               else
+               {
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(value))
                      ConvertFrom(tmp);
                }
             }
