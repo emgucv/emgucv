@@ -490,6 +490,7 @@ namespace Emgu.CV
       ///<param name="box"> The box to be drawn</param>
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
+      ///<typeparam name="T">The type of Box2D to draw</typeparam>
       public virtual void Draw<T>(Box2D<T> box, TColor color, int thickness) where T : IComparable, new()
       {
          Draw<float>(box.MCvBox2D, color, thickness);
@@ -499,6 +500,7 @@ namespace Emgu.CV
       ///<param name="rect"> The rectangle to be drawn</param>
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
+      ///<typeparam name="T">The type of rectangle to draw</typeparam>
       public virtual void Draw<T>(Rectangle<T> rect, TColor color, int thickness) where T : IComparable, new()
       {
          CvInvoke.cvRectangle(
@@ -515,6 +517,7 @@ namespace Emgu.CV
       ///<param name="cross"> The 2D Cross to be drawn</param>
       ///<param name="color"> The color of the cross </param>
       ///<param name="thickness"> Must be &gt; 0 </param>
+      ///<typeparam name="T">The type of cross to draw</typeparam>
       public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : IComparable, new()
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
@@ -529,6 +532,7 @@ namespace Emgu.CV
       ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thickness"> The thickness of the line segment </param>
+      ///<typeparam name="T">The type of line to draw</typeparam>
       public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : IComparable, new()
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
@@ -547,6 +551,7 @@ namespace Emgu.CV
       ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the triangle </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
+      ///<typeparam name="T">The type of convex polygon to draw</typeparam>
       public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : IComparable, new()
       {
          if (thickness > 0)
@@ -579,6 +584,7 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
+      /// <typeparam name="T">The type of point2D that make up the polyline</typeparam>
       public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T : IComparable, new()
       {
          DrawPolyline(
@@ -633,6 +639,7 @@ namespace Emgu.CV
       ///<param name="circle"> The circle to be drawn</param>
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+      ///<typeparam name="T">The type of circle to draw</typeparam>
       public virtual void Draw<T>(Circle<T> circle, TColor color, int thickness) where T : IComparable, new()
       {
          CvInvoke.cvCircle(
@@ -649,6 +656,7 @@ namespace Emgu.CV
       ///<param name="ellipse"> The ellipse to be draw</param>
       ///<param name="color"> The color of the ellipse </param>
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
+      ///<typeparam name="T">The type of ellipse to draw</typeparam>
       public void Draw<T>(Ellipse<T> ellipse, TColor color, int thickness) where T : IComparable, new()
       {
          CvInvoke.cvEllipse(
@@ -777,27 +785,15 @@ namespace Emgu.CV
                        flag,
                        minSize);
 
-                   int count = 0;
-                   if (objects != IntPtr.Zero)
-                   {
-                      MCvSeq seq = (MCvSeq)Marshal.PtrToStructure(objects, typeof(MCvSeq));
-                      count = seq.total;
-                   }
+                   if (objects == IntPtr.Zero)
+                      return new Rectangle<double>[0];
 
-                   Rectangle<double>[] recs = new Rectangle<double>[count];
-
-                   if (count != 0)
-                   {
-                      for (int i = 0; i < count; i++)
+                   Seq<MCvRect> rects = new Seq<MCvRect>(objects, stor);
+                   return Array.ConvertAll<MCvRect, Rectangle<double>>(rects.ToArray(),
+                      delegate(MCvRect mrect)
                       {
-                         recs[i] = new Rectangle<double>(
-                             (MCvRect)Marshal.PtrToStructure(
-                                 CvInvoke.cvGetSeqElem(objects, i),
-                                 typeof(MCvRect)));
-                      }
-                      CvInvoke.cvClearSeq((IntPtr)objects);
-                   }
-                   return recs;
+                         return new Rectangle<double>(mrect);
+                      });
                 };
 
             Rectangle<double>[][] res = ForEachDuplicateChannel(detector);
@@ -2451,6 +2447,37 @@ namespace Emgu.CV
                      ConvertFrom(tmp);
                }
             }
+            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+            {
+               if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+               {
+                  using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height))
+                  {
+                     indexValue.CopyFromBitmap(value);
+                     Matrix<Byte> bTable, gTable, rTable, aTable;
+                     Util.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
+
+                     using (Image<Gray, Byte> b = indexValue.CopyBlank())
+                     using (Image<Gray, Byte> g = indexValue.CopyBlank())
+                     using (Image<Gray, Byte> r = indexValue.CopyBlank())
+                     using (Image<Gray, Byte> a = indexValue.CopyBlank())
+                     {
+                        CvInvoke.cvLUT(indexValue.Ptr, b.Ptr, bTable.Ptr);
+                        CvInvoke.cvLUT(indexValue.Ptr, g.Ptr, gTable.Ptr);
+                        CvInvoke.cvLUT(indexValue.Ptr, r.Ptr, rTable.Ptr);
+                        CvInvoke.cvLUT(indexValue.Ptr, a.Ptr, aTable.Ptr);
+                        CvInvoke.cvMerge(b.Ptr, g.Ptr, r.Ptr, a.Ptr, Ptr);
+                     }
+                     bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
+                  }
+               }
+               else
+               {
+                  using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                     ConvertFrom(tmp);
+               }
+               
+            }
             else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format1bppIndexed)
             {
                if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
@@ -2465,33 +2492,27 @@ namespace Emgu.CV
                   int fullByteCount = cols >> 3;
                   int partialBitCount = cols & 7;
 
-                  int mask = 1 << 7; 
+                  int mask = 1 << 7;
 
                   Int64 srcAddress = data.Scan0.ToInt64();
                   Byte[, ,] imagedata = Data as Byte[, ,];
 
-                  using (PinnedArray<Byte> rowbuffer = new PinnedArray<byte>(fullByteCount + (partialBitCount == 0 ? 0 : 1)))
-                  {
-                     IntPtr destAddress = rowbuffer.AddrOfPinnedObject();
-                     Byte[] row = rowbuffer.Array;
+                  Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
 
-                     for (int i = 0; i < rows; i++, srcAddress += data.Stride)
+                  for (int i = 0; i < rows; i++, srcAddress += data.Stride)
+                  {
+                     Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
+
+                     int v = 0;
+                     for (int j = 0; j < cols; j++, v = v << 1)
                      {
-                        Emgu.Util.Toolbox.memcpy(destAddress, (IntPtr)srcAddress, data.Stride);
-                       
-                        int v = 0;
-                        for (int j = 0; j < cols; j++, v = v << 1)
-                        {
-                           if ((j & 7) == 0)
-                           {  //fetch the next byte 
-                              v = row[j >> 3];
-                           }  
-                           imagedata[i, j, 0] =  (v & mask) == 0 ? (Byte)0 : (Byte) 255;
+                        if ((j & 7) == 0)
+                        {  //fetch the next byte 
+                           v = row[j >> 3];
                         }
+                        imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
                      }
                   }
-                  value.UnlockBits(data);
-
                }
                else
                {

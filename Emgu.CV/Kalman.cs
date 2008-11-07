@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// A Kalman Filter 
    /// </summary>
-   public class Kalman 
+   public class Kalman : DisposableObject
    {
       private Matrix<float> _statePre;
       private Matrix<float> _statePost;
@@ -344,6 +345,28 @@ namespace Emgu.CV
          {
             return _gain;
          }
+      }
+
+      /// <summary>
+      /// Release all the matrix associated to this object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (_statePre != null) _statePre.Dispose();
+         if (_statePost != null) _statePost.Dispose();
+         if (_transitionMatrix != null) _transitionMatrix.Dispose();
+         if (_processNoiseCov != null) _processNoiseCov.Dispose();
+         if (_measurementMatrix != null) _measurementMatrix.Dispose();
+         if (_measurementNoiseCov != null) _measurementNoiseCov.Dispose();
+         if (_errorCovPre != null) _errorCovPre.Dispose();
+         if (_errorCovPost != null) _errorCovPost.Dispose();
+         if (_gain != null) _gain.Dispose();
+         if (_controlMatrix != null) _controlMatrix.Dispose();
+         if (_temp1 != null) _temp1.Dispose();
+         if (_temp2 != null) _temp2.Dispose();
+         if (_temp3 != null) _temp3.Dispose();
+         if (_temp4 != null) _temp4.Dispose();
+         if (_temp5 != null) _temp5.Dispose();
       }
    }
 }

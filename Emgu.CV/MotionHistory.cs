@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -10,7 +11,7 @@ namespace Emgu.CV
    /// <remarks>
    /// For help on using this class, take a look at the Motion Detection example
    /// </remarks>
-   public class MotionHistory
+   public class MotionHistory : DisposableObject
    {
       private int _bufferMax;
       private int _diffThresh;
@@ -32,16 +33,30 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
       /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
-      /// <param name="mhiDuration">In second, the duration of motion history your wants to keep</param>
-      /// <param name="maxTimeDelta">In second, parameter for cvCalcMotionGradient</param>
-      /// <param name="minTimeDelta">In second, parameter for cvCalcMotionGradient</param>
+      /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
+      /// <param name="maxTimeDelta">In second. Any change happens between a time interval greater than this will not be considerred</param>
+      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
       public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta)
+         : this (bufferCount, diffThresh, mhiDuration, maxTimeDelta, minTimeDelta, DateTime.Now)
+      {
+      }
+
+      /// <summary>
+      /// Create a motion history object
+      /// </summary>
+      /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
+      /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
+      /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
+      /// <param name="maxTimeDelta">In second. Any change happens between a time interval larger than this will not be considerred</param>
+      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
+      /// <param name="startTime">The start time of the motion history</param>
+      public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta, DateTime startTime)
       {
          _bufferMax = bufferCount;
          _buffer = new Queue<Image<Gray, Byte>>(_bufferMax);
          _diffThresh = diffThresh;
          _mhiDuration = mhiDuration;
-         _initTime = DateTime.Now;
+         _initTime = startTime;
          _maxTimeDelta = maxTimeDelta;
          _minTimeDelta = minTimeDelta;
       }
@@ -59,7 +74,7 @@ namespace Emgu.CV
       /// Update the motion history with the specific image and the specific timestamp
       /// </summary>
       /// <param name="image">The image to be added to history</param>
-      /// <param name="timestamp">The timestamp the image is captured</param>
+      /// <param name="timestamp">The time when the image is captured</param>
       public void Update(Image<Gray, Byte> image, DateTime timestamp)
       {
          _lastTime = timestamp;
@@ -140,6 +155,18 @@ namespace Emgu.CV
          CvInvoke.cvResetImageROI(_orientation);
          CvInvoke.cvResetImageROI(_mask);
          CvInvoke.cvResetImageROI(_silh);
+      }
+
+      /// <summary>
+      /// Release any images associated with this object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (_silh != null) _silh.Dispose();
+         if (_mhi != null) _mhi.Dispose();
+         if (_mask != null) _mask.Dispose();
+         if (_orientation != null) _orientation.Dispose();
+         if (_segMask != null) _segMask.Dispose();
       }
    }
 }

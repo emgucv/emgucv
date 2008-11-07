@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Emgu.CV
 {
@@ -26,6 +27,34 @@ namespace Emgu.CV
                palette.Entries[i] = System.Drawing.Color.FromArgb(i, i, i);
             }
             return palette;
+         }
+      }
+
+      /// <summary>
+      /// Convert the color pallette to four lookup tables
+      /// </summary>
+      /// <param name="pallette">The color pallette to transform</param>
+      /// <param name="bTable">Lookup table for the B channel</param>
+      /// <param name="gTable">Lookup table for the G channel</param>
+      /// <param name="rTable">Lookup table for the R channel</param>
+      /// <param name="aTable">Lookup table for the A channel</param>
+      public static void ColorPaletteToLookupTable(ColorPalette pallette, out Matrix<Byte> bTable, out Matrix<byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
+      {
+         bTable = new Matrix<byte>(256, 1);
+         gTable = new Matrix<byte>(256, 1);
+         rTable = new Matrix<byte>(256, 1);
+         aTable = new Matrix<byte>(256, 1);
+         byte[,] bData = bTable.Data;
+         byte[,] gData = gTable.Data;
+         byte[,] rData = rTable.Data;
+         byte[,] aData = aTable.Data;
+         Color[] colors = pallette.Entries;
+         for (int i = 0; i < 256; i++)
+         {
+            bData[i,0] = colors[i].B;
+            gData[i,0] = colors[i].G;
+            rData[i,0] = colors[i].R;
+            aData[i,0] = colors[i].A;
          }
       }
 
