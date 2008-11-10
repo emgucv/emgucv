@@ -14,76 +14,76 @@ namespace Emgu.CV
       /// <summary>
       /// Threshold for piece-wise linear data cost function (5 by default)
       /// </summary>
-      int Ithreshold; 
+      public int Ithreshold; 
       /// <summary>
       /// Radius for smoothness cost function (1 by default; means Potts model)
       /// </summary>
-      int interactionRadius; 
+      public int interactionRadius; 
       /// <summary>
       /// Parameters for the cost function
       /// </summary>
-      float K;
+      public float K;
       /// <summary>
       /// Parameters for the cost function
       /// </summary>
-      float lambda;
+      public float lambda;
       /// <summary>
       /// Parameters for the cost function
       /// </summary>
-      float lambda1;
+      public float lambda1;
       /// <summary>
       /// Parameters for the cost function
       /// </summary>
-      float lambda2; 
+      public float lambda2; 
       
       /// <summary>
       /// 10000 by default, (usually computed adaptively from the input data)
       /// </summary>
-      int occlusionCost; 
+      public int occlusionCost; 
       /// <summary>
       /// 0 by default; see CvStereoBMState
       /// </summary>
-      int minDisparity; 
+      public int minDisparity; 
       /// <summary>
       /// Defined by user; see CvStereoBMState
       /// </summary>
-      int numberOfDisparities; 
+      public int numberOfDisparities; 
       /// <summary>
       /// Number of iterations; defined by user.
       /// </summary>
-      int maxIters; 
+      public int maxIters; 
 
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr left;
+      public IntPtr left;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr right;
+      public IntPtr right;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr dispLeft;
+      public IntPtr dispLeft;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr dispRight;
+      public IntPtr dispRight;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr ptrLeft;
+      public IntPtr ptrLeft;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr ptrRight;
+      public IntPtr ptrRight;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr vtxBuf;
+      public IntPtr vtxBuf;
       /// <summary>
       /// Internal buffers
       /// </summary>
-      IntPtr edgeBuf;
+      public IntPtr edgeBuf;
    }
 }

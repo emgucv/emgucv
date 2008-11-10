@@ -2003,9 +2003,27 @@ namespace Emgu.CV
       #region Sampling, Interpolation and Geometrical Transforms
       ///<summary> Sample the pixel values on the specific line segment </summary>
       ///<param name="line"> The line to obtain samples</param>
+      ///<returns>The values on the (Eight-connected) line </returns>
       public TDepth[,] Sample(LineSegment2D<int> line)
       {
-         int size = Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y));
+         return Sample(line, Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED);
+      }
+
+      /// <summary>
+      /// Sample the pixel values on the specific line segment
+      /// </summary>
+      /// <param name="line">The line to obtain samples</param>
+      /// <param name="type">The sampling type</param>
+      /// <returns>The values on the line</returns>
+      public TDepth[,] Sample(LineSegment2D<int> line, CvEnum.LINE_SAMPLE_TYPE type)
+      {
+         int size;
+
+         if (type == Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED)
+            size = Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y));
+         else
+            size = Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
+
          TDepth[,] data = new TDepth[size, new TColor().Dimension];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          CvInvoke.cvSampleLine(
@@ -2013,10 +2031,11 @@ namespace Emgu.CV
              line.P1,
              line.P2,
              handle.AddrOfPinnedObject(),
-             8);
+             type);
          handle.Free();
          return data;
       }
+
 
       /// <summary>
       /// Scale the image to the specific size 
@@ -2366,26 +2385,12 @@ namespace Emgu.CV
       {
          get
          {
-            bool grayByte = (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte));
-            bool bgrByte = (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte));
-            bool bgraByte = (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte));
-
-#if LINUX
-                // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
-                // See https://bugzilla.novell.com/show_bug.cgi?id=363431
-                // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
-                if (bgrByte)
-                    return ToBitmap();
-#else
-#endif
-            if (!grayByte && !bgrByte && !bgraByte) return ToBitmap();
-
             IntPtr scan0;
             int step;
             MCvSize size;
             CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
-            if (grayByte)
+            if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
             {   //Grayscale of Bytes
                Bitmap bmp = new Bitmap(
                    size.width,
@@ -2397,7 +2402,12 @@ namespace Emgu.CV
                bmp.Palette = Util.GrayscalePalette;
                return bmp;
             }
-            else if (bgrByte)
+#if LINUX
+            // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
+            // See https://bugzilla.novell.com/show_bug.cgi?id=363431
+            // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
+#else
+            else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
             {   //Bgr byte    
                return new Bitmap(
                    size.width,
@@ -2406,7 +2416,8 @@ namespace Emgu.CV
                    System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                    scan0);
             }
-            else
+#endif
+            else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
             {   //Bgra byte
                return new Bitmap(
                    size.width,
@@ -2414,6 +2425,21 @@ namespace Emgu.CV
                    step,
                    System.Drawing.Imaging.PixelFormat.Format32bppArgb,
                    scan0);
+            }
+            /*
+            //PixelFormat.Format16bppGrayScale is not supported in .NET
+            else if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(UInt16))
+            {
+               return new Bitmap(
+                  size.width,
+                  size.height,
+                  step,
+                  System.Drawing.Imaging.PixelFormat.Format16bppGrayScale;
+                  scan0);
+            }*/
+            else
+            {  //default handler
+               return ToBitmap();
             }
          }
          set
@@ -2427,6 +2453,26 @@ namespace Emgu.CV
             }
             #endregion
 
+            /*
+            if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb
+               || value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+            {
+               if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+               {
+                  using (Bitmap bmp = Bitmap)
+                  using (Graphics g = Graphics.FromImage(bmp))
+                  {
+                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                     g.DrawImage(value, 0.0f, 0.0f, (float) value.Width, (float) value.Height);
+                  }
+               }
+               else
+               {
+                  using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                     ConvertFrom(tmp);
+               }
+            }*/
+            
             if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
             {
                if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
@@ -2434,16 +2480,6 @@ namespace Emgu.CV
                else
                {
                   using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }
-            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
-            {
-               if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
-                  CopyFromBitmap(value);
-               else
-               {
-                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
                      ConvertFrom(tmp);
                }
             }
@@ -2476,7 +2512,16 @@ namespace Emgu.CV
                   using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
                      ConvertFrom(tmp);
                }
-               
+            }
+            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+            {
+               if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                  CopyFromBitmap(value);
+               else
+               {
+                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                     ConvertFrom(tmp);
+               }
             }
             else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format1bppIndexed)
             {
@@ -2516,13 +2561,20 @@ namespace Emgu.CV
                }
                else
                {
-                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(value))
+                  using (Image<Gray, Byte> tmp = new Image<Gray, Byte>(value))
                      ConvertFrom(tmp);
                }
             }
             else
             {
                #region Handle other image type
+               /*
+               Bitmap bgraImage = new Bitmap(value.Width, value.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+               using (Graphics g = Graphics.FromImage(bgraImage))
+               {
+                  g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
+               }
+               Bitmap = bgraImage;*/
                using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
                {
                   Byte[, ,] data = tmp1.Data;
@@ -2610,11 +2662,6 @@ namespace Emgu.CV
          {
             if (typeof(TDepth) == typeof(byte))
             {
-               Image<Bgra, Byte> img = this as Image<Bgra, Byte>;
-               Image<Gray, Byte>[] channels = img.Split();
-               channels = new Image<Gray, byte>[] { channels[3], channels[0], channels[1], channels[2] };
-               Image<Bgra, Byte> img2 = new Image<Bgra, byte>(channels);
-
                Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
                     new System.Drawing.Rectangle(0, 0, Width, Height),

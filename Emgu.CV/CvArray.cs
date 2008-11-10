@@ -208,7 +208,7 @@ namespace Emgu.CV
       /// Copy the current array to <paramref name="dest"/>
       /// </summary>
       /// <param name="dest"> The destination Array</param>
-      public void Copy(CvArray<TDepth> dest)
+      public void CopyTo(CvArray<TDepth> dest)
       {
          CvInvoke.cvCopy(Ptr, dest.Ptr, IntPtr.Zero);
       }

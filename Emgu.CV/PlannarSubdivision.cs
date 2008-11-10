@@ -89,7 +89,7 @@ namespace Emgu.CV
       /// <param name="point">The point to be inserted</param>
       public void Insert(ref MCvPoint2D32f point)
       {
-         IntPtr ptr = CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
+         CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
          _isVoronoiDirty = true;
       }
 

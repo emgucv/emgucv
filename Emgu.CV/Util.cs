@@ -48,8 +48,9 @@ namespace Emgu.CV
          byte[,] gData = gTable.Data;
          byte[,] rData = rTable.Data;
          byte[,] aData = aTable.Data;
+
          Color[] colors = pallette.Entries;
-         for (int i = 0; i < 256; i++)
+         for (int i = 0; i < colors.Length; i++)
          {
             bData[i,0] = colors[i].B;
             gData[i,0] = colors[i].G;

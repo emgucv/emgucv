@@ -50,7 +50,7 @@ namespace Emgu.CV
       public Map(Image<TColor, TDepth> image, Rectangle<double> area)
          : base(image.Width, image.Height)
       {
-         image.Copy(this);
+         image.CopyTo(this);
          _area = area;
       }
 

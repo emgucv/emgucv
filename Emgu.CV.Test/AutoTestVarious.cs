@@ -69,7 +69,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSerialization()
       {
-         Rectangle<int> rec = new Rectangle<int>(-10, 10, 10, -2);
+         Rectangle<int> rec = new Rectangle<int>(new MCvRect(-10, -2, 20, 12));
          XmlDocument xdoc = Toolbox.XmlSerialize<Rectangle<int>>(rec);
          //Trace.WriteLine(xdoc.OuterXml);
          rec = Toolbox.XmlDeserialize<Rectangle<int>>(xdoc);
@@ -119,7 +119,7 @@ namespace Emgu.CV.Test
          Application.SetCompatibleTextRenderingDefault(false);
          using (Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray()))
          {
-            Rectangle<double> rect = new Rectangle<double>(10, 80, 50, 10);
+            Rectangle<double> rect = new Rectangle<double>(new MCvRect(10, 10, 80 - 10, 50 - 10));
             img.Draw(rect, new Gray(255.0), -1);
 
             Point2D<float> pIn = new Point2D<float>(60, 40);

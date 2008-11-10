@@ -45,6 +45,7 @@ namespace Emgu.CV
       /// <summary> 
       /// Create a rectangle with the specific left, right, top bottom corrdinates
       /// </summary>
+      [Obsolete("Use other constructor instead, will be removed in the next version")]
       public Rectangle(T left, T right, T top, T bottom)
       {
          _center = new Point2D<T>(

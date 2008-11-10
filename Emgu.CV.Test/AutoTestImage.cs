@@ -102,11 +102,11 @@ namespace Emgu.CV.Test
       public void TestGenericOperation()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
-         img1.ROI = new Rectangle<double>(10, 50, 19, 1);
+         img1.ROI = new Rectangle<double>(new MCvRect(10, 1, 50 - 10, 19 - 1));
          img1.SetValue(5.0);
 
          Image<Gray, Single> img2 = new Image<Gray, float>(50, 20);
-         img2.ROI = new Rectangle<double>(0, 40, 20, 2);
+         img2.ROI = new Rectangle<double>(new MCvRect(0, 2, 40, 20 - 2));
          img2.SetValue(new Gray(2.0));
 
          Assert.AreEqual(img1.Width, img2.Width);
@@ -278,9 +278,12 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+
          Byte[,] buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(0, 100)));
          for (int i = 0; i < 100; i++)
             Assert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
+
+         buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(100, 100)), Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.FOUR_CONNECTED);
       }
 
 
@@ -355,6 +358,7 @@ namespace Emgu.CV.Test
 
          Image<Hsv, Single> img7 = new Image<Hsv, float>("stuff.jpg");
          Image<Hsv, Byte> img8 = new Image<Hsv, byte>("stuff.jpg");
+
       }
 
       [Test]
@@ -403,7 +407,9 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
          image3.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
          bmp = image3.ToBitmap();
+         DateTime t1 = DateTime.Now;
          Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
+         Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds);
          Assert.IsTrue(image3.Equals(image4));
          #endregion
 
@@ -473,7 +479,6 @@ namespace Emgu.CV.Test
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          image.ThresholdToZero(new Gray(120));
          MCvMoments moment = image.GetMoments(true);
-
       }
 
       [Test]
@@ -494,9 +499,9 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
          Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
-         res.ROI = new Rectangle<double>(0, objectImage.Width, objectImage.Height, 0);
+         res.ROI = new Rectangle<double>( new MCvRect( 0, 0, objectImage.Width, objectImage.Height));
          objectImage.Copy(res, null);
-         res.ROI = new Rectangle<double>(0, image.Width, objectImage.Height + image.Height, objectImage.Height);
+         res.ROI = new Rectangle<double>( new MCvRect( 0, objectImage.Height, image.Width, image.Height ));
          image.Copy(res, null);
          res.ROI = null;
 
@@ -604,8 +609,45 @@ namespace Emgu.CV.Test
       [Test]
       public void TestDFT()
       {
-         int i = CvInvoke.cvGetOptimalDFTSize(201);
-         i = i + 1 - 1;
+         Image<Gray, float> matA = new Image<Gray, float>("stuff.jpg");
+         
+         Matrix<float> matB = new Matrix<float>(
+            new float[,] { 
+            {0, 1, 0}, 
+            {1, -4, 1}, 
+            {0, 1, 0}}); //a simpel laplace filter
+
+         Image<Gray, float> convResult1 = new Image<Gray, float>(matA.Cols + matB.Cols - 1, matA.Rows + matB.Rows - 1);
+         int dft_rows = CvInvoke.cvGetOptimalDFTSize(convResult1.Rows);
+         int dft_cols = CvInvoke.cvGetOptimalDFTSize(convResult1.Cols);
+
+         Matrix<float> dftA = new Matrix<float>(dft_rows, dft_cols);
+
+         matA.CopyTo(dftA.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, matA.Width, matA.Height))));
+
+         CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
+
+         Matrix<float> dftB = new Matrix<float>(dft_rows, dft_cols);
+         matB.CopyTo(dftB.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, matB.Width, matB.Height))));
+         CvInvoke.cvDFT(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
+
+         CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
+         CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convResult1.Rows);
+         dftA.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, convResult1.Width, convResult1.Height))).CopyTo(convResult1);
+
+         //ImageViewer.Show(convResult1);
       }
+
+      /*
+      [Test]
+      public void T()
+      {
+         DateTime t1 = DateTime.Now;
+         for (int i = 0; i < 100; i++)
+         {
+            Image<Gray, Byte> img = new Image<Gray, byte>("01E01002.TIF");
+         }
+         Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds / 100);
+      }*/
    }
 }

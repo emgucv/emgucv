@@ -960,6 +960,21 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// The type for cvSampleLine
+   /// </summary>
+   public enum LINE_SAMPLE_TYPE
+   {
+      /// <summary>
+      /// 8-connected
+      /// </summary>
+      EIGHT_CONNECTED = 8,
+      /// <summary>
+      /// 4-connected
+      /// </summary>
+      FOUR_CONNECTED = 4
+   }
+
+   /// <summary>
    /// The type of line for drawing
    /// </summary>
    public enum LINE_TYPE

@@ -185,7 +185,7 @@ namespace Emgu.CV.Test
       {
          Matrix<float> mat = new Matrix<float>(30, 40);
          mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
-         Matrix<float> submat = mat.GetSubMatrix(new Rectangle<double>(5, 20, 20, 5));
+         Matrix<float> submat = mat.GetSubMatrix(new Rectangle<double>(new MCvRect(5, 5, 15, 15)));
          for (int i = 0; i < 15; i++)
             for (int j = 0; j < 15; j++)
                Assert.AreEqual(mat[i + 5, j + 5], submat[i, j]);
@@ -225,13 +225,13 @@ namespace Emgu.CV.Test
          Matrix<float> mat = new Matrix<float>(30, 40);
          mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
 
-         Matrix<float> m1 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, 20, 0));
-         Matrix<float> m2 = mat.GetSubMatrix(new Rectangle<double>(0, mat.Cols, mat.Rows, 20));
+         Matrix<float> m1 = mat.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, mat.Cols, 20)));
+         Matrix<float> m2 = mat.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 20, mat.Cols, mat.Rows - 20)));
          Matrix<float> mat2 = m1.ConcateVertical(m2);
          Assert.IsTrue(mat.Equals(mat2));
 
-         Matrix<float> m3 = mat.GetSubMatrix(new Rectangle<double>(0, 10, mat.Rows, 0));
-         Matrix<float> m4 = mat.GetSubMatrix(new Rectangle<double>(10, mat.Cols, mat.Rows, 0));
+         Matrix<float> m3 = mat.GetSubMatrix(new Rectangle<double>(new MCvRect( 0, 0, 10, mat.Rows)));
+         Matrix<float> m4 = mat.GetSubMatrix(new Rectangle<double>(new MCvRect( 10, 0, mat.Cols - 10, mat.Rows)));
          Matrix<float> mat3 = m3.ConcateHorizontal(m4);
          Assert.IsTrue(mat.Equals(mat3));
 

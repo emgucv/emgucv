@@ -243,7 +243,7 @@ namespace Emgu.CV
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
          subMat.AllocateHeader();
-         subMat._ptr = CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect.MCvRect);
+         CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect.MCvRect);
          return subMat;
       }
 
@@ -379,9 +379,9 @@ namespace Emgu.CV
          Debug.Assert(Cols == otherMatrix.Cols, "The number of columns must be the same when concatening matrices verticly.");
          Matrix<TDepth> res = new Matrix<TDepth>(Rows + otherMatrix.Rows, Cols);
          using (Matrix<TDepth> subUppper = res.GetRows(0, Rows, 1))
-            Copy(subUppper);
+            CopyTo(subUppper);
          using (Matrix<TDepth> subLower = res.GetRows(Rows, res.Rows, 1))
-            otherMatrix.Copy(subLower);
+            otherMatrix.CopyTo(subLower);
          return res;
       }
 
@@ -395,9 +395,9 @@ namespace Emgu.CV
          Debug.Assert(Rows == otherMatrix.Rows, "The number of rows must be the same when concatening matrices horizontally.");
          Matrix<TDepth> res = new Matrix<TDepth>(Rows, Cols + otherMatrix.Cols);
          using (Matrix<TDepth> subLeft = res.GetCols(0, Cols))
-            Copy(subLeft);
+            CopyTo(subLeft);
          using (Matrix<TDepth> subRight = res.GetCols(Cols, res.Cols))
-            otherMatrix.Copy(subRight);
+            otherMatrix.CopyTo(subRight);
          return res;
       }
       #endregion

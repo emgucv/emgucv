@@ -2703,7 +2703,7 @@ namespace Emgu.CV
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern int cvSampleLine(IntPtr image, MCvPoint pt1, MCvPoint pt2, IntPtr buffer, int connectivity);
+      public static extern int cvSampleLine(IntPtr image, MCvPoint pt1, MCvPoint pt2, IntPtr buffer, CvEnum.LINE_SAMPLE_TYPE connectivity);
 
       /// <summary>
       /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
@@ -3006,12 +3006,51 @@ namespace Emgu.CV
       /// <param name="rotation_vector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
       /// <param name="translation_vector">The output 3x1 or 1x3 translation vector</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvFindExtrinsicCameraParams2(IntPtr object_points,
-                                 IntPtr image_points,
-                                 IntPtr intrinsic_matrix,
-                                 IntPtr distortion_coeffs,
-                                 IntPtr rotation_vector,
-                                 IntPtr translation_vector);
+      public static extern void cvFindExtrinsicCameraParams2(
+         IntPtr object_points,
+         IntPtr image_points,
+         IntPtr intrinsic_matrix,
+         IntPtr distortion_coeffs,
+         IntPtr rotation_vector,
+         IntPtr translation_vector);
+
+      /// <summary>
+      /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
+      /// R2=R*R1,
+      /// T2=R*T1 + T,
+      /// </summary>
+      /// <param name="object_points">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
+      /// <param name="image_points1">The joint matrix of corresponding image points in the views from the 1st camera, 2xN or Nx2, where N is the total number of points in all views</param>
+      /// <param name="image_points2">The joint matrix of corresponding image points in the views from the 2nd camera, 2xN or Nx2, where N is the total number of points in all views</param>
+      /// <param name="point_counts">Vector containing numbers of points in each view, 1xM or Mx1, where M is the number of views</param>
+      /// <param name="camera_matrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="dist_coeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="camera_matrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="dist_coeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="image_size">Size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="R">The rotation matrix between the 1st and the 2nd cameras' coordinate systems </param>
+      /// <param name="T">The translation vector between the cameras' coordinate systems</param>
+      /// <param name="E">The optional output essential matrix</param>
+      /// <param name="F">The optional output fundamental matrix </param>
+      /// <param name="term_crit">Termination criteria for the iterative optimiziation algorithm</param>
+      /// <param name="flags"></param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvStereoCalibrate(
+         IntPtr object_points,
+         IntPtr image_points1,
+         IntPtr image_points2,
+         IntPtr point_counts,
+         IntPtr camera_matrix1,
+         IntPtr dist_coeffs1,
+         IntPtr camera_matrix2,
+         IntPtr dist_coeffs2,
+         MCvSize image_size,
+         IntPtr R,
+         IntPtr T,
+         IntPtr E,
+         IntPtr F,
+         MCvTermCriteria term_crit,
+         int flags);
 
       /// <summary>
       /// Transforms the image to compensate radial and tangential lens distortion. The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same.
