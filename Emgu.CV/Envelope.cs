@@ -9,6 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// An envelope that contains the maximum and minimum value
    /// </summary>
+   /// <typeparam name="T">The type of elements in this envelope</typeparam>
    public class Envelope<T> where T : IComparable, new()
    {
       private T _max;

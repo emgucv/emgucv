@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
+using Emgu.CV.Reflection;
 
 namespace Emgu.CV.UI
 {
@@ -51,7 +52,9 @@ namespace Emgu.CV.UI
 
          for (int i = 0; i < paramInfo.Length; i++)
          {
-            ParamInputPanel panel = CreatePanelForParameter(paramInfo[i], paramList == null? null : paramList[i]);
+            ParamInputPanel panel = CreatePanelForParameter(
+               paramInfo[i],
+               (paramList == null || i >= paramList.Length) ? null : paramList[i]);
             parameterInputPanel.Controls.Add(panel);
             panel.Location = new Point(0, i * panel.Height);
             _paramPanel[i] = panel;
@@ -180,8 +183,6 @@ namespace Emgu.CV.UI
       /// <returns>the panel</returns>
       private static ParamInputPanel CreatePanelForParameter(ParameterInfo param, object defaultValue)
       {
-         Type paramType = param.ParameterType;
-
          ParamInputPanel panel = new ParamInputPanel();
          panel.Height = 50;
          panel.Width = 400;
@@ -189,110 +190,133 @@ namespace Emgu.CV.UI
 
          #region add the label for the parameter
          Label paramNameLabel = new Label();
-         paramNameLabel.Text = ParseParameterName(param) + ":";
          paramNameLabel.AutoSize = true;
          panel.Controls.Add(paramNameLabel);
          paramNameLabel.Location = new System.Drawing.Point(10, textBoxStartY);
          #endregion
 
-         if (paramType.IsEnum)
-         {
+         if (param == null)
+         {  // a generic parameter
+            String defaultString = (String)defaultValue;
+            String[] splitTypeName = defaultString.Split('|');
+            paramNameLabel.Text = splitTypeName[0] + ":";
+            String[] splitDefaultValue = splitTypeName[1].Split(':');
+
+            String[] options = splitDefaultValue[1].Split(',');
             ComboBox combo = new ComboBox();
             panel.Controls.Add(combo);
             combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
-            combo.Items.AddRange(Enum.GetNames(paramType));
-            combo.SelectedIndex = 0;
-
+            combo.Items.AddRange(options);
+            combo.SelectedIndex = Array.FindIndex<String>(options, splitDefaultValue[0].Equals);
             panel.GetParamFunction =
                 delegate()
                 {
-                   return Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
+                   return splitTypeName[0] + "|" + combo.Text + ":" + splitDefaultValue[1];
                 };
          }
-         else if (paramType == typeof(bool))
-         {
-            ComboBox combo = new ComboBox();
-            panel.Controls.Add(combo);
-            combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
-            combo.Items.AddRange(new String[] { "True", "False" });
-            combo.SelectedIndex = 0;
-            panel.GetParamFunction =
-                delegate()
-                {
-                   return combo.SelectedItem.ToString().Equals("True");
-                };
-         }
-         else if (paramType == typeof(UInt64) || paramType == typeof(int) || paramType == typeof(double))
-         {
-            //Create inpout box for the int paramater
-            TextBox inputTextBox = new TextBox();
-            panel.Controls.Add(inputTextBox);
-            inputTextBox.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
-            inputTextBox.Text = defaultValue == null? "0" : defaultValue.ToString();
-
-            panel.GetParamFunction =
-                delegate()
-                {
-                   return System.Convert.ChangeType(inputTextBox.Text, paramType);
-                };
-         }
-         else if (paramType == typeof(MCvScalar))
-         {
-            TextBox[] inputBoxes = new TextBox[4];
-            int boxWidth = 40;
-
-            //Create input boxes for the scalar value
-            for (int i = 0; i < inputBoxes.Length; i++)
-            {
-               inputBoxes[i] = new TextBox();
-               panel.Controls.Add(inputBoxes[i]);
-               inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
-               inputBoxes[i].Width = boxWidth;
-               inputBoxes[i].Text = "0.0";
-            }
-            panel.GetParamFunction =
-                delegate()
-                {
-                   double[] values = new double[4];
-                   for (int i = 0; i < inputBoxes.Length; i++)
-                   {
-                      values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
-                   }
-                   return new MCvScalar(values[0], values[1], values[2], values[3]);
-                };
-         }
-         /*
-         else if (paramType.IsSubclassOf(typeof(ColorType)))
-         {
-            TextBox[] inputBoxes = new TextBox[4];
-            int boxWidth = 40;
-
-            //Create input boxes for the scalar value
-            for (int i = 0; i < inputBoxes.Length; i++)
-            {
-               inputBoxes[i] = new TextBox();
-               panel.Controls.Add(inputBoxes[i]);
-               inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
-               inputBoxes[i].Width = boxWidth;
-               inputBoxes[i].Text = "0.0";
-            }
-            panel.GetParamFunction =
-                delegate()
-                {
-                   double[] values = new double[4];
-                   for (int i = 0; i < inputBoxes.Length; i++)
-                   {
-                      values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
-                   }
-                   
-                   ColorType color = Activator.CreateInstance(paramType) as ColorType;
-                   color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
-                   return color;
-                };
-         }*/
          else
          {
-            throw new NotSupportedException(String.Format("Parameter type '{0}' is not supported", paramType.Name));
+            Type paramType = param.ParameterType;
+            paramNameLabel.Text = ParseParameterName(param) + ":";
+
+            if (paramType.IsEnum)
+            {
+               ComboBox combo = new ComboBox();
+               panel.Controls.Add(combo);
+               combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               combo.Items.AddRange(Enum.GetNames(paramType));
+               combo.SelectedIndex = 0;
+
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      return Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
+                   };
+            }
+            else if (paramType == typeof(bool))
+            {
+               ComboBox combo = new ComboBox();
+               panel.Controls.Add(combo);
+               combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               combo.Items.AddRange(new String[] { "True", "False" });
+               combo.SelectedIndex = 0;
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      return combo.SelectedItem.ToString().Equals("True");
+                   };
+            }
+            else if (paramType == typeof(UInt64) || paramType == typeof(int) || paramType == typeof(double))
+            {
+               //Create inpout box for the int paramater
+               TextBox inputTextBox = new TextBox();
+               panel.Controls.Add(inputTextBox);
+               inputTextBox.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               inputTextBox.Text = defaultValue == null ? "0" : defaultValue.ToString();
+
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      return System.Convert.ChangeType(inputTextBox.Text, paramType);
+                   };
+            }
+            else if (paramType == typeof(MCvScalar))
+            {
+               TextBox[] inputBoxes = new TextBox[4];
+               int boxWidth = 40;
+
+               //Create input boxes for the scalar value
+               for (int i = 0; i < inputBoxes.Length; i++)
+               {
+                  inputBoxes[i] = new TextBox();
+                  panel.Controls.Add(inputBoxes[i]);
+                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+                  inputBoxes[i].Width = boxWidth;
+                  inputBoxes[i].Text = "0.0";
+               }
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      double[] values = new double[4];
+                      for (int i = 0; i < inputBoxes.Length; i++)
+                      {
+                         values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                      }
+                      return new MCvScalar(values[0], values[1], values[2], values[3]);
+                   };
+            }
+            else if (paramType.IsSubclassOf(typeof(ColorType)))
+            {
+               TextBox[] inputBoxes = new TextBox[4];
+               int boxWidth = 40;
+
+               //Create input boxes for the scalar value
+               for (int i = 0; i < inputBoxes.Length; i++)
+               {
+                  inputBoxes[i] = new TextBox();
+                  panel.Controls.Add(inputBoxes[i]);
+                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+                  inputBoxes[i].Width = boxWidth;
+                  inputBoxes[i].Text = "0.0";
+               }
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      double[] values = new double[4];
+                      for (int i = 0; i < inputBoxes.Length; i++)
+                      {
+                         values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                      }
+
+                      ColorType color = Activator.CreateInstance(paramType) as ColorType;
+                      color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
+                      return color;
+                   };
+            }
+            else
+            {
+               throw new NotSupportedException(String.Format("Parameter type '{0}' is not supported", paramType.Name));
+            }
          }
          return panel;
       }
@@ -301,20 +325,56 @@ namespace Emgu.CV.UI
       /// Obtain the parameters for <paramref name="method"/> and put them in <paramref name="paramList"/>
       /// </summary>
       /// <param name="method">The method to Obtain parameters from</param>
-      /// <param name="defaultParam">The list that will be used as the storage for the retrieved parameters, if it contains elements, those elements will be used as default value</param>
+      /// <param name="defaultParameterValues">The list that will be used as the storage for the retrieved parameters, if it contains elements, those elements will be used as default value</param>
       /// <returns>True if successed, false otherwise</returns>
-      public static Object[] GetParams(MethodInfo method, Object[] defaultParam)
+      public static Object[] GetParams(MethodInfo method, Object[] defaultParameterValues)
       {
-         ParameterInfo[] parameters = method.GetParameters();
+         List<ParameterInfo> parameterList = new List<ParameterInfo>();
+         List<Object> defaultParameterValueList = new List<object>();
+
+         #region find all the generic types and options and add that to the lists.
+         if (method.ContainsGenericParameters)
+         {
+            Type[] genericTypes = method.GetGenericArguments();
+            ExposableMethodAttribute methodAtt = method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute;
+            String[] genericOptions = methodAtt.GenericParametersOptions.Split(';');
+
+            Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
+            for (int i = 0; i < genericOptions.Length; i++)
+            {
+               String option = genericOptions[i];
+               if (option.Substring(0, 1).Equals(":"))
+                  option = instanceGenericParameters[i].FullName + option;
+               genericOptions[i] = option;
+            }
+
+            for (int i = 0; i < genericTypes.Length; i++)
+            {
+               parameterList.Add(null);
+               Object defaultParameterValue = defaultParameterValues == null
+                  ? genericTypes[i].Name + "|" + genericOptions[i] :
+                  defaultParameterValues[i];
+
+               defaultParameterValueList.Add(defaultParameterValue);
+            }
+         }
+         #endregion
+
+         parameterList.AddRange(method.GetParameters());
+
+         if (defaultParameterValues != null)
+         {
+            defaultParameterValueList.AddRange(defaultParameterValues);
+         }
 
          //if the method requires no parameter, simply return true
-         if (parameters.Length == 0)
+         if (parameterList.Count == 0)
          {
             return new object[0];
          }
 
          #region Handle the cases where at least one parameter is required as input
-         ParamInputDlg dlg = new ParamInputDlg(parameters, defaultParam);
+         ParamInputDlg dlg = new ParamInputDlg(parameterList.ToArray(), defaultParameterValueList.ToArray());
          dlg.ShowDialog();
          if (dlg.Successed)
          {

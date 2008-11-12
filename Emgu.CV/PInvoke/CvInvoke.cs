@@ -2947,7 +2947,7 @@ namespace Emgu.CV
           IntPtr distortion_coeffs,
           IntPtr rotation_vectors,
           IntPtr translation_vectors,
-          int flags);
+          CvEnum.CALIB_TYPE flags);
 
       /// <summary>
       /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
@@ -3017,7 +3017,7 @@ namespace Emgu.CV
       /// <summary>
       /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
       /// R2=R*R1,
-      /// T2=R*T1 + T,
+      /// T2=R*T1 + T
       /// </summary>
       /// <param name="object_points">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
       /// <param name="image_points1">The joint matrix of corresponding image points in the views from the 1st camera, 2xN or Nx2, where N is the total number of points in all views</param>
@@ -3050,7 +3050,7 @@ namespace Emgu.CV
          IntPtr E,
          IntPtr F,
          MCvTermCriteria term_crit,
-         int flags);
+         CvEnum.CALIB_TYPE flags);
 
       /// <summary>
       /// Transforms the image to compensate radial and tangential lens distortion. The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same.

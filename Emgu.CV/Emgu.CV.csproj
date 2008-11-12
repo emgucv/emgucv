@@ -94,7 +94,7 @@
     <Compile Include="CvException.cs" />
     <Compile Include="EigenObjectRecognizer.cs" />
     <Compile Include="Envelope.cs" />
-    <Compile Include="ExposableMethodAttribute.cs" />
+    <Compile Include="Reflection\ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
     <Compile Include="Kalman.cs" />
     <Compile Include="MotionHistory.cs" />
@@ -117,6 +117,8 @@
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="PlannarSubdivision.cs" />
+    <Compile Include="Reflection\ReflectColorType.cs" />
+    <Compile Include="Reflection\ReflectIImage.cs" />
     <Compile Include="Shape\Cross2D.cs" />
     <Compile Include="Shape\IConvexPolygon.cs" />
     <Compile Include="Shape\Triangle2D.cs" />

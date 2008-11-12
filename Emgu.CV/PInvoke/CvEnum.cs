@@ -1570,6 +1570,51 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Various camera calibration flags
+   /// </summary>
+   [Flags]
+   public enum CALIB_TYPE
+   {
+      /// <summary>
+      /// The default value
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// intrinsic_matrix contains valid initial values of fx, fy, cx, cy that are optimized further. Otherwise, (cx, cy) is initially set to the image center (image_size is used here), and focal distances are computed in some least-squares fashion
+      /// </summary>
+      CV_CALIB_USE_INTRINSIC_GUESS = 1,
+      /// <summary>
+      /// The optimization procedure consider only one of fx and fy as independent variable and keeps the aspect ratio fx/fy the same as it was set initially in intrinsic_matrix. In this case the actual initial values of (fx, fy) are either taken from the matrix (when CV_CALIB_USE_INTRINSIC_GUESS is set) or estimated somehow (in the latter case fx, fy may be set to arbitrary values, only their ratio is used)
+      /// </summary>
+      CV_CALIB_FIX_ASPECT_RATIO = 2,
+      /// <summary>
+      /// The principal point is not changed during the global optimization, it stays at the center and at the other location specified (when CV_CALIB_FIX_FOCAL_LENGTH - Both fx and fy are fixed.
+      /// CV_CALIB_USE_INTRINSIC_GUESS is set as well)
+      /// </summary>
+      CV_CALIB_FIX_PRINCIPAL_POINT = 4,
+      /// <summary>
+      /// Tangential distortion coefficients are set to zeros and do not change during the optimization
+      /// </summary>
+      CV_CALIB_ZERO_TANGENT_DIST = 8,
+      /// <summary>
+      /// The focal length is fixed
+      /// </summary>
+      CV_CALIB_FIX_FOCAL_LENGTH = 16,
+      /// <summary>
+      /// The 0-th distortion coefficient (k1) is fixed (to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed)
+      /// </summary>
+      CV_CALIB_FIX_K1 = 32,
+      /// <summary>
+      /// The 1-st distortion coefficient (k2) is fixed (see above)
+      /// </summary>
+      CV_CALIB_FIX_K2 = 64,
+      /// <summary>
+      /// The 4-th distortion coefficient (k3) is fixed (see above)
+      /// </summary>
+      CV_CALIB_FIX_K3 = 128
+   }
+
+   /// <summary>
    /// Type of chessboard calibration
    /// </summary>
    [Flags]

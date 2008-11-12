@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace Emgu.CV
 {
    ///<summary> A rectangle </summary>
+   ///<typeparam name="T">The type of elements in this Rectangle</typeparam>
    [Serializable]
    public class Rectangle<T> : IConvexPolygon<T> where T : IComparable, new()
    {

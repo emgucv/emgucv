@@ -70,7 +70,7 @@ namespace PlannarSubdivision
          }
 
          //display the image
-         Application.Run(new ImageViewer(img, "Plannar Subdivision"));
+         ImageViewer.Show(img, "Plannar Subdivision");
       }
    }
 }

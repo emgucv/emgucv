@@ -36,9 +36,9 @@ namespace SURFFeatureExample
          SURFFeature[] imageFeatures = image.ExtractSURF(ref param2);
          
          Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
-         res.ROI = new Rectangle<double>(0, objectImage.Width, objectImage.Height, 0);
+         res.ROI = new Rectangle<double>(new MCvRect(0, 0, objectImage.Width, objectImage.Height));
          objectImage.Copy(res, null);
-         res.ROI = new Rectangle<double>(0, image.Width, objectImage.Height + image.Height, objectImage.Height);
+         res.ROI = new Rectangle<double>(new MCvRect(0, objectImage.Height, image.Width, image.Height) );
          image.Copy(res, null);
          res.ROI = null;
 

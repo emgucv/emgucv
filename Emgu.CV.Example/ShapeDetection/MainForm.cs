@@ -31,7 +31,7 @@ namespace ShapeDetection
             Gray cannyThresholdLinking = new Gray(120);
             Gray circleAccumulatorThreshold = new Gray(120);
 
-            Circle<float>[] circles = gray.HughCircles(
+            Circle<float>[] circles = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
                 5.0, //Resolution of the accumulator used to detect centers of the circles
@@ -41,7 +41,7 @@ namespace ShapeDetection
                 )[0]; //Get the circles from the first channel
 
             Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
-            LineSegment2D<int>[] lines = cannyEdges.HughLinesBinary(
+            LineSegment2D<int>[] lines = cannyEdges.HoughLinesBinary(
                 1, //Distance resolution in pixel-related units
                 Math.PI / 45.0, //Angle resolution measured in radians.
                 20, //threshold

@@ -40,7 +40,9 @@ namespace Webservice_Client
             if (_started == false)
             {
                if (_frameGrabber != null && _frameGrabber.IsAlive)
+               {
                   _frameGrabber.Abort();
+               }
             }
             else //_started = true
             {
@@ -74,6 +76,5 @@ namespace Webservice_Client
       {
          Started = false;
       }
-
    }
 }

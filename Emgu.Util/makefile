@@ -27,6 +27,3 @@ tar:
 	cat ${NAME}.spec >> ${PKG_NAME}/${PKG_NAME}.spec
 	tar -czf ${PKG_NAME}.tar.gz ${PKG_NAME}
 	rm -rf ${PKG_NAME}
-
-
-

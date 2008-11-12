@@ -5,8 +5,9 @@ using System.Text;
 namespace Emgu.CV
 {
    ///<summary>
-   /// A rotated rectangle box
+   /// A Rotated rectangle box
    ///</summary>
+   ///<typeparam name="T">The type of elements in this 2D Box</typeparam>
    public class Box2D<T> : Rectangle<T> where T : IComparable, new()
    {
       /// <summary>

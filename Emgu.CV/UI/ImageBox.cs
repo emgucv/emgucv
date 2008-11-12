@@ -21,7 +21,7 @@ namespace Emgu.CV.UI
       private IImage _displayedImage;
       private PropertyDlg _propertyDlg;
 
-      private Stack<Operation<IImage>> _operationStack;
+      private Stack<Operation> _operationStack;
 
       //private double _zoomLevel = 1.0;
 
@@ -42,16 +42,14 @@ namespace Emgu.CV.UI
       {
          InitializeComponent();
 
-         _operationStack = new Stack<Operation<IImage>>();
-
-         AddOperationMenuItem();
+         _operationStack = new Stack<Operation>();
       }
 
       /// <summary>
       /// Push the specific operation onto the stack
       /// </summary>
       /// <param name="operation">The operation to be pushed onto the stack</param>
-      public void PushOperation(Operation<IImage> operation)
+      public void PushOperation(Operation operation)
       {
          _operationStack.Push(operation);
          ImageProperty panel = ImagePropertyPanel;
@@ -96,10 +94,44 @@ namespace Emgu.CV.UI
             Image = Image;
          }
       }
-
-      private void AddOperationMenuItem()
+      
+      private ToolStripMenuItem[] BuildOperationTree( IEnumerable<KeyValuePair<string, MethodInfo>> catelogMiPairList)
       {
-         foreach (MethodInfo mi in GetImageMethods())
+         List<ToolStripMenuItem> res = new List<ToolStripMenuItem>();
+
+         SortedDictionary<String, List<KeyValuePair<String, MethodInfo>>> catelogDic = new SortedDictionary<string, List<KeyValuePair<String, MethodInfo>>>();
+         SortedDictionary<String, MethodInfo> operationItem = new SortedDictionary<string, MethodInfo>();
+
+         foreach (KeyValuePair<string, MethodInfo> pair in catelogMiPairList)
+         {
+            if (!pair.Key.Equals(String.Empty))
+            {
+
+               String[] catelogs = pair.Key.Split('|');
+               if (!catelogDic.ContainsKey(catelogs[0]))
+               {
+                  catelogDic.Add(catelogs[0], new List<KeyValuePair<String, MethodInfo>>());
+               }
+               string[] subcatelogs = new string[catelogs.Length-1];
+               Array.Copy(catelogs, 1, subcatelogs, 0, subcatelogs.Length);
+
+               catelogDic[catelogs[0]].Add(new KeyValuePair<String, MethodInfo>(String.Join("|", subcatelogs), pair.Value));
+            }
+            else
+            {
+               operationItem.Add(pair.Value.Name, pair.Value);
+            }
+         }
+
+         foreach (String catelog in catelogDic.Keys)
+         {
+            ToolStripMenuItem catelogMenuItem = new ToolStripMenuItem();
+            catelogMenuItem.Text = catelog;
+            catelogMenuItem.DropDownItems.AddRange(BuildOperationTree(catelogDic[catelog]));
+            res.Add(catelogMenuItem);  
+         }
+
+         foreach (MethodInfo mi in operationItem.Values)
          {
             ToolStripMenuItem operationMenuItem = new ToolStripMenuItem();
             operationMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -114,28 +146,13 @@ namespace Emgu.CV.UI
 
             operationMenuItem.Click += delegate(Object o, EventArgs e)
                 {
-                   /*
-                   Object[] paramList = null;
-                   paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
-                   if (paramList != null)
-                   {
-                      Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList);
-                      try
-                      {
-                         PushOperation(operation);
-                      }
-                      catch (Exception expt)
-                      {
-                         MessageBox.Show(expt.InnerException.Message);
-                      }
-                   }*/
                    Object[] paramList = null;
                    do
                    {
                       paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
                       if (paramList != null)
                       {
-                         Operation<IImage> operation = new Operation<IImage>(methodInfoRef, paramList);
+                         Operation operation = new Operation(methodInfoRef, paramList);
                          try
                          {
                             PushOperation(operation);
@@ -143,14 +160,33 @@ namespace Emgu.CV.UI
                          }
                          catch (Exception expt)
                          {
-                            MessageBox.Show(expt.InnerException.Message);
+                            if (expt.InnerException != null)
+                               MessageBox.Show(expt.InnerException.Message);
+                            else
+                               MessageBox.Show(expt.Message);
+
+                            if (methodInfoRef.GetParameters().Length == 0)
+                            {
+                               paramList = null;
+                            }
                          }
                       }
                    } while (paramList != null);
                 };
-
-            operationsToolStripMenuItem.DropDownItems.Add(operationMenuItem);
+            res.Add(operationMenuItem);
          }
+
+         return res.ToArray();
+      }
+
+      private void BuildOperationMenuItem(IImage image)
+      {
+         operationsToolStripMenuItem.DropDownItems.Clear();
+         List<KeyValuePair<String, MethodInfo>> l = new List<KeyValuePair<string,MethodInfo>>( Reflection.ReflectIImage.GetImageMethods(image));
+         int n = l.Count;
+         operationsToolStripMenuItem.DropDownItems.AddRange(
+            BuildOperationTree( Reflection.ReflectIImage.GetImageMethods(image)));
+         
       }
 
       /// <summary>
@@ -175,17 +211,24 @@ namespace Emgu.CV.UI
 
                if (imageToBeDisplayed != null)
                {
-                  Operation<IImage>[] ops = _operationStack.ToArray();
+                  bool isCloned = false;
+                  Operation[] ops = _operationStack.ToArray();
                   System.Array.Reverse(ops);
-                  foreach (Operation<IImage> operation in ops)
+                  foreach (Operation operation in ops)
                   {
                      if (operation.Method.ReturnType == typeof(void))
                      {
+                        if (!isCloned)
+                        {
+                           imageToBeDisplayed = _image.Clone() as IImage;
+                           isCloned = true;
+                        }
                         //if the operation has return type of void, just execute the operation
                         operation.InvokeMethod(imageToBeDisplayed);
                      }
-                     else if (operation.Method.ReturnType == typeof(IImage))
+                     else if (operation.Method.ReturnType.GetInterface("IImage") != null)
                      {
+                        isCloned = true;
                         imageToBeDisplayed = operation.InvokeMethod(imageToBeDisplayed) as IImage;
                      }
                      else
@@ -215,6 +258,8 @@ namespace Emgu.CV.UI
             _displayedImage = value;
             if (_displayedImage != null)
             {
+               BuildOperationMenuItem(_displayedImage);
+
                if (Width != _displayedImage.Width) Width = _displayedImage.Width;
                if (Height != _displayedImage.Height) Height = _displayedImage.Height;
 
@@ -224,9 +269,9 @@ namespace Emgu.CV.UI
                {
                   ImagePropertyPanel.ImageWidth = _displayedImage.Width;
                   ImagePropertyPanel.ImageHeight = _displayedImage.Height;
-                  Type imageType = Toolbox.GetBaseType(_displayedImage.GetType(), "Image`2");
-                  ImagePropertyPanel.TypeOfColor = imageType.GetGenericArguments()[0];
-                  ImagePropertyPanel.TypeOfDepth = imageType.GetGenericArguments()[1];
+
+                  ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
+                  ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
 
                   #region calculate the frame rate
                   TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
@@ -278,19 +323,6 @@ namespace Emgu.CV.UI
             catch (Exception excpt)
             {
                MessageBox.Show(excpt.Message);
-            }
-         }
-      }
-
-      private static IEnumerable<MethodInfo> GetImageMethods()
-      {
-         foreach (MemberInfo mi in typeof(IImage).GetMembers())
-         {
-            if (mi.MemberType == MemberTypes.Method)
-            {
-               Object[] atts = mi.GetCustomAttributes(typeof(ExposableMethodAttribute), false);
-               if (atts.Length == 0 || ((ExposableMethodAttribute)atts[0]).Exposable)
-                  yield return mi as MethodInfo;
             }
          }
       }
@@ -351,29 +383,13 @@ namespace Emgu.CV.UI
       {
          if (EnableProperty)
          {
-            Point2D<int> location = new Point2D<int>();
-
-            ColorType color = null;
-
+            Point2D<int> location = new Point2D<int>(e.X, e.Y);
             IImage img = DisplayedImage;
 
-            if (img != null)
-            {
-               location.X = Math.Min(e.X, DisplayedImage.Width - 1);
-               location.Y = Math.Min(e.Y, DisplayedImage.Height - 1);
-
-               Type t = img.GetType();
-               MethodInfo indexers = t.GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
-               if (indexers != null)
-               {
-                  color = indexers.Invoke(img, new object[2] { location.Y, location.X }) as ColorType;
-               }
-               else
-               {
-                  color = new Bgra();
-               }
-            }
-
+            ColorType color = img == null ?
+               null :
+               Reflection.ReflectIImage.GetPixelColor(img, location);
+            
             ImagePropertyPanel.MousePositionOnImage = location;
             ImagePropertyPanel.ColorIntensity = color;
          }

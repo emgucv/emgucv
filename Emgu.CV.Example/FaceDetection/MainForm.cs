@@ -32,7 +32,7 @@ namespace FaceDetection
          foreach (Rectangle<double> f in facesDetected[0])
          {
             //draw all the faces detected in the 0th (gray) channel with blue color
-            image.Draw(f, new Bgr(255, 0, 0), 2);
+            image.Draw(f, new Bgr(Color.Blue), 2);
          }
 
          //display the image 

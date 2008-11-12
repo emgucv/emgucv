@@ -9,12 +9,14 @@ using System.IO.Compression;
 using zlib;
 using System.Security.Permissions;
 using Emgu.Util;
+using Emgu.CV.Reflection;
 
 namespace Emgu.CV
 {
    ///<summary>
    ///Wrapped CvArr pointer 
    ///</summary>
+   ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam>
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
    {
       /// <summary>
@@ -267,6 +269,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
       /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
+      [ExposableMethod(Exposable = true)]
       public void SetRandUniform(MCvScalar floorValue, MCvScalar ceilingValue)
       {
          SetRandUniform((UInt64)DateTime.Now.Ticks, floorValue, ceilingValue);
@@ -288,6 +291,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mean">the mean value of random numbers</param>
       /// <param name="std"> the standard deviation of random numbers</param>
+      [ExposableMethod(Exposable = true)]
       public void SetRandNormal(MCvScalar mean, MCvScalar std)
       {
          SetRandNormal((UInt64)DateTime.Now.Ticks, mean, std);
@@ -347,6 +351,7 @@ namespace Emgu.CV
       ///<summary>
       ///Inplace compute the elementwise minimum value 
       ///</summary>
+      [ExposableMethod(Exposable = true)]
       public void _Min(double val)
       {
          CvInvoke.cvMinS(Ptr, val, Ptr);
@@ -365,6 +370,7 @@ namespace Emgu.CV
       /// Inplace compute the elementwise maximum value with <paramref name="val"/>
       /// </summary>
       /// <param name="val">The value to be compare with</param>
+      [ExposableMethod(Exposable = true)]
       public void _Max(double val)
       {
          CvInvoke.cvMaxS(Ptr, val, Ptr);
@@ -413,6 +419,7 @@ namespace Emgu.CV
       ///<summary> 
       ///Inplace compute the complement for all Array Elements
       ///</summary>
+      [ExposableMethod(Exposable = true)]
       public void _Not()
       {
          CvInvoke.cvNot(Ptr, Ptr);

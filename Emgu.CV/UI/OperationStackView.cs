@@ -48,7 +48,7 @@ namespace Emgu.CV.UI
       /// Display the operation stack
       /// </summary>
       /// <param name="operationStack">The operation stack to be displayed</param>
-      public void DisplayOperationStack(Stack<Operation<IImage>> operationStack)
+      public void DisplayOperationStack(Stack<Operation> operationStack)
       {
          if (_language == ProgrammingLanguage.CSharp)
          {
@@ -71,10 +71,10 @@ namespace Emgu.CV.UI
          }
       }
 
-      private String[] GetOperationCode(Stack<Operation<IImage>> operationStack)
+      private String[] GetOperationCode(Stack<Operation> operationStack)
       {
          List<String> ops = new List<string>();
-         foreach (Operation<IImage> op in operationStack)
+         foreach (Operation op in operationStack)
          {
             String str = op.ToCode(_language).Replace("{instance}", "image");
 

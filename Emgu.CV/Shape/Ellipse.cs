@@ -7,6 +7,7 @@ namespace Emgu.CV
    ///<summary>
    ///An ellipse
    ///</summary>
+   ///<typeparam name="T">The type of elements in this ellipse</typeparam>
    public class Ellipse<T> : Box2D<T> where T : IComparable, new()
    {
       ///<summary> 

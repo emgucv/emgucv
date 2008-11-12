@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 namespace Emgu.CV
 {
    ///<summary> A circle </summary>
+   ///<typeparam name="T">The type of elements in this Circle</typeparam>
    public class Circle<T> : Point2D<T> where T : IComparable, new()
    {
       // The radius of the circle

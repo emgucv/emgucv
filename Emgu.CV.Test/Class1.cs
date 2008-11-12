@@ -244,11 +244,11 @@ namespace Emgu.CV.Test
                {
                   using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
                   {
-                     LineSegment2D<int>[][] lines = imgHsv2.HughLines(
+                     LineSegment2D<int>[][] lines = imgHsv2.HoughLines(
                          new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
                          1, Math.PI / 180.0, 50, 50, 10);
 
-                     Circle<float>[][] circles = img.HughCircles(
+                     Circle<float>[][] circles = img.HoughCircles(
                          new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
                          4.0, 1.0, 0, 0);
 

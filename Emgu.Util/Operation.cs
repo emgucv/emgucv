@@ -8,8 +8,7 @@ namespace Emgu.Util
    /// <summary>
    /// An operation contains the MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
    /// </summary>
-   /// <typeparam name="T">The type of instance this operation applies to</typeparam>
-   public class Operation<T> : ICodeGenerable
+   public class Operation: ICodeGenerable
    {
       private MethodInfo _mi;
 
@@ -49,9 +48,25 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="instance">The instance to call the method</param>
       /// <returns></returns>
-      public Object InvokeMethod(T instance)
+      public Object InvokeMethod(Object instance)
       {
-         return typeof(T).InvokeMember(_mi.Name, BindingFlags.InvokeMethod, null, instance, _parameters);
+         if (!_mi.ContainsGenericParameters)
+            return _mi.DeclaringType.InvokeMember(_mi.Name, BindingFlags.InvokeMethod, null, instance, _parameters);
+
+         Type[] types = new Type[_mi.GetGenericArguments().Length];
+         for (int i = 0; i < types.Length; i++)
+         {
+            String typeName = ((String)_parameters[i]).Split('|')[1].Split(':')[0];
+            if ((types[i] = Type.GetType(typeName)) == null)
+            {
+               typeName = typeName + "," + typeName.Substring(0, typeName.LastIndexOf("."));
+               types[i] = Type.GetType(typeName);
+            }
+         }
+         MethodInfo m = _mi.MakeGenericMethod(types);
+         Object[] param = new object[_parameters.Length - types.Length];
+         Array.Copy(_parameters, types.Length, param, 0, param.Length);
+         return m.Invoke(instance, param); //m.DeclaringType.InvokeMember(m.Name, BindingFlags.InvokeMethod, null, instance, param);
       }
 
       /// <summary>

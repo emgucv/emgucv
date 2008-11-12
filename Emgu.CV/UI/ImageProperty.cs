@@ -113,7 +113,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Set the description of the operation stack
       /// </summary>
-      public void SetOperationStack(Stack<Operation<IImage>> stack)
+      public void SetOperationStack(Stack<Operation> stack)
       {
          cSharpOperationStackView.DisplayOperationStack(stack);
          cPlusPlusoperationStackView.DisplayOperationStack(stack);
@@ -174,7 +174,7 @@ namespace Emgu.CV.UI
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          ColorType typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as ColorType;
          String[] channelNames = typeOfColor.ChannelName;
-         System.Drawing.Color[] colors = typeOfColor.ChannelColor;
+         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetChannelDisplayColor(typeOfColor);// typeOfColor.GetChannelDisplayColor();
 
          HistogramViewer hviewer = new HistogramViewer();
          System.Type typeOfDepth = imageType.GetGenericArguments()[1];

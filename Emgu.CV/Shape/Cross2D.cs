@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// A 2D cross
    /// </summary>
-   /// <typeparam name="T">The type of the cross element</typeparam>
+   /// <typeparam name="T">The type of elements in the cross</typeparam>
    public class Cross2D<T> : Rectangle<T> where T : IComparable, new()
    {
       /// <summary>

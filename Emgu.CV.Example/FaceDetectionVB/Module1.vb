@@ -1,23 +1,27 @@
 Imports Emgu.CV
 Imports Emgu.Util
 Imports System.Windows.Forms
+Imports System.Drawing
+
 
 Module Module1
 
    Sub Main()
+      'Load the image from file
       Dim img As New Image(Of Bgr, Byte)("lena.jpg")
-      Dim imgGray As New Image(Of Gray, Byte)(1,1)
+
+      'Load the object detector
       Dim objectToDetect As New HaarCascade("haarcascade_frontalface_alt2.xml")
-      Dim objectDetected As New Rectangle(Of Double)
 
-      imgGray = img.Convert(Of Gray, Byte)()
+      'Convert the image to Grayscale
+      Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
 
-      for each rect as Rectangle(Of Double) in imgGray.DetectHaarCascade(objectToDetect)(0)
-         img.Draw(rect, New Bgr(255, 255, 255), 1)
+      For Each rect As Rectangle(Of Double) In imgGray.DetectHaarCascade(objectToDetect)(0)
+         img.Draw(rect, New Bgr(Color.White), 1)
       Next
 
-      Dim viewer = New UI.ImageViewer(img)
-      System.Windows.Forms.Application.Run(viewer)
+      'Show the image
+      UI.ImageViewer.Show(img)
 
    End Sub
 

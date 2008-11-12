@@ -4,7 +4,7 @@ PKG_NAME = ${NAME}-${VERSION}
 LIB_NAME = Emgu.CV.dll
 MCS_FLAG= -d:LINUX -pkg:olive -r:System.Xml -r:System.Drawing -r:System.Windows.Forms -r:System.Data  -target:library
 MCS=gmcs ${MCS_FLAG} 
-SRC= *.cs UI/*.cs Shape/*.cs Properties/*.cs PointAndLine/*.cs PInvoke/*.cs PInvoke/CvType/*.cs Color/*.cs Capture/*.cs CameraCalibration/*.cs
+SRC= *.cs UI/*.cs Shape/*.cs Properties/*.cs PointAndLine/*.cs PInvoke/*.cs PInvoke/CvType/*.cs Color/*.cs Capture/*.cs CameraCalibration/*.cs Reflection/*.cs
 INSTALL_DIR = var/lib
 EMGU_DIR = ${INSTALL_DIR}/emgu
 PKG_DIR = ${EMGU_DIR}/bin
@@ -30,4 +30,3 @@ tar:
 	install ../bin/Emgu.Util.dll ../lib/zlib.net.dll ../lib/ZedGraph.dll ${PKG_NAME}/lib
 	tar -czf ${PKG_NAME}.tar.gz ${PKG_NAME}
 	rm -rf ${PKG_NAME}
-

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Security.Permissions;
 using Emgu.Util;
+using Emgu.CV.Reflection;
 
 namespace Emgu.CV
 {
@@ -18,7 +19,7 @@ namespace Emgu.CV
    /// <typeparam name="TColor">Color type of this image</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, Single or Double)</typeparam>
    [Serializable]
-   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, ICloneable, IEquatable<Image<TColor, TDepth>> where TColor : ColorType, new()
+   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : ColorType, new()
    {
       private TDepth[, ,] _array;
 
@@ -103,7 +104,7 @@ namespace Emgu.CV
 
             //TODO: fix the following to handle the case when input image has non 4-align byte in a row
             Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
-            
+
             CvInvoke.cvReleaseImage(ref ptr);
             #endregion
          }
@@ -111,7 +112,7 @@ namespace Emgu.CV
          {   //if the file format cannot be recognized by OpenCV 
             if (Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
             {
-               using(Bitmap bmp = new Bitmap(fi.FullName))
+               using (Bitmap bmp = new Bitmap(fi.FullName))
                   Bitmap = bmp;
             }
             else
@@ -802,7 +803,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region Hugh line and circles
+      #region Hough line and circles
       ///<summary> 
       ///Apply Hugh transform to find line segments. 
       ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
@@ -812,7 +813,43 @@ namespace Emgu.CV
       ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
       ///<param name="minLineWidth">Minimum width of a line</param>
       ///<param name="gapBetweenLines">Minimum gap between lines</param>
+      [Obsolete("Typo, please use HoughLinesBinary instead. Will be removed in the next release")]
       public LineSegment2D<int>[][] HughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Emgu.Util.Toolbox.Func<IImage, int, LineSegment2D<int>[]> detector =
+                delegate(IImage img, int channel)
+                {
+                   IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+                   MCvSeq lineSeq = (MCvSeq)Marshal.PtrToStructure(lines, typeof(MCvSeq));
+                   LineSegment2D<int>[] linesegs = new LineSegment2D<int>[lineSeq.total];
+                   for (int i = 0; i < lineSeq.total; i++)
+                   {
+                      int[] val = new int[4];
+                      Marshal.Copy(CvInvoke.cvGetSeqElem(lines, i), val, 0, 4);
+                      linesegs[i] = new LineSegment2D<int>(
+                          new Point2D<int>(val[0], val[1]),
+                          new Point2D<int>(val[2], val[3]));
+                   }
+                   CvInvoke.cvClearSeq(lines);
+                   return linesegs;
+                };
+            LineSegment2D<int>[][] res = ForEachDuplicateChannel(detector);
+            return res;
+         }
+      }
+
+      ///<summary> 
+      ///Apply Hugh transform to find line segments. 
+      ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
+      ///</summary> 
+      ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
+      ///<param name="thetaResolution">Angle resolution measured in radians</param>
+      ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+      ///<param name="minLineWidth">Minimum width of a line</param>
+      ///<param name="gapBetweenLines">Minimum gap between lines</param>
+      public LineSegment2D<int>[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -842,11 +879,24 @@ namespace Emgu.CV
       ///First apply Canny Edge Detector on the current image, 
       ///then apply Hugh transform to find line segments 
       ///</summary>
+      [Obsolete("Typo, please use HoughLines instead. Will be removed in the next release")]
       public LineSegment2D<int>[][] HughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
-            return canny.HughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+            return canny.HoughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+         }
+      }
+
+      ///<summary> 
+      ///First apply Canny Edge Detector on the current image, 
+      ///then apply Hugh transform to find line segments 
+      ///</summary>
+      public LineSegment2D<int>[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+      {
+         using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
+         {
+            return canny.HoughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
          }
       }
 
@@ -860,7 +910,52 @@ namespace Emgu.CV
       ///<param name="minRadius">Minimal radius of the circles to search for</param>
       ///<param name="maxRadius">Maximal radius of the circles to search for</param>
       ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+      [Obsolete("Typo, please use HoughCircles instead. Will be removed in the next release")]
       public Circle<float>[][] HughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            double[] cannyThresh = cannyThreshold.Resize(4).Coordinate;
+            double[] accumulatorThresh = accumulatorThreshold.Resize(4).Coordinate;
+            Emgu.Util.Toolbox.Func<IImage, int, Circle<float>[]> detector =
+                delegate(IImage img, int channel)
+                {
+                   IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
+                       img.Ptr,
+                       stor.Ptr,
+                       CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT,
+                       dp,
+                       minDist,
+                       cannyThresh[channel],
+                       accumulatorThresh[channel],
+                       minRadius,
+                       maxRadius);
+
+                   Seq<MCvPoint3D32f> cirSeq = new Seq<MCvPoint3D32f>(circlesSeqPtr, stor);
+
+                   return System.Array.ConvertAll<MCvPoint3D32f, Circle<float>>(cirSeq.ToArray(),
+                       delegate(MCvPoint3D32f p)
+                       {
+                          return new Circle<float>(new Point2D<float>(p.x, p.y), p.z);
+                       });
+                };
+            Circle<float>[][] res = ForEachDuplicateChannel(detector);
+
+            return res;
+         }
+      }
+
+      ///<summary> 
+      ///First apply Canny Edge Detector on the current image, 
+      ///then apply Hugh transform to find circles 
+      ///</summary>
+      ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
+      ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
+      ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
+      ///<param name="minRadius">Minimal radius of the circles to search for</param>
+      ///<param name="maxRadius">Maximal radius of the circles to search for</param>
+      ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+      public Circle<float>[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -1161,6 +1256,7 @@ namespace Emgu.CV
       /// <param name="yorder">Order of the derivative y</param>
       /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size xaperture_size separable kernel will be used to calculate the derivative.</param>
       /// <returns>The result of the sobel edge detector</returns>
+      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
       {
          Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
@@ -1178,6 +1274,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="apertureSize">Aperture size </param>
       /// <returns>The Laplacian of the image</returns>
+      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, Single> Laplace(int apertureSize)
       {
          Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
@@ -1189,6 +1286,7 @@ namespace Emgu.CV
       ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
       ///<param name="threshLinking"> The threshold used for edge Linking</param>
       ///<returns> The edges found by the Canny edge detector</returns>
+      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, TDepth> Canny(TColor thresh, TColor threshLinking)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1281,7 +1379,7 @@ namespace Emgu.CV
          CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
       }
-      #endregion 
+      #endregion
 
       /// <summary>
       /// Finds corners with big eigenvalues in the image. 
@@ -1392,7 +1490,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region Object tracking
+      #region Object Tracking
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
       /// </summary>
@@ -1425,7 +1523,7 @@ namespace Emgu.CV
 
          Contour<MCvPoint> rSeq = new Contour<MCvPoint>(storage);
 
-         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject() , count, false);
+         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject(), count, false);
          handle.Free();
 
          return rSeq;
@@ -1743,6 +1841,45 @@ namespace Emgu.CV
       }
       #endregion
 
+      #region Discrete Transforms
+      /// <summary>
+      /// performs forward or inverse transform of 1D or 2D floating-point array
+      /// </summary>
+      /// <param name="type">Transformation flags</param>
+      /// <param name="nonzeroRows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT</param>
+      /// <returns>The result of DFT</returns>
+      [ExposableMethod(Exposable = true, Category = "Discrete Transforms")]
+      public Image<TColor, Single> DFT(CvEnum.CV_DXT type, int nonzeroRows)
+      {
+         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
+         CvInvoke.cvDFT(Ptr, res.Ptr, type, nonzeroRows);
+         return res;
+      }
+
+      /// <summary>
+      /// performs forward or inverse transform of 2D floating-point image
+      /// </summary>
+      /// <param name="type">Transformation flags</param>
+      /// <returns>The result of DFT</returns>
+      public Image<TColor, Single> DFT(CvEnum.CV_DXT type)
+      {
+         return DFT(type, 0);
+      }
+
+      /// <summary>
+      /// performs forward or inverse transform of 2D floating-point image
+      /// </summary>
+      /// <param name="type">Transformation flags</param>
+      /// <returns>The result of DCT</returns>
+      [ExposableMethod(Exposable = true, Category = "Discrete Transforms")]
+      public Image<TColor, Single> DCT(CvEnum.CV_DCT_TYPE type)
+      {
+         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
+         CvInvoke.cvDCT(Ptr, res.Ptr, type);
+         return res;
+      }
+      #endregion
+
       #region Arithmatic
       #region Substraction methods
       ///<summary> Elementwise subtract another image from the current image </summary>
@@ -1914,6 +2051,20 @@ namespace Emgu.CV
          CvInvoke.cvRunningAvg(img.Ptr, Ptr, alpha, mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
+      ///<summary> 
+      ///Computes absolute different between <i>this</i> image and the other image
+      ///</summary>
+      ///<param name="img2">The other image to compute absolute different with</param>
+      ///<returns> The image that contains the absolute different value</returns>
+      public Image<TColor, TDepth> AbsDiff(Image<TColor, TDepth> img2)
+      {
+         Image<TColor, TDepth> res = CopyBlank();
+         CvInvoke.cvAbsDiff(Ptr, img2.Ptr, res.Ptr);
+         return res;
+      }
+      #endregion
+
+      #region Math Functions
       /// <summary>
       /// Raises every element of input array to p
       /// dst(I)=src(I)^p, if p is integer
@@ -1921,6 +2072,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="power">The exponent of power</param>
       /// <returns>The power image</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Pow(double power)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1934,6 +2086,7 @@ namespace Emgu.CV
       /// Maximum relative error is ~7e-6. Currently, the function converts denormalized values to zeros on output.
       /// </summary>
       /// <returns>The exponent image</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Exp()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1942,60 +2095,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// performs forward or inverse transform of 1D or 2D floating-point array
-      /// </summary>
-      /// <param name="type">Transformation flags</param>
-      /// <param name="nonzeroRows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT</param>
-      /// <returns>The result of DFT</returns>
-      public Image<TColor, Single> DFT(CvEnum.CV_DXT type, int nonzeroRows)
-      {
-         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
-         CvInvoke.cvDFT(Ptr, res.Ptr, type, nonzeroRows);
-         return res;
-      }
-
-      /// <summary>
-      /// performs forward or inverse transform of 2D floating-point image
-      /// </summary>
-      /// <param name="type">Transformation flags</param>
-      /// <returns>The result of DFT</returns>
-      public Image<TColor, Single> DFT(CvEnum.CV_DXT type)
-      {
-         return DFT(type, 0);
-      }
-
-      /// <summary>
-      /// performs forward or inverse transform of 2D floating-point image
-      /// </summary>
-      /// <param name="type">Transformation flags</param>
-      /// <returns>The result of DCT</returns>
-      public Image<TColor, Single> DCT(CvEnum.CV_DCT_TYPE type)
-      {
-         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
-         CvInvoke.cvDCT(Ptr, res.Ptr, type);
-         return res;
-      }
-
-      /// <summary>
       /// Calculates natural logarithm of absolute value of every element of input array
       /// </summary>
       /// <returns>Natural logarithm of absolute value of every element of input array</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Log()
       {
          Image<TColor, TDepth> res = CopyBlank();
          CvInvoke.cvLog(Ptr, res.Ptr);
-         return res;
-      }
-
-      ///<summary> 
-      ///Computes absolute different between <i>this</i> image and the other image
-      ///</summary>
-      ///<param name="img2">The other image to compute absolute different with</param>
-      ///<returns> The image that contains the absolute different value</returns>
-      public Image<TColor, TDepth> AbsDiff(Image<TColor, TDepth> img2)
-      {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAbsDiff(Ptr, img2.Ptr, res.Ptr);
          return res;
       }
       #endregion
@@ -2043,6 +2150,7 @@ namespace Emgu.CV
       /// <param name="width">The width of the returned image.</param>
       /// <param name="height">The height of the returned image.</param>
       /// <returns>The resized image</returns>
+      [ExposableMethod(Exposable = true)]
       public Image<TColor, TDepth> Resize(int width, int height)
       {
          Image<TColor, TDepth> imgScale = new Image<TColor, TDepth>(width, height);
@@ -2157,6 +2265,7 @@ namespace Emgu.CV
       /// <param name="background">The color with wich to fill the background</param>
       /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
       /// <returns>The rotated image</returns>
+      [ExposableMethod(Exposable = true)]
       public Image<TColor, TDepth> Rotate(double angle, TColor background, bool crop)
       {
          Image<TColor, TDepth> resultImage;
@@ -2241,6 +2350,10 @@ namespace Emgu.CV
       ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
       ///<typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
       ///<returns> Image of the specific color and depth </returns>
+      [ExposableMethod(
+         Exposable = true,
+         Category = "Convertion",
+         GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte")]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.ColorType, new()
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Width, Height);
@@ -2472,7 +2585,7 @@ namespace Emgu.CV
                      ConvertFrom(tmp);
                }
             }*/
-            
+
             if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
             {
                if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
@@ -2742,6 +2855,7 @@ namespace Emgu.CV
       /// by rejecting even rows and columns.
       ///</summary>
       ///<returns> The downsampled image</returns>
+      [ExposableMethod(Exposable = true)]
       public Image<TColor, TDepth> PyrDown()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width >> 1, Height >> 1);
@@ -2756,6 +2870,7 @@ namespace Emgu.CV
       /// So the resulting image is four times larger than the source image.
       ///</summary>
       ///<returns> The upsampled image</returns>
+      [ExposableMethod(Exposable = true)]
       public Image<TColor, TDepth> PyrUp()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width << 1, Height << 1);
@@ -2805,6 +2920,7 @@ namespace Emgu.CV
       ///Erosion are applied serveral (iterations) times
       ///</summary>
       ///<returns> The eroded image</returns>
+      [ExposableMethod(Exposable = true, Category = "Morphological Operations")]
       public Image<TColor, TDepth> Erode(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2817,6 +2933,7 @@ namespace Emgu.CV
       ///Dilation are applied serveral (iterations) times
       ///</summary>
       ///<returns> The dialated image</returns>
+      [ExposableMethod(Exposable = true, Category = "Morphological Operations")]
       public Image<TColor, TDepth> Dilate(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2880,11 +2997,11 @@ namespace Emgu.CV
          int width1 = Marshal.SizeOf(typeof(TDepth)) * cols1;
 
          using (PinnedArray<TDepth> row1 = new PinnedArray<TDepth>(cols1))
-         for (int row = 0; row < Height; row++, data1 += step1)
-         {
-            Emgu.Util.Toolbox.memcpy(row1.AddrOfPinnedObject(), new IntPtr(data1), width1);
-            System.Array.ForEach(row1.Array, action);
-         }
+            for (int row = 0; row < Height; row++, data1 += step1)
+            {
+               Emgu.Util.Toolbox.memcpy(row1.AddrOfPinnedObject(), new IntPtr(data1), width1);
+               System.Array.ForEach(row1.Array, action);
+            }
       }
 
       /// <summary>
@@ -3461,7 +3578,7 @@ namespace Emgu.CV
       /// <returns>The result of blur</returns>
       public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
       {
-         Emgu.CV.CvEnum.SMOOTH_TYPE type = scale ?  Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR : Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR_NO_SCALE;
+         Emgu.CV.CvEnum.SMOOTH_TYPE type = scale ? Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR : Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR_NO_SCALE;
          Image<TColor, TDepth> res = CopyBlank();
          CvInvoke.cvSmooth(Ptr, res.Ptr, type, width, height, 0.0, 0.0);
          return res;
@@ -3623,6 +3740,7 @@ namespace Emgu.CV
 
       ///<summary> Threshold the image such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
       ///<returns> dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </returns>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdToZero(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3630,14 +3748,25 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
+      /// <summary> 
+      /// Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise 
+      /// </summary>
+      /// <param name="threshold">The threshold to apply</param>
+      /// <returns>The image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise</returns>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdToZeroInv(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
          ThresholdBase(res, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO_INV);
          return res;
       }
-      ///<summary> Threshold the image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise </summary>
+
+      /// <summary>
+      /// Threshold the image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise 
+      /// </summary>
+      /// <param name="threshold">The threshold to apply</param>
+      /// <returns>The image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise</returns>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdTrunc(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3645,7 +3774,10 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Threshold the image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </summary>
+      /// <summary> 
+      /// Threshold the image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise 
+      /// </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdBinary(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3654,6 +3786,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdBinaryInv(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3666,6 +3799,7 @@ namespace Emgu.CV
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO);
       }
+
       ///<summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
       public void _ThresholdToZeroInv(TColor threshold)
       {
@@ -3788,6 +3922,7 @@ namespace Emgu.CV
       ///<summary> Inplace flip the image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
+      [ExposableMethod(Exposable = true)]
       public void _Flip(CvEnum.FLIP flipType)
       {
          if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
@@ -3853,7 +3988,8 @@ namespace Emgu.CV
          {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName);
-         } else
+         }
+         else
          {
             base.Save(fileName);
          }
@@ -3862,6 +3998,7 @@ namespace Emgu.CV
       /// <summary>
       /// The algorithm normalizes brightness and increases contrast of the image
       /// </summary>
+      [ExposableMethod(Exposable = true)]
       public void _EqualizeHist()
       {
          //TODO: handle multiple channel as well
@@ -3870,79 +4007,6 @@ namespace Emgu.CV
       #endregion
 
       #region IImage
-
-      IImage IImage.PyrUp()
-      {
-         return (IImage)PyrUp();
-      }
-
-      IImage IImage.PyrDown()
-      {
-         return (IImage)PyrDown();
-      }
-
-      IImage IImage.Laplace(int apertureSize)
-      {
-         return (IImage)Laplace(apertureSize);
-      }
-
-      IImage IImage.ToGray()
-      {
-         return (IImage)Convert<Gray, TDepth>();
-      }
-
-      IImage IImage.Resize(int width, int height)
-      {
-         return (IImage)Resize(width, height);
-      }
-
-      IImage IImage.Resize(double scale)
-      {
-         return (IImage)Resize(scale);
-      }
-
-      IImage IImage.Canny(MCvScalar thresh, MCvScalar threshLinking)
-      {
-         TColor threshColor = new TColor();
-         threshColor.MCvScalar = thresh;
-         TColor threshLinkingColor = new TColor();
-         threshLinkingColor.MCvScalar = threshLinking;
-
-         return (IImage)Canny(threshColor, threshLinkingColor);
-      }
-
-      IImage IImage.Sobel(int xorder, int yorder, int apertureSize)
-      {
-         return (IImage)Sobel(xorder, yorder, apertureSize);
-      }
-
-      IImage IImage.Rotate(double angle, MCvScalar background, bool crop)
-      {
-         TColor backgroundColor = new TColor();
-         backgroundColor.MCvScalar = background;
-         return (IImage)Rotate(angle, backgroundColor, crop);
-      }
-
-      IImage IImage.DFT(CvEnum.CV_DXT type, int nonzeroRows)
-      {
-         return (IImage)DFT(type, nonzeroRows);
-      }
-
-      IImage IImage.DCT(CvEnum.CV_DCT_TYPE type)
-      {
-         return (IImage)DCT(type);
-      }
-
-      IImage IImage.ToSingle()
-      {
-         return (IImage)Convert<TColor, Single>();
-      }
-
-      IImage IImage.ToByte()
-      {
-         return (IImage)Convert<TColor, Byte>();
-      }
-
       IImage[] IImage.Split()
       {
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });

@@ -16,10 +16,10 @@ namespace Emgu.CV
       /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
       /// <param name="imagePoints">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
       /// <param name="imageSize">The size of the image, used only to initialize intrinsic camera matrix</param>
-      /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial value. The value is modified by this function.</param>
+      /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
       /// <param name="flags">Flags</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
-      public static void CalibrateCamera(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints, ref MCvSize imageSize, IntrinsicCameraParameters intrinsicParam, int flags, out ExtrinsicCameraParameters[] extrinsicParams)
+      public static void CalibrateCamera(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints, ref MCvSize imageSize, IntrinsicCameraParameters intrinsicParam, CvEnum.CALIB_TYPE flags, out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
          int imageCount = objectPoints.Length;
@@ -68,6 +68,81 @@ namespace Emgu.CV
             RotationVector3D rot = new RotationVector3D(new float[] { rotationVectors[0, i], rotationVectors[1, i], rotationVectors[2, i] });
             extrinsicParams[i] = new ExtrinsicCameraParameters(rot, translationVectors.GetCol(i).Transpose());
          }
+      }
+
+      /// <summary>
+      /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
+      /// R2=R*R1,
+      /// T2=R*T1 + T
+      /// </summary>
+      /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
+      /// <param name="imagePoints1">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="imagePoints2">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="intrinsicParam1">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
+      /// <param name="intrinsicParam2">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
+      /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="flags">Different flags</param>
+      /// <param name="extrinsicParams">The extrinsic parameters which contains:
+      /// R - The rotation matrix between the 1st and the 2nd cameras' coordinate systems; 
+      /// T - The translation vector between the cameras' coordinate systems. </param>
+      /// <param name="essentialMatrix">essential matrix</param>
+      /// <param name="termCrit"> Termination criteria for the iterative optimiziation algorithm </param>
+      /// <param name="foundamentalMatrix">fundamental matrix</param>
+      public static void StereoCalibrate(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints1, Point2D<float>[][] imagePoints2, IntrinsicCameraParameters intrinsicParam1, IntrinsicCameraParameters intrinsicParam2, ref MCvSize imageSize, CvEnum.CALIB_TYPE flags, ref MCvTermCriteria termCrit, out ExtrinsicCameraParameters extrinsicParams, out Matrix<float> foundamentalMatrix, out Matrix<float> essentialMatrix )
+      {
+         Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
+         int imageCount = objectPoints.Length;
+
+         #region get the matrix that represent the object points
+         List<Point<float>> objectPointList = new List<Point<float>>();
+         foreach (Point3D<float>[] pts in objectPoints)
+            objectPointList.AddRange(pts);
+         Matrix<float> objectPointMatrix = PointCollection.ToMatrix<float>(objectPointList);
+         #endregion
+
+         #region get the matrix that represent the image points
+         List<Point<float>> imagePointList1 = new List<Point<float>>();
+         foreach (Point2D<float>[] pts in imagePoints1)
+            imagePointList1.AddRange(pts);
+         Matrix<float> imagePointMatrix1 = PointCollection.ToMatrix<float>(imagePointList1);
+         #endregion
+
+         #region get the matrix that represent the image points
+         List<Point<float>> imagePointList2 = new List<Point<float>>();
+         foreach (Point2D<float>[] pts in imagePoints2)
+            imagePointList2.AddRange(pts);
+         Matrix<float> imagePointMatrix2 = PointCollection.ToMatrix<float>(imagePointList2);
+         #endregion
+
+         #region get the matrix that represent the point counts
+         int[] pointCounts = new int[objectPoints.Length];
+         for (int i = 0; i < objectPoints.Length; i++)
+         {
+            Debug.Assert(objectPoints[i].Length == imagePoints1[i].Length && objectPoints[i].Length == imagePoints2[i].Length, String.Format("Number of 3D points and image points should be equal in the {0}th image", i));
+            pointCounts[i] = objectPoints[i].Length;
+         }
+         Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts);
+         #endregion
+         extrinsicParams = new ExtrinsicCameraParameters();
+         essentialMatrix = new Matrix<float>(3, 3);
+         foundamentalMatrix = new Matrix<float>(3, 3);
+
+         CvInvoke.cvStereoCalibrate(
+            objectPointMatrix.Ptr, 
+            imagePointMatrix1.Ptr, 
+            imagePointMatrix2.Ptr, 
+            pointCountsMatrix.Ptr,
+            intrinsicParam1.IntrinsicMatrix, 
+            intrinsicParam1.DistortionCoeffs,
+            intrinsicParam2.IntrinsicMatrix,
+            intrinsicParam2.DistortionCoeffs,
+            imageSize, 
+            extrinsicParams.RotationVector,
+            extrinsicParams.TranslationVector,
+            essentialMatrix.Ptr,
+            foundamentalMatrix.Ptr,
+            termCrit,
+            flags);
       }
 
       /// <summary>
