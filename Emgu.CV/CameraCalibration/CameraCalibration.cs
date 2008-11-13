@@ -91,7 +91,7 @@ namespace Emgu.CV
       public static void StereoCalibrate(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints1, Point2D<float>[][] imagePoints2, IntrinsicCameraParameters intrinsicParam1, IntrinsicCameraParameters intrinsicParam2, ref MCvSize imageSize, CvEnum.CALIB_TYPE flags, ref MCvTermCriteria termCrit, out ExtrinsicCameraParameters extrinsicParams, out Matrix<float> foundamentalMatrix, out Matrix<float> essentialMatrix )
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
-         int imageCount = objectPoints.Length;
+         //int imageCount = objectPoints.Length;
 
          #region get the matrix that represent the object points
          List<Point<float>> objectPointList = new List<Point<float>>();

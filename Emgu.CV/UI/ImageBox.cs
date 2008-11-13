@@ -182,8 +182,8 @@ namespace Emgu.CV.UI
       private void BuildOperationMenuItem(IImage image)
       {
          operationsToolStripMenuItem.DropDownItems.Clear();
-         List<KeyValuePair<String, MethodInfo>> l = new List<KeyValuePair<string,MethodInfo>>( Reflection.ReflectIImage.GetImageMethods(image));
-         int n = l.Count;
+         //List<KeyValuePair<String, MethodInfo>> l = new List<KeyValuePair<string,MethodInfo>>( Reflection.ReflectIImage.GetImageMethods(image));
+         //int n = l.Count;
          operationsToolStripMenuItem.DropDownItems.AddRange(
             BuildOperationTree( Reflection.ReflectIImage.GetImageMethods(image)));
          
