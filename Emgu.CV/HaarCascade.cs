@@ -20,9 +20,7 @@ namespace Emgu.CV
 
          if (_ptr == IntPtr.Zero)
          {
-            PrioritizedException e = new PrioritizedException(ExceptionLevel.Critical,
-                String.Format("Fail to create HaarCascade object: {0}", fileName));
-            throw e;
+            throw new NullReferenceException( String.Format("Fail to create HaarCascade object: {0}", fileName));
          }
       }
 

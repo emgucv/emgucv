@@ -36,7 +36,7 @@ namespace Emgu.CV
       {
          _ptr = CvInvoke.cvCreateVideoWriter(fileName, compressionCode, fps, new MCvSize(width, height), isColor);
          if (_ptr == IntPtr.Zero)
-            throw new PrioritizedException(ExceptionLevel.Medium, "Unable to create VideoWriter. Make sure you have the specific codec installed");
+            throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
       }
 
       /// <summary>
