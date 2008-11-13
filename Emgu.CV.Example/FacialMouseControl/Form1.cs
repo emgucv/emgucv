@@ -34,9 +34,9 @@ namespace FacialMouseControl
             {
                _capture = new Capture();
             }
-            catch (PrioritizedException excpt)
+            catch (NullReferenceException excpt)
             {
-               excpt.Alert(true);
+               MessageBox.Show(excpt.Message);
                return;
             }
          }

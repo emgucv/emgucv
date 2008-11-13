@@ -32,10 +32,9 @@ namespace CameraCapture
                {
                   _capture = new Capture();
                }
-               catch (PrioritizedException excpt)
+               catch (NullReferenceException excpt)
                {
-                  excpt.Alert(true);
-                  return;
+                  MessageBox.Show(excpt.Message);
                }
             }
             _captureThread = new Thread(

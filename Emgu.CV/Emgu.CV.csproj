@@ -61,12 +61,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=4.6.4.31011, Culture=neutral, PublicKeyToken=02a83cbd123fcd60">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\ZedGraph.dll</HintPath>
-    </Reference>
     <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\zlib.net.dll</HintPath>
@@ -125,36 +120,6 @@
     <Compile Include="Shape\Triangle3D.cs" />
     <Compile Include="StructuringElementEx.cs" />
     <Compile Include="SURFFeature.cs" />
-    <Compile Include="UI\HistogramCtrl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\HistogramCtrl.Designer.cs">
-      <DependentUpon>HistogramCtrl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\HistogramViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\HistogramViewer.Designer.cs">
-      <DependentUpon>HistogramViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ImageBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\ImageBox.Designer.cs">
-      <DependentUpon>ImageBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ImageProperty.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\ImageProperty.Designer.cs">
-      <DependentUpon>ImageProperty.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ImageViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ImageViewer.Designer.cs">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
@@ -209,24 +174,6 @@
     </Compile>
     <Compile Include="Shape\Rectangle.cs" />
     <Compile Include="TimedImage.cs" />
-    <Compile Include="UI\OperationStackView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\OperationStackView.Designer.cs">
-      <DependentUpon>OperationStackView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ParamInputDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ParamInputDlg.Designer.cs">
-      <DependentUpon>ParamInputDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\PropertyDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\PropertyDlg.Designer.cs">
-      <DependentUpon>PropertyDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="VideoWriter.cs" />
   </ItemGroup>
@@ -240,39 +187,6 @@
   <ItemGroup>
     <Content Include="Emgu.CV.License.txt" />
     <Content Include="README.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="UI\HistogramCtrl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>HistogramCtrl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\HistogramViewer.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>HistogramViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ImageBox.resx">
-      <DependentUpon>ImageBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ImageProperty.resx">
-      <DependentUpon>ImageProperty.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ImageViewer.resx">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\OperationStackView.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OperationStackView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ParamInputDlg.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ParamInputDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\PropertyDlg.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PropertyDlg.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">

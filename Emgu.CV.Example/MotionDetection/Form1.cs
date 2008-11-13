@@ -28,9 +28,9 @@ namespace MotionDetection
             {
                _capture = new Capture();
             }
-            catch (PrioritizedException excpt)
+            catch (NullReferenceException excpt)
             {   //show errors if there is any
-               excpt.Alert(false);
+               MessageBox.Show(excpt.Message);
             }
          }
 
