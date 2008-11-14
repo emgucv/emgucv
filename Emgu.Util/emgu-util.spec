@@ -27,7 +27,7 @@ rm -rf $RPM_BUILD_ROOT
 /var/lib/emgu/bin/Emgu.Util.dll
 
 %changelog
-* Mon Dec 31 2007 Canming Huang <canming@devel.emgu.com> - 
+* Mon Dec 31 2007 Canming Huang <huangcanming@hotmail.com> - 
 - Initial build.
 
 %post

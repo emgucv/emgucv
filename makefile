@@ -4,14 +4,14 @@ SVN_URL = https://emgucv.svn.sourceforge.net/svnroot/emgucv/trunk/
 VERSION = 1.4.0.0
 VS2005_FOLDER=Solution/VS2005_MonoDevelop/
 VS2008_FOLDER=Solution/VS2008/
-CV_DLLS=cv100.dll cxcore100.dll cvaux100.dll cvcam100.dll highgui100.dll cxts001.dll libguide40.dll opencv.license.txt
+CV_DLLS=cv110.dll cxcore110.dll cvaux110.dll highgui110.dll cxts001.dll ffopencv110.dll opencv.license.txt
 LIB_DLLS=zlib.net.dll zlib.net.license.txt ZedGraph.dll ZedGraph.license.txt
 FILE_TO_COPY=README.txt ${VS2005_FOLDER}Emgu.CV.sln ${VS2008_FOLDER}Emgu.CV.sln ${VS2005_FOLDER}Emgu.CV.Example.sln ${VS2008_FOLDER}Emgu.CV.Example.sln
-CV_CHECKOUT=Emgu.CV Emgu.Util Emgu.CV.Example  
+CV_CHECKOUT=Emgu.CV Emgu.Util Emgu.CV.UI Emgu.CV.Example  
 
-CV_RELEASE: Util CV FORCE
+CV_RELEASE: CV.UI FORCE
 	install -d release 
-	cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt bin/Emgu.CV.dll bin/Emgu.Util.dll release 
+	cp Emgu.CV/README.txt Emgu.CV/Emgu.CV.License.txt bin/Emgu.CV.dll bin/Emgu.CV.UI.dll bin/Emgu.Util.dll release 
 	$(foreach dll, $(LIB_DLLS), cp lib/$(dll) release;)
 	tar -cv release | gzip -c > Emgu.CV.Linux.Binary-${VERSION}.tar.gz
 	rm -rf release
@@ -20,6 +20,9 @@ Util:  FORCE
 	make -C Emgu.$@ bin; 
 
 CV: Util FORCE 
+	make -C Emgu.$@ bin;
+
+CV.UI: CV FORCE
 	make -C Emgu.$@ bin;
 
 UI: 	FORCE

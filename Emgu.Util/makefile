@@ -1,7 +1,7 @@
 NAME = emgu-util
 VERSION = 1.1.0.0
 PKG_NAME = ${NAME}-${VERSION}
-MCS_FLAG = -target:library -r:System.Windows.Forms  -d:LINUX 
+MCS_FLAG = -target:library -d:LINUX 
 MCS=gmcs ${MCS_FLAG}
 UTIL_SRC=  *.cs Properties/AssemblyInfo.cs 
 INSTALL_DIR = var/lib
