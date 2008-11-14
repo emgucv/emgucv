@@ -55,7 +55,6 @@ namespace Emgu.CV.UI
             this.Controls.Add(this.zedGraphControl1);
             this.Name = "HistogramViewer";
             this.Size = new System.Drawing.Size(270, 230);
-            this.Load += new System.EventHandler(this.HistogramViewer_Load);
             this.Resize += new System.EventHandler(this.HistogramViewer_Resize);
             this.ResumeLayout(false);
 

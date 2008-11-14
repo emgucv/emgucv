@@ -6,7 +6,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Drawing;
 using System.Diagnostics;
-using System.Reflection;
 using System.Security.Permissions;
 using Emgu.Util;
 using Emgu.CV.Reflection;
@@ -805,7 +804,7 @@ namespace Emgu.CV
 
       #region Hough line and circles
       ///<summary> 
-      ///Apply Hugh transform to find line segments. 
+      ///Apply Hough transform to find line segments. 
       ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
       ///</summary> 
       ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
@@ -841,7 +840,7 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///Apply Hugh transform to find line segments. 
+      ///Apply Hough transform to find line segments. 
       ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
       ///</summary> 
       ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
@@ -877,7 +876,7 @@ namespace Emgu.CV
 
       ///<summary> 
       ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hugh transform to find line segments 
+      ///then apply Hough transform to find line segments 
       ///</summary>
       [Obsolete("Typo, please use HoughLines instead. Will be removed in the next release")]
       public LineSegment2D<int>[][] HughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
@@ -890,7 +889,7 @@ namespace Emgu.CV
 
       ///<summary> 
       ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hugh transform to find line segments 
+      ///then apply Hough transform to find line segments 
       ///</summary>
       public LineSegment2D<int>[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
@@ -902,7 +901,7 @@ namespace Emgu.CV
 
       ///<summary> 
       ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hugh transform to find circles 
+      ///then apply Hough transform to find circles 
       ///</summary>
       ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
       ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
@@ -947,7 +946,7 @@ namespace Emgu.CV
 
       ///<summary> 
       ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hugh transform to find circles 
+      ///then apply Hough transform to find circles 
       ///</summary>
       ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
       ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
@@ -1601,6 +1600,7 @@ namespace Emgu.CV
       ///<summary> Perform an elementwise OR operation with some color</summary>
       ///<param name="val">The value for the OR operation</param>
       ///<returns> The result of the OR operation</returns>
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Or(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1648,6 +1648,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="val">The value for the XOR operation</param>
       /// <returns> The result of the XOR operation</returns>
+      [ExposableMethod(Exposable=true, Category="Logic Operation")]
       public Image<TColor, TDepth> Xor(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1673,6 +1674,7 @@ namespace Emgu.CV
       ///Compute the complement image
       ///</summary>
       ///<returns> The complement image</returns>
+      [ExposableMethod(Exposable=true, Category="Logic Operation")]
       public Image<TColor, TDepth> Not()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1695,6 +1697,7 @@ namespace Emgu.CV
       ///<summary> Find the elementwise maximum value </summary>
       ///<param name="value">The value to compare with</param>
       ///<returns> An image where each pixel is the maximum of <i>this</i> image and <paramref name="value"/></returns>
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Max(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1715,6 +1718,7 @@ namespace Emgu.CV
       ///<summary> Find the elementwise minimum value </summary>
       ///<param name="value">The value to compare with</param>
       ///<returns> An image where each pixel is the minimum of <i>this</i> image and <paramref name="value"/></returns>
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Min(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1789,6 +1793,7 @@ namespace Emgu.CV
       /// <param name="value">The value to compare with</param>
       /// <param name="cmp_type">The comparison type</param>
       /// <returns>The result of the comparison as a mask</returns>
+      [ExposableMethod(Exposable=true, Category="Logic Operation")]
       public Image<TColor, Byte> Cmp(double value, CvEnum.CMP_TYPE cmp_type)
       {
          Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
@@ -1906,6 +1911,7 @@ namespace Emgu.CV
       ///<summary> Elementwise subtrace a color from the current image</summary>
       ///<param name="val">The color value to be subtraced from the current image</param>
       ///<returns> The result of elementwise subtracting color 'val' from the current image</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Sub(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1918,6 +1924,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="val">the value which subtract this image</param>
       /// <returns>val - this</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> SubR(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1962,6 +1969,7 @@ namespace Emgu.CV
       ///<summary> Elementwise add a color <paramref name="val"/> to the current image</summary>
       ///<param name="val">The color value to be added to the current image</param>
       ///<returns> The result of elementwise adding color <paramref name="val"/> from the current image</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Add(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1993,6 +2001,7 @@ namespace Emgu.CV
       ///<summary> Elementwise multiply the current image with <paramref name="scale"/></summary>
       ///<param name="scale">The scale to be multiplied</param>
       ///<returns> The scaled image </returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
       public Image<TColor, TDepth> Mul(double scale)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2353,7 +2362,7 @@ namespace Emgu.CV
       [ExposableMethod(
          Exposable = true,
          Category = "Convertion",
-         GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte")]
+         GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte,System.Double")]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.ColorType, new()
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Width, Height);
@@ -2855,7 +2864,7 @@ namespace Emgu.CV
       /// by rejecting even rows and columns.
       ///</summary>
       ///<returns> The downsampled image</returns>
-      [ExposableMethod(Exposable = true)]
+      [ExposableMethod(Exposable = true, Category="Pyramids")]
       public Image<TColor, TDepth> PyrDown()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width >> 1, Height >> 1);
@@ -2870,7 +2879,7 @@ namespace Emgu.CV
       /// So the resulting image is four times larger than the source image.
       ///</summary>
       ///<returns> The upsampled image</returns>
-      [ExposableMethod(Exposable = true)]
+      [ExposableMethod(Exposable = true, Category = "Pyramids")]
       public Image<TColor, TDepth> PyrUp()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width << 1, Height << 1);

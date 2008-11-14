@@ -40,14 +40,6 @@ namespace Emgu.CV.UI
          
          // Size the control to fill the form with a margin
          SetSize();
-
-      }
-
-
-
-      private void HistogramViewer_Load(object sender, EventArgs e)
-      {
-
       }
 
       private void HistogramViewer_Resize(object sender, EventArgs e)

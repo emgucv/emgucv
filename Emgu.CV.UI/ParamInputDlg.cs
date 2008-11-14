@@ -287,7 +287,9 @@ namespace Emgu.CV.UI
             }
             else if (paramType.IsSubclassOf(typeof(ColorType)))
             {
-               TextBox[] inputBoxes = new TextBox[4];
+               ColorType t = Activator.CreateInstance(paramType) as ColorType;
+               string[] channelNames = t.ChannelName;
+               TextBox[] inputBoxes = new TextBox[channelNames.Length];
                int boxWidth = 40;
 
                //Create input boxes for the scalar value

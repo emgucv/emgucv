@@ -451,8 +451,8 @@ namespace Emgu.CV.Test
 
       public void TestReadImage()
       {
-         Application.Run(new ImageViewer(new Image<Gray, Byte>("lena.jpg")));
-         Application.Run(new ImageViewer(new Image<Bgr, Byte>("lena.jpg").Convert<Gray, Byte>()));
+         ImageViewer.Show(new Image<Gray, Byte>("lena.jpg"));
+         ImageViewer.Show(new Image<Bgr, Byte>("lena.jpg").Convert<Gray, Byte>());
       }
 
       public void TestImageViewer()

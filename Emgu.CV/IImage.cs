@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using Emgu.CV.Reflection;
 
 namespace Emgu.CV
 {

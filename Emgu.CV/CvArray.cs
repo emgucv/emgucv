@@ -351,7 +351,6 @@ namespace Emgu.CV
       ///<summary>
       ///Inplace compute the elementwise minimum value 
       ///</summary>
-      [ExposableMethod(Exposable = true)]
       public void _Min(double val)
       {
          CvInvoke.cvMinS(Ptr, val, Ptr);
@@ -370,7 +369,6 @@ namespace Emgu.CV
       /// Inplace compute the elementwise maximum value with <paramref name="val"/>
       /// </summary>
       /// <param name="val">The value to be compare with</param>
-      [ExposableMethod(Exposable = true)]
       public void _Max(double val)
       {
          CvInvoke.cvMaxS(Ptr, val, Ptr);
@@ -419,7 +417,6 @@ namespace Emgu.CV
       ///<summary> 
       ///Inplace compute the complement for all Array Elements
       ///</summary>
-      [ExposableMethod(Exposable = true)]
       public void _Not()
       {
          CvInvoke.cvNot(Ptr, Ptr);
