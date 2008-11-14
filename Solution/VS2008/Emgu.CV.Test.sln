@@ -8,7 +8,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV", "..\..\Emgu.CV\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Cv.Test", "..\..\Emgu.CV.Test\Emgu.Cv.Test.csproj", "{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV.UI\Emgu.CV.UI.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|Any CPU = Debug Linux|Any CPU
 		Debug Linux|Mixed Platforms = Debug Linux|Mixed Platforms
@@ -148,6 +154,34 @@ Global
 		{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}.Release|Win32.ActiveCfg = Release|Any CPU
 		{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}.Release|x64.ActiveCfg = Release|Any CPU
 		{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Mixed Platforms.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Win32.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|x64.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|x86.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Mixed Platforms.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Win32.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|x64.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|x86.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x64.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

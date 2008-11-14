@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForm", "..\..\Emgu.C
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
 	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "Svn"
+		SccAuxPath = "Svn"
+		SccLocalPath = "Svn"
+		SccProvider = "SubversionScc"
 		TargetFramework = "3.0"
 		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;{7C2C5325-8235-4A24-9C67-6BD79A4679E2}|Emgu.Utils.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
@@ -48,7 +52,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\SURFFeature\SURFFeature.csproj", "{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV.UI\Emgu.CV.UI.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
 		Debug Linux|Any CPU = Debug Linux|Any CPU
@@ -468,6 +478,34 @@ Global
 		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Win32.ActiveCfg = Release|Any CPU
 		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|x86.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|.NET.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Any CPU.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Mixed Platforms.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|Win32.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug Linux|x86.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|.NET.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Any CPU.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Mixed Platforms.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|Win32.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release Linux|x86.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|.NET.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

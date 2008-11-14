@@ -280,23 +280,23 @@ namespace Emgu.CV
       /// attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
       /// </summary>
       /// <param name="image">Source chessboard view</param>
-      /// <param name="pattern_size">The number of inner corners per chessboard row and column</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">The corners detected</param>
       /// <param name="flags">Various operation flags</param>
       /// <returns>If the chess board pattern is found</returns>
       public static bool FindChessboardCorners(
          Image<Gray, Byte> image,
-         MCvSize pattern_size,
+         MCvSize patternSize,
          CvEnum.CALIB_CB_TYPE flags,
          out Point2D<float>[] corners)
       {
-         float[,] cornersCoordinates = new float[pattern_size.width * pattern_size.height, 2];
+         float[,] cornersCoordinates = new float[patternSize.width * patternSize.height, 2];
          int cornerCount = 0;
 
          bool patternFound =
          CvInvoke.cvFindChessboardCorners(
             image.Ptr,
-            pattern_size,
+            patternSize,
             cornersCoordinates,
             ref cornerCount,
             flags) != 0; 

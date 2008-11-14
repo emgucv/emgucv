@@ -14,13 +14,13 @@ namespace Emgu.CV
       /// <summary>
       /// Create a BGStatModel
       /// </summary>
-      /// <param name="img">The image used for initiating the statistic model</param>
+      /// <param name="image">The image used for initiating the statistic model</param>
       /// <param name="type">The type of the statistics model</param>
-      public BackgroundStatisticsModel(Image<Bgr, Byte> img, Emgu.CV.CvEnum.BG_STAT_TYPE type)
+      public BackgroundStatisticsModel(Image<Bgr, Byte> image, Emgu.CV.CvEnum.BG_STAT_TYPE type)
       {
          _ptr = (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL) ?
-            CvInvoke.cvCreateFGDStatModel(img, IntPtr.Zero)
-            : CvInvoke.cvCreateGaussianBGModel(img, IntPtr.Zero);
+            CvInvoke.cvCreateFGDStatModel(image, IntPtr.Zero)
+            : CvInvoke.cvCreateGaussianBGModel(image, IntPtr.Zero);
       }
 
       private delegate int UpdateFunction(IntPtr img, IntPtr statModel);
@@ -28,12 +28,12 @@ namespace Emgu.CV
       /// <summary>
       /// Update the statistic model
       /// </summary>
-      /// <param name="img"></param>
-      public void Update(Image<Bgr, Byte> img)
+      /// <param name="image"></param>
+      public void Update(Image<Bgr, Byte> image)
       {
          MCvBGStatModel model = MCvBGStatModel;
          UpdateFunction updateFunction = (UpdateFunction)Marshal.GetDelegateForFunctionPointer(model.CvUpdateBGStatModel, typeof(UpdateFunction));
-         updateFunction(img.Ptr, _ptr);
+         updateFunction(image.Ptr, _ptr);
       }
 
       /// <summary>

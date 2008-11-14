@@ -200,6 +200,10 @@
 			ReferencedProjectIdentifier="{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}"
 			RelativePathToProject="..\..\Emgu.CV\Emgu.CV.csproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
+			RelativePathToProject="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj"
+		/>
 	</References>
 	<Files>
 		<Filter
