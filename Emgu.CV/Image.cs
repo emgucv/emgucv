@@ -1846,6 +1846,7 @@ namespace Emgu.CV
       }
       #endregion
 
+      /*
       #region Discrete Transforms
       /// <summary>
       /// performs forward or inverse transform of 1D or 2D floating-point array
@@ -1884,7 +1885,7 @@ namespace Emgu.CV
          return res;
       }
       #endregion
-
+      */
       #region Arithmatic
       #region Substraction methods
       ///<summary> Elementwise subtract another image from the current image </summary>
