@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Xml.Serialization;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace Emgu.CV
 {
@@ -85,16 +85,23 @@ namespace Emgu.CV
       {
          get
          {
-            if (typeof(TDepth) == typeof(float))
+            Type typeOfDepth = typeof(TDepth);
+
+            if (typeOfDepth == typeof(Single))
                return CvEnum.MAT_DEPTH.CV_32F;
-            else if (typeof(TDepth) == typeof(Byte))
+            if (typeOfDepth == typeof(UInt32))
+               return Emgu.CV.CvEnum.MAT_DEPTH.CV_32S;
+            if (typeOfDepth == typeof(SByte))
+               return Emgu.CV.CvEnum.MAT_DEPTH.CV_8S;
+            if (typeOfDepth == typeof(Byte))
                return CvEnum.MAT_DEPTH.CV_8U;
-            else if (typeof(TDepth) == typeof(double))
+            if (typeOfDepth == typeof(Double))
                return CvEnum.MAT_DEPTH.CV_64F;
-            else
-            {
-               throw new NotImplementedException("Unsupported matrix depth");
-            }
+            if (typeOfDepth == typeof(UInt16))
+               return CvEnum.MAT_DEPTH.CV_16U;
+            if (typeOfDepth == typeof(Int16))
+               return CvEnum.MAT_DEPTH.CV_16S;
+            throw new NotImplementedException("Unsupported matrix depth");
          }
       }
 
@@ -333,16 +340,12 @@ namespace Emgu.CV
       {
          if (startRow == 0)
             return GetRows(endRow, Rows, 1);
-         else if (endRow == Rows)
+         if (endRow == Rows)
             return GetRows(0, startRow, 1);
-         else
-         {
-            using (Matrix<TDepth> upper = GetRows(0, startRow, 1))
-            using (Matrix<TDepth> lower = GetRows(endRow, Rows, 1))
-            {
-               return upper.ConcateVertical(lower);
-            }
-         }
+
+         using (Matrix<TDepth> upper = GetRows(0, startRow, 1))
+         using (Matrix<TDepth> lower = GetRows(endRow, Rows, 1))
+            return upper.ConcateVertical(lower);
       }
 
       /// <summary>
@@ -355,16 +358,12 @@ namespace Emgu.CV
       {
          if (startCol == 0)
             return GetCols(endCol, Cols);
-         else if (endCol == Cols)
+         if (endCol == Cols)
             return GetCols(0, startCol);
-         else
-         {
-            using (Matrix<TDepth> upper = GetCols(0, startCol))
-            using (Matrix<TDepth> lower = GetCols(endCol, Cols))
-            {
-               return upper.ConcateHorizontal(lower);
-            }
-         }
+
+         using (Matrix<TDepth> upper = GetCols(0, startCol))
+         using (Matrix<TDepth> lower = GetCols(endCol, Cols))
+            return upper.ConcateHorizontal(lower);
       }
       #endregion
 

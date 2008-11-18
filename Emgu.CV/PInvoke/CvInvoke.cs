@@ -926,6 +926,18 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Initializes CvMatND structure allocated by the user
+      /// </summary>
+      /// <param name="mat">Pointer to the array header to be initialized</param>
+      /// <param name="dims">Number of array dimensions</param>
+      /// <param name="sizes">Array of dimension sizes</param>
+      /// <param name="type">Type of array elements</param>
+      /// <param name="data">Optional data pointer assigned to the matrix header</param>
+      /// <returns>Pointer to the array header</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvInitMatNDHeader(IntPtr mat, int dims, int[] sizes, CV.CvEnum.MAT_DEPTH type, IntPtr data);
+
+      /// <summary>
       /// Decrements the matrix data reference counter and releases matrix header
       /// </summary>
       /// <param name="mat">Double pointer to the matrix.</param>
@@ -2149,11 +2161,11 @@ namespace Emgu.CV
           double threshold2);
 
       /// <summary>
-      /// The function cvWatershed implements one of the variants of watershed, non-parametric marker-based segmentation algorithm, described in [Meyer92] Before passing the image to the function, user has to outline roughly the desired regions in the image markers with positive (>0) indices, i.e. every region is represented as one or more connected components with the pixel values 1, 2, 3 etc. Those components will be "seeds" of the future image regions. All the other pixels in markers, which relation to the outlined regions is not known and should be defined by the algorithm, should be set to 0's. On the output of the function, each pixel in markers is set to one of values of the "seed" components, or to -1 at boundaries between the regions.
+      /// Implements one of the variants of watershed, non-parametric marker-based segmentation algorithm, described in [Meyer92] Before passing the image to the function, user has to outline roughly the desired regions in the image markers with positive (>0) indices, i.e. every region is represented as one or more connected components with the pixel values 1, 2, 3 etc. Those components will be "seeds" of the future image regions. All the other pixels in markers, which relation to the outlined regions is not known and should be defined by the algorithm, should be set to 0's. On the output of the function, each pixel in markers is set to one of values of the "seed" components, or to -1 at boundaries between the regions.
       /// </summary>
       /// <remarks>Note, that it is not necessary that every two neighbor connected components are separated by a watershed boundary (-1's pixels), for example, in case when such tangent components exist in the initial marker image. </remarks>
       /// <param name="image">The input 8-bit 3-channel image</param>
-      /// <param name="markers">The input/output 32-bit single-channel image (map) of markers. </param>
+      /// <param name="markers">The input/output Int32 depth single-channel image (map) of markers. </param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvWatershed(IntPtr image, IntPtr markers);
 

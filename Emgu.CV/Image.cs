@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Xml.Serialization;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Emgu.Util;
+using System.Xml.Serialization;
 using Emgu.CV.Reflection;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -337,23 +337,25 @@ namespace Emgu.CV
       /// <summary>
       /// Get the equivalent opencv depth type for this image
       /// </summary>
-      public CvEnum.IPL_DEPTH CvDepth
+      public static CvEnum.IPL_DEPTH CvDepth
       {
          get
-         {
-            if (typeof(TDepth) == typeof(Single))
+         {            
+            Type typeOfDepth = typeof(TDepth);
+
+            if (typeOfDepth == typeof(Single))
                return CvEnum.IPL_DEPTH.IPL_DEPTH_32F;
-            else if (typeof(TDepth) == typeof(Byte))
+            else if (typeOfDepth == typeof(Byte))
                return CvEnum.IPL_DEPTH.IPL_DEPTH_8U;
-            else if (typeof(TDepth) == typeof(Double))
+            else if (typeOfDepth == typeof(Double))
                return CvEnum.IPL_DEPTH.IPL_DEPTH_64F;
-            else if (typeof(TDepth) == typeof(SByte))
+            else if (typeOfDepth == typeof(SByte))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8S;
-            else if (typeof(TDepth) == typeof(UInt16))
+            else if (typeOfDepth == typeof(UInt16))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16U;
-            else if (typeof(TDepth) == typeof(Int16))
+            else if (typeOfDepth == typeof(Int16))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16S;
-            else if (typeof(TDepth) == typeof(Int32))
+            else if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32S;
             else
                throw new NotImplementedException("Unsupported image depth");
@@ -555,9 +557,7 @@ namespace Emgu.CV
       public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : IComparable, new()
       {
          if (thickness > 0)
-         {
             DrawPolyline(polygon.Vertices, true, color, thickness);
-         }
          else
          {
             MCvPoint[] pts = Array.ConvertAll<Point2D<T>, MCvPoint>(polygon.Vertices,
@@ -2134,12 +2134,9 @@ namespace Emgu.CV
       /// <returns>The values on the line</returns>
       public TDepth[,] Sample(LineSegment2D<int> line, CvEnum.LINE_SAMPLE_TYPE type)
       {
-         int size;
-
-         if (type == Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED)
-            size = Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y));
-         else
-            size = Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
+         int size = type == Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED ?
+            Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y)) 
+            : Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
 
          TDepth[,] data = new TDepth[size, new TColor().Dimension];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -2177,14 +2174,9 @@ namespace Emgu.CV
       /// <returns></returns>
       public Image<TColor, TDepth> Resize(int width, int height, bool preserverScale)
       {
-         if (preserverScale)
-         {
-            return Resize(Math.Min((double)width / Width, (double)height / Height));
-         }
-         else
-         {
-            return Resize(width, height);
-         }
+         return preserverScale ? 
+            Resize(Math.Min((double)width / Width, (double)height / Height)) 
+            : Resize(width, height);
       }
 
       /// <summary>
@@ -2491,6 +2483,7 @@ namespace Emgu.CV
             CvInvoke.cvConvertScaleAbs(Ptr, res.Ptr, scale, shift);
          else
             CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, shift);
+
          return res;
       }
       #endregion
@@ -2568,8 +2561,7 @@ namespace Emgu.CV
          set
          {
             #region reallocate memory if necessary
-            if (Ptr == IntPtr.Zero ||
-                (Width != value.Width || Height != value.Height))
+            if (Ptr == IntPtr.Zero || Width != value.Width || Height != value.Height)
             {
                DisposeObject();
                AllocateData(value.Height, value.Width);
@@ -2596,124 +2588,122 @@ namespace Emgu.CV
                }
             }*/
 
-            if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+            switch (value.PixelFormat)
             {
-               if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-                  CopyFromBitmap(value);
-               else
-               {
-                  using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }
-            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
-            {
-               if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-               {
-                  using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height))
+               case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
+                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+                     CopyFromBitmap(value);
+                  else
                   {
-                     indexValue.CopyFromBitmap(value);
-                     Matrix<Byte> bTable, gTable, rTable, aTable;
-                     Util.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
-
-                     using (Image<Gray, Byte> b = indexValue.CopyBlank())
-                     using (Image<Gray, Byte> g = indexValue.CopyBlank())
-                     using (Image<Gray, Byte> r = indexValue.CopyBlank())
-                     using (Image<Gray, Byte> a = indexValue.CopyBlank())
-                     {
-                        CvInvoke.cvLUT(indexValue.Ptr, b.Ptr, bTable.Ptr);
-                        CvInvoke.cvLUT(indexValue.Ptr, g.Ptr, gTable.Ptr);
-                        CvInvoke.cvLUT(indexValue.Ptr, r.Ptr, rTable.Ptr);
-                        CvInvoke.cvLUT(indexValue.Ptr, a.Ptr, aTable.Ptr);
-                        CvInvoke.cvMerge(b.Ptr, g.Ptr, r.Ptr, a.Ptr, Ptr);
-                     }
-                     bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
+                     using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                        ConvertFrom(tmp);
                   }
-               }
-               else
-               {
-                  using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }
-            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
-            {
-               if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
-                  CopyFromBitmap(value);
-               else
-               {
-                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }
-            else if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format1bppIndexed)
-            {
-               if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
-               {
-                  int rows = value.Height;
-                  int cols = value.Width;
-                  System.Drawing.Imaging.BitmapData data = value.LockBits(
-                      new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
-                      System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                      value.PixelFormat);
-
-                  int fullByteCount = cols >> 3;
-                  int partialBitCount = cols & 7;
-
-                  int mask = 1 << 7;
-
-                  Int64 srcAddress = data.Scan0.ToInt64();
-                  Byte[, ,] imagedata = Data as Byte[, ,];
-
-                  Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
-
-                  for (int i = 0; i < rows; i++, srcAddress += data.Stride)
+                  break;
+               case System.Drawing.Imaging.PixelFormat.Format8bppIndexed:
+                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
                   {
-                     Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
-
-                     int v = 0;
-                     for (int j = 0; j < cols; j++, v = v << 1)
+                     using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height))
                      {
-                        if ((j & 7) == 0)
-                        {  //fetch the next byte 
-                           v = row[j >> 3];
+                        indexValue.CopyFromBitmap(value);
+                        Matrix<Byte> bTable, gTable, rTable, aTable;
+                        Util.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
+
+                        using (Image<Gray, Byte> b = indexValue.CopyBlank())
+                        using (Image<Gray, Byte> g = indexValue.CopyBlank())
+                        using (Image<Gray, Byte> r = indexValue.CopyBlank())
+                        using (Image<Gray, Byte> a = indexValue.CopyBlank())
+                        {
+                           CvInvoke.cvLUT(indexValue.Ptr, b.Ptr, bTable.Ptr);
+                           CvInvoke.cvLUT(indexValue.Ptr, g.Ptr, gTable.Ptr);
+                           CvInvoke.cvLUT(indexValue.Ptr, r.Ptr, rTable.Ptr);
+                           CvInvoke.cvLUT(indexValue.Ptr, a.Ptr, aTable.Ptr);
+                           CvInvoke.cvMerge(b.Ptr, g.Ptr, r.Ptr, a.Ptr, Ptr);
                         }
-                        imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
+                        bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
                      }
                   }
-               }
-               else
-               {
-                  using (Image<Gray, Byte> tmp = new Image<Gray, Byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }
-            else
-            {
-               #region Handle other image type
-               /*
-               Bitmap bgraImage = new Bitmap(value.Width, value.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-               using (Graphics g = Graphics.FromImage(bgraImage))
-               {
-                  g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
-               }
-               Bitmap = bgraImage;*/
-               using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
-               {
-                  Byte[, ,] data = tmp1.Data;
-                  for (int i = 0; i < value.Width; i++)
-                     for (int j = 0; j < value.Height; j++)
-                     {
-                        System.Drawing.Color color = value.GetPixel(i, j);
-                        data[j, i, 0] = color.B;
-                        data[j, i, 1] = color.G;
-                        data[j, i, 2] = color.R;
-                        data[j, i, 3] = color.A;
-                     }
+                  else
+                  {
+                     using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                        ConvertFrom(tmp);
+                  }
+                  break;
+               case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+                  if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                     CopyFromBitmap(value);
+                  else
+                  {
+                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                        ConvertFrom(tmp);
+                  }
+                  break;
+               case System.Drawing.Imaging.PixelFormat.Format1bppIndexed:
+                  if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
+                  {
+                     int rows = value.Height;
+                     int cols = value.Width;
+                     System.Drawing.Imaging.BitmapData data = value.LockBits(
+                         new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
+                         System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                         value.PixelFormat);
 
-                  ConvertFrom<Bgra, Byte>(tmp1);
-               }
-               #endregion
+                     int fullByteCount = cols >> 3;
+                     int partialBitCount = cols & 7;
+
+                     int mask = 1 << 7;
+
+                     Int64 srcAddress = data.Scan0.ToInt64();
+                     Byte[, ,] imagedata = Data as Byte[, ,];
+
+                     Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
+
+                     for (int i = 0; i < rows; i++, srcAddress += data.Stride)
+                     {
+                        Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
+
+                        int v = 0;
+                        for (int j = 0; j < cols; j++, v = v << 1)
+                        {
+                           if ((j & 7) == 0)
+                           {  //fetch the next byte 
+                              v = row[j >> 3];
+                           }
+                           imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
+                        }
+                     }
+                  }
+                  else
+                  {
+                     using (Image<Gray, Byte> tmp = new Image<Gray, Byte>(value))
+                        ConvertFrom(tmp);
+                  }
+                  break;
+               default:
+                  #region Handle other image type
+                  /*
+				               Bitmap bgraImage = new Bitmap(value.Width, value.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+				               using (Graphics g = Graphics.FromImage(bgraImage))
+				               {
+				                  g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
+				               }
+				               Bitmap = bgraImage;*/
+                  using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
+                  {
+                     Byte[, ,] data = tmp1.Data;
+                     for (int i = 0; i < value.Width; i++)
+                        for (int j = 0; j < value.Height; j++)
+                        {
+                           System.Drawing.Color color = value.GetPixel(i, j);
+                           data[j, i, 0] = color.B;
+                           data[j, i, 1] = color.G;
+                           data[j, i, 2] = color.R;
+                           data[j, i, 3] = color.A;
+                        }
+
+                     ConvertFrom<Bgra, Byte>(tmp1);
+                  }
+                  #endregion
+                  break;
             }
          }
       }
@@ -2776,9 +2766,7 @@ namespace Emgu.CV
             else
             {
                using (Image<Gray, Byte> temp = Convert<Gray, Byte>())
-               {
                   return temp.ToBitmap();
-               }
             }
          }
          else if (typeof(TColor) == typeof(Bgra)) //if this is Bgra image
@@ -2807,9 +2795,7 @@ namespace Emgu.CV
             else
             {
                using (Image<Bgra, Byte> tmp = Convert<Bgra, Byte>())
-               {
                   return tmp.ToBitmap();
-               }
             }
          }
          else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
@@ -2841,9 +2827,7 @@ namespace Emgu.CV
          else
          {
             using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
-            {
                return temp.ToBitmap();
-            }
          }
       }
 
@@ -3995,14 +3979,10 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
          if (System.Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
-         {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName);
-         }
          else
-         {
             base.Save(fileName);
-         }
       }
 
       /// <summary>

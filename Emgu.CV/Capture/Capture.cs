@@ -106,14 +106,11 @@ namespace Emgu.CV
       {
          System.IO.FileInfo info = new System.IO.FileInfo(fileName);
          if (!info.Exists)
-         {
             throw new System.IO.FileNotFoundException(String.Format("The file: {0} cannot be found", fileName));
-         }
+
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
-         {
             throw new NullReferenceException("Unable to create capture from file:" + fileName);
-         }
       }
 
       #region implement UnmanagedObject
@@ -216,9 +213,7 @@ namespace Emgu.CV
          IntPtr img = CvInvoke.cvQueryFrame(Ptr);
 #endif
          if (img == IntPtr.Zero)
-         {
             return null;
-         }
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 

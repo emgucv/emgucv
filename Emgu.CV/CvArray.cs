@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.IO;
 using System.IO.Compression;
-using zlib;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Emgu.Util;
+using System.Xml.Serialization;
 using Emgu.CV.Reflection;
+using Emgu.Util;
+using zlib;
 
 namespace Emgu.CV
 {
@@ -115,6 +115,7 @@ namespace Emgu.CV
             }
             else
             {
+               
                using (MemoryStream ms = new MemoryStream(value))
                {
                   //ms.Position = 0;
@@ -341,9 +342,7 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_dataHandle.IsAllocated)
-         {
             _dataHandle.Free();
-         };
       }
       #endregion
 
