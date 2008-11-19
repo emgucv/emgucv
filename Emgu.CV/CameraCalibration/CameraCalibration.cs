@@ -88,10 +88,20 @@ namespace Emgu.CV
       /// <param name="essentialMatrix">essential matrix</param>
       /// <param name="termCrit"> Termination criteria for the iterative optimiziation algorithm </param>
       /// <param name="foundamentalMatrix">fundamental matrix</param>
-      public static void StereoCalibrate(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints1, Point2D<float>[][] imagePoints2, IntrinsicCameraParameters intrinsicParam1, IntrinsicCameraParameters intrinsicParam2, ref MCvSize imageSize, CvEnum.CALIB_TYPE flags, ref MCvTermCriteria termCrit, out ExtrinsicCameraParameters extrinsicParams, out Matrix<float> foundamentalMatrix, out Matrix<float> essentialMatrix )
+      public static void StereoCalibrate(
+         Point3D<float>[][] objectPoints, 
+         Point2D<float>[][] imagePoints1, 
+         Point2D<float>[][] imagePoints2, 
+         IntrinsicCameraParameters intrinsicParam1, 
+         IntrinsicCameraParameters intrinsicParam2, 
+         ref MCvSize imageSize, 
+         CvEnum.CALIB_TYPE flags, 
+         ref MCvTermCriteria termCrit, 
+         out ExtrinsicCameraParameters extrinsicParams, 
+         out Matrix<float> foundamentalMatrix, 
+         out Matrix<float> essentialMatrix )
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
-         //int imageCount = objectPoints.Length;
 
          #region get the matrix that represent the object points
          List<Point<float>> objectPointList = new List<Point<float>>();
@@ -123,6 +133,7 @@ namespace Emgu.CV
          }
          Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts);
          #endregion
+
          extrinsicParams = new ExtrinsicCameraParameters();
          essentialMatrix = new Matrix<float>(3, 3);
          foundamentalMatrix = new Matrix<float>(3, 3);
@@ -209,14 +220,27 @@ namespace Emgu.CV
           params Matrix<float>[] mats)
       {
          Matrix<float> pointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         IntPtr dpdrot = mats.Length > 0 ? mats[0].Ptr : IntPtr.Zero;
-         IntPtr dpdt = mats.Length > 1 ? mats[1].Ptr : IntPtr.Zero;
-         IntPtr dpdf = mats.Length > 2 ? mats[2].Ptr : IntPtr.Zero;
-         IntPtr dpdc = mats.Length > 3 ? mats[3].Ptr : IntPtr.Zero;
-         IntPtr dpddist = mats.Length > 4 ? mats[4].Ptr : IntPtr.Zero;
+         int matsLength = mats.Length;
+         IntPtr dpdrot = matsLength > 0 ? mats[0].Ptr : IntPtr.Zero;
+         IntPtr dpdt = matsLength > 1 ? mats[1].Ptr : IntPtr.Zero;
+         IntPtr dpdf = matsLength > 2 ? mats[2].Ptr : IntPtr.Zero;
+         IntPtr dpdc = matsLength > 3 ? mats[3].Ptr : IntPtr.Zero;
+         IntPtr dpddist = matsLength > 4 ? mats[4].Ptr : IntPtr.Zero;
 
          Matrix<float> point2DMatrix = new Matrix<float>(objectPoints.Length, 2);
-         CvInvoke.cvProjectPoints2(pointMatrix.Ptr, extrin.RotationVector.Ptr, extrin.TranslationVector.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, point2DMatrix.Ptr, dpdrot, dpdt, dpdf, dpdc, dpddist);
+         CvInvoke.cvProjectPoints2(
+            pointMatrix.Ptr, 
+            extrin.RotationVector.Ptr, 
+            extrin.TranslationVector.Ptr, 
+            intrin.IntrinsicMatrix.Ptr, 
+            intrin.DistortionCoeffs.Ptr, 
+            point2DMatrix.Ptr, 
+            dpdrot, 
+            dpdt, 
+            dpdf, 
+            dpdc, 
+            dpddist);
+
          Point2D<float>[] imagePoints = new Point2D<float>[objectPoints.Length];
          for (int i = 0; i < imagePoints.Length; i++)
             imagePoints[i] = new Point2D<float>(point2DMatrix[i, 0], point2DMatrix[i, 1]);
@@ -241,7 +265,10 @@ namespace Emgu.CV
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints, double ransacReprojThreshold)
+      public static Matrix<float> FindHomography(
+         Matrix<float> srcPoints, 
+         Matrix<float> dstPoints, 
+         double ransacReprojThreshold)
       {
          return FindHomography(srcPoints, dstPoints, CvEnum.HOMOGRAPHY_METHOD.RANSAC, ransacReprojThreshold);
       }
@@ -254,7 +281,11 @@ namespace Emgu.CV
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints, CvEnum.HOMOGRAPHY_METHOD method, double ransacReprojThreshold)
+      public static Matrix<float> FindHomography(
+         Matrix<float> srcPoints, 
+         Matrix<float> dstPoints, 
+         CvEnum.HOMOGRAPHY_METHOD method, 
+         double ransacReprojThreshold)
       {
          Matrix<float> homography = new Matrix<float>(3, 3);
          CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero);
@@ -269,7 +300,11 @@ namespace Emgu.CV
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(Point2D<float>[] srcPoints, Point2D<float>[] dstPoints, CvEnum.HOMOGRAPHY_METHOD method, double ransacReprojThreshold)
+      public static Matrix<float> FindHomography(
+         Point2D<float>[] srcPoints, 
+         Point2D<float>[] dstPoints, 
+         CvEnum.HOMOGRAPHY_METHOD method, 
+         double ransacReprojThreshold)
       {
          Matrix<float> srcPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(srcPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
          Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));

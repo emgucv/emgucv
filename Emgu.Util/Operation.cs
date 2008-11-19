@@ -59,7 +59,7 @@ namespace Emgu.Util
             String typeName = ((String)_parameters[i]).Split('|')[1].Split(':')[0];
             if ((types[i] = Type.GetType(typeName)) == null)
             {
-               typeName = typeName + "," + typeName.Substring(0, typeName.LastIndexOf("."));
+               typeName = String.Format("{0},{1}", typeName, typeName.Substring(0, typeName.LastIndexOf(".")));
                types[i] = Type.GetType(typeName);
             }
          }
@@ -89,27 +89,48 @@ namespace Emgu.Util
       public String ToCode(TypeEnum.ProgrammingLanguage language)
       {
          String res = String.Empty;
+
+         String genericArgString = string.Empty;
+         Type[] genericArguments = _mi.GetGenericArguments();
+
+         Object[] genericParameters = new object[genericArguments.Length];
+         Object[] nonGenericParameters = new object[_parameters.Length - genericParameters.Length];
+         Array.Copy(_parameters, genericParameters, genericParameters.Length);
+         Array.Copy(_parameters, genericParameters.Length, nonGenericParameters, 0, nonGenericParameters.Length);
+
+         if (genericArguments.Length > 0) 
+         {
+            genericArgString = String.Join(",", Array.ConvertAll<Object, String>(genericParameters, 
+               delegate(Object t)
+               {
+                  return (t as String).Split('|')[1].Split(':')[0];
+               }));
+         }
          if (language == TypeEnum.ProgrammingLanguage.CSharp)
          {
-            res = String.Format("{0}.{1}({2})",
+            genericArgString = String.Format("<{0}>", genericArgString);
+            res = String.Format("{0}.{1}{2}({3})",
                 "{instance}",
                 Method.Name,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, delegate(Object p) { return  ParameterToCode(p, language);} )));
+                genericArgString,
+                String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
          }
          else if (language == TypeEnum.ProgrammingLanguage.CPlusPlus)
          {
-            res = String.Format("{0}->{1}({2})",
+            genericArgString = String.Format("<{0}>", genericArgString);
+            res = String.Format("{0}->{1}{2}({3})",
                 "{instance}",
                 Method.Name,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(Parameters, delegate(Object p) { return  ParameterToCode(p, language);} )));
+                genericArgString,
+                String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
          }
          return res;
       }
 
-      private String ParameterToCode(Object Parameters, TypeEnum.ProgrammingLanguage language)
+      private String ParameterToCode(Object parameter, TypeEnum.ProgrammingLanguage language)
       {
-         ICodeGenerable gen = Parameters as ICodeGenerable;
-         return gen == null ? System.Convert.ToString(Parameters) :
+         ICodeGenerable gen = parameter as ICodeGenerable;
+         return gen == null ? System.Convert.ToString(parameter) :
             gen.ToCode(language);
       }
 

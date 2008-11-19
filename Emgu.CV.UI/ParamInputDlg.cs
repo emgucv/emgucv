@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
-using System.Diagnostics;
+using System.Windows.Forms;
 using Emgu.CV.Reflection;
 
 namespace Emgu.CV.UI
@@ -73,29 +69,21 @@ namespace Emgu.CV.UI
 
       private void okButton_Click(object sender, EventArgs e)
       {
-         bool valid = true;
-
          for (int i = 0; i < _paramInfo.Length; i++)
          {
             ParamInputPanel panel = _paramPanel[i];
             Object value = panel.GetValue();
             if (value == null)
             {
-               valid = false;
                MessageBox.Show("Parameter {0} is invalid.", panel.Name);
-               break;
+               return;
             }
-            else
-            {
-               _paramValue[i] = value;
-            }
+
+            _paramValue[i] = value;
          }
 
-         if (valid)
-         {
-            _sucessed = true;
-            Close();
-         }
+         _sucessed = true;
+         Close();
       }
 
       private class ParamInputPanel : Panel
@@ -109,16 +97,14 @@ namespace Emgu.CV.UI
          /// <returns>The value of the parameter input panel, if unable to retrieve value, return null</returns>
          public Object GetValue()
          {
-            Object o = null;
             try
             {
-               o = _getParamFunction();
+               return _getParamFunction();
             }
             catch (Exception)
             {
                return null;
             }
-            return o;
          }
 
          public delegate Object GetParamDelegate();
@@ -199,7 +185,7 @@ namespace Emgu.CV.UI
          {  // a generic parameter
             String defaultString = (String)defaultValue;
             String[] splitTypeName = defaultString.Split('|');
-            paramNameLabel.Text = splitTypeName[0] + ":";
+            paramNameLabel.Text = String.Format("{0}:", splitTypeName[0]);
             String[] splitDefaultValue = splitTypeName[1].Split(':');
 
             String[] options = splitDefaultValue[1].Split(',');
@@ -211,13 +197,16 @@ namespace Emgu.CV.UI
             panel.GetParamFunction =
                 delegate()
                 {
-                   return splitTypeName[0] + "|" + combo.Text + ":" + splitDefaultValue[1];
+                   return String.Format("{0}|{1}:{2}", 
+                      splitTypeName[0], 
+                      combo.Text, 
+                      splitDefaultValue[1]);
                 };
          }
          else
          {
             Type paramType = param.ParameterType;
-            paramNameLabel.Text = ParseParameterName(param) + ":";
+            paramNameLabel.Text = String.Format("{0}:", ParseParameterName(param));
 
             if (paramType.IsEnum)
             {
@@ -309,7 +298,6 @@ namespace Emgu.CV.UI
                       {
                          values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
                       }
-
                       ColorType color = Activator.CreateInstance(paramType) as ColorType;
                       color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
                       return color;
@@ -354,7 +342,7 @@ namespace Emgu.CV.UI
             {
                parameterList.Add(null);
                Object defaultParameterValue = defaultParameterValues == null
-                  ? genericTypes[i].Name + "|" + genericOptions[i] :
+                  ? String.Format("{0}|{1}", genericTypes[i].Name, genericOptions[i]) :
                   defaultParameterValues[i];
 
                defaultParameterValueList.Add(defaultParameterValue);
@@ -378,15 +366,7 @@ namespace Emgu.CV.UI
          #region Handle the cases where at least one parameter is required as input
          ParamInputDlg dlg = new ParamInputDlg(parameterList.ToArray(), defaultParameterValueList.ToArray());
          dlg.ShowDialog();
-         if (dlg.Successed)
-         {
-            return dlg.Parameters;
-         }
-         else
-         {
-            return null;
-         }
-
+         return dlg.Successed ? dlg.Parameters : null;
          #endregion
       }
    }

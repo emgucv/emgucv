@@ -259,7 +259,7 @@ namespace Emgu.CV.Test
          using (MemoryStream ms = new MemoryStream())
          {
             img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-
+            img.SerializationCompressionRatio = 9;
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                 formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             formatter.Serialize(ms, img);
@@ -291,9 +291,7 @@ namespace Emgu.CV.Test
       public void TestGetSize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
-
          Point2D<int> size = img.Size;
-
       }
 
       [Test]

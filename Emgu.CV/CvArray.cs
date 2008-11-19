@@ -94,8 +94,8 @@ namespace Emgu.CV
             {
                using (MemoryStream ms = new MemoryStream())
                {
-                  using (GZipStream compressedStream = new GZipStream(ms, CompressionMode.Compress))
-                  //using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms, SerializationCompressionRatio))
+                  //using (GZipStream compressedStream = new GZipStream(ms, CompressionMode.Compress))
+                  using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms, SerializationCompressionRatio))
                   {
                      compressedStream.Write(data, 0, data.Length);
                      compressedStream.Flush();
@@ -115,25 +115,31 @@ namespace Emgu.CV
             }
             else
             {
-               
-               using (MemoryStream ms = new MemoryStream(value))
-               {
-                  //ms.Position = 0;
-                  using (GZipStream stream = new GZipStream(ms, CompressionMode.Decompress))
+               try
+               {  //try to use zlib to decompressed the data
+                  using (MemoryStream ms = new MemoryStream())
                   {
-                     bytes = new Byte[size];
-                     stream.Read(bytes, 0, size);
+                     using (zlib.ZOutputStream stream = new zlib.ZOutputStream(ms))
+                     {
+                        stream.Write(value, 0, value.Length);
+                        stream.Flush(); 
+                     }
+                     bytes = ms.ToArray();
                   }
                }
-               /*
-               using (MemoryStream ms = new MemoryStream())
-               {
-                   using (zlib.ZOutputStream stream = new zlib.ZOutputStream(ms))
-                   {
-                       stream.Write(value, 0, value.Length);
-                       bytes = ms.ToArray();
-                   }
-               }*/
+               catch
+               {  //if using zlib decompression fails, try to use .NET GZipStream to decompress
+               
+                  using (MemoryStream ms = new MemoryStream(value))
+                  {
+                     //ms.Position = 0;
+                     using (GZipStream stream = new GZipStream(ms, CompressionMode.Decompress))
+                     {
+                        bytes = new Byte[size];
+                        stream.Read(bytes, 0, size);
+                     }
+                  }
+               }
             }
 
             Marshal.Copy(bytes, 0, _dataHandle.AddrOfPinnedObject(), size);

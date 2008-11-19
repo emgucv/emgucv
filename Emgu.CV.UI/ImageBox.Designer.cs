@@ -36,8 +36,8 @@ namespace Emgu.CV.UI
            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
            this.propertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-           this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-           this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+           this.loadImageFromFileDialog = new System.Windows.Forms.OpenFileDialog();
+           this.saveImageToFileDialog = new System.Windows.Forms.SaveFileDialog();
            this.contextMenuStrip1.SuspendLayout();
            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
            this.SuspendLayout();
@@ -87,14 +87,14 @@ namespace Emgu.CV.UI
            this.propertyToolStripMenuItem.Text = "Property";
            this.propertyToolStripMenuItem.Click += new System.EventHandler(this.propertyToolStripMenuItem_Click);
            // 
-           // openFileDialog1
+           // loadImageFromFileDialog
            // 
-           this.openFileDialog1.Filter = "Image Files (*.jpg; *.bmp;*.png)|*.jpg;*.bmp;*.png|All Files(*.*)|*.*";
-           this.openFileDialog1.Title = "Open Image File";
+           this.loadImageFromFileDialog.Filter = "Image Files (*.jpg; *.bmp;*.png)|*.jpg;*.bmp;*.png|All Files(*.*)|*.*";
+           this.loadImageFromFileDialog.Title = "Open Image File";
            // 
-           // saveFileDialog1
+           // saveImageToFileDialog
            // 
-           this.saveFileDialog1.Title = "File Saving";
+           this.saveImageToFileDialog.Title = "File Saving";
            // 
            // ImageBox
            // 
@@ -115,8 +115,8 @@ namespace Emgu.CV.UI
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileOperationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadImageToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog loadImageFromFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveImageToFileDialog;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem propertyToolStripMenuItem;

@@ -1796,4 +1796,19 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       ON_EDGE = 2
    }
+
+   /// <summary>
+   /// Type used in cvStereoRectify
+   /// </summary>
+   public enum STEREO_RECTIFY_TYPE
+   {
+      /// <summary>
+      /// Shift one of the image in horizontal or vertical direction (depending on the orientation of epipolar lines) in order to maximise the useful image area
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Makes the principal points of each camera have the same pixel coordinates in the rectified views
+      /// </summary>
+      CALIB_ZERO_DISPARITY = 1024
+   }
 }

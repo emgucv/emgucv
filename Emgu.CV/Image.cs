@@ -2738,9 +2738,12 @@ namespace Emgu.CV
       /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
       public Bitmap ToBitmap()
       {
-         if (typeof(TColor) == typeof(Gray)) // if this is a gray scale image
+         Type typeOfColor = typeof(TColor);
+         Type typeofDepth = typeof(TDepth);
+
+         if (typeOfColor == typeof(Gray)) // if this is a gray scale image
          {
-            if (typeof(TDepth) == typeof(Byte))
+            if (typeofDepth == typeof(Byte))
             {
                Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
@@ -2769,9 +2772,9 @@ namespace Emgu.CV
                   return temp.ToBitmap();
             }
          }
-         else if (typeof(TColor) == typeof(Bgra)) //if this is Bgra image
+         else if (typeOfColor == typeof(Bgra)) //if this is Bgra image
          {
-            if (typeof(TDepth) == typeof(byte))
+            if (typeofDepth == typeof(byte))
             {
                Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
@@ -2798,7 +2801,7 @@ namespace Emgu.CV
                   return tmp.ToBitmap();
             }
          }
-         else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+         else if (typeOfColor == typeof(Bgr) && typeofDepth == typeof(Byte))
          {   //if this is a Bgr Byte image
 
             //create the bitmap and get the pointer to the data

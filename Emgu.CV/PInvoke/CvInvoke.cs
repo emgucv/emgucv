@@ -53,10 +53,10 @@ namespace Emgu.CV
       /// <param name="version">Information about the module(s), including version</param>
       /// <param name="loadedAddonPlugins">The list of names and versions of the optimized plugins that CXCORE was able to find and load</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetModuleInfo( 
+      public static extern void cvGetModuleInfo(
          IntPtr moduleName,
          ref IntPtr version,
-         ref IntPtr loadedAddonPlugins );
+         ref IntPtr loadedAddonPlugins);
 
       #region Memory Management
       /*
@@ -89,13 +89,14 @@ namespace Emgu.CV
       /// <summary>
       /// The function cvSetMemoryManager sets user-defined memory managment functions (substitutors for malloc and free) that will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage)
       /// </summary>
-      /// <param name="alloc_func">Allocation function</param>
-      /// <param name="free_func">Deallocation function</param>
+      /// <param name="allocFunc">Allocation function</param>
+      /// <param name="freeFunc">Deallocation function</param>
       /// <param name="userdata">User data that is transparetly passed to the custom functions</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSetMemoryManager( CvAllocFunc alloc_func,
-                         CvFreeFunc free_func,
-                         IntPtr userdata );
+      public static extern void cvSetMemoryManager(
+         CvAllocFunc allocFunc,
+         CvFreeFunc freeFunc,
+         IntPtr userdata);
 
       #endregion
 
@@ -115,7 +116,13 @@ namespace Emgu.CV
       /// <param name="line">The line number in the souce where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <returns></returns>
-      private static int CvErrorHandler(int status, String funcName, String errMsg, String fileName, int line, IntPtr userData)
+      private static int CvErrorHandler(
+         int status,
+         String funcName,
+         String errMsg,
+         String fileName,
+         int line,
+         IntPtr userData)
       {
          try
          {
@@ -138,7 +145,8 @@ namespace Emgu.CV
       /// <param name="line">The line number in the souce where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <returns></returns>
-      public delegate int CvErrorCallback(int status, String funcName, String errMsg, String fileName, int line, IntPtr userData);
+      public delegate int CvErrorCallback(
+         int status, String funcName, String errMsg, String fileName, int line, IntPtr userData);
 
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
@@ -252,11 +260,11 @@ namespace Emgu.CV
       /// <summary>
       /// Move to the next element in the sequence
       /// </summary>
-      /// <param name="elem_size">the size of the element</param>
+      /// <param name="elemSize">the size of the element</param>
       /// <param name="reader">the sequence reader</param>
-      public static void CV_NEXT_SEQ_ELEM(int elem_size, ref MCvSeqReader reader)
+      public static void CV_NEXT_SEQ_ELEM(int elemSize, ref MCvSeqReader reader)
       {
-         reader.ptr = new IntPtr(reader.ptr.ToInt64() + elem_size);
+         reader.ptr = new IntPtr(reader.ptr.ToInt64() + elemSize);
          if (((reader).ptr.ToInt64()) >= (reader).block_max.ToInt64())
          {
             cvChangeSeqBlock(ref reader, 1);
@@ -465,9 +473,9 @@ namespace Emgu.CV
       public static void cvSubS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
       {
          CvInvoke.cvAddS(
-            src, 
+            src,
             new MCvScalar(-value.v0, -value.v1, -value.v2, -value.v3),
-            dst, 
+            dst,
             mask);
       }
 
@@ -638,9 +646,13 @@ namespace Emgu.CV
       /// <param name="src">Source array, real or complex</param>
       /// <param name="dst">Destination array of the same size and same type as the source</param>
       /// <param name="flags">Transformation flags</param>
-      /// <param name="nonzero_rows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT. See the sample below</param>
+      /// <param name="nonzeroRows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT. See the sample below</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvDFT(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags, int nonzero_rows);
+      public static extern void cvDFT(
+         IntPtr src,
+         IntPtr dst,
+         CvEnum.CV_DXT flags,
+         int nonzeroRows);
 
       /// <summary>
       /// Returns the minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. 
@@ -649,7 +661,7 @@ namespace Emgu.CV
       /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern int cvGetOptimalDFTSize(int size0);
- 
+
       /// <summary>
       /// Performs per-element multiplication of the two CCS-packed or complex matrices that are results of real or complex Fourier transform. 
       /// </summary>
@@ -658,7 +670,7 @@ namespace Emgu.CV
       /// <param name="dst">The destination array of the same type and the same size of the sources</param>
       /// <param name="flags"></param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvMulSpectrums( IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.MUL_SPECTRUMS_TYPE flags );
+      public static extern void cvMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.MUL_SPECTRUMS_TYPE flags);
 
 
       /// <summary>
@@ -950,14 +962,14 @@ namespace Emgu.CV
       /// <param name="fileName">File name</param>
       /// <param name="memstorage">Memory storage for dynamic structures, such as CvSeq or CvGraph. It is not used for matrices or images</param>
       /// <param name="name">Optional object name. If it is NULL, the first top-level object in the storage will be loaded</param>
-      /// <param name="real_name">Optional output parameter that will contain name of the loaded object (useful if name=NULL). </param>
+      /// <param name="realName">Optional output parameter that will contain name of the loaded object (useful if name=NULL). </param>
       /// <returns>Loaded object from file</returns>
       [DllImport(CXCORE_LIBRARY, EntryPoint = "cvLoad")]
       private static extern IntPtr _cvLoad(
           [MarshalAs(_stringMarshalType)] String fileName,
           IntPtr memstorage,
           [MarshalAs(_stringMarshalType)] String name,
-          IntPtr real_name);
+          IntPtr realName);
 
       /// <summary>
       /// Loads object from file. It provides a simple interface to cvRead. After object is loaded, the file storage is closed and all the temporary buffers are deleted. Thus, to load a dynamic structure, such as sequence, contour or graph, one should pass a valid destination memory storage to the function.
@@ -1260,7 +1272,7 @@ namespace Emgu.CV
       /// <param name="diag">Array diagonal. Zero corresponds to the main diagonal, -1 corresponds to the diagonal above the main etc., 1 corresponds to the diagonal below the main etc</param>
       /// <returns>Pointer to the resulting sub-array header</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvGetDiag( IntPtr arr, IntPtr submat, int diag );
+      public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
 
 
       /// <summary>
@@ -1744,7 +1756,7 @@ namespace Emgu.CV
       /// <param name="transmat">Transformation matrix</param>
       /// <param name="shiftvec">Optional shift vector</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvTransform( IntPtr src, IntPtr dst, IntPtr transmat, IntPtr shiftvec);
+      public static extern void cvTransform(IntPtr src, IntPtr dst, IntPtr transmat, IntPtr shiftvec);
 
       /// <summary>
       /// Transforms every element of src (by treating it as 2D or 3D vector) in the following way:
@@ -1969,7 +1981,7 @@ namespace Emgu.CV
       /// <param name="start">The lower inclusive boundary of the range</param>
       /// <param name="end">The upper exclusive boundary of the range</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvRange( IntPtr mat, double start, double end );
+      public static extern void cvRange(IntPtr mat, double start, double end);
 
       /// <summary>
       /// Fills output variables with low-level information about the array data. All output parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with ROI set, parameters of ROI are returned. 
@@ -2239,7 +2251,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvCreateSubdivDelaunay2D(MCvRect rect, IntPtr storage)
       {
-         IntPtr subdiv = cvCreateSubdiv2D( (int) CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
+         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
                  Marshal.SizeOf(typeof(MCvSubdiv2D)),
                  Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
                  Marshal.SizeOf(typeof(MCvQuadEdge2D)),
@@ -2667,11 +2679,15 @@ namespace Emgu.CV
       /// <param name="src">Source array (single-channel, 8-bit of 32-bit floating point). </param>
       /// <param name="dst">Destination array; must be either the same type as src or 8-bit. </param>
       /// <param name="threshold">Threshold value</param>
-      /// <param name="max_value">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
-      /// <param name="threshold_type">Thresholding type </param>
+      /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+      /// <param name="thresholdType">Thresholding type </param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvThreshold(IntPtr src, IntPtr dst, double threshold,
-                double max_value, CvEnum.THRESH threshold_type);
+      public static extern void cvThreshold(
+         IntPtr src, 
+         IntPtr dst, 
+         double threshold,
+         double maxValue, 
+         CvEnum.THRESH thresholdType);
 
       /// <summary>
       /// Transforms grayscale image to binary image. 
@@ -2689,13 +2705,13 @@ namespace Emgu.CV
       /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvAdaptiveThreshold(
-          IntPtr src,
-          IntPtr dst,
-          double maxValue,
-          CvEnum.ADAPTIVE_THRESHOLD_TYPE adaptiveType,
-          CvEnum.THRESH thresholdType,
-          int blockSize,
-          double param1);
+         IntPtr src,
+         IntPtr dst,
+         double maxValue,
+         CvEnum.ADAPTIVE_THRESHOLD_TYPE adaptiveType,
+         CvEnum.THRESH thresholdType,
+         int blockSize,
+         double param1);
 
       /// <summary>
       /// Clears histogram bins that are below the specified threshold
@@ -2729,10 +2745,14 @@ namespace Emgu.CV
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
       /// <returns>Rectangular regions in the given image that are likely to contain objects the cascade has been trained for</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvHaarDetectObjects(IntPtr image, IntPtr cascade,
-                          IntPtr storage, double scaleFactor,
-                          int minNeighbors, int flags,
-                          MCvSize minSize);
+      public static extern IntPtr cvHaarDetectObjects(
+         IntPtr image, 
+         IntPtr cascade,
+         IntPtr storage, 
+         double scaleFactor,
+         int minNeighbors, 
+         int flags,
+         MCvSize minSize);
 
       /// <summary>
       /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or NULL if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
@@ -2747,13 +2767,13 @@ namespace Emgu.CV
       /// <returns></returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvFindContours(
-          IntPtr image,
-          IntPtr storage,
-          ref IntPtr firstContour,
-          int headerSize,
-          CvEnum.RETR_TYPE mode,
-          CvEnum.CHAIN_APPROX_METHOD method,
-          MCvPoint offset);
+         IntPtr image,
+         IntPtr storage,
+         ref IntPtr firstContour,
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method,
+         MCvPoint offset);
 
       /// <summary>
       /// Finds circles in grayscale image using some modification of Hough transform
@@ -2770,15 +2790,15 @@ namespace Emgu.CV
       /// <returns>Pointer to the sequence of circles</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvHoughCircles(
-          IntPtr image,
-          IntPtr circleStorage,
-          CvEnum.HOUGH_TYPE method,
-          double dp,
-          double minDist,
-          double param1,
-          double param2,
-          int minRadius,
-          int maxRadius);
+         IntPtr image,
+         IntPtr circleStorage,
+         CvEnum.HOUGH_TYPE method,
+         double dp,
+         double minDist,
+         double param1,
+         double param2,
+         int minRadius,
+         int maxRadius);
 
       /// <summary>
       /// Converts input image from one color space to another. The function ignores colorModel and channelSeq fields of IplImage header, so the source image color space should be specified correctly (including order of the channels in case of RGB space, e.g. BGR means 24-bit format with B0 G0 R0 B1 G1 R1 ... layout, whereas RGB means 24-bit format with R0 G0 B0 R1 G1 B1 ... layout). 
@@ -2810,9 +2830,15 @@ namespace Emgu.CV
       /// </param>
       /// <returns>Pointer to the decetected lines</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvHoughLines2(IntPtr image, IntPtr lineStorage, CvEnum.HOUGH_TYPE method,
-                    double rho, double theta, int threshold,
-                    double param1, double param2);
+      public static extern IntPtr cvHoughLines2(
+         IntPtr image, 
+         IntPtr lineStorage, 
+         CvEnum.HOUGH_TYPE method,
+         double rho, 
+         double theta, 
+         int threshold,
+         double param1, 
+         double param2);
 
       /// <summary>
       /// Calculates spatial and central moments up to the third order and writes them to moments. The moments may be used then to calculate gravity center of the shape, its area, main axises and various shape characeteristics including 7 Hu invariants.
@@ -2866,12 +2892,12 @@ namespace Emgu.CV
       /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
       /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvExtractSURF( 
+      public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
-         ref IntPtr keypoints, 
+         ref IntPtr keypoints,
          ref IntPtr descriptors,
-         IntPtr storage, 
-         MCvSURFParams parameters );
+         IntPtr storage,
+         MCvSURFParams parameters);
 
       /// <summary>
       /// Create a CvSURFParams using the specific values
@@ -2894,12 +2920,12 @@ namespace Emgu.CV
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
       /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
       /// </summary>
-      /// <param name="object_points">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
-      /// <param name="rotation_vector">The rotation vector, 1x3 or 3x1</param>
-      /// <param name="translation_vector">The translation vector, 1x3 or 3x1</param>
-      /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-      /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's</param>
-      /// <param name="image_points">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
+      /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
+      /// <param name="rotationVector">The rotation vector, 1x3 or 3x1</param>
+      /// <param name="translationVector">The translation vector, 1x3 or 3x1</param>
+      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's</param>
+      /// <param name="imagePoints">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
       /// <param name="dpdrot">Optional Nx3 matrix of derivatives of image points with respect to components of the rotation vector</param>
       /// <param name="dpdt">Optional Nx3 matrix of derivatives of image points w.r.t. components of the translation vector</param>
       /// <param name="dpdf">Optional Nx2 matrix of derivatives of image points w.r.t. fx and fy</param>
@@ -2907,12 +2933,12 @@ namespace Emgu.CV
       /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvProjectPoints2(
-          IntPtr object_points,
-          IntPtr rotation_vector,
-          IntPtr translation_vector,
-          IntPtr intrinsic_matrix,
-          IntPtr distortion_coeffs,
-          IntPtr image_points,
+          IntPtr objectPoints,
+          IntPtr rotationVector,
+          IntPtr translationVector,
+          IntPtr intrinsicMatrix,
+          IntPtr distortionCoeffs,
+          IntPtr imagePoints,
           IntPtr dpdrot,
           IntPtr dpdt,
           IntPtr dpdf,
@@ -2922,16 +2948,16 @@ namespace Emgu.CV
       /// <summary>
       /// Finds perspective transformation H=||hij|| between the source and the destination planes
       /// </summary>
-      /// <param name="src_points">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
-      /// <param name="dst_points">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
+      /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points. </param>
+      /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
       /// <param name="method">The type of the method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindHomography(
-         IntPtr src_points,
-         IntPtr dst_points,
+         IntPtr srcPoints,
+         IntPtr dstPoints,
          IntPtr homography,
          CvEnum.HOMOGRAPHY_METHOD method,
          double ransacReprojThreshold,
@@ -2940,25 +2966,25 @@ namespace Emgu.CV
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
       /// </summary>
-      /// <param name="object_points">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
-      /// <param name="image_points">The joint matrix of corresponding image points, 2xN or Nx2, where N is the total number of points in all views</param>
-      /// <param name="point_counts">Vector containing numbers of points in each particular view, 1xM or Mx1, where M is the number of a scene views</param>
-      /// <param name="image_size">Size of the image, used only to initialize intrinsic camera matrix</param>
-      /// <param name="intrinsic_matrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
-      /// <param name="distortion_coeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
-      /// <param name="rotation_vectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
-      /// <param name="translation_vectors">The output 3xM or Mx3 array of translation vectors</param>
+      /// <param name="objectPoints">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
+      /// <param name="imagePoints">The joint matrix of corresponding image points, 2xN or Nx2, where N is the total number of points in all views</param>
+      /// <param name="pointCounts">Vector containing numbers of points in each particular view, 1xM or Mx1, where M is the number of a scene views</param>
+      /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="intrinsicMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+      /// <param name="distortionCoeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
+      /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
+      /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
       /// <param name="flags">Different flags</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvCalibrateCamera2(
-          IntPtr object_points,
-          IntPtr image_points,
-          IntPtr point_counts,
-          MCvSize image_size,
-          IntPtr intrinsic_matrix,
-          IntPtr distortion_coeffs,
-          IntPtr rotation_vectors,
-          IntPtr translation_vectors,
+          IntPtr objectPoints,
+          IntPtr imagePoints,
+          IntPtr pointCounts,
+          MCvSize imageSize,
+          IntPtr intrinsicMatrix,
+          IntPtr distortionCoeffs,
+          IntPtr rotationVectors,
+          IntPtr translationVectors,
           CvEnum.CALIB_TYPE flags);
 
       /// <summary>
@@ -2966,7 +2992,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points1">Array of the first image points of 2xN, Nx2, 3xN or Nx3 size (where N is number of points). Multi-channel 1xN or Nx1 array is also acceptable. The point coordinates should be floating-point (single or double precision) </param>
       /// <param name="points2">Array of the second image points of the same size and format as points1</param>
-      /// <param name="fundamental_matrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
+      /// <param name="fundamentalMatrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
       /// <param name="method">Method for computing the fundamental matrix </param>
       /// <param name="param1"></param>
       /// <param name="param2"></param>
@@ -2974,12 +3000,12 @@ namespace Emgu.CV
       /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvFindFundamentalMat(IntPtr points1,
-                        IntPtr points2,
-                        IntPtr fundamental_matrix,
-                        CvEnum.CV_FM method,
-                        double param1,
-                        double param2,
-                        IntPtr status);
+         IntPtr points2,
+         IntPtr fundamentalMatrix,
+         CvEnum.CV_FM method,
+         double param1,
+         double param2,
+         IntPtr status);
 
       /// <summary>
       /// computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
@@ -2995,13 +3021,13 @@ namespace Emgu.CV
       /// <param name="principalPoint">The principal point in realworld units </param>
       /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvCalibrationMatrixValues( 
+      public static extern void cvCalibrationMatrixValues(
          IntPtr calibMatr,
-         int imgWidth, 
+         int imgWidth,
          int imgHeight,
-         double apertureWidth, 
+         double apertureWidth,
          double apertureHeight,
-         ref double fovx, 
+         ref double fovx,
          ref double fovy,
          ref double focalLength,
          ref MCvPoint2D64f principalPoint,
@@ -3011,84 +3037,159 @@ namespace Emgu.CV
       /// <summary>
       /// Estimates extrinsic camera parameters using known intrinsic parameters and and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error
       /// </summary>
-      /// <param name="object_points">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
-      /// <param name="image_points">The array of corresponding image points, 2xN or Nx2, where N is the number of points in the view</param>
-      /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-      /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's.</param>
-      /// <param name="rotation_vector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
-      /// <param name="translation_vector">The output 3x1 or 1x3 translation vector</param>
+      /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
+      /// <param name="imagePoints">The array of corresponding image points, 2xN or Nx2, where N is the number of points in the view</param>
+      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's.</param>
+      /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
+      /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindExtrinsicCameraParams2(
-         IntPtr object_points,
-         IntPtr image_points,
-         IntPtr intrinsic_matrix,
-         IntPtr distortion_coeffs,
-         IntPtr rotation_vector,
-         IntPtr translation_vector);
+         IntPtr objectPoints,
+         IntPtr imagePoints,
+         IntPtr intrinsicMatrix,
+         IntPtr distortionCoeffs,
+         IntPtr rotationVector,
+         IntPtr translationVector);
 
       /// <summary>
       /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
       /// R2=R*R1,
       /// T2=R*T1 + T
       /// </summary>
-      /// <param name="object_points">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
-      /// <param name="image_points1">The joint matrix of corresponding image points in the views from the 1st camera, 2xN or Nx2, where N is the total number of points in all views</param>
-      /// <param name="image_points2">The joint matrix of corresponding image points in the views from the 2nd camera, 2xN or Nx2, where N is the total number of points in all views</param>
-      /// <param name="point_counts">Vector containing numbers of points in each view, 1xM or Mx1, where M is the number of views</param>
-      /// <param name="camera_matrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
-      /// <param name="dist_coeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
-      /// <param name="camera_matrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
-      /// <param name="dist_coeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
-      /// <param name="image_size">Size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="objectPoints">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
+      /// <param name="imagePoints1">The joint matrix of corresponding image points in the views from the 1st camera, 2xN or Nx2, where N is the total number of points in all views</param>
+      /// <param name="imagePoints2">The joint matrix of corresponding image points in the views from the 2nd camera, 2xN or Nx2, where N is the total number of points in all views</param>
+      /// <param name="pointCounts">Vector containing numbers of points in each view, 1xM or Mx1, where M is the number of views</param>
+      /// <param name="cameraMatrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="distCoeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="cameraMatrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="distCoeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
       /// <param name="R">The rotation matrix between the 1st and the 2nd cameras' coordinate systems </param>
       /// <param name="T">The translation vector between the cameras' coordinate systems</param>
       /// <param name="E">The optional output essential matrix</param>
       /// <param name="F">The optional output fundamental matrix </param>
-      /// <param name="term_crit">Termination criteria for the iterative optimiziation algorithm</param>
+      /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
       /// <param name="flags"></param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvStereoCalibrate(
-         IntPtr object_points,
-         IntPtr image_points1,
-         IntPtr image_points2,
-         IntPtr point_counts,
-         IntPtr camera_matrix1,
-         IntPtr dist_coeffs1,
-         IntPtr camera_matrix2,
-         IntPtr dist_coeffs2,
-         MCvSize image_size,
+         IntPtr objectPoints,
+         IntPtr imagePoints1,
+         IntPtr imagePoints2,
+         IntPtr pointCounts,
+         IntPtr cameraMatrix1,
+         IntPtr distCoeffs1,
+         IntPtr cameraMatrix2,
+         IntPtr distCoeffs2,
+         MCvSize imageSize,
          IntPtr R,
          IntPtr T,
          IntPtr E,
          IntPtr F,
-         MCvTermCriteria term_crit,
+         MCvTermCriteria termCrit,
          CvEnum.CALIB_TYPE flags);
+
+      /// <summary>
+      /// computes the rectification transformations without knowing intrinsic parameters of the cameras and their relative position in space, hence the suffix "Uncalibrated". Another related difference from cvStereoRectify is that the function outputs not the rectification transformations in the object (3D) space, but the planar perspective transformations, encoded by the homography matrices H1 and H2. The function implements the following algorithm [Hartley99]. 
+      /// </summary>
+      /// <remarks>
+      /// Note that while the algorithm does not need to know the intrinsic parameters of the cameras, it heavily depends on the epipolar geometry. Therefore, if the camera lenses have significant distortion, it would better be corrected before computing the fundamental matrix and calling this function. For example, distortion coefficients can be estimated for each head of stereo camera separately by using cvCalibrateCamera2 and then the images can be corrected using cvUndistort2
+      /// </remarks>
+      /// <param name="points1">The array of 2D points</param>
+      /// <param name="points2">The array of 2D points</param>
+      /// <param name="F">Fundamental matrix. It can be computed using the same set of point pairs points1 and points2 using cvFindFundamentalMat</param>
+      /// <param name="imageSize">Size of the image</param>
+      /// <param name="H1">The rectification homography matrices for the first images</param>
+      /// <param name="H2">The rectification homography matrices for the second images</param>
+      /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvStereoRectifyUncalibrated(
+         IntPtr points1,
+         IntPtr points2,
+         IntPtr F,
+         MCvSize imageSize,
+         IntPtr H1,
+         IntPtr H2,
+         double threshold);
+
+      /// <summary>
+      /// computes the rotation matrices for each camera that (virtually) make both camera image planes the same plane. Consequently, that makes all the epipolar lines parallel and thus simplifies the dense stereo correspondence problem. On input the function takes the matrices computed by cvStereoCalibrate and on output it gives 2 rotation matrices and also 2 projection matrices in the new coordinates. The function is normally called after cvStereoCalibrate that computes both camera matrices, the distortion coefficients, R and T
+      /// </summary>
+      /// <param name="cameraMatrix1">The camera matrices [fx_k 0 cx_k; 0 fy_k cy_k; 0 0 1]</param>
+      /// <param name="cameraMatrix2">The camera matrices [fx_k 0 cx_k; 0 fy_k cy_k; 0 0 1]</param>
+      /// <param name="distCoeffs1">The vectors of distortion coefficients for first camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="distCoeffs2">The vectors of distortion coefficients for second camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="imageSize">Size of the image used for stereo calibration</param>
+      /// <param name="R">The rotation matrix between the 1st and the 2nd cameras' coordinate systems</param>
+      /// <param name="T">The translation vector between the cameras' coordinate systems</param>
+      /// <param name="R1">3x3 Rectification transforms (rotation matrices) for the first camera</param>
+      /// <param name="R2">3x3 Rectification transforms (rotation matrices) for the second camera</param>
+      /// <param name="P1">3x4 Projection matrices in the new (rectified) coordinate systems</param>
+      /// <param name="P2">3x4 Projection matrices in the new (rectified) coordinate systems</param>
+      /// <param name="Q">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
+      /// <param name="flags">The operation flags</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvStereoRectify(
+         IntPtr cameraMatrix1,
+         IntPtr cameraMatrix2,
+         IntPtr distCoeffs1,
+         IntPtr distCoeffs2,
+         MCvSize imageSize,
+         IntPtr R,
+         IntPtr T,
+         IntPtr R1,
+         IntPtr R2,
+         IntPtr P1,
+         IntPtr P2,
+         IntPtr Q,
+         CvEnum.STEREO_RECTIFY_TYPE flags);
 
       /// <summary>
       /// Transforms the image to compensate radial and tangential lens distortion. The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same.
       /// </summary>
       /// <param name="src">The input (distorted) image</param>
       /// <param name="dst">The output (corrected) image</param>
-      /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1].</param>
-      /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2].</param>
+      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1].</param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2].</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvUndistort2(
           IntPtr src,
           IntPtr dst,
-          IntPtr intrinsic_matrix,
-          IntPtr distortion_coeffs);
+          IntPtr intrinsicMatrix,
+          IntPtr distortionCoeffs);
 
       /// <summary>
       /// Pre-computes the undistortion map - coordinates of the corresponding pixel in the distorted image for every pixel in the corrected image. Then, the map (together with input and output images) can be passed to cvRemap function. 
       /// </summary>
-      /// <param name="intrinsic_matrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]</param>
-      /// <param name="distortion_coeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. </param>
+      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]</param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. </param>
       /// <param name="mapx">The output array of x-coordinates of the map</param>
       /// <param name="mapy">The output array of y-coordinates of the map</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvInitUndistortMap(IntPtr intrinsic_matrix,
-                       IntPtr distortion_coeffs,
-                       IntPtr mapx, IntPtr mapy);
+      public static extern void cvInitUndistortMap(
+         IntPtr intrinsicMatrix,
+         IntPtr distortionCoeffs,
+         IntPtr mapx, 
+         IntPtr mapy);
+
+      /// <summary>
+      /// This function is an extended version of cvInitUndistortMap. That is, in addition to the correction of lens distortion, the function can also apply arbitrary perspective transformation R and finally it can scale and shift the image according to the new camera matrix
+      /// </summary>
+      /// <param name="cameraMatrix">The camera matrix A=[fx 0 cx; 0 fy cy; 0 0 1]</param>
+      /// <param name="distCoeffs">The vector of distortion coefficients, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is NULL, the identity matrix is used</param>
+      /// <param name="newCameraMatrix">The new camera matrix A'=[fx' 0 cx'; 0 fy' cy'; 0 0 1]</param>
+      /// <param name="mapx">The output array of x-coordinates of the map</param>
+      /// <param name="mapy">The output array of y-coordinates of the map</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvInitUndistortRectifyMap( 
+         IntPtr cameraMatrix,
+         IntPtr distCoeffs,
+         IntPtr R,
+         IntPtr newCameraMatrix,
+         IntPtr mapx, 
+         IntPtr mapy );
 
       /// <summary>
       /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
@@ -3101,25 +3202,28 @@ namespace Emgu.CV
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
       [DllImport(CV_LIBRARY)]
-      public static extern int cvFindChessboardCorners( 
-               IntPtr image, 
-               MCvSize patternSize,
-               float[,] corners, 
-               ref int cornerCount,
-               CvEnum.CALIB_CB_TYPE flags);
+      public static extern int cvFindChessboardCorners(
+         IntPtr image,
+         MCvSize patternSize,
+         float[,] corners,
+         ref int cornerCount,
+         CvEnum.CALIB_CB_TYPE flags);
 
       /// <summary>
       /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
       /// </summary>
       /// <param name="image">The destination image; it must be 8-bit color image</param>
-      /// <param name="pattern_size">The number of inner corners per chessboard row and column</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">The array of corners detected</param>
       /// <param name="count">The number of corners</param>
       /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvDrawChessboardCorners(IntPtr image, MCvSize pattern_size,
-                              float[,] corners, int count,
-                              int patternWasFound);
+      public static extern void cvDrawChessboardCorners(
+         IntPtr image,
+         MCvSize patternSize,
+         float[,] corners,
+         int count,
+         int patternWasFound);
 
       #endregion
 
@@ -3136,10 +3240,11 @@ namespace Emgu.CV
       /// <param name="fundamentalMatrix">Fundamental matrix </param>
       /// <param name="correspondentLines">Computed epilines, 3xN or Nx3 array </param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvComputeCorrespondEpilines(IntPtr points,
-                                int whichImage,
-                                IntPtr fundamentalMatrix,
-                                IntPtr correspondentLines);
+      public static extern void cvComputeCorrespondEpilines(
+         IntPtr points,
+         int whichImage,
+         IntPtr fundamentalMatrix,
+         IntPtr correspondentLines);
 
       /// <summary>
       /// Converts 2D or 3D points from/to homogenious coordinates, or simply copies or transposes the array. In case if the input array dimensionality is larger than the output, each point coordinates are divided by the last coordinate
@@ -3159,10 +3264,10 @@ namespace Emgu.CV
       /// <returns>the number of iterations made</returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvMeanShift(
-          IntPtr probImage,
-          MCvRect window,
-          MCvTermCriteria criteria,
-          out MCvConnectedComp comp);
+         IntPtr probImage,
+         MCvRect window,
+         MCvTermCriteria criteria,
+         out MCvConnectedComp comp);
 
       /// <summary>
       /// Implements CAMSHIFT object tracking algrorithm ([Bradski98]). First, it finds an object center using cvMeanShift and, after that, calculates the object size and orientation. 
@@ -3175,11 +3280,11 @@ namespace Emgu.CV
       /// <returns>number of iterations made within cvMeanShift</returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvCamShift(
-          IntPtr probImage,
-          MCvRect window,
-          MCvTermCriteria criteria,
-          out MCvConnectedComp comp,
-          out MCvBox2D box);
+         IntPtr probImage,
+         MCvRect window,
+         MCvTermCriteria criteria,
+         out MCvConnectedComp comp,
+         out MCvBox2D box);
 
       /// <summary>
       /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
@@ -3274,7 +3379,17 @@ namespace Emgu.CV
            MCvTermCriteria criteria,
            bool calcGradient)
       {
-         cvSnakeImage(image, points, length, alpha, beta, gamma, coeffUsage, win, criteria, calcGradient ? 1 : 0);
+         cvSnakeImage(
+            image,
+            points,
+            length,
+            alpha,
+            beta,
+            gamma,
+            coeffUsage,
+            win,
+            criteria,
+            calcGradient ? 1 : 0);
       }
 
       /// <summary>
@@ -3709,13 +3824,13 @@ namespace Emgu.CV
       /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
       /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvFindCornerSubPix( 
-         IntPtr image, 
+      public static extern void cvFindCornerSubPix(
+         IntPtr image,
          float[,] corners,
-         int count, 
-         MCvSize win, 
+         int count,
+         MCvSize win,
          MCvSize zeroZone,
-         MCvTermCriteria criteria );
+         MCvTermCriteria criteria);
 
 
       /// <summary>
@@ -3726,23 +3841,27 @@ namespace Emgu.CV
       /// <param name="image">The source image, WxH, 8-bit or floating-point (32f or 64f) image.</param>
       /// <param name="sum">The integral image, W+1xH+1, 32-bit integer or double precision floating-point (64f). </param>
       /// <param name="sqsum">The integral image for squared pixel values, W+1xH+1, double precision floating-point (64f). </param>
-      /// <param name="tilted_sum">The integral for the image rotated by 45 degrees, W+1xH+1, the same data type as sum.</param>
+      /// <param name="tiltedSum">The integral for the image rotated by 45 degrees, W+1xH+1, the same data type as sum.</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvIntegral(IntPtr image, IntPtr sum, IntPtr sqsum, IntPtr tilted_sum);
+      public static extern void cvIntegral(
+         IntPtr image,
+         IntPtr sum,
+         IntPtr sqsum,
+         IntPtr tiltedSum);
 
       /// <summary>
       /// Transforms source image using the specified matrix
       /// </summary>
       /// <param name="src">Source image</param>
       /// <param name="dst">Destination image</param>
-      /// <param name="map_matrix">3×3 transformation matrix</param>
+      /// <param name="mapMatrix">3×3 transformation matrix</param>
       /// <param name="flags"></param>
       /// <param name="fillval">A value used to fill outliers</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvWarpPerspective( 
-         IntPtr src, 
-         IntPtr dst, 
-         IntPtr map_matrix,
+      public static extern void cvWarpPerspective(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix,
          int flags,
          MCvScalar fillval);
 
@@ -3819,10 +3938,13 @@ namespace Emgu.CV
       /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
       /// </example>
       /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
-      /// <param name="back_project">Destination back projection image of the same type as the source images</param>
+      /// <param name="backProject">Destination back projection image of the same type as the source images</param>
       /// <param name="hist">Histogram</param>
       [DllImport(CV_LIBRARY, EntryPoint = "cvCalcArrBackProject")]
-      public static extern void cvCalcBackProject(IntPtr[] image, IntPtr back_project, IntPtr hist);
+      public static extern void cvCalcBackProject(
+         IntPtr[] image,
+         IntPtr backProject,
+         IntPtr hist);
 
       /// <summary>
       /// Releases the histogram (header and the data). 
@@ -3847,12 +3969,12 @@ namespace Emgu.CV
       /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvDistTransform(
-          IntPtr src,
-          IntPtr dst,
-          CvEnum.DIST_TYPE distanceType,
-          int maskSize,
-          float[] userMask,
-          IntPtr labels);
+         IntPtr src,
+         IntPtr dst,
+         CvEnum.DIST_TYPE distanceType,
+         int maskSize,
+         float[] userMask,
+         IntPtr labels);
 
       //TODO: use enumeration for flood fill
       /// <summary>
@@ -3928,7 +4050,7 @@ namespace Emgu.CV
       /// <param name="filename">Name of the video file</param>
       /// <returns>Pointer to the capture structure</returns>
       [DllImport(HIGHGUI_LIBRARY)]
-      public static extern IntPtr cvCreateFileCapture([MarshalAs(UnmanagedType.LPStr)] String filename);
+      public static extern IntPtr cvCreateFileCapture([MarshalAs(_stringMarshalType)] String filename);
 
       /// <summary>
       /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture
@@ -3975,10 +4097,12 @@ namespace Emgu.CV
       /// JPEG 2000 images - jp2. 
       /// </summary>
       /// <param name="filename">The name of the file to be loaded</param>
-      /// <param name="load_type"></param>
+      /// <param name="loadType"></param>
       /// <returns>The loaded image</returns>
       [DllImport(HIGHGUI_LIBRARY)]
-      public static extern IntPtr cvLoadImage([MarshalAs(UnmanagedType.LPStr)] String filename, CvEnum.LOAD_IMAGE_TYPE load_type);
+      public static extern IntPtr cvLoadImage(
+         [MarshalAs(_stringMarshalType)] String filename,
+         CvEnum.LOAD_IMAGE_TYPE loadType);
 
       /// <summary>
       /// Saves the image to the specified file. The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format
@@ -3987,10 +4111,10 @@ namespace Emgu.CV
       /// <param name="image">The image to be saved</param>
       /// <returns></returns>
       [DllImport(HIGHGUI_LIBRARY)]
-      public static extern int cvSaveImage([MarshalAs(UnmanagedType.LPStr)] String filename, IntPtr image);
+      public static extern int cvSaveImage([MarshalAs(_stringMarshalType)] String filename, IntPtr image);
 
       [DllImport(HIGHGUI_LIBRARY, EntryPoint = "cvNamedWindow")]
-      private static extern int _cvNamedWindow([MarshalAs(UnmanagedType.LPStr)] String name, int flags);
+      private static extern int _cvNamedWindow([MarshalAs(_stringMarshalType)] String name, int flags);
 
       /// <summary>
       /// Creates a window which can be used as a placeholder for images and trackbars. Created windows are reffered by their names. 
@@ -4016,14 +4140,14 @@ namespace Emgu.CV
       /// <param name="name">Name of the window</param>
       /// <param name="image">Image to be shown</param>
       [DllImport(HIGHGUI_LIBRARY)]
-      public static extern void cvShowImage([MarshalAs(UnmanagedType.LPStr)] String name, IntPtr image);
+      public static extern void cvShowImage([MarshalAs(_stringMarshalType)] String name, IntPtr image);
 
       /// <summary>
       /// Destroys the window with a given name
       /// </summary>
       /// <param name="name">Name of the window to be destroyed</param>
       [DllImport(HIGHGUI_LIBRARY)]
-      public static extern void cvDestroyWindow([MarshalAs(UnmanagedType.LPStr)] String name);
+      public static extern void cvDestroyWindow([MarshalAs(_stringMarshalType)] String name);
 
       /// <summary>
       /// Creates video writer structure.
@@ -4036,7 +4160,7 @@ namespace Emgu.CV
       /// <returns>The video writer</returns>
       [DllImport(HIGHGUI_LIBRARY)]
       public static extern IntPtr cvCreateVideoWriter(
-          [MarshalAs(UnmanagedType.LPStr)] String filename,
+          [MarshalAs(_stringMarshalType)] String filename,
           int fourcc,
           double fps,
           MCvSize frameSize,
@@ -4162,7 +4286,7 @@ namespace Emgu.CV
       public static float[] cvEigenDecomposite(
           IntPtr obj,
           IntPtr[] eigInput,
-            IntPtr avg)
+          IntPtr avg)
       {
          float[] coeffs = new float[eigInput.Length];
          cvEigenDecomposite(
@@ -4180,7 +4304,7 @@ namespace Emgu.CV
       /// Calculates all decomposition coefficients for the input object using the previously calculated eigen objects basis and the averaged object
       /// </summary>
       /// <param name="obj">Input object (Pointer to IplImage)</param>
-      /// <param name="eigenvec_count">Number of eigen objects</param>
+      /// <param name="eigenvecCount">Number of eigen objects</param>
       /// <param name="eigInput">Pointer either to the array of IplImage input objects or to the read callback function according to the value of the parameter <paramref name="ioFlags"/></param>
       /// <param name="ioFlags">Input/output flags</param>
       /// <param name="userData">Pointer to the structure that contains all necessary data for the callback functions</param>
@@ -4188,13 +4312,13 @@ namespace Emgu.CV
       /// <param name="coeffs">Calculated coefficients; an output parameter</param>
       [DllImport(CVAUX_LIBRARY)]
       private static extern void cvEigenDecomposite(
-                  IntPtr obj,
-                  int eigenvec_count,
-                    IntPtr[] eigInput,
-                    CvEnum.EIGOBJ_TYPE ioFlags,
-                    IntPtr userData,
-                    IntPtr avg,
-                    float[] coeffs);
+         IntPtr obj,
+         int eigenvecCount,
+         IntPtr[] eigInput,
+         CvEnum.EIGOBJ_TYPE ioFlags,
+         IntPtr userData,
+         IntPtr avg,
+         float[] coeffs);
 
       #endregion
 
@@ -4208,11 +4332,11 @@ namespace Emgu.CV
       /// <param name="eigVecs">Pointer either to the array of eigen objects</param>
       /// <return>Pointer either to the array of eigen objects or to the write callback function</return>
       public static void cvCalcEigenObjects(
-          IntPtr[] input,
-          ref MCvTermCriteria calcLimit,
-            IntPtr[] eigVecs,
-            float[] eigVals,
-            IntPtr avg)
+         IntPtr[] input,
+         ref MCvTermCriteria calcLimit,
+         IntPtr[] eigVecs,
+         float[] eigVals,
+         IntPtr avg)
       {
          cvCalcEigenObjects(
              input.Length,
@@ -4240,15 +4364,15 @@ namespace Emgu.CV
       /// <param name="eigVals">Pointer to the eigenvalues array in the descending order; may be NULL</param>
       [DllImport(CVAUX_LIBRARY)]
       private static extern void cvCalcEigenObjects(
-          int nObjects,
-          IntPtr[] input,
-            IntPtr[] output,
-          CvEnum.EIGOBJ_TYPE ioFlags,
-            int ioBufSize,
-            IntPtr userData,
-            ref MCvTermCriteria calcLimit,
-            IntPtr avg,
-            float[] eigVals);
+         int nObjects,
+         IntPtr[] input,
+         IntPtr[] output,
+         CvEnum.EIGOBJ_TYPE ioFlags,
+         int ioBufSize,
+         IntPtr userData,
+         ref MCvTermCriteria calcLimit,
+         IntPtr avg,
+         float[] eigVals);
 
       /// <summary>
       /// Calculates an object projection to the eigen sub-space or, in other words, restores an object using previously calculated eigen objects basis, averaged object, and decomposition coefficients of the restored object. 
@@ -4258,10 +4382,10 @@ namespace Emgu.CV
       /// <param name="avg">Average vector</param>
       /// <param name="proj">Projection to the eigen sub-space</param>
       public static void cvEigenProjection(
-          IntPtr[] inputVecs,
-          float[] coeffs,
-          IntPtr avg,
-          IntPtr proj)
+         IntPtr[] inputVecs,
+         float[] coeffs,
+         IntPtr avg,
+         IntPtr proj)
       {
          CvInvoke.cvEigenProjection(
              inputVecs,
@@ -4285,13 +4409,13 @@ namespace Emgu.CV
       /// <param name="proj">Projection to the eigen sub-space</param>
       [DllImport(CVAUX_LIBRARY)]
       private extern static void cvEigenProjection(
-          IntPtr[] inputVecs,
-          int eigenvecCount,
-          CvEnum.EIGOBJ_TYPE ioFlags,
-          IntPtr userdata,
-          float[] coeffs,
-          IntPtr avg,
-          IntPtr proj);
+         IntPtr[] inputVecs,
+         int eigenvecCount,
+         CvEnum.EIGOBJ_TYPE ioFlags,
+         IntPtr userdata,
+         float[] coeffs,
+         IntPtr avg,
+         IntPtr proj);
       #endregion
 
       #region background statistic
@@ -4337,5 +4461,4 @@ namespace Emgu.CV
       #endregion
 
    }
-
 }

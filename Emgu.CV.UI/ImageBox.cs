@@ -26,9 +26,10 @@ namespace Emgu.CV.UI
       //private double _zoomLevel = 1.0;
 
       /// <summary>
-      /// one of the parameters used for caculating the frame rate
+      /// timer used for caculating the frame rate
       /// </summary>
-      private DateTime _counterStartTime;
+      private DateTime _timerStartTime;
+
       /// <summary>
       /// one of the parameters used for caculating the frame rate
       /// </summary>
@@ -61,12 +62,14 @@ namespace Emgu.CV.UI
             Image = Image;
          }
          catch (Exception e)
-         {
-            _operationStack.Pop();
+         {  //if pushing the operation generate exceptions
+
+            _operationStack.Pop(); //remove the operation from the stack
             if (panel != null)
-               panel.SetOperationStack(_operationStack);
-            Image = Image;
-            throw (e);
+               panel.SetOperationStack(_operationStack); //update the operation stack
+
+            Image = Image; //update the image
+            throw (e); //rethrow the exception
          }
       }
 
@@ -105,7 +108,7 @@ namespace Emgu.CV.UI
          foreach (KeyValuePair<string, MethodInfo> pair in catelogMiPairList)
          {
             if (!pair.Key.Equals(String.Empty))
-            {
+            {  //if this is a catelog
 
                String[] catelogs = pair.Key.Split('|');
                if (!catelogDic.ContainsKey(catelogs[0]))
@@ -118,13 +121,15 @@ namespace Emgu.CV.UI
                catelogDic[catelogs[0]].Add(new KeyValuePair<String, MethodInfo>(String.Join("|", subcatelogs), pair.Value));
             }
             else
-            {
+            {  //this is an operation
+
                operationItem.Add(pair.Value.Name, pair.Value);
             }
          }
-
+         
          foreach (String catelog in catelogDic.Keys)
-         {
+         {  //add the catelog to the menu
+            
             ToolStripMenuItem catelogMenuItem = new ToolStripMenuItem();
             catelogMenuItem.Text = catelog;
             catelogMenuItem.DropDownItems.AddRange(BuildOperationTree(catelogDic[catelog]));
@@ -132,11 +137,27 @@ namespace Emgu.CV.UI
          }
 
          foreach (MethodInfo mi in operationItem.Values)
-         {
+         {  //add the method to the menu
+            
             ToolStripMenuItem operationMenuItem = new ToolStripMenuItem();
             operationMenuItem.Size = new System.Drawing.Size(152, 22);
-            operationMenuItem.Text = String.Format("{0}({1})", mi.Name,
-                String.Join(",", System.Array.ConvertAll<ParameterInfo, String>(mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; })));
+
+            String genericArgString = string.Empty;
+            Type[] genericArgs = mi.GetGenericArguments();
+            if (genericArgs.Length > 0)
+            {
+               genericArgString = String.Format(
+                  "<{0}>", 
+                  String.Join(",", Array.ConvertAll<Type, String>(
+                     genericArgs,
+                     delegate(Type t) { return t.Name; })));
+            }
+
+            operationMenuItem.Text = String.Format(
+               "{0}{1}({2})", 
+               mi.Name,
+               genericArgString,
+               String.Join(",", System.Array.ConvertAll<ParameterInfo, String>(mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; })));
 
             //This is necessary to handle delegate with a loop
             //Cause me lots of headache before reading the article on
@@ -147,31 +168,35 @@ namespace Emgu.CV.UI
             operationMenuItem.Click += delegate(Object o, EventArgs e)
                 {
                    Object[] paramList = null;
-                   do
-                   {
-                      paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
-                      if (paramList != null)
-                      {
-                         Operation operation = new Operation(methodInfoRef, paramList);
-                         try
-                         {
-                            PushOperation(operation);
-                            paramList = null;
-                         }
-                         catch (Exception expt)
-                         {
-                            if (expt.InnerException != null)
-                               MessageBox.Show(expt.InnerException.Message);
-                            else
-                               MessageBox.Show(expt.Message);
 
-                            if (methodInfoRef.GetParameters().Length == 0)
-                            {
-                               paramList = null;
-                            }
-                         }
+                   while (true)
+                   {
+                      //Get the parameters for the method
+                      //this pop up an input dialog and ask for user input
+                      paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
+
+                      if (paramList == null) break; //user click cancel on the input dialog
+
+                      //create an operation from the specific methodInfo and parameterlist
+                      Operation operation = new Operation(methodInfoRef, paramList);
+                      try
+                      {
+                         PushOperation(operation);
+                         break;
                       }
-                   } while (paramList != null);
+                      catch (Exception expt)
+                      {
+                         if (expt.InnerException != null)
+                            MessageBox.Show(expt.InnerException.Message);
+                         else
+                            MessageBox.Show(expt.Message);
+
+                         //special case, then there is no parameter and the method throw an exception
+                         //break the loop
+                         if (methodInfoRef.GetParameters().Length == 0)
+                            break;
+                      }
+                   } 
                 };
             res.Add(operationMenuItem);
          }
@@ -274,12 +299,12 @@ namespace Emgu.CV.UI
                   ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
 
                   #region calculate the frame rate
-                  TimeSpan ts = DateTime.Now.Subtract(_counterStartTime);
+                  TimeSpan ts = DateTime.Now.Subtract(_timerStartTime);
                   if (ts.TotalSeconds > 1)
                   {
                      ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
                      //reset the counter
-                     _counterStartTime = DateTime.Now;
+                     _timerStartTime = DateTime.Now;
                      _imageReceivedSinceCounterStart = 0;
                   }
                   else
@@ -294,12 +319,10 @@ namespace Emgu.CV.UI
 
       private void loadImageToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DialogResult res = openFileDialog1.ShowDialog();
-         if (res == DialogResult.OK)
-         {
+         if (loadImageFromFileDialog.ShowDialog() == DialogResult.OK)
             try
             {
-               String filename = openFileDialog1.FileName;
+               String filename = loadImageFromFileDialog.FileName;
                Image<Bgr, Byte> img = new Image<Bgr, byte>(filename);
                Image = img;
             }
@@ -307,24 +330,20 @@ namespace Emgu.CV.UI
             {
                MessageBox.Show(excpt.Message);
             }
-         }
       }
 
       private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DialogResult res = saveFileDialog1.ShowDialog();
-         if (res == DialogResult.OK)
-         {
+         if (saveImageToFileDialog.ShowDialog() == DialogResult.OK)
             try
             {
-               String filename = saveFileDialog1.FileName;
+               String filename = saveImageToFileDialog.FileName;
                _image.Save(filename);
             }
             catch (Exception excpt)
             {
                MessageBox.Show(excpt.Message);
             }
-         }
       }
 
       private void propertyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -350,7 +369,9 @@ namespace Emgu.CV.UI
          {
             if (value)
             {   //this is a call to enable the property dlg
-               if (_propertyDlg == null) _propertyDlg = new PropertyDlg(this);
+               if (_propertyDlg == null) 
+                  _propertyDlg = new PropertyDlg(this);
+
                _propertyDlg.Show();
 
                _propertyDlg.FormClosed +=

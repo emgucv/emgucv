@@ -714,6 +714,7 @@ namespace Emgu.CV.Test
             Assert.AreEqual(numberOfFrames, count);
          }
          File.Delete(fi.FullName);
-      }*/
+      }
+      */
    }
 }
