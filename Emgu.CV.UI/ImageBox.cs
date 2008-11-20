@@ -20,6 +20,47 @@ namespace Emgu.CV.UI
       private IImage _image;
       private IImage _displayedImage;
       private PropertyDlg _propertyDlg;
+      
+      private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
+
+      /// <summary>
+      /// Get or set the display mode for the ImageBox
+      /// </summary>
+      [Bindable(false)]
+      [Category("Design")]
+      [DefaultValue(Emgu.CV.UI.ImageBox.FunctionalModeOption.Everything)]
+      public FunctionalModeOption FunctionalMode
+      {
+         get { return _functionalMode; }
+         set 
+         {
+            //hide all menu items
+            foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
+               mi.Visible = false;
+
+            if (value == FunctionalModeOption.Everything)
+               foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
+                  mi.Visible = true;
+
+            _functionalMode = value; 
+         }
+      }
+
+      /// <summary>
+      /// The display mode for ImageBox
+      /// </summary>
+      public enum FunctionalModeOption
+      {
+         /// <summary>
+         /// The ImageBox is only used for displaying image. 
+         /// No right-click menu available
+         /// </summary>
+         Minimum = 0,
+         /// <summary>
+         /// This is the ImageBox with all functions enabled.
+         /// </summary>
+         Everything = 1
+      }
 
       private Stack<Operation> _operationStack;
 
@@ -217,6 +258,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Set the image for this image box
       /// </summary>
+      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
       public new IImage Image
       {
          get
@@ -232,6 +274,7 @@ namespace Emgu.CV.UI
             else
             {
                _image = value;
+
                IImage imageToBeDisplayed = _image;
 
                if (imageToBeDisplayed != null)
@@ -261,6 +304,7 @@ namespace Emgu.CV.UI
                         throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
                      }
                   }
+
                   DisplayedImage = imageToBeDisplayed;
                }
 
@@ -272,6 +316,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// The image that is being displayed. It's the Image following by some user defined image operation
       /// </summary>
+      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
       public IImage DisplayedImage
       {
          get
@@ -285,8 +330,8 @@ namespace Emgu.CV.UI
             {
                BuildOperationMenuItem(_displayedImage);
 
-               if (Width != _displayedImage.Width) Width = _displayedImage.Width;
-               if (Height != _displayedImage.Height) Height = _displayedImage.Height;
+               //if (Width != _displayedImage.Width) Width = _displayedImage.Width;
+               //if (Height != _displayedImage.Height) Height = _displayedImage.Height;
 
                base.Image = _displayedImage.Bitmap;
 

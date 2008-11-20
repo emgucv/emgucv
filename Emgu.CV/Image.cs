@@ -52,71 +52,103 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (System.Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
-         {   //if the file can be imported from Open CV
-
-            IntPtr ptr;
-            MIplImage mptr;
-
-            #region read the image into ptr ( color type - C, depth - Byte )
-            if (typeof(TColor) == typeof(Gray)) //color type is gray
+         if (Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
+         {  //if the file can be imported from Open CV
+            try
             {
-               ptr = CvInvoke.cvLoadImage(fileName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
-               mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+               LoadImageUsingOpenCV(fi);
             }
-            else //color type is not gray
-            {
-               ptr = CvInvoke.cvLoadImage(fileName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
-               mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-
-               if (typeof(TColor) != typeof(Bgr)) //color type is not Bgr
-               {
-                  IntPtr tmp1 = CvInvoke.cvCreateImage(
-                      new MCvSize(mptr.width, mptr.height),
-                      (CvEnum.IPL_DEPTH)mptr.depth,
-                      3);
-                  CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(TColor), typeof(Bgr)));
-
-                  CvInvoke.cvReleaseImage(ref ptr);
-                  ptr = tmp1;
-                  mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-               }
+            catch
+            {  //give Bitmap a try
+               //and if it cannot load the image, exception will be thrown
+               LoadFileUsingBitmap(fi);
             }
-            #endregion
+            return;
+         }
 
-            if (typeof(TDepth) != typeof(Byte)) //depth is not Byte
+         //if the file format is not recognized by OpenCV
+         try
+         {
+            LoadFileUsingBitmap(fi);
+         }
+         catch
+         {  //give OpenCV a try any way, 
+            //and if it cannot load the image, exception will be thrown
+            LoadImageUsingOpenCV(fi);
+         }
+      }
+
+      /// <summary>
+      /// Load the specific file using Bitmap
+      /// </summary>
+      /// <param name="fi"></param>
+      private void LoadFileUsingBitmap(FileInfo fi)
+      {
+         using (Bitmap bmp = new Bitmap(fi.FullName))
+            Bitmap = bmp;
+      }
+
+      /// <summary>
+      /// Load the specific file using OpenCV
+      /// </summary>
+      /// <param name="file"></param>
+      private void LoadImageUsingOpenCV(FileInfo file)
+      {
+         IntPtr ptr;
+         MIplImage mptr;
+
+         #region read the image into ptr ( color type - C, depth - Byte )
+         if (typeof(TColor) == typeof(Gray)) //color type is gray
+         {
+            ptr = CvInvoke.cvLoadImage(file.FullName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
+            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+         }
+         else //color type is not gray
+         {
+            ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+
+            if (ptr == IntPtr.Zero)
+               throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
+
+            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+
+            if (typeof(TColor) != typeof(Bgr)) //color type is not Bgr
             {
                IntPtr tmp1 = CvInvoke.cvCreateImage(
                    new MCvSize(mptr.width, mptr.height),
-                   CvDepth,
-                   new TColor().Dimension);
-               CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
+                   (CvEnum.IPL_DEPTH)mptr.depth,
+                   3);
+               CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(TColor), typeof(Bgr)));
+
                CvInvoke.cvReleaseImage(ref ptr);
                ptr = tmp1;
                mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
             }
+         }
+         #endregion
 
-            #region use managed memory instead of unmanaged
-            AllocateData(mptr.height, mptr.width);
-            //The above line of code might change the widthStep, therefore a re-marshal is necessary
-            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-
-            //TODO: fix the following to handle the case when input image has non 4-align byte in a row
-            Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
-
+         if (typeof(TDepth) != typeof(Byte)) //depth is not Byte
+         {
+            IntPtr tmp1 = CvInvoke.cvCreateImage(
+                new MCvSize(mptr.width, mptr.height),
+                CvDepth,
+                new TColor().Dimension);
+            CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
             CvInvoke.cvReleaseImage(ref ptr);
-            #endregion
+            ptr = tmp1;
+            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
          }
-         else
-         {   //if the file format cannot be recognized by OpenCV 
-            if (Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
-            {
-               using (Bitmap bmp = new Bitmap(fi.FullName))
-                  Bitmap = bmp;
-            }
-            else
-               throw new FileLoadException(String.Format("Unable to load file of type {0}", fi.Extension));
-         }
+
+         #region use managed memory instead of unmanaged
+         AllocateData(mptr.height, mptr.width);
+         //The above line of code might change the widthStep, therefore a re-marshal is necessary
+         mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+
+         //TODO: fix the following to handle the case when input image has non 4-align byte in a row
+         Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
+
+         CvInvoke.cvReleaseImage(ref ptr);
+         #endregion
       }
 
       /// <summary>
@@ -3983,9 +4015,9 @@ namespace Emgu.CV
          FileInfo fi = new FileInfo(fileName);
          if (System.Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
             using (Bitmap bmp = Bitmap)
-               bmp.Save(fileName);
+               bmp.Save(fileName); //save the image using Bitmap
          else
-            base.Save(fileName);
+            base.Save(fileName); //save the image using OpenCV
       }
 
       /// <summary>

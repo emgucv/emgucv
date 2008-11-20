@@ -100,8 +100,7 @@ namespace Emgu.CV.UI
            // 
            this.ContextMenuStrip = this.contextMenuStrip1;
            this.Cursor = System.Windows.Forms.Cursors.Cross;
-           this.Dock = System.Windows.Forms.DockStyle.Fill;
-           this.Size = new System.Drawing.Size(150, 150);
+           this.Size = new System.Drawing.Size(0, 0);
            this.TabIndex = 2;
            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.onMouseMove);
            this.contextMenuStrip1.ResumeLayout(false);
