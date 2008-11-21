@@ -84,18 +84,18 @@
     <Compile Include="OperationStackView.designer.cs">
       <DependentUpon>OperationStackView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParamInputDlg.cs">
+    <Compile Include="ParameterInputDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParamInputDlg.designer.cs">
-      <DependentUpon>ParamInputDlg.cs</DependentUpon>
+    <Compile Include="ParameterInputDialog.designer.cs">
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyDlg.cs">
+    <Compile Include="PropertyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertyDlg.designer.cs">
-      <DependentUpon>PropertyDlg.cs</DependentUpon>
+    <Compile Include="PropertyDialog.designer.cs">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -133,12 +133,12 @@
       <DependentUpon>OperationStackView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParamInputDlg.resx">
-      <DependentUpon>ParamInputDlg.cs</DependentUpon>
+    <EmbeddedResource Include="ParameterInputDialog.resx">
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyDlg.resx">
-      <DependentUpon>PropertyDlg.cs</DependentUpon>
+    <EmbeddedResource Include="PropertyDialog.resx">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

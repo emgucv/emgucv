@@ -1,6 +1,6 @@
 namespace Emgu.CV.UI
 {
-    partial class ParamInputDlg
+    partial class ParameterInputDialog
     {
         /// <summary>
         /// Required designer variable.

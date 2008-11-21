@@ -71,11 +71,11 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Add a plot of the histogram
+      /// Add a plot of the histogram. You should call the Refresh() function to update the control after all modification is complete.
       /// </summary>
       /// <param name="name">The name of the histogram</param>
-      /// <param name="color"></param>
-      /// <param name="values"></param>
+      /// <param name="color">The drawing color</param>
+      /// <param name="values">The points on the histogram</param>
       public void AddHistogram(String name, System.Drawing.Color color, IEnumerable<Point2D<int>> values)
       {
          GraphPane pane = new GraphPane();
@@ -97,12 +97,21 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
+      /// Remove all the histogram from the control. You should call the Refresh() function to update the control after all modification is complete.
+      /// </summary>
+      public void ClearHistogram()
+      {
+         zedGraphControl1.MasterPane.PaneList.Clear();
+      }
+
+      /// <summary>
       /// Paint the histogram
       /// </summary>
-      public new void Paint()
+      public new void Refresh()
       {
          zedGraphControl1.MasterPane.AxisChange(_graphic);
          zedGraphControl1.MasterPane.SetLayout(_graphic, PaneLayout.SingleColumn);
+         base.Refresh();
       }
    }
 }

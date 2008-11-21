@@ -22,7 +22,7 @@ namespace Emgu.CV
       /// <summary>
       /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
       /// </summary>
-      public static String[] OpencvFileFormats = new string[] { ".jpg", ".jpeg", ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
+      public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
 
       /// <summary>
       /// The pinned GCHandle to _array;

@@ -25,7 +25,7 @@ namespace Emgu.CV
       /// <summary>
       /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
       /// </summary>
-      public static String[] BitmapFormats = new string[] { ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
+      public static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
 
       #region constructors
       ///<summary>
@@ -2215,6 +2215,7 @@ namespace Emgu.CV
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
       /// <returns>The scaled image</returns>
+      [ExposableMethod(Exposable=true)]
       public Image<TColor, TDepth> Resize(double scale)
       {
          return Resize(
@@ -4012,12 +4013,15 @@ namespace Emgu.CV
       /// <param name="fileName">The name of the file to be saved to</param>
       public override void Save(String fileName)
       {
-         FileInfo fi = new FileInfo(fileName);
-         if (System.Array.Exists(BitmapFormats, fi.Extension.ToLower().Equals))
+         try
+         {
+            base.Save(fileName); //save the image using OpenCV
+         }
+         catch
+         {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName); //save the image using Bitmap
-         else
-            base.Save(fileName); //save the image using OpenCV
+         }
       }
 
       /// <summary>

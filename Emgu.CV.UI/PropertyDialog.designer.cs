@@ -1,6 +1,6 @@
 namespace Emgu.CV.UI
 {
-    partial class PropertyDlg
+    partial class PropertyDialog
     {
         /// <summary>
         /// Required designer variable.

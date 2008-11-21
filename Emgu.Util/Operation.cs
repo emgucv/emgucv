@@ -98,7 +98,7 @@ namespace Emgu.Util
          Array.Copy(_parameters, genericParameters, genericParameters.Length);
          Array.Copy(_parameters, genericParameters.Length, nonGenericParameters, 0, nonGenericParameters.Length);
 
-         if (genericArguments.Length > 0) 
+         if (genericArguments.Length > 0)
          {
             genericArgString = String.Join(",", Array.ConvertAll<Object, String>(genericParameters, 
                delegate(Object t)
@@ -108,7 +108,8 @@ namespace Emgu.Util
          }
          if (language == TypeEnum.ProgrammingLanguage.CSharp)
          {
-            genericArgString = String.Format("<{0}>", genericArgString);
+            if (genericArguments.Length > 0)
+               genericArgString = String.Format("<{0}>", genericArgString);
             res = String.Format("{0}.{1}{2}({3})",
                 "{instance}",
                 Method.Name,
@@ -117,7 +118,8 @@ namespace Emgu.Util
          }
          else if (language == TypeEnum.ProgrammingLanguage.CPlusPlus)
          {
-            genericArgString = String.Format("<{0}>", genericArgString);
+            if (genericArguments.Length > 0)
+               genericArgString = String.Format("<{0}>", genericArgString);
             res = String.Format("{0}->{1}{2}({3})",
                 "{instance}",
                 Method.Name,

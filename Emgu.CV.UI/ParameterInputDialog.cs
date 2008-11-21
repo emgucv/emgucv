@@ -10,7 +10,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// The dialog to ask user for parameters to the specific method
    /// </summary>
-   public partial class ParamInputDlg : Form
+   public partial class ParameterInputDialog : Form
    {
       private bool _sucessed;
 
@@ -37,7 +37,7 @@ namespace Emgu.CV.UI
          }
       }
 
-      private ParamInputDlg(ParameterInfo[] paramInfo, Object[] paramList)
+      private ParameterInputDialog(ParameterInfo[] paramInfo, Object[] paramList)
       {
          InitializeComponent();
 
@@ -364,7 +364,7 @@ namespace Emgu.CV.UI
          }
 
          #region Handle the cases where at least one parameter is required as input
-         ParamInputDlg dlg = new ParamInputDlg(parameterList.ToArray(), defaultParameterValueList.ToArray());
+         ParameterInputDialog dlg = new ParameterInputDialog(parameterList.ToArray(), defaultParameterValueList.ToArray());
          dlg.ShowDialog();
          return dlg.Successed ? dlg.Parameters : null;
          #endregion

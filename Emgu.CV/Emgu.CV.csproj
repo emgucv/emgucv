@@ -89,6 +89,7 @@
     <Compile Include="CvException.cs" />
     <Compile Include="EigenObjectRecognizer.cs" />
     <Compile Include="Envelope.cs" />
+    <Compile Include="FeatureTree.cs" />
     <Compile Include="MatND.cs" />
     <Compile Include="Reflection\ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />

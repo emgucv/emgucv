@@ -178,14 +178,12 @@ namespace Emgu.CV.UI
 
          HistogramViewer hviewer = new HistogramViewer();
          System.Type typeOfDepth = imageType.GetGenericArguments()[1];
+
+         float minVal = 0.0f, maxVal = 0.0f;
          if (typeOfDepth == typeof(Byte))
          {
-            for (int i = 0; i < channels.Length; i++)
-            {
-               Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, 0.0f, 255f);
-               hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
-            }
-            hviewer.HistogramCtrl.Paint();
+            minVal = 0.0f;
+            maxVal = 255.0f;
          }
          else
          {
@@ -202,12 +200,17 @@ namespace Emgu.CV.UI
             }
             #endregion
 
-            for (int i = 0; i < channels.Length; i++)
-            {
-               Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, (float)min, (float)max);
-               hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
-            }
+            minVal = (float)min;
+            maxVal = (float)max;
          }
+
+         for (int i = 0; i < channels.Length; i++)
+         {
+            Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, minVal, maxVal);
+            hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
+         }
+
+         hviewer.HistogramCtrl.Refresh();
 
          hviewer.Show();
       }

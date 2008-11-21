@@ -11,14 +11,14 @@ namespace Emgu.CV.UI
    /// <summary>
    /// A dialog to display the property of an image
    /// </summary>
-   public partial class PropertyDlg : Form
+   public partial class PropertyDialog : Form
    {
       private ImageBox _imageBox;
 
       /// <summary>
       /// Constructor
       /// </summary>
-      public PropertyDlg(ImageBox imageBox)
+      public PropertyDialog(ImageBox imageBox)
       {
          InitializeComponent();
          _imageBox = imageBox;

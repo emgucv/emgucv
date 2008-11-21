@@ -482,28 +482,78 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSURF()
       {
+         Stopwatch stopwatch = new Stopwatch();
+
+         #region extract features from the object image
          Image<Gray, Byte> objectImage = new Image<Gray, byte>("box.png");
          objectImage = objectImage.Resize(400, 400, true);
          DateTime t1 = DateTime.Now;
          MCvSURFParams param1 = new MCvSURFParams(500, false);
          SURFFeature[] objectFeatures = objectImage.ExtractSURF(ref param1);
-         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
 
+         //Create a feature tree for the given features
+         FeatureTree fTree = new FeatureTree(
+            Array.ConvertAll<SURFFeature, Matrix<float>>(objectFeatures,
+               delegate(SURFFeature f) { return f.Descriptor; }));
+
+         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
+         #endregion
+
+         #region extract features from the observed image
          Image<Gray, Byte> image = new Image<Gray, byte>("box_in_scene.png");
          image = image.Resize(400, 400, true);
          t1 = DateTime.Now;
          MCvSURFParams param2 = new MCvSURFParams(500, false);
          SURFFeature[] imageFeatures = image.ExtractSURF(ref param2);
          Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
+         #endregion
 
+         #region Merge the object image and the observed image into one image for display
          Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
          res.ROI = new Rectangle<double>( new MCvRect( 0, 0, objectImage.Width, objectImage.Height));
          objectImage.Copy(res, null);
          res.ROI = new Rectangle<double>( new MCvRect( 0, objectImage.Height, image.Width, image.Height ));
          image.Copy(res, null);
          res.ROI = null;
+         #endregion
 
+         /*
+         stopwatch.Reset(); stopwatch.Start();
+         #region alternative method to match feature
+         Matrix<float>[] imageFeatureDescriptors = Array.ConvertAll<SURFFeature, Matrix<float>>(
+            imageFeatures,
+            delegate(SURFFeature f) { return f.Descriptor; });
+         Matrix<Int32> result;
+         Matrix<double> dist;
+         fTree.FindFeatures(imageFeatureDescriptors, out result, out dist, 2, 20);
+         List<Point2D<float>> list1 = new List<Point2D<float>>();
+         List<Point2D<float>> list2 = new List<Point2D<float>>();
+
+         for (int i = 0; i < result.Rows; i++)
+         {
+            SURFFeature fObserve = imageFeatures[i];
+            int bestMatchedIndex = result[i, 0];
+            int secondBestMatchedIndex = result[i,1];
+            SURFFeature bestMatched = bestMatchedIndex >= 0? objectFeatures[bestMatchedIndex] : null;
+            SURFFeature secondBestMatched = secondBestMatchedIndex > 0 ? objectFeatures[secondBestMatchedIndex] : null;
+            if (bestMatched != null)
+            {
+               if (secondBestMatched == null || 0.8 * dist[i, 0] > dist[i,1] )
+               {  //this is a unique / almost unique match
+                  Point2D<float> p1 = new Point2D<float>((float)fObserve.Point.pt.x, (float)fObserve.Point.pt.y);
+                  Point2D<float> p2 = new Point2D<float>((float)bestMatched.Point.pt.x, (float)bestMatched.Point.pt.y);
+                  list1.Add(p1);
+                  list2.Add(p2);
+               }
+            }
+         }
+         #endregion
+         stopwatch.Stop();
+         Trace.WriteLine(String.Format("{0} milli-sec", stopwatch.ElapsedMilliseconds));
+         */
+         
          t1 = DateTime.Now;
+         #region find the best matched feature
          List<Point2D<float>> list1 = new List<Point2D<float>>();
          List<Point2D<float>> list2 = new List<Point2D<float>>();
          foreach (SURFFeature f in objectFeatures)
@@ -538,13 +588,24 @@ namespace Emgu.CV.Test
                list1.Add(p1);
                list2.Add(p2);
 
-               Point2D<float> p = p2.Convert<float>();
-               p.Y += objectImage.Height;
-               res.Draw(new LineSegment2D<int>(p1.Convert<int>(), p.Convert<int>()), new Gray(0), 1);
+               
+               //Point2D<float> p = p2.Convert<float>();
+               //p.Y += objectImage.Height;
+               //res.Draw(new LineSegment2D<int>(p1.Convert<int>(), p.Convert<int>()), new Gray(0), 1);
+               
             }
          }
+         #endregion
 
-         Matrix<float> homographyMatrix = CameraCalibration.FindHomography(list1.ToArray(), list2.ToArray(), CvEnum.HOMOGRAPHY_METHOD.RANSAC, 3);
+         Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
+            list1.ToArray(), //points on the object image
+            list2.ToArray(), //points on the observed image
+            CvEnum.HOMOGRAPHY_METHOD.RANSAC, 
+            3);
+
+         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
+
+         #region draw teh projected object in observed image
          Rectangle<double> rect = objectImage.ROI;
 
          Point2D<double>[] pts = new Point2D<double>[]
@@ -559,11 +620,8 @@ namespace Emgu.CV.Test
          {
             p.Y += objectImage.Height;
          }
-
          res.DrawPolyline(pts, true, new Gray(255.0), 5);
-
-         Trace.WriteLine(String.Format("{0} milli-sec", DateTime.Now.Subtract(t1).TotalMilliseconds));
-
+         #endregion
          //Application.Run(new ImageViewer(res.Resize(200, 200, true)));
       }
 

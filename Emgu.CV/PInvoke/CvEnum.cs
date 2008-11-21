@@ -1811,4 +1811,19 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CALIB_ZERO_DISPARITY = 1024
    }
+
+   /// <summary>
+   /// The type for CopyMakeBorder function
+   /// </summary>
+   public enum BORDER_TYPE
+   {
+      /// <summary>
+      /// border is filled with the fixed value, passed as last parameter of the function
+      /// </summary>
+      CONSTANT = 0,
+      /// <summary>
+      ///  the pixels from the top and bottom rows, the left-most and right-most columns are replicated to fill the border
+      /// </summary>
+      REPLICATE = 1,
+   }
 }

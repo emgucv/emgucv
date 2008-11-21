@@ -2360,6 +2360,56 @@ namespace Emgu.CV
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
 
+      #region Feature Matching
+      /// <summary>
+      /// Constructs a balanced kd-tree index of the given feature vectors. The lifetime of the desc matrix must exceed that of the returned tree. I.e., no copy is made of the vectors.
+      /// </summary>
+      /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
+      /// <returns>A balanced kd-tree index of the given feature vectors</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvCreateFeatureTree(IntPtr desc);
+
+      /// <summary>
+      /// Deallocates the given kd-tree
+      /// </summary>
+      /// <param name="tr">Pointer to tree being destroyed</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReleaseFeatureTree(IntPtr tr);
+
+      /// <summary>
+      /// Finds (with high probability) the k nearest neighbors in tr for each of the given (row-)vectors in desc, using best-bin-first searching ([Beis97]). The complexity of the entire operation is at most O(m*emax*log2(n)), where n is the number of vectors in the tree
+      /// </summary>
+      /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
+      /// <param name="desc">m x d matrix of (row-)vectors to find the nearest neighbors of</param>
+      /// <param name="results">m x k set of row indices of matching vectors (referring to matrix passed to cvCreateFeatureTree). Contains -1 in some columns if fewer than k neighbors found</param>
+      /// <param name="dist">m x k matrix of distances to k nearest neighbors</param>
+      /// <param name="k">The number of neighbors to find</param>
+      /// <param name="emax">The maximum number of leaves to visit</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindFeatures(
+         IntPtr tr, 
+         IntPtr desc,
+		   IntPtr results, 
+         IntPtr dist, 
+         int k, 
+         int emax);
+
+      /// <summary>
+      /// Performs orthogonal range seaching on the given kd-tree. That is, it returns the set of vectors v in tr that satisfy bounds_min[i] &lt;= v[i] &lt;= bounds_max[i], 0 &lt;= i &lt; d, where d is the dimension of vectors in the tree. The function returns the number of such vectors found
+      /// </summary>
+      /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
+      /// <param name="boundsMin">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving minimum value for each dimension</param>
+      /// <param name="boundsMax">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving maximum value for each dimension</param>
+      /// <param name="results">1 x m or m x 1 vector (CV_32SC1) to contain output row indices (referring to matrix passed to cvCreateFeatureTree)</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindFeaturesBoxed(
+         IntPtr tr,
+         IntPtr boundsMin, 
+         IntPtr boundsMax,
+         IntPtr results);
+
+      #endregion
+
       /// <summary>
       /// Erodes the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the minimum is taken:
       /// dst=erode(src,element):  dst(x,y)=min((x',y') in element))src(x+x',y+y')
@@ -2672,6 +2722,22 @@ namespace Emgu.CV
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, MCvPoint anchor);
+
+      /// <summary>
+      /// Copies the source 2D array into interior of destination array and makes a border of the specified type around the copied area. The function is useful when one needs to emulate border type that is different from the one embedded into a specific algorithm implementation. For example, morphological functions, as well as most of other filtering functions in OpenCV, internally use replication border type, while the user may need zero border or a border, filled with 1's or 255's
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image</param>
+      /// <param name="offset">Coordinates of the top-left corner (or bottom-left in case of images with bottom-left origin) of the destination image rectangle where the source image (or its ROI) is copied. Size of the rectangle matches the source image size/ROI size</param>
+      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="value">Value of the border pixels if bordertype=CONSTANT</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCopyMakeBorder( 
+         IntPtr src, 
+         IntPtr dst, 
+         MCvPoint offset,
+         CvEnum.BORDER_TYPE bordertype, 
+         MCvScalar value);
 
       /// <summary>
       /// Applies fixed-level thresholding to single-channel array. The function is typically used to get bi-level (binary) image out of grayscale image (cvCmpS could be also used for this purpose) or for removing a noise, i.e. filtering out pixels with too small or too large values. There are several types of thresholding the function supports that are determined by threshold_type

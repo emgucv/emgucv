@@ -17,14 +17,46 @@ namespace Emgu.CV.UI
    /// </summary>
    public partial class ImageBox : PictureBox
    {
+      #region private fileds
       private IImage _image;
       private IImage _displayedImage;
-      private PropertyDlg _propertyDlg;
+      private PropertyDialog _propertyDlg;
       
       private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
 
       /// <summary>
-      /// Get or set the display mode for the ImageBox
+      /// A cache to store the ToolStripMenuItems for different types of images
+      /// </summary>
+      private static readonly Dictionary<Type, ToolStripMenuItem[]> _typeToToolStripMenuItemsDictionary = new Dictionary<Type, ToolStripMenuItem[]>();
+
+      private Stack<Operation> _operationStack;
+
+      //private double _zoomLevel = 1.0;
+
+      /// <summary>
+      /// timer used for caculating the frame rate
+      /// </summary>
+      private DateTime _timerStartTime;
+
+      /// <summary>
+      /// one of the parameters used for caculating the frame rate
+      /// </summary>
+      private int _imageReceivedSinceCounterStart;
+      #endregion
+
+      /// <summary>
+      /// Create a ImageBox
+      /// </summary>
+      public ImageBox()
+         : base()
+      {
+         InitializeComponent();
+         _operationStack = new Stack<Operation>();
+      }
+
+      #region properties
+      /// <summary>
+      /// Get or set the functional mode for the ImageBox
       /// </summary>
       [Bindable(false)]
       [Category("Design")]
@@ -46,46 +78,152 @@ namespace Emgu.CV.UI
          }
       }
 
-      /// <summary>
-      /// The display mode for ImageBox
-      /// </summary>
-      public enum FunctionalModeOption
+      private bool EnablePropertyPanel
       {
-         /// <summary>
-         /// The ImageBox is only used for displaying image. 
-         /// No right-click menu available
-         /// </summary>
-         Minimum = 0,
-         /// <summary>
-         /// This is the ImageBox with all functions enabled.
-         /// </summary>
-         Everything = 1
+         get
+         {
+            return _propertyDlg != null;
+         }
+         set
+         {
+            if (value)
+            {   //this is a call to enable the property dlg
+               if (_propertyDlg == null)
+                  _propertyDlg = new PropertyDialog(this);
+
+               _propertyDlg.Show();
+
+               _propertyDlg.FormClosed +=
+                   delegate(object sender, FormClosedEventArgs e)
+                   {
+                      _propertyDlg = null;
+                   };
+
+               ImagePropertyPanel.SetOperationStack(_operationStack);
+
+               // reset the image such that the property is updated
+               Image = Image;
+            }
+            else
+            {
+               if (_propertyDlg != null)
+               {
+                  _propertyDlg.Focus();
+               }
+            }
+         }
       }
 
-      private Stack<Operation> _operationStack;
-
-      //private double _zoomLevel = 1.0;
-
       /// <summary>
-      /// timer used for caculating the frame rate
+      /// Set the image for this image box
       /// </summary>
-      private DateTime _timerStartTime;
-
-      /// <summary>
-      /// one of the parameters used for caculating the frame rate
-      /// </summary>
-      private int _imageReceivedSinceCounterStart;
-
-      /// <summary>
-      /// Create a ImageBox
-      /// </summary>
-      public ImageBox()
-         : base()
+      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      public new IImage Image
       {
-         InitializeComponent();
+         get
+         {
+            return _image;
+         }
+         set
+         {
+            if (InvokeRequired)
+            {
+               this.Invoke(new MethodInvoker(delegate() { Image = value; }));
+            }
+            else
+            {
+               _image = value;
 
-         _operationStack = new Stack<Operation>();
+               IImage imageToBeDisplayed = _image;
+
+               if (imageToBeDisplayed != null)
+               {
+                  #region perform operations on _operationStack if there is any
+                  if (_operationStack.Count > 0)
+                  {
+                     bool isCloned = false;
+                     Operation[] ops = _operationStack.ToArray();
+                     System.Array.Reverse(ops);
+                     foreach (Operation operation in ops)
+                     {
+                        if (operation.Method.ReturnType == typeof(void))
+                        {
+                           if (!isCloned)
+                           {
+                              imageToBeDisplayed = _image.Clone() as IImage;
+                              isCloned = true;
+                           }
+                           //if the operation has return type of void, just execute the operation
+                           operation.InvokeMethod(imageToBeDisplayed);
+                        }
+                        else if (operation.Method.ReturnType.GetInterface("IImage") != null)
+                        {
+                           isCloned = true;
+                           imageToBeDisplayed = operation.InvokeMethod(imageToBeDisplayed) as IImage;
+                        }
+                        else
+                        {
+                           throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
+                        }
+                     }
+                  }
+                  #endregion
+
+                  DisplayedImage = imageToBeDisplayed;
+               }
+
+               operationsToolStripMenuItem.Enabled = (_image != null);
+            }
+         }
       }
+
+      /// <summary>
+      /// The image that is being displayed. It's the Image following by some user defined image operation
+      /// </summary>
+      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      public IImage DisplayedImage
+      {
+         get
+         {
+            return _displayedImage;
+         }
+         set
+         {
+            _displayedImage = value;
+            if (_displayedImage != null)
+            {
+               if (_functionalMode != FunctionalModeOption.Minimum)
+                  BuildOperationMenuItem(_displayedImage);
+
+               base.Image = _displayedImage.Bitmap;
+
+               if (EnablePropertyPanel)
+               {
+                  ImagePropertyPanel.ImageWidth = _displayedImage.Width;
+                  ImagePropertyPanel.ImageHeight = _displayedImage.Height;
+
+                  ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
+                  ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
+
+                  #region calculate the frame rate
+                  TimeSpan ts = DateTime.Now.Subtract(_timerStartTime);
+                  if (ts.TotalSeconds > 1)
+                  {
+                     ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
+                     //reset the counter
+                     _timerStartTime = DateTime.Now;
+                     _imageReceivedSinceCounterStart = 0;
+                  }
+                  else
+                  {
+                     _imageReceivedSinceCounterStart++;
+                  }
+                  #endregion
+               }
+            }
+         }
+      }
+      #endregion
 
       /// <summary>
       /// Push the specific operation onto the stack
@@ -163,8 +301,7 @@ namespace Emgu.CV.UI
             }
             else
             {  //this is an operation
-
-               operationItem.Add(pair.Value.Name, pair.Value);
+               operationItem.Add(pair.Value.ToString(), pair.Value);
             }
          }
          
@@ -214,7 +351,7 @@ namespace Emgu.CV.UI
                    {
                       //Get the parameters for the method
                       //this pop up an input dialog and ask for user input
-                      paramList = ParamInputDlg.GetParams(methodInfoRef, paramList);
+                      paramList = ParameterInputDialog.GetParams(methodInfoRef, paramList);
 
                       if (paramList == null) break; //user click cancel on the input dialog
 
@@ -247,119 +384,21 @@ namespace Emgu.CV.UI
 
       private void BuildOperationMenuItem(IImage image)
       {
-         operationsToolStripMenuItem.DropDownItems.Clear();
-         //List<KeyValuePair<String, MethodInfo>> l = new List<KeyValuePair<string,MethodInfo>>( Reflection.ReflectIImage.GetImageMethods(image));
-         //int n = l.Count;
-         operationsToolStripMenuItem.DropDownItems.AddRange(
-            BuildOperationTree( Reflection.ReflectIImage.GetImageMethods(image)));
+         Type typeOfImage = image.GetType();
          
-      }
+         operationsToolStripMenuItem.DropDownItems.Clear();
 
-      /// <summary>
-      /// Set the image for this image box
-      /// </summary>
-      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-      public new IImage Image
-      {
-         get
+         if (_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
          {
-            return _image;
+            operationsToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
          }
-         set
+         else
          {
-            if (InvokeRequired)
-            {
-               this.Invoke(new MethodInvoker(delegate() { Image = value; }));
-            }
-            else
-            {
-               _image = value;
-
-               IImage imageToBeDisplayed = _image;
-
-               if (imageToBeDisplayed != null)
-               {
-                  bool isCloned = false;
-                  Operation[] ops = _operationStack.ToArray();
-                  System.Array.Reverse(ops);
-                  foreach (Operation operation in ops)
-                  {
-                     if (operation.Method.ReturnType == typeof(void))
-                     {
-                        if (!isCloned)
-                        {
-                           imageToBeDisplayed = _image.Clone() as IImage;
-                           isCloned = true;
-                        }
-                        //if the operation has return type of void, just execute the operation
-                        operation.InvokeMethod(imageToBeDisplayed);
-                     }
-                     else if (operation.Method.ReturnType.GetInterface("IImage") != null)
-                     {
-                        isCloned = true;
-                        imageToBeDisplayed = operation.InvokeMethod(imageToBeDisplayed) as IImage;
-                     }
-                     else
-                     {
-                        throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
-                     }
-                  }
-
-                  DisplayedImage = imageToBeDisplayed;
-               }
-
-               operationsToolStripMenuItem.Enabled = (_image != null);
-            }
+            ToolStripMenuItem[] items = BuildOperationTree(Reflection.ReflectIImage.GetImageMethods(image));
+            _typeToToolStripMenuItemsDictionary.Add(typeOfImage, items);
+            operationsToolStripMenuItem.DropDownItems.AddRange(items);
          }
-      }
-
-      /// <summary>
-      /// The image that is being displayed. It's the Image following by some user defined image operation
-      /// </summary>
-      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-      public IImage DisplayedImage
-      {
-         get
-         {
-            return _displayedImage;
-         }
-         set
-         {
-            _displayedImage = value;
-            if (_displayedImage != null)
-            {
-               BuildOperationMenuItem(_displayedImage);
-
-               //if (Width != _displayedImage.Width) Width = _displayedImage.Width;
-               //if (Height != _displayedImage.Height) Height = _displayedImage.Height;
-
-               base.Image = _displayedImage.Bitmap;
-
-               if (EnableProperty)
-               {
-                  ImagePropertyPanel.ImageWidth = _displayedImage.Width;
-                  ImagePropertyPanel.ImageHeight = _displayedImage.Height;
-
-                  ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
-                  ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
-
-                  #region calculate the frame rate
-                  TimeSpan ts = DateTime.Now.Subtract(_timerStartTime);
-                  if (ts.TotalSeconds > 1)
-                  {
-                     ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
-                     //reset the counter
-                     _timerStartTime = DateTime.Now;
-                     _imageReceivedSinceCounterStart = 0;
-                  }
-                  else
-                  {
-                     _imageReceivedSinceCounterStart++;
-                  }
-                  #endregion
-               }
-            }
-         }
+         
       }
 
       private void loadImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -383,7 +422,7 @@ namespace Emgu.CV.UI
             try
             {
                String filename = saveImageToFileDialog.FileName;
-               _image.Save(filename);
+               DisplayedImage.Save(filename);
             }
             catch (Exception excpt)
             {
@@ -393,52 +432,17 @@ namespace Emgu.CV.UI
 
       private void propertyToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         EnableProperty = !EnableProperty;
+         EnablePropertyPanel = !EnablePropertyPanel;
       }
 
       private ImageProperty ImagePropertyPanel
       {
          get
          {
-            return EnableProperty ? _propertyDlg.ImagePropertyPanel : null;
+            return EnablePropertyPanel ? _propertyDlg.ImagePropertyPanel : null;
          }
       }
 
-      private bool EnableProperty
-      {
-         get
-         {
-            return _propertyDlg != null;
-         }
-         set
-         {
-            if (value)
-            {   //this is a call to enable the property dlg
-               if (_propertyDlg == null) 
-                  _propertyDlg = new PropertyDlg(this);
-
-               _propertyDlg.Show();
-
-               _propertyDlg.FormClosed +=
-                   delegate(object sender, FormClosedEventArgs e)
-                   {
-                      _propertyDlg = null;
-                   };
-
-               ImagePropertyPanel.SetOperationStack(_operationStack);
-
-               // reset the image such that the property is updated
-               Image = Image;
-            }
-            else
-            {
-               if (_propertyDlg != null)
-               {
-                  _propertyDlg.Focus();
-               }
-            }
-         }
-      }
 
       /// <summary>
       /// Used for tracking the mouse position on the image
@@ -447,7 +451,7 @@ namespace Emgu.CV.UI
       /// <param name="e"></param>
       private void onMouseMove(object sender, MouseEventArgs e)
       {
-         if (EnableProperty)
+         if (EnablePropertyPanel)
          {
             Point2D<int> location = new Point2D<int>(e.X, e.Y);
             IImage img = DisplayedImage;
@@ -459,6 +463,22 @@ namespace Emgu.CV.UI
             ImagePropertyPanel.MousePositionOnImage = location;
             ImagePropertyPanel.ColorIntensity = color;
          }
+      }
+
+      /// <summary>
+      /// The display mode for ImageBox
+      /// </summary>
+      public enum FunctionalModeOption
+      {
+         /// <summary>
+         /// The ImageBox is only used for displaying image. 
+         /// No right-click menu available
+         /// </summary>
+         Minimum = 0,
+         /// <summary>
+         /// This is the ImageBox with all functions enabled.
+         /// </summary>
+         Everything = 1
       }
    }
 }

@@ -46,17 +46,6 @@ namespace Emgu.CV.UI
       /// <param name="operationStack">The operation stack to be displayed</param>
       public void DisplayOperationStack(Stack<Operation> operationStack)
       {
-         if (_language == ProgrammingLanguage.CSharp)
-         {
-            topLabel.Text = "public static IImage Function(IImage image)\r\n{";
-            bottomLabel.Text = "}";
-         }
-         else if (_language == ProgrammingLanguage.CPlusPlus)
-         {
-            topLabel.Text = "public static IImage^ Function(IImage^ image)\r\n{";
-            bottomLabel.Text = "}";
-         }
-
          dataGridView1.Rows.Clear();
          String[] codes = GetOperationCode(operationStack);
          if (codes.Length > 0)
@@ -67,27 +56,75 @@ namespace Emgu.CV.UI
          }
       }
 
+      private String ImageTypeToString(Type imageType)
+      {
+         Type[] genericParameterTypes = imageType.GetGenericArguments();
+         String genericParamString = String.Join(",",
+            Array.ConvertAll<Type, String>(genericParameterTypes,
+               delegate(Type t) { return t.Name; }));
+
+         if (_language == ProgrammingLanguage.CSharp)
+         {
+            return String.Format("{0}<{1}>", imageType.Name, genericParamString);
+         }
+         else if (_language == ProgrammingLanguage.CPlusPlus)
+         {
+            return String.Format("{0}<{1}>^", imageType.Name, genericParamString);
+         }
+         else
+         {
+            throw new NotImplementedException("Code generation for this programming language is not implemented");
+         }
+      }
+
       private String[] GetOperationCode(Stack<Operation> operationStack)
       {
          List<String> ops = new List<string>();
-         foreach (Operation op in operationStack)
+
+         Operation[] operationArray = operationStack.ToArray();
+         Array.Reverse(operationArray);
+
+         int currentInstanceIndex = 0;
+
+         if (_language == ProgrammingLanguage.CSharp)
          {
-            String str = op.ToCode(_language).Replace("{instance}", "image");
+            ops.Add("public static IImage Function(IImage image" + currentInstanceIndex + "){");
+         }
+         else if (_language == ProgrammingLanguage.CPlusPlus)
+         {
+            ops.Add("public static IImage^ Function(IImage^ image" + currentInstanceIndex + "){");
+         }
+
+         foreach (Operation op in operationArray)
+         {
+            String str = op.ToCode(_language).Replace("{instance}", "image" + currentInstanceIndex);
 
             if (_language == ProgrammingLanguage.CSharp || _language == ProgrammingLanguage.CPlusPlus)
             {
                if (op.Method.ReturnType == typeof(void))
                {
-                  str += ";";
+                  str = String.Format("{0};", str);
                }
                else
                {
-                  str = "image = " + str + ";";
+                  currentInstanceIndex++;
+                  str = String.Format("image{0} = {1};",
+                     //ImageTypeToString(op.Method.ReturnType), 
+                     currentInstanceIndex, str);
                }
             }
             ops.Add(str);
          }
-         ops.Reverse();
+         ops.Add(String.Format("return image{0};", currentInstanceIndex));
+
+         if (_language == ProgrammingLanguage.CSharp)
+         {
+            ops.Add("}");
+         }
+         else if (_language == ProgrammingLanguage.CPlusPlus)
+         {
+            ops.Add("}");
+         }
          return ops.ToArray();
       }
    }

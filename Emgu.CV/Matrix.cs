@@ -89,7 +89,7 @@ namespace Emgu.CV
 
             if (typeOfDepth == typeof(Single))
                return CvEnum.MAT_DEPTH.CV_32F;
-            if (typeOfDepth == typeof(UInt32))
+            if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.MAT_DEPTH.CV_32S;
             if (typeOfDepth == typeof(SByte))
                return Emgu.CV.CvEnum.MAT_DEPTH.CV_8S;
