@@ -80,7 +80,7 @@ namespace Emgu.CV
 
       ///<summary> Create a capture using the default camera </summary>
       public Capture()
-         : this(-1)
+         : this(0)
       {
       }
 
