@@ -1,6 +1,7 @@
 ﻿<project schemaVersion="1.6.0.7">
     <assemblies>
         <assembly assemblyPath="..\bin\Emgu.CV.dll" xmlCommentsPath="..\bin\Emgu.CV.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\bin\Emgu.CV.UI.dll" xmlCommentsPath="..\bin\Emgu.CV.UI.xml" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.Util.dll" xmlCommentsPath="..\bin\Emgu.Util.xml" commentsOnly="False" />
         <assembly assemblyPath="..\lib\ZedGraph.dll" xmlCommentsPath="..\lib\ZedGraph.xml" commentsOnly="False" />
     </assemblies>
