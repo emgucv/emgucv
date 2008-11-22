@@ -22,11 +22,12 @@ namespace ShapeDetection
       {
          if (fileNameTextBox.Text != String.Empty)
          {
+            //Load the image from file
             Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, true);
 
             //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
-            
+
             Gray cannyThreshold = new Gray(180);
             Gray cannyThresholdLinking = new Gray(120);
             Gray circleAccumulatorThreshold = new Gray(120);
@@ -98,7 +99,7 @@ namespace ShapeDetection
             foreach (Box2D<int> box in boxList)
                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
             triangleRectangleImageBox.Image = triangleRectangleImage;
-            #endregion 
+            #endregion
 
             #region draw circles
             Image<Bgr, Byte> circleImage = img.CopyBlank();
