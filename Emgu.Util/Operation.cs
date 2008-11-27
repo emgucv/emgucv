@@ -129,7 +129,7 @@ namespace Emgu.Util
          return res;
       }
 
-      private String ParameterToCode(Object parameter, TypeEnum.ProgrammingLanguage language)
+      private static String ParameterToCode(Object parameter, TypeEnum.ProgrammingLanguage language)
       {
          ICodeGenerable gen = parameter as ICodeGenerable;
          return gen == null ? System.Convert.ToString(parameter) :

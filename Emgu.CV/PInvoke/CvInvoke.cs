@@ -588,6 +588,18 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvXorS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
+      #region Copying and Filling
+      /// <summary>
+      /// Copies selected elements from input array to output array:
+      /// dst(I)=src(I) if mask(I)!=0. 
+      /// If any of the passed arrays is of IplImage type, then its ROI and COI fields are used. Both arrays must have the same type, the same number of dimensions and the same size. The function can also copy sparse arrays (mask is not supported in this case).
+      /// </summary>
+      /// <param name="src">The source array</param>
+      /// <param name="des">The destination array</param>
+      /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
+
       /// <summary>
       /// Copies scalar value to every selected element of the destination array:
       ///arr(I)=value if mask(I)!=0
@@ -600,15 +612,111 @@ namespace Emgu.CV
       public static extern void cvSet(IntPtr arr, MCvScalar value, IntPtr mask);
 
       /// <summary>
-      /// Calculates natural logarithm of absolute value of every element of input array:
-      /// dst(I)=log(abs(src(I))), src(I)!=0
-      /// dst(I)=C,  src(I)=0
-      /// Where C is large negative number (-700 in the current implementation)
+      /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
       /// </summary>
-      /// <param name="src">The source array</param>
-      /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
+      /// <param name="arr">array to be cleared</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvLog(IntPtr src, IntPtr dst);
+      public static extern void cvSetZero(IntPtr arr);
+
+      /// <summary>
+      /// Initializes scaled identity matrix:
+      /// arr(i,j)=value if i=j,
+      /// 0 otherwise
+      /// </summary>
+      /// <param name="mat">The matrix to initialize (not necesserily square).</param>
+      /// <param name="value">The value to assign to the diagonal elements.</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSetIdentity(IntPtr mat, MCvScalar value);
+
+      /// <summary>
+      /// Initializes the matrix as following:
+      /// arr(i,j)=(end-start)*(i*cols(arr)+j)/(cols(arr)*rows(arr))
+      /// </summary>
+      /// <param name="mat">The matrix to initialize. It should be single-channel 32-bit, integer or floating-point</param>
+      /// <param name="start">The lower inclusive boundary of the range</param>
+      /// <param name="end">The upper exclusive boundary of the range</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvRange(IntPtr mat, double start, double end);
+      #endregion
+
+      #region Math Functions
+      /// <summary>
+      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
+      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
+      /// angle(I)=atan( y(I)/x(I) )
+      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
+      /// </summary>
+      /// <param name="x">The array of x-coordinates </param>
+      /// <param name="y">The array of y-coordinates</param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvCartToPolar(
+         IntPtr x,
+         IntPtr y,
+         IntPtr magnitude,
+         IntPtr angle,
+         int angleInDegrees);
+
+      /// <summary>
+      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
+      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
+      /// angle(I)=atan( y(I)/x(I) )
+      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
+      /// </summary>
+      /// <param name="x">The array of x-coordinates </param>
+      /// <param name="y">The array of y-coordinates</param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      public static void cvCartToPolar(
+         IntPtr x,
+         IntPtr y,
+         IntPtr magnitude,
+         IntPtr angle,
+         bool angleInDegrees)
+      {
+         cvCartToPolar(x, y, magnitude, angle, angleInDegrees ? 1 : 0);
+      }
+
+      /// <summary>
+      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
+      /// x(I)=magnitude(I)*cos(angle(I)),
+      /// y(I)=magnitude(I)*sin(angle(I))
+      /// </summary>
+      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="angle">The array of angles, whether in radians or degrees</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvPolarToCart(
+         IntPtr magnitude,
+         IntPtr angle,
+         IntPtr x,
+         IntPtr y,
+         int angleInDegrees);
+
+      /// <summary>
+      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
+      /// x(I)=magnitude(I)*cos(angle(I)),
+      /// y(I)=magnitude(I)*sin(angle(I))
+      /// </summary>
+      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="angle">The array of angles, whether in radians or degrees</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+      public static void cvPolarToCart(
+         IntPtr magnitude,
+         IntPtr angle,
+         IntPtr x,
+         IntPtr y,
+         bool angleInDegrees)
+      {
+         cvPolarToCart(magnitude, angle, x, y, angleInDegrees ? 1 : 0);
+      }
 
       /// <summary>
       /// Raises every element of input array to p:
@@ -639,6 +747,47 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvExp(IntPtr src, IntPtr dst);
 
+      /// <summary>
+      /// Calculates natural logarithm of absolute value of every element of input array:
+      /// dst(I)=log(abs(src(I))), src(I)!=0
+      /// dst(I)=C,  src(I)=0
+      /// Where C is large negative number (-700 in the current implementation)
+      /// </summary>
+      /// <param name="src">The source array</param>
+      /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvLog(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// finds real roots of a cubic equation:
+      /// coeffs[0]*x^3 + coeffs[1]*x^2 + coeffs[2]*x + coeffs[3] = 0
+      /// (if coeffs is 4-element vector)
+      /// or
+      /// x^3 + coeffs[0]*x^2 + coeffs[1]*x + coeffs[2] = 0
+      /// (if coeffs is 3-element vector)
+      /// </summary>
+      /// <param name="coeffs">The equation coefficients, array of 3 or 4 elements</param>
+      /// <param name="roots">The output array of real roots. Should have 3 elements. Padded with zeros if there is only one root</param>
+      /// <returns>the number of real roots found</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern int cvSolveCubic( IntPtr coeffs, IntPtr roots );
+
+      /// <summary>
+      /// Finds all real and complex roots of any degree polynomial with real coefficients
+      /// </summary>
+      /// <param name="coeffs">The (degree + 1)-length array of equation coefficients (CV_32FC1 or CV_64FC1)</param>
+      /// <param name="roots">The degree-length output array of real or complex roots (CV_32FC2 or CV_64FC2)</param>
+      /// <param name="maxiter">The maximum number of iterations</param>
+      /// <param name="fig">The required figures of precision required</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void  cvSolvePoly(
+         IntPtr coeffs, 
+         IntPtr roots,
+         int maxiter, 
+         int fig);
+      #endregion
+
+      #region Discrete Transforms
       /// <summary>
       /// Performs forward or inverse transform of 1D or 2D floating-point array
       /// In case of real (single-channel) data, the packed format, borrowed from IPL, is used to to represent a result of forward Fourier transform or input for inverse Fourier transform
@@ -672,7 +821,6 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.MUL_SPECTRUMS_TYPE flags);
 
-
       /// <summary>
       /// Performs forward or inverse transform of 1D or 2D floating-point array
       /// </summary>
@@ -681,6 +829,7 @@ namespace Emgu.CV
       /// <param name="flags">Transformation flags</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvDCT(IntPtr src, IntPtr dst, CvEnum.CV_DCT_TYPE flags);
+      #endregion
 
       /// <summary>
       /// Calculates a part of the line segment which is entirely in the image. It returns 0 if the line segment is completely outside the image and 1 otherwise.
@@ -748,6 +897,7 @@ namespace Emgu.CV
           Emgu.CV.CvEnum.NORM_TYPE normType,
           IntPtr mask);
 
+      #region Initialization
       /// <summary>
       /// Creates the header and allocates data. 
       /// </summary>
@@ -829,17 +979,6 @@ namespace Emgu.CV
          int step);
 
       /// <summary>
-      /// Copies selected elements from input array to output array:
-      /// dst(I)=src(I) if mask(I)!=0. 
-      /// If any of the passed arrays is of IplImage type, then its ROI and COI fields are used. Both arrays must have the same type, the same number of dimensions and the same size. The function can also copy sparse arrays (mask is not supported in this case).
-      /// </summary>
-      /// <param name="src">The source array</param>
-      /// <param name="des">The destination array</param>
-      /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
-
-      /// <summary>
       /// Sets the channel of interest to a given value. Value 0 means that all channels are selected, 1 means that the first channel is selected etc. If ROI is NULL and coi != 0, ROI is allocated.
       /// </summary>
       /// <param name="image">Image header. </param>
@@ -877,38 +1016,6 @@ namespace Emgu.CV
       /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern MCvRect cvGetImageROI(IntPtr image);
-
-      #region Memory Storages
-      /// <summary>
-      /// Creates a memory storage and returns pointer to it. Initially the storage is empty. All fields of the header, except the block_size, are set to 0.
-      /// </summary>
-      /// <param name="blockSize"></param>
-      /// <returns>Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is 64K. </returns>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateMemStorage(int blockSize);
-
-      /// <summary>
-      /// Creates a child memory storage that is similar to simple memory storage except for the differences in the memory allocation/deallocation mechanism. When a child storage needs a new block to add to the block list, it tries to get this block from the parent. The first unoccupied parent block available is taken and excluded from the parent block list. If no blocks are available, the parent either allocates a block or borrows one from its own parent, if any. In other words, the chain, or a more complex structure, of memory storages where every storage is a child/parent of another is possible. When a child storage is released or even cleared, it returns all blocks to the parent. In other aspects, the child storage is the same as the simple storage.
-      /// </summary>
-      /// <param name="parent">Parent memory storage</param>
-      /// <returns>ChildMemStorage</returns>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateChildMemStorage(IntPtr parent);
-
-      /// <summary>
-      /// Resets the top (free space boundary) of the storage to the very beginning. This function does not deallocate any memory. If the storage has a parent, the function returns all blocks to the parent.
-      /// </summary>
-      /// <param name="storage">Memory storage</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvClearMemStorage(IntPtr storage);
-
-      /// <summary>
-      /// Deallocates all storage memory blocks or returns them to the parent, if any. Then it deallocates the storage header and clears the pointer to the storage. All children of the storage must be released before the parent is released.
-      /// </summary>
-      /// <param name="storage">Pointer to the released storage</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvReleaseMemStorage(ref IntPtr storage);
-      #endregion
 
       /// <summary>
       /// Allocates header for the new matrix and underlying data, and returns a pointer to the created matrix. Matrices are stored row by row. All the rows are aligned by 4 bytes. 
@@ -955,6 +1062,39 @@ namespace Emgu.CV
       /// <param name="mat">Double pointer to the matrix.</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvReleaseMat(ref IntPtr mat);
+      #endregion
+
+      #region Memory Storages
+      /// <summary>
+      /// Creates a memory storage and returns pointer to it. Initially the storage is empty. All fields of the header, except the block_size, are set to 0.
+      /// </summary>
+      /// <param name="blockSize"></param>
+      /// <returns>Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is 64K. </returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvCreateMemStorage(int blockSize);
+
+      /// <summary>
+      /// Creates a child memory storage that is similar to simple memory storage except for the differences in the memory allocation/deallocation mechanism. When a child storage needs a new block to add to the block list, it tries to get this block from the parent. The first unoccupied parent block available is taken and excluded from the parent block list. If no blocks are available, the parent either allocates a block or borrows one from its own parent, if any. In other words, the chain, or a more complex structure, of memory storages where every storage is a child/parent of another is possible. When a child storage is released or even cleared, it returns all blocks to the parent. In other aspects, the child storage is the same as the simple storage.
+      /// </summary>
+      /// <param name="parent">Parent memory storage</param>
+      /// <returns>ChildMemStorage</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvCreateChildMemStorage(IntPtr parent);
+
+      /// <summary>
+      /// Resets the top (free space boundary) of the storage to the very beginning. This function does not deallocate any memory. If the storage has a parent, the function returns all blocks to the parent.
+      /// </summary>
+      /// <param name="storage">Memory storage</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvClearMemStorage(IntPtr storage);
+
+      /// <summary>
+      /// Deallocates all storage memory blocks or returns them to the parent, if any. Then it deallocates the storage header and clears the pointer to the storage. All children of the storage must be released before the parent is released.
+      /// </summary>
+      /// <param name="storage">Pointer to the released storage</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvReleaseMemStorage(ref IntPtr storage);
+      #endregion
 
       /// <summary>
       /// Loads object from file. It provides a simple interface to cvRead. After object is loaded, the file storage is closed and all the temporary buffers are deleted. Thus, to load a dynamic structure, such as sequence, contour or graph, one should pass a valid destination memory storage to the function.
@@ -1865,7 +2005,7 @@ namespace Emgu.CV
       /// <param name="vec2">The second 1D source vector</param>
       /// <param name="mat">The inverse covariation matrix</param>
       /// <returns>the Mahalanobis distance</returns>
-      [DllImport(CV_LIBRARY)]
+      [DllImport(CXCORE_LIBRARY)]
       public static extern double cvMahalanobis(IntPtr vec1, IntPtr vec2, IntPtr mat);
 
       /// <summary>
@@ -1884,104 +2024,6 @@ namespace Emgu.CV
           IntPtr eigenvectors,
           CvEnum.PCA_TYPE flags);
       #endregion
-
-      /// <summary>
-      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
-      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
-      /// angle(I)=atan( y(I)/x(I) )
-      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
-      /// </summary>
-      /// <param name="x">The array of x-coordinates </param>
-      /// <param name="y">The array of y-coordinates</param>
-      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
-      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvCartToPolar(
-         IntPtr x,
-         IntPtr y,
-         IntPtr magnitude,
-         IntPtr angle,
-         int angleInDegrees);
-
-      /// <summary>
-      /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
-      /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
-      /// angle(I)=atan( y(I)/x(I) )
-      /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
-      /// </summary>
-      /// <param name="x">The array of x-coordinates </param>
-      /// <param name="y">The array of y-coordinates</param>
-      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
-      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      public static void cvCartToPolar(
-         IntPtr x,
-         IntPtr y,
-         IntPtr magnitude,
-         IntPtr angle,
-         bool angleInDegrees)
-      {
-         cvCartToPolar(x, y, magnitude, angle, angleInDegrees ? 1 : 0);
-      }
-
-      /// <summary>
-      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
-      /// x(I)=magnitude(I)*cos(angle(I)),
-      /// y(I)=magnitude(I)*sin(angle(I))
-      /// </summary>
-      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
-      /// <param name="angle">The array of angles, whether in radians or degrees</param>
-      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
-      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
-      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvPolarToCart(
-         IntPtr magnitude,
-         IntPtr angle,
-         IntPtr x,
-         IntPtr y,
-         int angleInDegrees);
-
-      /// <summary>
-      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
-      /// x(I)=magnitude(I)*cos(angle(I)),
-      /// y(I)=magnitude(I)*sin(angle(I))
-      /// </summary>
-      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
-      /// <param name="angle">The array of angles, whether in radians or degrees</param>
-      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
-      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
-      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      public static void cvPolarToCart(
-         IntPtr magnitude,
-         IntPtr angle,
-         IntPtr x,
-         IntPtr y,
-         bool angleInDegrees)
-      {
-         cvPolarToCart(magnitude, angle, x, y, angleInDegrees ? 1 : 0);
-      }
-
-      /// <summary>
-      /// Initializes scaled identity matrix:
-      /// arr(i,j)=value if i=j,
-      /// 0 otherwise
-      /// </summary>
-      /// <param name="mat">The matrix to initialize (not necesserily square).</param>
-      /// <param name="value">The value to assign to the diagonal elements.</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSetIdentity(IntPtr mat, MCvScalar value);
-
-      /// <summary>
-      /// Initializes the matrix as following:
-      /// arr(i,j)=(end-start)*(i*cols(arr)+j)/(cols(arr)*rows(arr))
-      /// </summary>
-      /// <param name="mat">The matrix to initialize. It should be single-channel 32-bit, integer or floating-point</param>
-      /// <param name="start">The lower inclusive boundary of the range</param>
-      /// <param name="end">The upper exclusive boundary of the range</param>
-      [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvRange(IntPtr mat, double start, double end);
 
       /// <summary>
       /// Fills output variables with low-level information about the array data. All output parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with ROI set, parameters of ROI are returned. 
@@ -2061,6 +2103,22 @@ namespace Emgu.CV
       /// <returns>the textual description for the specified error status code.</returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern String cvErrorStr(int status);
+
+      #region Miscellaneous Functions
+      /// <summary>
+      /// implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix
+      /// </summary>
+      /// <param name="samples">Floating-point matrix of input samples, one row per sample</param>
+      /// <param name="cluster_count">Number of clusters to split the set by</param>
+      /// <param name="labels">Output integer vector storing cluster indices for every sample</param>
+      /// <param name="termcrit">Specifies maximum number of iterations and/or accuracy (distance the centers move by between the subsequent iterations)</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvKMeans2( 
+         IntPtr samples, 
+         int cluster_count,
+         IntPtr labels, 
+         MCvTermCriteria termcrit );
+      #endregion
 
       #endregion
 
@@ -2766,7 +2824,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination array; must be either the same type as src or 8-bit. </param>
       /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
       /// <param name="adaptiveType">Adaptive_method </param>
-      /// <param name="thresholdType">Thresholding type </param>
+      /// <param name="thresholdType">Thresholding type. must be one of CV_THRESH_BINARY, CV_THRESH_BINARY_INV  </param>
       /// <param name="blockSize">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
       /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
       [DllImport(CV_LIBRARY)]
@@ -3318,7 +3376,7 @@ namespace Emgu.CV
       /// <param name="src">The input point array, 2xN, Nx2, 3xN, Nx3, 4xN or Nx4 (where N is the number of points). Multi-channel 1xN or Nx1 array is also acceptable</param>
       /// <param name="dst">The output point array, must contain the same number of points as the input; The dimensionality must be the same, 1 less or 1 more than the input, and also within 2..4.</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvConvertPointsHomogenious(IntPtr src, IntPtr dst);
+      public static extern void cvConvertPointsHomogeneous(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
@@ -3920,7 +3978,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source image</param>
       /// <param name="dst">Destination image</param>
-      /// <param name="mapMatrix">3×3 transformation matrix</param>
+      /// <param name="mapMatrix">3? transformation matrix</param>
       /// <param name="flags"></param>
       /// <param name="fillval">A value used to fill outliers</param>
       [DllImport(CV_LIBRARY)]

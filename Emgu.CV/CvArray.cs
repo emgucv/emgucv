@@ -314,6 +314,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Set the values to zero
+      /// </summary>
+      public void SetZero()
+      {
+         CvInvoke.cvSetZero(Ptr);
+      }
+
+      /// <summary>
       /// Initialize the identity matrix
       /// </summary>
       public void SetIdentity()
@@ -456,7 +464,7 @@ namespace Emgu.CV
       /// <returns>the xml schema</returns>
       public System.Xml.Schema.XmlSchema GetSchema()
       {
-         throw new System.Exception("The method or operation is not implemented.");
+         throw new System.NotImplementedException("The method or operation is not implemented.");
       }
 
       /// <summary>

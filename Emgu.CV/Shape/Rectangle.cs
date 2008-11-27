@@ -43,22 +43,6 @@ namespace Emgu.CV
          _size = new Point2D<T>(width, height);
       }
 
-      /// <summary> 
-      /// Create a rectangle with the specific left, right, top bottom corrdinates
-      /// </summary>
-      [Obsolete("Use other constructor instead, will be removed in the next version")]
-      public Rectangle(T left, T right, T top, T bottom)
-      {
-         _center = new Point2D<T>(
-             (T)System.Convert.ChangeType((System.Convert.ToDouble(right) + System.Convert.ToDouble(left)) / 2.0, typeof(T)),
-             (T)System.Convert.ChangeType((System.Convert.ToDouble(top) + System.Convert.ToDouble(bottom)) / 2.0, typeof(T))
-             );
-         _size = new Point2D<T>(
-             (T)System.Convert.ChangeType(System.Convert.ToDouble(right) - System.Convert.ToDouble(left), typeof(T)),
-             (T)System.Convert.ChangeType(System.Convert.ToDouble(top) - System.Convert.ToDouble(bottom), typeof(T))
-             );
-      }
-
       ///<summary> 
       /// Create a rectangle from a CvRect structure 
       ///</summary>

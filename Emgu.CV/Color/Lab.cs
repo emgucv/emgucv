@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a CIE Lab color 
    ///</summary>
-   [ColorInfo(ConversionCodeName = "Lab")]
+   [ColorInfo(ConversionCodename = "Lab")]
    public class Lab : ColorType
    {
       ///<summary> Create a CIE Lab color using the specific values</summary>

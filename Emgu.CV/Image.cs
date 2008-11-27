@@ -844,42 +844,6 @@ namespace Emgu.CV
       ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
       ///<param name="minLineWidth">Minimum width of a line</param>
       ///<param name="gapBetweenLines">Minimum gap between lines</param>
-      [Obsolete("Typo, please use HoughLinesBinary instead. Will be removed in the next release")]
-      public LineSegment2D<int>[][] HughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            Emgu.Util.Toolbox.Func<IImage, int, LineSegment2D<int>[]> detector =
-                delegate(IImage img, int channel)
-                {
-                   IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
-                   MCvSeq lineSeq = (MCvSeq)Marshal.PtrToStructure(lines, typeof(MCvSeq));
-                   LineSegment2D<int>[] linesegs = new LineSegment2D<int>[lineSeq.total];
-                   for (int i = 0; i < lineSeq.total; i++)
-                   {
-                      int[] val = new int[4];
-                      Marshal.Copy(CvInvoke.cvGetSeqElem(lines, i), val, 0, 4);
-                      linesegs[i] = new LineSegment2D<int>(
-                          new Point2D<int>(val[0], val[1]),
-                          new Point2D<int>(val[2], val[3]));
-                   }
-                   CvInvoke.cvClearSeq(lines);
-                   return linesegs;
-                };
-            LineSegment2D<int>[][] res = ForEachDuplicateChannel(detector);
-            return res;
-         }
-      }
-
-      ///<summary> 
-      ///Apply Hough transform to find line segments. 
-      ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
-      ///</summary> 
-      ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
-      ///<param name="thetaResolution">Angle resolution measured in radians</param>
-      ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
-      ///<param name="minLineWidth">Minimum width of a line</param>
-      ///<param name="gapBetweenLines">Minimum gap between lines</param>
       public LineSegment2D<int>[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (MemStorage stor = new MemStorage())
@@ -910,69 +874,11 @@ namespace Emgu.CV
       ///First apply Canny Edge Detector on the current image, 
       ///then apply Hough transform to find line segments 
       ///</summary>
-      [Obsolete("Typo, please use HoughLines instead. Will be removed in the next release")]
-      public LineSegment2D<int>[][] HughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
-      {
-         using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
-         {
-            return canny.HoughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
-         }
-      }
-
-      ///<summary> 
-      ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hough transform to find line segments 
-      ///</summary>
       public LineSegment2D<int>[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
             return canny.HoughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
-         }
-      }
-
-      ///<summary> 
-      ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hough transform to find circles 
-      ///</summary>
-      ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
-      ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
-      ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
-      ///<param name="minRadius">Minimal radius of the circles to search for</param>
-      ///<param name="maxRadius">Maximal radius of the circles to search for</param>
-      ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
-      [Obsolete("Typo, please use HoughCircles instead. Will be removed in the next release")]
-      public Circle<float>[][] HughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            double[] cannyThresh = cannyThreshold.Resize(4).Coordinate;
-            double[] accumulatorThresh = accumulatorThreshold.Resize(4).Coordinate;
-            Emgu.Util.Toolbox.Func<IImage, int, Circle<float>[]> detector =
-                delegate(IImage img, int channel)
-                {
-                   IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
-                       img.Ptr,
-                       stor.Ptr,
-                       CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT,
-                       dp,
-                       minDist,
-                       cannyThresh[channel],
-                       accumulatorThresh[channel],
-                       minRadius,
-                       maxRadius);
-
-                   Seq<MCvPoint3D32f> cirSeq = new Seq<MCvPoint3D32f>(circlesSeqPtr, stor);
-
-                   return System.Array.ConvertAll<MCvPoint3D32f, Circle<float>>(cirSeq.ToArray(),
-                       delegate(MCvPoint3D32f p)
-                       {
-                          return new Circle<float>(new Point2D<float>(p.x, p.y), p.z);
-                       });
-                };
-            Circle<float>[][] res = ForEachDuplicateChannel(detector);
-
-            return res;
          }
       }
 
@@ -2377,7 +2283,7 @@ namespace Emgu.CV
          ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
          ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
 
-         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodeName, destInfo.ConversionCodeName);
+         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
          return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
       }
 
@@ -4017,7 +3923,7 @@ namespace Emgu.CV
          {
             base.Save(fileName); //save the image using OpenCV
          }
-         catch
+         catch 
          {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName); //save the image using Bitmap

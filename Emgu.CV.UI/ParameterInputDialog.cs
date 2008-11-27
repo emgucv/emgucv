@@ -89,7 +89,6 @@ namespace Emgu.CV.UI
       private class ParamInputPanel : Panel
       {
          private GetParamDelegate _getParamFunction;
-         private String _paramName;
 
          /// <summary>
          /// Return the value of the parameter input panel, if unable to retrieve value, return null
@@ -117,18 +116,6 @@ namespace Emgu.CV.UI
             set
             {
                _getParamFunction = value;
-            }
-         }
-
-         public String ParamName
-         {
-            get
-            {
-               return _paramName;
-            }
-            set
-            {
-               _paramName = value;
             }
          }
       }

@@ -25,7 +25,7 @@ namespace Emgu.CV
       /// <param name="sizes">The size for each dimension</param>
       public MatND(params int[] sizes)
       {
-         ManagedArray = Array.CreateInstance(typeof(TDepth), sizes);
+         Data = Array.CreateInstance(typeof(TDepth), sizes);
       }
 
       private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMatND));
@@ -42,7 +42,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public Array ManagedArray
+      public Array Data
       {
          get { return _array; }
          set

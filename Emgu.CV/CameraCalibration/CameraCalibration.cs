@@ -187,16 +187,16 @@ namespace Emgu.CV
       /// Transforms the image to compensate radial and tangential lens distortion. 
       /// The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same
       /// </summary>
-      /// <typeparam name="C">The color type of the image</typeparam>
-      /// <typeparam name="D">The depth of the image</typeparam>
+      /// <typeparam name="TColor">The color type of the image</typeparam>
+      /// <typeparam name="TDepth">The depth of the image</typeparam>
       /// <param name="src">The distorted image</param>
       /// <param name="intrin">The intrinsic camera parameters</param>
       /// <returns>The corrected image</returns>
-      public static Image<C, D> Undistort2<C, D>(Image<C, D> src, IntrinsicCameraParameters intrin)
-         where C : ColorType, new()
-         where D : IComparable, new()
+      public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
+         where TColor : ColorType, new()
+         where TDepth : IComparable, new()
       {
-         Image<C, D> res = src.CopyBlank();
+         Image<TColor, TDepth> res = src.CopyBlank();
          CvInvoke.cvUndistort2(src.Ptr, res.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr);
          return res;
       }

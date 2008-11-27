@@ -67,7 +67,7 @@ namespace Emgu.CV.UI
             if (colorAttributes.Length > 0)
             {
                ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
-               typeOfColorTexbox.Text = info.ConversionCodeName;
+               typeOfColorTexbox.Text = info.ConversionCodename;
             }
             else
             {

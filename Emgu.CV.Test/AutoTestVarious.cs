@@ -678,6 +678,25 @@ namespace Emgu.CV.Test
          //Application.Run(new ImageViewer(img));
       }
 
+      [Test]
+      public void TestFeatureTree()
+      {
+         Matrix<float>[] features = new Matrix<float>[10];
+         for (int i = 0; i < features.Length; i++)
+            features[i] = new Matrix<float>(new float[1, 1] { { (float)i } });
+         FeatureTree tree = new FeatureTree(features);
+
+         Matrix<Int32> result;
+         Matrix<double> distance;
+         Matrix<float>[] features2 = new Matrix<float>[1];
+         features2[0] = new Matrix<float>(new float[1,1]{{ 5.0f}});
+
+         tree.FindFeatures(features2, out result, out distance, 1, 20);
+         Assert.AreEqual(result[0, 0], 5);
+         Assert.AreEqual(distance[0, 0], 0.0);
+      }
+
+
       //TODO: Figure out why the following test case cannot passed
       /*
       [Test]

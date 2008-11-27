@@ -5,7 +5,7 @@ using System.Text;
 namespace Emgu.CV
 {
    ///<summary> Defines a Gray color </summary>
-   [ColorInfo(ConversionCodeName = "GRAY")]
+   [ColorInfo(ConversionCodename = "GRAY")]
    public class Gray : ColorType, IComparable
    {
       ///<summary> Create a Gray color with the given intensity</summary>

@@ -56,6 +56,7 @@ namespace Emgu.CV.UI
          }
       }
 
+      /*
       private String ImageTypeToString(Type imageType)
       {
          Type[] genericParameterTypes = imageType.GetGenericArguments();
@@ -75,7 +76,7 @@ namespace Emgu.CV.UI
          {
             throw new NotImplementedException("Code generation for this programming language is not implemented");
          }
-      }
+      }*/
 
       private String[] GetOperationCode(Stack<Operation> operationStack)
       {

@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a Bgra (Blue Green Red Alpha) color
    ///</summary>
-   [ColorInfo(ConversionCodeName = "BGRA")]
+   [ColorInfo(ConversionCodename = "BGRA")]
    public class Bgra : ColorType
    {
       /// <summary>

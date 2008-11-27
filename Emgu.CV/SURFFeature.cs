@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// A SURF feature
    /// </summary>
-   public class SURFFeature
+   public class SURFFeature : DisposableObject
    {
       private MCvSURFPoint _point;
 
@@ -42,32 +43,12 @@ namespace Emgu.CV
          _descriptor = new Matrix<float>(descriptor);
       }
 
-      /*
       /// <summary>
-      /// Find from the candidate the best match and return the distance between the descriptors.
+      /// Release the memory associated with this object
       /// </summary>
-      /// <param name="candidates">A list of candidate to find a match from</param>
-      /// <param name="maxDist">The maximum distance between a match</param>
-      /// <param name="match">The returned best matched candidate, if there exist one</param>
-      /// <param name="distance">The distance between the descriptors</param>
-      public void FindBestMatch(SURFFeature[] candidates, double maxDist,  out SURFFeature match, out double distance)
+      protected override void DisposeObject()
       {
-         match = null;
-         distance = -1.0;
-
-         foreach (SURFFeature f in candidates)
-         {
-            if (f.Point.laplacian != Point.laplacian)
-               continue;
-
-            double d = CvInvoke.cvNorm(_descriptor.Ptr, f.Descriptor.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-
-            if ( distance < maxDist && ( distance < 0.0 || distance > d ))
-            {
-               distance = d;
-               match = f;
-            }
-         }
-      }*/
+         _descriptor.Dispose();
+      }
    }
 }

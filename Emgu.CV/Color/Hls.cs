@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a Hls (Hue Lightness Satuation) color
    ///</summary>
-   [ColorInfo(ConversionCodeName = "HLS")]
+   [ColorInfo(ConversionCodename = "HLS")]
    public class Hls : ColorType
    {
       ///<summary> Create a Hls color using the specific values</summary>

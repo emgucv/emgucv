@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a Bgr (Blue Green Red) color
    ///</summary>
-   [ColorInfo(ConversionCodeName = "BGR")]
+   [ColorInfo(ConversionCodename = "BGR")]
    public class Bgr : ColorType
    {
       ///<summary> Create a BGR color using the specific values</summary>

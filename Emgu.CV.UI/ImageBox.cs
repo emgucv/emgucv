@@ -240,7 +240,7 @@ namespace Emgu.CV.UI
          {
             Image = Image;
          }
-         catch (Exception e)
+         catch 
          {  //if pushing the operation generate exceptions
 
             _operationStack.Pop(); //remove the operation from the stack
@@ -248,7 +248,7 @@ namespace Emgu.CV.UI
                panel.SetOperationStack(_operationStack); //update the operation stack
 
             Image = Image; //update the image
-            throw (e); //rethrow the exception
+            throw; //rethrow the exception
          }
       }
 
@@ -286,7 +286,7 @@ namespace Emgu.CV.UI
 
          foreach (KeyValuePair<string, MethodInfo> pair in catelogMiPairList)
          {
-            if (!pair.Key.Equals(String.Empty))
+            if (!String.IsNullOrEmpty(pair.Key))
             {  //if this is a catelog
 
                String[] catelogs = pair.Key.Split('|');

@@ -13,15 +13,15 @@ namespace Emgu.CV
       /// <summary>
       /// The code which is used for color conversion
       /// </summary>
-      private String _conversionCodeName;
+      private String _conversionCodename;
 
       /// <summary>
       /// The code which is used for color conversion
       /// </summary>
-      public String ConversionCodeName
+      public String ConversionCodename
       {
-         get { return _conversionCodeName; }
-         set { _conversionCodeName = value; }
+         get { return _conversionCodename; }
+         set { _conversionCodename = value; }
       }
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// </summary>
       public ColorInfoAttribute()
       {
-         _conversionCodeName = String.Empty;
+         _conversionCodename = String.Empty;
       }
    }
 }

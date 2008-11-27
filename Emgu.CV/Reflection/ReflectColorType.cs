@@ -7,7 +7,7 @@ namespace Emgu.CV.Reflection
    /// <summary>
    /// A collection of reflection function that can be applied to ColorType object
    /// </summary>
-   public class ReflectColorType
+   public static class ReflectColorType
    {
       /// <summary>
       /// Get the display color for each channel

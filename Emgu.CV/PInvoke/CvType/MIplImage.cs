@@ -117,7 +117,7 @@ namespace Emgu.CV
       /// <summary>
       /// offset of nSize
       /// </summary>
-      public static readonly int nSize = 0;
+      public static readonly int nSize;
       /// <summary>
       /// Offset of ID
       /// </summary>

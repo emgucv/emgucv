@@ -6,7 +6,9 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
-   ///<summary> The HaarCascade class for object detection</summary>
+   ///<summary> 
+   /// The HaarCascade class for object detection
+   /// </summary>
    public class HaarCascade : UnmanagedObject
    {
       ///<summary> Create a HaarCascade object from the specific file</summary>

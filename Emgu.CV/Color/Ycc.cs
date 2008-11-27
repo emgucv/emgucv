@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a Ycc color (YCrCb JPEG)
    ///</summary>
-   [ColorInfo(ConversionCodeName = "YCrCb")]
+   [ColorInfo(ConversionCodename = "YCrCb")]
    public class Ycc : ColorType
    {
       ///<summary> Create a Ycc color using the specific values</summary>

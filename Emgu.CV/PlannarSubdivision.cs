@@ -68,7 +68,7 @@ namespace Emgu.CV
                {
                   Insert(ref cvPoint);
                }
-               catch (Exception)
+               catch (CvException)
                { }
             }
          }

@@ -1,7 +1,7 @@
 CC=gmcs
 CVTEST_SRC = Emgu.CV.Test/*.cs  
 SVN_URL = https://emgucv.svn.sourceforge.net/svnroot/emgucv/trunk/
-VERSION = 1.4.0.0
+VERSION = 1.5.0.0
 VS2005_FOLDER=Solution/VS2005_MonoDevelop/
 VS2008_FOLDER=Solution/VS2008/
 CV_DLLS=cv110.dll cxcore110.dll cvaux110.dll highgui110.dll cxts001.dll ffopencv110.dll opencv.license.txt

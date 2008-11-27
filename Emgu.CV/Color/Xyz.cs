@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
    ///</summary>
-   [ColorInfo(ConversionCodeName = "XYZ")]
+   [ColorInfo(ConversionCodename = "XYZ")]
    public class Xyz : ColorType
    {
       ///<summary> Create a Xyz color using the specific values</summary>

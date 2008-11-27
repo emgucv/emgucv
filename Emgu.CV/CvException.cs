@@ -69,6 +69,10 @@ namespace Emgu.CV
          set { _line = value; }
       }
 
+      private CvException()
+      {
+      }
+
       /// <summary>
       /// The default exception to be thrown when error is encountered in Open CV 
       /// </summary>

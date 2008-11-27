@@ -7,7 +7,7 @@ namespace Emgu.CV
    ///<summary> 
    ///Defines a CIE Luv color 
    ///</summary>
-   [ColorInfo(ConversionCodeName = "Luv")]
+   [ColorInfo(ConversionCodename = "Luv")]
    public class Luv : ColorType
    {
       ///<summary> Create a CIE Lab color using the specific values</summary>
