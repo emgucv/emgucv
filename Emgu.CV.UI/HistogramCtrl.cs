@@ -11,7 +11,7 @@ using Emgu.CV;
 namespace Emgu.CV.UI
 {
    /// <summary>
-   /// The histogram control
+   /// The control that is used to display histogram
    /// </summary>
    public partial class HistogramCtrl : UserControl
    {

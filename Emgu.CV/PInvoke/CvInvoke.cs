@@ -324,6 +324,21 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// initializes CvMat header so that it points to the same data as the original array but has different shape - different number of channels, different number of rows or both
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="header">Output header to be filled</param>
+      /// <param name="new_cn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
+      /// <param name="new_rows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
+      /// <returns></returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvReshape(
+         IntPtr arr, 
+         IntPtr header, 
+         int new_cn, 
+         int new_rows);
+
+      /// <summary>
       /// Fills the destination array with source array tiled:
       /// dst(i,j)=src(i mod rows(src), j mod cols(src))So the destination array may be as larger as well as smaller than the source array
       /// </summary>

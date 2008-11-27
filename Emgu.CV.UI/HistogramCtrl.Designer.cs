@@ -1,8 +1,5 @@
 namespace Emgu.CV.UI
 {
-    /// <summary>
-    /// The control to display histogram
-    /// </summary>
     partial class HistogramCtrl
     {
         /// <summary> 
