@@ -33,6 +33,11 @@ extern EMGU_CV_EXTERN_API void CvEMRelease(CvEM* model);
 extern EMGU_CV_EXTERN_API bool CvEMTrain(CvEM* model, const CvMat* samples, const CvMat* sample_idx=0,
                         CvEMParams params=CvEMParams(), CvMat* labels=0 );
 extern EMGU_CV_EXTERN_API float CvEMPredict(CvEM* model, const CvMat* sample, CvMat* probs );
+extern EMGU_CV_EXTERN_API int CvEMGetNclusters(CvEM* model);
+extern EMGU_CV_EXTERN_API const CvMat* CvEMGetMeans(CvEM* model);
+extern EMGU_CV_EXTERN_API const CvMat** CvEMGetCovs(CvEM* model);
+extern EMGU_CV_EXTERN_API const CvMat* CvEMGetWeights(CvEM* model);
+extern EMGU_CV_EXTERN_API const CvMat* CvEMGetProbs(CvEM* model);
 #if defined(__cplusplus)
 }
 #endif

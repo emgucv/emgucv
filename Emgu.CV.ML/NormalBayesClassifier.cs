@@ -51,5 +51,12 @@ namespace Emgu.CV.ML
       {
          return MlInvoke.CvNormalBayesClassifierTrain(_ptr, trainData.Ptr, responses.Ptr, varIdx.Ptr, sampleIdx.Ptr, update);
       }
+
+      public float Predict(Matrix<float> samples, out Matrix<float> results)
+      {
+         results = new Matrix<float>(samples.Rows, 1);
+         return MlInvoke.CvNormalBayesClassifierPredict(_ptr, samples.Ptr, results.Ptr);
+      }
+
    }
 }

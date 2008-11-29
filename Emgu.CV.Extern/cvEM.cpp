@@ -20,3 +20,28 @@ float CvEMPredict(CvEM* model, const CvMat* sample, CvMat* probs )
 {
    return model->predict(sample, probs);
 }
+
+int CvEMGetNclusters(CvEM* model)
+{
+   return model->get_nclusters();
+}
+
+const CvMat* CvEMGetMeans(CvEM* model)
+{
+   return model->get_means();
+}
+
+const CvMat** CvEMGetCovs(CvEM* model)
+{
+   return model->get_covs();
+}
+
+const CvMat* CvEMGetWeights(CvEM* model)
+{
+   return model->get_weights();
+}
+
+const CvMat* CvEMGetProbs(CvEM* model)
+{
+   return model->get_probs();
+}

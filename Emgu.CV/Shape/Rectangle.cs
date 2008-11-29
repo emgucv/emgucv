@@ -53,21 +53,21 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The left most coordinate
+      /// The left most coordinate (a smaller x value)
       /// </summary>
       public T Left { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.X) - System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
       /// <summary>
-      /// The right most coordinate
+      /// The right most coordinate (a larger x value)
       /// </summary>
       public T Right { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.X) + System.Convert.ToDouble(Width) / 2.0), typeof(T)); } }
       /// <summary>
-      /// The top most coordinate
+      /// The top most coordinate ( a smaller y value )
       /// </summary>
-      public T Top { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) + System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
+      public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) + System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
       /// <summary>
-      /// The bottom most coordinate
+      /// The bottom most coordinate ( a larger y value )
       /// </summary>
-      public T Bottom { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
+      public T Top { get { return (T)System.Convert.ChangeType((System.Convert.ToDouble(_center.Y) - System.Convert.ToDouble(Height) / 2.0), typeof(T)); } }
 
       /// <summary>
       /// The Size (width and height) of this rectangle
@@ -115,13 +115,21 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> The top left corner of the rectangle</summary>
+      ///<summary> 
+      ///Get the top left corner of the rectangle
+      ///</summary>
       public Point2D<T> TopLeft { get { return new Point2D<T>(Left, Top); } }
-      ///<summary> The top right corner of the rectangle</summary>
+      ///<summary> 
+      ///Get the top right corner of the rectangle
+      ///</summary>
       public Point2D<T> TopRight { get { return new Point2D<T>(Right, Top); } }
-      ///<summary> The bottom left corner of the rectangle</summary>
+      ///<summary> 
+      ///Get the bottom left corner of the rectangle
+      ///</summary>
       public Point2D<T> BottomLeft { get { return new Point2D<T>(Left, Bottom); } }
-      ///<summary> The bottom right corner of the rectangle</summary>
+      ///<summary> 
+      ///Get the bottom right corner of the rectangle
+      ///</summary>
       public Point2D<T> BottomRight { get { return new Point2D<T>(Right, Bottom); } }
 
       ///<summary> The area of the rectangle </summary>
@@ -141,7 +149,7 @@ namespace Emgu.CV
          {
             return new MCvRect(
                 System.Convert.ToInt32(Left),
-                System.Convert.ToInt32(Bottom),
+                System.Convert.ToInt32(Top),
                 System.Convert.ToInt32(Width),
                 System.Convert.ToInt32(Height));
          }

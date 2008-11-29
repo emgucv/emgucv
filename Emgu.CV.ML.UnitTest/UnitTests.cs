@@ -89,35 +89,46 @@ namespace Emgu.CV.ML.UnitTest
          Image<Bgr, Byte> img = new Image<Bgr,byte>(500, 500);
          Matrix<float> sample = new Matrix<float>(1, 2);
 
-         using (EM emModel = new EM())
+         CvInvoke.cvReshape(samples.Ptr, samples.Ptr, 2, 0);
+         for (int i = 0; i < N; i++)
          {
-            CvInvoke.cvReshape(samples.Ptr, samples.Ptr, 2, 0);
-            for (int i = 0; i < N; i++)
-            {
-               Matrix<float> rows = samples.GetRows(i * nSamples / N, (i + 1) * nSamples / N, 1);
-               double scale = ((i % N1) + 1.0) / (N1 + 1);
-               MCvScalar mean = new MCvScalar(scale * img.Width, scale * img.Height);
-               MCvScalar sigma = new MCvScalar(30, 30);
-               ulong seed = (ulong)DateTime.Now.Ticks;
-               CvInvoke.cvRandArr(ref seed, rows.Ptr, Emgu.CV.CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, sigma);
-            }
-            CvInvoke.cvReshape(samples.Ptr, samples.Ptr, 1, 0);
+            Matrix<float> rows = samples.GetRows(i * nSamples / N, (i + 1) * nSamples / N, 1);
+            double scale = ((i % N1) + 1.0) / (N1 + 1);
+            MCvScalar mean = new MCvScalar(scale * img.Width, scale * img.Height);
+            MCvScalar sigma = new MCvScalar(30, 30);
+            ulong seed = (ulong)DateTime.Now.Ticks;
+            CvInvoke.cvRandArr(ref seed, rows.Ptr, Emgu.CV.CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, sigma);
+         }
+         CvInvoke.cvReshape(samples.Ptr, samples.Ptr, 1, 0);
 
-            EMParams parameters = new EMParams();
-            parameters.Nclusters = N;
-            parameters.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_SPHERICAL;
-            parameters.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
-            parameters.TermCrit = new MCvTermCriteria(10, 0.1);
+         using (EM emModel1 = new EM())
+         using (EM emModel2 = new EM())
+         {
+            EMParams parameters1 = new EMParams();
+            parameters1.Nclusters = N;
+            parameters1.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
+            parameters1.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
+            parameters1.TermCrit = new MCvTermCriteria(10, 0.01);
+            emModel1.Train(samples, null, parameters1, labels);
 
-            emModel.Train(samples, null, parameters, labels);
-
+            EMParams parameters2 = new EMParams();
+            parameters2.Nclusters = N;
+            parameters2.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_GENERIC;
+            parameters2.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_E_STEP;
+            parameters2.TermCrit = new MCvTermCriteria(100, 1.0e-6);
+            parameters2.Means = emModel1.GetMeans();
+            parameters2.Covs = emModel1.GetCovariances();
+            parameters2.Weights = emModel1.GetWeights();
+                        
+            emModel2.Train(samples, null, parameters2, labels);
+            
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
                {
                   sample[0, 0] = (float)i;
                   sample[0, 1] = (float)j;
-                  int response = (int) emModel.Predict(sample, null);
+                  int response = (int) emModel2.Predict(sample, null);
 
                   Bgr color = new Bgr();
                   for (int k = 0; k < color.Coordinate.Length; k++)
@@ -135,6 +146,7 @@ namespace Emgu.CV.ML.UnitTest
             #endregion 
    
             Emgu.CV.UI.ImageViewer.Show(img);
+            
          }
       }
    }

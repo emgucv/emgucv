@@ -22,6 +22,14 @@ namespace Emgu.CV.ML
       public static extern void StatModelSave(IntPtr statModel, String fileName);
 
       /// <summary>
+      /// Load the statistic model from the specific file
+      /// </summary>
+      /// <param name="statModel">The statistic model to save</param>
+      /// <param name="fileName">The file name to load from</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void StatModelLoad(IntPtr statModel, String fileName);
+
+      /// <summary>
       /// Clear the statistic model
       /// </summary>
       /// <param name="statModel">The model to be cleared</param>
@@ -55,6 +63,9 @@ namespace Emgu.CV.ML
          IntPtr _var_idx,
          IntPtr _sample_idx,
          bool update);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern float CvNormalBayesClassifierPredict(IntPtr model, IntPtr samples, IntPtr results);
       #endregion
 
       #region CvKNearest
@@ -135,6 +146,21 @@ namespace Emgu.CV.ML
          IntPtr model, 
          IntPtr sample, 
          IntPtr probs );
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvEMGetMeans(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvEMGetCovs(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvEMGetWeights(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvEMGetProbs(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int CvEMGetNclusters(IntPtr model);
       #endregion
    }
 }

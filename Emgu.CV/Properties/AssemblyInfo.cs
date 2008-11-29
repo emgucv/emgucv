@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Emgu.CV")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A wrapper for the OpenCV library (cxcore, cv and highGUI)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
 [assembly: AssemblyProduct("Emgu.CV")]

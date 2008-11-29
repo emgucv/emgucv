@@ -51,8 +51,21 @@ namespace Emgu.CV
       /// <param name="rows">The number of rows (<b>height</b>)</param>
       /// <param name="cols">The number of cols (<b>width</b>)</param>
       public Matrix(int rows, int cols)
+         : this(rows, cols, 1)
       {
-         AllocateData(rows, cols);
+      }
+
+      /// <summary>
+      /// Create a matrix of the specific size and channels
+      /// </summary>
+      /// <param name="rows">The number of rows</param>
+      /// <param name="cols">The number of cols</param>
+      /// <param name="channels">The number of channels</param>
+      public Matrix(int rows, int cols, int channels)
+      {
+         AllocateData(rows, cols * channels);
+         if (channels > 1)
+            CvInvoke.cvReshape(_ptr, _ptr, channels, 0);
       }
 
       /// <summary> 
@@ -146,6 +159,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Get the number of channels for this matrix
+      /// </summary>
+      public int NumberOfChannels
+      {
+         get
+         {
+            return MCvMat.NumberOfChannels;
+         }
+      }
+
+      /// <summary>
       /// The MCvMat structure format  
       /// </summary>
       public MCvMat MCvMat
@@ -197,11 +221,23 @@ namespace Emgu.CV
       /// <returns>A copy if this matrix</returns>
       public Matrix<TDepth> Clone()
       {
-         Matrix<TDepth> mat = new Matrix<TDepth>(Rows, Cols);
+         Matrix<TDepth> mat = new Matrix<TDepth>(Rows, Cols, NumberOfChannels);
          CvInvoke.cvCopy(Ptr, mat.Ptr, IntPtr.Zero);
          return mat;
       }
       #endregion
+
+      /// <summary>
+      /// Convert this matrix to different depth
+      /// </summary>
+      /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
+      /// <returns>Matrix of different depth</returns>
+      public Matrix<TOtherDepth> Convert<TOtherDepth>()  where TOtherDepth : new ()
+      {
+         Matrix<TOtherDepth> res = new Matrix<TOtherDepth>(Rows, Cols, NumberOfChannels);
+         CvInvoke.cvConvertScale(Ptr, res.Ptr, 1.0, 0.0);
+         return res;
+      }
 
       ///<summary> Returns the transpose of this matrix</summary>
       public Matrix<TDepth> Transpose()

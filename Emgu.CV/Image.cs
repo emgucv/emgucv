@@ -789,7 +789,7 @@ namespace Emgu.CV
       /// <returns>The objects detected, one array per channel</returns>
       public Rectangle<double>[][] DetectHaarCascade(HaarCascade haarObj)
       {
-         return DetectHaarCascade(haarObj, 1.1, 3, 1, new MCvSize(0, 0));
+         return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new MCvSize(0, 0));
       }
 
       /// <summary>
@@ -801,7 +801,7 @@ namespace Emgu.CV
       /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle<double>[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, int flag, MCvSize minSize)
+      public Rectangle<double>[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, MCvSize minSize)
       {
          using (MemStorage stor = new MemStorage())
          {

@@ -29,6 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML", "..\..\Emgu.CV
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC} = {0BABD742-CF82-421F-9C01-1DA8C08129AC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.UnitTest", "..\..\Emgu.CV.ML.UnitTest\Emgu.CV.ML.UnitTest.csproj", "{067B638E-B41E-41E5-9FBD-D9722AC59BCF}"
 	ProjectSection(WebsiteProperties) = preProject

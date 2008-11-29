@@ -54,5 +54,16 @@ namespace Emgu.CV
       /// Height
       /// </summary>
       public int height { get { return rows; } }
+
+      /// <summary>
+      /// Get the number of channels
+      /// </summary>
+      public int NumberOfChannels
+      {
+         get
+         {
+            return ((((type) & ((64 - 1) << 3)) >> 3) + 1);
+         }
+      }
    }
 }

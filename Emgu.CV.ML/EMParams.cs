@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.ML
 {
@@ -12,11 +13,14 @@ namespace Emgu.CV.ML
       private int _nclusters;
       private MlEnum.EM_COVARIAN_MATRIX_TYPE _covMatType;
       private MlEnum.EM_INIT_STEP_TYPE _startStep;
-      private Matrix<float> _probs;
-      private Matrix<float> _weights;
-      private Matrix<float> _means;
-      private Matrix<float>[] _covs;
+      private Matrix<double> _probs;
+      private Matrix<double> _weights;
+      private Matrix<double> _means;
+      private Matrix<double>[] _covs;
       private MCvTermCriteria _termCrit;
+
+      //private IntPtr[] _covsPtr;
+      //private GCHandle _covsPtrHandle;
 
       /// <summary>
       /// Create EM parameters with default value
@@ -27,28 +31,6 @@ namespace Emgu.CV.ML
          CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
          StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
          _termCrit = new MCvTermCriteria(100, 1.0e-6);
-      }
-
-      /// <summary>
-      /// Get the equivalent MCvEMParams structure
-      /// </summary>
-      public MCvEMParams MCvEMParams
-      {
-         get
-         {
-            MCvEMParams param = new MCvEMParams();
-            param.nclusters = _nclusters;
-            param.cov_mat_type = _covMatType;
-            param.start_step = _startStep;
-            param.probs = _probs == null? IntPtr.Zero: _probs.Ptr;
-            param.means = _means == null? IntPtr.Zero : _means.Ptr;
-            param.weights = _weights == null ? IntPtr.Zero : _weights.Ptr;
-            param.covs = _covs == null ? null :
-               Array.ConvertAll<Matrix<float>, IntPtr>(_covs,
-               delegate(Matrix<float> m) { return m.Ptr; });
-            param.term_crit = _termCrit;
-            return param;
-         }
       }
 
       /// <summary>
@@ -69,7 +51,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get or Set the Covariance matrices
       /// </summary>
-      public Matrix<float>[] Covs
+      public Matrix<double>[] Covs
       {
          get
          {
@@ -84,7 +66,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get or set the means
       /// </summary>
-      public Matrix<float> Means
+      public Matrix<double> Means
       {
          get
          {
@@ -114,7 +96,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get or Set the probabilities
       /// </summary>
-      public Matrix<float> Probs
+      public Matrix<double> Probs
       {
          get
          {
@@ -159,7 +141,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get or Set the weights
       /// </summary>
-      public Matrix<float> Weights
+      public Matrix<double> Weights
       {
          get
          {

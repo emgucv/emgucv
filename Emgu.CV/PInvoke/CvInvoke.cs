@@ -2889,8 +2889,8 @@ namespace Emgu.CV
          IntPtr cascade,
          IntPtr storage, 
          double scaleFactor,
-         int minNeighbors, 
-         int flags,
+         int minNeighbors,
+         CvEnum.HAAR_DETECTION_TYPE flags,
          MCvSize minSize);
 
       /// <summary>
@@ -4346,14 +4346,15 @@ namespace Emgu.CV
       /// <summary>
       /// This function performs the same as CV_MAKETYPE macro
       /// </summary>
-      /// <param name="depth"></param>
-      /// <param name="cn"></param>
+      /// <param name="depth">The type of depth</param>
+      /// <param name="cn">The number of channels</param>
       /// <returns></returns>
       public static int CV_MAKETYPE(int depth, int cn)
       {
          return ((depth) + (((cn) - 1) << 3));
       }
 
+      /*
       private static int _CV_MAT_DEPTH(int flag)
       {
          return flag & ((1 << 3) - 1);
@@ -4362,6 +4363,7 @@ namespace Emgu.CV
       {
          return type & ((1 << 3) * 64 - 1);
       }
+
       private static int _CV_MAT_CN(int flag)
       {
          return ((((flag) & ((64 - 1) << 3)) >> 3) + 1);
@@ -4369,7 +4371,7 @@ namespace Emgu.CV
       private static int _CV_ELEM_SIZE(int type)
       {
          return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_MAT_DEPTH(type) * 2) & 3));
-      }
+      }*/
 
       /*
       public static MCvMat cvMat(int rows, int cols, int type, IntPtr data)

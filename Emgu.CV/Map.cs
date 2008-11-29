@@ -80,7 +80,7 @@ namespace Emgu.CV
       {
          return new Point2D<double>(
              (System.Convert.ToDouble(pt.X) - System.Convert.ToDouble(Area.Left)) / Resolution.X,
-             (System.Convert.ToDouble(pt.Y) - System.Convert.ToDouble(Area.Bottom)) / Resolution.Y);
+             (System.Convert.ToDouble(pt.Y) - System.Convert.ToDouble(Area.Top)) / Resolution.Y);
       }
 
       /// <summary>
@@ -176,7 +176,7 @@ namespace Emgu.CV
       /// <returns> A new map where each element is obtained from converter</returns>
       public Map<TColor, D2> Convert<D2>(Emgu.Util.Toolbox.Func<TDepth, double, double, D2> converter)
       {
-         double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Bottom;
+         double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Top;
 
          Emgu.Util.Toolbox.Func<TDepth, int, int, D2> iconverter =
              delegate(TDepth data, int row, int col)

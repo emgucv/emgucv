@@ -243,6 +243,15 @@ namespace Emgu.CV.Test
          Assert.IsTrue(mat.RemoveRows(mat.Rows - 1, mat.Rows).Equals(mat.GetRows(0, mat.Rows - 1, 1)));
       }
 
+      [Test]
+      public void TestMultiChannelMatrix()
+      {
+         Matrix<float> m = new Matrix<float>(10, 20, 2);
+         Assert.AreEqual(10, m.Rows);
+         Assert.AreEqual(20, m.Cols);
+         Assert.AreEqual(2, m.NumberOfChannels);
+      }
+
       /*
       [Test]
       public void TestDataContractSerializer()
