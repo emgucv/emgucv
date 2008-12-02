@@ -73,5 +73,27 @@ namespace Emgu.CV
             _angle = System.Convert.ToDouble(value.angle);
          }
       }
+
+      #region IConvexPolygon<T> Members
+      /// <summary>
+      /// Return the vertices for this Box2D
+      /// </summary>
+      public override Point2D<T>[] Vertices
+      {
+         get
+         {
+
+            MCvBox2D box = MCvBox2D;
+            float[] coors = new float[8];
+            CvInvoke.cvBoxPoints(box, coors);
+            Point2D<float>[] pts = new Point2D<float>[coors.Length];
+            for (int i = 0; i < coors.Length; i++)
+               pts[i] = new Point2D<float>(coors[i << 1], coors[i << 1 + 1]);
+            return Array.ConvertAll<Point2D<float>, Point2D<T>>(pts,
+               delegate(Point2D<float> p) { return p.Convert<T>(); });
+         }
+      }
+
+      #endregion
    }
 }

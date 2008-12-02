@@ -359,6 +359,12 @@ namespace Emgu.CV.Test
          XmlDocument xDoc = Toolbox.XmlSerialize<Point2D<float>>(p);
          Point2D<float> p2 = Toolbox.XmlDeserialize<Point2D<float>>(xDoc);
          Assert.IsTrue(p.Equals(p2));
+
+         Rectangle<double> rect = new Rectangle<double>(new Point2D<double>(3.5, 3.5), 5, 3);
+         XmlDocument xDoc2 = Toolbox.XmlSerialize<Rectangle<double>>(rect);
+         Rectangle<double> rect2 = Toolbox.XmlDeserialize<Rectangle<double>>(xDoc2);
+         Assert.IsTrue(rect.Equals(rect2));
+
       }
 
       [Test]

@@ -634,6 +634,15 @@ namespace Emgu.CV
       public static extern void cvSetZero(IntPtr arr);
 
       /// <summary>
+      /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
+      /// </summary>
+      /// <param name="arr">array to be cleared</param>
+      public static void cvZero(IntPtr arr)
+      {
+         cvSetZero(arr);
+      }
+
+      /// <summary>
       /// Initializes scaled identity matrix:
       /// arr(i,j)=value if i=j,
       /// 0 otherwise

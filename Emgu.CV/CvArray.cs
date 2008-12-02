@@ -64,6 +64,11 @@ namespace Emgu.CV
       public abstract int Height { get; }
 
       /// <summary>
+      /// Get the number of channels of the array
+      /// </summary>
+      public abstract int NumberOfChannels{ get;}
+
+      /// <summary>
       /// The number of rows for this array
       /// </summary>
       public int Rows { get { return Height; } }
@@ -156,7 +161,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rows">The number of rows</param>
       /// <param name="cols">The number of columns</param>
-      protected abstract void AllocateData(int rows, int cols);
+      /// <param name="numberOfChannels">The number of channels of this cvArray</param>
+      protected abstract void AllocateData(int rows, int cols, int numberOfChannels);
 
       /// <summary>
       /// sum of diagonal elements of the matrix 
@@ -478,7 +484,10 @@ namespace Emgu.CV
          int rows = reader.ReadContentAsInt();
          reader.MoveToAttribute("Cols");
          int cols = reader.ReadContentAsInt();
-         AllocateData(rows, cols);
+
+         reader.MoveToAttribute("NumberOfChannels");
+         int numberOfChannels = reader.ReadContentAsInt();
+         AllocateData(rows, cols, numberOfChannels);
          #endregion
 
          reader.MoveToAttribute("CompressionRatio");
@@ -514,6 +523,7 @@ namespace Emgu.CV
       {
          writer.WriteAttributeString("Rows", Rows.ToString());
          writer.WriteAttributeString("Cols", Cols.ToString());
+         writer.WriteAttributeString("NumberOfChannels", NumberOfChannels.ToString());
          writer.WriteAttributeString("CompressionRatio", SerializationCompressionRatio.ToString());
 
          writer.WriteStartElement("Bytes");
@@ -534,6 +544,7 @@ namespace Emgu.CV
       {
          info.AddValue("Rows", Rows);
          info.AddValue("Cols", Cols);
+         info.AddValue("NumberOfChannels", NumberOfChannels);
          info.AddValue("CompressionRatio", SerializationCompressionRatio);
          info.AddValue("Bytes", Bytes);
       }
@@ -547,7 +558,8 @@ namespace Emgu.CV
       {
          int rows = (int)info.GetValue("Rows", typeof(int));
          int cols = (int)info.GetValue("Cols", typeof(int));
-         AllocateData(rows, cols);
+         int numberOfChannels = (int)info.GetValue("NumberOfChannels", typeof(int));
+         AllocateData(rows, cols, numberOfChannels);
          SerializationCompressionRatio = (int)info.GetValue("CompressionRatio", typeof(int));
          Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
       }

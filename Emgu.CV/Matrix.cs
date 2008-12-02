@@ -63,9 +63,7 @@ namespace Emgu.CV
       /// <param name="channels">The number of channels</param>
       public Matrix(int rows, int cols, int channels)
       {
-         AllocateData(rows, cols * channels);
-         if (channels > 1)
-            CvInvoke.cvReshape(_ptr, _ptr, channels, 0);
+         AllocateData(rows, cols, channels);
       }
 
       /// <summary> 
@@ -161,7 +159,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the number of channels for this matrix
       /// </summary>
-      public int NumberOfChannels
+      public override int NumberOfChannels
       {
          get
          {
@@ -270,9 +268,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rows">The number of rows</param>
       /// <param name="cols">The number of columns</param>
-      protected override void AllocateData(int rows, int cols)
+      /// <param name="numberOfChannels">The number of channels for this matrix</param>
+      protected override void AllocateData(int rows, int cols, int numberOfChannels)
       {
-         Data = new TDepth[rows, cols];
+         Data = new TDepth[rows, cols*numberOfChannels];
+         if (numberOfChannels > 1)
+            CvInvoke.cvReshape(_ptr, _ptr, numberOfChannels, 0);
       }
 
       #region Accessing Elements and sub-Arrays
@@ -681,6 +682,27 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Get all channels for the multi channel matrix
+      /// </summary>
+      /// <returns></returns>
+      public Matrix<TDepth>[] Split()
+      {
+         int channelCount = NumberOfChannels;
+         Matrix<TDepth>[] channels = new Matrix<TDepth>[channelCount];
+         for (int i = 0; i < channelCount; i++)
+         {
+            channels[i] = new Matrix<TDepth>(Rows, Cols);
+         }
+         CvInvoke.cvSplit(
+            Ptr,
+            channels[0].Ptr,
+            channelCount >= 2 ? channels[1].Ptr : IntPtr.Zero,
+            channelCount >= 3 ? channels[2].Ptr : IntPtr.Zero,
+            channelCount >= 4 ? channels[3].Ptr : IntPtr.Zero);
+         return channels;
+      }
+
+      /// <summary>
       /// Return true if every element of this matrix equals elements in <paramref name="mat2"/>
       /// </summary>
       /// <param name="mat2">The other matrix to compare with</param>
@@ -688,10 +710,24 @@ namespace Emgu.CV
       public bool Equals(Matrix<TDepth> mat2)
       {
          if (!EqualSize(mat2)) return false;
+         int numberOfChannels = NumberOfChannels;
+         if (numberOfChannels != mat2.NumberOfChannels) return false;
 
-         using (Matrix<Byte> neqMask = Cmp(mat2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
+         if (numberOfChannels == 1)
+            using (Matrix<Byte> neqMask = Cmp(mat2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
+            {
+               return CvInvoke.cvCountNonZero(neqMask.Ptr) == 0;
+            }
+         else
          {
-            return CvInvoke.cvCountNonZero(neqMask.Ptr) == 0;
+            Matrix<TDepth>[] channels = Split();
+            Matrix<TDepth>[] channels2 = mat2.Split();
+            for (int i = 0; i < numberOfChannels; i++)
+            {
+               if (!channels[i].Equals(channels2[i]))
+                  return false;
+            }
+            return true;
          }
       }
 

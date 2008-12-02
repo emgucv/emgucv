@@ -140,7 +140,7 @@ namespace Emgu.CV
          }
 
          #region use managed memory instead of unmanaged
-         AllocateData(mptr.height, mptr.width);
+         AllocateData(mptr.height, mptr.width, NumberOfChannels);
          //The above line of code might change the widthStep, therefore a re-marshal is necessary
          mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
 
@@ -179,7 +179,7 @@ namespace Emgu.CV
       ///<param name="height">The height of the image</param>
       public Image(int width, int height)
       {
-         AllocateData(height, width);
+         AllocateData(height, width, NumberOfChannels);
       }
 
       /// <summary>
@@ -200,7 +200,8 @@ namespace Emgu.CV
          set
          {
             Debug.Assert(value != null, "The Array cannot be null");
-            AllocateData(value.GetLength(0), value.GetLength(1));
+            Debug.Assert(value.GetLength(2) == NumberOfChannels, "The number of channels must equal");
+            AllocateData(value.GetLength(0), value.GetLength(1), NumberOfChannels );
             int rows = value.GetLength(0);
             int valueRowLength = value.GetLength(1) * value.GetLength(2);
             int arrayRowLength = _array.GetLength(1) * _array.GetLength(2);
@@ -214,12 +215,13 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rows">The number of rows</param>
       /// <param name="cols">The number of columns</param>
-      protected override void AllocateData(int rows, int cols)
+      /// <param name="numberOfChannels">The number of channels of this image</param>
+      protected override void AllocateData(int rows, int cols, int numberOfChannels)
       {
          DisposeObject();
          Debug.Assert(!_dataHandle.IsAllocated, "Handle should be free");
 
-         int channelCount = new TColor().Dimension;
+         int channelCount = numberOfChannels;
 
          _ptr = CvInvoke.cvCreateImageHeader(new MCvSize(cols, rows), CvDepth, channelCount);
          MIplImage iplImage = MIplImage;
@@ -248,7 +250,7 @@ namespace Emgu.CV
          int channelCount = new TColor().Dimension;
 
          Debug.Assert(channelCount == channels.Length);
-         AllocateData(channels[0].Height, channels[0].Width);
+         AllocateData(channels[0].Height, channels[0].Width, channelCount);
 
          if (channelCount == 1)
          {
@@ -344,6 +346,17 @@ namespace Emgu.CV
       ///if ROI is set, the height of the ROI 
       ///</summary> 
       public override int Height { get { return isROISet ? (int)ROI.Height : Marshal.ReadInt32(Ptr, IplImageOffset.height); } }
+
+      /// <summary>
+      /// Get the number of channels for this image
+      /// </summary>
+      public override int NumberOfChannels
+      {
+         get
+         {
+            return new TColor().Dimension;
+         }
+      }
 
       /// <summary>
       /// Get the underneath managed array
@@ -2503,7 +2516,7 @@ namespace Emgu.CV
             if (Ptr == IntPtr.Zero || Width != value.Width || Height != value.Height)
             {
                DisposeObject();
-               AllocateData(value.Height, value.Width);
+               AllocateData(value.Height, value.Width, new TColor().Dimension);
             }
             #endregion
 

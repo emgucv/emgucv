@@ -79,8 +79,9 @@ namespace Emgu.CV
          set { _size = value; }
       }
 
-      ///<summary> The center of the rectangle</summary>
-      [XmlIgnore]
+      ///<summary> 
+      ///Get or Set the center of the rectangle
+      ///</summary>
       public Point2D<T> Center
       {
          get { return _center; }
@@ -132,7 +133,9 @@ namespace Emgu.CV
       ///</summary>
       public Point2D<T> BottomRight { get { return new Point2D<T>(Right, Bottom); } }
 
-      ///<summary> The area of the rectangle </summary>
+      ///<summary> 
+      /// Get the area the rectangle occupied
+      ///</summary>
       public double Area
       {
          get
@@ -184,7 +187,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the vertices of this triangle
       /// </summary>
-      public Point2D<T>[] Vertices
+      public virtual Point2D<T>[] Vertices
       {
          get
          {

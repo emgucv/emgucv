@@ -140,14 +140,15 @@ namespace Emgu.CV.Test
       [Test]
       public void TestRuntimeSerialize()
       {
-         Matrix<Byte> mat = new Matrix<Byte>(100, 80);
+         Matrix<Byte> mat = new Matrix<Byte>(100, 80, 2);
+         mat.SetRandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+
          System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
              formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
          Byte[] bytes;
          using (MemoryStream ms = new MemoryStream())
          {
-            mat.SetRandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
             formatter.Serialize(ms, mat);
             bytes = ms.GetBuffer();
          }
@@ -250,6 +251,10 @@ namespace Emgu.CV.Test
          Assert.AreEqual(10, m.Rows);
          Assert.AreEqual(20, m.Cols);
          Assert.AreEqual(2, m.NumberOfChannels);
+
+         XmlDocument xDoc = Toolbox.XmlSerialize<Matrix<float>>(m);
+         Matrix<float> m2 = Toolbox.XmlDeserialize<Matrix<float>>(xDoc);
+         Assert.IsTrue(m.Equals(m2));
       }
 
       /*

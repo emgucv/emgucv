@@ -32,7 +32,7 @@ namespace Emgu.CV
          get
          {
             Point2D<double> center = Center.Convert<double>();
-            double width = System.Convert.ToDouble(_size.X);
+            double width = System.Convert.ToDouble(Size.X);
             //double height = System.Convert.ToDouble(_size.Y);
             return new LineSegment2D<T>(
                 (new Point2D<double>(center.X - width / 2.0, center.Y)).Convert<T>(),
@@ -49,7 +49,7 @@ namespace Emgu.CV
          {
             Point2D<double> center = Center.Convert<double>();
             //double width = System.Convert.ToDouble(_size.X);
-            double height = System.Convert.ToDouble(_size.Y);
+            double height = System.Convert.ToDouble(Size.Y);
             return new LineSegment2D<T>(
                 (new Point2D<double>(center.X, center.Y - height / 2.0)).Convert<T>(),
                 (new Point2D<double>(center.X, center.Y + height / 2.0)).Convert<T>());
