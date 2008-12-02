@@ -38,6 +38,25 @@ extern EMGU_CV_EXTERN_API const CvMat* CvEMGetMeans(CvEM* model);
 extern EMGU_CV_EXTERN_API const CvMat** CvEMGetCovs(CvEM* model);
 extern EMGU_CV_EXTERN_API const CvMat* CvEMGetWeights(CvEM* model);
 extern EMGU_CV_EXTERN_API const CvMat* CvEMGetProbs(CvEM* model);
+
+//SVM
+extern EMGU_CV_EXTERN_API CvSVM* CvSVMDefaultCreate();
+extern EMGU_CV_EXTERN_API bool CvSVMTrain(CvSVM* model, const CvMat* _train_data, const CvMat* _responses,
+                   const CvMat* _var_idx=0, const CvMat* _sample_idx=0,
+                   CvSVMParams _params=CvSVMParams() );
+extern EMGU_CV_EXTERN_API void CvSVMRelease(CvSVM* model);
+
+//ANN_MLP
+extern EMGU_CV_EXTERN_API CvANN_MLP* CvANN_MLPCreate(const CvMat* _layer_sizes,
+               int _activ_func= CvANN_MLP::SIGMOID_SYM,
+               double _f_param1=0, double _f_param2=0 );
+extern EMGU_CV_EXTERN_API void CvANN_MLPRelease(CvANN_MLP* model);
+extern EMGU_CV_EXTERN_API int CvANN_MLPTrain(CvANN_MLP* model, const CvMat* _inputs, const CvMat* _outputs,
+                       const CvMat* _sample_weights, const CvMat* _sample_idx=0,
+                       CvANN_MLP_TrainParams _params = CvANN_MLP_TrainParams(),
+                       int flags=0 );
+extern EMGU_CV_EXTERN_API float CvANN_MLPPredict(CvANN_MLP* model, const CvMat* _inputs,
+                           CvMat* _outputs );
 #if defined(__cplusplus)
 }
 #endif

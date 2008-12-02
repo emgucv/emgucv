@@ -53,15 +53,11 @@ namespace Emgu.CV.ML
       public float FindNearest(
          Matrix<float> samples, 
          int k, 
-         out Matrix<float> results, 
-         out Matrix<float> neighborResponses, 
-         out Matrix<float> dist)
+         Matrix<float> results, 
+         Matrix<float> neighborResponses, 
+         Matrix<float> dist)
       {
-         results = new Matrix<float>(samples.Rows, 1);
-         IntPtr[] neighbors = new IntPtr[ samples.Rows * k];
-         neighborResponses = new Matrix<float>( samples.Rows, k);
-         dist = new Matrix<float>(samples.Rows, k);
-
+         IntPtr[] neighbors = new IntPtr[samples.Rows * k];
          return MlInvoke.CvKNearestFindNearest(_ptr, samples.Ptr, k, results.Ptr, neighbors, neighborResponses, dist);
       }
    }

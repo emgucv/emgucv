@@ -11,13 +11,20 @@ namespace Emgu.CV.ML
    public class EM : StatModel
    {
       /// <summary>
-      /// Create a Expectation Maximization model
+      /// Create an Expectation Maximization model
       /// </summary>
       public EM()
       {
          _ptr = MlInvoke.CvEMDefaultCreate();
       }
 
+      /// <summary>
+      /// Creaet an Expectation Maximization model using the specific training parameters
+      /// </summary>
+      /// <param name="samples">The samples to be trained</param>
+      /// <param name="sampleIdx"></param>
+      /// <param name="parameters"></param>
+      /// <param name="labels"></param>
       public EM(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
          : this()
       {
@@ -59,7 +66,7 @@ namespace Emgu.CV.ML
             samples.Ptr, 
             sampleIdx == null? IntPtr.Zero : sampleIdx.Ptr, 
             param,
-            labels.Ptr);
+            labels == null? IntPtr.Zero : labels.Ptr);
 
          if (covsPtrHandle.HasValue)
             covsPtrHandle.Value.Free();
@@ -75,6 +82,9 @@ namespace Emgu.CV.ML
             probs == null ? IntPtr.Zero : probs.Ptr);
       }
 
+      /// <summary>
+      /// Get the number of clusters of this EM model
+      /// </summary>
       public int NumberOfClusters
       {
          get
@@ -84,18 +94,18 @@ namespace Emgu.CV.ML
       }
 
       /// <summary>
-      /// Get the mean matrix
+      /// Get the mean of the clusters
       /// </summary>
-      /// <returns>The mean matrix</returns>
+      /// <returns>The mean of the clusters</returns>
       public Matrix<double> GetMeans()
       {
          return IntPtrToDoubleMatrix( MlInvoke.CvEMGetMeans(_ptr));
       }
 
       /// <summary>
-      /// Get the weight matrix
+      /// Get the weights of the clusters
       /// </summary>
-      /// <returns>the weight matrix</returns>
+      /// <returns>The weights of the clusters</returns>
       public Matrix<double> GetWeights()
       {
          return IntPtrToDoubleMatrix(MlInvoke.CvEMGetWeights(_ptr));
@@ -110,6 +120,10 @@ namespace Emgu.CV.ML
          return IntPtrToDoubleMatrix(MlInvoke.CvEMGetProbs(_ptr));
       }
 
+      /// <summary>
+      /// Get the covariance matrices for each cluster
+      /// </summary>
+      /// <returns></returns>
       public Matrix<double>[] GetCovariances()
       {
          Int64 ptrToCovs = MlInvoke.CvEMGetCovs(_ptr).ToInt64();
@@ -136,10 +150,6 @@ namespace Emgu.CV.ML
          GetMatrixInfo(matPtr, out rows, out cols);
          Matrix<double> res = new Matrix<double>(rows, cols);
          CvInvoke.cvCopy(matPtr, res, IntPtr.Zero);
-
-         //Matrix<float> res2 = new Matrix<float>(rows, cols);
-         //CvInvoke.cvCopy(matPtr, res2, IntPtr.Zero);
-         
 
          return res;
       }

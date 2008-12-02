@@ -121,7 +121,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model"></param>
       /// <param name="samples"></param>
-      /// <param name="sample_idx"></param>
+      /// <param name="sampleIdx"></param>
       /// <param name="parameter"></param>
       /// <param name="labels"></param>
       /// <returns></returns>
@@ -129,7 +129,7 @@ namespace Emgu.CV.ML
       public static extern bool CvEMTrain(
          IntPtr model,
          IntPtr samples,
-         IntPtr sample_idx,
+         IntPtr sampleIdx,
          MCvEMParams parameter,
          IntPtr labels);
 
@@ -147,20 +147,112 @@ namespace Emgu.CV.ML
          IntPtr sample, 
          IntPtr probs );
 
+      /// <summary>
+      /// Get the means of the clusters from the EM model
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <returns>The means of the clusters of the EM model</returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern IntPtr CvEMGetMeans(IntPtr model);
 
+      /// <summary>
+      /// Get the covariance matrices of the clusters from the EM model
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <returns>The covariance matrices of the clusters of the EM model</returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern IntPtr CvEMGetCovs(IntPtr model);
 
+      /// <summary>
+      /// Get the weights of the clusters from the EM model
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <returns>The weights of the clusters of the EM model</returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern IntPtr CvEMGetWeights(IntPtr model);
 
+      /// <summary>
+      /// Get the probabilities from the EM model
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <returns>The probabilities of the EM model </returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern IntPtr CvEMGetProbs(IntPtr model);
 
+      /// <summary>
+      /// Get the number of clusters from the EM model
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <returns>The number of clusters of the EM model</returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern int CvEMGetNclusters(IntPtr model);
       #endregion
+
+      #region CvSVM
+      /// <summary>
+      /// Create a default SVM model
+      /// </summary>
+      /// <returns>Pointer to the SVM model</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvSVMDefaultCreate();
+
+      /// <summary>
+      /// Release the SVM model and all the memory associated to ir
+      /// </summary>
+      /// <param name="model">The SVM model to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvSVMRelease(IntPtr model);
+
+      /// <summary>
+      /// Train the SVM model with the specific paramters
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      /// <param name="trainData"></param>
+      /// <param name="responses"></param>
+      /// <param name="varIdx"></param>
+      /// <param name="sampleIdx"></param>
+      /// <param name="parameters"></param>
+      /// <returns></returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern bool CvSVMTrain(
+         IntPtr model,
+         IntPtr trainData,
+         IntPtr responses,
+         IntPtr varIdx,
+         IntPtr sampleIdx,
+         MCvSVMParams parameters);
+      #endregion
+
+      #region CvANN_MLP
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvANN_MLPCreate(
+         IntPtr layerSizes,
+         MlEnum.ANN_MLP_ACTIVATION_FUNCTION activFunc,
+         double fParam1,
+         double fParam2);
+
+      /// <summary>
+      /// Release the ANN_MLP model
+      /// </summary>
+      /// <param name="model">The ANN_MLP model to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvANN_MLPRelease(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int CvANN_MLPTrain(
+         IntPtr model, 
+         IntPtr inputs, 
+         IntPtr outputs,
+         IntPtr sampleWeights, 
+         IntPtr sampleIdx,
+         MCvANN_MLP_TrainParams parameters,
+         MlEnum.ANN_MLP_TRAINING_FLAG flags );
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern float CvANN_MLPPredict(
+         IntPtr model,
+         IntPtr inputs,
+         IntPtr outputs);
+      #endregion 
    }
 }

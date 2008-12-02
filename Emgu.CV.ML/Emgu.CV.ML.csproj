@@ -38,12 +38,17 @@
     <Compile Include="EM.cs" />
     <Compile Include="EMParams.cs" />
     <Compile Include="KNearest.cs" />
+    <Compile Include="NeuralNetwork.cs" />
     <Compile Include="NormalBayesClassifier.cs" />
     <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />
     <Compile Include="PInvoke\CvType\MlEnum.cs" />
+    <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />
     <Compile Include="PInvoke\MlInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatModel.cs" />
+    <Compile Include="SVM.cs" />
+    <Compile Include="SVMParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">

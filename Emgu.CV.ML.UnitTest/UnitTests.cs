@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Framework;
 
 namespace Emgu.CV.ML.UnitTest
 {
+   [TestFixture]
    public class UnitTests
    {
+      [Test]
       public void TestKNearest()
       {
          int K = 10;
@@ -29,6 +32,11 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
          trainClasses2.SetValue(2);
          #endregion
+         
+         Matrix<float> results, neighborResponses, dist;
+         results = new Matrix<float>(sample.Rows, 1);
+         neighborResponses = new Matrix<float>(sample.Rows, K);
+         dist = new Matrix<float>(sample.Rows, K);
 
          using (KNearest knn = new KNearest(trainData.Clone(), trainClasses.Clone(), null, false, K))
          {
@@ -38,10 +46,9 @@ namespace Emgu.CV.ML.UnitTest
                {
                   sample[0, 0] = j;
                   sample[0, 1] = i;
-                  Matrix<float> results, neighborResponses, dist;
 
                   // estimates the response and get the neighbors' labels
-                  float response = knn.FindNearest(sample, K, out results, out neighborResponses, out dist);
+                  float response = knn.FindNearest(sample, K, results, neighborResponses, dist);
 
                   int accuracy = 0;
                   // compute the number of neighbors representing the majority
@@ -68,9 +75,10 @@ namespace Emgu.CV.ML.UnitTest
             img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
          }
 
-         Emgu.CV.UI.ImageViewer.Show(img);
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
+      [Test]
       public void TestEM()
       {
          int N = 4; //number of clusters
@@ -145,8 +153,23 @@ namespace Emgu.CV.ML.UnitTest
             }
             #endregion 
    
-            Emgu.CV.UI.ImageViewer.Show(img);
-            
+            //Emgu.CV.UI.ImageViewer.Show(img);
+         }
+      }
+
+      [Test]
+      public void TestSVM()
+      {
+         using (SVM model = new SVM())
+         {
+         }
+      }
+
+      [Test]
+      public void TestNormalBayesClassifier()
+      {
+         using (NormalBayesClassifier classifier = new NormalBayesClassifier())
+         {
          }
       }
    }

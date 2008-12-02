@@ -119,7 +119,7 @@ namespace Emgu.CV
       public EigenObjectRecognizer(Image<Gray, Byte>[] images, String[] labels, double eigenDistanceThreshold, ref MCvTermCriteria termCrit)
       {
          Debug.Assert(images.Length == labels.Length, "The number of images should equals the number of labels");
-         Debug.Assert(eigenDistanceThreshold >= 0.0, "Simularity threshold should always >= 0.0");
+         Debug.Assert(eigenDistanceThreshold >= 0.0, "Eigen-distance threshold should always >= 0.0");
 
          CalcEigenObjects(images, ref termCrit, out _eigenImages, out _avgImage);
 
@@ -157,13 +157,16 @@ namespace Emgu.CV
 
          IntPtr[] inObjs = Array.ConvertAll<Image<Gray, Byte>, IntPtr>(trainingImages, delegate(Image<Gray, Byte> img) { return img.Ptr; });
 
-         int maxEigenObjs = termCrit.max_iter == 0 ? trainingImages.Length : termCrit.max_iter;
+         if (termCrit.max_iter <= 0 || termCrit.max_iter > trainingImages.Length)
+            termCrit.max_iter = trainingImages.Length;
+         
+         int maxEigenObjs = termCrit.max_iter;
 
          #region initialize eigen images
-         Image<Gray, Single>[] eigenImgsInit = new Image<Gray, float>[maxEigenObjs];
-         for (int i = 0; i < eigenImgsInit.Length; i++)
-            eigenImgsInit[i] = new Image<Gray, float>(width, height);
-         IntPtr[] eigObjs = Array.ConvertAll<Image<Gray, Single>, IntPtr>(eigenImgsInit, delegate(Image<Gray, Single> img) { return img.Ptr; });
+         eigenImages = new Image<Gray, float>[maxEigenObjs];
+         for (int i = 0; i < eigenImages.Length; i++)
+            eigenImages[i] = new Image<Gray, float>(width, height);
+         IntPtr[] eigObjs = Array.ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; });
          #endregion
 
          float[] eigValsInit = new float[maxEigenObjs];
@@ -176,16 +179,6 @@ namespace Emgu.CV
              eigObjs,
              eigValsInit,
              avg.Ptr);
-
-         if (maxEigenObjs == termCrit.max_iter)
-         {
-            eigenImages = eigenImgsInit;
-         }
-         else
-         {
-            eigenImages = new Image<Gray, float>[termCrit.max_iter];
-            Array.Copy(eigenImgsInit, eigenImages, termCrit.max_iter);
-         }
       }
 
       /// <summary>

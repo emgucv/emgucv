@@ -752,48 +752,33 @@ namespace Emgu.CV.Test
       public void TestDFT()
       {
          Image<Gray, float> matA = new Image<Gray, float>("stuff.jpg");
-         
+
+         #region test DFT for matB
+         //The matrix to be transformed.
          Matrix<float> matB = new Matrix<float>(
             new float[,] { 
             {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 
             {1.0f/16.0f, 8.0f/16.0f, 1.0f/16.0f}, 
             {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}}); 
 
-         #region test DFT for matB
          Matrix<float> matBDft = new Matrix<float>(
             CvInvoke.cvGetOptimalDFTSize(matB.Rows),
             CvInvoke.cvGetOptimalDFTSize(matB.Cols));
-         matB.CopyTo(matBDft.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, matB.Width, matB.Height))));
+         CvInvoke.cvCopyMakeBorder(matB, matBDft, new MCvPoint(0, 0), Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+         Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
+         CvInvoke.cvMerge(matBDft, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, dftIn);
 
-         Image<Gray, float> inReal = new Image<Gray, float>(matBDft.Width, matBDft.Height);
-         CvInvoke.cvConvert(matBDft, inReal);
-         IntPtr dftIn = CvInvoke.cvCreateImage( new MCvSize(matBDft.Width, matBDft.Cols), Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
-         CvInvoke.cvMerge(inReal, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, dftIn);
-         IntPtr dftOut = CvInvoke.cvCreateImage( new MCvSize(matBDft.Width, matBDft.Cols), Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
+         Matrix<float> dftOut = new Matrix<float>(dftIn.Rows, dftIn.Cols, 2);
+         //perform the Fourior Transform
          CvInvoke.cvDFT(dftIn, dftOut, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
-         Image<Gray, float> outReal = new Image<Gray, float>(matBDft.Width, matBDft.Height);
-         Image<Gray, float> outIm = new Image<Gray, float>(matBDft.Width, matBDft.Height);
+
+         //The real part of the Fourior Transform
+         Matrix<float> outReal = new Matrix<float>(matBDft.Rows, matBDft.Cols);
+         //The imaginary part of the Fourior Transform
+         Matrix<float> outIm = new Matrix<float>(matBDft.Rows, matBDft.Cols);
          CvInvoke.cvSplit(dftOut, outReal, outIm, IntPtr.Zero, IntPtr.Zero);
-         CvInvoke.cvReleaseImage(ref dftIn);
-         CvInvoke.cvReleaseImage(ref dftOut);
          #endregion
 
-         /*
-         #region test DFT for matB
-         MatND<float> matBDft = new MatND<float>(
-            CvInvoke.cvGetOptimalDFTSize(matB.Rows),
-            CvInvoke.cvGetOptimalDFTSize(matB.Cols),
-            2);
-
-         float[,] src = matB.ManagedArray as float[,];
-         float[, ,] dest = matBDft.ManagedArray as float[, ,];
-
-         for (int i = 0; i < matB.Rows; i++)
-            for (int j = 0; j < matB.Cols; j++)
-               dest[i, j, 0] = src[i, j];
-         CvInvoke.cvDFT(matBDft, matBDft, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, 3);
-         #endregion
-         */
          Image<Gray, float> convResult1 = new Image<Gray, float>(matA.Cols + matB.Cols - 1, matA.Rows + matB.Rows - 1);
          int dft_rows = CvInvoke.cvGetOptimalDFTSize(convResult1.Rows);
          int dft_cols = CvInvoke.cvGetOptimalDFTSize(convResult1.Cols);

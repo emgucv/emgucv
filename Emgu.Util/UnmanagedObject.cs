@@ -23,7 +23,6 @@ namespace Emgu.Util
          {
             return _ptr;
          }
-
       }
 
       /// <summary>
@@ -33,7 +32,7 @@ namespace Emgu.Util
       /// <returns></returns>
       public static implicit operator IntPtr(UnmanagedObject obj)
       {
-         return obj._ptr;
+         return obj == null ? IntPtr.Zero : obj._ptr;
       }
    }
 }

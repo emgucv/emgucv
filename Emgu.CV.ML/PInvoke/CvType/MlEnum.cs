@@ -43,4 +43,112 @@ namespace Emgu.CV.ML.MlEnum
       /// </summary>
       START_AUTO_STEP = 0
    }
+
+   /// <summary>
+   /// Type of SVM
+   /// </summary>
+   public enum SVM_TYPE
+   {
+      /// <summary>
+      /// n-class classification (n>=2), allows imperfect separation of classes with penalty multiplier C for outliers
+      /// </summary>
+      C_SVC = 100,
+      /// <summary>
+      /// n-class classification with possible imperfect separation. Parameter nu (in the range 0..1, the larger the value, the smoother the decision boundary) is used instead of C
+      /// </summary>
+      NU_SVC = 101,
+      /// <summary>
+      /// one-class SVM. All the training data are from the same class, SVM builds a boundary that separates the class from the rest of the feature space
+      /// </summary>
+      ONE_CLASS = 102, 
+      /// <summary>
+      /// Regression. The distance between feature vectors from the training set and the fitting hyper-plane must be less than p. For outliers the penalty multiplier C is used
+      /// </summary>
+      EPS_SVR = 103,
+      /// <summary>
+      /// Regression; nu is used instead of p.
+      /// </summary>
+      NU_SVR = 104
+   }
+
+   /// <summary>
+   /// SVM kernel type
+   /// </summary>
+   public enum SVM_KERNEL_TYPE
+   {
+      /// <summary>
+      /// No mapping is done, linear discrimination (or regression) is done in the original feature space. It is the fastest option. d(x,y) = x y == (x,y)
+      /// </summary>
+      LINEAR = 0,
+      /// <summary>
+      /// polynomial kernel: d(x,y) = (gamma*(xy)+coef0)^degree
+      /// </summary>
+      POLY = 1, 
+      /// <summary>
+      /// Radial-basis-function kernel; a good choice in most cases: d(x,y) = exp(-gamma*|x-y|^2)
+      /// </summary>
+      RBF = 2, 
+      /// <summary>
+      /// sigmoid function is used as a kernel: d(x,y) = tanh(gamma*(xy)+coef0)
+      /// </summary>
+      SIGMOID = 3
+   }
+
+   /// <summary>
+   /// Training method for ANN_MLP
+   /// </summary>
+   public enum ANN_MLP_TRAIN_METHOD
+   {
+      /// <summary>
+      /// Back-propagation algorithmn
+      /// </summary>
+      BACKPROP = 0, 
+      /// <summary>
+      /// Batch RPROP algorithm
+      /// </summary>
+      RPROP = 1 
+   }
+
+   /// <summary>
+   /// Possible activation functions
+   /// </summary>
+   public enum ANN_MLP_ACTIVATION_FUNCTION
+   {
+      /// <summary>
+      /// Identity
+      /// </summary>
+      IDENTITY = 0,
+      /// <summary>
+      /// sigmoif symetric
+      /// </summary>
+      SIGMOID_SYM = 1, 
+      /// <summary>
+      /// Gaussian
+      /// </summary>
+      GAUSSIAN = 2
+   }
+
+   /// <summary>
+   /// The flags for the neural network training function
+   /// </summary>
+   [Flags]
+   public enum ANN_MLP_TRAINING_FLAG
+   {
+      /// <summary>
+      /// 
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// 
+      /// </summary>
+      UPDATE_WEIGHTS = 1, 
+      /// <summary>
+      /// 
+      /// </summary>
+      NO_INPUT_SCALE = 2, 
+      /// <summary>
+      /// 
+      /// </summary>
+      NO_OUTPUT_SCALE = 4
+   }
 }
