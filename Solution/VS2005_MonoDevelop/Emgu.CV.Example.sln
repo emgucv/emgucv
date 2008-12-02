@@ -61,7 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacialMouseControl", "..\..
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlannarSubdivision", "..\..\Emgu.CV.Example\PlannarSubdivision\PlannarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\PlanarSubdivision\PlanarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
