@@ -665,6 +665,22 @@ namespace Emgu.CV
 
       #region Math Functions
       /// <summary>
+      /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="center">The transformation center, where the output precision is maximal</param>
+      /// <param name="M">Magnitude scale parameter</param>
+      /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvLogPolar(
+         IntPtr src,
+         IntPtr dst,
+         MCvPoint2D32f center,
+         double M,
+         int flags);
+
+      /// <summary>
       /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
       /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
       /// angle(I)=atan( y(I)/x(I) )
@@ -2147,6 +2163,7 @@ namespace Emgu.CV
       #endregion
 
       #region CV_LIBRARY
+
       /// <summary>
       /// Transforms source image using the specified matrix
       /// </summary>

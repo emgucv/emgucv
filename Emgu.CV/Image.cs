@@ -2101,7 +2101,6 @@ namespace Emgu.CV
          return data;
       }
 
-
       /// <summary>
       /// Scale the image to the specific size 
       /// </summary>
@@ -2287,7 +2286,19 @@ namespace Emgu.CV
          return resultImage;
       }
 
-
+      ///<summary>
+      /// Convert the image to log polar, simulating the human foveal vision
+      /// </summary>
+      /// <param name="center">The transformation center, where the output precision is maximal</param>
+      /// <param name="M">Magnitude scale parameter</param>
+      /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+      /// <returns>The converted image</returns>
+      public Image<TColor, TDepth> LogPolar(MCvPoint2D32f center, double M, int flags)
+      {
+         Image<TColor, TDepth> imgPolar = CopyBlank();
+         CvInvoke.cvLogPolar(Ptr, imgPolar.Ptr, center, M, flags);
+         return imgPolar;
+      }
       #endregion
 
       #region Image color and depth conversion
