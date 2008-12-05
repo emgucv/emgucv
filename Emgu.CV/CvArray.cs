@@ -266,6 +266,8 @@ namespace Emgu.CV
          SetValue(new MCvScalar(val, val, val, val), mask);
       }
 
+      private readonly static Random _randomGenerator = new Random();
+
       /// <summary>
       /// Inplace fills Array with uniformly distributed random numbers
       /// </summary>
@@ -285,7 +287,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true)]
       public void SetRandUniform(MCvScalar floorValue, MCvScalar ceilingValue)
       {
-         SetRandUniform((UInt64)DateTime.Now.Ticks, floorValue, ceilingValue);
+         SetRandUniform((UInt64) _randomGenerator.Next(), floorValue, ceilingValue);
       }
 
       /// <summary>
@@ -307,7 +309,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true)]
       public void SetRandNormal(MCvScalar mean, MCvScalar std)
       {
-         SetRandNormal((UInt64)DateTime.Now.Ticks, mean, std);
+         SetRandNormal((UInt64)_randomGenerator.Next(), mean, std);
       }
 
       /// <summary>

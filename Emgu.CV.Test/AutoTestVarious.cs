@@ -702,6 +702,24 @@ namespace Emgu.CV.Test
          Assert.AreEqual(distance[0, 0], 0.0);
       }
 
+      [Test]
+      public void TestEigenObjectRecognizer()
+      {
+         Image<Gray, Byte>[] images = new Image<Gray, byte>[20];
+         for (int i = 0; i < images.Length; i++)
+         {
+            images[i] = new Image<Gray, byte>(200, 200);
+            images[i].SetRandUniform(new MCvScalar(0), new MCvScalar(255));
+         }
+         MCvTermCriteria termCrit = new MCvTermCriteria(10, 1.0e-6);
+
+         EigenObjectRecognizer rec = new EigenObjectRecognizer(images, ref termCrit);
+         foreach(Image<Gray, Byte> img in images)
+         {
+            rec.Recognize(img);
+            //Trace.WriteLine(rec.Recognize(img));
+         }
+      }
 
       //TODO: Figure out why the following test case cannot passed
       /*

@@ -169,7 +169,7 @@ namespace Emgu.CV
          IntPtr[] eigObjs = Array.ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; });
          #endregion
 
-         float[] eigValsInit = new float[maxEigenObjs];
+         //float[] eigValsInit = new float[maxEigenObjs];
 
          avg = new Image<Gray, Single>(width, height);
 
@@ -177,7 +177,7 @@ namespace Emgu.CV
              inObjs,
              ref termCrit,
              eigObjs,
-             eigValsInit,
+             null,
              avg.Ptr);
       }
 
