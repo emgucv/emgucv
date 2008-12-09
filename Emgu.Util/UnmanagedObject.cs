@@ -28,8 +28,8 @@ namespace Emgu.Util
       /// <summary>
       /// implicit operator for IntPtr
       /// </summary>
-      /// <param name="obj"></param>
-      /// <returns></returns>
+      /// <param name="obj">The UnmanagedObject</param>
+      /// <returns>The unmanaged pointer for this object</returns>
       public static implicit operator IntPtr(UnmanagedObject obj)
       {
          return obj == null ? IntPtr.Zero : obj._ptr;

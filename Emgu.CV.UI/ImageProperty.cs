@@ -173,7 +173,7 @@ namespace Emgu.CV.UI
          IImage[] channels = image.Split();
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          ColorType typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as ColorType;
-         String[] channelNames = typeOfColor.ChannelName;
+         String[] channelNames = typeOfColor.ChannelNames;
          System.Drawing.Color[] colors = Reflection.ReflectColorType.GetChannelDisplayColor(typeOfColor);// typeOfColor.GetChannelDisplayColor();
 
          HistogramViewer hviewer = new HistogramViewer();

@@ -183,6 +183,18 @@ namespace Emgu.CV
          return new Rectangle<TOther>(Center.Convert<TOther>(), Size.Convert<TOther>());
       }
 
+      #region explicit operators
+      /// <summary>
+      /// Explicit operator for RectangleF
+      /// </summary>
+      /// <param name="rect">A generic rectangle</param>
+      /// <returns>The corresponding System.Drawing.Rectangle</returns>
+      public static explicit operator System.Drawing.Rectangle(Rectangle<T> rect)
+      {
+         return rect.MCvRect;         
+      }
+      #endregion
+
       #region IConvexPolygon<T> Members
       /// <summary>
       /// Get the vertices of this triangle

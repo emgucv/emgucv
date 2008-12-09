@@ -221,6 +221,30 @@ namespace Emgu.CV.ML
          IntPtr varIdx,
          IntPtr sampleIdx,
          MCvSVMParams parameters);
+
+      /// <summary>
+      /// Get the default parameter grid for the specific SVM type
+      /// </summary>
+      /// <param name="type">The SVM type</param>
+      /// <param name="grid">The parameter grid reference, values will be filled in by the funtion call</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvSVMGetDefaultGrid(MlEnum.SVM_TYPE type, ref MCvParamGrid grid);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern bool CvSVMTrainAuto(
+         IntPtr model,
+         IntPtr trainData,
+         IntPtr responses,
+         IntPtr varIdx,
+         IntPtr sampleIdx,
+         MCvSVMParams parameters,
+         int kFold,
+         MCvParamGrid cGrid,
+         MCvParamGrid gammaGrid,
+         MCvParamGrid pGrid,
+         MCvParamGrid nuGrid,
+         MCvParamGrid coefGrid,
+         MCvParamGrid degreeGrid);
       #endregion
 
       #region CvANN_MLP

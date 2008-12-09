@@ -65,5 +65,15 @@ namespace Emgu.CV
       {
          get { return width * height; }
       }
+
+      /// <summary>
+      /// Implicit operator for Rectangle
+      /// </summary>
+      /// <param name="rect">The MCvRect structure</param>
+      /// <returns>An equivalent representation of the System.Drawing.Rectangle</returns>
+      public static implicit operator System.Drawing.Rectangle(MCvRect rect)
+      {
+         return new System.Drawing.Rectangle(rect.x, rect.y, rect.width, rect.height);
+      }
    }
 }

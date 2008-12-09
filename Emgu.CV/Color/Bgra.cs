@@ -32,19 +32,19 @@ namespace Emgu.CV
          _coordinate[3] = alpha;
       }
 
-      ///<summary> Get or set the intensity of the B color channel </summary>
+      ///<summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
       public double Blue { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
 
-      ///<summary> Get or set the intensity of the G color channel </summary>
+      ///<summary> Get or set the intensity of the green color channel </summary>
       [DisplayColor(0, 255, 0)]
       public double Green { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
 
-      ///<summary> Get or set the intensity of the R color channel </summary>
+      ///<summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
 
-      ///<summary> Get or set the intensity of the A color channel </summary>
+      ///<summary> Get or set the intensity of the alpha color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Alpha { get { return _coordinate[3]; } set { _coordinate[3] = value; } }
 

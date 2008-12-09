@@ -2071,9 +2071,9 @@ namespace Emgu.CV
       /// <param name="arr">Array header</param>
       /// <param name="data">Output pointer to the whole image origin or ROI origin if ROI is set</param>
       /// <param name="step">Output full row length in bytes</param>
-      /// <param name="roi_size">Output ROI size</param>
+      /// <param name="roiSize">Output ROI size</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out MCvSize roi_size);
+      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out MCvSize roiSize);
 
       /// <summary>
       /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 

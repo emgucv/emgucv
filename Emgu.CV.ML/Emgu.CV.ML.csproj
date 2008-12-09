@@ -41,6 +41,7 @@
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="NormalBayesClassifier.cs" />
     <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvParamGrid.cs" />
     <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />
     <Compile Include="PInvoke\CvType\MlEnum.cs" />
     <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />

@@ -7,7 +7,7 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Neural network
    /// </summary>
-   public class NeuralNetwork : StatModel
+   public class ANN_MLP : StatModel
    {
       /// <summary>
       /// Create a neural network using the specific parameters
@@ -16,7 +16,7 @@ namespace Emgu.CV.ML
       /// <param name="activeFunction">Activation function</param>
       /// <param name="fParam1"></param>
       /// <param name="fParam2"></param>
-      public NeuralNetwork(Matrix<int> layerSize, MlEnum.ANN_MLP_ACTIVATION_FUNCTION activeFunction, double fParam1, double fParam2)
+      public ANN_MLP(Matrix<int> layerSize, MlEnum.ANN_MLP_ACTIVATION_FUNCTION activeFunction, double fParam1, double fParam2)
       {
          _ptr = MlInvoke.CvANN_MLPCreate(layerSize.Ptr, activeFunction, fParam1, fParam2);
       }
@@ -42,7 +42,7 @@ namespace Emgu.CV.ML
                _ptr,
                inputs.Ptr,
                outputs.Ptr,
-               sampleWeights.Ptr,
+               sampleWeights == null? IntPtr.Zero : sampleWeights.Ptr,
                sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
                parameters,
                flag);

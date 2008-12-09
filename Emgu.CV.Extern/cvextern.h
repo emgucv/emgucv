@@ -44,6 +44,16 @@ extern EMGU_CV_EXTERN_API CvSVM* CvSVMDefaultCreate();
 extern EMGU_CV_EXTERN_API bool CvSVMTrain(CvSVM* model, const CvMat* _train_data, const CvMat* _responses,
                    const CvMat* _var_idx=0, const CvMat* _sample_idx=0,
                    CvSVMParams _params=CvSVMParams() );
+extern EMGU_CV_EXTERN_API bool CvSVMTrainAuto(CvSVM* model, const CvMat* _train_data, const CvMat* _responses,
+        const CvMat* _var_idx, const CvMat* _sample_idx, CvSVMParams _params,
+        int k_fold = 10,
+        CvParamGrid C_grid      = CvSVM::get_default_grid(CvSVM::C),
+        CvParamGrid gamma_grid  = CvSVM::get_default_grid(CvSVM::GAMMA),
+        CvParamGrid p_grid      = CvSVM::get_default_grid(CvSVM::P),
+        CvParamGrid nu_grid     = CvSVM::get_default_grid(CvSVM::NU),
+        CvParamGrid coef_grid   = CvSVM::get_default_grid(CvSVM::COEF),
+        CvParamGrid degree_grid = CvSVM::get_default_grid(CvSVM::DEGREE) );
+extern EMGU_CV_EXTERN_API void CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid);
 extern EMGU_CV_EXTERN_API void CvSVMRelease(CvSVM* model);
 
 //ANN_MLP

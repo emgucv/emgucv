@@ -47,7 +47,7 @@ namespace Emgu.CV
       [DisplayColor(0, 255, 0)]
       public double Green { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
 
-      ///<summary> Get or set the intensity of the reg color channel </summary>
+      ///<summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
 

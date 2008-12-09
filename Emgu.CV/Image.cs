@@ -95,58 +95,58 @@ namespace Emgu.CV
       private void LoadImageUsingOpenCV(FileInfo file)
       {
          IntPtr ptr;
-         MIplImage mptr;
+         int width, height;
 
-         #region read the image into ptr ( color type - C, depth - Byte )
-         if (typeof(TColor) == typeof(Gray)) //color type is gray
+         #region read the image into ptr ( of TColor, Byte )
+         if (typeof(TColor) == typeof(Gray)) //TColor type is gray, load the image as grayscale
          {
             ptr = CvInvoke.cvLoadImage(file.FullName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
-            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+            MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+            width = mptr.width;
+            height = mptr.height;
          }
          else //color type is not gray
          {
+            //load the image as Bgr color
             ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
 
             if (ptr == IntPtr.Zero)
                throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
 
-            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+            MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+            width = mptr.width;
+            height = mptr.height;
 
-            if (typeof(TColor) != typeof(Bgr)) //color type is not Bgr
-            {
+            if (typeof(TColor) != typeof(Bgr)) //TColor type is not Bgr, a conversion is required
+            {  
                IntPtr tmp1 = CvInvoke.cvCreateImage(
                    new MCvSize(mptr.width, mptr.height),
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
-               CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(TColor), typeof(Bgr)));
+               CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(Bgr), typeof(TColor)));
 
                CvInvoke.cvReleaseImage(ref ptr);
                ptr = tmp1;
-               mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
             }
          }
          #endregion
 
-         if (typeof(TDepth) != typeof(Byte)) //depth is not Byte
+         if (typeof(TDepth) != typeof(Byte)) //depth is not Byte, a conversion of depth is required
          {
             IntPtr tmp1 = CvInvoke.cvCreateImage(
-                new MCvSize(mptr.width, mptr.height),
+                new MCvSize(width, height),
                 CvDepth,
                 new TColor().Dimension);
             CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
             CvInvoke.cvReleaseImage(ref ptr);
             ptr = tmp1;
-            mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
          }
 
          #region use managed memory instead of unmanaged
-         AllocateData(mptr.height, mptr.width, NumberOfChannels);
-         //The above line of code might change the widthStep, therefore a re-marshal is necessary
-         mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+         AllocateData(height, width, NumberOfChannels);
 
-         //TODO: fix the following to handle the case when input image has non 4-align byte in a row
-         Emgu.Util.Toolbox.memcpy(_dataHandle.AddrOfPinnedObject(), mptr.imageData, mptr.widthStep * mptr.height);
-
+         CvInvoke.cvCopy(ptr, Ptr, IntPtr.Zero);
+         
          CvInvoke.cvReleaseImage(ref ptr);
          #endregion
       }
@@ -210,6 +210,8 @@ namespace Emgu.CV
          }
       }
 
+      private readonly static long _sizeOfHeader = Marshal.SizeOf(typeof(MIplImage));
+
       /// <summary>
       /// Allocate data for the array
       /// </summary>
@@ -224,6 +226,8 @@ namespace Emgu.CV
          int channelCount = numberOfChannels;
 
          _ptr = CvInvoke.cvCreateImageHeader(new MCvSize(cols, rows), CvDepth, channelCount);
+         GC.AddMemoryPressure(_sizeOfHeader);
+
          MIplImage iplImage = MIplImage;
 
          Debug.Assert(iplImage.align == 4, "Only 4 align is supported at this moment");
@@ -339,13 +343,13 @@ namespace Emgu.CV
       ///Get the width of the image ( number of pixels in the x direction),
       ///if ROI is set, the width of the ROI 
       ///</summary>
-      public override int Width { get { return isROISet ? (int)ROI.Width : Marshal.ReadInt32(Ptr, IplImageOffset.width); } }
+      public override int Width { get { return IsROISet ? (int)ROI.Width : Marshal.ReadInt32(Ptr, IplImageOffset.width); } }
 
       ///<summary> 
       ///Get the height of the image ( number of pixels in the y direction ),
       ///if ROI is set, the height of the ROI 
       ///</summary> 
-      public override int Height { get { return isROISet ? (int)ROI.Height : Marshal.ReadInt32(Ptr, IplImageOffset.height); } }
+      public override int Height { get { return IsROISet ? (int)ROI.Height : Marshal.ReadInt32(Ptr, IplImageOffset.height); } }
 
       /// <summary>
       /// Get the number of channels for this image
@@ -410,7 +414,7 @@ namespace Emgu.CV
       ///<summary> 
       ///Indicates if the region of interest has been set
       ///</summary> 
-      public bool isROISet
+      public bool IsROISet
       {
          get
          {
@@ -3216,6 +3220,7 @@ namespace Emgu.CV
          {
             CvInvoke.cvReleaseImageHeader(ref _ptr);
             _ptr = IntPtr.Zero;
+            GC.RemoveMemoryPressure(_sizeOfHeader);
          }
 
          base.DisposeObject();

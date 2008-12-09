@@ -18,7 +18,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the names for each channel
       /// </summary>
-      public virtual String[] ChannelName
+      public virtual String[] ChannelNames
       {
          get
          {

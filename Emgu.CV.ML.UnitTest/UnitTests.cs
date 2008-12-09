@@ -33,10 +33,10 @@ namespace Emgu.CV.ML.UnitTest
          trainClasses2.SetValue(2);
          #endregion
          
-         Matrix<float> results, neighborResponses, dist;
+         Matrix<float> results, neighborResponses;
          results = new Matrix<float>(sample.Rows, 1);
          neighborResponses = new Matrix<float>(sample.Rows, K);
-         dist = new Matrix<float>(sample.Rows, K);
+         //dist = new Matrix<float>(sample.Rows, K);
 
          using (KNearest knn = new KNearest(trainData.Clone(), trainClasses.Clone(), null, false, K))
          {
@@ -47,8 +47,9 @@ namespace Emgu.CV.ML.UnitTest
                   sample[0, 0] = j;
                   sample[0, 1] = i;
 
+                  //Matrix<float> nearestNeighbors = new Matrix<float>(K* sample.Rows, sample.Cols);
                   // estimates the response and get the neighbors' labels
-                  float response = knn.FindNearest(sample, K, results, neighborResponses, dist);
+                  float response = knn.FindNearest(sample, K, results, null, neighborResponses, null);
 
                   int accuracy = 0;
                   // compute the number of neighbors representing the majority
@@ -75,7 +76,7 @@ namespace Emgu.CV.ML.UnitTest
             img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
          }
 
-         //Emgu.CV.UI.ImageViewer.Show(img);
+         Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       [Test]
@@ -171,6 +172,73 @@ namespace Emgu.CV.ML.UnitTest
          using (NormalBayesClassifier classifier = new NormalBayesClassifier())
          {
          }
+      }
+
+      [Test]
+      public void TestANN_MLP()
+      {
+         int trainSampleCount = 100;
+
+         #region Generate the traning data and classes
+         Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
+         Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
+
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+
+         Matrix<float> sample = new Matrix<float>(1, 2);
+         Matrix<float> prediction = new Matrix<float>(1, 1);
+
+         Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount >> 1, 1);
+         trainData1.SetRandNormal(new MCvScalar(200), new MCvScalar(50));
+         Matrix<float> trainData2 = trainData.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
+         trainData2.SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+
+         Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount >> 1, 1);
+         trainClasses1.SetValue(1);
+         Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
+         trainClasses2.SetValue(2);
+         #endregion
+
+         Matrix<int> layerSize = new Matrix<int>(3, 1);
+         layerSize[0, 0] = 2;
+         layerSize[1, 0] = 5;
+         layerSize[2, 0] = 1;
+         MCvANN_MLP_TrainParams parameters = new MCvANN_MLP_TrainParams();
+         parameters.term_crit = new MCvTermCriteria(10, 1.0e-8);
+         parameters.train_method = Emgu.CV.ML.MlEnum.ANN_MLP_TRAIN_METHOD.BACKPROP;
+         parameters.bp_dw_scale = 0.1;
+         parameters.bp_moment_scale = 0.1;
+
+         using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
+         {
+            network.Train(trainData, trainClasses, null, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
+
+            for (int i = 0; i < img.Height; i++)
+            {
+               for (int j = 0; j < img.Width; j++)
+               {
+                  sample[0, 0] = j;
+                  sample[0, 1] = i;
+                  network.Predict(sample, prediction);
+
+                  // estimates the response and get the neighbors' labels
+                  float response = prediction[0,0];
+
+                  // highlight the pixel depending on the accuracy (or confidence)
+                  img[i, j] = response < 1.5 ? new Bgr(90, 0, 0) : new Bgr(0, 90, 0);
+               }
+            }
+         }
+
+         // display the original training samples
+         for (int i = 0; i < (trainSampleCount >> 1); i++)
+         {
+            Point2D<int> p1 = new Point2D<int>((int)trainData1[i, 0], (int)trainData1[i, 1]);
+            img.Draw(new Circle<int>(p1, 2), new Bgr(255, 100, 100), -1);
+            Point2D<int> p2 = new Point2D<int>((int)trainData2[i, 0], (int)trainData2[i, 1]);
+            img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
+         }
+         Emgu.CV.UI.ImageViewer.Show(img);
       }
    }
 }
