@@ -2063,6 +2063,32 @@ namespace Emgu.CV
           IntPtr eigenvalues,
           IntPtr eigenvectors,
           CvEnum.PCA_TYPE flags);
+
+
+      /// <summary>
+      /// Projects vectors to the specified subspace
+      /// </summary>
+      /// <param name="data">The input data. Each vector is eigher a single row or a single column.</param>
+      /// <param name="avg">
+      /// The mean (average) vector. If it is a single-row vector, it means that the input vectors are stored as rows of data;
+      /// Otherwise, it should be a single-column vector, then the vectors are stored as columns of data.
+      /// </param>
+      /// <param name="eigenvectors">
+      /// The eigenvectors (principle components). One vector per row.
+      /// </param>
+      /// <param name="result">
+      /// The output matrix of decomposition coefficients.
+      /// The number of rows must be the same as the number of vectors, the number of columns
+      /// must be less than or equal to the number of rows in eigenvectos.
+      /// That it is less, the input vectors are projected into subspace of the first cols(result)
+      /// principle components.
+      /// </param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvProjectPCA(
+          IntPtr data,
+          IntPtr avg,
+          IntPtr eigenvectors,
+          IntPtr result);
       #endregion
 
       /// <summary>
