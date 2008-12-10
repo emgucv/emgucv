@@ -112,42 +112,42 @@ namespace Emgu.CV.Test
          Assert.AreEqual(img1.Width, img2.Width);
          Assert.AreEqual(img1.Height, img2.Height);
 
-         DateTime t1 = DateTime.Now;
+         Stopwatch watch = Stopwatch.StartNew();
          Image<Gray, Single> img3 = img1.Add(img2);
-         DateTime t2 = DateTime.Now;
+         long cvAddTime = watch.ElapsedMilliseconds;
+
+         watch.Reset(); watch.Start();
          Image<Gray, Single> img4 = img1.Convert<Single, Single>(img2, delegate(Single v1, Single v2) { return v1 + v2; });
-         DateTime t3 = DateTime.Now;
+         long genericAddTime = watch.ElapsedMilliseconds;
 
          Image<Gray, Single> img5 = img3.AbsDiff(img4);
-         DateTime t4 = DateTime.Now;
+
+         watch.Reset(); watch.Start();
          double sum1 = img5.GetSum().Intensity;
-         DateTime t5 = DateTime.Now;
+         long cvSumTime = watch.ElapsedMilliseconds;
+
+         watch.Reset(); watch.Start();
          Single sum2 = 0.0f;
          img5.Action(delegate(Single v) { sum2 += v; });
-         DateTime t6 = DateTime.Now;
+         long genericSumTime = watch.ElapsedMilliseconds;
 
-         /*
-         TimeSpan ts1 = t2.Subtract(t1);
-         TimeSpan ts2 = t3.Subtract(t2);
-         TimeSpan ts3 = t5.Subtract(t4);
-         TimeSpan ts4 = t6.Subtract(t5);
-         Trace.WriteLine(String.Format("CV Add     : {0} milliseconds", ts1.TotalMilliseconds));
-         Trace.WriteLine(String.Format("Generic Add: {0} milliseconds", ts2.TotalMilliseconds));
-         Trace.WriteLine(String.Format("CV Sum     : {0} milliseconds", ts3.TotalMilliseconds));
-         Trace.WriteLine(String.Format("Generic Sum: {0} milliseconds", ts4.TotalMilliseconds));
+         Trace.WriteLine(String.Format("CV Add     : {0} milliseconds", cvAddTime));
+         Trace.WriteLine(String.Format("Generic Add: {0} milliseconds", genericAddTime));
+         Trace.WriteLine(String.Format("CV Sum     : {0} milliseconds", cvSumTime));
+         Trace.WriteLine(String.Format("Generic Sum: {0} milliseconds", genericSumTime));
          Trace.WriteLine(String.Format("Abs Diff = {0}", sum1));
-         Trace.WriteLine(String.Format("Abs Diff = {0}", sum2));*/
+         Trace.WriteLine(String.Format("Abs Diff = {0}", sum2));
          Assert.AreEqual(sum1, sum2);
-
+         
          img3.Dispose();
          img4.Dispose();
          img5.Dispose();
 
-         t1 = DateTime.Now;
+         DateTime t1 = DateTime.Now;
          img3 = img1.Mul(2.0);
-         t2 = DateTime.Now;
+         DateTime t2 = DateTime.Now;
          img4 = img1.Convert<Single>(delegate(Single v1) { return v1 * 2.0f; });
-         t3 = DateTime.Now;
+         DateTime t3 = DateTime.Now;
 
          /*
          ts1 = t2.Subtract(t1);
@@ -155,6 +155,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("CV Mul     : {0} milliseconds", ts1.TotalMilliseconds));
          Trace.WriteLine(String.Format("Generic Mul: {0} milliseconds", ts2.TotalMilliseconds));
          */
+
          Assert.IsTrue(img3.Equals(img4));
          img3.Dispose();
          img4.Dispose();
@@ -165,6 +166,7 @@ namespace Emgu.CV.Test
          t2 = DateTime.Now;
          img5 = img1.Convert<Single, Single, Single>(img1, img1, delegate(Single v1, Single v2, Single v3) { return v1 + v2 + v3; });
          t3 = DateTime.Now;
+         
          /*
          ts1 = t2.Subtract(t1);
          ts2 = t3.Subtract(t2);
@@ -240,13 +242,14 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> mask = new Image<Bgr, byte>(img.Width, img.Height);
          mask.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255)); //file the mask with random color
 
-         DateTime startTime = DateTime.Now;
+         Stopwatch watch = Stopwatch.StartNew();
          Image<Bgr, Byte> imgMasked = img.Convert<Byte, Byte>(mask,
             delegate(Byte byteFromImg, Byte byteFromMask)
             {
                return byteFromMask > (Byte)120 ? byteFromImg : (Byte)0;
             });
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", DateTime.Now.Subtract(startTime).TotalMilliseconds));
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
          Assert.IsTrue(img1.Equals(img2));
       }
@@ -514,13 +517,11 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSURF()
       {
-         Stopwatch stopwatch = new Stopwatch();
-
          Image<Gray, Byte> objectImage = new Image<Gray, byte>("box.png");
          objectImage = objectImage.Resize(400, 400, true);
 
          #region extract features from the object image
-         stopwatch.Reset(); stopwatch.Start();
+         Stopwatch stopwatch = Stopwatch.StartNew();
          MCvSURFParams param1 = new MCvSURFParams(500, false);
          SURFFeature[] objectFeatures = objectImage.ExtractSURF(ref param1);
          SURFFeature[] objectFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(objectFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0;});

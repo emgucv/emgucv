@@ -52,10 +52,11 @@ namespace Emgu.CV
          Color[] colors = pallette.Entries;
          for (int i = 0; i < colors.Length; i++)
          {
-            bData[i,0] = colors[i].B;
-            gData[i,0] = colors[i].G;
-            rData[i,0] = colors[i].R;
-            aData[i,0] = colors[i].A;
+            Color c = colors[i];
+            bData[i,0] = c.B;
+            gData[i,0] = c.G;
+            rData[i,0] = c.R;
+            aData[i,0] = c.A;
          }
       }
 

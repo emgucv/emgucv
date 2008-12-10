@@ -40,8 +40,6 @@ namespace Emgu.CV
          v3 = values.Length > 3 ? values[3] : 0.0;
       }
 
-
-
       #region ICodeGenerable Members
       /// <summary>
       /// Return the code to generate this MCvScalar from specific language

@@ -51,6 +51,62 @@ namespace Emgu.CV.Test
          bg_header.Save("bg_header.gif");
       }
 
+      public void TestPointPerformance()
+      {
+         #region test point constructors
+         int numberOfPoints = 100000;
+         Stopwatch stopwatch = Stopwatch.StartNew();
+         Point2D<int>[] pts = new Point2D<int>[numberOfPoints];
+         for (int i = 0; i < pts.Length; i++)
+            pts[i] = new Point2D<int>();
+         stopwatch.Stop();
+         Trace.WriteLine("Point2D creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
+         stopwatch.Reset(); stopwatch.Start();
+         MCvPoint[] mpts = new MCvPoint[numberOfPoints];
+         stopwatch.Stop();
+         Trace.WriteLine("MCvPoint creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
+         #endregion
+
+         #region MCvPoint example
+         MCvPoint p1 = new MCvPoint(0, 0); 
+
+         MCvPoint[] ptsArray = new MCvPoint[1]; //structure (value type) in array are initialized, ptsArray[0] has been allocated to a default point (0,0)
+         ptsArray[0] = p1; //ptsArray[0] now contains a copy of p1 (0, 0)
+         p1.x = 1; //change the value on p1, now p1 is (1, 0)
+         Trace.WriteLine("difference in X: " + (p1.x - ptsArray[0].x)); //ptsArray[0] returns a copy of the point (0,0)
+         #endregion
+
+         int numberOfPointsInArray = 1000000;
+         int numberOfReadyAccess = 1000;
+
+         stopwatch.Reset(); stopwatch.Start();
+         //initialize Point2D array
+         Point2D<int>[] pointArray = new Point2D<int>[numberOfPointsInArray];
+         for (int i = 0; i < pointArray.Length; i++)
+            pointArray[i] = new Point2D<int>();
+
+         for (int j = 0; j < numberOfReadyAccess; j++)
+            for (int i = 0; i < pointArray.Length; i++)
+            {
+               pointArray[i].X = 2;
+            }
+         stopwatch.Stop();
+         Trace.WriteLine("Time to access elements in Point2D<int> array: " + stopwatch.ElapsedMilliseconds);
+
+         stopwatch.Reset(); stopwatch.Start();
+         //initialize MCvPoint array
+         MCvPoint[] pointStructures = new MCvPoint[numberOfPointsInArray];
+
+         for (int j = 0; j < numberOfReadyAccess; j++)
+            for (int i = 0; i < pointStructures.Length; i++)
+            {
+               pointStructures[i].x = 2;
+            }
+         stopwatch.Stop();
+         Trace.WriteLine("Time to access elements in MCvPoint array: " + stopwatch.ElapsedMilliseconds);
+
+      }
+
       public void TestCvNamedWindow()
       {
          String win1 = "Test Window"; //The name of the window
@@ -229,6 +285,20 @@ namespace Emgu.CV.Test
                img.Draw<float>(new Circle<float>(p, 3.0f), new Bgr(255, 0, 0), 1);
             //Application.Run(new ImageViewer(img));
          }
+      }
+
+      public void TestImageIndexer()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(1000, 5000);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+         Stopwatch watch = Stopwatch.StartNew();
+         for (int i = 0; i < image.Height; i++)
+            for (int j = 0; j < image.Width; j++)
+            {
+               Bgr color = image[i, j];
+            }
+         watch.Stop();
+         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
       }
 
       public void TestSplitMerge()

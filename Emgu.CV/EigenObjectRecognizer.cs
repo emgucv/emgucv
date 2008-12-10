@@ -214,7 +214,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the eigen distance between <paramref name="image"/> and every other image in the database
+      /// Get the Euclidean eigen-distance between <paramref name="image"/> and every other image in the database
       /// </summary>
       /// <param name="image">The image to be compared from the training images</param>
       /// <returns>An array of eigen distance from every image in the training images</returns>

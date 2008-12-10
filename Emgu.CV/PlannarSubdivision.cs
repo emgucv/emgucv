@@ -102,7 +102,8 @@ namespace Emgu.CV
       /// <returns>The type of location for the point</returns>
       public CvEnum.Subdiv2DPointLocationType Locate(ref MCvPoint2D32f pt, out MCvSubdiv2DEdge? subdiv2DEdge, out MCvSubdiv2DPoint? subdiv2DPoint)
       {
-         IntPtr edge, vertex = new IntPtr();
+         IntPtr edge;
+         IntPtr vertex = new IntPtr();
          CvEnum.Subdiv2DPointLocationType res = CvInvoke.cvSubdiv2DLocate(Ptr, pt, out edge, ref vertex);
 
          subdiv2DEdge = (edge == IntPtr.Zero) ? null : (MCvSubdiv2DEdge?)Marshal.PtrToStructure(edge, typeof(MCvSubdiv2DEdge));
@@ -135,19 +136,21 @@ namespace Emgu.CV
       {
          List<VoronoiFacet> facets = new List<VoronoiFacet>();
 
-         MCvSubdiv2DEdge e1 = quadEdge.next[0].cvSubdiv2DRotateEdge(1);
+         MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
+
+         MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
          Point2D<float>[] p1 = EdgeToPoly(ref e1);
          if (p1 != null)
          {
-            MCvSubdiv2DPoint pt = quadEdge.next[0].cvSubdiv2DEdgeOrg();
+            MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeOrg();
             facets.Add(new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p1));
          }
 
-         MCvSubdiv2DEdge e2 = quadEdge.next[0].cvSubdiv2DRotateEdge(3);
+         MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
          Point2D<float>[] p2 = EdgeToPoly(ref e2);
          if (p2 != null)
          {
-            MCvSubdiv2DPoint pt = quadEdge.next[0].cvSubdiv2DEdgeDst();
+            MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeDst();
             facets.Add(new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p2));
          }
 
@@ -233,14 +236,9 @@ namespace Emgu.CV
 
                foreach (VoronoiFacet facet in facet1)
                {
-                  if (facet.Point.InConvexPolygon(_roi))
-                  {
-                     Point2D<float> p = facet.Point;
-                     if (InsertPoint2DToDictionary(p, facetDict))
-                     {
-                        facetList.Add(facet);
-                     }
-                  }
+                  if (facet.Point.InConvexPolygon(_roi) 
+                     && InsertPoint2DToDictionary(facet.Point, facetDict))
+                     facetList.Add(facet);
                }
             }
 
@@ -256,17 +254,14 @@ namespace Emgu.CV
       /// <param name="pt">The point to insert</param>
       /// <param name="dic">The point dictionary</param>
       /// <returns>If the point already exist, return false. Otherwise return true.</returns>
-      private static bool InsertPoint2DToDictionary<T>(Point2D<T> pt, Dictionary<string, string> dic) where T: IComparable, new() 
+      private static bool InsertPoint2DToDictionary<T>(Point2D<T> pt, Dictionary<string, string> dic) where T : IComparable, new()
       {
          string key = String.Format("{0},{1}", pt.X.ToString(), pt.Y.ToString());
-         if (dic.ContainsKey(key)) 
-         {
+         if (dic.ContainsKey(key))
             return false;
-         } else
-         {
-            dic.Add(key, null);
-            return true;
-         }
+
+         dic.Add(key, null);
+         return true;
       }
 
       /// <summary>

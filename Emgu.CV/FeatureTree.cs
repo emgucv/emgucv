@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -25,13 +26,13 @@ namespace Emgu.CV
       private static Matrix<float> DescriptorsToMatrix(Matrix<float>[] descriptors)
       {
          Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Rows);
+         IntPtr rowHeader = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
          for (int i = 0; i < descriptors.Length; i++)
          {
-            using (Matrix<float> row = res.GetRow(i))
-            {
-               CvInvoke.cvTranspose(descriptors[i], row);
-            }
+            CvInvoke.cvGetRows(res, rowHeader, i, i + 1, 1);
+            CvInvoke.cvTranspose(descriptors[i], rowHeader);
          }
+         Marshal.FreeHGlobal(rowHeader);
          return res;
       }
 

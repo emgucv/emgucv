@@ -1051,7 +1051,7 @@ namespace Emgu.CV
       public TColor this[int row, int col]
       {
          get
-         {
+         { 
             TColor res = new TColor();
             res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, col);
             return res;
@@ -1290,7 +1290,7 @@ namespace Emgu.CV
                float[,] descriptor = new float[elementsInDescriptor, 1];
                GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
                Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
-               res[i] = new SURFFeature(ref p, descriptor);
+               res[i] = new SURFFeature(ref p, new Matrix<float>(descriptor));
             }
 
             return res;
@@ -1299,9 +1299,8 @@ namespace Emgu.CV
 
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
       {
-         IntPtr keypointsPtr = new IntPtr();
-         descriptorPtr = new IntPtr();
-         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, ref keypointsPtr, ref descriptorPtr, stor.Ptr, param);
+         IntPtr keypointsPtr;
+         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, out keypointsPtr, out descriptorPtr, stor.Ptr, param);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
       }
       #endregion

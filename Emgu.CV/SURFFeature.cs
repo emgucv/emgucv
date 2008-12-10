@@ -37,10 +37,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The MCvSURFPoint structure</param>
       /// <param name="descriptor">The point descriptor</param>
-      public SURFFeature(ref MCvSURFPoint point, float[,] descriptor)
+      public SURFFeature(ref MCvSURFPoint point, Matrix<float> descriptor)
       {
          _point = point;
-         _descriptor = new Matrix<float>(descriptor);
+         _descriptor = descriptor;
       }
 
       /// <summary>

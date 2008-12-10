@@ -3085,8 +3085,8 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
-         ref IntPtr keypoints,
-         ref IntPtr descriptors,
+         out IntPtr keypoints,
+         out IntPtr descriptors,
          IntPtr storage,
          MCvSURFParams parameters);
 
@@ -4022,7 +4022,6 @@ namespace Emgu.CV
          MCvSize win,
          MCvSize zeroZone,
          MCvTermCriteria criteria);
-
 
       /// <summary>
       /// Calculates one or more integral images for the source image 

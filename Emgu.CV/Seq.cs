@@ -17,6 +17,8 @@ namespace Emgu.CV
       /// </summary>
       protected readonly MemStorage _stor;
 
+      private static readonly int _sizeOfT = Marshal.SizeOf(typeof(T));
+
       #region Constructors
       /// <summary>
       /// Create a sequence using the specific <paramref name="seqFlag"/> and <paramref name="storage"/>
@@ -28,7 +30,7 @@ namespace Emgu.CV
          _stor = storage;
          _ptr = CvInvoke.cvCreateSeq(
              seqFlag, Marshal.SizeOf(typeof(MCvSeq)),
-             Marshal.SizeOf(typeof(T)),
+             _sizeOfT,
              storage.Ptr);
       }
 
@@ -79,7 +81,7 @@ namespace Emgu.CV
       /// <param name="data">The data to be push into the sequence</param>
       public void Push(T data)
       {
-         IntPtr dataCopy = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+         IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfT);
          Marshal.StructureToPtr(data, dataCopy, false);
          CvInvoke.cvSeqPush(Ptr, dataCopy);
          Marshal.FreeHGlobal(dataCopy);

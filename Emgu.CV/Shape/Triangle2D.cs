@@ -40,7 +40,6 @@ namespace Emgu.CV
          _vertices = new Point2D<T>[] { v1, v2, v3 };
       }
 
-
       /// <summary>
       /// Get the area of this triangle
       /// </summary>

@@ -54,9 +54,15 @@ namespace Emgu.CV
          }
          set
          {
-            int size = Math.Min(Dimension, 4);
-            for (int i = 0; i < size; i++)
-               _coordinate[i] = value.v[i];
+            int d = Dimension;
+            if (d >= 1)
+               _coordinate[0] = value.v0;
+            if (d >= 2)
+               _coordinate[1] = value.v1;
+            if (d >= 3)
+               _coordinate[2] = value.v2;
+            if (d >= 4)
+               _coordinate[3] = value.v3;
          }
       }
 

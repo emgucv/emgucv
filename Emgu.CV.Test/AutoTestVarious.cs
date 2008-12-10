@@ -407,14 +407,17 @@ namespace Emgu.CV.Test
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
          img.Save("tmp.png");
 
-         DateTime t0 = DateTime.Now;
+         Stopwatch stopwatch = Stopwatch.StartNew();
          Image<Bgra, Byte> img2 = new Image<Bgra, byte>("tmp.png");
-         //Trace.WriteLine(string.Format("Time: {0} milliseconds", DateTime.Now.Subtract(t0).TotalMilliseconds));
+         stopwatch.Stop();
+         Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
          Assert.IsTrue(img.Equals(img2));
 
-         DateTime t1 = DateTime.Now;
+         stopwatch.Reset(); stopwatch.Start();
          Image<Gray, Byte> img3 = new Image<Gray, byte>("tmp.png");
-         //Trace.WriteLine(string.Format("Time: {0} milliseconds", DateTime.Now.Subtract(t1).TotalMilliseconds));
+         stopwatch.Stop();
+         Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
+
          Assert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
       }
 
@@ -466,17 +469,19 @@ namespace Emgu.CV.Test
          }
          #endregion
 
-         DateTime t1 = DateTime.Now;
+         Stopwatch watch = Stopwatch.StartNew();
          PlanarSubdivision division = new PlanarSubdivision(points);
 
          List<Triangle2D<float>> triangles = division.GetDelaunayTriangles(false);
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", DateTime.Now.Subtract(t1).TotalMilliseconds, triangles.Count));
+         watch.Stop();
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Count));
 
-         t1 = DateTime.Now;
+         watch.Reset(); watch.Start();
          division = new PlanarSubdivision(points);
 
          List<VoronoiFacet> facets = division.GetVoronoiFacets();
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", DateTime.Now.Subtract(t1).TotalMilliseconds, facets.Count));
+         watch.Stop();
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Count));
 
          foreach (Triangle2D<float> t in triangles)
          {
@@ -637,17 +642,17 @@ namespace Emgu.CV.Test
          Byte[] status;
          float[] trackError;
 
-         DateTime t = DateTime.Now;
+         Stopwatch watch = Stopwatch.StartNew();
 
          OpticalFlow.PyrLK(
             prevImg, currImg, prevFeature, new MCvSize(10, 10), 3, new MCvTermCriteria(10, 0.01),
             out currFeature, out status, out trackError);
-
+         watch.Stop();
          Trace.WriteLine(String.Format(
-            "prev: ({0}, {1}); curr: ({2}, {3}); Time: {4} milliseconds",
+            "prev: ({0}, {1}); curr: ({2}, {3}); \r\nTime: {4} milliseconds",
             prevFeature[0].X, prevFeature[0].Y,
             currFeature[0].X, currFeature[0].Y,
-            DateTime.Now.Subtract(t).TotalMilliseconds));
+            watch.ElapsedMilliseconds));
 
       }
 
@@ -665,11 +670,11 @@ namespace Emgu.CV.Test
             Emgu.CV.CvEnum.CALIB_CB_TYPE.ADAPTIVE_THRESH | Emgu.CV.CvEnum.CALIB_CB_TYPE.NORMALIZE_IMAGE | Emgu.CV.CvEnum.CALIB_CB_TYPE.FILTER_QUADS,
             out corners);
 
-         chessboardImage.FindCornerSubPix(
+         corners = chessboardImage.FindCornerSubPix(
             new Point2D<float>[][] { corners },
             new MCvSize(10, 10),
             new MCvSize(-1, -1),
-            new MCvTermCriteria(0.05));
+            new MCvTermCriteria(0.05))[0];
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
          //Application.Run(new ImageViewer(chessboardImage));
