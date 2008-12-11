@@ -13,7 +13,7 @@ namespace Emgu.CV
    public class PlanarSubdivision : UnmanagedObject
    {
       private readonly MemStorage _storage;
-      private readonly Rectangle<float> _roi;
+      private readonly MCvRect _roi;
 
       private bool _isVoronoiDirty;
 
@@ -22,10 +22,10 @@ namespace Emgu.CV
       /// Start the Delaunay's triangulation in the specific region of interest.
       /// </summary>
       /// <param name="roi">The region of interest of the triangulation</param>
-      public PlanarSubdivision(Rectangle<float> roi)
+      public PlanarSubdivision(ref MCvRect roi)
       {
          _storage = new MemStorage();
-         _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi.MCvRect, _storage);
+         _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi, _storage);
          _roi = roi;
       }
 
@@ -46,24 +46,24 @@ namespace Emgu.CV
       public PlanarSubdivision(IEnumerable<Point2D<float>> points, bool silent)
       {
          #region Find the region of interest
-         Rectangle<float> roi;
          using (MemStorage storage = new MemStorage())
-         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(points, delegate(Point2D<float> p) { return (Point<float>)p; })))
+         using (Seq<MCvPoint2D32f> seq = new Seq<MCvPoint2D32f>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage))
          {
-            MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
-            roi = new Rectangle<float>(cvRect);
+            foreach (Point2D<float> p in points)
+               seq.Push(new MCvPoint2D32f(p.X, p.Y));
+            
+            _roi = CvInvoke.cvBoundingRect(seq.Ptr, true);
          }
          #endregion
 
          _storage = new MemStorage();
-         _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi.MCvRect, _storage);
-         _roi = roi;
+         _ptr = CvInvoke.cvCreateSubdivDelaunay2D(_roi, _storage);
 
          if (silent)
          {
             foreach (Point2D<float> p in points)
             {
-               MCvPoint2D32f cvPoint = p.MCvPoint2D32f;
+               MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X,p.Y);
                try
                {
                   Insert(ref cvPoint);
@@ -76,7 +76,7 @@ namespace Emgu.CV
          {
             foreach (Point2D<float> p in points)
             {
-               MCvPoint2D32f cvPoint = p.MCvPoint2D32f;
+               MCvPoint2D32f cvPoint = new MCvPoint2D32f(p.X, p.Y);
                Insert(ref cvPoint);
             }
          }
@@ -163,19 +163,20 @@ namespace Emgu.CV
          if (!v0.isValid) return null;
 
          List<Point2D<float>> list = new List<Point2D<float>>();
-         Point2D<float> startPoint = new Point2D<float>(v0.pt.x, v0.pt.y);
-         list.Add(startPoint);
+         MCvPoint2D32f startPoint = v0.pt;
+         //Point2D<float> startPoint = new Point2D<float>(v0.pt.x, v0.pt.y);
+         list.Add(new Point2D<float>(v0.pt.x, v0.pt.y));
 
          for (MCvSubdiv2DEdge currentEdge = e; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.isValid) return null;
 
-            Point2D<float> currentPoint = new Point2D<float>(v.pt.x, v.pt.y);
-            if (currentPoint.Equals(startPoint))
+            //Point2D<float> currentPoint = new Point2D<float>(v.pt.x, v.pt.y);
+            if ( v.pt.x == startPoint.x && v.pt.y == startPoint.y)
                break;
 
-            list.Add(currentPoint);
+            list.Add(new Point2D<float>(v.pt.x, v.pt.y));
          }
          return list.ToArray();
       }
@@ -234,9 +235,12 @@ namespace Emgu.CV
 
                List<VoronoiFacet> facet1 = EdgeToFacets(ref quadEdge);
 
+               int left = _roi.x, top = _roi.y, right = _roi.x + _roi.width, bottom = _roi.y + _roi.height;
+
                foreach (VoronoiFacet facet in facet1)
                {
-                  if (facet.Point.InConvexPolygon(_roi) 
+                  Point2D<float> p = facet.Point;
+                  if (  p.X  >= left && p.X <= right && p.Y >= top && p.Y <= bottom
                      && InsertPoint2DToDictionary(facet.Point, facetDict))
                      facetList.Add(facet);
                }
@@ -246,7 +250,6 @@ namespace Emgu.CV
          }
          return facetList;
       }
-
       
       /// <summary>
       /// Insert the point into the dictionary. If the point already exist, return false. Otherwise return true.
@@ -312,9 +315,16 @@ namespace Emgu.CV
             return triangleList;
          } else
          {
+            int left = _roi.x, top = _roi.y, right = _roi.x + _roi.width, bottom = _roi.y + _roi.height;
             return triangleList.FindAll(
                delegate(Triangle2D<float> tri) 
-               { return Util.IsConvexPolygonInConvexPolygon(tri, _roi); });
+               {  
+                  Point2D<float>[] vertices = tri.Vertices;
+                  return
+                     vertices[0].X >= left && vertices[0].X <= right && vertices[0].Y >= top && vertices[0].Y <= bottom &&
+                     vertices[1].X >= left && vertices[1].X <= right && vertices[1].Y >= top && vertices[1].Y <= bottom &&
+                     vertices[2].X >= left && vertices[2].X <= right && vertices[2].Y >= top && vertices[2].Y <= bottom;
+               });
          }
       }
 

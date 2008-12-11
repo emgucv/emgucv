@@ -570,7 +570,7 @@ namespace Emgu.CV.Test
             {
                MCvPoint[] vertices = approx.ToArray();
 
-               LineSegment2D<int>[] edges = PointCollection.PolyLine<int>(vertices, true);
+               LineSegment2D<int>[] edges = PointCollection.PolyLine(vertices, true);
 
                res.DrawPolyline(vertices, true, new Gray(200), 1);
             }

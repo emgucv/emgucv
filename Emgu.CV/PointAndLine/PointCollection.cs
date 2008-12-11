@@ -250,14 +250,13 @@ namespace Emgu.CV
       /// <summary>
       /// convert a series of MCvPoint to LineSegment2D
       /// </summary>
-      /// <typeparam name="D">the depth of the point</typeparam>
       /// <param name="points">the array of points</param>
       /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <returns>array of LineSegment2D</returns>
-      public static LineSegment2D<D>[] PolyLine<D>(MCvPoint[] points, bool closed) where D : IComparable, new()
+      public static LineSegment2D<int>[] PolyLine(MCvPoint[] points, bool closed) 
       {
          return PolyLine(
-             Array.ConvertAll<MCvPoint, Point2D<D>>(points, delegate(MCvPoint p) { Point2D<D> p2d = new Point2D<D>(); p2d.MCvPoint = p; return p2d; }),
+             Array.ConvertAll<MCvPoint, Point2D<int>>(points, delegate(MCvPoint p) { return new Point2D<int>(p.x, p.y);}),
              closed);
       }
 

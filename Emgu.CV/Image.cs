@@ -1290,6 +1290,7 @@ namespace Emgu.CV
                float[,] descriptor = new float[elementsInDescriptor, 1];
                GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
                Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
+               handle.Free();
                res[i] = new SURFFeature(ref p, new Matrix<float>(descriptor));
             }
 
