@@ -7,8 +7,8 @@
     <ProjectGuid>{4220DDC1-A966-4BB3-BD36-5A0110819E84}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PlannarSubdivision</RootNamespace>
-    <AssemblyName>PlannarSubdivision</AssemblyName>
+    <RootNamespace>PlanarSubdivision</RootNamespace>
+    <AssemblyName>PlanarSubdivision</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>

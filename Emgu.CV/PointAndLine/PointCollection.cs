@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// <summary>
       /// A comparator which compares only the X value of the point
       /// </summary>
-      private class XValueOfPointComparator<T> : IComparer<Point<T>> where T : IComparable, new()
+      private class XValueOfPointComparator<T> : IComparer<Point<T>> where T : struct, IComparable
       {
          public int Compare(Point<T> p1, Point<T> p2)
          {
@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// <param name="points">The collection of points. Must be sorted by the x value.</param>
       /// <param name="index">the x coordinate</param>
       /// <returns>the y coordinate as the result of the first degree interpolation</returns>
-      public static T FirstDegreeInterpolate<T>(Point2D<T>[] points, T index) where T : IComparable, new()
+      public static T FirstDegreeInterpolate<T>(Point2D<T>[] points, T index) where T : struct, IComparable
       {
          XValueOfPointComparator<T> comparator = new XValueOfPointComparator<T>();
          int idx = System.Array.BinarySearch<Point<T>>((Point<T>[])points, (Point<T>)new Point2D<T>(index, new T()), comparator);
@@ -64,7 +64,7 @@ namespace Emgu.CV
       /// <param name="points">The collection of points, Must be sorted by x value</param>
       /// <param name="indexes">the x coordinates</param>
       /// <returns>The y coordinates as the result of the first degree interpolation</returns>
-      public static T[] FirstDegreeInterpolate<T>(Point2D<T>[] points, T[] indexes) where T : IComparable, new()
+      public static T[] FirstDegreeInterpolate<T>(Point2D<T>[] points, T[] indexes) where T : struct, IComparable
       {
          return System.Array.ConvertAll<T, T>(
              indexes,
@@ -77,7 +77,7 @@ namespace Emgu.CV
       /// <param name="stor">The sotrage</param>
       /// <param name="points">The points to be converted to sequence</param>
       /// <returns>A pointer to the sequence</returns>
-      public static Seq<MCvPoint2D32f> To2D32fSequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : IComparable, new()
+      public static Seq<MCvPoint2D32f> To2D32fSequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : struct, IComparable
       {
          Seq<MCvPoint2D32f> seq = new Seq<MCvPoint2D32f>(
              CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
@@ -111,7 +111,7 @@ namespace Emgu.CV
       /// <param name="stor">The sotrage</param>
       /// <param name="points">The points to be converted to sequence</param>
       /// <returns>A pointer to the sequence</returns>
-      public static Seq<MCvPoint3D32f> To3D32Sequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : IComparable, new()
+      public static Seq<MCvPoint3D32f> To3D32Sequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : struct, IComparable
       {
          Seq<MCvPoint3D32f> seq = new Seq<MCvPoint3D32f>(
              CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 3),
@@ -144,7 +144,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The points which will be converted to matrix</param>
       /// <returns>the matrix representing the collection of points</returns>
-      public static Matrix<D> ToMatrix<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
+      public static Matrix<D> ToMatrix<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
       {
          return new Matrix<D>(ToArray(points));
       }
@@ -154,7 +154,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The points which will be converted to array</param>
       /// <returns>the array representing the collection of points</returns>
-      public static D[,] ToArray<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
+      public static D[,] ToArray<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
       {
          List<D[]> pts = new List<D[]>();
          foreach (Point<D> pt in points)
@@ -177,7 +177,7 @@ namespace Emgu.CV
       /// <typeparam name="D">The type of the point</typeparam>
       /// <param name="values">The 2D array of values, size of Nx2</param>
       /// <returns>An array of Point2D</returns>
-      public static Point2D<D>[] FromArray<D>(D[,] values) where D : IComparable, new()
+      public static Point2D<D>[] FromArray<D>(D[,] values) where D : struct, IComparable
       {
          Point2D<D>[] res = new Point2D<D>[values.GetLength(0)];
          for (int i = 0; i < res.Length; i++)
@@ -193,7 +193,7 @@ namespace Emgu.CV
       /// <param name="points">The points to be fitted</param>
       /// <param name="type">The type of the fitting</param>
       /// <returns>A 2D line</returns>
-      public static Line2D<float> Line2DFitting<D>(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type) where D : IComparable, new()
+      public static Line2D<float> Line2DFitting<D>(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type) where D : struct, IComparable
       {
          float[] data = new float[6];
          using (MemStorage stor = new MemStorage())
@@ -210,7 +210,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The points to be fitted</param>
       /// <returns>An ellipse</returns>
-      public static Ellipse<float> LeastSquareEllipseFitting<D>(IEnumerable<Point<D>> points) where D : IComparable, new()
+      public static Ellipse<float> LeastSquareEllipseFitting<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
       {
          Ellipse<float> res = new Ellipse<float>();
          using (MemStorage stor = new MemStorage())
@@ -228,20 +228,20 @@ namespace Emgu.CV
       /// <param name="points">the array of points</param>
       /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <returns>array of LineSegment2D</returns>
-      public static LineSegment2D<D>[] PolyLine<D>(Point2D<D>[] points, bool closed) where D : IComparable, new()
+      public static LineSegment2D<D>[] PolyLine<D>(Point2D<D>[] points, bool closed) where D : struct, IComparable
       {
          LineSegment2D<D>[] res;
          int length = points.Length;
          if (closed)
          {
             res = new LineSegment2D<D>[length];
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < res.Length; i++)
                res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
          }
          else
          {
             res = new LineSegment2D<D>[length - 1];
-            for (int i = 0; i < length - 1; i++)
+            for (int i = 0; i < res.Length; i++)
                res[i] = new LineSegment2D<D>(points[i], points[(i + 1)]);
          }
          return res;
@@ -267,7 +267,7 @@ namespace Emgu.CV
       /// <param name="points">The points to find convex hull from</param>
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <returns>The array of points that forms the convex hull</returns>
-      public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable<Point<D>> points, CvEnum.ORIENTATION orientation) where D : IComparable, new()
+      public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable<Point<D>> points, CvEnum.ORIENTATION orientation) where D : struct, IComparable
       {
          using (MemStorage stor = new MemStorage())
          using (Seq<MCvPoint2D32f> sequence = To2D32fSequence<D>(stor, points))

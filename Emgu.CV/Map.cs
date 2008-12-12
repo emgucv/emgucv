@@ -11,7 +11,8 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
-   public class Map<TColor, TDepth> : Image<TColor, TDepth> where TColor : ColorType, new()
+   public class Map<TColor, TDepth> : Image<TColor, TDepth> 
+      where TColor : ColorType, new() 
    {
       private Rectangle<double> _area;
 
@@ -76,7 +77,7 @@ namespace Emgu.CV
       /// <typeparam name="D2"></typeparam>
       /// <param name="pt"></param>
       /// <returns></returns>
-      private Point2D<double> MapPoint<D2>(Point2D<D2> pt) where D2 : IComparable, new()
+      private Point2D<double> MapPoint<D2>(Point2D<D2> pt) where D2 : struct, IComparable
       {
          return new Point2D<double>(
              (System.Convert.ToDouble(pt.X) - System.Convert.ToDouble(Area.Left)) / Resolution.X,

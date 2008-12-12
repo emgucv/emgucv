@@ -9,7 +9,7 @@ namespace Emgu.CV
    ///<summary> A rectangle </summary>
    ///<typeparam name="T">The type of elements in this Rectangle</typeparam>
    [Serializable]
-   public class Rectangle<T> : IConvexPolygon<T> where T : IComparable, new()
+   public class Rectangle<T> : IConvexPolygon<T> where T : struct, IComparable
    {
       private Point2D<T> _center;
 
@@ -178,7 +178,7 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="TOther">the depth type to convert to</typeparam>
       /// <returns>The current rectangle in different depth</returns>
-      public Rectangle<TOther> Convert<TOther>() where TOther : IComparable, new()
+      public Rectangle<TOther> Convert<TOther>() where TOther : struct, IComparable
       {
          return new Rectangle<TOther>(Center.Convert<TOther>(), Size.Convert<TOther>());
       }

@@ -5,7 +5,7 @@ using System.Text;
 namespace Emgu.CV
 {
    ///<summary> A 2D line </summary>
-   public class Line2D<T> where T : IComparable, new()
+   public class Line2D<T> where T : struct, IComparable
    {
       ///<summary> A point on the line </summary>
       protected Point2D<T> _p1;
@@ -72,9 +72,8 @@ namespace Emgu.CV
          Point2D<double> p2 = P2.Convert<double>();
          Point2D<double> p = point.Convert<double>();
          double res = (p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y);
-         if (res > 0.0) return 1;
-         else if (res < 0.0) return -1;
-         else return 0;
+         return res > 0.0 ? 1 :
+            res < 0.0 ? -1 : 0;
       }
 
       /// <summary>

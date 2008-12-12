@@ -38,14 +38,14 @@ namespace Emgu.CV.ML.UnitTest
          neighborResponses = new Matrix<float>(sample.Rows, K);
          //dist = new Matrix<float>(sample.Rows, K);
 
-         using (KNearest knn = new KNearest(trainData.Clone(), trainClasses.Clone(), null, false, K))
+         using (KNearest knn = new KNearest(trainData, trainClasses, null, false, K))
          {
             for (int i = 0; i < img.Height; i++)
             {
                for (int j = 0; j < img.Width; j++)
                {
-                  sample[0, 0] = j;
-                  sample[0, 1] = i;
+                  sample.Data[0, 0] = j;
+                  sample.Data[0, 1] = i;
 
                   //Matrix<float> nearestNeighbors = new Matrix<float>(K* sample.Rows, sample.Cols);
                   // estimates the response and get the neighbors' labels
@@ -55,7 +55,7 @@ namespace Emgu.CV.ML.UnitTest
                   // compute the number of neighbors representing the majority
                   for (int k = 0; k < K; k++)
                   {
-                     if (neighborResponses[0, k] == response)
+                     if (neighborResponses.Data[0, k] == response)
                         accuracy++;
                   }
                   // highlight the pixel depending on the accuracy (or confidence)
@@ -76,7 +76,7 @@ namespace Emgu.CV.ML.UnitTest
             img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
          }
 
-         Emgu.CV.UI.ImageViewer.Show(img);
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       [Test]
@@ -135,8 +135,8 @@ namespace Emgu.CV.ML.UnitTest
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
                {
-                  sample[0, 0] = (float)i;
-                  sample[0, 1] = (float)j;
+                  sample.Data[0, 0] = (float)i;
+                  sample.Data[0, 1] = (float)j;
                   int response = (int) emModel2.Predict(sample, null);
 
                   Bgr color = new Bgr();
@@ -150,7 +150,7 @@ namespace Emgu.CV.ML.UnitTest
             #region draw the clustered samples
             for (int i = 0; i < nSamples; i++)
             {
-               img.Draw(new Circle<int>(new Point2D<int>((int)samples[i, 0], (int)samples[i, 1]), 1), colors[labels[i, 0]], 0);
+               img.Draw(new Circle<int>(new Point2D<int>((int)samples.Data[i, 0], (int)samples.Data[i, 1]), 1), colors[labels.Data[i, 0]], 0);
             }
             #endregion 
    
@@ -199,10 +199,8 @@ namespace Emgu.CV.ML.UnitTest
          trainClasses2.SetValue(2);
          #endregion
 
-         Matrix<int> layerSize = new Matrix<int>(3, 1);
-         layerSize[0, 0] = 2;
-         layerSize[1, 0] = 5;
-         layerSize[2, 0] = 1;
+         Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 });
+
          MCvANN_MLP_TrainParams parameters = new MCvANN_MLP_TrainParams();
          parameters.term_crit = new MCvTermCriteria(10, 1.0e-8);
          parameters.train_method = Emgu.CV.ML.MlEnum.ANN_MLP_TRAIN_METHOD.BACKPROP;
@@ -217,12 +215,12 @@ namespace Emgu.CV.ML.UnitTest
             {
                for (int j = 0; j < img.Width; j++)
                {
-                  sample[0, 0] = j;
-                  sample[0, 1] = i;
+                  sample.Data[0, 0] = j;
+                  sample.Data[0, 1] = i;
                   network.Predict(sample, prediction);
 
                   // estimates the response and get the neighbors' labels
-                  float response = prediction[0,0];
+                  float response = prediction.Data[0,0];
 
                   // highlight the pixel depending on the accuracy (or confidence)
                   img[i, j] = response < 1.5 ? new Bgr(90, 0, 0) : new Bgr(0, 90, 0);
@@ -238,7 +236,7 @@ namespace Emgu.CV.ML.UnitTest
             Point2D<int> p2 = new Point2D<int>((int)trainData2[i, 0], (int)trainData2[i, 1]);
             img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
          }
-         Emgu.CV.UI.ImageViewer.Show(img);
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
    }
 }

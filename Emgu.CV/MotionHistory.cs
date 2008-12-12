@@ -21,6 +21,7 @@ namespace Emgu.CV
       private Image<Gray, Byte> _mask;
       private Image<Gray, Single> _orientation;
       private Image<Gray, Single> _segMask;
+
       private DateTime _initTime;
       private DateTime _lastTime;
       private double _maxTimeDelta;
@@ -95,7 +96,8 @@ namespace Emgu.CV
          CvInvoke.cvThreshold(_silh.Ptr, _silh.Ptr, _diffThresh, 1, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
 
          CvInvoke.cvUpdateMotionHistory(_silh.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
-         CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, 255.0 / _mhiDuration, (_mhiDuration - ts.TotalSeconds) * 255.0 / _mhiDuration);
+         double scale = 255.0 / _mhiDuration;
+         CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
 
          CvInvoke.cvCalcMotionGradient(_mhi.Ptr, _mask.Ptr, _orientation.Ptr, _maxTimeDelta, _minTimeDelta, 3);
       }

@@ -8,7 +8,7 @@ namespace Emgu.CV
    /// An interface for the convex polygon
    /// </summary>
    /// <typeparam name="T">The depth of the convex polygon</typeparam>
-   public interface IConvexPolygon<T> where T : IComparable, new()
+   public interface IConvexPolygon<T> where T : struct, IComparable
    {
       /// <summary>
       /// Get the vertices of this convex polygon

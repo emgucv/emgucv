@@ -242,7 +242,7 @@ namespace Emgu.CV
          }
 
          _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-         CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * Marshal.SizeOf(typeof(TDepth)));
+         CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * _sizeOfElement);
       }
 
       ///<summary>
@@ -542,7 +542,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
       ///<typeparam name="T">The type of Box2D to draw</typeparam>
-      public virtual void Draw<T>(Box2D<T> box, TColor color, int thickness) where T : IComparable, new()
+      public virtual void Draw<T>(Box2D<T> box, TColor color, int thickness) where T : struct, IComparable
       {
          Draw<float>(box.MCvBox2D, color, thickness);
       }
@@ -552,7 +552,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
       ///<typeparam name="T">The type of rectangle to draw</typeparam>
-      public virtual void Draw<T>(Rectangle<T> rect, TColor color, int thickness) where T : IComparable, new()
+      public virtual void Draw<T>(Rectangle<T> rect, TColor color, int thickness) where T : struct, IComparable
       {
          CvInvoke.cvRectangle(
              Ptr,
@@ -569,7 +569,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the cross </param>
       ///<param name="thickness"> Must be &gt; 0 </param>
       ///<typeparam name="T">The type of cross to draw</typeparam>
-      public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : IComparable, new()
+      public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : struct, IComparable
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
@@ -584,7 +584,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thickness"> The thickness of the line segment </param>
       ///<typeparam name="T">The type of line to draw</typeparam>
-      public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : IComparable, new()
+      public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : struct, IComparable
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
@@ -603,7 +603,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the triangle </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       ///<typeparam name="T">The type of convex polygon to draw</typeparam>
-      public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : IComparable, new()
+      public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : struct, IComparable
       {
          if (thickness > 0)
             DrawPolyline(polygon.Vertices, true, color, thickness);
@@ -634,7 +634,7 @@ namespace Emgu.CV
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
       /// <typeparam name="T">The type of point2D that make up the polyline</typeparam>
-      public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T : IComparable, new()
+      public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T : struct, IComparable
       {
          DrawPolyline(
              Array.ConvertAll<Point2D<T>, MCvPoint>(pts, delegate(Point2D<T> p) { return p.MCvPoint; }),
@@ -689,7 +689,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
       ///<typeparam name="T">The type of circle to draw</typeparam>
-      public virtual void Draw<T>(Circle<T> circle, TColor color, int thickness) where T : IComparable, new()
+      public virtual void Draw<T>(Circle<T> circle, TColor color, int thickness) where T : struct, IComparable
       {
          CvInvoke.cvCircle(
              Ptr,
@@ -706,7 +706,7 @@ namespace Emgu.CV
       ///<param name="color"> The color of the ellipse </param>
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
       ///<typeparam name="T">The type of ellipse to draw</typeparam>
-      public void Draw<T>(Ellipse<T> ellipse, TColor color, int thickness) where T : IComparable, new()
+      public void Draw<T>(Ellipse<T> ellipse, TColor color, int thickness) where T : struct, IComparable
       {
          CvInvoke.cvEllipse(
              Ptr,
@@ -728,7 +728,7 @@ namespace Emgu.CV
       /// <param name="font">The font used for drawing</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
-      public virtual void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) where T : IComparable, new()
+      public virtual void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) where T : struct, IComparable
       {
          CvInvoke.cvPutText(
              Ptr,
@@ -983,18 +983,14 @@ namespace Emgu.CV
       /// </returns>
       public Contour<MCvPoint> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
       {
-         IntPtr seq = IntPtr.Zero;
-
-         int sequenceHeaderSize;
          if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
          {
             //TODO: wrap CvChain and add code here
             throw new NotImplementedException("Not implmented");
          }
-         else
-         {
-            sequenceHeaderSize = Marshal.SizeOf(typeof(MCvContour));
-         }
+
+         IntPtr seq = IntPtr.Zero;
+         int sequenceHeaderSize = Marshal.SizeOf(typeof(MCvContour));
 
          using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
          {
@@ -2610,7 +2606,7 @@ namespace Emgu.CV
                      int rows = value.Height;
                      int cols = value.Width;
                      System.Drawing.Imaging.BitmapData data = value.LockBits(
-                         new System.Drawing.Rectangle(0, 0, value.Width, value.Height),
+                         new System.Drawing.Rectangle(0, 0, cols, rows),
                          System.Drawing.Imaging.ImageLockMode.ReadOnly,
                          value.PixelFormat);
 
@@ -2624,11 +2620,11 @@ namespace Emgu.CV
 
                      Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
 
+                     int v = 0;
                      for (int i = 0; i < rows; i++, srcAddress += data.Stride)
                      {
                         Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
 
-                        int v = 0;
                         for (int j = 0; j < cols; j++, v = v << 1)
                         {
                            if ((j & 7) == 0)
@@ -2687,7 +2683,7 @@ namespace Emgu.CV
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              bmp.PixelFormat);
 
-         int arrayWidthStep = Marshal.SizeOf(typeof(TDepth)) * new TColor().Dimension * _array.GetLength(1);
+         int arrayWidthStep = _sizeOfElement * new TColor().Dimension * _array.GetLength(1);
 
          Int64 destAddress = _dataHandle.AddrOfPinnedObject().ToInt64();
          Int64 srcAddress = data.Scan0.ToInt64();
@@ -2914,16 +2910,18 @@ namespace Emgu.CV
       public void _MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
       {
          Image<TColor, TDepth> temp = null;
-         IntPtr tempPtr = IntPtr.Zero;
          if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT)
-         {
             temp = CopyBlank();
-            tempPtr = temp.Ptr;
-         }
 
-         CvInvoke.cvMorphologyEx(Ptr, Ptr, tempPtr, element.Ptr, operation, iterations);
+         CvInvoke.cvMorphologyEx(
+            Ptr, 
+            Ptr, 
+            temp == null ? IntPtr.Zero : temp.Ptr, 
+            element.Ptr, 
+            operation, 
+            iterations);
 
          if (temp != null) temp.Dispose();
       }
@@ -2958,7 +2956,7 @@ namespace Emgu.CV
          MCvSize roiSize;
          CvInvoke.cvGetRawData(Ptr, out start, out step1, out roiSize);
          Int64 data1 = start.ToInt64();
-         int width1 = Marshal.SizeOf(typeof(TDepth)) * cols1;
+         int width1 = _sizeOfElement * cols1;
 
          using (PinnedArray<TDepth> row1 = new PinnedArray<TDepth>(cols1))
             for (int row = 0; row < Height; row++, data1 += step1)
@@ -3899,7 +3897,10 @@ namespace Emgu.CV
                 flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
                //0 indicates vertical flip only
                 0;
-            CvInvoke.cvFlip(Ptr, Ptr, code);
+            CvInvoke.cvFlip(
+               Ptr, 
+               Ptr, 
+               code);
          }
       }
 

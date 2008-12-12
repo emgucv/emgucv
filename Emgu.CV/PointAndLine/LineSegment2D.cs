@@ -7,7 +7,7 @@ namespace Emgu.CV
    /// <summary> 
    /// A line segment 
    /// </summary>
-   public class LineSegment2D<T> : Line2D<T> where T : IComparable, new()
+   public class LineSegment2D<T> : Line2D<T> where T : struct, IComparable
    {
       /// <summary> 
       /// Create a line segment with the specific starting point and end point 

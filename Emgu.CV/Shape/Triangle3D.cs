@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// A 3D triangle
    /// </summary>
    /// <typeparam name="T">The depth of the triangle</typeparam>
-   public class Triangle3D<T> where T : IComparable, new()
+   public class Triangle3D<T> where T : struct, IComparable
    {
       /// <summary>
       /// The vertices for this triangle

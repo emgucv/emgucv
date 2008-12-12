@@ -5,7 +5,7 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.UI;
 
-namespace PlannarSubdivision
+namespace PlanarSubdivisionExample
 {
    static class Program
    {

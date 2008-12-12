@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// <summary>
       /// return if this is a valid point
       /// </summary>
-      public bool isValid
+      public bool IsValid
       {
          get
          {

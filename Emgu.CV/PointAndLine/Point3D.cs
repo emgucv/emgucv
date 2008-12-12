@@ -10,7 +10,7 @@ namespace Emgu.CV
    ///<summary> A 3D point </summary>
    ///<typeparam name="T"> The type of value for this 3D point</typeparam>
    [Serializable]
-   public class Point3D<T> : Point2D<T> where T : IComparable, new()
+   public class Point3D<T> : Point2D<T> where T : struct, IComparable
    {
       /// <summary>
       /// Create a 3D point using the specific coordinate
@@ -26,8 +26,6 @@ namespace Emgu.CV
       public Point3D()
       {
          _coordinate = new T[3];
-         //initialize the data
-         _coordinate.Initialize();
       }
 
       ///<summary> Create a 3D point of the specific location</summary>

@@ -8,7 +8,7 @@ namespace Emgu.CV
    ///An ellipse
    ///</summary>
    ///<typeparam name="T">The type of elements in this ellipse</typeparam>
-   public class Ellipse<T> : Box2D<T> where T : IComparable, new()
+   public class Ellipse<T> : Box2D<T> where T : struct, IComparable
    {
       ///<summary> 
       ///Create an ellipse with default parameters

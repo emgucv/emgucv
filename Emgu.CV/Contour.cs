@@ -10,6 +10,8 @@ namespace Emgu.CV
    /// </summary>
    public class Contour<T> : Seq<T> where T : struct
    {
+      private static readonly int _sizeOfHeader = Marshal.SizeOf(typeof(MCvContour));
+
       /// <summary>
       /// Craete a contour from the specific IntPtr and storage
       /// </summary>
@@ -29,8 +31,8 @@ namespace Emgu.CV
          : this(IntPtr.Zero, storage)
       {
          _ptr = CvInvoke.cvCreateSeq(
-             seqFlag, Marshal.SizeOf(typeof(MCvContour)),
-             Marshal.SizeOf(typeof(T)),
+             seqFlag, _sizeOfHeader,
+             _sizeOfElement,
              storage.Ptr);
       }
 
@@ -166,7 +168,7 @@ namespace Emgu.CV
          return new Contour<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
-             System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvContour)),
+             _sizeOfHeader,
              storage.Ptr,
              CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
              accuracy,

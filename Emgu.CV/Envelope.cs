@@ -10,7 +10,7 @@ namespace Emgu.CV
    /// An envelope that contains the maximum and minimum value
    /// </summary>
    /// <typeparam name="T">The type of elements in this envelope</typeparam>
-   public class Envelope<T> where T : IComparable, new()
+   public class Envelope<T> where T : struct, IComparable
    {
       private T _max;
       private T _min;
@@ -19,7 +19,6 @@ namespace Emgu.CV
       /// Create an envelope with default value
       /// </summary>
       public Envelope()
-         : this(new T(), new T())
       {
       }
 
@@ -61,7 +60,7 @@ namespace Emgu.CV
    /// <summary>
    /// An Envelope that contains the maximum, minimun and mean
    /// </summary>
-   public class Envelope3M<T> : Envelope<T> where T : IComparable, new()
+   public class Envelope3M<T> : Envelope<T> where T : struct, IComparable
    {
       private T _mean;
 
@@ -74,7 +73,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create an envelope with default value
       /// </summary>
-      public Envelope3M() : this(new T(), new T(), new T()) { }
+      public Envelope3M() { }
 
       /// <summary>
       /// Create an envelope with the specific data

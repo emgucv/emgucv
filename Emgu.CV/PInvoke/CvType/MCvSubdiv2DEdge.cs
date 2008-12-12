@@ -12,6 +12,15 @@ namespace Emgu.CV
    public struct MCvSubdiv2DEdge
    {
       /// <summary>
+      /// Create a MCvSubdiv2DEdge from the specific edge
+      /// </summary>
+      /// <param name="e">the edge</param>
+      public MCvSubdiv2DEdge(IntPtr e)
+      {
+         edge = e;
+      }
+
+      /// <summary>
       /// one of edges within quad-edge, lower 2 bits is index (0..3) and upper bits are quad-edge pointer 
       /// </summary>
       public IntPtr edge;
@@ -22,7 +31,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public MCvSubdiv2DPoint cvSubdiv2DEdgeOrg()
       {
-         IntPtr ptr = (IntPtr)(edge.ToInt64() >> 2 << 2);
+         IntPtr ptr = (IntPtr)(edge.ToInt64() & -4);
          MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
          IntPtr pointPtr = qe.pt[(edge.ToInt64() & 3)];
          if (pointPtr == IntPtr.Zero)
@@ -33,8 +42,7 @@ namespace Emgu.CV
          }
          else
          {
-            MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
-            return pt;
+            return (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
          }
       }
 
@@ -44,7 +52,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public MCvSubdiv2DPoint cvSubdiv2DEdgeDst()
       {
-         IntPtr ptr = (IntPtr)(edge.ToInt64() >> 2 << 2);
+         IntPtr ptr = (IntPtr)(edge.ToInt64() & -4);
          MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
          IntPtr pointPtr = qe.pt[(edge.ToInt64() + 2) & 3];
          if (pointPtr == IntPtr.Zero)
@@ -55,8 +63,7 @@ namespace Emgu.CV
          }
          else
          {
-            MCvSubdiv2DPoint pt = (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
-            return pt;
+            return (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
          }
       }
 
@@ -73,9 +80,7 @@ namespace Emgu.CV
       /// <returns>The rotated edge</returns>
       public MCvSubdiv2DEdge cvSubdiv2DRotateEdge(int rotate)
       {
-         MCvSubdiv2DEdge e = new MCvSubdiv2DEdge();
-         e.edge = new IntPtr((edge.ToInt64() & ~3) + ((edge.ToInt64() + rotate) & 3));
-         return e;
+         return new MCvSubdiv2DEdge(new IntPtr((edge.ToInt64() & -4) + ((edge.ToInt64() + rotate) & 3)));
       }
 
       /// <summary>
@@ -85,14 +90,12 @@ namespace Emgu.CV
       /// <returns>The next edge</returns>
       public MCvSubdiv2DEdge cvSubdiv2DGetEdge(CvEnum.CV_NEXT_EDGE_TYPE type)
       {
-         IntPtr ptr = (IntPtr)(edge.ToInt64() >> 2 << 2);
+         IntPtr ptr = (IntPtr)(edge.ToInt64() & -4);
          MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
          Int64 edgePtr = qe.next[(edge.ToInt64() + (int)type) & 3].edge.ToInt64();
-         edgePtr = (edgePtr >> 2 << 2) + ((edgePtr + ((int)type >> 4)) & 3);
+         edgePtr = (edgePtr & -4) + ((edgePtr + ((int)type >> 4)) & 3);
 
-         MCvSubdiv2DEdge e = new MCvSubdiv2DEdge();
-         e.edge = new IntPtr(edgePtr);
-         return e;
+         return new MCvSubdiv2DEdge( new IntPtr(edgePtr));
       }
    }
 }

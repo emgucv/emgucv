@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// A 2D triangle
    /// </summary>
    /// <typeparam name="T">The depth of the triangle</typeparam>
-   public class Triangle2D<T> : IConvexPolygon<T> where T : IComparable, new()
+   public class Triangle2D<T> : IConvexPolygon<T> where T : struct, IComparable
    {
       /// <summary>
       /// The vertices for this triangle
@@ -68,8 +68,7 @@ namespace Emgu.CV
       {
          get
          {
-            Point2D<double>[] vertices = Array.ConvertAll<Point2D<T>, Point2D<double>>(Vertices, delegate(Point2D<T> p) { return p.Convert<double>(); });
-            Point2D<double> v0 = vertices[0], v1 = vertices[1], v2 = vertices[2];
+            Point2D<double> v0 = Vertices[0].Convert<double>(), v1 = Vertices[1].Convert<double>(), v2 = Vertices[2].Convert<double>();
             return new Point2D<double>((v0.X + v1.X + v2.X) / 3.0, (v0.Y + v1.Y + v2.Y) / 3.0);
          }
       }

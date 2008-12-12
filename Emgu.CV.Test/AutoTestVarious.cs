@@ -533,16 +533,15 @@ namespace Emgu.CV.Test
          pts[32] = new Point2D<float>(348, 32);
 
          #region Find the region of interest
-         Rectangle<float> roi;
+         MCvRect roi;
          using (MemStorage storage = new MemStorage())
          using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; })))
          {
-            MCvRect cvRect = CvInvoke.cvBoundingRect(seq.Ptr, true);
-            roi = new Rectangle<float>(cvRect);
+            roi = CvInvoke.cvBoundingRect(seq.Ptr, true);
          }
          #endregion
 
-         PlanarSubdivision subdiv = new PlanarSubdivision(roi);
+         PlanarSubdivision subdiv = new PlanarSubdivision(ref roi);
          for (int i = 0; i < pts.Length; i++)
          {
             MCvPoint2D32f ptToInsert = pts[i].MCvPoint2D32f;

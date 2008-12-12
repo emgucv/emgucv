@@ -10,7 +10,7 @@ namespace Emgu.CV
    ///<summary> A two dimensional point </summary>
    ///<typeparam name="T"> The type of value for this 2D point</typeparam>
    [Serializable]
-   public class Point2D<T> : Point<T> where T : IComparable, new()
+   public class Point2D<T> : Point<T> where T : struct, IComparable
    {
       ///<summary> Create a 2D point located in the origin</summary>
       public Point2D() : base(2) { }
@@ -57,11 +57,14 @@ namespace Emgu.CV
 
       ///<summary> Convert this 2D point to the specific format</summary>
       ///<returns> An equavailent 2D point of the specific format</returns> 
-      public new Point2D<T2> Convert<T2>() where T2 : IComparable, new()
+      public new Point2D<T2> Convert<T2>() where T2 : struct, IComparable
       {
-         return new Point2D<T2>(
-         (T2)System.Convert.ChangeType(X, typeof(T2)),
-         (T2)System.Convert.ChangeType(Y, typeof(T2)));
+         return this as Point2D<T2> ??
+            (typeof(T2) == typeof(double) ? new Point2D<double>(System.Convert.ToDouble(X), System.Convert.ToDouble(Y)) as Point2D<T2> :
+            typeof(T2) == typeof(int) ? new Point2D<int>(System.Convert.ToInt32(X), System.Convert.ToInt32(Y)) as Point2D<T2> :
+               new Point2D<T2>(
+                  (T2)System.Convert.ChangeType(X, typeof(T2)),
+                  (T2)System.Convert.ChangeType(Y, typeof(T2))));
       }
 
       /// <summary>
@@ -127,15 +130,15 @@ namespace Emgu.CV
       /// <returns>true if the point is in/on the convex polygon; false otherwise </returns>
       public bool InConvexPolygon(Point2D<T>[] polygon)
       {
-         LineSegment2D<T>[] edges = PointCollection.PolyLine<T>(polygon, true);
-         int side = edges[0].Side(this);
-
-         for (int i = 1; i < edges.Length; i++)
+         Debug.Assert(polygon.Length >= 3, "A polygon must have >= 3 verticies");
+         int side = new LineSegment2D<T>(polygon[0], polygon[1]).Side(this);
+         int max = polygon.Length - 1;
+         for (int i = 1; i < polygon.Length; i++)
          {
-            int currentSide = edges[i].Side(this);
+            int currentSide = new LineSegment2D<T>(polygon[i], polygon[i == max ? 0 : i + 1]).Side(this);
             if (side == 0) side = currentSide;
 
-            if (!(side == currentSide || currentSide == 0))
+            if (side != currentSide && currentSide != 0)
                return false;
          }
          return true;

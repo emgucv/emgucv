@@ -11,7 +11,7 @@ namespace Emgu.CV
    ///<summary> A multi dimension point</summary>
    ///<typeparam name="T"> The type of value for this point</typeparam>
    [Serializable]
-   public class Point<T> : IEquatable<Point<T>> where T : IComparable, new()
+   public class Point<T> : IEquatable<Point<T>> where T : struct, IComparable
    {
       ///<summary> The internal representation of this point as an array</summary>
       protected T[] _coordinate;
@@ -26,7 +26,6 @@ namespace Emgu.CV
       public Point(int dimension)
       {
          _coordinate = new T[dimension];
-         _coordinate.Initialize();
       }
 
       ///<summary> Create a point using the specific data</summary>
@@ -63,8 +62,8 @@ namespace Emgu.CV
       /// <param name="convertor">The generic operator</param>
       /// <returns>The result of the generic operation</returns>
       public Point<TOther3> Convert<TOther2, TOther3>(Point<TOther2> p2, Emgu.Util.Toolbox.Func<T, TOther2, TOther3> convertor)
-         where TOther3 : IComparable, new()
-         where TOther2 : IComparable, new()
+         where TOther3 : struct, IComparable
+         where TOther2 : struct, IComparable
       {
          int d = Dimension;
          Point<TOther3> res = new Point<TOther3>(d);
@@ -84,7 +83,7 @@ namespace Emgu.CV
       {
          Point<double> pt = Convert<double>();
          double[] coordinate = pt.Coordinate;
-         double mul = (double)System.Convert.ChangeType(value, typeof(double));
+         double mul = System.Convert.ToDouble(value);
          for (int i = 0; i < coordinate.Length; i++)
          {
             coordinate[i] *= mul;
@@ -99,7 +98,7 @@ namespace Emgu.CV
       /// <param name="p2">The second point to apply generic operation</param>
       /// <param name="convertor">The generic operator</param>
       public void _Convert<TOther>(Point<TOther> p2, Emgu.Util.Toolbox.Func<T, TOther, T> convertor)
-          where TOther : IComparable, new()
+          where TOther : struct, IComparable
       {
          for (int i = 0; i < _coordinate.Length; i++)
             _coordinate[i] = convertor(_coordinate[i], p2[i]);
@@ -112,7 +111,7 @@ namespace Emgu.CV
       ///<param name="other"> The other point to be added to <i>this</i></param> 
       ///<returns>The sum of the two point</returns>
       public Point<T> Sub<TOther>(Point<TOther> other)
-          where TOther : IComparable, new()
+          where TOther : struct, IComparable
       {
          return Convert<TOther, T>(
              other,
@@ -128,7 +127,7 @@ namespace Emgu.CV
       /// <typeparam name="TOther">The type of the point to be substracted</typeparam>
       /// <param name="other">The point to be substracted</param>
       public void _Sub<TOther>(Point<TOther> other)
-          where TOther : IComparable, new()
+          where TOther : struct, IComparable
       {
          _Convert<TOther>(
              other,
@@ -141,7 +140,7 @@ namespace Emgu.CV
       ///<summary> Sum the current point with another point and returns the result</summary>
       ///<seealso cref="operator+"></seealso>
       public Point<T> Add<TOther>(Point<TOther> other)
-          where TOther : IComparable, new()
+          where TOther : struct, IComparable
       {
          return Convert<TOther, T>(
              other,
@@ -156,7 +155,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="other">The point to be added to this</param>
       public void _Add<TOther>(Point<TOther> other)
-          where TOther : IComparable, new()
+          where TOther : struct, IComparable
       {
          _Convert<TOther>(
              other,
@@ -200,11 +199,12 @@ namespace Emgu.CV
       }
       #endregion 
 
-      ///<summary> Convert this point to the specific type</summary>
-      ///<returns> An equavailent point of the specific type</returns> 
-      public Point<TOther> Convert<TOther>() where TOther : IComparable, new()
+      ///<summary> Convert this point to the specific type, if the destination type is the same as current type, this object is returned</summary>
+      ///<returns> An equavailent point of the specific type, if the destination type is the same as current type, this object is returned</returns> 
+      public Point<TOther> Convert<TOther>() where TOther : struct, IComparable
       {
-         return new Point<TOther>(
+         return this as Point<TOther> ??
+            new Point<TOther>(
              System.Array.ConvertAll<T, TOther>(
                  _coordinate,
                  delegate(T val) { return (TOther)System.Convert.ChangeType(val, typeof(TOther)); }));
@@ -233,9 +233,13 @@ namespace Emgu.CV
          get
          {
             double nor = Norm;
-            double[] d = Convert<double>().Coordinate;
-            for (int i = 0; i < d.Length; d[i++] /= nor) ;
-            return new Point<double>(d);
+            Point<double> res = new Point<double>(Dimension);
+            double[] d = res.Coordinate;
+            for (int i = 0; i < d.Length; i++)
+            {
+               d[i] = System.Convert.ToDouble(Coordinate[i]) / Norm;
+            }
+            return res;
          }
       }
 

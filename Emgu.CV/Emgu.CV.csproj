@@ -73,6 +73,7 @@
     <Compile Include="Color\Bgra.cs" />
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Contour.cs" />
+    <Compile Include="PlanarSubdivision.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
@@ -113,7 +114,6 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
-    <Compile Include="PlannarSubdivision.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />
     <Compile Include="Shape\Cross2D.cs" />

@@ -94,7 +94,7 @@ namespace Emgu.CV
       /// true if the small convex polygon is inside the larger convex polygon;
       /// false otherwise.
       /// </returns>
-      public static bool IsConvexPolygonInConvexPolygon<T>(IConvexPolygon<T> smallPolygon, IConvexPolygon<T> largePolygon) where T : IComparable, new()
+      public static bool IsConvexPolygonInConvexPolygon<T>(IConvexPolygon<T> smallPolygon, IConvexPolygon<T> largePolygon) where T : struct, IComparable
       {
          Point2D<T>[] vertices = smallPolygon.Vertices;
          return Array.TrueForAll<Point2D<T>>(vertices, delegate(Point2D<T> v) { return v.InConvexPolygon(largePolygon); });

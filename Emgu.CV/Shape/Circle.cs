@@ -7,7 +7,7 @@ namespace Emgu.CV
 {
    ///<summary> A circle </summary>
    ///<typeparam name="T">The type of elements in this Circle</typeparam>
-   public class Circle<T> : Point2D<T> where T : IComparable, new()
+   public class Circle<T> : Point2D<T> where T : struct, IComparable
    {
       // The radius of the circle
       private T _radius;
@@ -16,7 +16,6 @@ namespace Emgu.CV
       public Circle()
          : base()
       {
-         _radius = new T();
       }
 
       ///<summary> Create a circle with the specific center and radius </summary>
@@ -45,8 +44,7 @@ namespace Emgu.CV
       {
          get
          {
-            double a = 0.0;
-            a = System.Convert.ToDouble(_radius);
+            double a = System.Convert.ToDouble(_radius);
             return a * a * Math.PI;
          }
       }

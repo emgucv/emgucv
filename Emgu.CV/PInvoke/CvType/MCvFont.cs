@@ -60,7 +60,6 @@ namespace Emgu.CV
       public MCvFont(CvEnum.FONT type, double hscale, double vscale)
          : this()
       {
-         //_ptr = Marshal.AllocHGlobal(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvFont)));
          CvInvoke.cvInitFont(ref this, type, hscale, vscale, 0, 1, CvEnum.LINE_TYPE.EIGHT_CONNECTED);
       }
 

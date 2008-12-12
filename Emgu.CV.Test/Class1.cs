@@ -711,6 +711,13 @@ namespace Emgu.CV.Test
          }
       }
 
+      public void TestNegate()
+      {
+         Assert.AreEqual(~1, -2);
+         Assert.AreEqual(~(-1), 0);
+         //Assert.AreEqual(~3, 2);
+      }
+
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100);
@@ -759,7 +766,7 @@ namespace Emgu.CV.Test
             Point2D<float> predictPoint = angleToPoint(tracker.PredictedState[0, 0]);
             Point2D<float> measurementPoint = angleToPoint(measurement[0, 0]);
 
-            img.SetValue(new Bgr()); //clear the image
+            img.SetZero(); //clear the image
             drawCross(statePoint, new Bgr(Color.White)); //draw current state in White
             drawCross(measurementPoint, new Bgr(Color.Red)); //draw the measurement in Red
             drawCross(predictPoint, new Bgr(Color.Green)); //draw the prediction (the next state) in green 

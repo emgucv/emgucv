@@ -20,6 +20,11 @@ namespace Emgu.CV
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
    {
       /// <summary>
+      /// The size of the elements in the CvArray
+      /// </summary>
+      protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
+
+      /// <summary>
       /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
       /// </summary>
       public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
@@ -87,7 +92,7 @@ namespace Emgu.CV
       {
          get
          {
-            int size = Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
+            int size = _sizeOfElement * ManagedArray.Length;
             Byte[] data = new Byte[size];
             Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
 
@@ -112,7 +117,7 @@ namespace Emgu.CV
          set
          {
             Byte[] bytes;
-            int size = Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
+            int size = _sizeOfElement * ManagedArray.Length;
 
             if (SerializationCompressionRatio == 0)
             {
@@ -498,7 +503,7 @@ namespace Emgu.CV
          #region decode the data from Xml and assign the value to the matrix
          reader.MoveToContent();
          reader.ReadToFollowing("Bytes");
-         int size = Marshal.SizeOf(typeof(TDepth)) * ManagedArray.Length;
+         int size = _sizeOfElement * ManagedArray.Length;
          if (SerializationCompressionRatio == 0)
          {
             Byte[] bytes = new Byte[size];

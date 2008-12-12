@@ -119,7 +119,7 @@ namespace Emgu.CV
          get { return (MCvSubdiv2D)Marshal.PtrToStructure(_ptr, typeof(MCvSubdiv2D)); }
       }
 
-      private static Triangle2D<float> EdgeToTriangle(ref MCvSubdiv2DEdge e)
+      private static Triangle2D<float> EdgeToTriangle(MCvSubdiv2DEdge e)
       {
          MCvSubdiv2DPoint v1 = e.cvSubdiv2DEdgeOrg();
          MCvSubdiv2DPoint v2 = e.cvSubdiv2DEdgeDst();
@@ -132,53 +132,48 @@ namespace Emgu.CV
              new Point2D<float>(v2.pt.x, v2.pt.y));
       }
 
-      private static List<VoronoiFacet> EdgeToFacets(ref MCvQuadEdge2D quadEdge)
+      private static IEnumerable<VoronoiFacet> EdgeToFacets(IntPtr edge, List<Point2D<float>> bufferList)
       {
-         List<VoronoiFacet> facets = new List<VoronoiFacet>();
-
+         MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
          MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
 
          MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
-         Point2D<float>[] p1 = EdgeToPoly(ref e1);
+         
+         Point2D<float>[] p1 = EdgeToPoly(e1, bufferList);
          if (p1 != null)
          {
             MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeOrg();
-            facets.Add(new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p1));
+            yield return new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p1);
          }
 
          MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
-         Point2D<float>[] p2 = EdgeToPoly(ref e2);
+         Point2D<float>[] p2 = EdgeToPoly(e2, bufferList);
          if (p2 != null)
          {
             MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeDst();
-            facets.Add(new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p2));
+            yield return new VoronoiFacet(new Point2D<float>(pt.pt.x, pt.pt.y), p2);
          }
-
-         return facets;
       }
 
-      private static Point2D<float>[] EdgeToPoly(ref MCvSubdiv2DEdge e)
+      private static Point2D<float>[] EdgeToPoly(MCvSubdiv2DEdge e, List<Point2D<float>> bufferList)
       {
          MCvSubdiv2DPoint v0 = e.cvSubdiv2DEdgeOrg();
-         if (!v0.isValid) return null;
-
-         List<Point2D<float>> list = new List<Point2D<float>>();
-         MCvPoint2D32f startPoint = v0.pt;
-         //Point2D<float> startPoint = new Point2D<float>(v0.pt.x, v0.pt.y);
-         list.Add(new Point2D<float>(v0.pt.x, v0.pt.y));
+         if (!v0.IsValid) return null;
+         
+         bufferList.Clear();
+         bufferList.Add(new Point2D<float>(v0.pt.x, v0.pt.y));
 
          for (MCvSubdiv2DEdge currentEdge = e; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
-            if (!v.isValid) return null;
+            if (!v.IsValid) return null;
 
-            //Point2D<float> currentPoint = new Point2D<float>(v.pt.x, v.pt.y);
-            if ( v.pt.x == startPoint.x && v.pt.y == startPoint.y)
+            if ( v.pt.x == v0.pt.x && v.pt.y == v0.pt.y)
                break;
 
-            list.Add(new Point2D<float>(v.pt.x, v.pt.y));
+            bufferList.Add(new Point2D<float>(v.pt.x, v.pt.y));
          }
-         return list.ToArray();
+         return bufferList.Count > 2 ? bufferList.ToArray() : null;
       }
 
       /// <summary>
@@ -188,8 +183,9 @@ namespace Emgu.CV
       /// <returns>returns the found subdivision vertex</returns>
       public MCvSubdiv2DPoint FindNearestPoint2D(ref MCvPoint2D32f point)
       {
-         IntPtr ptr = CvInvoke.cvFindNearestPoint2D(Ptr, point);
-         return (MCvSubdiv2DPoint)Marshal.PtrToStructure(ptr, typeof(MCvSubdiv2DPoint));
+         return (MCvSubdiv2DPoint)Marshal.PtrToStructure(
+            CvInvoke.cvFindNearestPoint2D(Ptr, point), 
+            typeof(MCvSubdiv2DPoint));
       }
 
       /// <summary>
@@ -221,32 +217,23 @@ namespace Emgu.CV
          MCvSeqReader reader = new MCvSeqReader();
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-         int i, total = set.total;
+         int total = set.total;
          int elem_size = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
-         for (i = 0; i < total; i++)
+         List<Point2D<float>> bufferList = new List<Point2D<float>>();
+
+         int left = _roi.x, top = _roi.y, right = _roi.x + _roi.width, bottom = _roi.y + _roi.height;
+
+         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader))
          {
-            IntPtr edge = reader.ptr;
-
-            if (CvInvoke.CV_IS_SET_ELEM(edge))
+            foreach (VoronoiFacet facet in EdgeToFacets(reader.ptr, bufferList))
             {
-               MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
-
-               List<VoronoiFacet> facet1 = EdgeToFacets(ref quadEdge);
-
-               int left = _roi.x, top = _roi.y, right = _roi.x + _roi.width, bottom = _roi.y + _roi.height;
-
-               foreach (VoronoiFacet facet in facet1)
-               {
-                  Point2D<float> p = facet.Point;
-                  if (  p.X  >= left && p.X <= right && p.Y >= top && p.Y <= bottom
-                     && InsertPoint2DToDictionary(facet.Point, facetDict))
-                     facetList.Add(facet);
-               }
+               Point2D<float> p = facet.Point;
+               if (p.X >= left && p.X <= right && p.Y >= top && p.Y <= bottom
+                  && InsertPoint2DToDictionary(p, facetDict))
+                  facetList.Add(facet);
             }
-
-            CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader);
          }
          return facetList;
       }
@@ -257,7 +244,7 @@ namespace Emgu.CV
       /// <param name="pt">The point to insert</param>
       /// <param name="dic">The point dictionary</param>
       /// <returns>If the point already exist, return false. Otherwise return true.</returns>
-      private static bool InsertPoint2DToDictionary<T>(Point2D<T> pt, Dictionary<string, string> dic) where T : IComparable, new()
+      private static bool InsertPoint2DToDictionary<T>(Point2D<T> pt, Dictionary<string, string> dic) where T : struct, IComparable
       {
          string key = String.Format("{0},{1}", pt.X.ToString(), pt.Y.ToString());
          if (dic.ContainsKey(key))
@@ -281,51 +268,44 @@ namespace Emgu.CV
          MCvSeqReader reader = new MCvSeqReader();
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-         int i, total = set.total;
+         int total = set.total;
          int elem_size = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
-         for (i = 0; i < total; i++)
+         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader))
          {
-            IntPtr edge = reader.ptr;
+            MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
 
-            if (CvInvoke.CV_IS_SET_ELEM(edge))
+            Triangle2D<float> tri1 = EdgeToTriangle(quadEdge.next[0]);
+
+            if (InsertPoint2DToDictionary(tri1.Centeroid, triangleDic))
             {
-               MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
-
-               Triangle2D<float> tri1 = EdgeToTriangle(ref quadEdge.next[0]);
-
-               if (InsertPoint2DToDictionary(tri1.Centeroid, triangleDic))
-               {
-                  triangleList.Add(tri1);
-               }
-
-               Triangle2D<float> tri2 = EdgeToTriangle(ref quadEdge.next[2]);
-               if (InsertPoint2DToDictionary(tri2.Centeroid, triangleDic))
-               {
-                  triangleList.Add(tri2);
-               }
+               triangleList.Add(tri1);
             }
 
-            CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader);
+            Triangle2D<float> tri2 = EdgeToTriangle(quadEdge.next[2]);
+            if (InsertPoint2DToDictionary(tri2.Centeroid, triangleDic))
+            {
+               triangleList.Add(tri2);
+            }
          }
 
-         if (includeVirtualPoints)
-         {
-            return triangleList;
-         } else
+         if (!includeVirtualPoints)
          {
             int left = _roi.x, top = _roi.y, right = _roi.x + _roi.width, bottom = _roi.y + _roi.height;
-            return triangleList.FindAll(
-               delegate(Triangle2D<float> tri) 
-               {  
+
+            triangleList.RemoveAll(
+               delegate(Triangle2D<float> tri)
+               {
                   Point2D<float>[] vertices = tri.Vertices;
                   return
+                     !(
                      vertices[0].X >= left && vertices[0].X <= right && vertices[0].Y >= top && vertices[0].Y <= bottom &&
                      vertices[1].X >= left && vertices[1].X <= right && vertices[1].Y >= top && vertices[1].Y <= bottom &&
-                     vertices[2].X >= left && vertices[2].X <= right && vertices[2].Y >= top && vertices[2].Y <= bottom;
+                     vertices[2].X >= left && vertices[2].X <= right && vertices[2].Y >= top && vertices[2].Y <= bottom);
                });
          }
+         return triangleList;
       }
 
       /*

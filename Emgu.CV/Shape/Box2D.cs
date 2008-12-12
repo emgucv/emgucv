@@ -8,7 +8,7 @@ namespace Emgu.CV
    /// A Rotated rectangle box
    ///</summary>
    ///<typeparam name="T">The type of elements in this 2D Box</typeparam>
-   public class Box2D<T> : Rectangle<T> where T : IComparable, new()
+   public class Box2D<T> : Rectangle<T> where T : struct, IComparable
    {
       /// <summary>
       /// The rotation angle of the rectangle in radians
@@ -82,15 +82,13 @@ namespace Emgu.CV
       {
          get
          {
-
             MCvBox2D box = MCvBox2D;
             float[] coors = new float[8];
             CvInvoke.cvBoxPoints(box, coors);
-            Point2D<float>[] pts = new Point2D<float>[coors.Length];
-            for (int i = 0; i < coors.Length; i++)
-               pts[i] = new Point2D<float>(coors[i << 1], coors[i << 1 + 1]);
-            return Array.ConvertAll<Point2D<float>, Point2D<T>>(pts,
-               delegate(Point2D<float> p) { return p.Convert<T>(); });
+            Point2D<T>[] pts = new Point2D<T>[4];
+            for (int i = 0; i < pts.Length; i++)
+               pts[i] = (new Point2D<float>(coors[i << 1], coors[i << 1 + 1])).Convert<T>();
+            return pts;
          }
       }
 
