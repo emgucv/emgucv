@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using Emgu;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -15,11 +16,11 @@ namespace Emgu.CV
       /// <summary>
       /// A comparator which compares only the X value of the point
       /// </summary>
-      private class XValueOfPointComparator<T> : IComparer<Point<T>> where T : struct, IComparable
+      private class XValueOfPointComparator : IComparer<PointF>
       {
-         public int Compare(Point<T> p1, Point<T> p2)
+         public int Compare(PointF p1, PointF p2)
          {
-            return p1[0].CompareTo(p2[0]);
+            return p1.X.CompareTo(p2.X);
          }
       }
 
@@ -29,10 +30,10 @@ namespace Emgu.CV
       /// <param name="points">The collection of points. Must be sorted by the x value.</param>
       /// <param name="index">the x coordinate</param>
       /// <returns>the y coordinate as the result of the first degree interpolation</returns>
-      public static T FirstDegreeInterpolate<T>(Point2D<T>[] points, T index) where T : struct, IComparable
+      public static float FirstDegreeInterpolate(PointF[] points, float index)
       {
-         XValueOfPointComparator<T> comparator = new XValueOfPointComparator<T>();
-         int idx = System.Array.BinarySearch<Point<T>>((Point<T>[])points, (Point<T>)new Point2D<T>(index, new T()), comparator);
+         XValueOfPointComparator comparator = new XValueOfPointComparator();
+         int idx = System.Array.BinarySearch<PointF>(points, new PointF(index, 0.0f), comparator);
          if (idx >= 0)
          {   // an exact index is matched
             return points[idx].Y;
@@ -53,7 +54,7 @@ namespace Emgu.CV
                idx -= 2;
             }
 
-            Line2D<T> line = new Line2D<T>(points[idx], points[idx + 1]);
+            Line2DF line = new Line2DF(points[idx], points[idx + 1]);
             return line.YByX(index);
          }
       }
@@ -64,127 +65,27 @@ namespace Emgu.CV
       /// <param name="points">The collection of points, Must be sorted by x value</param>
       /// <param name="indexes">the x coordinates</param>
       /// <returns>The y coordinates as the result of the first degree interpolation</returns>
-      public static T[] FirstDegreeInterpolate<T>(Point2D<T>[] points, T[] indexes) where T : struct, IComparable
+      public static float[] FirstDegreeInterpolate(PointF[] points, float[] indexes)
       {
-         return System.Array.ConvertAll<T, T>(
+         return System.Array.ConvertAll<float, float>(
              indexes,
-             delegate(T d) { return FirstDegreeInterpolate<T>(points, d); });
+             delegate(float d) { return FirstDegreeInterpolate(points, d); });
       }
 
       /// <summary>
-      /// Convert the points to a sequence of CvPoint2D32f
+      /// Convert the structures to a sequence
       /// </summary>
       /// <param name="stor">The sotrage</param>
-      /// <param name="points">The points to be converted to sequence</param>
+      /// <param name="points">The structure to be converted to sequence</param>
       /// <returns>A pointer to the sequence</returns>
-      public static Seq<MCvPoint2D32f> To2D32fSequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : struct, IComparable
+      public static Seq<PointF> To2D32fSequence(MemStorage stor, PointF[] points)
       {
-         Seq<MCvPoint2D32f> seq = new Seq<MCvPoint2D32f>(
+         Seq<PointF> seq = new Seq<System.Drawing.PointF>(
              CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
              stor);
+         seq.Push(points, CvEnum.BACK_OR_FRONT.FRONT);
 
-         if (typeof(D) == typeof(float)) // if the depth of the point is float
-         {
-            foreach (Point<D> p in points)
-            {
-               GCHandle handle = GCHandle.Alloc(p.Coordinate, GCHandleType.Pinned);
-               CvInvoke.cvSeqPush(seq.Ptr, handle.AddrOfPinnedObject());
-               handle.Free();
-            }
-         }
-         else //if the depth of the point is not float
-         {
-            foreach (Point<D> p in points)
-            {
-               Point<float> pf = p.Convert<float>(); //convert the point to float
-               GCHandle handle = GCHandle.Alloc(pf.Coordinate, GCHandleType.Pinned);
-               CvInvoke.cvSeqPush(seq.Ptr, handle.AddrOfPinnedObject());
-               handle.Free();
-            }
-         }
          return seq;
-      }
-
-      /// <summary>
-      /// Convert the points to a sequence of CvPoint3D32f
-      /// </summary>
-      /// <param name="stor">The sotrage</param>
-      /// <param name="points">The points to be converted to sequence</param>
-      /// <returns>A pointer to the sequence</returns>
-      public static Seq<MCvPoint3D32f> To3D32Sequence<D>(MemStorage stor, IEnumerable<Point<D>> points) where D : struct, IComparable
-      {
-         Seq<MCvPoint3D32f> seq = new Seq<MCvPoint3D32f>(
-             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 3),
-             stor);
-
-         if (typeof(D) == typeof(float)) // if the depth of the point is float
-         {
-            foreach (Point<D> p in points)
-            {
-               GCHandle handle = GCHandle.Alloc(p.Coordinate, GCHandleType.Pinned);
-               CvInvoke.cvSeqPush(seq.Ptr, handle.AddrOfPinnedObject());
-               handle.Free();
-            }
-         }
-         else //if the depth of the point is not float
-         {
-            foreach (Point<D> p in points)
-            {
-               Point<float> pf = p.Convert<float>(); //convert the point to float
-               GCHandle handle = GCHandle.Alloc(pf.Coordinate, GCHandleType.Pinned);
-               CvInvoke.cvSeqPush(seq.Ptr, handle.AddrOfPinnedObject());
-               handle.Free();
-            }
-         }
-         return seq;
-      }
-
-      /// <summary>
-      /// Convert a collection of N Points to an (N x k) matrix, k is determined by the dimension of the first point
-      /// </summary>
-      /// <param name="points">The points which will be converted to matrix</param>
-      /// <returns>the matrix representing the collection of points</returns>
-      public static Matrix<D> ToMatrix<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
-      {
-         return new Matrix<D>(ToArray(points));
-      }
-
-      /// <summary>
-      /// Convert a collection of N Points to an (N x k) array, k is determined by the dimension of the first point
-      /// </summary>
-      /// <param name="points">The points which will be converted to array</param>
-      /// <returns>the array representing the collection of points</returns>
-      public static D[,] ToArray<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
-      {
-         List<D[]> pts = new List<D[]>();
-         foreach (Point<D> pt in points)
-            pts.Add(pt.Coordinate);
-
-         Debug.Assert(pts.Count > 0);
-         int rows = pts.Count;
-         int cols = pts[0].Length;
-
-         D[,] array = new D[rows, cols];
-         for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-               array[i, j] = pts[i][j];
-         return array;
-      }
-
-      /// <summary>
-      /// Get an array of Point2D from a 2D array of values
-      /// </summary>
-      /// <typeparam name="D">The type of the point</typeparam>
-      /// <param name="values">The 2D array of values, size of Nx2</param>
-      /// <returns>An array of Point2D</returns>
-      public static Point2D<D>[] FromArray<D>(D[,] values) where D : struct, IComparable
-      {
-         Point2D<D>[] res = new Point2D<D>[values.GetLength(0)];
-         for (int i = 0; i < res.Length; i++)
-         {
-            res[i] = new Point2D<D>(values[i, 0], values[i, 1]);
-         }
-         return res;
       }
 
       /// <summary>
@@ -193,16 +94,28 @@ namespace Emgu.CV
       /// <param name="points">The points to be fitted</param>
       /// <param name="type">The type of the fitting</param>
       /// <returns>A 2D line</returns>
-      public static Line2D<float> Line2DFitting<D>(IEnumerable<Point<D>> points, CvEnum.DIST_TYPE type) where D : struct, IComparable
+      public static Line2DF Line2DFitting(PointF[] points, CvEnum.DIST_TYPE type)
       {
          float[] data = new float[6];
-         using (MemStorage stor = new MemStorage())
-         {
-            Seq<MCvPoint2D32f> seq = To2D32fSequence(stor, points);
-            CvInvoke.cvFitLine(seq.Ptr, type, 0.0, 0.01, 0.01, data);
-         }
-         Line2D<float> res = new Line2D<float>(new Point2D<float>(data[2], data[3]), new Point2D<float>(data[2] + data[0], data[3] + data[1]));
-         return res;
+         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            HeaderSize.MCvSeq,
+            HeaderSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block); 
+
+         CvInvoke.cvFitLine(seq, type, 0.0, 0.01, 0.01, data);
+
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return new Line2DF(new PointF(data[2], data[3]), new PointF(data[2] + data[0], data[3] + data[1]));
       }
 
       /// <summary>
@@ -210,71 +123,142 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The points to be fitted</param>
       /// <returns>An ellipse</returns>
-      public static Ellipse<float> LeastSquareEllipseFitting<D>(IEnumerable<Point<D>> points) where D : struct, IComparable
+      public static Ellipse EllipseLeastSquareFitting(PointF[] points)
       {
-         Ellipse<float> res = new Ellipse<float>();
-         using (MemStorage stor = new MemStorage())
-         {
-            Seq<MCvPoint2D32f> seq = To2D32fSequence(stor, points);
-            res.MCvBox2D = CvInvoke.cvFitEllipse2(seq.Ptr);
-         }
-         return res;
+         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            HeaderSize.MCvSeq,
+            HeaderSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block);
+         Ellipse e = new Ellipse(CvInvoke.cvFitEllipse2(seq));
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return e;
       }
 
       /// <summary>
       /// convert a series of points to LineSegment2D
       /// </summary>
-      /// <typeparam name="D">the depth of the point</typeparam>
       /// <param name="points">the array of points</param>
       /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <returns>array of LineSegment2D</returns>
-      public static LineSegment2D<D>[] PolyLine<D>(Point2D<D>[] points, bool closed) where D : struct, IComparable
+      public static LineSegment2DF[] PolyLine(PointF[] points, bool closed)
       {
-         LineSegment2D<D>[] res;
+         LineSegment2DF[] res;
          int length = points.Length;
          if (closed)
          {
-            res = new LineSegment2D<D>[length];
+            res = new LineSegment2DF[length];
+            PointF lastPoint = points[length - 1];
             for (int i = 0; i < res.Length; i++)
-               res[i] = new LineSegment2D<D>(points[i], points[(i + 1) % length]);
+            {
+               res[i] = new LineSegment2DF(lastPoint, points[i]);
+               lastPoint = points[i];
+            }
          }
          else
          {
-            res = new LineSegment2D<D>[length - 1];
+            res = new LineSegment2DF[length - 1];
+            PointF lastPoint = points[0];
+            for (int i = 1; i < res.Length; i++)
+            {
+               res[i] = new LineSegment2DF(lastPoint, points[i]);
+               lastPoint = points[i];
+            }
+         }
+
+         return res;
+      }
+
+
+      /// <summary>
+      /// convert a series of System.Drawing.Point to LineSegment2D
+      /// </summary>
+      /// <param name="points">the array of points</param>
+      /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
+      /// <returns>array of LineSegment2D</returns>
+      public static LineSegment2D[] PolyLine(System.Drawing.Point[] points, bool closed)
+      {
+         LineSegment2D[] res;
+         int length = points.Length;
+         if (closed)
+         {
+            res = new LineSegment2D[length];
             for (int i = 0; i < res.Length; i++)
-               res[i] = new LineSegment2D<D>(points[i], points[(i + 1)]);
+               res[i] = new LineSegment2D(points[i], points[(i + 1) % length]);
+         }
+         else
+         {
+            res = new LineSegment2D[length - 1];
+            for (int i = 0; i < res.Length; i++)
+               res[i] = new LineSegment2D(points[i], points[(i + 1)]);
          }
          return res;
       }
 
       /// <summary>
-      /// convert a series of MCvPoint to LineSegment2D
-      /// </summary>
-      /// <param name="points">the array of points</param>
-      /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
-      /// <returns>array of LineSegment2D</returns>
-      public static LineSegment2D<int>[] PolyLine(MCvPoint[] points, bool closed) 
-      {
-         return PolyLine(
-             Array.ConvertAll<MCvPoint, Point2D<int>>(points, delegate(MCvPoint p) { return new Point2D<int>(p.x, p.y);}),
-             closed);
-      }
-
-      /// <summary>
       /// Obtain the convex hull from the point collection
       /// </summary>
-      /// <typeparam name="D">The type of depth for the point</typeparam>
       /// <param name="points">The points to find convex hull from</param>
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <returns>The array of points that forms the convex hull</returns>
-      public static MCvPoint2D32f[] ConvexHull<D>(IEnumerable<Point<D>> points, CvEnum.ORIENTATION orientation) where D : struct, IComparable
+      public static System.Drawing.PointF[] ConvexHull(PointF[] points, CvEnum.ORIENTATION orientation)
       {
          using (MemStorage stor = new MemStorage())
-         using (Seq<MCvPoint2D32f> sequence = To2D32fSequence<D>(stor, points))
-         using (Seq<MCvPoint2D32f> hullSequence = sequence.GetConvexHull(orientation, stor))
          {
-            return hullSequence.ToArray();
+            IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
+            IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+            GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+            CvInvoke.cvMakeSeqHeaderForArray(
+               CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+               HeaderSize.MCvSeq,
+               HeaderSize.PointF,
+               handle.AddrOfPinnedObject(),
+               points.Length,
+               seq,
+               block);
+
+            Seq<PointF> convexHull = new Seq<PointF>(CvInvoke.cvConvexHull2(seq, stor.Ptr, orientation, 1), stor);
+            PointF[] res = convexHull.ToArray();
+
+            handle.Free();
+            Marshal.FreeHGlobal(seq);
+            Marshal.FreeHGlobal(block);
+
+            return res;
          }
+      }
+
+      /// <summary>
+      /// Find the bounding rectangle for the specific array of points
+      /// </summary>
+      /// <param name="points">The collection of points</param>
+      /// <returns>The bounding rectangle for the array of points</returns>
+      public static System.Drawing.Rectangle BoundingRectangle(PointF[] points)
+      {
+         using (MemStorage storage = new MemStorage())
+         using (Seq<System.Drawing.PointF> seq = new Seq<System.Drawing.PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage))
+         {
+            seq.Push(points, CvEnum.BACK_OR_FRONT.FRONT);
+            return  CvInvoke.cvBoundingRect(seq.Ptr, true);
+         }
+         /*
+         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvContour);
+         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         System.Drawing.Rectangle rect = CvInvoke.cvBoundingRect(seq, true);
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return rect;
+         */ 
       }
    }
 }

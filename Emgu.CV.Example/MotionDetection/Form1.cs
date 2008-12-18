@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Threading;
 
@@ -61,7 +62,7 @@ namespace MotionDetection
             #region get a copy of the motion mask and enhance its color
             Image<Gray, Byte> motionMask = _motionHistory.Mask;
             double[] minValues, maxValues; 
-            MCvPoint[] minLoc, maxLoc;
+            System.Drawing.Point[] minLoc, maxLoc;
             motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
             motionMask = motionMask * (255.0 / maxValues[0]);
             #endregion
@@ -80,7 +81,7 @@ namespace MotionDetection
             foreach (MCvConnectedComp comp in motionComponents)
             {
                //reject the components that have small area;
-               if (comp.rect.Area < minArea) continue;
+               if (comp.rect.Width * comp.rect.Height < minArea) continue;
 
                // find the angle and motion pixel count of the specific area
                double angle, motionPixelCount;
@@ -95,8 +96,8 @@ namespace MotionDetection
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
-            _motionHistory.MotionInfo(motionMask.ROI.MCvRect, out overallAngle, out overallMotionPixelCount);
-            DrawMotion(motionImage, motionMask.ROI.MCvRect, overallAngle, new Bgr(Color.Green));
+            _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
+            DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
 
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
@@ -122,19 +123,18 @@ namespace MotionDetection
          }
       }
 
-      private static void DrawMotion(Image<Bgr, Byte> image, MCvRect motionArea, double angle, Bgr color)
+      private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionArea, double angle, Bgr color)
       {
-         int circleRadius = (int)(motionArea.width + motionArea.height) / 4;
+         float circleRadius = (float)(motionArea.Width + motionArea.Height) / 4.0f;
 
-         Rectangle<int> rect = new Rectangle<int>(motionArea);
-         Circle<int> circle = new Circle<int>(rect.Center, circleRadius);
+         CircleF circle = new CircleF(new System.Drawing.PointF(motionArea.X + motionArea.Width / 2.0f, motionArea.Y + motionArea.Height / 2.0f), circleRadius);
 
          int xDirection = (int)(Math.Cos(angle * Math.PI / 180.0) * circleRadius);
          int yDirection = (int)(Math.Sin(angle * Math.PI / 180.0) * circleRadius);
-         Point2D<int> pointOnCircle = new Point2D<int>(
-             circle.Center.X + xDirection,
-             circle.Center.Y + yDirection);
-         LineSegment2D<int> line = new LineSegment2D<int>(circle.Center, pointOnCircle);
+         Point pointOnCircle = new Point(
+             (int)circle.Center.X + xDirection,
+             (int)circle.Center.Y + yDirection);
+         LineSegment2D line = new LineSegment2D(new Point((int)circle.Center.X, (int) circle.Center.Y), pointOnCircle);
 
          image.Draw(circle, color, 1);
          image.Draw(line, color, 2);

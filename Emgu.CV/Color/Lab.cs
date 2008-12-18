@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -8,18 +9,15 @@ namespace Emgu.CV
    ///Defines a CIE Lab color 
    ///</summary>
    [ColorInfo(ConversionCodename = "Lab")]
-   public class Lab : ColorType
+   public class Lab : ColorType, IEquatable<Lab>
    {
       ///<summary> Create a CIE Lab color using the specific values</summary>
       ///<param name="z"> The z value for this color </param>
       ///<param name="y"> The y value for this color </param>
       ///<param name="x"> The x value for this color </param>
       public Lab(double x, double y, double z)
-         : this()
+         : base(3, new MCvScalar(x, y, z))
       {
-         _coordinate[0] = x;
-         _coordinate[1] = y;
-         _coordinate[2] = z;
       }
 
       ///<summary> Create a CIE Lab color using the default values (0.0, 0.0, 0.0)</summary>
@@ -29,14 +27,27 @@ namespace Emgu.CV
 
       ///<summary> Get or set the intensity of the x color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double X { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
+      public double X { get { return _scalar.v0; } set { _scalar.v0 = value; } }
 
       ///<summary> Get or set the intensity of the y color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Y { get { return _coordinate[1]; } set { _coordinate[1] = value; } }
+      public double Y { get { return _scalar.v1; } set { _scalar.v1 = value; } }
 
       ///<summary> Get or set the intensity of the z color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Z { get { return _coordinate[2]; } set { _coordinate[2] = value; } }
+      public double Z { get { return _scalar.v2; } set { _scalar.v2 = value; } }
+
+      #region IEquatable<Lab> Members
+      /// <summary>
+      /// Return true if the two color equals
+      /// </summary>
+      /// <param name="other">The other color to compare with</param>
+      /// <returns>true if the two color equals</returns>
+      public bool Equals(Lab other)
+      {
+         return MCvScalar.Equals(other.MCvScalar);
+      }
+
+      #endregion
    }
 }

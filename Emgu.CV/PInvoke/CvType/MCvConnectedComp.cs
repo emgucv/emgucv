@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed structure equivalent to CvConnectedComp
@@ -24,7 +24,7 @@ namespace Emgu.CV
       /// <summary>
       /// ROI of the segmented component
       /// </summary>
-      public MCvRect rect;
+      public System.Drawing.Rectangle rect;
 
       /// <summary>
       /// Pointer to the CvSeq

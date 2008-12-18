@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -16,14 +17,14 @@ namespace Emgu.CV
    {
       private TDepth[,] _array;
 
-      private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMat));
+      //private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMat));
 
       private void AllocateHeader()
       {
          if (_ptr == IntPtr.Zero)
          {
-            _ptr = Marshal.AllocHGlobal(_sizeOfHeader);
-            GC.AddMemoryPressure(_sizeOfHeader);
+            _ptr = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+            GC.AddMemoryPressure(HeaderSize.MCvMat);
          }
       }
 
@@ -32,6 +33,30 @@ namespace Emgu.CV
       /// The default constructor which allows Data to be set later on
       /// </summary>
       protected Matrix()
+      {
+      }
+
+      /// <summary>
+      /// Create a Matrix (only header is allocated) using the Pinned/Unmanaged <paramref name="data"/>. The <paramref name="data"/> is not freed by the disposed function of this class 
+      /// </summary>
+      /// <param name="rows">The number of rows</param>
+      /// <param name="cols">The number of cols</param>
+      /// <param name="data">The Pinned/Unmanaged data</param>
+      /// <param name="step">The step (row stride in bytes)</param>
+      public Matrix(int rows, int cols, IntPtr data, int step)
+      {
+         AllocateHeader();
+         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvDepth, data, step);
+      }
+
+      /// <summary>
+      /// Create a Matrix (only header is allocated) using the Pinned/Unmanaged <paramref name="data"/>. The <paramref name="data"/> is not freed by the disposed function of this class 
+      /// </summary>
+      /// <param name="rows">The number of rows</param>
+      /// <param name="cols">The number of cols</param>
+      /// <param name="data">The Pinned/Unmanaged data</param>
+      public Matrix(int rows, int cols, IntPtr data)
+         : this(rows, cols, data, 0)
       {
       }
 
@@ -282,12 +307,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rect">the rectangle area of the sub-matrix</param>
       /// <returns>A submatrix corresponding to a specified rectangle</returns>
-      public Matrix<TDepth> GetSubMatrix(Rectangle<double> rect)
+      public Matrix<TDepth> GetSubMatrix(System.Drawing.Rectangle rect)
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
          subMat.AllocateHeader();
-         CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect.MCvRect);
+         CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect);
          return subMat;
       }
 
@@ -441,10 +466,10 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the min / max locations and values for the matrix
       /// </summary>
-      public void MinMax(out double minValue, out double maxValue, out MCvPoint minLocation, out MCvPoint maxLocation)
+      public void MinMax(out double minValue, out double maxValue, out System.Drawing.Point minLocation, out System.Drawing.Point maxLocation)
       {
          minValue = 0; maxValue = 0;
-         minLocation = new MCvPoint(); maxLocation = new MCvPoint();
+         minLocation = new System.Drawing.Point(); maxLocation = new System.Drawing.Point();
          CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
       }
 
@@ -659,7 +684,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             Marshal.FreeHGlobal(_ptr);
-            GC.RemoveMemoryPressure(_sizeOfHeader);
+            GC.RemoveMemoryPressure(HeaderSize.MCvMat);
             _ptr = IntPtr.Zero;
          }
 

@@ -5,6 +5,7 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 
 namespace SURFFeatureExample
 {
@@ -36,15 +37,15 @@ namespace SURFFeatureExample
          SURFFeature[] imageFeatures = image.ExtractSURF(ref param2);
          
          Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
-         res.ROI = new Rectangle<double>(new MCvRect(0, 0, objectImage.Width, objectImage.Height));
+         res.ROI = new System.Drawing.Rectangle(0, 0, objectImage.Width, objectImage.Height);
          objectImage.Copy(res, null);
-         res.ROI = new Rectangle<double>(new MCvRect(0, objectImage.Height, image.Width, image.Height) );
+         res.ROI = new System.Drawing.Rectangle(0, objectImage.Height, image.Width, image.Height);
          image.Copy(res, null);
-         res.ROI = null;
+         res.ROI = System.Drawing.Rectangle.Empty;
 
          t1 = DateTime.Now;
-         List<Point2D<float>> list1 = new List<Point2D<float>>();
-         List<Point2D<float>> list2 = new List<Point2D<float>>();
+         List<PointF> list1 = new List<PointF>();
+         List<PointF> list2 = new List<PointF>();
          foreach (SURFFeature f in objectFeatures)
          {
             double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeatures,
@@ -71,46 +72,42 @@ namespace SURFFeatureExample
             }
             if (distance[closestIndex] < 0.6 * distance[secondClosestIndex])
             { //If this is almost a unique match
-               Point2D<float> p1 = new Point2D<float>((float)f.Point.pt.x, (float)f.Point.pt.y);
                SURFFeature match = imageFeatures[closestIndex];
-               Point2D<float> p2 = new Point2D<float>((float)match.Point.pt.x, (float)match.Point.pt.y);
-               list1.Add(p1);
-               list2.Add(p2);
+               list1.Add(f.Point.pt);
+               list2.Add(match.Point.pt);
 
-               Point2D<float> p = p2.Convert<float>();
-               p.Y += objectImage.Height;
-               res.Draw(new LineSegment2D<int>(p1.Convert<int>(), p.Convert<int>()), new Gray(0), 1);
+               res.Draw(new LineSegment2D(
+                  new Point( (int)f.Point.pt.X, (int)f.Point.pt.Y),  
+                  new Point( (int)match.Point.pt.X, (int)match.Point.pt.Y + objectImage.Height)), 
+                  new Gray(0), 1);
             }
          }
 
          Matrix<float> homographyMatrix = CameraCalibration.FindHomography(list1.ToArray(), list2.ToArray(), HOMOGRAPHY_METHOD.RANSAC, 3);
-         Rectangle<double> rect = objectImage.ROI;
 
-         Point2D<double>[] pts = new Point2D<double>[]
-         {
-            HomographyTransform( rect.BottomLeft, homographyMatrix ),
-            HomographyTransform( rect.BottomRight, homographyMatrix ),
-            HomographyTransform( rect.TopRight, homographyMatrix ),
-            HomographyTransform( rect.TopLeft, homographyMatrix )
-         };
+         System.Drawing.Rectangle rect = objectImage.ROI;
+         Matrix<float> orginalCornerCoordinate = new Matrix<float>(new float[,] 
+            {{  rect.Left, rect.Bottom, 1.0f},
+               { rect.Right, rect.Bottom, 1.0f},
+               { rect.Right, rect.Top, 1.0f},
+               { rect.Left, rect.Top, 1.0f}});
 
-         foreach (Point2D<double> p in pts)
+         Matrix<float> destCornerCoordinate = homographyMatrix * orginalCornerCoordinate.Transpose();
+         Point[] destCornerPoints = new Point[4];
+         float[,] destCornerCoordinateArray = destCornerCoordinate.Data;
+         for (int i = 0; i < destCornerPoints.Length; i++)
          {
-            p.Y += objectImage.Height;
+            float denominator = destCornerCoordinateArray[2, i];
+            destCornerPoints[i] = new Point(
+               (int)(destCornerCoordinateArray[0, i] / denominator),
+               (int)(destCornerCoordinateArray[1, i] / denominator) + objectImage.Height);
          }
 
-         res.DrawPolyline(pts, true, new Gray(255.0), 5);
+         res.DrawPolyline(destCornerPoints, true, new Gray(255.0), 5);
 
          Application.Run(new ImageViewer(res));
       }
 
-      private static Point2D<double> HomographyTransform(Point2D<double> p, Matrix<float> homographyMatrix)
-      {
-         Matrix<float> pMat = new Matrix<float>(p.Convert<float>().Resize(3).Coordinate);
-         pMat[2, 0] = 1.0f;
-         pMat = homographyMatrix * pMat;
-         pMat = pMat / (double)pMat[2, 0];
-         return new Point2D<double>((double)pMat[0, 0], (double)pMat[1, 0]);
-      }
+
    }
 }

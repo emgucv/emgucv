@@ -6,20 +6,20 @@ using System.Drawing;
 namespace Emgu.CV
 {
    ///<summary> A 2D line </summary>
-   public class Line2D
+   public class Line2DF
    {
       ///<summary> A point on the line </summary>
-      private Point _p1;
+      private PointF _p1;
       ///<value> An other point on the line </value>
-      private Point _p2;
+      private PointF _p2;
 
       ///<summary>
       ///Create a default line
       ///</summary>
-      public Line2D()
+      public Line2DF()
       {
-         _p1 = new Point();
-         _p2 = new Point();
+         _p1 = new PointF();
+         _p2 = new PointF();
       }
 
       ///<summary> 
@@ -27,41 +27,40 @@ namespace Emgu.CV
       ///</summary>
       ///<param name="p1"> A point on the line </param>
       ///<param name="p2"> An other point on the line </param>
-      public Line2D(Point p1, Point p2)
+      public Line2DF(PointF p1, PointF p2)
       {
          _p1 = p1;
          _p2 = p2;
       }
 
       ///<summary> A point on the line </summary>
-      public Point P1 { get { return _p1; } set { _p1 = value; } }
+      public PointF P1 { get { return _p1; } set { _p1 = value; } }
 
       ///<summary> An other point on the line </summary>
-      public Point P2 { get { return _p2; } set { _p2 = value; } }
+      public PointF P2 { get { return _p2; } set { _p2 = value; } }
 
       ///<summary> The direction of the line, the norm of which is 1 </summary>
       public PointF Direction
       {
          get
          {
-            int dx = P1.X - P2.X;
-            int dy = P1.Y - P2.Y;
+            float dx = P2.X - P1.X;
+            float dy = P2.Y - P1.Y;
             float dist = (float)Math.Sqrt(dx * dx + dy * dy);
 
-            return new PointF(dx / dist, dy / dist);
+            return new PointF(dx/dist, dy / dist);
          }
       }
 
-      /*
-      ///<summary> Obtain the Y value from the X value</summary>
+      ///<summary> Obtain the Y value from the X value using first degree interpolation</summary>
       ///<param name="x">The X value</param>
       ///<returns>The Y value</returns>
       public float YByX(float x)
       {
-         Point2D<double> p1 = _p1.Convert<double>();
-         Point2D<double> dir = Direction;
-         return (T)System.Convert.ChangeType((System.Convert.ToDouble(x) - p1.X) / dir.X * dir.Y + p1.Y, typeof(T));
-      }*/
+         PointF p1 = _p1;
+         PointF dir = Direction;
+         return (x - p1.X) / dir.X * dir.Y + p1.Y;
+      }
 
       /// <summary>
       /// Determin which side of the line the 2D point is at
@@ -72,7 +71,7 @@ namespace Emgu.CV
       /// 0 if on the line;
       /// -1 if on the left hand side;
       /// </returns>
-      public int Side(Point point)
+      public int Side(PointF point)
       {
          float res = (P1.X - P1.X) * (point.Y - P1.Y) - (point.X - P1.X) * (P2.Y - P1.Y);
          return res > 0.0f ? 1 :
@@ -84,7 +83,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="otherLine">The other line</param>
       /// <returns>The exterior angle between this line and <paramref name="otherLine"/></returns>
-      public double GetExteriorAngleDegree(Line2D otherLine)
+      public double GetExteriorAngleDegree(Line2DF otherLine)
       {
          PointF direction1 = Direction;
          PointF direction2 = otherLine.Direction;

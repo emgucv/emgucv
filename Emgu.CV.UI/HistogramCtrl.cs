@@ -76,7 +76,7 @@ namespace Emgu.CV.UI
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
       /// <param name="values">The points on the histogram</param>
-      public void AddHistogram(String name, System.Drawing.Color color, IEnumerable<Point2D<int>> values)
+      public void AddHistogram(String name, System.Drawing.Color color, IEnumerable<System.Drawing.Point> values)
       {
          GraphPane pane = new GraphPane();
 
@@ -87,7 +87,7 @@ namespace Emgu.CV.UI
 
          PointPairList list1 = new PointPairList();
 
-         foreach (Point2D<int> point in values)
+         foreach (System.Drawing.Point point in values)
             //if (point.Y != 0)
             list1.Add(point.X, point.Y);
 

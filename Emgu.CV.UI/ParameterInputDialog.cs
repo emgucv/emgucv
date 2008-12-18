@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Emgu.CV.Reflection;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.UI
 {

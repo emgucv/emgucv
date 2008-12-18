@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed CvSubdiv2DPoint structure
@@ -24,7 +24,7 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
-      public MCvPoint2D32f pt;
+      public System.Drawing.PointF pt;
 
       /// <summary>
       /// return if this is a valid point

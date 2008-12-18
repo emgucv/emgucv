@@ -5,6 +5,7 @@ using System.Text;
 using System.ServiceModel;
 using System.Runtime.InteropServices;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

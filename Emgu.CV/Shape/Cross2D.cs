@@ -3,56 +3,71 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using System.Drawing;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// A 2D cross
    /// </summary>
-   /// <typeparam name="T">The type of elements in the cross</typeparam>
-   public class Cross2D<T> : Rectangle<T> where T : struct, IComparable
+   public struct Cross2DF 
    {
+      private PointF _center;
+      private SizeF _size;
+
+      /// <summary>
+      /// The center of this cross
+      /// </summary>
+      public PointF Center
+      {
+         get { return _center; }
+         set { _center = value; }
+      }
+
+      /// <summary>
+      /// The size of this cross
+      /// </summary>
+      public SizeF Size
+      {
+         get { return _size; }
+         set { _size = value; }
+      }
+
       /// <summary>
       /// Construct a cross
       /// </summary>
       /// <param name="center">The center of the cross</param>
       /// <param name="width">the width of the cross</param>
       /// <param name="height">the height of the cross</param>
-      public Cross2D(Point2D<T> center, T width, T height)
-         : base(center, width, height)
+      public Cross2DF(PointF center, float width, float height)
       {
-
+         _center = center;
+         _size = new SizeF(width, height);
       }
 
       /// <summary>
       /// Get the horizonal linesegment of this cross
       /// </summary>
-      public LineSegment2D<T> Horizontal
+      public LineSegment2DF Horizontal
       {
          get
          {
-            Point2D<double> center = Center.Convert<double>();
-            double width = System.Convert.ToDouble(Size.X);
-            //double height = System.Convert.ToDouble(_size.Y);
-            return new LineSegment2D<T>(
-                (new Point2D<double>(center.X - width / 2.0, center.Y)).Convert<T>(),
-                (new Point2D<double>(center.X + width / 2.0, center.Y)).Convert<T>());
+            return new LineSegment2DF(
+                (new PointF(_center.X - (_size.Width / 2.0f), _center.Y)),
+                (new PointF(_center.X + (_size.Width / 2.0f), _center.Y)));
          }
       }
 
       /// <summary>
       /// Get the vertical linesegment of this cross
       /// </summary>
-      public LineSegment2D<T> Vertical
+      public LineSegment2DF Vertical
       {
          get
          {
-            Point2D<double> center = Center.Convert<double>();
-            //double width = System.Convert.ToDouble(_size.X);
-            double height = System.Convert.ToDouble(Size.Y);
-            return new LineSegment2D<T>(
-                (new Point2D<double>(center.X, center.Y - height / 2.0)).Convert<T>(),
-                (new Point2D<double>(center.X, center.Y + height / 2.0)).Convert<T>());
+            return new LineSegment2DF(
+                (new PointF(_center.X, _center.Y - (_size.Height / 2.0f))),
+                (new PointF(_center.X, _center.Y + (_size.Height / 2.0f))));
          }
       }
    }

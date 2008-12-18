@@ -16,7 +16,7 @@ Module Module1
       'Convert the image to Grayscale
       Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
 
-      For Each rect As Rectangle(Of Double) In imgGray.DetectHaarCascade(objectToDetect)(0)
+      For Each rect As Rectangle In imgGray.DetectHaarCascade(objectToDetect)(0)
          img.Draw(rect, New Bgr(Color.White), 1)
       Next
 

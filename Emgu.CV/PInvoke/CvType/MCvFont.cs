@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed structure equivalent to CvFont
@@ -69,9 +69,9 @@ namespace Emgu.CV
       /// <param name="text">Input string</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
       /// <returns>size of the text string. Height of the text does not include the height of character parts that are below the baseline</returns>
-      public MCvSize GetTextSize(string text, int baseline)
+      public System.Drawing.Size GetTextSize(string text, int baseline)
       {
-         MCvSize size = new MCvSize();
+         System.Drawing.Size size = new System.Drawing.Size();
          CvInvoke.cvGetTextSize(text, ref this, ref size, ref baseline);
          return size;
       }

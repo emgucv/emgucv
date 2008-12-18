@@ -13,7 +13,7 @@ namespace Emgu.CV
       /// <summary>
       /// The center of the convolution kernel
       /// </summary>
-      protected Point2D<int> _center;
+      protected System.Drawing.Point _center;
 
       /// <summary>
       /// Create a convolution kernel with the specific number of <paramref name="rows"/> and <paramref name="cols"/>
@@ -24,7 +24,7 @@ namespace Emgu.CV
          : base(rows, cols)
       {
          Debug.Assert(!(rows <= 1 || cols <= 1));
-         _center = new Point2D<int>(-1, -1);
+         _center = new System.Drawing.Point(-1, -1);
       }
 
       /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="kernel">the values for the convolution kernel</param>
       /// <param name="center">the center of the kernel</param>
-      public ConvolutionKernelF(Matrix<float> kernel, Point2D<int> center)
+      public ConvolutionKernelF(Matrix<float> kernel, System.Drawing.Point center)
          : this(kernel.Data, center)
       {
       }
@@ -42,7 +42,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="kernel">the values for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel)
-         : this(kernel, new Point2D<int>(-1, -1))
+         : this(kernel, new System.Drawing.Point(-1, -1))
       {
       }
 
@@ -51,7 +51,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="kernel">the values for the convolution kernel</param>
       /// <param name="center">the center for the convolution kernel</param>
-      public ConvolutionKernelF(float[,] kernel, Point2D<int> center)
+      public ConvolutionKernelF(float[,] kernel, System.Drawing.Point center)
          : base()
       {
          int rows = kernel.GetLength(0);
@@ -87,15 +87,20 @@ namespace Emgu.CV
          ConvolutionKernelF res = new ConvolutionKernelF(Height, Width);
          CvInvoke.cvFlip(Ptr, res.Ptr, code);
 
-         res.Center.X = (Center.X == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? Width - Center.X - 1 : Center.X));
-         res.Center.Y = (Center.Y == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FLIP.VERTICAL) == Emgu.CV.CvEnum.FLIP.VERTICAL ? Height - Center.Y - 1 : Center.Y));
+         res.Center = new System.Drawing.Point(
+          (Center.X == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? Width - Center.X - 1 : Center.X)),
+          (Center.Y == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FLIP.VERTICAL) == Emgu.CV.CvEnum.FLIP.VERTICAL ? Height - Center.Y - 1 : Center.Y)));
          return res;
       }
 
       /// <summary>
       /// The center of the convolution kernel
       /// </summary>
-      public Point2D<int> Center { get { return _center; } }
+      public System.Drawing.Point Center 
+      { 
+         get { return _center; }
+         set { _center = value; }
+      }
 
       /// <summary>
       /// Obtain the transpose of the convolution kernel
@@ -105,7 +110,7 @@ namespace Emgu.CV
       {
          return new ConvolutionKernelF(
          base.Transpose(),
-         new Point2D<int>(_center.Y, _center.X));
+         new System.Drawing.Point(_center.Y, _center.X));
       }
    }
 }

@@ -4,12 +4,14 @@ using System.Text;
 using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
+using Emgu.CV.Structure;
 using Emgu.UI;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
@@ -30,59 +32,69 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCvClipLine()
       {
-         MCvPoint m1 = new MCvPoint(-1, 10);
-         MCvPoint m2 = new MCvPoint(100, 10);
-         int inside = CvInvoke.cvClipLine(new MCvSize(20, 20), ref m1, ref m2);
-         Assert.AreEqual(0, m1.x);
-         Assert.AreEqual(19, m2.x);
+         System.Drawing.Point m1 = new System.Drawing.Point(-1, 10);
+         System.Drawing.Point m2 = new System.Drawing.Point(100, 10);
+         int inside = CvInvoke.cvClipLine(new System.Drawing.Size(20, 20), ref m1, ref m2);
+         Assert.AreEqual(0, m1.X);
+         Assert.AreEqual(19, m2.X);
       }
 
       [Test]
       public void TestLookup()
       {
-         double[] b = new double[4] { 0.0, 1.0, 2.0, 3.0 };
-         double[] a = new double[4] { 1.0, 3.0, 2.0, 0.0 };
-         Point2D<double>[] pts = new Point2D<double>[b.Length];
+         float[] b = new float[4] { 0, 1, 2, 3 };
+         float[] a = new float[4] { 1, 3, 2, 0 };
+         PointF[] pts = new PointF[b.Length];
          for (int i = 0; i < pts.Length; i++)
-            pts[i] = new Point2D<double>(b[i], a[i]);
+            pts[i] = new PointF(b[i], a[i]);
 
-         Assert.AreEqual(2.5, PointCollection.FirstDegreeInterpolate(pts, 1.5));
-         Assert.AreEqual(-1, PointCollection.FirstDegreeInterpolate(pts, 3.5));
+         Assert.AreEqual(2.5f, PointCollection.FirstDegreeInterpolate(pts, 1.5f));
+         Assert.AreEqual(-1f, PointCollection.FirstDegreeInterpolate(pts, 3.5f));
       }
 
       [Test]
       public void TestLineFitting()
       {
-         List<Point2D<float>> pts = new List<Point2D<float>>();
+         List<PointF> pts = new List<PointF>();
 
-         pts.Add(new Point2D<float>(1.0f, 1.0f));
-         pts.Add(new Point2D<float>(2.0f, 2.0f));
-         pts.Add(new Point2D<float>(3.0f, 3.0f));
-         pts.Add(new Point2D<float>(4.0f, 4.0f));
+         pts.Add(new PointF(1.0f, 1.0f));
+         pts.Add(new PointF(2.0f, 2.0f));
+         pts.Add(new PointF(3.0f, 3.0f));
+         pts.Add(new PointF(4.0f, 4.0f));
 
-         Line2D<float> res = PointCollection.Line2DFitting((IEnumerable<Point<float>>)pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
+         Line2DF res = PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
 
+         PointF direction = res.Direction;
+         
          //check if the line is 45 degree from +x axis
-         Assert.AreEqual(45.0, res.Direction.PointDegreeAngle);
+         Assert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
       }
 
       [Test]
       public void TestSerialization()
       {
-         Rectangle<int> rec = new Rectangle<int>(new MCvRect(-10, -2, 20, 12));
+         /*
+         Rectangle<int> rec = new Rectangle<int>(new System.Drawing.Rectangle(-10, -2, 20, 12));
          XmlDocument xdoc = Toolbox.XmlSerialize<Rectangle<int>>(rec);
          //Trace.WriteLine(xdoc.OuterXml);
          rec = Toolbox.XmlDeserialize<Rectangle<int>>(xdoc);
+         */
 
-         Point2D<double> pt2d = new Point2D<double>(12.0, 5.5);
-         xdoc = Toolbox.XmlSerialize<Point2D<double>>(pt2d);
+         MCvPoint2D64f pt2d = new MCvPoint2D64f(12.0, 5.5);
+         Point ptemp = new Point(10, 10);
+         //XmlSerializer x = new XmlSerializer(typeof(Point2D<double>), new Type[] { typeof(System.Drawing.Point) });
+         //StringBuilder sb = new StringBuilder();
+         //x.Serialize(new StringWriter(sb), pt2d);
+         //xdoc = new XmlDocument();
+         //xdoc.Load(sb.ToString());
+         XmlDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d, new Type[] { typeof(System.Drawing.Point) });
          //Trace.WriteLine(xdoc.OuterXml);
-         pt2d = Toolbox.XmlDeserialize<Point2D<double>>(xdoc);
+         pt2d = Toolbox.XmlDeserialize<MCvPoint2D64f>(xdoc, new Type[] { typeof(System.Drawing.Point) });
 
-         Circle<float> cir = new Circle<float>(new Point2D<float>(0.0f, 1.0f), 2.8f);
-         xdoc = Toolbox.XmlSerialize<Circle<float>>(cir);
+         CircleF cir = new CircleF(new PointF(0.0f, 1.0f), 2.8f);
+         xdoc = Toolbox.XmlSerialize<CircleF>(cir, new Type[] { typeof(System.Drawing.Point) });
          //Trace.WriteLine(xdoc.OuterXml);
-         cir = Toolbox.XmlDeserialize<Circle<float>>(xdoc);
+         cir = Toolbox.XmlDeserialize<CircleF>(xdoc, new Type[] { typeof(System.Drawing.Point) });
 
          Image<Bgr, Byte> img1 = new Image<Bgr, byte>("stuff.jpg");
          xdoc = Toolbox.XmlSerialize(img1);
@@ -115,29 +127,29 @@ namespace Emgu.CV.Test
       [Test]
       public void TestContour()
       {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
+         //Application.EnableVisualStyles();
+         //Application.SetCompatibleTextRenderingDefault(false);
          using (Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray()))
          {
-            Rectangle<double> rect = new Rectangle<double>(new MCvRect(10, 10, 80 - 10, 50 - 10));
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(10, 10, 80 - 10, 50 - 10);
             img.Draw(rect, new Gray(255.0), -1);
-
-            Point2D<float> pIn = new Point2D<float>(60, 40);
-            Point2D<float> pOut = new Point2D<float>(80, 100);
+            //ImageViewer.Show(img);
+            PointF pIn = new PointF(60, 40);
+            PointF pOut = new PointF(80, 100);
 
             using (MemStorage stor = new MemStorage())
             {
-               Contour<MCvPoint> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
-               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(MCvPoint)));
-               Assert.AreEqual(rect.Area, cs.Area);
+               Contour<System.Drawing.Point> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(System.Drawing.Point)));
+               Assert.AreEqual(rect.Width * rect.Height, cs.Area);
 
                Assert.IsTrue(cs.Convex);
                Assert.AreEqual(rect.Width * 2 + rect.Height * 2, cs.Perimeter);
-               Rectangle<double> rect2 = cs.BoundingRectangle;
+               System.Drawing.Rectangle rect2 = cs.BoundingRectangle;
                rect2.Width -= 1;
                rect2.Height -= 1;
-               rect2.Center.X -= 0.5;
-               rect2.Center.Y -= 0.5;
+               //rect2.Center.X -= 0.5;
+               //rect2.Center.Y -= 0.5;
                Assert.IsTrue(rect2.Equals(rect));
                Assert.AreEqual(cs.InContour(pIn), 100);
                Assert.AreEqual(cs.InContour(pOut), -100);
@@ -145,21 +157,23 @@ namespace Emgu.CV.Test
                Assert.AreEqual(cs.Distance(pOut), -50);
                img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
 
+               MCvPoint2D64f rectangleCenter = new MCvPoint2D64f(rect.X + rect.Width / 2.0, rect.Y + rect.Height / 2.0);
                MCvMoments moment = cs.GetMoments();
-               Assert.IsTrue(moment.GravityCenter.Equals(rect2.Center));
+               MCvPoint2D64f center = moment.GravityCenter;
+               Assert.AreEqual(center, rectangleCenter);
             }
 
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
-               Contour<MCvPoint> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Contour<System.Drawing.Point> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
                Assert.AreEqual(c, null);
             }
          }
 
          int s1 = Marshal.SizeOf(typeof(MCvSeq));
          int s2 = Marshal.SizeOf(typeof(MCvContour));
-         int sizeRect = Marshal.SizeOf(typeof(MCvRect));
+         int sizeRect = Marshal.SizeOf(typeof(System.Drawing.Rectangle));
          Assert.AreEqual(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)), s2);
       }
 
@@ -181,21 +195,6 @@ namespace Emgu.CV.Test
             }
             Assert.IsTrue(exceptionCaught);
          }
-      }
-
-      [Test]
-      public void TestRectangle()
-      {
-         Matrix<Byte> mat = new Matrix<Byte>(1, 4);
-         mat.SetRandUniform(new MCvScalar(), new MCvScalar(255.0));
-
-         MCvRect rect1 = new MCvRect((int)mat[0, 0], (int)mat[0, 1], (int)mat[0, 2], (int)mat[0, 3]);
-         Rectangle<double> rectangle = new Rectangle<double>(rect1);
-         MCvRect rect2 = rectangle.MCvRect;
-
-         Assert.AreEqual(rect1.x, rect2.x);
-         Assert.AreEqual(rect1.y, rect2.y);
-
       }
 
       [Test]
@@ -246,15 +245,17 @@ namespace Emgu.CV.Test
          }
          #endregion
       }
+      
+      /*
       [Test]
       public void TestPointInPolygon()
       {
-         Triangle2D<float> tri = new Triangle2D<float>(
+         Triangle2D tri = new Triangle2D(
              new Point2D<float>(-10, -10),
              new Point2D<float>(0, 10),
              new Point2D<float>(10, -10));
 
-         Rectangle<float> rect = new Rectangle<float>(
+         Rectangle<float> rect = new Rectangle(
              new Point2D<float>(0.0f, 0.0f),
              10f, 10f);
 
@@ -265,29 +266,15 @@ namespace Emgu.CV.Test
          Assert.IsTrue(p1.InConvexPolygon(rect));
          Assert.IsFalse(p2.InConvexPolygon(tri));
          Assert.IsFalse(p2.InConvexPolygon(rect));
+      }*/
 
-         /*
-         using (MemStorage stor = new MemStorage())
-         {
-            Seq<MCvPoint2D32f> contour = new Seq<MCvPoint2D32f>(
-               CvEnum.SEQ_ELTYPE.CV_SEQ_ELTYPE_GENERIC,
-               CvEnum.SEQ_KIND.CV_SEQ_KIND_CURVE, 
-               CvEnum.SEQ_FLAG.CV_SEQ_FLAG_CLOSED, 
-               stor);
-            foreach (Point2D<float> p in tri.Vertices)
-            {
-               contour.Push(p.MCvPoint2D32f);
-            }
-            Assert.IsTrue(contour.InContour(p1) > 0);
-         }*/
-      }
-
+      /*
       private float[,] ProjectPoints(float[,] points3D, Matrix<float> rotation, Matrix<float> translation, float focalLength)
       {
          float[,] imagePoint = new float[points3D.GetLength(0), 2];
          for (int i = 0; i < imagePoint.GetLength(0); i++)
          {
-            Point3D<float> p = new Point3D<float>(points3D[i, 0], points3D[i, 1], points3D[i, 2]);
+            MCvPoint3D32f p = new MCvPoint3D32f(points3D[i, 0], points3D[i, 1], points3D[i, 2]);
             Matrix<float> p3D = new Matrix<float>(p.Coordinate);
             Matrix<float> pProjected = rotation * p3D + translation;
             pProjected = pProjected * (focalLength / (-pProjected[2, 0]));
@@ -295,8 +282,9 @@ namespace Emgu.CV.Test
             imagePoint[i, 1] = pProjected[1, 0];
          }
          return imagePoint;
-      }
+      }*/
 
+      /*
       [Test]
       public void TestPOSIT()
       {
@@ -350,30 +338,31 @@ namespace Emgu.CV.Test
          }
 
          CvInvoke.cvReleasePOSITObject(ref posit);
-      }
+      }*/
 
       [Test]
       public void TestXmlSerialize()
       {
-         Point2D<float> p = new Point2D<float>(0.0f, 0.0f);
-         XmlDocument xDoc = Toolbox.XmlSerialize<Point2D<float>>(p);
-         Point2D<float> p2 = Toolbox.XmlDeserialize<Point2D<float>>(xDoc);
+         PointF p = new PointF(0.0f, 0.0f);
+         XmlDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(System.Drawing.Point) });
+         PointF p2 = Toolbox.XmlDeserialize<PointF>(xDoc, new Type[] { typeof(System.Drawing.Point) });
          Assert.IsTrue(p.Equals(p2));
 
-         Rectangle<double> rect = new Rectangle<double>(new Point2D<double>(3.5, 3.5), 5, 3);
-         XmlDocument xDoc2 = Toolbox.XmlSerialize<Rectangle<double>>(rect);
-         Rectangle<double> rect2 = Toolbox.XmlDeserialize<Rectangle<double>>(xDoc2);
+         
+         System.Drawing.Rectangle rect = new Rectangle(3, 4, 5, 3);
+         XmlDocument xDoc2 = Toolbox.XmlSerialize<System.Drawing.Rectangle>(rect);
+         System.Drawing.Rectangle rect2 = Toolbox.XmlDeserialize<System.Drawing.Rectangle>(xDoc2);
          Assert.IsTrue(rect.Equals(rect2));
-
+         
       }
 
       [Test]
       public void TestTriangle()
       {
-         Point2D<double> p1 = new Point2D<double>(0, 0);
-         Point2D<double> p2 = new Point2D<double>(1, 0);
-         Point2D<double> p3 = new Point2D<double>(0, 1);
-         Triangle2D<double> tri = new Triangle2D<double>(p1, p2, p3);
+         PointF p1 = new PointF(0, 0);
+         PointF p2 = new PointF(1, 0);
+         PointF p3 = new PointF(0, 1);
+         Triangle2DF tri = new Triangle2DF(p1, p2, p3);
          double epsilon = 1e-10;
          Assert.IsTrue(Math.Abs(tri.Area - 0.5) < epsilon);
       }
@@ -381,11 +370,11 @@ namespace Emgu.CV.Test
       [Test]
       public void TestLine()
       {
-         Point2D<double> p1 = new Point2D<double>(0, 0);
-         Point2D<double> p2 = new Point2D<double>(1, 0);
-         Point2D<double> p3 = new Point2D<double>(0, 1);
-         LineSegment2D<double> l1 = new LineSegment2D<double>(p1, p2);
-         LineSegment2D<double> l2 = new LineSegment2D<double>(p1, p3);
+         PointF p1 = new PointF(0, 0);
+         PointF p2 = new PointF(1, 0);
+         PointF p3 = new PointF(0, 1);
+         LineSegment2DF l1 = new LineSegment2DF(p1, p2);
+         LineSegment2DF l2 = new LineSegment2DF(p1, p3);
          double angle = l1.GetExteriorAngleDegree(l2);
          Assert.AreEqual(angle, 90.0);
       }
@@ -393,11 +382,13 @@ namespace Emgu.CV.Test
       [Test]
       public void GetBox2DPoints()
       {
-         MCvBox2D box = new MCvBox2D();
-         box.center = new MCvPoint2D32f(3.0f, 2.0f);
-         box.size = new MCvSize2D32f(4.0f, 6.0f);
-         Point2D<float>[] vertices = box.Vertices;
-         Assert.IsTrue(vertices[0].Equals(new Point2D<float>(0.0f, 0.0f)));
+         MCvBox2D box = new MCvBox2D(
+            new System.Drawing.PointF(3.0f, 2.0f), 
+            new System.Drawing.SizeF(4.0f, 6.0f), 
+            0.0f);
+         PointF[] vertices = box.GetVertices();
+         Assert.IsTrue(vertices[0].Equals(new PointF(0.0f, 0.0f)));
+         Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
       [Test]
@@ -439,11 +430,17 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> bg = new Image<Bgr, byte>(width, height);
          bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
 
+         Size size = new Size(width / 10, height / 10);
+         Point topLeft = new Point((width >> 1) - (size.Width >>1) , (height >> 1) - (size.Height >> 1));
+
+         System.Drawing.Rectangle rect = new Rectangle(topLeft, size);
+
          Image<Bgr, Byte> img1 = bg.Copy();
-         img1.Draw(new Rectangle<double>(new Point2D<double>(width >> 1, height >> 1), width / 10, height / 10), new Bgr(Color.Red), -1);
+         img1.Draw(rect, new Bgr(Color.Red), -1);
 
          Image<Bgr, Byte> img2 = bg.Copy();
-         img2.Draw(new Rectangle<double>(new Point2D<double>(width >> 1 + 10, height >> 1), width / 10, height / 10), new Bgr(Color.Red), -1);
+         rect.Offset(10, 0);
+         img2.Draw(rect, new Bgr(Color.Red), -1);
 
          BackgroundStatisticsModel model1 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
          model1.Update(img2);
@@ -461,18 +458,18 @@ namespace Emgu.CV.Test
          int pointCount = 1000;
 
          #region generate random points
-         Point2D<float>[] points = new Point2D<float>[pointCount];
+         PointF[] points = new PointF[pointCount];
          Random r = new Random((int)DateTime.Now.Ticks);
          for (int i = 0; i < points.Length; i++)
          {
-            points[i] = new Point2D<float>((float)(r.NextDouble() * 20), (float)(r.NextDouble() * 20));
+            points[i] = new PointF((float)(r.NextDouble() * 20), (float)(r.NextDouble() * 20));
          }
          #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
          PlanarSubdivision division = new PlanarSubdivision(points);
 
-         List<Triangle2D<float>> triangles = division.GetDelaunayTriangles(false);
+         List<Triangle2DF> triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Count));
 
@@ -483,60 +480,62 @@ namespace Emgu.CV.Test
          watch.Stop();
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Count));
 
-         foreach (Triangle2D<float> t in triangles)
+         foreach (Triangle2DF t in triangles)
          {
-            int equalCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return t2.Equals(t); }).Count;
+            int equalCount = triangles.FindAll(delegate(Triangle2DF t2) { return t2.Equals(t); }).Count;
             Assert.AreEqual(1, equalCount, "Triangle duplicates");
 
-            int overlapCount = triangles.FindAll(delegate(Triangle2D<float> t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
-            Assert.AreEqual(1, overlapCount, "Triangle overlaps");
+            //int overlapCount = triangles.FindAll(delegate(Triangle2D t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
+            //Assert.AreEqual(1, overlapCount, "Triangle overlaps");
          }
       }
 
       [Test]
       public void TestPlannarSubdivision2()
       {
-         Point2D<float>[] pts = new Point2D<float>[33];
+         PointF[] pts = new PointF[33];
 
-         pts[0] = new Point2D<float>(224, 432);
-         pts[1] = new Point2D<float>(368, 596);
-         pts[2] = new Point2D<float>(316, 428);
-         pts[3] = new Point2D<float>(244, 596);
-         pts[4] = new Point2D<float>(224, 436);
-         pts[5] = new Point2D<float>(224, 552);
-         pts[6] = new Point2D<float>(276, 568);
-         pts[7] = new Point2D<float>(308, 472);
-         pts[8] = new Point2D<float>(316, 588);
-         pts[9] = new Point2D<float>(368, 536);
-         pts[10] = new Point2D<float>(332, 428);
-         pts[11] = new Point2D<float>(124, 380);
-         pts[12] = new Point2D<float>(180, 400);
-         pts[13] = new Point2D<float>(148, 360);
-         pts[14] = new Point2D<float>(148, 416);
-         pts[15] = new Point2D<float>(128, 372);
-         pts[16] = new Point2D<float>(124, 392);
-         pts[17] = new Point2D<float>(136, 412);
-         pts[18] = new Point2D<float>(156, 416);
-         pts[19] = new Point2D<float>(176, 404);
-         pts[20] = new Point2D<float>(180, 384);
-         pts[21] = new Point2D<float>(168, 364);
-         pts[22] = new Point2D<float>(260, 104);
-         pts[23] = new Point2D<float>(428, 124);
-         pts[24] = new Point2D<float>(328, 32);
-         pts[25] = new Point2D<float>(320, 200);
-         pts[26] = new Point2D<float>(268, 76);
-         pts[27] = new Point2D<float>(264, 144);
-         pts[28] = new Point2D<float>(316, 196);
-         pts[29] = new Point2D<float>(384, 196);
-         pts[30] = new Point2D<float>(424, 136);
-         pts[31] = new Point2D<float>(412, 68);
-         pts[32] = new Point2D<float>(348, 32);
+         pts[0] = new PointF(224, 432);
+         pts[1] = new PointF(368, 596);
+         pts[2] = new PointF(316, 428);
+         pts[3] = new PointF(244, 596);
+         pts[4] = new PointF(224, 436);
+         pts[5] = new PointF(224, 552);
+         pts[6] = new PointF(276, 568);
+         pts[7] = new PointF(308, 472);
+         pts[8] = new PointF(316, 588);
+         pts[9] = new PointF(368, 536);
+         pts[10] = new PointF(332, 428);
+         pts[11] = new PointF(124, 380);
+         pts[12] = new PointF(180, 400);
+         pts[13] = new PointF(148, 360);
+         pts[14] = new PointF(148, 416);
+         pts[15] = new PointF(128, 372);
+         pts[16] = new PointF(124, 392);
+         pts[17] = new PointF(136, 412);
+         pts[18] = new PointF(156, 416);
+         pts[19] = new PointF(176, 404);
+         pts[20] = new PointF(180, 384);
+         pts[21] = new PointF(168, 364);
+         pts[22] = new PointF(260, 104);
+         pts[23] = new PointF(428, 124);
+         pts[24] = new PointF(328, 32);
+         pts[25] = new PointF(320, 200);
+         pts[26] = new PointF(268, 76);
+         pts[27] = new PointF(264, 144);
+         pts[28] = new PointF(316, 196);
+         pts[29] = new PointF(384, 196);
+         pts[30] = new PointF(424, 136);
+         pts[31] = new PointF(412, 68);
+         pts[32] = new PointF(348, 32);
 
          #region Find the region of interest
-         MCvRect roi;
+         System.Drawing.Rectangle roi;
          using (MemStorage storage = new MemStorage())
-         using (Seq<MCvPoint2D32f> seq = PointCollection.To2D32fSequence(storage, Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; })))
+         using (Seq<System.Drawing.PointF> seq = 
+            new Seq<PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage))
          {
+            seq.Push(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
             roi = CvInvoke.cvBoundingRect(seq.Ptr, true);
          }
          #endregion
@@ -544,25 +543,19 @@ namespace Emgu.CV.Test
          PlanarSubdivision subdiv = new PlanarSubdivision(ref roi);
          for (int i = 0; i < pts.Length; i++)
          {
-            MCvPoint2D32f ptToInsert = pts[i].MCvPoint2D32f;
-
+            MCvSubdiv2DEdge? edge;
+            MCvSubdiv2DPoint? point;
+            CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(ref pts[i], out edge, out point);
+            if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.ON_EDGE)
             {
-               MCvSubdiv2DEdge? edge;
-               MCvSubdiv2DPoint? point;
-               CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(ref ptToInsert, out edge, out point);
-               if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.ON_EDGE)
-               {
-                  //you might want to store the points which is not inserted here.
-                  //or alternatively, add some random noise to the point and re-insert it again.
-                  continue;
-               }
+               //you might want to store the points which is not inserted here.
+               //or alternatively, add some random noise to the point and re-insert it again.
+               continue;
             }
-
-            subdiv.Insert(ref ptToInsert);
+            subdiv.Insert(pts[i]);
          }
 
          List<VoronoiFacet> facets = subdiv.GetVoronoiFacets();
-
       }
 
       [Test]
@@ -577,10 +570,10 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCrossProduct()
       {
-         Point3D<float> p1 = new Point3D<float>(1.0f, 0.0f, 0.0f);
-         Point3D<float> p2 = new Point3D<float>(0.0f, 1.0f, 0.0f);
-         Point3D<float> p3 = p1.CrossProduct(p2);
-         Assert.IsTrue(new Point3D<float>(0.0f, 0.0f, 1.0f).Equals(p3));
+         MCvPoint3D32f p1 = new MCvPoint3D32f(1.0f, 0.0f, 0.0f);
+         MCvPoint3D32f p2 = new MCvPoint3D32f(0.0f, 1.0f, 0.0f);
+         MCvPoint3D32f p3 = p1.CrossProduct(p2);
+         Assert.IsTrue(new MCvPoint3D32f(0.0f, 0.0f, 1.0f).Equals(p3));
       }
 
       [Test]
@@ -589,7 +582,7 @@ namespace Emgu.CV.Test
          #region prepare synthetic image for testing
          int templWidth = 50;
          int templHeight = 50;
-         Point2D<double> templCenter = new Point2D<double>(120, 100);
+         Point templCenter = new Point(120, 100);
 
          //Create a random object
          Image<Bgr, Byte> randomObj = new Image<Bgr, byte>(templWidth, templHeight);
@@ -597,19 +590,19 @@ namespace Emgu.CV.Test
 
          //Draw the object in image1 center at templCenter;
          Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
-         Rectangle<double> objectLocation = new Rectangle<double>(templCenter, 50, 50);
+         System.Drawing.Rectangle objectLocation = new Rectangle(  templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1) , templWidth, templHeight);
          img.ROI = objectLocation;
          randomObj.Copy(img, null);
-         img.ROI = null;
+         img.ROI = System.Drawing.Rectangle.Empty;
          #endregion
 
          Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
          double[] minVal, maxVal;
-         MCvPoint[] minLoc, maxLoc;
+         System.Drawing.Point[] minLoc, maxLoc;
          match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
-         Assert.AreEqual(minLoc[0].x, templCenter.X - templWidth / 2);
-         Assert.AreEqual(minLoc[0].y, templCenter.Y - templHeight / 2);
+         Assert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
+         Assert.AreEqual(minLoc[0].Y, templCenter.Y - templHeight / 2);
       }
 
       [Test]
@@ -622,29 +615,29 @@ namespace Emgu.CV.Test
 
          //Draw the object in image1 center at (100, 100);
          Image<Gray, Byte> prevImg = new Image<Gray, byte>(300, 200);
-         Rectangle<double> objectLocation = new Rectangle<double>(new Point2D<double>(100, 100), 50, 50);
+         Rectangle objectLocation = new Rectangle(75, 75, 50, 50);
          prevImg.ROI = objectLocation;
          randomObj.Copy(prevImg, null);
-         prevImg.ROI = null;
+         prevImg.ROI = Rectangle.Empty;
 
          //Draw the object in image2 center at (102, 103);
          Image<Gray, Byte> currImg = new Image<Gray, byte>(300, 200);
-         objectLocation.Center += new Point2D<double>(2, 3);
+         objectLocation.Offset(2, 3);
          currImg.ROI = objectLocation;
          randomObj.Copy(currImg, null);
-         currImg.ROI = null;
+         currImg.ROI = Rectangle.Empty;
          #endregion
 
-         Point2D<float>[] prevFeature = new Point2D<float>[] { new Point2D<float>(100f, 100f) };
+         PointF[] prevFeature = new PointF[] { new PointF(100f, 100f) };
 
-         Point2D<float>[] currFeature;
+         PointF[] currFeature;
          Byte[] status;
          float[] trackError;
 
          Stopwatch watch = Stopwatch.StartNew();
 
          OpticalFlow.PyrLK(
-            prevImg, currImg, prevFeature, new MCvSize(10, 10), 3, new MCvTermCriteria(10, 0.01),
+            prevImg, currImg, prevFeature, new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(10, 0.01),
             out currFeature, out status, out trackError);
          watch.Stop();
          Trace.WriteLine(String.Format(
@@ -658,10 +651,10 @@ namespace Emgu.CV.Test
       [Test]
       public void TestChessboardCalibration()
       {
-         MCvSize patternSize = new MCvSize(6, 6);
+         System.Drawing.Size patternSize = new System.Drawing.Size(6, 6);
 
          Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("chessBoard.jpg");
-         Point2D<float>[] corners;
+         PointF[] corners;
          bool patternFound =
             CameraCalibration.FindChessboardCorners(
             chessboardImage,
@@ -669,16 +662,17 @@ namespace Emgu.CV.Test
             Emgu.CV.CvEnum.CALIB_CB_TYPE.ADAPTIVE_THRESH | Emgu.CV.CvEnum.CALIB_CB_TYPE.NORMALIZE_IMAGE | Emgu.CV.CvEnum.CALIB_CB_TYPE.FILTER_QUADS,
             out corners);
 
-         corners = chessboardImage.FindCornerSubPix(
-            new Point2D<float>[][] { corners },
-            new MCvSize(10, 10),
-            new MCvSize(-1, -1),
-            new MCvTermCriteria(0.05))[0];
+         chessboardImage.FindCornerSubPix(
+            new PointF[][] { corners },
+            new System.Drawing.Size(10, 10),
+            new System.Drawing.Size(-1, -1),
+            new MCvTermCriteria(0.05));
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
          //Application.Run(new ImageViewer(chessboardImage));
       }
 
+      /*
       [Test]
       public void TestFillConvexPolygon()
       {
@@ -686,7 +680,7 @@ namespace Emgu.CV.Test
          Rectangle<double> rect = new Rectangle<double>(new Point2D<double>(100, 100), 50, 50);
          img.Draw((IConvexPolygon<double>)rect, new Bgr(Color.Blue), 0);
          //Application.Run(new ImageViewer(img));
-      }
+      }*/
 
       [Test]
       public void TestFeatureTree()

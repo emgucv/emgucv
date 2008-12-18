@@ -3,43 +3,52 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed structure equivalent to CvBox2D
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvBox2D : IConvexPolygon<float>
+   public struct MCvBox2D : IConvexPolygonF
    {
       /// <summary>
       /// The center of the box
       /// </summary>
-      public MCvPoint2D32f center;
+      public System.Drawing.PointF center;
       /// <summary>
       /// The size of the box
       /// </summary>
-      public MCvSize2D32f size;
+      public System.Drawing.SizeF size;
       /// <summary>
       /// The angle of the box
       /// </summary>
       public float angle;
 
       /// <summary>
-      /// Get the verticies of this 2D Box
+      /// Create a MCvBox2D structure with the specific parameters
       /// </summary>
-      public Point2D<float>[] Vertices
+      /// <param name="center">The center of the box</param>
+      /// <param name="size">The size of the box</param>
+      /// <param name="angle">The angle of the box</param>
+      public MCvBox2D(System.Drawing.PointF center, System.Drawing.SizeF size, float angle)
       {
-         get
-         {
-            float[] coordinates = new float[8];
-            CvInvoke.cvBoxPoints(this, coordinates);
-            Point2D<float>[] vertices = new Point2D<float>[4];
-            for (int i = 0; i < vertices.Length; i++)
-            {
-               vertices[i] = new Point2D<float>(coordinates[i << 1], coordinates[(i << 1) + 1]);
-            }
-            return vertices;
-         }
+         this.center = center;
+         this.size = size;
+         this.angle = angle;
       }
+
+      #region IConvexPolygonF Members
+      /// <summary>
+      /// Get the 4 verticies of this Box.
+      /// </summary>
+      /// <returns></returns>
+      public System.Drawing.PointF[] GetVertices()
+      {
+         System.Drawing.PointF[] coordinates = new System.Drawing.PointF[4];
+         CvInvoke.cvBoxPoints(this, coordinates);
+         return coordinates;
+      }
+
+      #endregion
    }
 }

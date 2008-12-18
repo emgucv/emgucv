@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed structure equivalent to CvContour
@@ -70,7 +70,7 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
-      public MCvRect rect;
+      public System.Drawing.Rectangle rect;
       /// <summary>
       /// 
       /// </summary>

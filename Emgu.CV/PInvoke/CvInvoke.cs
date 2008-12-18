@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Diagnostics;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -221,7 +222,7 @@ namespace Emgu.CV
       /// <param name="seq">Sequence</param>
       /// <param name="elements">Added elements</param>
       /// <param name="count">Number of elements to push</param>
-      /// <param name="inFront">
+      /// <param name="backOrFront">
       /// If != 0, the elements are added to the beginning of sequence;
       /// Otherwise the elements are added to the end of sequence </param>
       [DllImport(CXCORE_LIBRARY)]
@@ -229,25 +230,23 @@ namespace Emgu.CV
           IntPtr seq,
           IntPtr elements,
           int count,
-          int inFront);
+          CvEnum.BACK_OR_FRONT backOrFront);
 
       /// <summary>
-      /// Adds several elements to either end of the sequence. The elements are added to the sequence in the same order as they are arranged in the input array but they can fall into different sequence blocks.
+      /// Removes several elements from either end of the sequence. If the number of the elements to be removed exceeds the total number of elements in the sequence, the function removes as many elements as possible
       /// </summary>
       /// <param name="seq">Sequence</param>
-      /// <param name="elements">Added elements</param>
-      /// <param name="count">Number of elements to push</param>
-      /// <param name="inFront">
+      /// <param name="elements">Removed elements</param>
+      /// <param name="count">Number of elements to remove</param>
+      /// <param name="backOrFront">
       /// If != 0, the elements are added to the beginning of sequence;
       /// Otherwise the elements are added to the end of sequence </param>
-      public static void cvSeqPushMulti(
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSeqPopMulti(
           IntPtr seq,
           IntPtr elements,
           int count,
-          bool inFront)
-      {
-         cvSeqPushMulti(seq, elements, count, inFront ? 1 : 0);
-      }
+          CvEnum.BACK_OR_FRONT backOrFront);
 
       /// <summary>
       /// 
@@ -255,7 +254,9 @@ namespace Emgu.CV
       /// <param name="reader"></param>
       /// <param name="direction"></param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvChangeSeqBlock(ref MCvSeqReader reader, int direction);
+      public static extern void cvChangeSeqBlock(
+         ref MCvSeqReader reader, 
+         int direction);
 
       /// <summary>
       /// Move to the next element in the sequence
@@ -264,11 +265,10 @@ namespace Emgu.CV
       /// <param name="reader">the sequence reader</param>
       public static void CV_NEXT_SEQ_ELEM(int elemSize, ref MCvSeqReader reader)
       {
-         reader.ptr = new IntPtr(reader.ptr.ToInt64() + elemSize);
-         if (((reader).ptr.ToInt64()) >= (reader).block_max.ToInt64())
-         {
+         Int64 newAddress = reader.ptr.ToInt64() + elemSize;
+         reader.ptr = new IntPtr(newAddress);
+         if (newAddress >= reader.block_max.ToInt64())
             cvChangeSeqBlock(ref reader, 1);
-         }
       }
 
       /// <summary>
@@ -291,7 +291,8 @@ namespace Emgu.CV
       /// <returns>true if the specified node is occupied</returns>
       public static bool CV_IS_SET_ELEM(IntPtr ptr)
       {
-         return ((MCvSetElem)Marshal.PtrToStructure(ptr, typeof(MCvSetElem))).flags >= 0;
+         return Marshal.ReadInt32(ptr) >= 0;
+         //return ((MCvSetElem)Marshal.PtrToStructure(ptr, typeof(MCvSetElem))).flags >= 0;
       }
 
       /// <summary>
@@ -676,7 +677,7 @@ namespace Emgu.CV
       public static extern void cvLogPolar(
          IntPtr src,
          IntPtr dst,
-         MCvPoint2D32f center,
+         System.Drawing.PointF center,
          double M,
          int flags);
 
@@ -879,7 +880,7 @@ namespace Emgu.CV
       /// <param name="pt2">Second ending point of the line segment. It is modified by the function.</param>
       /// <returns>It returns 0 if the line segment is completely outside the image and 1 otherwise.</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern int cvClipLine(MCvSize imgSize, ref MCvPoint pt1, ref MCvPoint pt2);
+      public static extern int cvClipLine(System.Drawing.Size imgSize, ref System.Drawing.Point pt1, ref System.Drawing.Point pt2);
 
       /// <summary>
       /// Calculates absolute difference between two arrays.
@@ -949,7 +950,7 @@ namespace Emgu.CV
       /// </param>
       /// <returns>A pointer to IplImage </returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateImage(MCvSize size, CvEnum.IPL_DEPTH depth, int channels);
+      public static extern IntPtr cvCreateImage(System.Drawing.Size size, CvEnum.IPL_DEPTH depth, int channels);
 
       /// <summary>
       /// Allocates, initializes, and returns the structure IplImage.
@@ -962,7 +963,7 @@ namespace Emgu.CV
       /// </param>
       /// <returns> The structure IplImage</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateImageHeader(MCvSize size, CvEnum.IPL_DEPTH depth, int channels);
+      public static extern IntPtr cvCreateImageHeader(System.Drawing.Size size, CvEnum.IPL_DEPTH depth, int channels);
 
       /// <summary>
       /// Initializes the image header structure, pointer to which is passed by the user, and returns the pointer.
@@ -977,7 +978,7 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
-         MCvSize size,
+         System.Drawing.Size size,
          int depth,
          int channels,
          int origin,
@@ -1047,7 +1048,7 @@ namespace Emgu.CV
       /// <param name="image">Image header.</param>
       /// <param name="rect">ROI rectangle.</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSetImageROI(IntPtr image, MCvRect rect);
+      public static extern void cvSetImageROI(IntPtr image, System.Drawing.Rectangle rect);
 
       /// <summary>
       /// Returns channel of interest of the image (it returns 0 if all the channels are selected).
@@ -1055,7 +1056,7 @@ namespace Emgu.CV
       /// <param name="image">Image header.</param>
       /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern MCvRect cvGetImageROI(IntPtr image);
+      public static extern System.Drawing.Rectangle cvGetImageROI(IntPtr image);
 
       /// <summary>
       /// Allocates header for the new matrix and underlying data, and returns a pointer to the created matrix. Matrices are stored row by row. All the rows are aligned by 4 bytes. 
@@ -1094,7 +1095,13 @@ namespace Emgu.CV
       /// <param name="data">Optional data pointer assigned to the matrix header</param>
       /// <returns>Pointer to the array header</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvInitMatNDHeader(IntPtr mat, int dims, int[] sizes, CV.CvEnum.MAT_DEPTH type, IntPtr data);
+      public static extern IntPtr cvInitMatNDHeader(
+         IntPtr mat, 
+         int dims, 
+         [In]
+         int[] sizes, 
+         CV.CvEnum.MAT_DEPTH type, 
+         IntPtr data);
 
       /// <summary>
       /// Decrements the matrix data reference counter and releases matrix header
@@ -1245,7 +1252,11 @@ namespace Emgu.CV
       /// <param name="idx">Array of the element indices </param>
       /// <param name="value">The assigned value </param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSetRealND(IntPtr arr, int[] idx, double value);
+      public static extern void cvSetRealND(
+         IntPtr arr,
+         [In]
+         int[] idx, 
+         double value);
 
       /// <summary>
       /// clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
@@ -1253,7 +1264,10 @@ namespace Emgu.CV
       /// <param name="arr">Input array</param>
       /// <param name="idx">Array of the element indices </param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvClearND(IntPtr arr, int[] idx);
+      public static extern void cvClearND(
+         IntPtr arr, 
+         [In]
+         int[] idx);
 
       /// <summary>
       /// Assign the new value to the particular element of array
@@ -1299,8 +1313,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvLine(
           IntPtr img,
-          MCvPoint pt1,
-          MCvPoint pt2,
+          System.Drawing.Point pt1,
+          System.Drawing.Point pt2,
           MCvScalar color,
           int thickness,
           [MarshalAs(UnmanagedType.U4)] 
@@ -1324,16 +1338,18 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvPolyLine(
-          IntPtr img,
-          IntPtr[] pts,
-          int[] npts,
-          int contours,
-          int isClosed,
-          MCvScalar color,
-          int thickness,
-          [MarshalAs(UnmanagedType.U4)] 
-          CvEnum.LINE_TYPE lineType,
-          int shift);
+         IntPtr img,
+         [In]
+         IntPtr[] pts,
+         [In]
+         int[] npts,
+         int contours,
+         int isClosed,
+         MCvScalar color,
+         int thickness,
+         [MarshalAs(UnmanagedType.U4)] 
+         CvEnum.LINE_TYPE lineType,
+         int shift);
 
       /// <summary>
       /// Draws a single or multiple polygonal curves
@@ -1351,15 +1367,17 @@ namespace Emgu.CV
       /// <param name="lineType">Type of the line segments, see cvLine description</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
       public static void cvPolyLine(
-          IntPtr img,
-          IntPtr[] pts,
-          int[] npts,
-          int contours,
-          bool isClosed,
-          MCvScalar color,
-          int thickness,
-          CvEnum.LINE_TYPE lineType,
-          int shift)
+         IntPtr img,
+         [In]
+         IntPtr[] pts,
+         [In]
+         int[] npts,
+         int contours,
+         bool isClosed,
+         MCvScalar color,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift)
       {
          cvPolyLine(img, pts, npts, contours, isClosed ? 1 : 0, color, thickness, lineType, shift);
       }
@@ -1377,8 +1395,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvRectangle(
          IntPtr img,
-         MCvPoint pt1,
-         MCvPoint pt2,
+         System.Drawing.Point pt1,
+         System.Drawing.Point pt2,
          MCvScalar color,
          int thickness,
          [MarshalAs(UnmanagedType.U4)] 
@@ -1394,7 +1412,7 @@ namespace Emgu.CV
       /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
       /// <returns>the resultant sub-array header</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, MCvRect rect);
+      public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, System.Drawing.Rectangle rect);
 
       /// <summary>
       /// Return the header, corresponding to a specified row span of the input array
@@ -1468,7 +1486,7 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvCircle(
          IntPtr img,
-         MCvPoint center,
+         System.Drawing.Point center,
          int radius,
          MCvScalar color,
          int thickness,
@@ -1502,8 +1520,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvEllipse(
           IntPtr img,
-          MCvPoint center,
-          MCvSize axes,
+          System.Drawing.Point center,
+          System.Drawing.Size axes,
           double angle,
           double startAngle,
           double endAngle,
@@ -1649,7 +1667,7 @@ namespace Emgu.CV
           int maxLevel,
           int thickness,
           [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
-          MCvPoint offset);
+          System.Drawing.Point offset);
 
       /// <summary>
       /// Fills convex polygon interior. This function is much faster than The function cvFillPoly and can fill not only the convex polygons but any monotonic polygon, i.e. a polygon whose contour intersects every horizontal line (scan line) twice at the most
@@ -1662,12 +1680,13 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvFillConvexPoly(
-          IntPtr img,
-          MCvPoint[] pts,
-          int npts,
-          MCvScalar color,
-          [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
-          int shift);
+         IntPtr img,
+         [In]
+         System.Drawing.Point[] pts,
+         int npts,
+         MCvScalar color,
+         [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
+         int shift);
 
       #region Text
       /// <summary>
@@ -1699,7 +1718,7 @@ namespace Emgu.CV
       /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, MCvPoint org, ref MCvFont font, MCvScalar color);
+      public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, System.Drawing.Point org, ref MCvFont font, MCvScalar color);
 
       /// <summary>
       /// Calculates the binding rectangle for the given text string when a specified font is used
@@ -1709,7 +1728,7 @@ namespace Emgu.CV
       /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref MCvSize textSize, ref int baseline);
+      public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref System.Drawing.Size textSize, ref int baseline);
       #endregion
 
       /// <summary>
@@ -1721,6 +1740,27 @@ namespace Emgu.CV
       /// <returns>the pointer to the buffer</returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
+
+      /// <summary>
+      /// initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have NULL storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
+      /// </summary>
+      /// <param name="seqType">Type of the created sequence</param>
+      /// <param name="headerSize">Size of the header of the sequence. Parameter sequence must point to the structure of that size or greater size.</param>
+      /// <param name="elemSize">Size of the sequence element</param>
+      /// <param name="elements">Elements that will form a sequence</param>
+      /// <param name="total">Total number of elements in the sequence. The number of array elements must be equal to the value of this parameter</param>
+      /// <param name="seq">Pointer to the local variable that is used as the sequence header. </param>
+      /// <param name="block">Pointer to the local variable that is the header of the single sequence block. </param>
+      /// <returns>Pointer to the local variable that is used as the sequence header</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvMakeSeqHeaderForArray(
+         int seqType, 
+         int headerSize, 
+         int elemSize,
+         IntPtr elements, 
+         int total,
+         IntPtr seq, 
+         IntPtr block);
 
       /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array, selected ROI (in case of IplImage) or, if mask is not NULL, in the specified array region. If the array has more than one channel, it must be IplImage with COI set. In case if multi-dimensional arrays min_loc->x and max_loc->x will contain raw (linear) positions of the extremums
@@ -1736,8 +1776,8 @@ namespace Emgu.CV
          IntPtr arr,
          ref double minVal,
          ref double maxVal,
-         ref MCvPoint minLoc,
-         ref MCvPoint maxLoc,
+         ref System.Drawing.Point minLoc,
+         ref System.Drawing.Point maxLoc,
          IntPtr mask);
 
       /// <summary>
@@ -2099,7 +2139,7 @@ namespace Emgu.CV
       /// <param name="step">Output full row length in bytes</param>
       /// <param name="roiSize">Output ROI size</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out MCvSize roiSize);
+      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out System.Drawing.Size roiSize);
 
       /// <summary>
       /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
@@ -2314,7 +2354,7 @@ namespace Emgu.CV
       /// <param name="rect2">Second rectangle </param>
       /// <returns>The minimum area rectangle that contains both input rectangles inside</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern MCvRect cvMaxRect(ref MCvRect rect1, ref MCvRect rect2);
+      public static extern System.Drawing.Rectangle cvMaxRect(ref System.Drawing.Rectangle rect1, ref System.Drawing.Rectangle rect2);
 
       /// <summary>
       /// Fits line to 2D or 3D point set 
@@ -2340,7 +2380,21 @@ namespace Emgu.CV
       /// <param name="box">The box</param>
       /// <param name="pt">An array of size 8, where the coordinate for ith point is: [pt[i&gt;&gt;1], pt[(i&gt;&gt;1)+1]]</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvBoxPoints(MCvBox2D box, float[] pt);
+      public static extern void cvBoxPoints(
+         MCvBox2D box, 
+         [Out]
+         float[] pt);
+
+      /// <summary>
+      /// Calculates vertices of the input 2d box.
+      /// </summary>
+      /// <param name="box">The box</param>
+      /// <param name="pt">An array of size 4 points</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvBoxPoints(
+         MCvBox2D box, 
+         [Out]
+         System.Drawing.PointF[] pt);
 
       /// <summary>
       /// Calculates ellipse that fits best (in least-squares sense) to a set of 2D points. The meaning of the returned structure fields is similar to those in cvEllipse except that size stores the full lengths of the ellipse axises, not half-lengths
@@ -2374,7 +2428,7 @@ namespace Emgu.CV
       /// <param name="rect">Rectangle that includes all the 2d points that are to be added to subdivision.</param>
       /// <param name="storage">Container for subdivision</param>
       /// <returns></returns>
-      public static IntPtr cvCreateSubdivDelaunay2D(MCvRect rect, IntPtr storage)
+      public static IntPtr cvCreateSubdivDelaunay2D(System.Drawing.Rectangle rect, IntPtr storage)
       {
          IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
                  Marshal.SizeOf(typeof(MCvSubdiv2D)),
@@ -2392,7 +2446,7 @@ namespace Emgu.CV
       /// <param name="subdiv"></param>
       /// <param name="rect"></param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, MCvRect rect);
+      public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, System.Drawing.Rectangle rect);
 
       /// <summary>
       /// Locates input point within subdivision. It finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point. 
@@ -2401,7 +2455,7 @@ namespace Emgu.CV
       /// <param name="pt">Input point</param>
       /// <returns>pointer to the found subdivision vertex (CvSubdiv2DPoint)</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvFindNearestPoint2D(IntPtr subdiv, MCvPoint2D32f pt);
+      public static extern IntPtr cvFindNearestPoint2D(IntPtr subdiv, System.Drawing.PointF pt);
 
       /// <summary>
       /// Creates new subdivision
@@ -2426,7 +2480,7 @@ namespace Emgu.CV
       /// <param name="subdiv">Delaunay subdivision created by function cvCreateSubdivDelaunay2D</param>
       /// <param name="pt">Inserted point.</param>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, MCvPoint2D32f pt);
+      public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, System.Drawing.PointF pt);
 
       /// <summary>
       /// Locates input point within subdivision
@@ -2437,7 +2491,7 @@ namespace Emgu.CV
       /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
       /// <returns>The type of location for the point</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, MCvPoint2D32f pt,
+      public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, System.Drawing.PointF pt,
                                            out IntPtr edge,
                                            ref IntPtr vertex);
 
@@ -2707,7 +2761,7 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern double cvPointPolygonTest(
           IntPtr contour,
-          MCvPoint2D32f pt,
+          System.Drawing.PointF pt,
           int measureDist);
 
       /// <summary>
@@ -2722,7 +2776,7 @@ namespace Emgu.CV
       /// </returns>
       public static double cvPointPolygonTest(
          IntPtr contour,
-         MCvPoint2D32f pt,
+         System.Drawing.PointF pt,
          bool measureDist)
       {
          return cvPointPolygonTest(contour, pt, measureDist ? 1 : 0);
@@ -2745,7 +2799,7 @@ namespace Emgu.CV
       /// <param name="radius">Output parameter. The radius of the enclosing circle.</param>
       /// <returns>Nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern int cvMinEnclosingCircle(IntPtr points, out MCvPoint2D32f center, out float radius);
+      public static extern int cvMinEnclosingCircle(IntPtr points, out System.Drawing.PointF center, out float radius);
 
       /// <summary>
       /// Calculates 2D pair-wise geometrical histogram (PGH), described in [Iivarinen97], for the contour. The algorithm considers every pair of the contour edges. The angle between the edges and the minimum/maximum distances are determined for every pair. To do this each of the edges in turn is taken as the base, while the function loops through all the other edges. When the base edge and any other edge are considered, the minimum and maximum distances from the points on the non-base edge and line of the base edge are selected. The angle between the edges defines the row of the histogram in which all the bins that correspond to the distance between the calculated minimum and maximum distances are incremented (that is, the histogram is transposed relatively to [Iivarninen97] definition). The histogram can be used for contour matching
@@ -2775,7 +2829,7 @@ namespace Emgu.CV
       /// </param>
       /// <returns>The up-right bounding rectangle for 2d point set</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern MCvRect cvBoundingRect(
+      public static extern System.Drawing.Rectangle cvBoundingRect(
           IntPtr points,
           int update);
 
@@ -2789,7 +2843,7 @@ namespace Emgu.CV
       /// points is CvSeq* or CvMat*: update is ignored, the bounding rectangle is calculated and returned. 
       /// </param>
       /// <returns>The up-right bounding rectangle for 2d point set</returns>
-      public static MCvRect cvBoundingRect(IntPtr points, bool update)
+      public static System.Drawing.Rectangle cvBoundingRect(IntPtr points, bool update)
       {
          return cvBoundingRect(points, update ? 1 : 0);
       }
@@ -2846,7 +2900,7 @@ namespace Emgu.CV
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix. If you want to apply different kernels to different channels, split the image using cvSplit into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, MCvPoint anchor);
+      public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, System.Drawing.Point anchor);
 
       /// <summary>
       /// Copies the source 2D array into interior of destination array and makes a border of the specified type around the copied area. The function is useful when one needs to emulate border type that is different from the one embedded into a specific algorithm implementation. For example, morphological functions, as well as most of other filtering functions in OpenCV, internally use replication border type, while the user may need zero border or a border, filled with 1's or 255's
@@ -2860,7 +2914,7 @@ namespace Emgu.CV
       public static extern void cvCopyMakeBorder( 
          IntPtr src, 
          IntPtr dst, 
-         MCvPoint offset,
+         System.Drawing.Point offset,
          CvEnum.BORDER_TYPE bordertype, 
          MCvScalar value);
 
@@ -2922,7 +2976,7 @@ namespace Emgu.CV
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern int cvSampleLine(IntPtr image, MCvPoint pt1, MCvPoint pt2, IntPtr buffer, CvEnum.LINE_SAMPLE_TYPE connectivity);
+      public static extern int cvSampleLine(IntPtr image, System.Drawing.Point pt1, System.Drawing.Point pt2, IntPtr buffer, CvEnum.LINE_SAMPLE_TYPE connectivity);
 
       /// <summary>
       /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
@@ -2943,7 +2997,7 @@ namespace Emgu.CV
          double scaleFactor,
          int minNeighbors,
          CvEnum.HAAR_DETECTION_TYPE flags,
-         MCvSize minSize);
+         System.Drawing.Size minSize);
 
       /// <summary>
       /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or NULL if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
@@ -2964,7 +3018,7 @@ namespace Emgu.CV
          int headerSize,
          CvEnum.RETR_TYPE mode,
          CvEnum.CHAIN_APPROX_METHOD method,
-         MCvPoint offset);
+         System.Drawing.Point offset);
 
       /// <summary>
       /// Finds circles in grayscale image using some modification of Hough transform
@@ -3074,6 +3128,40 @@ namespace Emgu.CV
           double k);
 
       /// <summary>
+      /// Finds corners with big eigenvalues in the image. 
+      /// </summary>
+      /// <remarks>
+      /// The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. 
+      /// Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). 
+      /// The next step is rejecting the corners with the minimal eigenvalue less than quality_level*max(eigImage(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features.
+      /// </remarks>
+      /// <param name="image">The source 8-bit or floating-point 32-bit, single-channel image</param>
+      /// <param name="eigImage">Temporary floating-point 32-bit image of the same size as image</param>
+      /// <param name="tempImage">Another temporary image of the same size and same format as eig_image</param>
+      /// <param name="corners">Output parameter. Detected corners</param>
+      /// <param name="cornerCount">Output parameter. Number of detected corners</param>
+      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
+      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is NULL</param>
+      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+      /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
+      /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvGoodFeaturesToTrack(
+         IntPtr image,
+         IntPtr eigImage,
+         IntPtr tempImage,
+         [Out]
+         System.Drawing.PointF[] corners,
+         ref int cornerCount,
+         double qualityLevel,
+         double minDistance,
+         IntPtr mask,
+         int blockSize,
+         int useHarris,
+         double k);
+
+      /// <summary>
       /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
       /// <param name="image">The input 8-bit grayscale image</param>
@@ -3171,7 +3259,7 @@ namespace Emgu.CV
           IntPtr objectPoints,
           IntPtr imagePoints,
           IntPtr pointCounts,
-          MCvSize imageSize,
+          System.Drawing.Size imageSize,
           IntPtr intrinsicMatrix,
           IntPtr distortionCoeffs,
           IntPtr rotationVectors,
@@ -3273,7 +3361,7 @@ namespace Emgu.CV
          IntPtr distCoeffs1,
          IntPtr cameraMatrix2,
          IntPtr distCoeffs2,
-         MCvSize imageSize,
+         System.Drawing.Size imageSize,
          IntPtr R,
          IntPtr T,
          IntPtr E,
@@ -3299,7 +3387,7 @@ namespace Emgu.CV
          IntPtr points1,
          IntPtr points2,
          IntPtr F,
-         MCvSize imageSize,
+         System.Drawing.Size imageSize,
          IntPtr H1,
          IntPtr H2,
          double threshold);
@@ -3326,7 +3414,7 @@ namespace Emgu.CV
          IntPtr cameraMatrix2,
          IntPtr distCoeffs1,
          IntPtr distCoeffs2,
-         MCvSize imageSize,
+         System.Drawing.Size imageSize,
          IntPtr R,
          IntPtr T,
          IntPtr R1,
@@ -3395,7 +3483,7 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern int cvFindChessboardCorners(
          IntPtr image,
-         MCvSize patternSize,
+         System.Drawing.Size patternSize,
          float[,] corners,
          ref int cornerCount,
          CvEnum.CALIB_CB_TYPE flags);
@@ -3411,8 +3499,25 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvDrawChessboardCorners(
          IntPtr image,
-         MCvSize patternSize,
+         System.Drawing.Size patternSize,
          float[,] corners,
+         int count,
+         int patternWasFound);
+
+      /// <summary>
+      /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
+      /// </summary>
+      /// <param name="image">The destination image; it must be 8-bit color image</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The array of corners detected</param>
+      /// <param name="count">The number of corners</param>
+      /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvDrawChessboardCorners(
+         IntPtr image,
+         System.Drawing.Size patternSize,
+         [In]
+         System.Drawing.PointF[] corners,
          int count,
          int patternWasFound);
 
@@ -3456,7 +3561,7 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern int cvMeanShift(
          IntPtr probImage,
-         MCvRect window,
+         System.Drawing.Rectangle window,
          MCvTermCriteria criteria,
          out MCvConnectedComp comp);
 
@@ -3472,7 +3577,7 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern int cvCamShift(
          IntPtr probImage,
-         MCvRect window,
+         System.Drawing.Rectangle window,
          MCvTermCriteria criteria,
          out MCvConnectedComp comp,
          out MCvBox2D box);
@@ -3535,9 +3640,42 @@ namespace Emgu.CV
           [MarshalAs(UnmanagedType.LPArray)] float[] beta,
           [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
           int coeffUsage,
-          MCvSize win,
+          System.Drawing.Size win,
           MCvTermCriteria criteria,
           int calcGradient);
+
+      /// <summary>
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
+      /// </summary>
+      /// <param name="image">The source image or external energy field</param>
+      /// <param name="points">Seq points (snake). </param>
+      /// <param name="length">Number of points in the contour</param>
+      /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
+      /// <param name="beta">Weight[s] of curvature energy, similar to alpha</param>
+      /// <param name="gamma">Weight[s] of image energy, similar to alpha</param>
+      /// <param name="coeffUsage">Variant of usage of the previous three parameters: 
+      /// CV_VALUE indicates that each of alpha, beta, gamma is a pointer to a single value to be used for all points; 
+      /// CV_ARRAY indicates that each of alpha, beta, gamma is a pointer to an array of coefficients different for all the points of the snake. All the arrays must have the size equal to the contour size.
+      /// </param>
+      /// <param name="win">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
+      /// <param name="criteria">Termination criteria</param>
+      /// <param name="calcGradient">
+      /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
+      /// otherwise the input image itself is considered
+      /// </param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvSnakeImage(
+         IntPtr image,
+         [In,Out]
+         System.Drawing.Point[] points,
+         int length,
+         [MarshalAs(UnmanagedType.LPArray)] float[] alpha,
+         [MarshalAs(UnmanagedType.LPArray)] float[] beta,
+         [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
+         int coeffUsage,
+         System.Drawing.Size win,
+         MCvTermCriteria criteria,
+         int calcGradient);
 
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
@@ -3566,7 +3704,7 @@ namespace Emgu.CV
            float[] beta,
            float[] gamma,
            int coeffUsage,
-           MCvSize win,
+           System.Drawing.Size win,
            MCvTermCriteria criteria,
            bool calcGradient)
       {
@@ -3650,11 +3788,13 @@ namespace Emgu.CV
       /// <returns>A pointer to the histogram</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvCreateHist(
-          int dims,
-          int[] sizes,
-          CvEnum.HIST_TYPE type,
-          IntPtr[] ranges,
-          int uniform);
+         int dims,
+         [In]
+         int[] sizes,
+         CvEnum.HIST_TYPE type,
+         [In]
+         IntPtr[] ranges,
+         int uniform);
 
       /// <summary>
       /// Creates a histogram of the specified size and returns the pointer to the created histogram. If the array ranges is 0, the histogram bin ranges must be specified later via The function cvSetHistBinRanges, though cvCalcHist and cvCalcBackProject may process 8-bit images without setting bin ranges, they assume equally spaced in 0..255 bins
@@ -3671,11 +3811,13 @@ namespace Emgu.CV
       /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject</param>
       /// <returns>A pointer to the histogram</returns>
       public static IntPtr cvCreateHist(
-           int dims,
-           int[] sizes,
-           CvEnum.HIST_TYPE type,
-           IntPtr[] ranges,
-           bool uniform)
+         int dims,
+         [In]
+         int[] sizes,
+         CvEnum.HIST_TYPE type,
+         [In]
+         IntPtr[] ranges,
+         bool uniform)
       {
          return cvCreateHist(dims, sizes, type, ranges, uniform ? 1 : 0);
       }
@@ -3719,7 +3861,7 @@ namespace Emgu.CV
       public static extern void cvCalcOpticalFlowLK(
               IntPtr prev,
               IntPtr curr,
-              MCvSize winSize,
+              System.Drawing.Size winSize,
               IntPtr velx,
               IntPtr vely);
 
@@ -3758,9 +3900,9 @@ namespace Emgu.CV
       public static extern void cvCalcOpticalFlowBM(
               IntPtr prev,
               IntPtr curr,
-              MCvSize blockSize,
-              MCvSize shiftSize,
-              MCvSize maxRange,
+              System.Drawing.Size blockSize,
+              System.Drawing.Size shiftSize,
+              System.Drawing.Size maxRange,
               int usePrevious,
               IntPtr velx,
               IntPtr vely);
@@ -3791,12 +3933,47 @@ namespace Emgu.CV
           float[,] prevFeatures,
           float[,] currFeatures,
           int count,
-          MCvSize winSize,
+          System.Drawing.Size winSize,
           int level,
           Byte[] status,
           float[] trackError,
           MCvTermCriteria criteria,
           CvEnum.LKFLOW_TYPE flags);
+
+      /// <summary>
+      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
+      /// </summary>
+      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
+      /// <param name="prev">First frame, at time t. </param>
+      /// <param name="curr">Second frame, at time t + dt .</param>
+      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
+      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
+      /// <param name="count">Number of feature points.</param>
+      /// <param name="winSize">Size of the search window of each pyramid level.</param>
+      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
+      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
+      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
+      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
+      /// <param name="flags">Miscellaneous flags</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalcOpticalFlowPyrLK(
+         IntPtr prev,
+         IntPtr curr,
+         IntPtr prevPyr,
+         IntPtr currPyr,
+         [In]
+         System.Drawing.PointF[] prevFeatures,
+         [Out]
+         System.Drawing.PointF[] currFeatures,
+         int count,
+         System.Drawing.Size winSize,
+         int level,
+         Byte[] status,
+         float[] trackError,
+         MCvTermCriteria criteria,
+         CvEnum.LKFLOW_TYPE flags);
 
       #endregion
 
@@ -4019,8 +4196,27 @@ namespace Emgu.CV
          IntPtr image,
          float[,] corners,
          int count,
-         MCvSize win,
-         MCvSize zeroZone,
+         System.Drawing.Size win,
+         System.Drawing.Size zeroZone,
+         MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Iterates to find the sub-pixel accurate location of corners, or radial saddle points
+      /// </summary>
+      /// <param name="image">Input image</param>
+      /// <param name="corners">Initial coordinates of the input corners and refined coordinates on output</param>
+      /// <param name="count">Number of corners</param>
+      /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
+      /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
+      /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindCornerSubPix(
+         IntPtr image,
+         [In, Out]
+         System.Drawing.PointF[] corners,
+         int count,
+         System.Drawing.Size win,
+         System.Drawing.Size zeroZone,
          MCvTermCriteria criteria);
 
       /// <summary>
@@ -4066,7 +4262,7 @@ namespace Emgu.CV
       /// <returns>Pointer to the destination 2x3 matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cv2DRotationMatrix(
-          MCvPoint2D32f center,
+          System.Drawing.PointF center,
           double angle,
           double scale,
           IntPtr mapMatrix);
@@ -4199,7 +4395,7 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvFloodFill(
           IntPtr src,
-          MCvPoint seedPoint,
+          System.Drawing.Point seedPoint,
           MCvScalar newVal,
           MCvScalar loDiff,
           MCvScalar upDiff,
@@ -4353,7 +4549,7 @@ namespace Emgu.CV
           [MarshalAs(_stringMarshalType)] String filename,
           int fourcc,
           double fps,
-          MCvSize frameSize,
+          System.Drawing.Size frameSize,
           int isColor);
 
       /// <summary>
@@ -4368,7 +4564,7 @@ namespace Emgu.CV
       public static IntPtr cvCreateVideoWriter(String filename,
           int fourcc,
           double fps,
-          MCvSize frameSize,
+          System.Drawing.Size frameSize,
           bool isColor)
       {
          return cvCreateVideoWriter(filename, fourcc, fps, frameSize, isColor ? 1 : 0);

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 
 
 namespace WindowsForm
@@ -40,7 +41,7 @@ namespace WindowsForm
          img.Draw(
              DateTime.Now.Ticks.ToString(), //draw the system clock tick 
              ref f, //using the specific font
-             new Point2D<int>(50, 150), //The bottom left posistion of the first character
+             new Point(50, 150), //The bottom left posistion of the first character
              new Bgr(0, 0, 0)); //The color of the font
          return img;
       }

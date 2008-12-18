@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -136,7 +137,7 @@ namespace Emgu.CV
       /// <param name="motionRectangle">The rectangle area of the motion</param>
       /// <param name="angle">The orientation of the motion</param>
       /// <param name="motionPixelCount">Number of motion pixels within silhoute ROI</param>
-      public void MotionInfo(MCvRect motionRectangle, out double angle, out double motionPixelCount)
+      public void MotionInfo(System.Drawing.Rectangle motionRectangle, out double angle, out double motionPixelCount)
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
          // select component ROI

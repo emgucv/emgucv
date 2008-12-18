@@ -34,7 +34,7 @@ namespace Emgu.CV
       /// <param name="isColor">true if this is a color video, false otherwise</param>
       public VideoWriter(String fileName, int compressionCode, int fps, int width, int height, bool isColor)
       {
-         _ptr = CvInvoke.cvCreateVideoWriter(fileName, compressionCode, fps, new MCvSize(width, height), isColor);
+         _ptr = CvInvoke.cvCreateVideoWriter(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor);
          if (_ptr == IntPtr.Zero)
             throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
       }

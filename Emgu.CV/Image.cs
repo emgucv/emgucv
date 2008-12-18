@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Xml.Serialization;
 using Emgu.CV.Reflection;
+using Emgu.CV.Structure;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -118,9 +119,9 @@ namespace Emgu.CV
             height = mptr.height;
 
             if (typeof(TColor) != typeof(Bgr)) //TColor type is not Bgr, a conversion is required
-            {  
+            {
                IntPtr tmp1 = CvInvoke.cvCreateImage(
-                   new MCvSize(mptr.width, mptr.height),
+                   new System.Drawing.Size(mptr.width, mptr.height),
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
                CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(Bgr), typeof(TColor)));
@@ -134,7 +135,7 @@ namespace Emgu.CV
          if (typeof(TDepth) != typeof(Byte)) //depth is not Byte, a conversion of depth is required
          {
             IntPtr tmp1 = CvInvoke.cvCreateImage(
-                new MCvSize(width, height),
+                new System.Drawing.Size(width, height),
                 CvDepth,
                 new TColor().Dimension);
             CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
@@ -146,7 +147,7 @@ namespace Emgu.CV
          AllocateData(height, width, NumberOfChannels);
 
          CvInvoke.cvCopy(ptr, Ptr, IntPtr.Zero);
-         
+
          CvInvoke.cvReleaseImage(ref ptr);
          #endregion
       }
@@ -201,7 +202,7 @@ namespace Emgu.CV
          {
             Debug.Assert(value != null, "The Array cannot be null");
             Debug.Assert(value.GetLength(2) == NumberOfChannels, "The number of channels must equal");
-            AllocateData(value.GetLength(0), value.GetLength(1), NumberOfChannels );
+            AllocateData(value.GetLength(0), value.GetLength(1), NumberOfChannels);
             int rows = value.GetLength(0);
             int valueRowLength = value.GetLength(1) * value.GetLength(2);
             int arrayRowLength = _array.GetLength(1) * _array.GetLength(2);
@@ -209,8 +210,6 @@ namespace Emgu.CV
                Array.Copy(value, i * valueRowLength, _array, i * arrayRowLength, valueRowLength);
          }
       }
-
-      private readonly static long _sizeOfHeader = Marshal.SizeOf(typeof(MIplImage));
 
       /// <summary>
       /// Allocate data for the array
@@ -225,8 +224,8 @@ namespace Emgu.CV
 
          int channelCount = numberOfChannels;
 
-         _ptr = CvInvoke.cvCreateImageHeader(new MCvSize(cols, rows), CvDepth, channelCount);
-         GC.AddMemoryPressure(_sizeOfHeader);
+         _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, channelCount);
+         GC.AddMemoryPressure(HeaderSize.MIplImage);
 
          MIplImage iplImage = MIplImage;
 
@@ -286,7 +285,7 @@ namespace Emgu.CV
       public Image(SerializationInfo info, StreamingContext context)
       {
          DeserializeObjectData(info, context);
-         ROI = (Rectangle<double>)info.GetValue("Roi", typeof(Rectangle<double>));
+         ROI = (System.Drawing.Rectangle)info.GetValue("Roi", typeof(System.Drawing.Rectangle));
       }
 
       /// <summary>
@@ -316,26 +315,26 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      /// The region of interest for this image 
+      /// Get or Set the region of interest for this image. To clear the ROI, set it to System.Drawing.Rectangle.Empty
       ///</summary>
-      public Rectangle<double> ROI
+      public System.Drawing.Rectangle ROI
       {
          set
          {
-            if (value == null)
+            if (value.Equals(Rectangle.Empty))
             {
                //reset the image ROI
                CvInvoke.cvResetImageROI(Ptr);
             }
             else
             {   //set the image ROI to the specific value
-               CvInvoke.cvSetImageROI(Ptr, value.MCvRect);
+               CvInvoke.cvSetImageROI(Ptr, value);
             }
          }
          get
          {
             //return the image ROI
-            return new Rectangle<double>(CvInvoke.cvGetImageROI(Ptr));
+            return CvInvoke.cvGetImageROI(Ptr);
          }
       }
 
@@ -373,11 +372,11 @@ namespace Emgu.CV
       ///<summary> 
       /// Get the size of the internal iplImage structure, regardness of the ROI of this image: X -- Width; Y -- Height.
       ///</summary>
-      public Point2D<int> Size
+      public System.Drawing.Size Size
       {
          get
          {
-            return new Point2D<int>(
+            return new System.Drawing.Size(
             Marshal.ReadInt32(Ptr, IplImageOffset.width),
             Marshal.ReadInt32(Ptr, IplImageOffset.height));
          }
@@ -389,7 +388,7 @@ namespace Emgu.CV
       public static CvEnum.IPL_DEPTH CvDepth
       {
          get
-         {            
+         {
             Type typeOfDepth = typeof(TDepth);
 
             if (typeOfDepth == typeof(Single))
@@ -518,10 +517,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Clone()
       {
          int coi = CvInvoke.cvGetImageCOI(Ptr); //get the COI for current image
-         Rectangle<double> roi = ROI; //get the ROI for current image
+         System.Drawing.Rectangle roi = ROI; //get the ROI for current image
 
          CvInvoke.cvSetImageCOI(Ptr, 0); //clear COI for current image
-         ROI = null; // clear ROI for current image
+         ROI = Rectangle.Empty; // clear ROI for current image
 
          #region create a clone of the current image with the same COI and ROI
          Image<TColor, TDepth> res = Copy();
@@ -542,22 +541,21 @@ namespace Emgu.CV
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
       ///<typeparam name="T">The type of Box2D to draw</typeparam>
-      public virtual void Draw<T>(Box2D<T> box, TColor color, int thickness) where T : struct, IComparable
+      public virtual void Draw<T>(MCvBox2D box, TColor color, int thickness) where T : struct, IComparable
       {
-         Draw<float>(box.MCvBox2D, color, thickness);
+         Draw<float>(box, color, thickness);
       }
 
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
-      ///<typeparam name="T">The type of rectangle to draw</typeparam>
-      public virtual void Draw<T>(Rectangle<T> rect, TColor color, int thickness) where T : struct, IComparable
+      public virtual void Draw(System.Drawing.Rectangle rect, TColor color, int thickness)
       {
          CvInvoke.cvRectangle(
              Ptr,
-             rect.TopLeft,
-             rect.BottomRight,
+             new Point(rect.X, rect.Y ),
+             new Point(rect.X + rect.Width, rect.Y + rect.Height),
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -568,8 +566,7 @@ namespace Emgu.CV
       ///<param name="cross"> The 2D Cross to be drawn</param>
       ///<param name="color"> The color of the cross </param>
       ///<param name="thickness"> Must be &gt; 0 </param>
-      ///<typeparam name="T">The type of cross to draw</typeparam>
-      public void Draw<T>(Cross2D<T> cross, TColor color, int thickness) where T : struct, IComparable
+      public void Draw(Cross2DF cross, TColor color, int thickness) 
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
@@ -578,13 +575,29 @@ namespace Emgu.CV
             Draw(cross.Vertical, color, thickness);
          }
       }
+      ///<summary> Draw a line segment using the specific color and thickness </summary>
+      ///<param name="line"> The line segment to be drawn</param>
+      ///<param name="color"> The color of the line segment </param>
+      ///<param name="thickness"> The thickness of the line segment </param>
+      public virtual void Draw(LineSegment2DF line, TColor color, int thickness)
+      {
+         Debug.Assert(thickness > 0, "Thickness should be > 0");
+         if (thickness > 0)
+            CvInvoke.cvLine(
+                Ptr,
+                new Point((int) line.P1.X, (int) line.P1.Y), 
+                new Point((int) line.P2.X, (int) line.P2.Y),
+                color.MCvScalar,
+                thickness,
+                CvEnum.LINE_TYPE.EIGHT_CONNECTED,
+                0);
+      }
 
       ///<summary> Draw a line segment using the specific color and thickness </summary>
       ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thickness"> The thickness of the line segment </param>
-      ///<typeparam name="T">The type of line to draw</typeparam>
-      public virtual void Draw<T>(LineSegment2D<T> line, TColor color, int thickness) where T : struct, IComparable
+      public virtual void Draw(LineSegment2D line, TColor color, int thickness)
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
@@ -598,21 +611,25 @@ namespace Emgu.CV
                 0);
       }
 
+      
       ///<summary> Draw a convex polygon using the specific color and thickness </summary>
       ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the triangle </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
-      ///<typeparam name="T">The type of convex polygon to draw</typeparam>
-      public virtual void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness) where T : struct, IComparable
+      public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness) 
       {
+         PointF[] verticesF = polygon.GetVertices();
+         Point[] vertices = new Point[verticesF.Length];
+         for (int i = 0; i < vertices.Length; i++)
+         {
+            PointF p = verticesF[i];
+            vertices[i] = new Point((int)p.X, (int)p.Y);
+         }
          if (thickness > 0)
-            DrawPolyline(polygon.Vertices, true, color, thickness);
+            DrawPolyline(vertices, true, color, thickness);
          else
          {
-            MCvPoint[] pts = Array.ConvertAll<Point2D<T>, MCvPoint>(polygon.Vertices,
-                delegate(Point2D<T> p) { return p.MCvPoint; });
-
-            FillConvexPoly(pts, color);
+            FillConvexPoly(vertices, color);
          }
       }
 
@@ -621,11 +638,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pts">The array of points that define the convex polygon</param>
       /// <param name="color">The color to fill the polygon with</param>
-      public void FillConvexPoly(MCvPoint[] pts, TColor color)
+      public void FillConvexPoly(System.Drawing.Point[] pts, TColor color)
       {
          CvInvoke.cvFillConvexPoly(Ptr, pts, pts.Length, color.MCvScalar, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
       }
 
+      
       /// <summary>
       /// Draw the polyline defined by the array of 2D points
       /// </summary>
@@ -633,11 +651,10 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
-      /// <typeparam name="T">The type of point2D that make up the polyline</typeparam>
-      public virtual void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness) where T : struct, IComparable
+      public virtual void DrawPolyline<T>(Point[] pts, bool isClosed, TColor color, int thickness) where T : struct, IComparable
       {
          DrawPolyline(
-             Array.ConvertAll<Point2D<T>, MCvPoint>(pts, delegate(Point2D<T> p) { return p.MCvPoint; }),
+             pts,
              isClosed,
              color,
              thickness);
@@ -650,9 +667,9 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
-      public void DrawPolyline(MCvPoint[] pts, bool isClosed, TColor color, int thickness)
+      public void DrawPolyline(System.Drawing.Point[] pts, bool isClosed, TColor color, int thickness)
       {
-         DrawPolyline(new MCvPoint[][] { pts }, isClosed, color, thickness);
+         DrawPolyline(new System.Drawing.Point[][] { pts }, isClosed, color, thickness);
       }
 
       /// <summary>
@@ -662,16 +679,16 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
-      public void DrawPolyline(MCvPoint[][] pts, bool isClosed, TColor color, int thickness)
+      public void DrawPolyline(System.Drawing.Point[][] pts, bool isClosed, TColor color, int thickness)
       {
          if (thickness > 0)
          {
-            GCHandle[] handles = Array.ConvertAll<MCvPoint[], GCHandle>(pts, delegate(MCvPoint[] polyline) { return GCHandle.Alloc(polyline, GCHandleType.Pinned); });
+            GCHandle[] handles = Array.ConvertAll<System.Drawing.Point[], GCHandle>(pts, delegate(System.Drawing.Point[] polyline) { return GCHandle.Alloc(polyline, GCHandleType.Pinned); });
 
             CvInvoke.cvPolyLine(
                 Ptr,
                 Array.ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h) { return h.AddrOfPinnedObject(); }),
-                Array.ConvertAll<MCvPoint[], int>(pts, delegate(MCvPoint[] polyline) { return polyline.Length; }),
+                Array.ConvertAll<System.Drawing.Point[], int>(pts, delegate(System.Drawing.Point[] polyline) { return polyline.Length; }),
                 pts.Length,
                 isClosed,
                 color.MCvScalar,
@@ -688,12 +705,11 @@ namespace Emgu.CV
       ///<param name="circle"> The circle to be drawn</param>
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
-      ///<typeparam name="T">The type of circle to draw</typeparam>
-      public virtual void Draw<T>(Circle<T> circle, TColor color, int thickness) where T : struct, IComparable
+      public virtual void Draw(CircleF circle, TColor color, int thickness)
       {
          CvInvoke.cvCircle(
              Ptr,
-             circle.Center,
+             new Point( (int) circle.Center.X, (int) circle.Center.Y),
              System.Convert.ToInt32(circle.Radius),
              color,
              (thickness <= 0) ? -1 : thickness,
@@ -705,14 +721,13 @@ namespace Emgu.CV
       ///<param name="ellipse"> The ellipse to be draw</param>
       ///<param name="color"> The color of the ellipse </param>
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
-      ///<typeparam name="T">The type of ellipse to draw</typeparam>
-      public void Draw<T>(Ellipse<T> ellipse, TColor color, int thickness) where T : struct, IComparable
+      public void Draw(Ellipse ellipse, TColor color, int thickness) 
       {
          CvInvoke.cvEllipse(
              Ptr,
-             ellipse.Center,
-             new MCvSize(System.Convert.ToInt32(ellipse.Width) >> 1, System.Convert.ToInt32(ellipse.Height) >> 1),
-             ellipse.RadianAngle,
+             new Point( (int) ellipse.MCvBox2D.center.X, (int) ellipse.MCvBox2D.center.Y),
+             new System.Drawing.Size(( (int)ellipse.MCvBox2D.size.Width) >> 1, ((int)ellipse.MCvBox2D.size.Height) >> 1),
+             ellipse.MCvBox2D.angle,
              0.0,
              360.0,
              color,
@@ -728,12 +743,12 @@ namespace Emgu.CV
       /// <param name="font">The font used for drawing</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
-      public virtual void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) where T : struct, IComparable
+      public virtual void Draw(String message, ref MCvFont font, System.Drawing.Point bottomLeft, TColor color)
       {
          CvInvoke.cvPutText(
              Ptr,
              message,
-             bottomLeft.MCvPoint,
+             bottomLeft,
              ref font,
              color.MCvScalar);
       }
@@ -744,9 +759,9 @@ namespace Emgu.CV
       /// <param name="c">Pointer to the contour</param>
       /// <param name="color">Color of the contour</param>
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-      public void Draw(Seq<MCvPoint> c, TColor color, int thickness)
+      public void Draw(Seq<System.Drawing.Point> c, TColor color, int thickness)
       {
-         MCvPoint offset = new MCvPoint();
+         System.Drawing.Point offset = new System.Drawing.Point();
          Draw(c, color, color, 0, thickness, ref offset);
       }
 
@@ -763,9 +778,9 @@ namespace Emgu.CV
       /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
       /// </param>
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-      public void Draw(Seq<MCvPoint> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
+      public void Draw(Seq<System.Drawing.Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
       {
-         MCvPoint offset = new MCvPoint();
+         System.Drawing.Point offset = new System.Drawing.Point();
          Draw(c, externalColor, holeColor, maxLevel, thickness, ref offset);
       }
 
@@ -783,7 +798,7 @@ namespace Emgu.CV
       /// </param>
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
-      public void Draw(Seq<MCvPoint> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, ref MCvPoint offset)
+      public void Draw(Seq<System.Drawing.Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, ref System.Drawing.Point offset)
       {
          CvInvoke.cvDrawContours(
              Ptr,
@@ -804,9 +819,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="haarObj">The object to be detected</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle<double>[][] DetectHaarCascade(HaarCascade haarObj)
+      public Rectangle[][] DetectHaarCascade(HaarCascade haarObj)
       {
-         return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new MCvSize(0, 0));
+         return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new System.Drawing.Size(0, 0));
       }
 
       /// <summary>
@@ -818,11 +833,11 @@ namespace Emgu.CV
       /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle<double>[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, MCvSize minSize)
+      public Rectangle[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, System.Drawing.Size minSize)
       {
          using (MemStorage stor = new MemStorage())
          {
-            Emgu.Util.Toolbox.Func<IImage, int, Rectangle<double>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, Rectangle[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
@@ -835,17 +850,13 @@ namespace Emgu.CV
                        minSize);
 
                    if (objects == IntPtr.Zero)
-                      return new Rectangle<double>[0];
+                      return new Rectangle[0];
 
-                   Seq<MCvRect> rects = new Seq<MCvRect>(objects, stor);
-                   return Array.ConvertAll<MCvRect, Rectangle<double>>(rects.ToArray(),
-                      delegate(MCvRect mrect)
-                      {
-                         return new Rectangle<double>(mrect);
-                      });
+                   Seq<System.Drawing.Rectangle> rects = new Seq<System.Drawing.Rectangle>(objects, stor);
+                   return rects.ToArray();
                 };
 
-            Rectangle<double>[][] res = ForEachDuplicateChannel(detector);
+            Rectangle[][] res = ForEachDuplicateChannel(detector);
             return res;
          }
       }
@@ -861,29 +872,28 @@ namespace Emgu.CV
       ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
       ///<param name="minLineWidth">Minimum width of a line</param>
       ///<param name="gapBetweenLines">Minimum gap between lines</param>
-      public LineSegment2D<int>[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+      public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (MemStorage stor = new MemStorage())
          {
-            Emgu.Util.Toolbox.Func<IImage, int, LineSegment2D<int>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, LineSegment2D[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
                    MCvSeq lineSeq = (MCvSeq)Marshal.PtrToStructure(lines, typeof(MCvSeq));
-                   LineSegment2D<int>[] linesegs = new LineSegment2D<int>[lineSeq.total];
+                   LineSegment2D[] linesegs = new LineSegment2D[lineSeq.total];
                    for (int i = 0; i < lineSeq.total; i++)
                    {
                       int[] val = new int[4];
                       Marshal.Copy(CvInvoke.cvGetSeqElem(lines, i), val, 0, 4);
-                      linesegs[i] = new LineSegment2D<int>(
-                          new Point2D<int>(val[0], val[1]),
-                          new Point2D<int>(val[2], val[3]));
+                      linesegs[i] = new LineSegment2D(
+                          new Point(val[0], val[1]),
+                          new Point(val[2], val[3]));
                    }
                    CvInvoke.cvClearSeq(lines);
                    return linesegs;
                 };
-            LineSegment2D<int>[][] res = ForEachDuplicateChannel(detector);
-            return res;
+            return ForEachDuplicateChannel(detector);
          }
       }
 
@@ -891,7 +901,7 @@ namespace Emgu.CV
       ///First apply Canny Edge Detector on the current image, 
       ///then apply Hough transform to find line segments 
       ///</summary>
-      public LineSegment2D<int>[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+      public LineSegment2D[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
@@ -909,13 +919,13 @@ namespace Emgu.CV
       ///<param name="minRadius">Minimal radius of the circles to search for</param>
       ///<param name="maxRadius">Maximal radius of the circles to search for</param>
       ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
-      public Circle<float>[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
+      public CircleF[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
       {
          using (MemStorage stor = new MemStorage())
          {
-            double[] cannyThresh = cannyThreshold.Resize(4).Coordinate;
-            double[] accumulatorThresh = accumulatorThreshold.Resize(4).Coordinate;
-            Emgu.Util.Toolbox.Func<IImage, int, Circle<float>[]> detector =
+            double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
+            double[] accumulatorThresh = accumulatorThreshold.MCvScalar.ToArray();
+            Emgu.Util.Toolbox.Func<IImage, int, CircleF[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
@@ -929,15 +939,10 @@ namespace Emgu.CV
                        minRadius,
                        maxRadius);
 
-                   Seq<MCvPoint3D32f> cirSeq = new Seq<MCvPoint3D32f>(circlesSeqPtr, stor);
-
-                   return System.Array.ConvertAll<MCvPoint3D32f, Circle<float>>(cirSeq.ToArray(),
-                       delegate(MCvPoint3D32f p)
-                       {
-                          return new Circle<float>(new Point2D<float>(p.x, p.y), p.z);
-                       });
+                   Seq<CircleF> cirSeq = new Seq<CircleF>(circlesSeqPtr, stor);
+                   return cirSeq.ToArray();
                 };
-            Circle<float>[][] res = ForEachDuplicateChannel(detector);
+            CircleF[][] res = ForEachDuplicateChannel(detector);
 
             return res;
          }
@@ -952,7 +957,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour<MCvPoint> FindContours()
+      public Contour<System.Drawing.Point> FindContours()
       {
          return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
       }
@@ -966,7 +971,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour<MCvPoint> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
+      public Contour<System.Drawing.Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
       {
          return FindContours(method, type, new MemStorage());
       }
@@ -981,7 +986,7 @@ namespace Emgu.CV
       /// Contour if there is any;
       /// null if no contour is found
       /// </returns>
-      public Contour<MCvPoint> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
+      public Contour<System.Drawing.Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
       {
          if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
          {
@@ -1001,11 +1006,10 @@ namespace Emgu.CV
                 sequenceHeaderSize,
                 type,
                 method,
-                new MCvPoint(0, 0));
-            if (seq == IntPtr.Zero)
-               return null;
+                new System.Drawing.Point(0, 0));
+
+            return (seq == IntPtr.Zero) ? null : new Contour<System.Drawing.Point>(seq, stor);
          }
-         return new Contour<MCvPoint>(seq, stor);
       }
       #endregion
       #endregion
@@ -1047,7 +1051,7 @@ namespace Emgu.CV
       public TColor this[int row, int col]
       {
          get
-         { 
+         {
             TColor res = new TColor();
             res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, col);
             return res;
@@ -1063,7 +1067,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="location">the location of the pixel </param>
       /// <returns>the color in the <paramref name="location"/></returns>
-      public TColor this[Point2D<int> location]
+      public TColor this[Point location]
       {
          get
          {
@@ -1094,13 +1098,13 @@ namespace Emgu.CV
 
          if (ipl.roi != IntPtr.Zero)
          {
-            MCvRect rec = CvInvoke.cvGetImageROI(ptr);
-            elementCount = (int)rec.width * ipl.nChannels;
+            System.Drawing.Rectangle rec = CvInvoke.cvGetImageROI(ptr);
+            elementCount = (int)rec.Width * ipl.nChannels;
             byteWidth = ((int)ipl.depth >> 3) * elementCount;
 
-            start += (int)rec.y * widthStep
-                    + ((int)ipl.depth >> 3) * (int)rec.x;
-            rows = (int)rec.height;
+            start += (int)rec.Y * widthStep
+                    + ((int)ipl.depth >> 3) * (int)rec.X;
+            rows = (int)rec.Height;
          }
          else
          {
@@ -1141,13 +1145,37 @@ namespace Emgu.CV
       /// <summary>
       /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
       /// </summary>
-      /// <typeparam name="R">The return type</typeparam>
-      /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+      /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private R[] ForEachDuplicateChannel<R>(Emgu.Util.Toolbox.Func<IImage, int, R> conv)
+      private void ForEachDuplicateChannel(Emgu.Util.Toolbox.Action<IImage, int> action)
       {
          int channelCount = new TColor().Dimension;
-         R[] res = new R[channelCount];
+  
+         if (channelCount == 1)
+            action(this, 0);
+         else
+         {
+            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Width, Height))
+               for (int i = 0; i < channelCount; i++)
+               {
+                  CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                  CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
+                  action(tmp, i);
+               }
+            CvInvoke.cvSetImageCOI(Ptr, 0);
+         }
+      }
+
+      /// <summary>
+      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+      /// </summary>
+      /// <typeparam name="TReturn">The return type</typeparam>
+      /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+      /// <returns>An array which contains result for each channel</returns>
+      private TReturn[] ForEachDuplicateChannel<TReturn>(Emgu.Util.Toolbox.Func<IImage, int, TReturn> conv)
+      {
+         int channelCount = new TColor().Dimension;
+         TReturn[] res = new TReturn[channelCount];
          if (channelCount == 1)
             res[0] = conv(this, 0);
          else
@@ -1240,8 +1268,8 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Canny(TColor thresh, TColor threshLinking)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         double[] t1 = thresh.Coordinate;
-         double[] t2 = threshLinking.Coordinate;
+         double[] t1 = thresh.MCvScalar.ToArray();
+         double[] t2 = threshLinking.MCvScalar.ToArray();
          Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dest, int channel)
              {
@@ -1274,6 +1302,7 @@ namespace Emgu.CV
             IntPtr descriptorPtr;
             Seq<MCvSURFPoint> keypoints;
             ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+            MCvSURFPoint[] surfPoints = keypoints.ToArray();
 
             SURFFeature[] res = new SURFFeature[keypoints.Total];
 
@@ -1282,12 +1311,11 @@ namespace Emgu.CV
 
             for (int i = 0; i < res.Length; i++)
             {
-               MCvSURFPoint p = keypoints[i];
                float[,] descriptor = new float[elementsInDescriptor, 1];
                GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
                Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
                handle.Free();
-               res[i] = new SURFFeature(ref p, new Matrix<float>(descriptor));
+               res[i] = new SURFFeature(ref surfPoints[i], new Matrix<float>(descriptor));
             }
 
             return res;
@@ -1311,7 +1339,7 @@ namespace Emgu.CV
       /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <returns>The good features for each channel</returns>
-      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
+      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
       {
          return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, false, 0);
       }
@@ -1326,7 +1354,7 @@ namespace Emgu.CV
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="k">Free parameter of Harris detector. If provided, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal. </param>
       /// <returns>The good features for each channel</returns>
-      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
+      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
       {
          return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
       }
@@ -1342,26 +1370,25 @@ namespace Emgu.CV
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
       /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
       /// <returns>The good features for each channel</returns>
-      public Point2D<float>[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
+      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
       {
          int channelCount = new TColor().Dimension;
-         Point2D<float>[][] res = new Point2D<float>[channelCount][];
-
-         float[,] coors = new float[maxFeaturesPerChannel, 2];
+         PointF[][] res = new PointF[channelCount][];
 
          using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
          using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
          {
-            Emgu.Util.Toolbox.Func<IImage, int, Point2D<float>[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, PointF[]> detector =
                 delegate(IImage img, int channel)
                 {
                    int cornercount = maxFeaturesPerChannel;
-                   GCHandle handle = GCHandle.Alloc(coors, GCHandleType.Pinned);
+                   PointF[] pts = new PointF[maxFeaturesPerChannel];
+
                    CvInvoke.cvGoodFeaturesToTrack(
                        img.Ptr,
                        eigImage.Ptr,
                        tmpImage.Ptr,
-                       handle.AddrOfPinnedObject(),
+                       pts,
                        ref cornercount,
                        qualityLevel,
                        minDistance,
@@ -1369,11 +1396,7 @@ namespace Emgu.CV
                        blockSize,
                        useHarris ? 1 : 0,
                        k);
-                   handle.Free();
-
-                   Point2D<float>[] pts = new Point2D<float>[cornercount];
-                   for (int i = 0; i < cornercount; i++)
-                      pts[i] = new Point2D<float>(coors[i, 0], coors[i, 1]);
+                   Array.Resize(ref pts, cornercount);
                    return pts;
                 };
 
@@ -1385,42 +1408,25 @@ namespace Emgu.CV
       /// <summary>
       /// Iterates to find the sub-pixel accurate location of corners, or radial saddle points
       /// </summary>
-      /// <param name="corners">Initial coordinates of the input corners</param>
+      /// <param name="corners">Coordinates of the input corners, the values will be modified by this function call</param>
       /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
       /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
       /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
       /// <returns>Refined corner coordinates</returns>
-      public Point2D<float>[][] FindCornerSubPix(
-         Point2D<float>[][] corners,
-         MCvSize win,
-         MCvSize zeroZone,
+      public void FindCornerSubPix(
+         PointF[][] corners,
+         System.Drawing.Size win,
+         System.Drawing.Size zeroZone,
          MCvTermCriteria criteria)
       {
-         int channelCount = new TColor().Dimension;
-         Point2D<float>[][] res = new Point2D<float>[channelCount][];
-
-         Emgu.Util.Toolbox.Func<IImage, int, Point2D<float>[]> detector =
+         Emgu.Util.Toolbox.Action<IImage, int> detector =
              delegate(IImage img, int channel)
              {
-                Point2D<float>[] ptsForCurrentChannel = corners[channel];
+                PointF[] ptsForCurrentChannel = corners[channel];
                 int cornerCount = ptsForCurrentChannel.Length;
-                float[,] coors = new float[cornerCount, 2];
-                for (int i = 0; i < cornerCount; i++)
-                {
-                   Point2D<float> pt = ptsForCurrentChannel[i];
-                   coors[i, 0] = pt.X;
-                   coors[i, 1] = pt.Y;
-                }
-
-                CvInvoke.cvFindCornerSubPix(img.Ptr, coors, cornerCount, win, zeroZone, criteria);
-
-                Point2D<float>[] pts = new Point2D<float>[cornerCount];
-                for (int i = 0; i < cornerCount; i++)
-                   pts[i] = new Point2D<float>(coors[i, 0], coors[i, 1]);
-                return pts;
+                CvInvoke.cvFindCornerSubPix(img.Ptr, ptsForCurrentChannel, cornerCount, win, zeroZone, criteria);
              };
-         res = ForEachDuplicateChannel(detector);
-         return res;
+         ForEachDuplicateChannel(detector);
       }
 
       #endregion
@@ -1452,7 +1458,7 @@ namespace Emgu.CV
       /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
       /// <param name="storage">The memory storage used by the resulting sequence</param>
       /// <returns>The snake[d] contour</returns>
-      public Contour<MCvPoint> Snake(Seq<MCvPoint> contour, float alpha, float beta, float gamma, MCvSize windowSize, MCvTermCriteria tc, MemStorage storage)
+      public Contour<System.Drawing.Point> Snake(Seq<System.Drawing.Point> contour, float alpha, float beta, float gamma, System.Drawing.Size windowSize, MCvTermCriteria tc, MemStorage storage)
       {
          int count = contour.Total;
 
@@ -1471,12 +1477,37 @@ namespace Emgu.CV
              tc,
              true);
 
-         Contour<MCvPoint> rSeq = new Contour<MCvPoint>(storage);
+         Contour<System.Drawing.Point> rSeq = new Contour<System.Drawing.Point>(storage);
 
-         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject(), count, false);
+         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject(), count, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
          handle.Free();
 
          return rSeq;
+      }
+
+      /// <summary>
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
+      /// </summary>
+      /// <param name="contour">Some existing contour. It's value will be update by this function</param>
+      /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
+      /// <param name="beta">Weight[s] of curvature energy, similar to alpha.</param>
+      /// <param name="gamma">Weight[s] of image energy, similar to alpha.</param>
+      /// <param name="windowSize">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
+      /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
+      /// <param name="calculateGradiant">If true, the function calculates gradient magnitude for every image pixel and considers it as the energy field, otherwise the input image itself is considered</param>
+      public void Snake(System.Drawing.Point[] contour, float alpha, float beta, float gamma, System.Drawing.Size windowSize, MCvTermCriteria tc, bool calculateGradiant)
+      {
+         CvInvoke.cvSnakeImage(
+             Ptr,
+             contour,
+             contour.Length,
+             new float[1] { alpha },
+             new float[1] { beta },
+             new float[1] { gamma },
+             1,
+             windowSize,
+             tc,
+             calculateGradiant ? 1: 0);
       }
       #endregion
 
@@ -1599,7 +1630,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="val">The value for the XOR operation</param>
       /// <returns> The result of the XOR operation</returns>
-      [ExposableMethod(Exposable=true, Category="Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Xor(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1625,7 +1656,7 @@ namespace Emgu.CV
       ///Compute the complement image
       ///</summary>
       ///<returns> The complement image</returns>
-      [ExposableMethod(Exposable=true, Category="Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Not()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1744,7 +1775,7 @@ namespace Emgu.CV
       /// <param name="value">The value to compare with</param>
       /// <param name="cmp_type">The comparison type</param>
       /// <returns>The result of the comparison as a mask</returns>
-      [ExposableMethod(Exposable=true, Category="Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, Byte> Cmp(double value, CvEnum.CMP_TYPE cmp_type)
       {
          Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
@@ -2072,7 +2103,7 @@ namespace Emgu.CV
       ///<summary> Sample the pixel values on the specific line segment </summary>
       ///<param name="line"> The line to obtain samples</param>
       ///<returns>The values on the (Eight-connected) line </returns>
-      public TDepth[,] Sample(LineSegment2D<int> line)
+      public TDepth[,] Sample(LineSegment2D line)
       {
          return Sample(line, Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED);
       }
@@ -2083,10 +2114,10 @@ namespace Emgu.CV
       /// <param name="line">The line to obtain samples</param>
       /// <param name="type">The sampling type</param>
       /// <returns>The values on the line</returns>
-      public TDepth[,] Sample(LineSegment2D<int> line, CvEnum.LINE_SAMPLE_TYPE type)
+      public TDepth[,] Sample(LineSegment2D line, CvEnum.LINE_SAMPLE_TYPE type)
       {
          int size = type == Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED ?
-            Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y)) 
+            Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y))
             : Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
 
          TDepth[,] data = new TDepth[size, new TColor().Dimension];
@@ -2124,8 +2155,8 @@ namespace Emgu.CV
       /// <returns></returns>
       public Image<TColor, TDepth> Resize(int width, int height, bool preserverScale)
       {
-         return preserverScale ? 
-            Resize(Math.Min((double)width / Width, (double)height / Height)) 
+         return preserverScale ?
+            Resize(Math.Min((double)width / Width, (double)height / Height))
             : Resize(width, height);
       }
 
@@ -2133,7 +2164,7 @@ namespace Emgu.CV
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
       /// <returns>The scaled image</returns>
-      [ExposableMethod(Exposable=true)]
+      [ExposableMethod(Exposable = true)]
       public Image<TColor, TDepth> Resize(double scale)
       {
          return Resize(
@@ -2224,7 +2255,7 @@ namespace Emgu.CV
          Image<TColor, TDepth> resultImage;
          if (crop)
          {
-            Point2D<float> center = new Point2D<float>(Width * 0.5f, Height * 0.5f);
+            PointF center = new PointF(Width * 0.5f, Height * 0.5f);
             using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
             {
                resultImage = WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
@@ -2237,7 +2268,7 @@ namespace Emgu.CV
             float offsetX = (maxSize - Width) * 0.5f;
             float offsetY = (maxSize - Height) * 0.5f;
 
-            Point2D<float> center = new Point2D<float>(maxSize * .5f, maxSize * .5f);
+            PointF center = new PointF(maxSize * .5f, maxSize * .5f);
 
             using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
             using (Matrix<float> corners = new Matrix<float>(new float[4, 3]{
@@ -2253,7 +2284,7 @@ namespace Emgu.CV
                 * Frame the original image into a bigger one of side maxSize
                 * Rotating the framed image will always keep the original image without losing corners information
                 */
-               MCvRect CvR = new MCvRect((maxSize - Width) / 2, (maxSize - Height) / 2, Width, Height);
+               System.Drawing.Rectangle CvR = new System.Drawing.Rectangle((maxSize - Width) / 2, (maxSize - Height) / 2, Width, Height);
                CvInvoke.cvSetImageROI(tempImage1.Ptr, CvR);
                CvInvoke.cvCopy(Ptr, tempImage1.Ptr, IntPtr.Zero);
                CvInvoke.cvResetImageROI(tempImage1.Ptr);
@@ -2272,7 +2303,7 @@ namespace Emgu.CV
                int maxX = (int)Math.Round(Math.Max(Math.Max(data[0, 0], data[1, 0]), Math.Max(data[2, 0], data[3, 0])));
                int minY = (int)Math.Round(Math.Min(Math.Min(data[0, 1], data[1, 1]), Math.Min(data[2, 1], data[3, 1])));
                int maxY = (int)Math.Round(Math.Max(Math.Max(data[0, 1], data[1, 1]), Math.Max(data[2, 1], data[3, 1])));
-               MCvRect toCrop = new MCvRect(minX, maxSize - maxY, maxX - minX, maxY - minY);
+               System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, maxSize - maxY, maxX - minX, maxY - minY);
 
                /*
                 * Crop the region of interest
@@ -2293,7 +2324,7 @@ namespace Emgu.CV
       /// <param name="M">Magnitude scale parameter</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
       /// <returns>The converted image</returns>
-      public Image<TColor, TDepth> LogPolar(MCvPoint2D32f center, double M, int flags)
+      public Image<TColor, TDepth> LogPolar(System.Drawing.PointF center, double M, int flags)
       {
          Image<TColor, TDepth> imgPolar = CopyBlank();
          CvInvoke.cvLogPolar(Ptr, imgPolar.Ptr, center, M, flags);
@@ -2360,8 +2391,8 @@ namespace Emgu.CV
                   if (dstDepth == typeof(Byte) && srcDepth != typeof(Byte))
                   {
                      double min = 0.0, max = 0.0, scale, shift;
-                     MCvPoint p1 = new MCvPoint();
-                     MCvPoint p2 = new MCvPoint();
+                     System.Drawing.Point p1 = new System.Drawing.Point();
+                     System.Drawing.Point p2 = new System.Drawing.Point();
                      if (channelCount == 1)
                      {
                         CvInvoke.cvMinMaxLoc(srcImage.Ptr, ref min, ref max, ref p1, ref p2, IntPtr.Zero);
@@ -2466,14 +2497,14 @@ namespace Emgu.CV
          {
             IntPtr scan0;
             int step;
-            MCvSize size;
+            System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
             if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
             {   //Grayscale of Bytes
                Bitmap bmp = new Bitmap(
-                   size.width,
-                   size.height,
+                   size.Width,
+                   size.Height,
                    step,
                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed,
                    scan0
@@ -2489,8 +2520,8 @@ namespace Emgu.CV
             else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
             {   //Bgr byte    
                return new Bitmap(
-                   size.width,
-                   size.height,
+                   size.Width,
+                   size.Height,
                    step,
                    System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                    scan0);
@@ -2499,8 +2530,8 @@ namespace Emgu.CV
             else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
             {   //Bgra byte
                return new Bitmap(
-                   size.width,
-                   size.height,
+                   size.Width,
+                   size.Height,
                    step,
                    System.Drawing.Imaging.PixelFormat.Format32bppArgb,
                    scan0);
@@ -2717,7 +2748,7 @@ namespace Emgu.CV
 
                IntPtr startPtr;
                int widthStep;
-               MCvSize size;
+               System.Drawing.Size size;
                CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
                Int64 start = startPtr.ToInt64();
 
@@ -2748,7 +2779,7 @@ namespace Emgu.CV
 
                IntPtr startPtr;
                int widthStep;
-               MCvSize size;
+               System.Drawing.Size size;
                CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
                Int64 start = startPtr.ToInt64();
 
@@ -2778,7 +2809,7 @@ namespace Emgu.CV
 
             IntPtr startPtr;
             int widthStep;
-            MCvSize size;
+            System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
 
             Int64 start = startPtr.ToInt64();
@@ -2815,7 +2846,7 @@ namespace Emgu.CV
       /// by rejecting even rows and columns.
       ///</summary>
       ///<returns> The downsampled image</returns>
-      [ExposableMethod(Exposable = true, Category="Pyramids")]
+      [ExposableMethod(Exposable = true, Category = "Pyramids")]
       public Image<TColor, TDepth> PyrDown()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width >> 1, Height >> 1);
@@ -2916,11 +2947,11 @@ namespace Emgu.CV
             temp = CopyBlank();
 
          CvInvoke.cvMorphologyEx(
-            Ptr, 
-            Ptr, 
-            temp == null ? IntPtr.Zero : temp.Ptr, 
-            element.Ptr, 
-            operation, 
+            Ptr,
+            Ptr,
+            temp == null ? IntPtr.Zero : temp.Ptr,
+            element.Ptr,
+            operation,
             iterations);
 
          if (temp != null) temp.Dispose();
@@ -2953,7 +2984,7 @@ namespace Emgu.CV
 
          int step1;
          IntPtr start;
-         MCvSize roiSize;
+         System.Drawing.Size roiSize;
          CvInvoke.cvGetRawData(Ptr, out start, out step1, out roiSize);
          Int64 data1 = start.ToInt64();
          int width1 = _sizeOfElement * cols1;
@@ -3218,7 +3249,7 @@ namespace Emgu.CV
          {
             CvInvoke.cvReleaseImageHeader(ref _ptr);
             _ptr = IntPtr.Zero;
-            GC.RemoveMemoryPressure(_sizeOfHeader);
+            GC.RemoveMemoryPressure(HeaderSize.MIplImage);
          }
 
          base.DisposeObject();
@@ -3625,7 +3656,7 @@ namespace Emgu.CV
                 IntPtr srcFloat = src;
                 if (!isFloat)
                 {
-                   srcFloat = CvInvoke.cvCreateImage(new MCvSize(Width, Height), CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
+                   srcFloat = CvInvoke.cvCreateImage(new System.Drawing.Size(Width, Height), CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
                    CvInvoke.cvConvertScale(src, srcFloat, 1.0, 0.0);
                 }
 
@@ -3691,8 +3722,8 @@ namespace Emgu.CV
       ///</summary>
       private void ThresholdBase(Image<TColor, TDepth> dest, TColor threshold, TColor max_value, CvEnum.THRESH thresh_type)
       {
-         double[] t = threshold.Resize(4).Coordinate;
-         double[] m = max_value.Resize(4).Coordinate;
+         double[] t = threshold.MCvScalar.ToArray();
+         double[] m = max_value.MCvScalar.ToArray();
          Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dst, int channel)
              {
@@ -3837,13 +3868,13 @@ namespace Emgu.CV
       /// <returns>
       /// Returns the min / max location and values for the image
       /// </returns>
-      public void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations)
+      public void MinMax(out double[] minValues, out double[] maxValues, out System.Drawing.Point[] minLocations, out System.Drawing.Point[] maxLocations)
       {
          int channelCount = new TColor().Dimension;
          minValues = new double[channelCount];
          maxValues = new double[channelCount];
-         minLocations = new MCvPoint[channelCount];
-         maxLocations = new MCvPoint[channelCount];
+         minLocations = new System.Drawing.Point[channelCount];
+         maxLocations = new System.Drawing.Point[channelCount];
 
          if (channelCount == 1)
          {
@@ -3898,8 +3929,8 @@ namespace Emgu.CV
                //0 indicates vertical flip only
                 0;
             CvInvoke.cvFlip(
-               Ptr, 
-               Ptr, 
+               Ptr,
+               Ptr,
                code);
          }
       }
@@ -3953,7 +3984,7 @@ namespace Emgu.CV
          {
             base.Save(fileName); //save the image using OpenCV
          }
-         catch 
+         catch
          {
             using (Bitmap bmp = Bitmap)
                bmp.Save(fileName); //save the image using Bitmap

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 using NUnit.Framework;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.ML.UnitTest
 {
@@ -15,6 +17,7 @@ namespace Emgu.CV.ML.UnitTest
          int trainSampleCount = 100;
 
          #region Generate the traning data and classes
+
          Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
          Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
 
@@ -70,13 +73,13 @@ namespace Emgu.CV.ML.UnitTest
          // display the original training samples
          for (int i = 0; i < (trainSampleCount >> 1); i++)
          {
-            Point2D<int> p1 = new Point2D<int>((int)trainData1[i, 0], (int)trainData1[i, 1]);
-            img.Draw(new Circle<int>(p1, 2), new Bgr(255, 100, 100), -1);
-            Point2D<int> p2 = new Point2D<int>((int)trainData2[i, 0], (int)trainData2[i, 1]);
-            img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
+            PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
+            img.Draw(new CircleF(p1, 2.0f), new Bgr(255, 100, 100), -1);
+            PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
+            img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
          }
 
-         //Emgu.CV.UI.ImageViewer.Show(img);
+         Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       [Test]
@@ -135,22 +138,23 @@ namespace Emgu.CV.ML.UnitTest
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
                {
-                  sample.Data[0, 0] = (float)i;
-                  sample.Data[0, 1] = (float)j;
+                  sample.Data[0, 0] = i;
+                  sample.Data[0, 1] = j;
                   int response = (int) emModel2.Predict(sample, null);
 
-                  Bgr color = new Bgr();
-                  for (int k = 0; k < color.Coordinate.Length; k++)
-                     color.Coordinate[k] = colors[response][k] * 0.5;
+                  Bgr color = colors[response];
                   
-                  img.Draw(new Circle<int>(new Point2D<int>(j, i), 1), color, 0);
+                  img.Draw(
+                     new CircleF(new PointF(j, i), 1), 
+                     new Bgr(color.Blue*0.5, color.Green * 0.5, color.Red * 0.5 ), 
+                     0);
                }
             #endregion 
 
             #region draw the clustered samples
             for (int i = 0; i < nSamples; i++)
             {
-               img.Draw(new Circle<int>(new Point2D<int>((int)samples.Data[i, 0], (int)samples.Data[i, 1]), 1), colors[labels.Data[i, 0]], 0);
+               img.Draw(new CircleF(new PointF(samples.Data[i, 0], samples.Data[i, 1]), 1), colors[labels.Data[i, 0]], 0);
             }
             #endregion 
    
@@ -231,10 +235,10 @@ namespace Emgu.CV.ML.UnitTest
          // display the original training samples
          for (int i = 0; i < (trainSampleCount >> 1); i++)
          {
-            Point2D<int> p1 = new Point2D<int>((int)trainData1[i, 0], (int)trainData1[i, 1]);
-            img.Draw(new Circle<int>(p1, 2), new Bgr(255, 100, 100), -1);
-            Point2D<int> p2 = new Point2D<int>((int)trainData2[i, 0], (int)trainData2[i, 1]);
-            img.Draw(new Circle<int>(p2, 2), new Bgr(100, 255, 100), -1);
+            PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
+            img.Draw(new CircleF(p1, 2), new Bgr(255, 100, 100), -1);
+            PointF p2 = new PointF((int)trainData2[i, 0], (int)trainData2[i, 1]);
+            img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
          }
          //Emgu.CV.UI.ImageViewer.Show(img);
       }

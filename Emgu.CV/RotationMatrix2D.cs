@@ -23,7 +23,7 @@ namespace Emgu.CV
       /// <param name="center">Center of the rotation in the source image</param>
       /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
       /// <param name="scale">Isotropic scale factor.</param>
-      public RotationMatrix2D(Point2D<float> center, double angle, double scale)
+      public RotationMatrix2D(System.Drawing.PointF center, double angle, double scale)
          : this()
       {
          SetRotation(center, angle, scale);
@@ -35,9 +35,9 @@ namespace Emgu.CV
       /// <param name="center">Center of the rotation in the source image</param>
       /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
       /// <param name="scale">Isotropic scale factor.</param>
-      public void SetRotation(Point2D<float> center, double angle, double scale)
+      public void SetRotation(System.Drawing.PointF center, double angle, double scale)
       {
-         CvInvoke.cv2DRotationMatrix(new MCvPoint2D32f(center.X, center.Y), angle, scale, Ptr);
+         CvInvoke.cv2DRotationMatrix(center, angle, scale, Ptr);
       }
    }
 }

@@ -7,15 +7,22 @@ namespace Emgu.CV
    /// <summary>
    /// An interface for the convex polygon
    /// </summary>
-   /// <typeparam name="T">The depth of the convex polygon</typeparam>
-   public interface IConvexPolygon<T> where T : struct, IComparable
+   public interface IConvexPolygon
    {
       /// <summary>
       /// Get the vertices of this convex polygon
       /// </summary>
-      Point2D<T>[] Vertices
-      {
-         get;
-      }
+      System.Drawing.Point[] GetVertices();
+   }
+
+   /// <summary>
+   /// An interface for the convex polygon
+   /// </summary>
+   public interface IConvexPolygonF
+   {
+      /// <summary>
+      /// Get the vertices of this convex polygon
+      /// </summary>
+      System.Drawing.PointF[] GetVertices();
    }
 }

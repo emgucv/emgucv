@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.UI;
 using Emgu.CV.UI;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
@@ -68,7 +69,7 @@ namespace Emgu.CV.Test
             for (int i = 0; i < img2.Width; i++)
                for (int j = 0; j < img2.Height; j++)
                {
-                  Point2D<int> location = new Point2D<int>(i, j);
+                  System.Drawing.Point location = new System.Drawing.Point(i, j);
                   Assert.GreaterOrEqual(img4[location].Intensity, img2[location].Intensity);
                   Assert.GreaterOrEqual(img4[j, i].Intensity, img3[j, i].Intensity);
                }
@@ -102,11 +103,11 @@ namespace Emgu.CV.Test
       public void TestGenericOperation()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
-         img1.ROI = new Rectangle<double>(new MCvRect(10, 1, 50 - 10, 19 - 1));
+         img1.ROI = new System.Drawing.Rectangle(10, 1, 50 - 10, 19 - 1);
          img1.SetValue(5.0);
 
          Image<Gray, Single> img2 = new Image<Gray, float>(50, 20);
-         img2.ROI = new Rectangle<double>(new MCvRect(0, 2, 40, 20 - 2));
+         img2.ROI = new System.Drawing.Rectangle(0, 2, 40, 20 - 2);
          img2.SetValue(new Gray(2.0));
 
          Assert.AreEqual(img1.Width, img2.Width);
@@ -138,7 +139,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("Abs Diff = {0}", sum1));
          Trace.WriteLine(String.Format("Abs Diff = {0}", sum2));
          Assert.AreEqual(sum1, sum2);
-         
+
          img3.Dispose();
          img4.Dispose();
          img5.Dispose();
@@ -166,7 +167,7 @@ namespace Emgu.CV.Test
          t2 = DateTime.Now;
          img5 = img1.Convert<Single, Single, Single>(img1, img1, delegate(Single v1, Single v2, Single v3) { return v1 + v2 + v3; });
          t3 = DateTime.Now;
-         
+
          /*
          ts1 = t2.Subtract(t1);
          ts2 = t3.Subtract(t2);
@@ -282,11 +283,11 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
-         Byte[,] buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(0, 100)));
+         Byte[,] buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(0, 100)));
          for (int i = 0; i < 100; i++)
             Assert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
 
-         buffer = img.Sample(new LineSegment2D<int>(new Point2D<int>(0, 0), new Point2D<int>(100, 100)), Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.FOUR_CONNECTED);
+         buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.FOUR_CONNECTED);
       }
 
 
@@ -294,7 +295,8 @@ namespace Emgu.CV.Test
       public void TestGetSize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
-         Point2D<int> size = img.Size;
+         Size size = img.Size;
+         Assert.AreEqual(size, new Size(10, 10));
       }
 
       [Test]
@@ -488,28 +490,38 @@ namespace Emgu.CV.Test
          MCvMoments moment = image.GetMoments(true);
       }
 
-      private static void TestSURFMatchFeature(SURFFeature[] objectFeatures, SURFFeature[] imageFeatures, double matchDistanceRatio, Matrix<Int32> result1, Matrix<double> dist1, List<Point2D<float>> list1, List<Point2D<float>> list2)
+      private static void MatchSURFFeature(
+         SURFFeature[] objectFeatures, 
+         SURFFeature[] imageFeatures, 
+         double matchDistanceRatio, 
+         List<PointF> objectPointList, 
+         List<PointF> imagePointList)
       {
-         for (int i = 0; i < result1.Rows; i++)
+         foreach (SURFFeature f in objectFeatures)
          {
-            SURFFeature fObserve = imageFeatures[i];
+            double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeatures,
+               delegate(SURFFeature imgFeature)
+               {
+                  return CvInvoke.cvNorm(imgFeature.Descriptor, f.Descriptor, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+               });
 
-            int bestMatchedIndex = dist1[i, 0] < dist1[i, 1] ? result1[i, 0] : result1[i, 1];
-            int secondBestMatchedIndex = dist1[i, 0] < dist1[i, 1] ? result1[i, 1] : result1[i, 0];
+            int closestIndex = 0;
+            int secondClosestIndex = 0;
 
-            SURFFeature bestMatched = bestMatchedIndex >= 0 ? objectFeatures[bestMatchedIndex] : null;
-            SURFFeature secondBestMatched = secondBestMatchedIndex > 0 ? objectFeatures[secondBestMatchedIndex] : null;
-            if (bestMatched != null)
+            for (int i = 0; i < distance.Length; i++)
             {
-               double distanceRatio = dist1[i, 0] / dist1[i, 1];
-               if (bestMatched.Point.laplacian == fObserve.Point.laplacian)
-                  if (secondBestMatched == null || distanceRatio <= matchDistanceRatio || distanceRatio >= (1.0 / matchDistanceRatio))
-                  {  //this is a unique / almost unique match
-                     Point2D<float> p1 = new Point2D<float>((float)fObserve.Point.pt.x, (float)fObserve.Point.pt.y);
-                     Point2D<float> p2 = new Point2D<float>((float)bestMatched.Point.pt.x, (float)bestMatched.Point.pt.y);
-                     list1.Add(p1);
-                     list2.Add(p2);
-                  }
+               if (distance[i] < distance[closestIndex] || distance[closestIndex] == -1)
+               {
+                  secondClosestIndex = closestIndex;
+                  closestIndex = i;
+               }
+            }
+
+            if (distance[closestIndex] < matchDistanceRatio * distance[secondClosestIndex])
+            { //If this is almost a unique match
+               SURFFeature match = imageFeatures[closestIndex];
+               objectPointList.Add(f.Point.pt);
+               imagePointList.Add(match.Point.pt);
             }
          }
       }
@@ -524,9 +536,9 @@ namespace Emgu.CV.Test
          Stopwatch stopwatch = Stopwatch.StartNew();
          MCvSURFParams param1 = new MCvSURFParams(500, false);
          SURFFeature[] objectFeatures = objectImage.ExtractSURF(ref param1);
-         SURFFeature[] objectFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(objectFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0;});
+         SURFFeature[] objectFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(objectFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
          SURFFeature[] objectFeaturesNegativeLaplacian = Array.FindAll<SURFFeature>(objectFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
-         
+
          /*
          //Create a feature tree for the given features
          FeatureTree fTreePositiveLaplacian = new FeatureTree(
@@ -556,11 +568,11 @@ namespace Emgu.CV.Test
 
          #region Merge the object image and the observed image into one image for display
          Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(objectImage.Width, image.Width), objectImage.Height + image.Height);
-         res.ROI = new Rectangle<double>( new MCvRect( 0, 0, objectImage.Width, objectImage.Height));
+         res.ROI = new System.Drawing.Rectangle(0, 0, objectImage.Width, objectImage.Height);
          objectImage.Copy(res, null);
-         res.ROI = new Rectangle<double>( new MCvRect( 0, objectImage.Height, image.Width, image.Height ));
+         res.ROI = new System.Drawing.Rectangle(0, objectImage.Height, image.Width, image.Height);
          image.Copy(res, null);
-         res.ROI = null;
+         res.ROI = Rectangle.Empty;
          #endregion
 
          double matchDistanceRatio = 0.6;
@@ -595,141 +607,75 @@ namespace Emgu.CV.Test
          stopwatch.Stop();
          Trace.WriteLine(String.Format("{0} milli-sec", stopwatch.ElapsedMilliseconds));
          */
-         
+
          stopwatch.Reset(); stopwatch.Start();
          #region find the best matched feature
-         List<Point2D<float>> list1 = new List<Point2D<float>>();
-         List<Point2D<float>> list2 = new List<Point2D<float>>();
+         List<PointF> list1 = new List<PointF>();
+         List<PointF> list2 = new List<PointF>();
 
-         foreach (SURFFeature f in objectFeaturesPositiveLaplacian)
-         {
-            double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeaturesPositiveLaplacian,
-               delegate(SURFFeature imgFeature)
-               {
-                  return CvInvoke.cvNorm(imgFeature.Descriptor, f.Descriptor, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-               });
+         MatchSURFFeature(objectFeaturesPositiveLaplacian, imageFeaturesPositiveLaplacian, matchDistanceRatio, list1, list2);
+         MatchSURFFeature(objectFeaturesNegativeLaplacian, imageFeaturesNegativeLaplacian, matchDistanceRatio, list1, list2);
 
-            int closestIndex = 0;
-            int secondClosestIndex = 0;
-
-            for (int i = 0; i < distance.Length; i++)
-            {
-               if (distance[i] >= 0)
-               {
-                  if (distance[i] < distance[closestIndex] || distance[closestIndex] == -1)
-                  {
-                     secondClosestIndex = closestIndex;
-                     closestIndex = i;
-                  }
-               }
-            }
-            if (distance[closestIndex] < matchDistanceRatio * distance[secondClosestIndex])
-            { //If this is almost a unique match
-               Point2D<float> p1 = new Point2D<float>((float)f.Point.pt.x, (float)f.Point.pt.y);
-               SURFFeature match = imageFeaturesPositiveLaplacian[closestIndex];
-               Point2D<float> p2 = new Point2D<float>((float)match.Point.pt.x, (float)match.Point.pt.y);
-               list1.Add(p1);
-               list2.Add(p2);
-            }
-         }
-         foreach (SURFFeature f in objectFeaturesNegativeLaplacian)
-         {
-            double[] distance = Array.ConvertAll<SURFFeature, double>(imageFeaturesNegativeLaplacian,
-               delegate(SURFFeature imgFeature)
-               {
-                  return CvInvoke.cvNorm(imgFeature.Descriptor, f.Descriptor, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-               });
-
-            int closestIndex = 0;
-            int secondClosestIndex = 0;
-
-            for (int i = 0; i < distance.Length; i++)
-            {
-               if (distance[i] >= 0)
-               {
-                  if (distance[i] < distance[closestIndex] || distance[closestIndex] == -1)
-                  {
-                     secondClosestIndex = closestIndex;
-                     closestIndex = i;
-                  }
-               }
-            }
-            if (distance[closestIndex] < matchDistanceRatio * distance[secondClosestIndex])
-            { //If this is almost a unique match
-               Point2D<float> p1 = new Point2D<float>((float)f.Point.pt.x, (float)f.Point.pt.y);
-               SURFFeature match = imageFeaturesNegativeLaplacian[closestIndex];
-               Point2D<float> p2 = new Point2D<float>((float)match.Point.pt.x, (float)match.Point.pt.y);
-               list1.Add(p1);
-               list2.Add(p2);
-            }
-         }
          stopwatch.Stop();
          Trace.WriteLine(String.Format("{0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion
-         
+
          Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
             list1.ToArray(), //points on the object image
             list2.ToArray(), //points on the observed image
-            CvEnum.HOMOGRAPHY_METHOD.RANSAC, 
+            CvEnum.HOMOGRAPHY_METHOD.RANSAC,
             3);
 
-         #region draw teh projected object in observed image
+         #region draw the projected object in observed image
          for (int i = 0; i < list1.Count; i++)
          {
-            Point2D<float> p = list2[i].Convert<float>();
+            PointF p = list2[i];
             p.Y += objectImage.Height;
-            res.Draw(new LineSegment2D<float>(list1[i], p), new Gray(0), 1);
+            res.Draw(new LineSegment2DF(list1[i], p), new Gray(0), 1);
          }
 
-         Rectangle<double> rect = objectImage.ROI;
+         System.Drawing.Rectangle rect = objectImage.ROI;
+         Matrix<float> orginalCornerCoordinate = new Matrix<float>(new float[,] 
+            {{  rect.Left, rect.Bottom, 1.0f},
+               { rect.Right, rect.Bottom, 1.0f},
+               { rect.Right, rect.Top, 1.0f},
+               { rect.Left, rect.Top, 1.0f}});
 
-         Point2D<double>[] pts = new Point2D<double>[]
+         Matrix<float> destCornerCoordinate = homographyMatrix * orginalCornerCoordinate.Transpose();
+         Point[] destCornerPoints = new Point[4];
+         float[,] destCornerCoordinateArray = destCornerCoordinate.Data;
+         for (int i = 0; i < destCornerPoints.Length; i++)
          {
-            HomographyTransform( rect.BottomLeft, homographyMatrix ),
-            HomographyTransform( rect.BottomRight, homographyMatrix ),
-            HomographyTransform( rect.TopRight, homographyMatrix ),
-            HomographyTransform( rect.TopLeft, homographyMatrix )
-         };
-
-         foreach (Point2D<double> p in pts)
-         {
-            p.Y += objectImage.Height;
+            float denominator = destCornerCoordinateArray[2, i];
+            destCornerPoints[i] = new Point(
+               (int)(destCornerCoordinateArray[0, i] / denominator),
+               (int)(destCornerCoordinateArray[1, i] / denominator) + objectImage.Height);
          }
-         res.DrawPolyline(pts, true, new Gray(255.0), 5);
+
+         res.DrawPolyline(destCornerPoints, true, new Gray(255.0), 5);
          #endregion
          //Application.Run(new ImageViewer(res.Resize(200, 200, true)));
       }
 
-      private Point2D<double> HomographyTransform(Point2D<double> p, Matrix<float> homographyMatrix)
-      {
-         Matrix<float> pMat = new Matrix<float>(p.Convert<float>().Resize(3).Coordinate);
-         pMat[2, 0] = 1.0f;
-         pMat = homographyMatrix * pMat;
-         pMat = pMat / (double)pMat[2, 0];
-         return new Point2D<double>((double)pMat[0, 0], (double)pMat[1, 0]);
-      }
 
       [Test]
       public void TestSnake()
       {
          Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray());
 
-         Point2D<double> center = new Point2D<double>(50, 50);
-         double width = 20;
-         double height = 40;
-         Rectangle<double> rect = new Rectangle<double>(center, width, height);
+         System.Drawing.Rectangle rect = new Rectangle(40, 30, 20, 40);
          img.Draw(rect, new Gray(255.0), -1);
 
          using (MemStorage stor = new MemStorage())
          {
-            Seq<MCvPoint> pts = new Seq<MCvPoint>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
-            pts.Push(new MCvPoint(20, 20));
-            pts.Push(new MCvPoint(20, 80));
-            pts.Push(new MCvPoint(80, 80));
-            pts.Push(new MCvPoint(80, 20));
+            Seq<System.Drawing.Point> pts = new Seq<System.Drawing.Point>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+            pts.Push(new System.Drawing.Point(20, 20));
+            pts.Push(new System.Drawing.Point(20, 80));
+            pts.Push(new System.Drawing.Point(80, 80));
+            pts.Push(new System.Drawing.Point(80, 20));
 
             Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
-            Seq<MCvPoint> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new MCvSize(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+            Seq<System.Drawing.Point> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new System.Drawing.Size(21, 21), new MCvTermCriteria(40, 0.0002), stor);
 
             img.Draw(pts, new Gray(120), 1);
             img.Draw(snake, new Gray(80), 2);
@@ -742,8 +688,11 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("Stuff.jpg");
          Image<Gray, Int32> marker = new Image<Gray, Int32>(image.Width, image.Height);
+         System.Drawing.Rectangle rect = image.ROI;
          marker.Draw(
-            new Circle<double>(image.ROI.Center, Math.Min(image.Width, image.Height) / 4.0),
+            new CircleF(
+               new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f), 
+               (float) (Math.Min(image.Width, image.Height) / 4.0f)),
             new Gray(255),
             0);
          CvInvoke.cvWatershed(image, marker);
@@ -760,12 +709,12 @@ namespace Emgu.CV.Test
             new float[,] { 
             {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 
             {1.0f/16.0f, 8.0f/16.0f, 1.0f/16.0f}, 
-            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}}); 
+            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}});
 
          Matrix<float> matBDft = new Matrix<float>(
             CvInvoke.cvGetOptimalDFTSize(matB.Rows),
             CvInvoke.cvGetOptimalDFTSize(matB.Cols));
-         CvInvoke.cvCopyMakeBorder(matB, matBDft, new MCvPoint(0, 0), Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+         CvInvoke.cvCopyMakeBorder(matB, matBDft, new System.Drawing.Point(0, 0), Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
          Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
          CvInvoke.cvMerge(matBDft, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, dftIn);
 
@@ -786,19 +735,29 @@ namespace Emgu.CV.Test
 
          Matrix<float> dftA = new Matrix<float>(dft_rows, dft_cols);
 
-         matA.CopyTo(dftA.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, matA.Width, matA.Height))));
+         matA.CopyTo(dftA.GetSubMatrix(new System.Drawing.Rectangle(0, 0, matA.Width, matA.Height)));
 
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
 
          Matrix<float> dftB = new Matrix<float>(dft_rows, dft_cols);
-         matB.CopyTo(dftB.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, matB.Width, matB.Height))));
+         matB.CopyTo(dftB.GetSubMatrix(new System.Drawing.Rectangle(0, 0, matB.Width, matB.Height)));
          CvInvoke.cvDFT(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
          CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convResult1.Rows);
-         dftA.GetSubMatrix(new Rectangle<double>(new MCvRect(0, 0, convResult1.Width, convResult1.Height))).CopyTo(convResult1);
+         dftA.GetSubMatrix(new System.Drawing.Rectangle(0, 0, convResult1.Width, convResult1.Height)).CopyTo(convResult1);
 
          //ImageViewer.Show(convResult1);
+      }
+
+      [Test]
+      public void TestRoi()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(1, 1);
+         Rectangle roi = image.ROI;
+
+         Assert.AreEqual(roi.Width, image.Width);
+         Assert.AreEqual(roi.Height, image.Height);
       }
 
       /*

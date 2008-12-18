@@ -40,7 +40,7 @@ namespace Emgu.CV
       /// <returns>
       /// Returns the min / max location and values for the image
       /// </returns>
-      void MinMax(out double[] minValues, out double[] maxValues, out MCvPoint[] minLocations, out MCvPoint[] maxLocations);
+      void MinMax(out double[] minValues, out double[] maxValues, out System.Drawing.Point[] minLocations, out System.Drawing.Point[] maxLocations);
 
       ///<summary> 
       /// Split current IImage into an array of gray scale images where each element 

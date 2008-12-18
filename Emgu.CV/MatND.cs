@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

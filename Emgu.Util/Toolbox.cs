@@ -121,6 +121,22 @@ namespace Emgu.Util
       }
 
       /// <summary>
+      /// Convert an object to an xml document
+      /// </summary>
+      /// <typeparam name="T">The type of the object to be converted</typeparam>
+      /// <param name="o">The object to be serialized</param>
+      /// <param name="knownTypes">Other types that it must known ahead to serialize the object</param>
+      /// <returns>An xml document that represents the object</returns>
+      public static XmlDocument XmlSerialize<T>(T o, Type[] knownTypes)
+      {
+         StringBuilder sb = new StringBuilder();
+         (new XmlSerializer(typeof(T), knownTypes)).Serialize(new StringWriter(sb), o);
+         XmlDocument doc = new XmlDocument();
+         doc.LoadXml(sb.ToString());
+         return doc;
+      }
+
+      /// <summary>
       /// Convert an xml document to an object
       /// </summary>
       /// <typeparam name="T">The type of the object to be converted to</typeparam>
@@ -129,6 +145,18 @@ namespace Emgu.Util
       public static T XmlDeserialize<T>(XmlDocument xDoc)
       {
          return (T)(new XmlSerializer(typeof(T))).Deserialize(new XmlNodeReader(xDoc));
+      }
+
+      /// <summary>
+      /// Convert an xml document to an object
+      /// </summary>
+      /// <typeparam name="T">The type of the object to be converted to</typeparam>
+      /// <param name="xDoc">The xml document</param>
+      /// <param name="knownTypes">Other types that it must known ahead to deserialize the object</param>
+      /// <returns>The object representation as a result of the deserialization of the xml document</returns>
+      public static T XmlDeserialize<T>(XmlDocument xDoc, Type[] knownTypes)
+      {
+         return (T)(new XmlSerializer(typeof(T), knownTypes)).Deserialize(new XmlNodeReader(xDoc));
       }
 
       /// <summary>
@@ -253,6 +281,8 @@ namespace Emgu.Util
 
          return GetBaseType(baseType, baseclassName);
       }
+
+
 
       #region memory copy
       /// <summary>

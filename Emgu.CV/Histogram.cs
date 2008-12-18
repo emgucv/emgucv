@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

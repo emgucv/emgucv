@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
 using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace Webservice_Host
 {
@@ -14,7 +15,7 @@ namespace Webservice_Host
 
          MCvFont f = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
          String str = DateTime.Now.Ticks.ToString();
-         img.Draw(str, ref f, new Point2D<int>(50, 150), new Bgr(0, 0, 0));
+         img.Draw(str, ref f, new System.Drawing.Point(50, 150), new Bgr(0, 0, 0));
          return img;
       }
    }

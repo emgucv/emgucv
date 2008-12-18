@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed CvSubdiv2D structure
@@ -94,10 +94,10 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
-      public MCvPoint2D32f topleft;
+      public System.Drawing.PointF topleft;
       /// <summary>
       /// 
       /// </summary>
-      public MCvPoint2D32f bottomright;
+      public System.Drawing.PointF bottomright;
    }
 }

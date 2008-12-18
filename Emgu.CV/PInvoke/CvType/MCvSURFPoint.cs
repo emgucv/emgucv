@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Wrapped CvSURFPoint structure
@@ -14,7 +14,7 @@ namespace Emgu.CV
       /// <summary>
       /// Position of the feature within the image
       /// </summary>
-      public MCvPoint2D32f pt;
+      public System.Drawing.PointF pt;
 
       /// <summary>
       /// -1, 0 or +1. sign of the laplacian at the point.

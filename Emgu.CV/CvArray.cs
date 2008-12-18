@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Xml.Serialization;
 using Emgu.CV.Reflection;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using zlib;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -24,7 +25,7 @@ namespace Emgu.CV
       private Matrix<float> _descriptor;
 
       /// <summary>
-      /// The SURF descriptor as a matrix (A 64x1 matrix for regular descriptor; A 128x1 matrix for extended descriptor)
+      /// The SURF descriptor as a matrix (64x1 for regular descriptor; 128x1 for extended descriptor)
       /// </summary>
       public Matrix<float> Descriptor
       {
@@ -48,7 +49,8 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         _descriptor.Dispose();
+         if (_descriptor != null)
+            _descriptor.Dispose();
       }
    }
 }

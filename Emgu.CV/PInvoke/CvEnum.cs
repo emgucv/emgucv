@@ -1854,4 +1854,19 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       DO_ROUGH_SEARCH = 8
    }
+
+   /// <summary>
+   /// Specific if it is back or front
+   /// </summary>
+   public enum BACK_OR_FRONT
+   {
+      /// <summary>
+      /// Back
+      /// </summary>
+      BACK,
+      /// <summary>
+      /// Front
+      /// </summary>
+      FRONT
+   }
 }

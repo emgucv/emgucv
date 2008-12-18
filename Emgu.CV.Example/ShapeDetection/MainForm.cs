@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace ShapeDetection
 {
@@ -32,7 +33,7 @@ namespace ShapeDetection
             Gray cannyThresholdLinking = new Gray(120);
             Gray circleAccumulatorThreshold = new Gray(120);
 
-            Circle<float>[] circles = gray.HoughCircles(
+            CircleF[] circles = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
                 5.0, //Resolution of the accumulator used to detect centers of the circles
@@ -42,7 +43,7 @@ namespace ShapeDetection
                 )[0]; //Get the circles from the first channel
 
             Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
-            LineSegment2D<int>[] lines = cannyEdges.HoughLinesBinary(
+            LineSegment2D[] lines = cannyEdges.HoughLinesBinary(
                 1, //Distance resolution in pixel-related units
                 Math.PI / 45.0, //Angle resolution measured in radians.
                 20, //threshold
@@ -51,31 +52,36 @@ namespace ShapeDetection
                 )[0]; //Get the lines from the first channel
 
             #region Find triangles and rectangles
-            List<Triangle2D<int>> triangleList = new List<Triangle2D<int>>();
-            List<Box2D<int>> boxList = new List<Box2D<int>>();
+            List<Triangle2DF> triangleList = new List<Triangle2DF>();
+            List<MCvBox2D> boxList = new List<MCvBox2D>();
 
             using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
-               for (Contour<MCvPoint> contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
+               for (Contour<Point> contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
                {
-                  Contour<MCvPoint> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
+                  Contour<Point> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
 
                   if (contours.Area > 250) //only consider contours with area greater than 250
                   {
                      if (currentContour.Total == 3) //The contour has 3 vertices, it is a triangle
                      {
-                        Point2D<int>[] pts = Array.ConvertAll<MCvPoint, Point2D<int>>(currentContour.ToArray(), delegate(MCvPoint p) { return new Point2D<int>(p.x, p.y); });
-                        triangleList.Add(new Triangle2D<int>(pts[0], pts[1], pts[2]));
+                        Point[] pts = currentContour.ToArray();
+                        triangleList.Add(new Triangle2DF(
+                           new PointF(pts[0].X, pts[0].Y), 
+                           new PointF(pts[1].X, pts[1].Y),
+                           new PointF(pts[2].X, pts[2].Y)
+                           ));
                      }
                      else if (currentContour.Total == 4) //The contour has 4 vertices.
                      {
                         #region determine if all the angles in the contour are within the range of [80, 100] degree
                         bool isRectangle = true;
-                        Point2D<int>[] pts = Array.ConvertAll<MCvPoint, Point2D<int>>(currentContour.ToArray(), delegate(MCvPoint p) { return new Point2D<int>(p.x, p.y); });
-                        LineSegment2D<int>[] edges = PointCollection.PolyLine<int>(pts, true);
+                        Point[] pts = currentContour.ToArray();
+                        LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
 
                         for (int i = 0; i < edges.Length; i++)
                         {
-                           double angle = Math.Abs(edges[(i + 1) % edges.Length].GetExteriorAngleDegree(edges[i]));
+                           double angle = Math.Abs(
+                              edges[(i + 1) % edges.Length].GetExteriorAngleDegree(edges[i]));
                            if (angle < 80 || angle > 100)
                            {
                               isRectangle = false;
@@ -94,23 +100,23 @@ namespace ShapeDetection
 
             #region draw triangles and rectangles
             Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
-            foreach (Triangle2D<int> triangle in triangleList)
+            foreach (Triangle2DF triangle in triangleList)
                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
-            foreach (Box2D<int> box in boxList)
+            foreach (MCvBox2D box in boxList)
                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
             triangleRectangleImageBox.Image = triangleRectangleImage;
             #endregion
 
             #region draw circles
             Image<Bgr, Byte> circleImage = img.CopyBlank();
-            foreach (Circle<float> circle in circles)
+            foreach (CircleF circle in circles)
                circleImage.Draw(circle, new Bgr(Color.Brown), 2);
             circleImageBox.Image = circleImage;
             #endregion
 
             #region draw lines
             Image<Bgr, Byte> lineImage = img.CopyBlank();
-            foreach (LineSegment2D<int> line in lines)
+            foreach (LineSegment2D line in lines)
                lineImage.Draw(line, new Bgr(Color.Green), 2);
             lineImageBox.Image = lineImage;
             #endregion

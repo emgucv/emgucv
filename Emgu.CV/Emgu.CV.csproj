@@ -73,6 +73,8 @@
     <Compile Include="Color\Bgra.cs" />
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Contour.cs" />
+    <Compile Include="HeaderSize.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeqBlock.cs" />
     <Compile Include="PlanarSubdivision.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
@@ -92,6 +94,8 @@
     <Compile Include="Envelope.cs" />
     <Compile Include="FeatureTree.cs" />
     <Compile Include="MatND.cs" />
+    <Compile Include="PointAndLine\Line2DF.cs" />
+    <Compile Include="PointAndLine\LineSegment2DF.cs" />
     <Compile Include="Reflection\ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
     <Compile Include="Kalman.cs" />
@@ -131,19 +135,13 @@
     <Compile Include="PInvoke\CvType\MCvMat.cs" />
     <Compile Include="PInvoke\CvType\MCvMatND.cs" />
     <Compile Include="PInvoke\CvType\MCvMoments.cs" />
-    <Compile Include="PInvoke\CvType\MCvPoint.cs" />
-    <Compile Include="PInvoke\CvType\MCvPoint2D32f.cs" />
     <Compile Include="PInvoke\CvType\MCvPoint3D32f.cs" />
-    <Compile Include="PInvoke\CvType\MCvRect.cs" />
     <Compile Include="PInvoke\CvType\MCvScalar.cs" />
     <Compile Include="PInvoke\CvType\MCvSeq.cs" />
-    <Compile Include="PInvoke\CvType\MCvSize.cs" />
-    <Compile Include="PInvoke\CvType\MCvSize2D32f.cs" />
     <Compile Include="PInvoke\CvType\MCvSlice.cs" />
     <Compile Include="PInvoke\CvType\MCvTermCriteria.cs" />
     <Compile Include="PInvoke\CvType\MIplImage.cs" />
     <Compile Include="RotationMatrix2D.cs" />
-    <Compile Include="Shape\Box2D.cs" />
     <Compile Include="Capture\Capture.cs" />
     <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Shape\Circle.cs" />
@@ -165,16 +163,7 @@
     <Compile Include="PointAndLine\PointCollection.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="PointAndLine\Point.cs" />
-    <Compile Include="PointAndLine\Point2D.cs" />
-    <Compile Include="PointAndLine\Point3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Shape\Rectangle.cs" />
     <Compile Include="TimedImage.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="VideoWriter.cs" />
@@ -183,7 +172,6 @@
     <None Include="CV.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

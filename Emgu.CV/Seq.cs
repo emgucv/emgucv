@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -22,8 +23,6 @@ namespace Emgu.CV
       /// </summary>
       protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(T));
 
-      private static readonly int _sizeOfHeader = Marshal.SizeOf(typeof(MCvSeq));
-
       #region Constructors
       /// <summary>
       /// Create a sequence using the specific <paramref name="seqFlag"/> and <paramref name="storage"/>
@@ -35,7 +34,7 @@ namespace Emgu.CV
          _stor = storage;
          _ptr = CvInvoke.cvCreateSeq(
              seqFlag,
-             _sizeOfHeader,
+             HeaderSize.MCvSeq,
              _sizeOfElement,
              storage.Ptr);
       }
@@ -90,7 +89,35 @@ namespace Emgu.CV
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
          Marshal.StructureToPtr(data, dataCopy, false);
          CvInvoke.cvSeqPush(Ptr, dataCopy);
-         Marshal.FreeHGlobal(dataCopy);
+         Marshal.FreeHGlobal(dataCopy);;
+      }
+
+      /// <summary>
+      /// Push multiple elements to the sequence
+      /// </summary>
+      /// <param name="data">The data to push to the sequence</param>
+      /// <param name="backOrFront">Specify if pushing to the back or to the front</param>
+      public void Push(T[] data, CvEnum.BACK_OR_FRONT backOrFront)
+      {
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         CvInvoke.cvSeqPushMulti(Ptr, handle.AddrOfPinnedObject(), data.Length, backOrFront);
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Pop multiple elements from the sequence
+      /// </summary>
+      /// <param name="count">The number of elements to be poped</param>
+      /// <param name="backOrFront">The location the pop operation is started</param>
+      /// <returns>The elements poped from the sequence</returns>
+      public T[] Pop(int count, CvEnum.BACK_OR_FRONT backOrFront)
+      {
+         count = Math.Min(count, Total);
+         T[] res = new T[count];
+         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
+         CvInvoke.cvSeqPopMulti(Ptr, handle.AddrOfPinnedObject(), count, backOrFront);
+         handle.Free();
+         return res;
       }
 
       /// <summary>
@@ -110,7 +137,7 @@ namespace Emgu.CV
       /// Get the minimum area rectangle for this point sequence
       /// </summary>
       /// <returns>The minimum area rectangle</returns>
-      public Box2D<int> GetMinAreaRect()
+      public MCvBox2D GetMinAreaRect()
       {
          return GetMinAreaRect(null);
       }
@@ -120,12 +147,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="stor">The temporary storage to use</param>
       /// <returns>The minimum area rectangle</returns>
-      public Box2D<int> GetMinAreaRect(MemStorage stor)
+      public MCvBox2D GetMinAreaRect(MemStorage stor)
       {
-         Box2D<int> box = new Box2D<int>();
-         MCvBox2D cvbox = CvInvoke.cvMinAreaRect2(Ptr, stor == null ? IntPtr.Zero : stor.Ptr);
-         box.MCvBox2D = cvbox;
-         return box;
+         return CvInvoke.cvMinAreaRect2(Ptr, stor == null ? IntPtr.Zero : stor.Ptr);
       }
 
       /// <summary>
@@ -141,14 +165,13 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the convex hull of this point sequence
+      /// Get the convex hull of this point sequence, the resulting convex hull use the same storage as the current sequence
       /// </summary>
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <returns>The result convex hull</returns>
       public Seq<T> GetConvexHull(CvEnum.ORIENTATION orientation)
       {
-         MemStorage stor = new MemStorage();
-         return GetConvexHull(orientation, stor);
+         return GetConvexHull(orientation, _stor);
       }
 
       /// <summary>
@@ -171,8 +194,9 @@ namespace Emgu.CV
       public T[] ToArray()
       {
          T[] res = new T[Total];
-         for (int i = 0; i < res.Length; i++)
-            res[i] = this[i];
+         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
+         CvInvoke.cvCvtSeqToArray(Ptr, handle.AddrOfPinnedObject(), new MCvSlice(0, 0x3fffffff));
+         handle.Free();
          return res;
       }
 
@@ -363,24 +387,21 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Approximates one curve and returns the approximation result. 
+      /// Approximates one curve and returns the approximation result, the result use the same storage as the current sequence
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
       /// <returns>The approximated contour</returns>
       public Seq<T> ApproxPoly(double accuracy)
       {
-         MemStorage storage = new MemStorage();
-         return ApproxPoly(accuracy, storage);
+         return ApproxPoly(accuracy, _stor);
       }
 
       ///<summary> The smallest Bouding Rectangle </summary>
-      public Rectangle<double> BoundingRectangle
+      public System.Drawing.Rectangle BoundingRectangle
       {
          get
          {
-            Rectangle<double> res = new Rectangle<double>();
-            res.MCvRect = CvInvoke.cvBoundingRect(Ptr, false);
-            return res;
+            return CvInvoke.cvBoundingRect(Ptr, false);
          }
       }
 
@@ -397,9 +418,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The point to be tested</param>
       /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
-      public double InContour(Point2D<float> point)
+      public double InContour(System.Drawing.PointF point)
       {
-         return CvInvoke.cvPointPolygonTest(Ptr, point.MCvPoint2D32f, 0);
+         return CvInvoke.cvPointPolygonTest(Ptr, point, 0);
       }
 
       /// <summary>
@@ -407,9 +428,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The point to measured distance</param>
       /// <returns>positive distance if inside; negative distance if outside; 0 if on the contour</returns>
-      public double Distance(Point2D<float> point)
+      public double Distance(System.Drawing.PointF point)
       {
-         return CvInvoke.cvPointPolygonTest(Ptr, point.MCvPoint2D32f, 1);
+         return CvInvoke.cvPointPolygonTest(Ptr, point, 1);
       }
 
       /// <summary>

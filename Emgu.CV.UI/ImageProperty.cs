@@ -79,7 +79,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Set the mouse position over the image
       /// </summary>
-      public Point2D<int> MousePositionOnImage
+      public System.Drawing.Point MousePositionOnImage
       {
          set
          {
@@ -95,7 +95,7 @@ namespace Emgu.CV.UI
          set
          {
             colorIntensityTextbox.Text = String.Format("[{0}]",
-                value == null ? "" : String.Join(",", System.Array.ConvertAll<double, String>(value.Coordinate, System.Convert.ToString)));
+                value == null ? String.Empty : value.ToString());
          }
       }
 
@@ -140,7 +140,7 @@ namespace Emgu.CV.UI
          _imageBox.PopOperation();
       }
 
-      private static Point2D<int>[] SingleChannelImageToHistogramPoints(IImage channel, int numberOfBins, float minVal, float maxVal)
+      private static System.Drawing.Point[] SingleChannelImageToHistogramPoints(IImage channel, int numberOfBins, float minVal, float maxVal)
       {
          int[] binSize = new int[1] { numberOfBins };
          float[] min = new float[1] { minVal };
@@ -152,9 +152,9 @@ namespace Emgu.CV.UI
             hist.Accumulate(new IImage[] { channel });
 
             //all the values of the histogram for the specific color channel
-            Point2D<int>[] pts = new Point2D<int>[binSize[0]];
+            System.Drawing.Point[] pts = new System.Drawing.Point[binSize[0]];
             for (int binIndex = 0; binIndex < pts.Length; binIndex++)
-               pts[binIndex] = new Point2D<int>(binIndex, (int)hist.Query(binIndex));
+               pts[binIndex] = new System.Drawing.Point(binIndex, (int)hist.Query(binIndex));
 
             return pts;
          }
@@ -189,7 +189,7 @@ namespace Emgu.CV.UI
          {
             #region obtain the maximum and minimum color value
             double[] minValues, maxValues;
-            MCvPoint[] minLocations, maxLocations;
+            System.Drawing.Point[] minLocations, maxLocations;
             image.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
 
             double min = minValues[0], max = maxValues[0];
@@ -206,7 +206,7 @@ namespace Emgu.CV.UI
 
          for (int i = 0; i < channels.Length; i++)
          {
-            Point2D<int>[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, minVal, maxVal);
+            System.Drawing.Point[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, minVal, maxVal);
             hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
          }
 

@@ -28,14 +28,14 @@ namespace FaceDetection
          //Detect the faces  from the gray scale image and store the locations as rectangle
          //The first dimensional is the channel
          //The second dimension is the index of the rectangle in the specific channel
-         Rectangle<double>[][] facesDetected = gray.DetectHaarCascade(face, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new MCvSize(20, 20));
+         Rectangle[][] facesDetected = gray.DetectHaarCascade(face, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
 
-         foreach (Rectangle<double> f in facesDetected[0])
+         foreach (Rectangle f in facesDetected[0])
          {
             //Set the region of interest on the faces
             gray.ROI = f;
-            Rectangle<double>[][] eyesDetected = gray.DetectHaarCascade(eye, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new MCvSize(20, 20));
-            gray.ROI = null;
+            Rectangle[][] eyesDetected = gray.DetectHaarCascade(eye, 1.1, 1, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+            gray.ROI = Rectangle.Empty;
 
             //if there is no eye in the specific region, the region shouldn't contains a face
             //note that we might not be able to recoginize a person who ware glass in this case 
@@ -44,10 +44,9 @@ namespace FaceDetection
             //draw the face detected in the 0th (gray) channel with blue color
             image.Draw(f, new Bgr(Color.Blue), 2);
 
-            Point2D<double> faceOffset = f.TopLeft;
-            foreach (Rectangle<double> e in eyesDetected[0])
+            foreach (Rectangle e in eyesDetected[0])
             {
-               e.Center += faceOffset;
+               e.Offset(f.X, f.Y);
                image.Draw(e, new Bgr(Color.Red), 2);
             }
          }

@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
    ///<summary> Defines a Gray color </summary>
    [ColorInfo(ConversionCodename = "GRAY")]
-   public class Gray : ColorType, IComparable
+   public class Gray : ColorType, IComparable, IEquatable<Gray>
    {
       ///<summary> Create a Gray color with the given intensity</summary>
       ///<param name="intensity"> The intensity for this color </param>
       public Gray(double intensity)
-         : this()
+         : base(1, new MCvScalar(intensity))
       {
-         _coordinate[0] = intensity;
       }
 
       ///<summary> Create a Gray color with o intensity </summary>
@@ -25,7 +25,7 @@ namespace Emgu.CV
       ///<summary> The intensity of the gray color </summary>
       ///<value> The intensity of the gray color</value>
       [DisplayColor(122, 122, 122)]
-      public double Intensity { get { return _coordinate[0]; } set { _coordinate[0] = value; } }
+      public double Intensity { get { return _scalar.v0; } set { _scalar.v0 = value; } }
 
       /// <summary>
       /// Check if two gray color are equal
@@ -62,5 +62,18 @@ namespace Emgu.CV
          }
          throw new ArgumentException("object is not Gray");
       }
+
+      #region IEquatable<Gray> Members
+      /// <summary>
+      /// Return true if the two color equals
+      /// </summary>
+      /// <param name="other">The other color to compare with</param>
+      /// <returns>true if the two color equals</returns>
+      public bool Equals(Gray other)
+      {
+         return MCvScalar.Equals(other);
+      }
+
+      #endregion
    }
 }

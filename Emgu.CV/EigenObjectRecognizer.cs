@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Runtime.Serialization;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

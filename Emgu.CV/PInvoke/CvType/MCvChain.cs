@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Managed structure equivalent to CvChain
@@ -71,7 +71,7 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
-      public MCvPoint origin;
+      public System.Drawing.Point origin;
 
    }
 }

@@ -2,57 +2,68 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// A 3D triangle
    /// </summary>
-   /// <typeparam name="T">The depth of the triangle</typeparam>
-   public class Triangle3D<T> where T : struct, IComparable
+   public class Triangle3DF
    {
-      /// <summary>
-      /// The vertices for this triangle
-      /// </summary>
-      private Point3D<T>[] _vertices;
+      private MCvPoint3D32f _v0;
+      private MCvPoint3D32f _v1;
+      private MCvPoint3D32f _v2;
 
       /// <summary>
-      /// Get or set the vertices of this triangle
+      /// One of the vertex of the triangle
       /// </summary>
-      public Point3D<T>[] Vertices
+      public MCvPoint3D32f V0
       {
-         get { return _vertices; }
-         set
-         {
-            Debug.Assert(value.Length == 3, "The number of vertices for triangle must be 3");
-            _vertices = value;
-         }
+         get { return _v0; }
+         set { _v0 = value; }
+      }
+
+      /// <summary>
+      /// One of the vertex of the triangle
+      /// </summary>
+      public MCvPoint3D32f V1
+      {
+         get { return _v1; }
+         set { _v1 = value; }
+      }
+
+      /// <summary>
+      /// One of the vertex of the triangle
+      /// </summary>
+      public MCvPoint3D32f V2
+      {
+         get { return _v2; }
+         set { _v2 = value; }
       }
 
       /// <summary>
       /// Get the normal of this triangle
       /// </summary>
-      public Point3D<double> Normal
+      public MCvPoint3D32f Normal
       {
          get
          {
-            Matrix<T>[] vertices = Array.ConvertAll<Point3D<T>, Matrix<T>>( Vertices, delegate(Point3D<T> p) { return new Matrix<T>(p.Coordinate);});
-            Matrix<T> result = new Matrix<T>(3, 1);
-            CvInvoke.cvCrossProduct((vertices[1] - vertices[0]), (vertices[2] - vertices[1]), result);
-
-            return (new Point3D<T>(result[0,0], result[1,0], result[2, 0])).Normalized;
+            return V0.CrossProduct(V1).GetNormalizePoint();
          }
       }
 
       /// <summary>
       /// Create a triangle using the specific vertices
       /// </summary>
-      /// <param name="v1">The first vertex</param>
-      /// <param name="v2">The second vertex</param>
-      /// <param name="v3">The third vertex</param>
-      public Triangle3D(Point3D<T> v1, Point3D<T> v2, Point3D<T> v3)
+      /// <param name="v0">The first vertex</param>
+      /// <param name="v1">The second vertex</param>
+      /// <param name="v2">The third vertex</param>
+      public Triangle3DF(MCvPoint3D32f v0, MCvPoint3D32f v1, MCvPoint3D32f v2)
       {
-         _vertices = new Point3D<T>[] { v1, v2, v3 };
+         _v0 = v0;
+         _v1 = v1;
+         _v2 = v2;
       }
 
       /// <summary>
@@ -60,12 +71,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tri">the other triangles to compare with</param>
       /// <returns>true if the two triangles equals, false otherwise</returns>
-      public bool Equals(Triangle3D<T> tri)
+      public bool Equals(Triangle3DF tri)
       {
-         Point3D<T>[] v2 = tri.Vertices;
-         Point3D<T>[] v1 = Vertices;
-
-         return Array.TrueForAll<Point3D<T>>(v1, delegate(Point3D<T> v) { return Array.Exists<Point3D<T>>(v2, v.Equals); });
+         return
+            (V0.Equals(tri.V0) || V0.Equals(tri.V1) || V0.Equals(tri.V2)) &&
+            (V1.Equals(tri.V0) || V1.Equals(tri.V1) || V1.Equals(tri.V2)) &&
+            (V2.Equals(tri.V0) || V2.Equals(tri.V1) || V2.Equals(tri.V2));
       }
    }
 }

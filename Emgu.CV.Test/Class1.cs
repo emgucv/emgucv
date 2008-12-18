@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
+using Emgu.CV.Structure;
 using Emgu.UI;
 using Emgu.Util;
 using System.Diagnostics;
@@ -20,7 +21,7 @@ namespace Emgu.CV.Test
    {
       public void TestRotationMatrix2D()
       {
-         RotationMatrix2D mat = new RotationMatrix2D(new Point2D<float>(1, 2), 30, 1);
+         RotationMatrix2D mat = new RotationMatrix2D(new PointF(1, 2), 30, 1);
          //Trace.WriteLine(Emgu.Toolbox.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
       }
 
@@ -30,9 +31,9 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
          MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
          MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
-         semgu.Draw("Emgu", ref f1, new Point2D<int>(6, 50), new Bgr(55, 155, 255));
+         semgu.Draw("Emgu", ref f1, new Point(6, 50), new Bgr(55, 155, 255));
          semgu._Dilate(1);
-         scv.Draw("CV", ref f2, new Point2D<int>(50, 60), new Bgr(255, 55, 255));
+         scv.Draw("CV", ref f2, new Point(50, 60), new Bgr(255, 55, 255));
          scv._Dilate(2);
          Image<Bgr, Byte> logoBgr = semgu.Or(scv);
          Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
@@ -51,6 +52,7 @@ namespace Emgu.CV.Test
          bg_header.Save("bg_header.gif");
       }
 
+      /*
       public void TestPointPerformance()
       {
          #region test point constructors
@@ -62,18 +64,18 @@ namespace Emgu.CV.Test
          stopwatch.Stop();
          Trace.WriteLine("Point2D creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
          stopwatch.Reset(); stopwatch.Start();
-         MCvPoint[] mpts = new MCvPoint[numberOfPoints];
+         System.Drawing.Point[] mpts = new System.Drawing.Point[numberOfPoints];
          stopwatch.Stop();
-         Trace.WriteLine("MCvPoint creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
+         Trace.WriteLine("System.Drawing.Point creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
          #endregion
 
-         #region MCvPoint example
-         MCvPoint p1 = new MCvPoint(0, 0); 
+         #region System.Drawing.Point example
+         System.Drawing.Point p1 = new System.Drawing.Point(0, 0); 
 
-         MCvPoint[] ptsArray = new MCvPoint[1]; //structure (value type) in array are initialized, ptsArray[0] has been allocated to a default point (0,0)
+         System.Drawing.Point[] ptsArray = new System.Drawing.Point[1]; //structure (value type) in array are initialized, ptsArray[0] has been allocated to a default point (0,0)
          ptsArray[0] = p1; //ptsArray[0] now contains a copy of p1 (0, 0)
-         p1.x = 1; //change the value on p1, now p1 is (1, 0)
-         Trace.WriteLine("difference in X: " + (p1.x - ptsArray[0].x)); //ptsArray[0] returns a copy of the point (0,0)
+         p1.X = 1; //change the value on p1, now p1 is (1, 0)
+         Trace.WriteLine("difference in X: " + (p1.X - ptsArray[0].X)); //ptsArray[0] returns a copy of the point (0,0)
          #endregion
 
          int numberOfPointsInArray = 1000000;
@@ -94,18 +96,18 @@ namespace Emgu.CV.Test
          Trace.WriteLine("Time to access elements in Point2D<int> array: " + stopwatch.ElapsedMilliseconds);
 
          stopwatch.Reset(); stopwatch.Start();
-         //initialize MCvPoint array
-         MCvPoint[] pointStructures = new MCvPoint[numberOfPointsInArray];
+         //initialize System.Drawing.Point array
+         System.Drawing.Point[] pointStructures = new System.Drawing.Point[numberOfPointsInArray];
 
          for (int j = 0; j < numberOfReadyAccess; j++)
             for (int i = 0; i < pointStructures.Length; i++)
             {
-               pointStructures[i].x = 2;
+               pointStructures[i].X = 2;
             }
          stopwatch.Stop();
-         Trace.WriteLine("Time to access elements in MCvPoint array: " + stopwatch.ElapsedMilliseconds);
+         Trace.WriteLine("Time to access elements in System.Drawing.Point array: " + stopwatch.ElapsedMilliseconds);
 
-      }
+      }*/
 
       public void TestCvNamedWindow()
       {
@@ -115,7 +117,7 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) //Create an image of 400x200 of Blue color
          {
             MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0); //Create the font
-            img.Draw("Hello, world", ref f, new Point2D<int>(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
+            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
 
             CvInvoke.cvShowImage(win1, img.Ptr); //Show the image
             CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
@@ -132,14 +134,15 @@ namespace Emgu.CV.Test
 
       public void TestHorizontalLine()
       {
-         Point2D<int> p1 = new Point2D<int>(10, 10);
-         Point2D<int> p2 = new Point2D<int>(20, 10);
-         LineSegment2D<int> l1 = new LineSegment2D<int>(p1, p2);
+         Point p1 = new Point(10, 10);
+         Point p2 = new Point(20, 10);
+         LineSegment2D l1 = new LineSegment2D(p1, p2);
          Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
          img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
          ImageViewer.Show(img);
       }
 
+      /*
       public void TestRectangle()
       {
          Point2D<double> p1 = new Point2D<double>(1.1, 2.2);
@@ -151,27 +154,30 @@ namespace Emgu.CV.Test
          Map<Gray, Byte> map = new Map<Gray, Byte>(new Rectangle<double>(new Point2D<double>(2.0, 4.0), new Point2D<double>(4.0, 8.0)), new Point2D<double>(0.1, 0.1), new Gray(255.0));
          map.Draw<double>(rect, new Gray(0.0), 1);
 
-         Rectangle<double> roi = map.ROI;
-         roi.Height /= 2.0;
+         Rectangle roi= map.ROI;
+         roi.Height >>= 1;
          map.ROI = roi;
          ImageViewer.Show(map);
-      }
+      }*/
 
       public void TestEllipseFitting()
       {
          System.Random r = new Random();
 
          Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
-         List<Point2D<int>> pts = new List<Point2D<int>>();
+         List<PointF> pts = new List<PointF>();
          for (int i = 0; i <= 100; i++)
          {
             int x = r.Next(100) + 20;
             int y = r.Next(300) + 50;
             img[y, x] = new Bgr(255.0, 255.0, 255.0);
-            pts.Add(new Point2D<int>(x, y));
+            pts.Add(new PointF(x, y));
          }
 
-         Ellipse<float> e = PointCollection.LeastSquareEllipseFitting((IEnumerable<Point<int>>)pts.ToArray());
+         Stopwatch watch = Stopwatch.StartNew();
+         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts.ToArray());
+         watch.Stop();
+         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + "milliseconds");
 
          img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
          ImageViewer.Show(img);
@@ -209,8 +215,9 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Single> img2 = img.Resize(100, 100, true))
          {
             Application.Run(new ImageViewer(img2));
-            Rectangle<double> r = img2.ROI;
-            r.Size = new Point2D<double>(r.Size.X / 2, r.Size.Y / 2);
+            Rectangle r = img2.ROI;
+            r.Width >>= 1;
+            r.Height >>= 1;
             img2.ROI = r;
             ImageViewer.Show(img2);
          }
@@ -247,8 +254,8 @@ namespace Emgu.CV.Test
          {
             MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
             {
-               img.Draw("h.", ref f, new Point2D<int>(100, 10), new Gray(255.0));
-               img.Draw("a.", ref f, new Point2D<int>(100, 50), new Gray(255.0));
+               img.Draw("h.", ref f, new Point(100, 10), new Gray(255.0));
+               img.Draw("a.", ref f, new Point(100, 50), new Gray(255.0));
             }
             Application.Run(new ImageViewer(img));
          }
@@ -278,11 +285,11 @@ namespace Emgu.CV.Test
       {
          using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
          {
-            Point2D<float>[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
-            Point2D<float>[][] ptsSub = img.FindCornerSubPix(pts, new MCvSize(5, 5), new MCvSize(-1, -1), new MCvTermCriteria(20, 0.0001));
+            PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
+            img.FindCornerSubPix(pts, new System.Drawing.Size(5, 5), new System.Drawing.Size(-1, -1), new MCvTermCriteria(20, 0.0001));
 
-            foreach (Point2D<float> p in ptsSub[0])
-               img.Draw<float>(new Circle<float>(p, 3.0f), new Bgr(255, 0, 0), 1);
+            foreach (PointF p in pts[0])
+               img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
             //Application.Run(new ImageViewer(img));
          }
       }
@@ -314,11 +321,11 @@ namespace Emgu.CV.Test
                {
                   using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
                   {
-                     LineSegment2D<int>[][] lines = imgHsv2.HoughLines(
+                     LineSegment2D[][] lines = imgHsv2.HoughLines(
                          new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
                          1, Math.PI / 180.0, 50, 50, 10);
 
-                     Circle<float>[][] circles = img.HoughCircles(
+                     CircleF[][] circles = img.HoughCircles(
                          new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
                          4.0, 1.0, 0, 0);
 
@@ -337,19 +344,19 @@ namespace Emgu.CV.Test
                         imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
                      }
 
-                     foreach (Circle<float>[] cs in circles)
-                        foreach (Circle<float> c in cs)
+                     foreach (CircleF[] cs in circles)
+                        foreach (CircleF c in cs)
                            imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
 
                      Application.Run(new ImageViewer(imageRGB));
 
                      bool applied = false;
-                     foreach (Circle<float>[] cs in circles)
-                        foreach (Circle<float> c in cs)
+                     foreach (CircleF[] cs in circles)
+                        foreach (CircleF c in cs)
                         {
                            if (!applied)
                            {
-                              Circle<float> cir = c;
+                              CircleF cir = c;
                               cir.Radius += 30;
                               using (Image<Gray, Byte> mask = new Image<Gray, Byte>(imageRGB.Width, imageRGB.Height, new Gray(0.0)))
                               {
@@ -560,17 +567,17 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
 
-         Contour<MCvPoint> contour = img.FindContours();
+         Contour<System.Drawing.Point> contour = img.FindContours();
 
          while (contour != null)
          {
-            Contour<MCvPoint> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+            Contour<System.Drawing.Point> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
 
             if (approx.Convex && Math.Abs(approx.Area) > 20.0)
             {
-               MCvPoint[] vertices = approx.ToArray();
+               System.Drawing.Point[] vertices = approx.ToArray();
 
-               LineSegment2D<int>[] edges = PointCollection.PolyLine(vertices, true);
+               LineSegment2D[] edges = PointCollection.PolyLine(vertices, true);
 
                res.DrawPolyline(vertices, true, new Gray(200), 1);
             }
@@ -579,6 +586,7 @@ namespace Emgu.CV.Test
          Application.Run(new ImageViewer(res));
       }
 
+      /*
       private void TestMap()
       {
          Point2D<double> center = new Point2D<double>(-110032, -110032);
@@ -597,33 +605,34 @@ namespace Emgu.CV.Test
          map.Draw(tri, new Gray(80), 0);
          map.Draw(tri, new Gray(255), 1);
          Application.Run(new Emgu.CV.UI.ImageViewer(map));
-      }
+      }*/
 
+      /*
       private void TestConvexHull()
       {
          Random r = new Random();
-         Point2D<float>[] pts = new Point2D<float>[40];
+         PointF[] pts = new PointF[40];
          for (int i = 0; i < pts.Length; i++)
          {
-            pts[i] = new Point2D<float>((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
+            pts[i] = new PointF((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
          }
 
-         MCvPoint2D32f[] hull = PointCollection.ConvexHull(Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+         System.Drawing.PointF[] hull = PointCollection.ConvexHull(Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
-         foreach (Point2D<float> p in pts)
+         foreach (PointF p in pts)
          {
-            img.Draw(new Circle<float>(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
+            img.Draw(new Circle(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
          }
 
-         MCvPoint[] convexHull = Array.ConvertAll<MCvPoint2D32f, MCvPoint>(hull, delegate(MCvPoint2D32f p) { return new MCvPoint((int)p.x, (int)p.y); });
+         System.Drawing.Point[] convexHull = Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, delegate(System.Drawing.PointF p) { return new System.Drawing.Point((int)p.X, (int)p.Y); });
          img.DrawPolyline(
              convexHull,
              true, new Bgr(255.0, 0.0, 0.0), 1);
 
          Application.Run(new ImageViewer(img));
 
-      }
+      }*/
 
       private class SyntheticData
       {
@@ -711,6 +720,22 @@ namespace Emgu.CV.Test
          }
       }
 
+      public void TestPoint()
+      {
+         Point p = new Point(1, 2);
+         XmlDocument d = Emgu.Util.Toolbox.XmlSerialize<Point>(p);
+         Point p2 = Emgu.Util.Toolbox.XmlDeserialize<Point>(d);
+         Assert.AreEqual(p, p2);
+
+         Size s = new Size(1, 2);
+         d = Emgu.Util.Toolbox.XmlSerialize<Size>(s);
+         Trace.WriteLine(d.InnerXml);
+
+         Rectangle r = new Rectangle(1, 2, 3, 4);
+         d = Emgu.Util.Toolbox.XmlSerialize<Rectangle>(r);
+         Trace.WriteLine(d.InnerXml);
+      }
+
       public void TestNegate()
       {
          Assert.AreEqual(~1, -2);
@@ -737,18 +762,18 @@ namespace Emgu.CV.Test
          tracker.CorrectedState = state;
          #endregion 
 
-         System.Converter<double, Point2D<float>> angleToPoint =
+         System.Converter<double, PointF> angleToPoint =
             delegate(double radianAngle)
             {
-               return new Point2D<float>(
+               return new PointF(
                   (float)(img.Width / 2 + img.Width / 3 * Math.Cos(radianAngle)),
                   (float)(img.Height / 2 - img.Width / 3 * Math.Sin(radianAngle)));
             };
 
-         Toolbox.Action<Point2D<float>, Bgr> drawCross =
-           delegate(Point2D<float> point, Bgr color)
+         Toolbox.Action<PointF, Bgr> drawCross =
+           delegate(PointF point, Bgr color)
            {
-              img.Draw(new Cross2D<float>(point, 3, 3), color, 1);
+              img.Draw(new Cross2DF(point, 3, 3), color, 1);
            };
 
          CvInvoke.cvNamedWindow("Kalman");
@@ -762,15 +787,15 @@ namespace Emgu.CV.Test
             tracker.Predict();
 
             #region draw the state, prediction and the measurement
-            Point2D<float> statePoint = angleToPoint(tracker.CorrectedState[0, 0]);
-            Point2D<float> predictPoint = angleToPoint(tracker.PredictedState[0, 0]);
-            Point2D<float> measurementPoint = angleToPoint(measurement[0, 0]);
+            PointF statePoint = angleToPoint(tracker.CorrectedState[0, 0]);
+            PointF predictPoint = angleToPoint(tracker.PredictedState[0, 0]);
+            PointF measurementPoint = angleToPoint(measurement[0, 0]);
 
             img.SetZero(); //clear the image
             drawCross(statePoint, new Bgr(Color.White)); //draw current state in White
             drawCross(measurementPoint, new Bgr(Color.Red)); //draw the measurement in Red
             drawCross(predictPoint, new Bgr(Color.Green)); //draw the prediction (the next state) in green 
-            img.Draw(new LineSegment2D<float>(statePoint, predictPoint), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position 
+            img.Draw(new LineSegment2DF(statePoint, predictPoint), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position 
 
             Trace.WriteLine(String.Format("Velocity: {0}", tracker.CorrectedState[1, 0]));
             #endregion

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -10,6 +13,90 @@ namespace Emgu.CV
    /// </summary>
    public static class CameraCalibration
    {
+      /*
+      public static void TestTo1DMatrix()
+      {
+         MCvPoint3D32f p0 = new MCvPoint3D32f(1.0f, 2.0f, 1.0f);
+         MCvPoint3D32f p1 = new MCvPoint3D32f(3.0f, 2.0f, 1.0f);
+         MCvPoint3D32f p2 = new MCvPoint3D32f(1.0f, 4.0f, 1.0f);
+         MCvPoint3D32f p3 = new MCvPoint3D32f(5.0f, 2.0f, 1.0f);
+         MCvPoint3D32f p4 = new MCvPoint3D32f(1.0f, 6.0f, 1.0f);
+         MCvPoint3D32f p5 = new MCvPoint3D32f(7.0f, 2.0f, 1.0f);
+
+         MCvPoint3D32f[][] pts1 = new MCvPoint3D32f[][] { 
+            new MCvPoint3D32f[] {p0, p1},
+            new MCvPoint3D32f[] {p2, p3, p4},
+            new MCvPoint3D32f[] {},
+            new MCvPoint3D32f[] {p5}
+         };
+
+         MCvPoint3D32f[] pts2 = new MCvPoint3D32f[] { p0, p1, p2, p3, p4, p5 };
+         MCvPoint3D32f[] pts3 = Emgu.Util.Toolbox.To1DMatrix<MCvPoint3D32f>(pts1);
+
+         for (int i = 0; i < pts1.Length; i++)
+         {
+            Trace.WriteLine( pts2[i].Equals(pts3[i]) ) ;
+         }
+      }*/
+
+      private static Matrix<float> ToMatrix(MCvPoint3D32f[][] data)
+      {
+         int elementCount = 0;
+         foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
+
+         float[,] res = new float[elementCount, 3];
+         int sizeOfT = Marshal.SizeOf(typeof(MCvPoint3D32f));
+         GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
+         Int64 address = handle1.AddrOfPinnedObject().ToInt64();
+
+         foreach (MCvPoint3D32f[] d in data)
+         {
+            int lengthInBytes = d.Length * sizeOfT;
+            GCHandle handle2 = GCHandle.Alloc(d, GCHandleType.Pinned);
+            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle2.AddrOfPinnedObject(), lengthInBytes);
+            handle2.Free();
+            address += lengthInBytes;
+         }
+         handle1.Free();
+
+         return new Matrix<float>(res);
+      }
+
+      private static Matrix<float> ToMatrix(PointF[][] data)
+      {
+         int elementCount = 0;
+         foreach (PointF[] d in data) elementCount += d.Length;
+
+         float[,] res = new float[elementCount, 2];
+         int sizeOfT = Marshal.SizeOf(typeof(PointF));
+         GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
+         Int64 address = handle1.AddrOfPinnedObject().ToInt64();
+
+         foreach (PointF[] d in data)
+         {
+            int lengthInBytes = d.Length * sizeOfT;
+            GCHandle handle2 = GCHandle.Alloc(d, GCHandleType.Pinned);
+            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle2.AddrOfPinnedObject(), lengthInBytes);
+            handle2.Free();
+            address += lengthInBytes;
+         }
+         handle1.Free();
+
+         return new Matrix<float>(res);
+      }
+
+      private static Matrix<float> ToMatrix(PointF[] data)
+      {
+         float[,] res = new float[data.Length, 2];
+         int length = data.Length * Marshal.SizeOf(typeof(PointF));
+         GCHandle handle1 = GCHandle.Alloc(data, GCHandleType.Pinned);
+         GCHandle handle2 = GCHandle.Alloc(res, GCHandleType.Pinned);
+         Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), handle1.AddrOfPinnedObject(), length);
+         handle1.Free();
+         handle2.Free();
+         return new Matrix<float>(res);
+      }
+
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
       /// </summary>
@@ -19,23 +106,17 @@ namespace Emgu.CV
       /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
       /// <param name="flags">Flags</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
-      public static void CalibrateCamera(Point3D<float>[][] objectPoints, Point2D<float>[][] imagePoints, ref MCvSize imageSize, IntrinsicCameraParameters intrinsicParam, CvEnum.CALIB_TYPE flags, out ExtrinsicCameraParameters[] extrinsicParams)
+      public static void CalibrateCamera(MCvPoint3D32f[][] objectPoints, PointF[][] imagePoints, ref System.Drawing.Size imageSize, IntrinsicCameraParameters intrinsicParam, CvEnum.CALIB_TYPE flags, out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
          int imageCount = objectPoints.Length;
 
          #region get the matrix that represent the object points
-         List<Point<float>> objectPointList = new List<Point<float>>();
-         foreach (Point3D<float>[] pts in objectPoints)
-            objectPointList.AddRange(pts);
-         Matrix<float> objectPointMatrix = PointCollection.ToMatrix<float>(objectPointList);
+         Matrix<float> objectPointMatrix = ToMatrix(objectPoints);
          #endregion
 
          #region get the matrix that represent the image points
-         List<Point<float>> imagePointList = new List<Point<float>>();
-         foreach (Point2D<float>[] pts in imagePoints)
-            imagePointList.AddRange(pts);
-         Matrix<float> imagePointMatrix = PointCollection.ToMatrix<float>(imagePointList);
+         Matrix<float> imagePointMatrix = ToMatrix(imagePoints);
          #endregion
 
          #region get the matrix that represent the point counts
@@ -89,12 +170,12 @@ namespace Emgu.CV
       /// <param name="termCrit"> Termination criteria for the iterative optimiziation algorithm </param>
       /// <param name="foundamentalMatrix">fundamental matrix</param>
       public static void StereoCalibrate(
-         Point3D<float>[][] objectPoints, 
-         Point2D<float>[][] imagePoints1, 
-         Point2D<float>[][] imagePoints2, 
+         MCvPoint3D32f[][] objectPoints, 
+         PointF[][] imagePoints1, 
+         PointF[][] imagePoints2, 
          IntrinsicCameraParameters intrinsicParam1, 
          IntrinsicCameraParameters intrinsicParam2, 
-         ref MCvSize imageSize, 
+         ref System.Drawing.Size imageSize, 
          CvEnum.CALIB_TYPE flags, 
          ref MCvTermCriteria termCrit, 
          out ExtrinsicCameraParameters extrinsicParams, 
@@ -103,25 +184,10 @@ namespace Emgu.CV
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
 
-         #region get the matrix that represent the object points
-         List<Point<float>> objectPointList = new List<Point<float>>();
-         foreach (Point3D<float>[] pts in objectPoints)
-            objectPointList.AddRange(pts);
-         Matrix<float> objectPointMatrix = PointCollection.ToMatrix<float>(objectPointList);
-         #endregion
-
-         #region get the matrix that represent the image points
-         List<Point<float>> imagePointList1 = new List<Point<float>>();
-         foreach (Point2D<float>[] pts in imagePoints1)
-            imagePointList1.AddRange(pts);
-         Matrix<float> imagePointMatrix1 = PointCollection.ToMatrix<float>(imagePointList1);
-         #endregion
-
-         #region get the matrix that represent the image points
-         List<Point<float>> imagePointList2 = new List<Point<float>>();
-         foreach (Point2D<float>[] pts in imagePoints2)
-            imagePointList2.AddRange(pts);
-         Matrix<float> imagePointMatrix2 = PointCollection.ToMatrix<float>(imagePointList2);
+         #region get the matrices that represent the points
+         Matrix<float> objectPointMatrix = ToMatrix(objectPoints);
+         Matrix<float> imagePointMatrix1 = ToMatrix(imagePoints1);
+         Matrix<float> imagePointMatrix2 = ToMatrix(imagePoints2);
          #endregion
 
          #region get the matrix that represent the point counts
@@ -164,18 +230,26 @@ namespace Emgu.CV
       /// <param name="intrin">The intrinsic parameters</param>
       /// <returns>the extrinsic parameters</returns>
       public static ExtrinsicCameraParameters FindExtrinsicCameraParams2(
-          Point3D<float>[] objectPoints,
-          Point2D<float>[] imagePoints,
+          MCvPoint3D32f[] objectPoints,
+          PointF[] imagePoints,
           IntrinsicCameraParameters intrin)
       {
          ExtrinsicCameraParameters res = new ExtrinsicCameraParameters();
          Matrix<float> translation = new Matrix<float>(3, 1);
          RotationVector3D rotation = new RotationVector3D();
 
-         Matrix<float> objectPointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         Matrix<float> imagePointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(imagePoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         IntPtr objectPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr imagePointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
+         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
+         CvInvoke.cvInitMatHeader(objectPointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
+         CvInvoke.cvInitMatHeader(imagePointMatrix, imagePoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle2.AddrOfPinnedObject(), 0);
+         CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
 
-         CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix.Ptr, imagePointMatrix.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
+         handle1.Free();
+         handle2.Free();
+         Marshal.FreeHGlobal(objectPointMatrix);
+         Marshal.FreeHGlobal(imagePointMatrix);
 
          res.TranslationVector = translation;
          res.RotationVector = rotation;
@@ -213,13 +287,21 @@ namespace Emgu.CV
       /// <param name="intrin">intrinsic parameters</param>
       /// <param name="mats">Optional matrix supplied in the following order: dpdrot, dpdt, dpdf, dpdc, dpddist</param>
       /// <returns>The array of image points which is the projection of <paramref name="objectPoints"/></returns>
-      public static Point2D<float>[] ProjectPoints2(
-          Point3D<float>[] objectPoints,
+      public static MCvPoint3D32f[] ProjectPoints2(
+          MCvPoint3D32f[] objectPoints,
           ExtrinsicCameraParameters extrin,
           IntrinsicCameraParameters intrin,
           params Matrix<float>[] mats)
       {
-         Matrix<float> pointMatrix = PointCollection.ToMatrix(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(objectPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
+         MCvPoint3D32f[] imagePoints = new MCvPoint3D32f[objectPoints.Length];
+         
+         IntPtr pointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr imagePointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
+         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
+         CvInvoke.cvInitMatHeader(pointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
+         CvInvoke.cvInitMatHeader(imagePointMatrix, imagePoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle2.AddrOfPinnedObject(), 0);
+
          int matsLength = mats.Length;
          IntPtr dpdrot = matsLength > 0 ? mats[0].Ptr : IntPtr.Zero;
          IntPtr dpdt = matsLength > 1 ? mats[1].Ptr : IntPtr.Zero;
@@ -227,23 +309,23 @@ namespace Emgu.CV
          IntPtr dpdc = matsLength > 3 ? mats[3].Ptr : IntPtr.Zero;
          IntPtr dpddist = matsLength > 4 ? mats[4].Ptr : IntPtr.Zero;
 
-         Matrix<float> point2DMatrix = new Matrix<float>(objectPoints.Length, 2);
          CvInvoke.cvProjectPoints2(
-            pointMatrix.Ptr, 
+            pointMatrix, 
             extrin.RotationVector.Ptr, 
             extrin.TranslationVector.Ptr, 
             intrin.IntrinsicMatrix.Ptr, 
             intrin.DistortionCoeffs.Ptr, 
-            point2DMatrix.Ptr, 
+            imagePointMatrix, 
             dpdrot, 
             dpdt, 
             dpdf, 
             dpdc, 
             dpddist);
+         handle1.Free();
+         handle2.Free();
+         Marshal.FreeHGlobal(pointMatrix);
+         Marshal.FreeHGlobal(imagePointMatrix);
 
-         Point2D<float>[] imagePoints = new Point2D<float>[objectPoints.Length];
-         for (int i = 0; i < imagePoints.Length; i++)
-            imagePoints[i] = new Point2D<float>(point2DMatrix[i, 0], point2DMatrix[i, 1]);
          return imagePoints;
       }
 
@@ -301,14 +383,24 @@ namespace Emgu.CV
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
       public static Matrix<float> FindHomography(
-         Point2D<float>[] srcPoints, 
-         Point2D<float>[] dstPoints, 
+         PointF[] srcPoints, 
+         PointF[] dstPoints, 
          CvEnum.HOMOGRAPHY_METHOD method, 
          double ransacReprojThreshold)
       {
-         Matrix<float> srcPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(srcPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         Matrix<float> dstPointMatrix = PointCollection.ToMatrix<float>(Emgu.Util.Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(dstPoints, delegate(Point2D<float> p) { return (Point<float>)p; }));
-         return FindHomography(srcPointMatrix, dstPointMatrix, method, ransacReprojThreshold);
+         GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
+         GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
+         IntPtr srcPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr dstPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         CvInvoke.cvInitMatHeader(srcPointMatrix, srcPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, srcHandle.AddrOfPinnedObject(), 0);
+         CvInvoke.cvInitMatHeader(dstPointMatrix, dstPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, dstHandle.AddrOfPinnedObject(), 0);
+         Matrix<float> homography = new Matrix<float>(3, 3);
+         CvInvoke.cvFindHomography( srcPointMatrix, dstPointMatrix, homography.Ptr,  method, ransacReprojThreshold, IntPtr.Zero);
+         srcHandle.Free();
+         dstHandle.Free();
+         Marshal.FreeHGlobal(srcPointMatrix);
+         Marshal.FreeHGlobal(dstPointMatrix);
+         return homography;
       }
 
       /// <summary>
@@ -321,11 +413,11 @@ namespace Emgu.CV
       /// <returns>If the chess board pattern is found</returns>
       public static bool FindChessboardCorners(
          Image<Gray, Byte> image,
-         MCvSize patternSize,
+         System.Drawing.Size patternSize,
          CvEnum.CALIB_CB_TYPE flags,
-         out Point2D<float>[] corners)
+         out PointF[] corners)
       {
-         float[,] cornersCoordinates = new float[patternSize.width * patternSize.height, 2];
+         float[,] cornersCoordinates = new float[patternSize.Width * patternSize.Height, 2];
          int cornerCount = 0;
 
          bool patternFound =
@@ -336,10 +428,10 @@ namespace Emgu.CV
             ref cornerCount,
             flags) != 0; 
 
-         corners = new Point2D<float>[cornerCount];
+         corners = new PointF[cornerCount];
          for (int i = 0; i < corners.Length; i++)
          {
-            corners[i] = new Point2D<float>(cornersCoordinates[i, 0], cornersCoordinates[i, 1]);
+            corners[i] = new PointF(cornersCoordinates[i, 0], cornersCoordinates[i, 1]);
          }
 
          return patternFound;
@@ -354,14 +446,14 @@ namespace Emgu.CV
       /// <param name="patternWasFound">Result of FindChessboardCorners</param>
       public static void DrawChessboardCorners(
          Image<Gray, Byte> image,
-         MCvSize patternSize,
-         Point2D<float>[] corners,
+         System.Drawing.Size patternSize,
+         PointF[] corners,
          bool patternWasFound)
       {
          CvInvoke.cvDrawChessboardCorners(
             image.Ptr,
             patternSize, 
-            PointCollection.ToArray<float>(corners), 
+            corners, 
             corners.Length, 
             patternWasFound ? 1 : 0);
       }

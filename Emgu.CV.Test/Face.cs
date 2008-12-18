@@ -18,15 +18,15 @@ namespace Emgu.CV.Test
       {
          using (Image<Gray, D> gray = img.Convert<Gray, D>())
          {
-            Rectangle<double>[][] objects = gray.DetectHaarCascade(_faceCascade);
+            System.Drawing.Rectangle[][] objects = gray.DetectHaarCascade(_faceCascade);
             List<Face<D>> res = new List<Face<D>>();
 
-            foreach (Rectangle<double> o in objects[0])
+            foreach (System.Drawing.Rectangle o in objects[0])
             {
                img.ROI = o;
                res.Add(new Face<D>(img.Copy(), o));
             }
-            img.ROI = null;
+            img.ROI = System.Drawing.Rectangle.Empty;
             return res;
          }
       }
@@ -40,7 +40,7 @@ namespace Emgu.CV.Test
    public class Eye<D>
    {
       private Image<Bgr, D> _image;
-      public Eye(Image<Bgr, D> img, Rectangle<double> rect)
+      public Eye(Image<Bgr, D> img, System.Drawing.Rectangle rect)
       {
          _image = img;
       }
@@ -64,10 +64,10 @@ namespace Emgu.CV.Test
       private Image<Gray, D> _v;
       private Histogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
-      private Rectangle<double> _rect;
+      private System.Drawing.Rectangle _rect;
       private HaarCascade _eyeCascade;
 
-      public Face(Image<Bgr, D> img, Rectangle<double> rect)
+      public Face(Image<Bgr, D> img, System.Drawing.Rectangle rect)
       {
          _image = img;
          _rect = rect;
@@ -76,19 +76,19 @@ namespace Emgu.CV.Test
 
       public List<Eye<D>> DetectEye()
       {
-         Rectangle<double>[][] objects = Gray.DetectHaarCascade(_eyeCascade);
+         System.Drawing.Rectangle[][] objects = Gray.DetectHaarCascade(_eyeCascade);
          List<Eye<D>> res = new List<Eye<D>>();
 
-         foreach (Rectangle<double> o in objects[0])
+         foreach (System.Drawing.Rectangle o in objects[0])
          {
             _image.ROI = o;
             res.Add(new Eye<D>(_image.Copy(), o));
          }
-         _image.ROI = null;
+         _image.ROI = System.Drawing.Rectangle.Empty;
          return res;
       }
 
-      public Rectangle<double> Rectangle
+      public System.Drawing.Rectangle Rectangle
       {
          get { return _rect; }
       }

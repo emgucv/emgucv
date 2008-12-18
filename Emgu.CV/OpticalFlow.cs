@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -14,7 +15,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First frame, at time t</param>
       /// <param name="curr">Second frame, at time t + dt </param>
-     /// <param name="prevFeatures">Array of points for which the flow needs to be found</param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found</param>
       /// <param name="winSize">Size of the search window of each pyramid level</param>
       /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc</param>
       /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped</param>
@@ -24,11 +25,11 @@ namespace Emgu.CV
       public static void PyrLK(
          Image<Gray, Byte> prev,
          Image<Gray, Byte> curr,
-         Point2D<float>[] prevFeatures,
-         MCvSize winSize,
+         System.Drawing.PointF[] prevFeatures,
+         System.Drawing.Size winSize,
          int level,
          MCvTermCriteria criteria,
-         out Point2D<float>[] currFeatures,
+         out System.Drawing.PointF[] currFeatures,
          out Byte[] status,
          out float[] trackError)
       {
@@ -55,12 +56,12 @@ namespace Emgu.CV
          Image<Gray, Byte> curr,
          Image<Gray, Byte> prevPyrBuffer,
          Image<Gray, Byte> currPyrBuffer,
-         Point2D<float>[] prevFeatures,
-         MCvSize winSize,
+         System.Drawing.PointF[] prevFeatures,
+         System.Drawing.Size winSize,
          int level,
          MCvTermCriteria criteria,
          Emgu.CV.CvEnum.LKFLOW_TYPE flags,
-         out Point2D<float>[] currFeatures,
+         out System.Drawing.PointF[] currFeatures,
          out Byte[] status,
          out float[] trackError)
       {
@@ -76,15 +77,15 @@ namespace Emgu.CV
          status = new Byte[prevFeatures.Length];
          trackError = new float[prevFeatures.Length];
 
-         float[,] currLocation = new float[prevFeatures.Length, 2];
+         currFeatures = new System.Drawing.PointF[prevFeatures.Length];
 
          CvInvoke.cvCalcOpticalFlowPyrLK(
             prev,
             curr,
             prevPyrBuffer,
             currPyrBuffer,
-            PointCollection.ToArray<float>(prevFeatures),
-            currLocation,
+            prevFeatures,
+            currFeatures,
             prevFeatures.Length,
             winSize,
             level,
@@ -92,8 +93,6 @@ namespace Emgu.CV
             trackError,
             criteria,
             flags);
-
-         currFeatures = PointCollection.FromArray<float>(currLocation); 
       }
 
       /// <summary>
@@ -107,7 +106,7 @@ namespace Emgu.CV
       public static void LK(
          Image<Gray, Byte> prev,
          Image<Gray, Byte> curr,
-         MCvSize winSize,
+         System.Drawing.Size winSize,
          Image<Gray, Single> velx,
          Image<Gray, Single> vely)
       {

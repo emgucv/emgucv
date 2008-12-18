@@ -453,14 +453,13 @@ namespace Emgu.CV.UI
       {
          if (EnablePropertyPanel)
          {
-            Point2D<int> location = new Point2D<int>(e.X, e.Y);
             IImage img = DisplayedImage;
 
             ColorType color = img == null ?
                null :
-               Reflection.ReflectIImage.GetPixelColor(img, location);
+               Reflection.ReflectIImage.GetPixelColor(img, e.Location);
             
-            ImagePropertyPanel.MousePositionOnImage = location;
+            ImagePropertyPanel.MousePositionOnImage = e.Location;
             ImagePropertyPanel.ColorIntensity = color;
          }
       }

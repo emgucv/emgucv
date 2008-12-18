@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// spatial and central moments
@@ -29,11 +29,11 @@ namespace Emgu.CV
       /// <summary>
       /// The Gravity Center of this Moment
       /// </summary>
-      public Point2D<double> GravityCenter
+      public MCvPoint2D64f GravityCenter
       {
          get
          {
-            return new Point2D<double>(m10 / m00, m01 / m00);
+            return new MCvPoint2D64f(m10 / m00, m01 / m00);
          }
       }
 

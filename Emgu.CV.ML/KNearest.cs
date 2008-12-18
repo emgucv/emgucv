@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV.ML
 {
@@ -70,7 +71,7 @@ namespace Emgu.CV.ML
          float res = MlInvoke.CvKNearestFindNearest(_ptr, samples.Ptr, k, results, neighbors, neighborResponses, dist);
          if (kNearestNeighbors != null)
          {
-            IntPtr data; int step; MCvSize size;
+            IntPtr data; int step; Size size;
             CvInvoke.cvGetRawData(kNearestNeighbors.Ptr, out data, out step, out size);
             Int64 dataAddress = data.ToInt64();
             int elements = k * samples.Rows;
