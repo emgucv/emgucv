@@ -16,13 +16,13 @@ namespace Emgu.CV
       ///<param name="y"> The y value for this color </param>
       ///<param name="x"> The x value for this color </param>
       public Luv(double x, double y, double z)
-         : base(3, new MCvScalar(x, y, z))
+         : base(new MCvScalar(x, y, z))
       {
       }
 
       ///<summary> Create a CIE Luv color using the default values (0.0, 0.0, 0.0)</summary>
       public Luv()
-         : base(3)
+         : base()
       { }
 
       ///<summary> The intensity of the x color channel </summary>
@@ -49,5 +49,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 3; }
+      }
    }
 }

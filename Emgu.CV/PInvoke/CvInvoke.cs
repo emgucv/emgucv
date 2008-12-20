@@ -3489,6 +3489,24 @@ namespace Emgu.CV
          CvEnum.CALIB_CB_TYPE flags);
 
       /// <summary>
+      /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
+      /// </summary>
+      /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
+      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
+      /// <param name="corners">The output array of corners detected</param>
+      /// <param name="cornerCount">The output corner counter. If it is not NULL, the function stores there the number of corners found</param>
+      /// <param name="flags">Various operation flags</param>
+      /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
+      /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
+      [DllImport(CV_LIBRARY)]
+      public static extern int cvFindChessboardCorners(
+         IntPtr image,
+         System.Drawing.Size patternSize,
+         IntPtr corners,
+         ref int cornerCount,
+         CvEnum.CALIB_CB_TYPE flags);
+
+      /// <summary>
       /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
       /// </summary>
       /// <param name="image">The destination image; it must be 8-bit color image</param>

@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// Create a BGRA color using the specific values
       /// </summary>
       public Bgra()
-         : base(4)
+         : base()
       {
       }
 
@@ -25,7 +25,7 @@ namespace Emgu.CV
       ///<param name="red"> The red value for this color </param>
       ///<param name="alpha"> The alpha value for this color</param>
       public Bgra(double blue, double green, double red, double alpha)
-         : base(4, new MCvScalar(blue, green, red, alpha))
+         : base(new MCvScalar(blue, green, red, alpha))
       {
       }
 
@@ -59,5 +59,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 4; }
+      }
    }
 }

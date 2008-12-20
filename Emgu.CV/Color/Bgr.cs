@@ -16,7 +16,7 @@ namespace Emgu.CV
       ///<param name="green"> The green value for this color </param>
       ///<param name="red"> The red value for this color </param>
       public Bgr(double blue, double green, double red)
-         : base(3, new MCvScalar(blue, green, red))
+         : base(new MCvScalar(blue, green, red))
       {
       }
 
@@ -25,13 +25,13 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr(System.Drawing.Color winColor)
-         : base(3, new MCvScalar(winColor.B, winColor.G, winColor.R))
+         : base(new MCvScalar(winColor.B, winColor.G, winColor.R))
       {
       }
 
       ///<summary> Create a BGR color using the default values (0.0, 0.0, 0.0)</summary>
       public Bgr()
-         : base(3)
+         : base()
       { }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
@@ -59,5 +59,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 3; }
+      }
    }
 }

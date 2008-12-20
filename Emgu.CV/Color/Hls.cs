@@ -16,13 +16,13 @@ namespace Emgu.CV
       ///<param name="satuation"> The satuation for this color </param>
       ///<param name="lightness"> The lightness for this color </param>
       public Hls(double hue, double lightness, double satuation)
-         : base(3, new MCvScalar(hue, lightness, satuation))
+         : base(new MCvScalar(hue, lightness, satuation))
       {
       }
 
       ///<summary> Create a Hls color using the default values (0.0, 0.0, 0.0)</summary>
       public Hls()
-         : base(3)
+         : base()
       { }
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
@@ -47,7 +47,13 @@ namespace Emgu.CV
       {
          return MCvScalar.Equals(other.MCvScalar);
       }
-
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 3; }
+      }
    }
 }

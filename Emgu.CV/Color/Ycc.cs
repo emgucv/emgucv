@@ -16,13 +16,13 @@ namespace Emgu.CV
       ///<param name="cr"> The Cr value for this color </param>
       ///<param name="cb"> The Cb value for this color </param>
       public Ycc(double y, double cr, double cb)
-         : base(3, new MCvScalar(y, cr, cb))
+         : base(new MCvScalar(y, cr, cb))
       {
       }
 
       ///<summary> Create a Ycc color using the default values (0.0, 0.0, 0.0)</summary>
       public Ycc()
-         : base(3)
+         : base()
       { }
 
       ///<summary> Get or set the intensity of the Y color channel </summary>
@@ -49,5 +49,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 3; }
+      }
    }
 }

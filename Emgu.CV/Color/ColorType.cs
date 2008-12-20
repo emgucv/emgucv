@@ -10,28 +10,23 @@ namespace Emgu.CV
    ///</summary>
    public abstract class ColorType
    {
-      private int _dimension;
-
       /// <summary>
       /// The MCvScalar representation of the color intensity
       /// </summary>
       protected MCvScalar _scalar;
 
       /// <summary>
-      /// Create a color type of certain dimension
+      /// Create a color type of default intensity
       /// </summary>
-      /// <param name="dimension">The dimension of the color</param>
-      protected ColorType(int dimension) 
+      protected ColorType()
       {
-         _dimension = dimension;
       }
 
       /// <summary>
-      /// Creaete a ColorType of the specific dimension and intensity
+      /// Create a ColorType of the specific intensity
       /// </summary>
-      /// <param name="dimension">The dimension of the color</param>
       /// <param name="scalar">The intensity of the color</param>
-      protected ColorType(int dimension, MCvScalar scalar)
+      protected ColorType(MCvScalar scalar)
       {
          _scalar = scalar;
       }
@@ -81,9 +76,9 @@ namespace Emgu.CV
       /// <summary>
       /// Get the dimension of the color type
       /// </summary>
-      public int Dimension
+      public abstract int Dimension
       {
-         get { return _dimension; }
+         get;
       }
 
       /// <summary>

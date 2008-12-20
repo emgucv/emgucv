@@ -170,7 +170,7 @@ namespace Emgu.CV.Test
             for (i = 0; i < 500; i++)
             {
                Matrix<Single> mat = new Matrix<float>(500, 500);
-               Thread.Sleep(5);
+               //Thread.Sleep(5);
             }
          }
          //catch (Exception)

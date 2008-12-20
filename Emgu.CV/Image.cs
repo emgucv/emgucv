@@ -28,6 +28,11 @@ namespace Emgu.CV
       /// </summary>
       public static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
 
+      /// <summary>
+      /// The dimension of color
+      /// </summary>
+      private static int _numberOfChannels;
+
       #region constructors
       ///<summary>
       ///Create an empty Image
@@ -137,7 +142,7 @@ namespace Emgu.CV
             IntPtr tmp1 = CvInvoke.cvCreateImage(
                 new System.Drawing.Size(width, height),
                 CvDepth,
-                new TColor().Dimension);
+                NumberOfChannels);
             CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
             CvInvoke.cvReleaseImage(ref ptr);
             ptr = tmp1;
@@ -250,19 +255,17 @@ namespace Emgu.CV
       ///<param name="channels">The image channels to be merged into a single image</param>
       public Image(Image<Gray, TDepth>[] channels)
       {
-         int channelCount = new TColor().Dimension;
+         Debug.Assert(NumberOfChannels == channels.Length);
+         AllocateData(channels[0].Height, channels[0].Width, NumberOfChannels);
 
-         Debug.Assert(channelCount == channels.Length);
-         AllocateData(channels[0].Height, channels[0].Width, channelCount);
-
-         if (channelCount == 1)
+         if (NumberOfChannels == 1)
          {
             //if this image only have a single channel
             CvInvoke.cvCopy(channels[0].Ptr, Ptr, IntPtr.Zero);
          }
          else
          {
-            for (int i = 0; i < channelCount; i++)
+            for (int i = 0; i < NumberOfChannels; i++)
             {
                Image<Gray, TDepth> c = channels[i];
 
@@ -357,7 +360,11 @@ namespace Emgu.CV
       {
          get
          {
-            return new TColor().Dimension;
+            if (_numberOfChannels == 0)
+            {
+               _numberOfChannels =  new TColor().Dimension;
+            }
+            return _numberOfChannels;
          }
       }
 
@@ -663,7 +670,7 @@ namespace Emgu.CV
       /// <summary>
       /// Draw the polyline defined by the array of 2D points
       /// </summary>
-      /// <param name="pts">the points that defines the poly line</param>
+      /// <param name="pts">A polyline defined by its point</param>
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
@@ -675,7 +682,7 @@ namespace Emgu.CV
       /// <summary>
       /// Draw the polylines defined by the array of array of 2D points
       /// </summary>
-      /// <param name="pts">An array of array of points that defines the poly lines</param>
+      /// <param name="pts">An array of polylines each represented by an array of points</param>
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
@@ -710,7 +717,7 @@ namespace Emgu.CV
          CvInvoke.cvCircle(
              Ptr,
              new Point( (int) circle.Center.X, (int) circle.Center.Y),
-             System.Convert.ToInt32(circle.Radius),
+             (int) circle.Radius,
              color,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -995,7 +1002,7 @@ namespace Emgu.CV
          }
 
          IntPtr seq = IntPtr.Zero;
-         int sequenceHeaderSize = Marshal.SizeOf(typeof(MCvContour));
+         int sequenceHeaderSize = HeaderSize.MCvContour;
 
          using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
          {
@@ -1121,18 +1128,17 @@ namespace Emgu.CV
       /// For single channel image, apply converter directly.
       /// For multiple channel image, set the COI for the specific channel before appling the convertor
       /// </remarks>
-      /// <typeparam name="R">The return type</typeparam>
+      /// <typeparam name="TResult">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private R[] ForEachChannel<R>(Emgu.Util.Toolbox.Func<IntPtr, int, R> conv)
+      private TResult[] ForEachChannel<TResult>(Emgu.Util.Toolbox.Func<IntPtr, int, TResult> conv)
       {
-         int channelCount = new TColor().Dimension;
-         R[] res = new R[channelCount];
-         if (channelCount == 1)
+         TResult[] res = new TResult[NumberOfChannels];
+         if (NumberOfChannels == 1)
             res[0] = conv(Ptr, 0);
          else
          {
-            for (int i = 0; i < channelCount; i++)
+            for (int i = 0; i < NumberOfChannels; i++)
             {
                CvInvoke.cvSetImageCOI(Ptr, i + 1);
                res[i] = conv(Ptr, i);
@@ -1149,14 +1155,12 @@ namespace Emgu.CV
       /// <returns>An array which contains result for each channel</returns>
       private void ForEachDuplicateChannel(Emgu.Util.Toolbox.Action<IImage, int> action)
       {
-         int channelCount = new TColor().Dimension;
-  
-         if (channelCount == 1)
+         if (NumberOfChannels == 1)
             action(this, 0);
          else
          {
             using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Width, Height))
-               for (int i = 0; i < channelCount; i++)
+               for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
                   CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
@@ -1174,14 +1178,13 @@ namespace Emgu.CV
       /// <returns>An array which contains result for each channel</returns>
       private TReturn[] ForEachDuplicateChannel<TReturn>(Emgu.Util.Toolbox.Func<IImage, int, TReturn> conv)
       {
-         int channelCount = new TColor().Dimension;
-         TReturn[] res = new TReturn[channelCount];
-         if (channelCount == 1)
+         TReturn[] res = new TReturn[NumberOfChannels];
+         if (NumberOfChannels == 1)
             res[0] = conv(this, 0);
          else
          {
             using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Width, Height))
-               for (int i = 0; i < channelCount; i++)
+               for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
                   CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
@@ -1202,15 +1205,14 @@ namespace Emgu.CV
       /// <param name="dest">The destination image</param>
       private void ForEachDuplicateChannel<TOtherDepth>(Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
       {
-         int channelCount = new TColor().Dimension;
-         if (channelCount == 1)
+         if (NumberOfChannels == 1)
             act(Ptr, dest.Ptr, 0);
          else
          {
             using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Width, Height))
             using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Width, dest.Height))
             {
-               for (int i = 0; i < channelCount; i++)
+               for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
                   CvInvoke.cvSetImageCOI(dest.Ptr, i + 1);
@@ -1372,8 +1374,7 @@ namespace Emgu.CV
       /// <returns>The good features for each channel</returns>
       public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
       {
-         int channelCount = new TColor().Dimension;
-         PointF[][] res = new PointF[channelCount][];
+         PointF[][] res = new PointF[_numberOfChannels][];
 
          using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
          using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
@@ -1423,8 +1424,13 @@ namespace Emgu.CV
              delegate(IImage img, int channel)
              {
                 PointF[] ptsForCurrentChannel = corners[channel];
-                int cornerCount = ptsForCurrentChannel.Length;
-                CvInvoke.cvFindCornerSubPix(img.Ptr, ptsForCurrentChannel, cornerCount, win, zeroZone, criteria);
+                CvInvoke.cvFindCornerSubPix(
+                   img.Ptr, 
+                   ptsForCurrentChannel, 
+                   ptsForCurrentChannel.Length, 
+                   win, 
+                   zeroZone, 
+                   criteria);
              };
          ForEachDuplicateChannel(detector);
       }
@@ -1462,7 +1468,7 @@ namespace Emgu.CV
       {
          int count = contour.Total;
 
-         int[,] points = new int[count, 2];
+         Point[] points = new Point[count];
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvCvtSeqToArray(contour.Ptr, handle.AddrOfPinnedObject(), new MCvSlice(0, 0x3fffffff));
          CvInvoke.cvSnakeImage(
@@ -1738,9 +1744,7 @@ namespace Emgu.CV
 
          ForEachDuplicateChannel<Byte>(
          */
-
-         int dimension = new TColor().Dimension;
-         if (dimension == 1)
+         if (NumberOfChannels == 1)
          {
             CvInvoke.cvCmp(Ptr, img2.Ptr, res.Ptr, cmp_type);
          }
@@ -1749,7 +1753,7 @@ namespace Emgu.CV
             using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(Width, Height))
             using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(Width, Height))
             using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(Width, Height))
-               for (int i = 0; i < dimension; i++)
+               for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
                   CvInvoke.cvSetImageCOI(img2.Ptr, i + 1);
@@ -1780,8 +1784,7 @@ namespace Emgu.CV
       {
          Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
 
-         int dimension = new TColor().Dimension;
-         if (dimension == 1)
+         if (NumberOfChannels == 1)
          {
             CvInvoke.cvCmpS(Ptr, value, res.Ptr, cmp_type);
          }
@@ -1789,7 +1792,7 @@ namespace Emgu.CV
          {
             using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(Width, Height))
             using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(Width, Height))
-               for (int i = 0; i < dimension; i++)
+               for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
                   CvInvoke.cvCopy(Ptr, src1.Ptr, IntPtr.Zero);
@@ -3870,19 +3873,18 @@ namespace Emgu.CV
       /// </returns>
       public void MinMax(out double[] minValues, out double[] maxValues, out System.Drawing.Point[] minLocations, out System.Drawing.Point[] maxLocations)
       {
-         int channelCount = new TColor().Dimension;
-         minValues = new double[channelCount];
-         maxValues = new double[channelCount];
-         minLocations = new System.Drawing.Point[channelCount];
-         maxLocations = new System.Drawing.Point[channelCount];
+         minValues = new double[NumberOfChannels];
+         maxValues = new double[NumberOfChannels];
+         minLocations = new System.Drawing.Point[NumberOfChannels];
+         maxLocations = new System.Drawing.Point[NumberOfChannels];
 
-         if (channelCount == 1)
+         if (NumberOfChannels == 1)
          {
             CvInvoke.cvMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
          }
          else
          {
-            for (int i = 0; i < channelCount; i++)
+            for (int i = 0; i < NumberOfChannels; i++)
             {
                CvInvoke.cvSetImageCOI(Ptr, i + 1);
                CvInvoke.cvMinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
@@ -3957,15 +3959,15 @@ namespace Emgu.CV
       ///</returns>
       public Image<Gray, TDepth>[] Split()
       {
-         int channelCount = new TColor().Dimension;
-         if (channelCount == 1) return new Image<Gray, TDepth>[] { Copy() as Image<Gray, TDepth> };
 
-         Image<Gray, TDepth>[] res = new Image<Gray, TDepth>[channelCount];
+         if (NumberOfChannels == 1) return new Image<Gray, TDepth>[] { Copy() as Image<Gray, TDepth> };
+
+         Image<Gray, TDepth>[] res = new Image<Gray, TDepth>[NumberOfChannels];
          IntPtr[] a = new IntPtr[4];
-         a.Initialize();
-         for (int i = 0; i < channelCount; i++)
+         int width = Width, height = Height;
+         for (int i = 0; i < NumberOfChannels; i++)
          {
-            res[i] = new Image<Gray, TDepth>(Width, Height);
+            res[i] = new Image<Gray, TDepth>(width, height);
             a[i] = res[i].Ptr;
          }
 

@@ -207,7 +207,7 @@ namespace Emgu.CV.Test
       {
          for (int i = 0; i <= 500; i++)
          {
-            Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000, new Bgr());
+            Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000);
          }
       }
 

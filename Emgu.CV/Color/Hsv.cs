@@ -16,13 +16,13 @@ namespace Emgu.CV
       ///<param name="satuation"> The satuation value for this color </param>
       ///<param name="value"> The value for this color </param>
       public Hsv(double hue, double satuation, double value)
-         : base(3, new MCvScalar(hue, satuation, value))
+         : base(new MCvScalar(hue, satuation, value))
       {
       }
 
       ///<summary> Create a HSV color using the default values (0.0, 0.0, 0.0)</summary>
       public Hsv()
-         : base(3)
+         : base()
       { }
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
@@ -50,5 +50,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 3; }
+      }
    }
 }

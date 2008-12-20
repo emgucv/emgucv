@@ -607,33 +607,6 @@ namespace Emgu.CV.Test
          Application.Run(new Emgu.CV.UI.ImageViewer(map));
       }*/
 
-      /*
-      private void TestConvexHull()
-      {
-         Random r = new Random();
-         PointF[] pts = new PointF[40];
-         for (int i = 0; i < pts.Length; i++)
-         {
-            pts[i] = new PointF((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
-         }
-
-         System.Drawing.PointF[] hull = PointCollection.ConvexHull(Toolbox.IEnumConvertor<Point2D<float>, Point<float>>(pts, delegate(Point2D<float> p) { return (Point<float>)p; }), Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
-
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
-         foreach (PointF p in pts)
-         {
-            img.Draw(new Circle(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
-         }
-
-         System.Drawing.Point[] convexHull = Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, delegate(System.Drawing.PointF p) { return new System.Drawing.Point((int)p.X, (int)p.Y); });
-         img.DrawPolyline(
-             convexHull,
-             true, new Bgr(255.0, 0.0, 0.0), 1);
-
-         Application.Run(new ImageViewer(img));
-
-      }*/
-
       private class SyntheticData
       {
          private Matrix<float> _state;

@@ -12,13 +12,13 @@ namespace Emgu.CV
       ///<summary> Create a Gray color with the given intensity</summary>
       ///<param name="intensity"> The intensity for this color </param>
       public Gray(double intensity)
-         : base(1, new MCvScalar(intensity))
+         : base(new MCvScalar(intensity))
       {
       }
 
       ///<summary> Create a Gray color with o intensity </summary>
       public Gray()
-         : base(1)
+         : base()
       {
       }
 
@@ -75,5 +75,12 @@ namespace Emgu.CV
       }
 
       #endregion
+      /// <summary>
+      /// Get the dimension of this color
+      /// </summary>
+      public override int Dimension
+      {
+         get { return 1; }
+      }
    }
 }
