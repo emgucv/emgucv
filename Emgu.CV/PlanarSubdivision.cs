@@ -199,7 +199,7 @@ namespace Emgu.CV
          MCvSeqReader reader = new MCvSeqReader();
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-         int total = set.total;
+
          int elem_size = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
@@ -249,7 +249,7 @@ namespace Emgu.CV
          MCvSeqReader reader = new MCvSeqReader();
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-         int total = set.total;
+
          int elem_size = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
@@ -278,7 +278,6 @@ namespace Emgu.CV
             triangleList.RemoveAll(
                delegate(Triangle2DF tri)
                {
-                  //Point2D<float>[] vertices = tri.Vertices;
                   return
                      !(
                      tri.V0.X >= left && tri.V0.X <= right && tri.V0.Y >= top && tri.V0.Y <= bottom &&

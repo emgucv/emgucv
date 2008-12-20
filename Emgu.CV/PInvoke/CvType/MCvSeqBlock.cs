@@ -18,18 +18,18 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Next sequence block.
       /// </summary>
-      IntPtr next;
+      public IntPtr next;
       /// <summary>
       /// Index of the first element in the block + sequence-&gt;first-&gt;start_index.   
       /// </summary>
-      int start_index;
+      public int start_index;
       /// <summary>
       /// Number of elements in the block.
       /// </summary>
-      int count;
+      public int count;
       /// <summary>
       /// Pointer to the first element of the block.
       /// </summary>
-      IntPtr data;
+      public IntPtr data;
    }
 }
