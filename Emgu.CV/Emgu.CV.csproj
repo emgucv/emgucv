@@ -91,10 +91,8 @@
     <Compile Include="Color\Ycc.cs" />
     <Compile Include="CvException.cs" />
     <Compile Include="EigenObjectRecognizer.cs" />
-    <Compile Include="Envelope.cs" />
     <Compile Include="FeatureTree.cs" />
     <Compile Include="MatND.cs" />
-    <Compile Include="PointAndLine\Line2DF.cs" />
     <Compile Include="PointAndLine\LineSegment2DF.cs" />
     <Compile Include="Reflection\ExposableMethodAttribute.cs" />
     <Compile Include="IImage.cs" />
@@ -120,10 +118,11 @@
     <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />
-    <Compile Include="Shape\Cross2D.cs" />
+    <Compile Include="Shape\Cross2DF.cs" />
     <Compile Include="Shape\IConvexPolygon.cs" />
-    <Compile Include="Shape\Triangle2D.cs" />
-    <Compile Include="Shape\Triangle3D.cs" />
+    <Compile Include="Shape\IConvexPolygonF.cs" />
+    <Compile Include="Shape\Triangle2DF.cs" />
+    <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StructuringElementEx.cs" />
     <Compile Include="SURFFeature.cs" />
     <Compile Include="MemStorage.cs" />
@@ -144,7 +143,7 @@
     <Compile Include="RotationMatrix2D.cs" />
     <Compile Include="Capture\Capture.cs" />
     <Compile Include="Capture\CaptureClient.cs" />
-    <Compile Include="Shape\Circle.cs" />
+    <Compile Include="Shape\CircleF.cs" />
     <Compile Include="Color\ColorType.cs" />
     <Compile Include="Seq.cs" />
     <Compile Include="ConvolutionKernelF.cs" />
@@ -158,7 +157,6 @@
     <Compile Include="Capture\IDuplexCapture.cs" />
     <Compile Include="Capture\IDuplexCaptureCallback.cs" />
     <Compile Include="Image.cs" />
-    <Compile Include="PointAndLine\Line2D.cs" />
     <Compile Include="PointAndLine\LineSegment2D.cs" />
     <Compile Include="PointAndLine\PointCollection.cs" />
     <Compile Include="Map.cs" />

@@ -1472,6 +1472,13 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
 
+      /// <summary>
+      /// Returns number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.
+      /// </summary>
+      /// <param name="arr">array header</param>
+      /// <returns>number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern System.Drawing.Size cvGetSize(IntPtr arr);
 
       /// <summary>
       /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.

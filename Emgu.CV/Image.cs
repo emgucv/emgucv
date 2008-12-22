@@ -345,13 +345,13 @@ namespace Emgu.CV
       ///Get the width of the image ( number of pixels in the x direction),
       ///if ROI is set, the width of the ROI 
       ///</summary>
-      public override int Width { get { return IsROISet ? (int)ROI.Width : Marshal.ReadInt32(Ptr, IplImageOffset.width); } }
+      public override int Width { get { return CvInvoke.cvGetSize(Ptr).Width; } }
 
       ///<summary> 
       ///Get the height of the image ( number of pixels in the y direction ),
       ///if ROI is set, the height of the ROI 
       ///</summary> 
-      public override int Height { get { return IsROISet ? (int)ROI.Height : Marshal.ReadInt32(Ptr, IplImageOffset.height); } }
+      public override int Height { get { return CvInvoke.cvGetSize(Ptr).Height; } }
 
       /// <summary>
       /// Get the number of channels for this image
@@ -383,9 +383,7 @@ namespace Emgu.CV
       {
          get
          {
-            return new System.Drawing.Size(
-            Marshal.ReadInt32(Ptr, IplImageOffset.width),
-            Marshal.ReadInt32(Ptr, IplImageOffset.height));
+            return CvInvoke.cvGetSize(_ptr);
          }
       }
 
@@ -887,18 +885,8 @@ namespace Emgu.CV
                 delegate(IImage img, int channel)
                 {
                    IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
-                   MCvSeq lineSeq = (MCvSeq)Marshal.PtrToStructure(lines, typeof(MCvSeq));
-                   LineSegment2D[] linesegs = new LineSegment2D[lineSeq.total];
-                   for (int i = 0; i < lineSeq.total; i++)
-                   {
-                      int[] val = new int[4];
-                      Marshal.Copy(CvInvoke.cvGetSeqElem(lines, i), val, 0, 4);
-                      linesegs[i] = new LineSegment2D(
-                          new Point(val[0], val[1]),
-                          new Point(val[2], val[3]));
-                   }
-                   CvInvoke.cvClearSeq(lines);
-                   return linesegs;
+                   Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
+                   return segments.ToArray() ;
                 };
             return ForEachDuplicateChannel(detector);
          }

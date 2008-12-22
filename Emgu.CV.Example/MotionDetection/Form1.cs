@@ -75,39 +75,39 @@ namespace MotionDetection
             //Threshold to define a motion area, reduce the value to detect smaller motion
             double minArea = 100;
 
-            Seq<MCvConnectedComp> motionComponents = _motionHistory.MotionComponents;
-
-            //iterate through each of the motion component
-            foreach (MCvConnectedComp comp in motionComponents)
+            using (MemStorage storage = new MemStorage()) //create storage for motion components
             {
-               //reject the components that have small area;
-               if (comp.rect.Width * comp.rect.Height < minArea) continue;
+               Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
 
-               // find the angle and motion pixel count of the specific area
-               double angle, motionPixelCount;
-               _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
+               //iterate through each of the motion component
+               foreach (MCvConnectedComp comp in motionComponents)
+               {
+                  //reject the components that have small area;
+                  if (comp.rect.Width * comp.rect.Height < minArea) continue;
 
-               //reject the area that contains too few motion
-               if (motionPixelCount / comp.area < 0.05) continue;
+                  // find the angle and motion pixel count of the specific area
+                  double angle, motionPixelCount;
+                  _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
 
-               //Draw each individual motion in red
-               DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
+                  //reject the area that contains too few motion
+                  if (motionPixelCount / comp.area < 0.05) continue;
+
+                  //Draw each individual motion in red
+                  DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
+               }
+
+               // find and draw the overall motion angle
+               double overallAngle, overallMotionPixelCount;
+               _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
+               DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
+
+               //Display the amount of motions found on the current image
+               UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
             }
-
-            // find and draw the overall motion angle
-            double overallAngle, overallMotionPixelCount;
-            _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
-            DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
-
-            //Display the amount of motions found on the current image
-            UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
 
             //Display the image of the motion
             motionImageBox.Image = motionImage;
 
-            //The following is optional, it force a garbage collection and free unused memory
-            //If removed the program consumes more memory but runs slightly faster
-            GC.Collect();
          }
       }
 

@@ -9,7 +9,7 @@ namespace Emgu.CV
    ///<summary>
    ///An ellipse
    ///</summary>
-   public class Ellipse
+   public struct Ellipse
    {
       private MCvBox2D _box2D;
 
@@ -20,13 +20,6 @@ namespace Emgu.CV
       {
          get { return _box2D; }
          set { _box2D = value; }
-      }
-
-      ///<summary> 
-      ///Create an ellipse with default parameters
-      ///</summary>
-      public Ellipse()
-      {
       }
 
       ///<summary>

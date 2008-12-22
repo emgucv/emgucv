@@ -282,7 +282,7 @@ namespace Emgu.CV
                      !(
                      tri.V0.X >= left && tri.V0.X <= right && tri.V0.Y >= top && tri.V0.Y <= bottom &&
                      tri.V1.X >= left && tri.V1.X <= right && tri.V1.Y >= top && tri.V1.Y <= bottom &&
-                     tri.V1.X >= left && tri.V1.X <= right && tri.V1.Y >= top && tri.V1.Y <= bottom);
+                     tri.V2.X >= left && tri.V2.X <= right && tri.V2.Y >= top && tri.V2.Y <= bottom);
                });
          }
          return triangleList;
@@ -300,7 +300,7 @@ namespace Emgu.CV
    /// <summary>
    /// A Voronoi Facet
    /// </summary>
-   public class VoronoiFacet //: IConvexPolygon<float>
+   public class VoronoiFacet 
    {
       /// <summary>
       /// Create a Voronoi facet using the specific <paramref name="point"/> and <paramref name="polyline"/>
@@ -328,7 +328,6 @@ namespace Emgu.CV
 
       private System.Drawing.PointF[] _vertices;
 
-      #region IConvexPolygon<float> Members
       /// <summary>
       /// Get or set the vertices of this facet
       /// </summary>
@@ -337,6 +336,5 @@ namespace Emgu.CV
          get { return _vertices; }
          set { _vertices = value; }
       }
-      #endregion
    }
 }

@@ -117,18 +117,15 @@ namespace Emgu.CV
       /// <summary>
       /// Get a sequence of motion component
       /// </summary>
-      public Seq<MCvConnectedComp> MotionComponents
+      /// <param name="storage">The storage used by the motion components</param>
+      /// <returns>A sequence of motion components</returns>
+      public Seq<MCvConnectedComp> GetMotionComponents(MemStorage storage)
       {
-         get
-         {
-            TimeSpan ts = _lastTime.Subtract(_initTime);
-            if (_segMask == null) _segMask = new Image<Gray, float>(_mhi.Width, _mhi.Height);
-            MemStorage storage = new MemStorage();
-            Seq<MCvConnectedComp> seq =
-                new Seq<MCvConnectedComp>(CvInvoke.cvSegmentMotion(_mhi, _segMask, storage, ts.TotalSeconds, _maxTimeDelta), storage);
-
-            return seq;
-         }
+         TimeSpan ts = _lastTime.Subtract(_initTime);
+         if (_segMask == null)
+            _segMask = new Image<Gray, float>(_mhi.Width, _mhi.Height);
+         Seq<MCvConnectedComp> seq = new Seq<MCvConnectedComp>(CvInvoke.cvSegmentMotion(_mhi, _segMask, storage, ts.TotalSeconds, _maxTimeDelta), storage);
+         return seq;
       }
 
       /// <summary>

@@ -62,9 +62,8 @@ namespace Emgu.CV.Test
          pts.Add(new PointF(3.0f, 3.0f));
          pts.Add(new PointF(4.0f, 4.0f));
 
-         Line2DF res = PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2);
-
-         PointF direction = res.Direction;
+         PointF direction, pointOnLine;
+         PointCollection.Line2DFitting(pts.ToArray(),  Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, out direction, out pointOnLine );
          
          //check if the line is 45 degree from +x axis
          Assert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
@@ -455,7 +454,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlannarSubdivision1()
       {
-         int pointCount = 1000;
+         int pointCount = 10000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];
@@ -475,19 +474,18 @@ namespace Emgu.CV.Test
 
          watch.Reset(); watch.Start();
          division = new PlanarSubdivision(points);
-
          List<VoronoiFacet> facets = division.GetVoronoiFacets();
          watch.Stop();
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Count));
 
-         foreach (Triangle2DF t in triangles)
-         {
-            int equalCount = triangles.FindAll(delegate(Triangle2DF t2) { return t2.Equals(t); }).Count;
-            Assert.AreEqual(1, equalCount, "Triangle duplicates");
+         //foreach (Triangle2DF t in triangles)
+         //{
+            //int equalCount = triangles.FindAll(delegate(Triangle2DF t2) { return t2.Equals(t); }).Count;
+            //Assert.AreEqual(1, equalCount, "Triangle duplicates");
 
             //int overlapCount = triangles.FindAll(delegate(Triangle2D t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
             //Assert.AreEqual(1, overlapCount, "Triangle overlaps");
-         }
+         //}
       }
 
       [Test]
@@ -729,7 +727,12 @@ namespace Emgu.CV.Test
             pts[i] = new PointF((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
          }
 
-         System.Drawing.PointF[] hull = PointCollection.ConvexHull(pts, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+         PointF[] hull;
+         using (MemStorage storage = new MemStorage())
+         {
+            Seq<PointF> seq = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+            hull = seq.ToArray();
+         }
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
          foreach (PointF p in pts)

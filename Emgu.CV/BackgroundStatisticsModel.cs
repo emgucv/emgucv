@@ -24,7 +24,8 @@ namespace Emgu.CV
             : CvInvoke.cvCreateGaussianBGModel(image, IntPtr.Zero);
       }
 
-      private delegate int UpdateFunction(IntPtr img, IntPtr statModel);
+      private delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
+      private UpdateFunctionDelagate updateFunction;
 
       /// <summary>
       /// Update the statistic model
@@ -32,8 +33,10 @@ namespace Emgu.CV
       /// <param name="image"></param>
       public void Update(Image<Bgr, Byte> image)
       {
-         MCvBGStatModel model = MCvBGStatModel;
-         UpdateFunction updateFunction = (UpdateFunction)Marshal.GetDelegateForFunctionPointer(model.CvUpdateBGStatModel, typeof(UpdateFunction));
+         if (updateFunction == null)
+         {
+            updateFunction = (UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(UpdateFunctionDelagate));
+         }
          updateFunction(image.Ptr, _ptr);
       }
 
@@ -56,8 +59,8 @@ namespace Emgu.CV
          get
          {
             MCvBGStatModel statModel = MCvBGStatModel;
-            MIplImage iplImg = (MIplImage)Marshal.PtrToStructure(statModel.background, typeof(MIplImage));
-            Image<Bgr, Byte> res = new Image<Bgr, byte>(iplImg.width, iplImg.height);
+            System.Drawing.Size size = CvInvoke.cvGetSize(statModel.background);
+            Image<Bgr, Byte> res = new Image<Bgr, byte>(size.Width, size.Height);
             CvInvoke.cvCopy(statModel.background, res.Ptr, IntPtr.Zero);
             return res;
          }
@@ -71,8 +74,8 @@ namespace Emgu.CV
          get
          {
             MCvBGStatModel statModel = MCvBGStatModel;
-            MIplImage iplImg = (MIplImage)Marshal.PtrToStructure(statModel.foreground, typeof(MIplImage));
-            Image<Gray, Byte> res = new Image<Gray, byte>(iplImg.width, iplImg.height);
+            System.Drawing.Size size = CvInvoke.cvGetSize(statModel.background);
+            Image<Gray, Byte> res = new Image<Gray, byte>(size.Width, size.Height);
             CvInvoke.cvCopy(statModel.foreground, res.Ptr, IntPtr.Zero);
             return res;
          }

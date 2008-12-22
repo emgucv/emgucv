@@ -54,7 +54,7 @@ namespace Emgu.CV
                idx -= 2;
             }
 
-            Line2DF line = new Line2DF(points[idx], points[idx + 1]);
+            LineSegment2DF line = new LineSegment2DF(points[idx], points[idx + 1]);
             return line.YByX(index);
          }
       }
@@ -72,6 +72,7 @@ namespace Emgu.CV
              delegate(float d) { return FirstDegreeInterpolate(points, d); });
       }
 
+      /*
       /// <summary>
       /// Convert the structures to a sequence
       /// </summary>
@@ -86,15 +87,16 @@ namespace Emgu.CV
          seq.Push(points, CvEnum.BACK_OR_FRONT.FRONT);
 
          return seq;
-      }
+      }*/
 
       /// <summary>
       /// Fit a line to the points collection
       /// </summary>
       /// <param name="points">The points to be fitted</param>
       /// <param name="type">The type of the fitting</param>
-      /// <returns>A 2D line</returns>
-      public static Line2DF Line2DFitting(PointF[] points, CvEnum.DIST_TYPE type)
+      /// <param name="normalizedDirection">The normalized direction of the fitted line</param>
+      /// <param name="aPointOnLine">A point on the fitted line</param>
+      public static void Line2DFitting(PointF[] points, CvEnum.DIST_TYPE type, out PointF normalizedDirection, out PointF aPointOnLine)
       {
          float[] data = new float[6];
          IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
@@ -115,7 +117,8 @@ namespace Emgu.CV
          handle.Free();
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
-         return new Line2DF(new PointF(data[2], data[3]), new PointF(data[2] + data[0], data[3] + data[1]));
+         normalizedDirection = new PointF(data[0], data[1]);
+         aPointOnLine = new PointF(data[2], data[3]);
       }
 
       /// <summary>
@@ -204,36 +207,31 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Obtain the convex hull from the point collection
+      /// Finds convex hull of 2D point set using Sklansky's algorithm
       /// </summary>
       /// <param name="points">The points to find convex hull from</param>
+      /// <param name="storage">the storage used by the resulting sequence</param>
       /// <param name="orientation">The orientation of the convex hull</param>
-      /// <returns>The array of points that forms the convex hull</returns>
-      public static System.Drawing.PointF[] ConvexHull(PointF[] points, CvEnum.ORIENTATION orientation)
+      /// <returns>The convex hull of the points</returns>
+      public static Seq<PointF> ConvexHull(PointF[] points, MemStorage storage, CvEnum.ORIENTATION orientation)
       {
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
-            IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
-            GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            CvInvoke.cvMakeSeqHeaderForArray(
-               CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-               HeaderSize.MCvSeq,
-               HeaderSize.PointF,
-               handle.AddrOfPinnedObject(),
-               points.Length,
-               seq,
-               block);
+         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            HeaderSize.MCvSeq,
+            HeaderSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block);
 
-            Seq<PointF> convexHull = new Seq<PointF>(CvInvoke.cvConvexHull2(seq, stor.Ptr, orientation, 1), stor);
-            PointF[] res = convexHull.ToArray();
-
-            handle.Free();
-            Marshal.FreeHGlobal(seq);
-            Marshal.FreeHGlobal(block);
-
-            return res;
-         }
+         Seq<PointF> convexHull = new Seq<PointF>(CvInvoke.cvConvexHull2(seq, storage.Ptr, orientation, 1), storage);
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return convexHull;
       }
 
       /// <summary>
@@ -243,22 +241,23 @@ namespace Emgu.CV
       /// <returns>The bounding rectangle for the array of points</returns>
       public static System.Drawing.Rectangle BoundingRectangle(PointF[] points)
       {
-         using (MemStorage storage = new MemStorage())
-         using (Seq<System.Drawing.PointF> seq = new Seq<System.Drawing.PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage))
-         {
-            seq.Push(points, CvEnum.BACK_OR_FRONT.FRONT);
-            return  CvInvoke.cvBoundingRect(seq.Ptr, true);
-         }
-         /*
          IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvContour);
          IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            HeaderSize.MCvSeq,
+            HeaderSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block);
          System.Drawing.Rectangle rect = CvInvoke.cvBoundingRect(seq, true);
          handle.Free();
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
          return rect;
-         */ 
+          
       }
    }
 }

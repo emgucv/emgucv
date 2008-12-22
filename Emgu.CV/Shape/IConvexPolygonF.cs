@@ -4,14 +4,15 @@ using System.Text;
 
 namespace Emgu.CV
 {
+
    /// <summary>
    /// An interface for the convex polygon
    /// </summary>
-   public interface IConvexPolygon
+   public interface IConvexPolygonF
    {
       /// <summary>
       /// Get the vertices of this convex polygon
       /// </summary>
-      System.Drawing.Point[] GetVertices();
+      System.Drawing.PointF[] GetVertices();
    }
 }

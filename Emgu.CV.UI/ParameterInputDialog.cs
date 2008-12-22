@@ -141,12 +141,10 @@ namespace Emgu.CV.UI
             }
             charList.Add(c);
          }
-         name = new string(charList.ToArray());
-         #endregion
-
          //convert the first letter to upper case
-         name = name.Substring(0, 1).ToUpper() + name.Substring(1);
-         return name;
+         charList[0] = charList[0].ToString().ToUpper().ToCharArray()[0];
+         return new string(charList.ToArray());
+         #endregion
       }
 
       /// <summary>
@@ -313,10 +311,9 @@ namespace Emgu.CV.UI
          #region find all the generic types and options and add that to the lists.
          if (method.ContainsGenericParameters)
          {
-            Type[] genericTypes = method.GetGenericArguments();
             ExposableMethodAttribute methodAtt = method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute;
-            String[] genericOptions = methodAtt.GenericParametersOptions.Split(';');
 
+            String[] genericOptions = methodAtt.GenericParametersOptions.Split(';');
             Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
             for (int i = 0; i < genericOptions.Length; i++)
             {
@@ -326,6 +323,7 @@ namespace Emgu.CV.UI
                genericOptions[i] = option;
             }
 
+            Type[] genericTypes = method.GetGenericArguments();
             for (int i = 0; i < genericTypes.Length; i++)
             {
                parameterList.Add(null);

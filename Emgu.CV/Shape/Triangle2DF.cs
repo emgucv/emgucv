@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// A 2D triangle
    /// </summary>
-   public class Triangle2DF : IConvexPolygonF
+   public struct Triangle2DF : IConvexPolygonF
    {
       private PointF _v0;
       private PointF _v1;

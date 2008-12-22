@@ -296,7 +296,7 @@ namespace Emgu.CV.UI
                }
                string[] subcatelogs = new string[catelogs.Length-1];
                Array.Copy(catelogs, 1, subcatelogs, 0, subcatelogs.Length);
-
+               
                catelogDic[catelogs[0]].Add(new KeyValuePair<String, MethodInfo>(String.Join("|", subcatelogs), pair.Value));
             }
             else
@@ -388,17 +388,15 @@ namespace Emgu.CV.UI
          
          operationsToolStripMenuItem.DropDownItems.Clear();
 
-         if (_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
-         {
-            operationsToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
-         }
-         else
-         {
+         //check if the menu for the specific image type has been built before
+         if (!_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
+         {  
+            //if not built, build it and save to the cache.
             ToolStripMenuItem[] items = BuildOperationTree(Reflection.ReflectIImage.GetImageMethods(image));
             _typeToToolStripMenuItemsDictionary.Add(typeOfImage, items);
-            operationsToolStripMenuItem.DropDownItems.AddRange(items);
          }
-         
+
+         operationsToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
       }
 
       private void loadImageToolStripMenuItem_Click(object sender, EventArgs e)

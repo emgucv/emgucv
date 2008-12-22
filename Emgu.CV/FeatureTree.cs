@@ -15,6 +15,17 @@ namespace Emgu.CV
       private Matrix<float> _descriptorMatrix;
 
       /// <summary>
+      /// Get the descriptor matrix used by this feature tree
+      /// </summary>
+      public Matrix<float> DescriptorMatrix
+      {
+         get
+         {
+            return _descriptorMatrix;
+         }
+      }
+
+      /// <summary>
       /// Create a feature tree from the specific feature descriptors
       /// </summary>
       /// <param name="descriptors">The array of feature descriptors</param>
@@ -56,8 +67,10 @@ namespace Emgu.CV
          results = new Matrix<Int32>(numberOfDescriptors, k);
          dist = new Matrix<double>(numberOfDescriptors, k);
 
-         Matrix<float> descriptorMatrix = DescriptorsToMatrix(descriptors);
-         CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
+         using (Matrix<float> descriptorMatrix = DescriptorsToMatrix(descriptors))
+         {
+            CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
+         }
       }
 
       /// <summary>
@@ -67,6 +80,7 @@ namespace Emgu.CV
       {
          CvInvoke.cvReleaseFeatureTree(_ptr);
          _ptr = IntPtr.Zero;
+         _descriptorMatrix.Dispose();
       }
    }
 }
