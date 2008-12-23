@@ -35,10 +35,10 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Train the EM model using the specific training data
       /// </summary>
-      /// <param name="samples"></param>
-      /// <param name="sampleIdx"></param>
-      /// <param name="parameters"></param>
-      /// <param name="labels"></param>
+      /// <param name="samples">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="parameters">The parameters for EM</param>
+      /// <param name="labels">Can be null if not needed. Optionally computed output "class label" for each sample</param>
       /// <returns></returns>
       public bool Train(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
       {
@@ -75,6 +75,12 @@ namespace Emgu.CV.ML
          return res;
       }
 
+      /// <summary>
+      /// Predit the probability of the <paramref name="samples"/>
+      /// </summary>
+      /// <param name="samples">The input samples</param>
+      /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
+      /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
       public float Predict(Matrix<float> samples, Matrix<float> probs)
       {
          return MlInvoke.CvEMPredict(

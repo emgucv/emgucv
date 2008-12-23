@@ -189,6 +189,15 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a blank Image of the specific size
+      /// </summary>
+      /// <param name="size">The size of the image</param>
+      public Image(System.Drawing.Size size)
+         : this(size.Width, size.Height)
+      {
+      }
+
+      /// <summary>
       /// Get or Set the data for this matrix
       /// </summary>
       /// <remarks> 

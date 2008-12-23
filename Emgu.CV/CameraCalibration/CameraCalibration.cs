@@ -39,8 +39,8 @@ namespace Emgu.CV
          using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
          using (Matrix<float> imagePointMatrix = ToMatrix(imagePoints))
          using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
-         using (Matrix<float> rotationVectors = new Matrix<float>(3, imageCount - 1))
-         using (Matrix<float> translationVectors = new Matrix<float>(3, imageCount - 1))
+         using (Matrix<float> rotationVectors = new Matrix<float>(imageCount, 3))
+         using (Matrix<float> translationVectors = new Matrix<float>(imageCount, 3))
          {
             CvInvoke.cvCalibrateCamera2(
                 objectPointMatrix.Ptr,
@@ -53,14 +53,14 @@ namespace Emgu.CV
                 translationVectors,
                 flags);
 
-            extrinsicParams = new ExtrinsicCameraParameters[imageCount - 1];
+            extrinsicParams = new ExtrinsicCameraParameters[imageCount];
             float[,] rotationData = rotationVectors.Data;
-            for (int i = 0; i < imageCount - 1; i++)
+            for (int i = 0; i < imageCount; i++)
             {
-               RotationVector3D rot = new RotationVector3D(new float[] { rotationData[0, i], rotationData[1, i], rotationData[2, i] });
+               RotationVector3D rot = new RotationVector3D(new float[] { rotationData[i, 0], rotationData[i, 1], rotationData[i, 2] });
 
-               using (Matrix<float> col = translationVectors.GetCol(i))
-                  extrinsicParams[i] = new ExtrinsicCameraParameters(rot, col.Transpose());
+               using (Matrix<float> row = translationVectors.GetRow(i))
+                  extrinsicParams[i] = new ExtrinsicCameraParameters(rot, row.Transpose());
             }
          }
       }
@@ -99,11 +99,11 @@ namespace Emgu.CV
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
 
          #region get the matrix that represent the point counts
-         int[] pointCounts = new int[objectPoints.Length];
+         int[,] pointCounts = new int[objectPoints.Length, 1];
          for (int i = 0; i < objectPoints.Length; i++)
          {
             Debug.Assert(objectPoints[i].Length == imagePoints1[i].Length && objectPoints[i].Length == imagePoints2[i].Length, String.Format("Number of 3D points and image points should be equal in the {0}th image", i));
-            pointCounts[i] = objectPoints[i].Length;
+            pointCounts[i,0] = objectPoints[i].Length;
          }
          #endregion 
 
@@ -412,18 +412,6 @@ namespace Emgu.CV
          }
          handle1.Free();
 
-         return new Matrix<float>(res);
-      }
-
-      private static Matrix<float> ToMatrix(PointF[] data)
-      {
-         float[,] res = new float[data.Length, 2];
-         int length = data.Length * Marshal.SizeOf(typeof(PointF));
-         GCHandle handle1 = GCHandle.Alloc(data, GCHandleType.Pinned);
-         GCHandle handle2 = GCHandle.Alloc(res, GCHandleType.Pinned);
-         Emgu.Util.Toolbox.memcpy(handle2.AddrOfPinnedObject(), handle1.AddrOfPinnedObject(), length);
-         handle1.Free();
-         handle2.Free();
          return new Matrix<float>(res);
       }
       #endregion

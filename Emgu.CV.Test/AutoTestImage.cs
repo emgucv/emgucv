@@ -524,7 +524,7 @@ namespace Emgu.CV.Test
          SURFFeature[] modelFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
          SURFFeature[] modelFeaturesNegativeLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
 
-         //Create a feature tree for the given features
+         //Create feature trees for the given features
          FeatureTree featureTreePositiveLaplacian = new FeatureTree(
             Array.ConvertAll<SURFFeature, Matrix<float>>(
                modelFeaturesPositiveLaplacian,

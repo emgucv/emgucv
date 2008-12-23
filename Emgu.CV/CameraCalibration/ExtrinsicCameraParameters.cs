@@ -39,7 +39,7 @@ namespace Emgu.CV
          }
          set
          {
-            Debug.Assert(_translationVector.Rows == 3 && _translationVector.Cols == 1, "Translation must be a 3 x 1 matrix");
+            Debug.Assert(value.Rows == 3 && value.Cols == 1, "Translation must be a 3 x 1 matrix");
             _translationVector = value;
          }
       }

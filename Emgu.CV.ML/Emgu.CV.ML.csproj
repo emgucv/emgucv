@@ -41,6 +41,8 @@
     <Compile Include="KNearest.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="NormalBayesClassifier.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeNode.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeParams.cs" />
     <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
     <Compile Include="PInvoke\CvType\MCvParamGrid.cs" />
     <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />

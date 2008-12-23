@@ -42,6 +42,7 @@ namespace Emgu.CV
          }
          set
          {
+            Debug.Assert(value.Rows == 3 && value.Cols == 3, "The rotation matrix should be a 3x3 matrix");
             CvInvoke.cvRodrigues2(value.Ptr, Ptr, IntPtr.Zero);
          }
       }

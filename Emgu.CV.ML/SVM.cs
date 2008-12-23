@@ -25,6 +25,15 @@ namespace Emgu.CV.ML
          MlInvoke.CvSVMRelease(_ptr);
       }
 
+      /// <summary>
+      /// Train the SVM model with the specific paramters
+      /// </summary>
+      /// <param name="trainData">The training data.</param>
+      /// <param name="responses">The response for the training data.</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="parameters">The parameters for SVM</param>
+      /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
          Matrix<float> responses,
@@ -53,6 +62,22 @@ namespace Emgu.CV.ML
          return grid;
       }
 
+      /// <summary>
+      /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
+      /// </summary>
+      /// <param name="trainData">The training data.</param>
+      /// <param name="responses">The response for the training data.</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="parameters">The parameters for SVM</param>
+      /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
+      /// <param name="cGrid">cGrid</param>
+      /// <param name="gammaGrid">gammaGrid</param>
+      /// <param name="pGrid">pGrid</param>
+      /// <param name="nuGrid">nuGrid</param>
+      /// <param name="coefGrid">coedGrid</param>
+      /// <param name="degreeGrid">degreeGrid</param>
+      /// <returns></returns>
       public bool TrainAuto(
          Matrix<float> trainData,
          Matrix<float> responses,

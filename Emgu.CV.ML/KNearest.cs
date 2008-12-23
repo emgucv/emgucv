@@ -22,11 +22,11 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Creaet a KNearest classifier using the specific traing data
       /// </summary>
-      /// <param name="trainData"></param>
-      /// <param name="responses"></param>
-      /// <param name="sampleIdx"></param>
-      /// <param name="isRegression"></param>
-      /// <param name="maxK"></param>
+      /// <param name="isRegression">Specify the output variables type. It can be either categorical (isRegression=false) or ordered (isRegression=true)</param>
+      /// <param name="maxK">The number of maximum neighbors that may be passed to the method findNearest.</param>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
       public KNearest(Matrix<float> trainData, Matrix<float> responses, Matrix<int> sampleIdx, bool isRegression, int maxK)
       {
          _ptr = MlInvoke.CvKNearestCreate(trainData, responses, sampleIdx == null? IntPtr.Zero : sampleIdx.Ptr, isRegression, maxK);

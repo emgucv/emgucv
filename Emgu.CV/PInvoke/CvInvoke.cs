@@ -4276,6 +4276,35 @@ namespace Emgu.CV
          int flags,
          MCvScalar fillval);
 
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 3×3 matrix</param>
+      /// <returns>Pointer to the perspective transform matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetPerspectiveTransform( 
+         System.Drawing.PointF[] src, 
+         System.Drawing.PointF[] dst,
+         IntPtr mapMatrix );
+
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 3×3 matrix</param>
+      /// <returns>Pointer to the perspective transform matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetPerspectiveTransform(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix);
 
       /// <summary>
       /// Calculates rotation matrix
@@ -4291,8 +4320,6 @@ namespace Emgu.CV
           double angle,
           double scale,
           IntPtr mapMatrix);
-
-
 
       /// <summary>
       /// Calculates the histogram of one or more single-channel images. The elements of a tuple that is used to increment a histogram bin are taken at the same location from the corresponding input images.

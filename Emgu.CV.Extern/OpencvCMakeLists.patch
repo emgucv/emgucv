@@ -1,0 +1,13 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 1454)
++++ CMakeLists.txt	(working copy)
+@@ -429,7 +429,7 @@
+ add_subdirectory(apps)
+ add_subdirectory(doc)
+ add_subdirectory(data)
+-
++add_subdirectory(Emgu.CV.Extern)
+ if(BUILD_EXAMPLES)
+     add_subdirectory(samples)
+ endif()

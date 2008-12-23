@@ -718,6 +718,28 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestCameraCalibration()
+      {
+         MCvPoint3D32f[][] objectPoints = new MCvPoint3D32f[20][];
+         for (int i = 0; i < objectPoints.Length; i++)
+            objectPoints[i] = new MCvPoint3D32f[10];
+
+         PointF[][] imagePoints = new PointF[20][];
+         for (int i = 0; i < imagePoints.Length; i++)
+            imagePoints[i] = new PointF[10];
+
+         Size size = new Size(20, 20);
+         ExtrinsicCameraParameters[] extrinsicParameters;
+         CameraCalibration.CalibrateCamera(
+            objectPoints,
+            imagePoints,
+            ref size,
+            new IntrinsicCameraParameters(),
+            Emgu.CV.CvEnum.CALIB_TYPE.DEFAULT,
+            out extrinsicParameters);
+      }
+
+      [Test]
       public void TestConvexHull()
       {
          Random r = new Random();
