@@ -1,6 +1,7 @@
 ﻿<project schemaVersion="1.6.0.7">
     <assemblies>
         <assembly assemblyPath="..\bin\Emgu.CV.dll" xmlCommentsPath="..\bin\Emgu.CV.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\bin\Emgu.CV.ML.dll" xmlCommentsPath="..\bin\Emgu.CV.ML.XML" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.CV.UI.dll" xmlCommentsPath="..\bin\Emgu.CV.UI.xml" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.Util.dll" xmlCommentsPath="..\bin\Emgu.Util.xml" commentsOnly="False" />
         <assembly assemblyPath="..\lib\ZedGraph.dll" xmlCommentsPath="..\lib\ZedGraph.xml" commentsOnly="False" />
@@ -11,11 +12,15 @@
         <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV image processing functions. Base functions (L1) can be found in CvInvoke class, enumerations can be found in Emgu.CV.Enum namespace.</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Wrapped OpenCV enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper for OpenCV's  Machine Learning library</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's machine learning enumeration</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
+        <namespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True" />
+        <namespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True" />
+        <namespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</namespaceSummaryItem>
         <namespaceSummaryItem name="ZedGraph" isDocumented="False" />
     </namespaceSummaries>
     <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris and Mac OS X.</ProjectSummary>
