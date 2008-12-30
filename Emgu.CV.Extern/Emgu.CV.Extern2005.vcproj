@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cvDTree.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cvEM.cpp"
 				>
 			</File>

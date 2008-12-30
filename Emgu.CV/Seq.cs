@@ -11,8 +11,24 @@ namespace Emgu.CV
    ///<summary>
    /// Wrapper to OpenCV Seq 
    ///</summary>
-   public class Seq<T> : UnmanagedObject, IEnumerable<T> where T : struct
+   public class Seq<T> :  IEnumerable<T> where T : struct
    {
+      /// <summary>
+      /// The pointer to this sequence
+      /// </summary>
+      protected IntPtr _ptr;
+
+      /// <summary>
+      /// Get the pointer of this sequence
+      /// </summary>
+      public IntPtr Ptr
+      {
+         get
+         {
+            return _ptr;
+         }
+      }
+
       /// <summary>
       /// The pointer to the storage used by this sequence
       /// </summary>
@@ -57,14 +73,6 @@ namespace Emgu.CV
       /// <param name="storage">the storage</param>
       public Seq(MemStorage storage)
          : this(0, storage)
-      {
-      }
-
-      /// <summary>
-      /// Create a sequence 
-      /// </summary>
-      public Seq()
-         : this(new MemStorage())
       {
       }
 
@@ -195,7 +203,7 @@ namespace Emgu.CV
       {
          T[] res = new T[Total];
          GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-         CvInvoke.cvCvtSeqToArray(Ptr, handle.AddrOfPinnedObject(), new MCvSlice(0, 0x3fffffff));
+         CvInvoke.cvCvtSeqToArray(Ptr, handle.AddrOfPinnedObject(), MCvSlice.WholeSeq);
          handle.Free();
          return res;
       }
@@ -310,13 +318,6 @@ namespace Emgu.CV
          get { return MCvSeq.total; }
       }
 
-      /// <summary>
-      /// Release the sequence and all the memory associate with it
-      /// </summary>
-      protected override void DisposeObject()
-      {
-      }
-
       ///<summary> 
       /// Get the area of the contour 
       ///</summary>
@@ -324,7 +325,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Math.Abs(CvInvoke.cvContourArea(Ptr, new MCvSlice(0, 0x3fffffff)));
+            return Math.Abs(CvInvoke.cvContourArea(Ptr, MCvSlice.WholeSeq));
          }
       }
 
@@ -354,7 +355,7 @@ namespace Emgu.CV
       /// Approximates one curves and returns the approximation result
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
-      /// <param name="storage"> The storage the resulting sequence use</param>
+      /// <param name="storage"> The storage used by the resulting sequence. If null, the storage of this sequence is used.</param>
       /// <returns>The approximated contour</returns>
       public Seq<T> ApproxPoly(double accuracy, MemStorage storage)
       {
@@ -365,7 +366,7 @@ namespace Emgu.CV
       /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
       /// </summary>
       /// <param name="accuracy">The desired approximation accuracy</param>
-      /// <param name="storage"> The storage the resulting sequence use</param>
+      /// <param name="storage"> The storage used by the resulting sequence. If null, the storage of this sequence is used.</param>
       /// <param name="maxLevel">
       /// Maximal level for sequence approximation. 
       /// If 0, only sequence is arrpoximated. 
@@ -375,15 +376,16 @@ namespace Emgu.CV
       /// <returns>The approximated contour</returns>
       public Seq<T> ApproxPoly(double accuracy, int maxLevel, MemStorage storage)
       {
+         MemStorage stor = storage ?? this.Storage;
          return new Seq<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
              System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvContour)),
-             storage.Ptr,
+             stor.Ptr,
              CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
              accuracy,
              maxLevel),
-             storage);
+             stor);
       }
 
       /// <summary>

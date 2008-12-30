@@ -195,6 +195,9 @@ namespace Emgu.CV.UI
                if (_functionalMode != FunctionalModeOption.Minimum)
                   BuildOperationMenuItem(_displayedImage);
 
+               if (base.Image != null) //release the old Bitmap Image
+                  base.Image.Dispose();
+               
                base.Image = _displayedImage.Bitmap;
 
                if (EnablePropertyPanel)
@@ -476,6 +479,16 @@ namespace Emgu.CV.UI
          /// This is the ImageBox with all functions enabled.
          /// </summary>
          Everything = 1
+      }
+
+      /// <summary>
+      /// Release the this Imagebox and all memory associate with it.
+      /// </summary>
+      public virtual new void Dispose()
+      {
+         if (this.Image != null)
+            this.Image.Dispose();
+         base.Dispose();
       }
    }
 }

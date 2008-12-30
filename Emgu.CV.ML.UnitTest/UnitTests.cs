@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using NUnit.Framework;
 using Emgu.CV.Structure;
+using Emgu.CV.ML.Structure;
 
 namespace Emgu.CV.ML.UnitTest
 {
@@ -79,7 +80,7 @@ namespace Emgu.CV.ML.UnitTest
             img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
          }
 
-         Emgu.CV.UI.ImageViewer.Show(img);
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       [Test]
@@ -175,6 +176,15 @@ namespace Emgu.CV.ML.UnitTest
       {
          using (NormalBayesClassifier classifier = new NormalBayesClassifier())
          {
+         }
+      }
+
+      [Test]
+      public void TestDTree()
+      {
+         using (DTree tree = new DTree())
+         {
+            MCvDTreeParams param = MCvDTreeParams.GetDefaultParameter();
          }
       }
 

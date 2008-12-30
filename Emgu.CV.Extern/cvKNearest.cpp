@@ -11,6 +11,13 @@ CvKNearest* CvKNearestCreate(const CvMat* _train_data, const CvMat* _responses,
    return new CvKNearest(_train_data, _responses, _sample_idx, _is_regression, max_k);
 }
 
+bool CvKNearestTrain(CvKNearest* model, const CvMat* _train_data, const CvMat* _responses,
+                        const CvMat* _sample_idx, bool is_regression,
+                        int _max_k, bool _update_base )
+{
+   return model->train(_train_data, _responses, _sample_idx, is_regression, _max_k, _update_base);
+}
+
 void CvKNearestRelease(CvKNearest* classifier)
 {
    classifier->~CvKNearest();

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emgu.CV.ML
+namespace Emgu.CV.ML.Structure
 {
    /// <summary>
-   /// CvParamGrid used by SVM
+   /// Wrapped CvParamGrid structure used by SVM
    /// </summary>
    public struct MCvParamGrid
    {

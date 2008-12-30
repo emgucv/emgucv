@@ -41,17 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTree.cs" />
     <Compile Include="EM.cs" />
     <Compile Include="EMParams.cs" />
     <Compile Include="KNearest.cs" />
-    <Compile Include="NeuralNetwork.cs" />
+    <Compile Include="ANN_MLP.cs" />
     <Compile Include="NormalBayesClassifier.cs" />
     <Compile Include="PInvoke\CvType\MCvDTreeNode.cs" />
     <Compile Include="PInvoke\CvType\MCvDTreeParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeSplit.cs" />
     <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
     <Compile Include="PInvoke\CvType\MCvParamGrid.cs" />
     <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />
-    <Compile Include="PInvoke\CvType\MlEnum.cs" />
+    <Compile Include="PInvoke\MlEnum.cs" />
     <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />
     <Compile Include="PInvoke\MlInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

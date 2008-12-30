@@ -2733,21 +2733,6 @@ namespace Emgu.CV
           int aperture_size);
 
       /// <summary>
-      /// Calculates length or curve as sum of lengths of segments between subsequent points
-      /// </summary>
-      /// <param name="curve">Sequence or array of the curve points</param>
-      /// <param name="slice">Starting and ending points of the curve, by default the whole curve length is calculated</param>
-      /// <param name="is_closed">
-      /// Indicates whether the curve is closed or not. There are 3 cases:
-      /// is_closed=0 - the curve is assumed to be unclosed. 
-      /// is_closed&gt;0 - the curve is assumed to be closed. 
-      /// is_closed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
-      /// </param>
-      /// <returns></returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int is_closed);
-
-      /// <summary>
       /// Tests whether the input contour is convex or not. The contour must be simple, i.e. without self-intersections. 
       /// </summary>
       /// <param name="contour">Tested contour (sequence or array of points). </param>
@@ -2816,14 +2801,25 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
+      #region Contour Processing Functions
       /// <summary>
-      /// Calculates area of the whole contour or contour section. 
+      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence). 
       /// </summary>
-      /// <param name="contour">Seq (sequence or array of vertices). </param>
-      /// <param name="slice">Starting and ending points of the contour section of interest, by default area of the whole contour is calculated</param>
-      /// <returns>The area of the whole contour or contour section</returns>
+      /// <param name="src_seq">Sequence of array of points</param>
+      /// <param name="header_size">Header size of approximated curve[s].</param>
+      /// <param name="storage">Container for approximated contours. If it is NULL, the input sequences' storage is used</param>
+      /// <param name="method">Approximation method</param>
+      /// <param name="parameter">Desired approximation accuracy</param>
+      /// <param name="parameter2">If case if src_seq is sequence it means whether the single sequence should be approximated or all sequences on the same level or below src_seq (see cvFindContours for description of hierarchical contour structures). And if src_seq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). </param>
+      /// <returns> the approximation result</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern double cvContourArea(IntPtr contour, MCvSlice slice);
+      public static extern IntPtr cvApproxPoly(
+          IntPtr src_seq,
+          int header_size,
+          IntPtr storage,
+          CvEnum.APPROX_POLY_TYPE method,
+          double parameter,
+          int parameter2);
 
       /// <summary>
       /// Returns the up-right bounding rectangle for 2d point set
@@ -2856,38 +2852,85 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Calculates area of the whole contour or contour section. 
+      /// </summary>
+      /// <param name="contour">Seq (sequence or array of vertices). </param>
+      /// <param name="slice">Starting and ending points of the contour section of interest, by default area of the whole contour is calculated</param>
+      /// <returns>The area of the whole contour or contour section</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvContourArea(IntPtr contour, MCvSlice slice);
+
+      /// <summary>
+      /// Calculates length or curve as sum of lengths of segments between subsequent points
+      /// </summary>
+      /// <param name="curve">Sequence or array of the curve points</param>
+      /// <param name="slice">Starting and ending points of the curve, by default the whole curve length is calculated</param>
+      /// <param name="is_closed">
+      /// Indicates whether the curve is closed or not. There are 3 cases:
+      /// is_closed=0 - the curve is assumed to be unclosed. 
+      /// is_closed&gt;0 - the curve is assumed to be closed. 
+      /// is_closed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
+      /// </param>
+      /// <returns></returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int is_closed);
+      
+      /// <summary>
       /// Find the perimeter of the contour
       /// </summary>
       /// <param name="contour">Pointer to the contour</param>
       /// <returns>the perimeter of the contour</returns>
       public static double cvContourPerimeter(IntPtr contour)
       {
-         return cvArcLength(contour, new MCvSlice(0, 0x3fffffff), 1);
+         return cvArcLength(contour, MCvSlice.WholeSeq, 1);
       }
 
       /// <summary>
-      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence). 
+      /// Creates binary tree representation for the input contour and returns the pointer to its root.
       /// </summary>
-      /// <param name="src_seq">Sequence of array of points</param>
-      /// <param name="header_size">Header size of approximated curve[s].</param>
-      /// <param name="storage">Container for approximated contours. If it is NULL, the input sequences' storage is used</param>
-      /// <param name="method">Approximation method</param>
-      /// <param name="parameter">Desired approximation accuracy</param>
-      /// <param name="parameter2">If case if src_seq is sequence it means whether the single sequence should be approximated or all sequences on the same level or below src_seq (see cvFindContours for description of hierarchical contour structures). And if src_seq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). </param>
-      /// <returns> the approximation result</returns>
+      /// <param name="contour">Input contour</param>
+      /// <param name="storage">Container for output tree</param>
+      /// <param name="threshold">If the parameter threshold is less than or equal to 0, the function creates full binary tree representation. If the threshold is greater than 0, the function creates representation with the precision threshold: if the vertices with the interceptive area of its base line are less than threshold, the tree should not be built any further</param>
+      /// <returns>The binary tree representation for the input contour</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvApproxPoly(
-          IntPtr src_seq,
-          int header_size,
-          IntPtr storage,
-          CvEnum.APPROX_POLY_TYPE method,
-          double parameter,
-          int parameter2);
+      public static extern IntPtr cvCreateContourTree(
+         IntPtr contour,
+         IntPtr storage,
+         double threshold);
+
+      /// <summary>
+      /// Return the contour from its binary tree representation
+      /// </summary>
+      /// <param name="tree">Contour tree</param>
+      /// <param name="storage">Container for the reconstructed contour</param>
+      /// <param name="criteria">Criteria, where to stop reconstruction</param>
+      /// <returns>The contour represented by this contour tree</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvContourFromContourTree(
+         IntPtr tree,
+         IntPtr storage,
+         MCvTermCriteria criteria);
+      
+      /// <summary>
+      /// Calculates the value of the matching measure for two contour trees. The similarity measure is calculated level by level from the binary tree roots. If at the certain level difference between contours becomes less than threshold, the reconstruction process is interrupted and the current difference is returned
+      /// </summary>
+      /// <param name="tree1">First contour tree</param>
+      /// <param name="tree2">Second contour tree</param>
+      /// <param name="method">Similarity measure, only CV_CONTOUR_TREES_MATCH_I1 is supported</param>
+      /// <param name="threshold">Similarity threshold</param>
+      /// <returns>The value of the matching measure for two contour trees</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvMatchContourTrees( 
+         IntPtr tree1, 
+         IntPtr tree2,
+         CvEnum.MATCH_CONTOUR_TREE_METHOD method, 
+         double threshold );
+      #endregion
 
       /// <summary>
       /// Normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
       /// </summary>
-      /// <param name="hist">Pointer to the histogr</param>
+      /// <param name="hist">Pointer to the histogram</param>
       /// <param name="factor">Normalization factor</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvNormalizeHist(IntPtr hist, double factor);
@@ -2983,7 +3026,7 @@ namespace Emgu.CV
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern int cvSampleLine(IntPtr image, System.Drawing.Point pt1, System.Drawing.Point pt2, IntPtr buffer, CvEnum.LINE_SAMPLE_TYPE connectivity);
+      public static extern int cvSampleLine(IntPtr image, System.Drawing.Point pt1, System.Drawing.Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
 
       /// <summary>
       /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
@@ -4414,7 +4457,6 @@ namespace Emgu.CV
          float[] userMask,
          IntPtr labels);
 
-      //TODO: use enumeration for flood fill
       /// <summary>
       /// Fills a connected component with given color.
       /// </summary>
@@ -4446,14 +4488,51 @@ namespace Emgu.CV
       /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFloodFill(
-          IntPtr src,
-          System.Drawing.Point seedPoint,
-          MCvScalar newVal,
-          MCvScalar loDiff,
-          MCvScalar upDiff,
-          out MCvConnectedComp comp,
-          int flags,
-          IntPtr mask);
+         IntPtr src,
+         System.Drawing.Point seedPoint,
+         MCvScalar newVal,
+         MCvScalar loDiff,
+         MCvScalar upDiff,
+         out MCvConnectedComp comp,
+         int flags,
+         IntPtr mask);
+
+      /// <summary>
+      /// Fills a connected component with given color.
+      /// </summary>
+      /// <param name="src">Input 1- or 3-channel, 8-bit or floating-point image. It is modified by the function unless CV_FLOODFILL_MASK_ONLY flag is set.</param>
+      /// <param name="seedPoint">The starting point.</param>
+      /// <param name="newVal">New value of repainted domain pixels.</param>
+      /// <param name="loDiff">Maximal lower brightness/color difference
+      /// between the currently observed pixel and one of its neighbor belong to the component
+      /// or seed pixel to add the pixel to component.
+      /// In case of 8-bit color images it is packed value.</param>
+      /// <param name="upDiff">Maximal upper brightness/color difference
+      /// between the currently observed pixel and one of its neighbor belong to the component
+      /// or seed pixel to add the pixel to component.
+      /// In case of 8-bit color images it is packed value.</param>
+      /// <param name="comp">Pointer to structure the function fills with the information about the repainted domain.</param>
+      /// <param name="mask">Operation mask,
+      /// should be singe-channel 8-bit image, 2 pixels wider and 2 pixels taller than image.
+      /// If not NULL, the function uses and updates the mask, so user takes responsibility of initializing mask content.
+      /// Floodfilling can't go across non-zero pixels in the mask, for example, an edge detector output can be used as a mask to stop filling at edges.
+      /// Or it is possible to use the same mask in multiple calls to the function to make sure the filled area do not overlap.
+      /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
+      /// <param name="connectivity">The connectivity of flood fill</param>
+      /// <param name="flags">The flood fill types</param>
+      public static void cvFloodFill(
+         IntPtr src,
+         System.Drawing.Point seedPoint,
+         MCvScalar newVal,
+         MCvScalar loDiff,
+         MCvScalar upDiff,
+         out MCvConnectedComp comp,
+         CvEnum.CONNECTIVITY connectivity,
+         CvEnum.FLOODFILL_FLAG flags,
+         IntPtr mask)
+      {
+         cvFloodFill(src, seedPoint, newVal, loDiff, upDiff, out comp, (int)connectivity | (int)flags, mask);
+      }
 
       /*
               /// <summary>

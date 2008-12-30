@@ -30,5 +30,14 @@ namespace Emgu.CV.Structure
          start_index = start;
          end_index = end;
       }
+
+      /// <summary>
+      /// Get the equivalent of CV_WHOLE_SEQ
+      /// </summary>
+      public static MCvSlice WholeSeq
+      {
+         get { return new MCvSlice(0, 0x3fffffff); }
+      }
+      
    }
 }

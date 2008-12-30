@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.ML.Structure;
 
 namespace Emgu.CV.ML
 {

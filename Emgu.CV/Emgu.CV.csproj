@@ -74,6 +74,7 @@
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Contour.cs" />
     <Compile Include="HeaderSize.cs" />
+    <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />
     <Compile Include="PInvoke\CvType\MCvSeqBlock.cs" />
     <Compile Include="PlanarSubdivision.cs" />
     <Compile Include="CvArray.cs" />

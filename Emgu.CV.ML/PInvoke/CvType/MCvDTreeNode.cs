@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emgu.CV.ML
+namespace Emgu.CV.ML.Structure
 {
-   public struct CvDTreeNode
+   /// <summary>
+   /// An OpenCv decision Tree node
+   /// </summary>
+   public struct MCvDTreeNode
    {
       /// <summary>
       /// The assigned to the node normalized class index (to 0..class_count-1 range), it is used internally in classification trees and tree ensembles.

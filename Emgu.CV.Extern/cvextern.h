@@ -21,6 +21,9 @@ extern EMGU_CV_EXTERN_API float CvNormalBayesClassifierPredict(CvNormalBayesClas
 
 //KNearest
 extern EMGU_CV_EXTERN_API CvKNearest* CvKNearestDefaultCreate();
+extern EMGU_CV_EXTERN_API bool CvKNearestTrain(CvKNearest* classifier, const CvMat* _train_data, const CvMat* _responses,
+                        const CvMat* _sample_idx=0, bool is_regression=false,
+                        int _max_k=32, bool _update_base=false );
 extern EMGU_CV_EXTERN_API CvKNearest* CvKNearestCreate(const CvMat* _train_data, const CvMat* _responses,
                 const CvMat* _sample_idx=0, bool _is_regression=false, int max_k=32 );
 extern EMGU_CV_EXTERN_API void CvKNearestRelease(CvKNearest* classifier);
@@ -67,6 +70,19 @@ extern EMGU_CV_EXTERN_API int CvANN_MLPTrain(CvANN_MLP* model, const CvMat* _inp
                        int flags=0 );
 extern EMGU_CV_EXTERN_API float CvANN_MLPPredict(CvANN_MLP* model, const CvMat* _inputs,
                            CvMat* _outputs );
+
+//Decision Tree
+extern EMGU_CV_EXTERN_API CvDTreeParams* CvDTreeParamsCreate();
+extern EMGU_CV_EXTERN_API void CvDTreeParamsRelease(CvDTreeParams* params);
+
+extern EMGU_CV_EXTERN_API CvDTree* CvDTreeCreate();
+extern EMGU_CV_EXTERN_API void CvDTreeRelease(CvDTree* model);
+extern EMGU_CV_EXTERN_API bool CvDTreeTrain(CvDTree* model, const CvMat* _train_data, int _tflag,
+                     const CvMat* _responses, const CvMat* _var_idx=0,
+                     const CvMat* _sample_idx=0, const CvMat* _var_type=0,
+                     const CvMat* _missing_mask=0,
+                     CvDTreeParams params=CvDTreeParams() );
+
 #if defined(__cplusplus)
 }
 #endif

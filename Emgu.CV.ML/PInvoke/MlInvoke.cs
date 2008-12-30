@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using Emgu.CV.ML.Structure;
 
 namespace Emgu.CV.ML
 {
@@ -128,6 +129,29 @@ namespace Emgu.CV.ML
          IntPtr sampleIdx,
          bool isRegression,
          int maxK);
+
+      /// <summary>
+      /// Update the KNearest classifier using the specific traing data.
+      /// </summary>
+      /// <param name="isRegression">Specify the output variables type. It can be either categorical (isRegression=false) or ordered (isRegression=true)</param>
+      /// <param name="maxK">The number of maximum neighbors that may be passed to the method findNearest.</param>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="classifier">The KNearest classifier to be updated</param>
+      /// <param name="updateBase">
+      /// If true, the existing classifer is updated using the new training data;
+      /// Otherwise, the classifier is trained from scratch</param>
+      /// <returns></returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern bool CvKNearestTrain(
+         IntPtr classifier,
+         IntPtr trainData,
+         IntPtr responses,
+         IntPtr sampleIdx,
+         bool isRegression,
+         int maxK, 
+         bool updateBase);
 
       /// <summary>
       /// For each input vector (which are rows of the matrix <paramref name="samples"/>) the method finds k &lt;= get_max_k() nearest neighbor. In case of regression, the predicted result will be a mean value of the particular vector's neighbor responses. In case of classification the class is determined by voting.
@@ -373,5 +397,47 @@ namespace Emgu.CV.ML
          IntPtr inputs,
          IntPtr outputs);
       #endregion 
+
+      #region decision tree
+      /// <summary>
+      /// Create default parameters for CvDTreeParams
+      /// </summary>
+      /// <returns>Pointer to the default CvDTreeParams</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvDTreeParamsCreate();
+
+      /// <summary>
+      /// Release the CvDTreeParams
+      /// </summary>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvDTreeParamsRelease(IntPtr dTreeParam);
+
+      /// <summary>
+      /// Create a default decision tree
+      /// </summary>
+      /// <returns>Pointer to the decision tree</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvDTreeCreate();
+
+      /// <summary>
+      /// Release the decision tree model
+      /// </summary>
+      /// <param name="model">The decision tree model to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvDTreeRelease(IntPtr model);
+
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern bool CvDTreeTrain(
+         IntPtr model, 
+         IntPtr _train_data, 
+         int _tflag,
+         IntPtr _responses,
+         IntPtr _var_idx,
+         IntPtr _sample_idx,
+         IntPtr _var_type,
+         IntPtr _missing_mask,
+         MCvDTreeParams param);
+
+      #endregion
    }
 }

@@ -271,7 +271,8 @@ namespace Emgu.CV.Test
 
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
-               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)formatter.Deserialize(ms2);
+               Object o = formatter.Deserialize(ms2);
+               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>) o;
                Assert.IsTrue(img.Equals(img2));
             }
          }
@@ -287,7 +288,7 @@ namespace Emgu.CV.Test
          for (int i = 0; i < 100; i++)
             Assert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
 
-         buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.FOUR_CONNECTED);
+         buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.CONNECTIVITY.FOUR_CONNECTED);
       }
 
 

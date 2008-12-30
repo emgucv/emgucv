@@ -958,9 +958,31 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Type of floodfill operation
+   /// </summary>
+   [Flags]
+   public enum FLOODFILL_FLAG
+   {
+      /// <summary>
+      /// The default type
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// If set the difference between the current pixel and seed pixel is considered,
+      /// otherwise difference between neighbor pixels is considered (the range is floating).
+      /// </summary>
+      FIXED_RANGE = (1 << 16),
+      /// <summary>
+      /// If set, the function does not fill the image (new_val is ignored),
+      /// but the fills mask (that must be non-NULL in this case).
+      /// </summary>
+      MASK_ONLY = (1 << 17)
+   }
+
+   /// <summary>
    /// The type for cvSampleLine
    /// </summary>
-   public enum LINE_SAMPLE_TYPE
+   public enum CONNECTIVITY
    {
       /// <summary>
       /// 8-connected
@@ -1868,5 +1890,16 @@ namespace Emgu.CV.CvEnum
       /// Front
       /// </summary>
       FRONT
+   }
+
+   /// <summary>
+   /// The method for matching contour tree
+   /// </summary>
+   public enum MATCH_CONTOUR_TREE_METHOD
+   {
+      /// <summary>
+      /// 
+      /// </summary>
+      CONTOUR_TREES_MATCH_I1  = 1
    }
 }

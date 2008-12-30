@@ -151,4 +151,19 @@ namespace Emgu.CV.ML.MlEnum
       /// </summary>
       NO_OUTPUT_SCALE = 4
    }
+
+   /// <summary>
+   /// The data layout type
+   /// </summary>
+   public enum DATA_LAYOUT_TYPE
+   {
+      /// <summary>
+      /// Column sample
+      /// </summary>
+      COL_SAMPLE = 0,
+      /// <summary>
+      /// Row sample
+      /// </summary>
+      ROW_SAMPLE =1
+   }
 }

@@ -89,9 +89,9 @@ namespace Emgu.CV
          _buffer.Enqueue(image);
 
          if (_silh == null) _silh = image.CopyBlank();
-         if (_mhi == null) _mhi = new Image<Gray, float>(image.Width, image.Height);
+         if (_mhi == null) _mhi = new Image<Gray, float>(image.Size);
          if (_mask == null) _mask = image.CopyBlank();
-         if (_orientation == null) _orientation = new Image<Gray, float>(image.Width, image.Height);
+         if (_orientation == null) _orientation = new Image<Gray, float>(image.Size);
 
          CvInvoke.cvAbsDiff(image.Ptr, _buffer.Peek().Ptr, _silh.Ptr);
          CvInvoke.cvThreshold(_silh.Ptr, _silh.Ptr, _diffThresh, 1, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
@@ -123,7 +123,7 @@ namespace Emgu.CV
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
          if (_segMask == null)
-            _segMask = new Image<Gray, float>(_mhi.Width, _mhi.Height);
+            _segMask = new Image<Gray, float>(_mhi.Size);
          Seq<MCvConnectedComp> seq = new Seq<MCvConnectedComp>(CvInvoke.cvSegmentMotion(_mhi, _segMask, storage, ts.TotalSeconds, _maxTimeDelta), storage);
          return seq;
       }

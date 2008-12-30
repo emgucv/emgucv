@@ -530,9 +530,10 @@ namespace Emgu.CV.Test
          #region Find the region of interest
          System.Drawing.Rectangle roi;
          using (MemStorage storage = new MemStorage())
-         using (Seq<System.Drawing.PointF> seq = 
-            new Seq<PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage))
          {
+            Seq<System.Drawing.PointF> seq =
+               new Seq<PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage);
+         
             seq.Push(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
             roi = CvInvoke.cvBoundingRect(seq.Ptr, true);
          }
@@ -806,7 +807,7 @@ namespace Emgu.CV.Test
             Assert.AreEqual(numberOfFrames, count);
          }
          File.Delete(fi.FullName);
-      }
-      */
+      }*/
+      
    }
 }

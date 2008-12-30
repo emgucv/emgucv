@@ -32,7 +32,7 @@ namespace Emgu.CV
       /// The dimension of color
       /// </summary>
       private static int _numberOfChannels;
-
+      
       #region constructors
       ///<summary>
       ///Create an empty Image
@@ -107,9 +107,9 @@ namespace Emgu.CV
          if (typeof(TColor) == typeof(Gray)) //TColor type is gray, load the image as grayscale
          {
             ptr = CvInvoke.cvLoadImage(file.FullName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
-            MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-            width = mptr.width;
-            height = mptr.height;
+            System.Drawing.Size size = CvInvoke.cvGetSize(ptr);
+            width = size.Width;
+            height = size.Height;
          }
          else //color type is not gray
          {
@@ -296,7 +296,7 @@ namespace Emgu.CV
       /// <param name="context">The streaming context</param>
       public Image(SerializationInfo info, StreamingContext context)
       {
-         DeserializeObjectData(info, context);
+         base.DeserializeObjectData(info, context);
          ROI = (System.Drawing.Rectangle)info.GetValue("Roi", typeof(System.Drawing.Rectangle));
       }
 
@@ -371,7 +371,7 @@ namespace Emgu.CV
          {
             if (_numberOfChannels == 0)
             {
-               _numberOfChannels =  new TColor().Dimension;
+               _numberOfChannels = new TColor().Dimension;
             }
             return _numberOfChannels;
          }
@@ -999,7 +999,6 @@ namespace Emgu.CV
          }
 
          IntPtr seq = IntPtr.Zero;
-         int sequenceHeaderSize = HeaderSize.MCvContour;
 
          using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
          {
@@ -1007,7 +1006,7 @@ namespace Emgu.CV
                 imagecopy.Ptr,
                 stor.Ptr,
                 ref seq,
-                sequenceHeaderSize,
+                HeaderSize.MCvContour,
                 type,
                 method,
                 new System.Drawing.Point(0, 0));
@@ -1024,7 +1023,7 @@ namespace Emgu.CV
       /// For Get operation, a copy of the specific channel is returned.
       /// For Set operation, the specific channel is copied to this image.
       /// </summary>
-      /// <param name="channel">The channel to get from the current image</param>
+      /// <param name="channel">The channel to get from the current image, zero based index</param>
       /// <returns>The specific channel of the current image</returns>
       public Image<Gray, TDepth> this[int channel]
       {
@@ -1040,7 +1039,6 @@ namespace Emgu.CV
          set
          {
             IntPtr[] channels = new IntPtr[4];
-            channels.Initialize();
             channels[channel] = value.Ptr;
             CvInvoke.cvCvtPlaneToPix(channels[0], channels[1], channels[2], channels[3], Ptr);
          }
@@ -1467,7 +1465,7 @@ namespace Emgu.CV
 
          Point[] points = new Point[count];
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvCvtSeqToArray(contour.Ptr, handle.AddrOfPinnedObject(), new MCvSlice(0, 0x3fffffff));
+         CvInvoke.cvCvtSeqToArray(contour.Ptr, handle.AddrOfPinnedObject(), MCvSlice.WholeSeq);
          CvInvoke.cvSnakeImage(
              Ptr,
              handle.AddrOfPinnedObject(),
@@ -2105,7 +2103,7 @@ namespace Emgu.CV
       ///<returns>The values on the (Eight-connected) line </returns>
       public TDepth[,] Sample(LineSegment2D line)
       {
-         return Sample(line, Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED);
+         return Sample(line, Emgu.CV.CvEnum.CONNECTIVITY.EIGHT_CONNECTED);
       }
 
       /// <summary>
@@ -2114,9 +2112,9 @@ namespace Emgu.CV
       /// <param name="line">The line to obtain samples</param>
       /// <param name="type">The sampling type</param>
       /// <returns>The values on the line</returns>
-      public TDepth[,] Sample(LineSegment2D line, CvEnum.LINE_SAMPLE_TYPE type)
+      public TDepth[,] Sample(LineSegment2D line, CvEnum.CONNECTIVITY type)
       {
-         int size = type == Emgu.CV.CvEnum.LINE_SAMPLE_TYPE.EIGHT_CONNECTED ?
+         int size = type == Emgu.CV.CvEnum.CONNECTIVITY.EIGHT_CONNECTED ?
             Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y))
             : Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
 
