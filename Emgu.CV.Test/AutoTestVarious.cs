@@ -115,12 +115,13 @@ namespace Emgu.CV.Test
       [Test]
       public void TestRotationMatrix3D()
       {
-         float[] rod = new float[] { 0.2f, 0.5f, 0.3f };
+         double[] rod = new double[] { 0.2, 0.5, 0.3 };
          RotationVector3D rodVec = new RotationVector3D(rod);
 
          RotationVector3D rodVec2 = new RotationVector3D();
          rodVec2.RotationMatrix = rodVec.RotationMatrix;
-         Assert.IsTrue(rodVec.Equals(rodVec2));
+         Matrix<double> diff = rodVec - rodVec2;
+         Assert.IsTrue(diff.Norm < 1.0e-8);
       }
 
       [Test]

@@ -39,8 +39,8 @@ namespace Emgu.CV
          using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
          using (Matrix<float> imagePointMatrix = ToMatrix(imagePoints))
          using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
-         using (Matrix<float> rotationVectors = new Matrix<float>(imageCount, 3))
-         using (Matrix<float> translationVectors = new Matrix<float>(imageCount, 3))
+         using (Matrix<double> rotationVectors = new Matrix<double>(imageCount, 3))
+         using (Matrix<double> translationVectors = new Matrix<double>(imageCount, 3))
          {
             CvInvoke.cvCalibrateCamera2(
                 objectPointMatrix.Ptr,
@@ -54,12 +54,12 @@ namespace Emgu.CV
                 flags);
 
             extrinsicParams = new ExtrinsicCameraParameters[imageCount];
-            float[,] rotationData = rotationVectors.Data;
+            double[,] rotationData = rotationVectors.Data;
             for (int i = 0; i < imageCount; i++)
             {
-               RotationVector3D rot = new RotationVector3D(new float[] { rotationData[i, 0], rotationData[i, 1], rotationData[i, 2] });
+               RotationVector3D rot = new RotationVector3D(new double[] { rotationData[i, 0], rotationData[i, 1], rotationData[i, 2] });
 
-               using (Matrix<float> row = translationVectors.GetRow(i))
+               using (Matrix<double> row = translationVectors.GetRow(i))
                   extrinsicParams[i] = new ExtrinsicCameraParameters(rot, row.Transpose());
             }
          }
@@ -147,7 +147,7 @@ namespace Emgu.CV
           PointF[] imagePoints,
           IntrinsicCameraParameters intrin)
       {
-         Matrix<float> translation = new Matrix<float>(3, 1);
+         Matrix<double> translation = new Matrix<double>(3, 1);
          RotationVector3D rotation = new RotationVector3D();
 
          IntPtr objectPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);

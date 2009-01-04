@@ -2197,6 +2197,19 @@ namespace Emgu.CV
       /// Transforms source image using the specified matrix
       /// </summary>
       /// <param name="mapMatrix">2x3 transformation matrix</param>
+      /// <param name="interpolationType">Interpolation type</param>
+      /// <param name="warpType">Warp type</param>
+      /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <returns>The result of the transformation</returns>
+      public Image<TColor, TDepth> WarpAffine(Matrix<double> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      {
+         return WarpAffine(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
+      }
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="mapMatrix">2x3 transformation matrix</param>
       /// <param name="width">The width of the resulting image</param>
       /// <param name="height">the height of the resulting image</param>
       /// <param name="interpolationType">Interpolation type</param>
@@ -2204,6 +2217,23 @@ namespace Emgu.CV
       /// <param name="backgroundColor">A value used to fill outliers</param>
       /// <returns>The result of the transformation</returns>
       public Image<TColor, TDepth> WarpAffine(Matrix<float> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      {
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
+         CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
+         return res;
+      }
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="mapMatrix">2x3 transformation matrix</param>
+      /// <param name="width">The width of the resulting image</param>
+      /// <param name="height">the height of the resulting image</param>
+      /// <param name="interpolationType">Interpolation type</param>
+      /// <param name="warpType">Warp type</param>
+      /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <returns>The result of the transformation</returns>
+      public Image<TColor, TDepth> WarpAffine(Matrix<double> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);

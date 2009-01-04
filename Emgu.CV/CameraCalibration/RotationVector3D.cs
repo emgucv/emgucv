@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// A 3D rotation matrix
    /// </summary>
    [Serializable]
-   public class RotationVector3D : Matrix<float>
+   public class RotationVector3D : Matrix<double>
    {
       /// <summary>
       /// Create a 3D rotation vector (3x1 Matrix).
@@ -23,7 +23,7 @@ namespace Emgu.CV
       /// Create a rotation vector using the specific values
       /// </summary>
       /// <param name="value"></param>
-      public RotationVector3D(float[] value)
+      public RotationVector3D(double[] value)
          : base(value)
       {
          Debug.Assert(value.Length == 3, "Rotation Vector must have size == 3");
@@ -32,11 +32,11 @@ namespace Emgu.CV
       /// <summary>
       /// Get or Set the (3x3) rotation matrix represented by this rotation vector
       /// </summary>
-      public Matrix<float> RotationMatrix
+      public Matrix<double> RotationMatrix
       {
          get
          {
-            Matrix<float> mat = new Matrix<float>(3, 3);
+            Matrix<double> mat = new Matrix<double>(3, 3);
             CvInvoke.cvRodrigues2(Ptr, mat.Ptr, IntPtr.Zero);
             return mat;
          }
