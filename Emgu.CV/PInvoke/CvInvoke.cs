@@ -3619,6 +3619,24 @@ namespace Emgu.CV
       public static extern void cvConvertPointsHomogeneous(IntPtr src, IntPtr dst);
 
       /// <summary>
+      /// Creates the stereo correspondence structure and initializes it. It is possible to override any of the parameters at any time between the calls to cvFindStereoCorrespondenceBM
+      /// </summary>
+      /// <param name="type">ID of one of the pre-defined parameter sets. Any of the parameters can be overridden after creating the structure.</param>
+      /// <param name="numberOfDisparities">The number of disparities. If the parameter is 0, it is taken from the preset, otherwise the supplied value overrides the one from preset. </param>
+      /// <returns>Pointer to the stereo correspondece structure</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvCreateStereoBMState( 
+         CvEnum.STEREO_BM_TYPE type,
+         int numberOfDisparities);
+
+      /// <summary>
+      /// Releases the stereo correspondence structure and all the associated internal buffers
+      /// </summary>
+      /// <param name="state">The state to be released</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReleaseStereoBMState(ref IntPtr state);
+
+      /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
       /// </summary>
       /// <param name="probImage">Back projection of object histogram</param>
@@ -4326,7 +4344,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3×3 matrix</param>
+      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
       /// <returns>Pointer to the perspective transform matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetPerspectiveTransform( 
@@ -4341,7 +4359,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3×3 matrix</param>
+      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
       /// <returns>Pointer to the perspective transform matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetPerspectiveTransform(
