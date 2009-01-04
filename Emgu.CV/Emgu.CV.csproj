@@ -141,7 +141,7 @@
     <Compile Include="PInvoke\CvType\MCvSlice.cs" />
     <Compile Include="PInvoke\CvType\MCvTermCriteria.cs" />
     <Compile Include="PInvoke\CvType\MIplImage.cs" />
-    <Compile Include="RotationMatrix2D.cs" />
+    <Compile Include="CameraCalibration\RotationMatrix2D.cs" />
     <Compile Include="Capture\Capture.cs" />
     <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Shape\CircleF.cs" />
