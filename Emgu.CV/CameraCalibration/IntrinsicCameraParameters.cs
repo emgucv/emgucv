@@ -10,8 +10,8 @@ namespace Emgu.CV
    /// </summary>
    public class IntrinsicCameraParameters
    {
-      private Matrix<float> _intrinsicMatrix;
-      private Matrix<float> _distortionCoeffs;
+      private Matrix<double> _intrinsicMatrix;
+      private Matrix<double> _distortionCoeffs;
 
       /// <summary>
       /// Get or Set the DistortionCoeffs ( as a 5x1 (default) or 4x1 matrix ). 
@@ -19,7 +19,7 @@ namespace Emgu.CV
       /// (k1, k2, p1, p2[, k3]).
       /// That is, the first 2 radial distortion coefficients are followed by 2 tangential distortion coefficients and then, optionally, by the third radial distortion coefficients. Such ordering is used to keep backward compatibility with previous versions of OpenCV
       /// </summary>
-      public Matrix<float> DistortionCoeffs
+      public Matrix<double> DistortionCoeffs
       {
          get { return _distortionCoeffs; }
          set { _distortionCoeffs = value; }
@@ -28,7 +28,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get or Set the intrinsic matrix (3x3)
       /// </summary>
-      public Matrix<float> IntrinsicMatrix
+      public Matrix<double> IntrinsicMatrix
       {
          get { return _intrinsicMatrix; }
          set { _intrinsicMatrix = value; }
@@ -39,8 +39,8 @@ namespace Emgu.CV
       /// </summary>
       public IntrinsicCameraParameters()
       {
-         _intrinsicMatrix = new Matrix<float>(3, 3);
-         _distortionCoeffs = new Matrix<float>(5, 1);
+         _intrinsicMatrix = new Matrix<double>(3, 3);
+         _distortionCoeffs = new Matrix<double>(5, 1);
       }
 
       /// <summary>
