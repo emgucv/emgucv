@@ -241,9 +241,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, channelCount);
          GC.AddMemoryPressure(HeaderSize.MIplImage);
 
-         MIplImage iplImage = MIplImage;
-
-         Debug.Assert(iplImage.align == 4, "Only 4 align is supported at this moment");
+         Debug.Assert(Marshal.ReadInt32(Ptr, Marshal.OffsetOf(typeof(MIplImage), "align").ToInt32()) == 4, "Only 4 align is supported at this moment");
 
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
@@ -350,18 +348,6 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> 
-      ///Get the width of the image ( number of pixels in the x direction),
-      ///if ROI is set, the width of the ROI 
-      ///</summary>
-      public override int Width { get { return CvInvoke.cvGetSize(Ptr).Width; } }
-
-      ///<summary> 
-      ///Get the height of the image ( number of pixels in the y direction ),
-      ///if ROI is set, the height of the ROI 
-      ///</summary> 
-      public override int Height { get { return CvInvoke.cvGetSize(Ptr).Height; } }
-
       /// <summary>
       /// Get the number of channels for this image
       /// </summary>
@@ -383,17 +369,6 @@ namespace Emgu.CV
       public override System.Array ManagedArray
       {
          get { return _array; }
-      }
-
-      ///<summary> 
-      /// Get the size of the internal iplImage structure, regardness of the ROI of this image: X -- Width; Y -- Height.
-      ///</summary>
-      public System.Drawing.Size Size
-      {
-         get
-         {
-            return CvInvoke.cvGetSize(_ptr);
-         }
       }
 
       /// <summary>
@@ -521,7 +496,7 @@ namespace Emgu.CV
       /// <returns> The image of the same size</returns>
       public Image<TColor, TDepth> CopyBlank()
       {
-         return new Image<TColor, TDepth>(Width, Height);
+         return new Image<TColor, TDepth>(Size);
       }
 
       /// <summary>
@@ -568,7 +543,7 @@ namespace Emgu.CV
       {
          CvInvoke.cvRectangle(
              Ptr,
-             new Point(rect.X, rect.Y ),
+             new Point(rect.X, rect.Y),
              new Point(rect.X + rect.Width, rect.Y + rect.Height),
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
@@ -625,7 +600,6 @@ namespace Emgu.CV
                 0);
       }
 
-      
       ///<summary> Draw a convex polygon using the specific color and thickness </summary>
       ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the triangle </param>
@@ -657,7 +631,6 @@ namespace Emgu.CV
          CvInvoke.cvFillConvexPoly(Ptr, pts, pts.Length, color.MCvScalar, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
       }
 
-      
       /// <summary>
       /// Draw the polyline defined by the array of 2D points
       /// </summary>
@@ -1154,7 +1127,7 @@ namespace Emgu.CV
             action(this, 0);
          else
          {
-            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Width, Height))
+            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
@@ -1178,7 +1151,7 @@ namespace Emgu.CV
             res[0] = conv(this, 0);
          else
          {
-            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Width, Height))
+            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
@@ -1204,8 +1177,8 @@ namespace Emgu.CV
             act(Ptr, dest.Ptr, 0);
          else
          {
-            using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Width, Height))
-            using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Width, dest.Height))
+            using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Size))
+            using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Size))
             {
                for (int i = 0; i < NumberOfChannels; i++)
                {
@@ -2585,8 +2558,7 @@ namespace Emgu.CV
             #region reallocate memory if necessary
             if (Ptr == IntPtr.Zero || Width != value.Width || Height != value.Height)
             {
-               DisposeObject();
-               AllocateData(value.Height, value.Width, new TColor().Dimension);
+               AllocateData(value.Height, value.Width, NumberOfChannels);
             }
             #endregion
 

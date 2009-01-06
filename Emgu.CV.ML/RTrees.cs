@@ -10,18 +10,26 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Wrapped CvDTree class in machine learning library
    /// </summary>
-   public class DTree : Emgu.CV.ML.StatModel
+   public class RTrees : Emgu.CV.ML.StatModel
    {
       /// <summary>
-      /// Create a default decision tree
+      /// Create a random tree
       /// </summary>
-      public DTree()
+      public RTrees()
       {
-         _ptr = MlInvoke.CvDTreeCreate();
+         _ptr = MlInvoke.CvRTreesCreate();
       }
 
       /// <summary>
-      /// Train the decision tree using the specific traning data
+      /// Release the random tree and all memory associate with it
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         MlInvoke.CvRTreesRelease(_ptr);
+      }
+
+      /// <summary>
+      /// Train the random tree using the specific traning data
       /// </summary>
       /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
       /// <param name="tflag">data layout type</param>
@@ -30,7 +38,7 @@ namespace Emgu.CV.ML
       /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
       /// <param name="varType">The types of input variables</param>
       /// <param name="missingMask">Can be null if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
-      /// <param name="param">The parameters for training the decision tree</param>
+      /// <param name="param">The parameters for training the random tree</param>
       /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
@@ -40,9 +48,9 @@ namespace Emgu.CV.ML
          Matrix<int> sampleIdx,
          Matrix<int> varType,
          Matrix<int> missingMask,
-         MCvDTreeParams param)
+         MCvRTParams param)
       {
-         return MlInvoke.CvDTreeTrain(
+         return MlInvoke.CvRTreesTrain(
             _ptr,
             trainData.Ptr,
             tflag,
@@ -55,27 +63,17 @@ namespace Emgu.CV.ML
       }
 
       /// <summary>
-      /// The method takes the feature vector and the optional missing measurement mask on input, traverses the decision tree and returns the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure
+      /// The method takes the feature vector and the optional missing measurement mask on input, traverses the random tree and returns the cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)
       /// </summary>
       /// <param name="sample">The sample to be predicted</param>
       /// <param name="missingDataMask">Can be null if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
-      /// <param name="rawMode">normally set to false that implies a regular input. If it is true, the method assumes that all the values of the discrete input variables have been already normalized to 0..num_of_categoriesi-1 ranges. (as the decision tree uses such normalized representation internally). It is useful for faster prediction with tree ensembles. For ordered input variables the flag is not used. </param>
-      /// <returns>Pointer to the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure</returns>
-      public MCvDTreeNode Predict(
+      /// <returns>The cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)</returns>
+      public float Predict(
          Matrix<float> sample,
-         Matrix<int> missingDataMask,
-         bool rawMode)
+         Matrix<int> missingDataMask)
       {
-         IntPtr node = MlInvoke.CvDTreePredict(_ptr, sample.Ptr, missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr, rawMode);
-         return (MCvDTreeNode)Marshal.PtrToStructure(node, typeof(MCvDTreeNode));
-      }
-
-      /// <summary>
-      /// Release the decision tree and all the memory associate with it
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         MlInvoke.CvDTreeRelease(_ptr);
+         return MlInvoke.CvRTreesPredict(_ptr, sample.Ptr, missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr);
+         
       }
    }
 }

@@ -141,12 +141,6 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> The Width (Number of rows) of the Matrix </summary>
-      public override int Width { get { return MCvMat.width; } }
-
-      ///<summary> The Height (Number of columns) of the Matrix </summary>
-      public override int Height { get { return MCvMat.height; } }
-
       /// <summary>
       /// Get the underneath managed array
       /// </summary>

@@ -33,16 +33,41 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
-         /*
 #if LINUX
 #else
+         /*
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-         Emgu.Util.Toolbox.SetDllDirectory(System.IO.Path.GetDirectoryName(asm.Location));
-#endif
+         System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
+         System.IO.DirectoryInfo directory = file.Directory;
+         //System.Security.AccessControl.DirectorySecurity security = directory.GetAccessControl();
+         Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
          */
 
-         //Use the custome error handler
+         String loadLibraryErrorMessage =
+            "Unable to load {0}. Please check the following: 1. {0} is located in the same folder as Emgu.CV.dll; 2. MSVCRT 8.0 SP1 is installed.";
+         LoadLibrary(CXCORE_LIBRARY, loadLibraryErrorMessage);
+         LoadLibrary(CV_LIBRARY, loadLibraryErrorMessage);
+         LoadLibrary(HIGHGUI_LIBRARY, loadLibraryErrorMessage);
+         LoadLibrary(CVAUX_LIBRARY, loadLibraryErrorMessage);
+#endif
+
+         //Use the custom error handler
          cvRedirectError(DefaultCvErrorHandler, IntPtr.Zero, IntPtr.Zero);
+      }
+
+      private static void LoadLibrary(string libraryName, string errorMessage)
+      {
+         errorMessage = String.Format(errorMessage, libraryName);
+         try
+         {
+            IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(libraryName);
+            if (handle == IntPtr.Zero)
+               throw new DllNotFoundException(errorMessage);
+         }
+         catch (Exception e)
+         {
+            throw new DllNotFoundException(errorMessage, e);
+         }
       }
 
       #region CXCORE_LIBRARY
@@ -363,6 +388,38 @@ namespace Emgu.CV
           IntPtr src2,
           IntPtr src3,
           IntPtr dst);
+
+      /// <summary>
+      /// The function cvMixChannels is a generalized form of cvSplit and cvMerge and some forms of cvCvtColor. It can be used to change the order of the planes, add/remove alpha channel, extract or insert a single plane or multiple planes etc.
+      /// </summary>
+      /// <param name="src">The array of input arrays.</param>
+      /// <param name="srcCount">The number of input arrays</param>
+      /// <param name="dst">The array of output arrays</param>
+      /// <param name="dstCount">The number of output arrays</param>
+      /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
+      /// <param name="pairCount">The number of pairs in from_to, or the number of the planes copied</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvMixChannels( 
+         IntPtr[] src, 
+         int srcCount,
+         IntPtr[] dst, 
+         int dstCount,
+         int[] fromTo, 
+         int pairCount );
+
+      /// <summary>
+      /// The function cvMixChannels is a generalized form of cvSplit and cvMerge and some forms of cvCvtColor. It can be used to change the order of the planes, add/remove alpha channel, extract or insert a single plane or multiple planes etc.
+      /// </summary>
+      /// <param name="src">The array of input arrays.</param>
+      /// <param name="dst">The array of output arrays</param>
+      /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
+      public static void cvMixChannels(
+         IntPtr[] src,
+         IntPtr[] dst,
+         int[] fromTo)
+      {
+         cvMixChannels(src, src.Length, dst, dst.Length, fromTo, fromTo.Length >> 1);
+      }
 
       /// <summary>
       /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not NULL, all they are copied to the destination array, otherwise if only a single source channel of the first N is not NULL, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be NULL. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
@@ -2217,6 +2274,73 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern String cvErrorStr(int status);
 
+      #region File Storage
+      /// <summary>
+      /// Opens file storage for reading or writing data. In the latter case a new file is created or existing file is rewritten. Type of the read of written file is determined by the filename extension: .xml for XML, and .yml or .yaml for YAML
+      /// </summary>
+      /// <param name="filename">Name of the file associated with the storage</param>
+      /// <param name="memstorage">Memory storage used for temporary data and for storing dynamic structures, such as CvSeq or CvGraph. If it is NULL, a temporary memory storage is created and used</param>
+      /// <param name="flags"></param>
+      /// <returns>Pointer to CvFileStorage structure</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvOpenFileStorage(
+         [MarshalAs(_stringMarshalType)] String filename, 
+         IntPtr memstorage, 
+         CvEnum.STORAGE_OP flags );
+
+      /// <summary>
+      /// Closes the file associated with the storage and releases all the temporary structures. It must be called after all I/O operations with the storage are finished
+      /// </summary>
+      /// <param name="fs">Reference to the pointer of the released file storage</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvReleaseFileStorage(ref IntPtr fs);
+      #endregion 
+
+      #region Reading Data
+      
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="fs">File storage</param>
+      /// <param name="map">The parent map. If it is IntPtr.Zero, the function searches a top-level node</param>
+      /// <param name="name">The node name</param>
+      /// <returns></returns>
+      public static IntPtr cvReadByName(
+         IntPtr fs,
+         IntPtr map,
+         String name)
+      {
+         return cvRead(fs, cvGetFileNodeByName(fs, map, name), IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Decodes user object (creates object in a native representation from the file storage subtree) and returns it
+      /// </summary>
+      /// <param name="fs">File storage</param>
+      /// <param name="node">The root object node</param>
+      /// <param name="attributes">Unused parameter</param>
+      /// <returns>Pointer to the user object</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvRead( 
+         IntPtr fs, 
+         IntPtr node,
+         IntPtr attributes);
+
+      /// <summary>
+      /// Finds a file node by name
+      /// </summary>
+      /// <param name="fs">File storage</param>
+      /// <param name="map">The parent map. If it is NULL, the function searches in all the top-level nodes (streams), starting from the first one. </param>
+      /// <param name="name">The file node name</param>
+      /// <returns>Pointer to the specific file node</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvGetFileNodeByName(
+         IntPtr fs,
+         IntPtr map,
+         [MarshalAs(_stringMarshalType)] String name);
+
+      #endregion
+
       #region Miscellaneous Functions
       /// <summary>
       /// implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix
@@ -3317,26 +3441,6 @@ namespace Emgu.CV
           CvEnum.CALIB_TYPE flags);
 
       /// <summary>
-      /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
-      /// </summary>
-      /// <param name="points1">Array of the first image points of 2xN, Nx2, 3xN or Nx3 size (where N is number of points). Multi-channel 1xN or Nx1 array is also acceptable. The point coordinates should be floating-point (single or double precision) </param>
-      /// <param name="points2">Array of the second image points of the same size and format as points1</param>
-      /// <param name="fundamentalMatrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
-      /// <param name="method">Method for computing the fundamental matrix </param>
-      /// <param name="param1"></param>
-      /// <param name="param2"></param>
-      /// <param name="status"></param>
-      /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern int cvFindFundamentalMat(IntPtr points1,
-         IntPtr points2,
-         IntPtr fundamentalMatrix,
-         CvEnum.CV_FM method,
-         double param1,
-         double param2,
-         IntPtr status);
-
-      /// <summary>
       /// computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
       /// </summary>
       /// <param name="calibMatr">The matrix of intrinsic parameters</param>
@@ -3591,6 +3695,27 @@ namespace Emgu.CV
 
       #endregion
 
+      #region Epipolar Geometry, Stereo Correspondence
+      /// <summary>
+      /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
+      /// </summary>
+      /// <param name="points1">Array of the first image points of 2xN, Nx2, 3xN or Nx3 size (where N is number of points). Multi-channel 1xN or Nx1 array is also acceptable. The point coordinates should be floating-point (single or double precision) </param>
+      /// <param name="points2">Array of the second image points of the same size and format as points1</param>
+      /// <param name="fundamentalMatrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
+      /// <param name="method">Method for computing the fundamental matrix </param>
+      /// <param name="param1"></param>
+      /// <param name="param2"></param>
+      /// <param name="status"></param>
+      /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern int cvFindFundamentalMat(IntPtr points1,
+         IntPtr points2,
+         IntPtr fundamentalMatrix,
+         CvEnum.CV_FM method,
+         double param1,
+         double param2,
+         IntPtr status);
+
       /// <summary>
       /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]T, so that: 
       /// lT*[x, y, 1]T=0, or
@@ -3635,6 +3760,71 @@ namespace Emgu.CV
       /// <param name="state">The state to be released</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvReleaseStereoBMState(ref IntPtr state);
+
+      /// <summary>
+      /// computes disparity map for the input rectified stereo pair.
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindStereoCorrespondenceBM(
+         IntPtr left,
+         IntPtr right,
+         IntPtr disparity,
+         IntPtr state);
+
+      /// <summary>
+      /// Creates the stereo correspondence structure and initializes it. 
+      /// </summary>
+      /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
+      /// <param name="maxIters">Maximum number of iterations. On each iteration all possible (or reasonable) alpha-expansions are tried. The algorithm may terminate earlier if it could not find an alpha-expansion that decreases the overall cost function value</param>
+      /// <returns>The initialized stereo correspondence structure</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvCreateStereoGCState(
+         int numberOfDisparities,
+         int maxIters);
+
+      /// <summary>
+      /// Releases the stereo correspondence structure and all the associated internal buffers
+      /// </summary>
+      /// <param name="state">A reference to the pointer of StereoGCState structure</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReleaseStereoGCState(ref IntPtr state);
+
+      /// <summary>
+      /// Computes disparity maps for the input rectified stereo pair
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
+      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindStereoCorrespondenceGC( 
+         IntPtr left, 
+         IntPtr right,
+         IntPtr dispLeft, 
+         IntPtr dispRight,
+         IntPtr state,
+         int useDisparityGuess);
+
+      /// <summary>
+      /// Transforms 1-channel disparity map to 3-channel image, a 3D surface.
+      /// </summary>
+      /// <param name="disparity">Disparity map</param>
+      /// <param name="image3D">3-channel, 16-bit integer or 32-bit floating-point image - the output map of 3D points</param>
+      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReprojectImageTo3D( 
+         IntPtr disparity,
+         IntPtr image3D, 
+         IntPtr Q );
+
+
+      #endregion 
 
       /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 

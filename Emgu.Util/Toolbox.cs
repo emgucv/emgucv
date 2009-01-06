@@ -293,7 +293,7 @@ namespace Emgu.Util
       /// <returns>the byte vector</returns>
       public static Byte[] ToBytes<D>(D[] data)
       {
-         int size = System.Runtime.InteropServices.Marshal.SizeOf(data[0]) * data.Length;
+         int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * data.Length;
          Byte[] res = new Byte[size];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          Marshal.Copy(handle.AddrOfPinnedObject(), res, 0, size);
@@ -391,4 +391,3 @@ namespace Emgu.Util
 
    }
 }
-

@@ -13,18 +13,18 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Point of the contour where the defect begins
       /// </summary>
-      IntPtr start; 
+      public IntPtr start; 
       /// <summary>
       /// Point of the contour where the defect ends
       /// </summary>
-      IntPtr end; 
+      public IntPtr end; 
       /// <summary>
       /// The farthest from the convex hull point within the defect
       /// </summary>
-      IntPtr depth_point;
+      public IntPtr depth_point;
       /// <summary>
       /// Distance between the farthest point and the convex hull
       /// </summary>
-      float depth; 
+      public float depth; 
    }
 }

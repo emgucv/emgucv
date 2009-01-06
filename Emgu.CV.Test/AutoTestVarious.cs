@@ -772,6 +772,19 @@ namespace Emgu.CV.Test
          //Application.Run(new ImageViewer(img));
       }
 
+      [Test]
+      public void TestStereoCorrespondence()
+      {
+         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
+         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Image<Gray, float> leftDisparity = new Image<Gray, float>(left.Size);
+         Image<Gray, float> rightDisparity = new Image<Gray, float>(left.Size);
+         IntPtr state = CvInvoke.cvCreateStereoGCState(16, 2);
+         CvInvoke.cvFindStereoCorrespondenceGC(left, right, leftDisparity, rightDisparity, state, 0);
+         CvInvoke.cvReleaseStereoGCState(ref state);
+         //ImageViewer.Show(leftDisparity*(-16));
+      }
+
       //TODO: Figure out why the following test case cannot passed
       /*
       [Test]

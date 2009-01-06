@@ -1902,4 +1902,23 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CONTOUR_TREES_MATCH_I1  = 1
    }
+
+   /// <summary>
+   /// The file storage operation type
+   /// </summary>
+   public enum STORAGE_OP
+   {
+      /// <summary>
+      /// The storage is open for reading
+      /// </summary>
+      READ = 0,
+      /// <summary>
+      /// The storage is open for writing
+      /// </summary>
+      WRITE = 1,
+      /// <summary>
+      /// The storage is open for append
+      /// </summary>
+      APPEND = 2
+   }
 }

@@ -398,7 +398,7 @@ namespace Emgu.CV.ML
          IntPtr outputs);
       #endregion 
 
-      #region decision tree
+      #region Decision tree
       /// <summary>
       /// Create default parameters for CvDTreeParams
       /// </summary>
@@ -409,6 +409,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Release the CvDTreeParams
       /// </summary>
+      /// <param name="dTreeParam">Pointer to the decision tree parameters to be released</param>
       [DllImport(EXTERN_LIBRARY)]
       public static extern void CvDTreeParamsRelease(IntPtr dTreeParam);
 
@@ -426,18 +427,129 @@ namespace Emgu.CV.ML
       [DllImport(EXTERN_LIBRARY)]
       public static extern void CvDTreeRelease(IntPtr model);
 
+      /// <summary>
+      /// Train the decision tree using the specific training data
+      /// </summary>
+      /// <param name="model">The Decision Tree model</param>
+      /// <param name="tflag">The data layout type of the train data</param>
+      /// <param name="varIdx">Can be IntPtr.Zero if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varType">The types of input variables</param>
+      /// <param name="missingMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="param">The parameters for training the decision tree</param>
+      /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern bool CvDTreeTrain(
          IntPtr model, 
-         IntPtr _train_data, 
-         int _tflag,
-         IntPtr _responses,
-         IntPtr _var_idx,
-         IntPtr _sample_idx,
-         IntPtr _var_type,
-         IntPtr _missing_mask,
+         IntPtr trainData,
+         MlEnum.DATA_LAYOUT_TYPE tflag,
+         IntPtr responses,
+         IntPtr varIdx,
+         IntPtr sampleIdx,
+         IntPtr varType,
+         IntPtr missingMask,
          MCvDTreeParams param);
 
+      /// <summary>
+      /// The method takes the feature vector and the optional missing measurement mask on input, traverses the decision tree and returns the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure
+      /// </summary>
+      /// <param name="model">The decision tree model</param>
+      /// <param name="sample">The sample to be predicted</param>
+      /// <param name="missingDataMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
+      /// <param name="rawMode">normally set to false that implies a regular input. If it is true, the method assumes that all the values of the discrete input variables have been already normalized to 0..num_of_categoriesi-1 ranges. (as the decision tree uses such normalized representation internally). It is useful for faster prediction with tree ensembles. For ordered input variables the flag is not used. </param>
+      /// <returns>Pointer to the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvDTreePredict(
+         IntPtr model,
+         IntPtr sample,
+         IntPtr missingDataMask,
+         bool rawMode);
+      #endregion
+
+      #region Random tree
+      /// <summary>
+      /// Create default parameters for CvRTParams
+      /// </summary>
+      /// <returns>Pointer to the default CvRTParams</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvRTParamsCreate();
+
+      /// <summary>
+      /// Release the CvRTParams
+      /// </summary>
+      /// <param name="rTreesParam">Pointer to the random tree parameters to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvRTParamsRelease(IntPtr rTreesParam);
+
+      /// <summary>
+      /// Create a default random tree
+      /// </summary>
+      /// <returns>Pointer to the random tree</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvRTreesCreate();
+
+      /// <summary>
+      /// Release the random tree model
+      /// </summary>
+      /// <param name="model">The random tree model to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvRTreesRelease(IntPtr model);
+
+      /// <summary>
+      /// Train the random tree using the specific traning data
+      /// </summary>
+      /// <param name="model">The Random Tree model</param>
+      /// <param name="tFlag">The data layout type of the train data</param>
+      /// <param name="missingMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="param">The parameters for training the random tree</param>
+      /// <param name="varIdx">Can be IntPtr.Zero if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varType">The types of input variables</param>
+      /// <returns></returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern bool CvRTreesTrain(
+         IntPtr model,
+         IntPtr trainData,
+         MlEnum.DATA_LAYOUT_TYPE tFlag,
+         IntPtr responses,
+         IntPtr varIdx,
+         IntPtr sampleIdx,
+         IntPtr varType,
+         IntPtr missingMask,
+         MCvRTParams param);
+
+      /// <summary>
+      /// The method takes the feature vector and the optional missing measurement mask on input, traverses the random tree and returns the cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)
+      /// </summary>
+      /// <param name="model">The decision tree model</param>
+      /// <param name="sample">The sample to be predicted</param>
+      /// <param name="missingDataMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
+      /// <returns>The cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern float CvRTreesPredict(
+         IntPtr model,
+         IntPtr sample,
+         IntPtr missingDataMask);
+      #endregion
+
+      #region Boost
+      /// <summary>
+      /// Create a default boost classicfier
+      /// </summary>
+      /// <returns>Pointer to the boost classicfier</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvBoostCreate();
+
+      /// <summary>
+      /// Release the boost classicfier
+      /// </summary>
+      /// <param name="model">The boost classicfier to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvBoostRelease(IntPtr model);
       #endregion
    }
 }

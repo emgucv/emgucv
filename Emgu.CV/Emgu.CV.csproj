@@ -124,6 +124,7 @@
     <Compile Include="Shape\IConvexPolygonF.cs" />
     <Compile Include="Shape\Triangle2DF.cs" />
     <Compile Include="Shape\Triangle3DF.cs" />
+    <Compile Include="StereoBMState.cs" />
     <Compile Include="StructuringElementEx.cs" />
     <Compile Include="SURFFeature.cs" />
     <Compile Include="MemStorage.cs" />

@@ -189,6 +189,15 @@ namespace Emgu.CV.ML.UnitTest
       }
 
       [Test]
+      public void TestRTrees()
+      {
+         using (RTrees tree = new RTrees())
+         {
+            MCvRTParams param = MCvRTParams.GetDefaultParameter();
+         }
+      }
+
+      [Test]
       public void TestANN_MLP()
       {
          int trainSampleCount = 100;

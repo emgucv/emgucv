@@ -60,14 +60,27 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      /// The width of the Array 
+      /// Get the size of the array
       ///</summary>
-      public abstract int Width { get; }
+      public System.Drawing.Size Size
+      {
+         get
+         {
+            return CvInvoke.cvGetSize(_ptr);
+         }
+      }
 
       ///<summary> 
-      /// The height of the Array 
-      /// </summary>
-      public abstract int Height { get; }
+      ///Get the width (#Cols) of the cvArray
+      ///if ROI is set, the width of the ROI 
+      ///</summary>
+      public int Width { get { return Size.Width; } }
+
+      ///<summary> 
+      ///Get the height (#Rows) of the cvArray
+      ///if ROI is set, the height of the ROI 
+      ///</summary> 
+      public int Height { get { return Size.Height; } }
 
       /// <summary>
       /// Get the number of channels of the array
@@ -171,7 +184,7 @@ namespace Emgu.CV
       protected abstract void AllocateData(int rows, int cols, int numberOfChannels);
 
       /// <summary>
-      /// sum of diagonal elements of the matrix 
+      /// Sum of diagonal elements of the matrix 
       /// </summary>
       [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
       public MCvScalar Trace
@@ -345,6 +358,7 @@ namespace Emgu.CV
 
       #endregion
 
+      #region Inplace Arithmatic
       /// <summary>
       /// Inplace multiply elements of the Array by <paramref name="scale"/>
       /// </summary>
@@ -362,6 +376,7 @@ namespace Emgu.CV
       {
          CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
       }
+      #endregion
 
       #region UnmanagedObject
       /// <summary>
@@ -374,7 +389,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region Comparison
+      #region Inplace Comparison
       ///<summary>
       ///Inplace compute the elementwise minimum value 
       ///</summary>
@@ -451,6 +466,7 @@ namespace Emgu.CV
 
       #endregion
 
+      #region File IO
       /// <summary>
       /// Save the CvArray as image
       /// </summary>
@@ -469,6 +485,7 @@ namespace Emgu.CV
             throw new NotImplementedException(String.Format("Saving to {0} Format is not implemented", fi.Extension));
          }
       }
+      #endregion
 
       #region IXmlSerializable Members
 

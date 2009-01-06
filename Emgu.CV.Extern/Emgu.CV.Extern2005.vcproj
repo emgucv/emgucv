@@ -60,6 +60,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="ml.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
+				LinkIncremental="0"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -178,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cvBoost.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cvDTree.cpp"
 				>
 			</File>
@@ -191,6 +196,10 @@
 			</File>
 			<File
 				RelativePath=".\cvNormalBayesClassifier.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cvRTrees.cpp"
 				>
 			</File>
 			<File

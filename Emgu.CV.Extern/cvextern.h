@@ -82,7 +82,25 @@ extern EMGU_CV_EXTERN_API bool CvDTreeTrain(CvDTree* model, const CvMat* _train_
                      const CvMat* _sample_idx=0, const CvMat* _var_type=0,
                      const CvMat* _missing_mask=0,
                      CvDTreeParams params=CvDTreeParams() );
+extern EMGU_CV_EXTERN_API CvDTreeNode* predict(CvDTree* model, const CvMat* _sample, const CvMat* _missing_data_mask=0,
+                                  bool raw_mode=false );
 
+//Random Tree
+extern EMGU_CV_EXTERN_API CvRTParams* CvRTParamsCreate();
+extern EMGU_CV_EXTERN_API void CvRTParamsRelease(CvRTParams* params);
+
+extern EMGU_CV_EXTERN_API CvRTrees* CvRTreesCreate();
+extern EMGU_CV_EXTERN_API void CvRTreesRelease(CvRTrees* model);
+extern EMGU_CV_EXTERN_API bool CvRTreesTrain( CvRTrees* model, const CvMat* _train_data, int _tflag,
+                        const CvMat* _responses, const CvMat* _var_idx=0,
+                        const CvMat* _sample_idx=0, const CvMat* _var_type=0,
+                        const CvMat* _missing_mask=0,
+                        CvRTParams params=CvRTParams() );
+extern EMGU_CV_EXTERN_API float CvRTreesPredict(CvRTrees* model, const CvMat* sample, const CvMat* missing = 0 );
+
+//CvBoost
+extern EMGU_CV_EXTERN_API CvBoost* CvBoostCreate();
+extern EMGU_CV_EXTERN_API void CvBoostRelease(CvBoost* model);
 #if defined(__cplusplus)
 }
 #endif

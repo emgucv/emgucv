@@ -2,26 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.ML.Structure
 {
    /// <summary>
-   /// Parameters OpenCV's decision tree
+   /// Wrapped CvRTParams structure
    /// </summary>
-   public struct MCvDTreeParams
+   [StructLayout(LayoutKind.Sequential)]
+   public struct MCvRTParams
    {
       /// <summary>
       /// Get the default Decision tree training parameters
       /// </summary>
       /// <returns>The default Decision tree training parameters</returns>
-      public static MCvDTreeParams GetDefaultParameter()
+      public static MCvRTParams GetDefaultParameter()
       {
-         IntPtr ptr = MlInvoke.CvDTreeParamsCreate();
-         MCvDTreeParams p = (MCvDTreeParams) Marshal.PtrToStructure(ptr, typeof(MCvDTreeParams));
-         MlInvoke.CvDTreeParamsRelease(ptr);
+         IntPtr ptr = MlInvoke.CvRTParamsCreate();
+         MCvRTParams p = (MCvRTParams)Marshal.PtrToStructure(ptr, typeof(MCvRTParams));
+         MlInvoke.CvRTParamsRelease(ptr);
          return p;
       }
 
+      #region MCvTreeParams
       /// <summary>
       /// If a discrete variable, on which the training procedure tries to make a split, takes more than max_categories values, the precise best subset estimation may take a very long time (as the algorithm is exponential). Instead, many decision trees engines (including ML) try to find sub-optimal split in this case by clustering all the samples into max_categories clusters (i.e. some categories are merged together).
       ///Note that this technique is used only in N(>2)-class classification problems. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.
@@ -60,5 +63,23 @@ namespace Emgu.CV.ML.Structure
       /// </summary>
       /// <remarks>A note about memory management: the field priors  is a pointer to the array of floats. The array should be allocated by user, and released just after the CvDTreeParams structure is passed to CvDTreeTrainData or CvDTree constructors/methods (as the methods make a copy of the array).</remarks>
       public IntPtr priors;
+      #endregion
+
+      /// <summary>
+      /// If it is set, then variable importance is computed by the training procedure. To retrieve the computed variable importance array, call the method CvRTrees::get_var_importance()
+      /// </summary>
+      public bool calcVarImportance;
+
+      /// <summary>
+      /// The number of variables that are randomly selected at each tree node and that are used to find the best split(s). 
+      /// </summary>
+      public int nactiveVars;
+
+      /// <summary>
+      /// Termination criteria for growing the forest: term_crit.max_iter is the maximum number of trees in the forest (see also max_tree_count parameter of the constructor, by default it is set to 50)
+      /// term_crit.epsilon is the sufficient accuracy (OOB error). 
+      /// </summary>
+      public MCvTermCriteria termCrit;
+
    }
 }
