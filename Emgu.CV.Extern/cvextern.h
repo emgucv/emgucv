@@ -1,6 +1,9 @@
+#ifndef CVEXTERN_H
+#define CVEXTERN_H
+
 #include "ml.h"
 
-#define EMGU_CV_EXTERN_API __declspec(dllexport)
+#define EMGU_CV_EXTERN_API "C"
 
 #if defined(__cplusplus)
 extern "C" 
@@ -103,4 +106,5 @@ extern EMGU_CV_EXTERN_API CvBoost* CvBoostCreate();
 extern EMGU_CV_EXTERN_API void CvBoostRelease(CvBoost* model);
 #if defined(__cplusplus)
 }
+#endif
 #endif
