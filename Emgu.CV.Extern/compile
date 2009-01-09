@@ -1,0 +1,9 @@
+svn export https://opencvlibrary.svn.sourceforge.net/svnroot/opencvlibrary/trunk ../opencvlibrary
+cp -rf ../Emgu.CV.Extern ../opencvlibrary/opencv
+cd ../opencvlibrary/opencv
+patch CMakeLists.txt Emgu.CV.Extern/OpencvCMakeLists.patch
+cmake CMakeLists.txt
+make all
+
+
+
