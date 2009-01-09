@@ -20,7 +20,7 @@ set_target_properties(${the_target} PROPERTIES
 	)
 
 
-add_dependencies(${the_target} cxcore cv cvaux highgui ml)
+add_dependencies(${the_target} cxcore cv ml)
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} cxcore cv cvaux highgui ml)
