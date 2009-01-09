@@ -6,22 +6,23 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.ML.Structure
 {
    /// <summary>
-   /// Parameters OpenCV's decision tree parameters
+   /// An OpenCV Boost Tree parameters
    /// </summary>
-   public struct MCvDTreeParams
+   public struct MCvBoostParams
    {
       /// <summary>
       /// Get the default Decision tree training parameters
       /// </summary>
       /// <returns>The default Decision tree training parameters</returns>
-      public static MCvDTreeParams GetDefaultParameter()
+      public static MCvBoostParams GetDefaultParameter()
       {
-         IntPtr ptr = MlInvoke.CvDTreeParamsCreate();
-         MCvDTreeParams p = (MCvDTreeParams) Marshal.PtrToStructure(ptr, typeof(MCvDTreeParams));
-         MlInvoke.CvDTreeParamsRelease(ptr);
+         IntPtr ptr = MlInvoke.CvBoostParamsCreate();
+         MCvBoostParams p = (MCvBoostParams)Marshal.PtrToStructure(ptr, typeof(MCvBoostParams));
+         MlInvoke.CvBoostParamsRelease(ptr);
          return p;
       }
 
+      #region DTreeParams
       /// <summary>
       /// If a discrete variable, on which the training procedure tries to make a split, takes more than max_categories values, the precise best subset estimation may take a very long time (as the algorithm is exponential). Instead, many decision trees engines (including ML) try to find sub-optimal split in this case by clustering all the samples into max_categories clusters (i.e. some categories are merged together).
       ///Note that this technique is used only in N(>2)-class classification problems. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.
@@ -60,5 +61,24 @@ namespace Emgu.CV.ML.Structure
       /// </summary>
       /// <remarks>A note about memory management: the field priors  is a pointer to the array of floats. The array should be allocated by user, and released just after the CvDTreeParams structure is passed to CvDTreeTrainData or CvDTree constructors/methods (as the methods make a copy of the array).</remarks>
       public IntPtr priors;
+      #endregion
+
+      /// <summary>
+      /// Boosting type
+      /// </summary>
+      public MlEnum.BOOST_TYPE boostType;
+      /// <summary>
+      /// The number of weak classifiers to build
+      /// </summary>
+      public int weakCount;
+      /// <summary>
+      /// Splitting criteria, used to choose optimal splits during a weak tree construction
+      /// </summary>
+      public int splitCriteria;
+      /// <summary>
+      /// The weight trimming ratio, within 0..1. See the discussion of it above. If the parameter is ?0 or >1, the trimming is not used, all the samples are used at each iteration. The default value is 0.95
+      /// </summary>
+      public double weightTrimRate;
+
    }
 }

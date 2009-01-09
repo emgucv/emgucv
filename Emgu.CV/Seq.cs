@@ -380,7 +380,7 @@ namespace Emgu.CV
          return new Seq<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
-             System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvContour)),
+             HeaderSize.MCvContour,
              stor.Ptr,
              CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
              accuracy,

@@ -198,6 +198,15 @@ namespace Emgu.CV.ML.UnitTest
       }
 
       [Test]
+      public void TestBoost()
+      {
+         using (Boost tree = new Boost())
+         {
+            MCvBoostParams param = MCvBoostParams.GetDefaultParameter();
+         }
+      }
+
+      [Test]
       public void TestANN_MLP()
       {
          int trainSampleCount = 100;

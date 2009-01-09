@@ -64,7 +64,7 @@ namespace Emgu.CV.Reflection
       /// <param name="image">The image to obtain pixel value from</param>
       /// <param name="location">The location to sample a pixel</param>
       /// <returns>The color at the specific location</returns>
-      public static ColorType GetPixelColor(IImage image, System.Drawing.Point location)
+      public static IColor GetPixelColor(IImage image, System.Drawing.Point location)
       {
          location.X = Math.Min(location.X, image.Width - 1);
          location.Y = Math.Min(location.Y, image.Height - 1);
@@ -73,7 +73,7 @@ namespace Emgu.CV.Reflection
          MethodInfo indexers = t.GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
          if (indexers != null)
          {
-            return indexers.Invoke(image, new object[2] { location.Y, location.X }) as ColorType;
+            return indexers.Invoke(image, new object[2] { location.Y, location.X }) as IColor;
          }
          else
          {

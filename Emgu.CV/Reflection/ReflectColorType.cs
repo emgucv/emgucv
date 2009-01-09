@@ -12,7 +12,7 @@ namespace Emgu.CV.Reflection
       /// <summary>
       /// Get the display color for each channel
       /// </summary>
-      public static System.Drawing.Color[] GetChannelDisplayColor(ColorType color)
+      public static System.Drawing.Color[] GetDisplayColorOfChannels(IColor color)
       {
          List<System.Drawing.Color> channelColor = new List<System.Drawing.Color>();
          foreach (System.Reflection.PropertyInfo pInfo in color.GetType().GetProperties())
@@ -29,6 +29,30 @@ namespace Emgu.CV.Reflection
          for (int i = 0; i < color.Dimension; i++)
          {
             res[i] = System.Drawing.Color.Gray;
+         }
+         return res;
+      }
+
+      /// <summary>
+      /// Get the names for each channel
+      /// </summary>
+      public static String[] GetNamesOfChannels(IColor t)
+      {
+         List<String> channelNames = new List<string>();
+         foreach (System.Reflection.PropertyInfo pInfo in t.GetType().GetProperties())
+         {
+            Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
+            if (displayAtts.Length > 0)
+            {
+               channelNames.Add(pInfo.Name);
+            }
+         }
+         if (channelNames.Count > 0) return channelNames.ToArray();
+
+         String[] res = new string[t.Dimension];
+         for (int i = 0; i < t.Dimension; i++)
+         {
+            res[i] = "Channel " + i;
          }
          return res;
       }

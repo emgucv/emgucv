@@ -456,7 +456,7 @@ namespace Emgu.CV.UI
          {
             IImage img = DisplayedImage;
 
-            ColorType color = img == null ?
+            IColor color = img == null ?
                null :
                Reflection.ReflectIImage.GetPixelColor(img, e.Location);
             

@@ -1137,7 +1137,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvMat(int rows, int cols, CV.CvEnum.MAT_DEPTH type, IntPtr data)
       {
-         IntPtr mat = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvMat)));
+         IntPtr mat = Marshal.AllocHGlobal(HeaderSize.MCvMat);
          CvInvoke.cvInitMatHeader(mat, rows, cols, type, data, 0);
          return mat;
       }

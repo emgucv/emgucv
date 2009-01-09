@@ -9,15 +9,20 @@ namespace Emgu.CV
    ///Defines a Bgr (Blue Green Red) color
    ///</summary>
    [ColorInfo(ConversionCodename = "BGR")]
-   public class Bgr : ColorType, IEquatable<Bgr>
+   public struct Bgr: IColor, IEquatable<Bgr>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a BGR color using the specific values</summary>
       ///<param name="blue"> The blue value for this color </param>
       ///<param name="green"> The green value for this color </param>
       ///<param name="red"> The red value for this color </param>
       public Bgr(double blue, double green, double red)
-         : base(new MCvScalar(blue, green, red))
       {
+         _scalar = new MCvScalar(blue, green, red);
       }
 
       /// <summary>
@@ -25,14 +30,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr(System.Drawing.Color winColor)
-         : base(new MCvScalar(winColor.B, winColor.G, winColor.R))
       {
+         _scalar = new MCvScalar(winColor.B, winColor.G, winColor.R);
       }
-
-      ///<summary> Create a BGR color using the default values (0.0, 0.0, 0.0)</summary>
-      public Bgr()
-         : base()
-      { }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
@@ -59,12 +59,30 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+      #endregion
    }
 }

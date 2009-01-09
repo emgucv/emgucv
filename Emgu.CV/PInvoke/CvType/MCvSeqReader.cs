@@ -5,7 +5,7 @@ using System.Text;
 namespace Emgu.CV.Structure
 {
    /// <summary>
-   /// 
+   /// Wrapped CvSeqReader structure
    /// </summary>
    public struct MCvSeqReader
    {

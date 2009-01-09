@@ -9,21 +9,21 @@ namespace Emgu.CV
    ///Defines a HSV (Hue Satuation Value) color
    ///</summary>
    [ColorInfo(ConversionCodename = "HSV")]
-   public class Hsv : ColorType, IEquatable<Hsv>
+   public struct Hsv : IColor, IEquatable<Hsv>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a HSV color using the specific values</summary>
       ///<param name="hue"> The hue value for this color ( 0 &lt; hue &lt; 180 )  </param>
       ///<param name="satuation"> The satuation value for this color </param>
       ///<param name="value"> The value for this color </param>
       public Hsv(double hue, double satuation, double value)
-         : base(new MCvScalar(hue, satuation, value))
       {
+         _scalar = new MCvScalar(hue, satuation, value);
       }
-
-      ///<summary> Create a HSV color using the default values (0.0, 0.0, 0.0)</summary>
-      public Hsv()
-         : base()
-      { }
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
       [DisplayColor(122, 122, 122)]
@@ -50,12 +50,32 @@ namespace Emgu.CV
       }
 
       #endregion
+
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+
+      #endregion
    }
 }

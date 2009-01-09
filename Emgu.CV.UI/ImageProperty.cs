@@ -90,7 +90,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Set the color intensity of the pixel on the image where is mouse is at
       /// </summary>
-      public ColorType ColorIntensity
+      public IColor ColorIntensity
       {
          set
          {
@@ -172,9 +172,9 @@ namespace Emgu.CV.UI
 
          IImage[] channels = image.Split();
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
-         ColorType typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as ColorType;
-         String[] channelNames = typeOfColor.ChannelNames;
-         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetChannelDisplayColor(typeOfColor);// typeOfColor.GetChannelDisplayColor();
+         IColor typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as IColor;
+         String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
+         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);// typeOfColor.GetChannelDisplayColor();
 
          HistogramViewer hviewer = new HistogramViewer();
          System.Type typeOfDepth = imageType.GetGenericArguments()[1];

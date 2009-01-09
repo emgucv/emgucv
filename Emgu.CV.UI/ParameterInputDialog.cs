@@ -260,10 +260,10 @@ namespace Emgu.CV.UI
                       return new MCvScalar(values[0], values[1], values[2], values[3]);
                    };
             }
-            else if (paramType.IsSubclassOf(typeof(ColorType)))
+            else if (paramType.IsSubclassOf(typeof(IColor)))
             {
-               ColorType t = Activator.CreateInstance(paramType) as ColorType;
-               string[] channelNames = t.ChannelNames;
+               IColor t = Activator.CreateInstance(paramType) as IColor;
+               string[] channelNames = ReflectColorType.GetNamesOfChannels(t);
                TextBox[] inputBoxes = new TextBox[channelNames.Length];
                int boxWidth = 40;
 
@@ -284,7 +284,7 @@ namespace Emgu.CV.UI
                       {
                          values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
                       }
-                      ColorType color = Activator.CreateInstance(paramType) as ColorType;
+                      IColor color = Activator.CreateInstance(paramType) as IColor;
                       color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
                       return color;
                    };

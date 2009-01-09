@@ -79,7 +79,7 @@ namespace Emgu.CV
       /// </returns>
       public int Side(PointF point)
       {
-         float res = (P1.X - P1.X) * (point.Y - P1.Y) - (point.X - P1.X) * (P2.Y - P1.Y);
+         float res = (P2.X - P1.X) * (point.Y - P1.Y) - (point.X - P1.X) * (P2.Y - P1.Y);
          return res > 0.0f ? 1 :
             res < 0.0f ? -1 : 0;
       }

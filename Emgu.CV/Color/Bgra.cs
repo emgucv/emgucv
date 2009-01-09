@@ -9,15 +9,12 @@ namespace Emgu.CV
    ///Defines a Bgra (Blue Green Red Alpha) color
    ///</summary>
    [ColorInfo(ConversionCodename = "BGRA")]
-   public class Bgra : ColorType, IEquatable<Bgra>
+   public struct Bgra : IColor, IEquatable<Bgra>
    {
       /// <summary>
-      /// Create a BGRA color using the specific values
+      /// The MCvScalar representation of the color intensity
       /// </summary>
-      public Bgra()
-         : base()
-      {
-      }
+      private MCvScalar _scalar;
 
       ///<summary> Create a BGRA color using the specific values</summary>
       ///<param name="blue"> The blue value for this color </param>
@@ -25,8 +22,8 @@ namespace Emgu.CV
       ///<param name="red"> The red value for this color </param>
       ///<param name="alpha"> The alpha value for this color</param>
       public Bgra(double blue, double green, double red, double alpha)
-         : base(new MCvScalar(blue, green, red, alpha))
       {
+         _scalar = new MCvScalar(blue, green, red, alpha);
       }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
@@ -59,12 +56,32 @@ namespace Emgu.CV
       }
 
       #endregion
+
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 4; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+
+      #endregion
    }
 }

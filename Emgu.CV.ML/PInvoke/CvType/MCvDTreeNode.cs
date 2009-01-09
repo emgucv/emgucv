@@ -5,7 +5,7 @@ using System.Text;
 namespace Emgu.CV.ML.Structure
 {
    /// <summary>
-   /// An OpenCv decision Tree node
+   /// An OpenCV decision Tree Node
    /// </summary>
    public struct MCvDTreeNode
    {

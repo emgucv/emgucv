@@ -72,6 +72,7 @@
     <Compile Include="CameraCalibration\RotationVector3D.cs" />
     <Compile Include="Color\Bgra.cs" />
     <Compile Include="Color\DisplayColorAttribute.cs" />
+    <Compile Include="Color\IColor.cs" />
     <Compile Include="Contour.cs" />
     <Compile Include="HeaderSize.cs" />
     <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />
@@ -146,7 +147,6 @@
     <Compile Include="Capture\Capture.cs" />
     <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Shape\CircleF.cs" />
-    <Compile Include="Color\ColorType.cs" />
     <Compile Include="Seq.cs" />
     <Compile Include="ConvolutionKernelF.cs" />
     <Compile Include="PInvoke\CvEnum.cs" />
@@ -172,6 +172,7 @@
     <None Include="CV.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

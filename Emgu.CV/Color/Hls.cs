@@ -9,21 +9,22 @@ namespace Emgu.CV
    ///Defines a Hls (Hue Lightness Satuation) color
    ///</summary>
    [ColorInfo(ConversionCodename = "HLS")]
-   public class Hls : ColorType, IEquatable<Hls>
+   public struct Hls : IColor, IEquatable<Hls>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a Hls color using the specific values</summary>
       ///<param name="hue"> The hue value for this color ( 0 &lt; hue &lt; 180 )  </param>
       ///<param name="satuation"> The satuation for this color </param>
       ///<param name="lightness"> The lightness for this color </param>
       public Hls(double hue, double lightness, double satuation)
-         : base(new MCvScalar(hue, lightness, satuation))
       {
+         _scalar = new MCvScalar(hue, lightness, satuation);
       }
 
-      ///<summary> Create a Hls color using the default values (0.0, 0.0, 0.0)</summary>
-      public Hls()
-         : base()
-      { }
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
       [DisplayColor(255, 0, 0)]
@@ -48,12 +49,31 @@ namespace Emgu.CV
          return MCvScalar.Equals(other.MCvScalar);
       }
       #endregion
+
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+      #endregion
    }
 }

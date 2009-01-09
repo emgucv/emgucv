@@ -19,7 +19,7 @@ namespace Emgu.CV
    /// <typeparam name="TColor">Color type of this image</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, Single or Double)</typeparam>
    [Serializable]
-   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : ColorType, new()
+   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : IColor, new()
    {
       private TDepth[, ,] _array;
 
@@ -482,6 +482,21 @@ namespace Emgu.CV
          return res;
       }
 
+      /// <summary>
+      /// Make a copy of the specific ROI (Region of Interest)
+      /// </summary>
+      /// <param name="roi">The roi to be copied</param>
+      /// <returns>The image of the specific roi</returns>
+      public Image<TColor, TDepth> Copy(System.Drawing.Rectangle roi)
+      {
+         Rectangle currentRoi = ROI; //cache the current roi
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(roi.Width, roi.Height);
+         ROI = roi;
+         CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
+         ROI = currentRoi; //reset the roi
+         return res;
+      }
+
       ///<summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
       ///<returns> A copy of the image</returns>
       public Image<TColor, TDepth> Copy()
@@ -698,7 +713,7 @@ namespace Emgu.CV
              Ptr,
              new Point( (int) circle.Center.X, (int) circle.Center.Y),
              (int) circle.Radius,
-             color,
+             color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
              0);
@@ -717,7 +732,7 @@ namespace Emgu.CV
              ellipse.MCvBox2D.angle,
              0.0,
              360.0,
-             color,
+             color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
              0);
@@ -790,8 +805,8 @@ namespace Emgu.CV
          CvInvoke.cvDrawContours(
              Ptr,
              c.Ptr,
-             externalColor,
-             holeColor,
+             externalColor.MCvScalar,
+             holeColor.MCvScalar,
              maxLevel,
              thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -1274,7 +1289,7 @@ namespace Emgu.CV
             ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
             MCvSURFPoint[] surfPoints = keypoints.ToArray();
 
-            SURFFeature[] res = new SURFFeature[keypoints.Total];
+            SURFFeature[] res = new SURFFeature[surfPoints.Length];
 
             int elementsInDescriptor = param.extended == 0 ? 64 : 128;
             int bytesToCopy = elementsInDescriptor * sizeof(float);
@@ -2351,7 +2366,7 @@ namespace Emgu.CV
          Exposable = true,
          Category = "Convertion",
          GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte,System.Double")]
-      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.ColorType, new()
+      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.IColor, new()
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Width, Height);
          res.ConvertFrom(this);
@@ -2364,7 +2379,7 @@ namespace Emgu.CV
       /// <typeparam name="TSrcColor">The color type of the source image</typeparam>
       /// <typeparam name="TSrcDepth">The color depth of the source image</typeparam>
       /// <param name="srcImage">The sourceImage</param>
-      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.ColorType, new()
+      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.IColor, new()
       {
          if (srcImage.Width != Width || srcImage.Height != Height)
          {  //if the size of the source image do not match the size of the current image

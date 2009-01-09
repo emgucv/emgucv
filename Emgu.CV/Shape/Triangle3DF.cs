@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// A 3D triangle
    /// </summary>
-   public struct Triangle3DF
+   public struct Triangle3DF : IEquatable<Triangle3DF>
    {
       private MCvPoint3D32f _v0;
       private MCvPoint3D32f _v1;

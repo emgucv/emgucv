@@ -48,6 +48,7 @@
     <Compile Include="KNearest.cs" />
     <Compile Include="ANN_MLP.cs" />
     <Compile Include="NormalBayesClassifier.cs" />
+    <Compile Include="PInvoke\CvType\MCvBoostParams.cs" />
     <Compile Include="PInvoke\CvType\MCvDTreeNode.cs" />
     <Compile Include="PInvoke\CvType\MCvDTreeParams.cs" />
     <Compile Include="PInvoke\CvType\MCvDTreeSplit.cs" />

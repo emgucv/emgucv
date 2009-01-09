@@ -45,7 +45,7 @@
 				RuntimeLibrary="3"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -60,7 +60,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="ml.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
-				LinkIncremental="0"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"

@@ -114,46 +114,22 @@ namespace Emgu.CV
          return new Triangle2DF(v1.pt, v3.pt, v2.pt);
       }
 
-      private static IEnumerable<VoronoiFacet> EdgeToFacets(IntPtr edge, List<System.Drawing.PointF> bufferList)
-      {
-         MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(edge, typeof(MCvQuadEdge2D));
-         MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
-
-         MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
-
-         System.Drawing.PointF[] p1 = EdgeToPoly(e1, bufferList);
-         if (p1 != null)
-         {
-            MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeOrg();
-            yield return new VoronoiFacet(pt.pt, p1);
-         }
-
-         MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
-         System.Drawing.PointF[] p2 = EdgeToPoly(e2, bufferList);
-         if (p2 != null)
-         {
-            MCvSubdiv2DPoint pt = nextQuadEdge.cvSubdiv2DEdgeDst();
-            yield return new VoronoiFacet(pt.pt, p2);
-         }
-      }
-
       private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge e, List<System.Drawing.PointF> bufferList)
       {
          MCvSubdiv2DPoint v0 = e.cvSubdiv2DEdgeOrg();
          if (!v0.IsValid) return null;
          
          bufferList.Clear();
-         bufferList.Add(v0.pt);
 
-         for (MCvSubdiv2DEdge currentEdge = e; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
+         for (MCvSubdiv2DEdge currentEdge = e; ;currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.IsValid) return null;
 
-            if ( v.pt.X == v0.pt.X && v.pt.Y == v0.pt.Y)
-               break;
-
             bufferList.Add(v.pt);
+
+            if ( v.pt.Equals(v0.pt) ) //reach the starting point
+               break;
          }
          return bufferList.Count > 2 ? bufferList.ToArray() : null;
       }
@@ -186,7 +162,7 @@ namespace Emgu.CV
       /// <returns>The list of Voronoi Facets</returns>
       public List<VoronoiFacet> GetVoronoiFacets()
       {
-         if (_isVoronoiDirty == true)
+         if (_isVoronoiDirty)
          {
             CvInvoke.cvCalcSubdivVoronoi2D(Ptr);
             _isVoronoiDirty = false;
@@ -200,21 +176,40 @@ namespace Emgu.CV
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
 
-         int elem_size = set.elem_size;
+         int elemSize = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
          List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
 
          int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
 
-         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader))
+         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
          {
-            foreach (VoronoiFacet facet in EdgeToFacets(reader.ptr, bufferList))
+            MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
+            MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
+
+            System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
+            if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
+               && InsertPoint2DToDictionary(pt1, facetDict))
             {
-               System.Drawing.PointF p = facet.Point;
-               if (p.X >= left && p.X <= right && p.Y >= top && p.Y <= bottom
-                  && InsertPoint2DToDictionary(p, facetDict))
-                  facetList.Add(facet);
+               MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
+               System.Drawing.PointF[] p1 = EdgeToPoly(e1, bufferList);
+               if (p1 != null)
+               {
+                  facetList.Add(new VoronoiFacet(pt1, p1));
+               }
+            }
+
+            System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
+            if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
+               && InsertPoint2DToDictionary(pt2, facetDict))
+            {
+               MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
+               System.Drawing.PointF[] p2 = EdgeToPoly(e2, bufferList);
+               if (p2 != null)
+               {
+                  facetList.Add(new VoronoiFacet(pt2, p2));
+               }
             }
          }
          return facetList;
@@ -250,10 +245,10 @@ namespace Emgu.CV
          MCvSubdiv2D subdiv = MCvSubdiv2D;
          MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
 
-         int elem_size = set.elem_size;
+         int elemSize = set.elem_size;
          CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
 
-         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elem_size, ref reader))
+         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
          {
             MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
 

@@ -9,7 +9,7 @@ namespace Emgu.CV
 {
    ///<summary> A circle </summary>
    [StructLayout(LayoutKind.Sequential)]  
-   public struct CircleF
+   public struct CircleF : IEquatable<CircleF>
    {
       private PointF _center;
 

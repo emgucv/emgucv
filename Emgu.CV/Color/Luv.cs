@@ -9,21 +9,21 @@ namespace Emgu.CV
    ///Defines a CIE Luv color 
    ///</summary>
    [ColorInfo(ConversionCodename = "Luv")]
-   public class Luv : ColorType, IEquatable<Luv>
+   public struct Luv : IColor, IEquatable<Luv>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a CIE Lab color using the specific values</summary>
       ///<param name="z"> The z value for this color </param>
       ///<param name="y"> The y value for this color </param>
       ///<param name="x"> The x value for this color </param>
       public Luv(double x, double y, double z)
-         : base(new MCvScalar(x, y, z))
       {
+         _scalar = new MCvScalar(x, y, z);
       }
-
-      ///<summary> Create a CIE Luv color using the default values (0.0, 0.0, 0.0)</summary>
-      public Luv()
-         : base()
-      { }
 
       ///<summary> The intensity of the x color channel </summary>
       [DisplayColor(122, 122, 122)]
@@ -49,12 +49,32 @@ namespace Emgu.CV
       }
 
       #endregion
+
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+
+      #endregion
    }
 }

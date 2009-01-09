@@ -7,7 +7,7 @@ namespace Emgu.CV
    /// <summary>
    /// Attributes used to specify color information
    /// </summary>
-   [AttributeUsage(AttributeTargets.Class)]
+   [AttributeUsage(AttributeTargets.Struct)]
    public sealed class ColorInfoAttribute : System.Attribute
    {
       /// <summary>

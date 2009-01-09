@@ -166,4 +166,50 @@ namespace Emgu.CV.ML.MlEnum
       /// </summary>
       ROW_SAMPLE =1
    }
+
+   /// <summary>
+   /// Boosting type
+   /// </summary>
+   public enum BOOST_TYPE
+   {
+      /// <summary>
+      /// Discrete AdaBoost
+      /// </summary>
+      DISCRETE = 0, 
+      /// <summary>
+      /// Real AdaBoost
+      /// </summary>
+      REAL = 1, 
+      /// <summary>
+      /// LogitBoost
+      /// </summary>
+      LOGIT = 2, 
+      /// <summary>
+      /// Gentle AdaBoost
+      /// </summary>
+      GENTLE = 3
+   }
+
+   /// <summary>
+   /// Splitting criteria, used to choose optimal splits during a weak tree construction
+   /// </summary>
+   public enum BOOST_SPLIT_CREITERIA
+   {
+      /// <summary>
+      /// Use the default criteria for the particular boosting method, see below
+      /// </summary>
+      DEFAULT = 0, 
+      /// <summary>
+      /// Use Gini index. This is default option for Real AdaBoost; may be also used for Discrete AdaBoost
+      /// </summary>
+      GINI = 1, 
+      /// <summary>
+      /// Use misclassification rate. This is default option for Discrete AdaBoost; may be also used for Real AdaBoost
+      /// </summary>
+      MISCLASS = 3, 
+      /// <summary>
+      /// Use least squares criteria. This is default and the only option for LogitBoost and Gentle AdaBoost
+      /// </summary>
+      SQERR = 4 
+   }
 }

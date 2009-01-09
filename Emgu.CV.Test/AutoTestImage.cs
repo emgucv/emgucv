@@ -561,8 +561,8 @@ namespace Emgu.CV.Test
          #endregion
 
          double matchDistanceRatio = 0.8;
-         List<PointF> list1 = new List<PointF>();
-         List<PointF> list2 = new List<PointF>();
+         List<PointF> modelPoints = new List<PointF>();
+         List<PointF> observePoints = new List<PointF>();
 
          stopwatch.Reset(); stopwatch.Start();
          #region using Feature Tree to match feature
@@ -579,29 +579,29 @@ namespace Emgu.CV.Test
          MatchSURFFeatureWithFeatureTree(
            modelFeaturesPositiveLaplacian,
            imageFeaturesPositiveLaplacian,
-           matchDistanceRatio, result1.Data, dist1.Data, list1, list2);
+           matchDistanceRatio, result1.Data, dist1.Data, modelPoints, observePoints);
 
          featureTreeNegativeLaplacian.FindFeatures(imageFeatureDescriptorsNegativeLaplacian, out result1, out dist1, 2, 20);
          MatchSURFFeatureWithFeatureTree(
               modelFeaturesNegativeLaplacian,
               imageFeaturesNegativeLaplacian,
-              matchDistanceRatio, result1.Data, dist1.Data, list1, list2);
+              matchDistanceRatio, result1.Data, dist1.Data, modelPoints, observePoints);
          #endregion
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
 
          Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
-            list1.ToArray(), //points on the object image
-            list2.ToArray(), //points on the observed image
+            modelPoints.ToArray(), //points on the object image
+            observePoints.ToArray(), //points on the observed image
             CvEnum.HOMOGRAPHY_METHOD.RANSAC,
-            3);
+            3).Convert<float>();
 
          #region draw the projected object in observed image
-         for (int i = 0; i < list1.Count; i++)
+         for (int i = 0; i < modelPoints.Count; i++)
          {
-            PointF p = list2[i];
+            PointF p = observePoints[i];
             p.Y += modelImage.Height;
-            res.Draw(new LineSegment2DF(list1[i], p), new Gray(0), 1);
+            res.Draw(new LineSegment2DF(modelPoints[i], p), new Gray(0), 1);
          }
 
          System.Drawing.Rectangle rect = modelImage.ROI;
@@ -625,7 +625,7 @@ namespace Emgu.CV.Test
 
          res.DrawPolyline(destCornerPoints, true, new Gray(255.0), 5);
          #endregion
-         //Application.Run(new ImageViewer(res.Resize(200, 200, true)));
+         //ImageViewer.Show(res.Resize(200, 200, true));
       }
 
       [Test]
@@ -649,7 +649,8 @@ namespace Emgu.CV.Test
 
             img.Draw(pts, new Gray(120), 1);
             img.Draw(snake, new Gray(80), 2);
-            //Application.Run(new ImageViewer(img));
+
+            //ImageViewer.Show(img));
          }
       }
 

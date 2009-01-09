@@ -282,8 +282,6 @@ namespace Emgu.Util
          return GetBaseType(baseType, baseclassName);
       }
 
-
-
       #region memory copy
       /// <summary>
       /// Convert some generic vector to vector of Bytes

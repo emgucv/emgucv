@@ -9,21 +9,21 @@ namespace Emgu.CV
    ///Defines a Ycc color (YCrCb JPEG)
    ///</summary>
    [ColorInfo(ConversionCodename = "YCrCb")]
-   public class Ycc : ColorType, IEquatable<Ycc>
+   public struct Ycc : IColor, IEquatable<Ycc>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a Ycc color using the specific values</summary>
       ///<param name="y"> The Y value for this color </param>
       ///<param name="cr"> The Cr value for this color </param>
       ///<param name="cb"> The Cb value for this color </param>
       public Ycc(double y, double cr, double cb)
-         : base(new MCvScalar(y, cr, cb))
       {
+         _scalar = new MCvScalar(y, cr, cb);
       }
-
-      ///<summary> Create a Ycc color using the default values (0.0, 0.0, 0.0)</summary>
-      public Ycc()
-         : base()
-      { }
 
       ///<summary> Get or set the intensity of the Y color channel </summary>
       [DisplayColor(122, 122, 122)]
@@ -49,12 +49,31 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+
+      #endregion
    }
 }

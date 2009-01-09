@@ -538,6 +538,20 @@ namespace Emgu.CV.ML
 
       #region Boost
       /// <summary>
+      /// Create default parameters for CvBoost
+      /// </summary>
+      /// <returns>Pointer to the default CvBoostParams</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvBoostParamsCreate();
+
+      /// <summary>
+      /// Release the CvBoostParams
+      /// </summary>
+      /// <param name="bTreeParam">Pointer to the boost tree parameters to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvBoostParamsRelease(IntPtr bTreeParam);
+
+      /// <summary>
       /// Create a default boost classicfier
       /// </summary>
       /// <returns>Pointer to the boost classicfier</returns>

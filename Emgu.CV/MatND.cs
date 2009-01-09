@@ -29,14 +29,12 @@ namespace Emgu.CV
          Data = Array.CreateInstance(typeof(TDepth), sizes);
       }
 
-      private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMatND));
-
       private void AllocateHeader()
       {
          if (_ptr == IntPtr.Zero)
          {
-            _ptr = Marshal.AllocHGlobal(_sizeOfHeader);
-            GC.AddMemoryPressure(_sizeOfHeader);
+            _ptr = Marshal.AllocHGlobal(HeaderSize.MCvMatND);
+            GC.AddMemoryPressure(HeaderSize.MCvMatND);
          }
       }
 
@@ -100,7 +98,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             Marshal.FreeHGlobal(_ptr);
-            GC.RemoveMemoryPressure(_sizeOfHeader);
+            GC.RemoveMemoryPressure(HeaderSize.MCvMatND);
             _ptr = IntPtr.Zero;
          }
       }

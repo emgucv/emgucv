@@ -93,8 +93,8 @@ namespace Emgu.CV
          CvEnum.CALIB_TYPE flags, 
          ref MCvTermCriteria termCrit, 
          out ExtrinsicCameraParameters extrinsicParams, 
-         out Matrix<float> foundamentalMatrix, 
-         out Matrix<float> essentialMatrix )
+         out Matrix<double> foundamentalMatrix, 
+         out Matrix<double> essentialMatrix )
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
 
@@ -113,8 +113,8 @@ namespace Emgu.CV
          using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
          {
             extrinsicParams = new ExtrinsicCameraParameters();
-            essentialMatrix = new Matrix<float>(3, 3);
-            foundamentalMatrix = new Matrix<float>(3, 3);
+            essentialMatrix = new Matrix<double>(3, 3);
+            foundamentalMatrix = new Matrix<double>(3, 3);
 
             CvInvoke.cvStereoCalibrate(
                objectPointMatrix.Ptr,
@@ -176,7 +176,7 @@ namespace Emgu.CV
       /// <param name="intrin">The intrinsic camera parameters</param>
       /// <returns>The corrected image</returns>
       public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
-         where TColor : ColorType, new()
+         where TColor : IColor, new()
          where TDepth : struct, IComparable
       {
          Image<TColor, TDepth> res = src.CopyBlank();
@@ -244,7 +244,7 @@ namespace Emgu.CV
       /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints)
+      public static Matrix<double> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints)
       {
          return FindHomography(srcPoints, dstPoints, Emgu.CV.CvEnum.HOMOGRAPHY_METHOD.DEFAULT, 0.0);
       }
@@ -256,7 +256,7 @@ namespace Emgu.CV
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(
+      public static Matrix<double> FindHomography(
          Matrix<float> srcPoints, 
          Matrix<float> dstPoints, 
          double ransacReprojThreshold)
@@ -272,13 +272,13 @@ namespace Emgu.CV
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(
+      public static Matrix<double> FindHomography(
          Matrix<float> srcPoints, 
          Matrix<float> dstPoints, 
          CvEnum.HOMOGRAPHY_METHOD method, 
          double ransacReprojThreshold)
       {
-         Matrix<float> homography = new Matrix<float>(3, 3);
+         Matrix<double> homography = new Matrix<double>(3, 3);
          CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero);
          return homography;
       }
@@ -291,7 +291,7 @@ namespace Emgu.CV
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<float> FindHomography(
+      public static Matrix<double> FindHomography(
          PointF[] srcPoints, 
          PointF[] dstPoints, 
          CvEnum.HOMOGRAPHY_METHOD method, 
@@ -303,7 +303,7 @@ namespace Emgu.CV
          IntPtr dstPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
          CvInvoke.cvInitMatHeader(srcPointMatrix, srcPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, srcHandle.AddrOfPinnedObject(), 0);
          CvInvoke.cvInitMatHeader(dstPointMatrix, dstPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, dstHandle.AddrOfPinnedObject(), 0);
-         Matrix<float> homography = new Matrix<float>(3, 3);
+         Matrix<double> homography = new Matrix<double>(3, 3);
          CvInvoke.cvFindHomography( srcPointMatrix, dstPointMatrix, homography.Ptr,  method, ransacReprojThreshold, IntPtr.Zero);
          srcHandle.Free();
          dstHandle.Free();
@@ -375,7 +375,7 @@ namespace Emgu.CV
          foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
 
          float[,] res = new float[elementCount, 3];
-         int sizeOfT = Marshal.SizeOf(typeof(MCvPoint3D32f));
+         int sizeOfT = HeaderSize.MCvPoint3D32f;
          GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
          Int64 address = handle1.AddrOfPinnedObject().ToInt64();
 
@@ -398,7 +398,7 @@ namespace Emgu.CV
          foreach (PointF[] d in data) elementCount += d.Length;
 
          float[,] res = new float[elementCount, 2];
-         int sizeOfT = Marshal.SizeOf(typeof(PointF));
+         int sizeOfT = HeaderSize.PointF;
          GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
          Int64 address = handle1.AddrOfPinnedObject().ToInt64();
 

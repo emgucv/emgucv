@@ -17,8 +17,6 @@ namespace Emgu.CV
    {
       private TDepth[,] _array;
 
-      //private readonly static int _sizeOfHeader = Marshal.SizeOf(typeof(MCvMat));
-
       private void AllocateHeader()
       {
          if (_ptr == IntPtr.Zero)
@@ -738,15 +736,25 @@ namespace Emgu.CV
                return CvInvoke.cvCountNonZero(neqMask.Ptr) == 0;
             }
          else
-         {
+         {  //comapre channel by channel
             Matrix<TDepth>[] channels = Split();
             Matrix<TDepth>[] channels2 = mat2.Split();
-            for (int i = 0; i < numberOfChannels; i++)
+            try
             {
-               if (!channels[i].Equals(channels2[i]))
-                  return false;
+               for (int i = 0; i < numberOfChannels; i++)
+               {
+                  if (!channels[i].Equals(channels2[i]))
+                     return false;
+               }
+               return true;
             }
-            return true;
+            finally
+            {
+               foreach (Matrix<TDepth> channel in channels)
+                  channel.Dispose();
+               foreach (Matrix<TDepth> channel in channels2)
+                  channel.Dispose();
+            }
          }
       }
 

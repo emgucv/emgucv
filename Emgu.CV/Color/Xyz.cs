@@ -9,21 +9,21 @@ namespace Emgu.CV
    ///Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
    ///</summary>
    [ColorInfo(ConversionCodename = "XYZ")]
-   public class Xyz : ColorType, IEquatable<Xyz>
+   public struct Xyz : IColor, IEquatable<Xyz>
    {
+      /// <summary>
+      /// The MCvScalar representation of the color intensity
+      /// </summary>
+      private MCvScalar _scalar;
+
       ///<summary> Create a Xyz color using the specific values</summary>
       ///<param name="z"> The z value for this color </param>
       ///<param name="y"> The y value for this color </param>
       ///<param name="x"> The x value for this color </param>
       public Xyz(double x, double y, double z)
-         : base(new MCvScalar(x, y, z))
       {
+         _scalar = new MCvScalar(x, y, z);
       }
-
-      ///<summary> Create a Xyz color using the default values (0.0, 0.0, 0.0)</summary>
-      public Xyz()
-         : base()
-      { }
 
       ///<summary> Get or set the intensity of the z color channel </summary>
       [DisplayColor(122, 122, 122)]
@@ -49,12 +49,32 @@ namespace Emgu.CV
       }
 
       #endregion
+
+
+      #region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
-      public override int Dimension
+      public int Dimension
       {
          get { return 3; }
       }
+
+      /// <summary>
+      /// Get or Set the equivalent MCvScalar value
+      /// </summary>
+      public MCvScalar MCvScalar
+      {
+         get
+         {
+            return _scalar;
+         }
+         set
+         {
+            _scalar = value;
+         }
+      }
+
+      #endregion
    }
 }

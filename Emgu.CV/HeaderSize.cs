@@ -17,6 +17,8 @@ namespace Emgu.CV
       private static int _MCvContour;
       private static int _MIplImage;
       private static int _MCvSeqBlock;
+      private static int _MCvPoint3D32f;
+      private static int _MCvMatND;
 
       /// <summary>
       /// The size of PointF
@@ -66,6 +68,22 @@ namespace Emgu.CV
          get { return _MCvSeqBlock; }
       }
 
+      /// <summary>
+      /// The size of MCvPoint3D32f
+      /// </summary>
+      public static int MCvPoint3D32f
+      {
+         get { return _MCvPoint3D32f; }
+      }
+
+      /// <summary>
+      /// The size of MCvMatND
+      /// </summary>
+      public static int MCvMatND
+      {
+         get { return _MCvMatND; }
+      }
+
       static HeaderSize()
       {
          _PointF = Marshal.SizeOf(typeof(System.Drawing.PointF));
@@ -74,6 +92,8 @@ namespace Emgu.CV
          _MCvContour = Marshal.SizeOf(typeof(MCvContour));
          _MIplImage = Marshal.SizeOf(typeof(MIplImage));
          _MCvSeqBlock = Marshal.SizeOf(typeof(MCvSeqBlock));
+         _MCvPoint3D32f = Marshal.SizeOf(typeof(MCvPoint3D32f));
+         _MCvMatND = Marshal.SizeOf(typeof(MCvMatND));
       }
    }
 }
