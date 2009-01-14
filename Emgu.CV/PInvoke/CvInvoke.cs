@@ -2206,6 +2206,26 @@ namespace Emgu.CV
       public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out System.Drawing.Size roiSize);
 
       /// <summary>
+      /// Returns matrix header for the input array that can be matrix - CvMat, image - IplImage or multi-dimensional dense array - CvMatND* (latter case is allowed only if allowND != 0) . In the case of matrix the function simply returns the input pointer. In the case of IplImage* or CvMatND* it initializes header structure with parameters of the current image ROI and returns pointer to this temporary structure. Because COI is not supported by CvMat, it is returned separately. 
+      /// </summary>
+      /// <param name="arr">Input array</param>
+      /// <param name="header">Pointer to CvMat structure used as a temporary buffer</param>
+      /// <param name="coi">Optional output parameter for storing COI</param>
+      /// <param name="allowND">If non-zero, the function accepts multi-dimensional dense arrays (CvMatND*) and returns 2D (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or more than 2 dimensions). The array must be continuous</param>
+      /// <returns>Returns matrix header for the input array</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvGetMat( IntPtr arr, IntPtr header, out int coi, int allowND );
+
+      /// <summary>
+      /// Returns image header for the input array that can be matrix - CvMat*, or image - IplImage*.
+      /// </summary>
+      /// <param name="arr">Input array. </param>
+      /// <param name="imageHeader">Pointer to IplImage structure used as a temporary buffer.</param>
+      /// <returns>Returns image header for the input array</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvGetImage( IntPtr arr, IntPtr imageHeader );
+
+      /// <summary>
       /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
       /// </summary>
       /// <param name="arr">The array to check.</param>
