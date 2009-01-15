@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.ML
 {
    /// <summary>
-   /// Wrapped CvDTree class in machine learning library
+   /// Decision Tree 
    /// </summary>
    public class DTree : Emgu.CV.ML.StatModel
    {

@@ -1,4 +1,5 @@
 Imports Emgu.CV
+Imports Emgu.CV.Structure
 Imports Emgu.Util
 Imports System.Windows.Forms
 Imports System.Drawing
@@ -16,8 +17,8 @@ Module Module1
       'Convert the image to Grayscale
       Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
 
-      For Each rect As Rectangle In imgGray.DetectHaarCascade(objectToDetect)(0)
-         img.Draw(rect, New Bgr(Color.White), 1)
+      For Each face As MCvAvgComp In imgGray.DetectHaarCascade(objectToDetect)(0)
+         img.Draw(face.rect, New Bgr(Color.White), 1)
       Next
 
       'Show the image

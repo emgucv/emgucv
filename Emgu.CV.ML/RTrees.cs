@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.ML
 {
    /// <summary>
-   /// Wrapped CvDTree class in machine learning library
+   /// Random tree
    /// </summary>
    public class RTrees : Emgu.CV.ML.StatModel
    {
@@ -73,7 +73,6 @@ namespace Emgu.CV.ML
          Matrix<int> missingDataMask)
       {
          return MlInvoke.CvRTreesPredict(_ptr, sample.Ptr, missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr);
-         
       }
    }
 }

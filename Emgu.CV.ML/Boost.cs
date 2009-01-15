@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.ML
 {
    /// <summary>
-   /// Wrapped CvDTree class in machine learning library
+   /// Boost Tree 
    /// </summary>
    public class Boost : Emgu.CV.ML.StatModel
    {

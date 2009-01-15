@@ -6,12 +6,10 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Threading;
 using System.Runtime.InteropServices;
-
-//define alias
-using MCvPoint = System.Drawing.Point;
 
 namespace FacialMouseControl
 {
@@ -85,27 +83,27 @@ namespace FacialMouseControl
          //draw the stable area where the face will not trigger a movement;
          frame.Draw(mouseStableArea, new Bgr(255, 0, 0), 1);
 
-         System.Drawing.Rectangle[] faces = grayImage.DetectHaarCascade(_face)[0];
+         MCvAvgComp[] faces = grayImage.DetectHaarCascade(_face)[0];
          if (faces.Length > 0)
          {   //if there is at least one face
 
             #region find the biggest face
-            System.Drawing.Rectangle biggestFace = faces[0];
+            MCvAvgComp biggestFace = faces[0];
             for (int i = 1; i < faces.Length; i++)
             {
-               if (faces[i].Width * faces[i].Height > biggestFace.Width * biggestFace.Height)
+               if (faces[i].rect.Width * faces[i].rect.Height > biggestFace.rect.Width * biggestFace.rect.Height)
                   biggestFace = faces[i];
             }
             #endregion
 
             //draw a yellow rectangle around the face
-            frame.Draw(biggestFace, new Bgr(255, 255, 0.0), 1);
+            frame.Draw(biggestFace.rect, new Bgr(255, 255, 0.0), 1);
 
-            PointF biggestFaceCenter = new PointF(biggestFace.X + biggestFace.Width / 2.0f, biggestFace.Y + biggestFace.Height / 2.0f);
+            PointF biggestFaceCenter = new PointF(biggestFace.rect.X + biggestFace.rect.Width / 2.0f, biggestFace.rect.Y + biggestFace.rect.Height / 2.0f);
             PointF imageAreaCenter = new PointF(imageArea.X + imageArea.Width / 2.0f, imageArea.Y + imageArea.Height / 2.0f);
             //draw a green cross at the center of the biggest face
             frame.Draw(
-                new Cross2DF(biggestFaceCenter, biggestFace.Width * 0.1f, biggestFace.Height * 0.1f),
+                new Cross2DF(biggestFaceCenter, biggestFace.rect.Width * 0.1f, biggestFace.rect.Height * 0.1f),
                 new Bgr(0, 255, 0), 1);
 
             if (!PointInRectangle(biggestFaceCenter, mouseStableArea))
@@ -120,7 +118,7 @@ namespace FacialMouseControl
 
                Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
                int maxMouseSpeed = rect.Width / 20;
-               MCvPoint p;
+               System.Drawing.Point p;
                GetCursorPos(out p);
                p.X = Math.Min(Math.Max(0, p.X + (int)(maxMouseSpeed / 2.0 * horizontalFraction)), rect.Width);
                p.Y = Math.Min(Math.Max(0, p.Y - (int)(maxMouseSpeed / 2.0 * verticalFraction)), rect.Height);
@@ -132,7 +130,7 @@ namespace FacialMouseControl
       }
 
       [DllImport("user32.dll")]
-      private static extern bool GetCursorPos(out MCvPoint lpPoint);
+      private static extern bool GetCursorPos(out System.Drawing.Point lpPoint);
 
       [DllImport("user32.dll")]
       private static extern bool SetCursorPos(int X, int Y);

@@ -334,6 +334,47 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestFaceDetect()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>("lena.jpg");
+         //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\eye_12.xml"))
+         using (HaarCascade cascade = new HaarCascade(@".\haarcascades\eye_8.xml"))
+         //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\haarcascade_frontalface_alt2.xml"))
+         {
+            MCvAvgComp[][] objects = image.DetectHaarCascade(cascade, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10));
+
+            foreach (MCvAvgComp obj in objects[0])
+               image.Draw(obj.rect, new Gray(0.0), 1);
+
+
+            using (MemStorage stor = new MemStorage())
+            {
+               IntPtr objs = CvInvoke.cvHaarDetectObjects(
+                             image.Ptr,
+                             cascade.Ptr,
+                             stor.Ptr,
+                             1.05,
+                             0,
+                             Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
+                             new Size(10, 10));
+
+               if (objs != IntPtr.Zero)
+               {
+                  Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objs, stor);
+
+                  MCvAvgComp[] rect = rects.ToArray();
+                  for (int i = 0; i < rects.Total; i++)
+                  {
+                     Assert.AreEqual(rect[i].rect, rects[i].rect);
+                  }
+               }
+            }
+         }
+
+         //ImageViewer.Show(image);
+      }
+
+      [Test]
       public void TestConstructor()
       {
          for (int i = 0; i < 20; i++)

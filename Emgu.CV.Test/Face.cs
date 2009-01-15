@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.Test
 {
@@ -18,13 +19,13 @@ namespace Emgu.CV.Test
       {
          using (Image<Gray, D> gray = img.Convert<Gray, D>())
          {
-            System.Drawing.Rectangle[][] objects = gray.DetectHaarCascade(_faceCascade);
+            MCvAvgComp[][] objects = gray.DetectHaarCascade(_faceCascade);
             List<Face<D>> res = new List<Face<D>>();
 
-            foreach (System.Drawing.Rectangle o in objects[0])
+            foreach (MCvAvgComp o in objects[0])
             {
-               img.ROI = o;
-               res.Add(new Face<D>(img.Copy(), o));
+               img.ROI = o.rect;
+               res.Add(new Face<D>(img.Copy(), o.rect));
             }
             img.ROI = System.Drawing.Rectangle.Empty;
             return res;
@@ -76,13 +77,13 @@ namespace Emgu.CV.Test
 
       public List<Eye<D>> DetectEye()
       {
-         System.Drawing.Rectangle[][] objects = Gray.DetectHaarCascade(_eyeCascade);
+         MCvAvgComp[][] objects = Gray.DetectHaarCascade(_eyeCascade);
          List<Eye<D>> res = new List<Eye<D>>();
 
-         foreach (System.Drawing.Rectangle o in objects[0])
+         foreach (MCvAvgComp o in objects[0])
          {
-            _image.ROI = o;
-            res.Add(new Eye<D>(_image.Copy(), o));
+            _image.ROI = o.rect;
+            res.Add(new Eye<D>(_image.Copy(), o.rect));
          }
          _image.ROI = System.Drawing.Rectangle.Empty;
          return res;

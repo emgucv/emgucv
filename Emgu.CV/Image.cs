@@ -821,7 +821,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="haarObj">The object to be detected</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle[][] DetectHaarCascade(HaarCascade haarObj)
+      public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj)
       {
          return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new System.Drawing.Size(0, 0));
       }
@@ -835,11 +835,11 @@ namespace Emgu.CV
       /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, System.Drawing.Size minSize)
+      public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, System.Drawing.Size minSize)
       {
          using (MemStorage stor = new MemStorage())
          {
-            Emgu.Util.Toolbox.Func<IImage, int, Rectangle[]> detector =
+            Emgu.Util.Toolbox.Func<IImage, int, MCvAvgComp[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
@@ -852,13 +852,13 @@ namespace Emgu.CV
                        minSize);
 
                    if (objects == IntPtr.Zero)
-                      return new Rectangle[0];
+                      return new MCvAvgComp[0];
 
-                   Seq<System.Drawing.Rectangle> rects = new Seq<System.Drawing.Rectangle>(objects, stor);
+                   Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objects, stor);
                    return rects.ToArray();
                 };
 
-            Rectangle[][] res = ForEachDuplicateChannel(detector);
+            MCvAvgComp[][] res = ForEachDuplicateChannel(detector);
             return res;
          }
       }

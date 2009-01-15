@@ -744,32 +744,35 @@ namespace Emgu.CV.Test
       [Test]
       public void TestConvexHull()
       {
+         #region Create some random points
          Random r = new Random();
          PointF[] pts = new PointF[40];
          for (int i = 0; i < pts.Length; i++)
          {
             pts[i] = new PointF((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
          }
+         #endregion
 
+         #region Find the convex hull
          PointF[] hull;
          using (MemStorage storage = new MemStorage())
          {
             Seq<PointF> seq = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
             hull = seq.ToArray();
          }
+         #endregion
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
          foreach (PointF p in pts)
          {
             img.Draw(new CircleF(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
          }
-
          System.Drawing.Point[] convexHull = Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, delegate(System.Drawing.PointF p) { return new System.Drawing.Point((int)p.X, (int)p.Y); });
          img.DrawPolyline(
              convexHull,
              true, new Bgr(255.0, 0.0, 0.0), 1);
 
-         //Application.Run(new ImageViewer(img));
+         //ImageViewer.Show(img);
       }
 
       [Test]
