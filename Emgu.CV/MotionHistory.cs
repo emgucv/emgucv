@@ -33,12 +33,25 @@ namespace Emgu.CV
       /// <summary>
       /// The Motion Segment Mask. 
       /// Image where the mask found from GetMotionComponents is stored.
+      /// Do not dispose this image.
       /// </summary>
       public Image<Gray, Single> SegmentMask
       {
          get
          {
             return _segMask;
+         }
+      }
+
+      /// <summary>
+      /// The motion mask. 
+      /// Do not dispose this image.
+      /// </summary>
+      public Image<Gray, Byte> Mask
+      {
+         get
+         {
+            return _mask;
          }
       }
 
@@ -113,17 +126,6 @@ namespace Emgu.CV
          CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
 
          CvInvoke.cvCalcMotionGradient(_mhi.Ptr, _mask.Ptr, _orientation.Ptr, _maxTimeDelta, _minTimeDelta, 3);
-      }
-
-      /// <summary>
-      /// The motion mask
-      /// </summary>
-      public Image<Gray, Byte> Mask
-      {
-         get
-         {
-            return _mask;
-         }
       }
 
       /// <summary>
