@@ -31,6 +31,18 @@ namespace Emgu.CV
       private Queue<Image<Gray, Byte>> _buffer;
 
       /// <summary>
+      /// The Motion Segment Mask. 
+      /// Image where the mask found from GetMotionComponents is stored.
+      /// </summary>
+      public Image<Gray, Single> SegmentMask
+      {
+         get
+         {
+            return _segMask;
+         }
+      }
+
+      /// <summary>
       /// Create a motion history object
       /// </summary>
       /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
