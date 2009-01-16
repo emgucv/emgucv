@@ -331,6 +331,9 @@ namespace Emgu.CV.Test
 
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
          img.Rotate(90, new Bgr());
+         Image<Bgr, Byte> imgRotated = img.Rotate(30, new Bgr(0, 0, 0), false);
+         
+         //ImageViewer.Show(imgRotated);
       }
 
       [Test]

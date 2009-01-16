@@ -14,6 +14,7 @@ using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Emgu.CV.Test
 {
@@ -715,6 +716,25 @@ namespace Emgu.CV.Test
          Assert.AreEqual(~(-1), 0);
          //Assert.AreEqual(~3, 2);
       }
+
+      public void TestReflection()
+      {
+         MethodInfo[] members = typeof(Emgu.CV.CvInvoke).GetMethods();
+         foreach (MethodInfo member in members)
+         {
+            object[] pinvokeAtts = member.GetCustomAttributes(typeof(DllImportAttribute), false);
+            if (pinvokeAtts.Length > 0) // if this is a PInvoke call
+            {
+               DllImportAttribute att = pinvokeAtts[0] as DllImportAttribute;
+               Type[] types = Array.ConvertAll<ParameterInfo, Type>(member.GetParameters(), delegate(ParameterInfo p) { return p.ParameterType; });
+               //System.Reflection.Emit.DynamicMethod m = new System.Reflection.Emit.DynamicMethod("_"+member.Name, member.Attributes, member.CallingConvention, member.ReturnType, types, typeof(CvInvoke), true);
+            }
+         }
+      }
+      /*
+      private class CustomDllImportAttribute : DllImportAttribute
+      {
+      }*/
 
       public void TestKalman()
       {
