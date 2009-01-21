@@ -2,7 +2,7 @@ NAME = emgu-cv
 VERSION = 1.5.0.0
 PKG_NAME = ${NAME}-${VERSION}
 LIB_NAME = Emgu.CV.dll
-MCS_FLAG= -d:LINUX -pkg:olive -r:System.Xml -r:System.Drawing -r:System.Data  -target:library
+MCS_FLAG= -d:LINUX -r:System.ServiceModel -r:System.Xml -r:System.Drawing -r:System.Data  -target:library
 MCS=gmcs ${MCS_FLAG} 
 SRC= *.cs Shape/*.cs Properties/*.cs PointAndLine/*.cs PInvoke/*.cs PInvoke/CvType/*.cs Color/*.cs Capture/*.cs CameraCalibration/*.cs Reflection/*.cs
 INSTALL_DIR = var/lib
@@ -30,3 +30,6 @@ tar:
 	install ../bin/Emgu.Util.dll ../lib/zlib.net.dll ${PKG_NAME}/lib
 	tar -czf ${PKG_NAME}.tar.gz ${PKG_NAME}
 	rm -rf ${PKG_NAME}
+
+
+

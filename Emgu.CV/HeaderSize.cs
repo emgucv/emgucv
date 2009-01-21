@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary>
    /// Cache the size of various header in bytes
    /// </summary>
-   public static class HeaderSize
+   public static class StructSize
    {
       private static int _PointF;
       private static int _MCvMat;
@@ -84,7 +84,7 @@ namespace Emgu.CV
          get { return _MCvMatND; }
       }
 
-      static HeaderSize()
+      static StructSize()
       {
          _PointF = Marshal.SizeOf(typeof(System.Drawing.PointF));
          _MCvMat = Marshal.SizeOf(typeof(MCvMat));

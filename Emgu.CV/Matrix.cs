@@ -21,8 +21,8 @@ namespace Emgu.CV
       {
          if (_ptr == IntPtr.Zero)
          {
-            _ptr = Marshal.AllocHGlobal(HeaderSize.MCvMat);
-            GC.AddMemoryPressure(HeaderSize.MCvMat);
+            _ptr = Marshal.AllocHGlobal(StructSize.MCvMat);
+            GC.AddMemoryPressure(StructSize.MCvMat);
          }
       }
 
@@ -299,6 +299,21 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rect">the rectangle area of the sub-matrix</param>
       /// <returns>A submatrix corresponding to a specified rectangle</returns>
+      public Matrix<TDepth> GetSubRect(System.Drawing.Rectangle rect)
+      {
+         Matrix<TDepth> subMat = new Matrix<TDepth>();
+         subMat._array = _array;
+         subMat.AllocateHeader();
+         CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect);
+         return subMat;
+      }
+
+      /// <summary>
+      /// Get a submatrix corresponding to a specified rectangle
+      /// </summary>
+      /// <param name="rect">the rectangle area of the sub-matrix</param>
+      /// <returns>A submatrix corresponding to a specified rectangle</returns>
+      [Obsolete("Use GetSubRect instead, will be removed in the next version")]
       public Matrix<TDepth> GetSubMatrix(System.Drawing.Rectangle rect)
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
@@ -676,7 +691,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             Marshal.FreeHGlobal(_ptr);
-            GC.RemoveMemoryPressure(HeaderSize.MCvMat);
+            GC.RemoveMemoryPressure(StructSize.MCvMat);
             _ptr = IntPtr.Zero;
          }
 

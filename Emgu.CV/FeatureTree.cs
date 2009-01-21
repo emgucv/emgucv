@@ -38,7 +38,7 @@ namespace Emgu.CV
       private static Matrix<float> DescriptorsToMatrix(Matrix<float>[] descriptors)
       {
          Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Rows);
-         IntPtr rowHeader = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr rowHeader = Marshal.AllocHGlobal(StructSize.MCvMat);
          for (int i = 0; i < descriptors.Length; i++)
          {
             CvInvoke.cvGetRows(res, rowHeader, i, i + 1, 1);

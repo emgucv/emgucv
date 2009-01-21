@@ -77,6 +77,7 @@ namespace Emgu.CV
       {
          get
          {
+            //return new PointF((V0.X + V1.X + V2.X) * (1.0f / 3.0f), (V0.Y + V1.Y + V2.Y) * (1.0f / 3.0f));
             return new PointF((V0.X + V1.X + V2.X) / 3.0f, (V0.Y + V1.Y + V2.Y) / 3.0f);
          }
       }

@@ -11,7 +11,7 @@ namespace Emgu.CV
    /// <summary>
    /// Plannar Subdivision
    /// </summary>
-   public class PlanarSubdivision : UnmanagedObject
+   public class PlanarSubdivision : UnmanagedObject, IEnumerable<MCvQuadEdge2D>
    {
       private readonly MemStorage _storage;
       private readonly System.Drawing.Rectangle _roi;
@@ -106,22 +106,21 @@ namespace Emgu.CV
 
       private static Triangle2DF EdgeToTriangle(MCvSubdiv2DEdge e)
       {
-         MCvSubdiv2DPoint v1 = e.cvSubdiv2DEdgeOrg();
-         MCvSubdiv2DPoint v2 = e.cvSubdiv2DEdgeDst();
-
-         MCvSubdiv2DEdge eLnext = e.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT);
-         MCvSubdiv2DPoint v3 = eLnext.cvSubdiv2DEdgeDst();
-         return new Triangle2DF(v1.pt, v3.pt, v2.pt);
+         return new Triangle2DF(
+            e.cvSubdiv2DEdgeOrg().pt, 
+            e  .cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT)
+               .cvSubdiv2DEdgeDst().pt, 
+            e.cvSubdiv2DEdgeDst().pt);
       }
 
-      private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge e, List<System.Drawing.PointF> bufferList)
+      private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge currentEdge, List<System.Drawing.PointF> bufferList)
       {
-         MCvSubdiv2DPoint v0 = e.cvSubdiv2DEdgeOrg();
+         MCvSubdiv2DPoint v0 = currentEdge.cvSubdiv2DEdgeOrg();
          if (!v0.IsValid) return null;
          
          bufferList.Clear();
 
-         for (MCvSubdiv2DEdge currentEdge = e; ;currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
+         for (; ;currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.IsValid) return null;
@@ -172,20 +171,12 @@ namespace Emgu.CV
         
          List<VoronoiFacet> facetList = new List<VoronoiFacet>();
 
-         MCvSeqReader reader = new MCvSeqReader();
-         MCvSubdiv2D subdiv = MCvSubdiv2D;
-         MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-
-         int elemSize = set.elem_size;
-         CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
-
          List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
 
          int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-
-         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
+         
+         foreach(MCvQuadEdge2D quadEdge in this)
          {
-            MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
             MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
 
             System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
@@ -240,18 +231,9 @@ namespace Emgu.CV
          Dictionary<System.Drawing.PointF, Byte> triangleDic = new Dictionary<System.Drawing.PointF, Byte>();
 
          List<Triangle2DF> triangleList = new List<Triangle2DF>();
-
-         MCvSeqReader reader = new MCvSeqReader();
-         MCvSubdiv2D subdiv = MCvSubdiv2D;
-         MCvSet set = (MCvSet)Marshal.PtrToStructure(subdiv.edges, typeof(MCvSet));
-
-         int elemSize = set.elem_size;
-         CvInvoke.cvStartReadSeq(subdiv.edges, ref reader, false);
-
-         for (;CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
+ 
+         foreach(MCvQuadEdge2D quadEdge in this)
          {
-            MCvQuadEdge2D quadEdge = (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
-
             Triangle2DF tri1 = EdgeToTriangle(quadEdge.next[0]);
 
             if (InsertPoint2DToDictionary(tri1.Centeroid, triangleDic))
@@ -268,8 +250,12 @@ namespace Emgu.CV
 
          if (!includeVirtualPoints)
          {
-            int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-
+            int 
+               left = _roi.X, 
+               top = _roi.Y, 
+               right = _roi.X + _roi.Width, 
+               bottom = _roi.Y + _roi.Height;
+            
             triangleList.RemoveAll(
                delegate(Triangle2DF tri)
                {
@@ -290,6 +276,35 @@ namespace Emgu.CV
       {
          _storage.Dispose();
       }
+
+      #region IEnumerable<MCvQuadEdge2D> Members
+      /// <summary>
+      /// Get an enumerator of the QuadEdges in this plannar subdivision
+      /// </summary>
+      /// <returns></returns>
+      public IEnumerator<MCvQuadEdge2D> GetEnumerator()
+      {
+         IntPtr subdivEdges = MCvSubdiv2D.edges;
+         int elemSize = ((MCvSet)Marshal.PtrToStructure(subdivEdges, typeof(MCvSet))).elem_size;
+         MCvSeqReader reader = new MCvSeqReader();
+         CvInvoke.cvStartReadSeq(subdivEdges, ref reader, false);
+
+         for (; CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
+         {
+            yield return (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
+         }
+      }
+
+      #endregion
+
+      #region IEnumerable Members
+
+      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+      {
+         return GetEnumerator();
+      }
+
+      #endregion
    }
 
    /// <summary>

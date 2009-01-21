@@ -455,7 +455,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlannarSubdivision1()
       {
-         int pointCount = 3000;
+         int pointCount = 10000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];

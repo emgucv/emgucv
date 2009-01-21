@@ -239,7 +239,7 @@ namespace Emgu.CV
          int channelCount = numberOfChannels;
 
          _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, channelCount);
-         GC.AddMemoryPressure(HeaderSize.MIplImage);
+         GC.AddMemoryPressure(StructSize.MIplImage);
 
          Debug.Assert(Marshal.ReadInt32(Ptr, Marshal.OffsetOf(typeof(MIplImage), "align").ToInt32()) == 4, "Only 4 align is supported at this moment");
 
@@ -537,6 +537,27 @@ namespace Emgu.CV
 
          return res;
       }
+
+      /// <summary>
+      /// Get a subimage which image data is shared with the current image.
+      /// </summary>
+      /// <param name="rect">The rectangle area of the sub-image</param>
+      /// <returns>A subimage which image data is shared with the current image</returns>
+      public Image<TColor, TDepth> GetSubRect(System.Drawing.Rectangle rect)
+      {
+         Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
+         subRect._array = _array;
+         subRect._ptr = Marshal.AllocHGlobal(StructSize.MIplImage);
+         GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
+
+         IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
+         CvInvoke.cvGetSubRect(_ptr, matPtr, rect);
+         CvInvoke.cvGetImage(matPtr, subRect.Ptr);
+         Marshal.FreeHGlobal(matPtr);
+
+         return subRect;
+      }
+
       #endregion
 
       #region Drawing functions
@@ -994,7 +1015,7 @@ namespace Emgu.CV
                 imagecopy.Ptr,
                 stor.Ptr,
                 ref seq,
-                HeaderSize.MCvContour,
+                StructSize.MCvContour,
                 type,
                 method,
                 new System.Drawing.Point(0, 0));
@@ -1716,7 +1737,8 @@ namespace Emgu.CV
       /// <returns>The result of the comparison as a mask</returns>
       public Image<TColor, Byte> Cmp(Image<TColor, TDepth> img2, CvEnum.CMP_TYPE cmp_type)
       {
-         Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
+         Size size = Size;
+         Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
          /*
          Emgu.Toolbox.Action<IntPtr, IntPtr, int> comparator = 
@@ -1733,9 +1755,9 @@ namespace Emgu.CV
          }
          else
          {
-            using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(Width, Height))
-            using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(Width, Height))
-            using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(Width, Height))
+            using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
+            using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(size))
+            using (Image<Gray, Byte> dest = new Image<Gray, Byte>(size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
@@ -2106,7 +2128,7 @@ namespace Emgu.CV
             Math.Max(Math.Abs(line.P2.X - line.P1.X), Math.Abs(line.P2.Y - line.P1.Y))
             : Math.Abs(line.P2.X - line.P1.X) + Math.Abs(line.P2.Y - line.P1.Y);
 
-         TDepth[,] data = new TDepth[size, new TColor().Dimension];
+         TDepth[,] data = new TDepth[size, NumberOfChannels];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          CvInvoke.cvSampleLine(
              Ptr,
@@ -2272,7 +2294,7 @@ namespace Emgu.CV
          if (crop)
          {
             PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-            using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
+            using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
             {
                return WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
             }
@@ -2286,7 +2308,7 @@ namespace Emgu.CV
 
             PointF center = new PointF(maxSize * .5f, maxSize * .5f);
 
-            using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
+            using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
             using (Matrix<double> corners = new Matrix<double>(new double[4, 3]{
                  {offsetX,offsetY,1},
                  {offsetX,offsetY+size.Height,1},
@@ -2389,7 +2411,7 @@ namespace Emgu.CV
             else
             {
                //different depth
-               int channelCount = new TColor().Dimension;
+               int channelCount = NumberOfChannels;
                Type dstDepth = typeof(TDepth);
                Type srcDepth = typeof(TSrcDepth);
                {
@@ -2718,7 +2740,7 @@ namespace Emgu.CV
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              bmp.PixelFormat);
 
-         int arrayWidthStep = _sizeOfElement * new TColor().Dimension * _array.GetLength(1);
+         int arrayWidthStep = _sizeOfElement * NumberOfChannels * _array.GetLength(1);
 
          Int64 destAddress = _dataHandle.AddrOfPinnedObject().ToInt64();
          Int64 srcAddress = data.Scan0.ToInt64();
@@ -2748,8 +2770,9 @@ namespace Emgu.CV
                    new System.Drawing.Rectangle(0, 0, Width, Height),
                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+               
                Int64 dataPtr = data.Scan0.ToInt64();
-
+               
                IntPtr startPtr;
                int widthStep;
                System.Drawing.Size size;
@@ -2896,15 +2919,20 @@ namespace Emgu.CV
       public Image<TColor, TDepth> MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
+         
+         //For MOP_GRADIENT, a temperary buffer is required
          Image<TColor, TDepth> temp = null;
-         IntPtr tempPtr = IntPtr.Zero;
          if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT)
          {
             temp = CopyBlank();
-            tempPtr = temp.Ptr;
          }
 
-         CvInvoke.cvMorphologyEx(Ptr, res.Ptr, tempPtr, element.Ptr, operation, iterations);
+         CvInvoke.cvMorphologyEx(
+            Ptr, res.Ptr, 
+            temp == null? IntPtr.Zero : temp.Ptr, 
+            element.Ptr, 
+            operation, 
+            iterations);
 
          if (temp != null) temp.Dispose();
          return res;
@@ -3253,7 +3281,7 @@ namespace Emgu.CV
          {
             CvInvoke.cvReleaseImageHeader(ref _ptr);
             _ptr = IntPtr.Zero;
-            GC.RemoveMemoryPressure(HeaderSize.MIplImage);
+            GC.RemoveMemoryPressure(StructSize.MIplImage);
          }
 
          base.DisposeObject();
@@ -3960,15 +3988,16 @@ namespace Emgu.CV
       ///</returns>
       public Image<Gray, TDepth>[] Split()
       {
-
+         //If single channel, return a copy
          if (NumberOfChannels == 1) return new Image<Gray, TDepth>[] { Copy() as Image<Gray, TDepth> };
 
+         //handle multiple channels
          Image<Gray, TDepth>[] res = new Image<Gray, TDepth>[NumberOfChannels];
          IntPtr[] a = new IntPtr[4];
-         int width = Width, height = Height;
+         System.Drawing.Size size = Size;
          for (int i = 0; i < NumberOfChannels; i++)
          {
-            res[i] = new Image<Gray, TDepth>(width, height);
+            res[i] = new Image<Gray, TDepth>(size);
             a[i] = res[i].Ptr;
          }
 

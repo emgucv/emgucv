@@ -22,7 +22,8 @@ namespace Emgu.CV.Test
    {
       public void TestRotationMatrix2D()
       {
-         RotationMatrix2D mat = new RotationMatrix2D(new PointF(1, 2), 30, 1);
+         RotationMatrix2D<float> mat = new RotationMatrix2D<float>(new PointF(1, 2), 30, 1);
+         RotationMatrix2D<double> mat2 = new RotationMatrix2D<double>(new PointF(1, 2), 30, 1);
          //Trace.WriteLine(Emgu.Toolbox.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
       }
 
@@ -735,6 +736,29 @@ namespace Emgu.CV.Test
       private class CustomDllImportAttribute : DllImportAttribute
       {
       }*/
+
+      public void TestDiv2()
+      {
+         int total = 1000000000;
+         int b = 0;
+         Stopwatch watch = Stopwatch.StartNew();
+         for (int i = 0; i < total; i++)
+         {
+            b = i / 2;
+            //b /= 2;
+         }
+         watch.Stop();
+         Trace.WriteLine(watch.ElapsedMilliseconds);
+
+         watch.Reset(); watch.Start();
+         for (int i = 0; i < total; i++)
+         {
+            b = i >> 1 ;
+            //b >>= 1;
+         }
+         Trace.WriteLine(watch.ElapsedMilliseconds);
+
+      }
 
       public void TestKalman()
       {

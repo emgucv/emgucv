@@ -99,14 +99,14 @@ namespace Emgu.CV
       public static void Line2DFitting(PointF[] points, CvEnum.DIST_TYPE type, out PointF normalizedDirection, out PointF aPointOnLine)
       {
          float[] data = new float[6];
-         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
-         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
 
          CvInvoke.cvMakeSeqHeaderForArray(
             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-            HeaderSize.MCvSeq,
-            HeaderSize.PointF,
+            StructSize.MCvSeq,
+            StructSize.PointF,
             handle.AddrOfPinnedObject(),
             points.Length,
             seq,
@@ -128,13 +128,13 @@ namespace Emgu.CV
       /// <returns>An ellipse</returns>
       public static Ellipse EllipseLeastSquareFitting(PointF[] points)
       {
-         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
-         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-            HeaderSize.MCvSeq,
-            HeaderSize.PointF,
+            StructSize.MCvSeq,
+            StructSize.PointF,
             handle.AddrOfPinnedObject(),
             points.Length,
             seq,
@@ -215,13 +215,13 @@ namespace Emgu.CV
       /// <returns>The convex hull of the points</returns>
       public static Seq<PointF> ConvexHull(PointF[] points, MemStorage storage, CvEnum.ORIENTATION orientation)
       {
-         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvSeq);
-         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-            HeaderSize.MCvSeq,
-            HeaderSize.PointF,
+            StructSize.MCvSeq,
+            StructSize.PointF,
             handle.AddrOfPinnedObject(),
             points.Length,
             seq,
@@ -241,13 +241,13 @@ namespace Emgu.CV
       /// <returns>The bounding rectangle for the array of points</returns>
       public static System.Drawing.Rectangle BoundingRectangle(PointF[] points)
       {
-         IntPtr seq = Marshal.AllocHGlobal(HeaderSize.MCvContour);
-         IntPtr block = Marshal.AllocHGlobal(HeaderSize.MCvSeqBlock);
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-            HeaderSize.MCvSeq,
-            HeaderSize.PointF,
+            StructSize.MCvSeq,
+            StructSize.PointF,
             handle.AddrOfPinnedObject(),
             points.Length,
             seq,

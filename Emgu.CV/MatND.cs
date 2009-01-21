@@ -33,8 +33,8 @@ namespace Emgu.CV
       {
          if (_ptr == IntPtr.Zero)
          {
-            _ptr = Marshal.AllocHGlobal(HeaderSize.MCvMatND);
-            GC.AddMemoryPressure(HeaderSize.MCvMatND);
+            _ptr = Marshal.AllocHGlobal(StructSize.MCvMatND);
+            GC.AddMemoryPressure(StructSize.MCvMatND);
          }
       }
 
@@ -98,7 +98,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             Marshal.FreeHGlobal(_ptr);
-            GC.RemoveMemoryPressure(HeaderSize.MCvMatND);
+            GC.RemoveMemoryPressure(StructSize.MCvMatND);
             _ptr = IntPtr.Zero;
          }
       }

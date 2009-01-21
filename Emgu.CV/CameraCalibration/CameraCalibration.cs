@@ -150,8 +150,8 @@ namespace Emgu.CV
          Matrix<double> translation = new Matrix<double>(3, 1);
          RotationVector3D rotation = new RotationVector3D();
 
-         IntPtr objectPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
-         IntPtr imagePointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr objectPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
+         IntPtr imagePointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
          GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
          CvInvoke.cvInitMatHeader(objectPointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
@@ -204,8 +204,8 @@ namespace Emgu.CV
       {
          PointF[] imagePoints = new PointF[objectPoints.Length];
          
-         IntPtr pointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
-         IntPtr imagePointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr pointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
+         IntPtr imagePointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
          GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
          CvInvoke.cvInitMatHeader(pointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
@@ -299,8 +299,8 @@ namespace Emgu.CV
       {
          GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
          GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
-         IntPtr srcPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
-         IntPtr dstPointMatrix = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr srcPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
+         IntPtr dstPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
          CvInvoke.cvInitMatHeader(srcPointMatrix, srcPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, srcHandle.AddrOfPinnedObject(), 0);
          CvInvoke.cvInitMatHeader(dstPointMatrix, dstPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, dstHandle.AddrOfPinnedObject(), 0);
          Matrix<double> homography = new Matrix<double>(3, 3);
@@ -375,7 +375,7 @@ namespace Emgu.CV
          foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
 
          float[,] res = new float[elementCount, 3];
-         int sizeOfT = HeaderSize.MCvPoint3D32f;
+         int sizeOfT = StructSize.MCvPoint3D32f;
          GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
          Int64 address = handle1.AddrOfPinnedObject().ToInt64();
 
@@ -398,7 +398,7 @@ namespace Emgu.CV
          foreach (PointF[] d in data) elementCount += d.Length;
 
          float[,] res = new float[elementCount, 2];
-         int sizeOfT = HeaderSize.PointF;
+         int sizeOfT = StructSize.PointF;
          GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
          Int64 address = handle1.AddrOfPinnedObject().ToInt64();
 

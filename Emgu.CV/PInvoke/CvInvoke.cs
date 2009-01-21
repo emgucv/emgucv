@@ -316,7 +316,7 @@ namespace Emgu.CV
       /// <returns>true if the specified node is occupied</returns>
       public static bool CV_IS_SET_ELEM(IntPtr ptr)
       {
-         return Marshal.ReadInt32(ptr) >= 0;
+         return Marshal.ReadInt32(ptr) >= 0; 
          //return ((MCvSetElem)Marshal.PtrToStructure(ptr, typeof(MCvSetElem))).flags >= 0;
       }
 
@@ -1137,7 +1137,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvMat(int rows, int cols, CV.CvEnum.MAT_DEPTH type, IntPtr data)
       {
-         IntPtr mat = Marshal.AllocHGlobal(HeaderSize.MCvMat);
+         IntPtr mat = Marshal.AllocHGlobal(StructSize.MCvMat);
          CvInvoke.cvInitMatHeader(mat, rows, cols, type, data, 0);
          return mat;
       }

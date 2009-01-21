@@ -750,17 +750,17 @@ namespace Emgu.CV.Test
 
          Matrix<float> dftA = new Matrix<float>(dft_rows, dft_cols);
 
-         matA.CopyTo(dftA.GetSubMatrix(new System.Drawing.Rectangle(0, 0, matA.Width, matA.Height)));
+         matA.CopyTo(dftA.GetSubRect(new System.Drawing.Rectangle(0, 0, matA.Width, matA.Height)));
 
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
 
          Matrix<float> dftB = new Matrix<float>(dft_rows, dft_cols);
-         matB.CopyTo(dftB.GetSubMatrix(new System.Drawing.Rectangle(0, 0, matB.Width, matB.Height)));
+         matB.CopyTo(dftB.GetSubRect(new System.Drawing.Rectangle(0, 0, matB.Width, matB.Height)));
          CvInvoke.cvDFT(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
          CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convResult1.Rows);
-         dftA.GetSubMatrix(new System.Drawing.Rectangle(0, 0, convResult1.Width, convResult1.Height)).CopyTo(convResult1);
+         dftA.GetSubRect(new System.Drawing.Rectangle(0, 0, convResult1.Width, convResult1.Height)).CopyTo(convResult1);
 
          //ImageViewer.Show(convResult1);
       }
@@ -773,6 +773,17 @@ namespace Emgu.CV.Test
 
          Assert.AreEqual(roi.Width, image.Width);
          Assert.AreEqual(roi.Height, image.Height);
+      }
+
+      [Test]
+      public void TestGetSubRect()
+      {
+         Image<Bgr, Single> image = new Image<Bgr, float>(200, 100);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
+         Rectangle roi = new Rectangle(10, 20, 30, 40);
+         Image<Bgr, Single> roi1 = image.Copy(roi);
+         Image<Bgr, Single> roi2 = image.GetSubRect(roi);
+         Assert.IsTrue(roi1.Equals( roi2 ));
       }
 
       /*

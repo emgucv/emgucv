@@ -31,7 +31,7 @@ namespace Emgu.CV
       {
          _ptr = CvInvoke.cvCreateSeq(
              seqFlag, 
-             HeaderSize.MCvContour,
+             StructSize.MCvContour,
              _sizeOfElement,
              storage.Ptr);
       }
@@ -168,7 +168,7 @@ namespace Emgu.CV
          return new Contour<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
-             HeaderSize.MCvContour,
+             StructSize.MCvContour,
              storage.Ptr,
              CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
              accuracy,
