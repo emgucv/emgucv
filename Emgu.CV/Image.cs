@@ -101,15 +101,13 @@ namespace Emgu.CV
       private void LoadImageUsingOpenCV(FileInfo file)
       {
          IntPtr ptr;
-         int width, height;
+         System.Drawing.Size size;
 
          #region read the image into ptr ( of TColor, Byte )
          if (typeof(TColor) == typeof(Gray)) //TColor type is gray, load the image as grayscale
          {
             ptr = CvInvoke.cvLoadImage(file.FullName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
-            System.Drawing.Size size = CvInvoke.cvGetSize(ptr);
-            width = size.Width;
-            height = size.Height;
+            size = CvInvoke.cvGetSize(ptr);
          }
          else //color type is not gray
          {
@@ -120,36 +118,35 @@ namespace Emgu.CV
                throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
 
             MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-            width = mptr.width;
-            height = mptr.height;
+            size = new Size(mptr.width, mptr.height);
 
             if (typeof(TColor) != typeof(Bgr)) //TColor type is not Bgr, a conversion is required
             {
-               IntPtr tmp1 = CvInvoke.cvCreateImage(
-                   new System.Drawing.Size(mptr.width, mptr.height),
+               IntPtr tmp = CvInvoke.cvCreateImage(
+                   size,
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
-               CvInvoke.cvCvtColor(ptr, tmp1, GetColorCvtCode(typeof(Bgr), typeof(TColor)));
+               CvInvoke.cvCvtColor(ptr, tmp, GetColorCvtCode(typeof(Bgr), typeof(TColor)));
 
                CvInvoke.cvReleaseImage(ref ptr);
-               ptr = tmp1;
+               ptr = tmp;
             }
          }
          #endregion
 
          if (typeof(TDepth) != typeof(Byte)) //depth is not Byte, a conversion of depth is required
          {
-            IntPtr tmp1 = CvInvoke.cvCreateImage(
-                new System.Drawing.Size(width, height),
+            IntPtr tmp = CvInvoke.cvCreateImage(
+                size,
                 CvDepth,
                 NumberOfChannels);
-            CvInvoke.cvConvertScale(ptr, tmp1, 1.0, 0.0);
+            CvInvoke.cvConvertScale(ptr, tmp, 1.0, 0.0);
             CvInvoke.cvReleaseImage(ref ptr);
-            ptr = tmp1;
+            ptr = tmp;
          }
 
          #region use managed memory instead of unmanaged
-         AllocateData(height, width, NumberOfChannels);
+         AllocateData(size.Height, size.Width, NumberOfChannels);
 
          CvInvoke.cvCopy(ptr, Ptr, IntPtr.Zero);
 
@@ -236,20 +233,18 @@ namespace Emgu.CV
          DisposeObject();
          Debug.Assert(!_dataHandle.IsAllocated, "Handle should be free");
 
-         int channelCount = numberOfChannels;
-
-         _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, channelCount);
+         _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, numberOfChannels);
          GC.AddMemoryPressure(StructSize.MIplImage);
 
-         Debug.Assert(Marshal.ReadInt32(Ptr, Marshal.OffsetOf(typeof(MIplImage), "align").ToInt32()) == 4, "Only 4 align is supported at this moment");
+         Debug.Assert(Marshal.ReadInt32(Ptr, IplImageOffset.align) == 4, "Only 4 align is supported at this moment");
 
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
-            _array = new TDepth[rows, ((cols >> 2) << 2) + 4, channelCount];
+            _array = new TDepth[rows, (cols &(~3)) + 4, numberOfChannels];
          }
          else
          {
-            _array = new TDepth[rows, cols, channelCount];
+            _array = new TDepth[rows, cols, numberOfChannels];
          }
 
          _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
@@ -490,7 +485,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Copy(System.Drawing.Rectangle roi)
       {
          Rectangle currentRoi = ROI; //cache the current roi
-         Image<TColor, TDepth> res = new Image<TColor, TDepth>(roi.Width, roi.Height);
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(roi.Size);
          ROI = roi;
          CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
          ROI = currentRoi; //reset the roi
@@ -547,7 +542,8 @@ namespace Emgu.CV
       {
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
-         subRect._ptr = Marshal.AllocHGlobal(StructSize.MIplImage);
+         subRect._ptr = CvInvoke.cvCreateImageHeader(rect.Size, CvDepth, NumberOfChannels); 
+         
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
          IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
@@ -1110,12 +1106,12 @@ namespace Emgu.CV
          if (ipl.roi != IntPtr.Zero)
          {
             System.Drawing.Rectangle rec = CvInvoke.cvGetImageROI(ptr);
-            elementCount = (int)rec.Width * ipl.nChannels;
+            elementCount = rec.Width * ipl.nChannels;
             byteWidth = ((int)ipl.depth >> 3) * elementCount;
 
-            start += (int)rec.Y * widthStep
-                    + ((int)ipl.depth >> 3) * (int)rec.X;
-            rows = (int)rec.Height;
+            start += rec.Y * widthStep
+                    + ((int)ipl.depth >> 3) * rec.X;
+            rows = rec.Height;
          }
          else
          {
@@ -1740,15 +1736,6 @@ namespace Emgu.CV
          Size size = Size;
          Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
-         /*
-         Emgu.Toolbox.Action<IntPtr, IntPtr, int> comparator = 
-             delegate(IntPtr src, IntPtr dest, int channelIndex)
-             {
-
-             };
-
-         ForEachDuplicateChannel<Byte>(
-         */
          if (NumberOfChannels == 1)
          {
             CvInvoke.cvCmp(Ptr, img2.Ptr, res.Ptr, cmp_type);
@@ -1787,7 +1774,8 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, Byte> Cmp(double value, CvEnum.CMP_TYPE cmp_type)
       {
-         Image<TColor, Byte> res = new Image<TColor, byte>(Width, Height);
+         Size size = Size;
+         Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
          if (NumberOfChannels == 1)
          {
@@ -1795,8 +1783,8 @@ namespace Emgu.CV
          }
          else
          {
-            using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(Width, Height))
-            using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(Width, Height))
+            using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
+            using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
@@ -2379,7 +2367,7 @@ namespace Emgu.CV
          GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte,System.Double")]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.IColor, new()
       {
-         Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Width, Height);
+         Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);
          res.ConvertFrom(this);
          return res;
       }
@@ -2392,7 +2380,7 @@ namespace Emgu.CV
       /// <param name="srcImage">The sourceImage</param>
       public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.IColor, new()
       {
-         if (srcImage.Width != Width || srcImage.Height != Height)
+         if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
             using (Image<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Width, Height))
             {
@@ -2527,7 +2515,9 @@ namespace Emgu.CV
             System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
-            if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
+            if (
+               typeof(TColor) == typeof(Gray) && 
+               typeof(TDepth) == typeof(Byte))
             {   //Grayscale of Bytes
                Bitmap bmp = new Bitmap(
                    size.Width,
@@ -2539,12 +2529,14 @@ namespace Emgu.CV
                bmp.Palette = Util.GrayscalePalette;
                return bmp;
             }
-#if LINUX
-            // Mono doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
+            // Mono in Linux doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
             // See https://bugzilla.novell.com/show_bug.cgi?id=363431
             // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
-#else
-            else if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+            else if (
+               Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
+               Platform.Runtime == Emgu.Util.TypeEnum.Runtime.DotNet &&
+               typeof(TColor) == typeof(Bgr) && 
+               typeof(TDepth) == typeof(Byte))
             {   //Bgr byte    
                return new Bitmap(
                    size.Width,
@@ -2553,8 +2545,9 @@ namespace Emgu.CV
                    System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                    scan0);
             }
-#endif
-            else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+            else if (
+               typeof(TColor) == typeof(Bgra) && 
+               typeof(TDepth) == typeof(Byte))
             {   //Bgra byte
                return new Bitmap(
                    size.Width,
@@ -2582,31 +2575,11 @@ namespace Emgu.CV
          set
          {
             #region reallocate memory if necessary
-            if (Ptr == IntPtr.Zero || Width != value.Width || Height != value.Height)
+            if (Ptr == IntPtr.Zero || !Size.Equals(value.Size))
             {
                AllocateData(value.Height, value.Width, NumberOfChannels);
             }
             #endregion
-
-            /*
-            if (value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb
-               || value.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
-            {
-               if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-               {
-                  using (Bitmap bmp = Bitmap)
-                  using (Graphics g = Graphics.FromImage(bmp))
-                  {
-                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                     g.DrawImage(value, 0.0f, 0.0f, (float) value.Width, (float) value.Height);
-                  }
-               }
-               else
-               {
-                  using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
-                     ConvertFrom(tmp);
-               }
-            }*/
 
             switch (value.PixelFormat)
             {
@@ -2682,7 +2655,7 @@ namespace Emgu.CV
                      {
                         Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
 
-                        for (int j = 0; j < cols; j++, v = v << 1)
+                        for (int j = 0; j < cols; j++, v <<= 1)
                         {
                            if ((j & 7) == 0)
                            {  //fetch the next byte 
@@ -2838,12 +2811,10 @@ namespace Emgu.CV
             int widthStep;
             System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
-
             Int64 start = startPtr.ToInt64();
-
             for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
-
+           
             bmp.UnlockBits(data);
 
             return bmp;

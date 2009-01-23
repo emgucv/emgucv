@@ -528,19 +528,7 @@ namespace Emgu.CV.Test
          pts[31] = new PointF(412, 68);
          pts[32] = new PointF(348, 32);
 
-         #region Find the region of interest
-         System.Drawing.Rectangle roi;
-         using (MemStorage storage = new MemStorage())
-         {
-            Seq<System.Drawing.PointF> seq =
-               new Seq<PointF>(CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2), storage);
-         
-            seq.Push(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
-            roi = CvInvoke.cvBoundingRect(seq.Ptr, true);
-         }
-         #endregion
-
-         PlanarSubdivision subdiv = new PlanarSubdivision(ref roi);
+         PlanarSubdivision subdiv = new PlanarSubdivision(pts);
          for (int i = 0; i < pts.Length; i++)
          {
             MCvSubdiv2DEdge? edge;
@@ -735,7 +723,7 @@ namespace Emgu.CV.Test
          CameraCalibration.CalibrateCamera(
             objectPoints,
             imagePoints,
-            ref size,
+            size,
             new IntrinsicCameraParameters(),
             Emgu.CV.CvEnum.CALIB_TYPE.DEFAULT,
             out extrinsicParameters);

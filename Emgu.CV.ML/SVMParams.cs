@@ -217,6 +217,6 @@ namespace Emgu.CV.ML
             p.term_crit = TermCrit;
             return p;
          }
-   }
+      }
    }
 }

@@ -21,13 +21,14 @@ namespace Emgu.CV.Structure
       /// 
       /// </summary>
       public MCvSubdiv2DEdge first;
+
       /// <summary>
       /// 
       /// </summary>
       public System.Drawing.PointF pt;
 
       /// <summary>
-      /// return if this is a valid point
+      /// Return true if this is a valid point
       /// </summary>
       public bool IsValid
       {

@@ -51,6 +51,7 @@ namespace MotionDetection
 
       public void ProcessImage()
       {
+         using (MemStorage storage = new MemStorage()) //create storage for motion components
          while (true)
          {
             Image<Bgr, Byte> image = _capture.QuerySmallFrame().PyrUp(); //reduce noise from the image
@@ -68,46 +69,43 @@ namespace MotionDetection
             #endregion
 
             //create the motion image 
-            Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Width, motionMask.Height);
+            Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Size);
             //display the motion pixels in blue (first channel)
             motionImage[0] = motionMask;
             
             //Threshold to define a motion area, reduce the value to detect smaller motion
             double minArea = 100;
 
-            using (MemStorage storage = new MemStorage()) //create storage for motion components
+            storage.Clear(); //clear the storage
+            Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
+
+            //iterate through each of the motion component
+            foreach (MCvConnectedComp comp in motionComponents)
             {
-               Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
+               //reject the components that have small area;
+               if (comp.area < minArea) continue;
 
-               //iterate through each of the motion component
-               foreach (MCvConnectedComp comp in motionComponents)
-               {
-                  //reject the components that have small area;
-                  if (comp.rect.Width * comp.rect.Height < minArea) continue;
+               // find the angle and motion pixel count of the specific area
+               double angle, motionPixelCount;
+               _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
 
-                  // find the angle and motion pixel count of the specific area
-                  double angle, motionPixelCount;
-                  _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
+               //reject the area that contains too few motion
+               if (motionPixelCount / comp.area < 0.05) continue;
 
-                  //reject the area that contains too few motion
-                  if (motionPixelCount / comp.area < 0.05) continue;
-
-                  //Draw each individual motion in red
-                  DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
-               }
-
-               // find and draw the overall motion angle
-               double overallAngle, overallMotionPixelCount;
-               _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
-               DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
-
-               //Display the amount of motions found on the current image
-               UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
+               //Draw each individual motion in red
+               DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
             }
 
+            // find and draw the overall motion angle
+            double overallAngle, overallMotionPixelCount;
+            _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
+            DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
+
+            //Display the amount of motions found on the current image
+            UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
+            
             //Display the image of the motion
             motionImageBox.Image = motionImage;
-
          }
       }
 
@@ -123,11 +121,13 @@ namespace MotionDetection
          }
       }
 
-      private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionArea, double angle, Bgr color)
+      private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionRegion, double angle, Bgr color)
       {
-         float circleRadius = (float)(motionArea.Width + motionArea.Height) / 4.0f;
+         float circleRadius = (float)(motionRegion.Width + motionRegion.Height) / 4.0f;
 
-         CircleF circle = new CircleF(new System.Drawing.PointF(motionArea.X + motionArea.Width / 2.0f, motionArea.Y + motionArea.Height / 2.0f), circleRadius);
+         CircleF circle = new CircleF(
+            new System.Drawing.PointF(motionRegion.X + motionRegion.Width / 2.0f, motionRegion.Y + motionRegion.Height / 2.0f), 
+            circleRadius);
 
          int xDirection = (int)(Math.Cos(angle * Math.PI / 180.0) * circleRadius);
          int yDirection = (int)(Math.Sin(angle * Math.PI / 180.0) * circleRadius);

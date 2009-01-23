@@ -114,14 +114,14 @@ namespace FacialMouseControl
                //0.5 refer to the far right
                double horizontalFraction = (biggestFaceCenter.X - imageAreaCenter.X) / imageArea.Width;
                //do the same for vertical fraction
-               double verticalFraction = (biggestFaceCenter.Y = imageAreaCenter.Y) / imageArea.Height;
+               double verticalFraction = (biggestFaceCenter.Y - imageAreaCenter.Y) / imageArea.Height;
 
                Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
                int maxMouseSpeed = rect.Width / 20;
                System.Drawing.Point p;
                GetCursorPos(out p);
-               p.X = Math.Min(Math.Max(0, p.X + (int)(maxMouseSpeed / 2.0 * horizontalFraction)), rect.Width);
-               p.Y = Math.Min(Math.Max(0, p.Y - (int)(maxMouseSpeed / 2.0 * verticalFraction)), rect.Height);
+               p.X = Math.Min(Math.Max(0, p.X + (maxMouseSpeed / 2) *(int) horizontalFraction), rect.Width);
+               p.Y = Math.Min(Math.Max(0, p.Y - (maxMouseSpeed / 2) *(int) verticalFraction), rect.Height);
                SetCursorPos(p.X, p.Y);
             }
          }

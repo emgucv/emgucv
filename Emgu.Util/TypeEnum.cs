@@ -20,6 +20,21 @@ namespace Emgu.Util.TypeEnum
    }
 
    /// <summary>
+   /// The runtime environment
+   /// </summary>
+   public enum Runtime
+   {
+      /// <summary>
+      /// .Net runtime
+      /// </summary>
+      DotNet,
+      /// <summary>
+      /// Mono runtime
+      /// </summary>
+      Mono
+   }
+
+   /// <summary>
    /// The type of Programming languages
    /// </summary>
    public enum ProgrammingLanguage

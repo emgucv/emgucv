@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using System.Drawing;
 
 namespace Emgu.CV
@@ -14,7 +15,7 @@ namespace Emgu.CV
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
    public class Map<TColor, TDepth> : Image<TColor, TDepth> 
-      where TColor : ColorType, new() 
+      where TColor : IColor, new() 
    {
       private RectangleF _area;
 
@@ -25,10 +26,10 @@ namespace Emgu.CV
       /// <param name="area"></param>
       /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
       /// <param name="color"> The initial color of the map</param>
-      public Map(RectangleF area, Point2D<double> resolution, TColor color)
+      public Map(RectangleF area, PointF resolution, TColor color)
          : base(
-              System.Convert.ToInt32((area.Width) / resolution.X),
-              System.Convert.ToInt32((area.Height) / resolution.Y),
+              (int)((area.Width) / resolution.X),
+              (int)((area.Height) / resolution.Y),
               color)
       {
          _area = area;
@@ -40,7 +41,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="area"></param>
       /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
-      public Map(System.Drawing.RectangleF area, Point2D<double> resolution)
+      public Map(System.Drawing.RectangleF area, PointF resolution)
          : this(area, resolution, new TColor())
       {
       }
@@ -68,22 +69,21 @@ namespace Emgu.CV
       /// <summary>
       /// The resolution of this map as a 2D point
       /// </summary>
-      public Point2D<double> Resolution
+      public PointF Resolution
       {
-         get { return new Point2D<double>(Area.Width / Width, Area.Height / Height); }
+         get { return new PointF(Area.Width / Width, Area.Height / Height); }
       }
 
       /// <summary>
       /// Map a point to a position in the internal image
       /// </summary>
-      /// <typeparam name="D2"></typeparam>
       /// <param name="pt"></param>
       /// <returns></returns>
-      private PointF MapPoint(PointF pt) 
+      private Point MapPoint(PointF pt) 
       {
-         return new PointF(
-             (pt.X - Area.Left) / Resolution.X,
-             pt.Y - Area.Top) / Resolution.Y));
+         return new Point(
+             (int) ((pt.X - Area.Left) / Resolution.X),
+             (int) ((pt.Y - Area.Top) / Resolution.Y));
       }
 
       /// <summary>
@@ -95,7 +95,7 @@ namespace Emgu.CV
       public void Draw(RectangleF rect, TColor color, int thickness) 
       {
          base.Draw(new Rectangle(
-            MapPoint<float>( new Point2D<float>(rect.Left + rect.Width/2.0f, rect.Top + rect.Height/2.0f )).MCvPoint, 
+            MapPoint(new PointF(rect.Left + rect.Width/2.0f, rect.Top + rect.Height/2.0f )), 
             new Size((int) (rect.Width / Resolution.X),(int) (rect.Height / Resolution.Y))
             ), color, thickness);
       }
@@ -103,40 +103,36 @@ namespace Emgu.CV
       /// <summary>
       /// Draw a line segment in the map
       /// </summary>
-      /// <typeparam name="T">The type of the line</typeparam>
       /// <param name="line">The line to be draw</param>
       /// <param name="color">The color for the line</param>
       /// <param name="thickness">The thickness of the line</param>
       public override void Draw(LineSegment2DF line, TColor color, int thickness)
       {
-         PointF p1 = MapPoint(line.P1);
-         PointF p2 = MapPoint(line.P2);
-         base.Draw(new LineSegment2DF(p1, p2), color, thickness);
+         base.Draw(new LineSegment2D(MapPoint(line.P1), MapPoint(line.P2)), color, thickness);
       }
 
       ///<summary> Draw a Circle of the specific color and thickness </summary>
       ///<param name="circle"> The circle to be drawn</param>
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
-      public override void Draw<T>(Circle<T> circle, TColor color, int thickness)
+      public override void Draw(CircleF circle, TColor color, int thickness)
       {
-         Point2D<double> center = MapPoint<T>(circle.Center);
-         double radius = System.Convert.ToDouble(circle.Radius) / Resolution.X;
-         base.Draw(new Circle<double>(center, radius), color, thickness);
+         base.Draw(
+            new CircleF(MapPoint(circle.Center), circle.Radius / Resolution.X), 
+            color, 
+            thickness);
       }
 
       ///<summary> Draw a convex polygon of the specific color and thickness </summary>
       ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the convex polygon </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
-      public override void Draw<T>(IConvexPolygon<T> polygon, TColor color, int thickness)
+      public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
-         System.Drawing.Point[] pts = Array.ConvertAll<Point2D<T>, System.Drawing.Point>(
-             polygon.Vertices,
-             delegate(Point2D<T> p)
-             {
-                return MapPoint(p).MCvPoint;
-             });
+         System.Drawing.Point[] pts = Array.ConvertAll<PointF, System.Drawing.Point>(
+             polygon.GetVertices(),
+             this.MapPoint);
+
          if (thickness > 0)
             base.DrawPolyline(pts, true, color, thickness);
          else
@@ -150,9 +146,9 @@ namespace Emgu.CV
       /// <param name="font">The font used for drawing</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
-      public void Draw<T>(String message, ref MCvFont font, Point2D<T> bottomLeft, TColor color) where T: struct, IComparable
+      public void Draw(String message, ref MCvFont font, PointF bottomLeft, TColor color)
       {
-         base.Draw(message, ref font, MapPoint<T>(bottomLeft).Convert<int>().MCvPoint, color);
+         base.Draw(message, ref font, MapPoint(bottomLeft), color);
       }
 
       /// <summary>
@@ -162,10 +158,10 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
-      public override void DrawPolyline<T>(Point2D<T>[] pts, bool isClosed, TColor color, int thickness)
+      public void DrawPolyline(PointF[] pts, bool isClosed, TColor color, int thickness)
       {
-         base.DrawPolyline<double>(
-             Array.ConvertAll<Point2D<T>, Point2D<double>>(pts, delegate(Point2D<T> p) { return MapPoint(p); }),
+         base.DrawPolyline(
+             Array.ConvertAll<PointF, Point>(pts, this.MapPoint),
              isClosed,
              color,
              thickness);

@@ -28,13 +28,55 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Create a new MCvScalar structure using the specific values
       /// </summary>
-      /// <param name="values"></param>
-      public MCvScalar(params double[] values)
+      /// <param name="v0">v0</param>
+      public MCvScalar(double v0)
       {
-         v0 = values.Length > 0 ? values[0] : 0.0;
-         v1 = values.Length > 1 ? values[1] : 0.0;
-         v2 = values.Length > 2 ? values[2] : 0.0;
-         v3 = values.Length > 3 ? values[3] : 0.0;
+         this.v0 = v0;
+         this.v1 = 0;
+         this.v2 = 0;
+         this.v3 = 0;
+      }
+
+      /// <summary>
+      /// Create a new MCvScalar structure using the specific values
+      /// </summary>
+      /// <param name="v0">v0</param>
+      /// <param name="v1">v1</param>
+      public MCvScalar(double v0, double v1)
+      {
+         this.v0 = v0;
+         this.v1 = v1;
+         this.v2 = 0;
+         this.v3 = 0;
+      }
+
+      /// <summary>
+      /// Create a new MCvScalar structure using the specific values
+      /// </summary>
+      /// <param name="v0">v0</param>
+      /// <param name="v1">v1</param>
+      /// <param name="v2">v2</param>
+      public MCvScalar(double v0, double v1, double v2)
+      {
+         this.v0 = v0;
+         this.v1 = v1;
+         this.v2 = v2;
+         this.v3 = 0;
+      }
+
+      /// <summary>
+      /// Create a new MCvScalar structure using the specific values
+      /// </summary>
+      /// <param name="v0">v0</param>
+      /// <param name="v1">v1</param>
+      /// <param name="v2">v2</param>
+      /// <param name="v3">v3</param>
+      public MCvScalar(double v0, double v1, double v2, double v3)
+      {
+         this.v0 = v0;
+         this.v1 = v1;
+         this.v2 = v2;
+         this.v3 = v3;
       }
 
       #region ICodeGenerable Members
@@ -60,9 +102,11 @@ namespace Emgu.CV.Structure
       /// <returns>true if the two MCvScalar equals</returns>
       public bool Equals(MCvScalar other)
       {
-         return v0 == other.v0 && v1 == other.v1 && v2 == other.v2 && v3 == other.v3;
+         return v0 == other.v0 
+            && v1 == other.v1 
+            && v2 == other.v2 
+            && v3 == other.v3;
       }
-
       #endregion
    }
 }

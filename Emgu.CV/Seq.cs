@@ -11,7 +11,7 @@ namespace Emgu.CV
    ///<summary>
    /// Wrapper to OpenCV Seq 
    ///</summary>
-   public class Seq<T> :  IEnumerable<T> where T : struct
+   public class Seq<T> : IEnumerable<T> where T : struct
    {
       /// <summary>
       /// The pointer to this sequence
@@ -62,8 +62,8 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Seq(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind,  CvEnum.SEQ_FLAG flag, MemStorage stor)
-         : this( ((int)kind | (int)eltype | (int)flag), stor)
+      public Seq(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+         : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }
 
@@ -86,30 +86,70 @@ namespace Emgu.CV
          _ptr = seq;
          _stor = storage;
       }
-      #endregion 
+      #endregion
 
+      #region Push functions
       /// <summary>
       /// Push the data to the sequence
       /// </summary>
-      /// <param name="data">The data to be push into the sequence</param>
+      /// <param name="data">The data to be pushed into the sequence</param>
       public void Push(T data)
       {
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
          Marshal.StructureToPtr(data, dataCopy, false);
          CvInvoke.cvSeqPush(Ptr, dataCopy);
-         Marshal.FreeHGlobal(dataCopy);;
+         Marshal.FreeHGlobal(dataCopy); ;
+      }
+
+      /// <summary>
+      /// Push the data to the sequence
+      /// </summary>
+      /// <param name="data">The data to be pushed into the sequence</param>
+      public void PushFront(T data)
+      {
+         IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
+         Marshal.StructureToPtr(data, dataCopy, false);
+         CvInvoke.cvSeqPushFront(Ptr, dataCopy);
+
+         Marshal.FreeHGlobal(dataCopy); ;
       }
 
       /// <summary>
       /// Push multiple elements to the sequence
       /// </summary>
       /// <param name="data">The data to push to the sequence</param>
-      /// <param name="backOrFront">Specify if pushing to the back or to the front</param>
-      public void Push(T[] data, CvEnum.BACK_OR_FRONT backOrFront)
+      /// <param name="backOrFront">Specify if pushing to the back or front</param>
+      public void PushMulti(T[] data, CvEnum.BACK_OR_FRONT backOrFront)
       {
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          CvInvoke.cvSeqPushMulti(Ptr, handle.AddrOfPinnedObject(), data.Length, backOrFront);
          handle.Free();
+      }
+      #endregion 
+
+      #region Pop functions
+      /// <summary>
+      /// Pop an element from the back of the sequence 
+      /// </summary>
+      public T Pop()
+      {
+         IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
+         CvInvoke.cvSeqPop(Ptr, dataCopy);
+         T res = (T)Marshal.PtrToStructure(dataCopy, typeof(T));
+         Marshal.FreeHGlobal(dataCopy);
+         return res;
+      }
+
+      /// <summary>
+      /// Pop an element from the front of the sequence 
+      /// </summary>
+      public T PopFront()
+      {
+         IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
+         CvInvoke.cvSeqPopFront(Ptr, dataCopy);
+         T res = (T)Marshal.PtrToStructure(dataCopy, typeof(T));
+         Marshal.FreeHGlobal(dataCopy);
+         return res;
       }
 
       /// <summary>
@@ -118,7 +158,7 @@ namespace Emgu.CV
       /// <param name="count">The number of elements to be poped</param>
       /// <param name="backOrFront">The location the pop operation is started</param>
       /// <returns>The elements poped from the sequence</returns>
-      public T[] Pop(int count, CvEnum.BACK_OR_FRONT backOrFront)
+      public T[] PopMulti(int count, CvEnum.BACK_OR_FRONT backOrFront)
       {
          count = Math.Min(count, Total);
          T[] res = new T[count];
@@ -126,6 +166,29 @@ namespace Emgu.CV
          CvInvoke.cvSeqPopMulti(Ptr, handle.AddrOfPinnedObject(), count, backOrFront);
          handle.Free();
          return res;
+      }
+      #endregion
+
+      /// <summary>
+      /// Removes element from sequence middle
+      /// </summary>
+      /// <param name="index">Index of removed element</param>
+      public void RemoveAt(int index)
+      {
+         CvInvoke.cvSeqRemove(Ptr, index);
+      }
+
+      /// <summary>
+      /// Inserts element in sequence middle
+      /// </summary>
+      /// <param name="index">Index before which the element is inserted. Inserting before 0 (the minimal allowed value of the parameter) is equal to cvSeqPushFront and inserting before seq->total (the maximal allowed value of the parameter) is equal to cvSeqPush</param>
+      /// <param name="data">Inserted element</param>
+      public void Insert(int index, T data)
+      {
+         IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
+         Marshal.StructureToPtr(data, dataCopy, false);
+         CvInvoke.cvSeqInsert(Ptr, index, dataCopy);
+         Marshal.FreeHGlobal(dataCopy);
       }
 
       /// <summary>
@@ -398,7 +461,7 @@ namespace Emgu.CV
          return ApproxPoly(accuracy, _stor);
       }
 
-      ///<summary> The smallest Bouding Rectangle </summary>
+      ///<summary> Get the smallest bouding rectangle </summary>
       public System.Drawing.Rectangle BoundingRectangle
       {
          get

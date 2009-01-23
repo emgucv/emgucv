@@ -96,7 +96,7 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          CvInvoke.cvReleaseFeatureTree(_ptr);
-         _ptr = IntPtr.Zero;
+         //_ptr = IntPtr.Zero;
          _descriptorMatrix.Dispose();
       }
    }

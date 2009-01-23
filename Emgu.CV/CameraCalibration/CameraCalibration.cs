@@ -22,7 +22,13 @@ namespace Emgu.CV
       /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
       /// <param name="flags">Flags</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
-      public static void CalibrateCamera(MCvPoint3D32f[][] objectPoints, PointF[][] imagePoints, ref System.Drawing.Size imageSize, IntrinsicCameraParameters intrinsicParam, CvEnum.CALIB_TYPE flags, out ExtrinsicCameraParameters[] extrinsicParams)
+      public static void CalibrateCamera(
+         MCvPoint3D32f[][] objectPoints, 
+         PointF[][] imagePoints, 
+         System.Drawing.Size imageSize, 
+         IntrinsicCameraParameters intrinsicParam, 
+         CvEnum.CALIB_TYPE flags, 
+         out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
          int imageCount = objectPoints.Length;
@@ -89,9 +95,9 @@ namespace Emgu.CV
          PointF[][] imagePoints2, 
          IntrinsicCameraParameters intrinsicParam1, 
          IntrinsicCameraParameters intrinsicParam2, 
-         ref System.Drawing.Size imageSize, 
+         System.Drawing.Size imageSize, 
          CvEnum.CALIB_TYPE flags, 
-         ref MCvTermCriteria termCrit, 
+         MCvTermCriteria termCrit, 
          out ExtrinsicCameraParameters extrinsicParams, 
          out Matrix<double> foundamentalMatrix, 
          out Matrix<double> essentialMatrix )

@@ -33,23 +33,23 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
-#if LINUX
-#else
-         /*
-         System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-         System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
-         System.IO.DirectoryInfo directory = file.Directory;
-         //System.Security.AccessControl.DirectorySecurity security = directory.GetAccessControl();
-         Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
-         */
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         {
+            /*
+            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
+            System.IO.DirectoryInfo directory = file.Directory;
+            //System.Security.AccessControl.DirectorySecurity security = directory.GetAccessControl();
+            Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
+            */
 
-         String loadLibraryErrorMessage =
-            "Unable to load {0}. Please check the following: 1. {0} is located in the same folder as Emgu.CV.dll; 2. MSVCRT 8.0 SP1 is installed.";
-         LoadLibrary(CXCORE_LIBRARY, loadLibraryErrorMessage);
-         LoadLibrary(CV_LIBRARY, loadLibraryErrorMessage);
-         LoadLibrary(HIGHGUI_LIBRARY, loadLibraryErrorMessage);
-         LoadLibrary(CVAUX_LIBRARY, loadLibraryErrorMessage);
-#endif
+            String loadLibraryErrorMessage =
+               "Unable to load {0}. Please check the following: 1. {0} is located in the same folder as Emgu.CV.dll; 2. MSVCRT 8.0 SP1 is installed.";
+            LoadLibrary(CXCORE_LIBRARY, loadLibraryErrorMessage);
+            LoadLibrary(CV_LIBRARY, loadLibraryErrorMessage);
+            LoadLibrary(HIGHGUI_LIBRARY, loadLibraryErrorMessage);
+            LoadLibrary(CVAUX_LIBRARY, loadLibraryErrorMessage);
+         }
 
          //Use the custom error handler
          cvRedirectError(DefaultCvErrorHandler, IntPtr.Zero, IntPtr.Zero);
@@ -240,6 +240,48 @@ namespace Emgu.CV
       /// <param name="element">Added element</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvSeqPush(IntPtr seq, IntPtr element);
+
+      /// <summary>
+      /// Adds an element to the front of sequence and retuns pointer to the allocated element. If the input element is NULL, the function simply allocates a space for one more element.
+      /// </summary>
+      /// <param name="seq">Sequence</param>
+      /// <param name="element">Added element</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSeqPushFront(IntPtr seq, IntPtr element);
+
+      /// <summary>
+      /// Removes element from sequence end.
+      /// </summary>
+      /// <param name="seq">Sequence</param>
+      /// <param name="element">If the pointer is not zero, the function copies the removed element to this location</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSeqPop(IntPtr seq, IntPtr element);
+
+      /// <summary>
+      /// Removes element from sequence beginning.
+      /// </summary>
+      /// <param name="seq">Sequence</param>
+      /// <param name="element">If the pointer is not zero, the function copies the removed element to this location</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSeqPopFront(IntPtr seq, IntPtr element);
+
+      /// <summary>
+      /// Removes element from sequence middle
+      /// </summary>
+      /// <param name="seq">Sequence</param>
+      /// <param name="index">Index of removed element</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvSeqRemove(IntPtr seq, int index);
+
+      /// <summary>
+      /// Shifts the sequence elements from the inserted position to the nearest end of the sequence and copies the element content there if the pointer is not IntPtr.Zero
+      /// </summary>
+      /// <param name="seq">Sequence</param>
+      /// <param name="beforeIndex">Index before which the element is inserted. Inserting before 0 (the minimal allowed value of the parameter) is equal to cvSeqPushFront and inserting before seq->total (the maximal allowed value of the parameter) is equal to cvSeqPush</param>
+      /// <param name="element">Inserted element</param>
+      /// <returns>Pointer to the inserted element</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvSeqInsert( IntPtr seq, int beforeIndex, IntPtr element );
 
       /// <summary>
       /// Adds several elements to either end of the sequence. The elements are added to the sequence in the same order as they are arranged in the input array but they can fall into different sequence blocks.
@@ -1007,7 +1049,10 @@ namespace Emgu.CV
       /// </param>
       /// <returns>A pointer to IplImage </returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateImage(System.Drawing.Size size, CvEnum.IPL_DEPTH depth, int channels);
+      public static extern IntPtr cvCreateImage(
+         System.Drawing.Size size, 
+         CvEnum.IPL_DEPTH depth, 
+         int channels);
 
       /// <summary>
       /// Allocates, initializes, and returns the structure IplImage.
@@ -1020,7 +1065,10 @@ namespace Emgu.CV
       /// </param>
       /// <returns> The structure IplImage</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvCreateImageHeader(System.Drawing.Size size, CvEnum.IPL_DEPTH depth, int channels);
+      public static extern IntPtr cvCreateImageHeader(
+         System.Drawing.Size size, 
+         CvEnum.IPL_DEPTH depth, 
+         int channels);
 
       /// <summary>
       /// Initializes the image header structure, pointer to which is passed by the user, and returns the pointer.
@@ -1036,7 +1084,7 @@ namespace Emgu.CV
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
          System.Drawing.Size size,
-         int depth,
+         CvEnum.IPL_DEPTH depth,
          int channels,
          int origin,
          int align);

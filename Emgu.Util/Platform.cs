@@ -10,6 +10,17 @@ namespace Emgu.Util
    /// </summary>
    public static class Platform
    {
+      private static readonly OS _os;
+      private static readonly Runtime _runtime;
+
+      static Platform()
+      {
+         int p = (int)Environment.OSVersion.Platform;
+         _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
+
+         _runtime = (Type.GetType("System.MonoType", false) != null) ? Runtime.Mono : Runtime.DotNet;
+      }
+
       /// <summary>
       /// The operating system that is using
       /// </summary>
@@ -17,15 +28,18 @@ namespace Emgu.Util
       {
          get
          {
-            int p = (int)Environment.OSVersion.Platform;
-            if ((p == 4) || (p == 128))
-            {
-               return OS.Linux;
-            }
-            else
-            {
-               return OS.Windows;
-            }
+            return _os;
+         }
+      }
+
+      /// <summary>
+      /// Get the current runtime environment
+      /// </summary>
+      public static Runtime Runtime
+      {
+         get
+         {
+            return _runtime;
          }
       }
    }

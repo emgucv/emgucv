@@ -433,7 +433,7 @@ namespace Emgu.CV
       ///<returns> True if the two Array has the same size</returns>
       public bool EqualSize<D2>(CvArray<D2> src2)
       {
-         return (Width == src2.Width && Height == src2.Height);
+         return Size.Equals(src2.Size) ;
       }
       #endregion
 
