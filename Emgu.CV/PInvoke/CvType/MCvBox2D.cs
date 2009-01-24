@@ -50,5 +50,20 @@ namespace Emgu.CV.Structure
       }
 
       #endregion
+
+      /// <summary>
+      /// Get the minimum enclosing rectangle for this Box
+      /// </summary>
+      /// <returns>The minimum enclosing rectangle for this Box</returns>
+      public System.Drawing.Rectangle MinAreaRect()
+      {
+         float[] data = new float[8];
+         CvInvoke.cvBoxPoints(this, data);
+         int minX = (int)Math.Round(Math.Min(Math.Min(data[0], data[2]), Math.Min(data[4], data[6])));
+         int maxX = (int)Math.Round(Math.Max(Math.Max(data[0], data[2]), Math.Max(data[4], data[6])));
+         int minY = (int)Math.Round(Math.Min(Math.Min(data[1], data[3]), Math.Min(data[5], data[7])));
+         int maxY = (int)Math.Round(Math.Max(Math.Max(data[1], data[3]), Math.Max(data[5], data[7])));
+         return new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
+      }
    }
 }

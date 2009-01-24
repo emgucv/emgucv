@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using Emgu;
+using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 using System.Drawing;
 
@@ -257,7 +258,31 @@ namespace Emgu.CV
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
          return rect;
-          
+      }
+
+      /// <summary>
+      /// Find the bounding rectangle for the specific array of points
+      /// </summary>
+      /// <param name="points">The collection of points</param>
+      /// <returns>The bounding rectangle for the array of points</returns>
+      public static MCvBox2D MinAreaRect(PointF[] points)
+      {
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            StructSize.MCvSeq,
+            StructSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block);
+         MCvBox2D rect = CvInvoke.cvMinAreaRect2(seq, IntPtr.Zero);
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return rect;
       }
    }
 }

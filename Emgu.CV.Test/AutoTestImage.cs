@@ -535,39 +535,16 @@ namespace Emgu.CV.Test
          MCvMoments moment = image.GetMoments(true);
       }
 
-      private static void MatchSURFFeatureWithFeatureTree(SURFFeature[] modelFeatures, SURFFeature[] imageFeatures, double matchDistanceRatio, int[,] result1, double[,] dist1, List<PointF> modelPointList, List<PointF> imagePointList)
-      {
-         for (int i = 0; i < result1.GetLength(0); i++)
-         {
-            int bestMatchedIndex = dist1[i, 0] < dist1[i, 1] ? result1[i, 0] : result1[i, 1];
-            int secondBestMatchedIndex = dist1[i, 0] < dist1[i, 1] ? result1[i, 1] : result1[i, 0];
 
-            SURFFeature bestMatchedModelPoint = bestMatchedIndex >= 0 ? modelFeatures[bestMatchedIndex] : null;
-            SURFFeature secondBestMatchedModelPoint = secondBestMatchedIndex > 0 ? modelFeatures[secondBestMatchedIndex] : null;
-            if (bestMatchedModelPoint != null)
-            {
-               double distanceRatio = dist1[i, 0] / dist1[i, 1];
-               if (secondBestMatchedModelPoint == null || distanceRatio <= matchDistanceRatio || distanceRatio >= (1.0 / matchDistanceRatio))
-               {  //this is a unique / almost unique match
-                  modelPointList.Add(bestMatchedModelPoint.Point.pt);
-                  imagePointList.Add(imageFeatures[i].Point.pt);
-               }
-            }
-         }
-      }
-
-      private class SURFObject
+      public class SURFMatcher : DisposableObject
       {
-         private Image<Gray, Byte> _img;
          private SURFFeature[] _positiveLaplacian;
          private SURFFeature[] _negativeLaplacian;
          private FeatureTree _positiveTree;
          private FeatureTree _negativeTree;
 
-         public SURFObject(Image<Gray, Byte> img, ref MCvSURFParams param)
+         public SURFMatcher(SURFFeature[] features)
          {
-            _img = img;
-            SURFFeature[] features = img.ExtractSURF(ref param);
             _positiveLaplacian = Array.FindAll<SURFFeature>(features, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
             _negativeLaplacian = Array.FindAll<SURFFeature>(features, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
             _positiveTree = new FeatureTree(
@@ -580,86 +557,206 @@ namespace Emgu.CV.Test
                   delegate(SURFFeature f) { return f.Descriptor; }));
          }
 
-         public MatchedSURFFeature[][] MatchFeature(Image<Gray, Byte> image, ref MCvSURFParams param, int k, int emax)
+         private void SplitSURFByLaplacian(SURFFeature[] features, out List<SURFFeature> positiveLaplacian, out List<SURFFeature> negativeLaplacian)
          {
-            SURFFeature[] features = image.ExtractSURF(ref param);
-            SURFFeature[] positiveLaplacian = Array.FindAll<SURFFeature>(features, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
-            SURFFeature[] negativeLaplacian = Array.FindAll<SURFFeature>(features, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
+            positiveLaplacian = new List<SURFFeature>();
+            negativeLaplacian = new List<SURFFeature>();
+            foreach (SURFFeature f in features)
+            {
+               if (f.Point.laplacian >= 0)
+                  positiveLaplacian.Add(f);
+               else
+                  negativeLaplacian.Add(f);
+            }
+         }
 
-            MatchedSURFFeature[][] postive = MatchPositiveFeature(positiveLaplacian, k, emax);
-            MatchedSURFFeature[][] negative = MatchNegativeFeature(negativeLaplacian, k, emax);
+         public MatchedSURFFeature[] MatchFeature(SURFFeature[] features, int k, int emax)
+         {
+            List<SURFFeature> positiveLaplacian;
+            List<SURFFeature> negativeLaplacian;
+            SplitSURFByLaplacian(features, out positiveLaplacian, out negativeLaplacian);
+
+            MatchedSURFFeature[] postive = MatchFeatureWithModel(positiveLaplacian, _positiveLaplacian, _positiveTree, k, emax);
+            MatchedSURFFeature[] negative = MatchFeatureWithModel(negativeLaplacian, _negativeLaplacian, _negativeTree, k, emax);
             int positiveSize = postive.Length;
             Array.Resize(ref postive, postive.Length + negative.Length);
             Array.Copy(negative, 0, postive, positiveSize, negative.Length);
             return postive;
          }
 
-         private MatchedSURFFeature[][] MatchPositiveFeature(SURFFeature[] positiveFeature, int k, int emax)
+         private static MatchedSURFFeature[] MatchFeatureWithModel(List<SURFFeature> observedFeatures, SURFFeature[] modelFeatures, FeatureTree modelFeatureTree, int k, int emax)
          {
             Matrix<Int32> result1;
             Matrix<double> dist1;
-            
-            Matrix<float>[] positiveDescriptor = Array.ConvertAll<SURFFeature, Matrix<float>>(
-               positiveFeature,
-               delegate(SURFFeature f) { return f.Descriptor; });
-
-            _positiveTree.FindFeatures(positiveDescriptor, out result1, out dist1, k, emax);
+           
+            modelFeatureTree.FindFeatures(observedFeatures.ToArray(), out result1, out dist1, k, emax);
 
             int[,] indexes = result1.Data;
             double[,] distances = dist1.Data;
 
-            MatchedSURFFeature[][] res = new MatchedSURFFeature[positiveFeature.Length][];
-            for (int i = 0; i < positiveFeature.Length; i++)
+            MatchedSURFFeature[] res = new MatchedSURFFeature[modelFeatures.Length];
+            List<SURFFeature> matchedFeatures = new List<SURFFeature>();
+            List<double> matchedDistances = new List<double>();
+            for (int i = 0; i < res.Length; i++)
             {
-               res[i] = new MatchedSURFFeature[k];
-               for (int j = 0; j < k; j++)
-               {
-                  res[i][j] = new MatchedSURFFeature(positiveFeature[i], _positiveLaplacian[indexes[i, j]], distances[i, j]);
-               }
-            }
-            return res;
-         }
-
-         private MatchedSURFFeature[][] MatchNegativeFeature(SURFFeature[] negativeFeature, int k, int emax)
-         {
-            Matrix<Int32> result1;
-            Matrix<double> dist1;
-
-            Matrix<float>[] negativeDescriptor = Array.ConvertAll<SURFFeature, Matrix<float>>(
-               negativeFeature,
-               delegate(SURFFeature f) { return f.Descriptor; });
-
-            _negativeTree.FindFeatures(negativeDescriptor, out result1, out dist1, k, emax);
-
-            int[,] indexes = result1.Data;
-            double[,] distances = dist1.Data;
-
-            MatchedSURFFeature[][] res = new MatchedSURFFeature[negativeFeature.Length][];
-            for (int i = 0; i < negativeFeature.Length; i++)
-            {
-               res[i] = new MatchedSURFFeature[k];
+               matchedFeatures.Clear();
+               matchedDistances.Clear();
                for (int j = 0; j < k; j++)
                {
                   int index = indexes[i, j];
                   if (index >= 0)
-                        res[i][j] = new MatchedSURFFeature(negativeFeature[i], _negativeLaplacian[indexes[i, j]], distances[i, j]);
+                  {
+                     matchedFeatures.Add(modelFeatures[index]);
+                     matchedDistances.Add(distances[i, j]);
+                  }
                }
+               res[i].ModelFeatures = matchedFeatures.ToArray();
+               res[i].ObservedFeature = observedFeatures[i];
+               res[i].Distances = matchedDistances.ToArray();
             }
+            result1.Dispose();
+            dist1.Dispose();
             return res;
+         }
+
+         protected override void DisposeObject()
+         {
+            _positiveTree.Dispose();
+            _negativeTree.Dispose();
          }
       }
 
-      public class MatchedSURFFeature
+      public struct MatchedSURFFeature
       {
-         public SURFFeature Feature;
-         public SURFFeature MatchedFeature;
-         public double Dist;
+         public SURFFeature ObservedFeature;
+         public SURFFeature[] ModelFeatures;
+         public double[] Distances;
 
-         public MatchedSURFFeature(SURFFeature f, SURFFeature matchedSurf, double dist)
+         public MatchedSURFFeature(SURFFeature observedFeature, SURFFeature[] modelFeatures, double[] dist)
          {
-            Feature = f;
-            MatchedFeature = matchedSurf;
-            Dist = dist;
+            ObservedFeature = observedFeature;
+            ModelFeatures = modelFeatures;
+            Distances = dist;
+         }
+      }
+
+      public class SURFTracker
+      {
+         private SURFMatcher _matcher;
+         private Image<Gray, Byte> _model;
+         private Matrix<double> _originalCornerCoordinate;
+
+         public SURFTracker(Image<Gray, Byte> modelImage, ref MCvSURFParams param)
+         {
+            _model = modelImage;
+            SURFFeature[] modelFeatures = _model.ExtractSURF(ref param);
+            _matcher = new SURFMatcher(modelFeatures);
+
+            System.Drawing.Rectangle rect = modelImage.ROI;
+            _originalCornerCoordinate = new Matrix<double>(new double[,] 
+            {{  rect.Left, rect.Bottom, 1.0},
+               { rect.Right, rect.Bottom, 1.0},
+               { rect.Right, rect.Top, 1.0},
+               { rect.Left, rect.Top, 1.0}});
+         }
+
+         public MCvBox2D Track(Image<Gray, Byte> observedImage, SURFFeature[] observedFeatures, MCvBox2D initRegion)
+         {
+            double matchDistanceRatio = 0.8;
+
+            #region get the list of matched point on the observed image
+            Image<Gray, Single> matchMask = new Image<Gray, Single>(observedImage.Size);
+            Single[, ,] matchMaskData = matchMask.Data;
+
+            //List<PointF> modelPoints = new List<PointF>();
+            //List<PointF> observePoints = new List<PointF>();
+            MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
+            foreach (MatchedSURFFeature f in matchedFeature)
+            {
+               if (f.Distances.Length == 1)
+               {
+                  //modelPoints.Add(f.ModelFeatures[0].Point.pt);
+                  PointF p = f.ObservedFeature.Point.pt;
+                  //observePoints.Add(p);
+                  matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f /  (float) f.Distances[0];
+               }
+               else
+               {
+                  double ratio = f.Distances[0] / f.Distances[1];
+                  if (ratio <= matchDistanceRatio)
+                  {
+                     //modelPoints.Add(f.ModelFeatures[0].Point.pt);
+                     PointF p = f.ObservedFeature.Point.pt;
+                     //observePoints.Add(p);
+                     matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
+                  }
+                  else if (ratio >= (1.0 / matchDistanceRatio))
+                  {
+                     //modelPoints.Add(f.ModelFeatures[1].Point.pt);
+                     PointF p = f.ObservedFeature.Point.pt;
+                     //observePoints.Add(p);
+                     matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
+                  }
+               }
+            }
+            #endregion
+
+            Rectangle r = PointCollection.BoundingRectangle(initRegion.GetVertices());
+            if (r.IntersectsWith(matchMask.ROI)) r = matchMask.ROI;
+            MCvConnectedComp comp;
+            MCvBox2D box;
+            CvInvoke.cvCamShift(matchMask.Ptr, r, new MCvTermCriteria(10, 1.0e-8), out comp, out box);
+            return box;
+         }
+
+         public MCvBox2D Detect(SURFFeature[] imageFeatures)
+         {
+            double matchDistanceRatio = 0.8;
+            List<PointF> modelPoints = new List<PointF>();
+            List<PointF> observePoints = new List<PointF>();
+
+            MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(imageFeatures, 2, 20);
+            foreach (MatchedSURFFeature f in matchedFeature)
+            {
+               if (f.Distances.Length == 1)
+               {
+                  modelPoints.Add(f.ModelFeatures[0].Point.pt);
+                  observePoints.Add(f.ObservedFeature.Point.pt);
+               }
+               else
+               {
+                  double ratio = f.Distances[0] / f.Distances[1];
+                  if (ratio <= matchDistanceRatio)
+                  {
+                     modelPoints.Add(f.ModelFeatures[0].Point.pt);
+                     observePoints.Add(f.ObservedFeature.Point.pt);
+                  }
+                  else if (ratio >= (1.0 / matchDistanceRatio))
+                  {
+                     modelPoints.Add(f.ModelFeatures[1].Point.pt);
+                     observePoints.Add(f.ObservedFeature.Point.pt);
+                  }
+               }
+            }
+
+            Matrix<double> homographyMatrix = CameraCalibration.FindHomography(
+               modelPoints.ToArray(), //points on the object image
+               observePoints.ToArray(), //points on the observed image
+               CvEnum.HOMOGRAPHY_METHOD.RANSAC,
+               3);
+
+            Matrix<double> destCornerCoordinate = _originalCornerCoordinate * homographyMatrix.Transpose();
+            double[,] destCornerCoordinateArray = destCornerCoordinate.Data;
+
+            PointF[] destCornerPoints = new PointF[4];
+            for (int i = 0; i < destCornerPoints.Length; i++)
+            {
+               double denominator = destCornerCoordinateArray[i, 2];
+               destCornerPoints[i] = new PointF(
+                  (float)(destCornerCoordinateArray[i, 0] / denominator),
+                  (float)(destCornerCoordinateArray[i, 1] / denominator));
+            }
+            return PointCollection.MinAreaRect( destCornerPoints );
          }
       }
 
@@ -669,24 +766,13 @@ namespace Emgu.CV.Test
          for (int k = 0; k < 1; k++)
          {
             Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png");
-            modelImage = modelImage.Resize(400, 400, true);
+            //modelImage = modelImage.Resize(400, 400, true);
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
             MCvSURFParams param1 = new MCvSURFParams(500, false);
-            SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref param1);
-            SURFFeature[] modelFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
-            SURFFeature[] modelFeaturesNegativeLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
 
-            //Create feature trees for the given features
-            FeatureTree featureTreePositiveLaplacian = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
-                  modelFeaturesPositiveLaplacian,
-                  delegate(SURFFeature f) { return f.Descriptor; }));
-            FeatureTree featureTreeNegativeLaplacian = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
-                  modelFeaturesNegativeLaplacian,
-                  delegate(SURFFeature f) { return f.Descriptor; }));
+            SURFTracker tracker = new SURFTracker(modelImage, ref param1);
 
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
@@ -698,18 +784,8 @@ namespace Emgu.CV.Test
             stopwatch.Reset(); stopwatch.Start();
             MCvSURFParams param2 = new MCvSURFParams(500, false);
             SURFFeature[] imageFeatures = observedImage.ExtractSURF(ref param2);
-            SURFFeature[] imageFeaturesPositiveLaplacian = Array.FindAll<SURFFeature>(imageFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
-            SURFFeature[] imageFeaturesNegativeLaplacian = Array.FindAll<SURFFeature>(imageFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-            #endregion
-
-            #region alternative method
-            SURFObject obj = new SURFObject(modelImage, ref param1);
-            stopwatch.Reset(); stopwatch.Start();
-            MatchedSURFFeature[][] matchedFeature = obj.MatchFeature(observedImage, ref param2, 2, 20);
-            stopwatch.Stop();
-            Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
             #region Merge the object image and the observed image into one image for display
@@ -721,72 +797,28 @@ namespace Emgu.CV.Test
             res.ROI = Rectangle.Empty;
             #endregion
 
-            double matchDistanceRatio = 0.8;
-            List<PointF> modelPoints = new List<PointF>();
-            List<PointF> observePoints = new List<PointF>();
-
             stopwatch.Reset(); stopwatch.Start();
-            #region using Feature Tree to match feature
-            Matrix<float>[] imageFeatureDescriptorsPositiveLaplacian = Array.ConvertAll<SURFFeature, Matrix<float>>(
-               imageFeaturesPositiveLaplacian,
-               delegate(SURFFeature f) { return f.Descriptor; });
-            Matrix<float>[] imageFeatureDescriptorsNegativeLaplacian = Array.ConvertAll<SURFFeature, Matrix<float>>(
-               imageFeaturesNegativeLaplacian,
-               delegate(SURFFeature f) { return f.Descriptor; });
-            Matrix<Int32> result1;
-            Matrix<double> dist1;
-
-            featureTreePositiveLaplacian.FindFeatures(imageFeatureDescriptorsPositiveLaplacian, out result1, out dist1, 2, 20);
-            MatchSURFFeatureWithFeatureTree(
-              modelFeaturesPositiveLaplacian,
-              imageFeaturesPositiveLaplacian,
-              matchDistanceRatio, result1.Data, dist1.Data, modelPoints, observePoints);
-
-            featureTreeNegativeLaplacian.FindFeatures(imageFeatureDescriptorsNegativeLaplacian, out result1, out dist1, 2, 20);
-            MatchSURFFeatureWithFeatureTree(
-                 modelFeaturesNegativeLaplacian,
-                 imageFeaturesNegativeLaplacian,
-                 matchDistanceRatio, result1.Data, dist1.Data, modelPoints, observePoints);
-            #endregion
+            PointF[] tmp = tracker.Detect(imageFeatures).GetVertices();
+            Point[] destCornerPoints = new Point[tmp.Length];
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-
-            Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
-               modelPoints.ToArray(), //points on the object image
-               observePoints.ToArray(), //points on the observed image
-               CvEnum.HOMOGRAPHY_METHOD.RANSAC,
-               3).Convert<float>();
-
-            #region draw the projected object in observed image
-            for (int i = 0; i < modelPoints.Count; i++)
+            for(int i = 0; i < destCornerPoints.Length; i++)
             {
-               PointF p = observePoints[i];
-               p.Y += modelImage.Height;
-               res.Draw(new LineSegment2DF(modelPoints[i], p), new Gray(0), 1);
+               destCornerPoints[i].X = (int)tmp[i].X;
+               destCornerPoints[i].Y = (int)(tmp[i].Y + modelImage.Height);
             }
+            res.DrawPolyline(destCornerPoints, true, new Gray(255), 5);
 
-            System.Drawing.Rectangle rect = modelImage.ROI;
-            Matrix<float> orginalCornerCoordinate = new Matrix<float>(new float[,] 
-            {{  rect.Left, rect.Bottom, 1.0f},
-               { rect.Right, rect.Bottom, 1.0f},
-               { rect.Right, rect.Top, 1.0f},
-               { rect.Left, rect.Top, 1.0f}});
+            stopwatch.Reset(); stopwatch.Start();
 
-            Matrix<float> destCornerCoordinate = homographyMatrix * orginalCornerCoordinate.Transpose();
-            float[,] destCornerCoordinateArray = destCornerCoordinate.Data;
+            MCvBox2D initRegion = new MCvBox2D(new PointF(observedImage.Width >> 1, observedImage.Height >> 1), new SizeF(observedImage.Width, observedImage.Height), 0);
 
-            Point[] destCornerPoints = new Point[4];
-            for (int i = 0; i < destCornerPoints.Length; i++)
-            {
-               float denominator = destCornerCoordinateArray[2, i];
-               destCornerPoints[i] = new Point(
-                  (int)(destCornerCoordinateArray[0, i] / denominator),
-                  (int)(destCornerCoordinateArray[1, i] / denominator) + modelImage.Height);
-            }
-
-            res.DrawPolyline(destCornerPoints, true, new Gray(255.0), 5);
-            #endregion
-            //ImageViewer.Show(res.Resize(200, 200, true));
+            MCvBox2D box = tracker.Track(observedImage, imageFeatures, initRegion);
+            Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            destCornerPoints = Array.ConvertAll<PointF, Point>( box.GetVertices(), delegate(PointF p) { return new Point((int) p.X, (int) p.Y + modelImage.Height);});
+            res.DrawPolyline(destCornerPoints, true, new Gray(255), 5);
+            
+            ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 

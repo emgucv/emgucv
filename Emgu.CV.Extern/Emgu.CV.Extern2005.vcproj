@@ -116,6 +116,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)opencv\header&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CVAPI_EXPORTS"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -132,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib"
+				AdditionalDependencies="ml.lib cxcore.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
 				GenerateDebugInformation="true"

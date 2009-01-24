@@ -35,6 +35,19 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateFeatureTree(_descriptorMatrix.Ptr);
       }
 
+      private static Matrix<float> FeaturesToMatrix(SURFFeature[] descriptors)
+      {
+         Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Descriptor.Rows);
+         IntPtr rowHeader = Marshal.AllocHGlobal(StructSize.MCvMat);
+         for (int i = 0; i < descriptors.Length; i++)
+         {
+            CvInvoke.cvGetRows(res, rowHeader, i, i + 1, 1);
+            CvInvoke.cvTranspose(descriptors[i].Descriptor, rowHeader);
+         }
+         Marshal.FreeHGlobal(rowHeader);
+         return res;
+      }
+
       private static Matrix<float> DescriptorsToMatrix(Matrix<float>[] descriptors)
       {
          Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Rows);
@@ -67,6 +80,31 @@ namespace Emgu.CV
          results = new Matrix<Int32>(numberOfDescriptors, k);
          dist = new Matrix<double>(numberOfDescriptors, k);
          FindFeatures(descriptors, results, dist, k, emax);
+      }
+
+      /// <summary>
+      /// Finds (with high probability) the k nearest neighbors in tr for each of the given (row-)vectors in desc, using best-bin-first searching ([Beis97]). The complexity of the entire operation is at most O(m*emax*log2(n)), where n is the number of vectors in the tree
+      /// </summary>
+      /// <param name="features">The m features to be searched from the feature tree</param>
+      /// <param name="results">
+      /// The results of the best <paramref name="k"/> matched from the feature tree. A m x <paramref name="k"/> matrix. Contains -1 in some columns if fewer than k neighbors found. 
+      /// For each row the k neareast neighbors are not sorted. To findout the closet neighbour, look at the output matrix <paramref name="dist"/>.
+      /// </param>
+      /// <param name="dist">
+      /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
+      /// </param>
+      /// <param name="k">The number of neighbors to find</param>
+      /// <param name="emax">The maximum number of leaves to visit</param>
+      public void FindFeatures(SURFFeature[] features, out Matrix<Int32> results, out Matrix<double> dist, int k, int emax)
+      {
+         int numberOfDescriptors = features.Length;
+         results = new Matrix<Int32>(numberOfDescriptors, k);
+         dist = new Matrix<double>(numberOfDescriptors, k);
+
+         using (Matrix<float> descriptorMatrix = FeaturesToMatrix(features))
+         {
+            CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
+         }
       }
 
       /// <summary>
