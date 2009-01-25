@@ -730,6 +730,28 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestContourCreate()
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Contour<System.Drawing.Point> contour = new Contour<Point>(stor);
+            contour.Push(new System.Drawing.Point(0, 0));
+            contour.Push(new System.Drawing.Point(0, 1));
+            contour.Push(new System.Drawing.Point(1, 1));
+            contour.Push(new System.Drawing.Point(1, 0));
+            Assert.AreEqual(contour.Convex, true);
+            Assert.AreEqual(contour.Area, 1.0);
+
+            Seq<System.Drawing.Point> seq = new Seq<Point>(CvInvoke.CV_MAKETYPE(4, 2), stor);
+            seq.Push(new System.Drawing.Point(0, 0));
+            seq.Push(new System.Drawing.Point(0, 1));
+            seq.Push(new System.Drawing.Point(1, 1));
+            seq.Push(new System.Drawing.Point(1, 0));
+         }
+      }
+
+
+      [Test]
       public void TestConvexHull()
       {
          #region Create some random points
