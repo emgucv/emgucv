@@ -65,7 +65,7 @@ namespace MotionDetection
             double[] minValues, maxValues; 
             System.Drawing.Point[] minLoc, maxLoc;
             motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
-            motionMask = motionMask * (255.0 / maxValues[0]);
+            motionMask._Mul(255.0 / maxValues[0]);
             #endregion
 
             //create the motion image 
@@ -90,7 +90,7 @@ namespace MotionDetection
                _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
 
                //reject the area that contains too few motion
-               if (motionPixelCount / comp.area < 0.05) continue;
+               if (motionPixelCount < comp.area * 0.05) continue;
 
                //Draw each individual motion in red
                DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
