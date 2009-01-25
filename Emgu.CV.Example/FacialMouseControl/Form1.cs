@@ -56,20 +56,6 @@ namespace FacialMouseControl
          _captureThread.Start();
       }
 
-      /// <summary>
-      /// Returns true if the point is in the rectangle
-      /// </summary>
-      /// <param name="point">the point to test</param>
-      /// <param name="rect">the rectangle area</param>
-      private static bool PointInRectangle(PointF point, System.Drawing.Rectangle rect)
-      {
-         return
-             (point.X > rect.X) &&
-             (point.X < rect.X + rect.Width) &&
-             (point.Y > rect.Y) &&
-             (point.X < rect.Y + rect.Height);
-      }
-
       public void ProcessImage(Image<Bgr, Byte> frame)
       {
          Image<Gray, Byte> grayImage = frame.Convert<Gray, Byte>();
@@ -99,29 +85,29 @@ namespace FacialMouseControl
             //draw a yellow rectangle around the face
             frame.Draw(biggestFace.rect, new Bgr(255, 255, 0.0), 1);
 
-            PointF biggestFaceCenter = new PointF(biggestFace.rect.X + biggestFace.rect.Width / 2.0f, biggestFace.rect.Y + biggestFace.rect.Height / 2.0f);
-            PointF imageAreaCenter = new PointF(imageArea.X + imageArea.Width / 2.0f, imageArea.Y + imageArea.Height / 2.0f);
+            Point biggestFaceCenter = new Point(biggestFace.rect.X + biggestFace.rect.Width / 2, biggestFace.rect.Y + biggestFace.rect.Height / 2);
+            Point imageAreaCenter = new Point(imageArea.X + imageArea.Width / 2, imageArea.Y + imageArea.Height / 2);
             //draw a green cross at the center of the biggest face
             frame.Draw(
                 new Cross2DF(biggestFaceCenter, biggestFace.rect.Width * 0.1f, biggestFace.rect.Height * 0.1f),
                 new Bgr(0, 255, 0), 1);
 
-            if (!PointInRectangle(biggestFaceCenter, mouseStableArea))
+            if (!mouseStableArea.Contains(biggestFaceCenter))
             {   //the point is far enough from the center to triger a movement
 
                //horizontal fraction is a value in [-0.5, 0.5] where
                //-0.5 refer to the far left and 
                //0.5 refer to the far right
-               double horizontalFraction = (biggestFaceCenter.X - imageAreaCenter.X) / imageArea.Width;
+               double horizontalFraction = (double)(biggestFaceCenter.X - imageAreaCenter.X) / imageArea.Width;
                //do the same for vertical fraction
-               double verticalFraction = (biggestFaceCenter.Y - imageAreaCenter.Y) / imageArea.Height;
+               double verticalFraction = (double)(biggestFaceCenter.Y - imageAreaCenter.Y) / imageArea.Height;
 
                Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
                int maxMouseSpeed = rect.Width / 20;
                System.Drawing.Point p;
                GetCursorPos(out p);
-               p.X = Math.Min(Math.Max(0, p.X + (maxMouseSpeed / 2) *(int) horizontalFraction), rect.Width);
-               p.Y = Math.Min(Math.Max(0, p.Y - (maxMouseSpeed / 2) *(int) verticalFraction), rect.Height);
+               p.X = Math.Min(Math.Max(0,  p.X + (int)( (maxMouseSpeed / 2) * horizontalFraction)), rect.Width);
+               p.Y = Math.Min(Math.Max(0, p.Y + (int) ((maxMouseSpeed / 2) * verticalFraction)), rect.Height);
                SetCursorPos(p.X, p.Y);
             }
          }
