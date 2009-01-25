@@ -818,7 +818,7 @@ namespace Emgu.CV.Test
             destCornerPoints = Array.ConvertAll<PointF, Point>( box.GetVertices(), delegate(PointF p) { return new Point((int) p.X, (int) p.Y + modelImage.Height);});
             res.DrawPolyline(destCornerPoints, true, new Gray(255), 5);
             
-            ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 
