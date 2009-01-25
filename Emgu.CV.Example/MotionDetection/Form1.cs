@@ -123,18 +123,20 @@ namespace MotionDetection
 
       private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionRegion, double angle, Bgr color)
       {
-         float circleRadius = (float)(motionRegion.Width + motionRegion.Height) / 4.0f;
+         float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
 
+         Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);
+         
          CircleF circle = new CircleF(
-            new System.Drawing.PointF(motionRegion.X + motionRegion.Width / 2.0f, motionRegion.Y + motionRegion.Height / 2.0f), 
+            new System.Drawing.PointF(center.X, center.Y), 
             circleRadius);
 
-         int xDirection = (int)(Math.Cos(angle * Math.PI / 180.0) * circleRadius);
-         int yDirection = (int)(Math.Sin(angle * Math.PI / 180.0) * circleRadius);
+         int xDirection = (int)(Math.Cos(angle * (Math.PI / 180.0)) * circleRadius);
+         int yDirection = (int)(Math.Sin(angle * (Math.PI / 180.0)) * circleRadius);
          Point pointOnCircle = new Point(
-             (int)circle.Center.X + xDirection,
-             (int)circle.Center.Y + yDirection);
-         LineSegment2D line = new LineSegment2D(new Point((int)circle.Center.X, (int) circle.Center.Y), pointOnCircle);
+             center.X + xDirection,
+             center.Y - yDirection);
+         LineSegment2D line = new LineSegment2D(center, pointOnCircle);
 
          image.Draw(circle, color, 1);
          image.Draw(line, color, 2);
