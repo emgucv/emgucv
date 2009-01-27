@@ -47,8 +47,9 @@ namespace FaceDetection
 
             foreach (MCvAvgComp e in eyesDetected[0])
             {
-               e.rect.Offset(f.rect.X, f.rect.Y);
-               image.Draw(e.rect, new Bgr(Color.Red), 2);
+               Rectangle eyeRect = e.rect;
+               eyeRect.Offset(f.rect.X, f.rect.Y);
+               image.Draw(eyeRect, new Bgr(Color.Red), 2);
             }
          }
 
