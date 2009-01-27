@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.ML.Structure;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.ML
 {
@@ -108,5 +109,47 @@ namespace Emgu.CV.ML
             coefGrid,
             degreeGrid);
       }
+
+      #region contribution from Albert G
+      /// <summary>
+      /// Predicts response for the input sample.
+      /// </summary>
+      /// <param name="sample">The input sample</param>
+      public float Predict(Matrix<float> sample)
+      {
+         return MlInvoke.cvSVMPredict(Ptr, sample.Ptr);
+      }
+
+      /// <summary>
+      /// The method retrieves a given support vector
+      /// </summary>
+      /// <param name="i">The index of the support vector</param>       
+      public float[] GetSupportVector(int i)
+      {
+         int k = GetVarCount();
+         float[] res = new float[k];
+         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned); 
+         IntPtr vector = MlInvoke.cvSVMGetSupportVector(Ptr, i);
+         Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), vector, k * Marshal.SizeOf(typeof(float)));
+         handle.Free();
+         return res;
+      }
+
+      /// <summary>
+      /// The method retrieves the number of support vectors
+      /// </summary>
+      public int GetSupportVectorCount()
+      {
+         return MlInvoke.cvSVMGetSupportVectorCount(Ptr);
+      }
+
+      /// <summary>
+      /// The method retrieves the number of vars
+      /// </summary>
+      public int GetVarCount()
+      {
+         return MlInvoke.cvSVMGetVarCount(Ptr);
+      }
+      #endregion
    }
 }

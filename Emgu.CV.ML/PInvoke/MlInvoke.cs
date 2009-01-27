@@ -338,6 +338,38 @@ namespace Emgu.CV.ML
          MCvParamGrid nuGrid,
          MCvParamGrid coefGrid,
          MCvParamGrid degreeGrid);
+
+      #region contribution from Albert G
+      /// <summary>
+      /// Predicts response for the input sample.
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      /// <param name="_sample">The input sample</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern float cvSVMPredict(IntPtr model, IntPtr _sample);
+
+      /// <summary>
+      /// The method retrieves a given support vector
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      /// <param name="i">The index of the support vector</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr cvSVMGetSupportVector(IntPtr model, int i);
+
+      /// <summary>
+      /// The method retrieves the number of support vectors
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int cvSVMGetSupportVectorCount(IntPtr model);
+
+      /// <summary>
+      /// The method retrieves the number of vars
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int cvSVMGetVarCount(IntPtr model);
+      #endregion 
       #endregion
 
       #region CvANN_MLP

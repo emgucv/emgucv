@@ -56,6 +56,11 @@ CVAPI(bool) CvSVMTrainAuto(CvSVM* model, const CvMat* _train_data, const CvMat* 
 CVAPI(void) CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid);
 CVAPI(void) CvSVMRelease(CvSVM* model);
 
+CVAPI(float) cvSVMPredict(CvSVM* model,  const CvMat* _sample );
+CVAPI(const float*) cvSVMGetSupportVector(CvSVM* model, int i);
+CVAPI(int) cvSVMGetSupportVectorCount(CvSVM* model);
+CVAPI(int) cvSVMGetVarCount(CvSVM* model);
+
 //ANN_MLP
 CVAPI(CvANN_MLP*) CvANN_MLPCreate(const CvMat* _layer_sizes,
    int _activ_func= CvANN_MLP::SIGMOID_SYM,
