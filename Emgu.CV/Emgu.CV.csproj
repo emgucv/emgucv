@@ -74,6 +74,7 @@
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Color\IColor.cs" />
     <Compile Include="Contour.cs" />
+    <Compile Include="PInvoke\CvType\MCvFGDStatModelParams.cs" />
     <Compile Include="StructSize.cs" />
     <Compile Include="PInvoke\CvType\MCvAvgComp.cs" />
     <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />

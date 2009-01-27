@@ -5213,7 +5213,7 @@ namespace Emgu.CV
          IntPtr proj);
       #endregion
 
-      #region background statistic
+      #region background / forground  statistic
       /// <summary>
       /// Create a Gaussian background model
       /// </summary>
@@ -5229,6 +5229,15 @@ namespace Emgu.CV
       /// <param name="param">Parameters for the background model</param>
       [DllImport(CVAUX_LIBRARY)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
+
+      /// <summary>
+      /// Create a forground model
+      /// </summary>
+      /// <param name="firstFrame">The first frame</param>
+      /// <param name="parameters">The forground statistic parameters</param>
+      /// <returns>Pointer to the forground model</returns>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
       #endregion
 
       /*

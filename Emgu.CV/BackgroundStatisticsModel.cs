@@ -8,7 +8,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Create a background statistics model
+   /// Background statistics model
    /// </summary>
    public class BackgroundStatisticsModel : UnmanagedObject
    {
@@ -22,6 +22,16 @@ namespace Emgu.CV
          _ptr = (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL) ?
             CvInvoke.cvCreateFGDStatModel(image, IntPtr.Zero)
             : CvInvoke.cvCreateGaussianBGModel(image, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Create a forground statistic model using the given parameters
+      /// </summary>
+      /// <param name="image">The image used for initiating the statistic model</param>
+      /// <param name="parameters">FGDStatModel</param>
+      public BackgroundStatisticsModel(Image<Bgr, Byte> image, ref MCvFGDStatModelParams parameters)
+      {
+         _ptr = CvInvoke.cvCreateFGDStatModel(image, ref parameters);
       }
 
       private delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
