@@ -1,0 +1,10 @@
+PROJECT(Emgu.CV.ML)
+
+SET(CS_FLAGS -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV
+-r:${LIBRARY_OUTPUT_PATH}/Emgu.Util -r:System.Drawing)
+SET(SRC_CV_ML *.cs Properties/*.cs PInvoke/*.cs PInvoke/CvType/*.cs)
+ADD_CS_LIBRARY(Emgu.CV.ML "${SRC_CV_ML}" ALL)
+
+ADD_DEPENDENCIES(Emgu.CV.ML Emgu.CV)
+INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.dll DESTINATION bin
+COMPONENT binary)
