@@ -4,6 +4,7 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
