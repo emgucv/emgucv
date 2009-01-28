@@ -5,6 +5,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 FIND_PACKAGE(Mono REQUIRED)
 INCLUDE (CSharpMacros)
 
+#SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 project(emgucv)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(LIBRARY_3RDPARTY_PATH ${CMAKE_SOURCE_DIR}/lib)
@@ -13,6 +15,14 @@ add_subdirectory(Emgu.Util)
 add_subdirectory(Emgu.CV)
 add_subdirectory(Emgu.CV.ML)
 add_subdirectory(Emgu.CV.UI)
+
+set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/opencv)
+#set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/opencv)
+#INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/opencv)
+add_subdirectory(opencv)
+add_subdirectory(Emgu.CV.Extern)
+#SUBDIRS(opencv)
+
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV")
 SET(CPACK_GENERATOR "TGZ")
