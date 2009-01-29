@@ -664,49 +664,51 @@ namespace Emgu.CV.Test
          {
             double matchDistanceRatio = 0.8;
 
-            #region get the list of matched point on the observed image
-            Image<Gray, Single> matchMask = new Image<Gray, Single>(observedImage.Size);
-            Single[, ,] matchMaskData = matchMask.Data;
-
-            //List<PointF> modelPoints = new List<PointF>();
-            //List<PointF> observePoints = new List<PointF>();
-            MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
-            foreach (MatchedSURFFeature f in matchedFeature)
+            using (Image<Gray, Single> matchMask = new Image<Gray, Single>(observedImage.Size))
             {
-               if (f.Distances.Length == 1)
+               #region get the list of matched point on the observed image
+               Single[, ,] matchMaskData = matchMask.Data;
+
+               //List<PointF> modelPoints = new List<PointF>();
+               //List<PointF> observePoints = new List<PointF>();
+               MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
+               foreach (MatchedSURFFeature f in matchedFeature)
                {
-                  //modelPoints.Add(f.ModelFeatures[0].Point.pt);
-                  PointF p = f.ObservedFeature.Point.pt;
-                  //observePoints.Add(p);
-                  matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f /  (float) f.Distances[0];
-               }
-               else
-               {
-                  double ratio = f.Distances[0] / f.Distances[1];
-                  if (ratio <= matchDistanceRatio)
+                  if (f.Distances.Length == 1)
                   {
                      //modelPoints.Add(f.ModelFeatures[0].Point.pt);
                      PointF p = f.ObservedFeature.Point.pt;
                      //observePoints.Add(p);
                      matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
                   }
-                  else if (ratio >= (1.0 / matchDistanceRatio))
+                  else
                   {
-                     //modelPoints.Add(f.ModelFeatures[1].Point.pt);
-                     PointF p = f.ObservedFeature.Point.pt;
-                     //observePoints.Add(p);
-                     matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
+                     double ratio = f.Distances[0] / f.Distances[1];
+                     if (ratio <= matchDistanceRatio)
+                     {
+                        //modelPoints.Add(f.ModelFeatures[0].Point.pt);
+                        PointF p = f.ObservedFeature.Point.pt;
+                        //observePoints.Add(p);
+                        matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
+                     }
+                     else if (ratio >= (1.0 / matchDistanceRatio))
+                     {
+                        //modelPoints.Add(f.ModelFeatures[1].Point.pt);
+                        PointF p = f.ObservedFeature.Point.pt;
+                        //observePoints.Add(p);
+                        matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];
+                     }
                   }
                }
-            }
-            #endregion
+               #endregion
 
-            Rectangle r = PointCollection.BoundingRectangle(initRegion.GetVertices());
-            if (r.IntersectsWith(matchMask.ROI)) r = matchMask.ROI;
-            MCvConnectedComp comp;
-            MCvBox2D box;
-            CvInvoke.cvCamShift(matchMask.Ptr, r, new MCvTermCriteria(10, 1.0e-8), out comp, out box);
-            return box;
+               Rectangle r = PointCollection.BoundingRectangle(initRegion.GetVertices());
+               if (r.IntersectsWith(matchMask.ROI)) r = matchMask.ROI;
+               MCvConnectedComp comp;
+               MCvBox2D box;
+               CvInvoke.cvCamShift(matchMask.Ptr, r, new MCvTermCriteria(10, 1.0e-8), out comp, out box);
+               return box;
+            }
          }
 
          public MCvBox2D Detect(SURFFeature[] imageFeatures)
@@ -739,24 +741,28 @@ namespace Emgu.CV.Test
                }
             }
 
-            Matrix<double> homographyMatrix = CameraCalibration.FindHomography(
+            using(Matrix<double> homographyMatrix = CameraCalibration.FindHomography(
                modelPoints.ToArray(), //points on the object image
                observePoints.ToArray(), //points on the observed image
                CvEnum.HOMOGRAPHY_METHOD.RANSAC,
-               3);
-
-            Matrix<double> destCornerCoordinate = _originalCornerCoordinate * homographyMatrix.Transpose();
-            double[,] destCornerCoordinateArray = destCornerCoordinate.Data;
-
-            PointF[] destCornerPoints = new PointF[4];
-            for (int i = 0; i < destCornerPoints.Length; i++)
+               3))
+            using (Matrix<double> destCornerCoordinate = new Matrix<double>(_originalCornerCoordinate.Rows, 3))
             {
-               double denominator = destCornerCoordinateArray[i, 2];
-               destCornerPoints[i] = new PointF(
-                  (float)(destCornerCoordinateArray[i, 0] / denominator),
-                  (float)(destCornerCoordinateArray[i, 1] / denominator));
+               CvInvoke.cvGEMM(_originalCornerCoordinate, homographyMatrix, 1.0, IntPtr.Zero, 0.0, destCornerCoordinate, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+
+               double[,] destCornerCoordinateArray = destCornerCoordinate.Data;
+
+               PointF[] destCornerPoints = new PointF[4];
+               for (int i = 0; i < destCornerPoints.Length; i++)
+               {
+                  double denominator = destCornerCoordinateArray[i, 2];
+                  destCornerPoints[i] = new PointF(
+                     (float)(destCornerCoordinateArray[i, 0] / denominator),
+                     (float)(destCornerCoordinateArray[i, 1] / denominator));
+               }
+               //CvInvoke.cvMinAreaRect2(destCornerCoordinate.GetCols(0, 2).Convert<int>(), IntPtr.Zero);
+               return PointCollection.MinAreaRect(destCornerPoints);
             }
-            return PointCollection.MinAreaRect( destCornerPoints );
          }
       }
 
@@ -815,7 +821,7 @@ namespace Emgu.CV.Test
             box.Offset(0, modelImage.Height);
             res.Draw(box, new Gray(255.0), 5);
             
-            ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 
