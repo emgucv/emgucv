@@ -17,8 +17,6 @@ namespace FacialMouseControl
    {
       private Capture _capture;
 
-      private Thread _captureThread;
-
       //private bool _flipHorizontal;
       private HaarCascade _face;
 
@@ -41,23 +39,13 @@ namespace FacialMouseControl
                return;
             }
          }
-         _captureThread = new Thread(
-             delegate()
-             {
-                while (true)
-                {
-                   Image<Bgr, Byte> frame = _capture.QueryFrame();
 
-                   ProcessImage(frame);
-                }
-             }
-             );
-
-         _captureThread.Start();
+         Application.Idle += new EventHandler(ProcessImage);
       }
 
-      public void ProcessImage(Image<Bgr, Byte> frame)
+      public void ProcessImage(object sender, EventArgs e)
       {
+         Image<Bgr, Byte> frame = _capture.QueryFrame();
          Image<Gray, Byte> grayImage = frame.Convert<Gray, Byte>();
          grayImage._EqualizeHist();
 
@@ -123,9 +111,6 @@ namespace FacialMouseControl
 
       public void ReleaseData()
       {
-         if (_captureThread != null)
-            _captureThread.Abort();
-
          if (_capture != null)
             _capture.Dispose();
       }

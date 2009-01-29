@@ -15,7 +15,6 @@ namespace MotionDetection
    public partial class Form1 : Form
    {
       private Capture _capture;
-      private Thread _captureThread;
       private MotionHistory _motionHistory;
 
       public Form1()
@@ -44,15 +43,13 @@ namespace MotionDetection
                 0.05, //in second, parameter for cvCalcMotionGradient
                 0.5); //in second, parameter for cvCalcMotionGradient
 
-            _captureThread = new Thread(ProcessImage);
-            _captureThread.Start();
+            Application.Idle += new EventHandler(ProcessFrame);
          }
       }
 
-      public void ProcessImage()
+      private void ProcessFrame(object sender, EventArgs e)
       {
          using (MemStorage storage = new MemStorage()) //create storage for motion components
-         while (true)
          {
             Image<Bgr, Byte> image = _capture.QuerySmallFrame().PyrUp(); //reduce noise from the image
             capturedImageBox.Image = image;
@@ -62,7 +59,7 @@ namespace MotionDetection
 
             #region get a copy of the motion mask and enhance its color
             Image<Gray, Byte> motionMask = _motionHistory.Mask;
-            double[] minValues, maxValues; 
+            double[] minValues, maxValues;
             System.Drawing.Point[] minLoc, maxLoc;
             motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
             motionMask._Mul(255.0 / maxValues[0]);
@@ -72,7 +69,7 @@ namespace MotionDetection
             Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Size);
             //display the motion pixels in blue (first channel)
             motionImage[0] = motionMask;
-            
+
             //Threshold to define a motion area, reduce the value to detect smaller motion
             double minArea = 100;
 
@@ -103,7 +100,7 @@ namespace MotionDetection
 
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
-            
+
             //Display the image of the motion
             motionImageBox.Image = motionImage;
          }
@@ -148,12 +145,11 @@ namespace MotionDetection
       /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
       protected override void Dispose(bool disposing)
       {
+
          if (disposing && (components != null))
          {
             components.Dispose();
          }
-
-         if (_captureThread != null) _captureThread.Abort();
 
          base.Dispose(disposing);
       }
