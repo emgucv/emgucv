@@ -14,72 +14,65 @@ namespace CameraCapture
    public partial class CameraCapture : Form
    {
       private Capture _capture;
-
-      private Thread _captureThread;
+      private bool _captureInProgress;
 
       public CameraCapture()
       {
          InitializeComponent();
       }
 
+      private void ProcessFrame(object sender, EventArgs arg)
+      {
+         Image<Bgr, Byte> frame = _capture.QueryFrame();
+
+         Image<Gray, Byte> grayFrame = frame.Convert<Gray, Byte>();
+         Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
+         Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
+         Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(new Gray(100), new Gray(60));
+
+         captureImageBox.Image = frame;
+         grayscaleImageBox.Image = grayFrame;
+         smoothedGrayscaleImageBox.Image = smoothedGrayFrame;
+         cannyImageBox.Image = cannyFrame;
+      }
+
       private void captureButtonClick(object sender, EventArgs e)
       {
-         if (_captureThread == null) // if currently there is no capture thread running
+         #region if captureThread is empty, create it now
+         if (_capture == null)
          {
-            if (_capture == null)
+            try
             {
-               try
-               {
-                  _capture = new Capture();
-               }
-               catch (NullReferenceException excpt)
-               {
-                  MessageBox.Show(excpt.Message);
-               }
+               _capture = new Capture();
             }
-            _captureThread = new Thread(
-                delegate()
-                {
-                   while (true)
-                   {
-                      Image<Bgr, Byte> frame = _capture.QueryFrame();
-
-                      Image<Gray, Byte> grayFrame = frame.Convert<Gray, Byte>();
-                      Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
-                      Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
-                      Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(new Gray(100), new Gray(60));
-
-                      captureImageBox.Image = frame;
-                      grayscaleImageBox.Image = grayFrame;
-                      smoothedGrayscaleImageBox.Image = smoothedGrayFrame;
-                      cannyImageBox.Image = cannyFrame;
-
-                   }
-                }
-                );
-
-            captureButton.Text = "Stop";
-
-            _captureThread.Start();
-
-         }
-         else // if currently capturing
-         {
-            if (_captureThread != null)
+            catch (NullReferenceException excpt)
             {
-               _captureThread.Abort();
-               _captureThread = null;
+               MessageBox.Show(excpt.Message);
+            }
+         }
+         #endregion
+
+         if (_capture != null)
+         {
+            if (_captureInProgress)
+            {  //stop the capture
+               Application.Idle -= new EventHandler(ProcessFrame);
+               captureButton.Text = "Start Capture";
+            }
+            else
+            {
+               //start the capture
+               captureButton.Text = "Stop";
+               Application.Idle += new EventHandler(ProcessFrame);
             }
 
-            captureButton.Text = "Start Capture";
+            _captureInProgress = !_captureInProgress;
          }
+
       }
 
       private void ReleaseData()
       {
-         if (_captureThread != null)
-            _captureThread.Abort();
-
          if (_capture != null)
             _capture.Dispose();
       }

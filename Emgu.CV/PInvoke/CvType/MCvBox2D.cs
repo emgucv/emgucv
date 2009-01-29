@@ -37,6 +37,17 @@ namespace Emgu.CV.Structure
          this.angle = angle;
       }
 
+      /// <summary>
+      /// Shift the box by the specific amount
+      /// </summary>
+      /// <param name="x">The x value to be offseted</param>
+      /// <param name="y">The y value to be offseted</param>
+      public void Offset(int x, int y)
+      {
+         center.X += x;
+         center.Y += y;
+      }
+
       #region IConvexPolygonF Members
       /// <summary>
       /// Get the 4 verticies of this Box.

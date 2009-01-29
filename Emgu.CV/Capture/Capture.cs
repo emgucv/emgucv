@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -85,6 +86,7 @@ namespace Emgu.CV
       {
       }
 
+      #region constructors
       ///<summary> Create a capture using the specific camera</summary>
       ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
       public Capture(int camIndex)
@@ -113,6 +115,7 @@ namespace Emgu.CV
          if (_ptr == IntPtr.Zero)
             throw new NullReferenceException("Unable to create capture from file:" + fileName);
       }
+      #endregion
 
       #region implement UnmanagedObject
       /// <summary>
@@ -207,7 +210,7 @@ namespace Emgu.CV
             MCvFont font = new MCvFont( CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
             tmp.Draw(System.DateTime.Now.Ticks.ToString(),
                 ref font,
-                new Point2D<int>(10, 50),
+                new Point(10, 50),
                 new Bgr(255.0, 255.0, 255.0));
             IntPtr img = tmp;
 #else

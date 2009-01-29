@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -24,7 +26,7 @@ namespace Emgu.CV
       /// <param name="center">Center of the rotation in the source image</param>
       /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
       /// <param name="scale">Isotropic scale factor.</param>
-      public RotationMatrix2D(System.Drawing.PointF center, T angle, T scale)
+      public RotationMatrix2D(PointF center, double angle, double scale)
          : this()
       {
          SetRotation(center, angle, scale);
@@ -36,9 +38,36 @@ namespace Emgu.CV
       /// <param name="center">Center of the rotation in the source image</param>
       /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
       /// <param name="scale">Isotropic scale factor.</param>
-      public void SetRotation(System.Drawing.PointF center, T angle, T scale)
+      public void SetRotation(PointF center, double angle, double scale)
       {
-         CvInvoke.cv2DRotationMatrix(center, System.Convert.ToDouble(angle), System.Convert.ToDouble(scale), Ptr);
+         CvInvoke.cv2DRotationMatrix(center, angle, scale, Ptr);
       }
+
+      /*
+      /// <summary>
+      /// Rotate the points inplace
+      /// </summary>
+      /// <param name="points">the points to be rotated, its value is changed</param>
+      public void RotatePoints(PointF[] points)
+      {
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         IntPtr matHeader = Marshal.AllocHGlobal(StructSize.MCvMat);
+         CvInvoke.cvInitMatHeader(matHeader, points.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle.AddrOfPinnedObject(), StructSize.PointF);
+         Marshal.FreeHGlobal(matHeader);
+
+         using (Matrix<float> tmp = new Matrix<float>(points.Length, 3))
+         {
+            tmp.SetValue(1.0);
+
+            using (Matrix<float> cols = tmp.GetCols(0, 2))
+            {
+               CvInvoke.cvCopy(matHeader, cols, IntPtr.Zero);
+            }
+
+            CvInvoke.cvGEMM(tmp, Ptr, 1.0, IntPtr.Zero, 0.0, matHeader, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+         }
+         handle.Free();
+      }
+      */
    }
 }

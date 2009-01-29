@@ -798,27 +798,24 @@ namespace Emgu.CV.Test
             #endregion
 
             stopwatch.Reset(); stopwatch.Start();
-            PointF[] tmp = tracker.Detect(imageFeatures).GetVertices();
-            Point[] destCornerPoints = new Point[tmp.Length];
+            MCvBox2D box = tracker.Detect(imageFeatures);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-            for(int i = 0; i < destCornerPoints.Length; i++)
-            {
-               destCornerPoints[i].X = (int)tmp[i].X;
-               destCornerPoints[i].Y = (int)(tmp[i].Y + modelImage.Height);
-            }
-            res.DrawPolyline(destCornerPoints, true, new Gray(255), 5);
+            box.Offset(0, modelImage.Height);
+            res.Draw(box, new Gray(255.0), 5);
 
             stopwatch.Reset(); stopwatch.Start();
+            //set the initial region to be the whole image
+            MCvBox2D initRegion = new MCvBox2D(
+               new PointF(observedImage.Width >> 1, observedImage.Height >> 1), 
+               new SizeF(observedImage.Width, observedImage.Height), 0);
 
-            MCvBox2D initRegion = new MCvBox2D(new PointF(observedImage.Width >> 1, observedImage.Height >> 1), new SizeF(observedImage.Width, observedImage.Height), 0);
-
-            MCvBox2D box = tracker.Track(observedImage, imageFeatures, initRegion);
+            box = tracker.Track(observedImage, imageFeatures, initRegion);
             Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-            destCornerPoints = Array.ConvertAll<PointF, Point>( box.GetVertices(), delegate(PointF p) { return new Point((int) p.X, (int) p.Y + modelImage.Height);});
-            res.DrawPolyline(destCornerPoints, true, new Gray(255), 5);
+            box.Offset(0, modelImage.Height);
+            res.Draw(box, new Gray(255.0), 5);
             
-            //ImageViewer.Show(res.Resize(200, 200, true));
+            ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 
