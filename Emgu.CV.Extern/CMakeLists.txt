@@ -12,7 +12,7 @@ source_group("Include" FILES ${extern_hdrs})
 
 set(the_target "cvextern")
 
-add_library(${the_target} ${extern_srcs} ${extern_hdrs})
+add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
 
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
@@ -25,4 +25,3 @@ add_dependencies(${the_target} cxcore ml)
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} cxcore ml)
-
