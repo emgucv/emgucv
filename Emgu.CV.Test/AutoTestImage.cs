@@ -341,14 +341,13 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\eye_12.xml"))
-         using (HaarCascade cascade = new HaarCascade(@".\haarcascades\eye_8.xml"))
+         using (HaarCascade cascade = new HaarCascade(@".\haarcascades\haarcascade_eye.xml"))
          //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\haarcascade_frontalface_alt2.xml"))
          {
             MCvAvgComp[][] objects = image.DetectHaarCascade(cascade, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10));
 
             foreach (MCvAvgComp obj in objects[0])
                image.Draw(obj.rect, new Gray(0.0), 1);
-
 
             using (MemStorage stor = new MemStorage())
             {
