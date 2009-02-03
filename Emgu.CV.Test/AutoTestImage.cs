@@ -938,6 +938,48 @@ namespace Emgu.CV.Test
          Assert.IsTrue(roi1.Equals( roi2 ));
       }
 
+      [Test]
+      public void TestGoodFeature()
+      {
+         using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
+         {
+            PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
+            img.FindCornerSubPix(pts, new System.Drawing.Size(5, 5), new System.Drawing.Size(-1, -1), new MCvTermCriteria(20, 0.0001));
+
+            foreach (PointF p in pts[0])
+               img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
+            //ImageViewer.Show(img);
+         }
+      }
+
+      [Test]
+      public void TestContour()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
+         img.SmoothGaussian(3);
+         img = img.Canny(new Gray(80), new Gray(50));
+         Image<Gray, Byte> res = img.CopyBlank();
+         res.SetValue(255);
+
+         Contour<System.Drawing.Point> contour = img.FindContours();
+
+         while (contour != null)
+         {
+            Contour<System.Drawing.Point> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+
+            if (approx.Convex && Math.Abs(approx.Area) > 20.0)
+            {
+               System.Drawing.Point[] vertices = approx.ToArray();
+
+               LineSegment2D[] edges = PointCollection.PolyLine(vertices, true);
+
+               res.DrawPolyline(vertices, true, new Gray(200), 1);
+            }
+            contour = contour.HNext;
+         }
+         //ImageViewer.Show(res);
+      }
+
       /*
       [Test]
       public void T()

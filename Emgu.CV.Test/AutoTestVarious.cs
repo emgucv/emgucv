@@ -836,6 +836,30 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(leftDisparity*(-16));
       }
 
+      [Test]
+      public void TestEllipseFitting()
+      {
+         System.Random r = new Random();
+
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
+         List<PointF> pts = new List<PointF>();
+         for (int i = 0; i <= 100; i++)
+         {
+            int x = r.Next(100) + 20;
+            int y = r.Next(300) + 50;
+            img[y, x] = new Bgr(255.0, 255.0, 255.0);
+            pts.Add(new PointF(x, y));
+         }
+
+         Stopwatch watch = Stopwatch.StartNew();
+         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts.ToArray());
+         watch.Stop();
+         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + "milliseconds");
+
+         img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
+         //ImageViewer.Show(img);
+      }
+
       //TODO: Figure out why the following test case cannot passed
       /*
       [Test]

@@ -162,29 +162,6 @@ namespace Emgu.CV.Test
          ImageViewer.Show(map);
       }*/
 
-      public void TestEllipseFitting()
-      {
-         System.Random r = new Random();
-
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
-         List<PointF> pts = new List<PointF>();
-         for (int i = 0; i <= 100; i++)
-         {
-            int x = r.Next(100) + 20;
-            int y = r.Next(300) + 50;
-            img[y, x] = new Bgr(255.0, 255.0, 255.0);
-            pts.Add(new PointF(x, y));
-         }
-
-         Stopwatch watch = Stopwatch.StartNew();
-         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts.ToArray());
-         watch.Stop();
-         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + "milliseconds");
-
-         img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
-         ImageViewer.Show(img);
-      }
-
       /*
       public void TestIpp()
       {
@@ -204,9 +181,16 @@ namespace Emgu.CV.Test
 
       public void CameraTest()
       {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new TestCamera());
+         //Application.EnableVisualStyles();
+         //Application.SetCompatibleTextRenderingDefault(false);
+         //Application.Run(new TestCamera());
+         ImageViewer viewer = new ImageViewer();
+         Capture capture = new Capture();
+         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         {
+            viewer.Image = capture.QueryFrame();
+         });
+         viewer.ShowDialog();
       }
 
       public void TestImageLoader()
@@ -280,19 +264,6 @@ namespace Emgu.CV.Test
             }
 
             foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
-         }
-      }
-
-      public void TestGoodFeature()
-      {
-         using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
-         {
-            PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
-            img.FindCornerSubPix(pts, new System.Drawing.Size(5, 5), new System.Drawing.Size(-1, -1), new MCvTermCriteria(20, 0.0001));
-
-            foreach (PointF p in pts[0])
-               img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
-            //Application.Run(new ImageViewer(img));
          }
       }
 
@@ -561,32 +532,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
-      public void TestContour()
-      {
-         Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-         img.SmoothGaussian(3);
-         img = img.Canny(new Gray(80), new Gray(50));
-         Image<Gray, Byte> res = img.CopyBlank();
-         res.SetValue(255);
 
-         Contour<System.Drawing.Point> contour = img.FindContours();
-
-         while (contour != null)
-         {
-            Contour<System.Drawing.Point> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
-
-            if (approx.Convex && Math.Abs(approx.Area) > 20.0)
-            {
-               System.Drawing.Point[] vertices = approx.ToArray();
-
-               LineSegment2D[] edges = PointCollection.PolyLine(vertices, true);
-
-               res.DrawPolyline(vertices, true, new Gray(200), 1);
-            }
-            contour = contour.HNext;
-         }
-         Application.Run(new ImageViewer(res));
-      }
 
       /*
       private void TestMap()
@@ -744,16 +690,17 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          for (int i = 0; i < total; i++)
          {
-            b = i / 2;
+            b += (i / 2) * 2;
             //b /= 2;
          }
          watch.Stop();
          Trace.WriteLine(watch.ElapsedMilliseconds);
 
+         b = 0;
          watch.Reset(); watch.Start();
          for (int i = 0; i < total; i++)
          {
-            b = i >> 1 ;
+            b += (i >> 1 ) << 1;
             //b >>= 1;
          }
          Trace.WriteLine(watch.ElapsedMilliseconds);
