@@ -782,8 +782,9 @@ namespace Emgu.CV.Test
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
             foreach (MCvBlob blob in tracker)
             {
-               img.Draw(blob.GetRectangle(), new Gray(255.0), 2);
-               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.center.X, (int)blob.center.Y), new Gray(255.0));
+               RectangleF rect = blob;
+               img.Draw(new Rectangle((int) rect.X, (int) rect.Y, (int) rect.Width, (int) rect.Height), new Gray(255.0), 2);
+               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.Center.X, (int)blob.Center.Y), new Gray(255.0));
             }
             viewer.Image = img;
          });

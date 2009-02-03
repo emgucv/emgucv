@@ -15,12 +15,12 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The center of the blob 
       /// </summary>
-      public PointF center; 
+      public PointF Center; 
 
       /// <summary>
       /// blob size
       /// </summary>
-      public SizeF size;
+      public SizeF Size;
 
       /// <summary>
       /// blob ID  
@@ -28,12 +28,13 @@ namespace Emgu.CV.Structure
       public int ID;
 
       /// <summary>
-      /// Get the rectangle of this blob
+      /// Convert a MCvBlob to RectangleF
       /// </summary>
-      /// <returns>The rectangle of this blob</returns>
-      public Rectangle GetRectangle()
+      /// <param name="blob">The blob</param>
+      /// <returns>The equivalent RectangleF</returns>
+      public static implicit operator RectangleF(MCvBlob blob)
       {
-         return new Rectangle( (int)(center.X - size.Width / 2.0f), (int) (center.Y - size.Height / 2.0f), (int)size.Width, (int)size.Height); 
+         return new RectangleF( blob.Center.X - blob.Size.Width / 2.0f, blob.Center.Y - blob.Size.Height / 2.0f, blob.Size.Width, blob.Size.Height); 
       }
    }
 }
