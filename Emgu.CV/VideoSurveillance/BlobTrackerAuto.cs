@@ -15,11 +15,23 @@ namespace Emgu.CV
       private BlobTrackerAutoParam _param;
 
       /// <summary>
-      /// Create a blob tracker auto using the specific parameters
+      /// Create a auto blob tracker using the specific parameters
       /// </summary>
       /// <param name="param">The parameters for this blob tracker auto</param>
       public BlobTrackerAuto(BlobTrackerAutoParam param)
       {
+         _param = param;
+         MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
+         _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);
+      }
+
+      /// <summary>
+      /// Create a default auto blob tracker 
+      /// </summary>
+      public BlobTrackerAuto()
+      {
+         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
+         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
          _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);

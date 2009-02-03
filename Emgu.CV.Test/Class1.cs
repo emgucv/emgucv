@@ -763,34 +763,33 @@ namespace Emgu.CV.Test
       public void TestBlobTracking()
       {
          Capture capture = new Capture();
-
+        
          ImageViewer viewer = new ImageViewer();
 
          BlobTrackerAutoParam param = new BlobTrackerAutoParam();
-         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
          param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
-         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
-         param.FGTrainFrames = 5;
+         //param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF);
+         param.FGTrainFrames = 10;
          BlobTrackerAuto tracker = new BlobTrackerAuto(param);
 
          Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
          {
-            Image<Bgr, Byte> img  = capture.QueryFrame();
-            tracker.Process(img);
+            tracker.Process(capture.QuerySmallFrame().PyrUp());
+            Image<Gray, Byte> img = tracker.GetForgroundMask();
             //viewer.Image = tracker.GetForgroundMask();
 
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
             foreach (MCvBlob blob in tracker)
             {
-               img.Draw(new Rectangle((int)blob.x, (int)blob.y, (int) blob.w,(int) blob.h), new Bgr(255.0, 255.0, 255.0), 1);
-               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.x, (int)blob.y), new Bgr(255.0, 255.0, 255.0));
+               img.Draw(blob.GetRectangle(), new Gray(255.0), 2);
+               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.center.X, (int)blob.center.Y), new Gray(255.0));
             }
             viewer.Image = img;
          });
          viewer.ShowDialog();
          
       }
-
 
       public void TestKalman()
       {

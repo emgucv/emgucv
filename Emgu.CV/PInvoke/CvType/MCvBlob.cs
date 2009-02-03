@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -12,25 +13,27 @@ namespace Emgu.CV.Structure
    public struct MCvBlob
    {
       /// <summary>
-      /// blob position
+      /// The center of the blob 
       /// </summary>
-      public float x;
+      public PointF center; 
+
       /// <summary>
-      /// blob position
+      /// blob size
       /// </summary>
-      public float y;
-      /// <summary>
-      /// blob sizes 
-      /// </summary>
-      public float w;
-      /// <summary>
-      /// blob sizes 
-      /// </summary>
-      public float h;
+      public SizeF size;
 
       /// <summary>
       /// blob ID  
       /// </summary>
       public int ID;
+
+      /// <summary>
+      /// Get the rectangle of this blob
+      /// </summary>
+      /// <returns>The rectangle of this blob</returns>
+      public Rectangle GetRectangle()
+      {
+         return new Rectangle( (int)(center.X - size.Width / 2.0f), (int) (center.Y - size.Height / 2.0f), (int)size.Width, (int)size.Height); 
+      }
    }
 }
