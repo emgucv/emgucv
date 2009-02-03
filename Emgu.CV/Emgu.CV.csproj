@@ -68,18 +68,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundStatisticsModel.cs" />
-    <Compile Include="BlobDetector.cs" />
-    <Compile Include="BlobSeq.cs" />
-    <Compile Include="BlobTracker.cs" />
-    <Compile Include="BlobTrackerAuto.cs" />
-    <Compile Include="BlobTrackerAutoParam.cs" />
+    <Compile Include="VideoSurveillance\BackgroundStatisticsModel.cs" />
+    <Compile Include="VideoSurveillance\BlobDetector.cs" />
+    <Compile Include="VideoSurveillance\BlobSeq.cs" />
+    <Compile Include="VideoSurveillance\BlobTracker.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackerAuto.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackerAutoParam.cs" />
     <Compile Include="CameraCalibration\RotationVector3D.cs" />
     <Compile Include="Color\Bgra.cs" />
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Color\IColor.cs" />
     <Compile Include="Contour.cs" />
-    <Compile Include="ForgroundDetector.cs" />
+    <Compile Include="VideoSurveillance\ForgroundDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvBlob.cs" />
     <Compile Include="PInvoke\CvType\MCvBlobTrackerAutoParam1.cs" />
     <Compile Include="PInvoke\CvType\MCvBlobTrackerParamLH.cs" />
