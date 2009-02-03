@@ -1921,4 +1921,122 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       APPEND = 2
    }
+
+   /// <summary>
+   /// The type of blob detector
+   /// </summary>
+   public enum BLOB_DETECTOR_TYPE
+   {
+      /// <summary>
+      /// Simple blob detector
+      /// </summary>
+      Simple, 
+      /// <summary>
+      /// Conected Component blob detector
+      /// </summary>
+      CC
+   }
+
+   /// <summary>
+   /// MCvBlobTrackerParamMS profile
+   /// </summary>
+   public enum BLOBTRACKER_MS_PROFILE
+   {
+      /// <summary>
+      /// EPANECHNIKOV
+      /// </summary>
+      PROFILE_EPANECHNIKOV = 0,
+      /// <summary>
+      /// DoG
+      /// </summary>
+      PROFILE_DOG = 1
+   }
+   
+   /// <summary>
+   /// The types of blob trakcer
+   /// </summary>
+   public enum BLOBTRACKER_TYPE
+   {
+      /// <summary>
+      /// Simple blob tracker based on connected component tracking
+      /// </summary>
+      CC,
+      /// <summary>
+      /// Connected component tracking and mean-shift particle filter collion-resolver
+      /// </summary>
+      CCMSPF,
+      /// <summary>
+      /// Blob tracker that integrates meanshift and connected components
+      /// </summary>
+      MSFG,
+      /// <summary>
+      /// Blob tracker that integrates meanshift and connected components
+      /// </summary>
+      MSFGS,
+      /// <summary>
+      /// Meanshift without connected-components
+      /// </summary>
+      MS,
+      /// <summary>
+      /// Particle filtering via Bhattacharya coefficient, which is roughly the dot-product of two probability densities.
+      /// </summary>
+      MSPF,
+   }
+
+   /// <summary>
+   /// Histogram comparison method
+   /// </summary>
+   public enum HISTOGRAM_COMP_METHOD
+   {
+      /// <summary>
+      /// Correlation/ 
+      /// </summary>
+      CV_COMP_CORREL = 0,
+      /// <summary>
+      /// Chi-Square
+      /// </summary>
+      CV_COMP_CHISQR = 1,
+      /// <summary>
+      /// Intersection
+      /// </summary>
+      CV_COMP_INTERSECT = 2,
+      /// <summary>
+      /// Bhattacharyya distance
+      /// </summary>
+      CV_COMP_BHATTACHARYYA = 3
+   }
+
+   /// <summary>
+   /// The type of BGStatModel
+   /// </summary>
+   public enum BG_STAT_TYPE
+   {
+      /// <summary>
+      /// 
+      /// </summary>
+      FGD_STAT_MODEL,
+      /// <summary>
+      /// Gaussian background model
+      /// </summary>
+      GAUSSIAN_BG_MODEL
+   }
+
+   /// <summary>
+   /// Type of forground detector
+   /// </summary>
+   public enum FORGROUND_DETECTOR_TYPE
+   {
+      /// <summary>
+      /// Latest and greatest algorithm
+      /// </summary>
+      FGD = 0,
+      /// <summary>
+      /// "Mixture of Gaussians", older algorithm
+      /// </summary>
+      MOG = 1,
+      /// <summary>
+      ///  A simplified version of FGD
+      /// </summary>
+      FGD_SIMPLE = 2
+   }
 }

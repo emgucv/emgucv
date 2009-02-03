@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Emgu.Util;
+
+namespace Emgu.CV
+{
+   /// <summary>
+   /// A blob detector
+   /// </summary>
+   public class BlobDetector :UnmanagedObject
+   {
+      /// <summary>
+      /// Create a blob detector of specific type
+      /// </summary>
+      /// <param name="type">The type of the detector</param>
+      public BlobDetector(CvEnum.BLOB_DETECTOR_TYPE type)
+      {
+         if (type == Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.Simple)
+         {
+            _ptr = CvInvoke.CvCreateBlobDetectorSimple();
+         }
+         else if (type == Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC)
+         {
+            _ptr = CvInvoke.CvCreateBlobDetectorCC();
+         }
+      }
+
+      /// <summary>
+      /// Detect new blobs
+      /// </summary>
+      /// <param name="image">The image</param>
+      /// <param name="imageForground">The forground mask</param>
+      /// <param name="newBlob">The new blob list</param>
+      /// <param name="oldBlob">The old blob list</param>
+      public int DetectNewBlob(IImage image, IImage imageForground, BlobSeq newBlob, BlobSeq oldBlob)
+      {
+         return CvInvoke.CvBlobDetectorDetectNewBlob(_ptr, image.Ptr, imageForground.Ptr, newBlob.Ptr, oldBlob.Ptr);
+      }
+
+      /// <summary>
+      /// Release the detector
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         CvInvoke.CvBlobDetectorRelease(_ptr);
+      }
+   }
+}

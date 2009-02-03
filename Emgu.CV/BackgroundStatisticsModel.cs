@@ -34,7 +34,17 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateFGDStatModel(image, ref parameters);
       }
 
+      /// <summary>
+      /// Define the Release function
+      /// </summary>
+      /// <param name="ptr">The background mode to be released</param>
+      private delegate void ReleaseFunction(ref IntPtr ptr);
+
       private delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
+
+      /// <summary>
+      /// A cache of the update function
+      /// </summary>
       private UpdateFunctionDelagate updateFunction;
 
       /// <summary>
@@ -68,10 +78,9 @@ namespace Emgu.CV
       {
          get
          {
-            MCvBGStatModel statModel = MCvBGStatModel;
-            System.Drawing.Size size = CvInvoke.cvGetSize(statModel.background);
-            Image<Bgr, Byte> res = new Image<Bgr, byte>(size.Width, size.Height);
-            CvInvoke.cvCopy(statModel.background, res.Ptr, IntPtr.Zero);
+            IntPtr statModelbackground = MCvBGStatModel.background;
+            Image<Bgr, Byte> res = new Image<Bgr, byte>(CvInvoke.cvGetSize(statModelbackground));
+            CvInvoke.cvCopy(statModelbackground, res.Ptr, IntPtr.Zero);
             return res;
          }
       }
@@ -83,15 +92,12 @@ namespace Emgu.CV
       {
          get
          {
-            MCvBGStatModel statModel = MCvBGStatModel;
-            System.Drawing.Size size = CvInvoke.cvGetSize(statModel.background);
-            Image<Gray, Byte> res = new Image<Gray, byte>(size.Width, size.Height);
-            CvInvoke.cvCopy(statModel.foreground, res.Ptr, IntPtr.Zero);
+            IntPtr statModelforeground = MCvBGStatModel.foreground;
+            Image<Gray, Byte> res = new Image<Gray, byte>(CvInvoke.cvGetSize(statModelforeground));
+            CvInvoke.cvCopy(statModelforeground, res.Ptr, IntPtr.Zero);
             return res;
          }
       }
-
-      private delegate void ReleaseFunction(ref IntPtr ptr);
 
       /// <summary>
       /// Release the BGStatModel and all the unmanaged memory associate with it
@@ -101,23 +107,5 @@ namespace Emgu.CV
          ReleaseFunction releaseFunction = (ReleaseFunction)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvReleaseBGStatModel, typeof(ReleaseFunction));
          releaseFunction(ref _ptr);
       }
-   }
-}
-
-namespace Emgu.CV.CvEnum
-{
-   /// <summary>
-   /// The type of BGStatModel
-   /// </summary>
-   public enum BG_STAT_TYPE
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      FGD_STAT_MODEL,
-      /// <summary>
-      /// Gaussian background model
-      /// </summary>
-      GAUSSIAN_BG_MODEL
    }
 }

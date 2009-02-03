@@ -15,7 +15,19 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The scalar value
       /// </summary>
-      public double v0, v1, v2, v3;
+      public double v0;
+      /// <summary>
+      /// The scalar value
+      /// </summary>
+      public double v1;
+      /// <summary>
+      /// The scalar value
+      /// </summary>
+      public double v2;
+      /// <summary>
+      /// The scalar value
+      /// </summary>
+      public double v3;
 
       /// <summary>
       /// The scalar values as a vector (of size 4)

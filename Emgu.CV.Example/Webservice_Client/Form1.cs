@@ -13,10 +13,9 @@ namespace Webservice_Client
 {
    public partial class Form1 : Form
    {
-      private volatile bool _started;
+      private bool _started;
       private Webservice_Host.IImageService _imageGrabber;
       private NetTcpBinding _binding;
-      private Thread _frameGrabber;
 
       public Form1()
       {
@@ -37,30 +36,27 @@ namespace Webservice_Client
             _started = value;
             serviceUrlBox.Enabled = !_started;
 
-            if (_started == false)
-            {
-               if (_frameGrabber != null && _frameGrabber.IsAlive)
-               {
-                  _frameGrabber.Abort();
-               }
+            if (!_started)
+            {  
+               //stop grabing frames
+               Application.Idle -= new EventHandler(ProcessImage);
             }
-            else //_started = true
+            else
             {
+               //start to grab frames
                _imageGrabber = new ChannelFactory<Webservice_Host.IImageService>(
                    _binding,
                    new EndpointAddress(serviceUrlBox.Text)
                    ).CreateChannel();
-               _frameGrabber = new Thread(
-                   delegate()
-                   {
-                      while (_started)
-                      {
-                         imageBox1.Image = _imageGrabber.GrabFrame();
-                      }
-                   });
-               _frameGrabber.Start();
+
+               Application.Idle += new EventHandler(ProcessImage);
             }
          }
+      }
+
+      private void ProcessImage(object sender, EventArgs e)
+      {
+         imageBox1.Image = _imageGrabber.GrabFrame();
       }
 
       private void button1_Click(object sender, EventArgs e)

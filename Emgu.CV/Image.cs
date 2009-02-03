@@ -16,8 +16,8 @@ namespace Emgu.CV
    /// <summary>
    /// A wrapper for IplImage
    /// </summary>
-   /// <typeparam name="TColor">Color type of this image</typeparam>
-   /// <typeparam name="TDepth">Depth of this image (either Byte, Single or Double)</typeparam>
+   /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz or Ycc)</typeparam>
+   /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
    public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : IColor, new()
    {

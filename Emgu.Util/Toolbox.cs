@@ -274,12 +274,10 @@ namespace Emgu.Util
       {
          if (currentType.Name.Equals(baseclassName))
             return currentType;
-
          Type baseType = currentType.BaseType;
-         if (baseType == null)
-            return baseType;
 
-         return GetBaseType(baseType, baseclassName);
+         return (baseType == null) ?
+            null : GetBaseType(baseType, baseclassName);
       }
 
       #region memory copy

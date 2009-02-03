@@ -12,6 +12,7 @@ namespace Emgu.CV
    /// <summary> 
    /// The Matrix class that wrap around CvMat in OpenCV 
    /// </summary>
+   /// <typeparam name="TDepth">Depth of this matrix (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
    public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>> where TDepth : new()
    {

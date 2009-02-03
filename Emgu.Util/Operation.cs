@@ -106,25 +106,27 @@ namespace Emgu.Util
                   return (t as String).Split('|')[1].Split(':')[0];
                }));
          }
-         if (language == TypeEnum.ProgrammingLanguage.CSharp)
+
+         switch (language)
          {
-            if (genericArguments.Length > 0)
-               genericArgString = String.Format("<{0}>", genericArgString);
-            res = String.Format("{0}.{1}{2}({3})",
-                "{instance}",
-                Method.Name,
-                genericArgString,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
-         }
-         else if (language == TypeEnum.ProgrammingLanguage.CPlusPlus)
-         {
-            if (genericArguments.Length > 0)
-               genericArgString = String.Format("<{0}>", genericArgString);
-            res = String.Format("{0}->{1}{2}({3})",
-                "{instance}",
-                Method.Name,
-                genericArgString,
-                String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
+            case TypeEnum.ProgrammingLanguage.CSharp:
+               if (genericArguments.Length > 0)
+                  genericArgString = String.Format("<{0}>", genericArgString);
+               res = String.Format("{0}.{1}{2}({3})",
+                   "{instance}",
+                   Method.Name,
+                   genericArgString,
+                   String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
+               break;
+            case TypeEnum.ProgrammingLanguage.CPlusPlus:
+               if (genericArguments.Length > 0)
+                  genericArgString = String.Format("<{0}>", genericArgString);
+               res = String.Format("{0}->{1}{2}({3})",
+                   "{instance}",
+                   Method.Name,
+                   genericArgString,
+                   String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
+               break;
          }
          return res;
       }

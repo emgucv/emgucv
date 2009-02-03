@@ -21,11 +21,13 @@ namespace Emgu.CV
       private const string HIGHGUI_LIBRARY = "libhighgui.so.1";
       private const string CVAUX_LIBRARY = "libcvaux.so.1";
       private const string CVCAM_LIBRARY = "libcvaux.so.1";
+      private const string EXTERN_LIBRARY = "cvextern.so";
 #else
       private const string CXCORE_LIBRARY = "cxcore110.dll";
       private const string CV_LIBRARY = "cv110.dll";
       private const string HIGHGUI_LIBRARY = "highgui110.dll";
       private const string CVAUX_LIBRARY = "cvaux110.dll";
+      private const string EXTERN_LIBRARY = "cvextern.dll";
 #endif
 
       /// <summary>
@@ -33,23 +35,23 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
+         /*
          if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
          {
-            /*
-            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-            System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
-            System.IO.DirectoryInfo directory = file.Directory;
+            
+            //System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            //System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
+            //System.IO.DirectoryInfo directory = file.Directory;
             //System.Security.AccessControl.DirectorySecurity security = directory.GetAccessControl();
-            Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
-            */
-
+            //Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
+           
             String loadLibraryErrorMessage =
                "Unable to load {0}. Please check the following: 1. {0} is located in the same folder as Emgu.CV.dll; 2. MSVCRT 8.0 SP1 is installed.";
             LoadLibrary(CXCORE_LIBRARY, loadLibraryErrorMessage);
             LoadLibrary(CV_LIBRARY, loadLibraryErrorMessage);
             LoadLibrary(HIGHGUI_LIBRARY, loadLibraryErrorMessage);
             LoadLibrary(CVAUX_LIBRARY, loadLibraryErrorMessage);
-         }
+         }*/
 
          //Use the custom error handler
          cvRedirectError(DefaultCvErrorHandler, IntPtr.Zero, IntPtr.Zero);
@@ -3120,21 +3122,6 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
-      /// </summary>
-      /// <param name="hist">Pointer to the histogram</param>
-      /// <param name="factor">Normalization factor</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvNormalizeHist(IntPtr hist, double factor);
-
-      /// <summary>
-      /// Sets all histogram bins to 0 in case of dense histogram and removes all histogram bins in case of sparse array
-      /// </summary>
-      /// <param name="hist">Histogram</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvClearHist(IntPtr hist);
-
-      /// <summary>
       /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
       /// </summary>
       /// <param name="src">The source image</param>
@@ -3199,14 +3186,6 @@ namespace Emgu.CV
          CvEnum.THRESH thresholdType,
          int blockSize,
          double param1);
-
-      /// <summary>
-      /// Clears histogram bins that are below the specified threshold
-      /// </summary>
-      /// <param name="hist">Pointer to the histogram</param>
-      /// <param name="threshold">Threshold level</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvThreshHist(IntPtr hist, double threshold);
 
       /// <summary>
       /// Implements a particular case of application of line iterators. The function reads all the image points lying on the line between pt1 and pt2, including the ending points, and stores them into the buffer
@@ -4116,6 +4095,7 @@ namespace Emgu.CV
          CvEnum.CV_MORPH_OP operation,
          int iterations);
 
+      #region Histograms
       /// <summary>
       /// Creates a histogram of the specified size and returns the pointer to the created histogram. If the array ranges is 0, the histogram bin ranges must be specified later via The function cvSetHistBinRanges, though cvCalcHist and cvCalcBackProject may process 8-bit images without setting bin ranges, they assume equally spaced in 0..255 bins
       /// </summary>
@@ -4139,6 +4119,30 @@ namespace Emgu.CV
          [In]
          IntPtr[] ranges,
          int uniform);
+
+      /// <summary>
+      /// Normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
+      /// </summary>
+      /// <param name="hist">Pointer to the histogram</param>
+      /// <param name="factor">Normalization factor</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvNormalizeHist(IntPtr hist, double factor);
+
+      /// <summary>
+      /// Clears histogram bins that are below the specified threshold
+      /// </summary>
+      /// <param name="hist">Pointer to the histogram</param>
+      /// <param name="threshold">Threshold level</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvThreshHist(IntPtr hist, double threshold);
+
+
+      /// <summary>
+      /// Sets all histogram bins to 0 in case of dense histogram and removes all histogram bins in case of sparse array
+      /// </summary>
+      /// <param name="hist">Histogram</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvClearHist(IntPtr hist);
 
       /// <summary>
       /// Creates a histogram of the specified size and returns the pointer to the created histogram. If the array ranges is 0, the histogram bin ranges must be specified later via The function cvSetHistBinRanges, though cvCalcHist and cvCalcBackProject may process 8-bit images without setting bin ranges, they assume equally spaced in 0..255 bins
@@ -4191,6 +4195,18 @@ namespace Emgu.CV
       {
          cvCalcArrHist(image, hist, accumulate ? 1 : 0, mask);
       }
+
+      /// <summary>
+      /// Compares two dense histograms
+      /// </summary>
+      /// <param name="hist1">The first dense histogram. </param>
+      /// <param name="hist2">The second dense histogram.</param>
+      /// <param name="method">Comparison method</param>
+      /// <returns>Result of the comparison</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvCompareHist(IntPtr hist1, IntPtr hist2, CvEnum.HISTOGRAM_COMP_METHOD method);
+
+      #endregion
 
       #region Optical flow
       /// <summary>
@@ -5264,5 +5280,248 @@ namespace Emgu.CV
       */
       #endregion
 
+      #region EXTERN_LIBRARY
+      #region Forground detector
+      /// <summary>
+      /// Create a simple forground detector
+      /// </summary>
+      /// <param name="type">The type of the detector</param>
+      /// <param name="param">Pointer to the parameters of the detector</param>
+      /// <returns>Pointer the to forground detector</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, IntPtr param);
+
+      /// <summary>
+      /// Create a simple forground detector
+      /// </summary>
+      /// <param name="type">The type of the detector</param>
+      /// <param name="param">The parameters of the detector</param>
+      /// <returns>Pointer the to forground detector</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, ref MCvFGDStatModelParams param);
+      
+      /// <summary>
+      /// Release the forground detector
+      /// </summary>
+      /// <param name="detector">The forground detector to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvFGDetectorRelease(IntPtr detector); 
+      #endregion
+
+      #region BlobSeq
+      /// <summary>
+      /// Create a BlobSeq
+      /// </summary>
+      /// <param name="blobSize">The size of the blob in bytes</param>
+      /// <returns>Pointer to the BlobSeq</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobSeqCreate(int blobSize);
+
+      /// <summary>
+      /// Release the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">The BlobSeq to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobSeqRelease(IntPtr blobSeq);
+      #endregion
+
+      #region BlobDetector
+      /// <summary>
+      /// Release the blob detector
+      /// </summary>
+      /// <param name="detector">the detector to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobDetectorRelease(IntPtr detector);
+
+      /// <summary>
+      /// Get the specific blob from the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">the blob sequence</param>
+      /// <param name="blobIndex">the index of the blob to be retrieved</param>
+      /// <returns>Pointer to the specific blob</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobSeqGetBlob(IntPtr blobSeq, int blobIndex);
+
+      /// <summary>
+      /// Get the number of blob in the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">The blob sequence</param>
+      /// <returns>The number of blob in the blob sequence</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static int CvBlobSeqGetBlobNum(IntPtr blobSeq);
+
+      /// <summary>
+      /// Detect new blobs.
+      /// </summary>
+      /// <param name="detector">The blob detector</param>
+      /// <param name="img">The image</param>
+      /// <param name="imgFG">The forground mask</param>
+      /// <param name="newBlobList">The new blob list</param>
+      /// <param name="oldBlobList">The old blob list</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static int CvBlobDetectorDetectNewBlob(IntPtr detector, IntPtr img, IntPtr imgFG, IntPtr newBlobList, IntPtr oldBlobList);
+
+      /// <summary>
+      /// Get a simple blob detector 
+      /// </summary>
+      /// <returns>Pointer to the blob detector</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobDetectorSimple();
+
+      /// <summary>
+      /// Get a CC blob detector 
+      /// </summary>
+      /// <returns>Pointer to the blob detector</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobDetectorCC();
+      #endregion
+
+      #region BlobTracker
+      /// <summary>
+      /// Simple blob tracker based on connected component tracking
+      /// </summary>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerCC();
+
+      /// <summary>
+      /// Connected component tracking and mean-shift particle filter collion-resolver
+      /// </summary>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerCCMSPF();
+
+      /// <summary>
+      /// Blob tracker that integrates meanshift and connected components
+      /// </summary>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerMSFG();
+
+      /// <summary>
+      /// Blob tracker that integrates meanshift and connected components:
+      /// </summary>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerMSFGS();
+
+      /// <summary>
+      /// Meanshift without connected-components
+      /// </summary>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerMS();
+
+      /// <summary>
+      /// Particle filtering via Bhattacharya coefficient, which
+      /// is roughly the dot-product of two probability densities.
+      /// </summary>
+      /// <remarks>See: Real-Time Tracking of Non-Rigid Objects using Mean Shift Comanicius, Ramesh, Meer, 2000, 8p</remarks>
+      /// <returns>Pointer to the blob tracker</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerMSPF();
+
+      /// <summary>
+      /// Release the blob tracker
+      /// </summary>
+      /// <param name="tracker">The tracker to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobTrackerRealease(IntPtr tracker);
+
+      /// <summary>
+      /// Return number of currently tracked blobs
+      /// </summary>
+      /// <param name="tracker">The tracker</param>
+      /// <returns>Number of currently tracked blobs</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static int CvBlobTrackerGetBlobNum(IntPtr tracker);
+
+      /// <summary>
+      /// Return pointer to specified by index blob
+      /// </summary>
+      /// <param name="tracker">The tracker</param>
+      /// <param name="blobIndex">The index of the blob</param>
+      /// <returns>Pointer to specified by index blob</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerGetBlob(IntPtr tracker, int blobIndex);
+
+      /// <summary>
+      /// Delete blob by its index
+      /// </summary>
+      /// <param name="tracker">The tracker</param>
+      /// <param name="blobIndex">The index of the blob</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobTrackerDelBlob(IntPtr tracker, int blobIndex);
+
+      /// <summary>
+      /// Add new blob to track it and assign to this blob personal ID
+      /// </summary>
+      /// <param name="tracker">The tracker</param>
+      /// <param name="blob">pointer to structure with blob parameters (ID is ignored)</param>
+      /// <param name="currentImage">current image</param>
+      /// <param name="currentForgroundMask">current foreground mask</param>
+      /// <returns>Pointer to new added blob</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForgroundMask  );
+      #endregion
+
+      #region BlobTrackerAuto
+      /// <summary>
+      /// Create blob tracker auto ver1
+      /// </summary>
+      /// <param name="param">The parameters for the tracker</param>
+      /// <returns>Pointer to the blob tracker auto</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateBlobTrackerAuto1(ref MCvBlobTrackerAutoParam1 param);
+
+      /// <summary>
+      /// Release the blob tracker auto
+      /// </summary>
+      /// <param name="tracker">The tracker to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobTrackerAutoRelease(IntPtr tracker);
+
+      /// <summary>
+      /// Get the blob of specific index from the auto blob tracker
+      /// </summary>
+      /// <param name="tracker">The auto blob tracker</param>
+      /// <param name="index">The index of the blob</param>
+      /// <returns>Pointer to the the blob</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerAutoGetBlob(IntPtr tracker, int index);
+      /// <summary>
+      /// Get the blob of specific id from the auto blob tracker
+      /// </summary>
+      /// <param name="tracker">The auto blob tracker</param>
+      /// <param name="blobID">The id of the blob</param>
+      /// <returns>Pointer to the blob of specific ID</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerAutoGetBlobByID(IntPtr tracker, int blobID);
+      /// <summary>
+      /// Get the number of blobs in the auto blob tracker 
+      /// </summary>
+      /// <param name="tracker">The auto blob tracker</param>
+      /// <returns>The number of blobs</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static int CvBlobTrackerAutoGetBlobNum(IntPtr tracker);
+
+      /// <summary>
+      /// Process a image frame
+      /// </summary>
+      /// <param name="tracker">The auto blob tracker</param>
+      /// <param name="pImg">The frame to process</param>
+      /// <param name="pMask">The forground mask, can be IntPtr.Zero if not needed</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobTrackerAutoProcess(IntPtr tracker, IntPtr pImg, IntPtr pMask);
+
+      /// <summary>
+      /// Get the forground mask
+      /// </summary>
+      /// <param name="tracker">The auto blob tracker</param>
+      /// <returns>Pointer to the forground mask</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
+      #endregion
+      #endregion
    }
 }

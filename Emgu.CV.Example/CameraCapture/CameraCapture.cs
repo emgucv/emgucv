@@ -38,7 +38,7 @@ namespace CameraCapture
 
       private void captureButtonClick(object sender, EventArgs e)
       {
-         #region if captureThread is empty, create it now
+         #region if capture is not created, create it now
          if (_capture == null)
          {
             try
@@ -68,7 +68,6 @@ namespace CameraCapture
 
             _captureInProgress = !_captureInProgress;
          }
-
       }
 
       private void ReleaseData()

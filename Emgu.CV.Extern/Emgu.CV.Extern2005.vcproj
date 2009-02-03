@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib cxcore.lib"
+				AdditionalDependencies="ml.lib cxcore.lib cvaux.lib cv.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
 				GenerateDebugInformation="true"
@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cvBlob.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cvBoost.cpp"
 				>
 			</File>
@@ -217,6 +221,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\blob.h"
+				>
+			</File>
 			<File
 				RelativePath=".\cvextern.h"
 				>

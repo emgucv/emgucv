@@ -56,46 +56,61 @@ namespace Emgu.CV.UI
          }
       }
 
-      /*
       private String ImageTypeToString(Type imageType)
       {
+         if (imageType == typeof(IImage))
+         {
+            switch (_language)
+            {
+               case ProgrammingLanguage.CSharp:
+                  return "IImage";
+               case ProgrammingLanguage.CPlusPlus:
+                  return "IImage^";
+            }
+         }
+
          Type[] genericParameterTypes = imageType.GetGenericArguments();
          String genericParamString = String.Join(",",
             Array.ConvertAll<Type, String>(genericParameterTypes,
                delegate(Type t) { return t.Name; }));
 
-         if (_language == ProgrammingLanguage.CSharp)
+         switch (_language)
          {
-            return String.Format("{0}<{1}>", imageType.Name, genericParamString);
+            case ProgrammingLanguage.CSharp:
+               return String.Format("Image<{0}>", genericParamString);
+            case ProgrammingLanguage.CPlusPlus:
+               return String.Format("Image<{0}>^", genericParamString);
+            default:
+               throw new NotImplementedException("Code generation for this programming language is not implemented");
          }
-         else if (_language == ProgrammingLanguage.CPlusPlus)
-         {
-            return String.Format("{0}<{1}>^", imageType.Name, genericParamString);
-         }
-         else
-         {
-            throw new NotImplementedException("Code generation for this programming language is not implemented");
-         }
-      }*/
+      }
 
       private String[] GetOperationCode(Stack<Operation> operationStack)
       {
-         List<String> ops = new List<string>();
+         if (operationStack.Count == 0) return new string[0];
 
+         List<String> ops = new List<string>();
          Operation[] operationArray = operationStack.ToArray();
          Array.Reverse(operationArray);
 
          int currentInstanceIndex = 0;
 
-         if (_language == ProgrammingLanguage.CSharp)
-         {
-            ops.Add("public static IImage Function(IImage image" + currentInstanceIndex + "){");
-         }
-         else if (_language == ProgrammingLanguage.CPlusPlus)
-         {
-            ops.Add("public static IImage^ Function(IImage^ image" + currentInstanceIndex + "){");
-         }
+         Type imageType = typeof(IImage);
+         if (operationArray.Length > 0)
+            imageType = operationArray[0].Method.DeclaringType;
 
+         switch (_language)
+         {
+            case ProgrammingLanguage.CSharp:
+               ops.Add(
+                  String.Format("public static IImage Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
+               break;
+            case ProgrammingLanguage.CPlusPlus:
+               ops.Add(
+                  String.Format("public static IImage Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
+               break;
+         }
+         
          foreach (Operation op in operationArray)
          {
             String str = op.ToCode(_language).Replace("{instance}", "image" + currentInstanceIndex);
@@ -108,24 +123,27 @@ namespace Emgu.CV.UI
                }
                else
                {
+                  imageType = op.Method.ReturnType;
                   currentInstanceIndex++;
-                  str = String.Format("image{0} = {1};",
-                     //ImageTypeToString(op.Method.ReturnType), 
-                     currentInstanceIndex, str);
+                  str = String.Format("{0} image{1} = {2};",
+                     ImageTypeToString(op.Method.ReturnType), 
+                     currentInstanceIndex, 
+                     str);
                }
             }
             ops.Add(str);
          }
          ops.Add(String.Format("return image{0};", currentInstanceIndex));
 
-         if (_language == ProgrammingLanguage.CSharp)
+         switch (_language)
          {
-            ops.Add("}");
+            case ProgrammingLanguage.CSharp:
+            case ProgrammingLanguage.CPlusPlus:
+               ops.Add("}");
+               break;
          }
-         else if (_language == ProgrammingLanguage.CPlusPlus)
-         {
-            ops.Add("}");
-         }
+
+         ops[0] = ops[0].Replace("IImage", ImageTypeToString(imageType));
          return ops.ToArray();
       }
    }

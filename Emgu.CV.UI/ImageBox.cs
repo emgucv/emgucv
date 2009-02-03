@@ -395,8 +395,10 @@ namespace Emgu.CV.UI
          if (!_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
          {  
             //if not built, build it and save to the cache.
-            ToolStripMenuItem[] items = BuildOperationTree(Reflection.ReflectIImage.GetImageMethods(image));
-            _typeToToolStripMenuItemsDictionary.Add(typeOfImage, items);
+            _typeToToolStripMenuItemsDictionary.Add(
+               typeOfImage, 
+               BuildOperationTree(Reflection.ReflectIImage.GetImageMethods(image))
+               );
          }
 
          operationsToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
@@ -408,8 +410,7 @@ namespace Emgu.CV.UI
             try
             {
                String filename = loadImageFromFileDialog.FileName;
-               Image<Bgr, Byte> img = new Image<Bgr, byte>(filename);
-               Image = img;
+               Image = new Image<Bgr, byte>(filename);
             }
             catch (Exception excpt)
             {
@@ -422,8 +423,7 @@ namespace Emgu.CV.UI
          if (saveImageToFileDialog.ShowDialog() == DialogResult.OK)
             try
             {
-               String filename = saveImageToFileDialog.FileName;
-               DisplayedImage.Save(filename);
+               DisplayedImage.Save(saveImageToFileDialog.FileName);
             }
             catch (Exception excpt)
             {

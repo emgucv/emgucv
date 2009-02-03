@@ -32,7 +32,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// The Motion Segment Mask. 
-      /// Image where the mask found from GetMotionComponents is stored.
+      /// Same as the seg_mask in cvSegmentMotion function
       /// Do not dispose this image.
       /// </summary>
       public Image<Gray, Single> SegmentMask

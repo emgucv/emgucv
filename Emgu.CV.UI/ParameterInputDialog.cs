@@ -158,26 +158,25 @@ namespace Emgu.CV.UI
          ParamInputPanel panel = new ParamInputPanel();
          panel.Height = 50;
          panel.Width = 400;
-         int textBoxStartX = 100, textBoxStartY = 10;
+         System.Drawing.Point textBoxStart = new Point(100, 10);
 
          #region add the label for the parameter
          Label paramNameLabel = new Label();
          paramNameLabel.AutoSize = true;
          panel.Controls.Add(paramNameLabel);
-         paramNameLabel.Location = new System.Drawing.Point(10, textBoxStartY);
+         paramNameLabel.Location = new System.Drawing.Point(10, textBoxStart.Y);
          #endregion
 
          if (param == null)
          {  // a generic parameter
-            String defaultString = (String)defaultValue;
-            String[] splitTypeName = defaultString.Split('|');
+            String[] splitTypeName = defaultValue.ToString().Split('|');
             paramNameLabel.Text = String.Format("{0}:", splitTypeName[0]);
             String[] splitDefaultValue = splitTypeName[1].Split(':');
 
             String[] options = splitDefaultValue[1].Split(',');
             ComboBox combo = new ComboBox();
             panel.Controls.Add(combo);
-            combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+            combo.Location = textBoxStart;
             combo.Items.AddRange(options);
             combo.SelectedIndex = Array.FindIndex<String>(options, splitDefaultValue[0].Equals);
             panel.GetParamFunction =
@@ -198,7 +197,7 @@ namespace Emgu.CV.UI
             {
                ComboBox combo = new ComboBox();
                panel.Controls.Add(combo);
-               combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               combo.Location = textBoxStart;
                combo.Items.AddRange(Enum.GetNames(paramType));
                combo.SelectedIndex = 0;
 
@@ -212,7 +211,7 @@ namespace Emgu.CV.UI
             {
                ComboBox combo = new ComboBox();
                panel.Controls.Add(combo);
-               combo.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               combo.Location = textBoxStart;
                combo.Items.AddRange(new String[] { "True", "False" });
                combo.SelectedIndex = 0;
                panel.GetParamFunction =
@@ -226,7 +225,7 @@ namespace Emgu.CV.UI
                //Create inpout box for the int paramater
                TextBox inputTextBox = new TextBox();
                panel.Controls.Add(inputTextBox);
-               inputTextBox.Location = new System.Drawing.Point(textBoxStartX, textBoxStartY);
+               inputTextBox.Location = textBoxStart;
                inputTextBox.Text = defaultValue == null ? "0" : defaultValue.ToString();
 
                panel.GetParamFunction =
@@ -245,7 +244,7 @@ namespace Emgu.CV.UI
                {
                   inputBoxes[i] = new TextBox();
                   panel.Controls.Add(inputBoxes[i]);
-                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
                   inputBoxes[i].Width = boxWidth;
                   inputBoxes[i].Text = "0.0";
                }
@@ -263,8 +262,8 @@ namespace Emgu.CV.UI
             else if (paramType.IsSubclassOf(typeof(IColor)))
             {
                IColor t = Activator.CreateInstance(paramType) as IColor;
-               string[] channelNames = ReflectColorType.GetNamesOfChannels(t);
-               TextBox[] inputBoxes = new TextBox[channelNames.Length];
+               //string[] channelNames = ReflectColorType.GetNamesOfChannels(t);
+               TextBox[] inputBoxes = new TextBox[t.Dimension];
                int boxWidth = 40;
 
                //Create input boxes for the scalar value
@@ -272,7 +271,7 @@ namespace Emgu.CV.UI
                {
                   inputBoxes[i] = new TextBox();
                   panel.Controls.Add(inputBoxes[i]);
-                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStartX + i * (boxWidth + 5), textBoxStartY);
+                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
                   inputBoxes[i].Width = boxWidth;
                   inputBoxes[i].Text = "0.0";
                }
@@ -311,27 +310,24 @@ namespace Emgu.CV.UI
          #region find all the generic types and options and add that to the lists.
          if (method.ContainsGenericParameters)
          {
-            ExposableMethodAttribute methodAtt = method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute;
-
-            String[] genericOptions = methodAtt.GenericParametersOptions.Split(';');
+            String[] genericOptions = 
+               (method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute)
+               .GenericParametersOptions.Split(';');
             Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
-            for (int i = 0; i < genericOptions.Length; i++)
-            {
-               String option = genericOptions[i];
-               if (option.Substring(0, 1).Equals(":"))
-                  option = instanceGenericParameters[i].FullName + option;
-               genericOptions[i] = option;
-            }
-
             Type[] genericTypes = method.GetGenericArguments();
+
             for (int i = 0; i < genericTypes.Length; i++)
             {
                parameterList.Add(null);
-               Object defaultParameterValue = defaultParameterValues == null
-                  ? String.Format("{0}|{1}", genericTypes[i].Name, genericOptions[i]) :
-                  defaultParameterValues[i];
-
-               defaultParameterValueList.Add(defaultParameterValue);
+               defaultParameterValueList.Add(
+                  defaultParameterValues == null ?
+                  String.Format(
+                     "{0}|{1}", 
+                     genericTypes[i].Name, 
+                     genericOptions[i].Substring(0, 1).Equals(":") ? 
+                        instanceGenericParameters[i].FullName + genericOptions[i] :
+                        genericOptions[i]) :
+                  defaultParameterValues[i]);
             }
          }
          #endregion

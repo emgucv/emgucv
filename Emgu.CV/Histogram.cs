@@ -31,24 +31,24 @@ namespace Emgu.CV
              min.Length == _dimension && max.Length == _dimension,
              "incompatible dimension");
 
-         GCHandle[] r = new GCHandle[Dimension];
+         GCHandle[] pinnedRangesHandlers = new GCHandle[Dimension];
 
          float[][] ranges = new float[Dimension][];
 
          for (int i = 0; i < _dimension; i++)
          {
             ranges[i] = new float[2] { min[i], max[i] };
-            r[i] = GCHandle.Alloc(ranges[i], GCHandleType.Pinned);
+            pinnedRangesHandlers[i] = GCHandle.Alloc(ranges[i], GCHandleType.Pinned);
          }
 
          _ptr = CvInvoke.cvCreateHist(
              _dimension,
              binSizes,
              Emgu.CV.CvEnum.HIST_TYPE.CV_HIST_ARRAY,
-             Array.ConvertAll<GCHandle, IntPtr>(r, delegate(GCHandle h) { return h.AddrOfPinnedObject(); }),
+             Array.ConvertAll<GCHandle, IntPtr>(pinnedRangesHandlers, delegate(GCHandle h) { return h.AddrOfPinnedObject(); }),
              true);
 
-         foreach (GCHandle h in r)
+         foreach (GCHandle h in pinnedRangesHandlers)
             h.Free();
       }
 
@@ -132,6 +132,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Retrieve item counts for the specific bin </summary>
+      [Obsolete("Use the indexer instead, will be removed in the next version")]
       public double Query(params int[] binIndex)
       {
          Debug.Assert(binIndex.Length > 0, "Please specify at least one index");
@@ -147,6 +148,48 @@ namespace Emgu.CV
                return CvInvoke.cvQueryHistValue_3D(_ptr, binIndex[0], binIndex[1], binIndex[2]);
             default:
                throw new NotImplementedException(String.Format("Retrive from {0} dimensional histogram is not implemented", binIndex.Length));
+         }
+      }
+
+      /// <summary>
+      /// Get the specific bin value from the 1D Histogram
+      /// </summary>
+      /// <param name="index0">The 0th index of the bin</param>
+      /// <returns>The value in the histogram bin</returns>
+      public double this[int index0]
+      {
+         get
+         {
+            return CvInvoke.cvQueryHistValue_1D(_ptr, index0);
+         }
+      }
+
+      /// <summary>
+      /// Get the specific bin value from the 2D Histogram
+      /// </summary>
+      /// <param name="index0">The 0th index of the bin</param>
+      /// <param name="index1">The 1st index of the bin</param>
+      /// <returns>The value in the histogram bin</returns>
+      public double this[int index0, int index1]
+      {
+         get
+         {
+            return CvInvoke.cvQueryHistValue_2D(_ptr, index0, index1);
+         }
+      }
+
+      /// <summary>
+      /// Get the specific bin value from the 2D Histogram
+      /// </summary>
+      /// <param name="index0">The 0th index of the bin</param>
+      /// <param name="index1">The 1st index of the bin</param>
+      /// <param name="index2">The 2nd index of the bin</param>
+      /// <returns>The value in the histogram bin</returns>
+      public double this[int index0, int index1, int index2]
+      {
+         get
+         {
+            return CvInvoke.cvQueryHistValue_3D(_ptr, index0, index1, index2);
          }
       }
 
@@ -187,5 +230,6 @@ namespace Emgu.CV
             return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
          }
       }
+
    }
 }

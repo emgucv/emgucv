@@ -198,6 +198,44 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestBlob()
+      {
+         int width = 300;
+         int height = 400;
+         Image<Bgr, Byte> bg = new Image<Bgr, byte>(width, height);
+         bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
+
+         Size size = new Size(width / 10, height / 10);
+         Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
+
+         System.Drawing.Rectangle rect = new Rectangle(topLeft, size);
+
+         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
+         param.FGTrainFrames = 5;
+         BlobTrackerAuto tracker = new BlobTrackerAuto(param);
+
+         ImageViewer viewer = new ImageViewer();
+         //viewer.Show();
+         for (int i = 0; i < 20; i++)
+         {
+            using (Image<Bgr, Byte> img1 = bg.Copy())
+            {
+               rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
+               img1.Draw(rect, new Bgr(Color.Red), -1);
+               tracker.Process(img1);
+               viewer.Image = img1;
+               viewer.Refresh();
+            }
+         }
+         MCvBlob blob = tracker[0];
+         int id = blob.ID;
+         //ImageViewer.Show(forground);
+      }
+
+      [Test]
       public void TestEigenObjects()
       {
          String[] fileNames = new string[] { "stuff.jpg", "squares.gif", "lena.jpg" };
@@ -448,8 +486,8 @@ namespace Emgu.CV.Test
          BackgroundStatisticsModel model2 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
          model2.Update(img2);
 
-         //Application.Run(new ImageViewer(model2.Foreground));
-         //Application.Run(new ImageViewer(model.BackGround));
+         //ImageViewer.Show(model2.Foreground);
+         //ImageViewer.Show(model1.Background);
       }
 
       [Test]

@@ -760,6 +760,38 @@ namespace Emgu.CV.Test
 
       }
 
+      public void TestBlobTracking()
+      {
+         Capture capture = new Capture();
+
+         ImageViewer viewer = new ImageViewer();
+
+         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
+         param.FGTrainFrames = 5;
+         BlobTrackerAuto tracker = new BlobTrackerAuto(param);
+
+         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         {
+            Image<Bgr, Byte> img  = capture.QueryFrame();
+            tracker.Process(img);
+            //viewer.Image = tracker.GetForgroundMask();
+
+            MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+            foreach (MCvBlob blob in tracker)
+            {
+               img.Draw(new Rectangle((int)blob.x, (int)blob.y, (int) blob.w,(int) blob.h), new Bgr(255.0, 255.0, 255.0), 1);
+               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.x, (int)blob.y), new Bgr(255.0, 255.0, 255.0));
+            }
+            viewer.Image = img;
+         });
+         viewer.ShowDialog();
+         
+      }
+
+
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100);
@@ -793,9 +825,9 @@ namespace Emgu.CV.Test
               img.Draw(new Cross2DF(point, 3, 3), color, 1);
            };
 
-         CvInvoke.cvNamedWindow("Kalman");
+         ImageViewer viewer = new ImageViewer();
 
-         while (true)
+         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
          {
             Matrix<float> measurement = syntheticData.GetMeasurement();
             // adjust Kalman filter state 
@@ -814,18 +846,15 @@ namespace Emgu.CV.Test
             drawCross(predictPoint, new Bgr(Color.Green)); //draw the prediction (the next state) in green 
             img.Draw(new LineSegment2DF(statePoint, predictPoint), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position 
 
-            Trace.WriteLine(String.Format("Velocity: {0}", tracker.CorrectedState[1, 0]));
+            //Trace.WriteLine(String.Format("Velocity: {0}", tracker.CorrectedState[1, 0]));
             #endregion
 
             syntheticData.GoToNextState();
 
-            CvInvoke.cvShowImage("Kalman", img);
-            int code = CvInvoke.cvWaitKey(100);
-            if (code > 0)
-            {
-               break;
-            }
-         }
+            viewer.Image = img;
+         });
+
+         viewer.ShowDialog();
       }
    }
 }

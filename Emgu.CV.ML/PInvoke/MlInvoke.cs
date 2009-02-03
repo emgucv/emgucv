@@ -11,7 +11,12 @@ namespace Emgu.CV.ML
    /// </summary>
    public class MlInvoke
    {
+      
+#if LINUX
+      private const string EXTERN_LIBRARY = "cvextern.so";
+#else
       private const string EXTERN_LIBRARY = "cvextern.dll";
+#endif
 
       #region CvStatModel
       /// <summary>

@@ -154,7 +154,7 @@ namespace Emgu.CV.UI
             //all the values of the histogram for the specific color channel
             System.Drawing.Point[] pts = new System.Drawing.Point[binSize[0]];
             for (int binIndex = 0; binIndex < pts.Length; binIndex++)
-               pts[binIndex] = new System.Drawing.Point(binIndex, (int)hist.Query(binIndex));
+               pts[binIndex] = new System.Drawing.Point(binIndex, (int)hist[binIndex]);
 
             return pts;
          }
@@ -174,7 +174,7 @@ namespace Emgu.CV.UI
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          IColor typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as IColor;
          String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
-         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);// typeOfColor.GetChannelDisplayColor();
+         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
 
          HistogramViewer hviewer = new HistogramViewer();
          System.Type typeOfDepth = imageType.GetGenericArguments()[1];
