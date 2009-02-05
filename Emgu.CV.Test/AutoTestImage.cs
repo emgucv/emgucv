@@ -644,6 +644,7 @@ namespace Emgu.CV.Test
          private SURFMatcher _matcher;
          private Image<Gray, Byte> _model;
          private Matrix<double> _originalCornerCoordinate;
+         private MCvBox2D _currentLocation;
 
          public SURFTracker(Image<Gray, Byte> modelImage, ref MCvSURFParams param)
          {
@@ -659,7 +660,19 @@ namespace Emgu.CV.Test
                { rect.Left, rect.Top, 1.0}});
          }
 
-         public MCvBox2D Track(Image<Gray, Byte> observedImage, SURFFeature[] observedFeatures, MCvBox2D initRegion)
+         public MCvBox2D CurrentLocation
+         {
+            get
+            {
+               return _currentLocation;
+            }
+            set
+            {
+               _currentLocation = value;
+            }
+         }
+
+         public void Track(Image<Gray, Byte> observedImage, SURFFeature[] observedFeatures)
          {
             double matchDistanceRatio = 0.8;
 
@@ -700,17 +713,37 @@ namespace Emgu.CV.Test
                   }
                }
                #endregion
+               Rectangle startRegion;
+               if (_currentLocation.Equals(MCvBox2D.Empty))
+                  startRegion = matchMask.ROI;
+               else
+               {
+                  startRegion = PointCollection.BoundingRectangle(_currentLocation.GetVertices());
+                  if (startRegion.IntersectsWith(matchMask.ROI))
+                     startRegion.Intersect(matchMask.ROI);
+               }
 
-               Rectangle r = PointCollection.BoundingRectangle(initRegion.GetVertices());
-               if (r.IntersectsWith(matchMask.ROI)) r = matchMask.ROI;
-               MCvConnectedComp comp;
-               MCvBox2D box;
-               CvInvoke.cvCamShift(matchMask.Ptr, r, new MCvTermCriteria(10, 1.0e-8), out comp, out box);
-               return box;
+               MCvConnectedComp comp;       
+               //Updates the current location
+               CvInvoke.cvCamShift(matchMask.Ptr, startRegion, new MCvTermCriteria(10, 1.0e-8), out comp, out _currentLocation);
+               
             }
          }
 
-         public MCvBox2D Detect(SURFFeature[] imageFeatures)
+         public MCvBox2D BoundingRectangleFromHomographyMatrix(Matrix<double> homographyMatrix)
+         {
+            using (Matrix<double> destCornerCoordinate = new Matrix<double>(_originalCornerCoordinate.Rows, 3))
+            using (Matrix<float> destCornerCoordinate2D = new Matrix<float>(_originalCornerCoordinate.Rows, 1, 2))
+            {
+               CvInvoke.cvGEMM(_originalCornerCoordinate, homographyMatrix, 1.0, IntPtr.Zero, 0.0, destCornerCoordinate, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+
+               CvInvoke.cvConvertPointsHomogeneous(destCornerCoordinate, destCornerCoordinate2D);
+
+               return CvInvoke.cvMinAreaRect2(destCornerCoordinate2D, IntPtr.Zero);
+            }
+         }
+
+         public Matrix<double> Detect(SURFFeature[] imageFeatures)
          {
             double matchDistanceRatio = 0.8;
             List<PointF> modelPoints = new List<PointF>();
@@ -740,28 +773,11 @@ namespace Emgu.CV.Test
                }
             }
 
-            using(Matrix<double> homographyMatrix = CameraCalibration.FindHomography(
+            return CameraCalibration.FindHomography(
                modelPoints.ToArray(), //points on the object image
                observePoints.ToArray(), //points on the observed image
                CvEnum.HOMOGRAPHY_METHOD.RANSAC,
-               3))
-            using (Matrix<double> destCornerCoordinate = new Matrix<double>(_originalCornerCoordinate.Rows, 3))
-            {
-               CvInvoke.cvGEMM(_originalCornerCoordinate, homographyMatrix, 1.0, IntPtr.Zero, 0.0, destCornerCoordinate, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
-
-               double[,] destCornerCoordinateArray = destCornerCoordinate.Data;
-
-               PointF[] destCornerPoints = new PointF[4];
-               for (int i = 0; i < destCornerPoints.Length; i++)
-               {
-                  double denominator = destCornerCoordinateArray[i, 2];
-                  destCornerPoints[i] = new PointF(
-                     (float)(destCornerCoordinateArray[i, 0] / denominator),
-                     (float)(destCornerCoordinateArray[i, 1] / denominator));
-               }
-               //CvInvoke.cvMinAreaRect2(destCornerCoordinate.GetCols(0, 2).Convert<int>(), IntPtr.Zero);
-               return PointCollection.MinAreaRect(destCornerPoints);
-            }
+               3);
          }
       }
 
@@ -803,7 +819,7 @@ namespace Emgu.CV.Test
             #endregion
 
             stopwatch.Reset(); stopwatch.Start();
-            MCvBox2D box = tracker.Detect(imageFeatures);
+            MCvBox2D box = tracker.BoundingRectangleFromHomographyMatrix(tracker.Detect(imageFeatures));
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             box.Offset(0, modelImage.Height);
@@ -815,12 +831,13 @@ namespace Emgu.CV.Test
                new PointF(observedImage.Width >> 1, observedImage.Height >> 1), 
                new SizeF(observedImage.Width, observedImage.Height), 0);
 
-            box = tracker.Track(observedImage, imageFeatures, initRegion);
+            tracker.Track(observedImage, imageFeatures);
+            box = tracker.CurrentLocation;
             Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             box.Offset(0, modelImage.Height);
             res.Draw(box, new Gray(255.0), 5);
             
-            //ImageViewer.Show(res.Resize(200, 200, true));
+            ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 

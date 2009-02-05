@@ -10,7 +10,6 @@ void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, const CvPoint2D32f* point
    }
 }
 
-
 void PlanarSubdivisionEdgeToTriangle(const CvSubdiv2DEdge e, Triangle2DF* triangle)
 {
    triangle->V0 = cvSubdiv2DEdgeOrg(e)->pt;
@@ -33,13 +32,32 @@ inline bool PointInRegion(CvPoint2D32f pt, float left, float right, float top, f
       pt.x >= left && pt.x <= right && pt.y >= top && pt.y <= bottom;
 }
 
-CvSeq* PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, CvMemStorage* storage, bool includeVirtualPoint)
+struct ltpt
 {
+  bool operator()(CvPoint2D32f p1, CvPoint2D32f p2) const
+  {
+     return p1.x == p2.x? 
+        p1.y < p2.y :
+        p1.x < p2.x;
+  }
+};
+
+inline void TriangleVertexSum(Triangle2DF t, CvPoint2D32f* point)
+{
+   point->x = t.V0.x +t.V1.x + t.V2.x;
+   point->y = t.V0.y + t.V1.y + t.V2.y;
+};
+
+void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  bool includeVirtualPoint)
+{
+   set<CvPoint2D32f, ltpt> pointSet;
+
    CvSet* subdivEdges = subdiv->edges;
    CvSeqReader reader;
    cvStartReadSeq((CvSeq*) subdivEdges, &reader);
 
-   CvSeq* triangles = cvCreateSeq(0, sizeof(CvSeq), sizeof(Triangle2DF), storage);
+   int count = 0;
+   CvPoint2D32f p;
    Triangle2DF t0 ;
    Triangle2DF t1;
 
@@ -49,9 +67,20 @@ CvSeq* PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, CvMemStorage* sto
       {
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
          PlanarSubdivisionEdgeToTriangle( edge->next[0], &t0);
+         
+         TriangleVertexSum(t0, &p);
+         if (pointSet.find(p) == pointSet.end())
+         {
+            pointSet.insert(p);
+            triangles[count++] = t0;
+         }
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t1);
-         cvSeqPush(triangles, &t0);
-         cvSeqPush(triangles, &t1);
+         TriangleVertexSum(t1, &p);
+         if (pointSet.find(p) == pointSet.end())
+         {
+            pointSet.insert(p);
+            triangles[count++] = t1;
+         }
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
       }
    } else
@@ -66,20 +95,34 @@ CvSeq* PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, CvMemStorage* sto
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
          PlanarSubdivisionEdgeToTriangle( edge->next[0], &t0);
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t1);
-         if (TriangleInRegion(t0, left, right, top, bottom))
-            cvSeqPush(triangles, &t0);
-         if (TriangleInRegion(t1, left, right, top, bottom))
-            cvSeqPush(triangles, &t1);
+
+         TriangleVertexSum(t0, &p);
+         if (pointSet.find(p) == pointSet.end()
+            && TriangleInRegion(t0, left, right, top, bottom))
+         {
+            pointSet.insert(p);
+            triangles[count++] = t0;
+         }
+
+         TriangleVertexSum(t1, &p);
+         if (pointSet.find(p) == pointSet.end()
+            && TriangleInRegion(t1, left, right, top, bottom))
+         {
+            pointSet.insert(p);
+            triangles[count++] = t1;
+         }
+         
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
       }
    }
-
-   return triangles;
+   
+   *triangleCount = count;
 }
 
-/*
-void PlanarSubdivisionGetSubdiv2DPoints(const CvSubdiv2D* subdiv, CvMemStorage* storage, CvSeq** points, CvSeq** edges)
+void PlanarSubdivisionGetSubdiv2DPoints(const CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
 {
+   set<CvPoint2D32f, ltpt> pointSet;
+
    float left = subdiv->topleft.x,
       top = subdiv->topleft.y,
       right = subdiv->bottomright.x, 
@@ -87,44 +130,38 @@ void PlanarSubdivisionGetSubdiv2DPoints(const CvSubdiv2D* subdiv, CvMemStorage* 
 
    CvSet* subdivEdges = subdiv->edges;
    int total = subdivEdges->total;
-   int elemSize = subdivEdges->elem_size;
 
-   *points = cvCreateSeq(0, sizeof(CvSeq), sizeof(CvPoint2D32f), storage);
-   *edges = cvCreateSeq(0, sizeof(CvSeq), sizeof(CvSubdiv2DEdge), storage);
-
-   CvSeqReader reader;
-   cvStartReadSeq((CvSeq*) subdivEdges, &reader);
-
-   CvQuadEdge2D* qEdge;
-   CvSubdiv2DEdge e;
-   CvPoint2D32f p1;
-   CvPoint2D32f p2;
-   CvSubdiv2DEdge divEdge;
+   int count = 0;
 
    for (int i = 0; i < total; i++)
    {
-      if(CV_IS_SET_ELEM(reader.ptr))
+      CvQuadEdge2D* qEdge = (CvQuadEdge2D *) cvGetSetElem( subdiv->edges, i );
+
+      if (qEdge && CV_IS_SET_ELEM(qEdge))
       {
-         qEdge = (CvQuadEdge2D*)reader.ptr;
+         CvSubdiv2DEdge e = (CvSubdiv2DEdge) qEdge;
 
-         if (qEdge->flags != -1)
+         if (e && CV_IS_SET_ELEM(e))
          {
-            e = qEdge->next[0];
-
-            p1 = qEdge->pt[0]->pt;
-            p2 = cvSubdiv2DEdgeDst(e)->pt;
-            if (PointInRegion(p1, left, right, top, bottom)
-               && PointInRegion(p2, left, right, top, bottom))
+            CvPoint2D32f p1 = cvSubdiv2DEdgeOrg(e)->pt;
+            if (pointSet.find(p1) == pointSet.end() &&
+               PointInRegion(p1, left, right, top, bottom))
             {
-               cvSeqPush(*points, &p1);
-               divEdge = cvSubdiv2DRotateEdge(e, 1);
-               cvSeqPush(*edges, &divEdge);
-               cvSeqPush(*points, &p2);
-               divEdge = cvSubdiv2DRotateEdge(e, 3);
-               cvSeqPush(*edges, &divEdge);
+               pointSet.insert(p1);
+               points[count] = p1;
+               edges[count++] = cvSubdiv2DRotateEdge(e, 1);
+            }
+
+            CvPoint2D32f p2 = cvSubdiv2DEdgeDst(e)->pt;
+            if(pointSet.find(p2) == pointSet.end() &&
+               PointInRegion(p2, left, right, top, bottom))
+            {
+               pointSet.insert(p2);
+               points[count] = p2;
+               edges[count++] = cvSubdiv2DRotateEdge(e, 3);
             }
          }
       }
-      CV_NEXT_SEQ_ELEM(elemSize, reader);
    }
-}*/
+   *pointCount = count;
+}

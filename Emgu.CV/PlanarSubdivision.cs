@@ -122,15 +122,13 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern IntPtr PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr storage, bool includeVirtualPoints);
+      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, bool includeVirtualPoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
 
-      /*
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr storage, out IntPtr points, out IntPtr edges);
-      */
+      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
 
       private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge currentEdge, List<System.Drawing.PointF> bufferList)
       {
@@ -170,7 +168,7 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>The vertices of the triangles all belongs to the inserted points</remarks>
       /// <returns>The result of the current triangulation</returns>
-      public List<Triangle2DF> GetDelaunayTriangles()
+      public Triangle2DF[] GetDelaunayTriangles()
       {
          return GetDelaunayTriangles(false);
       }
@@ -179,7 +177,7 @@ namespace Emgu.CV
       /// Obtains the list of Voronoi Facets 
       /// </summary>
       /// <returns>The list of Voronoi Facets</returns>
-      public List<VoronoiFacet> GetVoronoiFacets()
+      public VoronoiFacet[] GetVoronoiFacets()
       {
          if (_isVoronoiDirty)
          {
@@ -187,69 +185,68 @@ namespace Emgu.CV
             _isVoronoiDirty = false;
          }
 
-         Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
-         List<VoronoiFacet> facetList = new List<VoronoiFacet>();
+         {  //slower C# implementation, works correctly in both DEBUG and RELEASE
+            int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
+            Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
+            List<VoronoiFacet> facetList = new List<VoronoiFacet>();
+            List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
 
-         List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
-
-         int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-
-         foreach (MCvQuadEdge2D quadEdge in this)
-         {
-            MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
-
-            System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
-            if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
-               && InsertPoint2DToDictionary(pt1, facetDict))
+            foreach (MCvQuadEdge2D quadEdge in this)
             {
-               MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
-               System.Drawing.PointF[] p1 = EdgeToPoly(e1, bufferList);
-               if (p1 != null)
+               MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
+
+               System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
+               if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
+                  && InsertPoint2DToDictionary(pt1, facetDict))
                {
-                  facetList.Add(new VoronoiFacet(pt1, p1));
+                  MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
+                  PointF[] p1 = EdgeToPoly(e1, bufferList);
+                  if (p1 != null)
+                  {
+                     facetList.Add(new VoronoiFacet(pt1, p1));
+                  }
+               }
+
+               System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
+               if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
+                  && InsertPoint2DToDictionary(pt2, facetDict))
+               {
+                  MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
+                  PointF[] p2 = EdgeToPoly(e2, bufferList);
+                  if (p2 != null)
+                  {
+                     facetList.Add(new VoronoiFacet(pt2, p2));
+                  }
                }
             }
-
-            System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
-            if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
-               && InsertPoint2DToDictionary(pt2, facetDict))
-            {
-               MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
-               System.Drawing.PointF[] p2 = EdgeToPoly(e2, bufferList);
-               if (p2 != null)
-               {
-                  facetList.Add(new VoronoiFacet(pt2, p2));
-               }
-            }
+            return facetList.ToArray();
          }
 
-
          /*
-         using (MemStorage stor = new MemStorage())
-         {
-            //Seq<System.Drawing.PointF> subdivPts = new Seq<System.Drawing.PointF>(stor);
-            //Seq<MCvSubdiv2DEdge> subdivEdges = new Seq<MCvSubdiv2DEdge>(stor);
-            IntPtr ptsSeq, edgesSeq;
-            PlanarSubdivisionGetSubdiv2DPoints(_ptr, stor, out ptsSeq , out edgesSeq);
-
-            System.Drawing.PointF[] pts = new Seq<System.Drawing.PointF>(ptsSeq, stor).ToArray();
-            MCvSubdiv2DEdge[] edges = new Seq<MCvSubdiv2DEdge>(edgesSeq, stor).ToArray();
+         {  //alternative high-performance method, works correctly in DEBUG but not RELEASE
+            int size = MCvSubdiv2D.total; 
+            PointF[] points = new PointF[size];
+            MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
+            GCHandle pointHandle = GCHandle.Alloc(points, GCHandleType.Pinned);
+            GCHandle edgeHandle = GCHandle.Alloc(edges, GCHandleType.Pinned);
+            
+            PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject() , edgeHandle.AddrOfPinnedObject(), ref size);
+            pointHandle.Free();
+            edgeHandle.Free();
 
             List<System.Drawing.PointF> buffer = new List<System.Drawing.PointF>();
+            VoronoiFacet[] facets = new VoronoiFacet[size];
             
-            
-            for (int i = 0; i < pts.Length; i++)
+            for (int i = 0; i < size; i++)
             {
-               if (InsertPoint2DToDictionary(pts[i], facetDict))
-               {
-                  System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
-                  if (polygon != null)
-                     facetList.Add(new VoronoiFacet(pts[i], polygon));
-               }
+               
+               System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
+               
+               if (polygon != null)
+                  facets[i] = new VoronoiFacet(points[i], polygon);
             }
+            return facets;
          }*/
-
-         return facetList;
       }
 
       /// <summary>
@@ -272,30 +269,15 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points, if you do not want those points, set <param name="includeVirtualPoints"> to false</param></remarks>
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
-      public List<Triangle2DF> GetDelaunayTriangles(bool includeVirtualPoints)
+      public Triangle2DF[] GetDelaunayTriangles(bool includeVirtualPoints)
       {
-         Triangle2DF[] triangles;
-         using (MemStorage storage = new MemStorage())
-         {
-            Seq<Triangle2DF> seq = new Seq<Triangle2DF>(PlanarSubdivisionGetTriangles(_ptr, storage, includeVirtualPoints), storage);
-            triangles = seq.ToArray();
-         }
-
-         #region remove duplicate triangles
-         Dictionary<System.Drawing.PointF, Byte> triangleDic = new Dictionary<System.Drawing.PointF, Byte>();
-         List<Triangle2DF> triangleList = new List<Triangle2DF>();
-
-         PointF sum = new PointF();
-         foreach (Triangle2DF t in triangles)
-         {
-            sum.X = t.V0.X + t.V1.X + t.V2.X;
-            sum.Y = t.V0.Y + t.V1.Y + t.V2.Y;
-            if (InsertPoint2DToDictionary(sum, triangleDic))
-               triangleList.Add(t);
-         }
-         #endregion
-
-         return triangleList;
+         int size = ((MCvSet)Marshal.PtrToStructure(MCvSubdiv2D.edges, typeof(MCvSet))).total * 2;
+         Triangle2DF[] triangles = new Triangle2DF[size];
+         GCHandle handle = GCHandle.Alloc(triangles, GCHandleType.Pinned);
+         PlanarSubdivisionGetTriangles(_ptr, handle.AddrOfPinnedObject(), ref size, includeVirtualPoints);
+         handle.Free();
+         Array.Resize(ref triangles, size);
+         return triangles;
       }
 
       /// <summary>
@@ -341,6 +323,9 @@ namespace Emgu.CV
    /// </summary>
    public class VoronoiFacet
    {
+      private System.Drawing.PointF _point;
+      private System.Drawing.PointF[] _vertices;
+
       /// <summary>
       /// Create a Voronoi facet using the specific <paramref name="point"/> and <paramref name="polyline"/>
       /// </summary>
@@ -354,18 +339,14 @@ namespace Emgu.CV
          //Debug.Assert(point.InConvexPolygon(this));
       }
 
-      private System.Drawing.PointF _point;
-
       /// <summary>
-      /// The point this facet associate to
+      /// The point this facet associates to
       /// </summary>
       public System.Drawing.PointF Point
       {
          get { return _point; }
          set { _point = value; }
       }
-
-      private System.Drawing.PointF[] _vertices;
 
       /// <summary>
       /// Get or set the vertices of this facet

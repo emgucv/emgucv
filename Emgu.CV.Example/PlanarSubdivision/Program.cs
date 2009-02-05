@@ -32,8 +32,8 @@ namespace PlanarSubdivisionExample
             pts[i] = new PointF((float)r.NextDouble() * maxValue, (float)r.NextDouble() * maxValue);
          #endregion
 
-         List<Triangle2DF> delaunayTriangles;
-         List<VoronoiFacet> voronoiFacets;
+         Triangle2DF[] delaunayTriangles;
+         VoronoiFacet[] voronoiFacets;
          using (PlanarSubdivision subdivision = new PlanarSubdivision(pts))
          {
             //Obtain the delaunay's triangulation from the set of points;

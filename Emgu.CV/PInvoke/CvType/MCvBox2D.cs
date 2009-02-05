@@ -9,7 +9,7 @@ namespace Emgu.CV.Structure
    /// Managed structure equivalent to CvBox2D
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvBox2D : IConvexPolygonF
+   public struct MCvBox2D : IConvexPolygonF, IEquatable<MCvBox2D>
    {
       /// <summary>
       /// The center of the box
@@ -48,6 +48,17 @@ namespace Emgu.CV.Structure
          center.Y += y;
       }
 
+      /// <summary>
+      /// Represent an uninitialized MCvBox2D
+      /// </summary>
+      public static MCvBox2D Empty
+      {
+         get
+         {
+            return new MCvBox2D();
+         }
+      }
+
       #region IConvexPolygonF Members
       /// <summary>
       /// Get the 4 verticies of this Box.
@@ -76,5 +87,20 @@ namespace Emgu.CV.Structure
          int maxY = (int)Math.Round(Math.Max(Math.Max(data[1], data[3]), Math.Max(data[5], data[7])));
          return new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
       }
+
+      #region IEquatable<MCvBox2D> Members
+      /// <summary>
+      /// Returns true if the two box are equal
+      /// </summary>
+      /// <param name="other">The other box to compare with</param>
+      /// <returns>True if equal.</returns>
+      public bool Equals(MCvBox2D other)
+      {
+         return center.Equals(other.center)
+            && size.Equals(other.size)
+            && angle == other.angle;
+      }
+
+      #endregion
    }
 }

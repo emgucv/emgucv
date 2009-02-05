@@ -35,29 +35,24 @@ namespace Emgu.CV
       {
          XValueOfPointComparator comparator = new XValueOfPointComparator();
          int idx = System.Array.BinarySearch<PointF>(points, new PointF(index, 0.0f), comparator);
-         if (idx >= 0)
-         {   // an exact index is matched
+         
+         if (idx >= 0) // an exact index is matched
             return points[idx].Y;
-         }
-         else
-         {   // the index fall into a range, in this case we do interpolation
-            idx = -idx;
-            if (idx == 1)
-            {   // the specific index is smaller than all indexes
-               idx = 0;
-            }
-            else if (idx == points.Length + 1)
-            {   // the specific index is larger than all indexes
-               idx = points.Length - 2;
-            }
-            else
-            {
-               idx -= 2;
-            }
 
-            LineSegment2DF line = new LineSegment2DF(points[idx], points[idx + 1]);
-            return line.YByX(index);
-         }
+         // the index fall into a range, in this case we do interpolation
+         idx = -idx;
+
+         if (idx == 1)
+            // the specific index is smaller than all indexes
+            idx = 0;
+         else if (idx == points.Length + 1)
+            // the specific index is larger than all indexes
+            idx = points.Length - 2;
+         else
+            idx -= 2;
+
+         LineSegment2DF line = new LineSegment2DF(points[idx], points[idx + 1]);
+         return line.YByX(index);         
       }
 
       /// <summary>

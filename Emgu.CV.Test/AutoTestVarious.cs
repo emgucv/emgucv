@@ -402,7 +402,9 @@ namespace Emgu.CV.Test
          PointF p2 = new PointF(1, 0);
          PointF p3 = new PointF(0, 1);
          Triangle2DF tri = new Triangle2DF(p1, p2, p3);
-         double epsilon = 1e-10;
+         double epsilon = 1e-12;
+         //Trace.WriteLine(tri.Area);
+         //Trace.WriteLine(((p2.X - p1.X) * (p3.Y - p1.Y) - (p2.Y - p1.Y) * (p3.X - p1.X))*0.5);
          Assert.IsTrue(Math.Abs(tri.Area - 0.5) < epsilon);
       }
 
@@ -494,7 +496,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlannarSubdivision1()
       {
-         int pointCount = 3000;
+         int pointCount = 1000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];
@@ -510,15 +512,15 @@ namespace Emgu.CV.Test
 
          watch.Reset(); watch.Start();
          division = new PlanarSubdivision(points, true);
-         List<Triangle2DF> triangles = division.GetDelaunayTriangles(false);
+         Triangle2DF[] triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Count));
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length));
 
          watch.Reset(); watch.Start();
          division = new PlanarSubdivision(points);
-         List<VoronoiFacet> facets = division.GetVoronoiFacets();
+         VoronoiFacet[] facets = division.GetVoronoiFacets();
          watch.Stop();
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Count));
+         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length));
 
          //foreach (Triangle2DF t in triangles)
          //{
@@ -584,7 +586,7 @@ namespace Emgu.CV.Test
             subdiv.Insert(pts[i]);
          }
 
-         List<VoronoiFacet> facets = subdiv.GetVoronoiFacets();
+         VoronoiFacet[] facets = subdiv.GetVoronoiFacets();
       }
 
       [Test]

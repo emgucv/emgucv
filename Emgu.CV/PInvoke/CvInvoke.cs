@@ -3044,7 +3044,7 @@ namespace Emgu.CV
       /// <summary>
       /// Finds a circumscribed rectangle of the minimal area for 2D point set by building convex hull for the set and applying rotating calipers technique to the hull.
       /// </summary>
-      /// <param name="points">Sequence or array of points</param>
+      /// <param name="points">Sequence of points, or two channel int/float depth matrix</param>
       /// <param name="storage">temporary memory storage</param>
       /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
       [DllImport(CV_LIBRARY)]

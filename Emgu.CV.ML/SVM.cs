@@ -128,10 +128,8 @@ namespace Emgu.CV.ML
       {
          int k = GetVarCount();
          float[] res = new float[k];
-         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned); 
          IntPtr vector = MlInvoke.cvSVMGetSupportVector(Ptr, i);
-         Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), vector, k * Marshal.SizeOf(typeof(float)));
-         handle.Free();
+         Marshal.Copy(vector, res, 0, k);
          return res;
       }
 
