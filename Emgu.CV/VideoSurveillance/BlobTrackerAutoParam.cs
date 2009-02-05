@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV
+namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
    /// Parameters of blobtracker auto ver1
@@ -38,10 +38,19 @@ namespace Emgu.CV
       /// <summary>
       /// Selected blob trajectory postprocessing module. If this field is NULL no postprocessing is done. 
       /// </summary>
-      public IntPtr BTPP;
+      private BlobTrackPostProc _postProcessModule;
 
       /// <summary>
-      /// 
+      /// Selected blob trajectory postprocessing module. If this field is NULL no postprocessing is done. 
+      /// </summary>
+      public BlobTrackPostProc BTPP
+      {
+         get { return _postProcessModule; }
+         set { _postProcessModule = value; }
+      }
+
+      /// <summary>
+      /// Indicates if postprocess data should be used
       /// </summary>
       private int _usePPData;
 
@@ -110,7 +119,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// 
+      /// Indicates if postprocess data should be used
       /// </summary>
       public int UsePPData
       {
@@ -136,7 +145,7 @@ namespace Emgu.CV
             param.BT = BlobTracker;
             param.BTA = BTA;
             param.BTGen = BTGen;
-            param.BTPP = BTPP;
+            param.BTPP = _postProcessModule;
             param.FG = ForgroundDetector;
             param.FGTrainFrames = FGTrainFrames;
             param.usePPData = UsePPData;

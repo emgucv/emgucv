@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
+using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
 using Emgu.Util;
 using System.Diagnostics;
@@ -493,7 +494,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlannarSubdivision1()
       {
-         int pointCount = 10000;
+         int pointCount = 3000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];
@@ -505,8 +506,10 @@ namespace Emgu.CV.Test
          #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
-         PlanarSubdivision division = new PlanarSubdivision(points);
+         PlanarSubdivision division;
 
+         watch.Reset(); watch.Start();
+         division = new PlanarSubdivision(points, true);
          List<Triangle2DF> triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Count));

@@ -5,7 +5,7 @@ using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV
+namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
    /// A forground detector

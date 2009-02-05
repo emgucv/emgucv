@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Emgu.Util;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -43,7 +44,7 @@ namespace Emgu.CV
       /// Create a planar subdivision from the given points. The ROI is computed as the minimun bounding Rectangle for the input points
       /// </summary>
       /// <param name="silent">If true, any exception during insert will be ignored</param>
-      /// <param name="points">The points for this planar subdivision</param>
+      /// <param name="points">The points to be inserted to this planar subdivision</param>
       public PlanarSubdivision(System.Drawing.PointF[] points, bool silent)
       {
          #region Find the region of interest
@@ -53,20 +54,36 @@ namespace Emgu.CV
          _storage = new MemStorage();
          _ptr = CvInvoke.cvCreateSubdivDelaunay2D(_roi, _storage);
 
+         Insert(points, silent);
+      }
+      #endregion
+
+      /// <summary>
+      /// Insert a collection of points to this planar subdivision
+      /// </summary>
+      /// <param name="points">The points to be inserted to this planar subdivision</param>
+      /// <param name="silent">If true, any exception during insert will be ignored</param>
+      public void Insert(PointF[] points, bool silent)
+      {
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+
          if (silent)
-            foreach (System.Drawing.PointF p in points)
-               try
-               {
-                  CvInvoke.cvSubdivDelaunay2DInsert(_ptr, p);
-               }
-               catch { }
+         {
+            //ignore all errors
+            IntPtr oldErrorCallback = CvInvoke.cvRedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
+
+            PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
+
+            //reset the error handler 
+            CvInvoke.cvRedirectError(oldErrorCallback, IntPtr.Zero, IntPtr.Zero);
+         }
          else
-            foreach (System.Drawing.PointF p in points)
-               CvInvoke.cvSubdivDelaunay2DInsert(_ptr, p);
+            PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
+
+         handle.Free();
 
          _isVoronoiDirty = true;
       }
-      #endregion
 
       /// <summary>
       /// Insert a point to the triangulation. If the point is already inserted, no changes will be made.
@@ -104,34 +121,37 @@ namespace Emgu.CV
          get { return (MCvSubdiv2D)Marshal.PtrToStructure(_ptr, typeof(MCvSubdiv2D)); }
       }
 
-      private static Triangle2DF EdgeToTriangle(MCvSubdiv2DEdge e)
-      {
-         return new Triangle2DF(
-            e.cvSubdiv2DEdgeOrg().pt, 
-            e  .cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT)
-               .cvSubdiv2DEdgeDst().pt, 
-            e.cvSubdiv2DEdgeDst().pt);
-      }
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern IntPtr PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr storage, bool includeVirtualPoints);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
+
+      /*
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr storage, out IntPtr points, out IntPtr edges);
+      */
 
       private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge currentEdge, List<System.Drawing.PointF> bufferList)
       {
          MCvSubdiv2DPoint v0 = currentEdge.cvSubdiv2DEdgeOrg();
          if (!v0.IsValid) return null;
-         
+
          bufferList.Clear();
 
-         for (; ;currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
+         for (; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
          {
             MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
             if (!v.IsValid) return null;
 
             bufferList.Add(v.pt);
 
-            if ( v.pt.Equals(v0.pt) ) //reach the starting point
+            if (v.pt.Equals(v0.pt)) //reach the starting point
                break;
          }
          return bufferList.Count > 2 ? bufferList.ToArray() : null;
       }
+
 
       /// <summary>
       /// Finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point.
@@ -141,7 +161,7 @@ namespace Emgu.CV
       public MCvSubdiv2DPoint FindNearestPoint2D(ref System.Drawing.PointF point)
       {
          return (MCvSubdiv2DPoint)Marshal.PtrToStructure(
-            CvInvoke.cvFindNearestPoint2D(Ptr, point), 
+            CvInvoke.cvFindNearestPoint2D(Ptr, point),
             typeof(MCvSubdiv2DPoint));
       }
 
@@ -168,14 +188,13 @@ namespace Emgu.CV
          }
 
          Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
-        
          List<VoronoiFacet> facetList = new List<VoronoiFacet>();
 
          List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
 
          int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-         
-         foreach(MCvQuadEdge2D quadEdge in this)
+
+         foreach (MCvQuadEdge2D quadEdge in this)
          {
             MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
 
@@ -203,16 +222,43 @@ namespace Emgu.CV
                }
             }
          }
+
+
+         /*
+         using (MemStorage stor = new MemStorage())
+         {
+            //Seq<System.Drawing.PointF> subdivPts = new Seq<System.Drawing.PointF>(stor);
+            //Seq<MCvSubdiv2DEdge> subdivEdges = new Seq<MCvSubdiv2DEdge>(stor);
+            IntPtr ptsSeq, edgesSeq;
+            PlanarSubdivisionGetSubdiv2DPoints(_ptr, stor, out ptsSeq , out edgesSeq);
+
+            System.Drawing.PointF[] pts = new Seq<System.Drawing.PointF>(ptsSeq, stor).ToArray();
+            MCvSubdiv2DEdge[] edges = new Seq<MCvSubdiv2DEdge>(edgesSeq, stor).ToArray();
+
+            List<System.Drawing.PointF> buffer = new List<System.Drawing.PointF>();
+            
+            
+            for (int i = 0; i < pts.Length; i++)
+            {
+               if (InsertPoint2DToDictionary(pts[i], facetDict))
+               {
+                  System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
+                  if (polygon != null)
+                     facetList.Add(new VoronoiFacet(pts[i], polygon));
+               }
+            }
+         }*/
+
          return facetList;
       }
-      
+
       /// <summary>
       /// Insert the point into the dictionary. If the point already exist, return false. Otherwise return true.
       /// </summary>
       /// <param name="pt">The point to insert</param>
       /// <param name="dic">The point dictionary</param>
       /// <returns>If the point already exist, return false. Otherwise return true.</returns>
-      private static bool InsertPoint2DToDictionary(System.Drawing.PointF pt, Dictionary<System.Drawing.PointF, Byte> dic) 
+      private static bool InsertPoint2DToDictionary(System.Drawing.PointF pt, Dictionary<System.Drawing.PointF, Byte> dic)
       {
          if (dic.ContainsKey(pt))
             return false;
@@ -228,44 +274,27 @@ namespace Emgu.CV
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
       public List<Triangle2DF> GetDelaunayTriangles(bool includeVirtualPoints)
       {
+         Triangle2DF[] triangles;
+         using (MemStorage storage = new MemStorage())
+         {
+            Seq<Triangle2DF> seq = new Seq<Triangle2DF>(PlanarSubdivisionGetTriangles(_ptr, storage, includeVirtualPoints), storage);
+            triangles = seq.ToArray();
+         }
+
+         #region remove duplicate triangles
          Dictionary<System.Drawing.PointF, Byte> triangleDic = new Dictionary<System.Drawing.PointF, Byte>();
-
          List<Triangle2DF> triangleList = new List<Triangle2DF>();
- 
-         foreach(MCvQuadEdge2D quadEdge in this)
+
+         PointF sum = new PointF();
+         foreach (Triangle2DF t in triangles)
          {
-            Triangle2DF tri1 = EdgeToTriangle(quadEdge.next[0]);
-
-            if (InsertPoint2DToDictionary(tri1.Centeroid, triangleDic))
-            {
-               triangleList.Add(tri1);
-            }
-
-            Triangle2DF tri2 = EdgeToTriangle(quadEdge.next[2]);
-            if (InsertPoint2DToDictionary(tri2.Centeroid, triangleDic))
-            {
-               triangleList.Add(tri2);
-            }
+            sum.X = t.V0.X + t.V1.X + t.V2.X;
+            sum.Y = t.V0.Y + t.V1.Y + t.V2.Y;
+            if (InsertPoint2DToDictionary(sum, triangleDic))
+               triangleList.Add(t);
          }
+         #endregion
 
-         if (!includeVirtualPoints)
-         {
-            int 
-               left = _roi.X, 
-               top = _roi.Y, 
-               right = _roi.X + _roi.Width, 
-               bottom = _roi.Y + _roi.Height;
-            
-            triangleList.RemoveAll(
-               delegate(Triangle2DF tri)
-               {
-                  return
-                     !(
-                     tri.V0.X >= left && tri.V0.X <= right && tri.V0.Y >= top && tri.V0.Y <= bottom &&
-                     tri.V1.X >= left && tri.V1.X <= right && tri.V1.Y >= top && tri.V1.Y <= bottom &&
-                     tri.V2.X >= left && tri.V2.X <= right && tri.V2.Y >= top && tri.V2.Y <= bottom);
-               });
-         }
          return triangleList;
       }
 
@@ -310,7 +339,7 @@ namespace Emgu.CV
    /// <summary>
    /// A Voronoi Facet
    /// </summary>
-   public class VoronoiFacet 
+   public class VoronoiFacet
    {
       /// <summary>
       /// Create a Voronoi facet using the specific <paramref name="point"/> and <paramref name="polyline"/>

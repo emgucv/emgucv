@@ -13,22 +13,56 @@ namespace Emgu.CV
    /// </summary>
    public static class CvInvoke
    {
+      /// <summary>
+      /// string marshaling type
+      /// </summary>
       private const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
 
+      #region define the pinvoke file names
 #if LINUX
-      private const string CXCORE_LIBRARY = "libcxcore.so.1";
-      private const string CV_LIBRARY = "libcv.so.1";
-      private const string HIGHGUI_LIBRARY = "libhighgui.so.1";
-      private const string CVAUX_LIBRARY = "libcvaux.so.1";
-      private const string CVCAM_LIBRARY = "libcvaux.so.1";
-      private const string EXTERN_LIBRARY = "cvextern.so";
+      /// <summary>
+      /// The file name of the cxcore library
+      /// </summary>
+      public const string CXCORE_LIBRARY = "libcxcore.so.1";
+      /// <summary>
+      /// The file name of the cv library
+      /// </summary>
+      public const string CV_LIBRARY = "libcv.so.1";
+      /// <summary>
+      /// The file name of the highgui library
+      /// </summary>
+      public const string HIGHGUI_LIBRARY = "libhighgui.so.1";
+      /// <summary>
+      /// The file name of the cvaux library
+      /// </summary>
+      public const string CVAUX_LIBRARY = "libcvaux.so.1";
+      /// <summary>
+      /// The file name of the cvextern library
+      /// </summary>
+      public const string EXTERN_LIBRARY = "cvextern.so";
 #else
-      private const string CXCORE_LIBRARY = "cxcore110.dll";
-      private const string CV_LIBRARY = "cv110.dll";
-      private const string HIGHGUI_LIBRARY = "highgui110.dll";
-      private const string CVAUX_LIBRARY = "cvaux110.dll";
-      private const string EXTERN_LIBRARY = "cvextern.dll";
+      /// <summary>
+      /// The file name of the cxcore library
+      /// </summary>
+      public const string CXCORE_LIBRARY = "cxcore110.dll";
+      /// <summary>
+      /// The file name of the cv library
+      /// </summary>
+      public const string CV_LIBRARY = "cv110.dll";
+      /// <summary>
+      /// The file name of the highgui library
+      /// </summary>
+      public const string HIGHGUI_LIBRARY = "highgui110.dll";
+      /// <summary>
+      /// The file name of the cvaux library
+      /// </summary>
+      public const string CVAUX_LIBRARY = "cvaux110.dll";
+      /// <summary>
+      /// The file name of the cvextern library
+      /// </summary>
+      public const string EXTERN_LIBRARY = "cvextern.dll";
 #endif
+      #endregion 
 
       /// <summary>
       /// Static Constructor to setup opencv environment
@@ -54,7 +88,7 @@ namespace Emgu.CV
          }*/
 
          //Use the custom error handler
-         cvRedirectError(DefaultCvErrorHandler, IntPtr.Zero, IntPtr.Zero);
+         cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
       }
 
       private static void LoadLibrary(string libraryName, string errorMessage)
@@ -132,7 +166,33 @@ namespace Emgu.CV
       /// <summary>
       /// The default Exception callback to handle Error thrown by OpenCV
       /// </summary>
-      public static readonly CvErrorCallback DefaultCvErrorHandler = (CvErrorCallback)CvErrorHandler;
+      public static readonly CvErrorCallback CvErrorHandlerThrowException = (CvErrorCallback)CvErrorHandler;
+      /// <summary>
+      /// An error handler which will ignore any error and continute
+      /// </summary>
+      public static readonly CvErrorCallback CvErrorHandlerIgnoreError = (CvErrorCallback)CvIgnoreErrorErrorHandler;
+
+      /// <summary>
+      /// A custome error handler for opencv
+      /// </summary>
+      /// <param name="status">The numeric code for error status</param>
+      /// <param name="funcName">The source file name where error is encountered</param>
+      /// <param name="errMsg">A description of the error</param>
+      /// <param name="fileName">The source file name where error is encountered</param>
+      /// <param name="line">The line number in the souce where error is encountered</param>
+      /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <returns></returns>
+      private static int CvIgnoreErrorErrorHandler(
+                  int status,
+         String funcName,
+         String errMsg,
+         String fileName,
+         int line,
+         IntPtr userData)
+      {
+         cvSetErrStatus(Emgu.CV.CvEnum.ERROR_CODES.CV_STSOK); //clear the error status
+         return 0; //signal the process to continute
+      }
 
       /// <summary>
       /// A custome error handler for opencv
@@ -186,6 +246,19 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvRedirectError(
           CvErrorCallback errorHandler,
+          IntPtr userdata,
+          IntPtr prevUserdata);
+
+      /// <summary>
+      /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
+      /// </summary>
+      /// <param name="errorHandler">Pointer to the new error handler</param>
+      /// <param name="userdata">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
+      /// <returns></returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvRedirectError(
+          IntPtr errorHandler,
           IntPtr userdata,
           IntPtr prevUserdata);
 
@@ -5463,6 +5536,36 @@ namespace Emgu.CV
       /// <returns>Pointer to new added blob</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForgroundMask  );
+      #endregion
+
+      #region BlobTrackPostProc
+      /// <summary>
+      /// Returns a Kalman blob tracking post process module
+      /// </summary>
+      /// <returns>Pointer to the tracking module</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateModuleBlobTrackPostProcKalman();
+
+      /// <summary>
+      /// Returns a TimeAverRect blob tracking post process module
+      /// </summary>
+      /// <returns>Pointer to the tracking module</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverRect();
+
+      /// <summary>
+      /// Returns a TimeAverExp blob tracking post process module
+      /// </summary>
+      /// <returns>Pointer to the tracking module</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverExp();
+
+      /// <summary>
+      /// Release the blob tracking post process module
+      /// </summary>
+      /// <param name="postProc">The post process module to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobTrackPostProcRelease(IntPtr postProc);
       #endregion
 
       #region BlobTrackerAuto

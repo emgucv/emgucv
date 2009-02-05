@@ -7,6 +7,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Structure;
 using Emgu.UI;
 using Emgu.Util;
+using Emgu.CV.VideoSurveillance;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;

@@ -5,7 +5,7 @@ using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
    /// A blob tracker auto

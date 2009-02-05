@@ -109,6 +109,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Emgu.CV.Extern", "..\..\Emgu.CV.Extern\Emgu.CV.Extern2005.vcproj", "{0BABD742-CF82-421F-9C01-1DA8C08129AC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Linux|.NET = Debug Linux|.NET
@@ -585,6 +591,34 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|.NET.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|Any CPU.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|Mixed Platforms.Build.0 = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|Win32.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|Win32.Build.0 = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug Linux|x86.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|.NET.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.Build.0 = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|x86.ActiveCfg = Debug|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|.NET.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|Any CPU.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|Mixed Platforms.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|Mixed Platforms.Build.0 = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|Win32.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|Win32.Build.0 = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release Linux|x86.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|.NET.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.ActiveCfg = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.Build.0 = Release|Win32
+		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

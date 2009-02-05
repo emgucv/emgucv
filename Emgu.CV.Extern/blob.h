@@ -49,4 +49,9 @@ CVAPI(int) CvBlobTrackerAutoGetBlobNum(CvBlobTrackerAuto* tracker) { return trac
 CVAPI(void) CvBlobTrackerAutoProcess(CvBlobTrackerAuto* tracker, IplImage* pImg, IplImage* pMask = NULL) { return tracker->Process(pImg, pMask); }
 CVAPI(IplImage*) CvBlobTrackerAutoGetFGMask(CvBlobTrackerAuto* tracker) { return tracker->GetFGMask(); }
 
+//blob tracker post process
+CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcKalman() { return cvCreateModuleBlobTrackPostProcKalman(); }
+CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverRect() { return cvCreateModuleBlobTrackPostProcTimeAverRect(); }
+CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverExp() { return cvCreateModuleBlobTrackPostProcTimeAverExp(); }
+CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc* postProc) { postProc->Release(); };
 #endif

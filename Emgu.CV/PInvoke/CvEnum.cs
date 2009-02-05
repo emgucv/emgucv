@@ -1984,6 +1984,25 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// The type of blob post process module
+   /// </summary>
+   public enum BLOB_POST_PROCESS_TYPE
+   {
+      /// <summary>
+      /// Kalman 
+      /// </summary>
+      Kalman,
+      /// <summary>
+      /// TimeAverRect
+      /// </summary>
+      TimeAverRect,
+      /// <summary>
+      /// TimeAverExp
+      /// </summary>
+      TimeAverExp
+   }
+
+   /// <summary>
    /// Histogram comparison method
    /// </summary>
    public enum HISTOGRAM_COMP_METHOD

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
    /// A Blob Tracker

@@ -519,5 +519,15 @@ namespace Emgu.CV
       {
          return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
       }
+
+      /// <summary>
+      /// Implicit operator for IntPtr
+      /// </summary>
+      /// <param name="sequence">The sequence</param>
+      /// <returns>The unmanaged pointer for this object</returns>
+      public static implicit operator IntPtr(Seq<T> sequence)
+      {
+         return sequence == null ? IntPtr.Zero : sequence._ptr;
+      }
    }
 }

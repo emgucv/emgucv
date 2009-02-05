@@ -26,7 +26,7 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// implicit operator for IntPtr
+      /// Implicit operator for IntPtr
       /// </summary>
       /// <param name="obj">The UnmanagedObject</param>
       /// <returns>The unmanaged pointer for this object</returns>

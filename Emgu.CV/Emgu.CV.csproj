@@ -79,6 +79,7 @@
     <Compile Include="Color\DisplayColorAttribute.cs" />
     <Compile Include="Color\IColor.cs" />
     <Compile Include="Contour.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackPostProc.cs" />
     <Compile Include="VideoSurveillance\ForgroundDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvBlob.cs" />
     <Compile Include="PInvoke\CvType\MCvBlobTrackerAutoParam1.cs" />
