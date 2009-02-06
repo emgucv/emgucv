@@ -837,7 +837,7 @@ namespace Emgu.CV.Test
             box.Offset(0, modelImage.Height);
             res.Draw(box, new Gray(255.0), 5);
             
-            ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 

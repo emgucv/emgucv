@@ -41,6 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)opencv\header&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CVAPI_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -59,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib"
+				AdditionalDependencies="ml.lib cvaux.lib cv.lib cxcore.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
@@ -115,6 +116,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)opencv\header&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;CVAPI_EXPORTS"
 				RuntimeLibrary="2"
@@ -133,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib cxcore.lib"
+				AdditionalDependencies="ml.lib cxcore.lib cvaux.lib cv.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
 				GenerateDebugInformation="true"
@@ -179,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cvBlob.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cvBoost.cpp"
 				>
 			</File>
@@ -210,6 +217,10 @@
 				RelativePath=".\cvSVM.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\planar_subdivision.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -217,7 +228,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\blob.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cvextern.h"
+				>
+			</File>
+			<File
+				RelativePath=".\planar_subdivision.h"
 				>
 			</File>
 		</Filter>
@@ -228,6 +247,4 @@
 			>
 		</Filter>
 	</Files>
-	<Globals>
-	</Globals>
 </VisualStudioProject>
