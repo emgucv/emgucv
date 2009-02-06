@@ -23,23 +23,23 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cxcore library
       /// </summary>
-      public const string CXCORE_LIBRARY = "libcxcore.so.1";
+      public const string CXCORE_LIBRARY = "libcxcore.so";
       /// <summary>
       /// The file name of the cv library
       /// </summary>
-      public const string CV_LIBRARY = "libcv.so.1";
+      public const string CV_LIBRARY = "libcv.so";
       /// <summary>
       /// The file name of the highgui library
       /// </summary>
-      public const string HIGHGUI_LIBRARY = "libhighgui.so.1";
+      public const string HIGHGUI_LIBRARY = "libhighgui.so";
       /// <summary>
       /// The file name of the cvaux library
       /// </summary>
-      public const string CVAUX_LIBRARY = "libcvaux.so.1";
+      public const string CVAUX_LIBRARY = "libcvaux.so";
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
-      public const string EXTERN_LIBRARY = "cvextern.so";
+      public const string EXTERN_LIBRARY = "libcvextern.so";
 #else
       /// <summary>
       /// The file name of the cxcore library
