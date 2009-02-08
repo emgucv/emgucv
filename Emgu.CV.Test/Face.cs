@@ -166,11 +166,10 @@ namespace Emgu.CV.Test
       {
          get
          {
-
             if (_hueHtg == null)
             {
                int size = 60;
-               _hueHtg = new Histogram(new int[1] { size }, new float[1] { 0.0f }, new float[1] { 180.0f });
+               _hueHtg = new Histogram(size ,  new RangeF(0, 180) );
             }
             return _hueHtg;
          }

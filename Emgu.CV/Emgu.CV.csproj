@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="VideoSurveillance\BackgroundStatisticsModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
     <Compile Include="VideoSurveillance\BlobSeq.cs" />

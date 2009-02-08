@@ -15,7 +15,7 @@ using zlib;
 namespace Emgu.CV
 {
    ///<summary>
-   ///Wrapped CvArr pointer 
+   ///Wrapped CvArr 
    ///</summary>
    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam>
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
@@ -71,14 +71,14 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///Get the width (#Cols) of the cvArray
-      ///if ROI is set, the width of the ROI 
+      ///Get the width (#Cols) of the cvArray.
+      ///If ROI is set, the width of the ROI 
       ///</summary>
       public int Width { get { return Size.Width; } }
 
       ///<summary> 
-      ///Get the height (#Rows) of the cvArray
-      ///if ROI is set, the height of the ROI 
+      ///Get the height (#Rows) of the cvArray.
+      ///If ROI is set, the height of the ROI 
       ///</summary> 
       public int Height { get { return Size.Height; } }
 

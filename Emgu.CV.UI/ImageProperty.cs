@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.Util.TypeEnum;
 
@@ -140,26 +141,6 @@ namespace Emgu.CV.UI
          _imageBox.PopOperation();
       }
 
-      private static System.Drawing.Point[] SingleChannelImageToHistogramPoints(IImage channel, int numberOfBins, float minVal, float maxVal)
-      {
-         int[] binSize = new int[1] { numberOfBins };
-         float[] min = new float[1] { minVal };
-         float[] max = new float[1] { maxVal };
-
-         using (Histogram hist = new Histogram(binSize, min, max))
-         {
-            hist.Clear(); //this is required since the initial histogram might contains random values
-            hist.Accumulate(new IImage[] { channel });
-
-            //all the values of the histogram for the specific color channel
-            System.Drawing.Point[] pts = new System.Drawing.Point[binSize[0]];
-            for (int binIndex = 0; binIndex < pts.Length; binIndex++)
-               pts[binIndex] = new System.Drawing.Point(binIndex, (int)hist[binIndex]);
-
-            return pts;
-         }
-      }
-
       private void showHistogramButton_Click(object sender, EventArgs e)
       {
          IImage image = _imageBox.DisplayedImage;
@@ -172,18 +153,19 @@ namespace Emgu.CV.UI
 
          IImage[] channels = image.Split();
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
-         IColor typeOfColor = Activator.CreateInstance( imageType.GetGenericArguments()[0]) as IColor;
+         IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
          String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
          System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
 
          HistogramViewer hviewer = new HistogramViewer();
-         System.Type typeOfDepth = imageType.GetGenericArguments()[1];
 
-         float minVal = 0.0f, maxVal = 0.0f;
+         float minVal, maxVal;
+         #region Get the maximum and minimum color intensity values
+         System.Type typeOfDepth = imageType.GetGenericArguments()[1];
          if (typeOfDepth == typeof(Byte))
          {
             minVal = 0.0f;
-            maxVal = 255.0f;
+            maxVal = 256.0f;
          }
          else
          {
@@ -203,12 +185,14 @@ namespace Emgu.CV.UI
             minVal = (float)min;
             maxVal = (float)max;
          }
+         #endregion
 
          for (int i = 0; i < channels.Length; i++)
-         {
-            System.Drawing.Point[] pts = SingleChannelImageToHistogramPoints(channels[i], 256, minVal, maxVal);
-            hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], pts);
-         }
+            using (Histogram hist = new Histogram(256, new RangeF(minVal, maxVal)))
+            {
+               hist.Accumulate(new IImage[1] { channels[i] });
+               hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], hist);
+            }
 
          hviewer.HistogramCtrl.Refresh();
 

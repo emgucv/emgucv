@@ -23,6 +23,12 @@ namespace Emgu.CV.Structure
       /// underlying data reference counter
       /// </summary>
       public IntPtr refcount;
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public int hdr_refcount;
+
       /// <summary>
       /// data pointers
       /// </summary>
@@ -31,7 +37,35 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// pairs (number of elements, distance between elements in bytes) for every dimension
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2 * (int)CvEnum.GENERAL.CV_MAX_DIM)]
-      public int[] dim;
+      [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)CvEnum.GENERAL.CV_MAX_DIM)]
+      public Dimension[] dim;
+
+      /// <summary>
+      /// The MatND Dimension
+      /// </summary>
+      [StructLayout(LayoutKind.Sequential)]
+      public struct Dimension
+      {
+         private int _size;
+         private int _step;
+
+         /// <summary>
+         /// Number of elements in this dimension
+         /// </summary>
+         public int Size
+         {
+            get { return _size; }
+            set { _size = value; }
+         }
+
+         /// <summary>
+         /// distance between elements in bytes for this dimension
+         /// </summary>
+         public int Step
+         {
+            get { return _step; }
+            set { _step = value; }
+         }
+      }
    }
 }

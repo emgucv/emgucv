@@ -4218,6 +4218,31 @@ namespace Emgu.CV
       public static extern void cvClearHist(IntPtr hist);
 
       /// <summary>
+      /// initializes the histogram, which header and bins are allocated by user. No cvReleaseHist need to be called afterwards. Only dense histograms can be initialized this way. 
+      /// </summary>
+      /// <param name="dims">Number of histogram dimensions</param>
+      /// <param name="sizes">Array of histogram dimension sizes</param>
+      /// <param name="hist">Pointer to the histogram</param>
+      /// <param name="data">The underline memory storage (pointer to array of float)</param>
+      /// <param name="ranges">Array of ranges for histogram bins. Its meaning depends on the uniform parameter value. The ranges are used for when histogram is calculated or backprojected to determine, which histogram bin corresponds to which value/tuple of values from the input image[s]. </param>
+      /// <param name="uniform">
+      /// Uniformity flag; 
+      /// if true, the histogram has evenly spaced bins and for every 0&lt;=i&lt;cDims ranges[i] is array of two numbers: lower and upper boundaries for the i-th histogram dimension. 
+      /// The whole range [lower,upper] is split then into dims[i] equal parts to determine i-th input tuple value ranges for every histogram bin. 
+      /// And if uniform=false, then i-th element of ranges array contains dims[i]+1 elements: lower0, upper0, lower1, upper1 == lower2, ..., upperdims[i]-1, where lowerj and upperj are lower and upper boundaries of i-th input tuple value for j-th bin, respectively. 
+      /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject
+      /// </param>
+      /// <returns>Pointer to the histogram</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvMakeHistHeaderForArray( 
+         int dims, 
+         [In] int[] sizes, 
+         IntPtr hist,
+         IntPtr data, 
+         [In] IntPtr[] ranges, 
+         int uniform);
+
+      /// <summary>
       /// Creates a histogram of the specified size and returns the pointer to the created histogram. If the array ranges is 0, the histogram bin ranges must be specified later via The function cvSetHistBinRanges, though cvCalcHist and cvCalcBackProject may process 8-bit images without setting bin ranges, they assume equally spaced in 0..255 bins
       /// </summary>
       /// <param name="dims">Number of histogram dimensions</param>
@@ -4229,7 +4254,8 @@ namespace Emgu.CV
       /// if true, the histogram has evenly spaced bins and for every 0&lt;=i&lt;cDims ranges[i] is array of two numbers: lower and upper boundaries for the i-th histogram dimension. 
       /// The whole range [lower,upper] is split then into dims[i] equal parts to determine i-th input tuple value ranges for every histogram bin. 
       /// And if uniform=false, then i-th element of ranges array contains dims[i]+1 elements: lower0, upper0, lower1, upper1 == lower2, ..., upperdims[i]-1, where lowerj and upperj are lower and upper boundaries of i-th input tuple value for j-th bin, respectively. 
-      /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject</param>
+      /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject
+      /// </param>
       /// <returns>A pointer to the histogram</returns>
       public static IntPtr cvCreateHist(
          int dims,

@@ -182,9 +182,6 @@ namespace Emgu.CV.Test
 
       public void CameraTest()
       {
-         //Application.EnableVisualStyles();
-         //Application.SetCompatibleTextRenderingDefault(false);
-         //Application.Run(new TestCamera());
          ImageViewer viewer = new ImageViewer();
          Capture capture = new Capture();
          Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
@@ -257,7 +254,7 @@ namespace Emgu.CV.Test
          {
             Image<Gray, Byte>[] HSVs = img2.Split();
 
-            using (Histogram h = new Histogram(new int[1] { 20 }, new float[1] { 0.0f }, new float[1] { 180.0f }))
+            using (Histogram h = new Histogram(20, new RangeF(0, 180)))
             {
                h.Accumulate(new Image<Gray, Byte>[1] { HSVs[0] });
                using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
@@ -532,8 +529,6 @@ namespace Emgu.CV.Test
             Assert.AreEqual(vec[i], vec2[i, 0]);
          }
       }*/
-
-
 
       /*
       private void TestMap()

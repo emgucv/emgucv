@@ -25,7 +25,7 @@ namespace Emgu.CV.Structure
       /// For uniform histograms 
       /// </summary>
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)CvEnum.GENERAL.CV_MAX_DIM)]
-      public Range[] thresh;
+      public RangeF[] thresh;
 
       /// <summary>
       /// For non-uniform histograms
@@ -36,21 +36,5 @@ namespace Emgu.CV.Structure
       /// Embedded matrix header for array histograms
       /// </summary>
       public MCvMatND mat;
-
-      /// <summary>
-      /// A range
-      /// </summary>
-      [StructLayout(LayoutKind.Sequential)]
-      public struct Range
-      {
-         /// <summary>
-         /// The min value of this bin
-         /// </summary>
-         public float min;
-         /// <summary>
-         /// The max value of this bin
-         /// </summary>
-         public float max;
-      }
    }
 }

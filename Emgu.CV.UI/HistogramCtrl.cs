@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using ZedGraph;
 using Emgu.CV;
+using Emgu.CV.Structure;
+using System.Diagnostics;
 
 namespace Emgu.CV.UI
 {
@@ -71,27 +73,34 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Add a plot of the histogram. You should call the Refresh() function to update the control after all modification is complete.
+      /// Add a plot of the 1D histogram. You should call the Refresh() function to update the control after all modification is complete.
       /// </summary>
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
-      /// <param name="values">The points on the histogram</param>
-      public void AddHistogram(String name, System.Drawing.Color color, IEnumerable<System.Drawing.Point> values)
+      /// <param name="histogram">The 1D histogram to be drawn</param>
+      public void AddHistogram(String name, System.Drawing.Color color, Histogram histogram)
       {
-         GraphPane pane = new GraphPane();
+         Debug.Assert(histogram.Dimension == 1, "Only 1D histogram is supported");
 
+         GraphPane pane = new GraphPane();
          // Set the Title
          pane.Title.Text = name;
          pane.XAxis.Title.Text = "Color Intensity";
          pane.YAxis.Title.Text = "Pixel Count";
 
-         PointPairList list1 = new PointPairList();
-
-         foreach (System.Drawing.Point point in values)
-            //if (point.Y != 0)
-            list1.Add(point.X, point.Y);
-
-         pane.AddCurve(name, list1, color);
+         #region draw the histogram
+         PointPairList pointList = new PointPairList();
+         RangeF range = histogram.Ranges[0];
+         int binSize = histogram.BinDimension[0].Size;
+         float step = (range.Max - range.Min) / binSize;
+         float start = range.Min;
+         for (int binIndex = 0; binIndex < binSize; binIndex++)
+         {
+            pointList.Add(start, (int)histogram[binIndex]);
+            start += step;
+         }
+         pane.AddCurve(name, pointList, color);
+         #endregion
 
          zedGraphControl1.MasterPane.Add(pane);
       }

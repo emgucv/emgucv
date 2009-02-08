@@ -9,47 +9,58 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    ///<summary> 
-   /// Histogram 
+   /// A Uniform Multi-dimensional Histogram 
    ///</summary>
    public class Histogram : UnmanagedObject
    {
-      private int _dimension;
-      private int[] _binSize;
+      private float[] _data;
+      private GCHandle _dataHandle;
 
       /// <summary>
-      /// Creates a uniform histogram of the specified size
+      /// Creates a uniform 1 dimension histogram of the specified size
+      /// </summary>
+      /// <param name="binSize">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
+      /// <param name="range">the upper and lower boundaries of the bins</param>
+      public Histogram(int binSize, RangeF range)
+         : this (new int[1] {binSize}, new RangeF[1] {range})
+      {
+      }
+
+      /// <summary>
+      /// Creates a uniform multi dimension histogram of the specified size
       /// </summary>
       /// <param name="binSizes">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
-      /// <param name="min">the lower boundaries of the bins</param>
-      /// <param name="max">the upper boundaries of the bins</param>
-      public Histogram(int[] binSizes, float[] min, float[] max)
+      /// <param name="ranges">the upper and lower boundaries of the bins</param>
+      public Histogram(int[] binSizes, RangeF[] ranges)
       {
-         _binSize = binSizes;
-         _dimension = binSizes.Length;
-
          Debug.Assert(
-             min.Length == _dimension && max.Length == _dimension,
+             ranges.Length == binSizes.Length,
              "incompatible dimension");
 
-         GCHandle[] pinnedRangesHandlers = new GCHandle[Dimension];
+         #region parse the ranges to appropriate format
+         GCHandle rangesHandle = GCHandle.Alloc(ranges, GCHandleType.Pinned);
+         IntPtr[] rangesPts = new IntPtr[ranges.Length];
+         Int64 address = rangesHandle.AddrOfPinnedObject().ToInt64();
+         for (int i = 0; i < rangesPts.Length; i++)
+            rangesPts[i] = new IntPtr( address + i * (Marshal.SizeOf(typeof(RangeF))) );
+         #endregion
 
-         float[][] ranges = new float[Dimension][];
+         #region alocate memory for the underline data storage
+         int size = 1;
+         foreach (int s in binSizes) size *= s;
+         _data = new float[size];
+         _dataHandle = GCHandle.Alloc(_data, GCHandleType.Pinned);
+         #endregion 
 
-         for (int i = 0; i < _dimension; i++)
-         {
-            ranges[i] = new float[2] { min[i], max[i] };
-            pinnedRangesHandlers[i] = GCHandle.Alloc(ranges[i], GCHandleType.Pinned);
-         }
+         _ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvHistogram)));
 
-         _ptr = CvInvoke.cvCreateHist(
-             _dimension,
-             binSizes,
-             Emgu.CV.CvEnum.HIST_TYPE.CV_HIST_ARRAY,
-             Array.ConvertAll<GCHandle, IntPtr>(pinnedRangesHandlers, delegate(GCHandle h) { return h.AddrOfPinnedObject(); }),
-             true);
-
-         foreach (GCHandle h in pinnedRangesHandlers)
-            h.Free();
+         CvInvoke.cvMakeHistHeaderForArray(
+            binSizes.Length,
+            binSizes,
+            _ptr,
+            _dataHandle.AddrOfPinnedObject(),
+            rangesPts,
+            1);
       }
 
       ///<summary> 
@@ -103,6 +114,20 @@ namespace Emgu.CV
                  imgs,
                  delegate(IImage img) { return img.Ptr; });
          CvInvoke.cvCalcHist(imgPtrs, _ptr, true, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Get the ranges of this histogram
+      /// </summary>
+      public RangeF[] Ranges
+      {
+         get
+         {
+            MCvHistogram h = MCvHistogram;
+            RangeF[] res = new RangeF[h.mat.dims];
+            Array.Copy(h.thresh, res, res.Length);
+            return res;
+         }
       }
 
       ///<summary> 
@@ -196,19 +221,34 @@ namespace Emgu.CV
       /// <summary>
       /// Get the number of dimensions for the histogram
       /// </summary>
-      public int Dimension { get { return _dimension; } }
+      public int Dimension { get { return MCvHistogram.mat.dims; } }
 
       /// <summary>
-      /// Get the size of the bins
+      /// Get the size of the bin dimensions
       /// </summary>
-      public int[] BinSize { get { return _binSize; } }
+      public MCvMatND.Dimension[] BinDimension 
+      { 
+         get 
+         {
+            MCvHistogram h = MCvHistogram;
+            MCvMatND.Dimension[] res = new MCvMatND.Dimension[h.mat.dims];
+            Array.Copy(h.mat.dim, res, h.mat.dims);
+            return res;
+         } 
+      }
+
+      /// <summary>
+      /// Get the data in this histogram
+      /// </summary>
+      public float[] Data { get { return _data; } }
 
       /// <summary>
       /// Release the histogram and all memory associate with it
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvReleaseHist(ref _ptr);
+         Marshal.FreeHGlobal(_ptr);
+         _dataHandle.Free();
       }
 
       /// <summary>
@@ -221,7 +261,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the MCvHistogram structure from Ptr
+      /// Get the equivalent MCvHistogram structure 
       /// </summary>
       public MCvHistogram MCvHistogram
       {
@@ -230,6 +270,5 @@ namespace Emgu.CV
             return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
          }
       }
-
    }
 }
