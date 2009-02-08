@@ -8,16 +8,19 @@
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu" isDocumented="True">Root name space for class and functions implemented by Emgu</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV image processing functions. Base functions (L1) can be found in CvInvoke class, enumerations can be found in Emgu.CV.Enum namespace.</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
+Base functions (L1) can be found in CvInvoke class</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">Wrapped OpenCV enumeration</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper for OpenCV's  Machine Learning library</namespaceSummaryItem>
-        <namespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's machine learning enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
-        <namespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True" />
+        <namespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</namespaceSummaryItem>
+        <namespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</namespaceSummaryItem>
         <namespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</namespaceSummaryItem>
@@ -34,7 +37,7 @@
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
     <BuildLogFile path="" />
-    <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
+    <HelpFileFormat>Website</HelpFileFormat>
     <CppCommentsFixup>True</CppCommentsFixup>
     <FrameworkVersion>3.0</FrameworkVersion>
     <IndentHtml>False</IndentHtml>
@@ -46,7 +49,7 @@
     <Language>en-US</Language>
     <CopyrightHref />
     <CopyrightText>2008 Emgu, All Rights Reserved,</CopyrightText>
-    <FeedbackEMailAddress />
+    <FeedbackEMailAddress>emgucv@gmail.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText />
     <HeaderText>www.emgu.com/wiki</HeaderText>
     <FooterText>For questions and discussions please visit www.emgu.com/forum</FooterText>
