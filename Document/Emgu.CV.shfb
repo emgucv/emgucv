@@ -35,7 +35,7 @@ Base functions (L1) can be found in CvInvoke class</namespaceSummaryItem>
     <SandcastlePath path="C:\Program Files\Sandcastle\" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
-    <KeepLogFile>True</KeepLogFile>
+    <KeepLogFile>False</KeepLogFile>
     <BuildLogFile path="" />
     <HelpFileFormat>Website</HelpFileFormat>
     <CppCommentsFixup>True</CppCommentsFixup>
