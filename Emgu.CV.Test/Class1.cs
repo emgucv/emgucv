@@ -191,6 +191,22 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
       }
 
+      public void CameraTest2()
+      {
+         ImageViewer viewer = new ImageViewer();
+         Capture capture = new Capture();
+         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         {
+            Image<Bgr, Byte> img = capture.QueryFrame();
+            img = img.Resize(0.8);
+            Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
+            gray._EqualizeHist();
+
+            viewer.Image = gray;
+         });
+         viewer.ShowDialog();
+      }
+
       public void TestImageLoader()
       {
          Application.EnableVisualStyles();

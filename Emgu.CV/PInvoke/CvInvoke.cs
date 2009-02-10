@@ -4194,6 +4194,26 @@ namespace Emgu.CV
          int uniform);
 
       /// <summary>
+      /// Finds the minimum and maximum histogram bins and their positions
+      /// </summary>
+      /// <remarks>
+      /// Among several extremums with the same value the ones with minimum index (in lexicographical order). 
+      /// In case of several maximums or minimums the earliest in lexicographical order extrema locations are returned.
+      /// </remarks>
+      /// <param name="hist">Histogram</param>
+      /// <param name="minValue">Pointer to the minimum value of the histogram </param>
+      /// <param name="maxValue">Pointer to the maximum value of the histogram </param>
+      /// <param name="minIdx">Pointer to the array of coordinates for minimum </param>
+      /// <param name="maxIdx">Pointer to the array of coordinates for maximum </param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvGetMinMaxHistValue( 
+         IntPtr hist,
+         ref float minValue, 
+         ref float maxValue,
+         int[] minIdx, 
+         int[] maxIdx);
+
+      /// <summary>
       /// Normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
       /// </summary>
       /// <param name="hist">Pointer to the histogram</param>
@@ -4296,6 +4316,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Makes a copy of the histogram. If the second histogram pointer *dst is NULL, a new histogram of the same size as src is created. Otherwise, both histograms must have equal types and sizes. Then the function copies the source histogram bins values to destination histogram and sets the same bin values ranges as in src.
+      /// </summary>
+      /// <param name="src">The source histogram</param>
+      /// <param name="dst">The destination histogram</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCopyHist( IntPtr src, ref IntPtr dst );
+
+      /// <summary>
       /// Compares two dense histograms
       /// </summary>
       /// <param name="hist1">The first dense histogram. </param>
@@ -4303,8 +4331,128 @@ namespace Emgu.CV
       /// <param name="method">Comparison method</param>
       /// <returns>Result of the comparison</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern double cvCompareHist(IntPtr hist1, IntPtr hist2, CvEnum.HISTOGRAM_COMP_METHOD method);
+      public static extern double cvCompareHist(
+         IntPtr hist1, 
+         IntPtr hist2, 
+         CvEnum.HISTOGRAM_COMP_METHOD method);
 
+      /// <summary>
+      /// Calculates the histogram of one or more single-channel images. The elements of a tuple that is used to increment a histogram bin are taken at the same location from the corresponding input images.
+      /// </summary>
+      /// <param name="image">Source images (though, you may pass CvMat** as well), all are of the same size and type</param>
+      /// <param name="hist">Pointer to the histogram</param>
+      /// <param name="accumulate">Accumulation flag. If it is set, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online</param>
+      /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
+      public static void cvCalcHist(
+          IntPtr[] image,
+          IntPtr hist,
+          bool accumulate,
+          IntPtr mask)
+      {
+         cvCalcArrHist(image, hist, accumulate ? 1 : 0, mask);
+      }
+
+      /// <summary>
+      /// Calculates the back project of the histogram. 
+      /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
+      /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
+      /// </summary>
+      /// <example>
+      /// To find a red object in the picture, one may do the following: 
+      /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
+      /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
+      /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
+      /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
+      /// </example>
+      /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
+      /// <param name="backProject">Destination back projection image of the same type as the source images</param>
+      /// <param name="hist">Histogram</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalcArrBackProject(IntPtr[] image, IntPtr backProject, IntPtr hist);
+
+      /// <summary>
+      /// The algorithm normalizes brightness and increases contrast of the image
+      /// </summary>
+      /// <param name="src">The input 8-bit single-channel image</param>
+      /// <param name="dst">The output image of the same size and the same data type as src</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvEqualizeHist(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// Calculates the back project of the histogram. 
+      /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
+      /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
+      /// </summary>
+      /// <example>
+      /// To find a red object in the picture, one may do the following: 
+      /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
+      /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
+      /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
+      /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
+      /// </example>
+      /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
+      /// <param name="backProject">Destination back projection image of the same type as the source images</param>
+      /// <param name="hist">Histogram</param>
+      [DllImport(CV_LIBRARY, EntryPoint = "cvCalcArrBackProject")]
+      public static extern void cvCalcBackProject(
+         IntPtr[] image,
+         IntPtr backProject,
+         IntPtr hist);
+
+      /// <summary>
+      /// Compares histogram, computed over each possible rectangular patch of the specified size in the input images, and stores the results to the output map dst.
+      /// </summary>
+      /// <remarks>In pseudo-code the operation may be written as:
+      ///for (x,y) in images (until (x+patch_size.width-1,y+patch_size.height-1) is inside the images) do
+      ///    compute histogram over the ROI (x,y,x+patch_size.width,y+patch_size.height) in images
+      ///       (see cvCalcHist)
+      ///    normalize the histogram using the factor
+      ///       (see cvNormalizeHist)
+      ///    compare the normalized histogram with input histogram hist using the specified method
+      ///       (see cvCompareHist)
+      ///    store the result to dst(x,y)
+      ///end for
+      ///</remarks>
+      /// <param name="images">Source images (though, you may pass CvMat** as well), all of the same size</param>
+      /// <param name="dst">Destination image.</param>
+      /// <param name="patchSize">Size of patch slid though the source images. </param>
+      /// <param name="hist">Histogram </param>
+      /// <param name="method">Comparison methof</param>
+      /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1. if unsure.</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalcBackProjectPatch(
+         IntPtr[] images,
+         IntPtr dst,
+         System.Drawing.Size patchSize,
+         IntPtr hist,
+         CvEnum.HISTOGRAM_COMP_METHOD method,
+         float factor);
+
+      /// <summary>
+      /// calculates the object probability density from the two histograms as:
+      /// dist_hist(I)=0,      if hist1(I)==0;
+      /// dist_hist(I)=scale,  if hist1(I)!=0 &amp;&amp; hist2(I)&gt;hist1(I);
+      /// dist_hist(I)=hist2(I)*scale/hist1(I), if hist1(I)!=0 &amp;&amp; hist2(I)&lt;=hist1(I)
+      /// </summary>
+      /// <param name="hist1">First histogram (the divisor)</param>
+      /// <param name="hist2">Second histogram.</param>
+      /// <param name="dstHist">Destination histogram. </param>
+      /// <param name="scale">Scale factor for the destination histogram.</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvCalcProbDensity(
+         IntPtr hist1,
+         IntPtr hist2,
+         IntPtr dstHist,
+         double scale);
+
+      /// <summary>
+      /// Releases the histogram (header and the data). 
+      /// The pointer to histogram is cleared by the function. 
+      /// If *hist pointer is already NULL, the function does nothing.
+      /// </summary>
+      /// <param name="hist">Double pointer to the released histogram</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReleaseHist(ref IntPtr hist);
       #endregion
 
       #region Optical flow
@@ -4754,78 +4902,6 @@ namespace Emgu.CV
           double angle,
           double scale,
           IntPtr mapMatrix);
-
-      /// <summary>
-      /// Calculates the histogram of one or more single-channel images. The elements of a tuple that is used to increment a histogram bin are taken at the same location from the corresponding input images.
-      /// </summary>
-      /// <param name="image">Source images (though, you may pass CvMat** as well), all are of the same size and type</param>
-      /// <param name="hist">Pointer to the histogram</param>
-      /// <param name="accumulate">Accumulation flag. If it is set, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online</param>
-      /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
-      public static void cvCalcHist(
-          IntPtr[] image,
-          IntPtr hist,
-          bool accumulate,
-          IntPtr mask)
-      {
-         cvCalcArrHist(image, hist, accumulate ? 1 : 0, mask);
-      }
-
-      /// <summary>
-      /// Calculates the back project of the histogram. 
-      /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
-      /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
-      /// </summary>
-      /// <example>
-      /// To find a red object in the picture, one may do the following: 
-      /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
-      /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
-      /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
-      /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
-      /// </example>
-      /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
-      /// <param name="backProject">Destination back projection image of the same type as the source images</param>
-      /// <param name="hist">Histogram</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvCalcArrBackProject(IntPtr[] image, IntPtr backProject, IntPtr hist);
-
-      /// <summary>
-      /// The algorithm normalizes brightness and increases contrast of the image
-      /// </summary>
-      /// <param name="src">The input 8-bit single-channel image</param>
-      /// <param name="dst">The output image of the same size and the same data type as src</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvEqualizeHist(IntPtr src, IntPtr dst);
-
-      /// <summary>
-      /// Calculates the back project of the histogram. 
-      /// For each tuple of pixels at the same position of all input single-channel images the function puts the value of the histogram bin, corresponding to the tuple, to the destination image. 
-      /// In terms of statistics, the value of each output image pixel is probability of the observed tuple given the distribution (histogram). 
-      /// </summary>
-      /// <example>
-      /// To find a red object in the picture, one may do the following: 
-      /// 1. Calculate a hue histogram for the red object assuming the image contains only this object. The histogram is likely to have a strong maximum, corresponding to red color. 
-      /// 2. Calculate back projection of a hue plane of input image where the object is searched, using the histogram. Threshold the image. 
-      /// 3. Find connected components in the resulting picture and choose the right component using some additional criteria, for example, the largest connected component. 
-      /// That is the approximate algorithm of Camshift color object tracker, except for the 3rd step, instead of which CAMSHIFT algorithm is used to locate the object on the back projection given the previous object position. 
-      /// </example>
-      /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
-      /// <param name="backProject">Destination back projection image of the same type as the source images</param>
-      /// <param name="hist">Histogram</param>
-      [DllImport(CV_LIBRARY, EntryPoint = "cvCalcArrBackProject")]
-      public static extern void cvCalcBackProject(
-         IntPtr[] image,
-         IntPtr backProject,
-         IntPtr hist);
-
-      /// <summary>
-      /// Releases the histogram (header and the data). 
-      /// The pointer to histogram is cleared by the function. 
-      /// If *hist pointer is already NULL, the function does nothing.
-      /// </summary>
-      /// <param name="hist">Double pointer to the released histogram</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvReleaseHist(ref IntPtr hist);
 
       /// <summary>
       /// Calculates distance to closest zero pixel for all non-zero pixels of source image

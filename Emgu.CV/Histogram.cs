@@ -16,6 +16,7 @@ namespace Emgu.CV
       private float[] _data;
       private GCHandle _dataHandle;
 
+      #region Constructors
       /// <summary>
       /// Creates a uniform 1 dimension histogram of the specified size
       /// </summary>
@@ -62,6 +63,7 @@ namespace Emgu.CV
             rangesPts,
             1);
       }
+      #endregion
 
       ///<summary> 
       /// Clear this histogram
@@ -117,17 +119,24 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the ranges of this histogram
+      /// Finds the minimum and maximum histogram bins and their positions
       /// </summary>
-      public RangeF[] Ranges
+      /// <remarks>
+      /// Among several extremums with the same value the ones with minimum index (in lexicographical order). 
+      /// In case of several maximums or minimums the earliest in lexicographical order extrema locations are returned.
+      /// </remarks>
+      /// <param name="minValue">Pointer to the minimum value of the histogram </param>
+      /// <param name="maxValue">Pointer to the maximum value of the histogram </param>
+      /// <param name="minLocation">Pointer to the array of coordinates for minimum </param>
+      /// <param name="maxLocation">Pointer to the array of coordinates for maximum </param>
+      public void MinMax(out float minValue, out float maxValue, out int[] minLocation, out int[] maxLocation)
       {
-         get
-         {
-            MCvHistogram h = MCvHistogram;
-            RangeF[] res = new RangeF[h.mat.dims];
-            Array.Copy(h.thresh, res, res.Length);
-            return res;
-         }
+         minValue = 0; 
+         maxValue = 0;
+         int dimension = Dimension;
+         minLocation = new int[dimension];
+         maxLocation = new int[dimension];
+         CvInvoke.cvGetMinMaxHistValue(_ptr, ref minValue, ref maxValue, minLocation, maxLocation);
       }
 
       ///<summary> 
@@ -156,6 +165,26 @@ namespace Emgu.CV
          CvInvoke.cvThreshHist(_ptr, thresh);
       }
 
+      /// <summary>
+      ///  normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
+      /// </summary>
+      /// <param name="factor">the sum of the bins after normalization</param>
+      public void Normalize(double factor)
+      {
+         CvInvoke.cvNormalizeHist(Ptr, factor);
+      }
+
+      /// <summary>
+      /// Copy this histogram to <paramref name="destination"/> 
+      /// </summary>
+      /// <param name="destination">The histogram to copy to</param>
+      public void Copy(Histogram destination)
+      {
+         IntPtr dst = destination.Ptr;
+         CvInvoke.cvCopyHist(_ptr, ref dst);
+      }
+
+      #region Indexer
       ///<summary> Retrieve item counts for the specific bin </summary>
       [Obsolete("Use the indexer instead, will be removed in the next version")]
       public double Query(params int[] binIndex)
@@ -217,6 +246,19 @@ namespace Emgu.CV
             return CvInvoke.cvQueryHistValue_3D(_ptr, index0, index1, index2);
          }
       }
+      #endregion
+
+      #region properties
+      /// <summary>
+      /// Get the equivalent MCvHistogram structure 
+      /// </summary>
+      public MCvHistogram MCvHistogram
+      {
+         get
+         {
+            return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
+         }
+      }
 
       /// <summary>
       /// Get the number of dimensions for the histogram
@@ -243,6 +285,22 @@ namespace Emgu.CV
       public float[] Data { get { return _data; } }
 
       /// <summary>
+      /// Get the ranges of this histogram
+      /// </summary>
+      public RangeF[] Ranges
+      {
+         get
+         {
+            MCvHistogram h = MCvHistogram;
+            RangeF[] res = new RangeF[h.mat.dims];
+            Array.Copy(h.thresh, res, res.Length);
+            return res;
+         }
+      }
+      #endregion
+
+      #region implement UnmanagedObject
+      /// <summary>
       /// Release the histogram and all memory associate with it
       /// </summary>
       protected override void DisposeObject()
@@ -250,25 +308,8 @@ namespace Emgu.CV
          Marshal.FreeHGlobal(_ptr);
          _dataHandle.Free();
       }
+      #endregion
 
-      /// <summary>
-      ///  normalizes the histogram bins by scaling them, such that the sum of the bins becomes equal to factor
-      /// </summary>
-      /// <param name="factor">the sum of the bins after normalization</param>
-      public void Normalize(double factor)
-      {
-         CvInvoke.cvNormalizeHist(Ptr, factor);
-      }
 
-      /// <summary>
-      /// Get the equivalent MCvHistogram structure 
-      /// </summary>
-      public MCvHistogram MCvHistogram
-      {
-         get
-         {
-            return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
-         }
-      }
    }
 }
