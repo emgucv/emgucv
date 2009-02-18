@@ -9,7 +9,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// A user control to display the operation stack
    /// </summary>
-   public partial class OperationStackView : UserControl
+   internal partial class OperationStackView : UserControl
    {
       private DataGridViewTextBoxColumn _codeColumn;
       private ProgrammingLanguage _language;

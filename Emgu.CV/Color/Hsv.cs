@@ -27,16 +27,15 @@ namespace Emgu.CV
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
       [DisplayColor(122, 122, 122)]
-      public double H { get { return _scalar.v0; } set { _scalar.v0 = value; } }
+      public double Hue { get { return _scalar.v0; } set { _scalar.v0 = value; } }
 
       ///<summary> Get or set the intensity of the satuation color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double S { get { return _scalar.v1; } set { _scalar.v1 = value; } }
+      public double Satuation { get { return _scalar.v1; } set { _scalar.v1 = value; } }
 
       ///<summary> Get or set the intensity of the value color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double V { get { return _scalar.v2; } set { _scalar.v2 = value; } }
-
+      public double Value { get { return _scalar.v2; } set { _scalar.v2 = value; } }
 
       #region IEquatable<Hsv> Members
       /// <summary>
@@ -75,7 +74,15 @@ namespace Emgu.CV
             _scalar = value;
          }
       }
-
       #endregion
+
+      /// <summary>
+      /// Represent this color as a String
+      /// </summary>
+      /// <returns>The string representation of this color</returns>
+      public override string ToString()
+      {
+         return String.Format("[{0},{1},{2}]", Hue, Satuation, Value);
+      }
    }
 }

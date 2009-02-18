@@ -11,7 +11,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// The dialog to ask user for parameters to the specific method
    /// </summary>
-   public partial class ParameterInputDialog : Form
+   internal partial class ParameterInputDialog : Form
    {
       private bool _sucessed;
 
@@ -135,16 +135,17 @@ namespace Emgu.CV.UI
          List<Char> charList = new List<char>();
          foreach (Char c in nameChars)
          {
-            if (c.CompareTo('A') >= 0 && c.CompareTo('Z') <= 0)
+            if (Char.IsUpper(c))
             {   //upper case char
                charList.Add(' ');
             }
             charList.Add(c);
          }
-         //convert the first letter to upper case
-         charList[0] = charList[0].ToString().ToUpper().ToCharArray()[0];
-         return new string(charList.ToArray());
          #endregion
+
+         //convert the first letter to upper case
+         charList[0] = Char.ToUpper(charList[0]);
+         return new string(charList.ToArray());
       }
 
       /// <summary>
@@ -259,7 +260,7 @@ namespace Emgu.CV.UI
                       return new MCvScalar(values[0], values[1], values[2], values[3]);
                    };
             }
-            else if (paramType.IsSubclassOf(typeof(IColor)))
+            else if (paramType.GetInterface("IColor") == typeof(IColor))
             {
                IColor t = Activator.CreateInstance(paramType) as IColor;
                //string[] channelNames = ReflectColorType.GetNamesOfChannels(t);
@@ -339,7 +340,7 @@ namespace Emgu.CV.UI
             defaultParameterValueList.AddRange(defaultParameterValues);
          }
 
-         //if the method requires no parameter, simply return true
+         //if the method requires no parameter, simply return an empty array
          if (parameterList.Count == 0)
          {
             return new object[0];

@@ -19,17 +19,9 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The width of this image
+      /// The size of this image
       /// </summary>
-      int Width
-      {
-         get;
-      }
-
-      /// <summary>
-      /// The height of this image
-      /// </summary>
-      int Height
+      System.Drawing.Size Size
       {
          get;
       }

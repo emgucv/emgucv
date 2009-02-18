@@ -66,9 +66,9 @@ namespace ShapeDetection
                      {
                         Point[] pts = currentContour.ToArray();
                         triangleList.Add(new Triangle2DF(
-                           new PointF(pts[0].X, pts[0].Y), 
-                           new PointF(pts[1].X, pts[1].Y),
-                           new PointF(pts[2].X, pts[2].Y)
+                           pts[0],
+                           pts[1],
+                           pts[2]
                            ));
                      }
                      else if (currentContour.Total == 4) //The contour has 4 vertices.

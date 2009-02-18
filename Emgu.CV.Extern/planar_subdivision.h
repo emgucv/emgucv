@@ -3,7 +3,8 @@
 #include "cxcore.h"
 #include "cv.h"
 #include <set>
-using std::set;
+
+using namespace std;
 
 typedef struct
 {

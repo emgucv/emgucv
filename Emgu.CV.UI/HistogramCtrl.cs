@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using ZedGraph;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.Util;
 using System.Diagnostics;
 
 namespace Emgu.CV.UI
@@ -89,20 +90,75 @@ namespace Emgu.CV.UI
          pane.YAxis.Title.Text = "Pixel Count";
 
          #region draw the histogram
-         PointPairList pointList = new PointPairList();
          RangeF range = histogram.Ranges[0];
          int binSize = histogram.BinDimension[0].Size;
          float step = (range.Max - range.Min) / binSize;
          float start = range.Min;
+         double[] bin = new double[binSize];
          for (int binIndex = 0; binIndex < binSize; binIndex++)
          {
-            pointList.Add(start, (int)histogram[binIndex]);
+            bin[binIndex] = start;
             start += step;
          }
+
+         PointPairList pointList = new PointPairList(
+            bin,
+            Array.ConvertAll<float, double>(histogram.Data, System.Convert.ToDouble));
+
          pane.AddCurve(name, pointList, color);
          #endregion
 
          zedGraphControl1.MasterPane.Add(pane);
+      }
+
+      /// <summary>
+      /// Generate histograms for the image. One histogram is generated for each color channel.
+      /// You will need to call the Refresh function to do the painting afterward.
+      /// </summary>
+      /// <param name="image">The image to retrieve histogram from</param>
+      /// <param name="numberOfBins">The number of bins for each histogram</param>
+      public void GenerateHistograms(IImage image, int numberOfBins)
+      {
+         IImage[] channels = image.Split();
+         Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
+         IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
+         String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
+         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
+
+         float minVal, maxVal;
+         #region Get the maximum and minimum color intensity values
+         System.Type typeOfDepth = imageType.GetGenericArguments()[1];
+         if (typeOfDepth == typeof(Byte))
+         {
+            minVal = 0.0f;
+            maxVal = 256.0f;
+         }
+         else
+         {
+            #region obtain the maximum and minimum color value
+            double[] minValues, maxValues;
+            System.Drawing.Point[] minLocations, maxLocations;
+            image.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
+
+            double min = minValues[0], max = maxValues[0];
+            for (int i = 1; i < minValues.Length; i++)
+            {
+               if (minValues[i] < min) min = minValues[i];
+               if (maxValues[i] > max) max = maxValues[i];
+            }
+            #endregion
+
+            minVal = (float)min;
+            maxVal = (float)max;
+         }
+         #endregion
+
+         for (int i = 0; i < channels.Length; i++)
+            using (Histogram hist = new Histogram(numberOfBins, new RangeF(minVal, maxVal)))
+            {
+               hist.Accumulate(new IImage[1] { channels[i] });
+               AddHistogram(channelNames[i], colors[i], hist);
+            }
       }
 
       /// <summary>

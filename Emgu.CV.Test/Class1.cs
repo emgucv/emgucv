@@ -112,19 +112,44 @@ namespace Emgu.CV.Test
 
       }*/
 
-      public void TestCvNamedWindow()
+      public void TestCvNamedWindow1()
       {
-         String win1 = "Test Window"; //The name of the window
-         CvInvoke.cvNamedWindow(win1); //Create the window using the specific name
+         //The name of the window
+         String win1 = "Test Window";
 
-         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) //Create an image of 400x200 of Blue color
+         //Create the window using the specific name
+         CvInvoke.cvNamedWindow(win1);
+
+         //Create an image of 400x200 of Blue color
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
          {
-            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0); //Create the font
-            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0)); //Draw "Hello, world." on the image using the specific font
+            //Create the font
+            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0);
+            //Draw "Hello, world." on the image using the specific font
+            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0));
 
-            CvInvoke.cvShowImage(win1, img.Ptr); //Show the image
-            CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
-            CvInvoke.cvDestroyWindow(win1); //Destory the window
+            //Show the image
+            CvInvoke.cvShowImage(win1, img.Ptr);
+            //Wait for the key pressing event
+            CvInvoke.cvWaitKey(0);
+            //Destory the window
+            CvInvoke.cvDestroyWindow(win1); 
+         }
+      }
+
+      public void TestCvNamedWindow2()
+      {
+         //Create an image of 400x200 of Blue color
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
+         {
+            //Create the font
+            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0);
+
+            //Draw "Hello, world." on the image using the specific font
+            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0)); 
+            
+            //Show the image using ImageViewer from Emgu.CV.UI
+            ImageViewer.Show(img, "Test Window");
          }
       }
 
@@ -163,32 +188,33 @@ namespace Emgu.CV.Test
          ImageViewer.Show(map);
       }*/
 
-      /*
-      public void TestIpp()
+      
+      public void TestModuleInfo()
       {
-          Trace.WriteLine(String.Format("Ipp Used: {0}", Emgu.CV.Toolbox.IppUsed()));
-      }*/
+         string pluginName;
+         string versionName;
+         Emgu.CV.Util.GetModuleInfo(out pluginName, out versionName);
+         Trace.WriteLine(String.Format("Plugin: {0}\r\nVersion: {1}", pluginName, versionName ));
+      }
 
-      /*
-      [Test]
       public void TestRandom()
       {
-          using (Image<Bgr, byte> img = new Image<Bgr, byte>(50, 50))
-          {
-              img.SetRandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
-              Application.Run(new ImageViewer(img.ToBitmap()));
-          }
-      }*/
+         using (Image<Bgr, byte> img = new Image<Bgr, byte>(50, 50))
+         {
+            img.SetRandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
+            ImageViewer.Show(img);
+         }
+      }
 
       public void CameraTest()
       {
-         ImageViewer viewer = new ImageViewer();
-         Capture capture = new Capture();
+         ImageViewer viewer = new ImageViewer(); //create an image viewer
+         Capture capture = new Capture(); //create a camera captue
          Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
-         {
-            viewer.Image = capture.QueryFrame();
+         {  //run this until application closed (close button click on image viewer)
+            viewer.Image = capture.QueryFrame(); //draw the image obtained from camera
          });
-         viewer.ShowDialog();
+         viewer.ShowDialog(); //show the image viewer
       }
 
       public void CameraTest2()
@@ -370,10 +396,10 @@ namespace Emgu.CV.Test
       {
          HaarCascade face = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
          Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
-         DateTime startTime = DateTime.Now;
+         Stopwatch watch = Stopwatch.StartNew();
          img.DetectHaarCascade(face);
-         TimeSpan detectionTime = DateTime.Now.Subtract(startTime);
-         Trace.WriteLine(String.Format("Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, detectionTime.TotalMilliseconds));
+         watch.Stop();
+         Trace.WriteLine(String.Format("Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, watch.ElapsedMilliseconds));
       }
 
       public void TestFaceDetect()
@@ -741,9 +767,8 @@ namespace Emgu.CV.Test
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
             foreach (MCvBlob blob in tracker)
             {
-               RectangleF rect = blob;
-               img.Draw(new Rectangle((int) rect.X, (int) rect.Y, (int) rect.Width, (int) rect.Height), new Gray(255.0), 2);
-               img.Draw(blob.ID.ToString(), ref font, new Point((int)blob.Center.X, (int)blob.Center.Y), new Gray(255.0));
+               img.Draw(Rectangle.Round(blob), new Gray(255.0), 2);
+               img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
             }
             viewer.Image = img;
          });

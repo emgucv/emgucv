@@ -12,7 +12,7 @@ using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.UI
 {
-   public partial class ImageProperty : UserControl
+   internal partial class ImageProperty : UserControl
    {
       private ImageBox _imageBox;
 
@@ -35,25 +35,12 @@ namespace Emgu.CV.UI
          cPlusPlusoperationStackView.Language = ProgrammingLanguage.CPlusPlus;
       }
 
-      /// <summary>
-      /// Set the width of the image
-      /// </summary>
-      public int ImageWidth
+      public System.Drawing.Size ImageSize
       {
          set
          {
-            widthTextbox.Text = value.ToString();
-         }
-      }
-
-      /// <summary>
-      /// Set the height of the image
-      /// </summary>
-      public int ImageHeight
-      {
-         set
-         {
-            heightTextBox.Text = value.ToString();
+            widthTextbox.Text = value.Width.ToString();
+            heightTextBox.Text = value.Height.ToString();
          }
       }
 
@@ -151,52 +138,7 @@ namespace Emgu.CV.UI
             return;
          }
 
-         IImage[] channels = image.Split();
-         Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
-         IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
-         String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
-         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
-
-         HistogramViewer hviewer = new HistogramViewer();
-
-         float minVal, maxVal;
-         #region Get the maximum and minimum color intensity values
-         System.Type typeOfDepth = imageType.GetGenericArguments()[1];
-         if (typeOfDepth == typeof(Byte))
-         {
-            minVal = 0.0f;
-            maxVal = 256.0f;
-         }
-         else
-         {
-            #region obtain the maximum and minimum color value
-            double[] minValues, maxValues;
-            System.Drawing.Point[] minLocations, maxLocations;
-            image.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
-
-            double min = minValues[0], max = maxValues[0];
-            for (int i = 1; i < minValues.Length; i++)
-            {
-               if (minValues[i] < min) min = minValues[i];
-               if (maxValues[i] > max) max = maxValues[i];
-            }
-            #endregion
-
-            minVal = (float)min;
-            maxVal = (float)max;
-         }
-         #endregion
-
-         for (int i = 0; i < channels.Length; i++)
-            using (Histogram hist = new Histogram(256, new RangeF(minVal, maxVal)))
-            {
-               hist.Accumulate(new IImage[1] { channels[i] });
-               hviewer.HistogramCtrl.AddHistogram(channelNames[i], colors[i], hist);
-            }
-
-         hviewer.HistogramCtrl.Refresh();
-
-         hviewer.Show();
+         HistogramViewer.Show(image);
       }
    }
 }

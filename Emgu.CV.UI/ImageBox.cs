@@ -21,7 +21,7 @@ namespace Emgu.CV.UI
       private IImage _image;
       private IImage _displayedImage;
       private PropertyDialog _propertyDlg;
-      
+
       private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
 
       /// <summary>
@@ -64,7 +64,7 @@ namespace Emgu.CV.UI
       public FunctionalModeOption FunctionalMode
       {
          get { return _functionalMode; }
-         set 
+         set
          {
             //hide all menu items
             foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
@@ -74,7 +74,7 @@ namespace Emgu.CV.UI
                foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
                   mi.Visible = true;
 
-            _functionalMode = value; 
+            _functionalMode = value;
          }
       }
 
@@ -147,19 +147,29 @@ namespace Emgu.CV.UI
                      foreach (Operation operation in ops)
                      {
                         if (operation.Method.ReturnType == typeof(void))
-                        {
+                        {  //if this is an inplace operation 
+
                            if (!isCloned)
-                           {
+                           {  //make a clone if not already done so
                               imageToBeDisplayed = _image.Clone() as IImage;
                               isCloned = true;
                            }
-                           //if the operation has return type of void, just execute the operation
+
+                           //execute the inplace operation
                            operation.InvokeMethod(imageToBeDisplayed);
                         }
                         else if (operation.Method.ReturnType.GetInterface("IImage") != null)
-                        {
+                        {  //if this operation has return value
+
+                           IImage tmp = null;
+                           if (isCloned == true) //if intermediate image exist, keep a reference of it
+                              tmp = imageToBeDisplayed;
+
                            isCloned = true;
                            imageToBeDisplayed = operation.InvokeMethod(imageToBeDisplayed) as IImage;
+
+                           if (tmp != null) //dispose the intermediate image
+                              tmp.Dispose();
                         }
                         else
                         {
@@ -195,15 +205,15 @@ namespace Emgu.CV.UI
                if (_functionalMode != FunctionalModeOption.Minimum)
                   BuildOperationMenuItem(_displayedImage);
 
-               if (base.Image != null) //release the old Bitmap Image
+               //release the old Bitmap Image
+               if (base.Image != null)
                   base.Image.Dispose();
-               
+
                base.Image = _displayedImage.Bitmap;
 
                if (EnablePropertyPanel)
                {
-                  ImagePropertyPanel.ImageWidth = _displayedImage.Width;
-                  ImagePropertyPanel.ImageHeight = _displayedImage.Height;
+                  ImagePropertyPanel.ImageSize = _displayedImage.Size;
 
                   ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
                   ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
@@ -243,7 +253,7 @@ namespace Emgu.CV.UI
          {
             Image = Image;
          }
-         catch 
+         catch
          {  //if pushing the operation generate exceptions
 
             _operationStack.Pop(); //remove the operation from the stack
@@ -279,8 +289,8 @@ namespace Emgu.CV.UI
             Image = Image;
          }
       }
-      
-      private ToolStripMenuItem[] BuildOperationTree( IEnumerable<KeyValuePair<string, MethodInfo>> catelogMiPairList)
+
+      private ToolStripMenuItem[] BuildOperationTree(IEnumerable<KeyValuePair<string, MethodInfo>> catelogMiPairList)
       {
          List<ToolStripMenuItem> res = new List<ToolStripMenuItem>();
 
@@ -289,53 +299,60 @@ namespace Emgu.CV.UI
 
          foreach (KeyValuePair<string, MethodInfo> pair in catelogMiPairList)
          {
-            if (!String.IsNullOrEmpty(pair.Key))
-            {  //if this is a catelog
-
-               String[] catelogs = pair.Key.Split('|');
-               if (!catelogDic.ContainsKey(catelogs[0]))
-               {
-                  catelogDic.Add(catelogs[0], new List<KeyValuePair<String, MethodInfo>>());
-               }
-               string[] subcatelogs = new string[catelogs.Length-1];
-               Array.Copy(catelogs, 1, subcatelogs, 0, subcatelogs.Length);
-               
-               catelogDic[catelogs[0]].Add(new KeyValuePair<String, MethodInfo>(String.Join("|", subcatelogs), pair.Value));
-            }
-            else
+            if (String.IsNullOrEmpty(pair.Key))
             {  //this is an operation
                operationItem.Add(pair.Value.ToString(), pair.Value);
             }
+            else
+            {  //this is a category
+               int index = pair.Key.IndexOf('|');
+               String category;
+               String subcategory;
+               if (index == -1)
+               {  //There is no sub category
+                  category = pair.Key;
+                  subcategory = string.Empty;
+               }
+               else
+               {  //There are sub categories
+                  category = pair.Key.Substring(0, index);
+                  subcategory = pair.Key.Substring(index + 1, pair.Key.Length - index - 1);
+               }
+               
+               if (!catelogDic.ContainsKey(category))
+                  catelogDic.Add(category, new List<KeyValuePair<String, MethodInfo>>());
+               catelogDic[category].Add(new KeyValuePair<String, MethodInfo>(subcategory, pair.Value));
+            }
          }
-         
+
+         #region Add catelogs to the menu
          foreach (String catelog in catelogDic.Keys)
-         {  //add the catelog to the menu
-            
+         {
             ToolStripMenuItem catelogMenuItem = new ToolStripMenuItem();
             catelogMenuItem.Text = catelog;
             catelogMenuItem.DropDownItems.AddRange(BuildOperationTree(catelogDic[catelog]));
-            res.Add(catelogMenuItem);  
+            res.Add(catelogMenuItem);
          }
+         #endregion
 
+         #region Add Methods to the menu
          foreach (MethodInfo mi in operationItem.Values)
-         {  //add the method to the menu
-            
+         {
             ToolStripMenuItem operationMenuItem = new ToolStripMenuItem();
             operationMenuItem.Size = new System.Drawing.Size(152, 22);
 
-            String genericArgString = string.Empty;
             Type[] genericArgs = mi.GetGenericArguments();
-            if (genericArgs.Length > 0)
-            {
-               genericArgString = String.Format(
-                  "<{0}>", 
+
+            String genericArgString = genericArgs.Length > 0 ?
+               String.Format(
+                  "<{0}>",
                   String.Join(",", Array.ConvertAll<Type, String>(
                      genericArgs,
-                     delegate(Type t) { return t.Name; })));
-            }
+                     System.Convert.ToString))) 
+               : string.Empty;           
 
             operationMenuItem.Text = String.Format(
-               "{0}{1}({2})", 
+               "{0}{1}({2})",
                mi.Name,
                genericArgString,
                String.Join(",", System.Array.ConvertAll<ParameterInfo, String>(mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; })));
@@ -367,20 +384,21 @@ namespace Emgu.CV.UI
                       }
                       catch (Exception expt)
                       {
-                         if (expt.InnerException != null)
-                            MessageBox.Show(expt.InnerException.Message);
-                         else
-                            MessageBox.Show(expt.Message);
+                         MessageBox.Show(
+                            expt.InnerException == null ?
+                              expt.Message
+                              : expt.InnerException.Message);
 
                          //special case, then there is no parameter and the method throw an exception
                          //break the loop
                          if (methodInfoRef.GetParameters().Length == 0)
                             break;
                       }
-                   } 
+                   }
                 };
             res.Add(operationMenuItem);
          }
+         #endregion
 
          return res.ToArray();
       }
@@ -388,15 +406,15 @@ namespace Emgu.CV.UI
       private void BuildOperationMenuItem(IImage image)
       {
          Type typeOfImage = image.GetType();
-         
+
          operationsToolStripMenuItem.DropDownItems.Clear();
 
          //check if the menu for the specific image type has been built before
          if (!_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
-         {  
+         {
             //if not built, build it and save to the cache.
             _typeToToolStripMenuItemsDictionary.Add(
-               typeOfImage, 
+               typeOfImage,
                BuildOperationTree(Reflection.ReflectIImage.GetImageMethods(image))
                );
          }
@@ -444,7 +462,6 @@ namespace Emgu.CV.UI
          }
       }
 
-
       /// <summary>
       /// Used for tracking the mouse position on the image
       /// </summary>
@@ -459,7 +476,7 @@ namespace Emgu.CV.UI
             IColor color = img == null ?
                null :
                Reflection.ReflectIImage.GetPixelColor(img, e.Location);
-            
+
             ImagePropertyPanel.MousePositionOnImage = e.Location;
             ImagePropertyPanel.ColorIntensity = color;
          }

@@ -49,7 +49,7 @@ namespace PlanarSubdivisionExample
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)
          {
-            Point[] points = Array.ConvertAll<PointF, Point>(facet.Vertices, delegate(PointF p) { return new Point((int) p.X, (int) p.Y); });
+            Point[] points = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
 
             //Draw the facet in color
             img.FillConvexPoly(

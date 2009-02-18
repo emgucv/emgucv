@@ -108,24 +108,16 @@ namespace MotionDetection
 
       private void UpdateText(String text)
       {
-         if (InvokeRequired)
-         {
-            this.Invoke(new Action<String>(UpdateText), new object[] { text });
-         }
-         else
-         {
-            label3.Text = text;
-         }
+         label3.Text = text;
       }
 
       private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionRegion, double angle, Bgr color)
       {
          float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
-
          Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);
          
          CircleF circle = new CircleF(
-            new System.Drawing.PointF(center.X, center.Y), 
+            center, 
             circleRadius);
 
          int xDirection = (int)(Math.Cos(angle * (Math.PI / 180.0)) * circleRadius);

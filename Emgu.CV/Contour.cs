@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// Wrapped class for Contour
    /// </summary>
+   /// <typeparam name="T">The type of elements in the Contour, either PointF or Point.</typeparam>
    public class Contour<T> : Seq<T> where T : struct
    {
       /// <summary>
       /// Craete a contour from the specific IntPtr and storage
       /// </summary>
-      /// <param name="ptr"></param>
+      /// <param name="ptr">The unmanged Pointer to the sequence</param>
       /// <param name="storage"></param>
       public Contour(IntPtr ptr, MemStorage storage)
          : base(ptr, storage)
@@ -30,7 +33,7 @@ namespace Emgu.CV
          : this(IntPtr.Zero, storage)
       {
          _ptr = CvInvoke.cvCreateSeq(
-             seqFlag, 
+             FixElementType(seqFlag), 
              StructSize.MCvContour,
              _sizeOfElement,
              storage.Ptr);
@@ -55,6 +58,29 @@ namespace Emgu.CV
       public Contour(MemStorage storage)
          : this((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON , storage)
       {
+      }
+
+      /// <summary>
+      /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
+      /// </summary>
+      /// <param name="point">The point to be tested</param>
+      /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
+      /// <remarks>requires MCvContour.rect to be pre-computed</remarks>
+      public override double InContour(System.Drawing.PointF point)
+      {
+         Debug.Assert(!MCvContour.rect.IsEmpty, "The bounding rectangle is not caculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first.");
+         return base.InContour(point);
+      }
+
+      ///<summary> Get the smallest bouding rectangle </summary>
+      ///<remarks>Requires MCvContour.rect to be pre-computed</remarks>
+      public override System.Drawing.Rectangle BoundingRectangle
+      {
+         get
+         {
+            Debug.Assert(!MCvContour.rect.IsEmpty, "The bounding rectangle is not caculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first.");
+            return base.BoundingRectangle;
+         }
       }
 
       /// <summary>

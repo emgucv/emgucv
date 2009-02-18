@@ -648,6 +648,12 @@ namespace Emgu.CV.CvEnum
       /// The bit to shift for SEQ_ELTYPE
       /// </summary>
       public const int CV_SEQ_ELTYPE_BITS = 9;
+
+      /// <summary>
+      /// The mask of CV_SEQ_ELTYPE
+      /// </summary>
+      public const int CV_SEQ_ELTYPE_MASK = ((1 << CV_SEQ_ELTYPE_BITS) - 1);
+
       /// <summary>
       /// The bits to shift for SEQ_KIND
       /// </summary>

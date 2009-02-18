@@ -575,8 +575,8 @@ namespace Emgu.CV
       {
          CvInvoke.cvRectangle(
              Ptr,
-             new Point(rect.X, rect.Y),
-             new Point(rect.X + rect.Width, rect.Y + rect.Height),
+             rect.Location,
+             Point.Add(rect.Location, rect.Size),
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -606,8 +606,8 @@ namespace Emgu.CV
          if (thickness > 0)
             CvInvoke.cvLine(
                 Ptr,
-                new Point((int) line.P1.X, (int) line.P1.Y), 
-                new Point((int) line.P2.X, (int) line.P2.Y),
+                Point.Round(line.P1),
+                Point.Round(line.P2),
                 color.MCvScalar,
                 thickness,
                 CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -638,13 +638,8 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness) 
       {
-         PointF[] verticesF = polygon.GetVertices();
-         Point[] vertices = new Point[verticesF.Length];
-         for (int i = 0; i < vertices.Length; i++)
-         {
-            PointF p = verticesF[i];
-            vertices[i] = new Point((int)p.X, (int)p.Y);
-         }
+         Point[] vertices = Array.ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
+
          if (thickness > 0)
             DrawPolyline(vertices, true, color, thickness);
          else
@@ -728,7 +723,7 @@ namespace Emgu.CV
       {
          CvInvoke.cvCircle(
              Ptr,
-             new Point( (int) circle.Center.X, (int) circle.Center.Y),
+             Point.Round(circle.Center),
              (int) circle.Radius,
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
@@ -744,7 +739,7 @@ namespace Emgu.CV
       {
          CvInvoke.cvEllipse(
              Ptr,
-             new Point( (int) ellipse.MCvBox2D.center.X, (int) ellipse.MCvBox2D.center.Y),
+             Point.Round(ellipse.MCvBox2D.center),
              new System.Drawing.Size(( (int)ellipse.MCvBox2D.size.Width) >> 1, ((int)ellipse.MCvBox2D.size.Height) >> 1),
              ellipse.MCvBox2D.angle,
              0.0,
@@ -780,8 +775,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
       public void Draw(Seq<System.Drawing.Point> c, TColor color, int thickness)
       {
-         System.Drawing.Point offset = new System.Drawing.Point();
-         Draw(c, color, color, 0, thickness, ref offset);
+         Draw(c, color, color, 0, thickness, Point.Empty);
       }
 
       /// <summary>
@@ -799,8 +793,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
       public void Draw(Seq<System.Drawing.Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
       {
-         System.Drawing.Point offset = new System.Drawing.Point();
-         Draw(c, externalColor, holeColor, maxLevel, thickness, ref offset);
+         Draw(c, externalColor, holeColor, maxLevel, thickness, Point.Empty);
       }
 
       /// <summary>
@@ -817,7 +810,7 @@ namespace Emgu.CV
       /// </param>
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
-      public void Draw(Seq<System.Drawing.Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, ref System.Drawing.Point offset)
+      public void Draw(Seq<System.Drawing.Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, System.Drawing.Point offset)
       {
          CvInvoke.cvDrawContours(
              Ptr,
@@ -1864,6 +1857,7 @@ namespace Emgu.CV
       }
       #endregion
       */
+
       #region Arithmatic
       #region Substraction methods
       ///<summary> Elementwise subtract another image from the current image </summary>
@@ -2738,20 +2732,19 @@ namespace Emgu.CV
          {
             if (typeofDepth == typeof(Byte))
             {
-               Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                   new System.Drawing.Rectangle(0, 0, Width, Height),
-                   System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                   System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-               
-               Int64 dataPtr = data.Scan0.ToInt64();
-               
+               System.Drawing.Size size;
                IntPtr startPtr;
                int widthStep;
-               System.Drawing.Size size;
                CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
                Int64 start = startPtr.ToInt64();
 
+               Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                   new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                   System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                   System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+               Int64 dataPtr = data.Scan0.ToInt64();
+               
                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                   Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
 
@@ -2770,18 +2763,18 @@ namespace Emgu.CV
          {
             if (typeofDepth == typeof(byte))
             {
-               Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                    new System.Drawing.Rectangle(0, 0, Width, Height),
-                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-               Int64 dataPtr = data.Scan0.ToInt64();
-
                IntPtr startPtr;
                int widthStep;
                System.Drawing.Size size;
                CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
                Int64 start = startPtr.ToInt64();
+
+               Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                    new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+               Int64 dataPtr = data.Scan0.ToInt64();
 
                for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                   Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
@@ -2797,21 +2790,21 @@ namespace Emgu.CV
          }
          else if (typeOfColor == typeof(Bgr) && typeofDepth == typeof(Byte))
          {   //if this is a Bgr Byte image
-
-            //create the bitmap and get the pointer to the data
-            Bitmap bmp = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-            System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                new System.Drawing.Rectangle(0, 0, Width, Height),
-                System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            Int64 dataPtr = data.Scan0.ToInt64();
-
             IntPtr startPtr;
             int widthStep;
             System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
             Int64 start = startPtr.ToInt64();
+
+            //create the bitmap and get the pointer to the data
+            Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Int64 dataPtr = data.Scan0.ToInt64();
+
             for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
                Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
            

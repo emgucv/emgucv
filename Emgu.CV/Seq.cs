@@ -5,12 +5,15 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 using Emgu.CV.Structure;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV
 {
    ///<summary>
    /// Wrapper to OpenCV Seq 
    ///</summary>
+   ///<typeparam name="T">The type of elements in this sequence, must be a structure</typeparam>
    public class Seq<T> : IEnumerable<T> where T : struct
    {
       /// <summary>
@@ -49,7 +52,7 @@ namespace Emgu.CV
       {
          _stor = storage;
          _ptr = CvInvoke.cvCreateSeq(
-             seqFlag,
+             FixElementType(seqFlag),
              StructSize.MCvSeq,
              _sizeOfElement,
              storage.Ptr);
@@ -74,6 +77,55 @@ namespace Emgu.CV
       public Seq(MemStorage storage)
          : this(0, storage)
       {
+      }
+
+      /// <summary>
+      /// Fix the input element type and return the correct one
+      /// </summary>
+      /// <param name="seqType">The input sequence type</param>
+      /// <returns>The best element type that match this sequence</returns>
+      protected static int FixElementType(int seqType)
+      {
+         int elementTypeID;
+
+         Type elementType = typeof(T);
+
+         if (elementType == typeof(PointF))
+         {
+            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2);
+         }
+         else if (elementType == typeof(Point))
+         {
+            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32S, 2);
+         }
+         else if (elementType == typeof(MCvPoint2D64f))
+         {
+            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_64F, 2);
+         }
+         else
+         {  // if no match found simply return the original value
+            return seqType;
+         }
+
+         return (seqType & (~(int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK)) + elementTypeID;
+      }
+
+      /// <summary>
+      /// Get or Set the element Type
+      /// </summary>
+      protected int ElementType
+      {
+         get
+         {
+            return MCvSeq.flags & (int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK;
+         }
+         set
+         {
+            if (ElementType != value)
+               Marshal.WriteInt32(
+                  new IntPtr(Ptr.ToInt64() + Marshal.OffsetOf(typeof(MCvSeq), "flags").ToInt64()), 
+                  (MCvSeq.flags & (~ (int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK )) + value);
+         }
       }
 
       /// <summary>
@@ -462,7 +514,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Get the smallest bouding rectangle </summary>
-      public System.Drawing.Rectangle BoundingRectangle
+      public virtual System.Drawing.Rectangle BoundingRectangle
       {
          get
          {
@@ -483,7 +535,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The point to be tested</param>
       /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
-      public double InContour(System.Drawing.PointF point)
+      public virtual double InContour(System.Drawing.PointF point)
       {
          return CvInvoke.cvPointPolygonTest(Ptr, point, 0);
       }

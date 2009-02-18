@@ -24,16 +24,18 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="statModel">The statistic model to save</param>
       /// <param name="fileName">The file name to save to</param>
+      /// <param name="name">Pass IntPtr.Zero</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern void StatModelSave(IntPtr statModel, String fileName);
+      public static extern void StatModelSave(IntPtr statModel, String fileName, IntPtr name);
 
       /// <summary>
       /// Load the statistic model from the specific file
       /// </summary>
       /// <param name="statModel">The statistic model to save</param>
       /// <param name="fileName">The file name to load from</param>
+      /// <param name="name">Pass IntPtr.Zero</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern void StatModelLoad(IntPtr statModel, String fileName);
+      public static extern void StatModelLoad(IntPtr statModel, String fileName, IntPtr name);
 
       /// <summary>
       /// Clear the statistic model

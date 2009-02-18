@@ -75,5 +75,14 @@ namespace Emgu.CV
          }
       }
       #endregion
+
+      /// <summary>
+      /// Represent this color as a String
+      /// </summary>
+      /// <returns>The string representation of this color</returns>
+      public override string ToString()
+      {
+         return String.Format("[{0},{1},{2}]", Hue, Lightness, Satuation);
+      }
    }
 }

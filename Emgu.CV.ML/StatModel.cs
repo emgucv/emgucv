@@ -16,7 +16,7 @@ namespace Emgu.CV.ML
       /// <param name="fileName"></param>
       public void Save(String fileName)
       {
-         MlInvoke.StatModelSave(_ptr, fileName);
+         MlInvoke.StatModelSave(_ptr, fileName, IntPtr.Zero);
       }
 
       /// <summary>
@@ -25,7 +25,7 @@ namespace Emgu.CV.ML
       /// <param name="fileName">The file to load the model from</param>
       public void Load(String fileName)
       {
-         MlInvoke.StatModelLoad(_ptr, fileName);
+         MlInvoke.StatModelLoad(_ptr, fileName, IntPtr.Zero);
       }
 
       /// <summary>

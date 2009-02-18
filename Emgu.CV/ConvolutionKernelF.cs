@@ -110,7 +110,7 @@ namespace Emgu.CV
       {
          return new ConvolutionKernelF(
          base.Transpose(),
-         new System.Drawing.Point(_center.Y, _center.X));
+         _center);
       }
    }
 }

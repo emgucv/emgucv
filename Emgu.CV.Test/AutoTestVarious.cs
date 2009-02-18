@@ -496,7 +496,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlannarSubdivision1()
       {
-         int pointCount = 1000;
+         int pointCount = 3000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];
@@ -779,11 +779,39 @@ namespace Emgu.CV.Test
          {
             Contour<System.Drawing.Point> contour = new Contour<Point>(stor);
             contour.Push(new System.Drawing.Point(0, 0));
-            contour.Push(new System.Drawing.Point(0, 1));
-            contour.Push(new System.Drawing.Point(1, 1));
-            contour.Push(new System.Drawing.Point(1, 0));
-            Assert.AreEqual(contour.Convex, true);
-            Assert.AreEqual(contour.Area, 1.0);
+            contour.Push(new System.Drawing.Point(0, 2));
+            contour.Push(new System.Drawing.Point(2, 2));
+            contour.Push(new System.Drawing.Point(2, 0));
+            Assert.IsTrue(contour.Convex);
+            Assert.AreEqual(contour.Area, 4.0);
+            //InContour function requires MCvContour.rect to be pre-computed
+            CvInvoke.cvBoundingRect(contour, 1);
+            Assert.GreaterOrEqual(contour.InContour(new Point(1, 1)), 0);
+            Assert.Less(contour.InContour(new Point(3, 3)), 0);
+
+            Contour<System.Drawing.PointF> contourF = new Contour<PointF>(stor);
+            contourF.Push(new System.Drawing.PointF(0, 0));
+            contourF.Push(new System.Drawing.PointF(0, 2));
+            contourF.Push(new System.Drawing.PointF(2, 2));
+            contourF.Push(new System.Drawing.PointF(2, 0));
+            Assert.IsTrue(contourF.Convex);
+            Assert.AreEqual(contourF.Area, 4.0);
+            //InContour function requires MCvContour.rect to be pre-computed
+            CvInvoke.cvBoundingRect(contourF, 1);
+            Assert.GreaterOrEqual(contourF.InContour(new PointF(1, 1)), 0);
+            Assert.Less(contourF.InContour(new PointF(3, 3)), 0);
+
+            Contour<MCvPoint2D64f> contourD = new Contour<MCvPoint2D64f>(stor);
+            contourD.Push(new MCvPoint2D64f(0, 0));
+            contourD.Push(new MCvPoint2D64f(0, 2));
+            contourD.Push(new MCvPoint2D64f(2, 2));
+            contourD.Push(new MCvPoint2D64f(2, 0));
+            //Assert.IsTrue(contourD.Convex);
+            //Assert.AreEqual(contourD.Area, 4.0);
+            //InContour function requires MCvContour.rect to be pre-computed
+            //CvInvoke.cvBoundingRect(contourD, 1);
+            //Assert.GreaterOrEqual(contourD.InContour(new PointF(1, 1)), 0);
+            //Assert.Less(contourD.InContour(new PointF(3, 3)), 0);
 
             Seq<System.Drawing.Point> seq = new Seq<Point>(CvInvoke.CV_MAKETYPE(4, 2), stor);
             seq.Push(new System.Drawing.Point(0, 0));

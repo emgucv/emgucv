@@ -28,6 +28,20 @@ namespace Emgu.CV.UI
       public ImageViewer(IImage image)
          : this()
       {
+         if (image != null)
+         {
+            System.Drawing.Size size = image.Size;
+            int width = size.Width + 8;
+            int height = size.Height + 32;
+            if (this.Width != width)
+            {
+               this.Width = width;
+            }
+            if (this.Height != height)
+            {
+               this.Height = height;
+            }
+         }
          Image = image;
       }
 
@@ -53,11 +67,6 @@ namespace Emgu.CV.UI
          }
          set
          {
-            if (value != null)
-            {
-               this.Width = value.Width + 8;
-               this.Height = value.Height + 32;
-            }
             imageBox1.Image = value;
          }
       }

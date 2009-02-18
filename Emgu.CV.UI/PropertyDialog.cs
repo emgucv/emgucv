@@ -11,7 +11,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// A dialog to display the property of an image
    /// </summary>
-   public partial class PropertyDialog : Form
+   internal partial class PropertyDialog : Form
    {
       private ImageBox _imageBox;
 

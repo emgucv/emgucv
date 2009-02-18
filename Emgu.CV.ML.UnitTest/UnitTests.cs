@@ -1,3 +1,4 @@
+#define SHOW_IMAGE
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -63,10 +64,10 @@ namespace Emgu.CV.ML.UnitTest
                         accuracy++;
                   }
                   // highlight the pixel depending on the accuracy (or confidence)
-                  img[i, j] =
-                  response == 1 ?
-                      (accuracy > 5 ? new Bgr(90, 0, 0) : new Bgr(90, 60, 0)) :
-                      (accuracy > 5 ? new Bgr(0, 90, 0) : new Bgr(60, 90, 0));
+                  img[i, j] = 
+                     response == 1 ?
+                        (accuracy > 5 ? new Bgr(90, 0, 0) : new Bgr(90, 40, 0)) :
+                        (accuracy > 5 ? new Bgr(0, 90, 0) : new Bgr(40, 90, 0));
                }
             }
          }
@@ -80,7 +81,9 @@ namespace Emgu.CV.ML.UnitTest
             img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
          }
 
-         //Emgu.CV.UI.ImageViewer.Show(img);
+#if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(img);
+#endif
       }
 
       [Test]
@@ -109,8 +112,7 @@ namespace Emgu.CV.ML.UnitTest
             double scale = ((i % N1) + 1.0) / (N1 + 1);
             MCvScalar mean = new MCvScalar(scale * img.Width, scale * img.Height);
             MCvScalar sigma = new MCvScalar(30, 30);
-            ulong seed = (ulong)DateTime.Now.Ticks;
-            CvInvoke.cvRandArr(ref seed, rows.Ptr, Emgu.CV.CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, sigma);
+            rows.SetRandNormal(mean, sigma);
          }
          CvInvoke.cvReshape(samples.Ptr, samples.Ptr, 1, 0);
 
@@ -145,10 +147,7 @@ namespace Emgu.CV.ML.UnitTest
 
                   Bgr color = colors[response];
                   
-                  img.Draw(
-                     new CircleF(new PointF(j, i), 1), 
-                     new Bgr(color.Blue*0.5, color.Green * 0.5, color.Red * 0.5 ), 
-                     0);
+                  img[j, i] = new Bgr(color.Blue*0.5, color.Green * 0.5, color.Red * 0.5 );
                }
             #endregion 
 
@@ -158,8 +157,10 @@ namespace Emgu.CV.ML.UnitTest
                img.Draw(new CircleF(new PointF(samples.Data[i, 0], samples.Data[i, 1]), 1), colors[labels.Data[i, 0]], 0);
             }
             #endregion 
-   
-            //Emgu.CV.UI.ImageViewer.Show(img);
+
+#if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(img);
+#endif
          }
       }
 
@@ -218,13 +219,11 @@ namespace Emgu.CV.ML.UnitTest
                   float response = model.Predict(sample);
 
                   img[i, j] =
-                  response == 1 ?
-                  new Bgr(90, 0, 0) : (
-                  response == 2 ? new Bgr(0, 90, 0) :
-                  new Bgr(0, 0, 90));
+                     response == 1 ? new Bgr(90, 0, 0) :
+                     response == 2 ? new Bgr(0, 90, 0) :
+                     new Bgr(0, 0, 90);
                }
             }
-
 
             int c = model.GetSupportVectorCount();
             for (int i = 0; i < c; i++)
@@ -245,16 +244,81 @@ namespace Emgu.CV.ML.UnitTest
             PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
             img.Draw(new CircleF(p3, 2.0f), new Bgr(100, 100, 255), -1);
          }
-         //Emgu.CV.UI.ImageViewer.Show(img);
+
+#if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(img);
+#endif
       }
       #endregion
 
       [Test]
       public void TestNormalBayesClassifier()
       {
-         using (NormalBayesClassifier classifier = new NormalBayesClassifier())
+         Bgr[] colors = new Bgr[] { 
+            new Bgr(0, 0, 255), 
+            new Bgr(0, 255, 0),
+            new Bgr(255, 0, 0)};
+         int trainSampleCount = 150;
+
+         #region Generate the traning data and classes
+         Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
+         Matrix<int> trainClasses = new Matrix<int>(trainSampleCount, 1);
+
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+
+         Matrix<float> sample = new Matrix<float>(1, 2);
+
+         Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount / 3, 1);
+         trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+         trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+
+         Matrix<float> trainData2 = trainData.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
+         trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(50));
+
+         Matrix<float> trainData3 = trainData.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
+         trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+         trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+
+         Matrix<int> trainClasses1 = trainClasses.GetRows(0, trainSampleCount / 3, 1);
+         trainClasses1.SetValue(1);
+         Matrix<int> trainClasses2 = trainClasses.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
+         trainClasses2.SetValue(2);
+         Matrix<int> trainClasses3 = trainClasses.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
+         trainClasses3.SetValue(3);
+         #endregion
+
+         using (NormalBayesClassifier classifier = new NormalBayesClassifier() )
          {
+            classifier.Train(trainData, trainClasses, null, null, false);
+            #region Classify every image pixel
+            for (int i = 0; i < img.Height; i++)
+               for (int j = 0; j < img.Width; j++)
+               {
+                  sample.Data[0, 0] = i;
+                  sample.Data[0, 1] = j;
+                  int response = (int) classifier.Predict(sample, null);
+
+                  Bgr color = colors[response -1];
+
+                  img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
+               }
+            #endregion 
          }
+
+         // display the original training samples
+         for (int i = 0; i < (trainSampleCount / 3); i++)
+         {
+            PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
+            img.Draw(new CircleF(p1, 2.0f), colors[0], -1);
+            PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
+            img.Draw(new CircleF(p2, 2.0f), colors[1], -1);
+            PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
+            img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
+         }
+
+#if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(img);
+#endif
       }
 
       [Test]
@@ -346,7 +410,9 @@ namespace Emgu.CV.ML.UnitTest
             PointF p2 = new PointF((int)trainData2[i, 0], (int)trainData2[i, 1]);
             img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
          }
-         //Emgu.CV.UI.ImageViewer.Show(img);
+#if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(img);
+#endif
       }
    }
 }

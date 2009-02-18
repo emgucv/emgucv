@@ -72,7 +72,7 @@ namespace Emgu.CV.Test
       {
          _image = img;
          _rect = rect;
-         _eyeCascade = new HaarCascade(".\\haarcascades\\eye_12.xml");
+         _eyeCascade = new HaarCascade(".\\haarcascades\\haarcascade_eye_tree_eyeglasses.xml");
       }
 
       public List<Eye<D>> DetectEye()
@@ -93,6 +93,7 @@ namespace Emgu.CV.Test
       {
          get { return _rect; }
       }
+
       public Image<Bgr, D> Bgr
       {
          get

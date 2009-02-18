@@ -66,11 +66,14 @@ namespace Emgu.CV.Reflection
       /// <returns>The color at the specific location</returns>
       public static IColor GetPixelColor(IImage image, System.Drawing.Point location)
       {
-         location.X = Math.Min(location.X, image.Width - 1);
-         location.Y = Math.Min(location.Y, image.Height - 1);
+         System.Drawing.Size size = image.Size;
+         location.X = Math.Min(location.X, size.Width - 1);
+         location.Y = Math.Min(location.Y, size.Height - 1);
 
-         Type t = image.GetType();
-         MethodInfo indexers = t.GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
+         MethodInfo indexers = 
+            image.GetType()
+            .GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
+
          if (indexers != null)
          {
             return indexers.Invoke(image, new object[2] { location.Y, location.X }) as IColor;
