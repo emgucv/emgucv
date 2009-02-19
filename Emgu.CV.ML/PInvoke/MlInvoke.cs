@@ -311,7 +311,7 @@ namespace Emgu.CV.ML
       /// <param name="type">The SVM type</param>
       /// <param name="grid">The parameter grid reference, values will be filled in by the funtion call</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern void CvSVMGetDefaultGrid(MlEnum.SVM_TYPE type, ref MCvParamGrid grid);
+      public static extern void CvSVMGetDefaultGrid(MlEnum.SVM_PARAM_TYPE type, ref MCvParamGrid grid);
 
       /// <summary>
       /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 

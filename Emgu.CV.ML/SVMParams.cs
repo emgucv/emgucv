@@ -58,7 +58,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The type of SVM
       /// </summary>
-      public MlEnum.SVM_TYPE SvmType
+      public MlEnum.SVM_TYPE SVMType
       {
          get
          {
@@ -205,7 +205,7 @@ namespace Emgu.CV.ML
          get
          {
             MCvSVMParams p = new MCvSVMParams();
-            p.svm_type = SvmType;
+            p.svm_type = SVMType;
             p.kernel_type = KernelType;
             p.degree = Degree;
             p.gamma = Gamma;

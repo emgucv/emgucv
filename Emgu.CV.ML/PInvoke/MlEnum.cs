@@ -72,6 +72,37 @@ namespace Emgu.CV.ML.MlEnum
    }
 
    /// <summary>
+   /// The type of SVM parameters
+   /// </summary>
+   public enum SVM_PARAM_TYPE
+   {
+      /// <summary>
+      /// C
+      /// </summary>
+      C = 0,
+      /// <summary>
+      /// Gamma
+      /// </summary>
+      GAMMA = 1,
+      /// <summary>
+      /// P
+      /// </summary>
+      P = 2,
+      /// <summary>
+      /// NU
+      /// </summary>
+      NU = 3,
+      /// <summary>
+      /// COEF
+      /// </summary>
+      COEF = 4,
+      /// <summary>
+      /// DEGREE
+      /// </summary>
+      DEGREE = 5
+   }
+
+   /// <summary>
    /// SVM kernel type
    /// </summary>
    public enum SVM_KERNEL_TYPE

@@ -57,7 +57,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="type">The SVM type</param>
       /// <returns>The default parameter grid for the specific SVM type </returns>
-      public static MCvParamGrid GetDefaultGrid(MlEnum.SVM_TYPE type)
+      public static MCvParamGrid GetDefaultGrid(MlEnum.SVM_PARAM_TYPE type)
       {
          MCvParamGrid grid = new MCvParamGrid();
          MlInvoke.CvSVMGetDefaultGrid(type, ref grid);

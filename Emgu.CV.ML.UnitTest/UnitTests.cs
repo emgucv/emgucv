@@ -203,7 +203,7 @@ namespace Emgu.CV.ML.UnitTest
          {
             SVMParams p = new SVMParams();
             p.KernelType = Emgu.CV.ML.MlEnum.SVM_KERNEL_TYPE.LINEAR;
-            p.SvmType = Emgu.CV.ML.MlEnum.SVM_TYPE.C_SVC;
+            p.SVMType = Emgu.CV.ML.MlEnum.SVM_TYPE.C_SVC;
             p.C = 1;
             p.TermCrit = new MCvTermCriteria(100, 0.00001);
 
