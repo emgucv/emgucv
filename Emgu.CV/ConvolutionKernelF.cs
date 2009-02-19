@@ -81,8 +81,15 @@ namespace Emgu.CV
       {
          int code = 0; //flipType == Emgu.CV.CvEnum.FLIP.VERTICAL
 
-         if (flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
-         else if (flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
+         switch (flipType)
+         {
+            case (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL):
+               code = -1;
+               break;
+            case Emgu.CV.CvEnum.FLIP.HORIZONTAL:
+               code = 1;
+               break;
+         }
 
          ConvolutionKernelF res = new ConvolutionKernelF(Height, Width);
          CvInvoke.cvFlip(Ptr, res.Ptr, code);

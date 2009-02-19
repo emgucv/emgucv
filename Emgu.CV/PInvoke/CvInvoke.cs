@@ -18,29 +18,10 @@ namespace Emgu.CV
       /// </summary>
       private const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
 
-      #region define the pinvoke file names
-#if LINUX
-      /// <summary>
-      /// The file name of the cxcore library
-      /// </summary>
-      public const string CXCORE_LIBRARY = "libcxcore.so";
-      /// <summary>
-      /// The file name of the cv library
-      /// </summary>
-      public const string CV_LIBRARY = "libcv.so";
-      /// <summary>
-      /// The file name of the highgui library
-      /// </summary>
-      public const string HIGHGUI_LIBRARY = "libhighgui.so";
-      /// <summary>
-      /// The file name of the cvaux library
-      /// </summary>
-      public const string CVAUX_LIBRARY = "libcvaux.so";
-      /// <summary>
-      /// The file name of the cvextern library
-      /// </summary>
-      public const string EXTERN_LIBRARY = "libcvextern.so";
-#else
+      #region define the PInvoke file names
+      // The following name are .Net Windows specific
+      // When run under Mono, change the mapping in Emgu.CV.dll.config accordingly
+
       /// <summary>
       /// The file name of the cxcore library
       /// </summary>
@@ -61,7 +42,6 @@ namespace Emgu.CV
       /// The file name of the cvextern library
       /// </summary>
       public const string EXTERN_LIBRARY = "cvextern.dll";
-#endif
       #endregion 
 
       /// <summary>
@@ -91,6 +71,7 @@ namespace Emgu.CV
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
       }
 
+      /*
       private static void LoadLibrary(string libraryName, string errorMessage)
       {
          errorMessage = String.Format(errorMessage, libraryName);
@@ -104,7 +85,7 @@ namespace Emgu.CV
          {
             throw new DllNotFoundException(errorMessage, e);
          }
-      }
+      }*/
 
       #region CXCORE_LIBRARY
 
@@ -124,12 +105,12 @@ namespace Emgu.CV
       /*
       private static IntPtr DefaultCvAllocFunc(uint size, IntPtr UserData)
       {
-         GC.AddMemoryPressure(size);
          return Marshal.AllocHGlobal((int)size);
       }
 
       private static int DefaultCvFreeFunc(IntPtr ptr, IntPtr userData)
       {
+         Marshal.FreeHGlobal(ptr);
       }*/
 
       /// <summary>

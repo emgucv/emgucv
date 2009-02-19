@@ -22,36 +22,36 @@ namespace Emgu.CV.ML
       private MlEnum.SVM_KERNEL_TYPE _kernelType;
 
       /// <summary>
-      /// for poly
+      /// For poly
       /// </summary>
       private double _degree;
       /// <summary>
-      /// for poly/rbf/sigmoid
+      /// For poly/rbf/sigmoid
       /// </summary>
       private double _gamma;
       /// <summary>
-      /// for poly/sigmoid
+      /// For poly/sigmoid
       /// </summary>
       private double _coef0;
 
       /// <summary>
-      /// for CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
+      /// For CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
       /// </summary>
       private double _c;
       /// <summary>
-      /// for CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
+      /// For CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
       /// </summary>
       private double _nu;
       /// <summary>
-      /// for CV_SVM_EPS_SVR
+      /// For CV_SVM_EPS_SVR
       /// </summary>
       private double _p;
       /// <summary>
-      /// for CV_SVM_C_SVC
+      /// For CV_SVM_C_SVC
       /// </summary>
       private Matrix<float> _classWeights;
       /// <summary>
-      /// termination criteria
+      /// Termination criteria
       /// </summary>
       private MCvTermCriteria _termCrit;
 
@@ -85,7 +85,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for poly
+      /// For poly
       /// </summary>
       public double Degree
       {
@@ -99,7 +99,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for poly/rbf/sigmoid
+      /// For poly/rbf/sigmoid
       /// </summary>
       public double Gamma
       {
@@ -113,7 +113,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for poly/sigmoid
+      /// For poly/sigmoid
       /// </summary>
       public double Coef0
       {
@@ -127,7 +127,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
+      /// For CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
       /// </summary>
       public double C
       {
@@ -141,7 +141,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
+      /// For CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
       /// </summary>
       public double Nu
       {
@@ -155,7 +155,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for CV_SVM_EPS_SVR
+      /// For CV_SVM_EPS_SVR
       /// </summary>
       public double P
       {
@@ -169,7 +169,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// for CV_SVM_C_SVC
+      /// For CV_SVM_C_SVC
       /// </summary>
       public Matrix<float> ClassWeights
       {
@@ -183,7 +183,7 @@ namespace Emgu.CV.ML
          }
       }
       /// <summary>
-      /// termination criteria
+      /// Get or Set the termination criteria
       /// </summary>
       public MCvTermCriteria TermCrit
       {

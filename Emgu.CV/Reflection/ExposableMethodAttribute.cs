@@ -12,9 +12,10 @@ namespace Emgu.CV.Reflection
    {
       private bool _exposable;
       private string _category;
+      private String _genericParametesOptions;
 
       /// <summary>
-      /// Get or Set the Exposable value, if true, this function will be displayed in Operation Menu of ImageBox
+      /// Get or Set the exposable value, if true, this function will be displayed in Operation Menu of ImageBox
       /// </summary>
       public bool Exposable
       {
@@ -29,7 +30,7 @@ namespace Emgu.CV.Reflection
       }
 
       /// <summary>
-      /// 
+      /// The catefory of this function
       /// </summary>
       public String Category
       {
@@ -42,8 +43,6 @@ namespace Emgu.CV.Reflection
             _category = value;
          }
       }
-
-      private String _genericParametesOptions;
 
       /// <summary>
       /// The options for generic parameters

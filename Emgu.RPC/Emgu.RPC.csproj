@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Capture\CaptureClient.cs" />
+    <Compile Include="Capture\DuplexCaptureCallback.cs" />
     <Compile Include="Serial\ISerialService.cs" />
     <Compile Include="Serial\ISerialServiceCallback.cs" />
     <Compile Include="Speech\ISpeechService.cs" />

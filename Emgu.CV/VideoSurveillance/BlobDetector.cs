@@ -16,13 +16,14 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="type">The type of the detector</param>
       public BlobDetector(CvEnum.BLOB_DETECTOR_TYPE type)
       {
-         if (type == Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.Simple)
+         switch (type)
          {
-            _ptr = CvInvoke.CvCreateBlobDetectorSimple();
-         }
-         else if (type == Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC)
-         {
-            _ptr = CvInvoke.CvCreateBlobDetectorCC();
+            case Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.Simple:
+               _ptr = CvInvoke.CvCreateBlobDetectorSimple();
+               break;
+            case Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC:
+               _ptr = CvInvoke.CvCreateBlobDetectorCC();
+               break;
          }
       }
 

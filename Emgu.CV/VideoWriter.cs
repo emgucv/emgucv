@@ -46,7 +46,7 @@ namespace Emgu.CV
       /// <typeparam name="D">The depth of the frame</typeparam>
       /// <param name="frame">The frame to be written to the video writer</param>
       public void WriteFrame<C, D>(Image<C, D> frame)
-         where C : IColor, new()
+         where C : struct, IColor
          where D : new()
       {
          CvInvoke.cvWriteFrame(_ptr, frame.Ptr);

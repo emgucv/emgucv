@@ -20,19 +20,11 @@ namespace Emgu.CV
        ICapture
    {
       /// <summary>
-      /// the width of this capture
-      /// </summary>
-      private int _width;
-      /// <summary>
-      /// the height of this capture
-      /// </summary>
-      private int _height;
-
-      /// <summary>
       /// the type of flipping
       /// </summary>
       private CvEnum.FLIP _flipType = Emgu.CV.CvEnum.FLIP.NONE;
 
+      #region Properties
       /// <summary>
       /// Get and set the flip type
       /// </summary>
@@ -80,6 +72,25 @@ namespace Emgu.CV
          }
       }
 
+      ///<summary> The width of this capture</summary>
+      public int Width
+      {
+         get
+         {
+            return System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH));
+         }
+      }
+
+      ///<summary> The height of this capture </summary>
+      public int Height
+      {
+         get
+         {
+            return System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+         }
+      }
+      #endregion
+
       ///<summary> Create a capture using the default camera </summary>
       public Capture()
          : this(0)
@@ -107,13 +118,12 @@ namespace Emgu.CV
       /// <param name="fileName">The file name of the movie</param>
       public Capture(String fileName)
       {
-         System.IO.FileInfo info = new System.IO.FileInfo(fileName);
-         if (!info.Exists)
+         if (! System.IO.File.Exists(fileName) )
             throw new System.IO.FileNotFoundException(String.Format("The file: {0} cannot be found", fileName));
 
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
-            throw new NullReferenceException("Unable to create capture from file:" + fileName);
+            throw new NullReferenceException("Unable to create capture from file: " + fileName);
       }
       #endregion
 
@@ -129,26 +139,6 @@ namespace Emgu.CV
 #endif
       }
       #endregion
-
-      ///<summary> The width of this capture</summary>
-      public int Width
-      {
-         get
-         {
-            if (_width == 0) _width = System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH));
-            return _width;
-         }
-      }
-
-      ///<summary> The height of this capture </summary>
-      public int Height
-      {
-         get
-         {
-            if (_height == 0) _height = System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
-            return _height;
-         }
-      }
 
       /// <summary>
       /// Obtain the capture property
@@ -240,9 +230,10 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///Capture a Bgr image frame that is half width and half height.
+      /// Capture a Bgr image frame that is half width and half height. 
+      /// Mainly used by WCF when sending image to remote locations in a band width conservertive senario
       ///</summary>
-      /// <remarks>Internally, this is a cvQueryFrame operation follow by a cvPyrDown</remarks>
+      ///<remarks>Internally, this is a cvQueryFrame operation follow by a cvPyrDown</remarks>
       ///<returns> A Bgr image frame that is half width and half height</returns>
       public virtual Image<Bgr, Byte> QuerySmallFrame()
       {

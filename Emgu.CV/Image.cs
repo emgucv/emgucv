@@ -19,7 +19,9 @@ namespace Emgu.CV
    /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz or Ycc)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
-   public class Image<TColor, TDepth> : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> where TColor : IColor, new()
+   public class Image<TColor, TDepth> 
+      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> 
+      where TColor : struct, IColor
    {
       private TDepth[, ,] _array;
 
@@ -2359,7 +2361,8 @@ namespace Emgu.CV
          Exposable = true,
          Category = "Convertion",
          GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte,System.Double")]
-      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() where TOtherColor : Emgu.CV.IColor, new()
+      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() 
+         where TOtherColor : struct, IColor
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);
          res.ConvertFrom(this);
@@ -2372,7 +2375,8 @@ namespace Emgu.CV
       /// <typeparam name="TSrcColor">The color type of the source image</typeparam>
       /// <typeparam name="TSrcDepth">The color depth of the source image</typeparam>
       /// <param name="srcImage">The sourceImage</param>
-      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) where TSrcColor : Emgu.CV.IColor, new()
+      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) 
+         where TSrcColor : struct, IColor
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image

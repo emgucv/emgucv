@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV;
 
-namespace Emgu.CV
+namespace Emgu.RPC
 {
    ///<summary>
    ///A simple implementation of the IDuplexCaptureCallback interface

@@ -169,6 +169,7 @@ namespace Emgu.CV.ML.UnitTest
       public void TestSVM()
       {
          int trainSampleCount = 150;
+         int sigma = 60;
 
          #region Generate the traning data and classes
 
@@ -180,15 +181,15 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> sample = new Matrix<float>(1, 2);
 
          Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount / 3, 1);
-         trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
-         trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+         trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(sigma));
+         trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(sigma));
 
          Matrix<float> trainData2 = trainData.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
-         trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(50));
+         trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(sigma));
 
          Matrix<float> trainData3 = trainData.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
-         trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
-         trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+         trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(sigma));
+         trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(sigma));
 
          Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount / 3, 1);
          trainClasses1.SetValue(1);
@@ -207,8 +208,9 @@ namespace Emgu.CV.ML.UnitTest
             p.C = 1;
             p.TermCrit = new MCvTermCriteria(100, 0.00001);
 
-            bool trained = model.Train(trainData, trainClasses, null, null, p);
-
+            //bool trained = model.Train(trainData, trainClasses, null, null, p);
+            bool trained = model.TrainAuto(trainData, trainClasses, null, null, p.MCvSVMParams, 5);
+            
             for (int i = 0; i < img.Height; i++)
             {
                for (int j = 0; j < img.Width; j++)

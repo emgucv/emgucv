@@ -114,11 +114,8 @@ namespace Emgu.CV.VideoSurveillance
       public IEnumerator<MCvBlob> GetEnumerator()
       {
          for (int i = 0; i < Count; i++)
-         {
             yield return this[i];
-         }
       }
-
       #endregion
 
       #region IEnumerable Members

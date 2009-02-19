@@ -32,8 +32,8 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="trainData">The training data.</param>
       /// <param name="responses">The response for the training data.</param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
       /// <param name="parameters">The parameters for SVM</param>
       /// <returns></returns>
       public bool Train(
@@ -69,8 +69,41 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="trainData">The training data.</param>
       /// <param name="responses">The response for the training data.</param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
+      /// <param name="parameters">The parameters for SVM</param>
+      /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
+      /// <returns></returns>
+      public bool TrainAuto(
+         Matrix<float> trainData,
+         Matrix<float> responses,
+         Matrix<int> varIdx,
+         Matrix<int> sampleIdx,
+         MCvSVMParams parameters,
+         int kFold)
+      {
+         return TrainAuto(
+            trainData,
+            responses,
+            varIdx,
+            sampleIdx,
+            parameters,
+            kFold,
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.C),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.GAMMA),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.P),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.NU),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.COEF),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.DEGREE));
+      }
+
+      /// <summary>
+      /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
+      /// </summary>
+      /// <param name="trainData">The training data.</param>
+      /// <param name="responses">The response for the training data.</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
       /// <param name="parameters">The parameters for SVM</param>
       /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
       /// <param name="cGrid">cGrid</param>
@@ -87,12 +120,12 @@ namespace Emgu.CV.ML
          Matrix<int> sampleIdx,
          MCvSVMParams parameters,
          int kFold,
-         ref MCvParamGrid cGrid,
-         ref MCvParamGrid gammaGrid,
-         ref MCvParamGrid pGrid,
-         ref MCvParamGrid nuGrid,
-         ref MCvParamGrid coefGrid,
-         ref MCvParamGrid degreeGrid)
+         MCvParamGrid cGrid,
+         MCvParamGrid gammaGrid,
+         MCvParamGrid pGrid,
+         MCvParamGrid nuGrid,
+         MCvParamGrid coefGrid,
+         MCvParamGrid degreeGrid)
       {
          return MlInvoke.CvSVMTrainAuto(
             Ptr,

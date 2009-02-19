@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
 using System.Threading;
+using Emgu.CV;
 
-namespace Emgu.CV
+namespace Emgu.RPC
 {
-#if LINUX
-    /*
-        Since mono-olive do not support creation of DuplexChannelFactory, this class is disabled
-    */
-#else
-
    /// <summary>
    /// A Camera capture client that use DuplexCaptureCallback to request image from the server
    /// </summary>
@@ -87,5 +82,4 @@ namespace Emgu.CV
       }
 
    }
-#endif
 }

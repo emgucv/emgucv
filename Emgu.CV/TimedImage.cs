@@ -8,7 +8,9 @@ namespace Emgu.CV
    /// The Image which contains time stamp which specified what time this image is created 
    /// </summary>
    [Serializable]
-   public class TimedImage<TColor, TDepth> : Image<TColor, TDepth> where TColor : IColor, new()
+   public class TimedImage<TColor, TDepth> 
+      : Image<TColor, TDepth> 
+      where TColor : struct, IColor
    {
       private System.DateTime _timestamp;
 

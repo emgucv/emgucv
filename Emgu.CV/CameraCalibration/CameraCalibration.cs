@@ -182,7 +182,7 @@ namespace Emgu.CV
       /// <param name="intrin">The intrinsic camera parameters</param>
       /// <returns>The corrected image</returns>
       public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
-         where TColor : IColor, new()
+         where TColor : struct, IColor
          where TDepth : struct, IComparable
       {
          Image<TColor, TDepth> res = src.CopyBlank();
@@ -380,22 +380,19 @@ namespace Emgu.CV
          int elementCount = 0;
          foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
 
-         float[,] res = new float[elementCount, 3];
-         int sizeOfT = StructSize.MCvPoint3D32f;
-         GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
-         Int64 address = handle1.AddrOfPinnedObject().ToInt64();
+         Matrix<float> res = new Matrix<float>(elementCount, 3);
+         Int64 address = res.MCvMat.data.ToInt64();
 
          foreach (MCvPoint3D32f[] d in data)
          {
-            int lengthInBytes = d.Length * sizeOfT;
-            GCHandle handle2 = GCHandle.Alloc(d, GCHandleType.Pinned);
-            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle2.AddrOfPinnedObject(), lengthInBytes);
-            handle2.Free();
+            int lengthInBytes = d.Length * StructSize.MCvPoint3D32f;
+            GCHandle handle = GCHandle.Alloc(d, GCHandleType.Pinned);
+            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle.AddrOfPinnedObject(), lengthInBytes);
+            handle.Free();
             address += lengthInBytes;
          }
-         handle1.Free();
 
-         return new Matrix<float>(res);
+         return res;
       }
 
       private static Matrix<float> ToMatrix(PointF[][] data)
@@ -403,22 +400,19 @@ namespace Emgu.CV
          int elementCount = 0;
          foreach (PointF[] d in data) elementCount += d.Length;
 
-         float[,] res = new float[elementCount, 2];
-         int sizeOfT = StructSize.PointF;
-         GCHandle handle1 = GCHandle.Alloc(res, GCHandleType.Pinned);
-         Int64 address = handle1.AddrOfPinnedObject().ToInt64();
+         Matrix<float> res = new Matrix<float>(elementCount, 2);
+         Int64 address = res.MCvMat.data.ToInt64();
 
          foreach (PointF[] d in data)
          {
-            int lengthInBytes = d.Length * sizeOfT;
-            GCHandle handle2 = GCHandle.Alloc(d, GCHandleType.Pinned);
-            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle2.AddrOfPinnedObject(), lengthInBytes);
-            handle2.Free();
+            int lengthInBytes = d.Length * StructSize.PointF;
+            GCHandle handle = GCHandle.Alloc(d, GCHandleType.Pinned);
+            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle.AddrOfPinnedObject(), lengthInBytes);
+            handle.Free();
             address += lengthInBytes;
          }
-         handle1.Free();
 
-         return new Matrix<float>(res);
+         return res;
       }
       #endregion
    }

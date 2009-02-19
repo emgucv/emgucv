@@ -1,4 +1,3 @@
-/*
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,9 +14,25 @@ namespace Emgu.CV
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
    public class Map<TColor, TDepth> : Image<TColor, TDepth> 
-      where TColor : IColor, new() 
+      where TColor : struct, IColor
    {
       private RectangleF _area;
+
+      /// <summary>
+      /// Get the area of this map as a rectangle
+      /// </summary>
+      public RectangleF Area
+      {
+         get { return _area; }
+      }
+
+      /// <summary>
+      /// Get the resolution of this map as a 2D point
+      /// </summary>
+      public PointF Resolution
+      {
+         get { return new PointF(Area.Width / Width, Area.Height / Height); }
+      }
 
       /// <summary>
       /// Create a new Image Map defined by the Rectangle area. The center (0.0, 0.0) of this map is 
@@ -52,26 +67,10 @@ namespace Emgu.CV
       /// <param name="image">The image of this map</param>
       /// <param name="area">The area of this map</param>
       public Map(Image<TColor, TDepth> image, System.Drawing.RectangleF area)
-         : base(image.Width, image.Height)
+         : base(image.Size)
       {
          image.CopyTo(this);
          _area = area;
-      }
-
-      /// <summary>
-      /// The area of this map as a rectangle
-      /// </summary>
-      public RectangleF Area
-      {
-         get { return _area; }
-      }
-
-      /// <summary>
-      /// The resolution of this map as a 2D point
-      /// </summary>
-      public PointF Resolution
-      {
-         get { return new PointF(Area.Width / Width, Area.Height / Height); }
       }
 
       /// <summary>
@@ -81,7 +80,8 @@ namespace Emgu.CV
       /// <returns></returns>
       private Point MapPoint(PointF pt) 
       {
-         return new Point(
+         return 
+            new Point(
              (int) ((pt.X - Area.Left) / Resolution.X),
              (int) ((pt.Y - Area.Top) / Resolution.Y));
       }
@@ -187,4 +187,4 @@ namespace Emgu.CV
       }
    }
 }
-*/
+

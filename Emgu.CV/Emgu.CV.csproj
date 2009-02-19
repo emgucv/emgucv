@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -35,24 +35,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.CV.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Linux|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;LINUX</DefineConstants>
-    <DocumentationFile>..\bin\Emgu.CV.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Linux|AnyCPU' ">
-    <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>TRACE;LINUX</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <DocumentationFile>..\bin\Emgu.CV.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -159,13 +141,11 @@
     <Compile Include="PInvoke\CvType\MIplImage.cs" />
     <Compile Include="CameraCalibration\RotationMatrix2D.cs" />
     <Compile Include="Capture\Capture.cs" />
-    <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Shape\CircleF.cs" />
     <Compile Include="Seq.cs" />
     <Compile Include="ConvolutionKernelF.cs" />
     <Compile Include="PInvoke\CvEnum.cs" />
     <Compile Include="PInvoke\CvInvoke.cs" />
-    <Compile Include="Capture\DuplexCaptureCallback.cs" />
     <Compile Include="Shape\Ellipse.cs" />
     <Compile Include="HaarCascade.cs" />
     <Compile Include="Histogram.cs" />
@@ -184,9 +164,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CV.snk" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    <None Include="Emgu.CV.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

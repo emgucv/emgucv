@@ -19,17 +19,14 @@ namespace Emgu.CV.Reflection
          {
             Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
             if (displayAtts.Length > 0)
-            {
                channelColor.Add(((DisplayColorAttribute)displayAtts[0]).DisplayColor);
-            }
          }
          if (channelColor.Count > 0) return channelColor.ToArray();
 
+         //create default color
          System.Drawing.Color[] res = new System.Drawing.Color[color.Dimension];
-         for (int i = 0; i < color.Dimension; i++)
-         {
+         for (int i = 0; i < res.Length; i++)
             res[i] = System.Drawing.Color.Gray;
-         }
          return res;
       }
 
@@ -43,17 +40,14 @@ namespace Emgu.CV.Reflection
          {
             Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
             if (displayAtts.Length > 0)
-            {
                channelNames.Add(pInfo.Name);
-            }
          }
          if (channelNames.Count > 0) return channelNames.ToArray();
 
+         //Create default channel names
          String[] res = new string[t.Dimension];
-         for (int i = 0; i < t.Dimension; i++)
-         {
-            res[i] = "Channel " + i;
-         }
+         for (int i = 0; i < res.Length; i++)
+            res[i] = String.Format("Channel {0}", i);
          return res;
       }
    }

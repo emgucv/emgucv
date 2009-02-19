@@ -11,14 +11,14 @@ namespace Emgu.CV
    /// </summary>
    public static class StructSize
    {
-      private static int _PointF;
-      private static int _MCvMat;
-      private static int _MCvSeq;
-      private static int _MCvContour;
-      private static int _MIplImage;
-      private static int _MCvSeqBlock;
-      private static int _MCvPoint3D32f;
-      private static int _MCvMatND;
+      private static readonly int _PointF;
+      private static readonly int _MCvMat;
+      private static readonly int _MCvSeq;
+      private static readonly int _MCvContour;
+      private static readonly int _MIplImage;
+      private static readonly int _MCvSeqBlock;
+      private static readonly int _MCvPoint3D32f;
+      private static readonly int _MCvMatND;
 
       /// <summary>
       /// The size of PointF
