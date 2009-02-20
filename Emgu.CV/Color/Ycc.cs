@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Emgu.CV.Structure;
+using Emgu.CV;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    ///<summary> 
    ///Defines a Ycc color (YCrCb JPEG)

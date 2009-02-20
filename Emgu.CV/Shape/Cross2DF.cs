@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Drawing;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// A 2D cross

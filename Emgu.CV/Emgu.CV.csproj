@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PInvoke\CvType\RangeF.cs" />
+    <Compile Include="StereoGC.cs" />
     <Compile Include="VideoSurveillance\BackgroundStatisticsModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
     <Compile Include="VideoSurveillance\BlobSeq.cs" />
@@ -121,7 +122,7 @@
     <Compile Include="Shape\IConvexPolygonF.cs" />
     <Compile Include="Shape\Triangle2DF.cs" />
     <Compile Include="Shape\Triangle3DF.cs" />
-    <Compile Include="StereoBMState.cs" />
+    <Compile Include="StereoBM.cs" />
     <Compile Include="StructuringElementEx.cs" />
     <Compile Include="SURFFeature.cs" />
     <Compile Include="MemStorage.cs" />

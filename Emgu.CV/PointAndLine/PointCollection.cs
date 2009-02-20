@@ -279,5 +279,34 @@ namespace Emgu.CV
          Marshal.FreeHGlobal(block);
          return rect;
       }
+
+      /// <summary>
+      /// Transforms 1-channel disparity map to 3-channel image, a 3D surface.
+      /// </summary>
+      /// <param name="disparity">Disparity map</param>
+      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      /// <return>The reprojected 3D points</return>
+      public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Int16> disparity, Matrix<double> Q)
+      {
+         System.Drawing.Size size = disparity.Size;
+         MCvPoint3D32f[] points3D = new MCvPoint3D32f[size.Width * size.Height];
+         GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
+         IntPtr image3D = Marshal.AllocHGlobal(StructSize.MIplImage);
+         CvInvoke.cvInitImageHeader(
+            image3D,
+            size,
+            Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F,
+            3,
+            0,
+            (size.Width & 3) == 0 ? 4 : 0);
+         Marshal.WriteIntPtr(
+            image3D, 
+            Marshal.OffsetOf(typeof(MIplImage), "imageData").ToInt32(), 
+            handle.AddrOfPinnedObject());
+         CvInvoke.cvReprojectImageTo3D(disparity, image3D, Q);
+         Marshal.FreeHGlobal(image3D);
+         handle.Free();
+         return points3D;
+      }
    }
 }

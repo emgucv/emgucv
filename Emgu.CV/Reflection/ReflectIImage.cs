@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.Reflection
 {

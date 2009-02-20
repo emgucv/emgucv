@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Emgu.CV.Structure;
+using Emgu.CV;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    ///<summary> 
    ///Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
@@ -49,7 +49,6 @@ namespace Emgu.CV
       }
 
       #endregion
-
 
       #region IColor Members
       /// <summary>

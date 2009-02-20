@@ -861,11 +861,32 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
          Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
-         Image<Gray, float> leftDisparity = new Image<Gray, float>(left.Size);
-         Image<Gray, float> rightDisparity = new Image<Gray, float>(left.Size);
-         IntPtr state = CvInvoke.cvCreateStereoGCState(16, 2);
-         CvInvoke.cvFindStereoCorrespondenceGC(left, right, leftDisparity, rightDisparity, state, 0);
-         CvInvoke.cvReleaseStereoGCState(ref state);
+         Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
+         Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
+
+         /*
+         StereoBM bm = new StereoBM(Emgu.CV.CvEnum.STEREO_BM_TYPE.CV_STEREO_BM_BASIC, 0);
+         bm.FindStereoCorrespondence(left, right, leftDisparity);
+         */
+
+         StereoGC gc = new StereoGC(10, 5);
+         Stopwatch watch = Stopwatch.StartNew();
+         gc.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+
+         Matrix<double> q = new Matrix<double>(4, 4);
+         q.SetIdentity();
+         MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(leftDisparity * (-16), q);
+         
+         float min = (float) 1.0e10, max = 0;
+         foreach (MCvPoint3D32f p in points)
+         {
+            if (p.z < min) min = p.z;
+            else if (p.z > max) max = p.z;
+         }
+         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+         
          //ImageViewer.Show(leftDisparity*(-16));
       }
 

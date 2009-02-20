@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
@@ -110,6 +109,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Emgu.CV.Extern", "..\..\Emgu.CV.Extern\Emgu.CV.Extern2005.vcproj", "{0BABD742-CF82-421F-9C01-1DA8C08129AC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simlpe3DReconstruction", "..\..\Emgu.CV.Example\Simlpe3DReconstruction\Simlpe3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -369,6 +374,20 @@ Global
 		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.ActiveCfg = Release|Win32
 		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.Build.0 = Release|Win32
 		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|x86.ActiveCfg = Release|Win32
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

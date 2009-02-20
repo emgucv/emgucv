@@ -4,7 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// A 2D triangle

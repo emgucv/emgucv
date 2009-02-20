@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    ///<summary> A circle </summary>
    [StructLayout(LayoutKind.Sequential)]  

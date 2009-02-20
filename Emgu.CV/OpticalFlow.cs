@@ -41,7 +41,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First frame, at time t</param>
       /// <param name="curr">Second frame, at time t + dt </param>
-      /// <param name="prevPyrBuffer">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient</param>
+      /// <param name="prevPyrBuffer">Buffer for the pyramid for the first frame. If it is not NULL, the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient</param>
       /// <param name="currPyrBuffer">Similar to prev_pyr, used for the second frame</param>
       /// <param name="prevFeatures">Array of points for which the flow needs to be found</param>
       /// <param name="winSize">Size of the search window of each pyramid level</param>

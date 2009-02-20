@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using Emgu.CV.Structure;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    ///<summary>
    ///An ellipse

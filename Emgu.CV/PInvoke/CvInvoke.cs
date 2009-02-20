@@ -3877,6 +3877,20 @@ namespace Emgu.CV
          IntPtr state);
 
       /// <summary>
+      /// Computes disparity map for the input rectified stereo pair.
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindStereoCorrespondenceBM(
+         IntPtr left,
+         IntPtr right,
+         IntPtr disparity,
+         ref MCvStereoBMState state);
+
+      /// <summary>
       /// Creates the stereo correspondence structure and initializes it. 
       /// </summary>
       /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
@@ -3910,6 +3924,24 @@ namespace Emgu.CV
          IntPtr dispLeft, 
          IntPtr dispRight,
          IntPtr state,
+         int useDisparityGuess);
+
+      /// <summary>
+      /// Computes disparity maps for the input rectified stereo pair
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
+      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvFindStereoCorrespondenceGC(
+         IntPtr left,
+         IntPtr right,
+         IntPtr dispLeft,
+         IntPtr dispRight,
+         ref MCvStereoGCState state,
          int useDisparityGuess);
 
       /// <summary>

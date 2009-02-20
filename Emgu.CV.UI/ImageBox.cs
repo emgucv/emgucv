@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Diagnostics;
 using Emgu.CV;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.UI
 {

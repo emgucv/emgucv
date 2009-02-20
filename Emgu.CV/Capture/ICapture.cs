@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

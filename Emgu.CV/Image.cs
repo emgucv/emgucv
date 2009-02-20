@@ -34,7 +34,12 @@ namespace Emgu.CV
       /// The dimension of color
       /// </summary>
       private static int _numberOfChannels;
-      
+
+      /// <summary>
+      /// Offset of roi
+      /// </summary>
+      private static readonly int _roiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
+
       #region constructors
       ///<summary>
       ///Create an empty Image
@@ -238,7 +243,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateImageHeader(new System.Drawing.Size(cols, rows), CvDepth, numberOfChannels);
          GC.AddMemoryPressure(StructSize.MIplImage);
 
-         Debug.Assert(Marshal.ReadInt32(Ptr, IplImageOffset.align) == 4, "Only 4 align is supported at this moment");
+         Debug.Assert(MIplImage.align == 4, "Only 4 align is supported at this moment");
 
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
@@ -403,7 +408,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Marshal.ReadIntPtr(Ptr, IplImageOffset.roi) != IntPtr.Zero;
+            return Marshal.ReadIntPtr(Ptr, _roiOffset) != IntPtr.Zero;
          }
       }
 
@@ -474,7 +479,7 @@ namespace Emgu.CV
       ///<returns> A copy of the image</returns>
       public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          Copy(res, mask);
          return res;
       }
@@ -1264,7 +1269,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, TDepth> Canny(TColor thresh, TColor threshLinking)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          double[] t1 = thresh.MCvScalar.ToArray();
          double[] t2 = threshLinking.MCvScalar.ToArray();
          Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
@@ -1519,7 +1524,7 @@ namespace Emgu.CV
       ///<returns> The result of the AND operation</returns>
       public Image<TColor, TDepth> And(Image<TColor, TDepth> img2)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
          return res;
       }
@@ -1532,7 +1537,7 @@ namespace Emgu.CV
       ///<returns> The result of the AND operation</returns>
       public Image<TColor, TDepth> And(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
          return res;
       }
@@ -1542,7 +1547,7 @@ namespace Emgu.CV
       ///<returns> The result of the AND operation</returns>
       public Image<TColor, TDepth> And(TColor val)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
          return res;
       }
@@ -1553,7 +1558,7 @@ namespace Emgu.CV
       ///<returns> The result of the AND operation</returns>
       public Image<TColor, TDepth> And(TColor val, Image<Gray, Byte> mask)
       {
-         Image<TColor, TDepth> res = CopyBlank();
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
          return res;
       }

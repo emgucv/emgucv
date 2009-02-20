@@ -11,7 +11,10 @@ namespace Emgu.CV.ML
    /// </summary>
    public class MlInvoke
    {
-      private const string EXTERN_LIBRARY = "cvextern.dll";
+      /// <summary>
+      /// Call the same extern library as defined in Emgu.CV.CvInvoke
+      /// </summary>
+      private const string EXTERN_LIBRARY = Emgu.CV.CvInvoke.EXTERN_LIBRARY;
 
       #region CvStatModel
       /// <summary>

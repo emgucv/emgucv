@@ -109,6 +109,7 @@ namespace Emgu.CV.Structure
       public IntPtr imageDataOrigin;
    }
 
+   /*
    /// <summary>
    /// Offset in bytes for different fields of IplImage
    /// </summary>
@@ -166,5 +167,5 @@ namespace Emgu.CV.Structure
       /// Offset of roi
       /// </summary>
       public static readonly int roi = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
-   }
+   }*/
 }
