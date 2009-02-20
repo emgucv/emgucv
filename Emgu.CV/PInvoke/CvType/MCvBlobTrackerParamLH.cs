@@ -14,10 +14,10 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// see Prob.h 
       /// </summary>
-      int HistType; 
+      public int HistType; 
       /// <summary>
       /// 
       /// </summary>
-      int ScaleAfter;
+      public int ScaleAfter;
    }
 }
