@@ -1,4 +1,4 @@
-set RELEASE-NAME=Emgu.CV.Windows.Binary-1.5.0.0
+set RELEASE-NAME=Emgu.CV.Binary-1.5.0.0
 set RELEASE-FOLDER=release_zip
 set RELEASE-ZIP=%RELEASE-NAME%.zip
 
