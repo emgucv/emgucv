@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
@@ -44,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util", "..\..\Emgu.Uti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Emgu.CV.Example\MotionDetection\MotionDetection.csproj", "{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlannarSubdivision", "..\..\Emgu.CV.Example\PlannarSubdivision\PlannarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\PlanarSubdivision\PlanarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.Example\CPlusPlus\CPlusPlus.vcproj", "{32330110-727C-41A1-9377-6BA41002983D}"
 EndProject
@@ -53,6 +52,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\SURFFeature\SURFFeature.csproj", "{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV.UI\Emgu.CV.UI.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simlpe3DReconstruction", "..\..\Emgu.CV.Example\Simlpe3DReconstruction\Simlpe3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -284,6 +285,20 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

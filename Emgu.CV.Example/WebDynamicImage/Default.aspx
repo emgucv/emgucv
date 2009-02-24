@@ -3,6 +3,8 @@
 <%@ Import Namespace="System" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="Emgu.CV" %>
+<%@ Import Namespace="Emgu.CV.Structure" %>
+<%@ Import Namespace="System.Drawing" %>
 
 <%
     Response.Clear();
@@ -14,7 +16,7 @@
         img.Draw(
             DateTime.Now.Ticks.ToString(), 
             ref font, 
-            new Point2D<int>(5, img.Height - 5), 
+            new Point(5, img.Height - 5), 
             new Bgr(255.0, 255.0, 255.0));
         img._Dilate(1);
 
