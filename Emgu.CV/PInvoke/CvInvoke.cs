@@ -3804,9 +3804,9 @@ namespace Emgu.CV
       /// <param name="points2">Array of the second image points of the same size and format as points1</param>
       /// <param name="fundamentalMatrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
       /// <param name="method">Method for computing the fundamental matrix </param>
-      /// <param name="param1"></param>
-      /// <param name="param2"></param>
-      /// <param name="status"></param>
+      /// <param name="param1">Use 3.0 for default. The parameter is used for RANSAC method only. It is the maximum distance from point to epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. Usually it is set somewhere from 1 to 3. </param>
+      /// <param name="param2">Use 0.99 for default. The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
+      /// <param name="status">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1’s.</param>
       /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvFindFundamentalMat(IntPtr points1,
@@ -3818,12 +3818,12 @@ namespace Emgu.CV
          IntPtr status);
 
       /// <summary>
-      /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]T, so that: 
-      /// lT*[x, y, 1]T=0, or
+      /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]^T, so that: 
+      /// l^T*[x, y, 1]^T=0, or
       /// a*x + b*y + c = 0
       /// From the fundamental matrix definition (see cvFindFundamentalMatrix discussion), line l2 for a point p1 in the first image (which_image=1) can be computed as: 
-      /// l2=F*p1and the line l1 for a point p2 in the second image (which_image=1) can be computed as: 
-      /// l1=FT*p2Line coefficients are defined up to a scale. They are normalized (a2+b2=1) are stored into correspondent_lines
+      /// l2=F*p1 and the line l1 for a point p2 in the second image (which_image=1) can be computed as: 
+      /// l1=F^T*p2Line coefficients are defined up to a scale. They are normalized (a2+b2=1) are stored into correspondent_lines
       /// </summary>
       /// <param name="points">The input points. 2xN, Nx2, 3xN or Nx3 array (where N number of points). Multi-channel 1xN or Nx1 array is also acceptable.</param>
       /// <param name="whichImage">Index of the image (1 or 2) that contains the points</param>
@@ -3955,7 +3955,6 @@ namespace Emgu.CV
          IntPtr disparity,
          IntPtr image3D, 
          IntPtr Q );
-
 
       #endregion 
 

@@ -494,7 +494,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestPlannarSubdivision1()
+      public void TestPlanarSubdivision1()
       {
          int pointCount = 3000;
 
@@ -533,7 +533,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestPlannarSubdivision2()
+      public void TestPlanarSubdivision2()
       {
          PointF[] pts = new PointF[33];
 
@@ -843,15 +843,17 @@ namespace Emgu.CV.Test
          }
          #endregion
 
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600);
+         #region Draw the points and the convex hull
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600, new Bgr(255.0, 255.0, 255.0));
          foreach (PointF p in pts)
          {
-            img.Draw(new CircleF(p, 3), new Bgr(255.0, 255.0, 255.0), 1);
+            img.Draw(new CircleF(p, 3), new Bgr(0.0, 0.0, 0.0), 1);
          }
-         System.Drawing.Point[] convexHull = Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, delegate(System.Drawing.PointF p) { return new System.Drawing.Point((int)p.X, (int)p.Y); });
+
          img.DrawPolyline(
-             convexHull,
+             Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, Point.Round),
              true, new Bgr(255.0, 0.0, 0.0), 1);
+         #endregion
 
          //ImageViewer.Show(img);
       }
@@ -894,19 +896,20 @@ namespace Emgu.CV.Test
       public void TestEllipseFitting()
       {
          System.Random r = new Random();
+         int sampleCount = 100;
 
          Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
-         List<PointF> pts = new List<PointF>();
-         for (int i = 0; i <= 100; i++)
+         PointF[] pts = new PointF[sampleCount];
+         for (int i = 0; i < pts.Length; i++)
          {
             int x = r.Next(100) + 20;
             int y = r.Next(300) + 50;
             img[y, x] = new Bgr(255.0, 255.0, 255.0);
-            pts.Add(new PointF(x, y));
+            pts[i] = new PointF(x, y);
          }
 
          Stopwatch watch = Stopwatch.StartNew();
-         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts.ToArray());
+         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts);
          watch.Stop();
          Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + "milliseconds");
 

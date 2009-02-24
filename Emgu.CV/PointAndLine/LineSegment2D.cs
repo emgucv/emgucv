@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace Emgu.CV
+namespace Emgu.CV.Structure
 {
    /// <summary> 
    /// A line segment 

@@ -80,6 +80,15 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a matrix of the specific size
+      /// </summary>
+      /// <param name="size">The size of the matrix</param>
+      public Matrix(System.Drawing.Size size)
+         : this(size.Height, size.Width)
+      {
+      }
+
+      /// <summary>
       /// Create a matrix of the specific size and channels
       /// </summary>
       /// <param name="rows">The number of rows</param>

@@ -18,7 +18,7 @@ namespace Emgu.CV.ML.UnitTest
          int K = 10;
          int trainSampleCount = 100;
 
-         #region Generate the traning data and classes
+         #region Generate the training data and classes
 
          Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
          Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
@@ -171,7 +171,7 @@ namespace Emgu.CV.ML.UnitTest
          int trainSampleCount = 150;
          int sigma = 60;
 
-         #region Generate the traning data and classes
+         #region Generate the training data and classes
 
          Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
          Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
@@ -262,7 +262,7 @@ namespace Emgu.CV.ML.UnitTest
             new Bgr(255, 0, 0)};
          int trainSampleCount = 150;
 
-         #region Generate the traning data and classes
+         #region Generate the training data and classes
          Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
          Matrix<int> trainClasses = new Matrix<int>(trainSampleCount, 1);
 

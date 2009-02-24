@@ -972,11 +972,8 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestDFT()
+      public void TestMatrixDFT()
       {
-         Image<Gray, float> matA = new Image<Gray, float>("stuff.jpg");
-
-         #region test DFT for matB
          //The matrix to be transformed.
          Matrix<float> matB = new Matrix<float>(
             new float[,] { 
@@ -996,31 +993,42 @@ namespace Emgu.CV.Test
          CvInvoke.cvDFT(dftIn, dftOut, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
          //The real part of the Fourior Transform
-         Matrix<float> outReal = new Matrix<float>(matBDft.Rows, matBDft.Cols);
+         Matrix<float> outReal = new Matrix<float>(matBDft.Size);
          //The imaginary part of the Fourior Transform
-         Matrix<float> outIm = new Matrix<float>(matBDft.Rows, matBDft.Cols);
+         Matrix<float> outIm = new Matrix<float>(matBDft.Size);
          CvInvoke.cvSplit(dftOut, outReal, outIm, IntPtr.Zero, IntPtr.Zero);
-         #endregion
+      }
 
-         Image<Gray, float> convResult1 = new Image<Gray, float>(matA.Cols + matB.Cols - 1, matA.Rows + matB.Rows - 1);
-         int dft_rows = CvInvoke.cvGetOptimalDFTSize(convResult1.Rows);
-         int dft_cols = CvInvoke.cvGetOptimalDFTSize(convResult1.Cols);
+      [Test]
+      public void TestImageDFT()
+      {
+         Image<Gray, float> matA = new Image<Gray, float>("stuff.jpg");
 
-         Matrix<float> dftA = new Matrix<float>(dft_rows, dft_cols);
+         //The matrix to be convoled with matA, a bluring filter
+         Matrix<float> matB = new Matrix<float>(
+            new float[,] { 
+            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 
+            {1.0f/16.0f, 8.0f/16.0f, 1.0f/16.0f}, 
+            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}});
 
-         matA.CopyTo(dftA.GetSubRect(new System.Drawing.Rectangle(0, 0, matA.Width, matA.Height)));
+         Image<Gray, float> convolvedImage = new Image<Gray, float>(matA.Size + matB.Size - new Size(1, 1));
+
+         Matrix<float> dftA = new Matrix<float>(
+            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Rows), 
+            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Cols));
+         matA.CopyTo(dftA.GetSubRect(matA.ROI));
 
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
 
-         Matrix<float> dftB = new Matrix<float>(dft_rows, dft_cols);
-         matB.CopyTo(dftB.GetSubRect(new System.Drawing.Rectangle(0, 0, matB.Width, matB.Height)));
+         Matrix<float> dftB = new Matrix<float>(dftA.Size);
+         matB.CopyTo(dftB.GetSubRect(new System.Drawing.Rectangle(Point.Empty, matB.Size)));
          CvInvoke.cvDFT(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
          CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
-         CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convResult1.Rows);
-         dftA.GetSubRect(new System.Drawing.Rectangle(0, 0, convResult1.Width, convResult1.Height)).CopyTo(convResult1);
+         CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convolvedImage.Rows);
+         dftA.GetSubRect(new System.Drawing.Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
 
-         //ImageViewer.Show(convResult1);
+         //ImageViewer.Show(convolvedImage);
       }
 
       [Test]

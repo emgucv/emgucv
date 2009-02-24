@@ -46,14 +46,14 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Create an ImageViewer from the specific <paramref name="img"/>, using <paramref name="windowName"/> as window name
+      /// Create an ImageViewer from the specific <paramref name="img"/>, using <paramref name="imageName"/> as window name
       /// </summary>
       /// <param name="image">The image to be displayed</param>
-      /// <param name="windowName">The name of the window</param>
-      public ImageViewer(IImage image, string windowName)
+      /// <param name="imageName">The name of the image</param>
+      public ImageViewer(IImage image, string imageName)
          : this(image)
       {
-         this.Text = windowName;
+         this.Text = imageName;
       }
 
       /// <summary>

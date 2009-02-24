@@ -120,6 +120,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simlpe3DReconstruction", ".
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "..\..\Emgu.CV.Example\OCR\OCR.csproj", "{71255E9A-4B3E-4362-8E42-275B1ABBD374}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -388,6 +394,20 @@ Global
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Win32.ActiveCfg = Release|Any CPU
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|.NET.ActiveCfg = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|Win32.ActiveCfg = Release|Any CPU
+		{71255E9A-4B3E-4362-8E42-275B1ABBD374}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
