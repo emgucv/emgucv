@@ -82,8 +82,8 @@ namespace Emgu.CV.UI
       {
          set
          {
-            colorIntensityTextbox.Text = String.Format("[{0}]",
-                value == null ? String.Empty : value.ToString());
+            colorIntensityTextbox.Text = 
+                value == null ? String.Empty : value.ToString();
          }
       }
 
