@@ -3210,7 +3210,7 @@ namespace Emgu.CV
       /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
       /// <param name="thresholdType">Thresholding type </param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvThreshold(
+      public static extern double cvThreshold(
          IntPtr src, 
          IntPtr dst, 
          double threshold,
