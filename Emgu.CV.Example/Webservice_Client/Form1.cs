@@ -39,7 +39,7 @@ namespace Webservice_Client
             if (!_started)
             {  
                //stop grabing frames
-               Application.Idle -= new EventHandler(ProcessImage);
+               Application.Idle -= ProcessImage;
             }
             else
             {
@@ -49,7 +49,7 @@ namespace Webservice_Client
                    new EndpointAddress(serviceUrlBox.Text)
                    ).CreateChannel();
 
-               Application.Idle += new EventHandler(ProcessImage);
+               Application.Idle += ProcessImage;
             }
          }
       }

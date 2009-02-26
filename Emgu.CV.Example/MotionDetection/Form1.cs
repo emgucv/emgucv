@@ -43,7 +43,7 @@ namespace MotionDetection
                 0.05, //in second, parameter for cvCalcMotionGradient
                 0.5); //in second, parameter for cvCalcMotionGradient
 
-            Application.Idle += new EventHandler(ProcessFrame);
+            Application.Idle += ProcessFrame;
          }
       }
 

@@ -56,12 +56,8 @@ namespace Emgu.Util
          Type[] types = new Type[_mi.GetGenericArguments().Length];
          for (int i = 0; i < types.Length; i++)
          {
-            String typeName = ((String)_parameters[i]).Split('|')[1].Split(':')[0];
-            if ((types[i] = Type.GetType(typeName)) == null)
-            {
-               typeName = String.Format("{0},{1}", typeName, typeName.Substring(0, typeName.LastIndexOf(".")));
-               types[i] = Type.GetType(typeName);
-            }
+            GenericParameter p = _parameters[i] as GenericParameter;
+            types[i] = p.SelectedType;
          }
          MethodInfo m = _mi.MakeGenericMethod(types);
          Object[] param = new object[_parameters.Length - types.Length];
@@ -100,11 +96,12 @@ namespace Emgu.Util
 
          if (genericArguments.Length > 0)
          {
-            genericArgString = String.Join(",", Array.ConvertAll<Object, String>(genericParameters, 
-               delegate(Object t)
-               {
-                  return (t as String).Split('|')[1].Split(':')[0];
-               }));
+            genericArgString = 
+               String.Join(",", Array.ConvertAll<Object, String>(genericParameters,
+                  delegate(Object t)
+                  {
+                     return (t as GenericParameter).SelectedType.Name;
+                  }));
          }
 
          switch (language)

@@ -12,7 +12,7 @@ namespace Emgu.CV.Reflection
    {
       private bool _exposable;
       private string _category;
-      private String _genericParametesOptions;
+      private Type[] _genericParametesOptions;
 
       /// <summary>
       /// Get or Set the exposable value, if true, this function will be displayed in Operation Menu of ImageBox
@@ -44,10 +44,22 @@ namespace Emgu.CV.Reflection
          }
       }
 
+      private int[] _genericParametersOptionSizes;
+
+      /// <summary>
+      /// The size for each generic parameter Options
+      /// </summary>
+      public int[] GenericParametersOptionSizes
+      {
+         get { return _genericParametersOptionSizes; }
+         set { _genericParametersOptionSizes = value; }
+      }
+
+
       /// <summary>
       /// The options for generic parameters
       /// </summary>
-      public String GenericParametersOptions
+      public Type[] GenericParametersOptions
       {
          get { return _genericParametesOptions; }
          set { _genericParametesOptions = value; }
@@ -60,7 +72,6 @@ namespace Emgu.CV.Reflection
       {
          //_exposable = false;
          _category = "Various Tools";
-         _genericParametesOptions = string.Empty;
       }
    }
 }

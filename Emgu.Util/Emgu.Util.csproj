@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisposableObject.cs" />
+    <Compile Include="GenericParameter.cs" />
     <Compile Include="ICodeGenerable.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="PinnedArray.cs" />

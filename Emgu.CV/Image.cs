@@ -2365,8 +2365,12 @@ namespace Emgu.CV
       [ExposableMethod(
          Exposable = true,
          Category = "Convertion",
-         GenericParametersOptions = ":Emgu.CV.Bgr,Emgu.CV.Gray;:System.Single,System.Byte,System.Double")]
-      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>() 
+         GenericParametersOptions = new Type[] {
+            typeof(Bgr), typeof(Gray), typeof(Hsv),
+            typeof(System.Single), typeof(System.Byte), typeof(System.Double)},
+         GenericParametersOptionSizes = new int[] { 3, 3 }
+         )]
+      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);

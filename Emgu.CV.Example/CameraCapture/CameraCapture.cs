@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
-using System.Threading;
+//using System.Threading;
 
 namespace CameraCapture
 {
@@ -57,16 +57,16 @@ namespace CameraCapture
          {
             if (_captureInProgress)
             {  //stop the capture
-               Application.Idle -= new EventHandler(ProcessFrame);
                captureButton.Text = "Start Capture";
+               Application.Idle -= ProcessFrame;
             }
             else
             {
                //start the capture
                captureButton.Text = "Stop";
-               Application.Idle += new EventHandler(ProcessFrame);
+               Application.Idle += ProcessFrame;
             }
-
+            
             _captureInProgress = !_captureInProgress;
          }
       }

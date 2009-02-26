@@ -40,7 +40,7 @@ namespace FacialMouseControl
             }
          }
 
-         Application.Idle += new EventHandler(ProcessImage);
+         Application.Idle += ProcessImage;
       }
 
       public void ProcessImage(object sender, EventArgs e)

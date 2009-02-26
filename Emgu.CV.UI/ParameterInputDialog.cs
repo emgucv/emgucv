@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.UI
 {
@@ -170,23 +171,24 @@ namespace Emgu.CV.UI
 
          if (param == null)
          {  // a generic parameter
-            String[] splitTypeName = defaultValue.ToString().Split('|');
-            paramNameLabel.Text = String.Format("{0}:", splitTypeName[0]);
-            String[] splitDefaultValue = splitTypeName[1].Split(':');
 
-            String[] options = splitDefaultValue[1].Split(',');
+            GenericParameter p = defaultValue as GenericParameter;
+
+            paramNameLabel.Text = "";
+
+            String[] options = Array.ConvertAll<Type, String>(p.AvailableTypes, System.Convert.ToString); //splitDefaultValue[1].Split(',');
             ComboBox combo = new ComboBox();
             panel.Controls.Add(combo);
             combo.Location = textBoxStart;
             combo.Items.AddRange(options);
-            combo.SelectedIndex = Array.FindIndex<String>(options, splitDefaultValue[0].Equals);
+            combo.SelectedIndex = Array.FindIndex<String>(options, p.SelectedType.ToString().Equals);
             panel.GetParamFunction =
                 delegate()
                 {
-                   return String.Format("{0}|{1}:{2}", 
-                      splitTypeName[0], 
-                      combo.Text, 
-                      splitDefaultValue[1]);
+                   return
+                      new GenericParameter(
+                       p.AvailableTypes[Array.FindIndex<String>(options, combo.Text.ToString().Equals)],
+                       p.AvailableTypes);
                 };
          }
          else
@@ -311,9 +313,21 @@ namespace Emgu.CV.UI
          #region find all the generic types and options and add that to the lists.
          if (method.ContainsGenericParameters)
          {
-            String[] genericOptions = 
-               (method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute)
-               .GenericParametersOptions.Split(';');
+            ExposableMethodAttribute att = 
+               (method.GetCustomAttributes(typeof(ExposableMethodAttribute), false)[0] as ExposableMethodAttribute);
+            Type[] typeOptions = att.GenericParametersOptions;
+            int[] optionSize = att.GenericParametersOptionSizes;
+
+            GenericParameter[] genericOptions = new GenericParameter[optionSize.Length];
+            int count = 0;
+            for (int i = 0; i < optionSize.Length; i++)
+            {
+               Type[] types = new Type[optionSize[i]];
+               for (int j = 0; j < types.Length; j++)
+                  types[j] = typeOptions[count++];
+               genericOptions[i] = new GenericParameter(types[0], types); 
+            }
+
             Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
             Type[] genericTypes = method.GetGenericArguments();
 
@@ -322,12 +336,7 @@ namespace Emgu.CV.UI
                parameterList.Add(null);
                defaultParameterValueList.Add(
                   defaultParameterValues == null ?
-                  String.Format(
-                     "{0}|{1}", 
-                     genericTypes[i].Name, 
-                     genericOptions[i].Substring(0, 1).Equals(":") ? 
-                        instanceGenericParameters[i].FullName + genericOptions[i] :
-                        genericOptions[i]) :
+                  genericOptions[i]:
                   defaultParameterValues[i]);
             }
          }
