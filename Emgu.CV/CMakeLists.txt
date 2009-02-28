@@ -1,7 +1,11 @@
 PROJECT(Emgu.CV)
 
+IF(WIN32)
+  SET(CS_FLAGS -doc:${LIBRARY_OUTPUT_PATH}/Emgu.CV.XML -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.0/System.ServiceModel.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll)
+ELSE(WIN32)
+  SET(CS_FLAGS -doc:${LIBRARY_OUTPUT_PATH}/Emgu.CV.XML -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.ServiceModel.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll)
+ENDIF(WIN32)
 
-SET(CS_FLAGS -doc:${LIBRARY_OUTPUT_PATH}/Emgu.CV.XML -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.ServiceModel -r:System.Xml -r:System.Drawing -r:System.Data)
 SET(SRC_CV *.cs Shape/*.cs Properties/*.cs PointAndLine/*.cs PInvoke/*.cs
 PInvoke/CvType/*.cs Color/*.cs Capture/*.cs CameraCalibration/*.cs
 Reflection/*.cs VideoSurveillance/*.cs)

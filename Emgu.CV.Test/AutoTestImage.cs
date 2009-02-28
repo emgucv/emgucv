@@ -14,6 +14,7 @@ using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
@@ -742,6 +743,7 @@ namespace Emgu.CV.Test
             {
                float[,] data = destCornerCoordinate2D.Data;
                Point[] res = new Point[destCornerCoordinate2D.Rows];
+               
                for (int i = 0; i < res.Length; i++)
                {
                   res[i] = new Point((int)data[i, 0], (int)data[i, 1]);
@@ -774,9 +776,9 @@ namespace Emgu.CV.Test
                double ratio;
                foreach (MatchedSURFFeature f in matchedFeature)
                {
-                  if (f.Distances.Length == 1 ||
-                     ( ratio = f.Distances[0] / f.Distances[1]) <= matchDistanceRatio ||
-                     ratio >= (1.0 / matchDistanceRatio))
+                  if (f.Distances.Length == 1 || //unique match
+                     ( ratio = f.Distances[0] / f.Distances[1]) <= matchDistanceRatio || //a close match
+                     ratio >= (1.0 / matchDistanceRatio)) // a close match
                   {
                      PointF p = f.ObservedFeature.Point.pt;
                      matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.Distances[0];

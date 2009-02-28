@@ -2329,6 +2329,7 @@ namespace Emgu.CV
              
                //Crop the region of interest
                return tempImage2.Copy(toCrop);
+             
             }
          }
       }
@@ -3729,14 +3730,14 @@ namespace Emgu.CV
       ///<summary> 
       ///the base threshold method shared by public threshold functions 
       ///</summary>
-      private void ThresholdBase(Image<TColor, TDepth> dest, TColor threshold, TColor max_value, CvEnum.THRESH thresh_type)
+      private void ThresholdBase(Image<TColor, TDepth> dest, TColor threshold, TColor maxValue, CvEnum.THRESH threshType)
       {
          double[] t = threshold.MCvScalar.ToArray();
-         double[] m = max_value.MCvScalar.ToArray();
+         double[] m = maxValue.MCvScalar.ToArray();
          Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dst, int channel)
              {
-                CvInvoke.cvThreshold(src, dst, t[channel], m[channel], thresh_type);
+                CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
              };
          ForEachDuplicateChannel<TDepth>(act, dest);
       }

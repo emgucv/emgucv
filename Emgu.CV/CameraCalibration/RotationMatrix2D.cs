@@ -3,16 +3,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV
 {
    /// <summary>
-   /// A 2D rotation matrix
+   /// A (2x3) 2D rotation matrix
    /// </summary>
    ///<typeparam name="T">The depth of the rotation matrix, should be float / double</typeparam>
    [Serializable]
    public class RotationMatrix2D<T> : Matrix<T> where T: struct
    {
+      /// <summary>
+      /// Constructor used to deserialize 2D rotation matrix
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public RotationMatrix2D(SerializationInfo info, StreamingContext context)
+         : base(info, context)
+      {
+      }
+
       /// <summary>
       /// Create an empty (2x3) 2D rotation matrix
       /// </summary>
@@ -21,7 +32,7 @@ namespace Emgu.CV
       { }
 
       /// <summary>
-      /// Create a 2D rotation matrix
+      /// Create a (2x3) 2D rotation matrix
       /// </summary>
       /// <param name="center">Center of the rotation in the source image</param>
       /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>

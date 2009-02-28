@@ -1181,6 +1181,25 @@ namespace Emgu.CV
          int step);
 
       /// <summary>
+      /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
+      /// </summary>
+      /// <param name="mat">Pointer to the matrix header to be initialized.</param>
+      /// <param name="rows">Number of rows in the matrix.</param>
+      /// <param name="cols">Number of columns in the matrix.</param>
+      /// <param name="type">Type of the matrix elements.</param>
+      /// <param name="data">Optional data pointer assigned to the matrix header</param>
+      /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
+      /// <returns></returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvInitMatHeader(
+         IntPtr mat,
+         int rows,
+         int cols,
+         int type,
+         IntPtr data,
+         int step);
+
+      /// <summary>
       /// Sets the channel of interest to a given value. Value 0 means that all channels are selected, 1 means that the first channel is selected etc. If ROI is NULL and coi != 0, ROI is allocated.
       /// </summary>
       /// <param name="image">Image header. </param>
@@ -3806,7 +3825,7 @@ namespace Emgu.CV
       /// <param name="method">Method for computing the fundamental matrix </param>
       /// <param name="param1">Use 3.0 for default. The parameter is used for RANSAC method only. It is the maximum distance from point to epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. Usually it is set somewhere from 1 to 3. </param>
       /// <param name="param2">Use 0.99 for default. The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
-      /// <param name="status">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1’s.</param>
+      /// <param name="status">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1?.</param>
       /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvFindFundamentalMat(IntPtr points1,

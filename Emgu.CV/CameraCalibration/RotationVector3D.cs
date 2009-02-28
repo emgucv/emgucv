@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV
 {
@@ -11,6 +12,16 @@ namespace Emgu.CV
    [Serializable]
    public class RotationVector3D : Matrix<double>
    {
+      /// <summary>
+      /// Constructor used to deserialize 3D rotation vector
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public RotationVector3D(SerializationInfo info, StreamingContext context)
+         : base(info, context)
+      {
+      }
+
       /// <summary>
       /// Create a 3D rotation vector (3x1 Matrix).
       /// </summary>

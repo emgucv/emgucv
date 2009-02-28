@@ -8,7 +8,8 @@ namespace Emgu.CV
    /// <summary>
    /// The extrinsic camera parameters
    /// </summary>
-   public class ExtrinsicCameraParameters
+   [Serializable]
+   public class ExtrinsicCameraParameters : IEquatable<ExtrinsicCameraParameters>
    {
       private RotationVector3D _rotationVector;
       private Matrix<double> _translationVector;
@@ -74,5 +75,19 @@ namespace Emgu.CV
          RotationVector = rotation;
          TranslationVector = translation;
       }
+
+      #region IEquatable<ExtrinsicCameraParameters> Members
+      /// <summary>
+      /// Return true if the two extrinsic camera parameters are equal
+      /// </summary>
+      /// <param name="other">The other extrinsic camera parameters to compare with</param>
+      /// <returns>True if the two extrinsic camera parameters are equal</returns>
+      public bool Equals(ExtrinsicCameraParameters other)
+      {
+         return _rotationVector.Equals(other.RotationVector) &&
+            _translationVector.Equals(other.TranslationVector);
+      }
+
+      #endregion
    }
 }

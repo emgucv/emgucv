@@ -73,28 +73,18 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSerialization()
       {
-         /*
-         Rectangle<int> rec = new Rectangle<int>(new System.Drawing.Rectangle(-10, -2, 20, 12));
-         XmlDocument xdoc = Toolbox.XmlSerialize<Rectangle<int>>(rec);
-         //Trace.WriteLine(xdoc.OuterXml);
-         rec = Toolbox.XmlDeserialize<Rectangle<int>>(xdoc);
-         */
 
          MCvPoint2D64f pt2d = new MCvPoint2D64f(12.0, 5.5);
          Point ptemp = new Point(10, 10);
-         //XmlSerializer x = new XmlSerializer(typeof(Point2D<double>), new Type[] { typeof(System.Drawing.Point) });
-         //StringBuilder sb = new StringBuilder();
-         //x.Serialize(new StringWriter(sb), pt2d);
-         //xdoc = new XmlDocument();
-         //xdoc.Load(sb.ToString());
-         XmlDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d, new Type[] { typeof(System.Drawing.Point) });
+
+         XmlDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d);
          //Trace.WriteLine(xdoc.OuterXml);
-         pt2d = Toolbox.XmlDeserialize<MCvPoint2D64f>(xdoc, new Type[] { typeof(System.Drawing.Point) });
+         pt2d = Toolbox.XmlDeserialize<MCvPoint2D64f>(xdoc);
 
          CircleF cir = new CircleF(new PointF(0.0f, 1.0f), 2.8f);
-         xdoc = Toolbox.XmlSerialize<CircleF>(cir, new Type[] { typeof(System.Drawing.Point) });
+         xdoc = Toolbox.XmlSerialize<CircleF>(cir);
          //Trace.WriteLine(xdoc.OuterXml);
-         cir = Toolbox.XmlDeserialize<CircleF>(xdoc, new Type[] { typeof(System.Drawing.Point) });
+         cir = Toolbox.XmlDeserialize<CircleF>(xdoc);
 
          Image<Bgr, Byte> img1 = new Image<Bgr, byte>("stuff.jpg");
          xdoc = Toolbox.XmlSerialize(img1);
@@ -891,6 +881,58 @@ namespace Emgu.CV.Test
          
          //ImageViewer.Show(leftDisparity*(-16));
       }
+
+
+      [Test]
+      public void TestExtrinsicCameraParametersRuntimeSerialize()
+      {
+         ExtrinsicCameraParameters param = new ExtrinsicCameraParameters();
+      
+         param.RotationVector.SetRandUniform(new MCvScalar(), new MCvScalar(1.0));
+         param.TranslationVector.SetRandUniform(new MCvScalar(), new MCvScalar(100));
+
+         System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+             formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+         Byte[] bytes;
+         using (MemoryStream ms = new MemoryStream())
+         {
+            formatter.Serialize(ms, param);
+            bytes = ms.GetBuffer();
+         }
+         using (MemoryStream ms2 = new MemoryStream(bytes))
+         {
+            ExtrinsicCameraParameters param2 = (ExtrinsicCameraParameters)formatter.Deserialize(ms2);
+            
+            Assert.IsTrue(param.Equals(param2));
+         }
+      }
+
+      [Test]
+      public void TestIntrinsicCameraParametersRuntimeSerialize()
+      {
+         IntrinsicCameraParameters param = new IntrinsicCameraParameters();
+
+         param.DistortionCoeffs.SetRandUniform(new MCvScalar(), new MCvScalar(1.0));
+         param.IntrinsicMatrix.SetRandUniform(new MCvScalar(), new MCvScalar(100));
+
+         System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+             formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+         Byte[] bytes;
+         using (MemoryStream ms = new MemoryStream())
+         {
+            formatter.Serialize(ms, param);
+            bytes = ms.GetBuffer();
+         }
+         using (MemoryStream ms2 = new MemoryStream(bytes))
+         {
+            IntrinsicCameraParameters param2 = (IntrinsicCameraParameters)formatter.Deserialize(ms2);
+
+            Assert.IsTrue(param.Equals(param2));
+         }
+      }
+
 
       [Test]
       public void TestEllipseFitting()

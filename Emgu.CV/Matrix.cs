@@ -40,12 +40,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rows">The number of rows</param>
       /// <param name="cols">The number of cols</param>
-      /// <param name="data">The Pinned/Unmanaged data</param>
+      /// <param name="data">The Pinned/Unmanaged data, the data must not be release before the Matrix is Disposed</param>
       /// <param name="step">The step (row stride in bytes)</param>
+      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the data parameter, however, the memory should not be released until the related Matrix is released. </remarks>
       public Matrix(int rows, int cols, IntPtr data, int step)
+         : this (rows, cols, 1, data, step)
       {
-         AllocateHeader();
-         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvDepth, data, step);
       }
 
       /// <summary>
@@ -53,7 +53,23 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rows">The number of rows</param>
       /// <param name="cols">The number of cols</param>
-      /// <param name="data">The Pinned/Unmanaged data</param>
+      /// <param name="channels">The number of channels</param>
+      /// <param name="data">The Pinned/Unmanaged data, the data must not be release before the Matrix is Disposed</param>
+      /// <param name="step">The step (row stride in bytes)</param>
+      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the data parameter, however, the memory should not be released until the related Matrix is released. </remarks>
+      public Matrix(int rows, int cols, int channels, IntPtr data, int step)
+      {
+         AllocateHeader();
+         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int) CvDepth, channels), data, step);
+      }
+
+      /// <summary>
+      /// Create a Matrix (only header is allocated) using the Pinned/Unmanaged <paramref name="data"/>. The <paramref name="data"/> is not freed by the disposed function of this class 
+      /// </summary>
+      /// <param name="rows">The number of rows</param>
+      /// <param name="cols">The number of cols</param>
+      /// <param name="data">The Pinned/Unmanaged data, the data must not be release before the Matrix is Disposed</param>
+      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the data parameter, however, the memory should not be released until the related Matrix is released. </remarks>
       public Matrix(int rows, int cols, IntPtr data)
          : this(rows, cols, data, 0)
       {

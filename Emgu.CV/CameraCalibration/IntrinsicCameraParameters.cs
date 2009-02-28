@@ -8,7 +8,8 @@ namespace Emgu.CV
    /// <summary>
    /// The intrinsic camera parameters
    /// </summary>
-   public class IntrinsicCameraParameters
+   [Serializable]
+   public class IntrinsicCameraParameters : IEquatable<IntrinsicCameraParameters>
    {
       private Matrix<double> _intrinsicMatrix;
       private Matrix<double> _distortionCoeffs;
@@ -88,5 +89,20 @@ namespace Emgu.CV
          CvInvoke.cvCalibrationMatrixValues(_intrinsicMatrix.Ptr, imgWidth, imgHeight, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
       }
 
+
+      #region IEquatable<IntrinsicCameraParameters> Members
+
+      /// <summary>
+      /// Return true if the two intrinsic camera parameters are equal
+      /// </summary>
+      /// <param name="other">The other intrinsic camera parameters to compare with</param>
+      /// <returns>True if the two intrinsic camera parameters are equal</returns>
+      public bool Equals(IntrinsicCameraParameters other)
+      {
+         return _intrinsicMatrix.Equals(other.IntrinsicMatrix)
+            && _distortionCoeffs.Equals(other.DistortionCoeffs);
+      }
+
+      #endregion
    }
 }
