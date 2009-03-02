@@ -10,7 +10,7 @@ namespace Emgu.CV.Reflection
    /// <summary>
    /// A collection of reflection function that can be applied to IImage object
    /// </summary>
-   public class ReflectIImage
+   public static class ReflectIImage
    {
       /// <summary>
       /// Get all the methods that belongs to the IImage and Image class with ExposableMethodAttribute set true.

@@ -31,8 +31,8 @@ namespace Emgu.CV.UI
       public ImageProperty()
       {
          InitializeComponent();
-         cSharpOperationStackView.Language = ProgrammingLanguage.CSharp;
-         cPlusPlusoperationStackView.Language = ProgrammingLanguage.CPlusPlus;
+         cSharpOperationView.Language = ProgrammingLanguage.CSharp;
+         cPlusPlusOperationView.Language = ProgrammingLanguage.CPlusPlus;
       }
 
       public System.Drawing.Size ImageSize
@@ -71,7 +71,7 @@ namespace Emgu.CV.UI
       {
          set
          {
-            mousePositionTextbox.Text = String.Format("[{0}, {1}]", value.X, value.Y);
+            mousePositionTextbox.Text = value.ToString();
          }
       }
 
@@ -99,12 +99,12 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Set the description of the operation stack
+      /// Set the description of the operation view
       /// </summary>
-      public void SetOperationStack(Stack<Operation> stack)
+      public void SetOperations(List<Operation> operations)
       {
-         cSharpOperationStackView.DisplayOperationStack(stack);
-         cPlusPlusoperationStackView.DisplayOperationStack(stack);
+         cSharpOperationView.DisplayOperations(operations);
+         cPlusPlusOperationView.DisplayOperations(operations);
       }
 
       /// <summary>
@@ -118,12 +118,12 @@ namespace Emgu.CV.UI
          }
       }
 
-      private void clearStackBtn_Click(object sender, EventArgs e)
+      private void clearOperationBtn_Click(object sender, EventArgs e)
       {
          _imageBox.ClearOperation();
       }
 
-      private void popStackButton_Click(object sender, EventArgs e)
+      private void popOperationButton_Click(object sender, EventArgs e)
       {
          _imageBox.PopOperation();
       }

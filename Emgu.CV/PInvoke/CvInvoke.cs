@@ -1929,7 +1929,7 @@ namespace Emgu.CV
       public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
 
       /// <summary>
-      /// initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have NULL storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
+      /// Initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have NULL storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
       /// </summary>
       /// <param name="seqType">Type of the created sequence</param>
       /// <param name="headerSize">Size of the header of the sequence. Parameter sequence must point to the structure of that size or greater size.</param>

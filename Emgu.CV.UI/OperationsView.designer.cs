@@ -1,6 +1,6 @@
 namespace Emgu.CV.UI
 {
-    partial class OperationStackView
+    partial class OperationsView
     {
         /// <summary> 
         /// Required designer variable.
@@ -59,14 +59,14 @@ namespace Emgu.CV.UI
            this.dataGridView1.Size = new System.Drawing.Size(209, 162);
            this.dataGridView1.TabIndex = 3;
            // 
-           // OperationStackView
+           // OperationsView
            // 
            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
            this.Controls.Add(this.dataGridView1);
            this.Controls.Add(this.bottomPanel);
            this.Controls.Add(this.topPanel);
-           this.Name = "OperationStackView";
+           this.Name = "OperationsView";
            this.Size = new System.Drawing.Size(209, 229);
            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
            this.ResumeLayout(false);

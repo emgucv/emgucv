@@ -19,6 +19,7 @@ namespace Emgu.CV
       private static readonly int _MCvSeqBlock;
       private static readonly int _MCvPoint3D32f;
       private static readonly int _MCvMatND;
+      private static readonly int _MCvPoint2D64f;
 
       /// <summary>
       /// The size of PointF
@@ -26,6 +27,14 @@ namespace Emgu.CV
       public static int PointF
       {
          get { return _PointF; }
+      }
+
+      /// <summary>
+      /// The size of PointF
+      /// </summary>
+      public static int MCvPoint2D64f
+      {
+         get { return _MCvPoint2D64f; }
       }
 
       /// <summary>
@@ -94,6 +103,7 @@ namespace Emgu.CV
          _MCvSeqBlock = Marshal.SizeOf(typeof(MCvSeqBlock));
          _MCvPoint3D32f = Marshal.SizeOf(typeof(MCvPoint3D32f));
          _MCvMatND = Marshal.SizeOf(typeof(MCvMatND));
+         _MCvPoint2D64f = Marshal.SizeOf(typeof(MCvPoint2D64f));
       }
    }
 }

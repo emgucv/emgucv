@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using Emgu.Util;
+using Emgu.Util.TypeEnum;
+using Emgu.CV.Reflection;
 
-namespace Emgu.Util
+namespace Emgu.CV.UI
 {
    /// <summary>
    /// An operation contains the MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 
@@ -82,7 +85,7 @@ namespace Emgu.Util
       /// Represent this operation as code
       /// </summary>
       /// <returns></returns>
-      public String ToCode(TypeEnum.ProgrammingLanguage language)
+      public String ToCode(ProgrammingLanguage language)
       {
          String res = String.Empty;
 
@@ -106,7 +109,7 @@ namespace Emgu.Util
 
          switch (language)
          {
-            case TypeEnum.ProgrammingLanguage.CSharp:
+            case ProgrammingLanguage.CSharp:
                if (genericArguments.Length > 0)
                   genericArgString = String.Format("<{0}>", genericArgString);
                res = String.Format("{0}.{1}{2}({3})",
@@ -115,7 +118,7 @@ namespace Emgu.Util
                    genericArgString,
                    String.Join(", ", System.Array.ConvertAll<Object, String>(nonGenericParameters, delegate(Object p) { return ParameterToCode(p, language); })));
                break;
-            case TypeEnum.ProgrammingLanguage.CPlusPlus:
+            case ProgrammingLanguage.CPlusPlus:
                if (genericArguments.Length > 0)
                   genericArgString = String.Format("<{0}>", genericArgString);
                res = String.Format("{0}->{1}{2}({3})",
@@ -128,7 +131,7 @@ namespace Emgu.Util
          return res;
       }
 
-      private static String ParameterToCode(Object parameter, TypeEnum.ProgrammingLanguage language)
+      private static String ParameterToCode(Object parameter, ProgrammingLanguage language)
       {
          ICodeGenerable gen = parameter as ICodeGenerable;
          return gen == null ? System.Convert.ToString(parameter) :

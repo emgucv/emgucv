@@ -7,9 +7,9 @@ using Emgu.Util.TypeEnum;
 namespace Emgu.CV.UI
 {
    /// <summary>
-   /// A user control to display the operation stack
+   /// A user control to display the operations
    /// </summary>
-   internal partial class OperationStackView : UserControl
+   internal partial class OperationsView : UserControl
    {
       private DataGridViewTextBoxColumn _codeColumn;
       private ProgrammingLanguage _language;
@@ -17,7 +17,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Constructor
       /// </summary>
-      public OperationStackView()
+      public OperationsView()
       {
          InitializeComponent();
          _codeColumn = new DataGridViewTextBoxColumn();
@@ -30,7 +30,7 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Set the programming language for this Operation Stack View
+      /// Set the programming language for this Operation View
       /// </summary>
       public ProgrammingLanguage Language
       {
@@ -41,13 +41,13 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Display the operation stack
+      /// Display the operations
       /// </summary>
-      /// <param name="operationStack">The operation stack to be displayed</param>
-      public void DisplayOperationStack(Stack<Operation> operationStack)
+      /// <param name="operations">The operations to be displayed</param>
+      public void DisplayOperations(List<Operation> operations)
       {
          dataGridView1.Rows.Clear();
-         String[] codes = GetOperationCode(operationStack);
+         String[] codes = GetOperationCode(operations);
          if (codes.Length > 0)
          {
             dataGridView1.Rows.Add(codes.Length);
@@ -85,19 +85,17 @@ namespace Emgu.CV.UI
          }
       }
 
-      private String[] GetOperationCode(Stack<Operation> operationStack)
+      private String[] GetOperationCode(List<Operation> operationList)
       {
-         if (operationStack.Count == 0) return new string[0];
+         Type imageType;
+         if (operationList.Count == 0) 
+            return new string[0];
+         else
+            imageType = operationList[0].Method.DeclaringType;
 
          List<String> ops = new List<string>();
-         Operation[] operationArray = operationStack.ToArray();
-         Array.Reverse(operationArray);
 
          int currentInstanceIndex = 0;
-
-         Type imageType = typeof(IImage);
-         if (operationArray.Length > 0)
-            imageType = operationArray[0].Method.DeclaringType;
 
          switch (_language)
          {
@@ -111,7 +109,7 @@ namespace Emgu.CV.UI
                break;
          }
          
-         foreach (Operation op in operationArray)
+         foreach (Operation op in operationList)
          {
             String str = op.ToCode(_language).Replace("{instance}", "image" + currentInstanceIndex);
 

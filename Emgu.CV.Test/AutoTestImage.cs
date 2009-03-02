@@ -331,8 +331,11 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-         img.Rotate(90, new Bgr());
-         Image<Bgr, Byte> imgRotated = img.Rotate(30, new Bgr(0, 0, 0), false);
+         
+         Image<Bgr, Byte> imgRotated90 = img.Rotate(90, new Bgr(), false);
+         Assert.AreEqual(img.Width, imgRotated90.Height);
+         Assert.AreEqual(img.Height, imgRotated90.Width);
+         Image<Bgr, Byte> imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
          
          //ImageViewer.Show(imgRotated);
       }
@@ -453,24 +456,24 @@ namespace Emgu.CV.Test
          #region test byte images
          Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
          image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-         Bitmap bmp = image1.ToBitmap();
-
-         Image<Bgr, Byte> image2 = new Image<Bgr, byte>(bmp);
-         Assert.IsTrue(image1.Equals(image2));
+         Assert.IsTrue(image1.Equals(new Image<Bgr, byte>(image1.ToBitmap())));
+         Assert.IsTrue(image1.Equals(new Image<Bgr, byte>(image1.Bitmap)));
 
          Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
          image3.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-         bmp = image3.ToBitmap();
-         DateTime t1 = DateTime.Now;
-         Image<Gray, Byte> image4 = new Image<Gray, byte>(bmp);
-         Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds);
-         Assert.IsTrue(image3.Equals(image4));
+         Assert.IsTrue(image3.Equals(new Image<Gray, byte>(image3.ToBitmap())));
+         Assert.IsTrue(image3.Equals(new Image<Gray, byte>(image3.Bitmap)));
+
+         Image<Bgra, Byte> image5 = new Image<Bgra, byte>(201, 401);
+         image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0, 255.0));
+         Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.ToBitmap())));
+         Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.Bitmap)));
          #endregion
 
          #region test single images
-         Image<Bgr, Single> image5 = new Image<Bgr, Single>(201, 401);
-         image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-         Bitmap bmp2 = image5.ToBitmap();
+         Image<Bgr, Single> image7 = new Image<Bgr, Single>(201, 401);
+         image7.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+         Bitmap bmp = image7.ToBitmap();
          #endregion
       }
 

@@ -30,7 +30,7 @@ namespace Emgu.CV.UI
       /// </summary>
       private static readonly Dictionary<Type, ToolStripMenuItem[]> _typeToToolStripMenuItemsDictionary = new Dictionary<Type, ToolStripMenuItem[]>();
 
-      private Stack<Operation> _operationStack;
+      private List<Operation> _operationLists;
 
       //private double _zoomLevel = 1.0;
 
@@ -42,7 +42,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// one of the parameters used for caculating the frame rate
       /// </summary>
-      private int _imageReceivedSinceCounterStart;
+      private int _imagesReceivedSinceCounterStart;
       #endregion
 
       /// <summary>
@@ -52,7 +52,7 @@ namespace Emgu.CV.UI
          : base()
       {
          InitializeComponent();
-         _operationStack = new Stack<Operation>();
+         _operationLists = new List<Operation>();
       }
 
       #region properties
@@ -100,7 +100,7 @@ namespace Emgu.CV.UI
                       _propertyDlg = null;
                    };
 
-               ImagePropertyPanel.SetOperationStack(_operationStack);
+               ImagePropertyPanel.SetOperations(_operationLists);
 
                // reset the image such that the property is updated
                Image = Image;
@@ -139,13 +139,12 @@ namespace Emgu.CV.UI
 
                if (imageToBeDisplayed != null)
                {
-                  #region perform operations on _operationStack if there is any
-                  if (_operationStack.Count > 0)
+                  #region perform operations on _operationList if there is any
+                  if (_operationLists.Count > 0)
                   {
                      bool isCloned = false;
-                     Operation[] ops = _operationStack.ToArray();
-                     System.Array.Reverse(ops);
-                     foreach (Operation operation in ops)
+
+                     foreach (Operation operation in _operationLists)
                      {
                         if (operation.Method.ReturnType == typeof(void))
                         {  //if this is an inplace operation 
@@ -223,14 +222,14 @@ namespace Emgu.CV.UI
                   TimeSpan ts = DateTime.Now.Subtract(_timerStartTime);
                   if (ts.TotalSeconds > 1)
                   {
-                     ImagePropertyPanel.FramesPerSecondText = _imageReceivedSinceCounterStart;
+                     ImagePropertyPanel.FramesPerSecondText = _imagesReceivedSinceCounterStart;
                      //reset the counter
                      _timerStartTime = DateTime.Now;
-                     _imageReceivedSinceCounterStart = 0;
+                     _imagesReceivedSinceCounterStart = 0;
                   }
                   else
                   {
-                     _imageReceivedSinceCounterStart++;
+                     _imagesReceivedSinceCounterStart++;
                   }
                   #endregion
                }
@@ -240,15 +239,15 @@ namespace Emgu.CV.UI
       #endregion
 
       /// <summary>
-      /// Push the specific operation onto the stack
+      /// Push the specific operation to the operation collection
       /// </summary>
-      /// <param name="operation">The operation to be pushed onto the stack</param>
+      /// <param name="operation">The operation to be pushed onto the operation collection</param>
       public void PushOperation(Operation operation)
       {
-         _operationStack.Push(operation);
+         _operationLists.Add(operation);
          ImageProperty panel = ImagePropertyPanel;
          if (panel != null)
-            panel.SetOperationStack(_operationStack);
+            panel.SetOperations(_operationLists);
 
          try
          {
@@ -256,37 +255,32 @@ namespace Emgu.CV.UI
          }
          catch
          {  //if pushing the operation generate exceptions
-
-            _operationStack.Pop(); //remove the operation from the stack
-            if (panel != null)
-               panel.SetOperationStack(_operationStack); //update the operation stack
-
-            Image = Image; //update the image
+            PopOperation();
             throw; //rethrow the exception
          }
       }
 
       /// <summary>
-      /// Remove all the operations from the stack
+      /// Remove all the operations from the collection
       /// </summary>
       public void ClearOperation()
       {
-         _operationStack.Clear();
+         _operationLists.Clear();
          ImageProperty panel = ImagePropertyPanel;
-         if (panel != null) panel.SetOperationStack(_operationStack);
+         if (panel != null) panel.SetOperations(_operationLists);
          Image = Image;
       }
 
       /// <summary>
-      /// Remove the last added operation from the stack
+      /// Remove the last added operation
       /// </summary>
       public void PopOperation()
       {
-         if (_operationStack.Count > 0)
+         if (_operationLists.Count > 0)
          {
-            _operationStack.Pop();
+            _operationLists.RemoveAt(_operationLists.Count - 1);
             ImageProperty panel = ImagePropertyPanel;
-            if (panel != null) panel.SetOperationStack(_operationStack);
+            if (panel != null) panel.SetOperations(_operationLists);
             Image = Image;
          }
       }
@@ -472,14 +466,13 @@ namespace Emgu.CV.UI
       {
          if (EnablePropertyPanel)
          {
-            IImage img = DisplayedImage;
+            ImagePropertyPanel.MousePositionOnImage = e.Location;
 
-            IColor color = img == null ?
+            IImage img = DisplayedImage;
+            ImagePropertyPanel.ColorIntensity = 
+               img == null ?
                null :
                Reflection.ReflectIImage.GetPixelColor(img, e.Location);
-
-            ImagePropertyPanel.MousePositionOnImage = e.Location;
-            ImagePropertyPanel.ColorIntensity = color;
          }
       }
 

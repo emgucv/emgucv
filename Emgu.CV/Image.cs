@@ -2292,20 +2292,18 @@ namespace Emgu.CV
          {
             //Maximum possible size is equal to the diagonal length of the image
             int maxSize = (int)Math.Round(Math.Sqrt(size.Width * size.Width + size.Height * size.Height));
-            double offsetX = (maxSize - size.Width) * 0.5;
-            double offsetY = (maxSize - size.Height) * 0.5;
+            float offsetX = (maxSize - size.Width) * 0.5f;
+            float offsetY = (maxSize - size.Height) * 0.5f;
 
             PointF center = new PointF(maxSize * .5f, maxSize * .5f);
-
-            using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
-            using (Matrix<double> corners = new Matrix<double>(new double[4, 3]{
-                 {offsetX,offsetY,1},
-                 {offsetX,offsetY+size.Height,1},
-                 {offsetX+size.Width,offsetY,1},
-                 {offsetX+size.Width,offsetY+size.Height,1}}))
-            using (Matrix<double> rotatedCorners = new Matrix<double>(4, 2))
+            PointF[] corners = new PointF[] { 
+               new PointF(offsetX,offsetY),
+               new PointF(offsetX,offsetY+size.Height),
+               new PointF(offsetX+size.Width,offsetY),
+               new PointF(offsetX+size.Width,offsetY+size.Height)};
+            
+            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
             using (Image<TColor, TDepth> tempImage1 = new Image<TColor, TDepth>(maxSize, maxSize, background))
-            using (Image<TColor, TDepth> tempImage2 = new Image<TColor, TDepth>(maxSize, maxSize))
             {
                // Frame the original image into a bigger one of side maxSize
                // Rotating the framed image will always keep the original image without losing corners information
@@ -2313,23 +2311,22 @@ namespace Emgu.CV
                CvInvoke.cvSetImageROI(tempImage1.Ptr, CvR);
                CvInvoke.cvCopy(Ptr, tempImage1.Ptr, IntPtr.Zero);
                CvInvoke.cvResetImageROI(tempImage1.Ptr);
-
+               
                // Rotate
-               CvInvoke.cvWarpAffine(tempImage1.Ptr, tempImage2.Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background.MCvScalar);
+               using (Image<TColor, TDepth> tempImage2 = tempImage1.WarpAffine(rotationMatrix, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background))
+               {
+                  //Calculate the position of the original corners in the rotated image
+                  rotationMatrix.RotatePoints(corners);
 
-               #region  Calculate the position of the original corners in the rotated image
-               CvInvoke.cvGEMM(corners.Ptr, rotationMatrix.Ptr, 1, IntPtr.Zero, 1, rotatedCorners.Ptr, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
-               double[,] data = rotatedCorners.Data;
-               int minX = (int)Math.Round(Math.Min(Math.Min(data[0, 0], data[1, 0]), Math.Min(data[2, 0], data[3, 0])));
-               int maxX = (int)Math.Round(Math.Max(Math.Max(data[0, 0], data[1, 0]), Math.Max(data[2, 0], data[3, 0])));
-               int minY = (int)Math.Round(Math.Min(Math.Min(data[0, 1], data[1, 1]), Math.Min(data[2, 1], data[3, 1])));
-               int maxY = (int)Math.Round(Math.Max(Math.Max(data[0, 1], data[1, 1]), Math.Max(data[2, 1], data[3, 1])));
-               System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, maxSize - maxY, maxX - minX, maxY - minY);
-               #endregion
-             
-               //Crop the region of interest
-               return tempImage2.Copy(toCrop);
-             
+                  //Crop the region of interest
+                  int minX = (int)Math.Round(Math.Min(Math.Min(corners[0].X, corners[1].X), Math.Min(corners[2].X, corners[3].X)));
+                  int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
+                  int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
+                  int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
+                  System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, maxSize - maxY, maxX - minX, maxY - minY);
+
+                  return tempImage2.Copy(toCrop);
+               }
             }
          }
       }
@@ -2523,9 +2520,7 @@ namespace Emgu.CV
             System.Drawing.Size size;
             CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
-            if (
-               typeof(TColor) == typeof(Gray) && 
-               typeof(TDepth) == typeof(Byte))
+            if (this is Image<Gray, Byte>)
             {   //Grayscale of Bytes
                Bitmap bmp = new Bitmap(
                    size.Width,
@@ -2543,8 +2538,7 @@ namespace Emgu.CV
             else if (
                Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
                Platform.Runtime == Emgu.Util.TypeEnum.Runtime.DotNet &&
-               typeof(TColor) == typeof(Bgr) && 
-               typeof(TDepth) == typeof(Byte))
+               this is Image<Bgr, Byte>)
             {   //Bgr byte    
                return new Bitmap(
                    size.Width,
@@ -2553,9 +2547,7 @@ namespace Emgu.CV
                    System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                    scan0);
             }
-            else if (
-               typeof(TColor) == typeof(Bgra) && 
-               typeof(TDepth) == typeof(Byte))
+            else if (this is Image<Bgra, Byte>)
             {   //Bgra byte
                return new Bitmap(
                    size.Width,
@@ -2592,7 +2584,7 @@ namespace Emgu.CV
             switch (value.PixelFormat)
             {
                case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
-                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+                  if (this is Image<Bgra, Byte>)
                      CopyFromBitmap(value);
                   else
                   {
@@ -2601,9 +2593,9 @@ namespace Emgu.CV
                   }
                   break;
                case System.Drawing.Imaging.PixelFormat.Format8bppIndexed:
-                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
+                  if (this is Image<Bgra, Byte>)
                   {
-                     using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height))
+                     using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Size))
                      {
                         indexValue.CopyFromBitmap(value);
                         Matrix<Byte> bTable, gTable, rTable, aTable;
@@ -2630,7 +2622,7 @@ namespace Emgu.CV
                   }
                   break;
                case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
-                  if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
+                  if (this is Image<Bgr, Byte>)
                      CopyFromBitmap(value);
                   else
                   {
@@ -2639,7 +2631,7 @@ namespace Emgu.CV
                   }
                   break;
                case System.Drawing.Imaging.PixelFormat.Format1bppIndexed:
-                  if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
+                  if (this is Image<Gray, Byte>)
                   {
                      int rows = value.Height;
                      int cols = value.Width;
@@ -2746,21 +2738,14 @@ namespace Emgu.CV
          {
             if (typeofDepth == typeof(Byte))
             {
-               System.Drawing.Size size;
-               IntPtr startPtr;
-               int widthStep;
-               CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
-               Int64 start = startPtr.ToInt64();
-
+               System.Drawing.Size size = Size;
                Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                   new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                   new System.Drawing.Rectangle(Point.Empty, size),
                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-               Int64 dataPtr = data.Scan0.ToInt64();
-               
-               for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                  Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+               using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
+                  CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
                bmp.UnlockBits(data);
                bmp.Palette = Util.GrayscalePalette;
@@ -2777,21 +2762,16 @@ namespace Emgu.CV
          {
             if (typeofDepth == typeof(byte))
             {
-               IntPtr startPtr;
-               int widthStep;
-               System.Drawing.Size size;
-               CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
-               Int64 start = startPtr.ToInt64();
+               System.Drawing.Size size = Size;
 
                Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                    new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                    new System.Drawing.Rectangle(Point.Empty, size),
                     System.Drawing.Imaging.ImageLockMode.WriteOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-               Int64 dataPtr = data.Scan0.ToInt64();
 
-               for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-                  Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
+               using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 4, data.Scan0, data.Stride))
+                  CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
                bmp.UnlockBits(data);
                return bmp;
@@ -2802,26 +2782,21 @@ namespace Emgu.CV
                   return tmp.ToBitmap();
             }
          }
-         else if (typeOfColor == typeof(Bgr) && typeofDepth == typeof(Byte))
+         else if (this is Image<Bgr, Byte>)
          {   //if this is a Bgr Byte image
-            IntPtr startPtr;
-            int widthStep;
-            System.Drawing.Size size;
-            CvInvoke.cvGetRawData(Ptr, out startPtr, out widthStep, out size);
-            Int64 start = startPtr.ToInt64();
+            System.Drawing.Size size = Size;
 
             //create the bitmap and get the pointer to the data
             Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-                new System.Drawing.Rectangle(0, 0, size.Width, size.Height),
+                new System.Drawing.Rectangle(Point.Empty, size),
                 System.Drawing.Imaging.ImageLockMode.WriteOnly,
                 System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            Int64 dataPtr = data.Scan0.ToInt64();
 
-            for (int row = 0; row < data.Height; row++, start += widthStep, dataPtr += data.Stride)
-               Emgu.Util.Toolbox.memcpy((IntPtr)dataPtr, (IntPtr)start, data.Stride);
-           
+            using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 3, data.Scan0, data.Stride))
+               CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
+
             bmp.UnlockBits(data);
 
             return bmp;
@@ -2899,20 +2874,20 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = CopyBlank();
          
          //For MOP_GRADIENT, a temperary buffer is required
-         Image<TColor, TDepth> temp = null;
+         Image<TColor, TDepth> buffer = null;
          if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT)
          {
-            temp = CopyBlank();
+            buffer = new Image<TColor, TDepth>(Size);
          }
 
          CvInvoke.cvMorphologyEx(
             Ptr, res.Ptr, 
-            temp == null? IntPtr.Zero : temp.Ptr, 
+            buffer == null? IntPtr.Zero : buffer.Ptr, 
             element.Ptr, 
             operation, 
             iterations);
 
-         if (temp != null) temp.Dispose();
+         if (buffer != null) buffer.Dispose();
          return res;
       }
 

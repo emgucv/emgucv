@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -54,31 +55,70 @@ namespace Emgu.CV
          CvInvoke.cv2DRotationMatrix(center, angle, scale, Ptr);
       }
 
-      /*
       /// <summary>
       /// Rotate the points inplace
       /// </summary>
-      /// <param name="points">the points to be rotated, its value is changed</param>
+      /// <param name="points">The points to be rotated, its value will be modified</param>
+      public void RotatePoints(MCvPoint2D64f [] points)
+      {
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         using (Matrix<double> mat = new Matrix<double>(points.Length, 2, handle.AddrOfPinnedObject()))
+         using (Matrix<double> tmp = new Matrix<double>(points.Length, 3))
+         {
+            tmp.SetValue(1.0);
+
+            using (Matrix<double> cols = tmp.GetCols(0, 2))
+            {
+               CvInvoke.cvCopy(mat, cols, IntPtr.Zero);
+            }
+
+            Matrix<double> rotationMatrix = this as Matrix<double> ?? Convert<double>();
+
+            CvInvoke.cvGEMM(
+               tmp, 
+               rotationMatrix, 
+               1.0, 
+               IntPtr.Zero, 
+               0.0, 
+               mat, 
+               Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+
+            if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
+         }
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Rotate the points inplace
+      /// </summary>
+      /// <param name="points">The points to be rotated, its value will be modified</param>
       public void RotatePoints(PointF[] points)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         IntPtr matHeader = Marshal.AllocHGlobal(StructSize.MCvMat);
-         CvInvoke.cvInitMatHeader(matHeader, points.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle.AddrOfPinnedObject(), StructSize.PointF);
-         Marshal.FreeHGlobal(matHeader);
-
+         using (Matrix<float> mat = new Matrix<float>(points.Length, 2, handle.AddrOfPinnedObject()))
          using (Matrix<float> tmp = new Matrix<float>(points.Length, 3))
          {
             tmp.SetValue(1.0);
 
             using (Matrix<float> cols = tmp.GetCols(0, 2))
             {
-               CvInvoke.cvCopy(matHeader, cols, IntPtr.Zero);
+               CvInvoke.cvCopy(mat, cols, IntPtr.Zero);
             }
+            
+            Matrix<float> rotationMatrix = this as Matrix<float> ?? Convert<float>();
 
-            CvInvoke.cvGEMM(tmp, Ptr, 1.0, IntPtr.Zero, 0.0, matHeader, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+            CvInvoke.cvGEMM(
+               tmp,
+               rotationMatrix,
+               1.0,
+               IntPtr.Zero,
+               0.0,
+               mat,
+               Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+
+            if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }
          handle.Free();
       }
-      */
    }
 }

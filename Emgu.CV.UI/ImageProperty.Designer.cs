@@ -48,12 +48,12 @@ namespace Emgu.CV.UI
            this.fpsTextBox = new System.Windows.Forms.TextBox();
            this.tabControl1 = new System.Windows.Forms.TabControl();
            this.tabPage1 = new System.Windows.Forms.TabPage();
+           this.cSharpOperationView = new Emgu.CV.UI.OperationsView();
            this.tabPage2 = new System.Windows.Forms.TabPage();
-           this.clearStackBtn = new System.Windows.Forms.Button();
-           this.popStackButton = new System.Windows.Forms.Button();
+           this.cPlusPlusOperationView = new Emgu.CV.UI.OperationsView();
+           this.clearOperationsBtn = new System.Windows.Forms.Button();
+           this.popOperationButton = new System.Windows.Forms.Button();
            this.showHistogramButton = new System.Windows.Forms.Button();
-           this.cSharpOperationStackView = new Emgu.CV.UI.OperationStackView();
-           this.cPlusPlusoperationStackView = new Emgu.CV.UI.OperationStackView();
            this.tabControl1.SuspendLayout();
            this.tabPage1.SuspendLayout();
            this.tabPage2.SuspendLayout();
@@ -166,9 +166,9 @@ namespace Emgu.CV.UI
            this.label7.AutoSize = true;
            this.label7.Location = new System.Drawing.Point(5, 123);
            this.label7.Name = "label7";
-           this.label7.Size = new System.Drawing.Size(87, 13);
+           this.label7.Size = new System.Drawing.Size(61, 13);
            this.label7.TabIndex = 12;
-           this.label7.Text = "Operation Stack:";
+           this.label7.Text = "Operations:";
            // 
            // label8
            // 
@@ -199,7 +199,7 @@ namespace Emgu.CV.UI
            // 
            // tabPage1
            // 
-           this.tabPage1.Controls.Add(this.cSharpOperationStackView);
+           this.tabPage1.Controls.Add(this.cSharpOperationView);
            this.tabPage1.Location = new System.Drawing.Point(4, 22);
            this.tabPage1.Name = "tabPage1";
            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -208,9 +208,17 @@ namespace Emgu.CV.UI
            this.tabPage1.Text = "C#";
            this.tabPage1.UseVisualStyleBackColor = true;
            // 
+           // cSharpOperationView
+           // 
+           this.cSharpOperationView.Dock = System.Windows.Forms.DockStyle.Fill;
+           this.cSharpOperationView.Location = new System.Drawing.Point(3, 3);
+           this.cSharpOperationView.Name = "cSharpOperationView";
+           this.cSharpOperationView.Size = new System.Drawing.Size(313, 210);
+           this.cSharpOperationView.TabIndex = 0;
+           // 
            // tabPage2
            // 
-           this.tabPage2.Controls.Add(this.cPlusPlusoperationStackView);
+           this.tabPage2.Controls.Add(this.cPlusPlusOperationView);
            this.tabPage2.Location = new System.Drawing.Point(4, 22);
            this.tabPage2.Name = "tabPage2";
            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -219,25 +227,33 @@ namespace Emgu.CV.UI
            this.tabPage2.Text = "C++";
            this.tabPage2.UseVisualStyleBackColor = true;
            // 
-           // clearStackBtn
+           // cPlusPlusOperationView
            // 
-           this.clearStackBtn.Location = new System.Drawing.Point(249, 118);
-           this.clearStackBtn.Name = "clearStackBtn";
-           this.clearStackBtn.Size = new System.Drawing.Size(75, 23);
-           this.clearStackBtn.TabIndex = 17;
-           this.clearStackBtn.Text = "Clear Stack";
-           this.clearStackBtn.UseVisualStyleBackColor = true;
-           this.clearStackBtn.Click += new System.EventHandler(this.clearStackBtn_Click);
+           this.cPlusPlusOperationView.Dock = System.Windows.Forms.DockStyle.Fill;
+           this.cPlusPlusOperationView.Location = new System.Drawing.Point(3, 3);
+           this.cPlusPlusOperationView.Name = "cPlusPlusOperationView";
+           this.cPlusPlusOperationView.Size = new System.Drawing.Size(313, 210);
+           this.cPlusPlusOperationView.TabIndex = 0;
            // 
-           // popStackButton
+           // clearOperationsBtn
            // 
-           this.popStackButton.Location = new System.Drawing.Point(124, 118);
-           this.popStackButton.Name = "popStackButton";
-           this.popStackButton.Size = new System.Drawing.Size(100, 23);
-           this.popStackButton.TabIndex = 18;
-           this.popStackButton.Text = "Pop Operation";
-           this.popStackButton.UseVisualStyleBackColor = true;
-           this.popStackButton.Click += new System.EventHandler(this.popStackButton_Click);
+           this.clearOperationsBtn.Location = new System.Drawing.Point(249, 118);
+           this.clearOperationsBtn.Name = "clearOperationsBtn";
+           this.clearOperationsBtn.Size = new System.Drawing.Size(75, 23);
+           this.clearOperationsBtn.TabIndex = 17;
+           this.clearOperationsBtn.Text = "Remove All";
+           this.clearOperationsBtn.UseVisualStyleBackColor = true;
+           this.clearOperationsBtn.Click += new System.EventHandler(this.clearOperationBtn_Click);
+           // 
+           // popOperationButton
+           // 
+           this.popOperationButton.Location = new System.Drawing.Point(124, 118);
+           this.popOperationButton.Name = "popOperationButton";
+           this.popOperationButton.Size = new System.Drawing.Size(100, 23);
+           this.popOperationButton.TabIndex = 18;
+           this.popOperationButton.Text = "Pop Operation";
+           this.popOperationButton.UseVisualStyleBackColor = true;
+           this.popOperationButton.Click += new System.EventHandler(this.popOperationButton_Click);
            // 
            // showHistogramButton
            // 
@@ -249,29 +265,13 @@ namespace Emgu.CV.UI
            this.showHistogramButton.UseVisualStyleBackColor = true;
            this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
            // 
-           // cSharpOperationStackView
-           // 
-           this.cSharpOperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
-           this.cSharpOperationStackView.Location = new System.Drawing.Point(3, 3);
-           this.cSharpOperationStackView.Name = "cSharpOperationStackView";
-           this.cSharpOperationStackView.Size = new System.Drawing.Size(313, 210);
-           this.cSharpOperationStackView.TabIndex = 0;
-           // 
-           // cPlusPlusoperationStackView
-           // 
-           this.cPlusPlusoperationStackView.Dock = System.Windows.Forms.DockStyle.Fill;
-           this.cPlusPlusoperationStackView.Location = new System.Drawing.Point(3, 3);
-           this.cPlusPlusoperationStackView.Name = "cPlusPlusoperationStackView";
-           this.cPlusPlusoperationStackView.Size = new System.Drawing.Size(313, 210);
-           this.cPlusPlusoperationStackView.TabIndex = 0;
-           // 
            // ImageProperty
            // 
            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
            this.Controls.Add(this.showHistogramButton);
-           this.Controls.Add(this.popStackButton);
-           this.Controls.Add(this.clearStackBtn);
+           this.Controls.Add(this.popOperationButton);
+           this.Controls.Add(this.clearOperationsBtn);
            this.Controls.Add(this.tabControl1);
            this.Controls.Add(this.fpsTextBox);
            this.Controls.Add(this.label8);
@@ -318,10 +318,10 @@ namespace Emgu.CV.UI
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private OperationStackView cSharpOperationStackView;
-        private OperationStackView cPlusPlusoperationStackView;
-        private System.Windows.Forms.Button clearStackBtn;
-        private System.Windows.Forms.Button popStackButton;
+        private OperationsView cSharpOperationView;
+        private OperationsView cPlusPlusOperationView;
+        private System.Windows.Forms.Button clearOperationsBtn;
+        private System.Windows.Forms.Button popOperationButton;
         private System.Windows.Forms.Button showHistogramButton;
     }
 }
