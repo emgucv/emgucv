@@ -486,7 +486,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPlanarSubdivision1()
       {
-         int pointCount = 3000;
+         int pointCount = 10000;
 
          #region generate random points
          PointF[] points = new PointF[pointCount];
@@ -882,7 +882,6 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(leftDisparity*(-16));
       }
 
-
       [Test]
       public void TestExtrinsicCameraParametersRuntimeSerialize()
       {
@@ -958,9 +957,7 @@ namespace Emgu.CV.Test
          img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
          //ImageViewer.Show(img);
       }
-
-      //TODO: Figure out why the following test case cannot passed
-      /*
+      
       [Test]
       public void TestVideoWriter()
       {
@@ -995,7 +992,7 @@ namespace Emgu.CV.Test
             Assert.AreEqual(numberOfFrames, count);
          }
          File.Delete(fi.FullName);
-      }*/
+      }
       
    }
 }

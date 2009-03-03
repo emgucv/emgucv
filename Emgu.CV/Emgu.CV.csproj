@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\zlib.net.dll</HintPath>
+      <HintPath>..\lib\3rdParty\zlib.net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

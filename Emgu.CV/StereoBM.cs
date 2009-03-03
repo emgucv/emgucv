@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Wrapper to the OpenCV StereoBMState
+   /// Use Block Matching algorithm to find stereo correspondence
    /// </summary>
    public class StereoBM : DisposableObject
    {

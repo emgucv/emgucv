@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Wrapper to the OpenCV StereoGCState
+   /// Use Graph Cut algorithm to find stereo correspondence
    /// </summary>
    public class StereoGC : DisposableObject
    {

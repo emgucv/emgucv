@@ -26,13 +26,26 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create a feature tree from the specific feature descriptors
+      /// Create a k-d tree from the specific feature descriptors
       /// </summary>
       /// <param name="descriptors">The array of feature descriptors</param>
       public FeatureTree(Matrix<float>[] descriptors)
       {
          _descriptorMatrix = DescriptorsToMatrix(descriptors);
-         _ptr = CvInvoke.cvCreateFeatureTree(_descriptorMatrix.Ptr);
+         _ptr = CvInvoke.cvCreateKDTree(_descriptorMatrix.Ptr);
+      }
+
+      /// <summary>
+      /// Create a spill tree from the specific feature descriptors
+      /// </summary>
+      /// <param name="descriptors">The array of feature descriptors</param>
+      /// <param name="naive">A good value is 50</param>
+      /// <param name="rho">A good value is .7</param>
+      /// <param name="tau">A good value is .1</param>
+      public FeatureTree(Matrix<float>[] descriptors, int naive, double rho, double tau)
+      {
+         _descriptorMatrix = DescriptorsToMatrix(descriptors);
+         _ptr = CvInvoke.cvCreateSpillTree(_descriptorMatrix.Ptr, naive, rho, tau);
       }
 
       private static Matrix<float> FeaturesToMatrix(SURFFeature[] descriptors)

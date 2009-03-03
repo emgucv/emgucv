@@ -2820,7 +2820,18 @@ namespace Emgu.CV
       /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
       /// <returns>A balanced kd-tree index of the given feature vectors</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvCreateFeatureTree(IntPtr desc);
+      public static extern IntPtr cvCreateKDTree(IntPtr desc);
+
+      /// <summary>
+      /// Constructs a spill tree index of the given feature vectors. The lifetime of the desc matrix must exceed that of the returned tree. I.e., no copy is made of the vectors.
+      /// </summary>
+      /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
+      /// <param name="naive"></param>
+      /// <param name="rho"></param>
+      /// <param name="tau"></param>
+      /// <returns>A spill tree index of the given feature vectors</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvCreateSpillTree(IntPtr desc, int naive, double rho, double tau);
 
       /// <summary>
       /// Deallocates the given kd-tree
@@ -5462,7 +5473,6 @@ namespace Emgu.CV
       public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
       #endregion
 
-      /*
       /// <summary>
       /// Calculates disparity for stereo-pair 
       /// </summary>
@@ -5478,12 +5488,11 @@ namespace Emgu.CV
       /// <param name="param5">defines a slightly reliable region</param>
       [DllImport(CVAUX_LIBRARY)]
       public extern static void cvFindStereoCorrespondence(
-                 IntPtr leftImage, IntPtr rightImage,
-                 int mode, IntPtr depthImage,
-                   int maxDisparity,
-                   double param1, double param2, double param3,
-                   double param4, double param5);
-      */
+         IntPtr leftImage, IntPtr rightImage,
+         int mode, IntPtr depthImage,
+         int maxDisparity,
+         double param1, double param2, double param3,
+         double param4, double param5);      
       #endregion
 
       #region EXTERN_LIBRARY
