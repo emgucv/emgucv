@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="opencv\header"
+				AdditionalIncludeDirectories="$(ProjectDir)..\..\opencv\include\opencv"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -60,9 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv.lib cxcore.lib highgui.lib $(NOINHERIT)"
+				AdditionalDependencies="cv110.lib cvaux110.lib cxcore110.lib highgui110.lib "
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="opencv\lib"
+				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="2"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)opencv\header"
+				AdditionalIncludeDirectories="$(ProjectDir)..\..\opencv\include\opencv"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -137,9 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv.lib cvaux.lib cxcore.lib highgui.lib $(NOINHERIT)"
+				AdditionalDependencies="cv110.lib cvaux110.lib cxcore110.lib highgui110.lib "
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(ProjectDir)opencv\lib"
+				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				EntryPointSymbol="main"

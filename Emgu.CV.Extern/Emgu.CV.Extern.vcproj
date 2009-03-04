@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)opencv\header&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\opencv\include\opencv&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;CVAPI_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,10 +60,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib cvaux.lib cv.lib cxcore.lib"
+				AdditionalDependencies="ml110.lib cvaux110.lib cv110.lib cxcore110.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib\release&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)opencv\header&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\opencv\include\opencv&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;CVAPI_EXPORTS"
 				RuntimeLibrary="2"
 				WarningLevel="3"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ml.lib cxcore.lib cvaux.lib cv.lib"
+				AdditionalDependencies="ml110.lib cvaux110.lib cv110.lib cxcore110.lib"
 				OutputFile="$(ProjectDir)..\bin\cvextern.dll"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\opencv\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib\release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -247,4 +247,6 @@
 			>
 		</Filter>
 	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>
