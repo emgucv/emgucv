@@ -19,7 +19,7 @@ ELSE(WIN32)
 FIND_PROGRAM (GMCS_EXECUTABLE gmcs)
 ENDIF(WIN32)
 
-FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin)
+FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin")
 
 SET (CSharp_FOUND FALSE)
 
