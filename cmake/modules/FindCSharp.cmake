@@ -14,7 +14,7 @@
 # copyright (c) 2009 Canming Huang emgucv@gmail.com
 
 IF(WIN32)
-FIND_PROGRAM (GMCS_EXECUTABLE csc c:/WINDOWS/Microsoft.NET/Framework/v2.0.50727)
+FIND_PROGRAM (GMCS_EXECUTABLE csc c:/WINDOWS/Microsoft.NET/Framework/v2.0.50727 C:/Windows/Microsoft.NET/Framework/v3.5)
 ELSE(WIN32)
 FIND_PROGRAM (GMCS_EXECUTABLE gmcs)
 ENDIF(WIN32)
