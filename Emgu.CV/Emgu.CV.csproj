@@ -50,9 +50,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
+    <Compile Include="SURFTracker.cs" />
     <Compile Include="VideoSurveillance\BackgroundStatisticsModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
     <Compile Include="VideoSurveillance\BlobSeq.cs" />

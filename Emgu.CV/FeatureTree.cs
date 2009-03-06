@@ -86,7 +86,7 @@ namespace Emgu.CV
       /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
       /// </param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">The maximum number of leaves to visit</param>
+      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
       public void FindFeatures(Matrix<float>[] descriptors, out Matrix<Int32> results, out Matrix<double> dist, int k, int emax)
       {
          int numberOfDescriptors = descriptors.Length;
@@ -107,7 +107,7 @@ namespace Emgu.CV
       /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
       /// </param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">The maximum number of leaves to visit</param>
+      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
       public void FindFeatures(SURFFeature[] features, out Matrix<Int32> results, out Matrix<double> dist, int k, int emax)
       {
          int numberOfDescriptors = features.Length;
@@ -132,7 +132,7 @@ namespace Emgu.CV
       /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
       /// </param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">The maximum number of leaves to visit</param>
+      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
       private void FindFeatures(Matrix<float>[] descriptors, Matrix<Int32> results, Matrix<double> dist, int k, int emax)
       {
          using (Matrix<float> descriptorMatrix = DescriptorsToMatrix(descriptors))

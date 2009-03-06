@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
@@ -56,56 +57,61 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Rotate the points inplace
+      /// Rotate the <paramref name="points"/>, the value of the input <paramref name="points"/> will be changed.
       /// </summary>
       /// <param name="points">The points to be rotated, its value will be modified</param>
-      public void RotatePoints(MCvPoint2D64f [] points)
+      public void RotatePoints(MCvPoint2D64f[] points)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          using (Matrix<double> mat = new Matrix<double>(points.Length, 2, handle.AddrOfPinnedObject()))
-         using (Matrix<double> tmp = new Matrix<double>(points.Length, 3))
-         {
-            tmp.SetValue(1.0);
-
-            using (Matrix<double> cols = tmp.GetCols(0, 2))
-            {
-               CvInvoke.cvCopy(mat, cols, IntPtr.Zero);
-            }
-
-            Matrix<double> rotationMatrix = this as Matrix<double> ?? Convert<double>();
-
-            CvInvoke.cvGEMM(
-               tmp, 
-               rotationMatrix, 
-               1.0, 
-               IntPtr.Zero, 
-               0.0, 
-               mat, 
-               Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
-
-            if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
-         }
+            RotatePoints(mat);
          handle.Free();
       }
 
       /// <summary>
-      /// Rotate the points inplace
+      /// Rotate the <paramref name="points"/>, the value of the input <paramref name="points"/> will be changed.
       /// </summary>
       /// <param name="points">The points to be rotated, its value will be modified</param>
       public void RotatePoints(PointF[] points)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          using (Matrix<float> mat = new Matrix<float>(points.Length, 2, handle.AddrOfPinnedObject()))
-         using (Matrix<float> tmp = new Matrix<float>(points.Length, 3))
+            RotatePoints(mat);
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Rotate the <paramref name="lineSegments"/>, the value of the input <paramref name="lineSegments"/> will be changed.
+      /// </summary>
+      /// <param name="lineSegments">The line segments to be rotated</param>
+      public void RotateLines(LineSegment2DF[] lineSegments)
+      {
+         GCHandle handle = GCHandle.Alloc(lineSegments, GCHandleType.Pinned);
+         using (Matrix<float> mat = new Matrix<float>(lineSegments.Length * 2, 2, handle.AddrOfPinnedObject()))
+            RotatePoints(mat);
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Rotate the single channel Nx2 matrix where N is the number of 2D points. The value of the matrix is changed after rotation.
+      /// </summary>
+      /// <typeparam name="TDepth">The depth of the points, must be fouble or float</typeparam>
+      /// <param name="points">The N 2D-points to be rotated</param>
+      public void RotatePoints<TDepth>(Matrix<TDepth> points) where TDepth : new ()
+      {
+         Debug.Assert(typeof(TDepth) == typeof(float) || typeof(TDepth) == typeof(Double), "Only type of double or float is supported");
+         Debug.Assert(points.NumberOfChannels == 1 && points.Cols == 2, "The matrix must be a single channel Nx2 matrix where N is the number of points");
+
+         using (Matrix<TDepth> tmp = new Matrix<TDepth>(points.Rows, 3))
          {
             tmp.SetValue(1.0);
 
-            using (Matrix<float> cols = tmp.GetCols(0, 2))
+            using (Matrix<TDepth> cols = tmp.GetCols(0, 2))
             {
-               CvInvoke.cvCopy(mat, cols, IntPtr.Zero);
+               CvInvoke.cvCopy(points, cols, IntPtr.Zero);
             }
-            
-            Matrix<float> rotationMatrix = this as Matrix<float> ?? Convert<float>();
+
+            Matrix<TDepth> rotationMatrix = this as Matrix<TDepth> ?? Convert<TDepth>();
 
             CvInvoke.cvGEMM(
                tmp,
@@ -113,12 +119,11 @@ namespace Emgu.CV
                1.0,
                IntPtr.Zero,
                0.0,
-               mat,
+               points,
                Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
 
             if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }
-         handle.Free();
       }
    }
 }

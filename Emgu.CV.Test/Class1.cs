@@ -298,9 +298,9 @@ namespace Emgu.CV.Test
 
             using (Histogram h = new Histogram(20, new RangeF(0, 180)))
             {
-               h.Accumulate(new Image<Gray, Byte>[1] { HSVs[0] });
+               h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
                using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
-                  Application.Run(new ImageViewer(bpj));
+                  ImageViewer.Show(bpj);
             }
 
             foreach (Image<Gray, Byte> i in HSVs) i.Dispose();

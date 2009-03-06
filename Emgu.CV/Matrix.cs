@@ -269,6 +269,21 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// Get reshaped matrix which also share the same data with the current matrix
+      /// </summary>
+      /// <param name="newChannels">the new number of channles</param>
+      /// <param name="newRows">The new number of rows</param>
+      /// <returns>A reshaped matrix which also share the same data with the current matrix</returns>
+      public Matrix<TDepth> Reshape(int newChannels, int newRows)
+      {
+         Matrix<TDepth> res = new Matrix<TDepth>();
+         res.Data = Data;
+         res.AllocateHeader();
+         CvInvoke.cvReshape(Ptr, res.Ptr, newChannels, newRows);
+         return res;
+      }
+
+      /// <summary>
       /// Convert this matrix to different depth
       /// </summary>
       /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>

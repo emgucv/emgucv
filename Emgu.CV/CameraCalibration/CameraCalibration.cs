@@ -277,7 +277,7 @@ namespace Emgu.CV
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
-      /// <returns>The 3x3 homography matrix. </returns>
+      /// <returns>The 3x3 homography matrix</returns>
       public static Matrix<double> FindHomography(
          Matrix<float> srcPoints, 
          Matrix<float> dstPoints, 
@@ -297,7 +297,7 @@ namespace Emgu.CV
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
-      public static Matrix<double> FindHomography(
+      public static HomographyMatrix FindHomography(
          PointF[] srcPoints, 
          PointF[] dstPoints, 
          CvEnum.HOMOGRAPHY_METHOD method, 
@@ -309,7 +309,7 @@ namespace Emgu.CV
          IntPtr dstPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
          CvInvoke.cvInitMatHeader(srcPointMatrix, srcPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, srcHandle.AddrOfPinnedObject(), 0);
          CvInvoke.cvInitMatHeader(dstPointMatrix, dstPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, dstHandle.AddrOfPinnedObject(), 0);
-         Matrix<double> homography = new Matrix<double>(3, 3);
+         HomographyMatrix homography = new HomographyMatrix();
          CvInvoke.cvFindHomography( srcPointMatrix, dstPointMatrix, homography.Ptr,  method, ransacReprojThreshold, IntPtr.Zero);
          srcHandle.Free();
          dstHandle.Free();

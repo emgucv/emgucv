@@ -77,6 +77,7 @@ namespace Emgu.CV
       /// Project the images to the histogram bins 
       ///</summary>
       ///<param name="imgs">image to project</param>
+      [Obsolete("Use Calculate function instead, will be removed in the next version")]
       public void Accumulate<TDepth>(Image<Gray, TDepth>[] imgs)
       {
          Accumulate<TDepth>(imgs, null);
@@ -88,26 +89,17 @@ namespace Emgu.CV
       /// <typeparam name="TDepth">The type of depth of the image</typeparam>
       /// <param name="imgs">image to project</param>
       /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
+      [Obsolete("Use Calculate function instead, will be removed in the next version")]
       public void Accumulate<TDepth>(Image<Gray, TDepth>[] imgs, Image<Gray, Byte> mask)
       {
-         Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
-
-         IntPtr[] imgPtrs =
-             System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
-                 imgs,
-                 delegate(Image<Gray, TDepth> img) { return img.Ptr; });
-
-         CvInvoke.cvCalcHist(
-            imgPtrs, 
-            _ptr, 
-            true, 
-            mask == null ? IntPtr.Zero : mask.Ptr);
+         Calculate<TDepth>(imgs, true, mask);
       }
 
       /// <summary>
       /// Project the images to the histogram bins 
       /// </summary>
       /// <param name="imgs"></param>
+      [Obsolete("Use Calculate function instead, will be removed in the next version")]
       public void Accumulate(IImage[] imgs)
       {
          Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
@@ -116,6 +108,60 @@ namespace Emgu.CV
                  imgs,
                  delegate(IImage img) { return img.Ptr; });
          CvInvoke.cvCalcHist(imgPtrs, _ptr, true, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Project the images to the histogram bins 
+      /// </summary>
+      /// <typeparam name="TDepth">The type of depth of the image</typeparam>
+      /// <param name="imgs">images to project</param>
+      /// <param name="accumulate">If it is true, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online. </param>
+      /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
+      public void Calculate<TDepth>(Image<Gray, TDepth>[] imgs, bool accumulate, Image<Gray, Byte> mask)
+      {
+         Calculate(
+            Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(imgs, delegate(Image<Gray, TDepth> img) { return img.Ptr; }),
+            accumulate,
+            mask);
+      }
+
+      /// <summary>
+      /// Project the matrices to the histogram bins 
+      /// </summary>
+      /// <typeparam name="TDepth">The type of depth of the image</typeparam>
+      /// <param name="matrices">Matrices to project</param>
+      /// <param name="accumulate">If it is true, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online. </param>
+      /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
+      public void Calculate<TDepth>(Matrix<TDepth>[] matrices, bool accumulate, Matrix<Byte> mask) where TDepth : new()
+      {
+         Calculate(
+            Array.ConvertAll<Matrix<TDepth>, IntPtr>(matrices, delegate(Matrix<TDepth> img) { return img.Ptr; }),
+            accumulate,
+            mask);
+      }
+
+      /// <summary>
+      /// Project the images to the histogram bins 
+      /// </summary>
+      /// <param name="imgs">images to project</param>
+      /// <param name="accumulate">If it is true, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online. </param>
+      /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
+      public void Calculate(IImage[] imgs, bool accumulate, Image<Gray, Byte> mask) 
+      {
+         Calculate(
+            Array.ConvertAll<IImage, IntPtr>(imgs, delegate(IImage img) { return img.Ptr; }),
+            accumulate,
+            mask);
+      }
+
+      private void Calculate(IntPtr[] arrays, bool accumulate, CvArray<Byte> mask)
+      {
+         Debug.Assert(arrays.Length == Dimension, "incompatible dimension");
+         CvInvoke.cvCalcHist(
+            arrays, 
+            _ptr,
+            accumulate, 
+            mask == null?  IntPtr.Zero : mask.Ptr);
       }
 
       /// <summary>
@@ -140,8 +186,11 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      /// Backproject the histogram into an gray scale image
+      /// Backproject the histogram into a gray scale image
       ///</summary>
+      ///<param name="srcs">Source images, all are of the same size and type</param>
+      ///<returns>Destination back projection image of the same type as the source images</returns>
+      ///<typeparam name="TDepth">The type of depth of the image</typeparam>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs)
       {
          Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
@@ -152,6 +201,49 @@ namespace Emgu.CV
                  delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
          Image<Gray, TDepth> res = srcs[0].CopyBlank();
+         CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
+         return res;
+      }
+
+      /// <summary> 
+      /// Compares histogram over each possible rectangular patch of the specified size in the input images, and stores the results to the output map dst.
+      /// </summary>
+      /// <param name="srcs">Source images, all are of the same size and type</param>
+      /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1. if unsure. </param>
+      /// <param name="patchSize">Size of patch slid though the source images.</param>
+      /// <param name="method">Comparison method, passed to cvCompareHist.</param>
+      /// <typeparam name="TDepth">The type of depth of the image</typeparam>
+      /// <returns>Destination back projection image of the same type as the source images</returns>
+      public Image<Gray, TDepth> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, float factor)
+      {
+         Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
+
+         IntPtr[] imgPtrs =
+             System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
+                 srcs,
+                 delegate(Image<Gray, TDepth> img) { return img.Ptr; });
+
+         Image<Gray, TDepth> res = srcs[0].CopyBlank();
+         CvInvoke.cvCalcBackProjectPatch(imgPtrs, res.Ptr, patchSize, Ptr, method, factor);
+         return res;
+      }
+
+      ///<summary> 
+      /// Backproject the histogram into a matrix
+      ///</summary>
+      ///<param name="srcs">Source matrices, all are of the same size and type</param>
+      ///<returns>Destination back projection matrix of the sametype as the source matrices</returns>
+      ///<typeparam name="TDepth">The type of depth of the matrix</typeparam>
+      public Matrix<TDepth> BackProject<TDepth>(Matrix<TDepth>[] srcs) where TDepth : new()
+      {
+         Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
+
+         IntPtr[] imgPtrs =
+             System.Array.ConvertAll<Matrix<TDepth>, IntPtr>(
+                 srcs,
+                 delegate(Matrix<TDepth> img) { return img.Ptr; });
+
+         Matrix<TDepth> res = new Matrix<TDepth>(srcs[0].Size);
          CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
          return res;
       }
@@ -309,7 +401,6 @@ namespace Emgu.CV
          _dataHandle.Free();
       }
       #endregion
-
 
    }
 }

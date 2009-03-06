@@ -2841,14 +2841,15 @@ namespace Emgu.CV
       public static extern void cvReleaseFeatureTree(IntPtr tr);
 
       /// <summary>
-      /// Finds (with high probability) the k nearest neighbors in tr for each of the given (row-)vectors in desc, using best-bin-first searching ([Beis97]). The complexity of the entire operation is at most O(m*emax*log2(n)), where n is the number of vectors in the tree
+      /// Searches feature tree for k nearest neighbors of given reference points.
       /// </summary>
+      /// <remarks> In case of k-d tree: Finds (with high probability) the k nearest neighbors in tr for each of the given (row-)vectors in desc, using best-bin-first searching ([Beis97]). The complexity of the entire operation is at most O(m*emax*log2(n)), where n is the number of vectors in the tree</remarks>
       /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
       /// <param name="desc">m x d matrix of (row-)vectors to find the nearest neighbors of</param>
       /// <param name="results">m x k set of row indices of matching vectors (referring to matrix passed to cvCreateFeatureTree). Contains -1 in some columns if fewer than k neighbors found</param>
       /// <param name="dist">m x k matrix of distances to k nearest neighbors</param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">The maximum number of leaves to visit</param>
+      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindFeatures(
          IntPtr tr, 

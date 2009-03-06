@@ -156,7 +156,7 @@ namespace Emgu.CV.UI
          for (int i = 0; i < channels.Length; i++)
             using (Histogram hist = new Histogram(numberOfBins, new RangeF(minVal, maxVal)))
             {
-               hist.Accumulate(new IImage[1] { channels[i] });
+               hist.Calculate(new IImage[1] { channels[i] }, true, null);
                AddHistogram(channelNames[i], colors[i], hist);
             }
       }
