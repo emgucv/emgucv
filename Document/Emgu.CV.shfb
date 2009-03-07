@@ -4,7 +4,7 @@
         <assembly assemblyPath="..\bin\Emgu.CV.ML.dll" xmlCommentsPath="..\bin\Emgu.CV.ML.XML" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.CV.UI.dll" xmlCommentsPath="..\bin\Emgu.CV.UI.xml" commentsOnly="False" />
         <assembly assemblyPath="..\bin\Emgu.Util.dll" xmlCommentsPath="..\bin\Emgu.Util.xml" commentsOnly="False" />
-        <assembly assemblyPath="..\lib\ZedGraph.dll" xmlCommentsPath="..\lib\ZedGraph.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\lib\3rdParty\ZedGraph.dll" xmlCommentsPath="..\lib\3rdParty\ZedGraph.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</namespaceSummaryItem>
