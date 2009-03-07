@@ -621,7 +621,7 @@ namespace Emgu.CV.Test
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
             }
 
-            ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 
