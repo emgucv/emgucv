@@ -10,7 +10,7 @@ xcopy /E /i opencv\include\opencv src\opencv\include\opencv
 xcopy lib\release\*.lib src\lib\release\
 xcopy /E /i lib\3rdParty src\lib\3rdParty
 
-REM == Clean up all folders except src folder ==
+REM == Clean up all folders except src folder == 
 perl miscellaneous\svn-clean.pl --exclude "^src(/|$)"
 
 REM == Copy other files ==
@@ -20,5 +20,6 @@ install -d src\%VS2008_FOLDER%
 cp %VS2005_FOLDER%Emgu.CV.sln %VS2005_FOLDER%Emgu.CV.Example.sln src src\%VS2005_FOLDER%
 cp %VS2008_FOLDER%Emgu.CV.sln  %VS2008_FOLDER%Emgu.CV.Example.sln src\%VS2008_FOLDER%
 tar --exclude-vcs -cvf Emgu.CV.SourceAndExamples-%VERSION%.tar src
-rm -rf src
-tar -xvf Emgu.CV.SourceAndExamples-%VERSION%.tar src
+rm -rf src/*
+mv Emgu.CV.SourceAndExamples-%VERSION%.tar src
+REM tar -xvf Emgu.CV.SourceAndExamples-%VERSION%.tar src
