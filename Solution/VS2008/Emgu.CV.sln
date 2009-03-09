@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML", "..\..\Emgu.CV.ML\Emgu.CV.ML.csproj", "{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Emgu.CV.Extern", "..\..\Emgu.CV.Extern\Emgu.CV.Extern.vcproj", "{0BABD742-CF82-421F-9C01-1DA8C08129AC}"
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -86,20 +84,6 @@ Global
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|Win32.ActiveCfg = Release|Any CPU
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|x64.ActiveCfg = Release|Any CPU
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|x86.ActiveCfg = Release|Any CPU
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.Build.0 = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|x64.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|x86.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.Build.0 = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|x64.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
