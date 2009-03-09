@@ -18,7 +18,7 @@ namespace Emgu.CV
    ///Wrapped CvArr 
    ///</summary>
    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam>
-   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable
+   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable where TDepth : new()
    {
       /// <summary>
       /// The size of the elements in the CvArray
@@ -85,7 +85,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the number of channels of the array
       /// </summary>
-      public abstract int NumberOfChannels{ get;}
+      public abstract int NumberOfChannels { get;}
 
       /// <summary>
       /// The number of rows for this array
@@ -146,14 +146,14 @@ namespace Emgu.CV
                      using (zlib.ZOutputStream stream = new zlib.ZOutputStream(ms))
                      {
                         stream.Write(value, 0, value.Length);
-                        stream.Flush(); 
+                        stream.Flush();
                      }
                      bytes = ms.ToArray();
                   }
                }
                catch
                {  //if using zlib decompression fails, try to use .NET GZipStream to decompress
-               
+
                   using (MemoryStream ms = new MemoryStream(value))
                   {
                      //ms.Position = 0;
@@ -231,7 +231,8 @@ namespace Emgu.CV
       /// </remarks>
       /// <param name="array1D">The destination single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
       /// <param name="type">The reduction operation type</param>
-      public void Reduce<TDepth2>(CvArray<TDepth2> array1D, CvEnum.REDUCE_TYPE type)
+      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_TYPE type)
+         where TOtherDepth : new ()
       {
          CvInvoke.cvReduce(Ptr, array1D.Ptr, type);
       }
@@ -306,7 +307,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true)]
       public void SetRandUniform(MCvScalar floorValue, MCvScalar ceilingValue)
       {
-         SetRandUniform((UInt64) _randomGenerator.Next(), floorValue, ceilingValue);
+         SetRandUniform((UInt64)_randomGenerator.Next(), floorValue, ceilingValue);
       }
 
       /// <summary>
@@ -429,11 +430,13 @@ namespace Emgu.CV
       ///Determine if the size (width and height) of <i>this</i> Array
       ///equals the size of <paramref name="src2"/>
       ///</summary>
+      /// <typeparam name="TOtherDepth">The depth type of the other CvArray</typeparam>
       ///<param name="src2"> The other Array to compare size with</param>
       ///<returns> True if the two Array has the same size</returns>
-      public bool EqualSize<D2>(CvArray<D2> src2)
+      public bool EqualSize<TOtherDepth>(CvArray<TOtherDepth> src2)
+         where TOtherDepth : new ()
       {
-         return Size.Equals(src2.Size) ;
+         return Size.Equals(src2.Size);
       }
       #endregion
 

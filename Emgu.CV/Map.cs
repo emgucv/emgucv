@@ -13,8 +13,9 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
-   public class Map<TColor, TDepth> : Image<TColor, TDepth> 
+   public class Map<TColor, TDepth> : Image<TColor, TDepth>
       where TColor : struct, IColor
+      where TDepth : new()
    {
       private RectangleF _area;
 
@@ -78,12 +79,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pt"></param>
       /// <returns></returns>
-      private Point MapPoint(PointF pt) 
+      private Point MapPoint(PointF pt)
       {
-         return 
+         return
             new Point(
-             (int) ((pt.X - Area.Left) / Resolution.X),
-             (int) ((pt.Y - Area.Top) / Resolution.Y));
+             (int)((pt.X - Area.Left) / Resolution.X),
+             (int)((pt.Y - Area.Top) / Resolution.Y));
       }
 
       /// <summary>
@@ -92,11 +93,11 @@ namespace Emgu.CV
       /// <param name="rect">The rectangle to draw</param>
       /// <param name="color">The color for the rectangle</param>
       /// <param name="thickness">The thickness of the rectangle, any value less than or equal to 0 will result in a filled rectangle</param>
-      public void Draw(RectangleF rect, TColor color, int thickness) 
+      public void Draw(RectangleF rect, TColor color, int thickness)
       {
          base.Draw(new Rectangle(
-            MapPoint(new PointF(rect.Left + rect.Width/2.0f, rect.Top + rect.Height/2.0f )), 
-            new Size((int) (rect.Width / Resolution.X),(int) (rect.Height / Resolution.Y))
+            MapPoint(new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f)),
+            new Size((int)(rect.Width / Resolution.X), (int)(rect.Height / Resolution.Y))
             ), color, thickness);
       }
 
@@ -118,8 +119,8 @@ namespace Emgu.CV
       public override void Draw(CircleF circle, TColor color, int thickness)
       {
          base.Draw(
-            new CircleF(MapPoint(circle.Center), circle.Radius / Resolution.X), 
-            color, 
+            new CircleF(MapPoint(circle.Center), circle.Radius / Resolution.X),
+            color,
             thickness);
       }
 
@@ -170,20 +171,21 @@ namespace Emgu.CV
       /// <summary>
       /// Compute a new map where each element is obtained from converter
       /// </summary>
-      /// <typeparam name="D2">The depth of the new Map</typeparam>
+      /// <typeparam name="TOtherDepth">The depth of the new Map</typeparam>
       /// <param name="converter">The converter that use the element from <i>this</i> map and the location of each pixel as input to compute the result</param>
       /// <returns> A new map where each element is obtained from converter</returns>
-      public Map<TColor, D2> Convert<D2>(Emgu.Util.Toolbox.Func<TDepth, double, double, D2> converter)
+      public Map<TColor, TOtherDepth> Convert<TOtherDepth>(Emgu.Util.Toolbox.Func<TDepth, double, double, TOtherDepth> converter)
+         where TOtherDepth : new()
       {
          double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Top;
 
-         Emgu.Util.Toolbox.Func<TDepth, int, int, D2> iconverter =
+         Emgu.Util.Toolbox.Func<TDepth, int, int, TOtherDepth> iconverter =
              delegate(TDepth data, int row, int col)
              {
                 //convert an int position to double position
                 return converter(data, col * rx + ox, row * ry + oy);
              };
-         return new Map<TColor, D2>(base.Convert<D2>(iconverter), Area);
+         return new Map<TColor, TOtherDepth>(base.Convert<TOtherDepth>(iconverter), Area);
       }
    }
 }

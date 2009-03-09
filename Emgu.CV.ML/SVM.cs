@@ -150,7 +150,7 @@ namespace Emgu.CV.ML
       /// <param name="sample">The input sample</param>
       public float Predict(Matrix<float> sample)
       {
-         return MlInvoke.cvSVMPredict(Ptr, sample.Ptr);
+         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr);
       }
 
       /// <summary>
@@ -161,7 +161,7 @@ namespace Emgu.CV.ML
       {
          int k = GetVarCount();
          float[] res = new float[k];
-         IntPtr vector = MlInvoke.cvSVMGetSupportVector(Ptr, i);
+         IntPtr vector = MlInvoke.CvSVMGetSupportVector(Ptr, i);
          Marshal.Copy(vector, res, 0, k);
          return res;
       }
@@ -171,7 +171,7 @@ namespace Emgu.CV.ML
       /// </summary>
       public int GetSupportVectorCount()
       {
-         return MlInvoke.cvSVMGetSupportVectorCount(Ptr);
+         return MlInvoke.CvSVMGetSupportVectorCount(Ptr);
       }
 
       /// <summary>
@@ -179,7 +179,7 @@ namespace Emgu.CV.ML
       /// </summary>
       public int GetVarCount()
       {
-         return MlInvoke.cvSVMGetVarCount(Ptr);
+         return MlInvoke.CvSVMGetVarCount(Ptr);
       }
       #endregion
    }

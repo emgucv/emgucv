@@ -179,43 +179,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\cvANN_MLP.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvBlob.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvBoost.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvDTree.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvEM.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvKNearest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvNormalBayesClassifier.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvRTrees.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvStatModel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cvSVM.cpp"
+				RelativePath=".\export.cpp"
 				>
 			</File>
 			<File
@@ -229,11 +193,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\blob.h"
+				RelativePath=".\blob_export.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cvextern.h"
+				RelativePath=".\ml_export.h"
 				>
 			</File>
 			<File

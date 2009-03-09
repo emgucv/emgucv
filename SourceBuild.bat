@@ -2,6 +2,8 @@ SET VERSION=2.0.0.0
 SET VS2005_FOLDER=Solution\VS2005_MonoDevelop\
 SET VS2008_FOLDER=Solution\VS2008\
 
+IF exist src rd /s /q src
+
 REM == Build OpenCV ==
 call BinaryBuild.bat
 
@@ -21,5 +23,5 @@ cp %VS2005_FOLDER%Emgu.CV.sln %VS2005_FOLDER%Emgu.CV.Example.sln src src\%VS2005
 cp %VS2008_FOLDER%Emgu.CV.sln  %VS2008_FOLDER%Emgu.CV.Example.sln src\%VS2008_FOLDER%
 tar --exclude-vcs -cvf Emgu.CV.SourceAndExamples-%VERSION%.tar src
 rm -rf src/*
-mv Emgu.CV.SourceAndExamples-%VERSION%.tar src
+move Emgu.CV.SourceAndExamples-%VERSION%.tar src
 REM tar -xvf Emgu.CV.SourceAndExamples-%VERSION%.tar src

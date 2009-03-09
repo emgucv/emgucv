@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A homography matrix
+   /// A 3x3 homography matrix
    /// </summary>
    [Serializable]
    public class HomographyMatrix : Matrix<double> 
@@ -59,17 +59,13 @@ namespace Emgu.CV
       public void ProjectPoints(PointF[] points) 
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         using (Matrix<double> homogeneousCoordinates = new Matrix<double>(points.Length, 3))
-         using (Matrix<double> firstTwoColums = homogeneousCoordinates.GetCols(0, 2))
-         using (Matrix<double> reshape = firstTwoColums.Reshape(2, points.Length))
-         using (Matrix<double> destCornerCoordinate = new Matrix<double>(points.Length, 3))
+
          using (Matrix<float> pointMat = new Matrix<float>(points.Length, 1, 2, handle.AddrOfPinnedObject(), 0))
+         using (Matrix<float> homographyMat = Convert<float>())
          {
-            homogeneousCoordinates.SetValue(1);
-            CvInvoke.cvConvert(pointMat, reshape);
-            CvInvoke.cvGEMM(homogeneousCoordinates, Ptr, 1.0, IntPtr.Zero, 0.0, destCornerCoordinate, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
-            CvInvoke.cvConvertPointsHomogeneous(destCornerCoordinate, pointMat);
+            CvInvoke.cvPerspectiveTransform(pointMat, pointMat, homographyMat);
          }
+
          handle.Free();
       }
    }

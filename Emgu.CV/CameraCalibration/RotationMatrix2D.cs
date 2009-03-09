@@ -97,19 +97,14 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="TDepth">The depth of the points, must be fouble or float</typeparam>
       /// <param name="points">The N 2D-points to be rotated</param>
-      public void RotatePoints<TDepth>(Matrix<TDepth> points) where TDepth : new ()
+      public void RotatePoints<TDepth>(Matrix<TDepth> points) where TDepth : new()
       {
          Debug.Assert(typeof(TDepth) == typeof(float) || typeof(TDepth) == typeof(Double), "Only type of double or float is supported");
          Debug.Assert(points.NumberOfChannels == 1 && points.Cols == 2, "The matrix must be a single channel Nx2 matrix where N is the number of points");
 
          using (Matrix<TDepth> tmp = new Matrix<TDepth>(points.Rows, 3))
          {
-            tmp.SetValue(1.0);
-
-            using (Matrix<TDepth> cols = tmp.GetCols(0, 2))
-            {
-               CvInvoke.cvCopy(points, cols, IntPtr.Zero);
-            }
+            CvInvoke.cvCopyMakeBorder(points, tmp, Point.Empty, Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(1.0));
 
             Matrix<TDepth> rotationMatrix = this as Matrix<TDepth> ?? Convert<TDepth>();
 
@@ -121,7 +116,7 @@ namespace Emgu.CV
                0.0,
                points,
                Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
-
+            
             if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }
       }

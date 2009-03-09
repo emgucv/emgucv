@@ -183,7 +183,7 @@ namespace Emgu.CV
       /// <returns>The corrected image</returns>
       public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
          where TColor : struct, IColor
-         where TDepth : struct, IComparable
+         where TDepth : new()
       {
          Image<TColor, TDepth> res = src.CopyBlank();
          CvInvoke.cvUndistort2(src.Ptr, res.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr);

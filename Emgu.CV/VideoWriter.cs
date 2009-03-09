@@ -42,12 +42,12 @@ namespace Emgu.CV
       /// <summary>
       /// Write a single frame to the video writer
       /// </summary>
-      /// <typeparam name="C">The color type of the frame</typeparam>
-      /// <typeparam name="D">The depth of the frame</typeparam>
+      /// <typeparam name="TColor">The color type of the frame</typeparam>
+      /// <typeparam name="TDepth">The depth of the frame</typeparam>
       /// <param name="frame">The frame to be written to the video writer</param>
-      public void WriteFrame<C, D>(Image<C, D> frame)
-         where C : struct, IColor
-         where D : new()
+      public void WriteFrame<TColor, TDepth>(Image<TColor, TDepth> frame)
+         where TColor : struct, IColor
+         where TDepth : new()
       {
          CvInvoke.cvWriteFrame(_ptr, frame.Ptr);
       }

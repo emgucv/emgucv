@@ -18,6 +18,7 @@ add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+	DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
 

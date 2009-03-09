@@ -15,7 +15,7 @@ namespace Emgu.CV.Test
 
       }
 
-      public List<Face<D>> Detect<D>(Image<Bgr, D> img)
+      public List<Face<D>> Detect<D>(Image<Bgr, D> img) where D : new ()
       {
          using (Image<Gray, D> gray = img.Convert<Gray, D>())
          {
@@ -38,7 +38,7 @@ namespace Emgu.CV.Test
       }
    }
 
-   public class Eye<D>
+   public class Eye<D> where D : new ()
    {
       private Image<Bgr, D> _image;
       public Eye(Image<Bgr, D> img, System.Drawing.Rectangle rect)
@@ -55,7 +55,7 @@ namespace Emgu.CV.Test
       }
    }
 
-   public class Face<D>
+   public class Face<D> where D: new()
    {
       private Image<Bgr, D> _image;
       private Image<Gray, D> _imageGray;

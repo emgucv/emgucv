@@ -19,9 +19,10 @@ namespace Emgu.CV
    /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz or Ycc)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
-   public class Image<TColor, TDepth> 
-      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>> 
+   public class Image<TColor, TDepth>
+      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
       where TColor : struct, IColor
+      where TDepth : new()
    {
       private TDepth[, ,] _array;
 
@@ -247,7 +248,7 @@ namespace Emgu.CV
 
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
-            _array = new TDepth[rows, (cols &(~3)) + 4, numberOfChannels];
+            _array = new TDepth[rows, (cols & (~3)) + 4, numberOfChannels];
          }
          else
          {
@@ -549,8 +550,8 @@ namespace Emgu.CV
       {
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
-         subRect._ptr = CvInvoke.cvCreateImageHeader(rect.Size, CvDepth, NumberOfChannels); 
-         
+         subRect._ptr = CvInvoke.cvCreateImageHeader(rect.Size, CvDepth, NumberOfChannels);
+
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
          IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
@@ -564,16 +565,6 @@ namespace Emgu.CV
       #endregion
 
       #region Drawing functions
-      ///<summary> Draw a box of the specific color and thickness </summary>
-      ///<param name="box"> The box to be drawn</param>
-      ///<param name="color"> The color of the rectangle </param>
-      ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
-      ///<typeparam name="T">The type of Box2D to draw</typeparam>
-      public virtual void Draw<T>(MCvBox2D box, TColor color, int thickness) where T : struct, IComparable
-      {
-         Draw<float>(box, color, thickness);
-      }
-
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
       ///<param name="color"> The color of the rectangle </param>
@@ -594,7 +585,7 @@ namespace Emgu.CV
       ///<param name="cross"> The 2D Cross to be drawn</param>
       ///<param name="color"> The color of the cross </param>
       ///<param name="thickness"> Must be &gt; 0 </param>
-      public void Draw(Cross2DF cross, TColor color, int thickness) 
+      public void Draw(Cross2DF cross, TColor color, int thickness)
       {
          Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
@@ -643,7 +634,7 @@ namespace Emgu.CV
       ///<param name="polygon"> The convex polygon to be drawn</param>
       ///<param name="color"> The color of the triangle </param>
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
-      public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness) 
+      public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
          Point[] vertices = Array.ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
 
@@ -663,22 +654,6 @@ namespace Emgu.CV
       public void FillConvexPoly(System.Drawing.Point[] pts, TColor color)
       {
          CvInvoke.cvFillConvexPoly(Ptr, pts, pts.Length, color.MCvScalar, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
-      }
-
-      /// <summary>
-      /// Draw the polyline defined by the array of 2D points
-      /// </summary>
-      /// <param name="pts">the points that defines the poly line</param>
-      /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
-      /// <param name="color">the color used for drawing</param>
-      /// <param name="thickness">the thinkness of the line</param>
-      public virtual void DrawPolyline<T>(Point[] pts, bool isClosed, TColor color, int thickness) where T : struct, IComparable
-      {
-         DrawPolyline(
-             pts,
-             isClosed,
-             color,
-             thickness);
       }
 
       /// <summary>
@@ -731,7 +706,7 @@ namespace Emgu.CV
          CvInvoke.cvCircle(
              Ptr,
              Point.Round(circle.Center),
-             (int) circle.Radius,
+             (int)circle.Radius,
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
@@ -742,12 +717,12 @@ namespace Emgu.CV
       ///<param name="ellipse"> The ellipse to be draw</param>
       ///<param name="color"> The color of the ellipse </param>
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
-      public void Draw(Ellipse ellipse, TColor color, int thickness) 
+      public void Draw(Ellipse ellipse, TColor color, int thickness)
       {
          CvInvoke.cvEllipse(
              Ptr,
              Point.Round(ellipse.MCvBox2D.center),
-             new System.Drawing.Size(( (int)ellipse.MCvBox2D.size.Width) >> 1, ((int)ellipse.MCvBox2D.size.Height) >> 1),
+             new System.Drawing.Size(((int)ellipse.MCvBox2D.size.Width) >> 1, ((int)ellipse.MCvBox2D.size.Height) >> 1),
              ellipse.MCvBox2D.angle,
              0.0,
              360.0,
@@ -900,7 +875,7 @@ namespace Emgu.CV
                 {
                    IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
                    Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
-                   return segments.ToArray() ;
+                   return segments.ToArray();
                 };
             return ForEachDuplicateChannel(detector);
          }
@@ -1204,6 +1179,7 @@ namespace Emgu.CV
       /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
       /// <param name="dest">The destination image</param>
       private void ForEachDuplicateChannel<TOtherDepth>(Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
+            where TOtherDepth : new ()
       {
          if (NumberOfChannels == 1)
             act(Ptr, dest.Ptr, 0);
@@ -1425,11 +1401,11 @@ namespace Emgu.CV
              {
                 PointF[] ptsForCurrentChannel = corners[channel];
                 CvInvoke.cvFindCornerSubPix(
-                   img.Ptr, 
-                   ptsForCurrentChannel, 
-                   ptsForCurrentChannel.Length, 
-                   win, 
-                   zeroZone, 
+                   img.Ptr,
+                   ptsForCurrentChannel,
+                   ptsForCurrentChannel.Length,
+                   win,
+                   zeroZone,
                    criteria);
              };
          ForEachDuplicateChannel(detector);
@@ -1513,7 +1489,7 @@ namespace Emgu.CV
              1,
              windowSize,
              tc,
-             calculateGradiant ? 1: 0);
+             calculateGradiant ? 1 : 0);
       }
       #endregion
 
@@ -2301,7 +2277,7 @@ namespace Emgu.CV
                new PointF(offsetX,offsetY+size.Height),
                new PointF(offsetX+size.Width,offsetY),
                new PointF(offsetX+size.Width,offsetY+size.Height)};
-            
+
             using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
             using (Image<TColor, TDepth> tempImage1 = new Image<TColor, TDepth>(maxSize, maxSize, background))
             {
@@ -2311,7 +2287,7 @@ namespace Emgu.CV
                CvInvoke.cvSetImageROI(tempImage1.Ptr, CvR);
                CvInvoke.cvCopy(Ptr, tempImage1.Ptr, IntPtr.Zero);
                CvInvoke.cvResetImageROI(tempImage1.Ptr);
-               
+
                // Rotate
                using (Image<TColor, TDepth> tempImage2 = tempImage1.WarpAffine(rotationMatrix, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background))
                {
@@ -2323,7 +2299,7 @@ namespace Emgu.CV
                   int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
                   int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
                   int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
-                  System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, maxSize - maxY, maxX - minX, maxY - minY);
+                  System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
 
                   return tempImage2.Copy(toCrop);
                }
@@ -2370,6 +2346,7 @@ namespace Emgu.CV
          )]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
+         where TOtherDepth : new ()
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);
          res.ConvertFrom(this);
@@ -2382,8 +2359,9 @@ namespace Emgu.CV
       /// <typeparam name="TSrcColor">The color type of the source image</typeparam>
       /// <typeparam name="TSrcDepth">The color depth of the source image</typeparam>
       /// <param name="srcImage">The sourceImage</param>
-      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage) 
+      public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage)
          where TSrcColor : struct, IColor
+         where TSrcDepth : new ()
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
@@ -2490,6 +2468,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth"> The type of depth to convert to</typeparam>
       ///<returns> Image of the specific depth, val = val * scale + shift </returns>
       public Image<TColor, TOtherDepth> ConvertScale<TOtherDepth>(double scale, double shift)
+                  where TOtherDepth : new ()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
@@ -2872,7 +2851,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         
+
          //For MOP_GRADIENT, a temperary buffer is required
          Image<TColor, TDepth> buffer = null;
          if (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT)
@@ -2881,10 +2860,10 @@ namespace Emgu.CV
          }
 
          CvInvoke.cvMorphologyEx(
-            Ptr, res.Ptr, 
-            buffer == null? IntPtr.Zero : buffer.Ptr, 
-            element.Ptr, 
-            operation, 
+            Ptr, res.Ptr,
+            buffer == null ? IntPtr.Zero : buffer.Ptr,
+            element.Ptr,
+            operation,
             iterations);
 
          if (buffer != null) buffer.Dispose();
@@ -2989,6 +2968,7 @@ namespace Emgu.CV
       /// <param name="img2">The second image to perform action on</param>
       /// <param name="action">An action such that the first parameter is the a single channel of a pixel from the first image, the second parameter is the corresponding channel of the correspondind pixel from the second image </param>
       public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Emgu.Util.Toolbox.Action<TDepth, TOtherDepth> action)
+                  where TOtherDepth : new()
       {
          Debug.Assert(EqualSize(img2));
 
@@ -3017,6 +2997,7 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image</summary> 
       public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Emgu.Util.Toolbox.Func<TDepth, int, int, TOtherDepth> converter)
+         where TOtherDepth : new()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
@@ -3048,6 +3029,7 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on element of this image</summary> 
       public Image<TColor, TOtherDepth> Convert<TOtherDepth>(System.Converter<TDepth, TOtherDepth> converter)
+         where TOtherDepth : new ()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
@@ -3077,6 +3059,8 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on the elements of the two image</summary>
       public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3> converter)
+         where TDepth2 : new()
+         where TDepth3 : new ()
       {
          Debug.Assert(EqualSize(img2), "Image size do not match");
 
@@ -3118,6 +3102,9 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on the elements of the three image</summary>
       public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
+         where TDepth2 : new ()
+         where TDepth3 : new ()
+         where TDepth4 : new ()
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3), "Image size do not match");
 
@@ -3168,6 +3155,10 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on the elements of the four image</summary>
       public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
+         where TDepth2 : new ()
+         where TDepth3 : new ()
+         where TDepth4 : new ()
+         where TDepth5 : new ()
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3) && EqualSize(img4), "Image size do not match");
 

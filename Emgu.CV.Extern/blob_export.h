@@ -3,20 +3,21 @@
 
 #include "cvaux.h"
 //Blob
-CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob));
-CVAPI(void) CvBlobSeqRelease(CvBlobSeq* blobSeq);
-CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex);
-CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq);
+CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob)) { return new CvBlobSeq(BlobSize); }
+CVAPI(void) CvBlobSeqRelease(CvBlobSeq* blobSeq) { blobSeq->~CvBlobSeq(); }
+CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlobByID(blobIndex); }
+CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
 
 //Forground detector
 CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
 CVAPI(void) CvFGDetectorRelease(CvFGDetector* detector) { detector->Release(); }
 
 //Blob Detector
-CVAPI(void) CvBlobDetectorRelease(CvBlobDetector* detector);
-CVAPI(int) CvBlobDetectorDetectNewBlob(CvBlobDetector* detector, IplImage* pImg, IplImage* pImgFG, CvBlobSeq* pNewBlobList, CvBlobSeq* pOldBlobList);
-CVAPI(CvBlobDetector*) CvCreateBlobDetectorSimple();
-CVAPI(CvBlobDetector*) CvCreateBlobDetectorCC();
+CVAPI(void) CvBlobDetectorRelease(CvBlobDetector* detector) { detector->~CvBlobDetector(); }
+CVAPI(int) CvBlobDetectorDetectNewBlob(CvBlobDetector* detector, IplImage* pImg, IplImage* pImgFG, CvBlobSeq* pNewBlobList, CvBlobSeq* pOldBlobList)
+   { return detector->DetectNewBlob(pImg, pImgFG, pNewBlobList, pOldBlobList); }
+CVAPI(CvBlobDetector*) CvCreateBlobDetectorSimple() { return cvCreateBlobDetectorSimple(); }
+CVAPI(CvBlobDetector*) CvCreateBlobDetectorCC() { return cvCreateBlobDetectorCC(); }
 
 //blob Tracker
 /* Simple blob tracker based on connected component tracking: */

@@ -1,4 +1,4 @@
-#define SHOW_IMAGE
+//#define SHOW_IMAGE
 using System;
 using System.Collections.Generic;
 using System.Text;

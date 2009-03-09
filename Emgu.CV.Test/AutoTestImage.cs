@@ -332,12 +332,12 @@ namespace Emgu.CV.Test
 
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
          
-         Image<Bgr, Byte> imgRotated90 = img.Rotate(90, new Bgr(), false);
-         Assert.AreEqual(img.Width, imgRotated90.Height);
-         Assert.AreEqual(img.Height, imgRotated90.Width);
-         Image<Bgr, Byte> imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
-         
-         //ImageViewer.Show(imgRotated);
+         Image<Bgr, Byte> imgRotated = img.Rotate(90, new Bgr(), false);
+         Assert.AreEqual(img.Width, imgRotated.Height);
+         Assert.AreEqual(img.Height, imgRotated.Width);
+         imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
+         //ImageViewer.Show(img);
+         ImageViewer.Show(imgRotated);
       }
 
       [Test]
@@ -621,7 +621,7 @@ namespace Emgu.CV.Test
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
             }
 
-            //ImageViewer.Show(res.Resize(200, 200, true));
+            ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 

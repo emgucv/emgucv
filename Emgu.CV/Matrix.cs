@@ -14,7 +14,8 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TDepth">Depth of this matrix (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
-   public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>> where TDepth : new()
+   public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>>  
+      where TDepth : new()
    {
       private TDepth[,] _array;
 
@@ -288,7 +289,8 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
       /// <returns>Matrix of different depth</returns>
-      public Matrix<TOtherDepth> Convert<TOtherDepth>()  where TOtherDepth : new ()
+      public Matrix<TOtherDepth> Convert<TOtherDepth>()  
+         where TOtherDepth : new ()
       {
          Matrix<TOtherDepth> res = new Matrix<TOtherDepth>(Rows, Cols, NumberOfChannels);
          CvInvoke.cvConvertScale(Ptr, res.Ptr, 1.0, 0.0);

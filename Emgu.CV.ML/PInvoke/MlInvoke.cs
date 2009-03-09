@@ -351,7 +351,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The SVM model</param>
       /// <param name="_sample">The input sample</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern float cvSVMPredict(IntPtr model, IntPtr _sample);
+      public static extern float CvSVMPredict(IntPtr model, IntPtr _sample);
 
       /// <summary>
       /// The method retrieves a given support vector
@@ -359,21 +359,21 @@ namespace Emgu.CV.ML
       /// <param name="model">The SVM model</param>
       /// <param name="i">The index of the support vector</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern IntPtr cvSVMGetSupportVector(IntPtr model, int i);
+      public static extern IntPtr CvSVMGetSupportVector(IntPtr model, int i);
 
       /// <summary>
       /// The method retrieves the number of support vectors
       /// </summary>
       /// <param name="model">The SVM model</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern int cvSVMGetSupportVectorCount(IntPtr model);
+      public static extern int CvSVMGetSupportVectorCount(IntPtr model);
 
       /// <summary>
       /// The method retrieves the number of vars
       /// </summary>
       /// <param name="model">The SVM model</param>
       [DllImport(EXTERN_LIBRARY)]
-      public static extern int cvSVMGetVarCount(IntPtr model);
+      public static extern int CvSVMGetVarCount(IntPtr model);
       #endregion 
       #endregion
 

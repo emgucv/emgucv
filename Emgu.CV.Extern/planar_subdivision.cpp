@@ -1,5 +1,6 @@
 #include "planar_subdivision.h"
 
+/*
 #if CV_SSE2 && defined(__GNUC__)
 #define align(x) __attribute__ ((aligned (x)))
 #elif CV_SSE2 && (defined(__ICL) || defined _MSC_VER && _MSC_VER >= 1300)
@@ -7,6 +8,7 @@
 #else
 #define align(x)
 #endif
+*/
 
 void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, const CvPoint2D32f* points, int count)
 {

@@ -108,12 +108,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Emgu.CV.Extern", "..\..\Emgu.CV.Extern\Emgu.CV.Extern2005.vcproj", "{0BABD742-CF82-421F-9C01-1DA8C08129AC}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simlpe3DReconstruction", "..\..\Emgu.CV.Example\Simlpe3DReconstruction\Simlpe3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -366,20 +360,6 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|.NET.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|Win32.Build.0 = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Debug|x86.ActiveCfg = Debug|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|.NET.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.ActiveCfg = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|Win32.Build.0 = Release|Win32
-		{0BABD742-CF82-421F-9C01-1DA8C08129AC}.Release|x86.ActiveCfg = Release|Win32
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU

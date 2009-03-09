@@ -11,6 +11,7 @@ namespace Emgu.CV
    public class TimedImage<TColor, TDepth> 
       : Image<TColor, TDepth> 
       where TColor : struct, IColor
+      where TDepth : new()
    {
       private System.DateTime _timestamp;
 
