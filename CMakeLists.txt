@@ -9,7 +9,7 @@ INCLUDE (CSharpMacros)
 
 project(emgucv)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-set(LIBRARY_3RDPARTY_PATH ${CMAKE_SOURCE_DIR}/lib)
+set(LIBRARY_3RDPARTY_PATH ${CMAKE_SOURCE_DIR}/lib/3rdParty)
 
 add_subdirectory(Emgu.Util)
 add_subdirectory(Emgu.CV)
