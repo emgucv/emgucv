@@ -36,10 +36,10 @@ namespace Emgu.CV.ML
          Matrix<float> trainData,
          MlEnum.DATA_LAYOUT_TYPE tflag,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
-         Matrix<int> varType,
-         Matrix<int> missingMask,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
+         Matrix<Byte> varType,
+         Matrix<Byte> missingMask,
          MCvDTreeParams param)
       {
          return MlInvoke.CvDTreeTrain(
@@ -63,7 +63,7 @@ namespace Emgu.CV.ML
       /// <returns>Pointer to the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure</returns>
       public MCvDTreeNode Predict(
          Matrix<float> sample,
-         Matrix<int> missingDataMask,
+         Matrix<Byte> missingDataMask,
          bool rawMode)
       {
          IntPtr node = MlInvoke.CvDTreePredict(_ptr, sample.Ptr, missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr, rawMode);

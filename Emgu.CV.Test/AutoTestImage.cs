@@ -206,7 +206,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMemory()
       {
-         for (int i = 0; i <= 200; i++)
+         for (int i = 0; i <= 100; i++)
          {
             Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000);
          }
@@ -337,7 +337,7 @@ namespace Emgu.CV.Test
          Assert.AreEqual(img.Height, imgRotated.Width);
          imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
          //ImageViewer.Show(img);
-         ImageViewer.Show(imgRotated);
+         //ImageViewer.Show(imgRotated);
       }
 
       [Test]
@@ -621,7 +621,7 @@ namespace Emgu.CV.Test
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
             }
 
-            ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, true));
          }
       }
 

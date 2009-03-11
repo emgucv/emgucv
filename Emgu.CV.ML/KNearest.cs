@@ -27,7 +27,7 @@ namespace Emgu.CV.ML
       /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
       /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
       /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      public KNearest(Matrix<float> trainData, Matrix<float> responses, Matrix<int> sampleIdx, bool isRegression, int maxK)
+      public KNearest(Matrix<float> trainData, Matrix<float> responses, Matrix<Byte> sampleIdx, bool isRegression, int maxK)
       {
          _ptr = MlInvoke.CvKNearestCreate(trainData, responses, sampleIdx == null? IntPtr.Zero : sampleIdx.Ptr, isRegression, maxK);
       }
@@ -55,7 +55,7 @@ namespace Emgu.CV.ML
       public bool Train(
          Matrix<float> trainData, 
          Matrix<float> responses, 
-         Matrix<int> sampleIdx, 
+         Matrix<Byte> sampleIdx, 
          bool isRegression, 
          int maxK,
          bool updateBase)

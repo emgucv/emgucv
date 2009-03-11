@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
 using System.Runtime.InteropServices;
 
@@ -34,8 +35,8 @@ namespace Emgu.CV.ML
       /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
       /// <param name="tflag">data layout type</param>
       /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
       /// <param name="varType">The types of input variables</param>
       /// <param name="missingMask">Can be null if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
       /// <param name="param">The parameters for training the random tree</param>
@@ -44,10 +45,10 @@ namespace Emgu.CV.ML
          Matrix<float> trainData,
          MlEnum.DATA_LAYOUT_TYPE tflag,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
-         Matrix<int> varType,
-         Matrix<int> missingMask,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
+         Matrix<Byte> varType,
+         Matrix<Byte> missingMask,
          MCvRTParams param)
       {
          return MlInvoke.CvRTreesTrain(
@@ -70,9 +71,34 @@ namespace Emgu.CV.ML
       /// <returns>The cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)</returns>
       public float Predict(
          Matrix<float> sample,
-         Matrix<int> missingDataMask)
+         Matrix<Byte> missingDataMask)
       {
          return MlInvoke.CvRTreesPredict(_ptr, sample.Ptr, missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr);
+      }
+
+      /// <summary>
+      /// Get the number of Trees in the Random tree
+      /// </summary>
+      public int TreeCount
+      {
+         get
+         {
+            return MlInvoke.CvRTreesGetTreeCount(Ptr);
+         }
+      }
+
+      /// <summary>
+      /// Get the variable importance matrix
+      /// </summary>
+      /// <returns>The variable importance matrix</returns>
+      public Matrix<float> GetVarImportance()
+      {
+         IntPtr mat = MlInvoke.CvRTreesGetVarImportance(Ptr);
+         if (mat == IntPtr.Zero) return null;
+         MCvMat matrix = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
+         Matrix<float> result = new Matrix<float>(matrix.rows, matrix.cols);
+         CvInvoke.cvCopy(mat, result, IntPtr.Zero);
+         return result;
       }
    }
 }

@@ -38,10 +38,10 @@ namespace Emgu.CV.ML
          Matrix<float> trainData,
          MlEnum.DATA_LAYOUT_TYPE tflag,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
-         Matrix<int> varType,
-         Matrix<int> missingMask,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
+         Matrix<Byte> varType,
+         Matrix<Byte> missingMask,
          MCvBoostParams param, 
          bool update)
       {
@@ -70,7 +70,7 @@ namespace Emgu.CV.ML
       /// <returns>The cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)</returns>
       public float Predict(
          Matrix<float> sample,
-         Matrix<int> missingDataMask, 
+         Matrix<Byte> missingDataMask, 
          Matrix<float> weakResponses,
          MCvSlice slice,
          bool rawMode

@@ -14,6 +14,14 @@ set(the_target "cvextern")
 
 add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
 
+IF (WIN32)
+ADD_CUSTOM_COMMAND(
+    TARGET cvextern
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ARGS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/${the_target}.dll ${EXECUTABLE_OUTPUT_PATH}/
+)
+ENDIF()
+
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
@@ -21,8 +29,8 @@ set_target_properties(${the_target} PROPERTIES
 	DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
-
-add_dependencies(${the_target} cxcore ml)
+add_dependencies(${the_target} cxcore cv cvaux ml)
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} cxcore cv cvaux ml)
+

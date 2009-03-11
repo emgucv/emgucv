@@ -535,6 +535,14 @@ namespace Emgu.CV.ML
       public static extern void CvRTreesRelease(IntPtr model);
 
       /// <summary>
+      /// Get the number of Trees in the Random tree
+      /// </summary>
+      /// <param name="model">The random tree</param>
+      /// <returns>The number of Trees in the Random tree</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int CvRTreesGetTreeCount(IntPtr model);
+
+      /// <summary>
       /// Train the random tree using the specific traning data
       /// </summary>
       /// <param name="model">The Random Tree model</param>
@@ -542,9 +550,9 @@ namespace Emgu.CV.ML
       /// <param name="missingMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
       /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
       /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
-      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
       /// <param name="param">The parameters for training the random tree</param>
-      /// <param name="varIdx">Can be IntPtr.Zero if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varIdx">Can be IntPtr.Zero if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
       /// <param name="varType">The types of input variables</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
@@ -571,6 +579,14 @@ namespace Emgu.CV.ML
          IntPtr model,
          IntPtr sample,
          IntPtr missingDataMask);
+
+      /// <summary>
+      /// Get the variable importance
+      /// </summary>
+      /// <param name="model">The randome tree</param>
+      /// <returns>Pointer to the matrix that represents the variable importance</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvRTreesGetVarImportance(IntPtr model);
       #endregion
 
       #region Boost

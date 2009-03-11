@@ -189,11 +189,11 @@ namespace Emgu.CV.ML.MlEnum
    public enum DATA_LAYOUT_TYPE
    {
       /// <summary>
-      /// Column sample
+      /// Feature vectors are stored as cols
       /// </summary>
       COL_SAMPLE = 0,
       /// <summary>
-      /// Row sample
+      /// Feature vectors are stored as rows
       /// </summary>
       ROW_SAMPLE =1
    }
@@ -242,5 +242,20 @@ namespace Emgu.CV.ML.MlEnum
       /// Use least squares criteria. This is default and the only option for LogitBoost and Gentle AdaBoost
       /// </summary>
       SQERR = 4 
+   }
+
+   /// <summary>
+   /// Variable type
+   /// </summary>
+   public enum VAR_TYPE
+   {
+      /// <summary>
+      /// Numerical or Ordered
+      /// </summary>
+      NUMERICAL  =   0,
+      /// <summary>
+      /// Catagorical
+      /// </summary>
+      CATEGORICAL   = 1
    }
 }

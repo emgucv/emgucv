@@ -26,7 +26,7 @@ namespace Emgu.CV.ML
       /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
       /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
       /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      public NormalBayesClassifier(Matrix<float> trainData, Matrix<int> responses, Matrix<int> varIdx, Matrix<int> sampleIdx)
+      public NormalBayesClassifier(Matrix<float> trainData, Matrix<int> responses, Matrix<Byte> varIdx, Matrix<Byte> sampleIdx)
       {
          _ptr = MlInvoke.CvNormalBayesClassifierCreate(
             trainData.Ptr, 
@@ -52,7 +52,7 @@ namespace Emgu.CV.ML
       /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
       /// <param name="update">If true, the training data is used to update the classifier; Otherwise, the data in the classifier are cleared before training is performed</param>
       /// <returns>The number of done iterations</returns>
-      public bool Train(Matrix<float> trainData, Matrix<int> responses, Matrix<int> varIdx, Matrix<int> sampleIdx, bool update)
+      public bool Train(Matrix<float> trainData, Matrix<int> responses, Matrix<Byte> varIdx, Matrix<Byte> sampleIdx, bool update)
       {
          return MlInvoke.CvNormalBayesClassifierTrain(
             _ptr, 

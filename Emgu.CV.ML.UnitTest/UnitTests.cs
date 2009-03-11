@@ -333,20 +333,92 @@ namespace Emgu.CV.ML.UnitTest
       }
 
       [Test]
-      public void TestRTrees()
-      {
-         using (RTrees tree = new RTrees())
-         {
-            MCvRTParams param = MCvRTParams.GetDefaultParameter();
-         }
-      }
-
-      [Test]
       public void TestBoost()
       {
          using (Boost tree = new Boost())
          {
             MCvBoostParams param = MCvBoostParams.GetDefaultParameter();
+         }
+      }
+
+      private void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
+      {
+         string[] rows = System.IO.File.ReadAllLines("letter-recognition.data");
+         
+         int varCount = rows[0].Split(',').Length - 1;
+         data = new Matrix<float>(rows.Length, varCount);
+         response = new Matrix<float>(rows.Length, 1);
+         int count = 0;
+         foreach ( string row in rows )
+         {
+            string[] values = row.Split(',');
+            Char c = System.Convert.ToChar(values[0]);
+            response[count, 0] = System.Convert.ToInt32(c);
+            for (int i = 1; i < values.Length; i++)
+               data[count, i - 1] = System.Convert.ToSingle(values[i]);
+            count++;
+         }
+      }
+
+      //TODO: Check why the following code do not work correctly
+      [Test]
+      public void TestRTrees()
+      {
+         Matrix<float> data, response;
+         ReadLetterRecognitionData(out data, out response);
+
+         int trainingSampleCount = (int)(data.Rows * 0.8);
+
+         Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
+         varType.SetValue((byte)MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
+         varType[data.Cols, 0] = (byte) MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
+
+         Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
+         using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
+         {
+            sampleRows.SetValue(255);
+         }
+
+         MCvRTParams param = new MCvRTParams();
+         param.maxDepth = 10;
+         param.minSampleCount = 10;
+         param.regressionAccuracy = 0.0f;
+         param.useSurrogates = false;
+         param.maxCategories = 15;
+         param.priors = IntPtr.Zero;
+         param.calcVarImportance = true;
+         param.nactiveVars = 4;
+         param.termCrit = new MCvTermCriteria(100, 0.01f);
+         param.termCrit.type = Emgu.CV.CvEnum.TERMCRIT.CV_TERMCRIT_ITER;
+
+         using (RTrees forest = new RTrees())
+         {
+            bool success = forest.Train(data, Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE,
+                           response, null, sampleIdx, varType, null, param);
+
+            if (!success) return;
+            //forest.Train(data, Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, response, null, null, varType, null, param);
+            double trainDataCorrectRatio = 0;
+            double testDataCorrectRatio = 0;
+            for (int i = 0; i < data.Rows; i++)
+            {
+               using (Matrix<float> sample = data.GetRow(i))
+               {
+                  double r = forest.Predict(sample, null);
+                  r = Math.Abs(r - response[i, 0]);
+                  if (r < 1.0e-5)
+                  {
+                     if (i < trainingSampleCount)
+                        trainDataCorrectRatio++;
+                     else
+                        testDataCorrectRatio++;
+                  }
+               }
+            }
+
+            Matrix<float> varImportance = forest.GetVarImportance();
+            trainDataCorrectRatio /= trainingSampleCount;
+            testDataCorrectRatio /= (data.Rows - trainingSampleCount);
          }
       }
 

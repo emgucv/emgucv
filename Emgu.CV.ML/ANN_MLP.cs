@@ -44,7 +44,7 @@ namespace Emgu.CV.ML
          Matrix<float> trainData,
          Matrix<float> responses,
          Matrix<float> sampleWeights,
-         Matrix<int> sampleIdx,
+         Matrix<Byte> sampleIdx,
          MCvANN_MLP_TrainParams parameters,
          MlEnum.ANN_MLP_TRAINING_FLAG flag)
       {

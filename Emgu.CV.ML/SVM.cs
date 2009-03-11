@@ -39,8 +39,8 @@ namespace Emgu.CV.ML
       public bool Train(
          Matrix<float> trainData,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
          SVMParams parameters)
       {
          return MlInvoke.CvSVMTrain(
@@ -77,8 +77,8 @@ namespace Emgu.CV.ML
       public bool TrainAuto(
          Matrix<float> trainData,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
          MCvSVMParams parameters,
          int kFold)
       {
@@ -116,8 +116,8 @@ namespace Emgu.CV.ML
       public bool TrainAuto(
          Matrix<float> trainData,
          Matrix<float> responses,
-         Matrix<int> varIdx,
-         Matrix<int> sampleIdx,
+         Matrix<Byte> varIdx,
+         Matrix<Byte> sampleIdx,
          MCvSVMParams parameters,
          int kFold,
          MCvParamGrid cGrid,
