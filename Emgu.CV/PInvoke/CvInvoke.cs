@@ -1822,9 +1822,10 @@ namespace Emgu.CV
       /// </remarks>
       /// <param name="src">The input matrix</param>
       /// <param name="dst">The output single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
+      /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_TYPE type);
+      public static extern void cvReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type);
       #endregion
 
       /// <summary>

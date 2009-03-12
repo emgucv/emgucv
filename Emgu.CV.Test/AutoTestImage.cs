@@ -727,6 +727,14 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestResize()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(123, 321);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         image.Resize(512, 512);
+      }
+
+      [Test]
       public void TestRoi()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(1, 1);

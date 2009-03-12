@@ -89,6 +89,25 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Type used for cvReduce function
+   /// </summary>
+   public enum REDUCE_DIMENSION
+   {
+      /// <summary>
+      /// The matrix is reduced to a single row
+      /// </summary>
+      SINGLE_ROW = 0,
+      /// <summary>
+      /// The matrix is reduced to a single column
+      /// </summary>
+      SINGLE_COL = 1,
+      /// <summary>
+      /// The dimension is chosen automatically by analysing the dst size
+      /// </summary>
+      AUTO = -1,
+   }
+
+   /// <summary>
    /// Type used for cvCmp function
    /// </summary>
    public enum CMP_TYPE

@@ -16,7 +16,7 @@ namespace Simlpe3DReconstruction
       private void InitializeComponent()
       {
          this.components = new System.ComponentModel.Container();
-         this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
+         this.simpleOsgControl = new OsgControl();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.splitContainer1.Panel1.SuspendLayout();
@@ -27,21 +27,21 @@ namespace Simlpe3DReconstruction
          // 
          // simpleOpenGlControl1
          // 
-         this.simpleOpenGlControl1.AccumBits = ((byte)(0));
-         this.simpleOpenGlControl1.AutoCheckErrors = false;
-         this.simpleOpenGlControl1.AutoFinish = false;
-         this.simpleOpenGlControl1.AutoMakeCurrent = true;
-         this.simpleOpenGlControl1.AutoSwapBuffers = true;
-         this.simpleOpenGlControl1.BackColor = System.Drawing.Color.Black;
-         this.simpleOpenGlControl1.ColorBits = ((byte)(32));
-         this.simpleOpenGlControl1.DepthBits = ((byte)(16));
-         this.simpleOpenGlControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.simpleOpenGlControl1.Location = new System.Drawing.Point(0, 0);
-         this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
-         this.simpleOpenGlControl1.Size = new System.Drawing.Size(367, 309);
-         this.simpleOpenGlControl1.StencilBits = ((byte)(0));
-         this.simpleOpenGlControl1.TabIndex = 0;
-         this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
+         this.simpleOsgControl.AccumBits = ((byte)(0));
+         this.simpleOsgControl.AutoCheckErrors = false;
+         this.simpleOsgControl.AutoFinish = false;
+         this.simpleOsgControl.AutoMakeCurrent = true;
+         this.simpleOsgControl.AutoSwapBuffers = true;
+         this.simpleOsgControl.BackColor = System.Drawing.Color.Black;
+         this.simpleOsgControl.ColorBits = ((byte)(32));
+         this.simpleOsgControl.DepthBits = ((byte)(16));
+         this.simpleOsgControl.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.simpleOsgControl.Location = new System.Drawing.Point(0, 0);
+         this.simpleOsgControl.Name = "simpleOpenGlControl1";
+         this.simpleOsgControl.Size = new System.Drawing.Size(367, 309);
+         this.simpleOsgControl.StencilBits = ((byte)(0));
+         this.simpleOsgControl.TabIndex = 0;
+         this.simpleOsgControl.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
          // 
          // splitContainer1
          // 
@@ -55,7 +55,7 @@ namespace Simlpe3DReconstruction
          // 
          // splitContainer1.Panel2
          // 
-         this.splitContainer1.Panel2.Controls.Add(this.simpleOpenGlControl1);
+         this.splitContainer1.Panel2.Controls.Add(this.simpleOsgControl);
          this.splitContainer1.Size = new System.Drawing.Size(791, 309);
          this.splitContainer1.SplitterDistance = 420;
          this.splitContainer1.TabIndex = 1;
@@ -88,7 +88,7 @@ namespace Simlpe3DReconstruction
 
       #endregion
 
-      private Tao.Platform.Windows.SimpleOpenGlControl simpleOpenGlControl1;
+      private OsgControl simpleOsgControl;
       private System.Windows.Forms.SplitContainer splitContainer1;
       private Emgu.CV.UI.ImageBox imageBox1;
    }

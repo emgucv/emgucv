@@ -230,11 +230,12 @@ namespace Emgu.CV
       /// And multi-channel arrays are also supported in these two reduction modes
       /// </remarks>
       /// <param name="array1D">The destination single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
+      /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
-      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_TYPE type)
+      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type)
          where TOtherDepth : new ()
       {
-         CvInvoke.cvReduce(Ptr, array1D.Ptr, type);
+         CvInvoke.cvReduce(Ptr, array1D.Ptr, dim, type);
       }
       #endregion
 

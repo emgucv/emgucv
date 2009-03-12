@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Tao.OpenGl;
+using OsgViewer;
+using OsgTerrain;
 
 namespace Simlpe3DReconstruction
 {
@@ -15,55 +17,116 @@ namespace Simlpe3DReconstruction
    {
       private MCvPoint3D32f[] _points;
       private Image<Bgr, Byte> _left;
-      private static double _angle = 0.0;
-      private static double _angleIncrement = 0.2;
+
+      private Viewer _viewer;
+
+      private Osg.Image ConvertImage(Image<Bgr, Byte> image)
+      {
+         Osg.Image res = new Osg.Image();
+         OsgWrapper.UnsignedCharPointer ptr = new OsgWrapper.UnsignedCharPointer();
+         ptr.Ptr = image.MIplImage.imageData;
+         
+         res.setImage(image.Width, image.Height, image.NumberOfChannels,
+            (int)Gl.GL_RGB, (int)Gl.GL_RGB, Gl.GL_UNSIGNED_BYTE, ptr,
+            Osg.Image.AllocationMode.USE_NEW_DELETE);
+         return res;
+      }
+
       public Simple3DReconstruction()
       {
+         int textureWidth = 256;
+         int textureHeight = 256;
+
          InitializeComponent();
+         _viewer = simpleOsgControl.Viewer;
 
          _left = new Image<Bgr, byte>("left.jpg");
          Image<Bgr, Byte> right = new Image<Bgr, byte>("right.jpg");
          Image<Gray, Int16> leftDisparityMap;
          Computer3DPointsFromImages(_left.Convert<Gray, Byte>(), right.Convert<Gray, Byte>(), out leftDisparityMap, out _points);
-         //Display the disparity map
-         imageBox1.Image = leftDisparityMap;
 
-         #region Initialize OpenGL control
-         simpleOpenGlControl1.InitializeContexts();
-         Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-         Gl.glMatrixMode(Gl.GL_PROJECTION);
-         Gl.glLoadIdentity();
-         Gl.glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+         /*
+         #region osg terrain
+         OsgTerrain.TerrainNode terrainNode = new TerrainNode();
+         OsgTerrain.Locator locator = new Locator();
+         OsgTerrain.ValidDataOperator validDataOperator = new ValidDataOperator();
 
-         #region Create texture for the 3D Point clouds
-         Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_WRAP_S, Gl.GL_REPEAT);
-         Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_WRAP_T, Gl.GL_REPEAT);
-         Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
-         Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
-         Gl.glTexEnvf(Gl.GL_TEXTURE_ENV, Gl.GL_TEXTURE_ENV_MODE, Gl.GL_DECAL);
-         Gl.glShadeModel(Gl.GL_SMOOTH);
-         Gl.glHint(Gl.GL_PERSPECTIVE_CORRECTION_HINT, Gl.GL_NICEST);
+         Osg.Image depthMap = ConvertImage(leftDisparityMap.Min(1000).Max(-1000).Convert<Bgr, Byte>());
+         OsgTerrain.ImageLayer depthLayer= new ImageLayer();
+         depthLayer.setImage(depthMap);
+         depthLayer.setLocator(locator);
+         depthLayer.setValidDataOperator(validDataOperator);
+         terrainNode.setElevationLayer(depthLayer);
 
-         Gl.glBindTexture(Gl.GL_TEXTURE_2D, 1);
+         Osg.Image textureMap = ConvertImage(_left);
+         OsgTerrain.ImageLayer textureLayer = new ImageLayer();
+         textureLayer.setImage(textureMap);
+         textureLayer.setLocator(locator);
+         depthLayer.setValidDataOperator(validDataOperator);
+         terrainNode.setColorLayer(0, textureLayer);
 
-         Size size = _left.Size;
-         int maxDim = Math.Max(size.Width, size.Height);
-         using (Image<Bgr, Byte> squareImg = new Image<Bgr, byte>(maxDim, maxDim))
+         OsgTerrain.GeometryTechnique geometryTechnique = new GeometryTechnique();
+         terrainNode.setTerrainTechnique(geometryTechnique);
+         #endregion
+         */
+           
+         //remove some depth outliers
+         for (int i = 0; i < _points.Length; i++)
          {
-            Rectangle roi = new Rectangle(maxDim / 2 - size.Width / 2, maxDim / 2 - size.Height / 2, size.Width, size.Height);
-            squareImg.ROI = roi;
-            CvInvoke.cvCopy(_left, squareImg, IntPtr.Zero);
-            squareImg.ROI = Rectangle.Empty;
-            using (Image<Bgr, Byte> texture = squareImg.Resize(256, 256, true))
-            {
-               texture._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);
-               Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, Gl.GL_RGB8, texture.Width, texture.Height, 0, Gl.GL_BGR_EXT, Gl.GL_UNSIGNED_BYTE, texture.MIplImage.imageData);
-               Glu.gluBuild2DMipmaps(Gl.GL_TEXTURE_2D, 4, texture.Width, texture.Height, Gl.GL_BGR, Gl.GL_UNSIGNED_BYTE, texture.MIplImage.imageData);
-            }
+            if (Math.Abs(_points[i].z) >= 1000) _points[i].z = 0;
          }
+
+         //Display the disparity map
+         //imageBox1.Image = leftDisparityMap;
+
+         
+         Osg.Geode geode = new Osg.Geode();
+         Osg.Geometry geometry = new Osg.Geometry();
+
+         #region setup the vertices
+         Osg.Vec3Array vertices = new Osg.Vec3Array();
+         foreach (MCvPoint3D32f p in _points)
+            vertices.Add(new Osg.Vec3(-p.x, p.y, p.z));
+         geometry.setVertexArray(vertices);
          #endregion
 
+         #region setup the primitive as point cloud
+         Osg.DrawElementsUInt draw = new Osg.DrawElementsUInt(
+            (uint)Osg.PrimitiveSet.Mode.POINTS, 0);
+         for (uint i = 0; i < _points.Length; i++)
+            draw.Add(i);
+         geometry.addPrimitiveSet(draw);
          #endregion
+
+         #region set the drawing color
+         Osg.Vec4Array colors = new Osg.Vec4Array();
+         colors.Add(new Osg.Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+         geometry.setColorArray(colors);
+         geometry.setColorBinding(Osg.Geometry.AttributeBinding.BIND_OVERALL);
+         #endregion
+
+         #region setup the texture coordinates
+         Osg.Vec2Array textureCoor = new Osg.Vec2Array();
+         foreach (MCvPoint3D32f p in _points)
+            textureCoor.Add(new Osg.Vec2( p.x / _left.Width + 0.5f , p.y / _left.Height + 0.5f));
+         geometry.setTexCoordArray(0, textureCoor);
+         #endregion
+
+         #region create and setup the texture
+         // Create a new StateSet with default settings
+         Osg.StateSet state = new Osg.StateSet();
+         Osg.Image textureImage = ConvertImage(_left.Resize(textureWidth, textureHeight));
+         Osg.Texture2D texture = new Osg.Texture2D(textureImage);
+         state.setTextureAttributeAndModes(0, texture, 1);
+         geode.setStateSet(state);
+         #endregion
+
+         geode.addDrawable(geometry);
+         
+
+         _viewer.setSceneData(geode);
+         //_viewer.setSceneData(terrainNode);
+         _viewer.realize();
       }
 
       /// <summary>
@@ -85,15 +148,13 @@ namespace Simlpe3DReconstruction
 
             leftDisparityMap = leftDisparity * (-16);
 
-            float scale = Math.Max(size.Width, size.Height);
-
             //Construct a simple Q matrix, if you have a matrix from cvStereoRectify, you should use that instead
             using (Matrix<double> q = new Matrix<double>(
                new double[,] {
                   {1.0, 0.0, 0.0, -size.Width/2}, //shift the x origin to image center
-                  {0.0, -1.0, 0.0, size.Height/2}, //shift the y origin to image center and flip it upside down
-                  {0.0, 0.0, 16.0, 0.0}, //Multiply the z value by 16, 
-                  {0.0, 0.0, 0.0, scale}})) //scale the object's corrdinate to within a [-0.5, 0.5] cube
+                  {0.0, 1.0, 0.0, -size.Height/2}, //shift the y origin to image center
+                  {0.0, 0.0, -16.0, 0.0}, //Multiply the z value by -16, 
+                  {0.0, 0.0, 0.0, 1.0}})) 
                points = PointCollection.ReprojectImageTo3D(leftDisparity, q);
          }
       }
@@ -105,28 +166,12 @@ namespace Simlpe3DReconstruction
       /// <param name="e"></param>
       private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
       {
-         Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
-
-         Gl.glEnable(Gl.GL_TEXTURE_2D);
-
-         Gl.glPushMatrix();
-         Gl.glRotated(10.0, 0.0, 1.0, 0.0);
-         Gl.glRotated(_angle, 0.0, 1.0, 0.0);
-
-         Gl.glBegin(Gl.GL_POINTS);
-
-         foreach (MCvPoint3D32f p in _points)
+         if (_viewer != null && !_viewer.done())
          {
-            Gl.glTexCoord2f(p.x + 0.5f, p.y + 0.5f);
-            Gl.glVertex3f(p.x, p.y, p.z);
+            _viewer.updateTraversal();
+            _viewer.frame();
          }
-
-         Gl.glEnd();
-         Gl.glPopMatrix();
-
-         if (_angle >= 30.0 || _angle <= -30.0) _angleIncrement = -_angleIncrement;
-         _angle += _angleIncrement;
-         simpleOpenGlControl1.Invalidate();
+         simpleOsgControl.Invalidate();
       }
 
       /// <summary>
@@ -137,7 +182,7 @@ namespace Simlpe3DReconstruction
       {
          if (disposing && (components != null))
          {
-            simpleOpenGlControl1.DestroyContexts();
+            simpleOsgControl.Dispose();
             components.Dispose();
          }
          base.Dispose(disposing);

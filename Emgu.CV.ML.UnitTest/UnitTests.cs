@@ -6,6 +6,7 @@ using System.Drawing;
 using NUnit.Framework;
 using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.ML.UnitTest
 {
@@ -265,7 +266,7 @@ namespace Emgu.CV.ML.UnitTest
          #region Generate the training data and classes
          Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
          Matrix<int> trainClasses = new Matrix<int>(trainSampleCount, 1);
-
+         
          Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
 
          Matrix<float> sample = new Matrix<float>(1, 2);
