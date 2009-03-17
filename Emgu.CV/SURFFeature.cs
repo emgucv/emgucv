@@ -12,6 +12,7 @@ namespace Emgu.CV
    public class SURFFeature : DisposableObject
    {
       private MCvSURFPoint _point;
+      private Matrix<float> _descriptor;
 
       /// <summary>
       /// The SURF point
@@ -22,7 +23,6 @@ namespace Emgu.CV
          set { _point = value; }
       }
 
-      private Matrix<float> _descriptor;
 
       /// <summary>
       /// The SURF descriptor as a matrix (64x1 for regular descriptor; 128x1 for extended descriptor)

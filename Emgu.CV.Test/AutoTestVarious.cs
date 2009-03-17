@@ -957,7 +957,19 @@ namespace Emgu.CV.Test
          img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
          //ImageViewer.Show(img);
       }
-      
+
+      [Test]
+      public void TestMemstorage()
+      {
+         for (int i = 0; i < 100000; i++)
+         {
+            using (MemStorage stor = new MemStorage())
+            {
+               Seq<PointF> seq = new Seq<PointF>(stor);
+            }
+         }
+      }
+
       [Test]
       public void TestVideoWriter()
       {

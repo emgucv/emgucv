@@ -54,6 +54,8 @@ namespace Emgu.CV.UI
            this.clearOperationsBtn = new System.Windows.Forms.Button();
            this.popOperationButton = new System.Windows.Forms.Button();
            this.showHistogramButton = new System.Windows.Forms.Button();
+           this.zoomLevelComboBox = new System.Windows.Forms.ComboBox();
+           this.label9 = new System.Windows.Forms.Label();
            this.tabControl1.SuspendLayout();
            this.tabPage1.SuspendLayout();
            this.tabPage2.SuspendLayout();
@@ -164,7 +166,7 @@ namespace Emgu.CV.UI
            // label7
            // 
            this.label7.AutoSize = true;
-           this.label7.Location = new System.Drawing.Point(5, 123);
+           this.label7.Location = new System.Drawing.Point(5, 176);
            this.label7.Name = "label7";
            this.label7.Size = new System.Drawing.Size(61, 13);
            this.label7.TabIndex = 12;
@@ -191,7 +193,7 @@ namespace Emgu.CV.UI
            // 
            this.tabControl1.Controls.Add(this.tabPage1);
            this.tabControl1.Controls.Add(this.tabPage2);
-           this.tabControl1.Location = new System.Drawing.Point(8, 149);
+           this.tabControl1.Location = new System.Drawing.Point(8, 192);
            this.tabControl1.Name = "tabControl1";
            this.tabControl1.SelectedIndex = 0;
            this.tabControl1.Size = new System.Drawing.Size(327, 242);
@@ -237,7 +239,7 @@ namespace Emgu.CV.UI
            // 
            // clearOperationsBtn
            // 
-           this.clearOperationsBtn.Location = new System.Drawing.Point(249, 118);
+           this.clearOperationsBtn.Location = new System.Drawing.Point(249, 171);
            this.clearOperationsBtn.Name = "clearOperationsBtn";
            this.clearOperationsBtn.Size = new System.Drawing.Size(75, 23);
            this.clearOperationsBtn.TabIndex = 17;
@@ -247,7 +249,7 @@ namespace Emgu.CV.UI
            // 
            // popOperationButton
            // 
-           this.popOperationButton.Location = new System.Drawing.Point(124, 118);
+           this.popOperationButton.Location = new System.Drawing.Point(124, 171);
            this.popOperationButton.Name = "popOperationButton";
            this.popOperationButton.Size = new System.Drawing.Size(100, 23);
            this.popOperationButton.TabIndex = 18;
@@ -257,18 +259,38 @@ namespace Emgu.CV.UI
            // 
            // showHistogramButton
            // 
-           this.showHistogramButton.Location = new System.Drawing.Point(8, 92);
+           this.showHistogramButton.Location = new System.Drawing.Point(8, 142);
            this.showHistogramButton.Name = "showHistogramButton";
            this.showHistogramButton.Size = new System.Drawing.Size(149, 23);
            this.showHistogramButton.TabIndex = 19;
-           this.showHistogramButton.Text = "Color Histogram";
+           this.showHistogramButton.Text = "Show Color Histogram";
            this.showHistogramButton.UseVisualStyleBackColor = true;
            this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
+           // 
+           // zoomLevelComboBox
+           // 
+           this.zoomLevelComboBox.FormattingEnabled = true;
+           this.zoomLevelComboBox.Location = new System.Drawing.Point(91, 103);
+           this.zoomLevelComboBox.Name = "zoomLevelComboBox";
+           this.zoomLevelComboBox.Size = new System.Drawing.Size(107, 21);
+           this.zoomLevelComboBox.TabIndex = 20;
+           this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
+           // 
+           // label9
+           // 
+           this.label9.AutoSize = true;
+           this.label9.Location = new System.Drawing.Point(48, 106);
+           this.label9.Name = "label9";
+           this.label9.Size = new System.Drawing.Size(37, 13);
+           this.label9.TabIndex = 21;
+           this.label9.Text = "Zoom:";
            // 
            // ImageProperty
            // 
            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+           this.Controls.Add(this.label9);
+           this.Controls.Add(this.zoomLevelComboBox);
            this.Controls.Add(this.showHistogramButton);
            this.Controls.Add(this.popOperationButton);
            this.Controls.Add(this.clearOperationsBtn);
@@ -289,7 +311,7 @@ namespace Emgu.CV.UI
            this.Controls.Add(this.widthTextbox);
            this.Controls.Add(this.label1);
            this.Name = "ImageProperty";
-           this.Size = new System.Drawing.Size(349, 394);
+           this.Size = new System.Drawing.Size(349, 437);
            this.tabControl1.ResumeLayout(false);
            this.tabPage1.ResumeLayout(false);
            this.tabPage2.ResumeLayout(false);
@@ -323,5 +345,7 @@ namespace Emgu.CV.UI
         private System.Windows.Forms.Button clearOperationsBtn;
         private System.Windows.Forms.Button popOperationButton;
         private System.Windows.Forms.Button showHistogramButton;
+       private System.Windows.Forms.ComboBox zoomLevelComboBox;
+       private System.Windows.Forms.Label label9;
     }
 }

@@ -48,7 +48,7 @@ namespace Simlpe3DReconstruction
          /*
          #region osg terrain
          OsgTerrain.TerrainNode terrainNode = new TerrainNode();
-         OsgTerrain.Locator locator = new Locator();
+         OsgTerrain.Locator locator = new OsgTerrain.EllipsoidLocator(-Math.PI, -Math.PI * 0.5, 2.0 * Math.PI, Math.PI, 0.0);
          OsgTerrain.ValidDataOperator validDataOperator = new ValidDataOperator();
 
          Osg.Image depthMap = ConvertImage(leftDisparityMap.Min(1000).Max(-1000).Convert<Bgr, Byte>());
@@ -123,7 +123,6 @@ namespace Simlpe3DReconstruction
 
          geode.addDrawable(geometry);
          
-
          _viewer.setSceneData(geode);
          //_viewer.setSceneData(terrainNode);
          _viewer.realize();

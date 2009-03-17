@@ -10,13 +10,19 @@ namespace Emgu.CV
    public interface IImage : IDisposable, ICloneable
    {
       /// <summary>
-      /// Convert this image into Bitmap 
+      /// Convert this image into Bitmap, when avaialbe, data is shared with this image.
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The Bitmap, when avaialbe, data is shared with this image</returns>
       Bitmap Bitmap
       {
          get;
       }
+
+      /// <summary>
+      /// Convert this image into Bitmap, the data is always copied over.
+      /// </summary>
+      /// <returns>The Bitmap, the data is always copied over.</returns>
+      Bitmap ToBitmap();
 
       /// <summary>
       /// The size of this image
@@ -57,6 +63,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="fileName">The file name of the image</param>
       void Save(String fileName);
-      
+
+      /// <summary>
+      /// Resize the image
+      /// </summary>
+      /// <param name="width">The new width</param>
+      /// <param name="height">The new height</param>
+      /// <returns>The resized image</returns>
+      IImage Resize(int width, int height);
+
    }
 }

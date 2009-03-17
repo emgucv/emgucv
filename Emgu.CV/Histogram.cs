@@ -23,7 +23,7 @@ namespace Emgu.CV
       /// <param name="binSize">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
       /// <param name="range">the upper and lower boundaries of the bins</param>
       public Histogram(int binSize, RangeF range)
-         : this (new int[1] {binSize}, new RangeF[1] {range})
+         : this(new int[1] { binSize }, new RangeF[1] { range })
       {
       }
 
@@ -43,7 +43,7 @@ namespace Emgu.CV
          IntPtr[] rangesPts = new IntPtr[ranges.Length];
          Int64 address = rangesHandle.AddrOfPinnedObject().ToInt64();
          for (int i = 0; i < rangesPts.Length; i++)
-            rangesPts[i] = new IntPtr( address + i * (Marshal.SizeOf(typeof(RangeF))) );
+            rangesPts[i] = new IntPtr(address + i * (Marshal.SizeOf(typeof(RangeF))));
          #endregion
 
          #region alocate memory for the underline data storage
@@ -51,7 +51,7 @@ namespace Emgu.CV
          foreach (int s in binSizes) size *= s;
          _data = new float[size];
          _dataHandle = GCHandle.Alloc(_data, GCHandleType.Pinned);
-         #endregion 
+         #endregion
 
          _ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvHistogram)));
 
@@ -146,7 +146,7 @@ namespace Emgu.CV
       /// <param name="imgs">images to project</param>
       /// <param name="accumulate">If it is true, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online. </param>
       /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
-      public void Calculate(IImage[] imgs, bool accumulate, Image<Gray, Byte> mask) 
+      public void Calculate(IImage[] imgs, bool accumulate, Image<Gray, Byte> mask)
       {
          Calculate(
             Array.ConvertAll<IImage, IntPtr>(imgs, delegate(IImage img) { return img.Ptr; }),
@@ -158,10 +158,10 @@ namespace Emgu.CV
       {
          Debug.Assert(arrays.Length == Dimension, "incompatible dimension");
          CvInvoke.cvCalcHist(
-            arrays, 
+            arrays,
             _ptr,
-            accumulate, 
-            mask == null?  IntPtr.Zero : mask.Ptr);
+            accumulate,
+            mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       /// <summary>
@@ -177,7 +177,7 @@ namespace Emgu.CV
       /// <param name="maxLocation">Pointer to the array of coordinates for maximum </param>
       public void MinMax(out float minValue, out float maxValue, out int[] minLocation, out int[] maxLocation)
       {
-         minValue = 0; 
+         minValue = 0;
          maxValue = 0;
          int dimension = Dimension;
          minLocation = new int[dimension];
@@ -340,7 +340,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region properties
+      #region Properties
       /// <summary>
       /// Get the equivalent MCvHistogram structure 
       /// </summary>
@@ -360,15 +360,15 @@ namespace Emgu.CV
       /// <summary>
       /// Get the size of the bin dimensions
       /// </summary>
-      public MCvMatND.Dimension[] BinDimension 
-      { 
-         get 
+      public MCvMatND.Dimension[] BinDimension
+      {
+         get
          {
             MCvHistogram h = MCvHistogram;
             MCvMatND.Dimension[] res = new MCvMatND.Dimension[h.mat.dims];
             Array.Copy(h.mat.dim, res, h.mat.dims);
             return res;
-         } 
+         }
       }
 
       /// <summary>
@@ -391,7 +391,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region implement UnmanagedObject
+      #region Implement UnmanagedObject
       /// <summary>
       /// Release the histogram and all memory associate with it
       /// </summary>

@@ -1,3 +1,4 @@
+//#define C_IMPLEMENTATION
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -127,8 +128,10 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
 
+#if C_IMPLEMENTATION
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
+#endif
 
       private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge currentEdge, List<System.Drawing.PointF> bufferList)
       {
@@ -185,68 +188,68 @@ namespace Emgu.CV
             _isVoronoiDirty = false;
          }
 
-         {  //slower C# implementation, works correctly in both DEBUG and RELEASE
-            int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-            Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
-            List<VoronoiFacet> facetList = new List<VoronoiFacet>();
-            List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
+#if C_IMPLEMENTATION
+         //alternative high-performance method, works correctly in DEBUG but not RELEASE
+         int size = MCvSubdiv2D.total;
+         PointF[] points = new PointF[size];
+         MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
+         GCHandle pointHandle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         GCHandle edgeHandle = GCHandle.Alloc(edges, GCHandleType.Pinned);
 
-            foreach (MCvQuadEdge2D quadEdge in this)
-            {
-               MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
+         PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject(), edgeHandle.AddrOfPinnedObject(), ref size);
+         pointHandle.Free();
+         edgeHandle.Free();
 
-               System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
-               if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
-                  && InsertPoint2DToDictionary(pt1, facetDict))
-               {
-                  MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
-                  PointF[] p1 = EdgeToPoly(e1, bufferList);
-                  if (p1 != null)
-                  {
-                     facetList.Add(new VoronoiFacet(pt1, p1));
-                  }
-               }
+         List<System.Drawing.PointF> buffer = new List<System.Drawing.PointF>();
+         VoronoiFacet[] facets = new VoronoiFacet[size];
 
-               System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
-               if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
-                  && InsertPoint2DToDictionary(pt2, facetDict))
-               {
-                  MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
-                  PointF[] p2 = EdgeToPoly(e2, bufferList);
-                  if (p2 != null)
-                  {
-                     facetList.Add(new VoronoiFacet(pt2, p2));
-                  }
-               }
-            }
-            return facetList.ToArray();
+         for (int i = 0; i < size; i++)
+         {
+
+            System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
+
+            if (polygon != null)
+               facets[i] = new VoronoiFacet(points[i], polygon);
          }
+         return facets;
 
-         /*
-         {  //alternative high-performance method, works correctly in DEBUG but not RELEASE
-            int size = MCvSubdiv2D.total; 
-            PointF[] points = new PointF[size];
-            MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
-            GCHandle pointHandle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            GCHandle edgeHandle = GCHandle.Alloc(edges, GCHandleType.Pinned);
-            
-            PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject() , edgeHandle.AddrOfPinnedObject(), ref size);
-            pointHandle.Free();
-            edgeHandle.Free();
+#else
+         //slower C# implementation, works correctly in both DEBUG and RELEASE
+         int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
+         Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
+         List<VoronoiFacet> facetList = new List<VoronoiFacet>();
+         List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
 
-            List<System.Drawing.PointF> buffer = new List<System.Drawing.PointF>();
-            VoronoiFacet[] facets = new VoronoiFacet[size];
-            
-            for (int i = 0; i < size; i++)
+         foreach (MCvQuadEdge2D quadEdge in this)
+         {
+            MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
+
+            System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
+            if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
+               && InsertPoint2DToDictionary(pt1, facetDict))
             {
-               
-               System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
-               
-               if (polygon != null)
-                  facets[i] = new VoronoiFacet(points[i], polygon);
+               MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
+               PointF[] p1 = EdgeToPoly(e1, bufferList);
+               if (p1 != null)
+               {
+                  facetList.Add(new VoronoiFacet(pt1, p1));
+               }
             }
-            return facets;
-         }*/
+
+            System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
+            if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
+               && InsertPoint2DToDictionary(pt2, facetDict))
+            {
+               MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
+               PointF[] p2 = EdgeToPoly(e2, bufferList);
+               if (p2 != null)
+               {
+                  facetList.Add(new VoronoiFacet(pt2, p2));
+               }
+            }
+         }
+         return facetList.ToArray();
+#endif
       }
 
       /// <summary>

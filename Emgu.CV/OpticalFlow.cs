@@ -65,14 +65,8 @@ namespace Emgu.CV
          out Byte[] status,
          out float[] trackError)
       {
-         if (prevPyrBuffer == null)
-         {
-            prevPyrBuffer = new Image<Gray, byte>(prev.Width + 8, prev.Height / 3);
-         }
-         if (currPyrBuffer == null)
-         {
-            currPyrBuffer = prevPyrBuffer.CopyBlank();
-         }
+         Image<Gray, Byte> prevPyrBufferParam = prevPyrBuffer ?? new Image<Gray, byte>(prev.Width + 8, prev.Height / 3);
+         Image<Gray, Byte> currPyrBufferParam = currPyrBuffer ?? prevPyrBufferParam.CopyBlank();
 
          status = new Byte[prevFeatures.Length];
          trackError = new float[prevFeatures.Length];
@@ -82,8 +76,8 @@ namespace Emgu.CV
          CvInvoke.cvCalcOpticalFlowPyrLK(
             prev,
             curr,
-            prevPyrBuffer,
-            currPyrBuffer,
+            prevPyrBufferParam,
+            currPyrBufferParam,
             prevFeatures,
             currFeatures,
             prevFeatures.Length,
@@ -93,6 +87,11 @@ namespace Emgu.CV
             trackError,
             criteria,
             flags);
+
+         #region Release buffer images if they are create within this function call
+         if (!object.ReferenceEquals(prevPyrBufferParam, prevPyrBuffer)) prevPyrBufferParam.Dispose();
+         if (!object.ReferenceEquals(currPyrBufferParam, currPyrBuffer)) currPyrBufferParam.Dispose();
+         #endregion
       }
 
       /// <summary>

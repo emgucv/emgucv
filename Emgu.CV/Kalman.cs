@@ -153,8 +153,9 @@ namespace Emgu.CV
       /// <returns>The predicted state</returns>
       public Matrix<float> Predict(Matrix<float> control)
       {
-         IntPtr controlPtr = control == null ? IntPtr.Zero : control.Ptr;
-         CvInvoke.cvKalmanPredict(ref _kalman, controlPtr);
+         CvInvoke.cvKalmanPredict(
+            ref _kalman, 
+            control == null ? IntPtr.Zero : control.Ptr);
          return PredictedState;
       }
 

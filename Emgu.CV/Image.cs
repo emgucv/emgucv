@@ -2163,20 +2163,8 @@ namespace Emgu.CV
       /// <param name="warpType">Warp type</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
-      {
-         return WarpAffine(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
-      }
-
-      /// <summary>
-      /// Transforms source image using the specified matrix
-      /// </summary>
-      /// <param name="mapMatrix">2x3 transformation matrix</param>
-      /// <param name="interpolationType">Interpolation type</param>
-      /// <param name="warpType">Warp type</param>
-      /// <param name="backgroundColor">A value used to fill outliers</param>
-      /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine(Matrix<double> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      public Image<TColor, TDepth> WarpAffine<TMapDepth>(Matrix<TMapDepth> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+         where TMapDepth : new()
       {
          return WarpAffine(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
       }
@@ -2190,25 +2178,10 @@ namespace Emgu.CV
       /// <param name="interpolationType">Interpolation type</param>
       /// <param name="warpType">Warp type</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine(Matrix<float> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
-      {
-         Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
-         CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
-         return res;
-      }
-
-      /// <summary>
-      /// Transforms source image using the specified matrix
-      /// </summary>
-      /// <param name="mapMatrix">2x3 transformation matrix</param>
-      /// <param name="width">The width of the resulting image</param>
-      /// <param name="height">the height of the resulting image</param>
-      /// <param name="interpolationType">Interpolation type</param>
-      /// <param name="warpType">Warp type</param>
-      /// <param name="backgroundColor">A value used to fill outliers</param>
-      /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine(Matrix<double> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      public Image<TColor, TDepth> WarpAffine<TMapDepth>(Matrix<TMapDepth> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+         where TMapDepth : new()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.cvWarpAffine(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
@@ -2222,8 +2195,10 @@ namespace Emgu.CV
       /// <param name="interpolationType">Interpolation type</param>
       /// <param name="warpType">Warp type</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpPerspective(Matrix<float> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      public Image<TColor, TDepth> WarpPerspective<TMapDepth>(Matrix<TMapDepth> mapMatrix, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+         where TMapDepth : new()
       {
          return WarpPerspective(mapMatrix, Width, Height, interpolationType, warpType, backgroundColor);
       }
@@ -2237,8 +2212,10 @@ namespace Emgu.CV
       /// <param name="interpolationType">Interpolation type</param>
       /// <param name="warpType">Warp type</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
+      /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpPerspective(Matrix<float> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+      public Image<TColor, TDepth> WarpPerspective<TMapDepth>(Matrix<TMapDepth> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
+         where TMapDepth : new ()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.cvWarpPerspective(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
@@ -2259,7 +2236,7 @@ namespace Emgu.CV
          if (crop)
          {
             PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-            using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
+            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
             {
                return WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
             }
@@ -2299,7 +2276,7 @@ namespace Emgu.CV
                   int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
                   int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
                   int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
-                  System.Drawing.Rectangle toCrop = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
+                  Rectangle toCrop = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 
                   return tempImage2.Copy(toCrop);
                }
@@ -3868,6 +3845,16 @@ namespace Emgu.CV
       #endregion
 
       #region various
+      private static int GetCodeFromFlipType(CvEnum.FLIP flipType)
+      {
+         return 
+            //-1 indicates vertical and horizontal flip
+            flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+            //1 indicates horizontal flip only
+            flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+            //0 indicates vertical flip only
+            0;
+      }
       ///<summary> Return a filpped copy of the current image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
@@ -3875,16 +3862,8 @@ namespace Emgu.CV
       {
          if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Copy();
 
-         int code =
-            //-1 indicates vertical and horizontal flip
-             flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
-            //1 indicates horizontal flip only
-             flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
-            //0 indicates vertical flip only
-             0;
-
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvFlip(Ptr, res.Ptr, code);
+         CvInvoke.cvFlip(Ptr, res.Ptr, GetCodeFromFlipType(flipType));
          return res;
       }
 
@@ -3896,17 +3875,10 @@ namespace Emgu.CV
       {
          if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
          {
-            int code =
-               //-1 indicates vertical and horizontal flip
-                flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
-               //1 indicates horizontal flip only
-                flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
-               //0 indicates vertical flip only
-                0;
             CvInvoke.cvFlip(
                Ptr,
                Ptr,
-               code);
+               GetCodeFromFlipType(flipType));
          }
       }
 
@@ -3982,6 +3954,11 @@ namespace Emgu.CV
       IImage[] IImage.Split()
       {
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
+      }
+
+      IImage IImage.Resize(int width, int height)
+      {
+         return Resize(width, height);
       }
       #endregion
 

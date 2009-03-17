@@ -16,7 +16,9 @@ namespace Simlpe3DReconstruction
       private void InitializeComponent()
       {
          this.components = new System.ComponentModel.Container();
+         
          this.simpleOsgControl = new OsgControl();
+
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.splitContainer1.Panel1.SuspendLayout();
@@ -24,8 +26,9 @@ namespace Simlpe3DReconstruction
          this.splitContainer1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
          this.SuspendLayout();
+         
          // 
-         // simpleOpenGlControl1
+         // simpleOsgControl
          // 
          this.simpleOsgControl.AccumBits = ((byte)(0));
          this.simpleOsgControl.AutoCheckErrors = false;
@@ -42,6 +45,7 @@ namespace Simlpe3DReconstruction
          this.simpleOsgControl.StencilBits = ((byte)(0));
          this.simpleOsgControl.TabIndex = 0;
          this.simpleOsgControl.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
+         
          // 
          // splitContainer1
          // 

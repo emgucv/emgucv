@@ -22,6 +22,12 @@ namespace Emgu.CV.UI
       private IImage _image;
       private IImage _displayedImage;
       private PropertyDialog _propertyDlg;
+      private double _zoomScale = 1.0;
+
+      /// <summary>
+      /// The available zoom levels for the displayed image 
+      /// </summary>
+      public static double[] ZoomLevels = new double[] { 0.12, 0.25, 0.5, 1.0, 1.5, 2.0, 4.0, 8.0 };
 
       private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
 
@@ -188,6 +194,26 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
+      /// Get or Set the zoom scale
+      /// </summary>
+      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      public double ZoomScale
+      {
+         get
+         {
+            return _zoomScale;
+         }
+         set
+         {
+            if (_zoomScale != value)
+            {
+               _zoomScale = value;
+               Image = Image;
+            }
+         }
+      }
+
+      /// <summary>
       /// The image that is being displayed. It's the Image following by some user defined image operation
       /// </summary>
       [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -209,11 +235,21 @@ namespace Emgu.CV.UI
                if (base.Image != null)
                   base.Image.Dispose();
 
+               #region scale the image according to _zoomScale
+               if (_zoomScale != 1.0)
+               {
+                  Size size = _displayedImage.Size;
+                  int width = (int)Math.Max(2, (size.Width * _zoomScale));
+                  int height = (int)Math.Max(2, (size.Height * _zoomScale));
+                  _displayedImage = _displayedImage.Resize(width, height);
+               }
+
                base.Image = _displayedImage.Bitmap;
+               #endregion
 
                if (EnablePropertyPanel)
                {
-                  ImagePropertyPanel.ImageSize = _displayedImage.Size;
+                  ImagePropertyPanel.ImageSize = base.Image.Size;
 
                   ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
                   ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
@@ -379,10 +415,7 @@ namespace Emgu.CV.UI
                       }
                       catch (Exception expt)
                       {
-                         MessageBox.Show(
-                            expt.InnerException == null ?
-                              expt.Message
-                              : expt.InnerException.Message);
+                         MessageBox.Show((expt.InnerException ?? expt).Message);
 
                          //special case, then there is no parameter and the method throw an exception
                          //break the loop

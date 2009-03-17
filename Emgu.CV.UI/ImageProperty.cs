@@ -33,6 +33,11 @@ namespace Emgu.CV.UI
          InitializeComponent();
          cSharpOperationView.Language = ProgrammingLanguage.CSharp;
          cPlusPlusOperationView.Language = ProgrammingLanguage.CPlusPlus;
+         
+         for (int i = 0; i < ImageBox.ZoomLevels.Length; i++)
+         {
+            zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
+         }
       }
 
       public System.Drawing.Size ImageSize
@@ -139,6 +144,14 @@ namespace Emgu.CV.UI
          }
 
          HistogramViewer.Show(image);
+      }
+
+      private void zoomLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         if (_imageBox != null)
+         {
+            _imageBox.ZoomScale = ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex];;
+         }
       }
    }
 }
