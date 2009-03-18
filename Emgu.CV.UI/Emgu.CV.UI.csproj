@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -96,11 +96,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringTable.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\StringTable.zh-CN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StringTable.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="PropertyDialog.cs">
       <SubType>Form</SubType>
