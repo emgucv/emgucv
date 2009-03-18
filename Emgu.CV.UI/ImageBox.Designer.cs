@@ -58,7 +58,7 @@ namespace Emgu.CV.UI
             this.saveAsToolStripMenuItem});
            this.fileOperationToolStripMenuItem.Name = "fileOperationToolStripMenuItem";
            this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-           this.fileOperationToolStripMenuItem.Text = "File";
+           this.fileOperationToolStripMenuItem.Text = Properties.StringTable.File;
            // 
            // loadImageToolStripMenuItem
            // 
@@ -71,7 +71,7 @@ namespace Emgu.CV.UI
            // 
            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-           this.saveAsToolStripMenuItem.Text = "Save As";
+           this.saveAsToolStripMenuItem.Text = Properties.StringTable.SaveAs;
            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
            // 
            // operationsToolStripMenuItem
@@ -84,7 +84,7 @@ namespace Emgu.CV.UI
            // 
            this.propertyToolStripMenuItem.Name = "propertyToolStripMenuItem";
            this.propertyToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-           this.propertyToolStripMenuItem.Text = "Property";
+           this.propertyToolStripMenuItem.Text = Properties.StringTable.Property;
            this.propertyToolStripMenuItem.Click += new System.EventHandler(this.propertyToolStripMenuItem_Click);
            // 
            // loadImageFromFileDialog
@@ -94,7 +94,7 @@ namespace Emgu.CV.UI
            // 
            // saveImageToFileDialog
            // 
-           this.saveImageToFileDialog.Title = "File Saving";
+           this.saveImageToFileDialog.Title = Properties.StringTable.SaveImageDialogText;
            // 
            // ImageBox
            // 

@@ -1,4 +1,4 @@
-Version 2.0
+Version 2.0.0.0
 ==================================================================
 
 For online documentation please visit
@@ -12,3 +12,4 @@ http://www.emgu.com/forum/
 
 To report a bug, please visit
 http://www.emgu.com/bugs/
+

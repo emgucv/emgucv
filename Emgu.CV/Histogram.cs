@@ -156,7 +156,7 @@ namespace Emgu.CV
 
       private void Calculate(IntPtr[] arrays, bool accumulate, CvArray<Byte> mask)
       {
-         Debug.Assert(arrays.Length == Dimension, "incompatible dimension");
+         Debug.Assert(arrays.Length == Dimension, Properties.StringTable.IncompatibleDimension);
          CvInvoke.cvCalcHist(
             arrays,
             _ptr,
@@ -193,7 +193,7 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the image</typeparam>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs) where TDepth : new()
       {
-         Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
+         Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
              System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
@@ -216,7 +216,7 @@ namespace Emgu.CV
       /// <returns>Destination back projection image of the same type as the source images</returns>
       public Image<Gray, TDepth> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, float factor) where TDepth : new()
       {
-         Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
+         Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
              System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
@@ -236,7 +236,7 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the matrix</typeparam>
       public Matrix<TDepth> BackProject<TDepth>(Matrix<TDepth>[] srcs) where TDepth : new()
       {
-         Debug.Assert(srcs.Length == Dimension, "incompatible dimension");
+         Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
              System.Array.ConvertAll<Matrix<TDepth>, IntPtr>(
@@ -282,7 +282,7 @@ namespace Emgu.CV
       public double Query(params int[] binIndex)
       {
          Debug.Assert(binIndex.Length > 0, "Please specify at least one index");
-         Debug.Assert(binIndex.Length == Dimension, "incompatible dimension");
+         Debug.Assert(binIndex.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          switch (binIndex.Length)
          {

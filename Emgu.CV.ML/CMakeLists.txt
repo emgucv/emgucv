@@ -1,7 +1,6 @@
 PROJECT(Emgu.CV.ML)
 
-SET(CS_FLAGS -doc:${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.XML -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll
--r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:System.Drawing.dll)
+SET(CS_FLAGS ${CS_FLAGS} -doc:${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.XML -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:System.Drawing.dll)
 SET(SRC_CV_ML *.cs Properties/*.cs PInvoke/*.cs PInvoke/CvType/*.cs)
 ADD_CS_LIBRARY(Emgu.CV.ML "${SRC_CV_ML}" ALL)
 

@@ -16,6 +16,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Globalization;
+using System.Threading;
 
 namespace Emgu.CV.Test
 {
@@ -547,6 +549,8 @@ namespace Emgu.CV.Test
 
       public void TestImageViewer()
       {
+         System.Threading.Thread.CurrentThread.CurrentUICulture =
+            new System.Globalization.CultureInfo("zh-CN");
          Application.Run(new ImageViewer(null));
       }
 

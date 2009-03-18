@@ -52,6 +52,11 @@
   <ItemGroup>
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
+    <Compile Include="Properties\StringTable.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringTable.resx</DependentUpon>
+    </Compile>
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
     <Compile Include="SURFTracker.cs" />
@@ -171,16 +176,34 @@
     <None Include="Emgu.CV.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="README.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.txt</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Emgu.CV.License.txt" />
-    <Content Include="README.txt" />
+    <Content Include="README.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>README.tt</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
       <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
       <Name>Emgu.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\StringTable.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringTable.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,38 @@
+<#@ template language="C#" #>
+<#@ output extension=".txt" #>
+<#@ import namespace="System.IO" #>
+Version <#= AssemblyVersion #>
+==================================================================
+
+For online documentation please visit
+<#= EmguUrl #>wiki/files/<#= AssemblyVersion #>/Help/Index.html
+
+For tutorials and helps please visit the Emgu CV wiki 
+<#= EmguUrl #>wiki/
+
+For questions and discussions please visit the Emgu CV forum
+<#= EmguUrl #>forum/
+
+To report a bug, please visit
+<#= EmguUrl #>bugs/
+
+<#+ 
+	private String AssemblyVersion
+	{ 
+		get 
+		{ 
+			string path = @"..\..\bin\Emgu.CV.dll";
+			if (System.IO.File.Exists(path))
+			{
+				return System.Reflection.Assembly.ReflectionOnlyLoadFrom(path).GetName().Version.ToString();
+			}
+			else
+			{
+				return "0.0.0.0";	
+			}
+		} 
+	}
+
+	private String EmguUrl
+	{ get { return "http://www.emgu.com/"; } }
+#>

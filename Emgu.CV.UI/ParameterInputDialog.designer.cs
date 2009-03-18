@@ -51,7 +51,7 @@ namespace Emgu.CV.UI
            this.cancelButton.Name = "cancelButton";
            this.cancelButton.Size = new System.Drawing.Size(75, 23);
            this.cancelButton.TabIndex = 1;
-           this.cancelButton.Text = "Cancel";
+           this.cancelButton.Text = Properties.StringTable.Cancel;
            this.cancelButton.UseVisualStyleBackColor = true;
            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
            // 
@@ -61,7 +61,7 @@ namespace Emgu.CV.UI
            this.okButton.Name = "okButton";
            this.okButton.Size = new System.Drawing.Size(75, 23);
            this.okButton.TabIndex = 0;
-           this.okButton.Text = "OK";
+           this.okButton.Text = Properties.StringTable.OK ;
            this.okButton.UseVisualStyleBackColor = true;
            this.okButton.Click += new System.EventHandler(this.okButton_Click);
            // 
@@ -81,7 +81,7 @@ namespace Emgu.CV.UI
            this.Controls.Add(this.parameterInputPanel);
            this.Controls.Add(this.buttonsPanel);
            this.Name = "ParamInputDlg";
-           this.Text = "Please enter the parameters";
+           this.Text = Properties.StringTable.PleaseEnterParameters;
            this.buttonsPanel.ResumeLayout(false);
            this.ResumeLayout(false);
 

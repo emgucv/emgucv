@@ -64,7 +64,7 @@ namespace Emgu.CV.UI
             }
             else
             {
-               typeOfColorTexbox.Text = "Unknown";
+               typeOfColorTexbox.Text = Properties.StringTable.Unknown;
             }
          }
       }

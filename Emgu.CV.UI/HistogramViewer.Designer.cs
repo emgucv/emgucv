@@ -46,7 +46,7 @@ namespace Emgu.CV.UI
            this.ClientSize = new System.Drawing.Size(372, 284);
            this.Controls.Add(this.histogramCtrl1);
            this.Name = "HistogramViewer";
-           this.Text = "Color Histogram ";
+           this.Text = Properties.StringTable.DefaultHistogramViewerText;
            this.ResumeLayout(false);
 
         }

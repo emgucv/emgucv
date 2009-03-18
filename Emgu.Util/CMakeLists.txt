@@ -1,6 +1,6 @@
 PROJECT(Emgu.Util)
 
-SET(CS_FLAGS -doc:${LIBRARY_OUTPUT_PATH}/Emgu.Util.XML)
+SET(CS_FLAGS ${CS_FLAGS} -doc:${LIBRARY_OUTPUT_PATH}/Emgu.Util.XML)
 SET(SRC_UTIL *.cs Properties/*.cs)
 
 ADD_CS_LIBRARY(Emgu.Util "${SRC_UTIL}")

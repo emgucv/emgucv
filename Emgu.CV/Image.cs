@@ -219,7 +219,7 @@ namespace Emgu.CV
          }
          set
          {
-            Debug.Assert(value != null, "The Array cannot be null");
+            Debug.Assert(value != null, "Data cannot be set to null");
             Debug.Assert(value.GetLength(2) == NumberOfChannels, "The number of channels must equal");
             AllocateData(value.GetLength(0), value.GetLength(1), NumberOfChannels);
             int rows = value.GetLength(0);
@@ -398,7 +398,7 @@ namespace Emgu.CV
             else if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32S;
             else
-               throw new NotImplementedException("Unsupported image depth");
+               throw new NotImplementedException(Properties.StringTable.UnsupportedImageDepth);
          }
       }
 
@@ -587,7 +587,7 @@ namespace Emgu.CV
       ///<param name="thickness"> Must be &gt; 0 </param>
       public void Draw(Cross2DF cross, TColor color, int thickness)
       {
-         Debug.Assert(thickness > 0, "Thickness should be > 0");
+         Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
          if (thickness > 0)
          {
             Draw(cross.Horizontal, color, thickness);
@@ -600,7 +600,7 @@ namespace Emgu.CV
       ///<param name="thickness"> The thickness of the line segment </param>
       public virtual void Draw(LineSegment2DF line, TColor color, int thickness)
       {
-         Debug.Assert(thickness > 0, "Thickness should be > 0");
+         Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
          if (thickness > 0)
             CvInvoke.cvLine(
                 Ptr,
@@ -618,7 +618,7 @@ namespace Emgu.CV
       ///<param name="thickness"> The thickness of the line segment </param>
       public virtual void Draw(LineSegment2D line, TColor color, int thickness)
       {
-         Debug.Assert(thickness > 0, "Thickness should be > 0");
+         Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
          if (thickness > 0)
             CvInvoke.cvLine(
                 Ptr,
@@ -975,7 +975,7 @@ namespace Emgu.CV
          if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
          {
             //TODO: wrap CvChain and add code here
-            throw new NotImplementedException("Not implmented");
+            throw new NotImplementedException(Properties.StringTable.NotImplemented);
          }
 
          IntPtr seq = IntPtr.Zero;

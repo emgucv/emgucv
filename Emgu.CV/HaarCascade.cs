@@ -16,13 +16,13 @@ namespace Emgu.CV
       public HaarCascade(String fileName)
       {
          if (!File.Exists(fileName))
-            throw new FileNotFoundException("File Not Found", fileName);
+            throw new FileNotFoundException(Properties.StringTable.FileNotFound, fileName);
 
          _ptr = CvInvoke.cvLoad(fileName, IntPtr.Zero, null, IntPtr.Zero);
 
          if (_ptr == IntPtr.Zero)
          {
-            throw new NullReferenceException( String.Format("Fail to create HaarCascade object: {0}", fileName));
+            throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, fileName));
          }
       }
 

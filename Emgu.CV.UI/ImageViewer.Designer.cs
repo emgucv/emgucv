@@ -51,7 +51,7 @@ namespace Emgu.CV.UI
            this.ClientSize = new System.Drawing.Size(563, 482);
            this.Controls.Add(this.imageBox1);
            this.Name = "ImageViewer";
-           this.Text = "Image Viewer";
+           this.Text = Properties.StringTable.DefaultImageViewerText;
            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
            this.ResumeLayout(false);
            this.PerformLayout();

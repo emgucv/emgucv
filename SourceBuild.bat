@@ -16,7 +16,8 @@ REM == Clean up all folders except src folder ==
 perl miscellaneous\svn-clean.pl --exclude "^src(/|$)"
 
 REM == Copy other files ==
-cp -r README.txt Emgu.CV Emgu.CV.Extern Emgu.CV.ML Emgu.Util Emgu.CV.UI Emgu.CV.Example src\
+copy Emgu.CV\README.txt + README.txt src\README.txt
+cp -r Emgu.CV Emgu.CV.Extern Emgu.CV.ML Emgu.Util Emgu.CV.UI Emgu.CV.Example src\
 install -d src\%VS2005_FOLDER%
 install -d src\%VS2008_FOLDER%
 cp %VS2005_FOLDER%Emgu.CV.sln %VS2005_FOLDER%Emgu.CV.Example.sln src src\%VS2005_FOLDER%
