@@ -20,7 +20,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       public System.Drawing.SizeF size;
       /// <summary>
-      /// The angle of the box in radians
+      /// The angle of the box in degrees
       /// </summary>
       public float angle;
 
@@ -29,7 +29,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="center">The center of the box</param>
       /// <param name="size">The size of the box</param>
-      /// <param name="angle">The angle of the box in radians</param>
+      /// <param name="angle">The angle of the box in degrees</param>
       public MCvBox2D(System.Drawing.PointF center, System.Drawing.SizeF size, float angle)
       {
          this.center = center;
@@ -93,7 +93,7 @@ namespace Emgu.CV.Structure
       /// Returns true if the two box are equal
       /// </summary>
       /// <param name="other">The other box to compare with</param>
-      /// <returns>True if equal.</returns>
+      /// <returns>True if two boxes are equal</returns>
       public bool Equals(MCvBox2D other)
       {
          return center.Equals(other.center)
@@ -105,10 +105,15 @@ namespace Emgu.CV.Structure
       /// Convert a RectangleF to MCvBox2D
       /// </summary>
       /// <param name="rectangle">The rectangle</param>
-      /// <returns>The equivalent RectangleF</returns>
+      /// <returns>The equivalent MCvBox2D</returns>
       public static implicit operator MCvBox2D(System.Drawing.RectangleF rectangle)
       {
-         return new MCvBox2D(new System.Drawing.PointF(rectangle.Location.X + (rectangle.Width * 0.5f), rectangle.Location.Y + (rectangle.Height* 0.5f) ), rectangle.Size, 0);
+         return new MCvBox2D(
+            new System.Drawing.PointF(
+               rectangle.Location.X + (rectangle.Width * 0.5f), 
+               rectangle.Location.Y + (rectangle.Height* 0.5f) ), 
+            rectangle.Size, 
+            0);
       }
       #endregion
    }

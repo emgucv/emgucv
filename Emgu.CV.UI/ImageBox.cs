@@ -249,10 +249,7 @@ namespace Emgu.CV.UI
 
                if (EnablePropertyPanel)
                {
-                  ImagePropertyPanel.ImageSize = base.Image.Size;
-
-                  ImagePropertyPanel.TypeOfColor = Reflection.ReflectIImage.GetTypeOfColor(_displayedImage);
-                  ImagePropertyPanel.TypeOfDepth = Reflection.ReflectIImage.GetTypeOfDepth(_displayedImage);
+                  ImagePropertyPanel.SetImage(_displayedImage);
 
                   #region calculate the frame rate
                   TimeSpan ts = DateTime.Now.Subtract(_timerStartTime);
@@ -499,13 +496,7 @@ namespace Emgu.CV.UI
       {
          if (EnablePropertyPanel)
          {
-            ImagePropertyPanel.MousePositionOnImage = e.Location;
-
-            IImage img = DisplayedImage;
-            ImagePropertyPanel.ColorIntensity = 
-               img == null ?
-               null :
-               Reflection.ReflectIImage.GetPixelColor(img, e.Location);
+            ImagePropertyPanel.SetMousePositionOnImage(e.Location);
          }
       }
 

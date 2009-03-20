@@ -79,6 +79,24 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color Intensity.
+        /// </summary>
+        internal static string ColorIntensity {
+            get {
+                return ResourceManager.GetString("ColorIntensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Histogram.
+        /// </summary>
+        internal static string DefaultHistogramTitle {
+            get {
+                return ResourceManager.GetString("DefaultHistogramTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Color Histogram .
         /// </summary>
         internal static string DefaultHistogramViewerText {
@@ -151,6 +169,15 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only 1D histogram is supported.
+        /// </summary>
+        internal static string Only1DHistogramSupported {
+            get {
+                return ResourceManager.GetString("Only1DHistogramSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter {0} is invalid..
         /// </summary>
         internal static string ParameterIsInvalid {
@@ -169,6 +196,15 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pixel Count.
+        /// </summary>
+        internal static string PixelCount {
+            get {
+                return ResourceManager.GetString("PixelCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter the parameters.
         /// </summary>
         internal static string PleaseEnterParameters {
@@ -178,11 +214,38 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please load an image first.
+        /// </summary>
+        internal static string PleaseLoadAnImageFirst {
+            get {
+                return ResourceManager.GetString("PleaseLoadAnImageFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pop Operation.
+        /// </summary>
+        internal static string PopOperation {
+            get {
+                return ResourceManager.GetString("PopOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property.
         /// </summary>
         internal static string Property {
             get {
                 return ResourceManager.GetString("Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove All.
+        /// </summary>
+        internal static string RemoveAll {
+            get {
+                return ResourceManager.GetString("RemoveAll", resourceCulture);
             }
         }
         

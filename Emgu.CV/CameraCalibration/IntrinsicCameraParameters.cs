@@ -89,7 +89,6 @@ namespace Emgu.CV
          CvInvoke.cvCalibrationMatrixValues(_intrinsicMatrix.Ptr, imgWidth, imgHeight, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
       }
 
-
       #region IEquatable<IntrinsicCameraParameters> Members
 
       /// <summary>

@@ -10,19 +10,6 @@ namespace Emgu.CV.UI
       /// </summary>
       private System.ComponentModel.IContainer components = null;
 
-      /// <summary> 
-      /// Clean up any resources being used.
-      /// </summary>
-      /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-      protected override void Dispose(bool disposing)
-      {
-         if (disposing && (components != null))
-         {
-            components.Dispose();
-         }
-         base.Dispose(disposing);
-      }
-
       #region Component Designer generated code
 
       /// <summary> 
@@ -243,7 +230,7 @@ namespace Emgu.CV.UI
          this.clearOperationsBtn.Name = "clearOperationsBtn";
          this.clearOperationsBtn.Size = new System.Drawing.Size(75, 23);
          this.clearOperationsBtn.TabIndex = 17;
-         this.clearOperationsBtn.Text = "Remove All";
+         this.clearOperationsBtn.Text = Properties.StringTable.RemoveAll;
          this.clearOperationsBtn.UseVisualStyleBackColor = true;
          this.clearOperationsBtn.Click += new System.EventHandler(this.clearOperationBtn_Click);
          // 
@@ -253,7 +240,7 @@ namespace Emgu.CV.UI
          this.popOperationButton.Name = "popOperationButton";
          this.popOperationButton.Size = new System.Drawing.Size(100, 23);
          this.popOperationButton.TabIndex = 18;
-         this.popOperationButton.Text = "Pop Operation";
+         this.popOperationButton.Text = Properties.StringTable.PopOperation;
          this.popOperationButton.UseVisualStyleBackColor = true;
          this.popOperationButton.Click += new System.EventHandler(this.popOperationButton_Click);
          // 

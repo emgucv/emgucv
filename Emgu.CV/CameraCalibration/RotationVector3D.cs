@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Emgu.CV
 {
@@ -43,6 +44,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get or Set the (3x3) rotation matrix represented by this rotation vector
       /// </summary>
+      [XmlIgnore]
       public Matrix<double> RotationMatrix
       {
          get

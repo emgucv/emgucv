@@ -8,6 +8,7 @@ namespace Emgu.CV.ML.Structure
    /// <summary>
    /// Parameters OpenCV's decision tree parameters
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvDTreeParams
    {
       /// <summary>
@@ -42,14 +43,17 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// If true, surrogate splits are built. Surrogate splits are needed to handle missing measurements and for variable importance estimation.
       /// </summary>
+      [MarshalAs(UnmanagedType.I1)]
       public bool useSurrogates;
       /// <summary>
       /// If true, the tree is truncated a bit more by the pruning procedure. That leads to compact, and more resistant to the training data noise, but a bit less accurate decision tree. 
       /// </summary>
+      [MarshalAs(UnmanagedType.I1)]
       public bool use1seRule;
       /// <summary>
       /// If true, the cut off nodes (with Tn&lt;=CvDTree::pruned_tree_idx) are physically removed from the tree. Otherwise they are kept, and by decreasing CvDTree::pruned_tree_idx (e.g. setting it to -1) it is still possible to get the results from the original un-pruned (or pruned less aggressively) tree. 
       /// </summary>
+      [MarshalAs(UnmanagedType.I1)]
       public bool truncatePrunedTree;
       /// <summary>
       /// Another stop criteria - only for regression trees. As soon as the estimated node value differs from the node training samples responses by less than the parameter value, the node is not split further.

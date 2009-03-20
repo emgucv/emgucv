@@ -156,19 +156,14 @@ namespace Emgu.CV
          Matrix<double> translation = new Matrix<double>(3, 1);
          RotationVector3D rotation = new RotationVector3D();
 
-         IntPtr objectPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
-         IntPtr imagePointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
          GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
-         CvInvoke.cvInitMatHeader(objectPointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
-         CvInvoke.cvInitMatHeader(imagePointMatrix, imagePoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle2.AddrOfPinnedObject(), 0);
-         CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
-
+         using (Matrix<float> objectPointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
+         using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
+            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
          handle1.Free();
          handle2.Free();
-         Marshal.FreeHGlobal(objectPointMatrix);
-         Marshal.FreeHGlobal(imagePointMatrix);
-         
+
          return new ExtrinsicCameraParameters(rotation, translation);
       }
 
@@ -209,38 +204,26 @@ namespace Emgu.CV
           params Matrix<float>[] mats)
       {
          PointF[] imagePoints = new PointF[objectPoints.Length];
-         
-         IntPtr pointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
-         IntPtr imagePointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
-         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
-         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
-         CvInvoke.cvInitMatHeader(pointMatrix, objectPoints.Length, 3, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle1.AddrOfPinnedObject(), 0);
-         CvInvoke.cvInitMatHeader(imagePointMatrix, imagePoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, handle2.AddrOfPinnedObject(), 0);
 
          int matsLength = mats.Length;
-         IntPtr dpdrot = matsLength > 0 ? mats[0].Ptr : IntPtr.Zero;
-         IntPtr dpdt = matsLength > 1 ? mats[1].Ptr : IntPtr.Zero;
-         IntPtr dpdf = matsLength > 2 ? mats[2].Ptr : IntPtr.Zero;
-         IntPtr dpdc = matsLength > 3 ? mats[3].Ptr : IntPtr.Zero;
-         IntPtr dpddist = matsLength > 4 ? mats[4].Ptr : IntPtr.Zero;
-
-         CvInvoke.cvProjectPoints2(
-            pointMatrix, 
-            extrin.RotationVector.Ptr, 
-            extrin.TranslationVector.Ptr, 
-            intrin.IntrinsicMatrix.Ptr, 
-            intrin.DistortionCoeffs.Ptr, 
-            imagePointMatrix, 
-            dpdrot, 
-            dpdt, 
-            dpdf, 
-            dpdc, 
-            dpddist);
+         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
+         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
+         using (Matrix<float> pointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
+         using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
+            CvInvoke.cvProjectPoints2(
+                  pointMatrix,
+                  extrin.RotationVector.Ptr,
+                  extrin.TranslationVector.Ptr,
+                  intrin.IntrinsicMatrix.Ptr,
+                  intrin.DistortionCoeffs.Ptr,
+                  imagePointMatrix,
+                  matsLength > 0 ? mats[0] : IntPtr.Zero,
+                  matsLength > 1 ? mats[1] : IntPtr.Zero,
+                  matsLength > 2 ? mats[2] : IntPtr.Zero,
+                  matsLength > 3 ? mats[3] : IntPtr.Zero,
+                  matsLength > 4 ? mats[4] : IntPtr.Zero);
          handle1.Free();
          handle2.Free();
-         Marshal.FreeHGlobal(pointMatrix);
-         Marshal.FreeHGlobal(imagePointMatrix);
-
          return imagePoints;
       }
 
@@ -303,18 +286,15 @@ namespace Emgu.CV
          CvEnum.HOMOGRAPHY_METHOD method, 
          double ransacReprojThreshold)
       {
+         HomographyMatrix homography = new HomographyMatrix();
+
          GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
          GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
-         IntPtr srcPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
-         IntPtr dstPointMatrix = Marshal.AllocHGlobal(StructSize.MCvMat);
-         CvInvoke.cvInitMatHeader(srcPointMatrix, srcPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, srcHandle.AddrOfPinnedObject(), 0);
-         CvInvoke.cvInitMatHeader(dstPointMatrix, dstPoints.Length, 2, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F, dstHandle.AddrOfPinnedObject(), 0);
-         HomographyMatrix homography = new HomographyMatrix();
-         CvInvoke.cvFindHomography( srcPointMatrix, dstPointMatrix, homography.Ptr,  method, ransacReprojThreshold, IntPtr.Zero);
+         using (Matrix<float> srcPointMatrix = new Matrix<float>(srcPoints.Length, 2, srcHandle.AddrOfPinnedObject()))
+         using (Matrix<float> dstPointMatrix = new Matrix<float>(dstPoints.Length, 2, dstHandle.AddrOfPinnedObject()))
+            CvInvoke.cvFindHomography(srcPointMatrix, dstPointMatrix, homography, method, ransacReprojThreshold, IntPtr.Zero);
          srcHandle.Free();
          dstHandle.Free();
-         Marshal.FreeHGlobal(srcPointMatrix);
-         Marshal.FreeHGlobal(dstPointMatrix);
          return homography;
       }
 
@@ -381,6 +361,7 @@ namespace Emgu.CV
          foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
 
          Matrix<float> res = new Matrix<float>(elementCount, 3);
+         
          Int64 address = res.MCvMat.data.ToInt64();
 
          foreach (MCvPoint3D32f[] d in data)

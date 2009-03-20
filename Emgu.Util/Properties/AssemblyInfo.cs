@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
 [assembly: AssemblyProduct("Emgu.Util")]
-[assembly: AssemblyCopyright("Copyright © Emgu 2008")]
+[assembly: AssemblyCopyright("Copyright © Emgu 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,4 +34,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]
 
-//[assembly: AssemblyKeyFile("Toolbox.key")]

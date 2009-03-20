@@ -26,7 +26,7 @@ namespace Emgu.CV
       /// <param name="sizes">The size for each dimension</param>
       public MatND(params int[] sizes)
       {
-         Data = Array.CreateInstance(typeof(TDepth), sizes);
+         ManagedArray = Array.CreateInstance(typeof(TDepth), sizes);
       }
 
       private void AllocateHeader()
@@ -41,7 +41,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public Array Data
+      public Array ManagedArray
       {
          get { return _array; }
          set
@@ -70,23 +70,7 @@ namespace Emgu.CV
       {
          get
          {
-            Type typeOfDepth = typeof(TDepth);
-
-            if (typeOfDepth == typeof(Single))
-               return CvEnum.MAT_DEPTH.CV_32F;
-            if (typeOfDepth == typeof(UInt32))
-               return Emgu.CV.CvEnum.MAT_DEPTH.CV_32S;
-            if (typeOfDepth == typeof(SByte))
-               return Emgu.CV.CvEnum.MAT_DEPTH.CV_8S;
-            if (typeOfDepth == typeof(Byte))
-               return CvEnum.MAT_DEPTH.CV_8U;
-            if (typeOfDepth == typeof(Double))
-               return CvEnum.MAT_DEPTH.CV_64F;
-            if (typeOfDepth == typeof(UInt16))
-               return CvEnum.MAT_DEPTH.CV_16U;
-            if (typeOfDepth == typeof(Int16))
-               return CvEnum.MAT_DEPTH.CV_16S;
-            throw new NotImplementedException("Unsupported matrix depth");
+            return Util.GetMatrixDepth(typeof(TDepth));
          }
       }
 

@@ -15,14 +15,15 @@ namespace Emgu.CV
       ///<param name="fileName"> The name of the file that contains the HaarCascade object</param>
       public HaarCascade(String fileName)
       {
-         if (!File.Exists(fileName))
-            throw new FileNotFoundException(Properties.StringTable.FileNotFound, fileName);
+         FileInfo file = new FileInfo(fileName);
+         if (!file.Exists)
+            throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
 
-         _ptr = CvInvoke.cvLoad(fileName, IntPtr.Zero, null, IntPtr.Zero);
+         _ptr = CvInvoke.cvLoad(file.FullName, IntPtr.Zero, null, IntPtr.Zero);
 
          if (_ptr == IntPtr.Zero)
          {
-            throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, fileName));
+            throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));
          }
       }
 

@@ -83,5 +83,29 @@ namespace Emgu.CV
       {
          CvInvoke.cvUseOptimized(enable);
       }
+
+      /// <summary>
+      /// Get the OpenCV matrix depth enumeration from depth type
+      /// </summary>
+      /// <param name="typeOfDepth">The depth of type</param>
+      /// <returns>OpenCV Matrix depth</returns>
+      internal static CvEnum.MAT_DEPTH GetMatrixDepth(Type typeOfDepth)
+      {
+         if (typeOfDepth == typeof(Single))
+            return CvEnum.MAT_DEPTH.CV_32F;
+         if (typeOfDepth == typeof(Int32))
+            return Emgu.CV.CvEnum.MAT_DEPTH.CV_32S;
+         if (typeOfDepth == typeof(SByte))
+            return Emgu.CV.CvEnum.MAT_DEPTH.CV_8S;
+         if (typeOfDepth == typeof(Byte))
+            return CvEnum.MAT_DEPTH.CV_8U;
+         if (typeOfDepth == typeof(Double))
+            return CvEnum.MAT_DEPTH.CV_64F;
+         if (typeOfDepth == typeof(UInt16))
+            return CvEnum.MAT_DEPTH.CV_16U;
+         if (typeOfDepth == typeof(Int16))
+            return CvEnum.MAT_DEPTH.CV_16S;
+         throw new NotImplementedException("Unsupported matrix depth");
+      }
    }
 }

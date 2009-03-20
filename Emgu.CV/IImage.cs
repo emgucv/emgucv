@@ -57,7 +57,7 @@ namespace Emgu.CV
       {
          get;
       }
-      
+
       /// <summary>
       /// Save the image to the specific <paramref name="fileName"/> 
       /// </summary>

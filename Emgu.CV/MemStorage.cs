@@ -10,12 +10,12 @@ namespace Emgu.CV
    /// </summary>
    public class MemStorage : UnmanagedObject
    {
-      private List<MemStorage> _childStorageList;
-
+      //private List<MemStorage> _childStorageList;
+      
       private MemStorage(IntPtr ptr)
       {
          _ptr = ptr;
-         _childStorageList = new List<MemStorage>();
+         //_childStorageList = new List<MemStorage>();
       }
 
       /// <summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV
       {
          IntPtr childStoragePtr = CvInvoke.cvCreateChildMemStorage(_ptr);
          MemStorage childStorage = new MemStorage(childStoragePtr);
-         _childStorageList.Add(childStorage);
+         //_childStorageList.Add(childStorage);
          return childStorage;
       }
 

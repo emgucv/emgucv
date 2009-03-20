@@ -62,13 +62,13 @@ namespace Emgu.CV.ML
             param.covs = covsPtrHandle.Value.AddrOfPinnedObject();
          }
          param.term_crit = parameters.TermCrit;
- 
+
          bool res = MlInvoke.CvEMTrain(
-            _ptr, 
-            samples.Ptr, 
-            sampleIdx == null? IntPtr.Zero : sampleIdx.Ptr, 
+            _ptr,
+            samples.Ptr,
+            sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
             param,
-            labels == null? IntPtr.Zero : labels.Ptr);
+            labels == null ? IntPtr.Zero : labels.Ptr);
 
          if (covsPtrHandle.HasValue)
             covsPtrHandle.Value.Free();
@@ -85,8 +85,8 @@ namespace Emgu.CV.ML
       public float Predict(Matrix<float> samples, Matrix<float> probs)
       {
          return MlInvoke.CvEMPredict(
-            _ptr, 
-            samples.Ptr, 
+            _ptr,
+            samples.Ptr,
             probs == null ? IntPtr.Zero : probs.Ptr);
       }
 
@@ -107,7 +107,7 @@ namespace Emgu.CV.ML
       /// <returns>The mean of the clusters</returns>
       public Matrix<double> GetMeans()
       {
-         return IntPtrToDoubleMatrix( MlInvoke.CvEMGetMeans(_ptr));
+         return IntPtrToDoubleMatrix(MlInvoke.CvEMGetMeans(_ptr));
       }
 
       /// <summary>

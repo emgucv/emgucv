@@ -33,7 +33,7 @@ namespace Emgu.CV
          : this(IntPtr.Zero, storage)
       {
          _ptr = CvInvoke.cvCreateSeq(
-             FixElementType(seqFlag), 
+             FixElementType(seqFlag),
              StructSize.MCvContour,
              _sizeOfElement,
              storage.Ptr);
@@ -46,8 +46,8 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Contour(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind,  CvEnum.SEQ_FLAG flag, MemStorage stor)
-         : this( ((int)kind | (int)eltype | (int)flag), stor)
+      public Contour(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+         : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }
 
@@ -56,7 +56,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="storage">The storage to be used</param>
       public Contour(MemStorage storage)
-         : this((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON , storage)
+         : this((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, storage)
       {
       }
 
@@ -68,7 +68,7 @@ namespace Emgu.CV
       /// <remarks>requires MCvContour.rect to be pre-computed</remarks>
       public override double InContour(System.Drawing.PointF point)
       {
-         Debug.Assert(!MCvContour.rect.IsEmpty, "The bounding rectangle is not caculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first.");
+         Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
          return base.InContour(point);
       }
 
@@ -78,7 +78,7 @@ namespace Emgu.CV
       {
          get
          {
-            Debug.Assert(!MCvContour.rect.IsEmpty, "The bounding rectangle is not caculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first.");
+            Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
             return base.BoundingRectangle;
          }
       }

@@ -1,6 +1,3 @@
-#ifndef CVEXTERN_H
-#define CVEXTERN_H
-
 #include "ml.h"
 
 //StatModel
@@ -95,6 +92,7 @@ CVAPI(int) CvANN_MLPTrain(CvANN_MLP* model, const CvMat* _inputs, const CvMat* _
 CVAPI(float) CvANN_MLPPredict(CvANN_MLP* model, const CvMat* _inputs,
                               CvMat* _outputs )
 { return model->predict(_inputs, _outputs); }
+CVAPI(int) CvANN_MLPGetLayerCount(CvANN_MLP* model) { return model->get_layer_count(); }
 
 //Decision Tree
 CVAPI(CvDTreeParams*) CvDTreeParamsCreate() { return new CvDTreeParams(); }
@@ -131,10 +129,14 @@ CVAPI(bool) CvRTreesTrain( CvRTrees* model, const CvMat* _train_data, int _tflag
                           CvRTParams params=CvRTParams() )
 { return model->train(_train_data, _tflag, _responses, _var_idx, _sample_idx, _var_type, _missing_mask, params); }
 */
-CVAPI(float) CvRTreesPredict(CvRTrees* model, const CvMat* sample, const CvMat* missing = 0 ) 
+CVAPI(float) CvRTreesPredict(CvRTrees* model, const CvMat* sample, const CvMat* missing ) 
 { return model->predict(sample, missing); }
 CVAPI(int) CvRTreesGetTreeCount(CvRTrees* model) { return model->get_tree_count(); }
 CVAPI(const CvMat*) CvRTreesGetVarImportance(CvRTrees* model) { return model->get_var_importance(); }
+
+//Extreme Random Tree
+CVAPI(CvERTrees*) CvERTreesCreate() { return new CvERTrees(); }
+CVAPI(void) CvERTreesRelease(CvERTrees* model) { model->~CvERTrees(); }
 
 //CvBoost
 CVAPI(CvBoostParams*) CvBoostParamsCreate() { return new CvBoostParams(); }
@@ -156,4 +158,3 @@ CVAPI(float) CvBoostPredict(CvBoost* model, const CvMat* _sample, const CvMat* _
                             bool raw_mode=false )
 { return model->predict(_sample, _missing, weak_responses, slice, raw_mode); }
 
-#endif

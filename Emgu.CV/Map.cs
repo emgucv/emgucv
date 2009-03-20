@@ -74,6 +74,8 @@ namespace Emgu.CV
          _area = area;
       }
 
+      //private delegate Point PointTransformationFunction(PointF point);
+
       /// <summary>
       /// Map a point to a position in the internal image
       /// </summary>
@@ -130,10 +132,10 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
-         System.Drawing.Point[] pts = Array.ConvertAll<PointF, System.Drawing.Point>(
+         System.Drawing.Point[] pts = Array.ConvertAll<PointF, Point>(
              polygon.GetVertices(),
-             this.MapPoint);
-
+             MapPoint);
+         
          if (thickness > 0)
             base.DrawPolyline(pts, true, color, thickness);
          else
@@ -162,7 +164,7 @@ namespace Emgu.CV
       public void DrawPolyline(PointF[] pts, bool isClosed, TColor color, int thickness)
       {
          base.DrawPolyline(
-             Array.ConvertAll<PointF, Point>(pts, this.MapPoint),
+             Array.ConvertAll<PointF, Point>(pts, MapPoint),
              isClosed,
              color,
              thickness);

@@ -167,7 +167,7 @@
   </data>
   <data name="FPS" xml:space="preserve">
     <value>FPS</value>
-    <comment>FPS description</comment>
+    <comment>Frames per second</comment>
   </data>
   <data name="ShowColorHistogram" xml:space="preserve">
     <value>Show Color Histogram</value>
@@ -196,5 +196,33 @@
   <data name="ParameterTypeIsNotSupported" xml:space="preserve">
     <value>Parameter type '{0}' is not supported</value>
     <comment>ParameterTypeIsNotSupported description</comment>
+  </data>
+  <data name="PleaseLoadAnImageFirst" xml:space="preserve">
+    <value>Please load an image first</value>
+    <comment>PleaseLoadAnImageFirst description</comment>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Remove All</value>
+    <comment>RemoveAll description</comment>
+  </data>
+  <data name="PopOperation" xml:space="preserve">
+    <value>Pop Operation</value>
+    <comment>PopOperation description</comment>
+  </data>
+  <data name="PixelCount" xml:space="preserve">
+    <value>Pixel Count</value>
+    <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
+  </data>
+  <data name="ColorIntensity" xml:space="preserve">
+    <value>Color Intensity</value>
+    <comment>ColorIntensity description</comment>
+  </data>
+  <data name="Only1DHistogramSupported" xml:space="preserve">
+    <value>Only 1D histogram is supported</value>
+    <comment>Only1DHistogramSupported description</comment>
+  </data>
+  <data name="DefaultHistogramTitle" xml:space="preserve">
+    <value>Histogram</value>
+    <comment>DefaultHistogram description</comment>
   </data>
 </root>

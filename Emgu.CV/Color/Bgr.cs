@@ -46,7 +46,6 @@ namespace Emgu.CV.Structure
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _scalar.v2; } set { _scalar.v2 = value; } }
 
-
       #region IEquatable<Bgr> Members
       /// <summary>
       /// Return true if the two color equals

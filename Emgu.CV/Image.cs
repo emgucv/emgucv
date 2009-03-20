@@ -275,16 +275,13 @@ namespace Emgu.CV
          }
          else
          {
-            for (int i = 0; i < NumberOfChannels; i++)
-            {
-               Image<Gray, TDepth> c = channels[i];
-
-               Debug.Assert(EqualSize(c), String.Format("The size of the {0}th channel is different from the 1st channel", i + 1));
-
-               CvInvoke.cvSetImageCOI(Ptr, i + 1);
-               CvInvoke.cvCopy(c.Ptr, Ptr, IntPtr.Zero);
-            }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
+            int channelsCount = channels.Length;
+            CvInvoke.cvMerge(
+               channelsCount > 0 ? channels[0] : IntPtr.Zero,
+               channelsCount > 1 ? channels[1] : IntPtr.Zero,
+               channelsCount > 2 ? channels[2] : IntPtr.Zero,
+               channelsCount > 3 ? channels[3] : IntPtr.Zero,
+               Ptr);
          }
       }
       #endregion
@@ -978,10 +975,9 @@ namespace Emgu.CV
             throw new NotImplementedException(Properties.StringTable.NotImplemented);
          }
 
-         IntPtr seq = IntPtr.Zero;
-
          using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
          {
+            IntPtr seq = IntPtr.Zero;
             CvInvoke.cvFindContours(
                 imagecopy.Ptr,
                 stor.Ptr,
@@ -989,7 +985,7 @@ namespace Emgu.CV
                 StructSize.MCvContour,
                 type,
                 method,
-                new System.Drawing.Point(0, 0));
+                Point.Empty);
 
             return (seq == IntPtr.Zero) ? null : new Contour<System.Drawing.Point>(seq, stor);
          }
@@ -1215,7 +1211,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
       {
-         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
+         Image<TColor, Single> res = new Image<TColor, float>(Size);
          CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
          return res;
       }
@@ -1233,7 +1229,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
       public Image<TColor, Single> Laplace(int apertureSize)
       {
-         Image<TColor, Single> res = new Image<TColor, float>(Width, Height);
+         Image<TColor, Single> res = new Image<TColor, float>(Size);
          CvInvoke.cvLaplace(Ptr, res.Ptr, apertureSize);
          return res;
       }
@@ -1696,7 +1692,7 @@ namespace Emgu.CV
       ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
       public Image<TColor, Byte> InRange(TColor lower, TColor higher)
       {
-         Image<TColor, Byte> res = new Image<TColor, Byte>(Width, Height);
+         Image<TColor, Byte> res = new Image<TColor, Byte>(Size);
          CvInvoke.cvInRangeS(Ptr, lower.MCvScalar, higher.MCvScalar, res.Ptr);
          return res;
       }
@@ -1718,6 +1714,25 @@ namespace Emgu.CV
          }
          else
          {
+            /*
+            Image<Gray, TDepth>[] channels1 = Split();
+            Image<Gray, TDepth>[] channels2 = img2.Split();
+            Image<Gray, Byte>[] cmpChannels = new Image<Gray, byte>[channels1.Length];
+            for (int i = 0; i < channels1.Length; i++)
+            {
+               cmpChannels[i] = new Image<Gray, byte>(size);
+               CvInvoke.cvCmp(channels1[i], channels2[i], cmpChannels[i], cmp_type);
+            }
+            res = new Image<TColor, Byte>(cmpChannels);
+
+            foreach (Image<Gray, TDepth> img in channels1)
+               img.Dispose();
+            foreach (Image<Gray, TDepth> img in channels2)
+               img.Dispose();
+            foreach (Image<Gray, Byte> img in cmpChannels)
+               img.Dispose();
+            */            
+
             using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
             using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(size))
             using (Image<Gray, Byte> dest = new Image<Gray, Byte>(size))
@@ -2260,8 +2275,8 @@ namespace Emgu.CV
             {
                // Frame the original image into a bigger one of side maxSize
                // Rotating the framed image will always keep the original image without losing corners information
-               System.Drawing.Rectangle CvR = new System.Drawing.Rectangle((maxSize - size.Width) >> 1, (maxSize - size.Height) >> 1, size.Width, size.Height);
-               CvInvoke.cvSetImageROI(tempImage1.Ptr, CvR);
+               System.Drawing.Rectangle centerRegion = new System.Drawing.Rectangle((maxSize - size.Width) >> 1, (maxSize - size.Height) >> 1, size.Width, size.Height);
+               CvInvoke.cvSetImageROI(tempImage1.Ptr, centerRegion);
                CvInvoke.cvCopy(Ptr, tempImage1.Ptr, IntPtr.Zero);
                CvInvoke.cvResetImageROI(tempImage1.Ptr);
 
@@ -2360,40 +2375,26 @@ namespace Emgu.CV
             {
                //different depth
                int channelCount = NumberOfChannels;
-               Type dstDepth = typeof(TDepth);
-               Type srcDepth = typeof(TSrcDepth);
                {
-                  if (dstDepth == typeof(Byte) && srcDepth != typeof(Byte))
+                  if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
                   {
-                     double min = 0.0, max = 0.0, scale, shift;
-                     System.Drawing.Point p1 = new System.Drawing.Point();
-                     System.Drawing.Point p2 = new System.Drawing.Point();
-                     if (channelCount == 1)
+                     double[] minVal, maxVal;
+                     Point[] minLoc, maxLoc;
+                     srcImage.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+                     double min = minVal[0];
+                     double max = maxVal[0];
+                     for (int i = 1; i < minVal.Length; i++)
                      {
-                        CvInvoke.cvMinMaxLoc(srcImage.Ptr, ref min, ref max, ref p1, ref p2, IntPtr.Zero);
+                        min = Math.Min(min, minVal[i]);
+                        max = Math.Max(max, maxVal[i]);
                      }
-                     else
-                     {
-                        for (int i = 0; i < channelCount; i++)
-                        {
-                           double minForChannel = 0.0, maxForChannel = 0.0;
-                           CvInvoke.cvSetImageCOI(srcImage.Ptr, i + 1);
-                           CvInvoke.cvMinMaxLoc(srcImage.Ptr, ref minForChannel, ref maxForChannel, ref p1, ref p2, IntPtr.Zero);
-                           min = Math.Min(min, minForChannel);
-                           max = Math.Max(max, maxForChannel);
-                        }
-                        CvInvoke.cvSetImageCOI(srcImage.Ptr, 0);
-                     }
-                     if (max <= 255.0 && min >= 0)
-                     {
-                        scale = 1.0;
-                        shift = 0.0;
-                     }
-                     else
+                     double scale = 1.0, shift = 0.0;
+                     if (max > 255.0 || min < 0)
                      {
                         scale = (max == min) ? 0.0 : 255.0 / (max - min);
                         shift = (scale == 0) ? min : -min * scale;
                      }
+
                      CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
                   }
                   else
@@ -2409,19 +2410,18 @@ namespace Emgu.CV
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-
-               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Width, Height);
+               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
             }
             else
             {   //different depth
                using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Width, Height);
+                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
             }
             #endregion
          }
       }
 
-      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, int width, int height)
+      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)
       {
          try
          {
@@ -2431,7 +2431,7 @@ namespace Emgu.CV
          catch (Exception)
          {
             //if a direct conversion doesn't exist, apply a two step conversion
-            using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(width, height))
+            using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
             {
                CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(srcColor, typeof(Bgr)));
                CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), destColor));
@@ -2636,7 +2636,7 @@ namespace Emgu.CV
 				                  g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
 				               }
 				               Bitmap = bgraImage;*/
-                  using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Width, value.Height))
+                  using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Size))
                   {
                      Byte[, ,] data = tmp1.Data;
                      for (int i = 0; i < value.Width; i++)
@@ -2669,14 +2669,9 @@ namespace Emgu.CV
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              bmp.PixelFormat);
 
-         int arrayWidthStep = _sizeOfElement * NumberOfChannels * _array.GetLength(1);
+         Matrix<TDepth> mat = new Matrix<TDepth>(bmp.Height, bmp.Width, NumberOfChannels, data.Scan0, data.Stride);
+         CvInvoke.cvCopy(mat, this, IntPtr.Zero);
 
-         Int64 destAddress = _dataHandle.AddrOfPinnedObject().ToInt64();
-         Int64 srcAddress = data.Scan0.ToInt64();
-         for (int i = 0; i < rows; i++, destAddress += arrayWidthStep, srcAddress += data.Stride)
-         {
-            Emgu.Util.Toolbox.memcpy((IntPtr)destAddress, (IntPtr)srcAddress, data.Stride);
-         }
          bmp.UnlockBits(data);
       }
 
@@ -3008,7 +3003,7 @@ namespace Emgu.CV
       public Image<TColor, TOtherDepth> Convert<TOtherDepth>(System.Converter<TDepth, TOtherDepth> converter)
          where TOtherDepth : new ()
       {
-         Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
+         Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Size);
 
          Int64 data1;
          int height1, cols1, width1, step1;

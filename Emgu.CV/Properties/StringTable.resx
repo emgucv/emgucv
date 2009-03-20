@@ -141,4 +141,8 @@
     <value>Not implmented</value>
     <comment>NotImplemented description</comment>
   </data>
+   <data name="BoundingRectangleNotCalculated" xml:space="preserve">
+    <value>The bounding rectangle is not calculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first.</value>
+    <comment>BoundingRectangleNotCalculated description</comment>
+  </data>
 </root>

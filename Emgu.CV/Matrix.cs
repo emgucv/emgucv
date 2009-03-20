@@ -61,7 +61,7 @@ namespace Emgu.CV
       public Matrix(int rows, int cols, int channels, IntPtr data, int step)
       {
          AllocateHeader();
-         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int) CvDepth, channels), data, step);
+         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int)Util.GetMatrixDepth(typeof(TDepth)), channels), data, step);
       }
 
       /// <summary>
@@ -141,30 +141,6 @@ namespace Emgu.CV
       #endregion
 
       #region Properties
-      ///<summary> Get the depth representation for openCV</summary>
-      protected static CvEnum.MAT_DEPTH CvDepth
-      {
-         get
-         {
-            Type typeOfDepth = typeof(TDepth);
-
-            if (typeOfDepth == typeof(Single))
-               return CvEnum.MAT_DEPTH.CV_32F;
-            if (typeOfDepth == typeof(Int32))
-               return Emgu.CV.CvEnum.MAT_DEPTH.CV_32S;
-            if (typeOfDepth == typeof(SByte))
-               return Emgu.CV.CvEnum.MAT_DEPTH.CV_8S;
-            if (typeOfDepth == typeof(Byte))
-               return CvEnum.MAT_DEPTH.CV_8U;
-            if (typeOfDepth == typeof(Double))
-               return CvEnum.MAT_DEPTH.CV_64F;
-            if (typeOfDepth == typeof(UInt16))
-               return CvEnum.MAT_DEPTH.CV_16U;
-            if (typeOfDepth == typeof(Int16))
-               return CvEnum.MAT_DEPTH.CV_16S;
-            throw new NotImplementedException("Unsupported matrix depth");
-         }
-      }
 
       /// <summary>
       /// Get the underneath managed array
@@ -196,7 +172,7 @@ namespace Emgu.CV
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
 
-            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvDepth, _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
+            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), Util.GetMatrixDepth(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
          }
       }
 
@@ -278,7 +254,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Reshape(int newChannels, int newRows)
       {
          Matrix<TDepth> res = new Matrix<TDepth>();
-         res.Data = Data;
+         res._array = _array;
          res.AllocateHeader();
          CvInvoke.cvReshape(Ptr, res.Ptr, newChannels, newRows);
          return res;

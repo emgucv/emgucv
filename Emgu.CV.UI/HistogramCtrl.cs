@@ -34,7 +34,7 @@ namespace Emgu.CV.UI
 
          // Display the MasterPane Title, and set the outer margin to 10 points
          master.Title.IsVisible = true;
-         master.Title.Text = "Histogram";
+         master.Title.Text = Properties.StringTable.DefaultHistogramTitle;
          master.Margin.All = 10;
          #endregion
 
@@ -81,13 +81,13 @@ namespace Emgu.CV.UI
       /// <param name="histogram">The 1D histogram to be drawn</param>
       public void AddHistogram(String name, System.Drawing.Color color, Histogram histogram)
       {
-         Debug.Assert(histogram.Dimension == 1, "Only 1D histogram is supported");
+         Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported );
 
          GraphPane pane = new GraphPane();
          // Set the Title
          pane.Title.Text = name;
-         pane.XAxis.Title.Text = "Color Intensity";
-         pane.YAxis.Title.Text = "Pixel Count";
+         pane.XAxis.Title.Text = Properties.StringTable.ColorIntensity;
+         pane.YAxis.Title.Text = Properties.StringTable.PixelCount;
 
          #region draw the histogram
          RangeF range = histogram.Ranges[0];
@@ -115,7 +115,7 @@ namespace Emgu.CV.UI
       /// Generate histograms for the image. One histogram is generated for each color channel.
       /// You will need to call the Refresh function to do the painting afterward.
       /// </summary>
-      /// <param name="image">The image to retrieve histogram from</param>
+      /// <param name="image">The image to generate histogram from</param>
       /// <param name="numberOfBins">The number of bins for each histogram</param>
       public void GenerateHistograms(IImage image, int numberOfBins)
       {

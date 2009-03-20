@@ -1,5 +1,3 @@
-#ifndef CVEXTERN_BLOB_H
-#define CVEXTERN_BLOB_H
 
 #include "cvaux.h"
 //Blob
@@ -55,4 +53,3 @@ CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcKalman() { return cvC
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverRect() { return cvCreateModuleBlobTrackPostProcTimeAverRect(); }
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverExp() { return cvCreateModuleBlobTrackPostProcTimeAverExp(); }
 CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc* postProc) { postProc->Release(); };
-#endif

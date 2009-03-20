@@ -14,6 +14,23 @@ namespace Emgu.CV.UI
 {
    internal partial class ImageProperty : UserControl
    {
+      private HistogramViewer _histogramViewer;
+
+      /// <summary>
+      /// Create a ImageProperty control
+      /// </summary>
+      public ImageProperty()
+      {
+         InitializeComponent();
+         cSharpOperationView.Language = ProgrammingLanguage.CSharp;
+         cPlusPlusOperationView.Language = ProgrammingLanguage.CPlusPlus;
+
+         for (int i = 0; i < ImageBox.ZoomLevels.Length; i++)
+         {
+            zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
+         }    
+      }
+
       private ImageBox _imageBox;
 
       /// <summary>
@@ -25,82 +42,50 @@ namespace Emgu.CV.UI
          set { _imageBox = value; }
       }
 
-      /// <summary>
-      /// Create a ImageProperty control
-      /// </summary>
-      public ImageProperty()
+      public void SetImage(IImage image)
       {
-         InitializeComponent();
-         cSharpOperationView.Language = ProgrammingLanguage.CSharp;
-         cPlusPlusOperationView.Language = ProgrammingLanguage.CPlusPlus;
-         
-         for (int i = 0; i < ImageBox.ZoomLevels.Length; i++)
-         {
-            zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
-         }
-      }
+         #region display the size of the image
+         Size size = image.Size;
+         widthTextbox.Text = size.Width.ToString();
+         heightTextBox.Text = size.Height.ToString();
+         #endregion
 
-      public System.Drawing.Size ImageSize
-      {
-         set
+         #region display the color type of the image
+         Type colorType = Reflection.ReflectIImage.GetTypeOfColor(image);
+         Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true);
+         if (colorAttributes.Length > 0)
          {
-            widthTextbox.Text = value.Width.ToString();
-            heightTextBox.Text = value.Height.ToString();
+            ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
+            typeOfColorTexbox.Text = info.ConversionCodename;
          }
-      }
+         else
+         {
+            typeOfColorTexbox.Text = Properties.StringTable.Unknown;
+         }
 
-      /// <summary>
-      /// Set the Type of the color
-      /// </summary>
-      public Type TypeOfColor
-      {
-         set
-         {
-            Object[] colorAttributes = value.GetCustomAttributes(typeof(ColorInfoAttribute), true);
-            if (colorAttributes.Length > 0)
-            {
-               ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
-               typeOfColorTexbox.Text = info.ConversionCodename;
-            }
-            else
-            {
-               typeOfColorTexbox.Text = Properties.StringTable.Unknown;
-            }
-         }
+         Type colorDepth = Reflection.ReflectIImage.GetTypeOfDepth(image);
+         typeOfDepthTextBox.Text = colorDepth.Name;
+         #endregion
+
+         UpdateHistogram();
       }
 
       /// <summary>
-      /// Set the mouse position over the image
+      /// Set the mouse position over the image. 
+      /// It also set the color intensity of the pixel on the image where is mouse is at
       /// </summary>
-      public System.Drawing.Point MousePositionOnImage
+      /// <param name="location">The location of the mouse on the image</param>
+      public void SetMousePositionOnImage(System.Drawing.Point location)
       {
-         set
-         {
-            mousePositionTextbox.Text = value.ToString();
-         }
-      }
+         mousePositionTextbox.Text = location.ToString();
 
-      /// <summary>
-      /// Set the color intensity of the pixel on the image where is mouse is at
-      /// </summary>
-      public IColor ColorIntensity
-      {
-         set
-         {
-            colorIntensityTextbox.Text = 
-                value == null ? String.Empty : value.ToString();
-         }
-      }
-
-      /// <summary>
-      /// Set the Depth of the image
-      /// </summary>
-      public Type TypeOfDepth
-      {
-         set
-         {
-            typeOfDepthTextBox.Text = value.Name;
-         }
+         IImage img = _imageBox.DisplayedImage;
+         IColor pixelColor =
+            img == null ?
+            null :
+            Reflection.ReflectIImage.GetPixelColor(img, location);
+         colorIntensityTextbox.Text =
+                pixelColor == null ? String.Empty : pixelColor.ToString();
       }
 
       /// <summary>
@@ -135,15 +120,40 @@ namespace Emgu.CV.UI
 
       private void showHistogramButton_Click(object sender, EventArgs e)
       {
-         IImage image = _imageBox.DisplayedImage;
-
-         if (image == null)
+         if (_imageBox.DisplayedImage == null)
          {
-            MessageBox.Show("Please load an image first");
+            MessageBox.Show(Properties.StringTable.PleaseLoadAnImageFirst);
             return;
          }
 
-         HistogramViewer.Show(image);
+         if (_histogramViewer != null && _histogramViewer.Visible == false)
+         {
+            _histogramViewer.Dispose();
+            _histogramViewer = null;
+         }
+
+         if (_histogramViewer == null)
+         {
+            _histogramViewer = new HistogramViewer();
+            _histogramViewer.Show();
+         }
+
+         UpdateHistogram();
+      }
+
+      private void UpdateHistogram()
+      {
+         if (_histogramViewer != null && _histogramViewer.Visible)
+         {
+            IImage image = _imageBox.DisplayedImage;
+
+            if (image != null)
+            {
+               _histogramViewer.HistogramCtrl.ClearHistogram();
+               _histogramViewer.HistogramCtrl.GenerateHistograms(image, 256);
+               _histogramViewer.HistogramCtrl.Refresh();
+            }
+         }
       }
 
       private void zoomLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -152,6 +162,24 @@ namespace Emgu.CV.UI
          {
             _imageBox.ZoomScale = ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex];;
          }
+      }
+
+      /// <summary> 
+      /// Clean up any resources being used.
+      /// </summary>
+      /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+      protected override void Dispose(bool disposing)
+      {
+         if (disposing && (components != null))
+         {
+            components.Dispose();
+            if (_histogramViewer != null)
+            {
+               _histogramViewer.Dispose();
+               _histogramViewer = null;
+            }
+         }
+         base.Dispose(disposing);
       }
    }
 }

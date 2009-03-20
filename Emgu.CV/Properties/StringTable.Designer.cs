@@ -61,6 +61,15 @@ namespace Emgu.CV.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The bounding rectangle is not calculated, consider calling CvInvoke.cvBoundingRect(thisContour, 1) first..
+        /// </summary>
+        internal static string BoundingRectangleNotCalculated {
+            get {
+                return ResourceManager.GetString("BoundingRectangleNotCalculated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fail to create HaarCascade object: {0}.
         /// </summary>
         internal static string FailToCreateHaarCascade {

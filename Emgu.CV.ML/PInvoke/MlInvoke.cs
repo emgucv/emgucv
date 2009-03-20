@@ -433,6 +433,13 @@ namespace Emgu.CV.ML
          IntPtr model,
          IntPtr inputs,
          IntPtr outputs);
+
+      /// <summary>
+      /// Get the number of layers in the ANN_MLP
+      /// </summary>
+      /// <param name="model">The ANN_MLP model</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern int CvANN_MLPGetLayerCount(IntPtr model);
       #endregion 
 
       #region Decision tree
@@ -587,6 +594,22 @@ namespace Emgu.CV.ML
       /// <returns>Pointer to the matrix that represents the variable importance</returns>
       [DllImport(EXTERN_LIBRARY)]
       public static extern IntPtr CvRTreesGetVarImportance(IntPtr model);
+      #endregion
+
+      #region Extreme Random tree
+      /// <summary>
+      /// Create a default extreme random tree
+      /// </summary>
+      /// <returns>Pointer to the extreme random tree</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern IntPtr CvERTreesCreate();
+
+      /// <summary>
+      /// Release the extreme random tree model
+      /// </summary>
+      /// <param name="model">The extreme random tree model to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvERTreesRelease(IntPtr model);
       #endregion
 
       #region Boost

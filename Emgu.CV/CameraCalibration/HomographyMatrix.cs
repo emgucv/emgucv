@@ -16,7 +16,7 @@ namespace Emgu.CV
    public class HomographyMatrix : Matrix<double> 
    {
       /// <summary>
-      /// Constructor used to deserialize 2D rotation matrix
+      /// Constructor used to deserialize homography matrix
       /// </summary>
       /// <param name="info">The serialization info</param>
       /// <param name="context">The streaming context</param>

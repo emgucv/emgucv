@@ -69,5 +69,16 @@ namespace Emgu.CV.ML
       {
          return MlInvoke.CvANN_MLPPredict(_ptr, samples, outputs);
       }
+
+      /// <summary>
+      /// Get the number of layer in the neural network.
+      /// </summary>
+      public int LayerCount
+      {
+         get
+         {
+            return MlInvoke.CvANN_MLPGetLayerCount(_ptr);
+         }
+      }
    }
 }
