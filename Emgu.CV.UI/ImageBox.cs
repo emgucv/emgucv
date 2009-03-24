@@ -24,10 +24,12 @@ namespace Emgu.CV.UI
       private PropertyDialog _propertyDlg;
       private double _zoomScale = 1.0;
 
+      private Graphics _graphics;
+
       /// <summary>
       /// The available zoom levels for the displayed image 
       /// </summary>
-      public static double[] ZoomLevels = new double[] { 0.12, 0.25, 0.5, 1.0, 1.5, 2.0, 4.0, 8.0 };
+      public static double[] ZoomLevels = new double[] { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0 };
 
       private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
 
@@ -49,6 +51,9 @@ namespace Emgu.CV.UI
       /// one of the parameters used for caculating the frame rate
       /// </summary>
       private int _imagesReceivedSinceCounterStart;
+
+      private Point _mouseDownPosition;
+      private MouseButtons _mouseDownButton;
       #endregion
 
       /// <summary>
@@ -58,7 +63,10 @@ namespace Emgu.CV.UI
          : base()
       {
          InitializeComponent();
+
          _operationLists = new List<Operation>();
+         DisplayScrollBars();
+         SetScrollBarValues();
       }
 
       #region properties
@@ -225,6 +233,11 @@ namespace Emgu.CV.UI
          }
          set
          {
+            bool sizeChanged =
+               _displayedImage == null
+               || value == null
+               || (_displayedImage.Size != value.Size);
+
             _displayedImage = value;
             if (_displayedImage != null)
             {
@@ -241,7 +254,8 @@ namespace Emgu.CV.UI
                   Size size = _displayedImage.Size;
                   int width = (int)Math.Max(2, (size.Width * _zoomScale));
                   int height = (int)Math.Max(2, (size.Height * _zoomScale));
-                  _displayedImage = _displayedImage.Resize(width, height);
+
+                  _displayedImage = _displayedImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
                }
 
                base.Image = _displayedImage.Bitmap;
@@ -266,6 +280,12 @@ namespace Emgu.CV.UI
                   }
                   #endregion
                }
+            }
+
+            if (sizeChanged)
+            {
+               DisplayScrollBars();
+               SetScrollBarValues();
             }
          }
       }
@@ -346,7 +366,7 @@ namespace Emgu.CV.UI
                   category = pair.Key.Substring(0, index);
                   subcategory = pair.Key.Substring(index + 1, pair.Key.Length - index - 1);
                }
-               
+
                if (!catelogDic.ContainsKey(category))
                   catelogDic.Add(category, new List<KeyValuePair<String, MethodInfo>>());
                catelogDic[category].Add(new KeyValuePair<String, MethodInfo>(subcategory, pair.Value));
@@ -376,8 +396,8 @@ namespace Emgu.CV.UI
                   "<{0}>",
                   String.Join(",", Array.ConvertAll<Type, String>(
                      genericArgs,
-                     System.Convert.ToString))) 
-               : string.Empty;           
+                     System.Convert.ToString)))
+               : string.Empty;
 
             operationMenuItem.Text = String.Format(
                "{0}{1}({2})",
@@ -492,11 +512,31 @@ namespace Emgu.CV.UI
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      private void onMouseMove(object sender, MouseEventArgs e)
+      private void ImageBox_MouseMove(object sender, MouseEventArgs e)
       {
          if (EnablePropertyPanel)
          {
-            ImagePropertyPanel.SetMousePositionOnImage(e.Location);
+            int horizontalScrollBarValue = horizontalScrollBar.Visible ? (int)horizontalScrollBar.Value : 0;
+
+            int verticalScrollBarValue = verticalScrollBar.Visible ? (int) verticalScrollBar.Value : 0;
+            ImagePropertyPanel.SetMousePositionOnImage(new Point(
+               e.Location.X + horizontalScrollBarValue,
+               e.Location.Y + verticalScrollBarValue));
+         }
+
+         if (_mouseDownButton == MouseButtons.Left)
+         {
+            //if (horizontalScrollBar.Visible)
+               horizontalScrollBar.Value =
+                     Math.Max(Math.Min(horizontalScrollBar.Value - (e.X - _mouseDownPosition.X), horizontalScrollBar.Maximum), horizontalScrollBar.Minimum);
+            //if (verticalScrollBar.Visible)
+               verticalScrollBar.Value =
+                     Math.Max(Math.Min(verticalScrollBar.Value - (e.Y - _mouseDownPosition.Y), verticalScrollBar.Maximum), verticalScrollBar.Minimum);
+
+            _mouseDownPosition = e.Location;
+
+            if (horizontalScrollBar.Visible || verticalScrollBar.Visible)
+               ResetControlROI();
          }
       }
 
@@ -516,14 +556,162 @@ namespace Emgu.CV.UI
          Everything = 1
       }
 
+      #region Handling ScrollBars
+      private void DisplayScrollBars()
+      {
+         if (base.Image == null)
+         {
+            horizontalScrollBar.Visible = false;
+            verticalScrollBar.Visible = false;
+         }
+         else
+         {
+            // If the image is wider than the PictureBox, show the HScrollBar.
+            horizontalScrollBar.Visible =
+               ClientSize.Width <= base.Image.Width;
+
+            // If the image is taller than the PictureBox, show the VScrollBar.
+            verticalScrollBar.Visible =
+               ClientSize.Height <= base.Image.Height;
+         }
+      }
+
+      private void HandleScroll(object sender, ScrollEventArgs e)
+      {
+         ResetControlROI();
+      }
+
+      private void ResetControlROI()
+      {
+         if (base.Image == null) return;
+
+         if (_graphics == null) _graphics = base.CreateGraphics();
+
+         int verticalScrollBarWidth = verticalScrollBar.Visible ? verticalScrollBar.Width : 0;
+         int horizontalScrollBarHeight = horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0;
+         
+         //Size size = new Size(base.Right - verticalScrollBarWidth, base.Bottom - horizontalScrollBarHeight);
+         Size size = ClientSize;
+
+         _graphics.DrawImage(base.Image,
+            new Rectangle(Point.Empty, size ),
+            new Rectangle(new Point( 
+               horizontalScrollBar.Visible ? horizontalScrollBar.Value: 0, 
+               verticalScrollBar.Visible ? verticalScrollBar.Value : 0), 
+            size),
+            GraphicsUnit.Pixel);
+      }
+
+      private void SetScrollBarValues()
+      {
+         if (base.Image == null) return;
+
+         // Set the Maximum, Minimum, LargeChange and SmallChange properties.
+         verticalScrollBar.Minimum = 0;
+         horizontalScrollBar.Minimum = 0;
+
+         verticalScrollBar.Maximum = 0;
+         horizontalScrollBar.Maximum = 0;
+
+         // If the offset does not make the Maximum less than zero, set its value. 
+         if (base.Image.Size.Width > ClientSize.Width)
+         {
+            horizontalScrollBar.Maximum =
+                base.Image.Size.Width - ClientSize.Width;
+         }
+         
+         // If the VScrollBar is visible, adjust the Maximum of the 
+         // HSCrollBar to account for the width of the VScrollBar.  
+         if (verticalScrollBar.Visible)
+         {
+            horizontalScrollBar.Maximum += verticalScrollBar.Width;
+         }
+         horizontalScrollBar.LargeChange = horizontalScrollBar.Maximum / 10;
+         horizontalScrollBar.SmallChange = horizontalScrollBar.Maximum / 20;
+
+         /*
+         // Adjust the Maximum value to make the raw Maximum value 
+         // attainable by user interaction.
+         horizontalScrollBar.Maximum += horizontalScrollBar.LargeChange;
+         */
+
+         // If the offset does not make the Maximum less than zero, set its value.    
+         if (base.Image.Size.Height > ClientSize.Height)
+         {
+            verticalScrollBar.Maximum =
+               base.Image.Size.Height - ClientSize.Height;
+         }
+
+         // If the HScrollBar is visible, adjust the Maximum of the 
+         // VSCrollBar to account for the width of the HScrollBar.
+         if (horizontalScrollBar.Visible)
+         {
+            verticalScrollBar.Maximum += horizontalScrollBar.Height;
+         }
+         verticalScrollBar.LargeChange = verticalScrollBar.Maximum / 10;
+         verticalScrollBar.SmallChange = verticalScrollBar.Maximum / 20;
+
+         /*
+         // Adjust the Maximum value to make the raw Maximum value 
+         // attainable by user interaction.
+         verticalScrollBar.Maximum += verticalScrollBar.LargeChange;
+          */
+      }
+      #endregion
+
+      void ImageBox_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+      {
+         if (e.Delta > 0)
+         {
+            ZoomScale *= 2.0;
+         }
+         else if (e.Delta < 0)
+         {
+            ZoomScale /= 2.0;
+         }
+      }
+
+      private void ImageBox_Resize(object sender, EventArgs e)
+      {
+         if (base.Image != null)
+         {
+            horizontalScrollBar.Value = horizontalScrollBar.Minimum;
+            verticalScrollBar.Value = verticalScrollBar.Minimum;
+            _mouseDownPosition = Point.Empty;
+
+            DisplayScrollBars();
+            SetScrollBarValues();
+            Refresh();
+         }
+      }
+
       /// <summary>
       /// Release the this Imagebox and all memory associate with it.
       /// </summary>
       public virtual new void Dispose()
       {
-         if (this.Image != null)
-            this.Image.Dispose();
+         if (_graphics != null) _graphics.Dispose();
+
+         if (this.Image != null) this.Image.Dispose();
          base.Dispose();
+      }
+
+      private void ImageBox_MouseEnter(object sender, EventArgs e)
+      {
+         Control parent = this.Parent;
+         while (!(parent is Form)) parent = parent.Parent;
+         (parent as Form).ActiveControl = this;
+      }
+
+      private void ImageBox_MouseDown(object sender, MouseEventArgs e)
+      {
+         _mouseDownPosition = e.Location;
+         _mouseDownButton = e.Button;
+      }
+
+      private void ImageBox_MouseUp(object sender, MouseEventArgs e)
+      {
+         _mouseDownButton = MouseButtons.None;
       }
    }
 }

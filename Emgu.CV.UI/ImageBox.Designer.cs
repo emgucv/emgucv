@@ -38,6 +38,8 @@ namespace Emgu.CV.UI
            this.propertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
            this.loadImageFromFileDialog = new System.Windows.Forms.OpenFileDialog();
            this.saveImageToFileDialog = new System.Windows.Forms.SaveFileDialog();
+           this.verticalScrollBar = new System.Windows.Forms.VScrollBar();
+           this.horizontalScrollBar = new System.Windows.Forms.HScrollBar();
            this.contextMenuStrip1.SuspendLayout();
            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
            this.SuspendLayout();
@@ -49,7 +51,7 @@ namespace Emgu.CV.UI
             this.operationsToolStripMenuItem,
             this.propertyToolStripMenuItem});
            this.contextMenuStrip1.Name = "contextMenuStrip1";
-           this.contextMenuStrip1.Size = new System.Drawing.Size(139, 70);
+           this.contextMenuStrip1.Size = new System.Drawing.Size(128, 70);
            // 
            // fileOperationToolStripMenuItem
            // 
@@ -57,34 +59,34 @@ namespace Emgu.CV.UI
             this.loadImageToolStripMenuItem,
             this.saveAsToolStripMenuItem});
            this.fileOperationToolStripMenuItem.Name = "fileOperationToolStripMenuItem";
-           this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-           this.fileOperationToolStripMenuItem.Text = Properties.StringTable.File;
+           this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+           this.fileOperationToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.File;
            // 
            // loadImageToolStripMenuItem
            // 
            this.loadImageToolStripMenuItem.Name = "loadImageToolStripMenuItem";
-           this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+           this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
            this.loadImageToolStripMenuItem.Text = "Load Image";
            this.loadImageToolStripMenuItem.Click += new System.EventHandler(this.loadImageToolStripMenuItem_Click);
            // 
            // saveAsToolStripMenuItem
            // 
            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-           this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-           this.saveAsToolStripMenuItem.Text = Properties.StringTable.SaveAs;
+           this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+           this.saveAsToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.SaveAs;
            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
            // 
            // operationsToolStripMenuItem
            // 
            this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
-           this.operationsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+           this.operationsToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
            this.operationsToolStripMenuItem.Text = "Operations";
            // 
            // propertyToolStripMenuItem
            // 
            this.propertyToolStripMenuItem.Name = "propertyToolStripMenuItem";
-           this.propertyToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-           this.propertyToolStripMenuItem.Text = Properties.StringTable.Property;
+           this.propertyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+           this.propertyToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Property;
            this.propertyToolStripMenuItem.Click += new System.EventHandler(this.propertyToolStripMenuItem_Click);
            // 
            // loadImageFromFileDialog
@@ -94,15 +96,40 @@ namespace Emgu.CV.UI
            // 
            // saveImageToFileDialog
            // 
-           this.saveImageToFileDialog.Title = Properties.StringTable.SaveImageDialogText;
+           this.saveImageToFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.SaveImageDialogText;
+           // 
+           // verticalScrollBar
+           // 
+           this.verticalScrollBar.Dock = System.Windows.Forms.DockStyle.Right;
+           this.verticalScrollBar.Location = new System.Drawing.Point(-17, 0);
+           this.verticalScrollBar.Name = "verticalScrollBar";
+           this.verticalScrollBar.Size = new System.Drawing.Size(17, -17);
+           this.verticalScrollBar.TabIndex = 1;
+           this.verticalScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.HandleScroll);
+           // 
+           // horizontalScrollBar
+           // 
+           this.horizontalScrollBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+           this.horizontalScrollBar.Location = new System.Drawing.Point(0, -17);
+           this.horizontalScrollBar.Name = "horizontalScrollBar";
+           this.horizontalScrollBar.Size = new System.Drawing.Size(0, 17);
+           this.horizontalScrollBar.TabIndex = 2;
+           this.horizontalScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.HandleScroll);
            // 
            // ImageBox
            // 
            this.ContextMenuStrip = this.contextMenuStrip1;
+           this.Controls.Add(this.verticalScrollBar);
+           this.Controls.Add(this.horizontalScrollBar);
            this.Cursor = System.Windows.Forms.Cursors.Cross;
            this.Size = new System.Drawing.Size(0, 0);
            this.TabIndex = 2;
-           this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.onMouseMove);
+           this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseWheel);
+           this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseMove);
+           this.Resize += new System.EventHandler(this.ImageBox_Resize);
+           this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseDown);
+           this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseUp);
+           this.MouseEnter += new System.EventHandler(this.ImageBox_MouseEnter);
            this.contextMenuStrip1.ResumeLayout(false);
            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
            this.ResumeLayout(false);
@@ -119,6 +146,8 @@ namespace Emgu.CV.UI
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem propertyToolStripMenuItem;
+       private System.Windows.Forms.VScrollBar verticalScrollBar;
+       private System.Windows.Forms.HScrollBar horizontalScrollBar;
 
     }
 }

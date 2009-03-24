@@ -512,19 +512,19 @@ namespace Emgu.CV.CvEnum
    public enum INTER
    {
       /// <summary>
-      /// The default type
+      /// Nearest-neighbor interpolation
       /// </summary>
       CV_INTER_NN = 0,
       /// <summary>
-      /// 
+      /// Bilinear interpolation
       /// </summary>
       CV_INTER_LINEAR = 1,
       /// <summary>
-      /// 
+      /// resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
       /// </summary>
       CV_INTER_CUBIC = 2,
       /// <summary>
-      /// 
+      /// Bicubic interpolation
       /// </summary>
       CV_INTER_AREA = 3
    }

@@ -238,7 +238,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte>[] imgs = Array.ConvertAll<String, Image<Gray, Byte>>(fileNames,
              delegate(String file)
              {
-                return new Image<Gray, Byte>(file).Resize(width, height);
+                return new Image<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
              });
 
          EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);

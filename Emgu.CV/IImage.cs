@@ -69,8 +69,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="width">The new width</param>
       /// <param name="height">The new height</param>
+      /// <param name="interpolationType">The type of interpolation for resize</param>
       /// <returns>The resized image</returns>
-      IImage Resize(int width, int height);
+      IImage Resize(int width, int height, CvEnum.INTER interpolationType);
 
    }
 }

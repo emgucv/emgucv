@@ -2126,12 +2126,10 @@ namespace Emgu.CV
       /// <param name="width">The width of the returned image.</param>
       /// <param name="height">The height of the returned image.</param>
       /// <returns>The resized image</returns>
-      [ExposableMethod(Exposable = true)]
+      [Obsolete("Please use Resize(int width, int height, CvEnum.INTER interpolationType) instead. This function will be removed in the next version")]
       public Image<TColor, TDepth> Resize(int width, int height)
       {
-         Image<TColor, TDepth> imgScale = new Image<TColor, TDepth>(width, height);
-         CvInvoke.cvResize(Ptr, imgScale.Ptr, CvEnum.INTER.CV_INTER_LINEAR);
-         return imgScale;
+         return Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
       }
 
       /// <summary>
@@ -2141,6 +2139,7 @@ namespace Emgu.CV
       /// <param name="height">The height of the returned image.</param>
       /// <param name="preserverScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
       /// <returns></returns>
+      [Obsolete("Please use Resize(int width, int height, CvEnum.INTER interpolationType, bool preserverScale) instead. This function will be removed in the next version")]
       public Image<TColor, TDepth> Resize(int width, int height, bool preserverScale)
       {
          return preserverScale ?
@@ -2152,12 +2151,57 @@ namespace Emgu.CV
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
       /// <returns>The scaled image</returns>
-      [ExposableMethod(Exposable = true)]
+      [Obsolete("Please use Resize(double scale, CvEnum.INTER interpolationType) instead. This function will be removed in the next version")]
       public Image<TColor, TDepth> Resize(double scale)
       {
          return Resize(
              (int)(Width * scale),
              (int)(Height * scale));
+      }
+
+      /// <summary>
+      /// Scale the image to the specific size 
+      /// </summary>
+      /// <param name="width">The width of the returned image.</param>
+      /// <param name="height">The height of the returned image.</param>
+      /// <param name="interpolationType">The type of interpolation</param>
+      /// <returns>The resized image</returns>
+      [ExposableMethod(Exposable = true)]
+      public Image<TColor, TDepth> Resize(int width, int height, CvEnum.INTER interpolationType)
+      {
+         Image<TColor, TDepth> imgScale = new Image<TColor, TDepth>(width, height);
+         CvInvoke.cvResize(Ptr, imgScale.Ptr, interpolationType);
+         return imgScale;
+      }
+
+      /// <summary>
+      /// Scale the image to the specific size
+      /// </summary>
+      /// <param name="width">The width of the returned image.</param>
+      /// <param name="height">The height of the returned image.</param>
+      /// <param name="interpolationType">The type of interpolation</param>
+      /// <param name="preserverScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
+      /// <returns></returns>
+      public Image<TColor, TDepth> Resize(int width, int height, CvEnum.INTER interpolationType, bool preserverScale)
+      {
+         return preserverScale ?
+            Resize(Math.Min((double)width / Width, (double)height / Height), interpolationType)
+            : Resize(width, height, interpolationType);
+      }
+
+      /// <summary>
+      /// Scale the image to the specific size: width *= scale; height *= scale  
+      /// </summary>
+      /// <param name="scale">The scale of resize</param>
+      /// <param name="interpolationType">The type of interpolation</param>
+      /// <returns>The scaled image</returns>
+      [ExposableMethod(Exposable = true)]
+      public Image<TColor, TDepth> Resize(double scale, CvEnum.INTER interpolationType)
+      {
+         return Resize(
+             (int)(Width * scale),
+             (int)(Height * scale),
+             interpolationType);
       }
 
       /// <summary>
@@ -2357,7 +2401,7 @@ namespace Emgu.CV
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (Image<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Width, Height))
+            using (Image<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Width, Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR))
             {
                ConvertFrom(tmp);
                return;
@@ -2765,7 +2809,7 @@ namespace Emgu.CV
       ///<returns> This image in Bitmap format of the specific size</returns>
       public Bitmap ToBitmap(int width, int height)
       {
-         using (Image<TColor, TDepth> scaledImage = Resize(width, height))
+         using (Image<TColor, TDepth> scaledImage = Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR))
             return scaledImage.ToBitmap();
       }
       #endregion
@@ -3951,9 +3995,9 @@ namespace Emgu.CV
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
       }
 
-      IImage IImage.Resize(int width, int height)
+      IImage IImage.Resize(int width, int height, CvEnum.INTER interpolationType)
       {
-         return Resize(width, height);
+         return Resize(width, height, interpolationType);
       }
       #endregion
 

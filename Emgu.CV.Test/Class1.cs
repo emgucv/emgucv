@@ -226,7 +226,7 @@ namespace Emgu.CV.Test
          Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
          {
             Image<Bgr, Byte> img = capture.QueryFrame();
-            img = img.Resize(0.8);
+            img = img.Resize(0.8, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
             gray._EqualizeHist();
 
@@ -240,7 +240,7 @@ namespace Emgu.CV.Test
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
          using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
-         using (Image<Bgr, Single> img2 = img.Resize(100, 100, true))
+         using (Image<Bgr, Single> img2 = img.Resize(100, 100, CvEnum.INTER.CV_INTER_AREA, true))
          {
             Application.Run(new ImageViewer(img2));
             Rectangle r = img2.ROI;
@@ -576,26 +576,28 @@ namespace Emgu.CV.Test
          }
       }*/
 
-      /*
+      
       private void TestMap()
       {
-         Point2D<double> center = new Point2D<double>(-110032, -110032);
+         PointF center = new PointF(-110032, -110032);
+         float width = 10000, height = 12000;
 
-         Map<Gray, Byte> map = new Map<Gray, byte>(new Rectangle<double>(center, 10000, 12000), new Point2D<double>(100, 100));
-         Point2D<float>[] pts = new Point2D<float>[]
+
+         Map<Gray, Byte> map = new Map<Gray, byte>(new RectangleF(center.X - width/2, center.Y - height/2, width, height), new PointF(100, 100));
+         PointF[] pts = new PointF[]
             {
-                new Point2D<float>( (float)center.X + 3120,(float) center.Y + 2310),
-                new Point2D<float>((float)center.X -220, (float) center.Y-4120)
+                new PointF( (float)center.X + 3120,(float) center.Y + 2310),
+                new PointF((float)center.X -220, (float) center.Y-4120)
             };
-         map.DrawPolyline<float>(pts, false, new Gray(255.0), 1);
-         Triangle2D<float> tri = new Triangle2D<float>(
-             new Point2D<float>((float)center.X - 1000.0f, (float)center.Y + 200.0f),
-             new Point2D<float>((float)center.X - 3000.0f, (float)center.Y + 200.0f),
-             new Point2D<float>((float)center.X - 700f, (float)center.Y + 800.0f));
+         map.DrawPolyline(pts, false, new Gray(255.0), 1);
+         Triangle2DF tri = new Triangle2DF(
+             new PointF((float)center.X - 1000.0f, (float)center.Y + 200.0f),
+             new PointF((float)center.X - 3000.0f, (float)center.Y + 200.0f),
+             new PointF((float)center.X - 700f, (float)center.Y + 800.0f));
          map.Draw(tri, new Gray(80), 0);
          map.Draw(tri, new Gray(255), 1);
-         Application.Run(new Emgu.CV.UI.ImageViewer(map));
-      }*/
+         ImageViewer.Show(map);
+      }
 
       private class SyntheticData
       {

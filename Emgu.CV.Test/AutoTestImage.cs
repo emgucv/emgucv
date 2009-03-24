@@ -731,7 +731,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(123, 321);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         image.Resize(512, 512);
+         image.Resize(512, 512, CvEnum.INTER.CV_INTER_CUBIC);
       }
 
       [Test]

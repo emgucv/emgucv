@@ -36,9 +36,10 @@ namespace Emgu.CV.UI
            // imageBox1
            // 
            this.imageBox1.Cursor = System.Windows.Forms.Cursors.Cross;
+           this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
            this.imageBox1.Location = new System.Drawing.Point(0, 0);
            this.imageBox1.Name = "imageBox1";
-           this.imageBox1.Size = new System.Drawing.Size(100, 100);
+           this.imageBox1.Size = new System.Drawing.Size(563, 482);
            this.imageBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
            this.imageBox1.TabIndex = 0;
            this.imageBox1.TabStop = false;
@@ -51,7 +52,7 @@ namespace Emgu.CV.UI
            this.ClientSize = new System.Drawing.Size(563, 482);
            this.Controls.Add(this.imageBox1);
            this.Name = "ImageViewer";
-           this.Text = Properties.StringTable.DefaultImageViewerText;
+           this.Text = "Image Viewer";
            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
            this.ResumeLayout(false);
            this.PerformLayout();
