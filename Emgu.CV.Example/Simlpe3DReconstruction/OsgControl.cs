@@ -30,6 +30,9 @@ namespace Simlpe3DReconstruction
          }
       }
 
+      /// <summary>
+      /// Get the Osg Viewer use by this control. Do not dispose this object
+      /// </summary>
       public Viewer Viewer
       {
          get { return _viewer; }
@@ -79,14 +82,13 @@ namespace Simlpe3DReconstruction
 
       private static uint ConvertMouse(MouseButtons button)
       {
-         uint result = 0;
          switch (button)
          {
-            case MouseButtons.Left: result = 1; break;
-            case MouseButtons.Middle: result = 2; break;
-            case MouseButtons.Right: result = 3; break;
+            case MouseButtons.Left: return 1; 
+            case MouseButtons.Middle: return 2;
+            case MouseButtons.Right: return 3; 
          }
-         return result;
+         return 0;
       }
 
       #region IDisposable Members

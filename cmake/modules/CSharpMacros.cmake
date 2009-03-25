@@ -51,6 +51,22 @@ MACRO(MAKE_PROPER_FILE_LIST source)
 	ENDFOREACH(file)
 ENDMACRO(MAKE_PROPER_FILE_LIST)
 # ----- end support macros -----
+MACRO(ADD_CS_MODULE target source)
+	GET_CS_LIBRARY_TARGET_DIR()
+	
+	SET(target_module "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
+	MAKE_PROPER_FILE_LIST("${source}")
+	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_module})
+	
+	ADD_CUSTOM_COMMAND (OUTPUT ${target_module}
+		COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_module} -target:module ${proper_file_list}
+		DEPENDS ${source}
+		COMMENT "Building ${relative_path}")
+	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_module})
+	SET(relative_path "")
+	SET(proper_file_list "")
+	SET(CS_FLAGS "")
+ENDMACRO(ADD_CS_MODULE)
 
 MACRO(ADD_CS_LIBRARY target source)
 	GET_CS_LIBRARY_TARGET_DIR()
@@ -115,3 +131,5 @@ MACRO(INSTALL_GAC target)
 	ENDIF(NOT WIN32)
 
 ENDMACRO(INSTALL_GAC target)
+
+

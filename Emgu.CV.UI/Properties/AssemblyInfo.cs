@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Emgu.CV.UI")]
-[assembly: AssemblyDescription("A collection User Interface for Emgu CV")]
+[assembly: AssemblyDescription("A Collection of User Interfaces for Emgu CV")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Emgu")]
 [assembly: AssemblyProduct("Emgu.CV.UI")]

@@ -9,7 +9,6 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Tao.OpenGl;
 using OsgViewer;
-using OsgTerrain;
 
 namespace Simlpe3DReconstruction
 {
@@ -18,58 +17,49 @@ namespace Simlpe3DReconstruction
       private MCvPoint3D32f[] _points;
       private Image<Bgr, Byte> _left;
 
-      private Viewer _viewer;
+      private Viewer _osgViewer;
 
-      private Osg.Image ConvertImage(Image<Bgr, Byte> image)
+      /// <summary>
+      /// Convert an Emgu CV image to Osg Image
+      /// </summary>
+      /// <param name="image">An Emgu CV image</param>
+      /// <returns>An Osg Image</returns>
+      private static Osg.Image ConvertImage(Image<Bgr, Byte> image)
       {
          Osg.Image res = new Osg.Image();
          OsgWrapper.UnsignedCharPointer ptr = new OsgWrapper.UnsignedCharPointer();
          ptr.Ptr = image.MIplImage.imageData;
-         
+
          res.setImage(image.Width, image.Height, image.NumberOfChannels,
-            (int)Gl.GL_RGB, (int)Gl.GL_RGB, Gl.GL_UNSIGNED_BYTE, ptr,
+            Gl.GL_RGB, Gl.GL_RGB, Gl.GL_UNSIGNED_BYTE, ptr,
             Osg.Image.AllocationMode.USE_NEW_DELETE);
          return res;
       }
 
+      /// <summary>
+      /// Set the textuer for the specific geode
+      /// </summary>
+      /// <param name="textureImage">The texture</param>
+      /// <param name="geode">The geode</param>
+      private static void SetTexture(Image<Bgr, Byte> textureImage, Osg.Geode geode)
+      {
+         //Create a new StateSet with default settings
+         Osg.StateSet state = new Osg.StateSet();
+         Osg.Texture2D texture = new Osg.Texture2D(ConvertImage(textureImage));
+         state.setTextureAttributeAndModes(0, texture, 1);
+         geode.setStateSet(state);
+      }
+
       public Simple3DReconstruction()
       {
-         int textureWidth = 256;
-         int textureHeight = 256;
-
          InitializeComponent();
-         _viewer = simpleOsgControl.Viewer;
+         _osgViewer = viewer3D.Viewer;
 
          _left = new Image<Bgr, byte>("left.jpg");
          Image<Bgr, Byte> right = new Image<Bgr, byte>("right.jpg");
          Image<Gray, Int16> leftDisparityMap;
          Computer3DPointsFromImages(_left.Convert<Gray, Byte>(), right.Convert<Gray, Byte>(), out leftDisparityMap, out _points);
 
-         /*
-         #region osg terrain
-         OsgTerrain.TerrainNode terrainNode = new TerrainNode();
-         OsgTerrain.Locator locator = new OsgTerrain.EllipsoidLocator(-Math.PI, -Math.PI * 0.5, 2.0 * Math.PI, Math.PI, 0.0);
-         OsgTerrain.ValidDataOperator validDataOperator = new ValidDataOperator();
-
-         Osg.Image depthMap = ConvertImage(leftDisparityMap.Min(1000).Max(-1000).Convert<Bgr, Byte>());
-         OsgTerrain.ImageLayer depthLayer= new ImageLayer();
-         depthLayer.setImage(depthMap);
-         depthLayer.setLocator(locator);
-         depthLayer.setValidDataOperator(validDataOperator);
-         terrainNode.setElevationLayer(depthLayer);
-
-         Osg.Image textureMap = ConvertImage(_left);
-         OsgTerrain.ImageLayer textureLayer = new ImageLayer();
-         textureLayer.setImage(textureMap);
-         textureLayer.setLocator(locator);
-         depthLayer.setValidDataOperator(validDataOperator);
-         terrainNode.setColorLayer(0, textureLayer);
-
-         OsgTerrain.GeometryTechnique geometryTechnique = new GeometryTechnique();
-         terrainNode.setTerrainTechnique(geometryTechnique);
-         #endregion
-         */
-           
          //remove some depth outliers
          for (int i = 0; i < _points.Length; i++)
          {
@@ -79,9 +69,12 @@ namespace Simlpe3DReconstruction
          //Display the disparity map
          //imageBox1.Image = leftDisparityMap;
 
-         
          Osg.Geode geode = new Osg.Geode();
          Osg.Geometry geometry = new Osg.Geometry();
+
+         int textureSize = 256;
+         //create and setup the texture
+         SetTexture(_left.Resize(textureSize, textureSize, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC), geode);
 
          #region setup the vertices
          Osg.Vec3Array vertices = new Osg.Vec3Array();
@@ -98,34 +91,24 @@ namespace Simlpe3DReconstruction
          geometry.addPrimitiveSet(draw);
          #endregion
 
-         #region set the drawing color
-         Osg.Vec4Array colors = new Osg.Vec4Array();
-         colors.Add(new Osg.Vec4(1.0f, 1.0f, 1.0f, 1.0f));
-         geometry.setColorArray(colors);
-         geometry.setColorBinding(Osg.Geometry.AttributeBinding.BIND_OVERALL);
-         #endregion
-
-         #region setup the texture coordinates
+         #region setup the texture coordinates for the pixels
          Osg.Vec2Array textureCoor = new Osg.Vec2Array();
          foreach (MCvPoint3D32f p in _points)
-            textureCoor.Add(new Osg.Vec2( p.x / _left.Width + 0.5f , p.y / _left.Height + 0.5f));
+            textureCoor.Add(new Osg.Vec2(p.x / _left.Width + 0.5f, p.y / _left.Height + 0.5f));
          geometry.setTexCoordArray(0, textureCoor);
          #endregion
 
-         #region create and setup the texture
-         // Create a new StateSet with default settings
-         Osg.StateSet state = new Osg.StateSet();
-         Osg.Image textureImage = ConvertImage(_left.Resize(textureWidth, textureHeight));
-         Osg.Texture2D texture = new Osg.Texture2D(textureImage);
-         state.setTextureAttributeAndModes(0, texture, 1);
-         geode.setStateSet(state);
+         geode.addDrawable(geometry);
+
+         #region apply the rotation on the scene
+         Osg.MatrixTransform transform = new Osg.MatrixTransform(
+            Osg.Matrix.rotate(90.0 / 180.0 * Math.PI, new Osg.Vec3d(1.0, 0.0, 0.0)) *
+            Osg.Matrix.rotate(180.0 / 180.0 * Math.PI, new Osg.Vec3d(0.0, 1.0, 0.0)));
+         transform.addChild(geode);
          #endregion
 
-         geode.addDrawable(geometry);
-         
-         _viewer.setSceneData(geode);
-         //_viewer.setSceneData(terrainNode);
-         _viewer.realize();
+         _osgViewer.setSceneData(transform);
+         _osgViewer.realize();
       }
 
       /// <summary>
@@ -153,7 +136,7 @@ namespace Simlpe3DReconstruction
                   {1.0, 0.0, 0.0, -size.Width/2}, //shift the x origin to image center
                   {0.0, 1.0, 0.0, -size.Height/2}, //shift the y origin to image center
                   {0.0, 0.0, -16.0, 0.0}, //Multiply the z value by -16, 
-                  {0.0, 0.0, 0.0, 1.0}})) 
+                  {0.0, 0.0, 0.0, 1.0}}))
                points = PointCollection.ReprojectImageTo3D(leftDisparity, q);
          }
       }
@@ -163,14 +146,15 @@ namespace Simlpe3DReconstruction
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
+      private void viewer3D_Paint(object sender, PaintEventArgs e)
       {
-         if (_viewer != null && !_viewer.done())
+         if (_osgViewer != null && !_osgViewer.done())
          {
-            _viewer.updateTraversal();
-            _viewer.frame();
+            _osgViewer.updateTraversal();
+            _osgViewer.frame();
          }
-         simpleOsgControl.Invalidate();
+
+         viewer3D.Invalidate(); //this create a repaint loop
       }
 
       /// <summary>
@@ -181,8 +165,8 @@ namespace Simlpe3DReconstruction
       {
          if (disposing && (components != null))
          {
-            simpleOsgControl.Dispose();
             components.Dispose();
+            viewer3D.Dispose();
          }
          base.Dispose(disposing);
       }

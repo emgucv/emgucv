@@ -1,9 +1,15 @@
 PROJECT(Emgu.CV.UI)
 
-SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:System.Drawing.dll -r:System.Data.dll -r:System.Windows.Forms.dll -r:${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll)
 SET(SRC_CV_UI *.cs Properties/*.cs )
-ADD_CS_LIBRARY(Emgu.CV.UI "${SRC_CV_UI}" ALL)
 
-ADD_DEPENDENCIES(Emgu.CV.UI Emgu.CV Emgu.Util)
-INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll DESTINATION bin
+#IF(WIN32)
+#  SET(CS_FLAGS ${CS_FLAGS} -addmodule:${LIBRARY_OUTPUT_PATH}/Emgu.Util.netmodule -addmodule:${LIBRARY_OUTPUT_PATH}/Emgu.CV.netmodule -r:System.Drawing.dll -r:System.Data.dll -r:System.Windows.Forms.dll -r:${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll)
+#  ADD_CS_MODULE(${PROJECT_NAME} "${SRC_CV_UI}" ALL)
+#ELSE(WIN32)
+  SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:System.Drawing.dll -r:System.Data.dll -r:System.Windows.Forms.dll -r:${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll)
+  ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV_UI}" ALL)
+#ENDIF(WIN32)
+
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.Util)
+INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll DESTINATION bin
 COMPONENT binary)

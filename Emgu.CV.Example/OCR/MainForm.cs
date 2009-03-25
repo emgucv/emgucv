@@ -26,10 +26,8 @@ namespace OCR
 
          fileNameTextBox.Text = fileName;
 
-         //Resize the image if it is too big, display it on the image box
-         int width = Math.Min(image.Width, imageBox1.Width);
-         int height = Math.Min(image.Height, imageBox1.Height);
-         imageBox1.Image = image.Resize(width, height, true);
+         //Display image on the image box
+         imageBox1.Image = image;
 
          //Perform OCR
          Tesseract ocr = new Tesseract();

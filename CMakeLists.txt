@@ -22,7 +22,6 @@ add_subdirectory(opencv)
 add_subdirectory(Emgu.CV.Extern)
 #SUBDIRS(opencv)
 
-
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV")
 SET(CPACK_GENERATOR "TGZ")
 SET(CPACK_PACKAGE_VENDOR "Emgu")
