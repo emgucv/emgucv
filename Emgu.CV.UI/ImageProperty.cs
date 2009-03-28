@@ -160,7 +160,7 @@ namespace Emgu.CV.UI
       {
          if (_imageBox != null)
          {
-            _imageBox.ZoomScale = ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex];;
+            _imageBox.SetZoomScale( ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex], Point.Empty );
          }
       }
 

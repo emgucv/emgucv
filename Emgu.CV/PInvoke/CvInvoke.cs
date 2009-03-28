@@ -2807,6 +2807,20 @@ namespace Emgu.CV
               MCvTermCriteria criteria, float[] rotationMatrix, float[] translationVector);
 
       /// <summary>
+      /// Implements POSIT algorithm. Image coordinates are given in a camera-related coordinate system. The focal length may be retrieved using camera calibration functions. At every iteration of the algorithm new perspective projection of estimated pose is computed. 
+      /// </summary>
+      /// <remarks>Difference norm between two projections is the maximal distance between corresponding points. </remarks>
+      /// <param name="positObject">Pointer to the object structure</param>
+      /// <param name="imagePoints">2D array to the object points projections on the 2D image plane, the second dimension must be 2.</param>
+      /// <param name="focalLength">Focal length of the camera used</param>
+      /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
+      /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
+      /// <param name="translationVector">Translation vector (3x1)</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvPOSIT(IntPtr positObject, IntPtr imagePoints, double focalLength,
+              MCvTermCriteria criteria, IntPtr rotationMatrix, IntPtr translationVector);
+
+      /// <summary>
       /// The function cvReleasePOSITObject releases memory previously allocated by the function cvCreatePOSITObject. 
       /// </summary>
       /// <param name="positObject">pointer to CvPOSIT structure</param>

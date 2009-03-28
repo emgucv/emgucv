@@ -483,10 +483,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Make a copy of the specific ROI (Region of Interest)
+      /// Make a copy of the specific ROI (Region of Interest) from the image
       /// </summary>
       /// <param name="roi">The roi to be copied</param>
-      /// <returns>The image of the specific roi</returns>
+      /// <returns>The roi region on the image</returns>
       public Image<TColor, TDepth> Copy(System.Drawing.Rectangle roi)
       {
          Rectangle currentRoi = ROI; //cache the current roi

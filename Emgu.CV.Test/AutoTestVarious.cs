@@ -297,23 +297,23 @@ namespace Emgu.CV.Test
          Assert.IsFalse(p2.InConvexPolygon(rect));
       }*/
 
+      
       /*
-      private float[,] ProjectPoints(float[,] points3D, Matrix<float> rotation, Matrix<float> translation, float focalLength)
+      private float[,] ProjectPoints(float[,] points3D, RotationVector3D rotation, Matrix<double> translation, float focalLength)
       {
-         float[,] imagePoint = new float[points3D.GetLength(0), 2];
-         for (int i = 0; i < imagePoint.GetLength(0); i++)
+         using (Matrix<float> imagePointMat = new Matrix<float>(points3D.GetLength(0), 2))
          {
-            MCvPoint3D32f p = new MCvPoint3D32f(points3D[i, 0], points3D[i, 1], points3D[i, 2]);
-            Matrix<float> p3D = new Matrix<float>(p.Coordinate);
-            Matrix<float> pProjected = rotation * p3D + translation;
-            pProjected = pProjected * (focalLength / (-pProjected[2, 0]));
-            imagePoint[i, 0] = pProjected[0, 0];
-            imagePoint[i, 1] = pProjected[1, 0];
+            CvInvoke.cvProjectPoints2(new Matrix<float>(points3D), rotation, translation,
+            new Matrix<double>(new double[,] { 
+               {focalLength, 0, 0},
+               {0, focalLength, 0}, 
+               {0,0,1}}),
+            IntPtr.Zero, imagePointMat, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            return imagePointMat.Data;
          }
-         return imagePoint;
-      }*/
+      }
 
-      /*
+      
       [Test]
       public void TestPOSIT()
       {
@@ -336,28 +336,31 @@ namespace Emgu.CV.Test
          IntPtr posit = CvInvoke.cvCreatePOSITObject(points3D, points3D.GetLength(0));
 
          #region caculate the image point assuming we know the rotation and translation
-         RotationVector3D realRotVec = new RotationVector3D(new float[3] { 0.01f, 0.02f, 0.03f });
-         Matrix<float> realRotMat = realRotVec.RotationMatrix;
-         Matrix<float> realTransVec = new Matrix<float>(new float[3] { 0.0f, 0.0f, -50.0f });
-         float[,] imagePoint = ProjectPoints(points3D, realRotMat, realTransVec, focalLength);
+         RotationVector3D realRotVec = new RotationVector3D(new double[3] { 0.1f, 0.2f, 0.3f });
+         Matrix<double> realTransVec = new Matrix<double>(new double[3] { 0.0f, 0.0f, -50.0f });
+         
+         float[,] imagePoint = ProjectPoints(points3D, realRotVec, realTransVec, focalLength);
+         GCHandle handle1 = GCHandle.Alloc(imagePoint, GCHandleType.Pinned);
          #endregion
 
-         RotationVector3D rotVecGuess = new RotationVector3D(new float[3] { 0.03f, 0.01f, 0.02f });
-         Matrix<float> rotMatGuess = rotVecGuess.RotationMatrix;
-         float[] rotFVecGuess = new float[] { rotMatGuess[0, 0], rotMatGuess[1, 0], rotMatGuess[2, 0], rotMatGuess[0, 1], rotMatGuess[1, 1], rotMatGuess[2, 1], rotMatGuess[0, 2], rotMatGuess[1, 2], rotMatGuess[2, 2] };
-         float[] tranFVecGuess = new float[] { 0, 0, 5 };
-         CvInvoke.cvPOSIT(posit, imagePoint, 0.5, new MCvTermCriteria(200, 1.0e-5), rotFVecGuess, tranFVecGuess);
-         Matrix<float> rotMatEst = new Matrix<float>(new float[,] { 
-            {rotFVecGuess[0], rotFVecGuess[3], rotFVecGuess[6]},
-            {rotFVecGuess[1], rotFVecGuess[4], rotFVecGuess[7]},
-            {rotFVecGuess[2], rotFVecGuess[5], rotFVecGuess[8]}});
+         RotationVector3D rotVecGuess = new RotationVector3D(new double[3] { 0.3f, 0.1f, 0.2f });
+         Matrix<double> rotMatGuess = rotVecGuess.RotationMatrix;
+         
+         //float[] rotFVecGuess = new float[] { (float)rotMatGuess[0, 0], (float) rotMatGuess[1, 0], (float) rotMatGuess[2, 0], (float)rotMatGuess[0, 1], (float)rotMatGuess[1, 1], (float)rotMatGuess[2, 1], (float)rotMatGuess[0, 2], (float)rotMatGuess[1, 2], (float)rotMatGuess[2, 2] };
+         Matrix<float> tranFVecGuess = new Matrix<float>( new float[] { 0, 0, 5 });
+         CvInvoke.cvPOSIT(posit, handle1.AddrOfPinnedObject(), 0.5, new MCvTermCriteria(200, 1.0e-5), rotMatGuess.MCvMat.data, tranFVecGuess.MCvMat.data);
+         
+         //Matrix<double> rotMatEst = new Matrix<double>(new double[,] { 
+         //   {rotFVecGuess[0], rotFVecGuess[3], rotFVecGuess[6]},
+         //   {rotFVecGuess[1], rotFVecGuess[4], rotFVecGuess[7]},
+         //   {rotFVecGuess[2], rotFVecGuess[5], rotFVecGuess[8]}});
          RotationVector3D rotVecEst = new RotationVector3D();
-         Matrix<float> tranMatEst = new Matrix<float>(tranFVecGuess);
+         Matrix<double> tranMatEst = tranFVecGuess.Convert<double>();
 
-         rotVecEst.RotationMatrix = rotMatEst;
+         rotVecEst.RotationMatrix = rotMatGuess;
          //At this point rotVecEst should be similar to realRotVec, but it is not...
 
-         float[,] projectionFromEst = ProjectPoints(points3D, rotMatEst, tranMatEst, focalLength);
+         float[,] projectionFromEst = ProjectPoints(points3D, rotVecEst, tranMatEst, focalLength);
 
          for (int i = 0; i < projectionFromEst.GetLength(0); i++)
          {
@@ -367,7 +370,8 @@ namespace Emgu.CV.Test
          }
 
          CvInvoke.cvReleasePOSITObject(ref posit);
-      }*/
+      }
+      */
 
       [Test]
       public void TestXmlSerialize()

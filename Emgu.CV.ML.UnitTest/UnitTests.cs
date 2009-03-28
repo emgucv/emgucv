@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Emgu.CV.ML.UnitTest
 {
@@ -53,7 +54,6 @@ namespace Emgu.CV.ML.UnitTest
                   sample.Data[0, 0] = j;
                   sample.Data[0, 1] = i;
 
-                  //Matrix<float> nearestNeighbors = new Matrix<float>(K* sample.Rows, sample.Cols);
                   // estimates the response and get the neighbors' labels
                   float response = knn.FindNearest(sample, K, results, null, neighborResponses, null);
 
@@ -325,39 +325,11 @@ namespace Emgu.CV.ML.UnitTest
       }
 
       [Test]
-      public void TestDTree()
-      {
-         using (DTree tree = new DTree())
-         {
-            MCvDTreeParams param = MCvDTreeParams.GetDefaultParameter();
-         }
-      }
-
-      [Test]
       public void TestBoost()
       {
          using (Boost tree = new Boost())
          {
             MCvBoostParams param = MCvBoostParams.GetDefaultParameter();
-         }
-      }
-
-      private void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
-      {
-         string[] rows = System.IO.File.ReadAllLines("agaricus-lepiota.data");
-
-         int varCount = rows[0].Split(',').Length - 1;
-         data = new Matrix<float>(rows.Length, varCount);
-         response = new Matrix<float>(rows.Length, 1);
-         int count = 0;
-         foreach (string row in rows)
-         {
-            string[] values = row.Split(',');
-            Char c = System.Convert.ToChar(values[0]);
-            response[count, 0] = System.Convert.ToInt32(c);
-            for (int i = 1; i < values.Length; i++)
-               data[count, i - 1] = System.Convert.ToByte(System.Convert.ToChar(values[i]));
-            count++;
          }
       }
 
@@ -380,12 +352,32 @@ namespace Emgu.CV.ML.UnitTest
          }
       }
 
+      private void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
+      {
+         string[] rows = System.IO.File.ReadAllLines("agaricus-lepiota.data");
+
+         int varCount = rows[0].Split(',').Length - 1;
+         data = new Matrix<float>(rows.Length, varCount);
+         response = new Matrix<float>(rows.Length, 1);
+         int count = 0;
+         foreach (string row in rows)
+         {
+            string[] values = row.Split(',');
+            Char c = System.Convert.ToChar(values[0]);
+            response[count, 0] = System.Convert.ToInt32(c);
+            for (int i = 1; i < values.Length; i++)
+               data[count, i - 1] = System.Convert.ToByte(System.Convert.ToChar(values[i]));
+            count++;
+         }
+      }
+
       [Test]
       public void TestDTreesMushroom()
       {
          Matrix<float> data, response;
          ReadMushroomData(out data, out response);
 
+         //Use the first 80% of data as training sample
          int trainingSampleCount = (int)(data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
@@ -416,13 +408,12 @@ namespace Emgu.CV.ML.UnitTest
                Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE,
                response,
                null,
-               null, /*sampleIdx,*/
+               sampleIdx,
                varType,
                null,
                param);
 
             if (!success) return;
-            //forest.Train(data, Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, response, null, null, varType, null, param);
             double trainDataCorrectRatio = 0;
             double testDataCorrectRatio = 0;
             for (int i = 0; i < data.Rows; i++)
@@ -443,6 +434,9 @@ namespace Emgu.CV.ML.UnitTest
 
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
+
+            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
+            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
          }
       }
 
@@ -510,6 +504,9 @@ namespace Emgu.CV.ML.UnitTest
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
             //int n = varImportance.Width;
+
+            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
+            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
          }
       }
 
@@ -573,6 +570,9 @@ namespace Emgu.CV.ML.UnitTest
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
             //int n = varImportance.Width;
+
+            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
+            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
          }
       }
 

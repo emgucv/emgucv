@@ -81,12 +81,75 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pt"></param>
       /// <returns></returns>
-      private Point MapPoint(PointF pt)
+      private Point MapPointToImagePoint(PointF pt)
       {
          return
             new Point(
              (int)((pt.X - Area.Left) / Resolution.X),
              (int)((pt.Y - Area.Top) / Resolution.Y));
+      }
+
+      private Rectangle MapRectangleToImageRectangle(RectangleF rect)
+      {
+         return
+            new Rectangle(MapPointToImagePoint(rect.Location),
+               new Size((int) (rect.Width / Resolution.X),(int)( rect.Height / Resolution.Y)));
+      }
+
+      /// <summary>
+      /// Map an image point to a Map point
+      /// </summary>
+      /// <param name="pt">The point on image</param>
+      /// <returns>The point on map</returns>
+      private PointF ImagePointToMapPoint(Point pt)
+      {
+         return
+            new PointF(
+               pt.X * Resolution.X + Area.Left,
+               pt.Y * Resolution.Y + Area.Top);
+      }
+
+      private RectangleF ImageRectangleToMapRectangle(Rectangle rect)
+      {
+         return
+            new RectangleF(ImagePointToMapPoint(rect.Location),
+               new SizeF(rect.Width * Resolution.X, rect.Height * Resolution.Y)); 
+      }
+
+      /// <summary>
+      /// Make a copy of the specific ROI (Region of Interest) from the map
+      /// </summary>
+      /// <param name="roi">The roi to be copied</param>
+      /// <returns>The roi region on the map</returns>
+      public Map<TColor, TDepth> Copy(System.Drawing.RectangleF roi)
+      {
+         return new Map<TColor, TDepth>(
+            base.Copy(MapRectangleToImageRectangle(roi)),
+            roi);
+      }
+
+      ///<summary> 
+      /// Get or Set the region of interest for this map. To clear the ROI, set it to System.Drawing.Rectangle.Empty
+      ///</summary>
+      public new RectangleF ROI
+      {
+         set
+         {
+            if (value.Equals(RectangleF.Empty))
+            {
+               //reset the image ROI
+               CvInvoke.cvResetImageROI(Ptr);
+            }
+            else
+            {  //set the image ROI to the specific value
+               base.ROI = MapRectangleToImageRectangle( value );
+            }
+         }
+         get
+         {
+            //return the image ROI
+            return ImageRectangleToMapRectangle( base.ROI );
+         }
       }
 
       /// <summary>
@@ -98,7 +161,7 @@ namespace Emgu.CV
       public void Draw(RectangleF rect, TColor color, int thickness)
       {
          base.Draw(new Rectangle(
-            MapPoint(new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f)),
+            MapPointToImagePoint(new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f)),
             new Size((int)(rect.Width / Resolution.X), (int)(rect.Height / Resolution.Y))
             ), color, thickness);
       }
@@ -111,7 +174,7 @@ namespace Emgu.CV
       /// <param name="thickness">The thickness of the line</param>
       public override void Draw(LineSegment2DF line, TColor color, int thickness)
       {
-         base.Draw(new LineSegment2D(MapPoint(line.P1), MapPoint(line.P2)), color, thickness);
+         base.Draw(new LineSegment2D(MapPointToImagePoint(line.P1), MapPointToImagePoint(line.P2)), color, thickness);
       }
 
       ///<summary> Draw a Circle of the specific color and thickness </summary>
@@ -121,7 +184,7 @@ namespace Emgu.CV
       public override void Draw(CircleF circle, TColor color, int thickness)
       {
          base.Draw(
-            new CircleF(MapPoint(circle.Center), circle.Radius / Resolution.X),
+            new CircleF(MapPointToImagePoint(circle.Center), circle.Radius / Resolution.X),
             color,
             thickness);
       }
@@ -134,7 +197,7 @@ namespace Emgu.CV
       {
          System.Drawing.Point[] pts = Array.ConvertAll<PointF, Point>(
              polygon.GetVertices(),
-             MapPoint);
+             MapPointToImagePoint);
          
          if (thickness > 0)
             base.DrawPolyline(pts, true, color, thickness);
@@ -151,7 +214,7 @@ namespace Emgu.CV
       /// <param name="color">The color of the text</param>
       public void Draw(String message, ref MCvFont font, PointF bottomLeft, TColor color)
       {
-         base.Draw(message, ref font, MapPoint(bottomLeft), color);
+         base.Draw(message, ref font, MapPointToImagePoint(bottomLeft), color);
       }
 
       /// <summary>
@@ -164,7 +227,7 @@ namespace Emgu.CV
       public void DrawPolyline(PointF[] pts, bool isClosed, TColor color, int thickness)
       {
          base.DrawPolyline(
-             Array.ConvertAll<PointF, Point>(pts, MapPoint),
+             Array.ConvertAll<PointF, Point>(pts, MapPointToImagePoint),
              isClosed,
              color,
              thickness);

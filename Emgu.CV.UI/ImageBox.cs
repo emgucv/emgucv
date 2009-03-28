@@ -93,6 +93,8 @@ namespace Emgu.CV.UI
          }
       }
 
+      private bool _settingBitmap = false;
+
       private bool EnablePropertyPanel
       {
          get
@@ -211,13 +213,31 @@ namespace Emgu.CV.UI
          {
             return _zoomScale;
          }
-         set
+      }
+
+      /// <summary>
+      /// Set the new zoom scale for the displayed image
+      /// </summary>
+      /// <param name="zoomScale">The new zoom scale</param>
+      /// <param name="fixPoint">The point to be fixed</param>
+      public void SetZoomScale( double zoomScale, Point fixPoint )
+      {
+         if (_zoomScale != zoomScale)
          {
-            if (_zoomScale != value)
-            {
-               _zoomScale = value;
-               Image = Image;
-            }
+            double scale = zoomScale / _zoomScale;
+
+            _zoomScale = zoomScale;
+
+            horizontalScrollBar.Maximum = Int32.MaxValue; //(int)(horizontalScrollBar.Maximum * scale);
+            verticalScrollBar.Maximum = Int32.MaxValue; //(int)(verticalScrollBar.Maximum * scale);
+            horizontalScrollBar.Value =
+               Math.Min(Math.Max(horizontalScrollBar.Minimum,
+               (int)(horizontalScrollBar.Value * scale + fixPoint.X * ( scale - 1.0))), horizontalScrollBar.Maximum);
+            verticalScrollBar.Value =
+               Math.Min(Math.Max(verticalScrollBar.Minimum,
+               (int)(verticalScrollBar.Value * scale + fixPoint.Y * (scale - 1.0))), verticalScrollBar.Maximum);
+
+            Image = Image;
          }
       }
 
@@ -244,9 +264,7 @@ namespace Emgu.CV.UI
                if (_functionalMode != FunctionalModeOption.Minimum)
                   BuildOperationMenuItem(_displayedImage);
 
-               //release the old Bitmap Image
-               if (base.Image != null)
-                  base.Image.Dispose();
+
 
                #region scale the image according to _zoomScale
                if (_zoomScale != 1.0)
@@ -258,7 +276,17 @@ namespace Emgu.CV.UI
                   _displayedImage = _displayedImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
                }
 
+               //release the old Bitmap Image
+               if (base.Image != null)
+               {
+                  base.Image.Dispose();
+                  base.Image = null;
+               }
+               sizeChanged |= base.Image == null || (base.Image.Size != _displayedImage.Size);
+
+               _settingBitmap = true;
                base.Image = _displayedImage.Bitmap;
+               _settingBitmap = false;
                #endregion
 
                if (EnablePropertyPanel)
@@ -284,8 +312,7 @@ namespace Emgu.CV.UI
 
             if (sizeChanged)
             {
-               DisplayScrollBars();
-               SetScrollBarValues();
+               Refresh();
             }
          }
       }
@@ -610,22 +637,25 @@ namespace Emgu.CV.UI
          verticalScrollBar.Minimum = 0;
          horizontalScrollBar.Minimum = 0;
 
-         verticalScrollBar.Maximum = 0;
-         horizontalScrollBar.Maximum = 0;
-
+         int widthDiff = base.Image.Size.Width - ClientSize.Width;
          // If the offset does not make the Maximum less than zero, set its value. 
-         if (base.Image.Size.Width > ClientSize.Width)
+         if (widthDiff > 0 )
          {
-            horizontalScrollBar.Maximum =
-                base.Image.Size.Width - ClientSize.Width;
+            int max = widthDiff;
+            // If the VScrollBar is visible, adjust the Maximum of the 
+            // HSCrollBar to account for the width of the VScrollBar.  
+            if (verticalScrollBar.Visible)
+            {
+               max += verticalScrollBar.Width;
+            }
+
+            horizontalScrollBar.Maximum = max;
+         }
+         else
+         {
+            horizontalScrollBar.Maximum = 0;
          }
          
-         // If the VScrollBar is visible, adjust the Maximum of the 
-         // HSCrollBar to account for the width of the VScrollBar.  
-         if (verticalScrollBar.Visible)
-         {
-            horizontalScrollBar.Maximum += verticalScrollBar.Width;
-         }
          horizontalScrollBar.LargeChange = horizontalScrollBar.Maximum / 10;
          horizontalScrollBar.SmallChange = horizontalScrollBar.Maximum / 20;
 
@@ -635,19 +665,25 @@ namespace Emgu.CV.UI
          horizontalScrollBar.Maximum += horizontalScrollBar.LargeChange;
          */
 
+         int heightDiff = base.Image.Size.Height - ClientSize.Height;
          // If the offset does not make the Maximum less than zero, set its value.    
-         if (base.Image.Size.Height > ClientSize.Height)
+         if (heightDiff > 0 )
          {
-            verticalScrollBar.Maximum =
-               base.Image.Size.Height - ClientSize.Height;
+            int max = heightDiff;
+            // If the HScrollBar is visible, adjust the Maximum of the 
+            // VSCrollBar to account for the width of the HScrollBar.
+            if (horizontalScrollBar.Visible)
+            {
+               max += horizontalScrollBar.Height;
+            }
+
+            verticalScrollBar.Maximum = max;
+         }
+         else
+         {
+            verticalScrollBar.Maximum = 0;
          }
 
-         // If the HScrollBar is visible, adjust the Maximum of the 
-         // VSCrollBar to account for the width of the HScrollBar.
-         if (horizontalScrollBar.Visible)
-         {
-            verticalScrollBar.Maximum += horizontalScrollBar.Height;
-         }
          verticalScrollBar.LargeChange = verticalScrollBar.Maximum / 10;
          verticalScrollBar.SmallChange = verticalScrollBar.Maximum / 20;
 
@@ -661,26 +697,39 @@ namespace Emgu.CV.UI
 
       void ImageBox_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
       {
+         double scale = 1.0;
          if (e.Delta > 0)
          {
-            ZoomScale *= 2.0;
+            scale = 2.0;
          }
          else if (e.Delta < 0)
          {
-            ZoomScale /= 2.0;
+            scale = 0.5;
          }
+         else
+            return;
+
+         SetZoomScale(ZoomScale * scale, e.Location);
+      }
+
+      /// <summary>
+      /// Refresh this ImageBox
+      /// </summary>
+      public override void Refresh()
+      {
+         DisplayScrollBars();
+         SetScrollBarValues();
+         base.Refresh();
       }
 
       private void ImageBox_Resize(object sender, EventArgs e)
       {
-         if (base.Image != null)
+         if (base.Image != null && !_settingBitmap)
          {
-            horizontalScrollBar.Value = horizontalScrollBar.Minimum;
-            verticalScrollBar.Value = verticalScrollBar.Minimum;
-            _mouseDownPosition = Point.Empty;
+            //horizontalScrollBar.Value = horizontalScrollBar.Minimum;
+            //verticalScrollBar.Value = verticalScrollBar.Minimum;
+            //_mouseDownPosition = Point.Empty;
 
-            DisplayScrollBars();
-            SetScrollBarValues();
             Refresh();
          }
       }
