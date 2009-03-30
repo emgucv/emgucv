@@ -73,5 +73,20 @@ namespace Emgu.CV
       /// <returns>The resized image</returns>
       IImage Resize(int width, int height, CvEnum.INTER interpolationType);
 
+      /// <summary>
+      /// Make a copy of the specific ROI (Region of Interest) from the image
+      /// </summary>
+      /// <param name="roi">The roi to be copied</param>
+      /// <returns>The roi region on the image</returns>
+      IImage Copy(Rectangle roi);
+
+      /// <summary>
+      /// Get or Set the ROI for this IImage
+      /// </summary>
+      Rectangle ROI
+      {
+         get;
+         set;
+      }
    }
 }

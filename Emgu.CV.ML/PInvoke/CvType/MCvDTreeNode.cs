@@ -79,7 +79,17 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// Global pruning data
       /// </summary>
-      public double nodeRisk, treeRisk, treeError;
+      public double nodeRisk;
+      
+      /// <summary>
+      /// Global pruning data
+      /// </summary>
+      public double treeRisk;
+
+      /// <summary>
+      /// Global pruning data
+      /// </summary>
+      public double treeError;
 
       /// <summary>
       /// Cross-validation pruning data

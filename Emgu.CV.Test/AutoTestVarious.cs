@@ -188,8 +188,6 @@ namespace Emgu.CV.Test
          }
       }
 
-      //TODO: Find out why the following test fails
-      /*
       [Test]
       public void TestBlob()
       {
@@ -226,7 +224,7 @@ namespace Emgu.CV.Test
          MCvBlob blob = tracker[0];
          int id = blob.ID;
          //ImageViewer.Show(forground);
-      }*/
+      }
 
       [Test]
       public void TestEigenObjects()

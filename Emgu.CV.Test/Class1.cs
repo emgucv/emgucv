@@ -201,7 +201,7 @@ namespace Emgu.CV.Test
 
       public void TestRandom()
       {
-         using (Image<Bgr, byte> img = new Image<Bgr, byte>(50, 50))
+         using (Image<Bgr, byte> img = new Image<Bgr, byte>(200, 200))
          {
             img.SetRandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
             ImageViewer.Show(img);

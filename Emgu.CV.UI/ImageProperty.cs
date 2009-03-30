@@ -29,6 +29,7 @@ namespace Emgu.CV.UI
          {
             zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
          }    
+         
       }
 
       private ImageBox _imageBox;
@@ -68,6 +69,7 @@ namespace Emgu.CV.UI
          #endregion
 
          UpdateHistogram();
+         UpdateZoomScale();
       }
 
       /// <summary>
@@ -106,6 +108,11 @@ namespace Emgu.CV.UI
          {
             fpsTextBox.Text = value.ToString();
          }
+      }
+
+      public void UpdateZoomScale()
+      {
+         this.zoomLevelComboBox.Text = String.Format("{0}%", ImageBox.ZoomScale * 100);
       }
 
       private void clearOperationBtn_Click(object sender, EventArgs e)

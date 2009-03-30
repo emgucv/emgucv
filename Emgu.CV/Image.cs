@@ -3999,6 +3999,11 @@ namespace Emgu.CV
       {
          return Resize(width, height, interpolationType);
       }
+
+      IImage IImage.Copy(Rectangle roi)
+      {
+         return Copy(roi);
+      }
       #endregion
 
       #region ICloneable Members

@@ -121,7 +121,7 @@ namespace Emgu.CV.UI
            this.ContextMenuStrip = this.contextMenuStrip1;
            this.Controls.Add(this.verticalScrollBar);
            this.Controls.Add(this.horizontalScrollBar);
-           this.Cursor = System.Windows.Forms.Cursors.Cross;
+           this.Cursor = _defaultCursor;
            this.Size = new System.Drawing.Size(0, 0);
            this.TabIndex = 2;
            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseWheel);
