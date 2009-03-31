@@ -24,7 +24,7 @@ namespace ShapeDetection
          if (fileNameTextBox.Text != String.Empty)
          {
             //Load the image from file
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, true);
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true);
 
             //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();

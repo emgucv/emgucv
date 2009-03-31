@@ -50,6 +50,7 @@ MACRO(MAKE_PROPER_FILE_LIST source)
 		SET(native "")
 	ENDFOREACH(file)
 ENDMACRO(MAKE_PROPER_FILE_LIST)
+
 # ----- end support macros -----
 MACRO(ADD_CS_MODULE target source)
 	GET_CS_LIBRARY_TARGET_DIR()
@@ -76,7 +77,7 @@ MACRO(ADD_CS_LIBRARY target source)
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_DLL})
 	
 	ADD_CUSTOM_COMMAND (OUTPUT ${target_DLL}
-		COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
+		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
 		DEPENDS ${source}
 		COMMENT "Building ${relative_path}")
 	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_DLL})
@@ -87,24 +88,38 @@ ENDMACRO(ADD_CS_LIBRARY)
 
 MACRO(ADD_CS_EXECUTABLE target source)
 	GET_CS_EXECUTABLE_TARGET_DIR()
-	
+
 	# FIXME:
 	# Seems like cmake doesn't like the ".exe" ending for custom commands.
 	# If we call it ${target}.exe, 'make' will later complain about a missing rule.
 	# mono doesn't care about endings, so temporarily add ".monoexe".
+	IF (MSVC)
+	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.exe")
+      ELSE(MSVC)
 	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.monoexe")
+	ENDIF(MSVC)
+
 	MAKE_PROPER_FILE_LIST("${source}")
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
 	
-	ADD_CUSTOM_COMMAND (OUTPUT "${target_EXE}"
-		COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
+	ADD_CUSTOM_COMMAND (OUTPUT ${target_EXE}
+		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
 		DEPENDS ${source}
 		COMMENT "Building ${relative_path}")
-	ADD_CUSTOM_TARGET ("${target}" "${ARGV2}" DEPENDS "${target_EXE}")
+	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_EXE})
 	SET(relative_path "")
 	SET(proper_file_list "")
 	SET(CS_FLAGS "")
 ENDMACRO(ADD_CS_EXECUTABLE)
+
+MACRO(SIGN_ASSEMBLY key)
+	SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
+ENDMACRO(SIGN_ASSEMBLY)
+
+MACRO(GENERATE_DOCUMENT file)
+	SET(CS_FLAGS ${CS_FLAGS} -doc:file.XML)
+ENDMACRO(GENERATE_DOCUMENT)
+
 
 MACRO(INSTALL_GAC target)
 	GET_CS_LIBRARY_TARGET_DIR()

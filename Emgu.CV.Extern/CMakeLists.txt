@@ -14,14 +14,6 @@ set(the_target "cvextern")
 
 add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
 
-IF (WIN32)
-ADD_CUSTOM_COMMAND(
-    TARGET ${PROJECT_NAME}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ARGS ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/${the_target}.dll ${EXECUTABLE_OUTPUT_PATH}/
-)
-ENDIF()
-
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"

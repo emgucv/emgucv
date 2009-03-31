@@ -1,10 +1,20 @@
 PROJECT(Emgu.CV)
 
-SET(SRC_CV *.cs Shape/*.cs PointAndLine/*.cs PInvoke/*.cs
-PInvoke/CvType/*.cs Color/*.cs Capture/*.cs CameraCalibration/*.cs
-Reflection/*.cs VideoSurveillance/*.cs Properties/*.cs)
+SET(SRC_CV 
+   *.cs 
+   Shape/*.cs 
+   PointAndLine/*.cs 
+   PInvoke/*.cs
+   PInvoke/CvType/*.cs 
+   Color/*.cs 
+   Capture/*.cs 
+   CameraCalibration/*.cs
+   Reflection/*.cs 
+   VideoSurveillance/*.cs 
+   Properties/*.cs)
 
-SET(CS_FLAGS ${CS_FLAGS} -doc:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.XML -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll)
+SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll)
+SET(CS_FLAGS ${CS_FLAGS} -resource:${PROJECT_NAME}.Properties.StringTable.resources)
 
 IF(WIN32)
   SET(CS_FLAGS ${CS_FLAGS} -r:C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.0/System.ServiceModel.dll )
@@ -12,9 +22,28 @@ ELSE(WIN32)
   SET(CS_FLAGS ${CS_FLAGS} -r:System.ServiceModel.dll)
 ENDIF(WIN32)
 
+GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
+SIGN_ASSEMBLY(CV.snk)
+
 ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV}")
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util)
+ADD_CUSTOM_COMMAND(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD 
+    COMMAND ${RESGEN_EXECUTABLE} Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources
+)
+
+#FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
+IF (WIN32)
+ELSE (WIN32)
+ADD_CUSTOM_COMMAND(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ARGS ${PROJECT_NAME}.dll.config ${EXECUTABLE_OUTPUT_PATH}/
+)
+ENDIF(WIN32)
+
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util cvextern)
 
 INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll
 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.XML DESTINATION bin
