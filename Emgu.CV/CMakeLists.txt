@@ -14,7 +14,6 @@ SET(SRC_CV
    Properties/*.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll)
-SET(CS_FLAGS ${CS_FLAGS} -resource:${PROJECT_NAME}.Properties.StringTable.resources)
 
 IF(WIN32)
   SET(CS_FLAGS ${CS_FLAGS} -r:C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.0/System.ServiceModel.dll )
@@ -25,13 +24,9 @@ ENDIF(WIN32)
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(CV.snk)
 
-ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV}")
+ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.Properties.StringTable.resources)
 
-ADD_CUSTOM_COMMAND(
-    TARGET ${PROJECT_NAME}
-    PRE_BUILD 
-    COMMAND ${RESGEN_EXECUTABLE} Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources
-)
+ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV}")
 
 #FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
 IF (WIN32)

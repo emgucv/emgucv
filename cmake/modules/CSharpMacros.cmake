@@ -77,6 +77,7 @@ MACRO(ADD_CS_LIBRARY target source)
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_DLL})
 	
 	ADD_CUSTOM_COMMAND (OUTPUT ${target_DLL}
+		${CS_PREBUILD_COMMAND}	   
 		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
 		DEPENDS ${source}
 		COMMENT "Building ${relative_path}")
@@ -103,6 +104,7 @@ MACRO(ADD_CS_EXECUTABLE target source)
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
 	
 	ADD_CUSTOM_COMMAND (OUTPUT ${target_EXE}
+		${CS_PREBUILD_COMMAND}	   
 		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
 		DEPENDS ${source}
 		COMMENT "Building ${relative_path}")
@@ -110,7 +112,15 @@ MACRO(ADD_CS_EXECUTABLE target source)
 	SET(relative_path "")
 	SET(proper_file_list "")
 	SET(CS_FLAGS "")
+	SET(CS_PREBUILD_COMMAND "")
 ENDMACRO(ADD_CS_EXECUTABLE)
+
+MACRO(ADD_CS_RESOURCES resx resources)
+        SET(CS_PREBUILD_COMMAND 
+	${CS_PREBUILD_COMMAND} 
+	COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources})
+	SET(CS_FLAGS ${CS_FLAGS} -resource:${resources})
+ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key)
 	SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
