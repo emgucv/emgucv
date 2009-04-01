@@ -4,7 +4,9 @@ SET(SRC_CV_ML *.cs PInvoke/*.cs PInvoke/CvType/*.cs)
 SET(SRC_CV_ML ${SRC_CV_ML} Properties/*.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
-SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:System.Drawing.dll)
+
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;System.Drawing.dll")
+
 SIGN_ASSEMBLY(ML.snk)
 
 #FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
@@ -14,8 +16,6 @@ ELSE (WIN32)
 ENDIF(WIN32)
 
 ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV_ML}")
-
-
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)
 INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.XML DESTINATION bin

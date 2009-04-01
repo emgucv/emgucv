@@ -48,11 +48,21 @@ struct ltpt
   }
 };
 
-CvPoint2D32f TriangleVertexSum(Triangle2DF t)
+CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
 {
    CvPoint2D32f point;
-   point.x = t.V0.x +t.V1.x + t.V2.x;
-   point.y = t.V0.y + t.V1.y + t.V2.y;
+   point.x = t->V0.x +t->V1.x + t->V2.x;
+   point.y = t->V0.y + t->V1.y + t->V2.y;
+   return point;
+};
+
+CvPoint2D32f TriangleVertexSumSSE(Triangle2DF* t)
+{
+   CvPoint2D32f point;
+   __m128 v0 = _mm_loadu_ps( (float*) &(t->V0));
+
+   //point.x = t->V0.x +t->V1.x + t->V2.x;
+   //point.y = t->V0.y + t->V1.y + t->V2.y;
    return point;
 };
 
@@ -74,14 +84,14 @@ void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triang
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
          PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
 
-         if (pointSet.insert(TriangleVertexSum(t)).second)
+         if (pointSet.insert(TriangleVertexSum(&t)).second)
          {
             *currentTriangle++ = t;
          }
 
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t);
 
-         if (pointSet.insert(TriangleVertexSum(t)).second)
+         if (pointSet.insert(TriangleVertexSum(&t)).second)
          {
             *currentTriangle++ = t;
          }
@@ -97,7 +107,7 @@ void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triang
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
          PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
 
-         if (pointSet.insert(TriangleVertexSum(t)).second
+         if (pointSet.insert(TriangleVertexSum(&t)).second
             && TriangleInRegion(t, topleft, bottomright))
          {
             *currentTriangle++ = t;
@@ -105,7 +115,7 @@ void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triang
 
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t);
 
-         if (pointSet.insert(TriangleVertexSum(t)).second
+         if (pointSet.insert(TriangleVertexSum(&t)).second
             && TriangleInRegion(t, topleft, bottomright))
          {
             *currentTriangle++ = t;
@@ -126,7 +136,6 @@ void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points
    CvPoint2D32f bottomright = subdiv->bottomright;
 
    CvSet* subdivEdges = subdiv->edges;
-   //int total = subdivEdges->total;
 
    CvPoint2D32f* currentPoint = points;
    CvSubdiv2DEdge* currentEdge = edges;

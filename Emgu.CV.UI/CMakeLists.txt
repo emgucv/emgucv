@@ -3,9 +3,10 @@ PROJECT(Emgu.CV.UI)
 SET(SRC_CV_UI *.cs Properties/*.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
-SET(CS_FLAGS ${CS_FLAGS} -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:System.Drawing.dll -r:System.Data.dll -r:System.Windows.Forms.dll -r:${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll)
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;System.Drawing.dll;System.Data.dll;System.Windows.Forms.dll;${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll")
 SIGN_ASSEMBLY(CV.UI.snk)
 ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources)
+
 ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV_UI}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.Util)
