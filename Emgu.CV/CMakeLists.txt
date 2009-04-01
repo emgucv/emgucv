@@ -26,13 +26,13 @@ SIGN_ASSEMBLY(CV.snk)
 
 ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.Properties.StringTable.resources)
 
-ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV}")
-
 #FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
 IF (WIN32)
 ELSE (WIN32)
 ADD_CS_PREBUILD_COMMAND(${CMAKE_COMMAND} -E copy ARGS ${PROJECT_NAME}.dll.config ${EXECUTABLE_OUTPUT_PATH}/)
 ENDIF(WIN32)
+
+ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV}")
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util cvextern)
 
