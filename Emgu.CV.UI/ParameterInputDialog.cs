@@ -328,7 +328,7 @@ namespace Emgu.CV.UI
                genericOptions[i] = new GenericParameter(types[0], types); 
             }
 
-            Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
+            //Type[] instanceGenericParameters = method.ReflectedType.GetGenericArguments();
             Type[] genericTypes = method.GetGenericArguments();
 
             for (int i = 0; i < genericTypes.Length; i++)

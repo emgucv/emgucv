@@ -2418,7 +2418,7 @@ namespace Emgu.CV
             else
             {
                //different depth
-               int channelCount = NumberOfChannels;
+               //int channelCount = NumberOfChannels;
                {
                   if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
                   {
@@ -2707,7 +2707,6 @@ namespace Emgu.CV
       /// <param name="bmp"></param>
       private void CopyFromBitmap(Bitmap bmp)
       {
-         int rows = bmp.Height;
          System.Drawing.Imaging.BitmapData data = bmp.LockBits(
              new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
              System.Drawing.Imaging.ImageLockMode.ReadOnly,

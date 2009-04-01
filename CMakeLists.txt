@@ -31,7 +31,6 @@ if(MSVC)
    set_target_properties(opencv_ffmpeg PROPERTIES PREFIX "../")
 endif()
 
-SET(EMGU_CV_REFERENCE -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll -r:System.Xml.dll -r:System.Drawing.dll -r:System.Data.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll -r:${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll)
 add_subdirectory(Emgu.CV.Example)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV")
