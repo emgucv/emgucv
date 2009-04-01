@@ -24,7 +24,7 @@ ENDIF(WIN32)
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(CV.snk)
 
-ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.Properties.StringTable.resources)
+ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources)
 
 #FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
 IF (WIN32)

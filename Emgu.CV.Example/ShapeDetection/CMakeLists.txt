@@ -4,14 +4,10 @@ SET(SRC_Example_ShapeDetection *.cs Properties/*.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_ShapeDetection}")
-
 #copy the test image for this example
-ADD_CUSTOM_COMMAND(
-    TARGET ${PROJECT_NAME}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ARGS pic3.png ${EXECUTABLE_OUTPUT_PATH}/
-)
+ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/pic3.png)
+
+ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_ShapeDetection}")
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 
