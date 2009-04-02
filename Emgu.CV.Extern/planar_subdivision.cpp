@@ -56,16 +56,6 @@ CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
    return point;
 };
 
-CvPoint2D32f TriangleVertexSumSSE(Triangle2DF* t)
-{
-   CvPoint2D32f point;
-   __m128 v0 = _mm_loadu_ps( (float*) &(t->V0));
-
-   //point.x = t->V0.x +t->V1.x + t->V2.x;
-   //point.y = t->V0.y + t->V1.y + t->V2.y;
-   return point;
-};
-
 void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  bool includeVirtualPoint)
 {
    set<CvPoint2D32f, ltpt> pointSet;
