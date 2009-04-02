@@ -1,4 +1,3 @@
-//#define C_IMPLEMENTATION
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -123,36 +122,16 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, bool includeVirtualPoints);
+      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
 
-#if C_IMPLEMENTATION
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
-#endif
 
-      private static System.Drawing.PointF[] EdgeToPoly(MCvSubdiv2DEdge currentEdge, List<System.Drawing.PointF> bufferList)
-      {
-         MCvSubdiv2DPoint v0 = currentEdge.cvSubdiv2DEdgeOrg();
-         if (!v0.IsValid) return null;
-
-         bufferList.Clear();
-
-         for (; ; currentEdge = currentEdge.cvSubdiv2DGetEdge(Emgu.CV.CvEnum.CV_NEXT_EDGE_TYPE.CV_NEXT_AROUND_LEFT))
-         {
-            MCvSubdiv2DPoint v = currentEdge.cvSubdiv2DEdgeDst();
-            if (!v.IsValid) return null;
-
-            bufferList.Add(v.pt);
-
-            if (v.pt.Equals(v0.pt)) //reach the starting point
-               break;
-         }
-         return bufferList.Count > 2 ? bufferList.ToArray() : null;
-      }
-
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer, ref int count);
 
       /// <summary>
       /// Finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point.
@@ -188,8 +167,6 @@ namespace Emgu.CV
             _isVoronoiDirty = false;
          }
 
-#if C_IMPLEMENTATION
-         //alternative high-performance method, works correctly in DEBUG but not RELEASE
          int size = MCvSubdiv2D.total;
          PointF[] points = new PointF[size];
          MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
@@ -200,56 +177,26 @@ namespace Emgu.CV
          pointHandle.Free();
          edgeHandle.Free();
 
-         List<System.Drawing.PointF> buffer = new List<System.Drawing.PointF>();
-         VoronoiFacet[] facets = new VoronoiFacet[size];
+         List<VoronoiFacet> facets = new List<VoronoiFacet>();
 
+         int voroniPolygonMaxEdge = 256;
+         PointF[] buffer = new PointF[voroniPolygonMaxEdge];
+         GCHandle bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+         IntPtr bufferPtr = bufferHandle.AddrOfPinnedObject();
+
+         int count = 0;
          for (int i = 0; i < size; i++)
          {
-
-            System.Drawing.PointF[] polygon = EdgeToPoly(edges[i], buffer);
-
-            if (polygon != null)
-               facets[i] = new VoronoiFacet(points[i], polygon);
-         }
-         return facets;
-
-#else
-         //slower C# implementation, works correctly in both DEBUG and RELEASE
-         int left = _roi.X, top = _roi.Y, right = _roi.X + _roi.Width, bottom = _roi.Y + _roi.Height;
-         Dictionary<System.Drawing.PointF, Byte> facetDict = new Dictionary<System.Drawing.PointF, Byte>();
-         List<VoronoiFacet> facetList = new List<VoronoiFacet>();
-         List<System.Drawing.PointF> bufferList = new List<System.Drawing.PointF>();
-
-         foreach (MCvQuadEdge2D quadEdge in this)
-         {
-            MCvSubdiv2DEdge nextQuadEdge = quadEdge.next[0];
-
-            System.Drawing.PointF pt1 = nextQuadEdge.cvSubdiv2DEdgeOrg().pt;
-            if (pt1.X >= left && pt1.X <= right && pt1.Y >= top && pt1.Y <= bottom
-               && InsertPoint2DToDictionary(pt1, facetDict))
+            PlanarSubdivisionEdgeToPoly(edges[i], bufferPtr, ref count);
+            if (count > 0)
             {
-               MCvSubdiv2DEdge e1 = nextQuadEdge.cvSubdiv2DRotateEdge(1);
-               PointF[] p1 = EdgeToPoly(e1, bufferList);
-               if (p1 != null)
-               {
-                  facetList.Add(new VoronoiFacet(pt1, p1));
-               }
-            }
-
-            System.Drawing.PointF pt2 = nextQuadEdge.cvSubdiv2DEdgeDst().pt;
-            if (pt2.X >= left && pt2.X <= right && pt2.Y >= top && pt2.Y <= bottom
-               && InsertPoint2DToDictionary(pt2, facetDict))
-            {
-               MCvSubdiv2DEdge e2 = nextQuadEdge.cvSubdiv2DRotateEdge(3);
-               PointF[] p2 = EdgeToPoly(e2, bufferList);
-               if (p2 != null)
-               {
-                  facetList.Add(new VoronoiFacet(pt2, p2));
-               }
+               PointF[] polygon = new PointF[count];
+               Array.Copy(buffer, polygon, count);
+               facets.Add(new VoronoiFacet(points[i], polygon));
             }
          }
-         return facetList.ToArray();
-#endif
+         bufferHandle.Free();
+         return facets.ToArray();
       }
 
       /// <summary>
@@ -277,7 +224,7 @@ namespace Emgu.CV
          int size = ((MCvSet)Marshal.PtrToStructure(MCvSubdiv2D.edges, typeof(MCvSet))).total * 2;
          Triangle2DF[] triangles = new Triangle2DF[size];
          GCHandle handle = GCHandle.Alloc(triangles, GCHandleType.Pinned);
-         PlanarSubdivisionGetTriangles(_ptr, handle.AddrOfPinnedObject(), ref size, includeVirtualPoints);
+         PlanarSubdivisionGetTriangles(_ptr, handle.AddrOfPinnedObject(), ref size, includeVirtualPoints ? 1 : 0);
          handle.Free();
          Array.Resize(ref triangles, size);
          return triangles;

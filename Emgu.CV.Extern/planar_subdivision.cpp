@@ -24,28 +24,28 @@ void PlanarSubdivisionEdgeToTriangle(const CvSubdiv2DEdge e, Triangle2DF* triang
    triangle->V2 = cvSubdiv2DEdgeDst(e)->pt;
 }
 
-bool PointInRegion(CvPoint2D32f pt, CvPoint2D32f topleft, CvPoint2D32f bottomright)
+bool PointInRegion(CvPoint2D32f pt, const CvSubdiv2D* subdiv)
 {
    return 
-      pt.x >= topleft.x && pt.y >= topleft.y && pt.x <= bottomright.x  && pt.y <= bottomright.y;
+      pt.x >= subdiv->topleft.x && pt.y >= subdiv->topleft.y && pt.x <= subdiv->bottomright.x  && pt.y <= subdiv->bottomright.y;
 }
 
-bool TriangleInRegion (Triangle2DF tri, CvPoint2D32f topleft, CvPoint2D32f bottomright)
+bool TriangleInRegion (Triangle2DF tri, const CvSubdiv2D* subdiv)
 {
    return
-      PointInRegion(tri.V0, topleft, bottomright)
-      && PointInRegion(tri.V1, topleft, bottomright)
-      && PointInRegion(tri.V2, topleft, bottomright);
+      PointInRegion(tri.V0, subdiv)
+      && PointInRegion(tri.V1, subdiv)
+      && PointInRegion(tri.V2, subdiv);
 }
 
 struct ltpt
 {
-  bool operator()(CvPoint2D32f p1, CvPoint2D32f p2) const
-  {
-     return p1.x == p2.x? 
-        p1.y < p2.y :
-        p1.x < p2.x;
-  }
+   bool operator()(CvPoint2D32f p1, CvPoint2D32f p2) const
+   {
+      return p1.x == p2.x? 
+         p1.y < p2.y :
+      p1.x < p2.x;
+   }
 };
 
 CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
@@ -56,7 +56,7 @@ CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
    return point;
 };
 
-void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  bool includeVirtualPoint)
+void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  int includeVirtualPoint)
 {
    set<CvPoint2D32f, ltpt> pointSet;
 
@@ -72,58 +72,63 @@ void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triang
       while(CV_IS_SET_ELEM(reader.ptr))
       {
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
-         PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
 
+         PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
          if (pointSet.insert(TriangleVertexSum(&t)).second)
-         {
             *currentTriangle++ = t;
-         }
 
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t);
-
          if (pointSet.insert(TriangleVertexSum(&t)).second)
-         {
             *currentTriangle++ = t;
-         }
+
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
       }
    } else
    {
-      CvPoint2D32f topleft = subdiv->topleft;
-      CvPoint2D32f bottomright = subdiv->bottomright;
-
       while(CV_IS_SET_ELEM(reader.ptr))
       {
          CvQuadEdge2D* edge = (CvQuadEdge2D*)reader.ptr;
-         PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
 
+         PlanarSubdivisionEdgeToTriangle( edge->next[0], &t);
          if (pointSet.insert(TriangleVertexSum(&t)).second
-            && TriangleInRegion(t, topleft, bottomright))
-         {
+            && TriangleInRegion(t, subdiv))
             *currentTriangle++ = t;
-         }
 
          PlanarSubdivisionEdgeToTriangle( edge->next[2], &t);
-
          if (pointSet.insert(TriangleVertexSum(&t)).second
-            && TriangleInRegion(t, topleft, bottomright))
-         {
+            && TriangleInRegion(t, subdiv))
             *currentTriangle++ = t;
-         }
-         
+
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
       }
    }
-   
+
    *triangleCount = (currentTriangle - triangles) ;
 }
 
-void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
+void PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvPoint2D32f* buffer, int* count)
+{
+   CvSubdiv2DPoint* v0 = cvSubdiv2DEdgeOrg(edge);
+   if (v0->flags == -1) { *count = 0; return; }
+
+   CvPoint2D32f* currentBuffer = buffer;
+
+   for (; ; edge = cvSubdiv2DGetEdge(edge, CV_NEXT_AROUND_LEFT))
+   {
+      CvSubdiv2DPoint* v = cvSubdiv2DEdgeDst(edge);
+      if (v->flags == -1) { *count = 0; return; }
+      *currentBuffer++ = v->pt;
+
+      if (v->pt.x == v0->pt.x && v->pt.y == v0->pt.y)
+         break;
+   }
+   *count = currentBuffer - buffer;
+   if (*count <= 2) *count = 0;
+}
+
+void PlanarSubdivisionGetSubdiv2DPoints(const CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
 {
    set<CvPoint2D32f, ltpt> pointSet;
-
-   CvPoint2D32f topleft = subdiv->topleft;
-   CvPoint2D32f bottomright = subdiv->bottomright;
 
    CvSet* subdivEdges = subdiv->edges;
 
@@ -145,7 +150,7 @@ void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points
             CvSubdiv2DPoint* p1 = cvSubdiv2DEdgeOrg(e);
             if (p1 &&
                pointSet.insert(p1->pt).second &&
-               PointInRegion(p1->pt, topleft, bottomright))
+               PointInRegion(p1->pt, subdiv))
             {
                *currentPoint++ = p1->pt;
                *currentEdge++ = cvSubdiv2DRotateEdge(e, 1);
@@ -154,7 +159,7 @@ void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points
             CvSubdiv2DPoint* p2 = cvSubdiv2DEdgeDst(e);
             if(p2 &&
                pointSet.insert(p2->pt).second &&
-               PointInRegion(p2->pt, topleft, bottomright))
+               PointInRegion(p2->pt, subdiv))
             {
                *currentPoint++ = p2->pt;
                *currentEdge++ = cvSubdiv2DRotateEdge(e, 3);
