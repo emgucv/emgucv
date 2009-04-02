@@ -22,14 +22,22 @@ add_subdirectory(opencv)
 add_subdirectory(Emgu.CV.Extern)
 
 if(MSVC)
-   set_target_properties(cvextern PROPERTIES PREFIX "../")
-   set_target_properties(cxcore PROPERTIES PREFIX "../")
-   set_target_properties(cv PROPERTIES PREFIX "../")
-   set_target_properties(cvaux PROPERTIES PREFIX "../")
-   set_target_properties(ml PROPERTIES PREFIX "../")
-   set_target_properties(highgui PROPERTIES PREFIX "../")
-   set_target_properties(opencv_ffmpeg PROPERTIES PREFIX "../")
+set(extra_prefix "../")
+else(MSVC)
+set(extra_prefix "../bin/")
 endif()
+
+set_target_properties(cvextern PROPERTIES PREFIX ${extra_prefix})
+set_target_properties(cxcore PROPERTIES PREFIX ${extra_prefix})
+set_target_properties(cv PROPERTIES PREFIX ${extra_prefix})
+set_target_properties(cvaux PROPERTIES PREFIX ${extra_prefix})
+set_target_properties(ml PROPERTIES PREFIX ${extra_prefix})
+set_target_properties(highgui PROPERTIES PREFIX ${extra_prefix})
+
+IF(WIN32)
+set_target_properties(opencv_ffmpeg PROPERTIES PREFIX ${extra_prefix})
+ENDIF()
+
 
 add_subdirectory(Emgu.CV.Example)
 
