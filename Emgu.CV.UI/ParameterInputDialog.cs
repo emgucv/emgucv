@@ -345,15 +345,11 @@ namespace Emgu.CV.UI
          parameterList.AddRange(method.GetParameters());
 
          if (defaultParameterValues != null)
-         {
             defaultParameterValueList.AddRange(defaultParameterValues);
-         }
 
          //if the method requires no parameter, simply return an empty array
          if (parameterList.Count == 0)
-         {
             return new object[0];
-         }
 
          #region Handle the cases where at least one parameter is required as input
          ParameterInputDialog dlg = new ParameterInputDialog(parameterList.ToArray(), defaultParameterValueList.ToArray());

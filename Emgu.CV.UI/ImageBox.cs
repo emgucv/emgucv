@@ -92,7 +92,7 @@ namespace Emgu.CV.UI
          }
       }
 
-      private bool _settingBitmap = false;
+      //private bool _settingBitmap = false;
 
       private bool EnablePropertyPanel
       {
@@ -223,8 +223,8 @@ namespace Emgu.CV.UI
       {
          if (_zoomScale != zoomScale)
          {
-            fixPoint.X = Math.Min(fixPoint.X, _displayedImage.Size.Width);
-            fixPoint.Y = Math.Min(fixPoint.Y, _displayedImage.Size.Height);
+            fixPoint.X = Math.Min(fixPoint.X, (int)(_displayedImage.Size.Width * _zoomScale));
+            fixPoint.Y = Math.Min(fixPoint.Y, (int)(_displayedImage.Size.Height * _zoomScale));
 
             //If the scale is too small, do nothing            
             if (zoomScale < _zoomScale &&
@@ -571,7 +571,7 @@ namespace Emgu.CV.UI
                offsetY + verticalScrollBarValue));
          }
 
-         if (_mouseDownButton == MouseButtons.Left && (horizontalScrollBar.Visible || verticalScrollBar.Visible))
+         if (_mouseDownButton == MouseButtons.Middle && (horizontalScrollBar.Visible || verticalScrollBar.Visible))
          {
             int horizontalShift = (int)((e.X - _mouseDownPosition.X) / _zoomScale);
             int verticalShift = (int)((e.Y - _mouseDownPosition.Y) / _zoomScale);
@@ -619,8 +619,10 @@ namespace Emgu.CV.UI
       {
          if (_displayedImage == null) return;
 
-         int displayWidth = horizontalScrollBar.Visible ? ClientSize.Width : base.Image == null ? _displayedImage.Size.Width : base.Image.Width;
-         int displayHeight = verticalScrollBar.Visible ? ClientSize.Height : base.Image == null ? _displayedImage.Size.Height : base.Image.Height;
+         int displayWidth = (verticalScrollBar.Visible || base.Image == null) ?
+            ClientSize.Width : base.Image.Width;
+         int displayHeight = (horizontalScrollBar.Visible || base.Image == null) ?
+            ClientSize.Height : base.Image.Height;
 
          Rectangle roi = new Rectangle(
             horizontalScrollBar.Visible ? horizontalScrollBar.Value : 0,
@@ -628,8 +630,18 @@ namespace Emgu.CV.UI
             (int)(displayWidth / _zoomScale),
             (int)(displayHeight / _zoomScale));
 
-         //TODO: fix the following such that Intersect is not needed
-         roi.Intersect(_displayedImage.ROI);
+         //TODO: fix the following such that it is not needed
+         {
+            if (roi.Width <= 1 || roi.Height <= 1) return;
+
+            int diffx = roi.X + roi.Width - _displayedImage.Size.Width;
+            if (diffx > 0) roi.Offset(-diffx, 0);
+            int diffy = roi.Y + roi.Height - _displayedImage.Size.Height;
+            if (diffy > 0) roi.Offset(0, -diffy);
+            if (roi.X < 0) roi.Offset(-roi.X, 0);
+            if (roi.Y < 0) roi.Offset(0, -roi.Y);
+            roi.Intersect(_displayedImage.ROI);
+         }
 
          using (IImage tmp1 = _displayedImage.Copy(roi))
          using (IImage tmp2 = tmp1.Resize(displayWidth, displayHeight, Emgu.CV.CvEnum.INTER.CV_INTER_NN))
@@ -651,6 +663,9 @@ namespace Emgu.CV.UI
          }
          else
          {
+            horizontalScrollBar.Visible = false;
+            verticalScrollBar.Visible = false;
+
             // If the image is wider than the PictureBox, show the HScrollBar.
             horizontalScrollBar.Visible =
                ClientSize.Width < (int)(_displayedImage.Size.Width * _zoomScale);
@@ -698,7 +713,7 @@ namespace Emgu.CV.UI
       #endregion
 
       void ImageBox_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
-      {
+      {  //handle the mouse whell scroll (for zooming)
          double scale = 1.0;
          if (e.Delta > 0)
          {
@@ -716,7 +731,7 @@ namespace Emgu.CV.UI
 
       private void ImageBox_Resize(object sender, EventArgs e)
       {
-         if (base.Image != null && !_settingBitmap && ClientSize.Width > 0 && ClientSize.Height > 0)
+         if (base.Image != null && ClientSize.Width > 0 && ClientSize.Height > 0)
          {
             RenderImage();
             SetScrollBarValues();
@@ -734,7 +749,7 @@ namespace Emgu.CV.UI
       }
 
       private void ImageBox_MouseEnter(object sender, EventArgs e)
-      {
+      {  //set this as the active control 
          Control parent = this.Parent;
          while (!(parent is Form)) parent = parent.Parent;
          (parent as Form).ActiveControl = this;
@@ -745,7 +760,7 @@ namespace Emgu.CV.UI
          _mouseDownPosition = e.Location;
          _mouseDownButton = e.Button;
 
-         if (_mouseDownButton == MouseButtons.Left)
+         if (_mouseDownButton == MouseButtons.Middle)
             this.Cursor = Cursors.Hand;
       }
 

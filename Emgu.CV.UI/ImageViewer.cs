@@ -31,16 +31,10 @@ namespace Emgu.CV.UI
          if (image != null)
          {
             System.Drawing.Size size = image.Size;
-            int width = size.Width + 8;
-            int height = size.Height + 32;
-            if (this.Width != width)
-            {
-               this.Width = width;
-            }
-            if (this.Height != height)
-            {
-               this.Height = height;
-            }
+            size.Width += 12;
+            size.Height += 38;
+            if (!Size.Equals(size))
+               Size = size;
          }
          Image = image;
       }

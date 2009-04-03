@@ -14,6 +14,7 @@ namespace Emgu.CV.UI
    public class Operation: ICodeGenerable
    {
       private MethodInfo _mi;
+      private Object[] _parameters;
 
       /// <summary>
       /// The MethodInfo
@@ -23,8 +24,6 @@ namespace Emgu.CV.UI
          get { return _mi; }
          set { _mi = value; }
       }
-
-      private Object[] _parameters;
 
       /// <summary>
       /// The parameters for this method
@@ -56,16 +55,20 @@ namespace Emgu.CV.UI
          if (!_mi.ContainsGenericParameters)
             return _mi.DeclaringType.InvokeMember(_mi.Name, BindingFlags.InvokeMethod, null, instance, _parameters);
 
+         #region get the generic types
          Type[] types = new Type[_mi.GetGenericArguments().Length];
          for (int i = 0; i < types.Length; i++)
          {
-            GenericParameter p = _parameters[i] as GenericParameter;
-            types[i] = p.SelectedType;
+            types[i] = (_parameters[i] as GenericParameter).SelectedType;
          }
-         MethodInfo m = _mi.MakeGenericMethod(types);
+         #endregion
+
+         #region get the non-generic parameters
          Object[] param = new object[_parameters.Length - types.Length];
          Array.Copy(_parameters, types.Length, param, 0, param.Length);
-         return m.Invoke(instance, param); //m.DeclaringType.InvokeMember(m.Name, BindingFlags.InvokeMethod, null, instance, param);
+         #endregion
+
+         return _mi.MakeGenericMethod(types).Invoke(instance, param); //m.DeclaringType.InvokeMember(m.Name, BindingFlags.InvokeMethod, null, instance, param);
       }
 
       /// <summary>
