@@ -22,16 +22,19 @@ FIND_PROGRAM (CSC_EXECUTABLE gmcs)
 ENDIF(WIN32)
 
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin" 
 "/usr/lib/mono/2.0")
 
 FIND_PROGRAM (AL_EXECUTABLE al
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
 "C:/Windows/Microsoft.NET/Framework/v3.5" 
 "/usr/lib/mono/2.0")
 
 FIND_PROGRAM (RESGEN_EXECUTABLE resgen
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
 "C:/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 "/usr/bin/resgen")
