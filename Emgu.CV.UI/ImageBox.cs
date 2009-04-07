@@ -221,22 +221,18 @@ namespace Emgu.CV.UI
       /// <param name="fixPoint">The point to be fixed</param>
       public void SetZoomScale(double zoomScale, Point fixPoint)
       {
-         if (_zoomScale != zoomScale)
+         if (_zoomScale != zoomScale //the scale has been changed
+            && //and, the scale is not too small
+            !(zoomScale < _zoomScale &&
+               (_displayedImage.Size.Width * zoomScale < (2.0 + verticalScrollBar.Width)
+               || _displayedImage.Size.Height * zoomScale < (2.0 + horizontalScrollBar.Height)))
+            && //and, the scale is not too big
+            !(zoomScale > _zoomScale &&
+               (ClientSize.Width < zoomScale * 2
+               || ClientSize.Height < zoomScale * 2)))
          {
             fixPoint.X = Math.Min(fixPoint.X, (int)(_displayedImage.Size.Width * _zoomScale));
             fixPoint.Y = Math.Min(fixPoint.Y, (int)(_displayedImage.Size.Height * _zoomScale));
-
-            //If the scale is too small, do nothing            
-            if (zoomScale < _zoomScale &&
-                  (_displayedImage.Size.Width * zoomScale < (2.0 + verticalScrollBar.Width)
-                  || _displayedImage.Size.Height * zoomScale < (2.0 + horizontalScrollBar.Height)))
-               return;
-
-            //If the scale is too big, do nothing            
-            if (zoomScale > _zoomScale &&
-                  (ClientSize.Width < zoomScale * 2
-                  || ClientSize.Height < zoomScale * 2))
-               return;
 
             int shiftX = (int)(fixPoint.X * (zoomScale - _zoomScale) / zoomScale / _zoomScale);
             int shiftY = (int)(fixPoint.Y * (zoomScale - _zoomScale) / zoomScale / _zoomScale);
@@ -248,7 +244,6 @@ namespace Emgu.CV.UI
             horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, (int)(horizontalScrollBar.Value + shiftX)), horizontalScrollBar.Maximum);
             verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, (int)(verticalScrollBar.Value + shiftY)), verticalScrollBar.Maximum);
 
-            SetScrollBarValues();
             RenderImage();
 
             if (_propertyDlg != null)
@@ -262,7 +257,7 @@ namespace Emgu.CV.UI
       {
          int width = (int)(_displayedImage.Size.Width * _zoomScale);
          int height = (int)(_displayedImage.Size.Height * _zoomScale);
-         if (width < Width && height < Height)
+         if (width <= Width && height <= Height)
          {  //no ROI is required           
             if (_zoomScale == 1.0)
                base.Image = _displayedImage.Bitmap;
@@ -621,12 +616,6 @@ namespace Emgu.CV.UI
 
          int displayWidth = ClientSize.Width;
          int displayHeight = ClientSize.Height;
-         /*
-         int displayWidth = (verticalScrollBar.Visible || base.Image == null) ?
-            ClientSize.Width : base.Image.Width;
-         int displayHeight = (horizontalScrollBar.Visible || base.Image == null) ?
-            ClientSize.Height : base.Image.Height;
-         */
 
          Rectangle roi = new Rectangle(
             horizontalScrollBar.Visible ? horizontalScrollBar.Value : 0,
@@ -652,9 +641,6 @@ namespace Emgu.CV.UI
          {
             base.Image = tmp2.ToBitmap();
          }
-         //int verticalScrollBarWidth = verticalScrollBar.Visible ? verticalScrollBar.Width : 0;
-         //int horizontalScrollBarHeight = horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0;
-
       }
 
       private void SetScrollBarValues()
@@ -739,7 +725,6 @@ namespace Emgu.CV.UI
          {
             RenderImage();
             SetScrollBarValues();
-            Refresh();
          }
       }
 
