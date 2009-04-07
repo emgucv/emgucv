@@ -2180,11 +2180,11 @@ namespace Emgu.CV
       /// <param name="width">The width of the returned image.</param>
       /// <param name="height">The height of the returned image.</param>
       /// <param name="interpolationType">The type of interpolation</param>
-      /// <param name="preserverScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
+      /// <param name="preserveScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
       /// <returns></returns>
-      public Image<TColor, TDepth> Resize(int width, int height, CvEnum.INTER interpolationType, bool preserverScale)
+      public Image<TColor, TDepth> Resize(int width, int height, CvEnum.INTER interpolationType, bool preserveScale)
       {
-         return preserverScale ?
+         return preserveScale ?
             Resize(Math.Min((double)width / Width, (double)height / Height), interpolationType)
             : Resize(width, height, interpolationType);
       }
@@ -3994,9 +3994,9 @@ namespace Emgu.CV
          return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
       }
 
-      IImage IImage.Resize(int width, int height, CvEnum.INTER interpolationType)
+      IImage IImage.Resize(int width, int height, CvEnum.INTER interpolationType, bool preserveScale)
       {
-         return Resize(width, height, interpolationType);
+         return Resize(width, height, interpolationType, preserveScale);
       }
 
       IImage IImage.Copy(Rectangle roi)

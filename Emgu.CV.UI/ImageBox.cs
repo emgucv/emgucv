@@ -268,7 +268,7 @@ namespace Emgu.CV.UI
                base.Image = _displayedImage.Bitmap;
             else
             {
-               using (IImage tmp = _displayedImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_NN))
+               using (IImage tmp = _displayedImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
                   base.Image = tmp.ToBitmap();
             }
             SetScrollBarValues();
@@ -619,10 +619,14 @@ namespace Emgu.CV.UI
       {
          if (_displayedImage == null) return;
 
+         int displayWidth = ClientSize.Width;
+         int displayHeight = ClientSize.Height;
+         /*
          int displayWidth = (verticalScrollBar.Visible || base.Image == null) ?
             ClientSize.Width : base.Image.Width;
          int displayHeight = (horizontalScrollBar.Visible || base.Image == null) ?
             ClientSize.Height : base.Image.Height;
+         */
 
          Rectangle roi = new Rectangle(
             horizontalScrollBar.Visible ? horizontalScrollBar.Value : 0,
@@ -644,7 +648,7 @@ namespace Emgu.CV.UI
          }
 
          using (IImage tmp1 = _displayedImage.Copy(roi))
-         using (IImage tmp2 = tmp1.Resize(displayWidth, displayHeight, Emgu.CV.CvEnum.INTER.CV_INTER_NN))
+         using (IImage tmp2 = tmp1.Resize(displayWidth, displayHeight, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
          {
             base.Image = tmp2.ToBitmap();
          }

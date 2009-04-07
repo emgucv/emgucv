@@ -70,8 +70,9 @@ namespace Emgu.CV
       /// <param name="width">The new width</param>
       /// <param name="height">The new height</param>
       /// <param name="interpolationType">The type of interpolation for resize</param>
+      /// <param name="preserveScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
       /// <returns>The resized image</returns>
-      IImage Resize(int width, int height, CvEnum.INTER interpolationType);
+      IImage Resize(int width, int height, CvEnum.INTER interpolationType, bool preserveScale);
 
       /// <summary>
       /// Make a copy of the specific ROI (Region of Interest) from the image
