@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,6 +54,7 @@
     <Compile Include="Face.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoTestImage.cs" />
+    <Compile Include="AutoTestML.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="box.png">
@@ -112,6 +113,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.ML\Emgu.CV.ML.csproj">
+      <Project>{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}</Project>
+      <Name>Emgu.CV.ML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>
@@ -131,6 +136,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="agaricus-lepiota.data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="letter-recognition.data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
