@@ -797,6 +797,14 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(res);
       }
 
+      [Test]
+      public void TestGamma()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(320, 240);
+         img.SetRandNormal(new MCvScalar(120, 120, 120), new MCvScalar(50, 50, 50));
+         img._GammaCorrect(0.5);
+      }
+
       /*
       [Test]
       public void T()

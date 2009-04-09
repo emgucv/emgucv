@@ -170,16 +170,15 @@ namespace Emgu.CV
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         Image<Gray, Byte> res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
+         Image<Gray, Byte> res;
          if (iplImage.nChannels == 3)
-         {
-            //if the image captured is Bgr, convert it to Grayscale
+         {  //if the image captured is Bgr, convert it to Grayscale
+            res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
             CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2GRAY);
          }
          else
          {
-            //make a copy of the image
-            CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+            res = new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
          }
 
          //inplace flip the image if necessary
@@ -211,16 +210,15 @@ namespace Emgu.CV
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         Image<Bgr, Byte> res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
+         Image<Bgr, Byte> res; 
          if (iplImage.nChannels == 1)
-         {
-            //if the image captured is Grayscale, convert it to BGR
+         {  //if the image captured is Grayscale, convert it to BGR
+            res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
             CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGR);
          }
          else
          {
-            //make a copy of the image
-            CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+            res = new Image<Bgr, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
          }
 
          //inplace flip the image if necessary

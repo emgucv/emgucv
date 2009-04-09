@@ -59,6 +59,24 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create an Image from unmanaged data. 
+      /// </summary>
+      /// <param name="width">The width of the image</param>
+      /// <param name="height">The height of the image</param>
+      /// <param name="stride">size of aligned image row in bytes</param>
+      /// <param name="scan0">Pointer to aligned image data that is 4-align</param>
+      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Bitmap is released. </remarks>
+      public Image(int width, int height, int stride, IntPtr scan0)
+      {
+         _ptr = Marshal.AllocHGlobal(StructSize.MIplImage);
+         CvInvoke.cvInitImageHeader(_ptr, new Size(width, height), CvDepth, NumberOfChannels, 0, 4);
+         MIplImage iplImage = MIplImage;
+         iplImage.imageData = scan0;
+         iplImage.widthStep = stride;
+         Marshal.StructureToPtr(iplImage, _ptr, false);
+      }
+
+      /// <summary>
       /// Read image from a file
       /// </summary>
       /// <param name="fileName">the name of the file that contains the image</param>
@@ -134,7 +152,7 @@ namespace Emgu.CV
                    size,
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
-               CvInvoke.cvCvtColor(ptr, tmp, GetColorCvtCode(typeof(Bgr), typeof(TColor)));
+               CvInvoke.cvCvtColor(ptr, tmp, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
 
                CvInvoke.cvReleaseImage(ref ptr);
                ptr = tmp;
@@ -2359,15 +2377,6 @@ namespace Emgu.CV
       #endregion
 
       #region Image color and depth conversion
-      private static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
-      {
-         ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-         ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-
-         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
-         return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
-      }
-
       ///<summary> Convert the current image to the specific color and depth </summary>
       ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
       ///<typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
@@ -2470,15 +2479,15 @@ namespace Emgu.CV
          try
          {
             // if the direct conversion exist, apply the conversion
-            CvInvoke.cvCvtColor(src, dest, GetColorCvtCode(srcColor, destColor));
+            CvInvoke.cvCvtColor(src, dest, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, destColor));
          }
          catch (Exception)
          {
             //if a direct conversion doesn't exist, apply a two step conversion
             using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
             {
-               CvInvoke.cvCvtColor(src, tmp.Ptr, GetColorCvtCode(srcColor, typeof(Bgr)));
-               CvInvoke.cvCvtColor(tmp.Ptr, dest, GetColorCvtCode(typeof(Bgr), destColor));
+               CvInvoke.cvCvtColor(src, tmp.Ptr, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, typeof(Bgr)));
+               CvInvoke.cvCvtColor(tmp.Ptr, dest, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), destColor));
             }
          }
       }
@@ -2633,10 +2642,11 @@ namespace Emgu.CV
                case System.Drawing.Imaging.PixelFormat.Format1bppIndexed:
                   if (this is Image<Gray, Byte>)
                   {
-                     int rows = value.Height;
-                     int cols = value.Width;
+                     Size size = value.Size;
+                     int rows = size.Height;
+                     int cols = size.Width;
                      System.Drawing.Imaging.BitmapData data = value.LockBits(
-                         new System.Drawing.Rectangle(0, 0, cols, rows),
+                         new System.Drawing.Rectangle(Point.Empty, size),
                          System.Drawing.Imaging.ImageLockMode.ReadOnly,
                          value.PixelFormat);
 
@@ -2708,7 +2718,7 @@ namespace Emgu.CV
       private void CopyFromBitmap(Bitmap bmp)
       {
          System.Drawing.Imaging.BitmapData data = bmp.LockBits(
-             new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+             new System.Drawing.Rectangle(Point.Empty, bmp.Size),
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              bmp.PixelFormat);
 
@@ -3561,6 +3571,7 @@ namespace Emgu.CV
       /// <param name="height">The height of the window</param>
       /// <param name="scale">If true, the result is subsequent scaled by 1/(param1 x param2)</param>
       /// <returns>The result of blur</returns>
+      [ExposableMethod(Exposable=true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
       {
          Emgu.CV.CvEnum.SMOOTH_TYPE type = scale ? Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR : Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR_NO_SCALE;
@@ -3574,6 +3585,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="size">The size (width &amp; height) of the window</param>
       /// <returns>The result of mediam smooth</returns>
+      [ExposableMethod(Exposable=true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothMedian(int size)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3587,6 +3599,7 @@ namespace Emgu.CV
       /// <param name="colorSigma">Color sigma</param>
       /// <param name="spaceSigma">Space sigma</param>
       /// <returns>The result of bilateral smooth</returns>
+      [ExposableMethod(Exposable=true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothBilatral(int colorSigma, int spaceSigma)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3609,6 +3622,7 @@ namespace Emgu.CV
       ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimwnsion</param>
       ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimwnsion</param>
       ///<returns> The smoothed image</returns>
+      [ExposableMethod(Exposable=true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3893,6 +3907,7 @@ namespace Emgu.CV
             //0 indicates vertical flip only
             0;
       }
+
       ///<summary> Return a filpped copy of the current image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
@@ -3930,6 +3945,46 @@ namespace Emgu.CV
          MCvMoments m = new MCvMoments();
          CvInvoke.cvMoments(Ptr, ref m, binary ? 1 : 0);
          return m;
+      }
+
+      /// <summary>
+      /// Gamma correct this image inplace. The image must have a depth type of Byte.
+      /// </summary>
+      /// <param name="gamma">The gamma value</param>
+      [ExposableMethod(Exposable=true)]
+      public void _GammaCorrect(double gamma)
+      {
+         Image<TColor, Byte> img = this as Image<TColor, Byte>;
+         if (img == null)
+            throw new NotImplementedException("Gamma correct requires Depth of Byte");
+
+         Byte[,] gammaLUT = new Byte[256, 1];
+         for (int i = 0; i < 256; i++)
+         {
+            gammaLUT[i, 0] = (Byte) ( Math.Pow(i / 255.0, gamma) * 255.0 );
+         }
+         using (Matrix<Byte> lut = new Matrix<byte>(gammaLUT))
+         {
+            Matrix<Byte> lookupTable;
+            if (lut.NumberOfChannels == 1)
+               lookupTable = lut;
+            else
+            {
+               lookupTable = new Matrix<byte>(lut.Rows, lut.Cols, NumberOfChannels);
+
+               CvInvoke.cvMerge(
+                  lut.Ptr,
+                  NumberOfChannels > 1 ? lut.Ptr : IntPtr.Zero,
+                  NumberOfChannels > 2 ? lut.Ptr : IntPtr.Zero,
+                  NumberOfChannels > 3 ? lut.Ptr : IntPtr.Zero,
+                  lookupTable);
+            }
+
+            CvInvoke.cvLUT(Ptr, Ptr, lookupTable);
+
+            if (!object.ReferenceEquals(lut, lookupTable))
+               lookupTable.Dispose();
+         }
       }
 
       ///<summary> 
@@ -3978,13 +4033,36 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The algorithm normalizes brightness and increases contrast of the image
+      /// The algorithm inplace normalizes brightness and increases contrast of the image.
+      /// For color images, a HSV representation of the image is first obtained and the V (value) channel is histogram normalized
       /// </summary>
       [ExposableMethod(Exposable = true)]
       public void _EqualizeHist()
       {
-         //TODO: handle multiple channel as well
-         CvInvoke.cvEqualizeHist(Ptr, Ptr);
+         if (NumberOfChannels == 1) //Gray scale image
+         {  
+            CvInvoke.cvEqualizeHist(Ptr, Ptr);
+         }
+         else //Color image
+         {  
+            //Get an hsv representation of this image
+            Image<Hsv, TDepth> hsv = this as Image<Hsv, TDepth> ?? this.Convert<Hsv, TDepth>();
+            
+            using (Image<Gray, TDepth> v = new Image<Gray,TDepth>(Size))
+            {  //equalize the V (value) channel
+               CvInvoke.cvSetImageCOI(hsv, 3);
+               CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
+               v._EqualizeHist();
+               CvInvoke.cvCopy(v.Ptr, hsv.Ptr, IntPtr.Zero);
+               CvInvoke.cvSetImageCOI(hsv, 0);
+            }
+
+            if (!Object.ReferenceEquals(this, hsv))
+            {
+               ConvertFrom(hsv);
+               hsv.Dispose();
+            }
+         }
       }
       #endregion
 
@@ -4014,4 +4092,44 @@ namespace Emgu.CV
 
       #endregion
    }
+
+   internal static class ColorConversionCodeLookupTable
+   {
+      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable;
+
+      static ColorConversionCodeLookupTable()
+      {
+         _lookupTable = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
+      }
+
+      public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
+      {
+         Dictionary<Type, CvEnum.COLOR_CONVERSION> table;
+         if (_lookupTable.ContainsKey(srcType))
+         {
+            table = _lookupTable[srcType];
+         }
+         else
+         {
+            table = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>();
+            _lookupTable[srcType] = table;
+         }
+
+         if (table.ContainsKey(destType))
+         {
+            return table[destType];
+         } else
+         {
+            ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+            ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+
+            String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
+            CvEnum.COLOR_CONVERSION code = (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
+            table[destType] = code;
+            return code;
+         }
+      }
+   }
 }
+
+

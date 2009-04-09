@@ -36,13 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML", "..\..\Emgu.CV
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.UnitTest", "..\..\Emgu.CV.ML.UnitTest\Emgu.CV.ML.UnitTest.csproj", "{067B638E-B41E-41E5-9FBD-D9722AC59BCF}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Global
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -142,20 +139,6 @@ Global
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|Win32.ActiveCfg = Release|Any CPU
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|x64.ActiveCfg = Release|Any CPU
 		{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}.Release|x86.ActiveCfg = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|Win32.ActiveCfg = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|x64.ActiveCfg = Release|Any CPU
-		{067B638E-B41E-41E5-9FBD-D9722AC59BCF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

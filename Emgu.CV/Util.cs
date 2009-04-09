@@ -68,10 +68,10 @@ namespace Emgu.CV
       public static void GetModuleInfo(out String pluginName, out String versionName)
       {
          IntPtr version = IntPtr.Zero;
-         IntPtr plugin_info = IntPtr.Zero;
-         CvInvoke.cvGetModuleInfo(IntPtr.Zero, ref version, ref plugin_info);
+         IntPtr pluginInfo = IntPtr.Zero;
+         CvInvoke.cvGetModuleInfo(IntPtr.Zero, ref version, ref pluginInfo);
 
-         pluginName = Marshal.PtrToStringAnsi(plugin_info);
+         pluginName = Marshal.PtrToStringAnsi(pluginInfo);
          versionName = Marshal.PtrToStringAnsi(version);
       }
       
@@ -107,5 +107,6 @@ namespace Emgu.CV
             return CvEnum.MAT_DEPTH.CV_16S;
          throw new NotImplementedException("Unsupported matrix depth");
       }
+
    }
 }

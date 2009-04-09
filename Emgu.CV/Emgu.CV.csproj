@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="PInvoke\CvInvokeCv.cs" />
+    <Compile Include="PInvoke\CvInvokeCvaux.cs" />
+    <Compile Include="PInvoke\CvInvokeCvextern.cs" />
+    <Compile Include="PInvoke\CvInvokeCxcore.cs" />
+    <Compile Include="PInvoke\CvInvokeDef.cs" />
+    <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="Properties\StringTable.Designer.cs">
       <AutoGen>True</AutoGen>
