@@ -68,8 +68,7 @@ namespace Emgu.CV
       /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Bitmap is released. </remarks>
       public Image(int width, int height, int stride, IntPtr scan0)
       {
-         _ptr = Marshal.AllocHGlobal(StructSize.MIplImage);
-         CvInvoke.cvInitImageHeader(_ptr, new Size(width, height), CvDepth, NumberOfChannels, 0, 4);
+         _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
          MIplImage iplImage = MIplImage;
          iplImage.imageData = scan0;
          iplImage.widthStep = stride;
