@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -73,6 +74,9 @@ namespace Emgu.CV.UI
          InitializeComponent();
 
          BorderStyle = BorderStyle.Fixed3D;
+         SetStyle(
+            ControlStyles.OptimizedDoubleBuffer,
+            true);
          _operationLists = new List<Operation>();
          SetScrollBarValues();
       }
@@ -262,30 +266,19 @@ namespace Emgu.CV.UI
 
       private void RenderImage()
       {
-         int width = (int)(_displayedImage.Size.Width * _zoomScale);
-         int height = (int)(_displayedImage.Size.Height * _zoomScale);
+         int width = (int)(base.Image.Size.Width * _zoomScale);
+         int height = (int)(base.Image.Size.Height * _zoomScale);
 
          if (width <= Width && height <= Height)
          {  //no ROI is required           
-
             verticalScrollBar.Visible = false;
             horizontalScrollBar.Visible = false;
-
-            if (_zoomScale == 1.0)
-               base.Image = _displayedImage.Bitmap;
-            else
-            {
-               using (IImage tmp = _displayedImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
-                  base.Image = tmp.ToBitmap();
-            }
-            //SetScrollBarValues();
-            //Refresh();
          }
          else
          {
             SetScrollBarValues();
-            ResetControlROI();
          }
+         Invalidate();
       }
 
       /// <summary>
@@ -312,6 +305,8 @@ namespace Emgu.CV.UI
                   base.Image.Dispose();
                   base.Image = null;
                }
+
+               base.Image = _displayedImage.Bitmap;
 
                RenderImage();
                //SetScrollBarValues();
@@ -621,7 +616,7 @@ namespace Emgu.CV.UI
             if (horizontalShift != 0) _mouseDownPosition.X = e.Location.X;
             if (verticalShift != 0) _mouseDownPosition.Y = e.Location.Y;
 
-            ResetControlROI();
+            Invalidate();
          }
          else if (_mouseDownButton == MouseButtons.Left)
          {
@@ -658,43 +653,24 @@ namespace Emgu.CV.UI
 
       private void HandleScroll(object sender, ScrollEventArgs e)
       {
-         ResetControlROI();
+         Invalidate();
       }
 
-      private void ResetControlROI()
+      protected override void OnPaint(PaintEventArgs pe)
       {
-         if (_displayedImage == null) return;
-
-         int displayWidth = ClientSize.Width;
-         int displayHeight = ClientSize.Height;
-
-         Rectangle roi = new Rectangle(
-            horizontalScrollBar.Visible ? horizontalScrollBar.Value : 0,
-            verticalScrollBar.Visible ? verticalScrollBar.Value : 0,
-            (int)(displayWidth / _zoomScale),
-            (int)(displayHeight / _zoomScale));
-
-         //TODO: fix the following such that it is not needed
+         if (base.Image == null)
          {
-            if (roi.Width <= 1 || roi.Height <= 1) return;
-
-            int diffx = roi.X + roi.Width - _displayedImage.Size.Width;
-            if (diffx > 0) roi.Offset(-diffx, 0);
-            int diffy = roi.Y + roi.Height - _displayedImage.Size.Height;
-            if (diffy > 0) roi.Offset(0, -diffy);
-            if (roi.X < 0) roi.Offset(-roi.X, 0);
-            if (roi.Y < 0) roi.Offset(0, -roi.Y);
-            roi.Intersect(_displayedImage.ROI);
+            OnPaintBackground(pe);
+            return;
          }
 
-         _displayedImage.ROI = roi;
-         using (IImage tmp = _displayedImage.Resize(displayWidth, displayHeight, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
-         {
-            //we must reset the roi here
-            _displayedImage.ROI = Rectangle.Empty;
-
-            base.Image = tmp.ToBitmap();
-         }
+         Matrix mx = new Matrix((float)_zoomScale, 0, 0, (float) _zoomScale, 0, 0);
+         mx.Translate(
+            horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
+            verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
+         pe.Graphics.Transform = mx;
+         pe.Graphics.InterpolationMode = InterpolationMode.High;
+         base.OnPaint(pe);
       }
 
       private void SetScrollBarValues()
@@ -815,7 +791,6 @@ namespace Emgu.CV.UI
             Rectangle imageRegion = new Rectangle(Point.Empty, ClientSize);
             if (imageRegion.Contains(_mouseDownPosition))
             {
-
                Rectangle rect = GetSelectedRectangle(e.X, e.Y);
                Point location = rect.Location;
                location = new Point((int)(location.X / _zoomScale), (int)(location.Y / _zoomScale));
