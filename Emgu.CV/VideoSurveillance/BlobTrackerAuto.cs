@@ -73,9 +73,8 @@ namespace Emgu.CV.VideoSurveillance
       {
          IntPtr forground = CvInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
          if (forground == IntPtr.Zero) return null;
-         Image<Gray, Byte> res = new Image<Gray, byte>(CvInvoke.cvGetSize(forground));
-         CvInvoke.cvCopy(forground, res.Ptr, IntPtr.Zero);
-         return res;
+         MIplImage iplImage = (MIplImage) Marshal.PtrToStructure(forground, typeof(MIplImage));
+         return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
       }
 
       /// <summary>

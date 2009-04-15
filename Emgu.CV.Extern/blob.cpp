@@ -8,6 +8,7 @@ CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(
 
 //Forground detector
 CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
+CVAPI(IplImage*) CvFGDetectorGetMask(CvFGDetector* detector) { return detector->GetMask(); } 
 CVAPI(void) CvFGDetectorRelease(CvFGDetector* detector) { detector->Release(); }
 
 //Blob Detector

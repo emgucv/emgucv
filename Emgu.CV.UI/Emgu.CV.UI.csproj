@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -85,6 +85,9 @@
     <Compile Include="OperationsView.designer.cs">
       <DependentUpon>OperationsView.cs</DependentUpon>
     </Compile>
+    <Compile Include="PanAndZoomPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ParameterInputDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +99,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringTable.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\StringTable.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringTable.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="PropertyDialog.cs">
       <SubType>Form</SubType>
@@ -138,6 +146,10 @@
     <EmbeddedResource Include="OperationsView.resx">
       <DependentUpon>OperationsView.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanAndZoomPictureBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PanAndZoomPictureBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterInputDialog.resx">
       <DependentUpon>ParameterInputDialog.cs</DependentUpon>
