@@ -19,6 +19,14 @@ namespace Emgu.CV
       public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, IntPtr param);
 
       /// <summary>
+      /// Get the forground mask from the forground detector
+      /// </summary>
+      /// <param name="detector">The forground detector</param>
+      /// <returns>The forground mask</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvFGDetectorGetMask(IntPtr detector);
+
+      /// <summary>
       /// Create a simple forground detector
       /// </summary>
       /// <param name="type">The type of the detector</param>

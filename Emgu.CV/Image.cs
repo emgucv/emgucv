@@ -64,7 +64,7 @@ namespace Emgu.CV
       /// <param name="width">The width of the image</param>
       /// <param name="height">The height of the image</param>
       /// <param name="stride">size of aligned image row in bytes</param>
-      /// <param name="scan0">Pointer to aligned image data that is 4-align</param>
+      /// <param name="scan0">Pointer to aligned image data, <b>where each row should be 4-align</b> </param>
       /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Bitmap is released. </remarks>
       public Image(int width, int height, int stride, IntPtr scan0)
       {
@@ -112,10 +112,10 @@ namespace Emgu.CV
       /// <summary>
       /// Load the specific file using Bitmap
       /// </summary>
-      /// <param name="fi"></param>
-      private void LoadFileUsingBitmap(FileInfo fi)
+      /// <param name="file"></param>
+      private void LoadFileUsingBitmap(FileInfo file)
       {
-         using (Bitmap bmp = new Bitmap(fi.FullName))
+         using (Bitmap bmp = new Bitmap(file.FullName))
             Bitmap = bmp;
       }
 
@@ -880,6 +880,7 @@ namespace Emgu.CV
       ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
       ///<param name="minLineWidth">Minimum width of a line</param>
       ///<param name="gapBetweenLines">Minimum gap between lines</param>
+      ///<returns>The line segments detected for each of the channels</returns>
       public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (MemStorage stor = new MemStorage())
@@ -899,6 +900,14 @@ namespace Emgu.CV
       ///First apply Canny Edge Detector on the current image, 
       ///then apply Hough transform to find line segments 
       ///</summary>
+      ///<param name="cannyThreshold"> The threshhold to find initial segments of strong edges</param>
+      ///<param name="cannyThresholdLinking"> The threshold used for edge Linking</param>
+      ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
+      ///<param name="thetaResolution">Angle resolution measured in radians</param>
+      ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+      ///<param name="minLineWidth">Minimum width of a line</param>
+      ///<param name="gapBetweenLines">Minimum gap between lines</param>
+      ///<returns>The line segments detected for each of the channels</returns>
       public LineSegment2D[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
@@ -917,6 +926,7 @@ namespace Emgu.CV
       ///<param name="minRadius">Minimal radius of the circles to search for</param>
       ///<param name="maxRadius">Maximal radius of the circles to search for</param>
       ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+      ///<returns>The circle detected for each of the channels</returns>
       public CircleF[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
       {
          using (MemStorage stor = new MemStorage())
@@ -2855,6 +2865,8 @@ namespace Emgu.CV
 
       #region Special Image Transforms
       ///<summary> Use impaint to recover the intensity of the pixels which location defined by <paramref>mask</paramref> on <i>this</i> image </summary>
+      ///<param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
+      ///<param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
       ///<returns> The inpainted image </returns>
       public Image<TColor, TDepth> InPaint(Image<Gray, Byte> mask, double radius)
       {
@@ -3370,10 +3382,12 @@ namespace Emgu.CV
          return img1.Or(val);
       }
 
-      ///<summary> Compute the complement image</summary>
-      public static Image<TColor, TDepth> operator ~(Image<TColor, TDepth> img1)
+      ///<summary>Compute the complement image</summary>
+      ///<param name="image">The image to be inverted</param>
+      ///<returns>The complement image</returns>
+      public static Image<TColor, TDepth> operator ~(Image<TColor, TDepth> image)
       {
-         return img1.Not();
+         return image.Not();
       }
 
       /// <summary>
@@ -3399,153 +3413,153 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Elementwise add <paramref name="img1"/> with <paramref name="val"/>
+      /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
       /// </summary>
-      /// <param name="img1">The image to be added</param>
-      /// <param name="val">The value to be added</param>
+      /// <param name="image">The image to be added</param>
+      /// <param name="value">The value to be added</param>
       /// <returns>The images plus the color</returns>
-      public static Image<TColor, TDepth> operator +(Image<TColor, TDepth> img1, double val)
+      public static Image<TColor, TDepth> operator +(Image<TColor, TDepth> image, double value)
       {
          TColor color = new TColor();
-         color.MCvScalar = new MCvScalar(val, val, val, val);
-         return img1.Add(color);
+         color.MCvScalar = new MCvScalar(value, value, value, value);
+         return image.Add(color);
       }
 
       /// <summary>
-      /// Elementwise add <paramref name="img1"/> with <paramref name="val"/>
+      /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
       /// </summary>
-      /// <param name="img1">The image to be added</param>
-      /// <param name="val">The color to be added</param>
+      /// <param name="image">The image to be added</param>
+      /// <param name="value">The color to be added</param>
       /// <returns>The images plus the color</returns>
-      public static Image<TColor, TDepth> operator +(Image<TColor, TDepth> img1, TColor val)
+      public static Image<TColor, TDepth> operator +(Image<TColor, TDepth> image, TColor value)
       {
-         return img1.Add(val);
+         return image.Add(value);
       }
 
       /// <summary>
-      /// Elementwise add <paramref name="img1"/> with <paramref name="val"/>
+      /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
       /// </summary>
-      /// <param name="img1">The image to be added</param>
-      /// <param name="val">The color to be added</param>
+      /// <param name="image">The image to be added</param>
+      /// <param name="value">The color to be added</param>
       /// <returns>The images plus the color</returns>
-      public static Image<TColor, TDepth> operator +(TColor val, Image<TColor, TDepth> img1)
+      public static Image<TColor, TDepth> operator +(TColor value, Image<TColor, TDepth> image)
       {
-         return img1.Add(val);
+         return image.Add(value);
       }
 
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="img1">The image to be substracted</param>
-      /// <param name="img2">The second image to be subtraced from <paramref name="img1"/></param>
-      /// <returns> The result of elementwise subtracting img2 from <paramref name="img1"/> </returns>
-      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> img1, Image<TColor, TDepth> img2)
+      /// <param name="image1">The image to be substracted</param>
+      /// <param name="image2">The second image to be subtraced from <paramref name="image1"/></param>
+      /// <returns> The result of elementwise subtracting img2 from <paramref name="image1"/> </returns>
+      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image1, Image<TColor, TDepth> image2)
       {
-         return img1.Sub(img2);
+         return image1.Sub(image2);
       }
 
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="img1">The image to be substracted</param>
-      /// <param name="val">The color to be subtracted</param>
-      /// <returns> The result of elementwise subtracting <paramred name="val"/> from <paramref name="img1"/> </returns>
-      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> img1, TColor val)
+      /// <param name="image">The image to be substracted</param>
+      /// <param name="value">The color to be subtracted</param>
+      /// <returns> The result of elementwise subtracting <paramred name="val"/> from <paramref name="image"/> </returns>
+      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, TColor value)
       {
-         return img1.Sub(val);
+         return image.Sub(value);
       }
 
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="img1">The image to be substracted</param>
-      /// <param name="val">The color to be subtracted</param>
-      /// <returns> <paramred name="val"/> - <paramref name="img1"/> </returns>
-      public static Image<TColor, TDepth> operator -(TColor val, Image<TColor, TDepth> img1)
+      /// <param name="image">The image to be substracted</param>
+      /// <param name="value">The color to be subtracted</param>
+      /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
+      public static Image<TColor, TDepth> operator -(TColor value, Image<TColor, TDepth> image)
       {
-         return img1.SubR(val);
+         return image.SubR(value);
       }
 
       /// <summary>
-      /// <paramred name="val"/> - <paramref name="img1"/>
+      /// <paramred name="val"/> - <paramref name="image"/>
       /// </summary>
-      /// <param name="img1">The image to be substracted</param>
-      /// <param name="val">The value to be subtracted</param>
-      /// <returns> <paramred name="val"/> - <paramref name="img1"/> </returns>
-      public static Image<TColor, TDepth> operator -(double val, Image<TColor, TDepth> img1)
+      /// <param name="image">The image to be substracted</param>
+      /// <param name="value">The value to be subtracted</param>
+      /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
+      public static Image<TColor, TDepth> operator -(double value, Image<TColor, TDepth> image)
       {
          TColor color = new TColor();
-         color.MCvScalar = new MCvScalar(val, val, val, val);
-         return img1.SubR(color);
+         color.MCvScalar = new MCvScalar(value, value, value, value);
+         return image.SubR(color);
       }
 
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="img1">The image to be substracted</param>
-      /// <param name="val">The value to be subtracted</param>
-      /// <returns> <paramref name="img1"/> - <paramred name="val"/>   </returns>
-      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> img1, double val)
+      /// <param name="image">The image to be substracted</param>
+      /// <param name="value">The value to be subtracted</param>
+      /// <returns> <paramref name="image"/> - <paramred name="val"/>   </returns>
+      public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, double value)
       {
          TColor color = new TColor();
-         color.MCvScalar = new MCvScalar(val, val, val, val);
-         return img1.Sub(color);
+         color.MCvScalar = new MCvScalar(value, value, value, value);
+         return image.Sub(color);
       }
 
       /// <summary>
-      ///  <paramref name="img1"/> * <paramref name="scale"/>
+      ///  <paramref name="image"/> * <paramref name="scale"/>
       /// </summary>
-      /// <param name="img1">The image</param>
+      /// <param name="image">The image</param>
       /// <param name="scale">The multiplication scale</param>
-      /// <returns><paramref name="img1"/> * <paramref name="scale"/></returns>
-      public static Image<TColor, TDepth> operator *(Image<TColor, TDepth> img1, double scale)
+      /// <returns><paramref name="image"/> * <paramref name="scale"/></returns>
+      public static Image<TColor, TDepth> operator *(Image<TColor, TDepth> image, double scale)
       {
-         return img1.Mul(scale);
+         return image.Mul(scale);
       }
 
       /// <summary>
-      ///   <paramref name="scale"/>*<paramref name="img1"/>
+      ///   <paramref name="scale"/>*<paramref name="image"/>
       /// </summary>
-      /// <param name="img1">The image</param>
+      /// <param name="image">The image</param>
       /// <param name="scale">The multiplication scale</param>
-      /// <returns><paramref name="scale"/>*<paramref name="img1"/></returns>
-      public static Image<TColor, TDepth> operator *(double scale, Image<TColor, TDepth> img1)
+      /// <returns><paramref name="scale"/>*<paramref name="image"/></returns>
+      public static Image<TColor, TDepth> operator *(double scale, Image<TColor, TDepth> image)
       {
-         return img1.Mul(scale);
+         return image.Mul(scale);
       }
 
       /// <summary>
-      /// Perform the convolution with <paramref name="kernel"/> on <paramref name="img1"/>
+      /// Perform the convolution with <paramref name="kernel"/> on <paramref name="image"/>
       /// </summary>
-      /// <param name="img1">The image</param>
+      /// <param name="image">The image</param>
       /// <param name="kernel">The kernel</param>
       /// <returns>Result of the convolution</returns>
-      public static Image<TColor, Single> operator *(Image<TColor, TDepth> img1, ConvolutionKernelF kernel)
+      public static Image<TColor, Single> operator *(Image<TColor, TDepth> image, ConvolutionKernelF kernel)
       {
-         return img1.Convolution(kernel);
+         return image.Convolution(kernel);
       }
 
       /// <summary>
-      ///  <paramref name="img1"/> / <paramref name="scale"/>
+      ///  <paramref name="image"/> / <paramref name="scale"/>
       /// </summary>
-      /// <param name="img1">The image</param>
+      /// <param name="image">The image</param>
       /// <param name="scale">The division scale</param>
-      /// <returns><paramref name="img1"/> / <paramref name="scale"/></returns>
-      public static Image<TColor, TDepth> operator /(Image<TColor, TDepth> img1, double scale)
+      /// <returns><paramref name="image"/> / <paramref name="scale"/></returns>
+      public static Image<TColor, TDepth> operator /(Image<TColor, TDepth> image, double scale)
       {
-         return img1.Mul(1.0 / scale);
+         return image.Mul(1.0 / scale);
       }
 
       /// <summary>
-      ///   <paramref name="scale"/> / <paramref name="img1"/>
+      ///   <paramref name="scale"/> / <paramref name="image"/>
       /// </summary>
-      /// <param name="img1">The image</param>
+      /// <param name="image">The image</param>
       /// <param name="scale">The scale</param>
-      /// <returns><paramref name="scale"/> / <paramref name="img1"/></returns>
-      public static Image<TColor, TDepth> operator /(double scale, Image<TColor, TDepth> img1)
+      /// <returns><paramref name="scale"/> / <paramref name="image"/></returns>
+      public static Image<TColor, TDepth> operator /(double scale, Image<TColor, TDepth> image)
       {
-         Image<TColor, TDepth> res = img1.CopyBlank();
-         CvInvoke.cvDiv(IntPtr.Zero, img1.Ptr, res.Ptr, scale);
+         Image<TColor, TDepth> res = image.CopyBlank();
+         CvInvoke.cvDiv(IntPtr.Zero, image.Ptr, res.Ptr, scale);
          return res;
       }
 
@@ -3825,17 +3839,17 @@ namespace Emgu.CV
       /// <summary>
       /// Calculates the average value and standard deviation of array elements, independently for each channel
       /// </summary>
-      /// <param name="avg">The avg color</param>
+      /// <param name="average">The avg color</param>
       /// <param name="sdv">The standard deviation for each channel</param>
       /// <param name="mask">The operation mask</param>
-      public void AvgSdv(out TColor avg, out MCvScalar sdv, Image<Gray, Byte> mask)
+      public void AvgSdv(out TColor average, out MCvScalar sdv, Image<Gray, Byte> mask)
       {
-         avg = new TColor();
+         average = new TColor();
          MCvScalar avgScalar = new MCvScalar();
          sdv = new MCvScalar();
 
-         CvInvoke.cvAvgSdv(Ptr, ref avgScalar, ref sdv, mask.Ptr);
-         avg.MCvScalar = avgScalar;
+         CvInvoke.cvAvgSdv(Ptr, ref avgScalar, ref sdv, mask == null ? IntPtr.Zero : mask.Ptr);
+         average.MCvScalar = avgScalar;
       }
 
       /// <summary>
@@ -3845,12 +3859,7 @@ namespace Emgu.CV
       /// <param name="sdv">The standard deviation for each channel</param>
       public void AvgSdv(out TColor avg, out MCvScalar sdv)
       {
-         avg = new TColor();
-         MCvScalar avgScalar = new MCvScalar();
-         sdv = new MCvScalar();
-
-         CvInvoke.cvAvgSdv(Ptr, ref avgScalar, ref sdv, IntPtr.Zero);
-         avg.MCvScalar = avgScalar;
+         AvgSdv(out avg, out sdv, null);
       }
 
       /// <summary>
@@ -3869,9 +3878,10 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the min / max location and values for the image
       /// </summary>
-      /// <returns>
-      /// Returns the min / max location and values for the image
-      /// </returns>
+      /// <param name="maxLocations">The maximum locations for each channel </param>
+      /// <param name="maxValues">The maximum values for each channel</param>
+      /// <param name="minLocations">The minimum locations for each channel</param>
+      /// <param name="minValues">The minimum values for each channel</param>
       public void MinMax(out double[] minValues, out double[] maxValues, out System.Drawing.Point[] minLocations, out System.Drawing.Point[] maxLocations)
       {
          minValues = new double[NumberOfChannels];

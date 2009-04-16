@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Windows Form")]
+[assembly: AssemblyTitle("VideoSurveilance")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("Windows Form")]
-[assembly: AssemblyCopyright("Copyright © Emgu 2008")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("VideoSurveilance")]
+[assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("22b671a2-7ef9-409a-94b4-7b69748ac48c")]
+[assembly: Guid("1473aee8-a64a-45ac-8765-de2fae48901b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

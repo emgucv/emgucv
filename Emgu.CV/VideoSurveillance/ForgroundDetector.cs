@@ -4,6 +4,7 @@ using System.Text;
 using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV.VideoSurveillance
 {
@@ -19,6 +20,18 @@ namespace Emgu.CV.VideoSurveillance
       public ForgroundDetector(CvEnum.FORGROUND_DETECTOR_TYPE type)
       {
          _ptr = CvInvoke.CvCreateFGDetectorBase(type, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Get the forground mask from the detector
+      /// </summary>
+      /// <returns></returns>
+      public Image<Gray, Byte> GetForgroundMask()
+      {
+         IntPtr forground = CvInvoke.CvFGDetectorGetMask(_ptr);
+         if (forground == IntPtr.Zero) return null;
+         MIplImage iplImage = (MIplImage) Marshal.PtrToStructure(forground, typeof(MIplImage));
+         return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
       }
 
       /// <summary>

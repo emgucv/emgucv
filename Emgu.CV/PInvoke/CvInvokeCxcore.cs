@@ -583,11 +583,11 @@ namespace Emgu.CV
 
       /// <summary>
       /// Divides one array by another:
-      /// dst(I)=scale * src1(I)/src2(I), if src1!=NULL
-      /// dst(I)=scale/src2(I),      if src1=NULL
+      /// dst(I)=scale * src1(I)/src2(I), if src1!=IntPtr.Zero;
+      /// dst(I)=scale/src2(I),      if src1==IntPtr.Zero;
       /// All the arrays must have the same type, and the same size (or ROI size)
       /// </summary>
-      /// <param name="src1">The first source array. If the pointer is NULL, the array is assumed to be all 1s. </param>
+      /// <param name="src1">The first source array. If the pointer is IntPtr.Zero, the array is assumed to be all 1s. </param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="scale">Optional scale factor </param>

@@ -751,6 +751,26 @@ namespace Emgu.CV.Test
 
       }
 
+      public void TestCodeBookBGModel()
+      {
+         using (Capture capture = new Capture())
+         using (BGCodeBookModel<Bgr> model = new BGCodeBookModel<Bgr>())
+         {
+            ImageViewer viewer = new ImageViewer();
+            Image<Gray, byte> fgMask = capture.QueryFrame().Convert<Gray, Byte>();
+
+            Application.Idle += delegate(Object sender, EventArgs args)
+            {
+               Image<Bgr, Byte> frame = capture.QueryFrame();
+               model.Update(frame, Rectangle.Empty, null);
+               model.Diff(frame, fgMask, Rectangle.Empty);
+               viewer.Image = fgMask;
+               //viewer.Image = frame;
+            };
+            viewer.ShowDialog();
+         }
+      }
+
       public void TestBlobTracking()
       {
          Capture capture = new Capture();

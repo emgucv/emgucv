@@ -74,14 +74,13 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get a copy of the current background
       /// </summary>
-      public Image<Bgr, Byte> Background
+      public Image<Gray, Byte> Background
       {
          get
          {
             IntPtr statModelbackground = MCvBGStatModel.background;
-            Image<Bgr, Byte> res = new Image<Bgr, byte>(CvInvoke.cvGetSize(statModelbackground));
-            CvInvoke.cvCopy(statModelbackground, res.Ptr, IntPtr.Zero);
-            return res;
+            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(statModelbackground, typeof(MIplImage));
+            return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
          }
       }
 
@@ -93,9 +92,8 @@ namespace Emgu.CV.VideoSurveillance
          get
          {
             IntPtr statModelforeground = MCvBGStatModel.foreground;
-            Image<Gray, Byte> res = new Image<Gray, byte>(CvInvoke.cvGetSize(statModelforeground));
-            CvInvoke.cvCopy(statModelforeground, res.Ptr, IntPtr.Zero);
-            return res;
+            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(statModelforeground, typeof(MIplImage));
+            return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
          }
       }
 

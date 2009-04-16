@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -210,5 +211,64 @@ namespace Emgu.CV
          int maxDisparity,
          double param1, double param2, double param3,
          double param4, double param5);
+
+      #region Codebook background model
+      /// <summary>
+      /// Create a BG code book model
+      /// </summary>
+      /// <returns>Poionter to BG code book model</returns>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static IntPtr cvCreateBGCodeBookModel();
+
+      /// <summary>
+      /// Update the BG code book model
+      /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image for update</param>
+      /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
+      /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static void cvBGCodeBookUpdate( 
+         IntPtr model, 
+         IntPtr image,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image to find diff</param>
+      /// <param name="fgmask">The returned forground mask</param>
+      /// <param name="roi">The </param>
+      /// <returns></returns>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static int cvBGCodeBookDiff( 
+         IntPtr model, 
+         IntPtr image,
+         IntPtr fgmask, 
+         Rectangle roi);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model"></param>
+      /// <param name="staleThresh"></param>
+      /// <param name="roi"></param>
+      /// <param name="mask"></param>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static void cvBGCodeBookClearStale( 
+         IntPtr model, 
+         int staleThresh,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
+      /// Release the BG code book model
+      /// </summary>
+      /// <param name="model">The BG code book model to be released</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static void cvReleaseBGCodeBookModel(ref IntPtr model);
+      #endregion
    }
 }

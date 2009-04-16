@@ -10,7 +10,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// A blob tracker auto
    /// </summary>
-   public class BlobTrackerAuto :UnmanagedObject, IEnumerable<MCvBlob>
+   public class BlobTrackerAuto : UnmanagedObject, IEnumerable<MCvBlob>
    {
       private BlobTrackerAutoParam _param;
 
@@ -43,7 +43,17 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="currentFrame">The frame to be processed</param>
       public void Process(IImage currentFrame)
       {
-         CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, IntPtr.Zero);
+         Process(currentFrame, null);
+      }
+
+      /// <summary>
+      /// Process a frame
+      /// </summary>
+      /// <param name="currentFrame">The frame to be processed</param>
+      /// <param name="forgroundMask">the forground mask to be used</param>
+      public void Process(IImage currentFrame, Image<Gray, Byte> forgroundMask)
+      {
+         CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, forgroundMask == null ? IntPtr.Zero : forgroundMask.Ptr);
       }
 
       /// <summary>
@@ -64,7 +74,7 @@ namespace Emgu.CV.VideoSurveillance
             return CvInvoke.CvBlobTrackerAutoGetBlobNum(_ptr);
          }
       }
-      
+
       /// <summary>
       /// Get the forground mask
       /// </summary>
@@ -73,7 +83,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          IntPtr forground = CvInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
          if (forground == IntPtr.Zero) return null;
-         MIplImage iplImage = (MIplImage) Marshal.PtrToStructure(forground, typeof(MIplImage));
+         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(forground, typeof(MIplImage));
          return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
       }
 
@@ -86,8 +96,20 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return (MCvBlob) Marshal.PtrToStructure(CvInvoke.CvBlobTrackerAutoGetBlob(_ptr, i), typeof(MCvBlob));
+            return (MCvBlob)Marshal.PtrToStructure(CvInvoke.CvBlobTrackerAutoGetBlob(_ptr, i), typeof(MCvBlob));
          }
+      }
+
+      /// <summary>
+      /// Get the blob with the specific id
+      /// </summary>
+      /// <param name="blobID">The id of the blob</param>
+      /// <returns>The blob of the specific id, if do not exist, null is returned</returns>
+      public MCvBlob? GetBlobByID(int blobID)
+      {
+         IntPtr blobPtr = CvInvoke.CvBlobTrackerAutoGetBlob(_ptr, blobID);
+         if (blobPtr == IntPtr.Zero) return null;
+         return (MCvBlob?)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
       }
 
       /// <summary>

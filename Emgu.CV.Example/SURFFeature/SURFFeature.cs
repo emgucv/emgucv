@@ -33,7 +33,7 @@ namespace SURFFeatureExample
          //Create a SURF Tracker using k-d Tree
          SURFTracker tracker = new SURFTracker(modelFeatures);
          
-         //Uncomment below if you wish to use spill-tree instead
+         //Comment out above and uncomment below if you wish to use spill-tree instead
          //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
          #endregion
 

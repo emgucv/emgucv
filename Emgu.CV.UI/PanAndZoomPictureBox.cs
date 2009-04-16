@@ -68,22 +68,16 @@ namespace Emgu.CV.UI
             Rectangle imageRegion = new Rectangle(Point.Empty, ClientSize);
             if (imageRegion.Contains(_mouseDownPosition))
             {
-               Rectangle rect = GetSelectedRectangle(e.X, e.Y);
-               Point location = rect.Location;
-               location = new Point((int)(location.X / _zoomScale), (int)(location.Y / _zoomScale));
-               if (horizontalScrollBar.Visible) location.X += horizontalScrollBar.Value;
-               if (verticalScrollBar.Visible) location.Y += horizontalScrollBar.Value;
+               Rectangle selectedRectangle = GetSelectedRectangle(e.X, e.Y);
 
-               Size size = new Size((int)(rect.Width / _zoomScale), (int)(rect.Height / _zoomScale));
-
-               if (size.Width > 2 && size.Height > 2)
+               if ( (selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
                {
-                  /*
-                  _zoomScale = _zoomScale / Math.Max((double)rect.Width / ClientSize.Width, (double)rect.Height / ClientSize.Height);
-               
-                  horizontalScrollBar.Value = Math.Min(horizontalScrollBar.Maximum, location.X);
-                  verticalScrollBar.Value = Math.Min(verticalScrollBar.Maximum, location.Y);
-                  RenderImage();*/
+                  horizontalScrollBar.Value = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value +(int)(selectedRectangle.Location.X / _zoomScale));
+                  verticalScrollBar.Value = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value +(int)(selectedRectangle.Location.Y / _zoomScale));
+
+                  _zoomScale = _zoomScale * ClientSize.Width / selectedRectangle.Width;
+
+                  Invalidate();
                }
             }
          }
@@ -292,6 +286,14 @@ namespace Emgu.CV.UI
          Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
          rect.Intersect(new Rectangle(Point.Empty, ClientSize));
 
+         if ((double)rect.Width / rect.Height > (double)ClientSize.Width / ClientSize.Height)
+         {
+            rect.Width = (int)((double)ClientSize.Width / ClientSize.Height * rect.Height);
+         }
+         else if ((double)rect.Width / rect.Height < (double)ClientSize.Width / ClientSize.Height)
+         {
+            rect.Height = (int)((double)rect.Width / ClientSize.Width * ClientSize.Height);
+         }
          return rect;
       }
 
@@ -331,7 +333,9 @@ namespace Emgu.CV.UI
       /// <param name="fixPoint">The point to be fixed</param>
       public void SetZoomScale(double zoomScale, Point fixPoint)
       {
-         if (_zoomScale != zoomScale //the scale has been changed
+         if (
+            Image != null &&
+            _zoomScale != zoomScale //the scale has been changed
             && //and, the scale is not too small
             !(zoomScale < _zoomScale &&
                (Image.Size.Width * zoomScale < (2.0 + verticalScrollBar.Width)
