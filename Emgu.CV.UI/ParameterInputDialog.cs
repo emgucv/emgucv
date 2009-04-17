@@ -43,6 +43,8 @@ namespace Emgu.CV.UI
       {
          InitializeComponent();
 
+         int panelsHeight = 0;
+
          _paramValue = new object[paramInfo.Length];
 
          _paramInfo = paramInfo;
@@ -56,7 +58,11 @@ namespace Emgu.CV.UI
             parameterInputPanel.Controls.Add(panel);
             panel.Location = new Point(0, i * panel.Height);
             _paramPanel[i] = panel;
+
+            panelsHeight += panel.Height;
          }
+
+         this.Height = panelsHeight + 100;
       }
 
       private bool Successed

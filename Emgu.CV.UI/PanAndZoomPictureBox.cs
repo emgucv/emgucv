@@ -64,8 +64,8 @@ namespace Emgu.CV.UI
          if (e.Button == MouseButtons.Left)
          {
             ReverseRectangle();
-
-            Rectangle imageRegion = new Rectangle(Point.Empty, ClientSize);
+            Size viewSize = GetViewSize();
+            Rectangle imageRegion = new Rectangle(Point.Empty, viewSize);
             if (imageRegion.Contains(_mouseDownPosition))
             {
                Rectangle selectedRectangle = GetSelectedRectangle(e.X, e.Y);
@@ -75,7 +75,7 @@ namespace Emgu.CV.UI
                   horizontalScrollBar.Value = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value +(int)(selectedRectangle.Location.X / _zoomScale));
                   verticalScrollBar.Value = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value +(int)(selectedRectangle.Location.Y / _zoomScale));
 
-                  _zoomScale = _zoomScale * ClientSize.Width / selectedRectangle.Width;
+                  _zoomScale = _zoomScale * viewSize.Width / selectedRectangle.Width;
 
                   Invalidate();
                }
@@ -92,10 +92,11 @@ namespace Emgu.CV.UI
 
       private void OnResize(object sender, EventArgs e)
       {
-         if (base.Image != null && ClientSize.Width > 0 && ClientSize.Height > 0)
+         Size viewSize = GetViewSize();
+         if (base.Image != null && viewSize.Width > 0 && viewSize.Height > 0)
          {
-            RenderImage();
             SetScrollBarValues();
+            Invalidate();
          }
       }
 
@@ -159,11 +160,11 @@ namespace Emgu.CV.UI
 
          // If the image is wider than the PictureBox, show the HScrollBar.
          horizontalScrollBar.Visible =
-            (int)(Image.Size.Width * _zoomScale) > ClientSize.Width;
+            (int)(Image.Size.Width * _zoomScale) > GetViewSize().Width;
 
          // If the image is taller than the PictureBox, show the VScrollBar.
          verticalScrollBar.Visible =
-            (int)(Image.Size.Height * _zoomScale) > ClientSize.Height;
+            (int)(Image.Size.Height * _zoomScale) > GetViewSize().Height;
          
          #endregion
 
@@ -276,42 +277,33 @@ namespace Emgu.CV.UI
          }
       }
 
+      private Size GetViewSize()
+      {
+         return new Size(
+            ClientSize.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0) ,
+            ClientSize.Height - (horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0));
+      }
+
       private Rectangle GetSelectedRectangle(int x, int y)
       {
          int top = Math.Min(y, _mouseDownPosition.Y);
          int bottom = Math.Max(y, _mouseDownPosition.Y);
          int left = Math.Min(x, _mouseDownPosition.X);
          int right = Math.Max(x, _mouseDownPosition.X);
+         Size viewSize = GetViewSize();
 
          Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
-         rect.Intersect(new Rectangle(Point.Empty, ClientSize));
+         rect.Intersect(new Rectangle(Point.Empty, viewSize));
 
-         if ((double)rect.Width / rect.Height > (double)ClientSize.Width / ClientSize.Height)
+         if ((double)rect.Width / rect.Height > (double)viewSize.Width / viewSize.Height)
          {
-            rect.Width = (int)((double)ClientSize.Width / ClientSize.Height * rect.Height);
+            rect.Width = (int)((double)viewSize.Width / viewSize.Height * rect.Height);
          }
-         else if ((double)rect.Width / rect.Height < (double)ClientSize.Width / ClientSize.Height)
+         else if ((double)rect.Width / rect.Height < (double)viewSize.Width / viewSize.Height)
          {
-            rect.Height = (int)((double)rect.Width / ClientSize.Width * ClientSize.Height);
+            rect.Height = (int)((double)rect.Width / viewSize.Width * viewSize.Height);
          }
          return rect;
-      }
-
-      protected void RenderImage()
-      {
-         int width = (int)(Image.Size.Width * _zoomScale);
-         int height = (int)(Image.Size.Height * _zoomScale);
-
-         if (width <= Width && height <= Height)
-         {  //no ROI is required           
-            verticalScrollBar.Visible = false;
-            horizontalScrollBar.Visible = false;
-         }
-         else
-         {
-            SetScrollBarValues();
-         }
-         Invalidate();
       }
 
       /// <summary>
@@ -342,8 +334,8 @@ namespace Emgu.CV.UI
                || Image.Size.Height * zoomScale < (2.0 + horizontalScrollBar.Height)))
             && //and, the scale is not too big
             !(zoomScale > _zoomScale &&
-               (ClientSize.Width < zoomScale * 2
-               || ClientSize.Height < zoomScale * 2)))
+               (GetViewSize().Width < zoomScale * 2
+               || GetViewSize().Height < zoomScale * 2)))
          {
             fixPoint.X = Math.Min(fixPoint.X, (int)(Image.Size.Width * _zoomScale));
             fixPoint.Y = Math.Min(fixPoint.Y, (int)(Image.Size.Height * _zoomScale));
@@ -358,7 +350,8 @@ namespace Emgu.CV.UI
             horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, (int)(horizontalScrollBar.Value + shiftX)), horizontalScrollBar.Maximum);
             verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, (int)(verticalScrollBar.Value + shiftY)), verticalScrollBar.Maximum);
 
-            RenderImage();
+            SetScrollBarValues();
+            Invalidate();
 
             if (ZoomScaleChange != null)
                ZoomScaleChange(this, new EventArgs());

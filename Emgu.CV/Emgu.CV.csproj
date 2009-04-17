@@ -57,6 +57,8 @@
     <Compile Include="PInvoke\CvInvokeCxcore.cs" />
     <Compile Include="PInvoke\CvInvokeDef.cs" />
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
+    <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="Properties\StringTable.Designer.cs">
       <AutoGen>True</AutoGen>

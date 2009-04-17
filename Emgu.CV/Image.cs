@@ -1332,6 +1332,20 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// Get the star keypoints from this image
+      /// </summary>
+      /// <param name="param">The Star Detector parameters</param>
+      public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr keyPointsPtr = CvInvoke.cvGetStarKeypoints(_ptr, stor.Ptr, param);
+            Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
+            return keyPoints.ToArray();
+         }
+      }
+
+      /// <summary>
       /// Finds corners with big eigenvalues in the image. 
       /// </summary>
       /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
@@ -1717,6 +1731,7 @@ namespace Emgu.CV
       ///<param name="lower"> The lower limit of color value</param>
       ///<param name="higher"> The upper limit of color value</param>
       ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
+      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, Byte> InRange(TColor lower, TColor higher)
       {
          Image<TColor, Byte> res = new Image<TColor, Byte>(Size);

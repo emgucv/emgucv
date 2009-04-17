@@ -2563,7 +2563,13 @@ namespace Emgu.CV
       }
 
       #region CalcEMD
-
+      /// <summary>
+      /// Wrapped Opencv's CvDistanceFunction
+      /// </summary>
+      /// <param name="f1">Pointer to an array of float</param>
+      /// <param name="f2">Pointer to an array of float</param>
+      /// <param name="userParams">User passed parameters</param>
+      /// <returns>The distance between f1 and f2</returns>
       public delegate float CvDistanceFunction(IntPtr f1, IntPtr f2, IntPtr userParams);
 
       /// <summary>
@@ -2613,6 +2619,19 @@ namespace Emgu.CV
          IntPtr lowerBound, 
          IntPtr userParam);
       #endregion
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="img">The image to detect start keypoints</param>
+      /// <param name="storage">The storage for the returned sequence</param>
+      /// <param name="param">The star detector parameters</param>
+      /// <returns></returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetStarKeypoints(
+         IntPtr img, 
+         IntPtr storage,
+         MCvStarDetectorParams param);
 
       /*
               /// <summary>

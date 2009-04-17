@@ -438,6 +438,8 @@ namespace Emgu.CV.ML.UnitTest
             Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
             Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
          }
+
+         priorsHandle.Free();
       }
 
       [Test]

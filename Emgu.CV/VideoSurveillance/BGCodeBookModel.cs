@@ -33,10 +33,29 @@ namespace Emgu.CV.VideoSurveillance
          CvInvoke.cvBGCodeBookUpdate(_ptr, image.Ptr, roi, mask);
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="fgmask"></param>
+      /// <param name="roi"></param>
+      /// <returns></returns>
       public int Diff(Image<TColor, Byte> image, Image<Gray, Byte> fgmask, Rectangle roi)
       {
          return CvInvoke.cvBGCodeBookDiff(_ptr, image, fgmask, roi);
       }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="staleThresh"></param>
+      /// <param name="roi"></param>
+      /// <param name="mask"></param>
+      public void ClearStale(int staleThresh, Rectangle roi, Image<Gray, Byte> mask)
+      {
+         CvInvoke.cvBGCodeBookClearStale(_ptr, staleThresh, roi, mask);
+      }
+
       /// <summary>
       /// Release the unmanaged resource that is associated to this object
       /// </summary>

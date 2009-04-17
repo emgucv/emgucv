@@ -120,6 +120,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveilance", "..\..\E
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\LicensePlateRecognition\LicensePlateRecognition.csproj", "{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
@@ -391,6 +397,20 @@ Global
 		{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}.Release|x86.ActiveCfg = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|.NET.ActiveCfg = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|Win32.ActiveCfg = Release|Any CPU
+		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
