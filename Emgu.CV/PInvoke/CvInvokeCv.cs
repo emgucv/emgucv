@@ -2562,6 +2562,58 @@ namespace Emgu.CV
          cvFloodFill(src, seedPoint, newVal, loDiff, upDiff, out comp, (int)connectivity | (int)flags, mask);
       }
 
+      #region CalcEMD
+
+      public delegate float CvDistanceFunction(IntPtr f1, IntPtr f2, IntPtr userParams);
+
+      /// <summary>
+      /// Computes earth mover distance and/or a lower boundary of the distance
+      /// between the two weighted point configurations. One of the application
+      /// desctibed in [RubnerSept98] is multi-dimensional histogram comparison
+      /// for image retrieval. EMD is a transportation problem that is solved
+      /// using some modification of simplex algorithm, thus the complexity is
+      /// exponential in the worst case, though, it is much faster in average.
+      /// In case of a real metric the lower boundary can be calculated even
+      /// faster (using linear-time algorithm) and it can be used to determine
+      /// roughly whether the two signatures are far enough so that they cannot
+      /// relate to the same object.
+      /// </summary>
+      /// <param name="signature1">
+      /// First signature, size1¡Ádims+1 floating-point matrix. Each row stores the point weight followed by the point coordinates. The matrix is allowed to have a single column (weights only) if the user-defined cost matrix is used.
+      /// </param>
+      /// <param name="signature2">Second signature of the same format as signature1, though the number of rows may be different. The total weights may be different, in this case an extra "dummy" point is added to either signature1 or signature2. </param>
+      /// <param name="distType">Metrics used; CV_DIST_L1, CV_DIST_L2, and CV_DIST_C stand for one of the standard metrics; CV_DIST_USER means that a user-defined function distance_func or pre-calculated cost_matrix is used. </param>
+      /// <param name="distFunc">The user-defined distance function. It takes coordinates of two points and returns the distance between the points.</param>
+      /// <param name="costMatrix">The user-defined size1¡Ásize2 cost matrix. At least one of cost_matrix and distance_func must be NULL. Also, if a cost matrix is used, lower boundary (see below) can not be calculated, because it needs a metric function.</param>
+      /// <param name="flow">The resultant size1¡Ásize2 flow matrix: flow,,ij,, is a flow from i-th point of signature1 to j-th point of signature2</param>
+      /// <param name="lowerBound">
+      /// Optional input/output parameter: lower boundary of
+      /// distance between the two signatures that is a distance between mass centers.
+      /// The lower boundary may not be calculated if the user-defined cost matrix
+      /// is used, the total weights of point configurations are not equal, or there
+      /// is the signatures consist of weights only (i.e. the signature matrices have
+      /// a single column). User must initialize *lower_bound. If the calculated
+      /// distance between mass centers is greater or equal to *lower_bound
+      /// (it means that the signatures are far enough) the function does not
+      /// calculate EMD. In any case *lower_bound is set to the calculated
+      /// distance between mass centers on return. Thus, if user wants to
+      /// calculate both distance between mass centers and EMD, *lower_bound should
+      /// be set to 0.
+      /// </param>
+      /// <param name="userParam">Pointer to optional data that is passed into the user-defined distance function. </param>
+      /// <returns>"minimal work" distance between two weighted point configurations</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern float cvCalcEMD2(
+         IntPtr signature1, 
+         IntPtr signature2, 
+         CvEnum.DIST_TYPE distType,
+         CvDistanceFunction distFunc,
+         IntPtr costMatrix, 
+         IntPtr flow,
+         IntPtr lowerBound, 
+         IntPtr userParam);
+      #endregion
+
       /*
               /// <summary>
               ///  Fits a line into set of 2d points in a robust way (M-estimator technique) 
