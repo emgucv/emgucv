@@ -1,4 +1,4 @@
-#define TEST_CAPTURE
+//#define TEST_CAPTURE
 using System;
 using System.Collections.Generic;
 using System.Text;
