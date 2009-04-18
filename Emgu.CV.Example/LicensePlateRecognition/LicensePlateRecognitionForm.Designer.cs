@@ -30,8 +30,8 @@ namespace LicensePlateRecognition
       {
          this.components = new System.ComponentModel.Container();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.label1 = new System.Windows.Forms.Label();
+         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -55,6 +55,15 @@ namespace LicensePlateRecognition
          this.splitContainer1.SplitterDistance = 215;
          this.splitContainer1.TabIndex = 0;
          // 
+         // label1
+         // 
+         this.label1.AutoSize = true;
+         this.label1.Location = new System.Drawing.Point(12, 9);
+         this.label1.Name = "label1";
+         this.label1.Size = new System.Drawing.Size(112, 13);
+         this.label1.TabIndex = 0;
+         this.label1.Text = "It is a work in progress";
+         // 
          // imageBox1
          // 
          this.imageBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -65,15 +74,6 @@ namespace LicensePlateRecognition
          this.imageBox1.TabIndex = 2;
          this.imageBox1.TabStop = false;
          // 
-         // label1
-         // 
-         this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(12, 9);
-         this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(112, 13);
-         this.label1.TabIndex = 0;
-         this.label1.Text = "It is a work in progress";
-         // 
          // LicensePlateRecognitionForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -81,7 +81,7 @@ namespace LicensePlateRecognition
          this.ClientSize = new System.Drawing.Size(580, 380);
          this.Controls.Add(this.splitContainer1);
          this.Name = "LicensePlateRecognitionForm";
-         this.Text = "LicensePlateRecognition";
+         this.Text = "License Plate Recognition";
          this.splitContainer1.Panel1.ResumeLayout(false);
          this.splitContainer1.Panel1.PerformLayout();
          this.splitContainer1.Panel2.ResumeLayout(false);
