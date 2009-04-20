@@ -7,113 +7,126 @@ using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.UI;
 using tessnet2;
 
 namespace LicensePlateRecognition
 {
    public partial class LicensePlateRecognitionForm : Form
    {
-      private Tesseract _ocr; 
+      private LicensePlateDetector _licensePlateDetector;
+      private StopSignDetector _stopSignDetector;
 
       public LicensePlateRecognitionForm()
       {
          InitializeComponent();
-         
-         //create OCR
-         _ocr = new Tesseract();
+         _licensePlateDetector = new LicensePlateDetector();
+         _stopSignDetector = new StopSignDetector();
 
-         //You can download more language definition data from
-         //http://code.google.com/p/tesseract-ocr/downloads/list
-         //Languages supported includes:
-         //Dutch, Spanish, German, Italian, French and English
-         _ocr.Init("eng", false);
-         
-         DetectLicensePlate(new Image<Bgr, byte>("license-plate.jpg"));
-
+         //ProcessImage(new Image<Bgr, byte>("stop-sign2.jpg"));
+         ProcessImage(new Image<Bgr, byte>("license-plate.jpg"));
       }
 
-      public List<Word> PlateOCR(Image<Gray, Byte> plate)
+      private void ProcessImage(Image<Bgr, byte> image)
       {
-         Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
-         Image<Gray, Byte> plateMask = new Image<Gray, byte>(plate.Size);
+         List<Image<Gray, Byte>> licensePlateList = new List<Image<Gray, byte>>();
+         List<Image<Gray, Byte>> filteredLicensePlateList = new List<Image<Gray, byte>>();
+         List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
+         List<List<Word>> words = _licensePlateDetector.DetectLicensePlate(
+            image,
+            licensePlateList,
+            filteredLicensePlateList,
+            licenseBoxList);
 
-         Image<Gray, Byte> plateCanny = plate.Canny(new Gray(100), new Gray(50));
-         using (MemStorage stor = new MemStorage())
+         List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
+         List<Image<Gray, Byte>> filteredStopSignList = new List<Image<Gray, byte>>();
+         List<MCvBox2D> stopSignBoxList = new List<MCvBox2D>();
+         _stopSignDetector.DetectStopSign(image, stopSignList, filteredStopSignList, stopSignBoxList);
+
+         panel1.Controls.Clear();
+
+         Point startPoint = new Point(10, 10);
+         ShowLicense(ref startPoint, words, licensePlateList, filteredLicensePlateList, licenseBoxList);
+         foreach (MCvBox2D box in licenseBoxList)
+            image.Draw(box, new Bgr(Color.Red), 2);
+
+         ShowStopSign(ref startPoint, stopSignList, filteredStopSignList, stopSignBoxList);
+         foreach (MCvBox2D box in stopSignBoxList)
+            image.Draw(box, new Bgr(Color.Aquamarine), 2);
+
+         //imageBox1.Image = image;
+      }
+
+      private void AddLabelAndImage(ref Point startPoint, String labelText, IImage image)
+      {
+         Label label = new Label();
+         panel1.Controls.Add(label);
+         label.Text = labelText;
+         label.Width = 100;
+         label.Height = 30;
+         label.Location = startPoint;
+         startPoint.Y += label.Height;
+
+         ImageBox box = new ImageBox();
+         panel1.Controls.Add(box);
+         box.ClientSize = image.Size;
+         box.Image = image;
+         box.Location = startPoint;
+         startPoint.Y += box.Height + 10;
+      }
+
+      private void ShowStopSign(ref Point startPoint, List<Image<Gray, Byte>> stopSignList, List<Image<Gray, Byte>> filteredStopSignList, List<MCvBox2D> boxList)
+      {
+         for (int i = 0; i < stopSignList.Count; i++)
          {
-            for (Contour<Point> contours = plateCanny.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_EXTERNAL, stor); contours != null; contours = contours.HNext)
-            {
-               Rectangle rect = contours.BoundingRectangle;
-               if (rect.Height > (plate.Height >> 1))
-               {
-                  rect.X -= 1; rect.Y -= 1; rect.Width += 2; rect.Height += 2;
-                  rect.Intersect(plate.ROI);
+            AddLabelAndImage(
+               ref startPoint, 
+               String.Format("Stop Sign {0}:", boxList[i].center.ToString()),
+               MergeImage(stopSignList[i], filteredStopSignList[i]));
+         }
+      }
 
-                  plateMask.Draw(rect, new Gray(255.0), -1);
-               }
+      private Image<Gray, Byte> MergeImage(Image<Gray, Byte> img1, Image<Gray, Byte> img2)
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>(img1.Width, img1.Height + img2.Height);
+         img.ROI = img1.ROI;
+         CvInvoke.cvCopy(img1, img, IntPtr.Zero);
+         Rectangle filterLicenseROI = img2.ROI;
+         filterLicenseROI.Offset(0, img1.Height);
+         img.ROI = filterLicenseROI;
+         CvInvoke.cvCopy(img2, img, IntPtr.Zero);
+         img.ROI = Rectangle.Empty;
+
+         return img;
+      }
+
+      private void ShowLicense(ref Point startPoint, List<List<Word>> licenses, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
+      {
+         for (int i = 0; i < licenses.Count; i++)
+         {
+            AddLabelAndImage(
+               ref startPoint,
+               "License: " + String.Join(" ", licenses[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
+               MergeImage(licensePlateList[i], filteredLicensePlateList[i]));
+         }
+      }
+
+      private void button1_Click(object sender, EventArgs e)
+      {
+         DialogResult result = openFileDialog1.ShowDialog();
+         if (result == DialogResult.OK)
+         {
+            try
+            {
+               Image<Bgr, Byte> img = new Image<Bgr, byte>(openFileDialog1.FileName);
+               ProcessImage(img);
+            }
+            catch
+            {
+               MessageBox.Show("Invalide file format");
             }
          }
-         plateMask._Not();
-         thresh.SetValue(0, plateMask);
-         thresh._Erode(1);
-         thresh._Dilate(1);
-
-         return _ocr.DoOCR(thresh.Bitmap, thresh.ROI);
       }
-
-      public void DetectLicensePlate(Image<Bgr, byte> img)
-      {
-         Image<Gray, byte> gray = img.Convert<Gray, Byte>();
-         Image<Gray, byte> canny = gray.Canny(new Gray(100), new Gray(50));
-
-         List<MCvBox2D> boxList = new List<MCvBox2D>();
-
-         using (MemStorage stor = new MemStorage())
-         {
-            for (Contour<Point> contours = canny.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor); contours != null; contours = contours.HNext)
-            {
-               Contour<Point> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, stor);
-               if (currentContour.Area > 250 && currentContour.Total == 4)
-               {
-                  #region determine if all the angles in the contour are within the range of [80, 100] degree
-                  bool isRectangle = true;
-                  Point[] pts = currentContour.ToArray();
-                  LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
-
-                  for (int i = 0; i < edges.Length; i++)
-                  {
-                     double angle = Math.Abs(
-                        edges[(i + 1) % edges.Length].GetExteriorAngleDegree(edges[i]));
-                     if (angle < 80 || angle > 100)
-                     {
-                        isRectangle = false;
-                        break;
-                     }
-                  }
-                  #endregion
-
-                  if (isRectangle) boxList.Add(currentContour.GetMinAreaRect());
-               }
-            }
-         }
-
-         foreach (MCvBox2D box in boxList)
-         {
-            RotationMatrix2D<double> rot = new RotationMatrix2D<double>(box.center, -(box.angle - 90), 1.0);
-            Image<Gray, Byte> rotatedGray = gray.WarpAffine(rot, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, Emgu.CV.CvEnum.WARP.CV_WRAP_DEFAULT, new Gray(0.0));
-            Image<Gray, Byte> plate = rotatedGray.Copy(new Rectangle((int)box.center.X - ((int)box.size.Width >> 1), (int)box.center.Y - ((int)box.size.Height >> 1), (int)box.size.Width, (int)box.size.Height));
-
-            List<Word> words = PlateOCR(plate);
-            StringBuilder builder = new StringBuilder();
-            foreach (Word w in words)
-               builder.Append(w.Text);
-
-            label1.Text = builder.ToString();
-
-         }
-
-         imageBox1.Image = img;
-
-      }
-
    }
+
 }

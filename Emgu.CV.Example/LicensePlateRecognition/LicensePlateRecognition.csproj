@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="LicensePlateDetector.cs" />
     <Compile Include="LicensePlateRecognitionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +59,7 @@
       <DependentUpon>LicensePlateRecognitionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StopSignDetector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

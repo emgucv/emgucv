@@ -514,6 +514,22 @@ namespace Emgu.CV
          return res;
       }
 
+      /// <summary>
+      /// Get a copy of the boxed region of the image
+      /// </summary>
+      /// <param name="box">The boxed region of the image</param>
+      /// <returns>A copy of the boxed region of the image</returns>
+      public Image<TColor, TDepth> Copy(MCvBox2D box)
+      {
+         using (RotationMatrix2D<double> rot = new RotationMatrix2D<double>(box.center, -(box.angle - 90), 1.0))
+         using (Image<TColor, TDepth> rotatedImage = WarpAffine(rot, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, Emgu.CV.CvEnum.WARP.CV_WRAP_DEFAULT, new TColor()))
+         {
+            Rectangle rect = new Rectangle((int)box.center.X - ((int)box.size.Width >> 1), (int)box.center.Y - ((int)box.size.Height >> 1), (int)box.size.Width, (int)box.size.Height);
+            rect.Intersect(rotatedImage.ROI);
+            return rotatedImage.Copy(rect);
+         }
+      }
+
       ///<summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
       ///<returns> A copy of the image</returns>
       public Image<TColor, TDepth> Copy()

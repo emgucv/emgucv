@@ -21,7 +21,7 @@ namespace Emgu.CV.UI
       {
          InitializeComponent();
          SetScrollBarValues();
-         BorderStyle = BorderStyle.Fixed3D;
+         //BorderStyle = BorderStyle.Fixed3D;
          SetStyle(
             ControlStyles.OptimizedDoubleBuffer,
             true);
@@ -388,7 +388,6 @@ namespace Emgu.CV.UI
          // 
          // PanAndZoomPictureBox
          // 
-         this.Dock = System.Windows.Forms.DockStyle.Right;
          this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
          this.Resize += new System.EventHandler(this.OnResize);
          this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
