@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using Emgu.Util;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using tessnet2;
@@ -89,10 +90,9 @@ namespace LicensePlateRecognition
       private Image<Gray, Byte> FilterPlate(Image<Gray, Byte> plate)
       {
          Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
+
          using (Image<Gray, Byte> plateMask = new Image<Gray, byte>(plate.Size))
-
          using (Image<Gray, Byte> plateCanny = plate.Canny(new Gray(100), new Gray(50)))
-
          using (MemStorage stor = new MemStorage())
          {
             for (

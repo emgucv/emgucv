@@ -120,7 +120,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// The event to fire when the zoom scale is changed
       /// </summary>
-      public event EventHandler ZoomScaleChange;
+      public event EventHandler OnZoomScaleChange;
 
       #region Handling ScrollBars
 
@@ -160,11 +160,11 @@ namespace Emgu.CV.UI
 
          // If the image is wider than the PictureBox, show the HScrollBar.
          horizontalScrollBar.Visible =
-            (int)(Image.Size.Width * _zoomScale) > GetViewSize().Width;
+            (int)(Image.Size.Width * _zoomScale) > ClientSize.Width;
 
          // If the image is taller than the PictureBox, show the VScrollBar.
          verticalScrollBar.Visible =
-            (int)(Image.Size.Height * _zoomScale) > GetViewSize().Height;
+            (int)(Image.Size.Height * _zoomScale) > ClientSize.Height;
          
          #endregion
 
@@ -173,13 +173,12 @@ namespace Emgu.CV.UI
          {  // If the offset does not make the Maximum less than zero, set its value.            
             horizontalScrollBar.Maximum =
                Image.Size.Width -
-               (int)(Math.Max(0, Size.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0)) / _zoomScale);
+               (int)(Math.Max(0, ClientSize.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0)) / _zoomScale);
          }
          else
          {
             horizontalScrollBar.Maximum = 0;
          }
-
          horizontalScrollBar.LargeChange = (int)Math.Max(horizontalScrollBar.Maximum / 10, 1);
          horizontalScrollBar.SmallChange = (int)Math.Max(horizontalScrollBar.Maximum / 20, 1);
 
@@ -187,17 +186,17 @@ namespace Emgu.CV.UI
          {  // If the offset does not make the Maximum less than zero, set its value.            
             verticalScrollBar.Maximum =
                Image.Size.Height -
-               (int)(Math.Max(0, Size.Height - (horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0)) / _zoomScale);
+               (int)(Math.Max(0, ClientSize.Height - (horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0)) / _zoomScale);
          }
          else
          {
             verticalScrollBar.Maximum = 0;
          }
-
          verticalScrollBar.LargeChange = (int)Math.Max(verticalScrollBar.Maximum / 10, 1);
          verticalScrollBar.SmallChange = (int)Math.Max(verticalScrollBar.Maximum / 20, 1);
       }
       #endregion
+
       /// <summary>
       /// Get the horizontal scroll bar from this control
       /// </summary>
@@ -303,6 +302,17 @@ namespace Emgu.CV.UI
          {
             rect.Height = (int)((double)rect.Width / viewSize.Width * viewSize.Height);
          }
+
+         if (rect.Y != _mouseDownPosition.Y)
+         {
+            rect.Y =  _mouseDownPosition.Y - rect.Height;
+         }
+
+         if (rect.X != _mouseDownPosition.X)
+         {
+            rect.X = _mouseDownPosition.X - rect.Width;
+         }
+
          return rect;
       }
 
@@ -322,7 +332,7 @@ namespace Emgu.CV.UI
       /// Set the new zoom scale for the displayed image
       /// </summary>
       /// <param name="zoomScale">The new zoom scale</param>
-      /// <param name="fixPoint">The point to be fixed</param>
+      /// <param name="fixPoint">The point to be fixed, in display coordinate</param>
       public void SetZoomScale(double zoomScale, Point fixPoint)
       {
          if (
@@ -337,6 +347,7 @@ namespace Emgu.CV.UI
                (GetViewSize().Width < zoomScale * 2
                || GetViewSize().Height < zoomScale * 2)))
          {
+            //constrain the coordinate to be within valide range
             fixPoint.X = Math.Min(fixPoint.X, (int)(Image.Size.Width * _zoomScale));
             fixPoint.Y = Math.Min(fixPoint.Y, (int)(Image.Size.Height * _zoomScale));
 
@@ -345,16 +356,16 @@ namespace Emgu.CV.UI
 
             _zoomScale = zoomScale;
 
-            horizontalScrollBar.Maximum = Int32.MaxValue;
-            verticalScrollBar.Maximum = Int32.MaxValue;
-            horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, (int)(horizontalScrollBar.Value + shiftX)), horizontalScrollBar.Maximum);
-            verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, (int)(verticalScrollBar.Value + shiftY)), verticalScrollBar.Maximum);
-
+            int h = (int)(horizontalScrollBar.Value + shiftX);
+            int v = (int)(verticalScrollBar.Value + shiftY);
             SetScrollBarValues();
+            horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, h), horizontalScrollBar.Maximum); ;
+            verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, v), verticalScrollBar.Maximum);
+
             Invalidate();
 
-            if (ZoomScaleChange != null)
-               ZoomScaleChange(this, new EventArgs());
+            if (OnZoomScaleChange != null)
+               OnZoomScaleChange(this, new EventArgs());
 
          }
       }

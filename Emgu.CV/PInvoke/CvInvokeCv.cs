@@ -1275,6 +1275,26 @@ namespace Emgu.CV
          IntPtr mapy);
 
       /// <summary>
+      /// This function is similar to cvInitUndistortRectifyMap and is opposite to it at the same time. 
+      /// The functions are similar in that they both are used to correct lens distortion and to perform the optional perspective (rectification) transformation. 
+      /// They are opposite because the function cvInitUndistortRectifyMap does actually perform the reverse transformation in order to initialize the maps properly, while this function does the forward transformation. 
+      /// </summary>
+      /// <param name="src">The observed point coordinates</param>
+      /// <param name="dst">The ideal point coordinates, after undistortion and reverse perspective transformation. </param>
+      /// <param name="camera_matrix">The camera matrix A=[fx 0 cx; 0 fy cy; 0 0 1]</param>
+      /// <param name="dist_coeffs">The vector of distortion coefficients, 4x1, 1x4, 5x1 or 1x5. </param>
+      /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
+      /// <param name="P">The new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvUndistortPoints( 
+         IntPtr src, 
+         IntPtr dst,
+         IntPtr camera_matrix,
+         IntPtr dist_coeffs,
+         IntPtr R,
+         IntPtr P);
+
+      /// <summary>
       /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
       /// </summary>
       /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>

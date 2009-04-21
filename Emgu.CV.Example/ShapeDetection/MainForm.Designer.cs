@@ -32,7 +32,7 @@ namespace ShapeDetection
            this.panel1 = new System.Windows.Forms.Panel();
            this.fileNameTextBox = new System.Windows.Forms.TextBox();
            this.label5 = new System.Windows.Forms.Label();
-           this.button1 = new System.Windows.Forms.Button();
+           this.loadImageButton = new System.Windows.Forms.Button();
            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
            this.originalImageBox = new Emgu.CV.UI.ImageBox();
@@ -73,7 +73,7 @@ namespace ShapeDetection
            // 
            this.panel1.Controls.Add(this.fileNameTextBox);
            this.panel1.Controls.Add(this.label5);
-           this.panel1.Controls.Add(this.button1);
+           this.panel1.Controls.Add(this.loadImageButton);
            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
            this.panel1.Location = new System.Drawing.Point(0, 0);
            this.panel1.Name = "panel1";
@@ -98,15 +98,15 @@ namespace ShapeDetection
            this.label5.TabIndex = 1;
            this.label5.Text = "File:";
            // 
-           // button1
+           // loadImageButton
            // 
-           this.button1.Location = new System.Drawing.Point(270, 12);
-           this.button1.Name = "button1";
-           this.button1.Size = new System.Drawing.Size(30, 23);
-           this.button1.TabIndex = 0;
-           this.button1.Text = "...";
-           this.button1.UseVisualStyleBackColor = true;
-           this.button1.Click += new System.EventHandler(this.button1_Click);
+           this.loadImageButton.Location = new System.Drawing.Point(270, 12);
+           this.loadImageButton.Name = "loadImageButton";
+           this.loadImageButton.Size = new System.Drawing.Size(30, 23);
+           this.loadImageButton.TabIndex = 0;
+           this.loadImageButton.Text = "...";
+           this.loadImageButton.UseVisualStyleBackColor = true;
+           this.loadImageButton.Click += new System.EventHandler(this.loadImageButton_Click);
            // 
            // splitContainer1
            // 
@@ -341,7 +341,7 @@ namespace ShapeDetection
         private Emgu.CV.UI.ImageBox lineImageBox;
         private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button loadImageButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
 
     }

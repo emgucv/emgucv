@@ -114,9 +114,7 @@ namespace Emgu.CV
 
          //At leaset 7 points are required.
          if (matchedGoodFeatures.Length < 7)
-         {
             return null;
-         }
 
          //Stopwatch w2 = Stopwatch.StartNew();
          matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures);

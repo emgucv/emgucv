@@ -62,7 +62,7 @@ namespace Emgu.CV.UI
 
          _operationLists = new List<Operation>();
 
-         ZoomScaleChange += delegate(Object sender, EventArgs e)
+         OnZoomScaleChange += delegate(Object sender, EventArgs e)
          {
             if (_propertyDlg != null)
                _propertyDlg.ImagePropertyPanel.UpdateZoomScale();

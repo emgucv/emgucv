@@ -34,8 +34,7 @@ namespace LicensePlateRecognition
          Image<Gray, Byte> redMask = h.InRange(new Gray(30), new Gray(150));
          redMask._Not();
 
-         Image<Gray, Byte> canny = redMask.Canny(new Gray(100), new Gray(50));
-
+         using(Image<Gray, Byte> canny = redMask.Canny(new Gray(100), new Gray(50)))
          using (MemStorage stor = new MemStorage())
          {
             for (
@@ -128,8 +127,6 @@ namespace LicensePlateRecognition
                return result.Copy(PointCollection.BoundingRectangle(points.ToArray()));
             }
          }
-
-         //return result;
       }
    }
 }

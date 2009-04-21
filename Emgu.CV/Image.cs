@@ -3936,10 +3936,10 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region various
+      #region image flipping
       private static int GetCodeFromFlipType(CvEnum.FLIP flipType)
       {
-         return 
+         return
             //-1 indicates vertical and horizontal flip
             flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
             //1 indicates horizontal flip only
@@ -3973,6 +3973,44 @@ namespace Emgu.CV
                Ptr,
                GetCodeFromFlipType(flipType));
          }
+      }
+      #endregion
+
+      #region various
+
+      /// <summary>
+      /// Concate the current image with another image vertically.
+      /// </summary>
+      /// <param name="otherImage">The other image to concate</param>
+      /// <returns>A new image that is the vertical concatening of this image and <paramref name="otherImage"/></returns>
+      public Image<TColor, TDepth> ConcateVertical(Image<TColor, TDepth> otherImage)
+      {
+         Image<TColor, TDepth> res = new Image<TColor,TDepth>(Math.Max(Width, otherImage.Width), Height + otherImage.Height);
+         res.ROI = ROI;
+         CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
+         Rectangle rect = otherImage.ROI;
+         rect.Y += Height;
+         res.ROI = rect;
+         CvInvoke.cvCopy(otherImage.Ptr, res.Ptr, IntPtr.Zero);
+         res.ROI = Rectangle.Empty;
+         return res;
+      }
+
+      /// <summary>
+      /// Concate the current image with another image horizontally. 
+      /// </summary>
+      /// <param name="otherImage">The other image to concate</param>
+      /// <returns>A new image that is the horizontal concatening of this image and <paramref name="otherImage"/></returns>
+      public Image<TColor, TDepth> ConcateHorizontal(Image<TColor, TDepth> otherImage)
+      {
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width + otherImage.Width, Math.Max(Height, otherImage.Height));
+         res.ROI = ROI;
+         CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
+         Rectangle rect = otherImage.ROI;
+         rect.X += Width;
+         CvInvoke.cvCopy(otherImage.Ptr, res.Ptr, IntPtr.Zero);
+         this.ROI = Rectangle.Empty;
+         return res;
       }
 
       /// <summary>

@@ -43,8 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VideoSurveilance.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VideoSurveilance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VideoSurveilance.Designer.cs">
+      <DependentUpon>VideoSurveilance.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -62,6 +68,12 @@
       <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
       <Name>Emgu.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="VideoSurveilance.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>VideoSurveilance.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

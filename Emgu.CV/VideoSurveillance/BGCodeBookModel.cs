@@ -38,7 +38,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image"></param>
       /// <param name="fgmask"></param>
-      /// <param name="roi"></param>
+      /// <param name="roi">The region of interest. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
       public int Diff(Image<TColor, Byte> image, Image<Gray, Byte> fgmask, Rectangle roi)
       {
@@ -49,8 +49,8 @@ namespace Emgu.CV.VideoSurveillance
       /// 
       /// </summary>
       /// <param name="staleThresh"></param>
-      /// <param name="roi"></param>
-      /// <param name="mask"></param>
+      /// <param name="roi">The region of interest. Use Rectangle.Empty for the whole image</param>
+      /// <param name="mask">Mask for Clear Stale. Can be null if not needed.</param>
       public void ClearStale(int staleThresh, Rectangle roi, Image<Gray, Byte> mask)
       {
          CvInvoke.cvBGCodeBookClearStale(_ptr, staleThresh, roi, mask);

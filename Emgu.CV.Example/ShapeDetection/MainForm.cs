@@ -23,8 +23,10 @@ namespace ShapeDetection
       {
          if (fileNameTextBox.Text != String.Empty)
          {
-            //Load the image from file
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(fileNameTextBox.Text).Resize(400, 400, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true);
+            //Load the image from file and resize it for display
+            Image<Bgr, Byte> img = 
+               new Image<Bgr, byte>(fileNameTextBox.Text)
+               .Resize(400, 400, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true);
 
             //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
@@ -53,14 +55,20 @@ namespace ShapeDetection
 
             #region Find triangles and rectangles
             List<Triangle2DF> triangleList = new List<Triangle2DF>();
-            List<MCvBox2D> boxList = new List<MCvBox2D>();
+            List<MCvBox2D> boxList = new List<MCvBox2D>(); //a box is a rotated rectangle
 
             using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
-               for (Contour<Point> contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
+               for (
+                  Contour<Point> contours = cannyEdges.FindContours(
+                     Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
+                     Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST,
+                     storage);
+                  contours != null;
+                  contours = contours.HNext)
                {
                   Contour<Point> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
 
-                  if (contours.Area > 250) //only consider contours with area greater than 250
+                  if (currentContour.Area > 250) //only consider contours with area greater than 250
                   {
                      if (currentContour.Total == 3) //The contour has 3 vertices, it is a triangle
                      {
@@ -73,7 +81,7 @@ namespace ShapeDetection
                      }
                      else if (currentContour.Total == 4) //The contour has 4 vertices.
                      {
-                        #region determine if all the angles in the contour are within the range of [80, 100] degree
+                        #region determine if all the angles in the contour are within [80, 100] degree
                         bool isRectangle = true;
                         Point[] pts = currentContour.ToArray();
                         LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
@@ -128,7 +136,7 @@ namespace ShapeDetection
          PerformShapeDetection();
       }
 
-      private void button1_Click(object sender, EventArgs e)
+      private void loadImageButton_Click(object sender, EventArgs e)
       {
          DialogResult result = openFileDialog1.ShowDialog();
          if (result == DialogResult.OK || result == DialogResult.Yes)

@@ -82,22 +82,8 @@ namespace LicensePlateRecognition
             AddLabelAndImage(
                ref startPoint, 
                String.Format("Stop Sign {0}:", boxList[i].center.ToString()),
-               MergeImage(stopSignList[i], filteredStopSignList[i]));
+               stopSignList[i].ConcateVertical(filteredStopSignList[i]));
          }
-      }
-
-      private Image<Gray, Byte> MergeImage(Image<Gray, Byte> img1, Image<Gray, Byte> img2)
-      {
-         Image<Gray, Byte> img = new Image<Gray, byte>(img1.Width, img1.Height + img2.Height);
-         img.ROI = img1.ROI;
-         CvInvoke.cvCopy(img1, img, IntPtr.Zero);
-         Rectangle filterLicenseROI = img2.ROI;
-         filterLicenseROI.Offset(0, img1.Height);
-         img.ROI = filterLicenseROI;
-         CvInvoke.cvCopy(img2, img, IntPtr.Zero);
-         img.ROI = Rectangle.Empty;
-
-         return img;
       }
 
       private void ShowLicense(ref Point startPoint, List<List<Word>> licenses, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
@@ -107,7 +93,7 @@ namespace LicensePlateRecognition
             AddLabelAndImage(
                ref startPoint,
                "License: " + String.Join(" ", licenses[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
-               MergeImage(licensePlateList[i], filteredLicensePlateList[i]));
+               licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
          }
       }
 

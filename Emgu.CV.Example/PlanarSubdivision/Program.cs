@@ -66,9 +66,7 @@ namespace PlanarSubdivisionExample
 
          //Draw the Delaunay triangulation
          foreach (Triangle2DF triangles in delaunayTriangles)
-         {
             img.Draw(triangles, new Bgr(Color.White), 1);
-         }
 
          //display the image
          ImageViewer.Show(img, "Plannar Subdivision");
