@@ -573,14 +573,8 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
-            #region Merge the object image and the observed image into one big image for display
-            Image<Gray, Byte> res = new Image<Gray, byte>(Math.Max(modelImage.Width, observedImage.Width), modelImage.Height + observedImage.Height);
-            res.ROI = modelImage.ROI; 
-            modelImage.Copy(res, null);
-            res.ROI = new System.Drawing.Rectangle(0, modelImage.Height, observedImage.Width, observedImage.Height);
-            observedImage.Copy(res, null);
-            res.ROI = Rectangle.Empty;
-            #endregion
+            //Merge the object image and the observed image into one big image for display
+            Image<Gray, Byte> res = modelImage.ConcateVertical(observedImage); 
 
             Rectangle rect = modelImage.ROI;
             PointF[] pts = new PointF[] { 
@@ -589,8 +583,10 @@ namespace Emgu.CV.Test
                new PointF(rect.Right, rect.Top),
                new PointF(rect.Left, rect.Top)};
 
+            HomographyMatrix homography;
+
             stopwatch.Reset(); stopwatch.Start();
-            HomographyMatrix homography = tracker.Detect(observedFeatures);
+            homography = tracker.Detect(observedFeatures);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             if (homography != null)
@@ -605,23 +601,27 @@ namespace Emgu.CV.Test
 
             stopwatch.Reset(); stopwatch.Start();
             //set the initial region to be the whole image
+            using (Image<Gray, Single> priorMask = new Image<Gray, float>(observedImage.Size))
+            {
+               priorMask.SetValue(1.0);
+               homography = tracker.CamShiftTrack(
+                  observedFeatures,
+                  (RectangleF)observedImage.ROI,
+                  priorMask);
+            }
+            Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
 
-            homography = tracker.CamShiftTrack(
-               observedImage.Size, //size of the image
-               observedFeatures,
-               (RectangleF)observedImage.ROI);
             if (homography != null) //set the initial tracking window to be the whole image
             {
                PointF[] points = pts.Clone() as PointF[];
                homography.ProjectPoints(points);
-               Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-
+               
                for (int i = 0; i < points.Length; i++)
                   points[i].Y += modelImage.Height;
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
             }
 
-            //ImageViewer.Show(res.Resize(200, 200, true));
+            //ImageViewer.Show(res.Resize(200, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true));
          }
       }
 

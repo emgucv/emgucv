@@ -1,0 +1,129 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Drawing;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using tessnet2;
+using System.Diagnostics;
+
+namespace TrafficSignRecognition
+{
+   public class StopSignDetector
+   {
+      private SURFTracker _tracker;
+      private MCvSURFParams _surfParam;
+      private MemStorage _octagonStorage;
+      private Contour<Point> _octagon;
+
+      public StopSignDetector()
+      {
+         _surfParam = new MCvSURFParams(500, false);
+         using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
+         using (Image<Gray, Byte> redMask = GetRedMask(stopSignModel))
+         {
+            _tracker = new SURFTracker(redMask.ExtractSURF(ref _surfParam));
+         }
+         _octagonStorage = new MemStorage();
+         _octagon = new Contour<Point>(_octagonStorage);
+         _octagon.PushMulti(new Point[] { 
+            new Point(1, 0),
+            new Point(2, 0),
+            new Point(3, 1),
+            new Point(3, 2),
+            new Point(2, 3),
+            new Point(1, 3),
+            new Point(0, 2),
+            new Point(0, 1)},
+            Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+      }
+
+      private Image<Gray, Byte> GetRedMask(Image<Bgr, byte> image)
+      {
+         using (Image<Hsv, Byte> hsv = image.Convert<Hsv, Byte>())
+         {
+            Image<Gray, Byte>[] channels = hsv.Split();
+
+            //channels[0] is the mask for hue less than 20 or larger than 160
+            CvInvoke.cvInRangeS(channels[0], new MCvScalar(20), new MCvScalar(160), channels[0]);
+            channels[0]._Not();
+
+            //channels[1] is the mask for satuation of at least 10, this is mainly used to filter out white pixels
+            channels[1]._ThresholdBinary(new Gray(10), new Gray(255.0));
+
+            CvInvoke.cvAnd(channels[0], channels[1], channels[0], IntPtr.Zero);
+
+            channels[1].Dispose();
+            channels[2].Dispose();
+            return channels[0];
+         }
+      }
+
+      private void FindStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, Contour<Point> contours)
+      {
+         for (; contours != null; contours = contours.HNext)
+         {
+            contours.ApproxPoly(contours.Perimeter * 0.02, 0, contours.Storage);
+            if (contours.Area > 200)
+            {
+               double ratio = CvInvoke.cvMatchShapes(_octagon, contours, Emgu.CV.CvEnum.CONTOURS_MATCH_TYPE.CV_CONTOURS_MATCH_I3, 0);
+
+               if (ratio > 0.1) //not a good match of contour shape
+               {
+                  Contour<Point> child = contours.VNext;
+                  if (child != null)
+                  {
+                     FindStopSign(img, stopSignList, boxList, child);
+                  }
+                  continue;
+               }
+
+               Rectangle box = contours.BoundingRectangle;
+               Image<Gray, Byte> candidate = img.Copy(box).Convert<Gray, byte>();
+
+               //set the value of pixels not in the contour region to zero
+               using (Image<Gray, Byte> mask = new Image<Gray, byte>(box.Size))
+               {
+                  CvInvoke.cvDrawContours(mask, contours, new MCvScalar(255), new MCvScalar(255), 0, -1, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, new Point(-box.X, -box.Y));
+                  double mean = CvInvoke.cvAvg(candidate, mask).v0;
+                  candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
+                  candidate._Not();
+                  mask._Not();
+                  candidate.SetValue(0, mask);
+               }
+
+               SURFFeature[] features = candidate.ExtractSURF(ref _surfParam);
+
+               SURFTracker.MatchedSURFFeature[] matchedFeatures = _tracker.MatchFeature(features, 2, 20);
+
+               int goodMatchCount = 0;
+               foreach (SURFTracker.MatchedSURFFeature ms in matchedFeatures)
+                  if (ms.Distances[0] < 0.5) goodMatchCount++;
+
+               if (goodMatchCount >= 10)
+               {
+                  boxList.Add(box);
+                  stopSignList.Add(candidate);
+               }
+            }
+         }
+      }
+
+      public void DetectStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
+      {
+         Image<Bgr, Byte> smoothImg = img.SmoothGaussian(5, 5, 1.5, 1.5);
+         Image<Gray, Byte> smoothedRedMask = GetRedMask(smoothImg);
+         smoothedRedMask._Dilate(1);
+         smoothedRedMask._Erode(1);
+         using (Image<Gray, Byte> canny = smoothedRedMask.Erode(3).Dilate(3).Canny(new Gray(100), new Gray(50)))
+         using (MemStorage stor = new MemStorage())
+         {
+            Contour<Point> contours = canny.FindContours(
+               Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
+               Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
+               stor);
+            FindStopSign(img, stopSignList, boxList, contours);
+         }
+      }
+   }
+}

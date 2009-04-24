@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}</ProjectGuid>
+    <ProjectGuid>{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LicensePlateRecognition</RootNamespace>
-    <AssemblyName>LicensePlateRecognition</AssemblyName>
+    <RootNamespace>TrafficSignRecognition</RootNamespace>
+    <AssemblyName>TrafficSignRecognition</AssemblyName>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -51,14 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="LicensePlateDetector.cs" />
-    <Compile Include="LicensePlateRecognitionForm.cs">
+    <Compile Include="TrafficSignRecognitionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LicensePlateRecognitionForm.Designer.cs">
-      <DependentUpon>LicensePlateRecognitionForm.cs</DependentUpon>
+    <Compile Include="TrafficSignRecognitionForm.Designer.cs">
+      <DependentUpon>TrafficSignRecognitionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StopSignDetector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -78,40 +78,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="tessdata\eng.DangAmbigs">
+    <Content Include="stop-sign-model.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.freq-dawg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.inttemp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.normproto">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.pffmtable">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.unicharset">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.user-words">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="tessdata\eng.word-dawg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="license-plate.jpg">
+    </Content>
+    <Content Include="stop-sign.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LicensePlateRecognitionForm.resx">
+    <EmbeddedResource Include="TrafficSignRecognitionForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>LicensePlateRecognitionForm.cs</DependentUpon>
+      <DependentUpon>TrafficSignRecognitionForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

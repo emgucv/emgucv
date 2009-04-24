@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace OCR
+namespace TrafficSignRecognition
 {
    static class Program
    {
@@ -14,7 +14,7 @@ namespace OCR
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new MainForm());
+         Application.Run(new TrafficSignRecognitionForm());
       }
    }
 }

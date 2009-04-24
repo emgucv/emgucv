@@ -600,19 +600,23 @@ namespace Emgu.CV
 
       #region Contour Processing Functions
       /// <summary>
-      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence). 
+      /// Approximates one or more curves and returns the approximation result[s]. 
+      /// In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence). 
       /// </summary>
-      /// <param name="src_seq">Sequence of array of points</param>
-      /// <param name="header_size">Header size of approximated curve[s].</param>
+      /// <param name="srcSeq">Sequence of array of points</param>
+      /// <param name="headerSize">Header size of approximated curve[s].</param>
       /// <param name="storage">Container for approximated contours. If it is NULL, the input sequences' storage is used</param>
       /// <param name="method">Approximation method</param>
       /// <param name="parameter">Desired approximation accuracy</param>
-      /// <param name="parameter2">If case if src_seq is sequence it means whether the single sequence should be approximated or all sequences on the same level or below src_seq (see cvFindContours for description of hierarchical contour structures). And if src_seq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). </param>
-      /// <returns> the approximation result</returns>
+      /// <param name="parameter2">
+      /// In case if srcSeq is sequence it means whether the single sequence should be approximated or all sequences on the same level or below srcSeq (see cvFindContours for description of hierarchical contour structures). 
+      /// And if srcSeq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). 
+      /// </param>
+      /// <returns>The approximation result</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvApproxPoly(
-          IntPtr src_seq,
-          int header_size,
+          IntPtr srcSeq,
+          int headerSize,
           IntPtr storage,
           CvEnum.APPROX_POLY_TYPE method,
           double parameter,

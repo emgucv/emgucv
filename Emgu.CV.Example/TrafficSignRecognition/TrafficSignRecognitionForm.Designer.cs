@@ -1,6 +1,6 @@
-namespace LicensePlateRecognition
+namespace TrafficSignRecognition
 {
-   partial class LicensePlateRecognitionForm
+   partial class TrafficSignRecognitionForm
    {
       /// <summary>
       /// Required designer variable.

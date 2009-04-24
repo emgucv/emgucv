@@ -23,7 +23,6 @@ namespace Emgu.CV
          set { _point = value; }
       }
 
-
       /// <summary>
       /// The SURF descriptor as a matrix (64x1 for regular descriptor; 128x1 for extended descriptor)
       /// </summary>

@@ -15,6 +15,7 @@ namespace Emgu.CV
    public class SURFTracker : DisposableObject
    {
       private SURFMatcher _matcher;
+      private static int _minRequiredMatch = 7;
 
       /// <summary>
       /// Create a SURF tracker, where SURF is matched with k-d Tree
@@ -40,20 +41,21 @@ namespace Emgu.CV
       /// <summary>
       /// Use camshift to track the feature
       /// </summary>
-      /// <param name="observedImageSize">Size of the observed image</param>
       /// <param name="observedFeatures">The feature found from the observed image</param>
       /// <param name="initRegion">The predicted location of the model in the observed image. If not known, use MCvBox2D.Empty as default</param>
+      /// <param name="priorMask">The mask that should be the same size as the observed image. Contains a priori value of the probability a match can be found. If you are not sure, pass an image fills with 1.0s</param>
       /// <returns>If a match is found, the homography projection matrix is returned. Otherwise null is returned</returns>
-      public HomographyMatrix CamShiftTrack(Size observedImageSize, SURFFeature[] observedFeatures, MCvBox2D initRegion)
+      public HomographyMatrix CamShiftTrack(SURFFeature[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
       {
          double matchDistanceRatio = 0.8;
 
-         using (Image<Gray, Single> matchMask = new Image<Gray, Single>(observedImageSize))
+         using (Image<Gray, Single> matchMask = new Image<Gray, Single>(priorMask.Size))
          {
             #region get the list of matched point on the observed image
             Single[, ,] matchMaskData = matchMask.Data;
 
             MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
+            SortIndividualMatchedFeatureByDistance(matchedFeature);
             matchedFeature = VoteForUniqueness(matchedFeature, matchDistanceRatio);
 
             foreach (MatchedSURFFeature f in matchedFeature)
@@ -72,6 +74,8 @@ namespace Emgu.CV
                if (startRegion.IntersectsWith(matchMask.ROI))
                   startRegion.Intersect(matchMask.ROI);
             }
+
+            CvInvoke.cvMul(matchMask.Ptr, priorMask.Ptr, matchMask.Ptr, 1.0);
 
             MCvConnectedComp comp;
             MCvBox2D currentRegion;
@@ -93,8 +97,6 @@ namespace Emgu.CV
             }
             #endregion
 
-
-
             return GetHomographyMatrixFromMatchedFeatures(featuesInCurrentRegion);
          }
       }
@@ -103,22 +105,25 @@ namespace Emgu.CV
       /// Detect the if the model features exist in the observed features. If true, an homography matrix is returned, otherwise, null is returned.
       /// </summary>
       /// <param name="observedFeatures">The observed features</param>
+      /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
       /// <returns>If the model features exist in the observed features, an homography matrix is returned, otherwise, null is returned.</returns>
-      public HomographyMatrix Detect(SURFFeature[] observedFeatures)
+      public HomographyMatrix Detect(SURFFeature[] observedFeatures, double uniquenessThreshold)
       {
          MatchedSURFFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2, 20);
 
          //Stopwatch w1 = Stopwatch.StartNew();
-         matchedGoodFeatures = VoteForUniqueness(matchedGoodFeatures, 0.8);
-         //Trace.WriteLine(w2.ElapsedMilliseconds);
+         matchedGoodFeatures = VoteForUniqueness(matchedGoodFeatures, uniquenessThreshold);
+         //Trace.WriteLine(w1.ElapsedMilliseconds);
 
-         //At leaset 7 points are required.
-         if (matchedGoodFeatures.Length < 7)
+         if (matchedGoodFeatures.Length < _minRequiredMatch)
             return null;
 
          //Stopwatch w2 = Stopwatch.StartNew();
          matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures);
          //Trace.WriteLine(w2.ElapsedMilliseconds);
+
+         if (matchedGoodFeatures.Length < _minRequiredMatch)
+            return null;
 
          return GetHomographyMatrixFromMatchedFeatures(matchedGoodFeatures);
       }
@@ -130,11 +135,8 @@ namespace Emgu.CV
       /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
       public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(MatchedSURFFeature[] matchedFeatures)
       {
-         //At leaset 7 points are required.
-         if (matchedFeatures.Length < 7)
-         {
+         if (matchedFeatures.Length < _minRequiredMatch)
             return null;
-         }
 
          PointF[] pts1 = new PointF[matchedFeatures.Length];
          PointF[] pts2 = new PointF[matchedFeatures.Length];
@@ -150,7 +152,8 @@ namespace Emgu.CV
             CvEnum.HOMOGRAPHY_METHOD.RANSAC,
             3);
 
-         if ( homography.IsValid(10) ) return homography;
+         if ( homography.IsValid(10) ) 
+            return homography;
          else
          {
             homography.Dispose();
@@ -159,16 +162,67 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Filter the matched Features, such that if a match is not unique, it is rejected.
-      /// It assume the Matched SURF Feature has a maximum of two neighbors. (e.g. it is obtained from the MatchFeature function where k = 2).
+      /// For each MatchedSURFFeature, sort the model SURF feature by distance (larger distance has smaller index).
       /// </summary>
-      /// <param name="matchedFeatures">The Matched SURF feature as a result of calling the MatchFeature function with k = 2</param>
-      /// <param name="matchDistanceRatio">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
-      /// <returns>The filtered matched SURF Features</returns>
-      public static MatchedSURFFeature[] VoteForUniqueness(MatchedSURFFeature[] matchedFeatures, double matchDistanceRatio)
+      /// <param name="matchedFeatures">The matched features to be sorted</param>
+      private static void SortIndividualMatchedFeatureByDistance(MatchedSURFFeature[] matchedFeatures)
       {
-         double ratio;
-         
+         SortedList<double, SURFFeature> sortedList = new SortedList<double, SURFFeature>();
+
+         foreach (MatchedSURFFeature ms in matchedFeatures)
+         {
+            SURFFeature[] modelFeatures = ms.ModelFeatures;
+            switch (modelFeatures.Length)
+            {
+               case 1: //no need to sort if only 1 match
+                  break; 
+               case 2: //fast implementation for only 2 matches
+                  double[] distances = ms.Distances;
+                  if (distances[0] < distances[1])
+                     break;
+
+                  double tmp1 = distances[0];
+                  distances[0] = distances[1];
+                  distances[1] = tmp1;
+                  SURFFeature tmp2 = modelFeatures[0];
+                  modelFeatures[0] = modelFeatures[1];
+                  modelFeatures[1] = tmp2;
+                  break;
+               default: //generic sort for 3 or more matches
+                  sortedList.Clear();
+                  for (int i = 0; i < ms.Distances.Length; i++)
+                  {
+                     sortedList.Add(ms.Distances[i], modelFeatures[i]);
+                  }
+                  sortedList.Keys.CopyTo(ms.Distances, 0);
+                  sortedList.Values.CopyTo(modelFeatures, 0);
+                  break;
+            }
+         }
+      }
+
+      /// <summary>
+      /// Sorted the matched SURF feature, such that the smaller distance a matchedFeature has, the lower index it will be located
+      /// </summary>
+      /// <param name="matchedFeatures">The matched features to be sorted</param>
+      public static void SortMatchedSURFFeatures(MatchedSURFFeature[] matchedFeatures)
+      {
+         SortedList<double, MatchedSURFFeature> list = new SortedList<double, MatchedSURFFeature>();
+         foreach (MatchedSURFFeature ms in matchedFeatures)
+         {
+            list.Add(ms.Distances[0], ms);
+         }
+         list.Values.CopyTo(matchedFeatures, 0);
+      }
+
+      /// <summary>
+      /// Filter the matched Features, such that if a match is not unique, it is rejected.
+      /// </summary>
+      /// <param name="matchedFeatures">The Matched SURF features, each of them has the model feature sorted by distance. (e.g. SortMatchedFeaturesByDistance )</param>
+      /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
+      /// <returns>The filtered matched SURF Features</returns>
+      public static MatchedSURFFeature[] VoteForUniqueness(MatchedSURFFeature[] matchedFeatures, double uniquenessThreshold)
+      {
          List<MatchedSURFFeature> matchedGoodFeatures = new List<MatchedSURFFeature>();
 
          foreach (MatchedSURFFeature f in matchedFeatures)
@@ -177,19 +231,12 @@ namespace Emgu.CV
             {
                matchedGoodFeatures.Add(f);
             }
-            else if ((ratio = f.Distances[0] / f.Distances[1]) <= matchDistanceRatio) //or the first model feature is a good match
+            else
             {
-               matchedGoodFeatures.Add(f);
-            }
-            else if (ratio >= (1.0 / matchDistanceRatio)) //the second model feature is a good match
-            {
-               MatchedSURFFeature feature = f;
-               feature.ModelFeatures[0] = f.ModelFeatures[1];
-               Array.Resize(ref feature.ModelFeatures, 1);
-               feature.Distances[0] = f.Distances[1];
-               Array.Resize(ref feature.Distances, 1);
-               
-               matchedGoodFeatures.Add(f);
+               if (f.Distances[0] / f.Distances[1] <= uniquenessThreshold) //if the first model feature is a good match
+               {
+                  matchedGoodFeatures.Add(f);
+               }
             }
          }
 
@@ -256,6 +303,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Release the memory assocaited with this SURF Tracker
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         _matcher.Dispose();
+      }
+
+      /// <summary>
       /// Match the SURF feature from the observed image to the features from the model image
       /// </summary>
       /// <param name="observedFeatures">The SURF feature from the observed image</param>
@@ -264,7 +319,9 @@ namespace Emgu.CV
       /// <returns>The matched features</returns>
       public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
       {
-         return _matcher.MatchFeature(observedFeatures, k, emax);
+         MatchedSURFFeature[] res = _matcher.MatchFeature(observedFeatures, k, emax);
+         SortIndividualMatchedFeatureByDistance(res);
+         return res;
       }
 
       /// <summary>
@@ -445,14 +502,6 @@ namespace Emgu.CV
             _positiveTree.Dispose();
             _negativeTree.Dispose();
          }
-      }
-
-      /// <summary>
-      /// Release the memory assocaited with this SURF Tracker
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         _matcher.Dispose();
       }
    }
 }

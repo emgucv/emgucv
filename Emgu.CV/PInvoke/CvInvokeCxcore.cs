@@ -2412,12 +2412,22 @@ namespace Emgu.CV
       /// <param name="cluster_count">Number of clusters to split the set by</param>
       /// <param name="labels">Output integer vector storing cluster indices for every sample</param>
       /// <param name="termcrit">Specifies maximum number of iterations and/or accuracy (distance the centers move by between the subsequent iterations)</param>
+      /// <param name="attempts">The number of attemps. Use 1 if not sure</param>
+      /// <param name="rng">Pointer to CvRNG, use IntPtr.Zero if not sure</param>
+      /// <param name="flags">Flags, use 0 if not sure</param>
+      /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
+      /// <param name="compactness">Pointer to array of doubles, use IntPtr.Zero if not sure</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvKMeans2(
+      public static extern int cvKMeans2(
          IntPtr samples,
          int cluster_count,
          IntPtr labels,
-         MCvTermCriteria termcrit);
+         MCvTermCriteria termcrit,
+         int attempts,
+         IntPtr rng,
+         int flags,
+         IntPtr centers, 
+         IntPtr compactness);
       #endregion
    }
 }

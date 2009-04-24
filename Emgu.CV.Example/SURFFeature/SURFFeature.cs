@@ -27,7 +27,6 @@ namespace SURFFeatureExample
          MCvSURFParams surfParam = new MCvSURFParams(500, false);
 
          Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png");
-         
          //extract features from the object image
          SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref surfParam);
 
@@ -40,9 +39,8 @@ namespace SURFFeatureExample
 
          //Comment out above and uncomment below if you wish to use spill-tree instead
          //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
-
+         
          SURFTracker.MatchedSURFFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
-
          matchedFeatures = SURFTracker.VoteForUniqueness(matchedFeatures, 0.8);
          matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures);
          HomographyMatrix homography = SURFTracker.GetHomographyMatrixFromMatchedFeatures(matchedFeatures);

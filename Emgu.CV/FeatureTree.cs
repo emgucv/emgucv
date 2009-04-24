@@ -48,19 +48,11 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateSpillTree(_descriptorMatrix.Ptr, naive, rho, tau);
       }
 
-      private static Matrix<float> FeaturesToMatrix(SURFFeature[] descriptors)
-      {
-         Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Descriptor.Rows);
-         IntPtr rowHeader = Marshal.AllocHGlobal(StructSize.MCvMat);
-         for (int i = 0; i < descriptors.Length; i++)
-         {
-            CvInvoke.cvGetRows(res, rowHeader, i, i + 1, 1);
-            CvInvoke.cvTranspose(descriptors[i].Descriptor, rowHeader);
-         }
-         Marshal.FreeHGlobal(rowHeader);
-         return res;
-      }
-
+      /// <summary>
+      /// Convert an array of descriptors to row by row matrix
+      /// </summary>
+      /// <param name="descriptors">An array of descriptors</param>
+      /// <returns>A matrix where each row is a descriptor</returns>
       private static Matrix<float> DescriptorsToMatrix(Matrix<float>[] descriptors)
       {
          Matrix<float> res = new Matrix<float>(descriptors.Length, descriptors[0].Rows);
@@ -113,8 +105,8 @@ namespace Emgu.CV
          int numberOfDescriptors = features.Length;
          results = new Matrix<Int32>(numberOfDescriptors, k);
          dist = new Matrix<double>(numberOfDescriptors, k);
-
-         using (Matrix<float> descriptorMatrix = FeaturesToMatrix(features))
+         Matrix<float>[] descriptors = Array.ConvertAll<SURFFeature, Matrix<float>>(features, delegate(SURFFeature f) { return f.Descriptor; });
+         using (Matrix<float> descriptorMatrix = DescriptorsToMatrix(descriptors))
          {
             CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
          }
@@ -147,7 +139,6 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          CvInvoke.cvReleaseFeatureTree(_ptr);
-         //_ptr = IntPtr.Zero;
          _descriptorMatrix.Dispose();
       }
    }

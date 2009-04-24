@@ -8,40 +8,34 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using tessnet2;
 using System.Diagnostics;
 
-namespace LicensePlateRecognition
+namespace TrafficSignRecognition
 {
-   public partial class LicensePlateRecognitionForm : Form
+   public partial class TrafficSignRecognitionForm : Form
    {
-      private LicensePlateDetector _licensePlateDetector;
+      private StopSignDetector _stopSignDetector;
 
-      public LicensePlateRecognitionForm()
+      public TrafficSignRecognitionForm()
       {
          InitializeComponent();
-         _licensePlateDetector = new LicensePlateDetector();
+         _stopSignDetector = new StopSignDetector();
 
-         ProcessImage(new Image<Bgr, byte>("license-plate.jpg"));
+         ProcessImage(new Image<Bgr, byte>("stop-sign.jpg"));
       }
 
       private void ProcessImage(Image<Bgr, byte> image)
       {
-         List<Image<Gray, Byte>> licensePlateList = new List<Image<Gray, byte>>();
-         List<Image<Gray, Byte>> filteredLicensePlateList = new List<Image<Gray, byte>>();
-         List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
-         List<List<Word>> words = _licensePlateDetector.DetectLicensePlate(
-            image,
-            licensePlateList,
-            filteredLicensePlateList,
-            licenseBoxList);
+         List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
+         List<Rectangle> stopSignBoxList = new List<Rectangle>();
+         _stopSignDetector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
          panel1.Controls.Clear();
 
          Point startPoint = new Point(10, 10);
-         ShowLicense(ref startPoint, words, licensePlateList, filteredLicensePlateList, licenseBoxList);
-         foreach (MCvBox2D box in licenseBoxList)
-            image.Draw(box, new Bgr(Color.Red), 2);
+         ShowStopSign(ref startPoint, stopSignList, stopSignBoxList);
+         foreach (Rectangle box in stopSignBoxList)
+            image.Draw(box, new Bgr(Color.Aquamarine), 2);
 
          imageBox1.Image = image;
       }
@@ -64,14 +58,15 @@ namespace LicensePlateRecognition
          startPoint.Y += box.Height + 10;
       }
 
-      private void ShowLicense(ref Point startPoint, List<List<Word>> licenses, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
+      private void ShowStopSign(ref Point startPoint, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
       {
-         for (int i = 0; i < licenses.Count; i++)
+         for (int i = 0; i < stopSignList.Count; i++)
          {
+            Rectangle rect = boxList[i];
             AddLabelAndImage(
-               ref startPoint,
-               "License: " + String.Join(" ", licenses[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
-               licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
+               ref startPoint, 
+               String.Format("Stop Sign [{0},{1}]:", rect.Location.Y + rect.Width /2, rect.Location.Y + rect.Height/2),
+               stopSignList[i]);
          }
       }
 
