@@ -439,6 +439,15 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Shuffles the matrix by swapping randomly chosen pairs of the matrix elements on each iteration (where each element may contain several components in case of multi-channel arrays)
+      /// </summary>
+      /// <param name="mat">The input/output matrix. It is shuffled in-place. </param>
+      /// <param name="rng">Pointer to MCvRNG radom number generator. Use IntPtr.Zero if not sure</param>
+      /// <param name="iterFactor">The relative parameter that characterizes intensity of the shuffling performed. The number of iterations (i.e. pairs swapped) is round(iter_factor*rows(mat)*cols(mat)), so iter_factor=0 means that no shuffling is done, iter_factor=1 means that the function swaps rows(mat)*cols(mat) random pairs etc</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvRandShuffle( IntPtr mat, IntPtr rng, double iterFactor );
+
+      /// <summary>
       /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not NULL, all they are copied to the destination array, otherwise if only a single source channel of the first N is not NULL, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be NULL. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
       /// </summary>
       /// <param name="src0">Input channels.</param>
@@ -966,6 +975,15 @@ namespace Emgu.CV
       /// <param name="dst">The destination array</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvAbsDiff(IntPtr src1, IntPtr src2, IntPtr dst);
+
+      /// <summary>
+      /// Calculates absolute difference between array and scalar
+      /// </summary>
+      /// <param name="src">The source array</param>
+      /// <param name="dst">The destination array</param>
+      /// <param name="value">The scalar</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvAbsDiffS(IntPtr src, IntPtr dst, MCvScalar value);
 
       /// <summary>
       /// Calculated weighted sum of two arrays as following:
@@ -2409,10 +2427,10 @@ namespace Emgu.CV
       /// implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix
       /// </summary>
       /// <param name="samples">Floating-point matrix of input samples, one row per sample</param>
-      /// <param name="cluster_count">Number of clusters to split the set by</param>
+      /// <param name="clusterCount">Number of clusters to split the set by</param>
       /// <param name="labels">Output integer vector storing cluster indices for every sample</param>
       /// <param name="termcrit">Specifies maximum number of iterations and/or accuracy (distance the centers move by between the subsequent iterations)</param>
-      /// <param name="attempts">The number of attemps. Use 1 if not sure</param>
+      /// <param name="attempts">The number of attemps. Use 2 if not sure</param>
       /// <param name="rng">Pointer to CvRNG, use IntPtr.Zero if not sure</param>
       /// <param name="flags">Flags, use 0 if not sure</param>
       /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
@@ -2420,7 +2438,7 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern int cvKMeans2(
          IntPtr samples,
-         int cluster_count,
+         int clusterCount,
          IntPtr labels,
          MCvTermCriteria termcrit,
          int attempts,

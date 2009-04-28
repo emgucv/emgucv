@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace LicensePlateRecognition
 {
-   public class LicensePlateDetector
+   public class LicensePlateDetector : DisposableObject
    {
       private Tesseract _ocr;
 
@@ -92,7 +92,6 @@ namespace LicensePlateRecognition
          }
       }
 
-
       private bool IsParallelogram(Point[] pts)
       {
          LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
@@ -145,6 +144,11 @@ namespace LicensePlateRecognition
          thresh._Dilate(1);
 
          return thresh;
+      }
+
+      protected override void DisposeObject()
+      {
+         _ocr.Dispose();
       }
    }
 }

@@ -644,5 +644,47 @@ namespace Emgu.CV.ML.UnitTest
          Emgu.CV.UI.ImageViewer.Show(img);
 #endif
       }
+
+      [Test]
+      public void TestKMeans()
+      {
+         int clustersCount = 5;
+         int sampleCount = 300;
+         int imageSize = 500;
+
+         Bgr[] colors = new Bgr[] {
+            new Bgr(0,0,255),
+            new Bgr(0, 255, 0),
+            new Bgr(255, 100, 100),
+            new Bgr(255,0,255),
+            new Bgr(0, 255, 255)};
+
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(imageSize, imageSize);
+
+         #region generate random samples
+         Matrix<float> points = new Matrix<float>(sampleCount, 1, 2);
+
+         Matrix<int> clusters = new Matrix<int>(sampleCount, 1);
+         Random r = new Random();
+         for (int i = 0; i < clustersCount; i++)
+         {
+            Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount), (i + 1) * (sampleCount / clustersCount), 1);
+            row.SetRandNormal(new MCvScalar(r.Next() % imageSize , r.Next() % imageSize), new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
+         }
+         CvInvoke.cvAbsDiffS(points, points, new MCvScalar());
+         CvInvoke.cvRandShuffle(points, IntPtr.Zero, 1.0);
+         #endregion
+
+         CvInvoke.cvKMeans2(points, clustersCount, clusters, new MCvTermCriteria(10, 1.0), 2, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero);
+
+         for (int i = 0; i < sampleCount; i++)
+         {
+            PointF p = new PointF(points.Data[i, 0], points.Data[i, 1]);
+            image.Draw(new CircleF(p, 1.0f), colors[clusters[i, 0]], 1);
+         }
+         #if SHOW_IMAGE
+         Emgu.CV.UI.ImageViewer.Show(image);
+         #endif
+      }
    }
 }

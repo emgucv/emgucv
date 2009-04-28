@@ -41,6 +41,14 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestHistogram()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
+         Histogram hist = new Histogram(256, new RangeF(0.0f, 255.0f));
+         hist.Calculate<Byte>(new Image<Gray, byte>[] { img }, true, null);
+      }
+
+      [Test]
       public void TestLookup()
       {
          float[] b = new float[4] { 0, 1, 2, 3 };

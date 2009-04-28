@@ -16,14 +16,14 @@ namespace Emgu.CV.UI
    /// <summary>
    /// The control that is used to display histogram
    /// </summary>
-   public partial class HistogramCtrl : UserControl
+   public partial class HistogramBox : UserControl
    {
       private Graphics _graphic;
 
       /// <summary>
       /// Construct a histogram control
       /// </summary>
-      public HistogramCtrl()
+      public HistogramBox()
       {
          InitializeComponent();
 

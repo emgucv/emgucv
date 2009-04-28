@@ -21,7 +21,6 @@ namespace Emgu.CV.UI
       {
          InitializeComponent();
          SetScrollBarValues();
-         //BorderStyle = BorderStyle.Fixed3D;
          SetStyle(
             ControlStyles.OptimizedDoubleBuffer,
             true);
@@ -43,6 +42,7 @@ namespace Emgu.CV.UI
       private Point _bufferPoint;
       private HScrollBar horizontalScrollBar;
       private VScrollBar verticalScrollBar;
+      private InterpolationMode _interpolationMode = InterpolationMode.NearestNeighbor;
 
       private static readonly Cursor _defaultCursor = Cursors.Cross;
 
@@ -130,6 +130,25 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
+      /// Get or Set the interpolation mode for zooming operation
+      /// </summary>
+      [Bindable(false)]
+      [Category("Design")]
+      [DefaultValue(InterpolationMode.NearestNeighbor)]
+      public InterpolationMode InterpolationMode
+      {
+         get
+         {
+            return _interpolationMode;
+         }
+         set
+         {
+            _interpolationMode = value;
+         }
+      }
+
+
+      /// <summary>
       /// Paint the image
       /// </summary>
       /// <param name="pe">The paint event</param>
@@ -144,7 +163,7 @@ namespace Emgu.CV.UI
                horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
                verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
             pe.Graphics.Transform = matrix;
-            pe.Graphics.InterpolationMode = InterpolationMode.High;
+            pe.Graphics.InterpolationMode = _interpolationMode;
          }
 
          base.OnPaint(pe);
@@ -252,6 +271,7 @@ namespace Emgu.CV.UI
          {
             //reverse the previous highlighted rectangle, if there is any
             ReverseRectangle();
+
             Rectangle rect = GetSelectedRectangle(e.X, e.Y);
             rect.Location = PointToScreen(rect.Location);
             ControlPaint.DrawReversibleFrame(

@@ -285,7 +285,7 @@ namespace Emgu.CV.Test
                img.Draw("h.", ref f, new Point(100, 10), new Gray(255.0));
                img.Draw("a.", ref f, new Point(100, 50), new Gray(255.0));
             }
-            Application.Run(new ImageViewer(img));
+            ImageViewer.Show(img);
          }
       }
 

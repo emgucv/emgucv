@@ -198,6 +198,7 @@ namespace Emgu.CV
       /// <returns>Pointer to new added blob</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForgroundMask);
+
       #endregion
 
       #region BlobTrackPostProc

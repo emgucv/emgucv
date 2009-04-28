@@ -26,6 +26,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(100, 40, new Gray(100));
          Image<Gray, Single> img2 = new Image<Gray, float>(100, 40, new Gray(50));
+         IImage img = img2;
          img1.RunningAvg(img2, 0.5);
       }
 
@@ -586,7 +587,7 @@ namespace Emgu.CV.Test
             HomographyMatrix homography;
 
             stopwatch.Reset(); stopwatch.Start();
-            homography = tracker.Detect(observedFeatures);
+            homography = tracker.Detect(observedFeatures, 0.8);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             if (homography != null)

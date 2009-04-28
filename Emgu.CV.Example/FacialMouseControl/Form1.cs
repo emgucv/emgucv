@@ -16,8 +16,6 @@ namespace FacialMouseControl
    public partial class Form1 : Form
    {
       private Capture _capture;
-
-      //private bool _flipHorizontal;
       private HaarCascade _face;
 
       public Form1()

@@ -82,13 +82,10 @@ namespace Emgu.CV.UI
          get { return _functionalMode; }
          set
          {
-            //hide all menu items
+            //right click menu enabled
+            bool rightClickMenuEnabled = ((int)value & (int)FunctionalModeOption.Everything) != 0;
             foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
-               mi.Visible = false;
-
-            if (value == FunctionalModeOption.Everything)
-               foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
-                  mi.Visible = true;
+               mi.Visible = rightClickMenuEnabled;
 
             _functionalMode = value;
          }
@@ -489,19 +486,20 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// The display mode for ImageBox
+      /// The functional mode for ImageBox
       /// </summary>
+      [Flags]
       public enum FunctionalModeOption
       {
          /// <summary>
          /// The ImageBox is only used for displaying image. 
-         /// No right-click menu available
+         /// No right-click menu nor Pan/Zoom available
          /// </summary>
          Minimum = 0,
          /// <summary>
-         /// This is the ImageBox with all functions enabled.
+         /// Support for the right click menu
          /// </summary>
-         Everything = 1
+         Everything = 1,
       }
 
       /// <summary> 

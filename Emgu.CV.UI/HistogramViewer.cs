@@ -59,7 +59,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Get the histogram control of this viewer
       /// </summary>
-      public HistogramCtrl HistogramCtrl
+      public HistogramBox HistogramCtrl
       {
          get
          {

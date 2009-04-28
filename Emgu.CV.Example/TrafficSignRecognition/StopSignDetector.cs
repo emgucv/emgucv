@@ -4,12 +4,12 @@ using System.Text;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using tessnet2;
+using Emgu.Util;
 using System.Diagnostics;
 
 namespace TrafficSignRecognition
 {
-   public class StopSignDetector
+   public class StopSignDetector : DisposableObject
    {
       private SURFTracker _tracker;
       private MCvSURFParams _surfParam;
@@ -124,6 +124,12 @@ namespace TrafficSignRecognition
                stor);
             FindStopSign(img, stopSignList, boxList, contours);
          }
+      }
+
+      protected override void DisposeObject()
+      {
+         _tracker.Dispose();
+         _octagonStorage.Dispose();
       }
    }
 }

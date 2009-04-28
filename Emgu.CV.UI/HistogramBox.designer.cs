@@ -1,6 +1,6 @@
 namespace Emgu.CV.UI
 {
-    partial class HistogramCtrl
+    partial class HistogramBox
     {
         /// <summary> 
         /// Required designer variable.

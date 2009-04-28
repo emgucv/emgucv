@@ -28,7 +28,7 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
-           this.histogramCtrl1 = new Emgu.CV.UI.HistogramCtrl();
+           this.histogramCtrl1 = new Emgu.CV.UI.HistogramBox();
            this.SuspendLayout();
            // 
            // histogramCtrl1
@@ -53,6 +53,6 @@ namespace Emgu.CV.UI
 
         #endregion
 
-        private HistogramCtrl histogramCtrl1;
+        private HistogramBox histogramCtrl1;
     }
 }
