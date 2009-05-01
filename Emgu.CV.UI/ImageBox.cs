@@ -35,20 +35,22 @@ namespace Emgu.CV.UI
       /// <summary>
       /// A cache to store the ToolStripMenuItems for different types of images
       /// </summary>
-      private static readonly Dictionary<Type, ToolStripMenuItem[]> _typeToToolStripMenuItemsDictionary = new Dictionary<Type, ToolStripMenuItem[]>();
+      private readonly Dictionary<Type, ToolStripMenuItem[]> _typeToToolStripMenuItemsDictionary = new Dictionary<Type, ToolStripMenuItem[]>();
 
+      /// <summary>
+      /// The list of operations binded to this ImageBox
+      /// </summary>
       private List<Operation> _operationLists;
 
       /// <summary>
-      /// timer used for caculating the frame rate
+      /// Timer used for caculating the frame rate
       /// </summary>
       private DateTime _timerStartTime;
 
       /// <summary>
-      /// one of the parameters used for caculating the frame rate
+      /// One of the parameters used for caculating the frame rate
       /// </summary>
       private int _imagesReceivedSinceCounterStart;
-
 
       #endregion
 
@@ -83,9 +85,11 @@ namespace Emgu.CV.UI
          set
          {
             //right click menu enabled
-            bool rightClickMenuEnabled = ((int)value & (int)FunctionalModeOption.Everything) != 0;
+            bool rightClickMenuEnabled = ((int)value & (int)FunctionalModeOption.RightClickMenu) != 0;
             foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
                mi.Visible = rightClickMenuEnabled;
+
+            base.PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
 
             _functionalMode = value;
          }
@@ -148,6 +152,7 @@ namespace Emgu.CV.UI
       /// Set the image for this image box
       /// </summary>
       [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      [Browsable(false)]
       public new IImage Image
       {
          get
@@ -216,12 +221,11 @@ namespace Emgu.CV.UI
          }
       }
 
-
-
       /// <summary>
       /// The image that is being displayed. It's the Image following by some user defined image operation
       /// </summary>
       [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      [Browsable(false)]
       public IImage DisplayedImage
       {
          get
@@ -230,18 +234,15 @@ namespace Emgu.CV.UI
          }
          set
          {
+            //release the old Bitmap Image if there is any              
+            if (base.Image != null)
+               base.Image.Dispose();
+
             _displayedImage = value;
             if (_displayedImage != null)
             {
                if (_functionalMode != FunctionalModeOption.Minimum)
                   BuildOperationMenuItem(_displayedImage);
-
-               //release the old Bitmap Image               
-               if (base.Image != null)
-               {
-                  base.Image.Dispose();
-                  base.Image = null;
-               }
 
                base.Image = _displayedImage.Bitmap;
 
@@ -264,6 +265,10 @@ namespace Emgu.CV.UI
                   }
                   #endregion
                }
+            }
+            else
+            {
+               base.Image = null;
             }
          }
       }
@@ -497,9 +502,17 @@ namespace Emgu.CV.UI
          /// </summary>
          Minimum = 0,
          /// <summary>
-         /// Support for the right click menu
+         /// Enable the right click menu
          /// </summary>
-         Everything = 1,
+         RightClickMenu = 1,
+         /// <summary>
+         /// Enable Pan and Zoom
+         /// </summary>
+         PanAndZoom = 2,
+         /// <summary>
+         /// Support for the right click menu, Pan and Zoom
+         /// </summary>
+         Everything = RightClickMenu | PanAndZoom,
       }
 
       /// <summary> 

@@ -40,7 +40,6 @@ namespace Emgu.CV.UI
            this.imageBox1.Location = new System.Drawing.Point(0, 0);
            this.imageBox1.Name = "imageBox1";
            this.imageBox1.Size = new System.Drawing.Size(563, 482);
-           this.imageBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
            this.imageBox1.TabIndex = 0;
            this.imageBox1.TabStop = false;
            // 
@@ -55,7 +54,6 @@ namespace Emgu.CV.UI
            this.Text = "Image Viewer";
            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
            this.ResumeLayout(false);
-           this.PerformLayout();
 
         }
 

@@ -171,26 +171,21 @@ namespace Emgu.CV.Test
          img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
          ImageViewer.Show(img);
       }
-
-      /*
+      
       public void TestRectangle()
       {
-         Point2D<double> p1 = new Point2D<double>(1.1, 2.2);
-         Point2D<double> p2 = new Point2D<double>(2.2, 4.4);
-         Rectangle<double> rect = new Rectangle<double>();
-         rect.Center = p1;
+         PointF p1 = new PointF(1.1f, 2.2f);
+         SizeF p2 = new SizeF(2.2f, 4.4f);
+         RectangleF rect = new RectangleF();
+         rect.Location = PointF.Empty;
          rect.Size = p2;
 
-         Map<Gray, Byte> map = new Map<Gray, Byte>(new Rectangle<double>(new Point2D<double>(2.0, 4.0), new Point2D<double>(4.0, 8.0)), new Point2D<double>(0.1, 0.1), new Gray(255.0));
-         map.Draw<double>(rect, new Gray(0.0), 1);
+         Map<Gray, Byte> map = new Map<Gray, Byte>(new RectangleF(PointF.Empty, new SizeF(4.0f, 8.0f)), new PointF(0.1f, 0.1f), new Gray(255.0));
+         map.Draw(rect, new Gray(0.0), 1);
 
-         Rectangle roi= map.ROI;
-         roi.Height >>= 1;
-         map.ROI = roi;
          ImageViewer.Show(map);
-      }*/
+      }
 
-      
       public void TestModuleInfo()
       {
          string pluginName;
@@ -307,20 +302,6 @@ namespace Emgu.CV.Test
 
             foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
          }
-      }
-
-      public void TestImageIndexer()
-      {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>(1000, 5000);
-         image.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-         Stopwatch watch = Stopwatch.StartNew();
-         for (int i = 0; i < image.Height; i++)
-            for (int j = 0; j < image.Width; j++)
-            {
-               Bgr color = image[i, j];
-            }
-         watch.Stop();
-         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
       }
 
       public void TestSplitMerge()
@@ -805,7 +786,7 @@ namespace Emgu.CV.Test
 
       public void TestKalman()
       {
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100);
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 400);
 
          SyntheticData syntheticData = new SyntheticData();
 
@@ -833,12 +814,13 @@ namespace Emgu.CV.Test
          Toolbox.Action<PointF, Bgr> drawCross =
            delegate(PointF point, Bgr color)
            {
-              img.Draw(new Cross2DF(point, 3, 3), color, 1);
+              img.Draw(new Cross2DF(point, 15, 15), color, 1);
            };
 
          ImageViewer viewer = new ImageViewer();
-
-         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+         timer.Interval = 1000;
+         timer.Tick += new EventHandler(delegate(object sender, EventArgs e)
          {
             Matrix<float> measurement = syntheticData.GetMeasurement();
             // adjust Kalman filter state 
@@ -864,7 +846,9 @@ namespace Emgu.CV.Test
 
             viewer.Image = img;
          });
-
+         timer.Start();
+         viewer.Disposed += delegate(Object sender, EventArgs e) { timer.Stop(); };
+         viewer.Text = "Actual State: White; Measurement: Red; Prediction: Green";
          viewer.ShowDialog();
       }
    }

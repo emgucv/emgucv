@@ -1218,7 +1218,7 @@ namespace Emgu.CV
       /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
       /// <param name="dest">The destination image</param>
       private void ForEachDuplicateChannel<TOtherDepth>(Emgu.Util.Toolbox.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
-            where TOtherDepth : new ()
+            where TOtherDepth : new()
       {
          if (NumberOfChannels == 1)
             act(Ptr, dest.Ptr, 0);
@@ -1772,25 +1772,6 @@ namespace Emgu.CV
          }
          else
          {
-            /*
-            Image<Gray, TDepth>[] channels1 = Split();
-            Image<Gray, TDepth>[] channels2 = img2.Split();
-            Image<Gray, Byte>[] cmpChannels = new Image<Gray, byte>[channels1.Length];
-            for (int i = 0; i < channels1.Length; i++)
-            {
-               cmpChannels[i] = new Image<Gray, byte>(size);
-               CvInvoke.cvCmp(channels1[i], channels2[i], cmpChannels[i], cmp_type);
-            }
-            res = new Image<TColor, Byte>(cmpChannels);
-
-            foreach (Image<Gray, TDepth> img in channels1)
-               img.Dispose();
-            foreach (Image<Gray, TDepth> img in channels2)
-               img.Dispose();
-            foreach (Image<Gray, Byte> img in cmpChannels)
-               img.Dispose();
-            */            
-
             using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
             using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(size))
             using (Image<Gray, Byte> dest = new Image<Gray, Byte>(size))
@@ -2100,6 +2081,19 @@ namespace Emgu.CV
          CvInvoke.cvAbsDiff(Ptr, img2.Ptr, res.Ptr);
          return res;
       }
+
+      ///<summary> 
+      ///Computes absolute different between <i>this</i> image and the specific color
+      ///</summary>
+      ///<param name="color">The color to compute absolute different with</param>
+      ///<returns> The image that contains the absolute different value</returns>
+      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      public Image<TColor, TDepth> AbsDiff(TColor color)
+      {
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
+         CvInvoke.cvAbsDiffS(Ptr, res.Ptr, color.MCvScalar);
+         return res;
+      }
       #endregion
 
       #region Math Functions
@@ -2332,7 +2326,7 @@ namespace Emgu.CV
       /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
       public Image<TColor, TDepth> WarpPerspective<TMapDepth>(Matrix<TMapDepth> mapMatrix, int width, int height, CvEnum.INTER interpolationType, CvEnum.WARP warpType, TColor backgroundColor)
-         where TMapDepth : new ()
+         where TMapDepth : new()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.cvWarpPerspective(Ptr, res.Ptr, mapMatrix.Ptr, (int)interpolationType | (int)warpType, backgroundColor.MCvScalar);
@@ -2431,7 +2425,7 @@ namespace Emgu.CV
          )]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
-         where TOtherDepth : new ()
+         where TOtherDepth : new()
       {
          Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);
          res.ConvertFrom(this);
@@ -2446,7 +2440,7 @@ namespace Emgu.CV
       /// <param name="srcImage">The sourceImage</param>
       public void ConvertFrom<TSrcColor, TSrcDepth>(Image<TSrcColor, TSrcDepth> srcImage)
          where TSrcColor : struct, IColor
-         where TSrcDepth : new ()
+         where TSrcDepth : new()
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
@@ -2538,7 +2532,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth"> The type of depth to convert to</typeparam>
       ///<returns> Image of the specific depth, val = val * scale + shift </returns>
       public Image<TColor, TOtherDepth> ConvertScale<TOtherDepth>(double scale, double shift)
-                  where TOtherDepth : new ()
+                  where TOtherDepth : new()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
@@ -3096,7 +3090,7 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on element of this image</summary> 
       public Image<TColor, TOtherDepth> Convert<TOtherDepth>(System.Converter<TDepth, TOtherDepth> converter)
-         where TOtherDepth : new ()
+         where TOtherDepth : new()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Size);
 
@@ -3127,7 +3121,7 @@ namespace Emgu.CV
       ///<summary> Compute the element of the new image based on the elements of the two image</summary>
       public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3> converter)
          where TDepth2 : new()
-         where TDepth3 : new ()
+         where TDepth3 : new()
       {
          Debug.Assert(EqualSize(img2), "Image size do not match");
 
@@ -3169,9 +3163,9 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on the elements of the three image</summary>
       public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
-         where TDepth2 : new ()
-         where TDepth3 : new ()
-         where TDepth4 : new ()
+         where TDepth2 : new()
+         where TDepth3 : new()
+         where TDepth4 : new()
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3), "Image size do not match");
 
@@ -3222,10 +3216,10 @@ namespace Emgu.CV
 
       ///<summary> Compute the element of the new image based on the elements of the four image</summary>
       public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Emgu.Util.Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
-         where TDepth2 : new ()
-         where TDepth3 : new ()
-         where TDepth4 : new ()
-         where TDepth5 : new ()
+         where TDepth2 : new()
+         where TDepth3 : new()
+         where TDepth4 : new()
+         where TDepth5 : new()
       {
          Debug.Assert(EqualSize(img2) && EqualSize(img3) && EqualSize(img4), "Image size do not match");
 
@@ -3615,7 +3609,7 @@ namespace Emgu.CV
       /// <param name="height">The height of the window</param>
       /// <param name="scale">If true, the result is subsequent scaled by 1/(param1 x param2)</param>
       /// <returns>The result of blur</returns>
-      [ExposableMethod(Exposable=true, Category = "Smoothing")]
+      [ExposableMethod(Exposable = true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
       {
          Emgu.CV.CvEnum.SMOOTH_TYPE type = scale ? Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR : Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BLUR_NO_SCALE;
@@ -3629,7 +3623,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="size">The size (width &amp; height) of the window</param>
       /// <returns>The result of mediam smooth</returns>
-      [ExposableMethod(Exposable=true, Category = "Smoothing")]
+      [ExposableMethod(Exposable = true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothMedian(int size)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3643,7 +3637,7 @@ namespace Emgu.CV
       /// <param name="colorSigma">Color sigma</param>
       /// <param name="spaceSigma">Space sigma</param>
       /// <returns>The result of bilateral smooth</returns>
-      [ExposableMethod(Exposable=true, Category = "Smoothing")]
+      [ExposableMethod(Exposable = true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothBilatral(int colorSigma, int spaceSigma)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3666,7 +3660,7 @@ namespace Emgu.CV
       ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimwnsion</param>
       ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimwnsion</param>
       ///<returns> The smoothed image</returns>
-      [ExposableMethod(Exposable=true, Category = "Smoothing")]
+      [ExposableMethod(Exposable = true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3985,7 +3979,7 @@ namespace Emgu.CV
       /// <returns>A new image that is the vertical concatening of this image and <paramref name="otherImage"/></returns>
       public Image<TColor, TDepth> ConcateVertical(Image<TColor, TDepth> otherImage)
       {
-         Image<TColor, TDepth> res = new Image<TColor,TDepth>(Math.Max(Width, otherImage.Width), Height + otherImage.Height);
+         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Math.Max(Width, otherImage.Width), Height + otherImage.Height);
          res.ROI = ROI;
          CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
          Rectangle rect = otherImage.ROI;
@@ -4029,7 +4023,7 @@ namespace Emgu.CV
       /// Gamma correct this image inplace. The image must have a depth type of Byte.
       /// </summary>
       /// <param name="gamma">The gamma value</param>
-      [ExposableMethod(Exposable=true)]
+      [ExposableMethod(Exposable = true)]
       public void _GammaCorrect(double gamma)
       {
          Image<TColor, Byte> img = this as Image<TColor, Byte>;
@@ -4039,7 +4033,7 @@ namespace Emgu.CV
          Byte[,] gammaLUT = new Byte[256, 1];
          for (int i = 0; i < 256; i++)
          {
-            gammaLUT[i, 0] = (Byte) ( Math.Pow(i / 255.0, gamma) * 255.0 );
+            gammaLUT[i, 0] = (Byte)(Math.Pow(i / 255.0, gamma) * 255.0);
          }
          using (Matrix<Byte> lut = new Matrix<byte>(gammaLUT))
          {
@@ -4118,15 +4112,15 @@ namespace Emgu.CV
       public void _EqualizeHist()
       {
          if (NumberOfChannels == 1) //Gray scale image
-         {  
+         {
             CvInvoke.cvEqualizeHist(Ptr, Ptr);
          }
          else //Color image
-         {  
+         {
             //Get an hsv representation of this image
             Image<Hsv, TDepth> hsv = this as Image<Hsv, TDepth> ?? this.Convert<Hsv, TDepth>();
-            
-            using (Image<Gray, TDepth> v = new Image<Gray,TDepth>(Size))
+
+            using (Image<Gray, TDepth> v = new Image<Gray, TDepth>(Size))
             {  //equalize the V (value) channel
                CvInvoke.cvSetImageCOI(hsv, 3);
                CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
@@ -4196,7 +4190,8 @@ namespace Emgu.CV
          if (table.ContainsKey(destType))
          {
             return table[destType];
-         } else
+         }
+         else
          {
             ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
             ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];

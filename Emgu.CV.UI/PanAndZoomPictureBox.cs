@@ -20,11 +20,50 @@ namespace Emgu.CV.UI
          : base()
       {
          InitializeComponent();
-         SetScrollBarValues();
-         SetStyle(
-            ControlStyles.OptimizedDoubleBuffer,
-            true);
-         this.MouseWheel += OnMouseWheel;
+         SetScrollBarVisibilityAndMaxMin();
+         //Enable double buffering
+         this.ResizeRedraw = false;
+         this.DoubleBuffered = true;
+         //this.BorderStyle = BorderStyle.Fixed3D;
+         PanableAndZoomable = true;
+      }
+
+      private bool _panableAndZoomable = false;
+
+      /// <summary>
+      /// Get or Set the property to enable(disable) Pan and Zoom
+      /// </summary>
+      protected bool PanableAndZoomable
+      {
+         get
+         {
+            return _panableAndZoomable;
+         }
+         set
+         {
+            if (_panableAndZoomable != value)
+            {
+               _panableAndZoomable = value;
+               if (_panableAndZoomable)
+               {
+                  this.MouseEnter += new System.EventHandler(this.OnMouseEnter);
+                  this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.OnMouseWheel);
+                  this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
+                  this.Resize += new System.EventHandler(this.OnResize);
+                  this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+                  this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+               }
+               else
+               {
+                  this.MouseEnter -= new System.EventHandler(this.OnMouseEnter);
+                  this.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.OnMouseWheel);
+                  this.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
+                  this.Resize -= new System.EventHandler(this.OnResize);
+                  this.MouseDown -= new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+                  this.MouseUp -= new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+               }
+            }
+         }
       }
 
       /// <summary>
@@ -66,28 +105,32 @@ namespace Emgu.CV.UI
             ReverseRectangle();
             Size viewSize = GetViewSize();
             Rectangle imageRegion = new Rectangle(Point.Empty, viewSize);
-            if (imageRegion.Contains(_mouseDownPosition))
+            if (!imageRegion.Contains(_mouseDownPosition))
+               return;
+
+            Rectangle selectedRectangle = GetSelectedRectangle(e.X, e.Y);
+
+            if ((selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
             {
-               Rectangle selectedRectangle = GetSelectedRectangle(e.X, e.Y);
+               int h = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value + (int)(selectedRectangle.Location.X / _zoomScale));
+               int v = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value + (int)(selectedRectangle.Location.Y / _zoomScale));
 
-               if ( (selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
-               {
-                  horizontalScrollBar.Value = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value +(int)(selectedRectangle.Location.X / _zoomScale));
-                  verticalScrollBar.Value = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value +(int)(selectedRectangle.Location.Y / _zoomScale));
+               _zoomScale = _zoomScale * viewSize.Width / selectedRectangle.Width;
 
-                  _zoomScale = _zoomScale * viewSize.Width / selectedRectangle.Width;
+               SetScrollBarVisibilityAndMaxMin();
 
-                  Invalidate();
-               }
+               horizontalScrollBar.Value = h;
+               verticalScrollBar.Value = v;
+
+               Invalidate();
             }
          }
       }
 
       private void OnMouseEnter(object sender, EventArgs e)
       {  //set this as the active control 
-         Control parent = this.Parent;
-         while (!(parent is Form)) parent = parent.Parent;
-         (parent as Form).ActiveControl = this;
+         Form f = TopLevelControl as Form;
+         if (f != null) f.ActiveControl = this;
       }
 
       private void OnResize(object sender, EventArgs e)
@@ -95,7 +138,7 @@ namespace Emgu.CV.UI
          Size viewSize = GetViewSize();
          if (base.Image != null && viewSize.Width > 0 && viewSize.Height > 0)
          {
-            SetScrollBarValues();
+            SetScrollBarVisibilityAndMaxMin();
             Invalidate();
          }
       }
@@ -156,12 +199,15 @@ namespace Emgu.CV.UI
       {
          if (Image != null          //image is set
             &&          //either pan or zoom
-            (_zoomScale != 1.0f || horizontalScrollBar.Visible || verticalScrollBar.Visible))
+            (_zoomScale != 1.0f || 
+            (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) || 
+            (verticalScrollBar.Visible && verticalScrollBar.Value != 0)))
          {
             Matrix matrix = new Matrix((float)_zoomScale, 0, 0, (float)_zoomScale, 0, 0);
             matrix.Translate(
                horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
                verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
+            matrix.Multiply(pe.Graphics.Transform, MatrixOrder.Prepend);
             pe.Graphics.Transform = matrix;
             pe.Graphics.InterpolationMode = _interpolationMode;
          }
@@ -169,7 +215,7 @@ namespace Emgu.CV.UI
          base.OnPaint(pe);
       }
 
-      private void SetScrollBarValues()
+      private void SetScrollBarVisibilityAndMaxMin()
       {
          #region determine if the scroll bar should be visible or not
          horizontalScrollBar.Visible = false;
@@ -219,6 +265,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Get the horizontal scroll bar from this control
       /// </summary>
+      [Browsable(false)]
       public HScrollBar HorizontalScrollBar
       {
          get
@@ -230,6 +277,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Get the vertical scroll bar of this control
       /// </summary>
+      [Browsable(false)]
       public VScrollBar VerticalScrollBar
       {
          get
@@ -245,9 +293,6 @@ namespace Emgu.CV.UI
       /// <param name="e"></param>
       private void OnMouseMove(object sender, MouseEventArgs e)
       {
-         int offsetX = (int)(e.Location.X / _zoomScale);
-         int offsetY = (int)(e.Location.Y / _zoomScale);
-
          if (_mouseDownButton == MouseButtons.Middle && (horizontalScrollBar.Visible || verticalScrollBar.Visible))
          {
             int horizontalShift = (int)((e.X - _mouseDownPosition.X) / _zoomScale);
@@ -339,7 +384,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Get or Set the zoom scale
       /// </summary>
-      [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+      [Browsable(false)]
       public double ZoomScale
       {
          get
@@ -378,7 +423,7 @@ namespace Emgu.CV.UI
 
             int h = (int)(horizontalScrollBar.Value + shiftX);
             int v = (int)(verticalScrollBar.Value + shiftY);
-            SetScrollBarValues();
+            SetScrollBarVisibilityAndMaxMin();
             horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, h), horizontalScrollBar.Maximum); ;
             verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, v), verticalScrollBar.Maximum);
 
@@ -419,11 +464,7 @@ namespace Emgu.CV.UI
          // 
          // PanAndZoomPictureBox
          // 
-         this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
-         this.Resize += new System.EventHandler(this.OnResize);
-         this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-         this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
-         this.MouseEnter += new System.EventHandler(this.OnMouseEnter);
+
          ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
          this.ResumeLayout(false);
 

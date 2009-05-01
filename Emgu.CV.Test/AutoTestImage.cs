@@ -806,6 +806,30 @@ namespace Emgu.CV.Test
          img._GammaCorrect(0.5);
       }
 
+      [Test]
+      public void TestImageIndexer()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(1000, 5000);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+         Stopwatch watch = Stopwatch.StartNew();
+         for (int i = 0; i < image.Height; i++)
+            for (int j = 0; j < image.Width; j++)
+            {
+               Bgr color = image[i, j];
+            }
+         watch.Stop();
+         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
+         watch = Stopwatch.StartNew();
+         for (int i = 0; i < image.Height; i++)
+            for (int j = 0; j < image.Width; j++)
+               for (int k = 0; k < image.NumberOfChannels; k++)
+               {
+                  Byte b = image.Data[i, j, k];
+               }
+         watch.Stop();
+         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
+      }
+
       /*
       [Test]
       public void T()
