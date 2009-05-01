@@ -200,21 +200,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Insert the point into the dictionary. If the point already exist, return false. Otherwise return true.
-      /// </summary>
-      /// <param name="pt">The point to insert</param>
-      /// <param name="dic">The point dictionary</param>
-      /// <returns>If the point already exist, return false. Otherwise return true.</returns>
-      private static bool InsertPoint2DToDictionary(System.Drawing.PointF pt, Dictionary<System.Drawing.PointF, Byte> dic)
-      {
-         if (dic.ContainsKey(pt))
-            return false;
-
-         dic.Add(pt, (Byte)0);
-         return true;
-      }
-
-      /// <summary>
       /// Retruns the triangles subdivision of the current planar subdivision. 
       /// </summary>
       /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points, if you do not want those points, set <param name="includeVirtualPoints"> to false</param></remarks>
