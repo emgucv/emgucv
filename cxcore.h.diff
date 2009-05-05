@@ -1,0 +1,13 @@
+Index: cxcore.h
+===================================================================
+--- cxcore.h	(revision 1739)
++++ cxcore.h	(working copy)
+@@ -1530,6 +1530,8 @@
+ typedef int (CV_CDECL *CvErrorCallback)( int status, const char* func_name,
+                     const char* err_msg, const char* file_name, int line, void* userdata );
+ 
++static CvErrorCallback customCvErrorCallback = 0;
++
+ /* Assigns a new error-handling function */
+ CVAPI(CvErrorCallback) cvRedirectError( CvErrorCallback error_handler,
+                                        void* userdata CV_DEFAULT(NULL),

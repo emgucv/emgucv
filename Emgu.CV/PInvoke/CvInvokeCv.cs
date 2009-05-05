@@ -997,10 +997,11 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
-         out IntPtr keypoints,
-         out IntPtr descriptors,
+         ref IntPtr keypoints,
+         ref IntPtr descriptors,
          IntPtr storage,
-         MCvSURFParams parameters);
+         MCvSURFParams parameters,
+         int useProvidedKeyPoints);
 
       /// <summary>
       /// Create a CvSURFParams using the specific values

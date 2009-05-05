@@ -1315,8 +1315,15 @@ namespace Emgu.CV
 
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
       {
-         IntPtr keypointsPtr;
-         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, out keypointsPtr, out descriptorPtr, stor.Ptr, param);
+         IntPtr keypointsPtr = new IntPtr() ;
+         descriptorPtr = new IntPtr();
+         CvInvoke.cvExtractSURF(
+            Ptr, mask == null ? IntPtr.Zero : mask.Ptr, 
+            ref keypointsPtr, 
+            ref descriptorPtr, 
+            stor.Ptr, 
+            param,
+            0);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
       }
       #endregion
@@ -1731,25 +1738,6 @@ namespace Emgu.CV
          }
          else
          {
-            /*
-            Image<Gray, TDepth>[] channels1 = Split();
-            Image<Gray, TDepth>[] channels2 = img2.Split();
-            Image<Gray, Byte>[] cmpChannels = new Image<Gray, byte>[channels1.Length];
-            for (int i = 0; i < channels1.Length; i++)
-            {
-               cmpChannels[i] = new Image<Gray, byte>(size);
-               CvInvoke.cvCmp(channels1[i], channels2[i], cmpChannels[i], cmp_type);
-            }
-            res = new Image<TColor, Byte>(cmpChannels);
-
-            foreach (Image<Gray, TDepth> img in channels1)
-               img.Dispose();
-            foreach (Image<Gray, TDepth> img in channels2)
-               img.Dispose();
-            foreach (Image<Gray, Byte> img in cmpChannels)
-               img.Dispose();
-            */            
-
             using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
             using (Image<Gray, TDepth> src2 = new Image<Gray, TDepth>(size))
             using (Image<Gray, Byte> dest = new Image<Gray, Byte>(size))
