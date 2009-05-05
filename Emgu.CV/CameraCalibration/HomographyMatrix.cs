@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A 3x3 homography matrix
+   /// A 3x3 homography matrix. This matrix defines an perspective transform
    /// </summary>
    [Serializable]
    public class HomographyMatrix : Matrix<double> 

@@ -386,6 +386,13 @@ namespace Emgu.CV
       public override System.Array ManagedArray
       {
          get { return _array; }
+         set
+         {
+            TDepth[, ,] data = value as TDepth[, ,];
+            if (data == null)
+               throw new InvalidCastException(String.Format("Cannot convert ManagedArray to type of {0}[,,].", typeof(TDepth).ToString()));
+            Data = data;
+         }
       }
 
       /// <summary>
@@ -521,12 +528,21 @@ namespace Emgu.CV
       /// <returns>A copy of the boxed region of the image</returns>
       public Image<TColor, TDepth> Copy(MCvBox2D box)
       {
-         using (RotationMatrix2D<double> rot = new RotationMatrix2D<double>(box.center, -(box.angle - 90), 1.0))
-         using (Image<TColor, TDepth> rotatedImage = WarpAffine(rot, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, Emgu.CV.CvEnum.WARP.CV_WRAP_DEFAULT, new TColor()))
+         PointF[] srcCorners = box.GetVertices();
+
+         PointF[] destCorners = new PointF[] {
+            new PointF(0, box.size.Height-1),
+            new PointF(0, 0),
+            new PointF(box.size.Width-1, 0)};
+
+         using (RotationMatrix2D<double> rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
          {
-            Rectangle rect = new Rectangle((int)box.center.X - ((int)box.size.Width >> 1), (int)box.center.Y - ((int)box.size.Height >> 1), (int)box.size.Width, (int)box.size.Height);
-            rect.Intersect(rotatedImage.ROI);
-            return rotatedImage.Copy(rect);
+            Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.size.Width, (int)box.size.Height);
+            CvInvoke.cvWarpAffine(Ptr, res.Ptr, rot, (int)Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR | (int)Emgu.CV.CvEnum.WARP.CV_WRAP_DEFAULT, new MCvScalar());
+
+            //TODO: Find out why cvGetQuadrangleSubPix do not return the expected output.
+            //CvInvoke.cvGetQuadrangleSubPix(Ptr, res.Ptr, rot.Ptr); 
+            return res;
          }
       }
 
@@ -2344,54 +2360,29 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Rotate(double angle, TColor background, bool crop)
       {
          Size size = Size;
-         if (crop)
+         PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
+         using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
          {
-            PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
-            {
+            if (crop)
                return WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
-            }
-         }
-         else
-         {
-            //Maximum possible size is equal to the diagonal length of the image
-            int maxSize = (int)Math.Round(Math.Sqrt(size.Width * size.Width + size.Height * size.Height));
-            float offsetX = (maxSize - size.Width) * 0.5f;
-            float offsetY = (maxSize - size.Height) * 0.5f;
 
-            PointF center = new PointF(maxSize * .5f, maxSize * .5f);
-            PointF[] corners = new PointF[] { 
-               new PointF(offsetX,offsetY),
-               new PointF(offsetX,offsetY+size.Height),
-               new PointF(offsetX+size.Width,offsetY),
-               new PointF(offsetX+size.Width,offsetY+size.Height)};
+            PointF[] corners = new PointF[] {
+                  new PointF(0, 0),
+                  new PointF(size.Width - 1 , 0),
+                  new PointF(size.Width - 1, size.Height -1),
+                  new PointF(0, size.Height -1)};
+            rotationMatrix.RotatePoints(corners);
+            int minX = (int)Math.Round(Math.Min(Math.Min(corners[0].X, corners[1].X), Math.Min(corners[2].X, corners[3].X)));
+            int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
+            int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
+            int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
+            Size newSize = new Size(maxX - minX + 1, maxY - minY + 1);
+            rotationMatrix[0, 2] -= minX;
+            rotationMatrix[1, 2] -= minY;
 
-            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
-            using (Image<TColor, TDepth> tempImage1 = new Image<TColor, TDepth>(maxSize, maxSize, background))
-            {
-               // Frame the original image into a bigger one of side maxSize
-               // Rotating the framed image will always keep the original image without losing corners information
-               System.Drawing.Rectangle centerRegion = new System.Drawing.Rectangle((maxSize - size.Width) >> 1, (maxSize - size.Height) >> 1, size.Width, size.Height);
-               CvInvoke.cvSetImageROI(tempImage1.Ptr, centerRegion);
-               CvInvoke.cvCopy(Ptr, tempImage1.Ptr, IntPtr.Zero);
-               CvInvoke.cvResetImageROI(tempImage1.Ptr);
-
-               // Rotate
-               using (Image<TColor, TDepth> tempImage2 = tempImage1.WarpAffine(rotationMatrix, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background))
-               {
-                  //Calculate the position of the original corners in the rotated image
-                  rotationMatrix.RotatePoints(corners);
-
-                  //Crop the region of interest
-                  int minX = (int)Math.Round(Math.Min(Math.Min(corners[0].X, corners[1].X), Math.Min(corners[2].X, corners[3].X)));
-                  int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
-                  int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
-                  int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
-                  Rectangle toCrop = new Rectangle(minX, minY, maxX - minX, maxY - minY);
-
-                  return tempImage2.Copy(toCrop);
-               }
-            }
+            Image<TColor, TDepth> res = new Image<TColor, TDepth>(newSize);
+            CvInvoke.cvWarpAffine(Ptr, res.Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background.MCvScalar);
+            return res;
          }
       }
 

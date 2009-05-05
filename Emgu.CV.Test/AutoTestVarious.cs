@@ -79,9 +79,8 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestSerialization()
+      public void TestXmlSerialization()
       {
-
          MCvPoint2D64f pt2d = new MCvPoint2D64f(12.0, 5.5);
          Point ptemp = new Point(10, 10);
 
@@ -977,6 +976,31 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Seq<PointF> seq = new Seq<PointF>(stor);
+            }
+         }
+      }
+
+      [Test]
+      public void TestMatNDRuntimeSerialization()
+      {
+         using (MatND<float> mat = new MatND<float>(2, 3, 4, 5))
+         {
+            using (MemoryStream ms = new MemoryStream())
+            {
+               mat.SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+               
+               mat.SerializationCompressionRatio = 6;
+               System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                   formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+               formatter.Serialize(ms, mat);
+               Byte[] bytes = ms.GetBuffer();
+
+               using (MemoryStream ms2 = new MemoryStream(bytes))
+               {
+                  Object o = formatter.Deserialize(ms2);
+                  MatND<float> mat2 = (MatND<float>)o;
+                  Assert.IsTrue(mat.Equals(mat2));
+               }
             }
          }
       }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
@@ -11,14 +13,10 @@ namespace Emgu.CV
    /// a wrapper for the CvMatND 
    /// </summary>
    /// <typeparam name="TDepth">The type of depth</typeparam>
-   public class MatND<TDepth> : Emgu.Util.UnmanagedObject
+   [Serializable]
+   public class MatND<TDepth> : CvArray<TDepth>, IEquatable<MatND<TDepth>> where TDepth : new()
    {
       private Array _array;
-
-      /// <summary>
-      /// The pinned GCHandle to _array;
-      /// </summary>
-      protected GCHandle _dataHandle;
 
       /// <summary>
       /// Create a N-dimensional matrix 
@@ -27,6 +25,38 @@ namespace Emgu.CV
       public MatND(params int[] sizes)
       {
          ManagedArray = Array.CreateInstance(typeof(TDepth), sizes);
+      }
+
+      /// <summary>
+      /// Constructor used to deserialize runtime serialized object
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public MatND(SerializationInfo info, StreamingContext context)
+      {
+         this.DeserializeObjectData(info, context);
+      }
+
+      /// <summary>
+      /// This function is not implemented for MatND
+      /// </summary>
+      /// <param name="rows">Not implemented</param>
+      /// <param name="cols">Not implemented</param>
+      /// <param name="numberOfChannels">Not implemented</param>
+      protected override void AllocateData(int rows, int cols, int numberOfChannels)
+      {
+         throw new Exception("The method or operation is not implemented.");
+      }
+
+      /// <summary>
+      /// This function is not implemented for MatND
+      /// </summary>
+      public override int NumberOfChannels
+      {
+         get 
+         { 
+            throw new Exception("The method or operation is not implemented."); 
+         }
       }
 
       private void AllocateHeader()
@@ -41,9 +71,9 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public Array ManagedArray
+      public override Array ManagedArray
       {
-         get { return _array; }
+         get  { return _array; }
          set
          {
             Debug.Assert(value != null, "The Array cannot be null");
@@ -56,13 +86,19 @@ namespace Emgu.CV
 
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-            int[] dim = new int[_array.Rank];
-            for (int i = 0; i < dim.Length; i++)
-            {
-               dim[i] = _array.GetLength(i);
-            }
+            int[] dim = GetDimension();
             CvInvoke.cvInitMatNDHeader(_ptr, dim.Length, dim, CvDepth, _dataHandle.AddrOfPinnedObject());
          }
+      }
+
+      private int[] GetDimension()
+      {
+         int[] dim = new int[_array.Rank];
+         for (int i = 0; i < dim.Length; i++)
+         {
+            dim[i] = _array.GetLength(i);
+         }
+         return dim;
       }
 
       ///<summary> Get the depth representation for openCV</summary>
@@ -85,6 +121,93 @@ namespace Emgu.CV
             GC.RemoveMemoryPressure(StructSize.MCvMatND);
             _ptr = IntPtr.Zero;
          }
+
+         base.DisposeObject();
       }
+
+      #region ISerializable Members
+      /// <summary>
+      /// A function used for runtime serilization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">Streaming context</param>
+      [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+      public override void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+         info.AddValue("Dimension", GetDimension());
+         info.AddValue("CompressionRatio", SerializationCompressionRatio);
+         info.AddValue("Bytes", Bytes);
+      }
+
+      /// <summary>
+      /// A function used for runtime deserailization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">Streaming context</param>
+      protected override void DeserializeObjectData(SerializationInfo info, StreamingContext context)
+      {
+         int[] dimension = (int[])info.GetValue("Dimension", typeof(int[]));
+         ManagedArray = Array.CreateInstance(typeof(TDepth), dimension);
+
+         SerializationCompressionRatio = (int)info.GetValue("CompressionRatio", typeof(int));
+         Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
+      }
+      #endregion
+      /// <summary>
+      /// Not Implemented
+      /// </summary>
+      /// <param name="reader">The XmlReader</param>
+      public override void ReadXml(System.Xml.XmlReader reader)
+      {
+         throw new NotImplementedException("This function is not implemented");
+      }
+
+      /// <summary>
+      /// Not Implemented
+      /// </summary>
+      /// <param name="writer">The XmlWriter</param>
+      public override void WriteXml(System.Xml.XmlWriter writer)
+      {
+         throw new NotImplementedException("This function is not implemented");
+      }
+
+      #region IEquatable<MatND<TDepth>> Members
+      /// <summary>
+      /// Check if the two MatND are equal
+      /// </summary>
+      /// <param name="other">The other MatND to compares to</param>
+      /// <returns>True if the two MatND equals</returns>
+      public bool Equals(MatND<TDepth> other)
+      {
+
+         int[] dim1 = GetDimension();
+         int[] dim2 = other.GetDimension();
+         if (dim1.Length != dim2.Length) return false;
+         for (int i = 0; i < dim1.Length; i++)
+         {
+            if (dim1[i] != dim2[i]) return false;
+         }
+
+         int compressionRatio = SerializationCompressionRatio;
+         if (SerializationCompressionRatio != other.SerializationCompressionRatio)
+         {
+            SerializationCompressionRatio = other.SerializationCompressionRatio;
+         }
+         //bool equals = true;
+         Byte[] bytes1 = Bytes;
+         SerializationCompressionRatio = compressionRatio;
+
+         Byte[] bytes2 = other.Bytes;
+         for (int i = 0; i < bytes1.Length; i++)
+         {
+            if (bytes1[i] != bytes2[i])
+            {
+               return false;
+            }
+         }
+         return true ;
+      }
+
+      #endregion
    }
 }

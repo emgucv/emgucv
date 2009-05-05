@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A (2x3) 2D rotation matrix
+   /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
    /// </summary>
    ///<typeparam name="T">The depth of the rotation matrix, should be float / double</typeparam>
    [Serializable]

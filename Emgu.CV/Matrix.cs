@@ -147,7 +147,17 @@ namespace Emgu.CV
       /// </summary>
       public override System.Array ManagedArray
       {
-         get { return Data; }
+         get 
+         { 
+            return Data;
+         }
+         set
+         {
+            TDepth[,] data = value as TDepth[,];
+            if (data == null)
+               throw new InvalidCastException(String.Format("Cannot convert ManagedArray to type of {0}[,].", typeof(TDepth).ToString()));
+            Data = data;
+         }
       }
 
       /// <summary>

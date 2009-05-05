@@ -173,7 +173,11 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public abstract System.Array ManagedArray { get; }
+      public abstract System.Array ManagedArray
+      {
+         get;
+         set;
+      }
 
       /// <summary>
       /// Allocate data for the array
@@ -506,7 +510,7 @@ namespace Emgu.CV
       /// Function to call when deserializing this object from XML
       /// </summary>
       /// <param name="reader">The xml reader</param>
-      public void ReadXml(System.Xml.XmlReader reader)
+      public virtual void ReadXml(System.Xml.XmlReader reader)
       {
          #region read the size of the matrix and assign storage
          reader.MoveToAttribute("Rows");
@@ -548,7 +552,7 @@ namespace Emgu.CV
       /// Function to call when serializing this object to XML 
       /// </summary>
       /// <param name="writer">The xml writer</param>
-      public void WriteXml(System.Xml.XmlWriter writer)
+      public virtual void WriteXml(System.Xml.XmlWriter writer)
       {
          writer.WriteAttributeString("Rows", Rows.ToString());
          writer.WriteAttributeString("Cols", Cols.ToString());
@@ -583,7 +587,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="info">Serialization info</param>
       /// <param name="context">Streaming context</param>
-      protected void DeserializeObjectData(SerializationInfo info, StreamingContext context)
+      protected virtual void DeserializeObjectData(SerializationInfo info, StreamingContext context)
       {
          int rows = (int)info.GetValue("Rows", typeof(int));
          int cols = (int)info.GetValue("Cols", typeof(int));

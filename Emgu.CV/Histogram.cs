@@ -18,17 +18,17 @@ namespace Emgu.CV
 
       #region Constructors
       /// <summary>
-      /// Creates a uniform 1 dimension histogram of the specified size
+      /// Creates a uniform 1-D histogram of the specified size
       /// </summary>
-      /// <param name="binSize">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
-      /// <param name="range">the upper and lower boundaries of the bins</param>
+      /// <param name="binSize">The number of bins in this 1-D histogram. </param>
+      /// <param name="range">The upper and lower boundary of the bin</param>
       public Histogram(int binSize, RangeF range)
          : this(new int[1] { binSize }, new RangeF[1] { range })
       {
       }
 
       /// <summary>
-      /// Creates a uniform multi dimension histogram of the specified size
+      /// Creates a uniform multi-dimension histogram of the specified size
       /// </summary>
       /// <param name="binSizes">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
       /// <param name="ranges">the upper and lower boundaries of the bins</param>

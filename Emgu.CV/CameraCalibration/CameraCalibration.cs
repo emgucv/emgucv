@@ -354,6 +354,42 @@ namespace Emgu.CV
             patternWasFound ? 1 : 0);
       }
 
+      /// <summary>
+      /// Calculates the matrix of an affine transform such that:
+      /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..2.
+      /// </summary>
+      /// <param name="src">Coordinates of 3 triangle vertices in the source image. If the array contains more than 3 points, only the first 3 will be used</param>
+      /// <param name="dest">Coordinates of the 3 corresponding triangle vertices in the destination image. If the array contains more than 3 points, only the first 3 will be used</param>
+      /// <return>The 2×3 rotation matrix that defines the Affine transform</return>
+      public static RotationMatrix2D<double> GetAffineTransform(PointF[] src, PointF[] dest)
+      {
+         Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
+         Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
+
+         RotationMatrix2D<double> rot = new RotationMatrix2D<double>();
+         CvInvoke.cvGetAffineTransform(src, dest, rot);
+         return rot;
+      }
+
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dest">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <returns>The 3x3 Homography matrix</returns>
+      public static HomographyMatrix GetPerspectiveTransform(PointF[] src, PointF[] dest)
+      {
+         Debug.Assert(src.Length >= 4, "The source should contain at least 4 points");
+         Debug.Assert(dest.Length >= 4, "The destination should contain at least 4 points");
+
+         HomographyMatrix rot = new HomographyMatrix();
+         CvInvoke.cvGetPerspectiveTransform(src, dest, rot);
+         return rot;
+      }
+
       #region helper methods
       private static Matrix<float> ToMatrix(MCvPoint3D32f[][] data)
       {

@@ -3,11 +3,59 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV
 {
    public partial class CvInvoke
    {
+      #region Sampling, Interpolation and Geometrical Transforms
+      /// <summary>
+      /// Implements a particular case of application of line iterators. The function reads all the image points lying on the line between pt1 and pt2, including the ending points, and stores them into the buffer
+      /// </summary>
+      /// <param name="image">Image to sample the line from</param>
+      /// <param name="pt1">Starting the line point.</param>
+      /// <param name="pt2">Ending the line point</param>
+      /// <param name="buffer">Buffer to store the line points; must have enough size to store max( |pt2.x-pt1.x|+1, |pt2.y-pt1.y|+1 ) points in case of 8-connected line and |pt2.x-pt1.x|+|pt2.y-pt1.y|+1 in case of 4-connected line</param>
+      /// <param name="connectivity">The line connectivity, 4 or 8</param>
+      /// <returns></returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern int cvSampleLine(IntPtr image, System.Drawing.Point pt1, System.Drawing.Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
+
+      /// <summary>
+      /// Extracts pixels from src:
+      /// dst(x, y) = src(x + center.x - (width(dst)-1)*0.5, y + center.y - (height(dst)-1)*0.5)
+      /// where the values of pixels at non-integer coordinates are retrieved using bilinear interpolation. Every channel of multiple-channel images is processed independently. Whereas the rectangle center must be inside the image, the whole rectangle may be partially occluded. In this case, the replication border mode is used to get pixel values beyond the image boundaries.
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Extracted rectangle</param>
+      /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center);
+
+      /// <summary>
+      /// Extracts pixels from src at sub-pixel accuracy and stores them to dst as follows:
+      /// dst(x, y)= src( A_11 x'+A_12 y'+ b1, A_21 x'+A_22 y'+ b2),
+      /// where A and b are taken from map_matrix:
+      /// map_matrix = [ [A11 A12  b1], [ A21 A22  b2 ] ]
+      /// x'=x-(width(dst)-1)*0.5, y'=y-(height(dst)-1)*0.5
+      /// where the values of pixels at non-integer coordinates A (x,y)^T + b are retrieved using bilinear interpolation. When the function needs pixels outside of the image, it uses replication border mode to reconstruct the values. Every channel of multiple-channel images is processed independently.
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Extracted quadrangle</param>
+      /// <param name="mapMatrix">The transformation 2 × 3 matrix [A|b]</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvGetQuadrangleSubPix(IntPtr src, IntPtr dst, IntPtr mapMatrix);
+
+      /// <summary>
+      /// Resizes image src so that it fits exactly to dst. If ROI is set, the function consideres the ROI as supported as usual
+      /// </summary>
+      /// <param name="src">Source image.</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="interpolation">Interpolation method</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
+
       /// <summary>
       /// Transforms source image using the specified matrix
       /// </summary>
@@ -25,6 +73,97 @@ namespace Emgu.CV
           MCvScalar fillval);
 
       /// <summary>
+      /// Calculates the matrix of an affine transform such that:
+      /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..2.
+      /// </summary>
+      /// <param name="src">Pointer to an array of PointF, Coordinates of 3 triangle vertices in the source image.</param>
+      /// <param name="dst">Pointer to an array of PointF, Coordinates of the 3 corresponding triangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 2×3 matrix</param>
+      /// <returns>Pointer to the destination 2×3 matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetAffineTransform(
+         IntPtr src, 
+         IntPtr dst, 
+         IntPtr mapMatrix);
+
+      /// <summary>
+      /// Calculates the matrix of an affine transform such that:
+      /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..2.
+      /// </summary>
+      /// <param name="src">Coordinates of 3 triangle vertices in the source image.</param>
+      /// <param name="dst">Coordinates of the 3 corresponding triangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 2×3 matrix</param>
+      /// <returns>Pointer to the destination 2×3 matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetAffineTransform(
+         System.Drawing.PointF[] src,
+         System.Drawing.PointF[] dst,
+         IntPtr mapMatrix);
+
+      /// <summary>
+      /// Calculates rotation matrix
+      /// </summary>
+      /// <param name="center">Center of the rotation in the source image. </param>
+      /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner).</param>
+      /// <param name="scale">Isotropic scale factor</param>
+      /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
+      /// <returns>Pointer to the destination 2x3 matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cv2DRotationMatrix(
+          System.Drawing.PointF center,
+          double angle,
+          double scale,
+          IntPtr mapMatrix);
+
+      /// <summary>
+      /// Transforms source image using the specified matrix
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="mapMatrix">3? transformation matrix</param>
+      /// <param name="flags"></param>
+      /// <param name="fillval">A value used to fill outliers</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvWarpPerspective(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix,
+         int flags,
+         MCvScalar fillval);
+
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 3x3 matrix</param>
+      /// <returns>Pointer to the perspective transform matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetPerspectiveTransform(
+         System.Drawing.PointF[] src,
+         System.Drawing.PointF[] dst,
+         IntPtr mapMatrix);
+
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
+      /// <returns>Pointer to the perspective transform matrix</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvGetPerspectiveTransform(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix);
+
+      /// <summary>
       /// Similar to other geometrical transformations, some interpolation method (specified by user) is used to extract pixels with non-integer coordinates.
       /// </summary>
       /// <param name="src">Source image</param>
@@ -38,6 +177,23 @@ namespace Emgu.CV
             IntPtr mapx, IntPtr mapy,
             int flags,
             MCvScalar fillval);
+
+      /// <summary>
+      /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="center">The transformation center, where the output precision is maximal</param>
+      /// <param name="M">Magnitude scale parameter</param>
+      /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvLogPolar(
+         IntPtr src,
+         IntPtr dst,
+         System.Drawing.PointF center,
+         double M,
+         int flags);
+      #endregion
 
       /// <summary>
       /// Finds all the motion segments and marks them in seg_mask with individual values each (1,2,...). It also returns a sequence of CvConnectedComp structures, one per each motion components. After than the motion direction for every component can be calculated with cvCalcGlobalOrientation using extracted mask of the particular component (using cvCmp) 
@@ -417,15 +573,6 @@ namespace Emgu.CV
       public static extern void cvDilate(IntPtr src, IntPtr dst, IntPtr element, int iterations);
 
       /// <summary>
-      /// Resizes image src so that it fits exactly to dst. If ROI is set, the function consideres the ROI as supported as usual
-      /// </summary>
-      /// <param name="src">Source image.</param>
-      /// <param name="dst">Destination image</param>
-      /// <param name="interpolation">Interpolation method</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
-
-      /// <summary>
       /// Deallocates the cascade that has been created manually or loaded using cvLoadHaarClassifierCascade or cvLoad
       /// </summary>
       /// <param name="cascade">Double pointer to the released cascade. The pointer is cleared by the function. </param>
@@ -793,18 +940,6 @@ namespace Emgu.CV
          CvEnum.THRESH thresholdType,
          int blockSize,
          double param1);
-
-      /// <summary>
-      /// Implements a particular case of application of line iterators. The function reads all the image points lying on the line between pt1 and pt2, including the ending points, and stores them into the buffer
-      /// </summary>
-      /// <param name="image">Image to sample the line from</param>
-      /// <param name="pt1">Starting the line point.</param>
-      /// <param name="pt2">Ending the line point</param>
-      /// <param name="buffer">Buffer to store the line points; must have enough size to store max( |pt2.x-pt1.x|+1, |pt2.y-pt1.y|+1 ) points in case of 8-connected line and |pt2.x-pt1.x|+|pt2.y-pt1.y|+1 in case of 4-connected line</param>
-      /// <param name="connectivity">The line connectivity, 4 or 8</param>
-      /// <returns></returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern int cvSampleLine(IntPtr image, System.Drawing.Point pt1, System.Drawing.Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
 
       /// <summary>
       /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
@@ -2426,67 +2561,6 @@ namespace Emgu.CV
          IntPtr sum,
          IntPtr sqsum,
          IntPtr tiltedSum);
-
-      /// <summary>
-      /// Transforms source image using the specified matrix
-      /// </summary>
-      /// <param name="src">Source image</param>
-      /// <param name="dst">Destination image</param>
-      /// <param name="mapMatrix">3? transformation matrix</param>
-      /// <param name="flags"></param>
-      /// <param name="fillval">A value used to fill outliers</param>
-      [DllImport(CV_LIBRARY)]
-      public static extern void cvWarpPerspective(
-         IntPtr src,
-         IntPtr dst,
-         IntPtr mapMatrix,
-         int flags,
-         MCvScalar fillval);
-
-      /// <summary>
-      /// calculates matrix of perspective transform such that:
-      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)T
-      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
-      /// </summary>
-      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
-      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
-      /// <returns>Pointer to the perspective transform matrix</returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvGetPerspectiveTransform(
-         System.Drawing.PointF[] src,
-         System.Drawing.PointF[] dst,
-         IntPtr mapMatrix);
-
-      /// <summary>
-      /// calculates matrix of perspective transform such that:
-      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)T
-      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
-      /// </summary>
-      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
-      /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
-      /// <returns>Pointer to the perspective transform matrix</returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvGetPerspectiveTransform(
-         IntPtr src,
-         IntPtr dst,
-         IntPtr mapMatrix);
-
-      /// <summary>
-      /// Calculates rotation matrix
-      /// </summary>
-      /// <param name="center">Center of the rotation in the source image. </param>
-      /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner).</param>
-      /// <param name="scale">Isotropic scale factor</param>
-      /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
-      /// <returns>Pointer to the destination 2x3 matrix</returns>
-      [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cv2DRotationMatrix(
-          System.Drawing.PointF center,
-          double angle,
-          double scale,
-          IntPtr mapMatrix);
 
       /// <summary>
       /// Calculates distance to closest zero pixel for all non-zero pixels of source image
