@@ -57,6 +57,7 @@
     <Compile Include="PInvoke\CvInvokeCxcore.cs" />
     <Compile Include="PInvoke\CvInvokeDef.cs" />
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
+    <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="Properties\StringTable.Designer.cs">
       <AutoGen>True</AutoGen>

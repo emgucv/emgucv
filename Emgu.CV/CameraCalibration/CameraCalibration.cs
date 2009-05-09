@@ -160,7 +160,7 @@ namespace Emgu.CV
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
          using (Matrix<float> objectPointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
          using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
-            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
+            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr, 0);
          handle1.Free();
          handle2.Free();
 

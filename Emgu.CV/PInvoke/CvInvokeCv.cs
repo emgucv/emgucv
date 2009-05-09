@@ -994,6 +994,7 @@ namespace Emgu.CV
       /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is NULL, the descriptors are not computed</param>
       /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
       /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
+      /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
@@ -1127,6 +1128,7 @@ namespace Emgu.CV
       /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's.</param>
       /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
       /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
+      /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvFindExtrinsicCameraParams2(
          IntPtr objectPoints,
@@ -1134,7 +1136,8 @@ namespace Emgu.CV
          IntPtr intrinsicMatrix,
          IntPtr distortionCoeffs,
          IntPtr rotationVector,
-         IntPtr translationVector);
+         IntPtr translationVector,
+         int useExtrinsicGuess);
 
       /// <summary>
       /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
