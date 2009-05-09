@@ -36,7 +36,6 @@ namespace SURFFeatureExample
 
          //Create a SURF Tracker using k-d Tree
          SURFTracker tracker = new SURFTracker(modelFeatures);
-
          //Comment out above and uncomment below if you wish to use spill-tree instead
          //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
          
@@ -57,6 +56,7 @@ namespace SURFFeatureExample
          }
          #endregion
 
+         #region draw the project region on the image
          if (homography != null)
          {  //draw a rectangle along the projected model
             System.Drawing.Rectangle rect = modelImage.ROI;
@@ -72,6 +72,7 @@ namespace SURFFeatureExample
 
             res.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Gray(255.0), 5);
          }
+         #endregion
 
          ImageViewer.Show(res);
       }

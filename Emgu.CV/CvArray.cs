@@ -108,7 +108,19 @@ namespace Emgu.CV
          {
             int size = _sizeOfElement * ManagedArray.Length;
             Byte[] data = new Byte[size];
-            Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
+
+            if (_dataHandle.IsAllocated)
+            {
+               Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
+            }
+            else
+            {  //Handle special situation where _dataHandle is not allocated
+               //This could happen if, for example, if the current CvArray is returned by GetSubRect function
+               Array clone = ManagedArray.Clone() as Array;
+               GCHandle handle = GCHandle.Alloc(clone, GCHandleType.Pinned);
+               Marshal.Copy(handle.AddrOfPinnedObject(), data, 0, size);
+               handle.Free();
+            }
 
             if (SerializationCompressionRatio == 0)
             {
@@ -127,6 +139,7 @@ namespace Emgu.CV
                   return ms.ToArray();
                }
             }
+            
          }
          set
          {

@@ -521,9 +521,10 @@ namespace Emgu.CV.UI
       /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
       protected override void Dispose(bool disposing)
       {
-         if (this.Image != null) this.Image.Dispose();
          if (disposing && (components != null))
          {
+            if (this.Image != null) this.Image.Dispose();
+            if (_propertyDlg != null) _propertyDlg.Dispose();
             components.Dispose();
          }
          base.Dispose(disposing);

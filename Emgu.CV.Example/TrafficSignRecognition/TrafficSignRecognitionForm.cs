@@ -26,16 +26,27 @@ namespace TrafficSignRecognition
 
       private void ProcessImage(Image<Bgr, byte> image)
       {
+         Stopwatch watch = Stopwatch.StartNew(); // time the detection process
+
          List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
          List<Rectangle> stopSignBoxList = new List<Rectangle>();
          _stopSignDetector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
-         panel1.Controls.Clear();
+         watch.Stop(); //stop the timer
+         processTimeLabel.Text = String.Format("Stop Sign Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
 
+         panel1.Controls.Clear();
          Point startPoint = new Point(10, 10);
-         ShowStopSign(ref startPoint, stopSignList, stopSignBoxList);
-         foreach (Rectangle box in stopSignBoxList)
-            image.Draw(box, new Bgr(Color.Aquamarine), 2);
+
+         for (int i = 0; i < stopSignList.Count; i++)
+         {
+            Rectangle rect = stopSignBoxList[i];
+            AddLabelAndImage(
+               ref startPoint,
+               String.Format("Stop Sign [{0},{1}]:", rect.Location.Y + rect.Width / 2, rect.Location.Y + rect.Height / 2),
+               stopSignList[i]);
+            image.Draw(rect, new Bgr(Color.Aquamarine), 2);
+         }
 
          imageBox1.Image = image;
       }
@@ -56,18 +67,6 @@ namespace TrafficSignRecognition
          box.Image = image;
          box.Location = startPoint;
          startPoint.Y += box.Height + 10;
-      }
-
-      private void ShowStopSign(ref Point startPoint, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
-      {
-         for (int i = 0; i < stopSignList.Count; i++)
-         {
-            Rectangle rect = boxList[i];
-            AddLabelAndImage(
-               ref startPoint, 
-               String.Format("Stop Sign [{0},{1}]:", rect.Location.Y + rect.Width /2, rect.Location.Y + rect.Height/2),
-               stopSignList[i]);
-         }
       }
 
       private void button1_Click(object sender, EventArgs e)

@@ -1,3 +1,11 @@
+# --------------------------------------------------------
+# Root CMake file for Emgu CV
+#
+# From the off-tree build directory, invoke:
+#   $ cmake <PATH_TO_EMGUCV_ROOT>
+#
+# --------------------------------------------------------
+
 project(emgucv)
 cmake_minimum_required(VERSION 2.6)
 
@@ -25,12 +33,19 @@ set_target_properties(cv PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(cvaux PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(ml PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(highgui PROPERTIES PREFIX ${extra_bin_prefix})
-
-IF(WIN32)
 set_target_properties(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
-ENDIF()
 
 #End building opencv and Emgu.CV.Extern
+
+if (WIN32)
+  #As default, do not build EMGU on Windows. It can be build using Visual Studio
+  set(EMGU_CV_BUILD OFF CACHE BOOL "Build Emgu CV")
+  set(EMGU_CV_EXAMPLE_BUILD OFF CACHE BOOL "Build Emgu CV Example")
+else (WIN32)
+  #As default, build Emgu CV on Linux
+  set(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
+  set(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
+endif ()
 
 add_subdirectory(Emgu.Util)
 add_subdirectory(Emgu.CV)

@@ -46,12 +46,14 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Display the specific histogram
       /// </summary>
-      /// <param name="hist">The histogram to be displayed</param>
+      /// <param name="hist">The 1 dimension histogram to be displayed</param>
       /// <param name="title">The name of the histogram</param>
       public static void Show(Histogram hist, string title)
       {
          HistogramViewer viewer = new HistogramViewer();
-         viewer.HistogramCtrl.AddHistogram(title, Color.Black, hist);
+         if (hist.Dimension == 1)
+            viewer.HistogramCtrl.AddHistogram(title, Color.Black, hist);
+         
          viewer.HistogramCtrl.Refresh();
          viewer.Show();
       }

@@ -1,3 +1,5 @@
+IF(EMGU_CV_EXAMPLE_BUILD)
+
 SET(EMGU_CV_REFERENCE 
 -r:${LIBRARY_3RDPARTY_PATH}/zlib.net.dll 
 -r:System.Xml.dll 
@@ -13,3 +15,5 @@ add_subdirectory(PlanarSubdivision)
 add_subdirectory(ShapeDetection)
 add_subdirectory(SURFFeature)
 add_subdirectory(TrafficSignRecognition)
+
+ENDIF()

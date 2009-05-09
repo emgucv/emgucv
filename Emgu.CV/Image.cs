@@ -1861,8 +1861,9 @@ namespace Emgu.CV
          //false if size are not equal
          if (!EqualSize(img2)) return false;
 
-         using (Image<TColor, Byte> neqMask = Cmp(img2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
+         using(Image<TColor, TDepth> neqMask = new Image<TColor, TDepth>(Size))
          {
+            CvInvoke.cvXor(_ptr, img2.Ptr, neqMask.Ptr, IntPtr.Zero);
             foreach (int c in neqMask.CountNonzero())
                if (c != 0) return false;
             return true;

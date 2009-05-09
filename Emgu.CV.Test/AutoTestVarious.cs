@@ -637,28 +637,63 @@ namespace Emgu.CV.Test
          Assert.AreEqual(minLoc[0].Y, templCenter.Y - templHeight / 2);
       }
 
-      [Test]
-      public void TestOpticalFlow()
+      /// <summary>
+      /// Prepare synthetic image for testing
+      /// </summary>
+      /// <param name="prevImg"></param>
+      /// <param name="currImg"></param>
+      private static void OptiocalFlowImage(out Image<Gray, Byte> prevImg, out Image<Gray, Byte> currImg)
       {
-         #region prepare synthetic image for testing
          //Create a random object
          Image<Gray, Byte> randomObj = new Image<Gray, byte>(50, 50);
          randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255));
 
          //Draw the object in image1 center at (100, 100);
-         Image<Gray, Byte> prevImg = new Image<Gray, byte>(300, 200);
+         prevImg = new Image<Gray, byte>(300, 200);
          Rectangle objectLocation = new Rectangle(75, 75, 50, 50);
          prevImg.ROI = objectLocation;
          randomObj.Copy(prevImg, null);
          prevImg.ROI = Rectangle.Empty;
 
          //Draw the object in image2 center at (102, 103);
-         Image<Gray, Byte> currImg = new Image<Gray, byte>(300, 200);
+         currImg = new Image<Gray, byte>(300, 200);
          objectLocation.Offset(2, 3);
          currImg.ROI = objectLocation;
          randomObj.Copy(currImg, null);
          currImg.ROI = Rectangle.Empty;
-         #endregion
+      }
+
+      [Test]
+      public void TestOpticalFlowBM()
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         OptiocalFlowImage(out prevImg, out currImg);
+         Size blockSize = new Size(5, 5);
+         Size shiftSize = new Size(1, 1);
+         Size maxRange = new Size(10, 10);
+         Size velSize = new Size(
+            (int) Math.Floor((prevImg.Width - blockSize.Width)/(double)shiftSize.Width),
+            (int) Math.Floor((prevImg.Height - blockSize.Height)/(double)shiftSize.Height));
+         Image<Gray, float> velx = new Image<Gray, float>(velSize);
+         Image<Gray, float> vely = new Image<Gray, float>(velSize);
+
+         Stopwatch watch = Stopwatch.StartNew();
+
+         OpticalFlow.BM(prevImg, currImg, blockSize, shiftSize, maxRange, false, velx, vely);
+
+         watch.Stop();
+
+         Trace.WriteLine(String.Format(
+            "Time: {0} milliseconds",
+            watch.ElapsedMilliseconds));
+
+      }
+
+      [Test]
+      public void TestOpticalFlowLK()
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         OptiocalFlowImage(out prevImg, out currImg);
 
          PointF[] prevFeature = new PointF[] { new PointF(100f, 100f) };
 
@@ -1003,6 +1038,16 @@ namespace Emgu.CV.Test
                }
             }
          }
+      }
+
+      [Test]
+      public void TestPyrSegmentation()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
+         Image<Bgr, Byte> segImage = new Image<Bgr, byte>(image.Size);
+         MemStorage storage = new MemStorage();
+         IntPtr comp;
+         CvInvoke.cvPyrSegmentation(image, segImage, storage, out comp, 4, 255, 30);
       }
 
       [Test]

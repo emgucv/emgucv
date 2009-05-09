@@ -27,6 +27,8 @@ namespace LicensePlateRecognition
 
       private void ProcessImage(Image<Bgr, byte> image)
       {
+         Stopwatch watch = Stopwatch.StartNew(); // time the detection process
+
          List<Image<Gray, Byte>> licensePlateList = new List<Image<Gray, byte>>();
          List<Image<Gray, Byte>> filteredLicensePlateList = new List<Image<Gray, byte>>();
          List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
@@ -36,12 +38,19 @@ namespace LicensePlateRecognition
             filteredLicensePlateList,
             licenseBoxList);
 
-         panel1.Controls.Clear();
+         watch.Stop(); //stop the timer
+         processTimeLabel.Text = String.Format("License Plate Recognition time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
 
+         panel1.Controls.Clear();
          Point startPoint = new Point(10, 10);
-         ShowLicense(ref startPoint, words, licensePlateList, filteredLicensePlateList, licenseBoxList);
-         foreach (MCvBox2D box in licenseBoxList)
-            image.Draw(box, new Bgr(Color.Red), 2);
+         for (int i = 0; i < words.Count; i++)
+         {
+            AddLabelAndImage(
+               ref startPoint,
+               "License: " + String.Join(" ", words[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
+               licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
+            image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
+         }
 
          imageBox1.Image = image;
       }
@@ -64,17 +73,6 @@ namespace LicensePlateRecognition
          startPoint.Y += box.Height + 10;
       }
 
-      private void ShowLicense(ref Point startPoint, List<List<Word>> licenses, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
-      {
-         for (int i = 0; i < licenses.Count; i++)
-         {
-            AddLabelAndImage(
-               ref startPoint,
-               "License: " + String.Join(" ", licenses[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
-               licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
-         }
-      }
-
       private void button1_Click(object sender, EventArgs e)
       {
          DialogResult result = openFileDialog1.ShowDialog();
@@ -87,7 +85,7 @@ namespace LicensePlateRecognition
             }
             catch
             {
-               MessageBox.Show("Invalide file format");
+               MessageBox.Show(String.Format("Invalide File: {0}", openFileDialog1.FileName));
                return;
             }
 

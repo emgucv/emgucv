@@ -20,7 +20,7 @@ namespace TrafficSignRecognition
       {
          _surfParam = new MCvSURFParams(500, false);
          using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
-         using (Image<Gray, Byte> redMask = GetRedMask(stopSignModel))
+         using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
             _tracker = new SURFTracker(redMask.ExtractSURF(ref _surfParam));
          }
@@ -38,7 +38,13 @@ namespace TrafficSignRecognition
             Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
       }
 
-      private Image<Gray, Byte> GetRedMask(Image<Bgr, byte> image)
+      /// <summary>
+      /// Compute the red pixel mask for the given image. 
+      /// A red pixel is a pixel where:  20 &lt; hue &lt; 160 AND satuation &gt; 10
+      /// </summary>
+      /// <param name="image">The color image to find red mask from</param>
+      /// <returns>The red pixel mask</returns>
+      private static Image<Gray, Byte> GetRedPixelMask(Image<Bgr, byte> image)
       {
          using (Image<Hsv, Byte> hsv = image.Convert<Hsv, Byte>())
          {
@@ -72,9 +78,7 @@ namespace TrafficSignRecognition
                {
                   Contour<Point> child = contours.VNext;
                   if (child != null)
-                  {
                      FindStopSign(img, stopSignList, boxList, child);
-                  }
                   continue;
                }
 
@@ -112,7 +116,7 @@ namespace TrafficSignRecognition
       public void DetectStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
       {
          Image<Bgr, Byte> smoothImg = img.SmoothGaussian(5, 5, 1.5, 1.5);
-         Image<Gray, Byte> smoothedRedMask = GetRedMask(smoothImg);
+         Image<Gray, Byte> smoothedRedMask = GetRedPixelMask(smoothImg);
          smoothedRedMask._Dilate(1);
          smoothedRedMask._Erode(1);
          using (Image<Gray, Byte> canny = smoothedRedMask.Erode(3).Dilate(3).Canny(new Gray(100), new Gray(50)))

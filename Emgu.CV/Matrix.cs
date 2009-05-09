@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -774,30 +775,30 @@ namespace Emgu.CV
          int numberOfChannels = NumberOfChannels;
          if (numberOfChannels != mat2.NumberOfChannels) return false;
 
-         if (numberOfChannels == 1)
-            using (Matrix<Byte> neqMask = Cmp(mat2, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_NE))
+         using (Matrix<TDepth> xor = new Matrix<TDepth>(Rows, Cols, numberOfChannels))
+         {
+            CvInvoke.cvXor(_ptr, mat2._ptr, xor.Ptr, IntPtr.Zero);
+
+            if (numberOfChannels == 1)
             {
-               return CvInvoke.cvCountNonZero(neqMask.Ptr) == 0;
+               return CvInvoke.cvCountNonZero(xor.Ptr) == 0;
             }
-         else
-         {  //comapre channel by channel
-            Matrix<TDepth>[] channels = Split();
-            Matrix<TDepth>[] channels2 = mat2.Split();
-            try
-            {
-               for (int i = 0; i < numberOfChannels; i++)
+            else
+            {  //comapre channel by channel
+               Matrix<TDepth>[] channels = xor.Split();
+               try
                {
-                  if (!channels[i].Equals(channels2[i]))
-                     return false;
+                  for (int i = 0; i < numberOfChannels; i++)
+                     if (CvInvoke.cvCountNonZero(channels[i].Ptr) != 0)
+                        return false;
+
+                  return true;
                }
-               return true;
-            }
-            finally
-            {
-               foreach (Matrix<TDepth> channel in channels)
-                  channel.Dispose();
-               foreach (Matrix<TDepth> channel in channels2)
-                  channel.Dispose();
+               finally
+               {
+                  foreach (Matrix<TDepth> channel in channels)
+                     channel.Dispose();
+               }
             }
          }
       }

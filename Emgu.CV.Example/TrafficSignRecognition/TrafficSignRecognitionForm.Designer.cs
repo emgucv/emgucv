@@ -31,18 +31,19 @@ namespace TrafficSignRecognition
          this.components = new System.ComponentModel.Container();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.panel1 = new System.Windows.Forms.Panel();
+         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.panel2 = new System.Windows.Forms.Panel();
+         this.informationLabel = new System.Windows.Forms.Label();
          this.textBox1 = new System.Windows.Forms.TextBox();
          this.button1 = new System.Windows.Forms.Button();
          this.label1 = new System.Windows.Forms.Label();
          this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-         this.imageBox1 = new Emgu.CV.UI.ImageBox();
-         this.informationLabel = new System.Windows.Forms.Label();
+         this.processTimeLabel = new System.Windows.Forms.Label();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
-         this.panel2.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
+         this.panel2.SuspendLayout();
          this.SuspendLayout();
          // 
          // splitContainer1
@@ -72,8 +73,19 @@ namespace TrafficSignRecognition
          this.panel1.Size = new System.Drawing.Size(215, 380);
          this.panel1.TabIndex = 0;
          // 
+         // imageBox1
+         // 
+         this.imageBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.imageBox1.Location = new System.Drawing.Point(0, 81);
+         this.imageBox1.Name = "imageBox1";
+         this.imageBox1.Size = new System.Drawing.Size(567, 299);
+         this.imageBox1.TabIndex = 4;
+         this.imageBox1.TabStop = false;
+         // 
          // panel2
          // 
+         this.panel2.Controls.Add(this.processTimeLabel);
          this.panel2.Controls.Add(this.informationLabel);
          this.panel2.Controls.Add(this.textBox1);
          this.panel2.Controls.Add(this.button1);
@@ -83,6 +95,14 @@ namespace TrafficSignRecognition
          this.panel2.Name = "panel2";
          this.panel2.Size = new System.Drawing.Size(567, 81);
          this.panel2.TabIndex = 3;
+         // 
+         // informationLabel
+         // 
+         this.informationLabel.AutoSize = true;
+         this.informationLabel.Location = new System.Drawing.Point(27, 55);
+         this.informationLabel.Name = "informationLabel";
+         this.informationLabel.Size = new System.Drawing.Size(0, 13);
+         this.informationLabel.TabIndex = 3;
          // 
          // textBox1
          // 
@@ -115,38 +135,28 @@ namespace TrafficSignRecognition
          // 
          this.openFileDialog1.FileName = "openFileDialog1";
          // 
-         // imageBox1
+         // ProcessTimeLabel
          // 
-         this.imageBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.imageBox1.Location = new System.Drawing.Point(0, 81);
-         this.imageBox1.Name = "imageBox1";
-         this.imageBox1.Size = new System.Drawing.Size(567, 299);
-         this.imageBox1.TabIndex = 4;
-         this.imageBox1.TabStop = false;
+         this.processTimeLabel.AutoSize = true;
+         this.processTimeLabel.Location = new System.Drawing.Point(33, 55);
+         this.processTimeLabel.Name = "ProcessTimeLabel";
+         this.processTimeLabel.Size = new System.Drawing.Size(0, 13);
+         this.processTimeLabel.TabIndex = 4;
          // 
-         // informationLabel
-         // 
-         this.informationLabel.AutoSize = true;
-         this.informationLabel.Location = new System.Drawing.Point(27, 55);
-         this.informationLabel.Name = "informationLabel";
-         this.informationLabel.Size = new System.Drawing.Size(0, 13);
-         this.informationLabel.TabIndex = 3;
-         // 
-         // LicensePlateRecognitionForm
+         // TrafficSignRecognitionForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(786, 380);
          this.Controls.Add(this.splitContainer1);
-         this.Name = "LicensePlateRecognitionForm";
+         this.Name = "TrafficSignRecognitionForm";
          this.Text = "License Plate Recognition";
          this.splitContainer1.Panel1.ResumeLayout(false);
          this.splitContainer1.Panel2.ResumeLayout(false);
          this.splitContainer1.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
          this.panel2.ResumeLayout(false);
          this.panel2.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
          this.ResumeLayout(false);
 
       }
@@ -162,5 +172,6 @@ namespace TrafficSignRecognition
       private System.Windows.Forms.OpenFileDialog openFileDialog1;
       private System.Windows.Forms.TextBox textBox1;
       private System.Windows.Forms.Label informationLabel;
+      private System.Windows.Forms.Label processTimeLabel;
    }
 }

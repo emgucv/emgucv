@@ -15,7 +15,7 @@ namespace Emgu.CV
    public class SURFTracker : DisposableObject
    {
       private SURFMatcher _matcher;
-      private static int _minRequiredMatch = 7;
+      private static int _randsacRequiredMatch = 10;
 
       /// <summary>
       /// Create a SURF tracker, where SURF is matched with k-d Tree
@@ -115,14 +115,14 @@ namespace Emgu.CV
          matchedGoodFeatures = VoteForUniqueness(matchedGoodFeatures, uniquenessThreshold);
          //Trace.WriteLine(w1.ElapsedMilliseconds);
 
-         if (matchedGoodFeatures.Length < _minRequiredMatch)
+         if (matchedGoodFeatures.Length < 4)
             return null;
 
          //Stopwatch w2 = Stopwatch.StartNew();
          matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures);
          //Trace.WriteLine(w2.ElapsedMilliseconds);
 
-         if (matchedGoodFeatures.Length < _minRequiredMatch)
+         if (matchedGoodFeatures.Length < 4)
             return null;
 
          return GetHomographyMatrixFromMatchedFeatures(matchedGoodFeatures);
@@ -135,22 +135,38 @@ namespace Emgu.CV
       /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
       public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(MatchedSURFFeature[] matchedFeatures)
       {
-         if (matchedFeatures.Length < _minRequiredMatch)
+         if (matchedFeatures.Length < 4)
             return null;
 
-         PointF[] pts1 = new PointF[matchedFeatures.Length];
-         PointF[] pts2 = new PointF[matchedFeatures.Length];
-         for (int i = 0; i < matchedFeatures.Length; i++)
-         {
-            pts1[i] = matchedFeatures[i].ModelFeatures[0].Point.pt;
-            pts2[i] = matchedFeatures[i].ObservedFeature.Point.pt;
+         HomographyMatrix homography;
+         if (matchedFeatures.Length < _randsacRequiredMatch)
+         {  // Too few points for randsac, use 4 points only
+            PointF[] pts1 = new PointF[4];
+            PointF[] pts2 = new PointF[4];
+            for (int i = 0; i < 4; i++)
+            {
+               pts1[i] = matchedFeatures[i].ModelFeatures[0].Point.pt;
+               pts2[i] = matchedFeatures[i].ObservedFeature.Point.pt;
+            }
+            homography = CameraCalibration.GetPerspectiveTransform(pts1, pts2);
          }
+         else
+         {
+            //use randsac to find the Homography Matrix
+            PointF[] pts1 = new PointF[matchedFeatures.Length];
+            PointF[] pts2 = new PointF[matchedFeatures.Length];
+            for (int i = 0; i < matchedFeatures.Length; i++)
+            {
+               pts1[i] = matchedFeatures[i].ModelFeatures[0].Point.pt;
+               pts2[i] = matchedFeatures[i].ObservedFeature.Point.pt;
+            }
 
-         HomographyMatrix homography = CameraCalibration.FindHomography(
-            pts1, //points on the model image
-            pts2, //points on the observed image
-            CvEnum.HOMOGRAPHY_METHOD.RANSAC,
-            3);
+            homography = CameraCalibration.FindHomography(
+               pts1, //points on the model image
+               pts2, //points on the observed image
+               CvEnum.HOMOGRAPHY_METHOD.RANSAC,
+               3);
+         }
 
          if ( homography.IsValid(10) ) 
             return homography;
@@ -162,7 +178,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// For each MatchedSURFFeature, sort the model SURF feature by distance (larger distance has smaller index).
+      /// For each MatchedSURFFeature, sort the model SURF feature by distance (closer distance has smaller index).
       /// </summary>
       /// <param name="matchedFeatures">The matched features to be sorted</param>
       private static void SortIndividualMatchedFeatureByDistance(MatchedSURFFeature[] matchedFeatures)
@@ -202,7 +218,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Sorted the matched SURF feature, such that the smaller distance a matchedFeature has, the lower index it will be located
+      /// Sorted the matched SURF feature, such that a matchedFeature with smaller distance has a lower index
       /// </summary>
       /// <param name="matchedFeatures">The matched features to be sorted</param>
       public static void SortMatchedSURFFeatures(MatchedSURFFeature[] matchedFeatures)

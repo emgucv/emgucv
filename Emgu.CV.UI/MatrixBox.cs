@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.Util;
+using Emgu.CV.Structure;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.UI
 {
@@ -40,6 +42,7 @@ namespace Emgu.CV.UI
             if (_matrix != null)
             {
                Size size = CvInvoke.cvGetSize(_matrix.Ptr);
+               int numberOfChannels = ((MCvMat)Marshal.PtrToStructure(_matrix.Ptr, typeof(MCvMat))).NumberOfChannels;
 
                for (int i = 0; i < size.Width; i++)
                {
@@ -49,11 +52,49 @@ namespace Emgu.CV.UI
                }
                dataGridView1.Rows.Add(size.Height);
 
-               for (int i = 0; i < size.Height; i++)
+               switch (numberOfChannels)
                {
-                  dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
-                  for (int j = 0; j < size.Width; j++)
-                      dataGridView1[j,i].Value = CvInvoke.cvGet2D(_matrix.Ptr, i, j).v0;
+                  case 1:
+                     for (int i = 0; i < size.Height; i++)
+                     {
+                        dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
+                        for (int j = 0; j < size.Width; j++)
+                           dataGridView1[j, i].Value = CvInvoke.cvGet2D(_matrix.Ptr, i, j).v0;
+                     }
+                     break;
+                  case 2:
+                     for (int i = 0; i < size.Height; i++)
+                     {
+                        dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
+                        for (int j = 0; j < size.Width; j++)
+                        {
+                           MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
+                           dataGridView1[j, i].Value = String.Format("[{0},{1}]", scalar.v0, scalar.v1);
+                        }
+                     }
+                     break;
+                  case 3:
+                     for (int i = 0; i < size.Height; i++)
+                     {
+                        dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
+                        for (int j = 0; j < size.Width; j++)
+                        {
+                           MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
+                           dataGridView1[j, i].Value = String.Format("[{0},{1},{2}]", scalar.v0, scalar.v1, scalar.v2);
+                        }
+                     }
+                     break;
+                  case 4:
+                     for (int i = 0; i < size.Height; i++)
+                     {
+                        dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
+                        for (int j = 0; j < size.Width; j++)
+                        {
+                           MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
+                           dataGridView1[j, i].Value = String.Format("[{0},{1},{2},{3}]", scalar.v0, scalar.v1, scalar.v2, scalar.v3);
+                        }
+                     }
+                     break;
                }
             }
          }

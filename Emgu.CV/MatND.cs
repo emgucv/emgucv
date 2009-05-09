@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// a wrapper for the CvMatND 
+   /// A wrapper for CvMatND 
    /// </summary>
    /// <typeparam name="TDepth">The type of depth</typeparam>
    [Serializable]
@@ -86,17 +86,21 @@ namespace Emgu.CV
 
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-            int[] dim = GetDimension();
+            int[] dim = new int[_array.Rank];
+            for (int i = 0; i < dim.Length; i++)
+               dim[i] = _array.GetLength(i);
+            
             CvInvoke.cvInitMatNDHeader(_ptr, dim.Length, dim, CvDepth, _dataHandle.AddrOfPinnedObject());
          }
       }
 
       private int[] GetDimension()
       {
-         int[] dim = new int[_array.Rank];
+         MCvMatND matND = MCvMatND;
+         int[] dim = new int[matND.dims];
          for (int i = 0; i < dim.Length; i++)
          {
-            dim[i] = _array.GetLength(i);
+            dim[i] = matND.dim[i].Size;
          }
          return dim;
       }
@@ -171,6 +175,17 @@ namespace Emgu.CV
          throw new NotImplementedException("This function is not implemented");
       }
 
+      /// <summary>
+      /// The MCvMatND structure
+      /// </summary>
+      public MCvMatND MCvMatND
+      {
+         get
+         {
+            return (MCvMatND)Marshal.PtrToStructure(_ptr, typeof(MCvMatND));
+         }
+      }
+     
       #region IEquatable<MatND<TDepth>> Members
       /// <summary>
       /// Check if the two MatND are equal
@@ -179,7 +194,7 @@ namespace Emgu.CV
       /// <returns>True if the two MatND equals</returns>
       public bool Equals(MatND<TDepth> other)
       {
-
+         #region check if the two MatND has equal dimension
          int[] dim1 = GetDimension();
          int[] dim2 = other.GetDimension();
          if (dim1.Length != dim2.Length) return false;
@@ -187,25 +202,16 @@ namespace Emgu.CV
          {
             if (dim1[i] != dim2[i]) return false;
          }
+         #endregion
 
-         int compressionRatio = SerializationCompressionRatio;
-         if (SerializationCompressionRatio != other.SerializationCompressionRatio)
+         MatND<TDepth> diff = new MatND<TDepth>(dim1);
+         CvInvoke.cvXor(_ptr, other, diff, IntPtr.Zero);
+         Byte[] bytes = diff.Bytes;
+         for (int i = 0; i < bytes.Length; i++)
          {
-            SerializationCompressionRatio = other.SerializationCompressionRatio;
+            if (bytes[i] != 0) return false;
          }
-         //bool equals = true;
-         Byte[] bytes1 = Bytes;
-         SerializationCompressionRatio = compressionRatio;
-
-         Byte[] bytes2 = other.Bytes;
-         for (int i = 0; i < bytes1.Length; i++)
-         {
-            if (bytes1[i] != bytes2[i])
-            {
-               return false;
-            }
-         }
-         return true ;
+         return true;
       }
 
       #endregion

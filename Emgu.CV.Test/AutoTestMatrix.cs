@@ -249,6 +249,7 @@ namespace Emgu.CV.Test
       public void TestMultiChannelMatrix()
       {
          Matrix<float> m = new Matrix<float>(10, 20, 2);
+         m.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255));
          Assert.AreEqual(10, m.Rows);
          Assert.AreEqual(20, m.Cols);
          Assert.AreEqual(2, m.NumberOfChannels);

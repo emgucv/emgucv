@@ -133,5 +133,30 @@ namespace Emgu.CV
       {
          CvInvoke.cvCalcOpticalFlowHS(prev.Ptr, curr.Ptr, usePrevious ? 1 : 0, velx.Ptr, vely.Ptr, lambda, criteria);
       }
+
+      /// <summary>
+      /// Calculates optical flow for overlapped blocks block_size.width * block_size.height pixels each, thus the velocity fields are smaller than the original images. 
+      /// For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous)
+      /// </summary>
+      /// <param name="prev">First image</param>
+      /// <param name="curr">Second image</param>
+      /// <param name="blockSize">Size of basic blocks that are compared.</param>
+      /// <param name="shiftSize">Block coordinate increments. </param>
+      /// <param name="maxRange">Size of the scanned neighborhood in pixels around block.</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field. </param>
+      /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size. </param>
+      /// <param name="vely">Vertical component of the optical flow of the same size velx.</param>
+      public static void BM(
+         Image<Gray, Byte> prev,
+         Image<Gray, Byte> curr,
+         System.Drawing.Size blockSize,
+         System.Drawing.Size shiftSize,
+         System.Drawing.Size maxRange,
+         bool usePrevious,
+         Image<Gray, Single> velx,
+         Image<Gray, Single> vely)
+      {
+         CvInvoke.cvCalcOpticalFlowBM(prev, curr, blockSize, shiftSize, maxRange, usePrevious ? 1 : 0, velx, vely);
+      }
    }
 }
