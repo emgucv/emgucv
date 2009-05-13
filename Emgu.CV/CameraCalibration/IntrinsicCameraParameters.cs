@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -87,6 +89,51 @@ namespace Emgu.CV
          principalPoint = new MCvPoint2D64f();
          pixelAspectRatio = 0;
          CvInvoke.cvCalibrationMatrixValues(_intrinsicMatrix.Ptr, imgWidth, imgHeight, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
+      }
+
+      /// <summary>
+      /// Similar to cvInitUndistortRectifyMap and is opposite to it at the same time.
+      /// The functions are similar in that they both are used to correct lens distortion and to perform the optional perspective (rectification) transformation.
+      /// They are opposite because the function cvInitUndistortRectifyMap does actually perform the reverse transformation in order to initialize the maps properly, while this function does the forward transformation.
+      /// </summary>
+      /// <param name="src">The observed point coordinates</param>
+      /// <param name="R">Optional rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
+      /// <param name="P">Optional new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
+      public PointF[] UndistortPoints(PointF[] src, Matrix<double> R, Matrix<double> P)
+      {
+         PointF[] dst = new PointF[src.Length]; 
+         GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
+         GCHandle dstHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
+         using (Matrix<float> srcPointMatrix = new Matrix<float>(src.Length, 1, 2, srcHandle.AddrOfPinnedObject(), 2 * sizeof(float)))
+         using (Matrix<float> dstPointMatrix = new Matrix<float>(dst.Length, 1, 2, dstHandle.AddrOfPinnedObject(), 2 * sizeof(float)))
+         {
+            CvInvoke.cvUndistortPoints(
+                srcPointMatrix, dstPointMatrix,
+                _intrinsicMatrix.Ptr,
+                _distortionCoeffs.Ptr,
+                R == null ? IntPtr.Zero : R.Ptr,
+                P == null ? IntPtr.Zero : P.Ptr);
+         }
+         srcHandle.Free();
+         dstHandle.Free();
+         return dst;
+      }
+
+      /// <summary>
+      /// Transforms the image to compensate radial and tangential lens distortion. 
+      /// The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same
+      /// </summary>
+      /// <typeparam name="TColor">The color type of the image</typeparam>
+      /// <typeparam name="TDepth">The depth of the image</typeparam>
+      /// <param name="src">The distorted image</param>
+      /// <returns>The corrected image</returns>
+      public Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src)
+         where TColor : struct, IColor
+         where TDepth : new()
+      {
+         Image<TColor, TDepth> res = src.CopyBlank();
+         CvInvoke.cvUndistort2(src.Ptr, res.Ptr, _intrinsicMatrix.Ptr, _distortionCoeffs.Ptr);
+         return res;
       }
 
       #region IEquatable<IntrinsicCameraParameters> Members

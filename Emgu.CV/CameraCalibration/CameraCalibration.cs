@@ -77,10 +77,10 @@ namespace Emgu.CV
       /// T2=R*T1 + T
       /// </summary>
       /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
-      /// <param name="imagePoints1">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
-      /// <param name="imagePoints2">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
-      /// <param name="intrinsicParam1">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
-      /// <param name="intrinsicParam2">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
+      /// <param name="imagePoints1">The 2D image location of the points for camera 1. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="imagePoints2">The 2D image location of the points for camera 2. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="intrinsicParam1">The intrisinc parameters for camera 1, might contains some initial values. The values will be modified by this function.</param>
+      /// <param name="intrinsicParam2">The intrisinc parameters for camera 2, might contains some initial values. The values will be modified by this function.</param>
       /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
       /// <param name="flags">Different flags</param>
       /// <param name="extrinsicParams">The extrinsic parameters which contains:
@@ -176,6 +176,7 @@ namespace Emgu.CV
       /// <param name="src">The distorted image</param>
       /// <param name="intrin">The intrinsic camera parameters</param>
       /// <returns>The corrected image</returns>
+      [Obsolete("Will be removed in the next version, use IntrinsicCameraParameters.Undistor2 function instead")]
       public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
          where TColor : struct, IColor
          where TDepth : new()
@@ -193,8 +194,8 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points) </remarks>
       /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
-      /// <param name="extrin">extrinsic parameters</param>
-      /// <param name="intrin">intrinsic parameters</param>
+      /// <param name="extrin">Extrinsic parameters</param>
+      /// <param name="intrin">Intrinsic parameters</param>
       /// <param name="mats">Optional matrix supplied in the following order: dpdrot, dpdt, dpdf, dpdc, dpddist</param>
       /// <returns>The array of image points which is the projection of <paramref name="objectPoints"/></returns>
       public static PointF[] ProjectPoints2(
@@ -233,6 +234,7 @@ namespace Emgu.CV
       /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <returns>The 3x3 homography matrix. </returns>
+      [Obsolete("Will be removed in the next version, use other overloaded FindHomography function instead")]
       public static Matrix<double> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints)
       {
          return FindHomography(srcPoints, dstPoints, Emgu.CV.CvEnum.HOMOGRAPHY_METHOD.DEFAULT, 0.0);
@@ -245,6 +247,7 @@ namespace Emgu.CV
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <returns>The 3x3 homography matrix. </returns>
+      [Obsolete("Will be removed in the next version, use other overloaded FindHomography function instead")]
       public static Matrix<double> FindHomography(
          Matrix<float> srcPoints, 
          Matrix<float> dstPoints, 

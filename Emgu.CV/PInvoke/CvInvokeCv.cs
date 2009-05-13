@@ -1414,7 +1414,7 @@ namespace Emgu.CV
          IntPtr mapy);
 
       /// <summary>
-      /// This function is similar to cvInitUndistortRectifyMap and is opposite to it at the same time. 
+      /// Similar to cvInitUndistortRectifyMap and is opposite to it at the same time. 
       /// The functions are similar in that they both are used to correct lens distortion and to perform the optional perspective (rectification) transformation. 
       /// They are opposite because the function cvInitUndistortRectifyMap does actually perform the reverse transformation in order to initialize the maps properly, while this function does the forward transformation. 
       /// </summary>
