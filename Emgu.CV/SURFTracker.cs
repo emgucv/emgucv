@@ -119,7 +119,7 @@ namespace Emgu.CV
             return null;
 
          //Stopwatch w2 = Stopwatch.StartNew();
-         matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures);
+         matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures, 1.5, 20);
          //Trace.WriteLine(w2.ElapsedMilliseconds);
 
          if (matchedGoodFeatures.Length < 4)
@@ -166,6 +166,8 @@ namespace Emgu.CV
                pts2, //points on the observed image
                CvEnum.HOMOGRAPHY_METHOD.RANSAC,
                3);
+            if (homography == null)
+               return null;
          }
 
          if ( homography.IsValid(10) ) 
@@ -262,7 +264,10 @@ namespace Emgu.CV
       /// <summary>
       /// Eliminate the matched features whose scale and rotation do not aggree with the majority's scale and rotation.
       /// </summary>
-      public static MatchedSURFFeature[] VoteForSizeAndOrientation(MatchedSURFFeature[] matchedFeatures)
+      /// <param name="rotationBins">The numbers of bins for rotation, a good value might be 20 (which means each bin covers 18 degree)</param>
+      /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
+      /// <param name="matchedFeatures">The matched feature that will be participated in the voting. For each matchedFeatures, only the zero indexed ModelFeature will be considered.</param>
+      public static MatchedSURFFeature[] VoteForSizeAndOrientation(MatchedSURFFeature[] matchedFeatures, double scaleIncrement, int rotationBins)
       {
          float[] scales = new float[matchedFeatures.Length];
          float[] rotations = new float[matchedFeatures.Length];
@@ -281,10 +286,8 @@ namespace Emgu.CV
             rotations[i] = rotation < 0.0 ? rotation + 360 : rotation; 
          }
          
-         int scaleBinSize = (int) Math.Max( ((maxScale - minScale) / Math.Log10(1.5)), 1) ;
-         int rotationBinSize = 20;
-
-         using (Histogram h = new Histogram(new int[] { scaleBinSize, rotationBinSize }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
+         int scaleBinSize = (int) Math.Max( ((maxScale - minScale) / Math.Log10(scaleIncrement)), 1) ;
+         using (Histogram h = new Histogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
          {
             GCHandle handle1 = GCHandle.Alloc(scales, GCHandleType.Pinned);
             GCHandle handle2 = GCHandle.Alloc(rotations, GCHandleType.Pinned);

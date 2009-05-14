@@ -155,7 +155,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3? matrix</param>
+      /// <param name="mapMatrix">Pointer to the destination 3x3 matrix</param>
       /// <returns>Pointer to the perspective transform matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetPerspectiveTransform(
@@ -1196,8 +1196,9 @@ namespace Emgu.CV
       /// <param name="method">The type of the method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
+      /// <returns>1 if the homography matrix is found, 0 otherwise.</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvFindHomography(
+      public static extern int cvFindHomography(
          IntPtr srcPoints,
          IntPtr dstPoints,
          IntPtr homography,

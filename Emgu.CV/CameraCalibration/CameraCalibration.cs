@@ -23,11 +23,11 @@ namespace Emgu.CV
       /// <param name="flags">Flags</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
       public static void CalibrateCamera(
-         MCvPoint3D32f[][] objectPoints, 
-         PointF[][] imagePoints, 
-         System.Drawing.Size imageSize, 
-         IntrinsicCameraParameters intrinsicParam, 
-         CvEnum.CALIB_TYPE flags, 
+         MCvPoint3D32f[][] objectPoints,
+         PointF[][] imagePoints,
+         System.Drawing.Size imageSize,
+         IntrinsicCameraParameters intrinsicParam,
+         CvEnum.CALIB_TYPE flags,
          out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
@@ -90,17 +90,17 @@ namespace Emgu.CV
       /// <param name="termCrit"> Termination criteria for the iterative optimiziation algorithm </param>
       /// <param name="foundamentalMatrix">fundamental matrix</param>
       public static void StereoCalibrate(
-         MCvPoint3D32f[][] objectPoints, 
-         PointF[][] imagePoints1, 
-         PointF[][] imagePoints2, 
-         IntrinsicCameraParameters intrinsicParam1, 
-         IntrinsicCameraParameters intrinsicParam2, 
-         System.Drawing.Size imageSize, 
-         CvEnum.CALIB_TYPE flags, 
-         MCvTermCriteria termCrit, 
-         out ExtrinsicCameraParameters extrinsicParams, 
-         out Matrix<double> foundamentalMatrix, 
-         out Matrix<double> essentialMatrix )
+         MCvPoint3D32f[][] objectPoints,
+         PointF[][] imagePoints1,
+         PointF[][] imagePoints2,
+         IntrinsicCameraParameters intrinsicParam1,
+         IntrinsicCameraParameters intrinsicParam2,
+         System.Drawing.Size imageSize,
+         CvEnum.CALIB_TYPE flags,
+         MCvTermCriteria termCrit,
+         out ExtrinsicCameraParameters extrinsicParams,
+         out Matrix<double> foundamentalMatrix,
+         out Matrix<double> essentialMatrix)
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
 
@@ -109,9 +109,9 @@ namespace Emgu.CV
          for (int i = 0; i < objectPoints.Length; i++)
          {
             Debug.Assert(objectPoints[i].Length == imagePoints1[i].Length && objectPoints[i].Length == imagePoints2[i].Length, String.Format("Number of 3D points and image points should be equal in the {0}th image", i));
-            pointCounts[i,0] = objectPoints[i].Length;
+            pointCounts[i, 0] = objectPoints[i].Length;
          }
-         #endregion 
+         #endregion
 
          using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
          using (Matrix<float> imagePointMatrix1 = ToMatrix(imagePoints1))
@@ -147,7 +147,7 @@ namespace Emgu.CV
       /// <param name="objectPoints">The array of object points</param>
       /// <param name="imagePoints">The array of corresponding image points</param>
       /// <param name="intrin">The intrinsic parameters</param>
-      /// <returns>the extrinsic parameters</returns>
+      /// <returns>The extrinsic parameters</returns>
       public static ExtrinsicCameraParameters FindExtrinsicCameraParams2(
           MCvPoint3D32f[] objectPoints,
           PointF[] imagePoints,
@@ -193,7 +193,7 @@ namespace Emgu.CV
       /// The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters. 
       /// </summary>
       /// <remarks>Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points) </remarks>
-      /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
+      /// <param name="objectPoints">The array of object points.</param>
       /// <param name="extrin">Extrinsic parameters</param>
       /// <param name="intrin">Intrinsic parameters</param>
       /// <param name="mats">Optional matrix supplied in the following order: dpdrot, dpdt, dpdf, dpdc, dpddist</param>
@@ -209,8 +209,8 @@ namespace Emgu.CV
          int matsLength = mats.Length;
          GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
-         using (Matrix<float> pointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
-         using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
+         using (Matrix<float> pointMatrix = new Matrix<float>(objectPoints.Length, 1, 3, handle1.AddrOfPinnedObject(), 3 * sizeof(float)))
+         using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 1, 2, handle2.AddrOfPinnedObject(), 2 * sizeof(float)))
             CvInvoke.cvProjectPoints2(
                   pointMatrix,
                   extrin.RotationVector.Ptr,
@@ -249,8 +249,8 @@ namespace Emgu.CV
       /// <returns>The 3x3 homography matrix. </returns>
       [Obsolete("Will be removed in the next version, use other overloaded FindHomography function instead")]
       public static Matrix<double> FindHomography(
-         Matrix<float> srcPoints, 
-         Matrix<float> dstPoints, 
+         Matrix<float> srcPoints,
+         Matrix<float> dstPoints,
          double ransacReprojThreshold)
       {
          return FindHomography(srcPoints, dstPoints, CvEnum.HOMOGRAPHY_METHOD.RANSAC, ransacReprojThreshold);
@@ -263,15 +263,19 @@ namespace Emgu.CV
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
-      /// <returns>The 3x3 homography matrix</returns>
-      public static Matrix<double> FindHomography(
-         Matrix<float> srcPoints, 
-         Matrix<float> dstPoints, 
-         CvEnum.HOMOGRAPHY_METHOD method, 
+      /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
+      public static HomographyMatrix FindHomography(
+         Matrix<float> srcPoints,
+         Matrix<float> dstPoints,
+         CvEnum.HOMOGRAPHY_METHOD method,
          double ransacReprojThreshold)
       {
-         Matrix<double> homography = new Matrix<double>(3, 3);
-         CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero);
+         HomographyMatrix homography = new HomographyMatrix();
+         if (0 == CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero))
+         {
+            homography.Dispose();
+            return null;
+         }
          return homography;
       }
 
@@ -281,21 +285,25 @@ namespace Emgu.CV
       /// <param name="srcPoints">Point coordinates in the original plane</param>
       /// <param name="dstPoints">Point coordinates in the destination plane</param>
       /// <param name="method">FindHomography method</param>
-      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
-      /// <returns>The 3x3 homography matrix. </returns>
+      /// <param name="ransacReprojThreshold">
+      /// The maximum allowed reprojection error to treat a point pair as an inlier. 
+      /// The parameter is only used in RANSAC-based homography estimation. 
+      /// E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3
+      /// </param>
+      /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
       public static HomographyMatrix FindHomography(
-         PointF[] srcPoints, 
-         PointF[] dstPoints, 
-         CvEnum.HOMOGRAPHY_METHOD method, 
+         PointF[] srcPoints,
+         PointF[] dstPoints,
+         CvEnum.HOMOGRAPHY_METHOD method,
          double ransacReprojThreshold)
       {
-         HomographyMatrix homography = new HomographyMatrix();
+         HomographyMatrix homography;
 
          GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
          GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
          using (Matrix<float> srcPointMatrix = new Matrix<float>(srcPoints.Length, 2, srcHandle.AddrOfPinnedObject()))
          using (Matrix<float> dstPointMatrix = new Matrix<float>(dstPoints.Length, 2, dstHandle.AddrOfPinnedObject()))
-            CvInvoke.cvFindHomography(srcPointMatrix, dstPointMatrix, homography, method, ransacReprojThreshold, IntPtr.Zero);
+            homography = FindHomography(srcPointMatrix, dstPointMatrix, method, ransacReprojThreshold);
          srcHandle.Free();
          dstHandle.Free();
          return homography;
@@ -315,8 +323,8 @@ namespace Emgu.CV
          CvEnum.CALIB_CB_TYPE flags,
          out PointF[] corners)
       {
-         int cornerCount = 0; 
-         
+         int cornerCount = 0;
+
          corners = new PointF[patternSize.Width * patternSize.Height];
          GCHandle handle = GCHandle.Alloc(corners, GCHandleType.Pinned);
 
@@ -327,7 +335,7 @@ namespace Emgu.CV
                handle.AddrOfPinnedObject(),
                ref cornerCount,
                flags) != 0;
-         
+
          handle.Free();
 
          if (cornerCount != corners.Length)
@@ -337,7 +345,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      ///  Draws the individual chessboard corners detected (as red circles) in case if the board was not found (patternWasFound== false) or the colored corners connected with lines when the board was found (patternWasFound == true). 
+      /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (patternWasFound== false) or the colored corners connected with lines when the board was found (patternWasFound == true). 
       /// </summary>
       /// <param name="image">The destination image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
@@ -351,9 +359,9 @@ namespace Emgu.CV
       {
          CvInvoke.cvDrawChessboardCorners(
             image.Ptr,
-            patternSize, 
-            corners, 
-            corners.Length, 
+            patternSize,
+            corners,
+            corners.Length,
             patternWasFound ? 1 : 0);
       }
 
@@ -400,7 +408,7 @@ namespace Emgu.CV
          foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
 
          Matrix<float> res = new Matrix<float>(elementCount, 3);
-         
+
          Int64 address = res.MCvMat.data.ToInt64();
 
          foreach (MCvPoint3D32f[] d in data)

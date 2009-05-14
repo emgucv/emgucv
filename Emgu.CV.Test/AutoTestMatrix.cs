@@ -13,6 +13,7 @@ using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Test
 {
@@ -139,7 +140,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestRuntimeSerialize()
+      public void TestRuntimeSerialize1()
       {
          Matrix<Byte> mat = new Matrix<Byte>(100, 80, 2);
          mat.SetRandNormal((ulong)DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
@@ -158,7 +159,63 @@ namespace Emgu.CV.Test
             Matrix<Byte> mat2 = (Matrix<Byte>)formatter.Deserialize(ms2);
             Assert.IsTrue(mat.Equals(mat2));
          }
+      }
 
+      [Test]
+      public void TestRuntimeSerialize2()
+      {
+         Random r = new Random();
+         double[,,] data = new double[100, 80, 2];
+         for (int i = 0; i < data.GetLength(0); i++)
+            for (int j = 0; j < data.GetLength(1); j++)
+               for (int k = 0; k < data.GetLength(2); k++)
+                  data[i, j, k] = r.NextDouble();
+
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+
+         Matrix<Double> mat = new Matrix<Double>(data.GetLength(0), data.GetLength(1), data.GetLength(2), handle.AddrOfPinnedObject(), sizeof(double) * data.GetLength(1) * data.GetLength(2));
+
+         System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+             formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+         Byte[] bytes;
+         using (MemoryStream ms = new MemoryStream())
+         {
+            formatter.Serialize(ms, mat);
+            bytes = ms.GetBuffer();
+         }
+         using (MemoryStream ms2 = new MemoryStream(bytes))
+         {
+            Matrix<Double> mat2 = (Matrix<double>)formatter.Deserialize(ms2);
+            Assert.IsTrue(mat.Equals(mat2));
+         }
+         handle.Free();
+      }
+
+      [Test]
+      public void TestRuntimeSerialize3()
+      {
+         MCvPoint3D32f[] data = new MCvPoint3D32f[] { new MCvPoint3D32f() };
+
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+
+         Matrix<float> mat = new Matrix<float>(data.GetLength(0), 1, 3, handle.AddrOfPinnedObject(), sizeof(float) * 3);
+
+         System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+             formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+         Byte[] bytes;
+         using (MemoryStream ms = new MemoryStream())
+         {
+            formatter.Serialize(ms, mat);
+            bytes = ms.GetBuffer();
+         }
+         using (MemoryStream ms2 = new MemoryStream(bytes))
+         {
+            Matrix<float> mat2 = (Matrix<float>)formatter.Deserialize(ms2);
+            Assert.IsTrue(mat.Equals(mat2));
+         }
+         handle.Free();
       }
 
       [Test]

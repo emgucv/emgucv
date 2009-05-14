@@ -41,7 +41,7 @@ namespace SURFFeatureExample
          
          SURFTracker.MatchedSURFFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
          matchedFeatures = SURFTracker.VoteForUniqueness(matchedFeatures, 0.8);
-         matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures);
+         matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
          HomographyMatrix homography = SURFTracker.GetHomographyMatrixFromMatchedFeatures(matchedFeatures);
 
          //Merge the object image and the observed image into one image for display

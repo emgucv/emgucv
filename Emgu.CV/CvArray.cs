@@ -106,22 +106,38 @@ namespace Emgu.CV
       {
          get
          {
-            int size = _sizeOfElement * ManagedArray.Length;
-            Byte[] data = new Byte[size];
+            int size;
+            IntPtr dataStart;
 
             if (_dataHandle.IsAllocated)
             {
-               Marshal.Copy(_dataHandle.AddrOfPinnedObject(), data, 0, size);
+               size = _sizeOfElement * ManagedArray.Length;
+               dataStart = _dataHandle.AddrOfPinnedObject();
+            }
+            else if (this is Matrix<TDepth>)
+            {
+               Matrix<TDepth> matrix = (Matrix<TDepth>)this;
+               MCvMat mat = matrix.MCvMat;
+               if (mat.step == 0)
+               {  //The matrix only have one row
+                  size = mat.cols * NumberOfChannels * Marshal.SizeOf(typeof(TDepth));
+               } else
+                  size = mat.rows * mat.step;
+               dataStart = mat.data;
+            }
+            else if (this is MatND<TDepth>)
+            {
+               throw new NotImplementedException("Getting Bytes from Pinned MatND is not implemented");
             }
             else
-            {  //Handle special situation where _dataHandle is not allocated
-               //This could happen if, for example, if the current CvArray is returned by GetSubRect function
-               Array clone = ManagedArray.Clone() as Array;
-               GCHandle handle = GCHandle.Alloc(clone, GCHandleType.Pinned);
-               Marshal.Copy(handle.AddrOfPinnedObject(), data, 0, size);
-               handle.Free();
+            {  //this is Image<TColor, TDepth>
+               MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
+               size = iplImage.height * iplImage.widthStep;
+               dataStart = iplImage.imageData;
             }
-
+            Byte[] data = new Byte[size];
+            Marshal.Copy(dataStart, data, 0, size);
+            
             if (SerializationCompressionRatio == 0)
             {
                return data;

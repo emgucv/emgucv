@@ -196,6 +196,17 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestProjectPoints()
+      {
+         IntrinsicCameraParameters intrin = new IntrinsicCameraParameters();
+         intrin.IntrinsicMatrix.SetIdentity();
+         ExtrinsicCameraParameters extrin = new ExtrinsicCameraParameters();
+         MCvPoint3D32f point = new MCvPoint3D32f();
+
+         PointF[] points = CameraCalibration.ProjectPoints2(new MCvPoint3D32f[] { point }, extrin, intrin);
+      }
+
+      [Test]
       public void TestBlob()
       {
          int width = 300;
