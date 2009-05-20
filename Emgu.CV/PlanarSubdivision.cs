@@ -216,9 +216,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the storage related to this triangulation
+      /// Release unmanaged resources
       /// </summary>
       protected override void DisposeObject()
+      {
+      }
+
+      /// <summary>
+      /// Release the storage related to this triangulation
+      /// </summary>
+      protected override void ReleaseManagedResources()
       {
          _storage.Dispose();
       }

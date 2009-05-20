@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoSurveillance
 {
@@ -34,7 +35,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="imageForground">The forground mask</param>
       /// <param name="newBlob">The new blob list</param>
       /// <param name="oldBlob">The old blob list</param>
-      public int DetectNewBlob(IImage image, IImage imageForground, BlobSeq newBlob, BlobSeq oldBlob)
+      public int DetectNewBlob(IImage image, Image<Gray, Byte> imageForground, BlobSeq newBlob, BlobSeq oldBlob)
       {
          return CvInvoke.CvBlobDetectorDetectNewBlob(_ptr, image.Ptr, imageForground.Ptr, newBlob.Ptr, oldBlob.Ptr);
       }

@@ -16,6 +16,7 @@ namespace Emgu.Util
    /// </summary>
    public static class Toolbox
    {
+      /*
       /// <summary>
       /// Convert on enumeration to another using the specific convertor
       /// </summary>
@@ -28,7 +29,7 @@ namespace Emgu.Util
       {
          foreach (Tin obj in inputs)
             yield return convertor(obj);
-      }
+      }*/
 
       #region delegates
       /// <summary>

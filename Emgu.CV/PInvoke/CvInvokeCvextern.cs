@@ -58,15 +58,6 @@ namespace Emgu.CV
       /// <param name="blobSeq">The BlobSeq to be released</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvBlobSeqRelease(IntPtr blobSeq);
-      #endregion
-
-      #region BlobDetector
-      /// <summary>
-      /// Release the blob detector
-      /// </summary>
-      /// <param name="detector">the detector to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
-      public extern static void CvBlobDetectorRelease(IntPtr detector);
 
       /// <summary>
       /// Get the specific blob from the blob sequence
@@ -78,12 +69,30 @@ namespace Emgu.CV
       public extern static IntPtr CvBlobSeqGetBlob(IntPtr blobSeq, int blobIndex);
 
       /// <summary>
+      /// Get the specific blob from the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">the blob sequence</param>
+      /// <param name="blobIndex">the index of the blob to be retrieved</param>
+      /// <returns>Pointer to the specific blob</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobSeqGetBlobByID(IntPtr blobSeq, int blobIndex);
+
+      /// <summary>
       /// Get the number of blob in the blob sequence
       /// </summary>
       /// <param name="blobSeq">The blob sequence</param>
       /// <returns>The number of blob in the blob sequence</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static int CvBlobSeqGetBlobNum(IntPtr blobSeq);
+      #endregion
+
+      #region BlobDetector
+      /// <summary>
+      /// Release the blob detector
+      /// </summary>
+      /// <param name="detector">the detector to be released</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvBlobDetectorRelease(IntPtr detector);
 
       /// <summary>
       /// Detect new blobs.
@@ -176,9 +185,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tracker">The tracker</param>
       /// <param name="blobIndex">The index of the blob</param>
-      /// <returns>Pointer to specified by index blob</returns>
+      /// <returns>Pointer to the blob with the specific index</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvBlobTrackerGetBlob(IntPtr tracker, int blobIndex);
+
+      /// <summary>
+      /// Return pointer to specified by index blob
+      /// </summary>
+      /// <param name="tracker">The tracker</param>
+      /// <param name="blobId">The id of the blob</param>
+      /// <returns>Pointer to the blob with specific id</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static IntPtr CvBlobTrackerGetBlobByID(IntPtr tracker, int blobId);
 
       /// <summary>
       /// Delete blob by its index

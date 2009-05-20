@@ -172,9 +172,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release any images associated with this object
+      /// Release unmanaged resources
       /// </summary>
       protected override void DisposeObject()
+      {
+
+      }
+
+      /// <summary>
+      /// Release any images associated with this object
+      /// </summary>
+      protected override void ReleaseManagedResources()
       {
          if (_silh != null) _silh.Dispose();
          if (_mhi != null) _mhi.Dispose();

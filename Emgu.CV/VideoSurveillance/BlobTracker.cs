@@ -10,7 +10,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// A Blob Tracker
    /// </summary>
-   public class BlobTracker : UnmanagedObject, IEnumerable<MCvBlob>
+   public class BlobTracker : BlobSeqBase
    {
       /// <summary>
       /// Create a blob trakcer of the specific type
@@ -46,11 +46,15 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blob">Structure with blob parameters (ID is ignored)</param>
       /// <param name="currentImage">current image</param>
-      /// <param name="currentForgroundMask">current foreground mask</param>
+      /// <param name="currentForgroundMask">Current foreground mask</param>
       /// <returns>Newly added blob</returns>
-      public MCvBlob AddBlob(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForgroundMask)
+      public MCvBlob Add(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForgroundMask)
       {
-         IntPtr bobPtr = CvInvoke.CvBlobTrackerAddBlob(_ptr, ref blob, currentImage.Ptr, currentForgroundMask);
+         IntPtr bobPtr = CvInvoke.CvBlobTrackerAddBlob(
+            _ptr, 
+            ref blob, 
+            currentImage == null ? IntPtr.Zero : currentImage.Ptr, 
+            currentForgroundMask);
          return (MCvBlob)Marshal.PtrToStructure(bobPtr, typeof(MCvBlob));
       }
 
@@ -58,17 +62,18 @@ namespace Emgu.CV.VideoSurveillance
       /// Delete blob by its index
       /// </summary>
       /// <param name="blobIndex">The index of the blob</param>
-      public void DeleteBlob(int blobIndex)
+      public void RemoveAt(int blobIndex)
       {
          CvInvoke.CvBlobTrackerDelBlob(_ptr, blobIndex);
       }
 
+      #region BolbSeqBase Members
       /// <summary>
       /// Return the blob given the specific index
       /// </summary>
       /// <param name="i">The index of the blob</param>
       /// <returns>The blob in the specific index</returns>
-      public MCvBlob this[int i]
+      public override MCvBlob this[int i]
       {
          get
          {
@@ -77,9 +82,21 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
+      /// Get the blob with the specific id
+      /// </summary>
+      /// <param name="blobID">The id of the blob</param>
+      /// <returns>The blob of the specific id, if it doesn't exist, null is returned</returns>
+      public override MCvBlob? GetBlobByID(int blobID)
+      {
+         IntPtr blobPtr = CvInvoke.CvBlobTrackerGetBlobByID(_ptr, blobID);
+         if (blobPtr == IntPtr.Zero) return null;
+         return (MCvBlob?)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
+      }
+
+      /// <summary>
       /// Get the number of blobs in this tracker
       /// </summary>
-      public int Count
+      public override int Count
       {
          get
          {
@@ -94,26 +111,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          CvInvoke.CvBlobTrackerRealease(_ptr);
       }
-
-      #region IEnumerable<MCvBlob> Members
-      /// <summary>
-      /// Get an enumerator of all the blobs tracked by this tracker.
-      /// </summary>
-      /// <returns></returns>
-      public IEnumerator<MCvBlob> GetEnumerator()
-      {
-         for (int i = 0; i < Count; i++)
-            yield return this[i];
-      }
       #endregion
 
-      #region IEnumerable Members
-
-      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-      {
-         return GetEnumerator();
-      }
-
-      #endregion
    }
 }

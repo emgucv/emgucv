@@ -132,9 +132,9 @@ namespace Emgu.CV.ML.UnitTest
             parameters2.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_GENERIC;
             parameters2.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_E_STEP;
             parameters2.TermCrit = new MCvTermCriteria(100, 1.0e-6);
-            parameters2.Means = emModel1.GetMeans();
+            parameters2.Means = emModel1.Means;
             parameters2.Covs = emModel1.GetCovariances();
-            parameters2.Weights = emModel1.GetWeights();
+            parameters2.Weights = emModel1.Weights;
                         
             emModel2.Train(samples, null, parameters2, labels);
             
@@ -160,7 +160,7 @@ namespace Emgu.CV.ML.UnitTest
             #endregion 
 
 #if SHOW_IMAGE
-         Emgu.CV.UI.ImageViewer.Show(img);
+            Emgu.CV.UI.ImageViewer.Show(img);
 #endif
          }
       }
@@ -502,13 +502,21 @@ namespace Emgu.CV.ML.UnitTest
                }
             }
 
-            //Matrix<float> varImportance = forest.GetVarImportance();
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
-            //int n = varImportance.Width;
+
+            StringBuilder builder = new StringBuilder("Variable Importance: ");
+            using (Matrix<float> varImportance = forest.VarImportance)
+            {
+               for (int i = 0; i < varImportance.Cols; i++)
+               {
+                  builder.AppendFormat("{0} ", varImportance[0, i]);
+               }
+            }
 
             Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
             Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
+            Trace.WriteLine(builder.ToString());
          }
       }
 
@@ -568,13 +576,12 @@ namespace Emgu.CV.ML.UnitTest
                }
             }
 
-            //Matrix<float> varImportance = forest.GetVarImportance();
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
-            //int n = varImportance.Width;
 
             Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
             Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
+
          }
       }
 

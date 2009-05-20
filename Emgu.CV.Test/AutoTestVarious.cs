@@ -433,7 +433,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void GetBox2DPoints()
+      public void TestGetBox2DPoints()
       {
          MCvBox2D box = new MCvBox2D(
             new System.Drawing.PointF(3.0f, 2.0f), 
@@ -761,17 +761,35 @@ namespace Emgu.CV.Test
       }*/
 
       [Test]
-      public void TestFeatureTree()
+      public void TestKDTree()
       {
-         Matrix<float>[] features = new Matrix<float>[10];
+         float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new Matrix<float>(new float[1, 1] { { (float)i } });
+            features[i] = new float[] { (float)i };
          FeatureTree tree = new FeatureTree(features);
 
          Matrix<Int32> result;
          Matrix<double> distance;
-         Matrix<float>[] features2 = new Matrix<float>[1];
-         features2[0] = new Matrix<float>(new float[1,1]{{ 5.0f}});
+         float[][] features2 = new float[1][];
+         features2[0] = new float[]{ 5.0f};
+
+         tree.FindFeatures(features2, out result, out distance, 1, 20);
+         Assert.AreEqual(result[0, 0], 5);
+         Assert.AreEqual(distance[0, 0], 0.0);
+      }
+
+      [Test]
+      public void TestSpillTree()
+      {
+         float[][] features = new float[10][];
+         for (int i = 0; i < features.Length; i++)
+            features[i] = new float[] { (float)i };
+         FeatureTree tree = new FeatureTree(features, 50, .7, .1);
+
+         Matrix<Int32> result;
+         Matrix<double> distance;
+         float[][] features2 = new float[1][];
+         features2[0] = new float[] { 5.0f };
 
          tree.FindFeatures(features2, out result, out distance, 1, 20);
          Assert.AreEqual(result[0, 0], 5);

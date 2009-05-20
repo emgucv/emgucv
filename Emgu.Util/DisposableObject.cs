@@ -22,24 +22,47 @@ namespace Emgu.Util
       }
 
       ///<summary> 
-      /// Release the all the memory associate with this object
+      /// Dispose(bool disposing) executes in two distinct scenarios.
+      /// If disposing equals true, the method has been called directly
+      /// or indirectly by a user's code. Managed and unmanaged resources
+      /// can be disposed.
+      /// If disposing equals false, the method has been called by the
+      /// runtime from inside the finalizer and you should not reference
+      /// other objects. Only unmanaged resources can be disposed.
       ///</summary>
-      protected virtual void Dispose(bool disposing)
+      /// <param name="disposing">
+      /// If disposing equals false, the method has been called by the
+      /// runtime from inside the finalizer and you should not reference
+      /// other objects. Only unmanaged resources can be disposed.
+      /// </param>
+      private void Dispose(bool disposing)
       {
-         if (disposing)
-         {
-            // Free other state (managed objects).
-         }
-         // Free your own state (unmanaged objects).
+         // Check to see if Dispose has already been called.
          if (!_disposed)
          {
             _disposed = true;
+
+            // If disposing equals true, release all managed resources as well
+            if (disposing)
+            {
+               ReleaseManagedResources();
+            }
+
+            //release unmanaged resource.
             DisposeObject();
          }
       }
 
       /// <summary>
-      /// Function use to release _ptr object
+      /// Release the managed resouces. This function will be called during the disposal of the current object.
+      /// override ride this function if you need to call the Dispose() function on any managed IDisposable object created by the current object
+      /// </summary>
+      protected virtual void ReleaseManagedResources()
+      {
+      }
+
+      /// <summary>
+      /// Release the unmanaged resources
       /// </summary>
       protected abstract void DisposeObject();
 

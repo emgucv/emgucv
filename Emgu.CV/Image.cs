@@ -1340,15 +1340,12 @@ namespace Emgu.CV
             SURFFeature[] res = new SURFFeature[surfPoints.Length];
 
             int elementsInDescriptor = param.extended == 0 ? 64 : 128;
-            int bytesToCopy = elementsInDescriptor * sizeof(float);
 
             for (int i = 0; i < res.Length; i++)
             {
-               float[,] descriptor = new float[elementsInDescriptor, 1];
-               GCHandle handle = GCHandle.Alloc(descriptor, GCHandleType.Pinned);
-               Emgu.Util.Toolbox.memcpy(handle.AddrOfPinnedObject(), CvInvoke.cvGetSeqElem(descriptorPtr, i), bytesToCopy);
-               handle.Free();
-               res[i] = new SURFFeature(ref surfPoints[i], new Matrix<float>(descriptor));
+               float[] descriptor = new float[elementsInDescriptor];
+               Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
+               res[i] = new SURFFeature(ref surfPoints[i], descriptor);
             }
 
             return res;
@@ -1358,7 +1355,10 @@ namespace Emgu.CV
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
       {
          IntPtr keypointsPtr;
+         //Stopwatch watch = Stopwatch.StartNew();
          CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, out keypointsPtr, out descriptorPtr, stor.Ptr, param);
+         //watch.Stop();
+         //System.Diagnostics.Trace.WriteLine(watch.ElapsedMilliseconds);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
       }
       #endregion
@@ -3956,7 +3956,7 @@ namespace Emgu.CV
          {
             CvInvoke.cvFlip(
                Ptr,
-               Ptr,
+               IntPtr.Zero,
                GetCodeFromFlipType(flipType));
          }
       }

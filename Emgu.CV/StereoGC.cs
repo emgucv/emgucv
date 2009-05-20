@@ -45,7 +45,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the Stereo state
+      /// Release the stereo state and all the memory associate with it
       /// </summary>
       protected override void DisposeObject()
       {

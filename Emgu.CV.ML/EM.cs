@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
+using System.Diagnostics;
 
 namespace Emgu.CV.ML
 {
@@ -56,8 +57,8 @@ namespace Emgu.CV.ML
             param.covs = IntPtr.Zero;
          else
          {
-            IntPtr[] covsPtr = Array.ConvertAll<CvArray<double>, IntPtr>(parameters.Covs,
-               delegate(CvArray<double> m) { return m.Ptr; });
+            IntPtr[] covsPtr = Array.ConvertAll<Matrix<double>, IntPtr>(parameters.Covs,
+               delegate(Matrix<double> m) { return m.Ptr; });
             covsPtrHandle = GCHandle.Alloc(covsPtr, GCHandleType.Pinned);
             param.covs = covsPtrHandle.Value.AddrOfPinnedObject();
          }
@@ -104,69 +105,60 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get the mean of the clusters
       /// </summary>
-      /// <returns>The mean of the clusters</returns>
-      public Matrix<double> GetMeans()
+      public Matrix<double> Means
       {
-         return IntPtrToDoubleMatrix(MlInvoke.CvEMGetMeans(_ptr));
+         get
+         {
+            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetMeans(_ptr));
+         }
       }
 
       /// <summary>
       /// Get the weights of the clusters
       /// </summary>
-      /// <returns>The weights of the clusters</returns>
-      public Matrix<double> GetWeights()
+      public Matrix<double> Weights
       {
-         return IntPtrToDoubleMatrix(MlInvoke.CvEMGetWeights(_ptr));
+         get
+         {
+            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetWeights(_ptr));
+         }
       }
 
       /// <summary>
-      /// Get the probability matrix
+      /// Get the matrix of probability. 
+      /// A entry on the m_th row and n_th col indicates the probability of the m_th data point given the n_th cluster.
       /// </summary>
-      /// <returns></returns>
-      public Matrix<double> GetProbabilities()
+      public Matrix<double> Probabilities
       {
-         return IntPtrToDoubleMatrix(MlInvoke.CvEMGetProbs(_ptr));
+         get
+         {
+            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetProbs(_ptr));
+         }
       }
 
       /// <summary>
       /// Get the covariance matrices for each cluster
       /// </summary>
-      /// <returns></returns>
+      /// <returns>Get the array of covariance matrix for each data point.</returns>
       public Matrix<double>[] GetCovariances()
       {
-         Int64 ptrToCovs = MlInvoke.CvEMGetCovs(_ptr).ToInt64();
-         if (ptrToCovs == 0) return null;
+         IntPtr ptrToCovs = MlInvoke.CvEMGetCovs(_ptr);
+         if (ptrToCovs == IntPtr.Zero) return null;
 
          int ncluster = NumberOfClusters;
-         int step = Marshal.SizeOf(typeof(IntPtr));
+         IntPtr[] covPtrs = new IntPtr[ncluster];
+         Marshal.Copy(ptrToCovs, covPtrs, 0, ncluster);
 
-         Matrix<double>[] covarianceMatrices = new Matrix<double>[ncluster];
-
-         for (int n = 0; n < ncluster; ptrToCovs += step, n++)
-         {
-            IntPtr covMatPtr = Marshal.ReadIntPtr(new IntPtr(ptrToCovs));
-            covarianceMatrices[n] = IntPtrToDoubleMatrix(covMatPtr);
-         }
-         return covarianceMatrices;
+         return Array.ConvertAll<IntPtr, Matrix<double>>(covPtrs, IntPtrToDoubleMatrix);
       }
 
       private Matrix<double> IntPtrToDoubleMatrix(IntPtr matPtr)
       {
          if (matPtr == IntPtr.Zero) return null;
-
-         int rows, cols;
-         GetMatrixInfo(matPtr, out rows, out cols);
-         Matrix<double> res = new Matrix<double>(rows, cols);
-         CvInvoke.cvCopy(matPtr, res, IntPtr.Zero);
-
-         return res;
-      }
-
-      private void GetMatrixInfo(IntPtr matPtr, out int rows, out int cols)
-      {
          MCvMat mat = (MCvMat)Marshal.PtrToStructure(matPtr, typeof(MCvMat));
-         rows = mat.rows;
-         cols = mat.cols;
+         Matrix<double> result = new Matrix<double>(mat.rows, mat.cols, 1, mat.data, mat.step);
+         Debug.Assert(mat.type == result.MCvMat.type, "Matrix type is not double");
+         return result;
       }
 
       /// <summary>

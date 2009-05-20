@@ -31,7 +31,7 @@ namespace Emgu.CV.VideoSurveillance
       private BlobTracker _blobTracker;
 
       /// <summary>
-      /// Selected blob trajectory generator. If this field is NULL no generator is used.
+      /// Selected blob trajectory generator. If this field is IntPtr.Zero no generator is used.
       /// </summary>
       public IntPtr BTGen;
 
@@ -73,6 +73,7 @@ namespace Emgu.CV.VideoSurveillance
             _blobDetector = value;
          }
       }
+
       /// <summary>
       /// Selected blob tracking module. If this field is NULL default blobtracker module will be created.
       /// </summary>

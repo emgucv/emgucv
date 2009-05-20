@@ -771,7 +771,7 @@ namespace Emgu.CV.Test
          {
             tracker.Process(capture.QuerySmallFrame().PyrUp());
             
-            Image<Gray, Byte> img = tracker.GetForgroundMask();
+            Image<Gray, Byte> img = tracker.ForgroundMask;
             //viewer.Image = tracker.GetForgroundMask();
             foreach (MCvBlob blob in tracker)
             {

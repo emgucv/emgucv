@@ -46,7 +46,7 @@ namespace Emgu.CV
             rangesPts[i] = new IntPtr(address + i * (Marshal.SizeOf(typeof(RangeF))));
          #endregion
 
-         #region alocate memory for the underline data storage
+         #region Allocate memory for the undernearth data storage
          int size = 1;
          foreach (int s in binSizes) size *= s;
          _data = new float[size];

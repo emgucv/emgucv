@@ -55,7 +55,11 @@
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
     <Compile Include="PInvoke\CvInvokeCxcore.cs" />
-    <Compile Include="PInvoke\CvInvokeDef.cs" />
+    <Compile Include="PInvoke\CvInvokeEntryPoints.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CvInvokeEntryPoints.tt</DependentUpon>
+    </Compile>
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
     <Compile Include="VideoSurveillance\BlobSeq.cs" />
+    <Compile Include="VideoSurveillance\BlobSeqBase.cs" />
     <Compile Include="VideoSurveillance\BlobTracker.cs" />
     <Compile Include="VideoSurveillance\BlobTrackerAuto.cs" />
     <Compile Include="CameraCalibration\RotationVector3D.cs" />
@@ -182,8 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CV.snk" />
-    <None Include="Emgu.CV.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="PInvoke\CvInvokeEntryPoints.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CvInvokeEntryPoints.cs</LastGenOutput>
     </None>
     <None Include="README.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

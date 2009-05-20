@@ -350,9 +350,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release all the matrix associated to this object
+      /// Release unmanaged resource
       /// </summary>
       protected override void DisposeObject()
+      {
+      }
+
+      /// <summary>
+      /// Release all the matrix associated to this object
+      /// </summary>
+      protected override void ReleaseManagedResources()
       {
          if (_statePre != null) _statePre.Dispose();
          if (_statePost != null) _statePost.Dispose();

@@ -47,7 +47,7 @@ namespace Emgu.Util
       /// <summary>
       /// Release the GCHandle
       /// </summary>
-      protected override void DisposeObject()
+      protected override void ReleaseUnmanagedResources()
       {
          _handle.Free();
       }

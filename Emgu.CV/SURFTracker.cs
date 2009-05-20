@@ -225,11 +225,10 @@ namespace Emgu.CV
       /// <param name="matchedFeatures">The matched features to be sorted</param>
       public static void SortMatchedSURFFeatures(MatchedSURFFeature[] matchedFeatures)
       {
-         SortedList<double, MatchedSURFFeature> list = new SortedList<double, MatchedSURFFeature>();
+         SortedList<double, MatchedSURFFeature> list = new SortedList<double, MatchedSURFFeature>(matchedFeatures.Length);
          foreach (MatchedSURFFeature ms in matchedFeatures)
-         {
             list.Add(ms.Distances[0], ms);
-         }
+         
          list.Values.CopyTo(matchedFeatures, 0);
       }
 
@@ -241,24 +240,13 @@ namespace Emgu.CV
       /// <returns>The filtered matched SURF Features</returns>
       public static MatchedSURFFeature[] VoteForUniqueness(MatchedSURFFeature[] matchedFeatures, double uniquenessThreshold)
       {
-         List<MatchedSURFFeature> matchedGoodFeatures = new List<MatchedSURFFeature>();
-
-         foreach (MatchedSURFFeature f in matchedFeatures)
-         {
-            if (f.Distances.Length == 1)  //if this is the only match
+         return Array.FindAll<MatchedSURFFeature>(matchedFeatures,
+            delegate(MatchedSURFFeature f)
             {
-               matchedGoodFeatures.Add(f);
-            }
-            else
-            {
-               if (f.Distances[0] / f.Distances[1] <= uniquenessThreshold) //if the first model feature is a good match
-               {
-                  matchedGoodFeatures.Add(f);
-               }
-            }
-         }
-
-         return matchedGoodFeatures.ToArray();
+               return
+                  f.Distances.Length == 1 //this is the only match
+                  || f.Distances[0] / f.Distances[1] <= uniquenessThreshold; //if the first model feature is a good match 
+            });
       }
 
       /// <summary>
@@ -269,8 +257,10 @@ namespace Emgu.CV
       /// <param name="matchedFeatures">The matched feature that will be participated in the voting. For each matchedFeatures, only the zero indexed ModelFeature will be considered.</param>
       public static MatchedSURFFeature[] VoteForSizeAndOrientation(MatchedSURFFeature[] matchedFeatures, double scaleIncrement, int rotationBins)
       {
-         float[] scales = new float[matchedFeatures.Length];
-         float[] rotations = new float[matchedFeatures.Length];
+         int elementsCount = matchedFeatures.Length;
+         float[] scales = new float[elementsCount];
+         float[] rotations = new float[elementsCount];
+         float[] flags = new float[elementsCount];
          float minScale = float.MaxValue;
          float maxScale = float.MinValue;
 
@@ -287,32 +277,35 @@ namespace Emgu.CV
          }
          
          int scaleBinSize = (int) Math.Max( ((maxScale - minScale) / Math.Log10(scaleIncrement)), 1) ;
+
          using (Histogram h = new Histogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
          {
-            GCHandle handle1 = GCHandle.Alloc(scales, GCHandleType.Pinned);
-            GCHandle handle2 = GCHandle.Alloc(rotations, GCHandleType.Pinned);
+            GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
+            GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
+            GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
 
-            Matrix<float> flags;
-            using (Matrix<float> scalesMat = new Matrix<float>(1, scales.Length, handle1.AddrOfPinnedObject()))
-            using (Matrix<float> rotationsMat = new Matrix<float>(1, rotations.Length, handle2.AddrOfPinnedObject()))
+            using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
+            using (Matrix<float> scalesMat = new Matrix<float>(1, elementsCount, scaleHandle.AddrOfPinnedObject()))
+            using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
             {
                h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
                
                float minVal, maxVal;
                int[] minLoc, maxLoc;
                h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
-
+               
                h.Threshold(maxVal * 0.5);
 
-               flags = h.BackProject(new Matrix<float>[2] { scalesMat, rotationsMat });
+               CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
             }
-            handle1.Free();
-            handle2.Free();
+            scaleHandle.Free();
+            rotationHandle.Free();
+            flagsHandle.Free();
 
             List<MatchedSURFFeature> matchedGoodFeatures = new List<MatchedSURFFeature>();
             for (int i = 0; i < matchedFeatures.Length; i++)
             {
-               if (flags[0, i] != 0)
+               if (flags[i] != 0)
                {
                   matchedGoodFeatures.Add(matchedFeatures[i]);
                }
@@ -322,9 +315,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the memory assocaited with this SURF Tracker
+      /// Release unmanaged memory
       /// </summary>
       protected override void DisposeObject()
+      {
+      }
+
+      /// <summary>
+      /// Release the memory assocaited with this SURF Tracker
+      /// </summary>
+      protected override void ReleaseManagedResources()
       {
          _matcher.Dispose();
       }
@@ -403,14 +403,13 @@ namespace Emgu.CV
          /// <param name="modelFeatures">The SURF feature extracted from the model image</param>
          public SURFMatcher(SURFFeature[] modelFeatures)
          {
-            _positiveLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
-            _negativeLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
+            SplitSURFByLaplacian(modelFeatures, out _positiveLaplacian, out _negativeLaplacian);
             _positiveTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
+               Array.ConvertAll<SURFFeature, float[]>(
                   _positiveLaplacian,
                   delegate(SURFFeature f) { return f.Descriptor; }));
             _negativeTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
+               Array.ConvertAll<SURFFeature, float[]>(
                   _negativeLaplacian,
                   delegate(SURFFeature f) { return f.Descriptor; }));
          }
@@ -424,17 +423,16 @@ namespace Emgu.CV
          /// <param name="tau">A good value is .1</param>
          public SURFMatcher(SURFFeature[] modelFeatures, int naive, double rho, double tau)
          {
-            _positiveLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian >= 0; });
-            _negativeLaplacian = Array.FindAll<SURFFeature>(modelFeatures, delegate(SURFFeature f) { return f.Point.laplacian < 0; });
+            SplitSURFByLaplacian(modelFeatures, out _positiveLaplacian, out _negativeLaplacian);
             _positiveTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
+               Array.ConvertAll<SURFFeature, float[]>(
                   _positiveLaplacian,
                   delegate(SURFFeature f) { return f.Descriptor; }),
                   naive,
                   rho,
                   tau);
             _negativeTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, Matrix<float>>(
+               Array.ConvertAll<SURFFeature, float[]>(
                   _negativeLaplacian,
                   delegate(SURFFeature f) { return f.Descriptor; }),
                   naive,
@@ -442,17 +440,24 @@ namespace Emgu.CV
                   tau);
          }
 
-         private void SplitSURFByLaplacian(SURFFeature[] features, out List<SURFFeature> positiveLaplacian, out List<SURFFeature> negativeLaplacian)
+         private void SplitSURFByLaplacian(SURFFeature[] features, out SURFFeature[] positiveLaplacian, out SURFFeature[]negativeLaplacian)
          {
-            positiveLaplacian = new List<SURFFeature>();
-            negativeLaplacian = new List<SURFFeature>();
-            foreach (SURFFeature f in features)
+            positiveLaplacian = new SURFFeature[features.Length];
+            negativeLaplacian = new SURFFeature[features.Length];
+            int pIndex = 0, nIndex = 0;
+
+            for (int i = 0; i < features.Length; i++)
             {
+               SURFFeature f = features[i];
+
                if (f.Point.laplacian >= 0)
-                  positiveLaplacian.Add(f);
+                  positiveLaplacian[pIndex++] = f;
                else
-                  negativeLaplacian.Add(f);
+                  negativeLaplacian[nIndex++] = f;
             }
+
+            Array.Resize<SURFFeature>(ref positiveLaplacian, pIndex);
+            Array.Resize<SURFFeature>(ref negativeLaplacian, nIndex);
          }
 
          /// <summary>
@@ -464,8 +469,8 @@ namespace Emgu.CV
          /// <returns>The matched features</returns>
          public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
          {
-            List<SURFFeature> positiveLaplacian;
-            List<SURFFeature> negativeLaplacian;
+            SURFFeature[] positiveLaplacian;
+            SURFFeature[] negativeLaplacian;
             SplitSURFByLaplacian(observedFeatures, out positiveLaplacian, out negativeLaplacian);
 
             MatchedSURFFeature[] matchedFeatures = MatchFeatureWithModel(positiveLaplacian, _positiveLaplacian, _positiveTree, k, emax);
@@ -476,19 +481,24 @@ namespace Emgu.CV
             return matchedFeatures;
          }
 
-         private static MatchedSURFFeature[] MatchFeatureWithModel(List<SURFFeature> observedFeatures, SURFFeature[] modelFeatures, FeatureTree modelFeatureTree, int k, int emax)
+         private static MatchedSURFFeature[] MatchFeatureWithModel(SURFFeature[] observedFeatures, SURFFeature[] modelFeatures, FeatureTree modelFeatureTree, int k, int emax)
          {
-            if (observedFeatures.Count == 0) return new MatchedSURFFeature[0];
+            if (observedFeatures.Length == 0) return new MatchedSURFFeature[0];
 
             Matrix<Int32> result1;
             Matrix<double> dist1;
 
-            modelFeatureTree.FindFeatures(observedFeatures.ToArray(), out result1, out dist1, k, emax);
+            float[][] descriptors = new float[observedFeatures.Length][];
+            for (int i = 0; i < observedFeatures.Length; i++)
+               descriptors[i] = observedFeatures[i].Descriptor;
+
+            modelFeatureTree.FindFeatures(descriptors, out result1, out dist1, k, emax);
 
             int[,] indexes = result1.Data;
             double[,] distances = dist1.Data;
 
-            MatchedSURFFeature[] res = new MatchedSURFFeature[observedFeatures.Count];
+            MatchedSURFFeature[] res = new MatchedSURFFeature[observedFeatures.Length];
+
             List<SURFFeature> matchedFeatures = new List<SURFFeature>();
             List<double> matchedDistances = new List<double>();
             for (int i = 0; i < res.Length; i++)

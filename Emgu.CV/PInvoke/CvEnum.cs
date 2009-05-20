@@ -474,15 +474,15 @@ namespace Emgu.CV.CvEnum
    public enum HOUGH_TYPE
    {
       /// <summary>
-      /// classical or standard Hough transform. Every line is represented by two floating-point numbers (?, ?), where ? is a distance between (0,0) point and the line, and ? is the angle between x-axis and the normal to the line. Thus, the matrix must be (the created sequence will be) of CV_32FC2 type
+      /// Classical or standard Hough transform. Every line is represented by two floating-point numbers (rho, theta), where rho is a distance between (0,0) point and the line, and theta is the angle between x-axis and the normal to the line. Thus, the matrix must be (the created sequence will be) of CV_32FC2 type
       /// </summary>
       CV_HOUGH_STANDARD = 0,
       /// <summary>
-      /// probabilistic Hough transform (more efficient in case if picture contains a few long linear segments). It returns line segments rather than the whole lines. Every segment is represented by starting and ending points, and the matrix must be (the created sequence will be) of CV_32SC4 type
+      /// Probabilistic Hough transform (more efficient in case if picture contains a few long linear segments). It returns line segments rather than the whole lines. Every segment is represented by starting and ending points, and the matrix must be (the created sequence will be) of CV_32SC4 type
       /// </summary>
       CV_HOUGH_PROBABILISTIC = 1,
       /// <summary>
-      /// multi-scale variant of classical Hough transform. The lines are encoded the same way as in CV_HOUGH_STANDARD
+      /// Multi-scale variant of classical Hough transform. The lines are encoded the same way as in CV_HOUGH_STANDARD
       /// </summary>
       CV_HOUGH_MULTI_SCALE = 2,
       /// <summary>
@@ -535,19 +535,19 @@ namespace Emgu.CV.CvEnum
    public enum SMOOTH_TYPE
    {
       /// <summary>
-      /// (simple blur with no scaling) - summation over a pixel param1?param2 neighborhood. If the neighborhood size may vary, one may precompute integral image with cvIntegral function
+      /// (simple blur with no scaling) - summation over a pixel param1xparam2 neighborhood. If the neighborhood size may vary, one may precompute integral image with cvIntegral function
       /// </summary>
       CV_BLUR_NO_SCALE = 0,
       /// <summary>
-      /// (simple blur) - summation over a pixel param1?param2 neighborhood with subsequent scaling by 1/(param1?param2). 
+      /// (simple blur) - summation over a pixel param1xparam2 neighborhood with subsequent scaling by 1/(param1xparam2). 
       /// </summary>
       CV_BLUR = 1,
       /// <summary>
-      /// (gaussian blur) - convolving image with param1?param2 Gaussian kernel. 
+      /// (gaussian blur) - convolving image with param1xparam2 Gaussian kernel. 
       /// </summary>
       CV_GAUSSIAN = 2,
       /// <summary>
-      /// (median blur) - finding median of param1?param1 neighborhood (i.e. the neighborhood is square). 
+      /// (median blur) - finding median of param1xparam1 neighborhood (i.e. the neighborhood is square). 
       /// </summary>
       CV_MEDIAN = 3,
       /// <summary>
@@ -876,25 +876,25 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_TM_SQDIFF = 0,
       /// <summary>
-      /// R(x,y)=sumx',y'[T(x',y')-I(x+x',y+y')]2/sqrt[sumx',y'T(x',y')2?sumx',y'I(x+x',y+y')2]
+      /// R(x,y)=sumx',y'[T(x',y')-I(x+x',y+y')]2/sqrt[sumx',y'T(x',y')2 sumx',y'I(x+x',y+y')2]
       /// </summary>
       CV_TM_SQDIFF_NORMED = 1,
       /// <summary>
-      /// R(x,y)=sumx',y'[T(x',y')?I(x+x',y+y')]
+      /// R(x,y)=sumx',y'[T(x',y') I(x+x',y+y')]
       /// </summary>
       CV_TM_CCORR = 2,
       /// <summary>
-      /// R(x,y)=sumx',y'[T(x',y')?I(x+x',y+y')]/sqrt[sumx',y'T(x',y')2?sumx',y'I(x+x',y+y')2]
+      /// R(x,y)=sumx',y'[T(x',y') I(x+x',y+y')]/sqrt[sumx',y'T(x',y')2 sumx',y'I(x+x',y+y')2]
       /// </summary>
       CV_TM_CCORR_NORMED = 3,
       /// <summary>
-      /// R(x,y)=sumx',y'[T'(x',y')?I'(x+x',y+y')],
-      /// where T'(x',y')=T(x',y') - 1/(w?h)?sumx",y"T(x",y")
-      ///    I'(x+x',y+y')=I(x+x',y+y') - 1/(w?h)?sumx",y"I(x+x",y+y")
+      /// R(x,y)=sumx',y'[T'(x',y') I'(x+x',y+y')],
+      /// where T'(x',y')=T(x',y') - 1/(wxh) sumx",y"T(x",y")
+      ///    I'(x+x',y+y')=I(x+x',y+y') - 1/(wxh) sumx",y"I(x+x",y+y")
       /// </summary>
       CV_TM_CCOEFF = 4,
       /// <summary>
-      /// R(x,y)=sumx',y'[T'(x',y')?I'(x+x',y+y')]/sqrt[sumx',y'T'(x',y')2?sumx',y'I'(x+x',y+y')2]
+      /// R(x,y)=sumx',y'[T'(x',y') I'(x+x',y+y')]/sqrt[sumx',y'T'(x',y')2 sumx',y'I'(x+x',y+y')2]
       /// </summary>
       CV_TM_CCOEFF_NORMED = 5
    }
@@ -969,15 +969,15 @@ namespace Emgu.CV.CvEnum
    public enum CHECK_TYPE
    {
       /// <summary>
-      /// checks that every element is neigther NaN nor ?Infinity
+      /// Checks that every element is neigther NaN nor Infinity
       /// </summary>
       CHECK_NAN_INFINITY = 0,
       /// <summary>
-      /// if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor ?Infinity
+      /// If set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor Infinity
       /// </summary>
       CHECK_RANGE = 1,
       /// <summary>
-      /// if set, the function does not raises an error if an element is invalid or out of range
+      /// If set, the function does not raises an error if an element is invalid or out of range
       /// </summary>
       CHECK_QUIET = 2
    }
@@ -1053,7 +1053,7 @@ namespace Emgu.CV.CvEnum
       ///</summary>
       CV_DIST_L1 = 1,
       ///<summary>
-      ///  the simple euclidean distance 
+      ///  Simple euclidean distance 
       ///</summary>
       CV_DIST_L2 = 2,
       ///<summary>

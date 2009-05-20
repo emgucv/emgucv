@@ -3,7 +3,8 @@
 //Blob
 CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob)) { return new CvBlobSeq(BlobSize); }
 CVAPI(void) CvBlobSeqRelease(CvBlobSeq* blobSeq) { blobSeq->~CvBlobSeq(); }
-CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlobByID(blobIndex); }
+CVAPI(CvBlob*) CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
+CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
 CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
 
 //Forground detector
@@ -37,6 +38,7 @@ CVAPI( CvBlobTracker*) CvCreateBlobTrackerMSPF() { return  cvCreateBlobTrackerMS
 CVAPI(void) CvBlobTrackerRealease(CvBlobTracker* tracker) { tracker->Release(); }
 CVAPI(int) CvBlobTrackerGetBlobNum(CvBlobTracker* tracker) { return tracker->GetBlobNum(); }
 CVAPI(CvBlob*) CvBlobTrackerGetBlob(CvBlobTracker* tracker, int BlobIndex) { return tracker->GetBlob(BlobIndex); }
+CVAPI(CvBlob*) CvBlobTrackerGetBlobByID(CvBlobTracker* tracker, int BlobId) { return tracker->GetBlobByID(BlobId); }
 CVAPI(void) CvBlobTrackerDelBlob(CvBlobTracker* tracker, int BlobIndex) { tracker->DelBlob(BlobIndex); }
 CVAPI(CvBlob*) CvBlobTrackerAddBlob(CvBlobTracker* tracker, CvBlob* pBlob, IplImage* pImg, IplImage* pImgFG = NULL ) { return tracker->AddBlob(pBlob, pImg, pImgFG); }
 

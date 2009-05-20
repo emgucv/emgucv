@@ -728,6 +728,20 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestImageDFT2()
+      {
+         Image<Gray, float> image = new Image<Gray, float>("stuff.jpg");
+         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
+         CvInvoke.cvSetImageCOI(complexImage, 1);
+         CvInvoke.cvCopy(image, complexImage, IntPtr.Zero);
+         CvInvoke.cvSetImageCOI(complexImage, 0);
+
+         Matrix<float> dft = new Matrix<float>(image.Rows, image.Cols, 2);
+
+         CvInvoke.cvDFT(complexImage, dft, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, 0);
+      }
+
+      [Test]
       public void TestResize()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(123, 321);

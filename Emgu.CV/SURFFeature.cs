@@ -9,10 +9,10 @@ namespace Emgu.CV
    /// <summary>
    /// A SURF feature
    /// </summary>
-   public class SURFFeature : DisposableObject
+   public class SURFFeature
    {
       private MCvSURFPoint _point;
-      private Matrix<float> _descriptor;
+      private float[] _descriptor;
 
       /// <summary>
       /// The SURF point
@@ -26,7 +26,7 @@ namespace Emgu.CV
       /// <summary>
       /// The SURF descriptor as a matrix (64x1 for regular descriptor; 128x1 for extended descriptor)
       /// </summary>
-      public Matrix<float> Descriptor
+      public float[] Descriptor
       {
          get { return _descriptor; }
          set { _descriptor = value; }
@@ -37,19 +37,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The MCvSURFPoint structure</param>
       /// <param name="descriptor">The point descriptor</param>
-      public SURFFeature(ref MCvSURFPoint point, Matrix<float> descriptor)
+      public SURFFeature(ref MCvSURFPoint point, float[] descriptor)
       {
          _point = point;
          _descriptor = descriptor;
-      }
-
-      /// <summary>
-      /// Release the memory associated with this object
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         if (_descriptor != null)
-            _descriptor.Dispose();
       }
    }
 }

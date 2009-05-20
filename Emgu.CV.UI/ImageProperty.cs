@@ -29,7 +29,6 @@ namespace Emgu.CV.UI
          {
             zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
          }    
-         
       }
 
       private ImageBox _imageBox;

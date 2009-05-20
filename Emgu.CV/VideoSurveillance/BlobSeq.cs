@@ -10,7 +10,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// a Blob Seq
    /// </summary>
-   public class BlobSeq : UnmanagedObject
+   public class BlobSeq : BlobSeqBase
    {
       /// <summary>
       /// Create a BlobSeq from the given pointer
@@ -29,10 +29,11 @@ namespace Emgu.CV.VideoSurveillance
          _ptr = CvInvoke.CvBlobSeqCreate(Marshal.SizeOf(typeof(MCvBlob)));
       }
 
+      #region BolbSeqBase Members
       /// <summary>
       /// Get the total number of blob in the sequence
       /// </summary>
-      public int Count
+      public override int Count
       {
          get
          {
@@ -45,7 +46,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="i">the index of the blob</param>
       /// <returns>The specific blob</returns>
-      public MCvBlob this[int i]
+      public override MCvBlob this[int i]
       {
          get
          {
@@ -53,6 +54,17 @@ namespace Emgu.CV.VideoSurveillance
          }
       }
 
+      /// <summary>
+      /// Get the blob with the specific id
+      /// </summary>
+      /// <param name="blobID">The id of the blob</param>
+      /// <returns>The blob of the specific id, if it doesn't exist, null is returned</returns>
+      public override MCvBlob? GetBlobByID(int blobID)
+      {
+         IntPtr blobPtr = CvInvoke.CvBlobSeqGetBlobByID(_ptr, blobID);
+         if (blobPtr == IntPtr.Zero) return null;
+         return (MCvBlob?)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
+      }
 
       /// <summary>
       /// Release the BlobSeq
@@ -61,5 +73,6 @@ namespace Emgu.CV.VideoSurveillance
       {
          CvInvoke.CvBlobSeqRelease(_ptr);
       }
+      #endregion
    }
 }

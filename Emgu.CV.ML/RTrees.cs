@@ -5,6 +5,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Emgu.CV.ML
 {
@@ -90,15 +91,18 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Get the variable importance matrix
       /// </summary>
-      /// <returns>The variable importance matrix</returns>
-      public Matrix<float> GetVarImportance()
+      public Matrix<float> VarImportance
       {
-         IntPtr mat = MlInvoke.CvRTreesGetVarImportance(Ptr);
-         if (mat == IntPtr.Zero) return null;
-         MCvMat matrix = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
-         Matrix<float> result = new Matrix<float>(matrix.rows, matrix.cols);
-         CvInvoke.cvCopy(mat, result, IntPtr.Zero);
-         return result;
+         get
+         {
+            IntPtr matPtr = MlInvoke.CvRTreesGetVarImportance(Ptr);
+            if (matPtr == IntPtr.Zero) return null;
+            MCvMat mat = (MCvMat)Marshal.PtrToStructure(matPtr, typeof(MCvMat));
+
+            Matrix<float> res = new Matrix<float>(mat.rows, mat.cols, 1, mat.data, mat.step);
+            Debug.Assert(mat.type == res.MCvMat.type, "Matrix type is not float");
+            return res;
+         }
       }
    }
 }
