@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Emgu.CV.Structure

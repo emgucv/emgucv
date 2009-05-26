@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using System.Diagnostics;
@@ -66,7 +64,7 @@ namespace Emgu.CV
       /// <param name="point">The point to be tested</param>
       /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
       /// <remarks>requires MCvContour.rect to be pre-computed</remarks>
-      public override double InContour(System.Drawing.PointF point)
+      public override double InContour(PointF point)
       {
          Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
          return base.InContour(point);
@@ -74,7 +72,7 @@ namespace Emgu.CV
 
       ///<summary> Get the smallest bouding rectangle </summary>
       ///<remarks>Requires MCvContour.rect to be pre-computed</remarks>
-      public override System.Drawing.Rectangle BoundingRectangle
+      public override Rectangle BoundingRectangle
       {
          get
          {

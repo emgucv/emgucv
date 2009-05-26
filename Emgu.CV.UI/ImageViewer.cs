@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Emgu.CV.UI
@@ -30,7 +26,7 @@ namespace Emgu.CV.UI
       {
          if (image != null)
          {
-            System.Drawing.Size size = image.Size;
+            Size size = image.Size;
             size.Width += 12;
             size.Height += 38;
             if (!Size.Equals(size))
@@ -47,7 +43,7 @@ namespace Emgu.CV.UI
       public ImageViewer(IImage image, string imageName)
          : this(image)
       {
-         this.Text = imageName;
+         Text = imageName;
       }
 
       /// <summary>

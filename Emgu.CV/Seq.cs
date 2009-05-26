@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
-using Emgu.Util;
 using Emgu.CV.Structure;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Emgu.CV
@@ -491,7 +488,7 @@ namespace Emgu.CV
       /// <returns>The approximated contour</returns>
       public Seq<T> ApproxPoly(double accuracy, int maxLevel, MemStorage storage)
       {
-         MemStorage stor = storage ?? this.Storage;
+         MemStorage stor = storage ?? Storage;
          return new Seq<T>(
              CvInvoke.cvApproxPoly(
              Ptr,
@@ -514,7 +511,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Get the smallest bouding rectangle </summary>
-      public virtual System.Drawing.Rectangle BoundingRectangle
+      public virtual Rectangle BoundingRectangle
       {
          get
          {
@@ -535,7 +532,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The point to be tested</param>
       /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
-      public virtual double InContour(System.Drawing.PointF point)
+      public virtual double InContour(PointF point)
       {
          return CvInvoke.cvPointPolygonTest(Ptr, point, 0);
       }
@@ -545,7 +542,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">The point to measured distance</param>
       /// <returns>positive distance if inside; negative distance if outside; 0 if on the contour</returns>
-      public double Distance(System.Drawing.PointF point)
+      public double Distance(PointF point)
       {
          return CvInvoke.cvPointPolygonTest(Ptr, point, 1);
       }

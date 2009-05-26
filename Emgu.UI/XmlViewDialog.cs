@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.XPath;
 using System.IO;
 
 namespace Emgu.UI
@@ -20,7 +19,7 @@ namespace Emgu.UI
       public XmlViewDialog(XmlDocument doc)
       {
          InitializeComponent();
-         tempFile = System.IO.Directory.GetCurrentDirectory() + System.IO.Path.PathSeparator + "emguTemperaryFile.xml";
+         tempFile = String.Format("{0}{1}emguTemperaryFile.xml", Directory.GetCurrentDirectory(), Path.PathSeparator);
          doc.Save(tempFile);
          webBrowser1.Navigate(tempFile);
          //webBrowser1.DocumentText = doc.OuterXml;

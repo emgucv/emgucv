@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.Util;
@@ -85,7 +81,7 @@ namespace Emgu.CV.UI
                dataGridView1.Rows.Add(size.Height);
 
                VisualizerChannel(size, numberOfChannels, channelSelectComboBox.SelectedIndex);
-               channelSelectComboBox.SelectedIndexChanged += new EventHandler(channelSelectComboBox_SelectedIndexChanged);
+               channelSelectComboBox.SelectedIndexChanged += channelSelectComboBox_SelectedIndexChanged;
             }
          }
       }
@@ -136,6 +132,7 @@ namespace Emgu.CV.UI
                   }
                   break;
                case 4:
+               default:
                   for (int i = 0; i < size.Height; i++)
                   {
                      dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);

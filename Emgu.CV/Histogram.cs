@@ -104,7 +104,7 @@ namespace Emgu.CV
       {
          Debug.Assert(imgs.Length == Dimension, "incompatible dimension");
          IntPtr[] imgPtrs =
-             System.Array.ConvertAll<IImage, IntPtr>(
+             Array.ConvertAll<IImage, IntPtr>(
                  imgs,
                  delegate(IImage img) { return img.Ptr; });
          CvInvoke.cvCalcHist(imgPtrs, _ptr, true, IntPtr.Zero);
@@ -196,7 +196,7 @@ namespace Emgu.CV
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
-             System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
+             Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
                  srcs,
                  delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
@@ -219,7 +219,7 @@ namespace Emgu.CV
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
-             System.Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
+             Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
                  srcs,
                  delegate(Image<Gray, TDepth> img) { return img.Ptr; });
 
@@ -239,7 +239,7 @@ namespace Emgu.CV
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
          IntPtr[] imgPtrs =
-             System.Array.ConvertAll<Matrix<TDepth>, IntPtr>(
+             Array.ConvertAll<Matrix<TDepth>, IntPtr>(
                  srcs,
                  delegate(Matrix<TDepth> img) { return img.Ptr; });
 

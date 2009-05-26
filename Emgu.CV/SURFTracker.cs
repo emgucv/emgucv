@@ -35,7 +35,7 @@ namespace Emgu.CV
       /// <param name="modelFeatures">The SURF feature from the model image</param>
       public SURFTracker(SURFFeature[] modelFeatures, int naive, double rho, double tau)
       {
-         _matcher = new SURFMatcher(modelFeatures);
+         _matcher = new SURFMatcher(modelFeatures, naive, rho, tau);
       }
 
       /// <summary>
@@ -440,7 +440,7 @@ namespace Emgu.CV
                   tau);
          }
 
-         private void SplitSURFByLaplacian(SURFFeature[] features, out SURFFeature[] positiveLaplacian, out SURFFeature[]negativeLaplacian)
+         private static void SplitSURFByLaplacian(SURFFeature[] features, out SURFFeature[] positiveLaplacian, out SURFFeature[]negativeLaplacian)
          {
             positiveLaplacian = new SURFFeature[features.Length];
             negativeLaplacian = new SURFFeature[features.Length];

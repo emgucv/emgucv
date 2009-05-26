@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -25,7 +23,7 @@ namespace Emgu.CV
       public static void CalibrateCamera(
          MCvPoint3D32f[][] objectPoints,
          PointF[][] imagePoints,
-         System.Drawing.Size imageSize,
+         Size imageSize,
          IntrinsicCameraParameters intrinsicParam,
          CvEnum.CALIB_TYPE flags,
          out ExtrinsicCameraParameters[] extrinsicParams)
@@ -60,14 +58,17 @@ namespace Emgu.CV
                 flags);
 
             extrinsicParams = new ExtrinsicCameraParameters[imageCount];
-            double[,] rotationData = rotationVectors.Data;
+            IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
             for (int i = 0; i < imageCount; i++)
             {
-               RotationVector3D rot = new RotationVector3D(new double[] { rotationData[i, 0], rotationData[i, 1], rotationData[i, 2] });
-
-               using (Matrix<double> row = translationVectors.GetRow(i))
-                  extrinsicParams[i] = new ExtrinsicCameraParameters(rot, row.Transpose());
+               ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
+               CvInvoke.cvGetRow(rotationVectors.Ptr, matPtr, i);
+               CvInvoke.cvTranspose(matPtr, p.RotationVector.Ptr);
+               CvInvoke.cvGetRow(translationVectors.Ptr, matPtr, i);
+               CvInvoke.cvTranspose(matPtr, p.TranslationVector.Ptr);
+               extrinsicParams[i] = p;
             }
+            Marshal.FreeHGlobal(matPtr);
          }
       }
 
@@ -95,7 +96,7 @@ namespace Emgu.CV
          PointF[][] imagePoints2,
          IntrinsicCameraParameters intrinsicParam1,
          IntrinsicCameraParameters intrinsicParam2,
-         System.Drawing.Size imageSize,
+         Size imageSize,
          CvEnum.CALIB_TYPE flags,
          MCvTermCriteria termCrit,
          out ExtrinsicCameraParameters extrinsicParams,
@@ -153,18 +154,17 @@ namespace Emgu.CV
           PointF[] imagePoints,
           IntrinsicCameraParameters intrin)
       {
-         Matrix<double> translation = new Matrix<double>(3, 1);
-         RotationVector3D rotation = new RotationVector3D();
+         ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
 
          GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
          using (Matrix<float> objectPointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
          using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
-            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, rotation.Ptr, translation.Ptr);
+            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, p.RotationVector.Ptr, p.TranslationVector.Ptr);
          handle1.Free();
          handle2.Free();
 
-         return new ExtrinsicCameraParameters(rotation, translation);
+         return p;
       }
 
       /// <summary>
@@ -319,7 +319,7 @@ namespace Emgu.CV
       /// <returns>If the chess board pattern is found</returns>
       public static bool FindChessboardCorners(
          Image<Gray, Byte> image,
-         System.Drawing.Size patternSize,
+         Size patternSize,
          CvEnum.CALIB_CB_TYPE flags,
          out PointF[] corners)
       {
@@ -353,7 +353,7 @@ namespace Emgu.CV
       /// <param name="patternWasFound">Result of FindChessboardCorners</param>
       public static void DrawChessboardCorners(
          Image<Gray, Byte> image,
-         System.Drawing.Size patternSize,
+         Size patternSize,
          PointF[] corners,
          bool patternWasFound)
       {

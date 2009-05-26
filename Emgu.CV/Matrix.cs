@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Xml.Serialization;
 using Emgu.CV.Structure;
 using System.Drawing;
 
@@ -101,7 +98,7 @@ namespace Emgu.CV
       /// Create a matrix of the specific size
       /// </summary>
       /// <param name="size">The size of the matrix</param>
-      public Matrix(System.Drawing.Size size)
+      public Matrix(Size size)
          : this(size.Height, size.Width)
       {
       }
@@ -146,10 +143,10 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public override System.Array ManagedArray
+      public override Array ManagedArray
       {
-         get 
-         { 
+         get
+         {
             return Data;
          }
          set
@@ -248,7 +245,7 @@ namespace Emgu.CV
       /// Make a copy of this matrix
       /// </summary>
       /// <returns>A copy if this matrix</returns>
-      public Matrix<TDepth> Clone()
+      public virtual Matrix<TDepth> Clone()
       {
          Matrix<TDepth> mat = new Matrix<TDepth>(Rows, Cols, NumberOfChannels);
          CvInvoke.cvCopy(Ptr, mat.Ptr, IntPtr.Zero);
@@ -329,7 +326,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rect">the rectangle area of the sub-matrix</param>
       /// <returns>A submatrix corresponding to a specified rectangle</returns>
-      public Matrix<TDepth> GetSubRect(System.Drawing.Rectangle rect)
+      public Matrix<TDepth> GetSubRect(Rectangle rect)
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
@@ -344,7 +341,7 @@ namespace Emgu.CV
       /// <param name="rect">the rectangle area of the sub-matrix</param>
       /// <returns>A submatrix corresponding to a specified rectangle</returns>
       [Obsolete("Use GetSubRect instead, will be removed in the next version")]
-      public Matrix<TDepth> GetSubMatrix(System.Drawing.Rectangle rect)
+      public Matrix<TDepth> GetSubMatrix(Rectangle rect)
       {
          Matrix<TDepth> subMat = new Matrix<TDepth>();
          subMat._array = _array;
@@ -503,10 +500,10 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the min / max locations and values for the matrix
       /// </summary>
-      public void MinMax(out double minValue, out double maxValue, out System.Drawing.Point minLocation, out System.Drawing.Point maxLocation)
+      public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation)
       {
          minValue = 0; maxValue = 0;
-         minLocation = new System.Drawing.Point(); maxLocation = new System.Drawing.Point();
+         minLocation = new Point(); maxLocation = new Point();
          CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
       }
 

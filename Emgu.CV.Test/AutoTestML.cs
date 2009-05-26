@@ -333,26 +333,26 @@ namespace Emgu.CV.ML.UnitTest
          }
       }
 
-      private void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
+      private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
       {
          string[] rows = System.IO.File.ReadAllLines("letter-recognition.data");
-         
+
          int varCount = rows[0].Split(',').Length - 1;
          data = new Matrix<float>(rows.Length, varCount);
          response = new Matrix<float>(rows.Length, 1);
          int count = 0;
-         foreach ( string row in rows )
+         foreach (string row in rows)
          {
             string[] values = row.Split(',');
-            Char c = System.Convert.ToChar(values[0]);
-            response[count, 0] = System.Convert.ToInt32(c);
+            Char c = Convert.ToChar(values[0]);
+            response[count, 0] = Convert.ToInt32(c);
             for (int i = 1; i < values.Length; i++)
-               data[count, i - 1] = System.Convert.ToSingle(values[i]);
+               data[count, i - 1] = Convert.ToSingle(values[i]);
             count++;
          }
       }
 
-      private void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
+      private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
       {
          string[] rows = System.IO.File.ReadAllLines("agaricus-lepiota.data");
 
@@ -363,10 +363,10 @@ namespace Emgu.CV.ML.UnitTest
          foreach (string row in rows)
          {
             string[] values = row.Split(',');
-            Char c = System.Convert.ToChar(values[0]);
-            response[count, 0] = System.Convert.ToInt32(c);
+            Char c = Convert.ToChar(values[0]);
+            response[count, 0] = Convert.ToInt32(c);
             for (int i = 1; i < values.Length; i++)
-               data[count, i - 1] = System.Convert.ToByte(System.Convert.ToChar(values[i]));
+               data[count, i - 1] = Convert.ToByte(Convert.ToChar(values[i]));
             count++;
          }
       }

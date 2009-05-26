@@ -15,7 +15,7 @@ namespace Emgu.CV
    public class PlanarSubdivision : UnmanagedObject, IEnumerable<MCvQuadEdge2D>
    {
       private readonly MemStorage _storage;
-      private readonly System.Drawing.Rectangle _roi;
+      private readonly Rectangle _roi;
 
       private bool _isVoronoiDirty;
 
@@ -24,7 +24,7 @@ namespace Emgu.CV
       /// Start the Delaunay's triangulation in the specific region of interest.
       /// </summary>
       /// <param name="roi">The region of interest of the triangulation</param>
-      public PlanarSubdivision(ref System.Drawing.Rectangle roi)
+      public PlanarSubdivision(ref Rectangle roi)
       {
          _storage = new MemStorage();
          _ptr = CvInvoke.cvCreateSubdivDelaunay2D(roi, _storage);
@@ -35,7 +35,7 @@ namespace Emgu.CV
       /// Create a planar subdivision from the given points. The ROI is computed as the minimun bounding Rectangle for the input points
       /// </summary>
       /// <param name="points">The points for this planar subdivision</param>
-      public PlanarSubdivision(System.Drawing.PointF[] points)
+      public PlanarSubdivision(PointF[] points)
          : this(points, false)
       {
       }
@@ -45,7 +45,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="silent">If true, any exception during insert will be ignored</param>
       /// <param name="points">The points to be inserted to this planar subdivision</param>
-      public PlanarSubdivision(System.Drawing.PointF[] points, bool silent)
+      public PlanarSubdivision(PointF[] points, bool silent)
       {
          #region Find the region of interest
          _roi = PointCollection.BoundingRectangle(points);
@@ -89,7 +89,7 @@ namespace Emgu.CV
       /// Insert a point to the triangulation. If the point is already inserted, no changes will be made.
       /// </summary>
       /// <param name="point">The point to be inserted</param>
-      public void Insert(System.Drawing.PointF point)
+      public void Insert(PointF point)
       {
          CvInvoke.cvSubdivDelaunay2DInsert(_ptr, point);
          _isVoronoiDirty = true;
@@ -102,7 +102,7 @@ namespace Emgu.CV
       /// <param name="subdiv2DEdge">The output edge the point falls onto or right to</param>
       /// <param name="subdiv2DPoint">Optional output vertex double pointer the input point coincides with</param>
       /// <returns>The type of location for the point</returns>
-      public CvEnum.Subdiv2DPointLocationType Locate(ref System.Drawing.PointF pt, out MCvSubdiv2DEdge? subdiv2DEdge, out MCvSubdiv2DPoint? subdiv2DPoint)
+      public CvEnum.Subdiv2DPointLocationType Locate(ref PointF pt, out MCvSubdiv2DEdge? subdiv2DEdge, out MCvSubdiv2DPoint? subdiv2DPoint)
       {
          IntPtr edge;
          IntPtr vertex = new IntPtr();
@@ -138,7 +138,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="point">Input point</param>
       /// <returns>returns the found subdivision vertex</returns>
-      public MCvSubdiv2DPoint FindNearestPoint2D(ref System.Drawing.PointF point)
+      public MCvSubdiv2DPoint FindNearestPoint2D(ref PointF point)
       {
          return (MCvSubdiv2DPoint)Marshal.PtrToStructure(
             CvInvoke.cvFindNearestPoint2D(Ptr, point),
@@ -179,8 +179,7 @@ namespace Emgu.CV
 
          List<VoronoiFacet> facets = new List<VoronoiFacet>();
 
-         int voroniPolygonMaxEdge = 256;
-         PointF[] buffer = new PointF[voroniPolygonMaxEdge];
+         PointF[] buffer = new PointF[256];
          GCHandle bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
          IntPtr bufferPtr = bufferHandle.AddrOfPinnedObject();
 
@@ -265,15 +264,15 @@ namespace Emgu.CV
    /// </summary>
    public class VoronoiFacet
    {
-      private System.Drawing.PointF _point;
-      private System.Drawing.PointF[] _vertices;
+      private PointF _point;
+      private PointF[] _vertices;
 
       /// <summary>
       /// Create a Voronoi facet using the specific <paramref name="point"/> and <paramref name="polyline"/>
       /// </summary>
       /// <param name="point">The point this facet associate with </param>
       /// <param name="polyline">The points that defines the contour of this facet</param>
-      public VoronoiFacet(System.Drawing.PointF point, System.Drawing.PointF[] polyline)
+      public VoronoiFacet(PointF point, PointF[] polyline)
       {
          _point = point;
          _vertices = polyline;
@@ -284,7 +283,7 @@ namespace Emgu.CV
       /// <summary>
       /// The point this facet associates to
       /// </summary>
-      public System.Drawing.PointF Point
+      public PointF Point
       {
          get { return _point; }
          set { _point = value; }
@@ -293,7 +292,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get or set the vertices of this facet
       /// </summary>
-      public System.Drawing.PointF[] Vertices
+      public PointF[] Vertices
       {
          get { return _vertices; }
          set { _vertices = value; }

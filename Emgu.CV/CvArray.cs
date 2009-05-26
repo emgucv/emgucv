@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -121,7 +120,8 @@ namespace Emgu.CV
                if (mat.step == 0)
                {  //The matrix only have one row
                   size = mat.cols * NumberOfChannels * Marshal.SizeOf(typeof(TDepth));
-               } else
+               }
+               else
                   size = mat.rows * mat.step;
                dataStart = mat.data;
             }
@@ -137,7 +137,7 @@ namespace Emgu.CV
             }
             Byte[] data = new Byte[size];
             Marshal.Copy(dataStart, data, 0, size);
-            
+
             if (SerializationCompressionRatio == 0)
             {
                return data;
@@ -147,7 +147,7 @@ namespace Emgu.CV
                using (MemoryStream ms = new MemoryStream())
                {
                   //using (GZipStream compressedStream = new GZipStream(ms, CompressionMode.Compress))
-                  using (zlib.ZOutputStream compressedStream = new zlib.ZOutputStream(ms, SerializationCompressionRatio))
+                  using (ZOutputStream compressedStream = new ZOutputStream(ms, SerializationCompressionRatio))
                   {
                      compressedStream.Write(data, 0, data.Length);
                      compressedStream.Flush();
@@ -155,7 +155,7 @@ namespace Emgu.CV
                   return ms.ToArray();
                }
             }
-            
+
          }
          set
          {
@@ -172,7 +172,7 @@ namespace Emgu.CV
                {  //try to use zlib to decompressed the data
                   using (MemoryStream ms = new MemoryStream())
                   {
-                     using (zlib.ZOutputStream stream = new zlib.ZOutputStream(ms))
+                     using (ZOutputStream stream = new ZOutputStream(ms))
                      {
                         stream.Write(value, 0, value.Length);
                         stream.Flush();
@@ -202,7 +202,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the underneath managed array
       /// </summary>
-      public abstract System.Array ManagedArray
+      public abstract Array ManagedArray
       {
          get;
          set;
@@ -512,7 +512,7 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (System.Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
+         if (Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
          {
             //if the file can be imported from Open CV
             CvInvoke.cvSaveImage(fileName, Ptr);
@@ -532,7 +532,7 @@ namespace Emgu.CV
       /// <returns>the xml schema</returns>
       public System.Xml.Schema.XmlSchema GetSchema()
       {
-         throw new System.NotImplementedException("The method or operation is not implemented.");
+         throw new NotImplementedException("The method or operation is not implemented.");
       }
 
       /// <summary>

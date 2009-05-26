@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace Emgu.CV
@@ -79,8 +77,7 @@ namespace Emgu.CV
       ///<returns> The flipped copy of <i>this</i> image </returns>
       public ConvolutionKernelF Flip(CvEnum.FLIP flipType)
       {
-         int code = 0; //flipType == Emgu.CV.CvEnum.FLIP.VERTICAL
-
+         int code;
          switch (flipType)
          {
             case (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL):
@@ -88,6 +85,10 @@ namespace Emgu.CV
                break;
             case Emgu.CV.CvEnum.FLIP.HORIZONTAL:
                code = 1;
+               break;
+            case Emgu.CV.CvEnum.FLIP.VERTICAL:
+            default:
+               code = 0;
                break;
          }
 

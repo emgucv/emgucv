@@ -1,11 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
@@ -219,13 +213,12 @@ namespace Emgu.CV
       /// <returns>An array of eigen distance from every image in the training images</returns>
       public float[] GetEigenDistances(Image<Gray, Byte> image)
       {
-         Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage));
-
-         return Array.ConvertAll<Matrix<float>, float>(_eigenValues,
-             delegate(Matrix<float> eigenValueI)
-             {
-                return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-             });
+         using (Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage)))
+            return Array.ConvertAll<Matrix<float>, float>(_eigenValues,
+                delegate(Matrix<float> eigenValueI)
+                {
+                   return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+                });
       }
 
       /// <summary>

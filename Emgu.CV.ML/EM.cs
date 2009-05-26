@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.CV.ML.Structure;
@@ -152,7 +150,7 @@ namespace Emgu.CV.ML
          return Array.ConvertAll<IntPtr, Matrix<double>>(covPtrs, IntPtrToDoubleMatrix);
       }
 
-      private Matrix<double> IntPtrToDoubleMatrix(IntPtr matPtr)
+      private static Matrix<double> IntPtrToDoubleMatrix(IntPtr matPtr)
       {
          if (matPtr == IntPtr.Zero) return null;
          MCvMat mat = (MCvMat)Marshal.PtrToStructure(matPtr, typeof(MCvMat));

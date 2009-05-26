@@ -1,7 +1,6 @@
 <#@ template language="C#" #>
 <#@ import namespace="System" #>
 using System;
-using System.Text;
 
 namespace Emgu.CV
 {

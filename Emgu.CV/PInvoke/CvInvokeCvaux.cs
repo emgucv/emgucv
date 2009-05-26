@@ -240,7 +240,7 @@ namespace Emgu.CV
       /// <param name="model">Pointer to the BGCodeBookModel</param>
       /// <param name="image">The image to find diff</param>
       /// <param name="fgmask">The returned forground mask</param>
-      /// <param name="roi">The </param>
+      /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
       [DllImport(CVAUX_LIBRARY)]
       public extern static int cvBGCodeBookDiff( 

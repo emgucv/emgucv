@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Diagnostics;
-using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

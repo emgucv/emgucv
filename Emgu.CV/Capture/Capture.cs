@@ -1,12 +1,9 @@
 //#define TEST_CAPTURE
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ServiceModel;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 using Emgu.CV.Structure;
-using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -77,7 +74,7 @@ namespace Emgu.CV
       {
          get
          {
-            return System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH));
+            return Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH));
          }
       }
 
@@ -86,7 +83,7 @@ namespace Emgu.CV
       {
          get
          {
-            return System.Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+            return Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
          }
       }
       #endregion
@@ -118,12 +115,12 @@ namespace Emgu.CV
       /// <param name="fileName">The file name of the movie</param>
       public Capture(String fileName)
       {
-         if (! System.IO.File.Exists(fileName) )
-            throw new System.IO.FileNotFoundException(String.Format("The file: {0} cannot be found", fileName));
+         if (!System.IO.File.Exists(fileName) )
+            throw new System.IO.FileNotFoundException(String.Format("The file '{0}' cannot be found", fileName));
 
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
-            throw new NullReferenceException("Unable to create capture from file: " + fileName);
+            throw new NullReferenceException(String.Format("Unable to create capture from file: {0}", fileName));
       }
       #endregion
 

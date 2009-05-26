@@ -90,9 +90,7 @@ namespace Emgu.CV.UI
       /// <returns></returns>
       public String ToCode(ProgrammingLanguage language)
       {
-         String res = String.Empty;
 
-         String genericArgString = string.Empty;
          Type[] genericArguments = _mi.GetGenericArguments();
 
          Object[] genericParameters = new object[genericArguments.Length];
@@ -100,16 +98,17 @@ namespace Emgu.CV.UI
          Array.Copy(_parameters, genericParameters, genericParameters.Length);
          Array.Copy(_parameters, genericParameters.Length, nonGenericParameters, 0, nonGenericParameters.Length);
 
-         if (genericArguments.Length > 0)
-         {
-            genericArgString = 
-               String.Join(",", Array.ConvertAll<Object, String>(genericParameters,
-                  delegate(Object t)
-                  {
-                     return (t as GenericParameter).SelectedType.Name;
-                  }));
-         }
+         String genericArgString =
+            genericArguments.Length > 0 ?
+                  String.Join(",", Array.ConvertAll<Object, String>(genericParameters,
+                     delegate(Object t)
+                     {
+                        return (t as GenericParameter).SelectedType.Name;
+                     }))
+            : string.Empty;
+         
 
+         String res = String.Empty;
          switch (language)
          {
             case ProgrammingLanguage.CSharp:
@@ -137,7 +136,7 @@ namespace Emgu.CV.UI
       private static String ParameterToCode(Object parameter, ProgrammingLanguage language)
       {
          ICodeGenerable gen = parameter as ICodeGenerable;
-         return gen == null ? System.Convert.ToString(parameter) :
+         return gen == null ? Convert.ToString(parameter) :
             gen.ToCode(language);
       }
 

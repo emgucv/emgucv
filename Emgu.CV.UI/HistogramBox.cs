@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using ZedGraph;
 using Emgu.CV;
@@ -39,7 +35,7 @@ namespace Emgu.CV.UI
          #endregion
 
          // Layout the GraphPanes using a default Pane Layout
-         _graphic = this.CreateGraphics();
+         _graphic = CreateGraphics();
          
          // Size the control to fill the form with a margin
          SetSize();
@@ -79,9 +75,9 @@ namespace Emgu.CV.UI
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
       /// <param name="histogram">The 1D histogram to be drawn</param>
-      public void AddHistogram(String name, System.Drawing.Color color, Histogram histogram)
+      public void AddHistogram(String name, Color color, Histogram histogram)
       {
-         Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported );
+         Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
 
          GraphPane pane = new GraphPane();
          // Set the Title
@@ -123,11 +119,11 @@ namespace Emgu.CV.UI
          Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
          String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
-         System.Drawing.Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
+         Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
 
          float minVal, maxVal;
          #region Get the maximum and minimum color intensity values
-         System.Type typeOfDepth = imageType.GetGenericArguments()[1];
+         Type typeOfDepth = imageType.GetGenericArguments()[1];
          if (typeOfDepth == typeof(Byte))
          {
             minVal = 0.0f;
@@ -137,7 +133,7 @@ namespace Emgu.CV.UI
          {
             #region obtain the maximum and minimum color value
             double[] minValues, maxValues;
-            System.Drawing.Point[] minLocations, maxLocations;
+            Point[] minLocations, maxLocations;
             image.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
 
             double min = minValues[0], max = maxValues[0];

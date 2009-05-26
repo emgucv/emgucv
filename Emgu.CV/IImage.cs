@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Drawing;
 
 namespace Emgu.CV
@@ -27,7 +26,7 @@ namespace Emgu.CV
       /// <summary>
       /// The size of this image
       /// </summary>
-      System.Drawing.Size Size
+      Size Size
       {
          get;
       }
@@ -38,7 +37,7 @@ namespace Emgu.CV
       /// <returns>
       /// Returns the min / max location and values for the image
       /// </returns>
-      void MinMax(out double[] minValues, out double[] maxValues, out System.Drawing.Point[] minLocations, out System.Drawing.Point[] maxLocations);
+      void MinMax(out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations);
 
       ///<summary> 
       /// Split current IImage into an array of gray scale images where each element 

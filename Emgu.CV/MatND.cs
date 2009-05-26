@@ -204,12 +204,14 @@ namespace Emgu.CV
          }
          #endregion
 
-         MatND<TDepth> diff = new MatND<TDepth>(dim1);
-         CvInvoke.cvXor(_ptr, other, diff, IntPtr.Zero);
-         Byte[] bytes = diff.Bytes;
-         for (int i = 0; i < bytes.Length; i++)
+         using (MatND<TDepth> diff = new MatND<TDepth>(dim1))
          {
-            if (bytes[i] != 0) return false;
+            CvInvoke.cvXor(_ptr, other, diff, IntPtr.Zero);
+            Byte[] bytes = diff.Bytes;
+            for (int i = 0; i < bytes.Length; i++)
+            {
+               if (bytes[i] != 0) return false;
+            }
          }
          return true;
       }

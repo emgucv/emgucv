@@ -1,16 +1,11 @@
-
 #include "cvaux.h"
+
 //Blob
 CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob)) { return new CvBlobSeq(BlobSize); }
 CVAPI(void) CvBlobSeqRelease(CvBlobSeq* blobSeq) { blobSeq->~CvBlobSeq(); }
 CVAPI(CvBlob*) CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
 CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
 CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
-
-//Forground detector
-CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
-CVAPI(IplImage*) CvFGDetectorGetMask(CvFGDetector* detector) { return detector->GetMask(); } 
-CVAPI(void) CvFGDetectorRelease(CvFGDetector* detector) { detector->Release(); }
 
 //Blob Detector
 CVAPI(void) CvBlobDetectorRelease(CvBlobDetector* detector) { detector->~CvBlobDetector(); }

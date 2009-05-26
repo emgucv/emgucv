@@ -2,14 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
-using System.Diagnostics;
 using Emgu.CV;
-using Emgu.Util;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.UI
@@ -103,7 +98,6 @@ namespace Emgu.CV.UI
          if (EnablePropertyPanel)
          {
             int horizontalScrollBarValue = HorizontalScrollBar.Visible ? (int)HorizontalScrollBar.Value : 0;
-
             int verticalScrollBarValue = VerticalScrollBar.Visible ? (int)VerticalScrollBar.Value : 0;
 
             ImagePropertyPanel.SetMousePositionOnImage(new Point(
@@ -163,7 +157,7 @@ namespace Emgu.CV.UI
          {
             if (InvokeRequired)
             {
-               this.Invoke(new MethodInvoker(delegate() { Image = value; }));
+               Invoke(new MethodInvoker(delegate() { Image = value; }));
             }
             else
             {
@@ -207,7 +201,7 @@ namespace Emgu.CV.UI
                         }
                         else
                         {
-                           throw new System.NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
+                           throw new NotImplementedException(string.Format("Return type of {0} is not implemented.", operation.Method.ReturnType));
                         }
                      }
                   }
@@ -370,7 +364,7 @@ namespace Emgu.CV.UI
          foreach (MethodInfo mi in operationItem.Values)
          {
             ToolStripMenuItem operationMenuItem = new ToolStripMenuItem();
-            operationMenuItem.Size = new System.Drawing.Size(152, 22);
+            operationMenuItem.Size = new Size(152, 22);
 
             Type[] genericArgs = mi.GetGenericArguments();
 
@@ -523,7 +517,7 @@ namespace Emgu.CV.UI
       {
          if (disposing && (components != null))
          {
-            if (this.Image != null) this.Image.Dispose();
+            if (Image != null) Image.Dispose();
             if (_propertyDlg != null) _propertyDlg.Dispose();
             components.Dispose();
          }

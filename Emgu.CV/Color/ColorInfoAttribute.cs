@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Emgu.CV
 {
@@ -8,7 +6,7 @@ namespace Emgu.CV
    /// Attributes used to specify color information
    /// </summary>
    [AttributeUsage(AttributeTargets.Struct)]
-   public sealed class ColorInfoAttribute : System.Attribute
+   public sealed class ColorInfoAttribute : Attribute
    {
       /// <summary>
       /// The code which is used for color conversion

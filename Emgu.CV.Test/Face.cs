@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV.Test
 {
@@ -15,19 +16,19 @@ namespace Emgu.CV.Test
 
       }
 
-      public List<Face<D>> Detect<D>(Image<Bgr, D> img) where D : new ()
+      public List<Face> Detect(Image<Bgr, Byte> img)
       {
-         using (Image<Gray, D> gray = img.Convert<Gray, D>())
+         using (Image<Gray, Byte> gray = img.Convert<Gray, Byte>())
          {
             MCvAvgComp[][] objects = gray.DetectHaarCascade(_faceCascade);
-            List<Face<D>> res = new List<Face<D>>();
+            List<Face> res = new List<Face>();
 
             foreach (MCvAvgComp o in objects[0])
             {
                img.ROI = o.rect;
-               res.Add(new Face<D>(img.Copy(), o.rect));
+               res.Add(new Face(img.Copy(), o.rect));
             }
-            img.ROI = System.Drawing.Rectangle.Empty;
+            img.ROI = Rectangle.Empty;
             return res;
          }
       }
@@ -38,15 +39,15 @@ namespace Emgu.CV.Test
       }
    }
 
-   public class Eye<D> where D : new ()
+   public class Eye
    {
-      private Image<Bgr, D> _image;
-      public Eye(Image<Bgr, D> img, System.Drawing.Rectangle rect)
+      private Image<Bgr, Byte> _image;
+      public Eye(Image<Bgr, Byte> img, Rectangle rect)
       {
          _image = img;
       }
 
-      public Image<Bgr, D> RGB
+      public Image<Bgr, Byte> RGB
       {
          get
          {
@@ -55,46 +56,46 @@ namespace Emgu.CV.Test
       }
    }
 
-   public class Face<D> where D: new()
+   public class Face 
    {
-      private Image<Bgr, D> _image;
-      private Image<Gray, D> _imageGray;
-      private Image<Hsv, D> _imageHSV;
-      private Image<Gray, D> _h;
-      private Image<Gray, D> _s;
-      private Image<Gray, D> _v;
+      private Image<Bgr, Byte> _image;
+      private Image<Gray, Byte> _imageGray;
+      private Image<Hsv, Byte> _imageHSV;
+      private Image<Gray, Byte> _h;
+      private Image<Gray, Byte> _s;
+      private Image<Gray, Byte> _v;
       private Histogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
-      private System.Drawing.Rectangle _rect;
+      private Rectangle _rect;
       private HaarCascade _eyeCascade;
 
-      public Face(Image<Bgr, D> img, System.Drawing.Rectangle rect)
+      public Face(Image<Bgr, Byte> img, Rectangle rect)
       {
          _image = img;
          _rect = rect;
          _eyeCascade = new HaarCascade(".\\haarcascades\\haarcascade_eye_tree_eyeglasses.xml");
       }
 
-      public List<Eye<D>> DetectEye()
+      public List<Eye> DetectEye()
       {
          MCvAvgComp[][] objects = Gray.DetectHaarCascade(_eyeCascade);
-         List<Eye<D>> res = new List<Eye<D>>();
+         List<Eye> res = new List<Eye>();
 
          foreach (MCvAvgComp o in objects[0])
          {
             _image.ROI = o.rect;
-            res.Add(new Eye<D>(_image.Copy(), o.rect));
+            res.Add(new Eye(_image.Copy(), o.rect));
          }
-         _image.ROI = System.Drawing.Rectangle.Empty;
+         _image.ROI = Rectangle.Empty;
          return res;
       }
 
-      public System.Drawing.Rectangle Rectangle
+      public Rectangle Rectangle
       {
          get { return _rect; }
       }
 
-      public Image<Bgr, D> Bgr
+      public Image<Bgr, Byte> Bgr
       {
          get
          {
@@ -102,31 +103,31 @@ namespace Emgu.CV.Test
          }
       }
 
-      public Image<Gray, D> Gray
+      public Image<Gray, Byte> Gray
       {
          get
          {
-            if (_imageGray == null) _imageGray = _image.Convert<Gray, D>();
+            if (_imageGray == null) _imageGray = _image.Convert<Gray, Byte>();
             return _imageGray;
          }
       }
 
-      public Image<Hsv, D> Hsv
+      public Image<Hsv, Byte> Hsv
       {
          get
          {
-            if (_imageHSV == null) _imageHSV = _image.Convert<Hsv, D>();
+            if (_imageHSV == null) _imageHSV = _image.Convert<Hsv, Byte>();
             return _imageHSV;
          }
       }
 
-      public Image<Gray, D> H
+      public Image<Gray, Byte> H
       {
          get
          {
             if (_h == null)
             {
-               Image<Gray, D>[] imgs = Hsv.Split();
+               Image<Gray, Byte>[] imgs = Hsv.Split();
                _h = imgs[0];
                _s = imgs[1];
                _v = imgs[2];
@@ -134,13 +135,13 @@ namespace Emgu.CV.Test
             return _h;
          }
       }
-      public Image<Gray, D> S
+      public Image<Gray, Byte> S
       {
          get
          {
             if (_s == null)
             {
-               Image<Gray, D>[] imgs = Hsv.Split();
+               Image<Gray, Byte>[] imgs = Hsv.Split();
                _h = imgs[0];
                _s = imgs[1];
                _v = imgs[2];
@@ -148,13 +149,13 @@ namespace Emgu.CV.Test
             return _s;
          }
       }
-      public Image<Gray, D> V
+      public Image<Gray, Byte> V
       {
          get
          {
             if (_h == null)
             {
-               Image<Gray, D>[] imgs = Hsv.Split();
+               Image<Gray, Byte>[] imgs = Hsv.Split();
                _h = imgs[0];
                _s = imgs[1];
                _v = imgs[2];
@@ -176,11 +177,11 @@ namespace Emgu.CV.Test
          }
       }
 
-      public Image<Gray, D> SkinMask
+      public Image<Gray, Byte> SkinMask
       {
          get
          {
-            Image<Gray, D> skinMask = Gray.CopyBlank();
+            Image<Gray, Byte> skinMask = Gray.CopyBlank();
 
             //skinMask.Draw(SkinContour, new Gray(255.0), new Gray(120.0), -1);
 
@@ -198,7 +199,7 @@ namespace Emgu.CV.Test
               {
                   Histogram htg = HueHistogram;
 
-                  htg.Accumulate(new Image<Gray, D>[1] { H });
+                  htg.Accumulate(new Image<Gray, Byte>[1] { H });
 
                   double[] arr = new double[htg.BinSize[0]];
                   for (int i = 0; i < htg.BinSize[0]; i++)
@@ -207,7 +208,7 @@ namespace Emgu.CV.Test
                   System.Array.Reverse(arr);
                   htg.Threshold(arr[2]);
 
-                  using (Image<Gray, D> bpj = htg.BackProject(new Image<Gray, D>[1] { H }))
+                  using (Image<Gray, Byte> bpj = htg.BackProject(new Image<Gray, Byte>[1] { H }))
                   {
                       Seq<MCvContour> cList = bpj.FindContours( CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, new MemStorage());
                       Seq<MCvContour> maxAreaContour = cList;

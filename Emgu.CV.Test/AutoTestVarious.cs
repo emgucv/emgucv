@@ -33,9 +33,9 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCvClipLine()
       {
-         System.Drawing.Point m1 = new System.Drawing.Point(-1, 10);
-         System.Drawing.Point m2 = new System.Drawing.Point(100, 10);
-         int inside = CvInvoke.cvClipLine(new System.Drawing.Size(20, 20), ref m1, ref m2);
+         Point m1 = new Point(-1, 10);
+         Point m2 = new Point(100, 10);
+         int inside = CvInvoke.cvClipLine(new Size(20, 20), ref m1, ref m2);
          Assert.AreEqual(0, m1.X);
          Assert.AreEqual(19, m2.X);
       }
@@ -129,7 +129,7 @@ namespace Emgu.CV.Test
          //Application.SetCompatibleTextRenderingDefault(false);
          using (Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray()))
          {
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(10, 10, 80 - 10, 50 - 10);
+            Rectangle rect = new Rectangle(10, 10, 80 - 10, 50 - 10);
             img.Draw(rect, new Gray(255.0), -1);
             //ImageViewer.Show(img);
             PointF pIn = new PointF(60, 40);
@@ -137,13 +137,13 @@ namespace Emgu.CV.Test
 
             using (MemStorage stor = new MemStorage())
             {
-               Contour<System.Drawing.Point> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
-               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(System.Drawing.Point)));
+               Contour<Point> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(Point)));
                Assert.AreEqual(rect.Width * rect.Height, cs.Area);
 
                Assert.IsTrue(cs.Convex);
                Assert.AreEqual(rect.Width * 2 + rect.Height * 2, cs.Perimeter);
-               System.Drawing.Rectangle rect2 = cs.BoundingRectangle;
+               Rectangle rect2 = cs.BoundingRectangle;
                rect2.Width -= 1;
                rect2.Height -= 1;
                //rect2.Center.X -= 0.5;
@@ -164,14 +164,14 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
-               Contour<System.Drawing.Point> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
                Assert.AreEqual(c, null);
             }
          }
 
          int s1 = Marshal.SizeOf(typeof(MCvSeq));
          int s2 = Marshal.SizeOf(typeof(MCvContour));
-         int sizeRect = Marshal.SizeOf(typeof(System.Drawing.Rectangle));
+         int sizeRect = Marshal.SizeOf(typeof(Rectangle));
          Assert.AreEqual(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)), s2);
       }
 
@@ -217,14 +217,14 @@ namespace Emgu.CV.Test
          Size size = new Size(width / 10, height / 10);
          Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
 
-         System.Drawing.Rectangle rect = new Rectangle(topLeft, size);
+         Rectangle rect = new Rectangle(topLeft, size);
 
-         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
+         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.ForgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
          param.FGTrainFrames = 5;
-         BlobTrackerAuto tracker = new BlobTrackerAuto(param);
+         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
          ImageViewer viewer = new ImageViewer();
          //viewer.Show();
@@ -395,16 +395,16 @@ namespace Emgu.CV.Test
       public void TestXmlSerialize()
       {
          PointF p = new PointF(0.0f, 0.0f);
-         XmlDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(System.Drawing.Point) });
-         PointF p2 = Toolbox.XmlDeserialize<PointF>(xDoc, new Type[] { typeof(System.Drawing.Point) });
+         XmlDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(Point) });
+         PointF p2 = Toolbox.XmlDeserialize<PointF>(xDoc, new Type[] { typeof(Point) });
          Assert.IsTrue(p.Equals(p2));
 
-         
-         System.Drawing.Rectangle rect = new Rectangle(3, 4, 5, 3);
-         XmlDocument xDoc2 = Toolbox.XmlSerialize<System.Drawing.Rectangle>(rect);
-         System.Drawing.Rectangle rect2 = Toolbox.XmlDeserialize<System.Drawing.Rectangle>(xDoc2);
+
+         Rectangle rect = new Rectangle(3, 4, 5, 3);
+         XmlDocument xDoc2 = Toolbox.XmlSerialize<Rectangle>(rect);
+         Rectangle rect2 = Toolbox.XmlDeserialize<Rectangle>(xDoc2);
          Assert.IsTrue(rect.Equals(rect2));
-         
+
       }
 
       [Test]
@@ -436,8 +436,8 @@ namespace Emgu.CV.Test
       public void TestGetBox2DPoints()
       {
          MCvBox2D box = new MCvBox2D(
-            new System.Drawing.PointF(3.0f, 2.0f), 
-            new System.Drawing.SizeF(4.0f, 6.0f), 
+            new PointF(3.0f, 2.0f),
+            new SizeF(4.0f, 6.0f),
             0.0f);
          PointF[] vertices = box.GetVertices();
          Assert.IsTrue(vertices[0].Equals(new PointF(0.0f, 0.0f)));
@@ -484,9 +484,9 @@ namespace Emgu.CV.Test
          bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
 
          Size size = new Size(width / 10, height / 10);
-         Point topLeft = new Point((width >> 1) - (size.Width >>1) , (height >> 1) - (size.Height >> 1));
+         Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
 
-         System.Drawing.Rectangle rect = new Rectangle(topLeft, size);
+         Rectangle rect = new Rectangle(topLeft, size);
 
          Image<Bgr, Byte> img1 = bg.Copy();
          img1.Draw(rect, new Bgr(Color.Red), -1);
@@ -495,10 +495,10 @@ namespace Emgu.CV.Test
          rect.Offset(10, 0);
          img2.Draw(rect, new Bgr(Color.Red), -1);
 
-         BackgroundStatisticsModel model1 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+         BGStatModel<Bgr> model1 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
          model1.Update(img2);
 
-         BackgroundStatisticsModel model2 = new BackgroundStatisticsModel(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
+         BGStatModel<Bgr> model2 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
          model2.Update(img2);
 
          //ImageViewer.Show(model2.Foreground);
@@ -633,15 +633,15 @@ namespace Emgu.CV.Test
 
          //Draw the object in image1 center at templCenter;
          Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
-         System.Drawing.Rectangle objectLocation = new Rectangle(  templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1) , templWidth, templHeight);
+         Rectangle objectLocation = new Rectangle(templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1), templWidth, templHeight);
          img.ROI = objectLocation;
          randomObj.Copy(img, null);
-         img.ROI = System.Drawing.Rectangle.Empty;
+         img.ROI = Rectangle.Empty;
          #endregion
 
          Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
          double[] minVal, maxVal;
-         System.Drawing.Point[] minLoc, maxLoc;
+         Point[] minLoc, maxLoc;
          match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
          Assert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
@@ -715,7 +715,7 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
 
          OpticalFlow.PyrLK(
-            prevImg, currImg, prevFeature, new System.Drawing.Size(10, 10), 3, new MCvTermCriteria(10, 0.01),
+            prevImg, currImg, prevFeature, new Size(10, 10), 3, new MCvTermCriteria(10, 0.01),
             out currFeature, out status, out trackError);
          watch.Stop();
          Trace.WriteLine(String.Format(
@@ -729,7 +729,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestChessboardCalibration()
       {
-         System.Drawing.Size patternSize = new System.Drawing.Size(6, 6);
+         Size patternSize = new Size(6, 6);
 
          Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("chessBoard.jpg");
          PointF[] corners;
@@ -742,8 +742,8 @@ namespace Emgu.CV.Test
 
          chessboardImage.FindCornerSubPix(
             new PointF[][] { corners },
-            new System.Drawing.Size(10, 10),
-            new System.Drawing.Size(-1, -1),
+            new Size(10, 10),
+            new Size(-1, -1),
             new MCvTermCriteria(0.05));
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
@@ -842,11 +842,11 @@ namespace Emgu.CV.Test
       {
          using (MemStorage stor = new MemStorage())
          {
-            Contour<System.Drawing.Point> contour = new Contour<Point>(stor);
-            contour.Push(new System.Drawing.Point(0, 0));
-            contour.Push(new System.Drawing.Point(0, 2));
-            contour.Push(new System.Drawing.Point(2, 2));
-            contour.Push(new System.Drawing.Point(2, 0));
+            Contour<Point> contour = new Contour<Point>(stor);
+            contour.Push(new Point(0, 0));
+            contour.Push(new Point(0, 2));
+            contour.Push(new Point(2, 2));
+            contour.Push(new Point(2, 0));
             Assert.IsTrue(contour.Convex);
             Assert.AreEqual(contour.Area, 4.0);
             //InContour function requires MCvContour.rect to be pre-computed
@@ -854,11 +854,11 @@ namespace Emgu.CV.Test
             Assert.GreaterOrEqual(contour.InContour(new Point(1, 1)), 0);
             Assert.Less(contour.InContour(new Point(3, 3)), 0);
 
-            Contour<System.Drawing.PointF> contourF = new Contour<PointF>(stor);
-            contourF.Push(new System.Drawing.PointF(0, 0));
-            contourF.Push(new System.Drawing.PointF(0, 2));
-            contourF.Push(new System.Drawing.PointF(2, 2));
-            contourF.Push(new System.Drawing.PointF(2, 0));
+            Contour<PointF> contourF = new Contour<PointF>(stor);
+            contourF.Push(new PointF(0, 0));
+            contourF.Push(new PointF(0, 2));
+            contourF.Push(new PointF(2, 2));
+            contourF.Push(new PointF(2, 0));
             Assert.IsTrue(contourF.Convex);
             Assert.AreEqual(contourF.Area, 4.0);
             //InContour function requires MCvContour.rect to be pre-computed
@@ -878,11 +878,11 @@ namespace Emgu.CV.Test
             //Assert.GreaterOrEqual(contourD.InContour(new PointF(1, 1)), 0);
             //Assert.Less(contourD.InContour(new PointF(3, 3)), 0);
 
-            Seq<System.Drawing.Point> seq = new Seq<Point>(CvInvoke.CV_MAKETYPE(4, 2), stor);
-            seq.Push(new System.Drawing.Point(0, 0));
-            seq.Push(new System.Drawing.Point(0, 1));
-            seq.Push(new System.Drawing.Point(1, 1));
-            seq.Push(new System.Drawing.Point(1, 0));
+            Seq<Point> seq = new Seq<Point>(CvInvoke.CV_MAKETYPE(4, 2), stor);
+            seq.Push(new Point(0, 0));
+            seq.Push(new Point(0, 1));
+            seq.Push(new Point(1, 1));
+            seq.Push(new Point(1, 0));
          }
       }
 
@@ -915,7 +915,7 @@ namespace Emgu.CV.Test
          }
 
          img.DrawPolyline(
-             Array.ConvertAll<System.Drawing.PointF, System.Drawing.Point>(hull, Point.Round),
+             Array.ConvertAll<PointF, Point>(hull, Point.Round),
              true, new Bgr(255.0, 0.0, 0.0), 1);
          #endregion
 
@@ -1082,17 +1082,23 @@ namespace Emgu.CV.Test
       [Test]
       public void TestVideoWriter()
       {
-         int numberOfFrames = 100;
+         int numberOfFrames = 10;
          int width = 300;
          int height = 200;
          String fileName = "tmp.avi";
-         using (VideoWriter writer = new VideoWriter(fileName, 2, width, height, true))
+
+         Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
+         for (int i = 0; i < images.Length; i++)
+         {
+            images[i] = new Image<Bgr, byte>(width, height);
+            images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+         }
+
+         using (VideoWriter writer = new VideoWriter(fileName, 0, width, height, true))
          {
             for (int i = 0; i < numberOfFrames; i++)
             {
-               Image<Bgr, Byte> img1 = new Image<Bgr, byte>(width, height);
-               img1.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
-               writer.WriteFrame(img1);
+               writer.WriteFrame(images[i]);
             }
          }
 
@@ -1107,6 +1113,7 @@ namespace Emgu.CV.Test
             {
                Assert.AreEqual(img2.Width, width);
                Assert.AreEqual(img2.Height, height);
+               //Assert.IsTrue(img2.Equals( images[count]) );
                img2 = capture.QueryFrame();
                count++;
             }

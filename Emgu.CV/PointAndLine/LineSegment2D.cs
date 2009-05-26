@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace Emgu.CV.Structure
@@ -70,8 +68,8 @@ namespace Emgu.CV.Structure
       {
          PointF direction1 = Direction;
          PointF direction2 = otherLine.Direction;
-         double radianAngle = System.Math.Atan2(direction2.Y, direction2.X) - System.Math.Atan2(direction1.Y, direction1.X);
-         double degreeAngle = radianAngle * (180.0 / System.Math.PI);
+         double radianAngle = Math.Atan2(direction2.Y, direction2.X) - Math.Atan2(direction1.Y, direction1.X);
+         double degreeAngle = radianAngle * (180.0 / Math.PI);
          return
              degreeAngle <= -180.0 ? degreeAngle + 360 :
              degreeAngle > 180.0 ? degreeAngle - 360 :

@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
@@ -51,7 +46,7 @@ namespace Emgu.UI
                    while (_continute)
                    {
                       System.Threading.Thread.Sleep(200);
-                      if (this.components != null)
+                      if (components != null)
                          Invoke((MethodInvoker)
                          delegate()
                          {

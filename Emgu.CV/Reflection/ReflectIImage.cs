@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using Emgu.Util;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Emgu.CV.Reflection
 {
@@ -20,11 +20,7 @@ namespace Emgu.CV.Reflection
       {
          if (image != null)
          {
-            List<MethodInfo> methods = new List<MethodInfo>();
-            methods.AddRange(image.GetType().GetMethods());
-            //methods.AddRange(image.GetType().GetInterface("IImage").GetMethods());
-
-            foreach (MethodInfo mi in methods)
+            foreach (MethodInfo mi in image.GetType().GetMethods())
             {
                Object[] atts = mi.GetCustomAttributes(typeof(ExposableMethodAttribute), false);
                if (atts.Length > 0)
@@ -69,18 +65,18 @@ namespace Emgu.CV.Reflection
       /// <param name="image">The image to obtain pixel value from</param>
       /// <param name="location">The location to sample a pixel</param>
       /// <returns>The color at the specific location</returns>
-      public static IColor GetPixelColor(IImage image, System.Drawing.Point location)
+      public static IColor GetPixelColor(IImage image, Point location)
       {
-         System.Drawing.Size size = image.Size;
+         Size size = image.Size;
          location.X = Math.Min(location.X, size.Width - 1);
          location.Y = Math.Min(location.Y, size.Height - 1);
 
-         MethodInfo indexers = 
+         MethodInfo indexers =
             image.GetType()
             .GetMethod("get_Item", new Type[2] { typeof(int), typeof(int) });
 
-         return indexers == null ? 
-            new Bgra() 
+         return indexers == null ?
+            new Bgra()
             : indexers.Invoke(image, new object[2] { location.Y, location.X }) as IColor;
       }
    }

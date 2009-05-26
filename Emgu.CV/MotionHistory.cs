@@ -14,10 +14,8 @@ namespace Emgu.CV
    /// </remarks>
    public class MotionHistory : DisposableObject
    {
-      private int _bufferMax;
-      private int _diffThresh;
+      private Image<Gray, Byte> _forgroundMask;
       private double _mhiDuration;
-      private Image<Gray, Byte> _silh;
       private Image<Gray, Single> _mhi;
       private Image<Gray, Byte> _mask;
       private Image<Gray, Single> _orientation;
@@ -28,7 +26,6 @@ namespace Emgu.CV
       private double _maxTimeDelta;
       private double _minTimeDelta;
 
-      private Queue<Image<Gray, Byte>> _buffer;
 
       /// <summary>
       /// The Motion Segment Mask. 
@@ -58,30 +55,23 @@ namespace Emgu.CV
       /// <summary>
       /// Create a motion history object
       /// </summary>
-      /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
-      /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
       /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
       /// <param name="maxTimeDelta">In second. Any change happens between a time interval greater than this will not be considerred</param>
       /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
-      public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta)
-         : this (bufferCount, diffThresh, mhiDuration, maxTimeDelta, minTimeDelta, DateTime.Now)
+      public MotionHistory(double mhiDuration, double maxTimeDelta, double minTimeDelta)
+         : this (mhiDuration, maxTimeDelta, minTimeDelta, DateTime.Now)
       {
       }
 
       /// <summary>
       /// Create a motion history object
       /// </summary>
-      /// <param name="bufferCount">number of images to store in buffer, adjust it to fit your camera's frame rate</param>
-      /// <param name="diffThresh">0-255, the amount of pixel intensity change to consider it as motion pixel</param>
       /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
       /// <param name="maxTimeDelta">In second. Any change happens between a time interval larger than this will not be considerred</param>
       /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
       /// <param name="startTime">The start time of the motion history</param>
-      public MotionHistory(int bufferCount, int diffThresh, double mhiDuration, double maxTimeDelta, double minTimeDelta, DateTime startTime)
+      public MotionHistory(double mhiDuration, double maxTimeDelta, double minTimeDelta, DateTime startTime)
       {
-         _bufferMax = bufferCount;
-         _buffer = new Queue<Image<Gray, Byte>>(_bufferMax);
-         _diffThresh = diffThresh;
          _mhiDuration = mhiDuration;
          _initTime = startTime;
          _maxTimeDelta = maxTimeDelta;
@@ -100,28 +90,19 @@ namespace Emgu.CV
       /// <summary>
       /// Update the motion history with the specific image and the specific timestamp
       /// </summary>
-      /// <param name="image">The image to be added to history</param>
+      /// <param name="forgroundMask">The forground of the image to be added to history</param>
       /// <param name="timestamp">The time when the image is captured</param>
-      public void Update(Image<Gray, Byte> image, DateTime timestamp)
+      public void Update(Image<Gray, Byte> forgroundMask, DateTime timestamp)
       {
          _lastTime = timestamp;
          TimeSpan ts = _lastTime.Subtract(_initTime);
 
-         if (_buffer.Count == _bufferMax)
-         {
-            _buffer.Dequeue();
-         }
-         _buffer.Enqueue(image);
+         _forgroundMask = forgroundMask;
+         if (_mhi == null) _mhi = new Image<Gray, float>(forgroundMask.Size);
+         if (_mask == null) _mask = forgroundMask.CopyBlank();
+         if (_orientation == null) _orientation = new Image<Gray, float>(forgroundMask.Size);
 
-         if (_silh == null) _silh = image.CopyBlank();
-         if (_mhi == null) _mhi = new Image<Gray, float>(image.Size);
-         if (_mask == null) _mask = image.CopyBlank();
-         if (_orientation == null) _orientation = new Image<Gray, float>(image.Size);
-
-         CvInvoke.cvAbsDiff(image.Ptr, _buffer.Peek().Ptr, _silh.Ptr);
-         CvInvoke.cvThreshold(_silh.Ptr, _silh.Ptr, _diffThresh, 1, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
-
-         CvInvoke.cvUpdateMotionHistory(_silh.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
+         CvInvoke.cvUpdateMotionHistory(forgroundMask.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
          double scale = 255.0 / _mhiDuration;
          CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
 
@@ -152,7 +133,7 @@ namespace Emgu.CV
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
          // select component ROI
-         CvInvoke.cvSetImageROI(_silh, motionRectangle);
+         CvInvoke.cvSetImageROI(_forgroundMask, motionRectangle);
          CvInvoke.cvSetImageROI(_mhi, motionRectangle);
          CvInvoke.cvSetImageROI(_orientation, motionRectangle);
          CvInvoke.cvSetImageROI(_mask, motionRectangle);
@@ -162,13 +143,13 @@ namespace Emgu.CV
          angle = 360.0 - angle; // adjust for images with top-left origin
 
          // caculate number of points within silhoute ROI
-         motionPixelCount = CvInvoke.cvNorm(_silh.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
+         motionPixelCount = CvInvoke.cvNorm(_forgroundMask.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
 
          // reset the ROI
          CvInvoke.cvResetImageROI(_mhi);
          CvInvoke.cvResetImageROI(_orientation);
          CvInvoke.cvResetImageROI(_mask);
-         CvInvoke.cvResetImageROI(_silh);
+         CvInvoke.cvResetImageROI(_forgroundMask);
       }
 
       /// <summary>
@@ -176,7 +157,6 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-
       }
 
       /// <summary>
@@ -184,7 +164,6 @@ namespace Emgu.CV
       /// </summary>
       protected override void ReleaseManagedResources()
       {
-         if (_silh != null) _silh.Dispose();
          if (_mhi != null) _mhi.Dispose();
          if (_mask != null) _mask.Dispose();
          if (_orientation != null) _orientation.Dispose();

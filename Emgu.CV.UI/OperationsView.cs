@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using Emgu.Util;
 using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.UI

@@ -387,22 +387,19 @@ namespace Emgu.CV.Test
 
       public void TestFaceDetect()
       {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
          using (Image<Bgr, Byte> smooth = image.SmoothGaussian(7))
          {
             DateTime t1 = DateTime.Now;
 
             FaceDetector fd = new FaceDetector();
-            Face<Byte> f = fd.Detect(smooth)[0];
+            Face f = fd.Detect(smooth)[0];
             TimeSpan ts = DateTime.Now.Subtract(t1);
             Trace.WriteLine(ts.TotalMilliseconds);
 
-            Eye<Byte> e = f.DetectEye()[0];
+            Eye e = f.DetectEye()[0];
 
-            Application.Run(new ImageViewer(e.RGB));
+            //Application.Run(new ImageViewer(e.RGB));
 
             /*
             Image<Rgb, Byte> res = f.RGB.BlankClone();
@@ -410,82 +407,6 @@ namespace Emgu.CV.Test
             Application.Run(new ImageViewer(res.ToBitmap()));
             */
          }
-
-         #region old code
-         /*
-            using (HaarCascade h = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml"))
-            using (Image<Rgb> image = Emgu.CV.Toolbox.LoadRGBImage("lena.jpg"))
-            using (Image<Gray> gray = image.ConvertColor<Gray>())
-            using (Image<Gray> small = gray.Scale(gray.Width / 2, gray.Height / 2))
-            using (Image<Rgb> colorSmall = image.Scale(gray.Width / 2, gray.Height / 2))
-            {
-                Rectangle<int>[][] objects = small.DetectHaarCascade(h);
-                foreach (Rectangle<int> o in objects[0])
-                {
-                    using (Image<Gray> mask = small.BlankClone(new Gray(0.0)))
-                    {
-                        mask.Draw(o, new Gray(255.0), -1);
-                        DateTime t2 = DateTime.Now;
-
-                        small.ROI = o;
-                        colorSmall.ROI = o;
-                        using (Image<Gray> face = small.Copy())
-                        using (Image<Rgb> colorFace = colorSmall.Copy())
-                        using (Image<Hsv> hsvFace = colorFace.ConvertColor<Hsv>())
-                        {
-                            Image<Gray>[] hsvPlanes = hsvFace.Split();
-                            using (Image<Gray> smallSatuation = hsvPlanes[1].Threshold(new Gray(120.0), new Gray(255.0), ThresholdType2.THRESH_BINART_INV))
-                            using (Image<Gray> smallValue = hsvPlanes[1].Threshold(new Gray(100.0), new Gray(255.0), ThresholdType2.THRESH_BINART_INV))
-                            using (Image<Gray> smallVS = smallSatuation & smallValue)
-                            //using (Image<Gray> edge = face.Canny(new Gray(160.0), new Gray(100.0)))
-                            {
-                                //smallValue.DilateInPlace(1);
-
-                                //edge.DilateInPlace(1);
-                                //Contours cs = edge.FindContours(ContourRetrivalMode.LIST, ContourApproxMethod.CHAIN_APPROX_SIMPLE);
-                                
-                                int size = 60;
-                                Histogram htg = new Histogram(new int[1] { size }, new float[1] { 0.0f }, new float[1] { 180.0f });
-                                htg.Accumulate(new Image<Gray>[1] { hsvPlanes[0] });
-                                
-                                double[] arr = new double[size];
-                                for (int i = 0; i < size; i++)
-                                    arr[i] = htg.Query(new int[1] { i });
-                                System.Array.Sort<double>(arr);
-                                System.Array.Reverse(arr);
-                                htg.Threshold(arr[2]);
-
-                                using (Image<Gray> bpj = htg.BackProject(new Image<Gray>[1] { hsvPlanes[0] }))
-                                {
-                                    List<Seq> cList = bpj.FindContoursList( ContourApproxMethod.CHAIN_APPROX_SIMPLE);
-                                     //= cs.Elements;
-
-                                    using (Image<Gray> cImage = smallSatuation.BlankClone(new Gray(0.0)))
-                                    {
-                                        Seq maxAreaContour = cList[0];
-                                        foreach (Seq ct in cList)
-                                        {
-                                            if (ct.Area > maxAreaContour.Area)
-                                                maxAreaContour = ct;
-                                        }
-
-                                        Seq snake = face.Snake(maxAreaContour, 0.5f, 0.5f, 0.5f, new Point2D<int>(5, 5), new TermCriteria(10, 5.0));
-                                        
-                                        //Seq temp = maxAreaContour.ApproxPoly(maxAreaContour.Perimeter * 0.02);
-                                        //if (temp.Area > 10)
-                                        cImage.Draw(snake, new Gray(255.0), new Gray(120.0), -1);
-                                        Application.Run(new ImageViewer(cImage.ToBitmap()));
-                                    }
-                                }
-                            }
-                        }
-                        small.ROI = null;
-                        image.ROI = null;
-                        
-                    }
-                }
-            }*/
-         #endregion
       }
 
       public void TestCompression()
@@ -743,10 +664,8 @@ namespace Emgu.CV.Test
             Application.Idle += delegate(Object sender, EventArgs args)
             {
                Image<Bgr, Byte> frame = capture.QueryFrame();
-               model.Update(frame, Rectangle.Empty, null);
-               model.Diff(frame, fgMask, Rectangle.Empty);
-               viewer.Image = fgMask;
-               //viewer.Image = frame;
+               model.Update(frame);
+               viewer.Image = model.ForgroundMask; 
             };
             viewer.ShowDialog();
          }
@@ -758,12 +677,12 @@ namespace Emgu.CV.Test
         
          ImageViewer viewer = new ImageViewer();
 
-         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
+         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.ForgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          //param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF);
          param.FGTrainFrames = 10;
-         BlobTrackerAuto tracker = new BlobTrackerAuto(param);
+         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
 

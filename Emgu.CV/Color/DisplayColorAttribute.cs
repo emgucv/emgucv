@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace Emgu.CV
 {
    [AttributeUsage(AttributeTargets.Property)]
-   internal sealed class DisplayColorAttribute : System.Attribute
+   internal sealed class DisplayColorAttribute : Attribute
    {
       public DisplayColorAttribute(int blue, int green, int red)
       {

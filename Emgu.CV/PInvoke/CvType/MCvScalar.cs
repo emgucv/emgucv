@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
@@ -44,9 +42,9 @@ namespace Emgu.CV.Structure
       public MCvScalar(double v0)
       {
          this.v0 = v0;
-         this.v1 = 0;
-         this.v2 = 0;
-         this.v3 = 0;
+         v1 = 0;
+         v2 = 0;
+         v3 = 0;
       }
 
       /// <summary>
@@ -58,8 +56,8 @@ namespace Emgu.CV.Structure
       {
          this.v0 = v0;
          this.v1 = v1;
-         this.v2 = 0;
-         this.v3 = 0;
+         v2 = 0;
+         v3 = 0;
       }
 
       /// <summary>
@@ -73,7 +71,7 @@ namespace Emgu.CV.Structure
          this.v0 = v0;
          this.v1 = v1;
          this.v2 = v2;
-         this.v3 = 0;
+         v3 = 0;
       }
 
       /// <summary>

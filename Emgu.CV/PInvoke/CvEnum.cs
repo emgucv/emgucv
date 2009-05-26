@@ -9,18 +9,18 @@ namespace Emgu.CV.CvEnum
    public enum NORM_TYPE
    {
       /// <summary>
-      /// if arr2 is NULL, norm = ||arr1||C = maxI abs(arr1(I));
-      /// if arr2 is not NULL, norm = ||arr1-arr2||C = maxI abs(arr1(I)-arr2(I))
+      /// if arr2 is NULL, norm = ||arr1||_C = max_I abs(arr1(I));
+      /// if arr2 is not NULL, norm = ||arr1-arr2||_C = max_I abs(arr1(I)-arr2(I))
       /// </summary>
       CV_C = 1,
       /// <summary>
-      /// if arr2 is NULL, norm = ||arr1||L1 = sumI abs(arr1(I));
-      /// if arr2 is not NULL, norm = ||arr1-arr2||L1 = sumI abs(arr1(I)-arr2(I))
+      /// if arr2 is NULL, norm = ||arr1||_L1 = sum_I abs(arr1(I));
+      /// if arr2 is not NULL, norm = ||arr1-arr2||_L1 = sum_I abs(arr1(I)-arr2(I))
       /// </summary>
       CV_L1 = 2,
       /// <summary>
-      /// if arr2 is NULL, norm = ||arr1||L2 = sqrt( sumI arr1(I)^2);
-      /// if arr2 is not NULL, norm = ||arr1-arr2||L2 = sqrt( sumI (arr1(I)-arr2(I))^2 )
+      /// if arr2 is NULL, norm = ||arr1||_L2 = sqrt( sum_I arr1(I)^2);
+      /// if arr2 is not NULL, norm = ||arr1-arr2||_L2 = sqrt( sum_I (arr1(I)-arr2(I))^2 )
       /// </summary>
       CV_L2 = 4,
       /// <summary>
@@ -28,11 +28,11 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_NORM_MASK = 7,
       /// <summary>
-      /// 
+      /// It is used in combination with either CV_C, CV_L1 or CV_L2
       /// </summary>
       CV_RELATIVE = 8,
       /// <summary>
-      /// 
+      /// It is used in combination with either CV_C, CV_L1 or CV_L2
       /// </summary>
       CV_DIFF = 16,
       /// <summary>
@@ -52,15 +52,15 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_DIFF_L2 = (CV_DIFF | CV_L2),
       /// <summary>
-      /// norm = ||arr1-arr2||C/||arr2||C
+      /// norm = ||arr1-arr2||_C/||arr2||_C
       /// </summary>
       CV_RELATIVE_C = (CV_RELATIVE | CV_C),
       /// <summary>
-      /// norm = ||arr1-arr2||L1/||arr2||L1
+      /// norm = ||arr1-arr2||_L1/||arr2||_L1
       /// </summary>
       CV_RELATIVE_L1 = (CV_RELATIVE | CV_L1),
       /// <summary>
-      /// norm = ||arr1-arr2||L2/||arr2||L2
+      /// norm = ||arr1-arr2||_L2/||arr2||_L2
       /// </summary>
       CV_RELATIVE_L2 = (CV_RELATIVE | CV_L2)
    }

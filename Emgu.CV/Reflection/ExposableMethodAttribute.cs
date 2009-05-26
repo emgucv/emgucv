@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Emgu.CV.Reflection
 {
@@ -8,7 +6,7 @@ namespace Emgu.CV.Reflection
    /// Attribute used by ImageBox to generate Operation Menu
    /// </summary>
    [AttributeUsage(AttributeTargets.Method)]
-   public sealed class ExposableMethodAttribute : System.Attribute
+   public sealed class ExposableMethodAttribute : Attribute
    {
       private bool _exposable;
       private string _category;

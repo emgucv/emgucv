@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 
 namespace MotionDetection
@@ -15,6 +16,7 @@ namespace MotionDetection
    {
       private Capture _capture;
       private MotionHistory _motionHistory;
+      private IBGFGDetector<Bgr> _forgroundDetector;
 
       public Form1()
       {
@@ -34,10 +36,8 @@ namespace MotionDetection
          }
 
          if (_capture != null) //if camera capture has been successfully created
-         {   
+         {
             _motionHistory = new MotionHistory(
-                6, //number of images to store in buffer, adjust it to fit your camera's frame rate
-                20, //0-255, the amount of pixel intensity change to consider it as motion pixel
                 1.0, //in second, the duration of motion history you wants to keep
                 0.05, //in second, parameter for cvCalcMotionGradient
                 0.5); //in second, parameter for cvCalcMotionGradient
@@ -48,13 +48,22 @@ namespace MotionDetection
 
       private void ProcessFrame(object sender, EventArgs e)
       {
+         using (Image<Bgr, Byte> image = _capture.QueryFrame())
          using (MemStorage storage = new MemStorage()) //create storage for motion components
          {
-            Image<Bgr, Byte> image = _capture.QuerySmallFrame().PyrUp(); //reduce noise from the image
+            if (_forgroundDetector == null)
+            {
+               //_forgroundDetector = new BGCodeBookModel<Bgr>();
+               //_forgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+               _forgroundDetector = new BGStatModel<Bgr>(image, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
+            }
+
+            _forgroundDetector.Update(image);
+
             capturedImageBox.Image = image;
 
             //update the motion history
-            _motionHistory.Update(image.Convert<Gray, Byte>());
+            _motionHistory.Update(_forgroundDetector.ForgroundMask);
 
             #region get a copy of the motion mask and enhance its color
             Image<Gray, Byte> motionMask = _motionHistory.Mask;
@@ -114,9 +123,9 @@ namespace MotionDetection
       {
          float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
          Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);
-         
+
          CircleF circle = new CircleF(
-            center, 
+            center,
             circleRadius);
 
          int xDirection = (int)(Math.Cos(angle * (Math.PI / 180.0)) * circleRadius);

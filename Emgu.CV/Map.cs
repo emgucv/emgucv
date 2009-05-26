@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
@@ -57,7 +55,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="area"></param>
       /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
-      public Map(System.Drawing.RectangleF area, PointF resolution)
+      public Map(RectangleF area, PointF resolution)
          : this(area, resolution, new TColor())
       {
       }
@@ -67,7 +65,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The image of this map</param>
       /// <param name="area">The area of this map</param>
-      public Map(Image<TColor, TDepth> image, System.Drawing.RectangleF area)
+      public Map(Image<TColor, TDepth> image, RectangleF area)
          : base(image.Size)
       {
          image.CopyTo(this);
@@ -121,7 +119,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="roi">The roi to be copied</param>
       /// <returns>The roi region on the map</returns>
-      public Map<TColor, TDepth> Copy(System.Drawing.RectangleF roi)
+      public Map<TColor, TDepth> Copy(RectangleF roi)
       {
          return new Map<TColor, TDepth>(
             base.Copy(MapRectangleToImageRectangle(roi)),
@@ -195,10 +193,10 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
-         System.Drawing.Point[] pts = Array.ConvertAll<PointF, Point>(
+         Point[] pts = Array.ConvertAll<PointF, Point>(
              polygon.GetVertices(),
              MapPointToImagePoint);
-         
+
          if (thickness > 0)
             base.DrawPolyline(pts, true, color, thickness);
          else

@@ -15,16 +15,16 @@ namespace Emgu.CV
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
       /// </summary>
-      public static readonly System.Drawing.Imaging.ColorPalette GrayscalePalette = GenerateGrayscalePalette();
+      public static readonly ColorPalette GrayscalePalette = GenerateGrayscalePalette();
 
-      private static System.Drawing.Imaging.ColorPalette GenerateGrayscalePalette()
+      private static ColorPalette GenerateGrayscalePalette()
       {
-         using (Bitmap image = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format8bppIndexed))
+         using (Bitmap image = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
          {
-            System.Drawing.Imaging.ColorPalette palette = image.Palette;
+            ColorPalette palette = image.Palette;
             for (int i = 0; i < 256; i++)
             {
-               palette.Entries[i] = System.Drawing.Color.FromArgb(i, i, i);
+               palette.Entries[i] = Color.FromArgb(i, i, i);
             }
             return palette;
          }

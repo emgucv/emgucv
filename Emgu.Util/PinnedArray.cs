@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.Util
@@ -47,9 +45,16 @@ namespace Emgu.Util
       /// <summary>
       /// Release the GCHandle
       /// </summary>
-      protected override void ReleaseUnmanagedResources()
+      protected override void ReleaseManagedResources()
       {
          _handle.Free();
+      }
+
+      /// <summary>
+      /// Disposed the unmanaged data
+      /// </summary>
+      protected override void DisposeObject()
+      {
       }
    }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Emgu.Util;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -12,8 +10,11 @@ namespace Emgu.CV.VideoSurveillance
    /// Background code book model
    /// </summary>
    /// <typeparam name="TColor"> The type of color for the image</typeparam>
-   public class BGCodeBookModel<TColor> : UnmanagedObject where TColor : struct, IColor
+   public class BGCodeBookModel<TColor> : UnmanagedObject, IBGFGDetector<TColor>
+      where TColor : struct, IColor
    {
+      private Image<Gray, Byte> _forgroundMask;
+
       /// <summary>
       /// Create a background code book model
       /// </summary>
@@ -31,18 +32,39 @@ namespace Emgu.CV.VideoSurveillance
       public void Update(Image<TColor, Byte> image, Rectangle roi, Image<Gray, Byte> mask)
       {
          CvInvoke.cvBGCodeBookUpdate(_ptr, image.Ptr, roi, mask);
+         if (_forgroundMask == null) _forgroundMask = new Image<Gray, byte>(image.Size);
+         CvInvoke.cvBGCodeBookDiff(_ptr, image, _forgroundMask, roi);
       }
 
       /// <summary>
-      /// 
+      /// Update the BG code book model
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="fgmask"></param>
-      /// <param name="roi">The region of interest. Use Rectangle.Empty for the whole image</param>
-      /// <returns></returns>
-      public int Diff(Image<TColor, Byte> image, Image<Gray, Byte> fgmask, Rectangle roi)
+      /// <param name="image">The image for update</param>
+      public void Update(Image<TColor, Byte> image)
       {
-         return CvInvoke.cvBGCodeBookDiff(_ptr, image, fgmask, roi);
+         Update(image, Rectangle.Empty, null);
+      }
+
+      /// <summary>
+      /// Get the forground mask. Do not dispose this image
+      /// </summary>
+      public Image<Gray, Byte> ForgroundMask
+      {
+         get
+         {
+            return _forgroundMask; 
+         }
+      }
+
+      /// <summary>
+      /// Get the background mask.
+      /// </summary>
+      public Image<Gray, Byte> BackgroundMask
+      {
+         get
+         {
+            return _forgroundMask.Not();
+         }
       }
 
       /// <summary>

@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 
@@ -10,15 +7,16 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// A blob tracker auto
    /// </summary>
-   public class BlobTrackerAuto : BlobSeqBase
+   public class BlobTrackerAuto<TColor> : BlobSeqBase
+      where TColor : struct, IColor
    {
-      private BlobTrackerAutoParam _param;
+      private BlobTrackerAutoParam<TColor> _param;
 
       /// <summary>
       /// Create a auto blob tracker using the specific parameters
       /// </summary>
       /// <param name="param">The parameters for this blob tracker auto</param>
-      public BlobTrackerAuto(BlobTrackerAutoParam param)
+      public BlobTrackerAuto(BlobTrackerAutoParam<TColor> param)
       {
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
@@ -30,8 +28,8 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       public BlobTrackerAuto()
       {
-         BlobTrackerAutoParam param = new BlobTrackerAutoParam();
-         param.ForgroundDetector = new ForgroundDetector(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         BlobTrackerAutoParam<TColor> param = new BlobTrackerAutoParam<TColor>();
+         param.ForgroundDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
          _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);
@@ -74,7 +72,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// The parameters for this blob tracker auto
       /// </summary>
-      public BlobTrackerAutoParam Param
+      public BlobTrackerAutoParam<TColor> Param
       {
          get
          {

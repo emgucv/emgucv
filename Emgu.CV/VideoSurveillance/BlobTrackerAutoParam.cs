@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoSurveillance
@@ -8,7 +6,8 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// Parameters of blobtracker auto ver1
    /// </summary>
-   public class BlobTrackerAutoParam
+   public class BlobTrackerAutoParam<TColor>
+      where TColor : struct, IColor
    {
       /// <summary>
       /// Number of frames needed for FG (foreground) detector to train.
@@ -18,7 +17,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// FGDetector module. If this field is NULL the Process FG mask is used.
       /// </summary>
-      private ForgroundDetector _forgroundDetector;
+      private FGDetector<TColor> _forgroundDetector;
 
       /// <summary>
       /// Selected blob detector module. If this field is NULL default blobdetector module will be created.
@@ -107,7 +106,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// FGDetector module. If this field is NULL the Process FG mask is used.
       /// </summary>
-      public ForgroundDetector ForgroundDetector
+      public FGDetector<TColor> ForgroundDetector
       {
          get
          {

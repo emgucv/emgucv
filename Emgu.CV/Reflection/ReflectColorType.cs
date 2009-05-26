@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Drawing;
 
 namespace Emgu.CV.Reflection
 {
@@ -12,9 +12,9 @@ namespace Emgu.CV.Reflection
       /// <summary>
       /// Get the display color for each channel
       /// </summary>
-      public static System.Drawing.Color[] GetDisplayColorOfChannels(IColor color)
+      public static Color[] GetDisplayColorOfChannels(IColor color)
       {
-         List<System.Drawing.Color> channelColor = new List<System.Drawing.Color>();
+         List<Color> channelColor = new List<Color>();
          foreach (System.Reflection.PropertyInfo pInfo in color.GetType().GetProperties())
          {
             Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
@@ -24,9 +24,9 @@ namespace Emgu.CV.Reflection
          if (channelColor.Count > 0) return channelColor.ToArray();
 
          //create default color
-         System.Drawing.Color[] res = new System.Drawing.Color[color.Dimension];
+         Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
-            res[i] = System.Drawing.Color.Gray;
+            res[i] = Color.Gray;
          return res;
       }
 
@@ -38,8 +38,7 @@ namespace Emgu.CV.Reflection
          List<String> channelNames = new List<string>();
          foreach (System.Reflection.PropertyInfo pInfo in t.GetType().GetProperties())
          {
-            Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
-            if (displayAtts.Length > 0)
+            if (pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true).Length > 0)
                channelNames.Add(pInfo.Name);
          }
          if (channelNames.Count > 0) return channelNames.ToArray();

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
@@ -10,14 +8,15 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// Background statistics model
    /// </summary>
-   public class BackgroundStatisticsModel : UnmanagedObject
+   public class BGStatModel<TColor> : UnmanagedObject, IBGFGDetector<TColor>
+      where TColor : struct, IColor
    {
       /// <summary>
       /// Create a BGStatModel
       /// </summary>
       /// <param name="image">The image used for initiating the statistic model</param>
       /// <param name="type">The type of the statistics model</param>
-      public BackgroundStatisticsModel(Image<Bgr, Byte> image, Emgu.CV.CvEnum.BG_STAT_TYPE type)
+      public BGStatModel(Image<TColor, Byte> image, Emgu.CV.CvEnum.BG_STAT_TYPE type)
       {
          _ptr = (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL) ?
             CvInvoke.cvCreateFGDStatModel(image, IntPtr.Zero)
@@ -29,33 +28,25 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image">The image used for initiating the statistic model</param>
       /// <param name="parameters">FGDStatModel</param>
-      public BackgroundStatisticsModel(Image<Bgr, Byte> image, ref MCvFGDStatModelParams parameters)
+      public BGStatModel(Image<TColor, Byte> image, ref MCvFGDStatModelParams parameters)
       {
          _ptr = CvInvoke.cvCreateFGDStatModel(image, ref parameters);
       }
 
       /// <summary>
-      /// Define the Release function
-      /// </summary>
-      /// <param name="ptr">The background mode to be released</param>
-      private delegate void ReleaseFunction(ref IntPtr ptr);
-
-      private delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
-
-      /// <summary>
       /// A cache of the update function
       /// </summary>
-      private UpdateFunctionDelagate updateFunction;
+      private BGStatModelDelegates.UpdateFunctionDelagate updateFunction;
 
       /// <summary>
       /// Update the statistic model
       /// </summary>
       /// <param name="image"></param>
-      public void Update(Image<Bgr, Byte> image)
+      public virtual void Update(Image<TColor, Byte> image)
       {
          if (updateFunction == null)
          {
-            updateFunction = (UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(UpdateFunctionDelagate));
+            updateFunction = (BGStatModelDelegates.UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(BGStatModelDelegates.UpdateFunctionDelagate));
          }
          updateFunction(image.Ptr, _ptr);
       }
@@ -74,7 +65,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get a copy of the current background
       /// </summary>
-      public Image<Gray, Byte> Background
+      public Image<Gray, Byte> BackgroundMask
       {
          get
          {
@@ -87,7 +78,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get a copy of the mask for the current forground
       /// </summary>
-      public Image<Gray, Byte> Foreground
+      public Image<Gray, Byte> ForgroundMask
       {
          get
          {
@@ -102,8 +93,25 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         ReleaseFunction releaseFunction = (ReleaseFunction)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvReleaseBGStatModel, typeof(ReleaseFunction));
+         BGStatModelDelegates.ReleaseFunction releaseFunction = (BGStatModelDelegates.ReleaseFunction)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvReleaseBGStatModel, typeof(BGStatModelDelegates.ReleaseFunction));
          releaseFunction(ref _ptr);
       }
+   }
+
+   internal static class BGStatModelDelegates
+   {
+      /// <summary>
+      /// Defines an image update function
+      /// </summary>
+      /// <param name="img">The image to be used for update</param>
+      /// <param name="statModel">The stat model to update</param>
+      /// <returns></returns>
+      public delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
+
+      /// <summary>
+      /// Define the Release function
+      /// </summary>
+      /// <param name="ptr">The background mode to be released</param>
+      public delegate void ReleaseFunction(ref IntPtr ptr);
    }
 }

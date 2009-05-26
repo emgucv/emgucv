@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Emgu.CV
 {
@@ -13,7 +11,7 @@ namespace Emgu.CV
       where TColor : struct, IColor
       where TDepth : new()
    {
-      private System.DateTime _timestamp;
+      private DateTime _timestamp;
 
       ///<summary>
       ///Create a empty Image 

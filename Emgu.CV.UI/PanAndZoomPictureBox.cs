@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -11,7 +9,7 @@ namespace Emgu.CV.UI
    /// <summary>
    /// A picture box with pan and zoom functionality
    /// </summary>
-   public partial class PanAndZoomPictureBox : PictureBox
+   public class PanAndZoomPictureBox : PictureBox
    {
       /// <summary>
       /// Create a picture box with pan and zoom functionality
@@ -22,13 +20,13 @@ namespace Emgu.CV.UI
          InitializeComponent();
          SetScrollBarVisibilityAndMaxMin();
          //Enable double buffering
-         this.ResizeRedraw = false;
-         this.DoubleBuffered = true;
+         ResizeRedraw = false;
+         DoubleBuffered = true;
          //this.BorderStyle = BorderStyle.Fixed3D;
          PanableAndZoomable = true;
       }
 
-      private bool _panableAndZoomable = false;
+      private bool _panableAndZoomable;
 
       /// <summary>
       /// Get or Set the property to enable(disable) Pan and Zoom
@@ -46,21 +44,21 @@ namespace Emgu.CV.UI
                _panableAndZoomable = value;
                if (_panableAndZoomable)
                {
-                  this.MouseEnter += new System.EventHandler(this.OnMouseEnter);
-                  this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.OnMouseWheel);
-                  this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
-                  this.Resize += new System.EventHandler(this.OnResize);
-                  this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-                  this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+                  MouseEnter += OnMouseEnter;
+                  MouseWheel += OnMouseWheel;
+                  MouseMove += OnMouseMove;
+                  Resize += OnResize;
+                  MouseDown += OnMouseDown;
+                  MouseUp += OnMouseUp;
                }
                else
                {
-                  this.MouseEnter -= new System.EventHandler(this.OnMouseEnter);
-                  this.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.OnMouseWheel);
-                  this.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
-                  this.Resize -= new System.EventHandler(this.OnResize);
-                  this.MouseDown -= new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-                  this.MouseUp -= new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+                  MouseEnter -= OnMouseEnter;
+                  MouseWheel -= OnMouseWheel;
+                  MouseMove -= OnMouseMove;
+                  Resize -= OnResize;
+                  MouseDown -= OnMouseDown;
+                  MouseUp -= OnMouseUp;
                }
             }
          }
@@ -92,13 +90,13 @@ namespace Emgu.CV.UI
 
          _bufferPoint = Point.Empty;
          if (e.Button == MouseButtons.Middle)
-            this.Cursor = Cursors.Hand;
+            Cursor = Cursors.Hand;
       }
 
       private void OnMouseUp(object sender, MouseEventArgs e)
       {
          _mouseDownButton = MouseButtons.None;
-         this.Cursor = _defaultCursor;
+         Cursor = _defaultCursor;
 
          if (e.Button == MouseButtons.Left)
          {
@@ -143,7 +141,7 @@ namespace Emgu.CV.UI
          }
       }
 
-      private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+      private void OnMouseWheel(object sender, MouseEventArgs e)
       {  //handle the mouse whell scroll (for zooming)
          double scale = 1.0;
          if (e.Delta > 0)
@@ -203,13 +201,17 @@ namespace Emgu.CV.UI
             (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) || 
             (verticalScrollBar.Visible && verticalScrollBar.Value != 0)))
          {
-            Matrix matrix = new Matrix((float)_zoomScale, 0, 0, (float)_zoomScale, 0, 0);
-            matrix.Translate(
-               horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
-               verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
-            matrix.Multiply(pe.Graphics.Transform, MatrixOrder.Prepend);
-            pe.Graphics.Transform = matrix;
-            pe.Graphics.InterpolationMode = _interpolationMode;
+            using (Matrix matrix = new Matrix((float)_zoomScale, 0, 0, (float)_zoomScale, 0, 0))
+            {
+               matrix.Translate(
+                  horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
+                  verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
+
+               pe.Graphics.Transform.Multiply(matrix, MatrixOrder.Append);
+            }
+
+            if (pe.Graphics.InterpolationMode != _interpolationMode)
+               pe.Graphics.InterpolationMode = _interpolationMode;
          }
 
          base.OnPaint(pe);

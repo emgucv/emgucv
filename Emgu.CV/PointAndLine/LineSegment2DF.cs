@@ -45,7 +45,9 @@ namespace Emgu.CV.Structure
          }
       }
 
-            ///<summary> The direction of the line, the norm of which is 1 </summary>
+      /// <summary> 
+      /// The direction of the line, the norm of which is 1 
+      /// </summary>
       public PointF Direction
       {
          get

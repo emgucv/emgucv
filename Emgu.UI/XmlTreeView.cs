@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -53,7 +49,7 @@ namespace Emgu.UI
          }
       }
 
-      private void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
+      private static void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
       {
          XmlNode xNode;
          TreeNode tNode;

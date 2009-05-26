@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Diagnostics;
-using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

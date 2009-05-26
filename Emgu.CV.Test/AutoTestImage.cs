@@ -71,7 +71,7 @@ namespace Emgu.CV.Test
             for (int i = 0; i < img2.Width; i++)
                for (int j = 0; j < img2.Height; j++)
                {
-                  System.Drawing.Point location = new System.Drawing.Point(i, j);
+                  Point location = new Point(i, j);
                   Assert.GreaterOrEqual(img4[location].Intensity, img2[location].Intensity);
                   Assert.GreaterOrEqual(img4[j, i].Intensity, img3[j, i].Intensity);
                }
@@ -105,11 +105,11 @@ namespace Emgu.CV.Test
       public void TestGenericOperation()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
-         img1.ROI = new System.Drawing.Rectangle(10, 1, 50 - 10, 19 - 1);
+         img1.ROI = new Rectangle(10, 1, 50 - 10, 19 - 1);
          img1.SetValue(5.0);
 
          Image<Gray, Single> img2 = new Image<Gray, float>(50, 20);
-         img2.ROI = new System.Drawing.Rectangle(0, 2, 40, 20 - 2);
+         img2.ROI = new Rectangle(0, 2, 40, 20 - 2);
          img2.SetValue(new Gray(2.0));
 
          Assert.AreEqual(img1.Width, img2.Width);
@@ -631,19 +631,19 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray());
 
-         System.Drawing.Rectangle rect = new Rectangle(40, 30, 20, 40);
+         Rectangle rect = new Rectangle(40, 30, 20, 40);
          img.Draw(rect, new Gray(255.0), -1);
 
          using (MemStorage stor = new MemStorage())
          {
-            Seq<System.Drawing.Point> pts = new Seq<System.Drawing.Point>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
-            pts.Push(new System.Drawing.Point(20, 20));
-            pts.Push(new System.Drawing.Point(20, 80));
-            pts.Push(new System.Drawing.Point(80, 80));
-            pts.Push(new System.Drawing.Point(80, 20));
+            Seq<Point> pts = new Seq<Point>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+            pts.Push(new Point(20, 20));
+            pts.Push(new Point(20, 80));
+            pts.Push(new Point(80, 80));
+            pts.Push(new Point(80, 20));
 
             Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
-            Seq<System.Drawing.Point> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new System.Drawing.Size(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+            Seq<Point> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new Size(21, 21), new MCvTermCriteria(40, 0.0002), stor);
 
             img.Draw(pts, new Gray(120), 1);
             img.Draw(snake, new Gray(80), 2);
@@ -657,11 +657,11 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("Stuff.jpg");
          Image<Gray, Int32> marker = new Image<Gray, Int32>(image.Width, image.Height);
-         System.Drawing.Rectangle rect = image.ROI;
+         Rectangle rect = image.ROI;
          marker.Draw(
             new CircleF(
-               new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f), 
-               (float) (Math.Min(image.Width, image.Height) / 4.0f)),
+               new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f),
+               (float)(Math.Min(image.Width, image.Height) / 4.0f)),
             new Gray(255),
             0);
          CvInvoke.cvWatershed(image, marker);
@@ -680,7 +680,7 @@ namespace Emgu.CV.Test
          Matrix<float> matBDft = new Matrix<float>(
             CvInvoke.cvGetOptimalDFTSize(matB.Rows),
             CvInvoke.cvGetOptimalDFTSize(matB.Cols));
-         CvInvoke.cvCopyMakeBorder(matB, matBDft, new System.Drawing.Point(0, 0), Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+         CvInvoke.cvCopyMakeBorder(matB, matBDft, new Point(0, 0), Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
          Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
          CvInvoke.cvMerge(matBDft, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, dftIn);
 
@@ -710,19 +710,19 @@ namespace Emgu.CV.Test
          Image<Gray, float> convolvedImage = new Image<Gray, float>(matA.Size + matB.Size - new Size(1, 1));
 
          Matrix<float> dftA = new Matrix<float>(
-            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Rows), 
+            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Rows),
             CvInvoke.cvGetOptimalDFTSize(convolvedImage.Cols));
          matA.CopyTo(dftA.GetSubRect(matA.ROI));
 
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
 
          Matrix<float> dftB = new Matrix<float>(dftA.Size);
-         matB.CopyTo(dftB.GetSubRect(new System.Drawing.Rectangle(Point.Empty, matB.Size)));
+         matB.CopyTo(dftB.GetSubRect(new Rectangle(Point.Empty, matB.Size)));
          CvInvoke.cvDFT(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
          CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convolvedImage.Rows);
-         dftA.GetSubRect(new System.Drawing.Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
+         dftA.GetSubRect(new Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
 
          //ImageViewer.Show(convolvedImage);
       }
@@ -776,7 +776,7 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
          {
             PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
-            img.FindCornerSubPix(pts, new System.Drawing.Size(5, 5), new System.Drawing.Size(-1, -1), new MCvTermCriteria(20, 0.0001));
+            img.FindCornerSubPix(pts, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(20, 0.0001));
 
             foreach (PointF p in pts[0])
                img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
@@ -793,15 +793,15 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
 
-         Contour<System.Drawing.Point> contour = img.FindContours();
+         Contour<Point> contour = img.FindContours();
 
          while (contour != null)
          {
-            Contour<System.Drawing.Point> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
+            Contour<Point> approx = contour.ApproxPoly(contour.Perimeter * 0.05);
 
             if (approx.Convex && Math.Abs(approx.Area) > 20.0)
             {
-               System.Drawing.Point[] vertices = approx.ToArray();
+               Point[] vertices = approx.ToArray();
 
                LineSegment2D[] edges = PointCollection.PolyLine(vertices, true);
 

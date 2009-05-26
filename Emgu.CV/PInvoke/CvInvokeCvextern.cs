@@ -27,6 +27,14 @@ namespace Emgu.CV
       public extern static IntPtr CvFGDetectorGetMask(IntPtr detector);
 
       /// <summary>
+      /// Update the FGDetector with new image
+      /// </summary>
+      /// <param name="detector">The forground detector</param>
+      /// <param name="image">The image which will be used to update the FGDetector</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvFGDetectorProcess(IntPtr detector, IntPtr image);
+
+      /// <summary>
       /// Create a simple forground detector
       /// </summary>
       /// <param name="type">The type of the detector</param>

@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.Util;
 using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.UI
@@ -76,7 +71,7 @@ namespace Emgu.CV.UI
       /// It also set the color intensity of the pixel on the image where is mouse is at
       /// </summary>
       /// <param name="location">The location of the mouse on the image</param>
-      public void SetMousePositionOnImage(System.Drawing.Point location)
+      public void SetMousePositionOnImage(Point location)
       {
          mousePositionTextbox.Text = location.ToString();
 
@@ -111,7 +106,7 @@ namespace Emgu.CV.UI
 
       public void UpdateZoomScale()
       {
-         this.zoomLevelComboBox.Text = String.Format("{0}%", ImageBox.ZoomScale * 100);
+         zoomLevelComboBox.Text = String.Format("{0}%", ImageBox.ZoomScale * 100);
       }
 
       private void clearOperationBtn_Click(object sender, EventArgs e)

@@ -34,7 +34,7 @@ namespace Emgu.CV
       public static float FirstDegreeInterpolate(PointF[] points, float index)
       {
          XValueOfPointComparator comparator = new XValueOfPointComparator();
-         int idx = System.Array.BinarySearch<PointF>(points, new PointF(index, 0.0f), comparator);
+         int idx = Array.BinarySearch<PointF>(points, new PointF(index, 0.0f), comparator);
          
          if (idx >= 0) // an exact index is matched
             return points[idx].Y;
@@ -63,7 +63,7 @@ namespace Emgu.CV
       /// <returns>The y coordinates as the result of the first degree interpolation</returns>
       public static float[] FirstDegreeInterpolate(PointF[] points, float[] indexes)
       {
-         return System.Array.ConvertAll<float, float>(
+         return Array.ConvertAll<float, float>(
              indexes,
              delegate(float d) { return FirstDegreeInterpolate(points, d); });
       }
@@ -183,7 +183,7 @@ namespace Emgu.CV
       /// <param name="points">the array of points</param>
       /// <param name="closed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <returns>array of LineSegment2D</returns>
-      public static LineSegment2D[] PolyLine(System.Drawing.Point[] points, bool closed)
+      public static LineSegment2D[] PolyLine(Point[] points, bool closed)
       {
          LineSegment2D[] res;
          int length = points.Length;
@@ -235,7 +235,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The collection of points</param>
       /// <returns>The bounding rectangle for the array of points</returns>
-      public static System.Drawing.Rectangle BoundingRectangle(PointF[] points)
+      public static Rectangle BoundingRectangle(PointF[] points)
       {
          IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
@@ -248,7 +248,7 @@ namespace Emgu.CV
             points.Length,
             seq,
             block);
-         System.Drawing.Rectangle rect = CvInvoke.cvBoundingRect(seq, true);
+         Rectangle rect = CvInvoke.cvBoundingRect(seq, true);
          handle.Free();
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
@@ -281,14 +281,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Transforms 1-channel disparity map to 3-channel image, a 3D surface.
+      /// Reproject pixels on a 1-channel disparity map to array of 3D points.
       /// </summary>
       /// <param name="disparity">Disparity map</param>
       /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
       /// <return>The reprojected 3D points</return>
       public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Int16> disparity, Matrix<double> Q)
       {
-         System.Drawing.Size size = disparity.Size;
+         Size size = disparity.Size;
          MCvPoint3D32f[] points3D = new MCvPoint3D32f[size.Width * size.Height];
          GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
 

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
-using Emgu.Util;
 
 namespace Emgu.CV.UI
 {
@@ -62,7 +61,7 @@ namespace Emgu.CV.UI
             panelsHeight += panel.Height;
          }
 
-         this.Height = panelsHeight + 100;
+         Height = panelsHeight + 100;
       }
 
       private bool Successed
@@ -166,13 +165,13 @@ namespace Emgu.CV.UI
          ParamInputPanel panel = new ParamInputPanel();
          panel.Height = 50;
          panel.Width = 400;
-         System.Drawing.Point textBoxStart = new Point(100, 10);
+         Point textBoxStart = new Point(100, 10);
 
          #region add the label for the parameter
          Label paramNameLabel = new Label();
          paramNameLabel.AutoSize = true;
          panel.Controls.Add(paramNameLabel);
-         paramNameLabel.Location = new System.Drawing.Point(10, textBoxStart.Y);
+         paramNameLabel.Location = new Point(10, textBoxStart.Y);
          #endregion
 
          if (param == null)
@@ -182,7 +181,7 @@ namespace Emgu.CV.UI
 
             paramNameLabel.Text = "";
 
-            String[] options = Array.ConvertAll<Type, String>(p.AvailableTypes, System.Convert.ToString); //splitDefaultValue[1].Split(',');
+            String[] options = Array.ConvertAll<Type, String>(p.AvailableTypes, Convert.ToString); //splitDefaultValue[1].Split(',');
             ComboBox combo = new ComboBox();
             panel.Controls.Add(combo);
             combo.Location = textBoxStart;
@@ -240,7 +239,7 @@ namespace Emgu.CV.UI
                panel.GetParamFunction =
                    delegate()
                    {
-                      return System.Convert.ChangeType(inputTextBox.Text, paramType);
+                      return Convert.ChangeType(inputTextBox.Text, paramType);
                    };
             }
             else if (paramType == typeof(MCvScalar))
@@ -253,7 +252,7 @@ namespace Emgu.CV.UI
                {
                   inputBoxes[i] = new TextBox();
                   panel.Controls.Add(inputBoxes[i]);
-                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
+                  inputBoxes[i].Location = new Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
                   inputBoxes[i].Width = boxWidth;
                   inputBoxes[i].Text = "0.0";
                }
@@ -263,7 +262,7 @@ namespace Emgu.CV.UI
                       double[] values = new double[4];
                       for (int i = 0; i < inputBoxes.Length; i++)
                       {
-                         values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                         values[i] = Convert.ToDouble(inputBoxes[i].Text);
                       }
                       return new MCvScalar(values[0], values[1], values[2], values[3]);
                    };
@@ -280,7 +279,7 @@ namespace Emgu.CV.UI
                {
                   inputBoxes[i] = new TextBox();
                   panel.Controls.Add(inputBoxes[i]);
-                  inputBoxes[i].Location = new System.Drawing.Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
+                  inputBoxes[i].Location = new Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
                   inputBoxes[i].Width = boxWidth;
                   inputBoxes[i].Text = "0.0";
                }
@@ -290,7 +289,7 @@ namespace Emgu.CV.UI
                       double[] values = new double[4];
                       for (int i = 0; i < inputBoxes.Length; i++)
                       {
-                         values[i] = System.Convert.ToDouble(inputBoxes[i].Text);
+                         values[i] = Convert.ToDouble(inputBoxes[i].Text);
                       }
                       IColor color = Activator.CreateInstance(paramType) as IColor;
                       color.MCvScalar = new MCvScalar(values[0], values[1], values[2], values[3]);
