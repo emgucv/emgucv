@@ -86,11 +86,10 @@ namespace Emgu.CV.UI
 
       private String[] GetOperationCode(List<Operation> operationList)
       {
-         Type imageType;
          if (operationList.Count == 0) 
             return new string[0];
-         else
-            imageType = operationList[0].Method.DeclaringType;
+
+         Type imageType = operationList[0].Method.DeclaringType;
 
          List<String> ops = new List<string>();
 
@@ -121,10 +120,9 @@ namespace Emgu.CV.UI
                else
                {
                   imageType = op.Method.ReturnType;
-                  currentInstanceIndex++;
                   str = String.Format("{0} image{1} = {2};",
                      ImageTypeToString(op.Method.ReturnType), 
-                     currentInstanceIndex, 
+                     ++currentInstanceIndex, 
                      str);
                }
             }

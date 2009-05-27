@@ -68,7 +68,7 @@ namespace MotionDetection
             #region get a copy of the motion mask and enhance its color
             Image<Gray, Byte> motionMask = _motionHistory.Mask;
             double[] minValues, maxValues;
-            System.Drawing.Point[] minLoc, maxLoc;
+            Point[] minLoc, maxLoc;
             motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
             motionMask._Mul(255.0 / maxValues[0]);
             #endregion
@@ -119,7 +119,7 @@ namespace MotionDetection
          label3.Text = text;
       }
 
-      private static void DrawMotion(Image<Bgr, Byte> image, System.Drawing.Rectangle motionRegion, double angle, Bgr color)
+      private static void DrawMotion(Image<Bgr, Byte> image, Rectangle motionRegion, double angle, Bgr color)
       {
          float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
          Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);

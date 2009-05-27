@@ -50,7 +50,6 @@ namespace Emgu.CV
       /// <param name="kernel">the values for the convolution kernel</param>
       /// <param name="center">the center for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel, System.Drawing.Point center)
-         : base()
       {
          int rows = kernel.GetLength(0);
          int cols = kernel.GetLength(1);

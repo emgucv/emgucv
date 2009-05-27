@@ -8,10 +8,6 @@ namespace Emgu.RPC.Serial
     {
         private String _data;
 
-        public SerialServiceCallback()
-        {
-        }
-
         public String Data
         {
             get { return _data; }

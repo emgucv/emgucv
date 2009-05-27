@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
 using Emgu.Util;
@@ -9,7 +7,7 @@ using System.Diagnostics;
 
 [assembly: DebuggerVisualizer(
 typeof(Emgu.CV.DebuggerVisualizers.MatrixVisualizer),
-Target = typeof(Emgu.CV.Matrix<>))]
+Target = typeof(Matrix<>))]
 namespace Emgu.CV.DebuggerVisualizers
 {
    public sealed class MatrixVisualizer : DialogDebuggerVisualizer
@@ -19,9 +17,11 @@ namespace Emgu.CV.DebuggerVisualizers
          UnmanagedObject mat = objectProvider.GetObject() as UnmanagedObject;
          if (mat != null)
          {
-            MatrixViewer viewer = new MatrixViewer();
-            viewer.Matrix = mat;
-            windowService.ShowDialog(viewer);
+            using (MatrixViewer viewer = new MatrixViewer())
+            {
+               viewer.Matrix = mat;
+               windowService.ShowDialog(viewer);
+            }
          }
       }
    }

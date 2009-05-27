@@ -11,11 +11,29 @@ namespace Emgu.CV.UI
    /// </summary>
    public class PanAndZoomPictureBox : PictureBox
    {
+      private bool _panableAndZoomable;
+      /// <summary>
+      /// The zoom scale of the image to be displayed
+      /// </summary>
+      private double _zoomScale = 1.0;
+
+      private Point _mouseDownPosition;
+      private MouseButtons _mouseDownButton;
+      private Point _bufferPoint;
+      private HScrollBar horizontalScrollBar;
+      private VScrollBar verticalScrollBar;
+      private InterpolationMode _interpolationMode = InterpolationMode.NearestNeighbor;
+      private static readonly Cursor _defaultCursor = Cursors.Cross;
+
+      /// <summary>
+      /// The available zoom levels for the displayed image 
+      /// </summary>
+      public static double[] ZoomLevels = new double[] { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0 };
+
       /// <summary>
       /// Create a picture box with pan and zoom functionality
       /// </summary>
       public PanAndZoomPictureBox()
-         : base()
       {
          InitializeComponent();
          SetScrollBarVisibilityAndMaxMin();
@@ -25,8 +43,6 @@ namespace Emgu.CV.UI
          //this.BorderStyle = BorderStyle.Fixed3D;
          PanableAndZoomable = true;
       }
-
-      private bool _panableAndZoomable;
 
       /// <summary>
       /// Get or Set the property to enable(disable) Pan and Zoom
@@ -63,25 +79,6 @@ namespace Emgu.CV.UI
             }
          }
       }
-
-      /// <summary>
-      /// The zoom scale of the image to be displayed
-      /// </summary>
-      private double _zoomScale = 1.0;
-
-      /// <summary>
-      /// The available zoom levels for the displayed image 
-      /// </summary>
-      public static double[] ZoomLevels = new double[] { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0 };
-
-      private Point _mouseDownPosition;
-      private MouseButtons _mouseDownButton;
-      private Point _bufferPoint;
-      private HScrollBar horizontalScrollBar;
-      private VScrollBar verticalScrollBar;
-      private InterpolationMode _interpolationMode = InterpolationMode.NearestNeighbor;
-
-      private static readonly Cursor _defaultCursor = Cursors.Cross;
 
       private void OnMouseDown(object sender, MouseEventArgs e)
       {
@@ -201,13 +198,13 @@ namespace Emgu.CV.UI
             (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) || 
             (verticalScrollBar.Visible && verticalScrollBar.Value != 0)))
          {
-            using (Matrix matrix = new Matrix((float)_zoomScale, 0, 0, (float)_zoomScale, 0, 0))
+            using (Matrix transform = pe.Graphics.Transform)
             {
-               matrix.Translate(
+               transform.Scale((float)_zoomScale, (float)_zoomScale, MatrixOrder.Append);
+               transform.Translate(
                   horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
                   verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
-
-               pe.Graphics.Transform.Multiply(matrix, MatrixOrder.Append);
+               pe.Graphics.Transform = transform;
             }
 
             if (pe.Graphics.InterpolationMode != _interpolationMode)

@@ -310,7 +310,7 @@ namespace Emgu.CV
       /// <param name="context">The streaming context</param>
       public Image(SerializationInfo info, StreamingContext context)
       {
-         base.DeserializeObjectData(info, context);
+         DeserializeObjectData(info, context);
          ROI = (Rectangle)info.GetValue("Roi", typeof(Rectangle));
       }
 
@@ -1353,9 +1353,15 @@ namespace Emgu.CV
 
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
       {
-         IntPtr keypointsPtr;
-         //Stopwatch watch = Stopwatch.StartNew();
-         CvInvoke.cvExtractSURF(Ptr, mask == null ? IntPtr.Zero : mask.Ptr, out keypointsPtr, out descriptorPtr, stor.Ptr, param);
+         IntPtr keypointsPtr = new IntPtr() ;
+         descriptorPtr = new IntPtr();
+         CvInvoke.cvExtractSURF(
+            Ptr, mask == null ? IntPtr.Zero : mask.Ptr, 
+            ref keypointsPtr, 
+            ref descriptorPtr, 
+            stor.Ptr, 
+            param,
+            0);
          //watch.Stop();
          //System.Diagnostics.Trace.WriteLine(watch.ElapsedMilliseconds);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
@@ -4109,7 +4115,7 @@ namespace Emgu.CV
          else //Color image
          {
             //Get an hsv representation of this image
-            Image<Hsv, TDepth> hsv = this as Image<Hsv, TDepth> ?? this.Convert<Hsv, TDepth>();
+            Image<Hsv, TDepth> hsv = this as Image<Hsv, TDepth> ?? Convert<Hsv, TDepth>();
 
             using (Image<Gray, TDepth> v = new Image<Gray, TDepth>(Size))
             {  //equalize the V (value) channel

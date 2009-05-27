@@ -23,12 +23,13 @@ namespace Emgu.RPC.Serial
                 new InstanceContext(this),
                 new EndpointAddress(url));
 
-            this.OnDataReceived += new EventHandler(
-                delegate { 
-                    if (!_disposed)
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(ReadData), _serialService); 
-                }); //signal that data has been received
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ReadData), _serialService); 
+            OnDataReceived += 
+               delegate
+               {
+                  if (!_disposed)
+                     ThreadPool.QueueUserWorkItem(ReadData, _serialService);
+               }; //signal that data has been received
+            ThreadPool.QueueUserWorkItem(ReadData, _serialService); 
         }
 
         private static void ReadData(Object serialService)

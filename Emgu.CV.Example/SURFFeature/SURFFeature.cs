@@ -38,7 +38,7 @@ namespace SURFFeatureExample
          SURFTracker tracker = new SURFTracker(modelFeatures);
          //Comment out above and uncomment below if you wish to use spill-tree instead
          //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
-         
+
          SURFTracker.MatchedSURFFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
          matchedFeatures = SURFTracker.VoteForUniqueness(matchedFeatures, 0.8);
          matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
@@ -48,7 +48,7 @@ namespace SURFFeatureExample
          Image<Gray, Byte> res = modelImage.ConcateVertical(observedImage);
 
          #region draw lines between the matched features
-         foreach(SURFTracker.MatchedSURFFeature matchedFeature in matchedFeatures)
+         foreach (SURFTracker.MatchedSURFFeature matchedFeature in matchedFeatures)
          {
             PointF p = matchedFeature.ObservedFeature.Point.pt;
             p.Y += modelImage.Height;
@@ -59,7 +59,7 @@ namespace SURFFeatureExample
          #region draw the project region on the image
          if (homography != null)
          {  //draw a rectangle along the projected model
-            System.Drawing.Rectangle rect = modelImage.ROI;
+            Rectangle rect = modelImage.ROI;
             PointF[] pts = new PointF[] { 
                new PointF(rect.Left, rect.Bottom),
                new PointF(rect.Right, rect.Bottom),

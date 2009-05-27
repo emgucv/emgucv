@@ -88,22 +88,6 @@ namespace Emgu.CV
          return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_MAT_DEPTH(type) * 2) & 3));
       }*/
 
-      /*
-      public static MCvMat cvMat(int rows, int cols, int type, IntPtr data)
-      {
-          MCvMat m;
-          Debug.Assert(_CV_MAT_DEPTH(type) <= (int)CvEnum.MAT_DEPTH.CV_64F);
-          type = _CV_MAT_TYPE(type);
-          m.type = 0x42420000 | (1 << 14) | type;
-          m.cols = cols;
-          m.rows = rows;
-          m.step = rows > 1 ? m.cols * _CV_ELEM_SIZE(type) : 0;
-          m.data = data;
-          m.refcount = IntPtr.Zero;
-          m.hdr_refcount = 0;
-          return m;
-      }*/
-
       /// <summary>
       /// Generate 4-character code of codec used to compress the frames. For example, CV_FOURCC('P','I','M','1') is MPEG-1 codec, CV_FOURCC('M','J','P','G') is motion-jpeg codec etc.
       /// </summary>

@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
-using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.Drawing;
 
 [assembly: DebuggerVisualizer(
 typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer),
-Target = typeof(Emgu.CV.Image<,>))]
+Target = typeof(Image<,>))]
 
 /*
 [assembly: DebuggerVisualizer(
@@ -28,9 +23,11 @@ namespace Emgu.CV.DebuggerVisualizers
          IImage image = objectProvider.GetObject() as IImage;
          if (image != null)
          {
-            ImageViewer viewer = new ImageViewer();
-            viewer.Image = image;
-            windowService.ShowDialog(viewer);
+            using (ImageViewer viewer = new ImageViewer())
+            {
+               viewer.Image = image;
+               windowService.ShowDialog(viewer);
+            }
          }
       }
    }

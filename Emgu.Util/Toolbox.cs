@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Xml.XPath;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace Emgu.Util
 {
@@ -222,32 +219,32 @@ namespace Emgu.Util
       /// <returns>The standard output</returns>
       public static string ExecuteCmd(string execFileName, string arguments)
       {
-         Process processor = new Process();
-
-         processor.StartInfo.FileName = execFileName;
-         processor.StartInfo.Arguments = arguments;
-         processor.StartInfo.UseShellExecute = false;
-         processor.StartInfo.RedirectStandardOutput = true;
-         processor.StartInfo.RedirectStandardError = true;
-
-         //string error = string.Empty;
-         try
+         using (Process processor = new Process())
          {
-            processor.Start();
+            processor.StartInfo.FileName = execFileName;
+            processor.StartInfo.Arguments = arguments;
+            processor.StartInfo.UseShellExecute = false;
+            processor.StartInfo.RedirectStandardOutput = true;
+            processor.StartInfo.RedirectStandardError = true;
+
+            //string error = string.Empty;
+            try
+            {
+               processor.Start();
+            }
+            catch (Exception)
+            {
+               //error = e.Message;
+            }
+
+            //processor.BeginErrorReadLine();
+            //String error2 = processor.StandardError.ReadToEnd();
+            string output = processor.StandardOutput.ReadToEnd();
+
+            processor.WaitForExit();
+            processor.Close();
+            return output;
          }
-         catch (Exception)
-         {
-            //error = e.Message;
-         }
-
-         //processor.BeginErrorReadLine();
-         //String error2 = processor.StandardError.ReadToEnd();
-         string output = processor.StandardOutput.ReadToEnd();
-
-         processor.WaitForExit();
-         processor.Close();
-
-         return output;
       }
 
       /// <summary>
@@ -275,7 +272,7 @@ namespace Emgu.Util
       /// <returns>the byte vector</returns>
       public static Byte[] ToBytes<D>(D[] data)
       {
-         int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D)) * data.Length;
+         int size = Marshal.SizeOf(typeof(D)) * data.Length;
          Byte[] res = new Byte[size];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          Marshal.Copy(handle.AddrOfPinnedObject(), res, 0, size);
@@ -325,7 +322,7 @@ namespace Emgu.Util
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
       public static void CopyMatrix<D>(IntPtr src, D[][] dest)
       {
-         int datasize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(D));
+         int datasize = Marshal.SizeOf(typeof(D));
          int step = datasize * dest[0].Length;
          int current = src.ToInt32();
 

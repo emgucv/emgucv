@@ -17,7 +17,7 @@ namespace Emgu.CV
       /// <param name="height">the height of the frame</param>
       /// <param name="isColor">true if this is a color video, false otherwise</param>
       public VideoWriter(String fileName, int fps, int width, int height, bool isColor)
-         : this(fileName, 0, fps, width, height, isColor)
+         : this(fileName, CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), fps, width, height, isColor)
       {
       }
 

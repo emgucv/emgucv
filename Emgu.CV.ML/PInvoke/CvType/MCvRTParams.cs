@@ -22,7 +22,7 @@ namespace Emgu.CV.ML.Structure
          return p;
       }
 
-      #region MCvTreeParams
+      #region MCvDTreeParams
       /// <summary>
       /// If a discrete variable, on which the training procedure tries to make a split, takes more than max_categories values, the precise best subset estimation may take a very long time (as the algorithm is exponential). Instead, many decision trees engines (including ML) try to find sub-optimal split in this case by clustering all the samples into max_categories clusters (i.e. some categories are merged together).
       ///Note that this technique is used only in N(>2)-class classification problems. In case of regression and 2-class classification the optimal split can be found efficiently without employing clustering, thus the parameter is not used in these cases.

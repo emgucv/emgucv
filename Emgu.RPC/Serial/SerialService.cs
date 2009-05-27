@@ -23,7 +23,7 @@ namespace Emgu.RPC.Serial
             _port.Open();   
         }
 
-        public String[] GetAvailablePorts()
+        public static String[] GetAvailablePorts()
         {
             return SerialPort.GetPortNames();
         }
@@ -47,7 +47,7 @@ namespace Emgu.RPC.Serial
                         {
                             data = _port.ReadExisting();
                         }
-                        catch (Exception)
+                        catch 
                         { };
                     }
                 }

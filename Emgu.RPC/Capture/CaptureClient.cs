@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ServiceModel;
 using System.Threading;
 using Emgu.CV;
@@ -22,7 +20,6 @@ namespace Emgu.RPC
       /// <param name="binding">The binding for this client</param>
       /// <param name="url">The url of the server</param>
       public CaptureClient(System.ServiceModel.Channels.Binding binding, string url)
-         : base()
       {
          _captureFactory = new DuplexChannelFactory<IDuplexCapture>(
               typeof(DuplexCaptureCallback),
@@ -32,14 +29,14 @@ namespace Emgu.RPC
              new InstanceContext(this),
              new EndpointAddress(url));
 
-         this.onFrameReceived += new EventHandler(
-             delegate
-             {
-                if (!_disposed)
-                   ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture);
-             }); //signal that data has been received
+         onFrameReceived +=
+            delegate
+            {
+               if (!_disposed)
+                  ThreadPool.QueueUserWorkItem(CaptureImage, _capture);
+            }; //signal that data has been received
 
-         ThreadPool.QueueUserWorkItem(new WaitCallback(CaptureImage), _capture);
+         ThreadPool.QueueUserWorkItem(CaptureImage, _capture);
       }
 
       private static void CaptureImage(Object capture)

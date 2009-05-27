@@ -82,6 +82,7 @@ namespace Emgu.CV.ML
       /// <param name="update">If true, the training data is used to update the classifier; Otherwise, the data in the classifier are cleared before training is performed</param>
       /// <returns>The number of done iterations</returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvNormalBayesClassifierTrain(
          IntPtr classifier,
          IntPtr trainData,
@@ -147,6 +148,7 @@ namespace Emgu.CV.ML
       /// Otherwise, the classifier is trained from scratch</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvKNearestTrain(
          IntPtr classifier,
          IntPtr trainData,
@@ -206,6 +208,7 @@ namespace Emgu.CV.ML
       /// <param name="labels">Can be IntPtr.Zero if not needed. Optionally computed output "class label" for each sample</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvEMTrain(
          IntPtr model,
          IntPtr samples,
@@ -293,6 +296,7 @@ namespace Emgu.CV.ML
       /// <param name="parameters">The parameters for SVM</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvSVMTrain(
          IntPtr model,
          IntPtr trainData,
@@ -483,6 +487,7 @@ namespace Emgu.CV.ML
       /// <param name="param">The parameters for training the decision tree</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvDTreeTrain(
          IntPtr model, 
          IntPtr trainData,
@@ -561,6 +566,7 @@ namespace Emgu.CV.ML
       /// <param name="varType">The types of input variables</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvRTreesTrain(
          IntPtr model,
          IntPtr trainData,
@@ -640,6 +646,7 @@ namespace Emgu.CV.ML
       /// <param name="update">specifies whether the classifier needs to be updated (i.e. the new weak tree classifiers added to the existing ensemble), or the classifier needs to be rebuilt from scratch</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvBoostTrain(
          IntPtr model,
          IntPtr trainData,

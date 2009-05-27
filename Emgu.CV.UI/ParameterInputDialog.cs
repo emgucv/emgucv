@@ -210,7 +210,7 @@ namespace Emgu.CV.UI
                combo.SelectedIndex = 0;
 
                panel.GetParamFunction =
-                   delegate()
+                   delegate
                    {
                       return Enum.Parse(paramType, combo.SelectedItem.ToString(), true);
                    };

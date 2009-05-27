@@ -47,7 +47,7 @@ namespace LicensePlateRecognition
          {
             AddLabelAndImage(
                ref startPoint,
-               "License: " + String.Join(" ", words[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray()),
+               String.Format("License: {0}", String.Join(" ", words[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray())),
                licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
             image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
          }

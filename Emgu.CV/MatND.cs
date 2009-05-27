@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
@@ -34,7 +32,7 @@ namespace Emgu.CV
       /// <param name="context">The streaming context</param>
       public MatND(SerializationInfo info, StreamingContext context)
       {
-         this.DeserializeObjectData(info, context);
+         DeserializeObjectData(info, context);
       }
 
       /// <summary>
@@ -206,7 +204,7 @@ namespace Emgu.CV
 
          using (MatND<TDepth> diff = new MatND<TDepth>(dim1))
          {
-            CvInvoke.cvXor(_ptr, other, diff, IntPtr.Zero);
+            CvInvoke.cvXor(_ptr, other.Ptr, diff.Ptr, IntPtr.Zero);
             Byte[] bytes = diff.Bytes;
             for (int i = 0; i < bytes.Length; i++)
             {

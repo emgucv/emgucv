@@ -92,7 +92,7 @@ namespace LicensePlateRecognition
          }
       }
 
-      private bool IsParallelogram(Point[] pts)
+      private static bool IsParallelogram(Point[] pts)
       {
          LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
 
@@ -111,7 +111,7 @@ namespace LicensePlateRecognition
       /// </summary>
       /// <param name="plate">The license plate image</param>
       /// <returns>License plate image without the noise</returns>
-      private Image<Gray, Byte> FilterPlate(Image<Gray, Byte> plate)
+      private static Image<Gray, Byte> FilterPlate(Image<Gray, Byte> plate)
       {
          Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
 

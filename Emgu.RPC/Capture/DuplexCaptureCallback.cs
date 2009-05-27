@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
@@ -12,11 +10,6 @@ namespace Emgu.RPC
    public class DuplexCaptureCallback : IDuplexCaptureCallback
    {
       private Image<Bgr, Byte> _img;
-
-      ///<summary>
-      ///Construct a DuplexCaptureCallback
-      ///</summary>
-      public DuplexCaptureCallback() { }
 
       ///<summary>
       ///Get the image that has been captured.

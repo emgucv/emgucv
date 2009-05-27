@@ -53,7 +53,6 @@ namespace Emgu.CV.UI
       /// Create a ImageBox
       /// </summary>
       public ImageBox()
-         : base()
       {
          InitializeComponent();
 
@@ -84,7 +83,7 @@ namespace Emgu.CV.UI
             foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
                mi.Visible = rightClickMenuEnabled;
 
-            base.PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
+            PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
 
             _functionalMode = value;
          }

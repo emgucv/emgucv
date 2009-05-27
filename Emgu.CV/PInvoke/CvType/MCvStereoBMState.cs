@@ -60,6 +60,11 @@ namespace Emgu.CV.Structure
       public int speckleRange;
 
       /// <summary>
+      /// If 1, the results may be more accurate at the expense of slower processing.
+      /// </summary>
+      public int trySmallerWindows;
+
+      /// <summary>
       /// internal buffers, do not modify (!)
       /// </summary>
       public IntPtr preFilteredImg0;
@@ -71,5 +76,13 @@ namespace Emgu.CV.Structure
       /// internal buffers, do not modify (!)
       /// </summary>
       public IntPtr slidingSumBuf;
+      /// <summary>
+      /// internal buffers, do not modify (!)
+      /// </summary>
+      public IntPtr dbmin;
+      /// <summary>
+      /// internal buffers, do not modify (!)
+      /// </summary>
+      public IntPtr dbmax;
    }
 }

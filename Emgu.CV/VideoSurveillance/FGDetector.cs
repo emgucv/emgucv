@@ -26,7 +26,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="image">The image which will be used to update the FGDetector</param>
       public void Update(Image<TColor, Byte> image)
       {
-         CvInvoke.CvFGDetectorProcess(_ptr, image);
+         CvInvoke.CvFGDetectorProcess(_ptr, image.Ptr);
       }
 
       /// <summary>
