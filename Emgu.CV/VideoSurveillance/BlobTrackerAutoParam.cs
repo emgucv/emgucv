@@ -6,6 +6,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// Parameters of blobtracker auto ver1
    /// </summary>
+   /// <typeparam name="TColor">The type of color for the image to be tracked. Due to a bug in OpenCV, only Gray is supported at the moment</typeparam>
    public class BlobTrackerAutoParam<TColor>
       where TColor : struct, IColor
    {
@@ -106,7 +107,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// FGDetector module. If this field is NULL the Process FG mask is used.
       /// </summary>
-      public FGDetector<TColor> ForgroundDetector
+      public FGDetector<TColor> FGDetector
       {
          get
          {
@@ -146,7 +147,7 @@ namespace Emgu.CV.VideoSurveillance
             param.BTA = BTA;
             param.BTGen = BTGen;
             param.BTPP = _postProcessModule;
-            param.FG = ForgroundDetector;
+            param.FG = FGDetector;
             param.FGTrainFrames = FGTrainFrames;
             param.usePPData = UsePPData;
             return param;

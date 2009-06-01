@@ -28,25 +28,30 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
+           System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistogramViewer));
            this.histogramCtrl1 = new Emgu.CV.UI.HistogramBox();
            this.SuspendLayout();
            // 
            // histogramCtrl1
            // 
-           this.histogramCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-           this.histogramCtrl1.Location = new System.Drawing.Point(0, 0);
+           this.histogramCtrl1.AccessibleDescription = null;
+           this.histogramCtrl1.AccessibleName = null;
+           resources.ApplyResources(this.histogramCtrl1, "histogramCtrl1");
+           this.histogramCtrl1.BackgroundImage = null;
+           this.histogramCtrl1.Font = null;
            this.histogramCtrl1.Name = "histogramCtrl1";
-           this.histogramCtrl1.Size = new System.Drawing.Size(372, 284);
-           this.histogramCtrl1.TabIndex = 0;
            // 
            // HistogramViewer
            // 
-           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+           this.AccessibleDescription = null;
+           this.AccessibleName = null;
+           resources.ApplyResources(this, "$this");
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-           this.ClientSize = new System.Drawing.Size(372, 284);
+           this.BackgroundImage = null;
            this.Controls.Add(this.histogramCtrl1);
+           this.Font = null;
+           this.Icon = null;
            this.Name = "HistogramViewer";
-           this.Text = Properties.StringTable.DefaultHistogramViewerText;
            this.ResumeLayout(false);
 
         }

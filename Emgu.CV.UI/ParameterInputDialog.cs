@@ -181,7 +181,7 @@ namespace Emgu.CV.UI
 
             paramNameLabel.Text = "";
 
-            String[] options = Array.ConvertAll<Type, String>(p.AvailableTypes, Convert.ToString); //splitDefaultValue[1].Split(',');
+            String[] options = Array.ConvertAll<Type, String>(p.AvailableTypes, delegate(Type t) { return t.Name; }); 
             ComboBox combo = new ComboBox();
             panel.Controls.Add(combo);
             combo.Location = textBoxStart;

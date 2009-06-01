@@ -13,80 +13,6 @@ namespace Emgu.Util
    /// </summary>
    public static class Toolbox
    {
-      #region delegates
-      /// <summary>
-      /// An Action that accepts two input and returns nothing
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <param name="o1">The first input parameter</param>
-      /// <param name="o2">The second input parameter</param>
-      public delegate void Action<TInput1, TInput2>(TInput1 o1, TInput2 o2);
-
-      /// <summary>
-      /// An Action that accepts three input and returns nothing
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <typeparam name="TInput3"></typeparam>
-      /// <param name="o1">The first input parameter</param>
-      /// <param name="o2">The second input parameter</param>
-      /// <param name="o3">The third input parameter</param>
-      public delegate void Action<TInput1, TInput2, TInput3>(TInput1 o1, TInput2 o2, TInput3 o3);
-
-      /// <summary>
-      /// An Action that accepts fourth input and returns nothing
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <typeparam name="TInput3"></typeparam>
-      /// <typeparam name="TInput4"></typeparam>
-      /// <param name="o1">The first input parameter</param>
-      /// <param name="o2">The second input parameter</param>
-      /// <param name="o3">The third input parameter</param>
-      /// <param name="o4">The fourth input parameter</param>
-      public delegate void Action<TInput1, TInput2, TInput3, TInput4>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
-
-      /// <summary>
-      /// Delegate similar to that in .Net 3.5
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <typeparam name="TOutput"></typeparam>
-      /// <param name="o1"></param>
-      /// <param name="o2"></param>
-      /// <returns></returns>
-      public delegate TOutput Func<TInput1, TInput2, TOutput>(TInput1 o1, TInput2 o2);
-
-      /// <summary>
-      /// Delegate similar to that in .Net 3.5
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <typeparam name="TInput3"></typeparam>
-      /// <typeparam name="TOutput"></typeparam>
-      /// <param name="o1"></param>
-      /// <param name="o2"></param>
-      /// <param name="o3"></param>
-      /// <returns></returns>
-      public delegate TOutput Func<TInput1, TInput2, TInput3, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3);
-
-      /// <summary>
-      /// Delegate similar to that in .Net 3.5
-      /// </summary>
-      /// <typeparam name="TInput1"></typeparam>
-      /// <typeparam name="TInput2"></typeparam>
-      /// <typeparam name="TInput3"></typeparam>
-      /// <typeparam name="TInput4"></typeparam>
-      /// <typeparam name="TOutput"></typeparam>
-      /// <param name="o1"></param>
-      /// <param name="o2"></param>
-      /// <param name="o3"></param>
-      /// <param name="o4"></param>
-      /// <returns></returns>
-      public delegate TOutput Func<TInput1, TInput2, TInput3, TInput4, TOutput>(TInput1 o1, TInput2 o2, TInput3 o3, TInput4 o4);
-      #endregion
-
       #region xml serilization and deserialization
       /// <summary>
       /// Convert an object to an xml document
@@ -184,32 +110,6 @@ namespace Emgu.Util
          Buffer.BlockCopy(b, 0, c, a.Length, b.Length);
          return c;
       }
-
-      /*
-      /// <summary>
-      /// Event argument that returns a string
-      /// </summary>
-      public class StringEventArgs : EventArgs
-      {
-         private string _message;
-         /// <summary>
-         /// The message for this EventArgs
-         /// </summary>
-         public string Message
-         {
-            get { return _message; }
-         }
-
-         /// <summary>
-         /// Constructor
-         /// </summary>
-         /// <param name="msg">the message for this event</param>
-         public StringEventArgs(string msg)
-            : base()
-         {
-            _message = msg;
-         }
-      }*/
 
       /// <summary>
       /// Call a command from command line

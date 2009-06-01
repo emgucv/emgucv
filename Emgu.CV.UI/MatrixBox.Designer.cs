@@ -28,73 +28,78 @@ namespace Emgu.CV.UI
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MatrixBox));
          this.panel1 = new System.Windows.Forms.Panel();
-         this.dataGridView1 = new System.Windows.Forms.DataGridView();
-         this.errorMsg = new System.Windows.Forms.Label();
-         this.channelLabel = new System.Windows.Forms.Label();
          this.channelSelectComboBox = new System.Windows.Forms.ComboBox();
+         this.channelLabel = new System.Windows.Forms.Label();
+         this.errorMsg = new System.Windows.Forms.Label();
+         this.dataGridView1 = new System.Windows.Forms.DataGridView();
          this.panel1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
          this.SuspendLayout();
          // 
          // panel1
          // 
+         this.panel1.AccessibleDescription = null;
+         this.panel1.AccessibleName = null;
+         resources.ApplyResources(this.panel1, "panel1");
+         this.panel1.BackgroundImage = null;
          this.panel1.Controls.Add(this.channelSelectComboBox);
          this.panel1.Controls.Add(this.channelLabel);
          this.panel1.Controls.Add(this.errorMsg);
-         this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-         this.panel1.Location = new System.Drawing.Point(0, 0);
+         this.panel1.Font = null;
          this.panel1.Name = "panel1";
-         this.panel1.Size = new System.Drawing.Size(383, 56);
-         this.panel1.TabIndex = 0;
-         // 
-         // dataGridView1
-         // 
-         this.dataGridView1.AllowUserToAddRows = false;
-         this.dataGridView1.AllowUserToDeleteRows = false;
-         this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-         this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-         this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.dataGridView1.Location = new System.Drawing.Point(0, 56);
-         this.dataGridView1.Name = "dataGridView1";
-         this.dataGridView1.RowHeadersWidth = 80;
-         this.dataGridView1.Size = new System.Drawing.Size(383, 190);
-         this.dataGridView1.TabIndex = 1;
-         // 
-         // errorMsg
-         // 
-         this.errorMsg.AutoSize = true;
-         this.errorMsg.Location = new System.Drawing.Point(13, 37);
-         this.errorMsg.Name = "errorMsg";
-         this.errorMsg.Size = new System.Drawing.Size(75, 13);
-         this.errorMsg.TabIndex = 0;
-         this.errorMsg.Text = "Error Message";
-         // 
-         // channelLabel
-         // 
-         this.channelLabel.AutoSize = true;
-         this.channelLabel.Location = new System.Drawing.Point(13, 14);
-         this.channelLabel.Name = "channelLabel";
-         this.channelLabel.Size = new System.Drawing.Size(46, 13);
-         this.channelLabel.TabIndex = 1;
-         this.channelLabel.Text = "Channel";
          // 
          // channelSelectComboBox
          // 
+         this.channelSelectComboBox.AccessibleDescription = null;
+         this.channelSelectComboBox.AccessibleName = null;
+         resources.ApplyResources(this.channelSelectComboBox, "channelSelectComboBox");
+         this.channelSelectComboBox.BackgroundImage = null;
+         this.channelSelectComboBox.Font = null;
          this.channelSelectComboBox.FormattingEnabled = true;
-         this.channelSelectComboBox.Location = new System.Drawing.Point(68, 11);
          this.channelSelectComboBox.Name = "channelSelectComboBox";
-         this.channelSelectComboBox.Size = new System.Drawing.Size(121, 21);
-         this.channelSelectComboBox.TabIndex = 2;
+         // 
+         // channelLabel
+         // 
+         this.channelLabel.AccessibleDescription = null;
+         this.channelLabel.AccessibleName = null;
+         resources.ApplyResources(this.channelLabel, "channelLabel");
+         this.channelLabel.Font = null;
+         this.channelLabel.Name = "channelLabel";
+         // 
+         // errorMsg
+         // 
+         this.errorMsg.AccessibleDescription = null;
+         this.errorMsg.AccessibleName = null;
+         resources.ApplyResources(this.errorMsg, "errorMsg");
+         this.errorMsg.Font = null;
+         this.errorMsg.Name = "errorMsg";
+         // 
+         // dataGridView1
+         // 
+         this.dataGridView1.AccessibleDescription = null;
+         this.dataGridView1.AccessibleName = null;
+         this.dataGridView1.AllowUserToAddRows = false;
+         this.dataGridView1.AllowUserToDeleteRows = false;
+         resources.ApplyResources(this.dataGridView1, "dataGridView1");
+         this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+         this.dataGridView1.BackgroundImage = null;
+         this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dataGridView1.Font = null;
+         this.dataGridView1.Name = "dataGridView1";
          // 
          // MatrixBox
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+         this.AccessibleDescription = null;
+         this.AccessibleName = null;
+         resources.ApplyResources(this, "$this");
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+         this.BackgroundImage = null;
          this.Controls.Add(this.dataGridView1);
          this.Controls.Add(this.panel1);
+         this.Font = null;
          this.Name = "MatrixBox";
-         this.Size = new System.Drawing.Size(383, 246);
          this.panel1.ResumeLayout(false);
          this.panel1.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

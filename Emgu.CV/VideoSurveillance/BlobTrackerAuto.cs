@@ -7,6 +7,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// A blob tracker auto
    /// </summary>
+   /// <typeparam name="TColor">The type of color for the image to be tracked. Due to a bug in OpenCV, only Gray is supported at the moment</typeparam>
    public class BlobTrackerAuto<TColor> : BlobSeqBase
       where TColor : struct, IColor
    {
@@ -29,7 +30,7 @@ namespace Emgu.CV.VideoSurveillance
       public BlobTrackerAuto()
       {
          BlobTrackerAutoParam<TColor> param = new BlobTrackerAutoParam<TColor>();
-         param.ForgroundDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.FGDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
          _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);
@@ -39,7 +40,7 @@ namespace Emgu.CV.VideoSurveillance
       /// Process a frame
       /// </summary>
       /// <param name="currentFrame">The frame to be processed</param>
-      public void Process(IImage currentFrame)
+      public void Process(Image<TColor, Byte> currentFrame)
       {
          Process(currentFrame, null);
       }
@@ -49,7 +50,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="currentFrame">The frame to be processed</param>
       /// <param name="forgroundMask">the forground mask to be used</param>
-      public void Process(IImage currentFrame, Image<Gray, Byte> forgroundMask)
+      public void Process(Image<TColor, Byte> currentFrame, Image<Gray, Byte> forgroundMask)
       {
          CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, forgroundMask == null ? IntPtr.Zero : forgroundMask.Ptr);
       }

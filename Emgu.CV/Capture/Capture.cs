@@ -2,6 +2,7 @@
 using System;
 using System.ServiceModel;
 using System.Runtime.InteropServices;
+using System.Drawing;
 using Emgu.Util;
 using Emgu.CV.Structure;
 

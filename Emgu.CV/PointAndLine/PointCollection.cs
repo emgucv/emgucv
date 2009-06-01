@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using Emgu;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -67,23 +64,6 @@ namespace Emgu.CV
              indexes,
              delegate(float d) { return FirstDegreeInterpolate(points, d); });
       }
-
-      /*
-      /// <summary>
-      /// Convert the structures to a sequence
-      /// </summary>
-      /// <param name="stor">The sotrage</param>
-      /// <param name="points">The structure to be converted to sequence</param>
-      /// <returns>A pointer to the sequence</returns>
-      public static Seq<PointF> To2D32fSequence(MemStorage stor, PointF[] points)
-      {
-         Seq<PointF> seq = new Seq<System.Drawing.PointF>(
-             CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
-             stor);
-         seq.Push(points, CvEnum.BACK_OR_FRONT.FRONT);
-
-         return seq;
-      }*/
 
       /// <summary>
       /// Fit a line to the points collection
@@ -293,9 +273,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
 
          using (Matrix<float> pts = new Matrix<float>(size.Height, size.Width, 3, handle.AddrOfPinnedObject(), 0))
-         {
-            CvInvoke.cvReprojectImageTo3D(disparity, pts, Q);
-         }
+            CvInvoke.cvReprojectImageTo3D(disparity.Ptr, pts.Ptr, Q);
 
          handle.Free();
          return points3D;

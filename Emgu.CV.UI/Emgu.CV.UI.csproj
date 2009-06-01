@@ -143,6 +143,10 @@
       <DependentUpon>HistogramViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="HistogramViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImageBox.resx">
       <DependentUpon>ImageBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -151,17 +155,33 @@
       <DependentUpon>ImageProperty.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ImageProperty.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImageProperty.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MatrixBox.resx">
       <DependentUpon>MatrixBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="MatrixBox.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatrixBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MatrixViewer.resx">
       <DependentUpon>MatrixViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MatrixViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatrixViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperationsView.resx">
       <DependentUpon>OperationsView.cs</DependentUpon>
@@ -174,6 +194,10 @@
     <EmbeddedResource Include="ParameterInputDialog.resx">
       <DependentUpon>ParameterInputDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParameterInputDialog.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\StringTable.resx">
       <SubType>Designer</SubType>
@@ -188,6 +212,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringTable.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyDialog.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

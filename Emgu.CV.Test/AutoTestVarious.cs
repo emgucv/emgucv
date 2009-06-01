@@ -82,7 +82,6 @@ namespace Emgu.CV.Test
       public void TestXmlSerialization()
       {
          MCvPoint2D64f pt2d = new MCvPoint2D64f(12.0, 5.5);
-         Point ptemp = new Point(10, 10);
 
          XmlDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d);
          //Trace.WriteLine(xdoc.OuterXml);
@@ -196,8 +195,6 @@ namespace Emgu.CV.Test
          }
       }
 
-
-      
       [Test]
       public void TestProjectPoints()
       {
@@ -209,8 +206,7 @@ namespace Emgu.CV.Test
          PointF[] points = CameraCalibration.ProjectPoints2(new MCvPoint3D32f[] { point }, extrin, intrin);
       }
 
-      //TODO: Find out why Blob test fails since svn 1611
-      /*
+      //TODO: Find out why Blob tracker no longer accepts color images since svn 1611
       [Test]
       public void TestBlob()
       {
@@ -224,12 +220,12 @@ namespace Emgu.CV.Test
 
          Rectangle rect = new Rectangle(topLeft, size);
 
-         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
+         BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.ForgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
          param.FGTrainFrames = 5;
-         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
+         BlobTrackerAuto<Gray> tracker = new BlobTrackerAuto<Gray>(param);
 
          ImageViewer viewer = new ImageViewer();
          //viewer.Show();
@@ -239,15 +235,16 @@ namespace Emgu.CV.Test
             {
                rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
                img1.Draw(rect, new Bgr(Color.Red), -1);
-               tracker.Process(img1);
+               tracker.Process(img1.Convert<Gray, Byte>());
                viewer.Image = img1;
-               viewer.Refresh();
+               //viewer.Refresh();
             }
          }
-         MCvBlob blob = tracker[0];
-         int id = blob.ID;
+         
+         //MCvBlob blob = tracker[0];
+         //int id = blob.ID;
          //ImageViewer.Show(forground);
-      } */
+      } 
 
       [Test]
       public void TestEigenObjects()
@@ -1085,7 +1082,6 @@ namespace Emgu.CV.Test
          IntPtr comp;
          CvInvoke.cvPyrSegmentation(image, segImage, storage, out comp, 4, 255, 30);
       }
-
       
       [Test]
       public void TestVideoWriter()

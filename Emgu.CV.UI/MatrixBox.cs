@@ -35,54 +35,53 @@ namespace Emgu.CV.UI
          set
          {
             _matrix = value;
-            if (_matrix != null)
+            if (_matrix == null) return;
+
+            Size size = CvInvoke.cvGetSize(_matrix.Ptr);
+            int numberOfChannels = ((MCvMat)Marshal.PtrToStructure(_matrix.Ptr, typeof(MCvMat))).NumberOfChannels;
+
+            String[] channelNames = new string[numberOfChannels + 1];
+            channelNames[0] = "All channels";
+            for (int i = 1; i <= numberOfChannels; i++)
+               channelNames[i] = String.Format("Channel {0}", i);
+
+            channelSelectComboBox.DataSource = channelNames;
+            channelSelectComboBox.SelectedIndex = 0;
+
+            if (numberOfChannels == 1)
             {
-               Size size = CvInvoke.cvGetSize(_matrix.Ptr);
-               int numberOfChannels = ((MCvMat)Marshal.PtrToStructure(_matrix.Ptr, typeof(MCvMat))).NumberOfChannels;
-
-               String[] channelNames = new string[numberOfChannels + 1];
-               channelNames[0] = "All channels";
-               for (int i = 1; i <= numberOfChannels; i++)
-               {
-                  channelNames[i] = String.Format("Channel {0}", i);
-               }
-               channelSelectComboBox.DataSource = channelNames;
-               channelSelectComboBox.SelectedIndex = 0;
-
-               if (numberOfChannels == 1)
-               {
-                  channelLabel.Visible = false;
-                  channelSelectComboBox.Visible = false;
-               }
-               else
-               {
-                  channelLabel.Visible = true;
-                  channelSelectComboBox.Visible = true;
-               }
-
-               if (size.Width * size.Height * numberOfChannels > 1000)
-               {
-                  channelLabel.Visible = false;
-                  channelSelectComboBox.Visible = false;
-                  errorMsg.Text = "The matrix is too big to be displayed.";
-                  return;
-               }
-               else
-               {
-                  errorMsg.Text = String.Empty;
-               }
-
-               for (int i = 0; i < size.Width; i++)
-               {
-                  string columnName = String.Format("Col {0}", i);
-                  dataGridView1.Columns.Add(columnName, columnName);
-                  dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
-               }
-               dataGridView1.Rows.Add(size.Height);
-
-               VisualizerChannel(size, numberOfChannels, channelSelectComboBox.SelectedIndex);
-               channelSelectComboBox.SelectedIndexChanged += channelSelectComboBox_SelectedIndexChanged;
+               channelLabel.Visible = false;
+               channelSelectComboBox.Visible = false;
             }
+            else
+            {
+               channelLabel.Visible = true;
+               channelSelectComboBox.Visible = true;
+            }
+
+            if (size.Width * size.Height * numberOfChannels > 1000)
+            {
+               channelLabel.Visible = false;
+               channelSelectComboBox.Visible = false;
+               errorMsg.Text = "The matrix is too big to be displayed.";
+               return;
+            }
+            else
+            {
+               errorMsg.Text = String.Empty;
+            }
+
+            for (int i = 0; i < size.Width; i++)
+            {
+               string columnName = String.Format("Col {0}", i);
+               dataGridView1.Columns.Add(columnName, columnName);
+               dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            dataGridView1.Rows.Add(size.Height);
+
+            VisualizerChannel(size, numberOfChannels, channelSelectComboBox.SelectedIndex);
+            channelSelectComboBox.SelectedIndexChanged += channelSelectComboBox_SelectedIndexChanged;
+
          }
       }
 

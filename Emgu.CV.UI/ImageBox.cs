@@ -58,7 +58,7 @@ namespace Emgu.CV.UI
 
          _operationLists = new List<Operation>();
 
-         OnZoomScaleChange += delegate(Object sender, EventArgs e)
+         OnZoomScaleChange += delegate
          {
             if (_propertyDlg != null)
                _propertyDlg.ImagePropertyPanel.UpdateZoomScale();
@@ -121,7 +121,7 @@ namespace Emgu.CV.UI
                _propertyDlg.Show();
 
                _propertyDlg.FormClosed +=
-                   delegate(object sender, FormClosedEventArgs e)
+                   delegate
                    {
                       _propertyDlg = null;
                    };
@@ -156,7 +156,7 @@ namespace Emgu.CV.UI
          {
             if (InvokeRequired)
             {
-               Invoke(new MethodInvoker(delegate() { Image = value; }));
+               Invoke(new MethodInvoker(delegate { Image = value; }));
             }
             else
             {
@@ -205,10 +205,9 @@ namespace Emgu.CV.UI
                      }
                   }
                   #endregion
-
-                  DisplayedImage = imageToBeDisplayed;
                }
 
+               DisplayedImage = imageToBeDisplayed;
                operationsToolStripMenuItem.Enabled = (_image != null);
             }
          }
@@ -387,7 +386,7 @@ namespace Emgu.CV.UI
             //I wishes MSFT handle this better
             MethodInfo methodInfoRef = mi;
 
-            operationMenuItem.Click += delegate(Object o, EventArgs e)
+            operationMenuItem.Click += delegate
                 {
                    Object[] paramList = null;
 

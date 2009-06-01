@@ -70,15 +70,6 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color.
-        /// </summary>
-        internal static string Color {
-            get {
-                return ResourceManager.GetString("Color", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Color Intensity.
         /// </summary>
         internal static string ColorIntensity {
@@ -97,65 +88,11 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color Histogram .
-        /// </summary>
-        internal static string DefaultHistogramViewerText {
-            get {
-                return ResourceManager.GetString("DefaultHistogramViewerText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Image Viewer.
-        /// </summary>
-        internal static string DefaultImageViewerText {
-            get {
-                return ResourceManager.GetString("DefaultImageViewerText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Depth.
-        /// </summary>
-        internal static string Depth {
-            get {
-                return ResourceManager.GetString("Depth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FPS.
-        /// </summary>
-        internal static string FPS {
-            get {
-                return ResourceManager.GetString("FPS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Intensity.
-        /// </summary>
-        internal static string Intensity {
-            get {
-                return ResourceManager.GetString("Intensity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mouse Position.
-        /// </summary>
-        internal static string MousePosition {
-            get {
-                return ResourceManager.GetString("MousePosition", resourceCulture);
             }
         }
         
@@ -201,15 +138,6 @@ namespace Emgu.CV.UI.Properties {
         internal static string PixelCount {
             get {
                 return ResourceManager.GetString("PixelCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please enter the parameters.
-        /// </summary>
-        internal static string PleaseEnterParameters {
-            get {
-                return ResourceManager.GetString("PleaseEnterParameters", resourceCulture);
             }
         }
         
@@ -277,29 +205,11 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
-        /// </summary>
-        internal static string Size {
-            get {
-                return ResourceManager.GetString("Size", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zoom.
-        /// </summary>
-        internal static string Zoom {
-            get {
-                return ResourceManager.GetString("Zoom", resourceCulture);
             }
         }
     }

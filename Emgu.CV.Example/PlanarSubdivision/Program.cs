@@ -49,16 +49,16 @@ namespace PlanarSubdivisionExample
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)
          {
-            Point[] points = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
+            Point[] polyline = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
 
             //Draw the facet in color
             img.FillConvexPoly(
-                points,
+                polyline,
                 new Bgr(r.NextDouble() * 120, r.NextDouble() * 120, r.NextDouble() * 120)
                 );
 
             //highlight the edge of the facet in black
-            img.DrawPolyline(points, true, new Bgr(Color.Black), 2);
+            img.DrawPolyline(polyline, true, new Bgr(Color.Black), 2);
 
             //draw the points associated with each facet in red
             img.Draw(new CircleF(facet.Point, 5.0f), new Bgr(Color.Red), 0);

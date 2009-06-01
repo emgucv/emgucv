@@ -28,26 +28,31 @@ namespace Emgu.CV.UI
       /// </summary>
       private void InitializeComponent()
       {
-         this.matrixBox = new MatrixBox();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MatrixViewer));
+         this.matrixBox = new Emgu.CV.UI.MatrixBox();
          this.SuspendLayout();
          // 
          // matrixBox
          // 
-         this.matrixBox.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.matrixBox.Location = new System.Drawing.Point(0, 0);
+         this.matrixBox.AccessibleDescription = null;
+         this.matrixBox.AccessibleName = null;
+         resources.ApplyResources(this.matrixBox, "matrixBox");
+         this.matrixBox.BackgroundImage = null;
+         this.matrixBox.Font = null;
          this.matrixBox.Matrix = null;
          this.matrixBox.Name = "matrixBox";
-         this.matrixBox.Size = new System.Drawing.Size(292, 266);
-         this.matrixBox.TabIndex = 0;
          // 
          // MatrixViewer
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+         this.AccessibleDescription = null;
+         this.AccessibleName = null;
+         resources.ApplyResources(this, "$this");
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(292, 266);
+         this.BackgroundImage = null;
          this.Controls.Add(this.matrixBox);
+         this.Font = null;
+         this.Icon = null;
          this.Name = "MatrixViewer";
-         this.Text = "MatrixViewer";
          this.ResumeLayout(false);
 
       }

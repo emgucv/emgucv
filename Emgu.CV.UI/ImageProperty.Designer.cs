@@ -18,6 +18,7 @@ namespace Emgu.CV.UI
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageProperty));
          this.label1 = new System.Windows.Forms.Label();
          this.widthTextbox = new System.Windows.Forms.TextBox();
          this.heightTextBox = new System.Windows.Forms.TextBox();
@@ -50,232 +51,252 @@ namespace Emgu.CV.UI
          // 
          // label1
          // 
-         this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(3, 7);
+         this.label1.AccessibleDescription = null;
+         this.label1.AccessibleName = null;
+         resources.ApplyResources(this.label1, "label1");
+         this.label1.Font = null;
          this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(30, 13);
-         this.label1.TabIndex = 0;
-         this.label1.Text = Properties.StringTable.Size + ":";
          // 
          // widthTextbox
          // 
-         this.widthTextbox.Location = new System.Drawing.Point(40, 3);
+         this.widthTextbox.AccessibleDescription = null;
+         this.widthTextbox.AccessibleName = null;
+         resources.ApplyResources(this.widthTextbox, "widthTextbox");
+         this.widthTextbox.BackgroundImage = null;
+         this.widthTextbox.Font = null;
          this.widthTextbox.Name = "widthTextbox";
          this.widthTextbox.ReadOnly = true;
-         this.widthTextbox.Size = new System.Drawing.Size(38, 20);
-         this.widthTextbox.TabIndex = 1;
          // 
          // heightTextBox
          // 
-         this.heightTextBox.Location = new System.Drawing.Point(104, 4);
+         this.heightTextBox.AccessibleDescription = null;
+         this.heightTextBox.AccessibleName = null;
+         resources.ApplyResources(this.heightTextBox, "heightTextBox");
+         this.heightTextBox.BackgroundImage = null;
+         this.heightTextBox.Font = null;
          this.heightTextBox.Name = "heightTextBox";
          this.heightTextBox.ReadOnly = true;
-         this.heightTextBox.Size = new System.Drawing.Size(38, 20);
-         this.heightTextBox.TabIndex = 2;
          // 
          // label2
          // 
-         this.label2.AutoSize = true;
-         this.label2.Location = new System.Drawing.Point(84, 6);
+         this.label2.AccessibleDescription = null;
+         this.label2.AccessibleName = null;
+         resources.ApplyResources(this.label2, "label2");
+         this.label2.Font = null;
          this.label2.Name = "label2";
-         this.label2.Size = new System.Drawing.Size(14, 13);
-         this.label2.TabIndex = 3;
-         this.label2.Text = "X";
          // 
          // label3
          // 
-         this.label3.AutoSize = true;
-         this.label3.Location = new System.Drawing.Point(3, 45);
+         this.label3.AccessibleDescription = null;
+         this.label3.AccessibleName = null;
+         resources.ApplyResources(this.label3, "label3");
+         this.label3.Font = null;
          this.label3.Name = "label3";
-         this.label3.Size = new System.Drawing.Size(82, 13);
-         this.label3.TabIndex = 4;
-         this.label3.Text = Properties.StringTable.MousePosition + ":";
          // 
          // mousePositionTextbox
          // 
-         this.mousePositionTextbox.Location = new System.Drawing.Point(91, 42);
+         this.mousePositionTextbox.AccessibleDescription = null;
+         this.mousePositionTextbox.AccessibleName = null;
+         resources.ApplyResources(this.mousePositionTextbox, "mousePositionTextbox");
+         this.mousePositionTextbox.BackgroundImage = null;
+         this.mousePositionTextbox.Font = null;
          this.mousePositionTextbox.Name = "mousePositionTextbox";
          this.mousePositionTextbox.ReadOnly = true;
-         this.mousePositionTextbox.Size = new System.Drawing.Size(82, 20);
-         this.mousePositionTextbox.TabIndex = 5;
          // 
          // label4
          // 
-         this.label4.AutoSize = true;
-         this.label4.Location = new System.Drawing.Point(36, 69);
+         this.label4.AccessibleDescription = null;
+         this.label4.AccessibleName = null;
+         resources.ApplyResources(this.label4, "label4");
+         this.label4.Font = null;
          this.label4.Name = "label4";
-         this.label4.Size = new System.Drawing.Size(49, 13);
-         this.label4.TabIndex = 6;
-         this.label4.Text = Properties.StringTable.Intensity + ":";
          // 
          // colorIntensityTextbox
          // 
-         this.colorIntensityTextbox.Location = new System.Drawing.Point(91, 66);
+         this.colorIntensityTextbox.AccessibleDescription = null;
+         this.colorIntensityTextbox.AccessibleName = null;
+         resources.ApplyResources(this.colorIntensityTextbox, "colorIntensityTextbox");
+         this.colorIntensityTextbox.BackgroundImage = null;
+         this.colorIntensityTextbox.Font = null;
          this.colorIntensityTextbox.Name = "colorIntensityTextbox";
          this.colorIntensityTextbox.ReadOnly = true;
-         this.colorIntensityTextbox.Size = new System.Drawing.Size(82, 20);
-         this.colorIntensityTextbox.TabIndex = 7;
          // 
          // label5
          // 
-         this.label5.AutoSize = true;
-         this.label5.Location = new System.Drawing.Point(164, 7);
+         this.label5.AccessibleDescription = null;
+         this.label5.AccessibleName = null;
+         resources.ApplyResources(this.label5, "label5");
+         this.label5.Font = null;
          this.label5.Name = "label5";
-         this.label5.Size = new System.Drawing.Size(34, 13);
-         this.label5.TabIndex = 8;
-         this.label5.Text = Properties.StringTable.Color + ":";
          // 
          // typeOfColorTexbox
          // 
-         this.typeOfColorTexbox.Location = new System.Drawing.Point(204, 4);
+         this.typeOfColorTexbox.AccessibleDescription = null;
+         this.typeOfColorTexbox.AccessibleName = null;
+         resources.ApplyResources(this.typeOfColorTexbox, "typeOfColorTexbox");
+         this.typeOfColorTexbox.BackgroundImage = null;
+         this.typeOfColorTexbox.Font = null;
          this.typeOfColorTexbox.Name = "typeOfColorTexbox";
          this.typeOfColorTexbox.ReadOnly = true;
-         this.typeOfColorTexbox.Size = new System.Drawing.Size(38, 20);
-         this.typeOfColorTexbox.TabIndex = 9;
          // 
          // label6
          // 
-         this.label6.AutoSize = true;
-         this.label6.Location = new System.Drawing.Point(249, 7);
+         this.label6.AccessibleDescription = null;
+         this.label6.AccessibleName = null;
+         resources.ApplyResources(this.label6, "label6");
+         this.label6.Font = null;
          this.label6.Name = "label6";
-         this.label6.Size = new System.Drawing.Size(39, 13);
-         this.label6.TabIndex = 10;
-         this.label6.Text = Properties.StringTable.Depth + ":";
          // 
          // typeOfDepthTextBox
          // 
-         this.typeOfDepthTextBox.Location = new System.Drawing.Point(294, 4);
+         this.typeOfDepthTextBox.AccessibleDescription = null;
+         this.typeOfDepthTextBox.AccessibleName = null;
+         resources.ApplyResources(this.typeOfDepthTextBox, "typeOfDepthTextBox");
+         this.typeOfDepthTextBox.BackgroundImage = null;
+         this.typeOfDepthTextBox.Font = null;
          this.typeOfDepthTextBox.Name = "typeOfDepthTextBox";
          this.typeOfDepthTextBox.ReadOnly = true;
-         this.typeOfDepthTextBox.Size = new System.Drawing.Size(40, 20);
-         this.typeOfDepthTextBox.TabIndex = 11;
          // 
          // label7
          // 
-         this.label7.AutoSize = true;
-         this.label7.Location = new System.Drawing.Point(5, 176);
+         this.label7.AccessibleDescription = null;
+         this.label7.AccessibleName = null;
+         resources.ApplyResources(this.label7, "label7");
+         this.label7.Font = null;
          this.label7.Name = "label7";
-         this.label7.Size = new System.Drawing.Size(61, 13);
-         this.label7.TabIndex = 12;
-         this.label7.Text = "Operations:";
          // 
          // label8
          // 
-         this.label8.AutoSize = true;
-         this.label8.Location = new System.Drawing.Point(213, 45);
+         this.label8.AccessibleDescription = null;
+         this.label8.AccessibleName = null;
+         resources.ApplyResources(this.label8, "label8");
+         this.label8.Font = null;
          this.label8.Name = "label8";
-         this.label8.Size = new System.Drawing.Size(30, 13);
-         this.label8.TabIndex = 14;
-         this.label8.Text = Properties.StringTable.FPS + ":";
          // 
          // fpsTextBox
          // 
-         this.fpsTextBox.Location = new System.Drawing.Point(249, 42);
+         this.fpsTextBox.AccessibleDescription = null;
+         this.fpsTextBox.AccessibleName = null;
+         resources.ApplyResources(this.fpsTextBox, "fpsTextBox");
+         this.fpsTextBox.BackgroundImage = null;
+         this.fpsTextBox.Font = null;
          this.fpsTextBox.Name = "fpsTextBox";
          this.fpsTextBox.ReadOnly = true;
-         this.fpsTextBox.Size = new System.Drawing.Size(82, 20);
-         this.fpsTextBox.TabIndex = 15;
          // 
          // tabControl1
          // 
+         this.tabControl1.AccessibleDescription = null;
+         this.tabControl1.AccessibleName = null;
+         resources.ApplyResources(this.tabControl1, "tabControl1");
+         this.tabControl1.BackgroundImage = null;
          this.tabControl1.Controls.Add(this.tabPage1);
          this.tabControl1.Controls.Add(this.tabPage2);
-         this.tabControl1.Location = new System.Drawing.Point(8, 192);
+         this.tabControl1.Font = null;
          this.tabControl1.Name = "tabControl1";
          this.tabControl1.SelectedIndex = 0;
-         this.tabControl1.Size = new System.Drawing.Size(327, 242);
-         this.tabControl1.TabIndex = 16;
          // 
          // tabPage1
          // 
+         this.tabPage1.AccessibleDescription = null;
+         this.tabPage1.AccessibleName = null;
+         resources.ApplyResources(this.tabPage1, "tabPage1");
+         this.tabPage1.BackgroundImage = null;
          this.tabPage1.Controls.Add(this.cSharpOperationView);
-         this.tabPage1.Location = new System.Drawing.Point(4, 22);
+         this.tabPage1.Font = null;
          this.tabPage1.Name = "tabPage1";
-         this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-         this.tabPage1.Size = new System.Drawing.Size(319, 216);
-         this.tabPage1.TabIndex = 0;
-         this.tabPage1.Text = "C#";
          this.tabPage1.UseVisualStyleBackColor = true;
          // 
          // cSharpOperationView
          // 
-         this.cSharpOperationView.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.cSharpOperationView.Location = new System.Drawing.Point(3, 3);
+         this.cSharpOperationView.AccessibleDescription = null;
+         this.cSharpOperationView.AccessibleName = null;
+         resources.ApplyResources(this.cSharpOperationView, "cSharpOperationView");
+         this.cSharpOperationView.BackgroundImage = null;
+         this.cSharpOperationView.Font = null;
          this.cSharpOperationView.Name = "cSharpOperationView";
-         this.cSharpOperationView.Size = new System.Drawing.Size(313, 210);
-         this.cSharpOperationView.TabIndex = 0;
          // 
          // tabPage2
          // 
+         this.tabPage2.AccessibleDescription = null;
+         this.tabPage2.AccessibleName = null;
+         resources.ApplyResources(this.tabPage2, "tabPage2");
+         this.tabPage2.BackgroundImage = null;
          this.tabPage2.Controls.Add(this.cPlusPlusOperationView);
-         this.tabPage2.Location = new System.Drawing.Point(4, 22);
+         this.tabPage2.Font = null;
          this.tabPage2.Name = "tabPage2";
-         this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-         this.tabPage2.Size = new System.Drawing.Size(319, 216);
-         this.tabPage2.TabIndex = 1;
-         this.tabPage2.Text = "C++";
          this.tabPage2.UseVisualStyleBackColor = true;
          // 
          // cPlusPlusOperationView
          // 
-         this.cPlusPlusOperationView.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.cPlusPlusOperationView.Location = new System.Drawing.Point(3, 3);
+         this.cPlusPlusOperationView.AccessibleDescription = null;
+         this.cPlusPlusOperationView.AccessibleName = null;
+         resources.ApplyResources(this.cPlusPlusOperationView, "cPlusPlusOperationView");
+         this.cPlusPlusOperationView.BackgroundImage = null;
+         this.cPlusPlusOperationView.Font = null;
          this.cPlusPlusOperationView.Name = "cPlusPlusOperationView";
-         this.cPlusPlusOperationView.Size = new System.Drawing.Size(313, 210);
-         this.cPlusPlusOperationView.TabIndex = 0;
          // 
          // clearOperationsBtn
          // 
-         this.clearOperationsBtn.Location = new System.Drawing.Point(249, 171);
+         this.clearOperationsBtn.AccessibleDescription = null;
+         this.clearOperationsBtn.AccessibleName = null;
+         resources.ApplyResources(this.clearOperationsBtn, "clearOperationsBtn");
+         this.clearOperationsBtn.BackgroundImage = null;
+         this.clearOperationsBtn.Font = null;
          this.clearOperationsBtn.Name = "clearOperationsBtn";
-         this.clearOperationsBtn.Size = new System.Drawing.Size(75, 23);
-         this.clearOperationsBtn.TabIndex = 17;
-         this.clearOperationsBtn.Text = Properties.StringTable.RemoveAll;
+         this.clearOperationsBtn.Text = global::Emgu.CV.UI.Properties.StringTable.RemoveAll;
          this.clearOperationsBtn.UseVisualStyleBackColor = true;
          this.clearOperationsBtn.Click += new System.EventHandler(this.clearOperationBtn_Click);
          // 
          // popOperationButton
          // 
-         this.popOperationButton.Location = new System.Drawing.Point(124, 171);
+         this.popOperationButton.AccessibleDescription = null;
+         this.popOperationButton.AccessibleName = null;
+         resources.ApplyResources(this.popOperationButton, "popOperationButton");
+         this.popOperationButton.BackgroundImage = null;
+         this.popOperationButton.Font = null;
          this.popOperationButton.Name = "popOperationButton";
-         this.popOperationButton.Size = new System.Drawing.Size(100, 23);
-         this.popOperationButton.TabIndex = 18;
-         this.popOperationButton.Text = Properties.StringTable.PopOperation;
+         this.popOperationButton.Text = global::Emgu.CV.UI.Properties.StringTable.PopOperation;
          this.popOperationButton.UseVisualStyleBackColor = true;
          this.popOperationButton.Click += new System.EventHandler(this.popOperationButton_Click);
          // 
          // showHistogramButton
          // 
-         this.showHistogramButton.Location = new System.Drawing.Point(8, 142);
+         this.showHistogramButton.AccessibleDescription = null;
+         this.showHistogramButton.AccessibleName = null;
+         resources.ApplyResources(this.showHistogramButton, "showHistogramButton");
+         this.showHistogramButton.BackgroundImage = null;
+         this.showHistogramButton.Font = null;
          this.showHistogramButton.Name = "showHistogramButton";
-         this.showHistogramButton.Size = new System.Drawing.Size(149, 23);
-         this.showHistogramButton.TabIndex = 19;
-         this.showHistogramButton.Text = Properties.StringTable.ShowColorHistogram;
+         this.showHistogramButton.Text = global::Emgu.CV.UI.Properties.StringTable.ShowColorHistogram;
          this.showHistogramButton.UseVisualStyleBackColor = true;
          this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
          // 
          // zoomLevelComboBox
          // 
+         this.zoomLevelComboBox.AccessibleDescription = null;
+         this.zoomLevelComboBox.AccessibleName = null;
+         resources.ApplyResources(this.zoomLevelComboBox, "zoomLevelComboBox");
+         this.zoomLevelComboBox.BackgroundImage = null;
+         this.zoomLevelComboBox.Font = null;
          this.zoomLevelComboBox.FormattingEnabled = true;
-         this.zoomLevelComboBox.Location = new System.Drawing.Point(91, 103);
          this.zoomLevelComboBox.Name = "zoomLevelComboBox";
-         this.zoomLevelComboBox.Size = new System.Drawing.Size(107, 21);
-         this.zoomLevelComboBox.TabIndex = 20;
          this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
          // 
          // label9
          // 
-         this.label9.AutoSize = true;
-         this.label9.Location = new System.Drawing.Point(48, 106);
+         this.label9.AccessibleDescription = null;
+         this.label9.AccessibleName = null;
+         resources.ApplyResources(this.label9, "label9");
+         this.label9.Font = null;
          this.label9.Name = "label9";
-         this.label9.Size = new System.Drawing.Size(37, 13);
-         this.label9.TabIndex = 21;
-         this.label9.Text = Properties.StringTable.Zoom + ":";
          // 
          // ImageProperty
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+         this.AccessibleDescription = null;
+         this.AccessibleName = null;
+         resources.ApplyResources(this, "$this");
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+         this.BackgroundImage = null;
          this.Controls.Add(this.label9);
          this.Controls.Add(this.zoomLevelComboBox);
          this.Controls.Add(this.showHistogramButton);
@@ -297,8 +318,8 @@ namespace Emgu.CV.UI
          this.Controls.Add(this.heightTextBox);
          this.Controls.Add(this.widthTextbox);
          this.Controls.Add(this.label1);
+         this.Font = null;
          this.Name = "ImageProperty";
-         this.Size = new System.Drawing.Size(349, 437);
          this.tabControl1.ResumeLayout(false);
          this.tabPage1.ResumeLayout(false);
          this.tabPage2.ResumeLayout(false);

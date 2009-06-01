@@ -237,12 +237,12 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth">The depth of the new Map</typeparam>
       /// <param name="converter">The converter that use the element from <i>this</i> map and the location of each pixel as input to compute the result</param>
       /// <returns> A new map where each element is obtained from converter</returns>
-      public Map<TColor, TOtherDepth> Convert<TOtherDepth>(Emgu.Util.Toolbox.Func<TDepth, double, double, TOtherDepth> converter)
+      public Map<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, double, double, TOtherDepth> converter)
          where TOtherDepth : new()
       {
          double rx = Resolution.X, ry = Resolution.Y, ox = Area.Left, oy = Area.Top;
 
-         Emgu.Util.Toolbox.Func<TDepth, int, int, TOtherDepth> iconverter =
+         Func<TDepth, int, int, TOtherDepth> iconverter =
              delegate(TDepth data, int row, int col)
              {
                 //convert an int position to double position

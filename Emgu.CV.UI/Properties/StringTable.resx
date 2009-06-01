@@ -137,49 +137,9 @@
     <value>Unknown</value>
     <comment>Unknown description</comment>
   </data>
-  <data name="DefaultImageViewerText" xml:space="preserve">
-    <value>Image Viewer</value>
-    <comment>DefaultImageViewerText description</comment>
-  </data>
-  <data name="DefaultHistogramViewerText" xml:space="preserve">
-    <value>Color Histogram </value>
-    <comment>DefaultHistogramViewerText description</comment>
-  </data>
-  <data name="Size" xml:space="preserve">
-    <value>Size</value>
-    <comment>Size description</comment>
-  </data>
-  <data name="MousePosition" xml:space="preserve">
-    <value>Mouse Position</value>
-    <comment>MousePosition description</comment>
-  </data>
-  <data name="Intensity" xml:space="preserve">
-    <value>Intensity</value>
-    <comment>Intensity description</comment>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Color</value>
-    <comment>Color description</comment>
-  </data>
-  <data name="Depth" xml:space="preserve">
-    <value>Depth</value>
-    <comment>Depth description</comment>
-  </data>
-  <data name="FPS" xml:space="preserve">
-    <value>FPS</value>
-    <comment>Frames per second</comment>
-  </data>
   <data name="ShowColorHistogram" xml:space="preserve">
     <value>Show Color Histogram</value>
     <comment>ShowColorHistogram description</comment>
-  </data>
-  <data name="Zoom" xml:space="preserve">
-    <value>Zoom</value>
-    <comment>Zoom description</comment>
-  </data>
-  <data name="PleaseEnterParameters" xml:space="preserve">
-    <value>Please enter the parameters</value>
-    <comment>PleaseEnterParameters description</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>

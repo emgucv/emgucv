@@ -66,11 +66,10 @@ namespace MotionDetection
             _motionHistory.Update(_forgroundDetector.ForgroundMask);
 
             #region get a copy of the motion mask and enhance its color
-            Image<Gray, Byte> motionMask = _motionHistory.Mask;
             double[] minValues, maxValues;
             Point[] minLoc, maxLoc;
-            motionMask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
-            motionMask._Mul(255.0 / maxValues[0]);
+            _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
+            Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
             #endregion
 
             //create the motion image 

@@ -28,26 +28,31 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
+           System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyDialog));
            this.imageProperty1 = new Emgu.CV.UI.ImageProperty();
            this.SuspendLayout();
            // 
            // imageProperty1
            // 
-           this.imageProperty1.Dock = System.Windows.Forms.DockStyle.Fill;
+           this.imageProperty1.AccessibleDescription = null;
+           this.imageProperty1.AccessibleName = null;
+           resources.ApplyResources(this.imageProperty1, "imageProperty1");
+           this.imageProperty1.BackgroundImage = null;
+           this.imageProperty1.Font = null;
            this.imageProperty1.ImageBox = null;
-           this.imageProperty1.Location = new System.Drawing.Point(0, 0);
            this.imageProperty1.Name = "imageProperty1";
-           this.imageProperty1.Size = new System.Drawing.Size(351, 408);
-           this.imageProperty1.TabIndex = 0;
            // 
-           // PropertyDlg
+           // PropertyDialog
            // 
-           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+           this.AccessibleDescription = null;
+           this.AccessibleName = null;
+           resources.ApplyResources(this, "$this");
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-           this.ClientSize = new System.Drawing.Size(351, 408);
+           this.BackgroundImage = null;
            this.Controls.Add(this.imageProperty1);
-           this.Name = "PropertyDlg";
-           this.Text = "Image Property";
+           this.Font = null;
+           this.Icon = null;
+           this.Name = "PropertyDialog";
            this.ResumeLayout(false);
 
         }

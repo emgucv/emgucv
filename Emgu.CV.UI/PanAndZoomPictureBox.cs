@@ -15,7 +15,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// The zoom scale of the image to be displayed
       /// </summary>
-      private double _zoomScale = 1.0;
+      private double _zoomScale;
 
       private Point _mouseDownPosition;
       private MouseButtons _mouseDownButton;
@@ -36,6 +36,8 @@ namespace Emgu.CV.UI
       public PanAndZoomPictureBox()
       {
          InitializeComponent();
+         _zoomScale = 1.0;
+
          SetScrollBarVisibilityAndMaxMin();
          //Enable double buffering
          ResizeRedraw = false;
@@ -92,10 +94,7 @@ namespace Emgu.CV.UI
 
       private void OnMouseUp(object sender, MouseEventArgs e)
       {
-         _mouseDownButton = MouseButtons.None;
-         Cursor = _defaultCursor;
-
-         if (e.Button == MouseButtons.Left)
+         if (e.Button == MouseButtons.Left && _mouseDownButton == MouseButtons.Left)
          {
             ReverseRectangle();
             Size viewSize = GetViewSize();
@@ -120,6 +119,8 @@ namespace Emgu.CV.UI
                Invalidate();
             }
          }
+         Cursor = _defaultCursor;
+         _mouseDownButton = MouseButtons.None;
       }
 
       private void OnMouseEnter(object sender, EventArgs e)

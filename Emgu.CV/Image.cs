@@ -876,7 +876,7 @@ namespace Emgu.CV
       {
          using (MemStorage stor = new MemStorage())
          {
-            Toolbox.Func<IImage, int, MCvAvgComp[]> detector =
+            Func<IImage, int, MCvAvgComp[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
@@ -916,14 +916,21 @@ namespace Emgu.CV
       {
          using (MemStorage stor = new MemStorage())
          {
-            Toolbox.Func<IImage, int, LineSegment2D[]> detector =
-                delegate(IImage img, int channel)
-                {
-                   IntPtr lines = CvInvoke.cvHoughLines2(img.Ptr, stor.Ptr, CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+            return ForEachDuplicateChannel<LineSegment2D[]>(
+               delegate(IImage img, int channel)
+               {
+                   IntPtr lines = CvInvoke.cvHoughLines2(
+                      img.Ptr, 
+                      stor.Ptr, 
+                      CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, 
+                      rhoResolution, 
+                      thetaResolution, 
+                      threshold, 
+                      minLineWidth, 
+                      gapBetweenLines);
                    Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
                    return segments.ToArray();
-                };
-            return ForEachDuplicateChannel(detector);
+               });
          }
       }
 
@@ -943,7 +950,12 @@ namespace Emgu.CV
       {
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
-            return canny.HoughLinesBinary(rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+            return canny.HoughLinesBinary(
+               rhoResolution, 
+               thetaResolution, 
+               threshold, 
+               minLineWidth, 
+               gapBetweenLines);
          }
       }
 
@@ -964,7 +976,7 @@ namespace Emgu.CV
          {
             double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
             double[] accumulatorThresh = accumulatorThreshold.MCvScalar.ToArray();
-            Toolbox.Func<IImage, int, CircleF[]> detector =
+            Func<IImage, int, CircleF[]> detector =
                 delegate(IImage img, int channel)
                 {
                    IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
@@ -981,9 +993,7 @@ namespace Emgu.CV
                    Seq<CircleF> cirSeq = new Seq<CircleF>(circlesSeqPtr, stor);
                    return cirSeq.ToArray();
                 };
-            CircleF[][] res = ForEachDuplicateChannel(detector);
-
-            return res;
+            return ForEachDuplicateChannel(detector);
          }
       }
       #endregion
@@ -1160,7 +1170,7 @@ namespace Emgu.CV
       /// <typeparam name="TResult">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private TResult[] ForEachChannel<TResult>(Toolbox.Func<IntPtr, int, TResult> conv)
+      private TResult[] ForEachChannel<TResult>(Func<IntPtr, int, TResult> conv)
       {
          TResult[] res = new TResult[NumberOfChannels];
          if (NumberOfChannels == 1)
@@ -1182,7 +1192,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private void ForEachDuplicateChannel(Toolbox.Action<IImage, int> action)
+      private void ForEachDuplicateChannel(Action<IImage, int> action)
       {
          if (NumberOfChannels == 1)
             action(this, 0);
@@ -1205,7 +1215,7 @@ namespace Emgu.CV
       /// <typeparam name="TReturn">The return type</typeparam>
       /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
       /// <returns>An array which contains result for each channel</returns>
-      private TReturn[] ForEachDuplicateChannel<TReturn>(Toolbox.Func<IImage, int, TReturn> conv)
+      private TReturn[] ForEachDuplicateChannel<TReturn>(Func<IImage, int, TReturn> conv)
       {
          TReturn[] res = new TReturn[NumberOfChannels];
          if (NumberOfChannels == 1)
@@ -1232,7 +1242,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>
       /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
       /// <param name="dest">The destination image</param>
-      private void ForEachDuplicateChannel<TOtherDepth>(Toolbox.Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
+      private void ForEachDuplicateChannel<TOtherDepth>(Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
             where TOtherDepth : new()
       {
          if (NumberOfChannels == 1)
@@ -1302,7 +1312,7 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
          double[] t1 = thresh.MCvScalar.ToArray();
          double[] t2 = threshLinking.MCvScalar.ToArray();
-         Toolbox.Action<IntPtr, IntPtr, int> act =
+         Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dest, int channel)
              {
                 CvInvoke.cvCanny(src, dest, t1[channel], t2[channel], 3);
@@ -1424,14 +1434,12 @@ namespace Emgu.CV
       /// <returns>The good features for each channel</returns>
       public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
       {
-         PointF[][] res = new PointF[_numberOfChannels][];
-
          using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
          using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
          {
-            Toolbox.Func<IImage, int, PointF[]> detector =
-                delegate(IImage img, int channel)
-                {
+            return ForEachDuplicateChannel<PointF[]>(
+               delegate(IImage img, int channel)
+               {
                    int cornercount = maxFeaturesPerChannel;
                    PointF[] pts = new PointF[maxFeaturesPerChannel];
 
@@ -1449,11 +1457,8 @@ namespace Emgu.CV
                        k);
                    Array.Resize(ref pts, cornercount);
                    return pts;
-                };
-
-            res = ForEachDuplicateChannel(detector);
+               });
          }
-         return res;
       }
 
       /// <summary>
@@ -1470,8 +1475,7 @@ namespace Emgu.CV
          Size zeroZone,
          MCvTermCriteria criteria)
       {
-         Toolbox.Action<IImage, int> detector =
-             delegate(IImage img, int channel)
+         ForEachDuplicateChannel(delegate(IImage img, int channel)
              {
                 PointF[] ptsForCurrentChannel = corners[channel];
                 CvInvoke.cvFindCornerSubPix(
@@ -1481,8 +1485,7 @@ namespace Emgu.CV
                    win,
                    zeroZone,
                    criteria);
-             };
-         ForEachDuplicateChannel(detector);
+             });
       }
 
       #endregion
@@ -2416,9 +2419,9 @@ namespace Emgu.CV
          Exposable = true,
          Category = "Convertion",
          GenericParametersOptions = new Type[] {
-            typeof(Bgr), typeof(Gray), typeof(Hsv),
+            typeof(Bgr), typeof(Gray), typeof(Hsv), typeof(Hls), typeof(Lab), typeof(Luv), typeof(Xyz), typeof(Ycc),
             typeof(Single), typeof(Byte), typeof(Double)},
-         GenericParametersOptionSizes = new int[] { 3, 3 }
+         GenericParametersOptionSizes = new int[] { 8, 3 }
          )]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
@@ -3025,7 +3028,7 @@ namespace Emgu.CV
       /// <typeparam name="TOtherDepth">The depth of the second image</typeparam>
       /// <param name="img2">The second image to perform action on</param>
       /// <param name="action">An action such that the first parameter is the a single channel of a pixel from the first image, the second parameter is the corresponding channel of the correspondind pixel from the second image </param>
-      public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Toolbox.Action<TDepth, TOtherDepth> action)
+      public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Action<TDepth, TOtherDepth> action)
                   where TOtherDepth : new()
       {
          Debug.Assert(EqualSize(img2));
@@ -3054,7 +3057,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image</summary> 
-      public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Toolbox.Func<TDepth, int, int, TOtherDepth> converter)
+      public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, int, int, TOtherDepth> converter)
          where TOtherDepth : new()
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
@@ -3116,7 +3119,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the two image</summary>
-      public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Toolbox.Func<TDepth, TDepth2, TDepth3> converter)
+      public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Func<TDepth, TDepth2, TDepth3> converter)
          where TDepth2 : new()
          where TDepth3 : new()
       {
@@ -3159,7 +3162,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the three image</summary>
-      public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
+      public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
          where TDepth2 : new()
          where TDepth3 : new()
          where TDepth4 : new()
@@ -3212,7 +3215,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Compute the element of the new image based on the elements of the four image</summary>
-      public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Toolbox.Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
+      public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
          where TDepth2 : new()
          where TDepth3 : new()
          where TDepth4 : new()
@@ -3690,7 +3693,7 @@ namespace Emgu.CV
       {
          bool isFloat = (typeof(TDepth) == typeof(Single));
 
-         Toolbox.Action<IntPtr, IntPtr, int> act =
+         Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dest, int channel)
              {
                 IntPtr srcFloat = src;
@@ -3764,7 +3767,7 @@ namespace Emgu.CV
       {
          double[] t = threshold.MCvScalar.ToArray();
          double[] m = maxValue.MCvScalar.ToArray();
-         Toolbox.Action<IntPtr, IntPtr, int> act =
+         Action<IntPtr, IntPtr, int> act =
              delegate(IntPtr src, IntPtr dst, int channel)
              {
                 CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
@@ -4164,40 +4167,25 @@ namespace Emgu.CV
 
    internal static class ColorConversionCodeLookupTable
    {
-      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable;
+      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
+         = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
 
-      static ColorConversionCodeLookupTable()
+      private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
       {
-         _lookupTable = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
+         ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+         ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+
+         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
+         return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
       }
 
       public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
       {
-         Dictionary<Type, CvEnum.COLOR_CONVERSION> table;
-         if (_lookupTable.ContainsKey(srcType))
-         {
-            table = _lookupTable[srcType];
-         }
-         else
-         {
-            table = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>();
-            _lookupTable[srcType] = table;
-         }
+         Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcType) ?
+            _lookupTable[srcType] : (_lookupTable[srcType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
 
-         if (table.ContainsKey(destType))
-         {
-            return table[destType];
-         }
-         else
-         {
-            ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-            ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-
-            String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
-            CvEnum.COLOR_CONVERSION code = (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
-            table[destType] = code;
-            return code;
-         }
+         return table.ContainsKey(destType) ? 
+            table[destType] : (table[destType] = GetCode(srcType, destType));
       }
    }
 }

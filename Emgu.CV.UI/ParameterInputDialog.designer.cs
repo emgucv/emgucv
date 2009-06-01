@@ -28,6 +28,7 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
+           System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParameterInputDialog));
            this.buttonsPanel = new System.Windows.Forms.Panel();
            this.cancelButton = new System.Windows.Forms.Button();
            this.okButton = new System.Windows.Forms.Button();
@@ -37,51 +38,58 @@ namespace Emgu.CV.UI
            // 
            // buttonsPanel
            // 
+           this.buttonsPanel.AccessibleDescription = null;
+           this.buttonsPanel.AccessibleName = null;
+           resources.ApplyResources(this.buttonsPanel, "buttonsPanel");
+           this.buttonsPanel.BackgroundImage = null;
            this.buttonsPanel.Controls.Add(this.cancelButton);
            this.buttonsPanel.Controls.Add(this.okButton);
-           this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-           this.buttonsPanel.Location = new System.Drawing.Point(0, 148);
+           this.buttonsPanel.Font = null;
            this.buttonsPanel.Name = "buttonsPanel";
-           this.buttonsPanel.Size = new System.Drawing.Size(343, 45);
-           this.buttonsPanel.TabIndex = 0;
            // 
            // cancelButton
            // 
-           this.cancelButton.Location = new System.Drawing.Point(247, 10);
+           this.cancelButton.AccessibleDescription = null;
+           this.cancelButton.AccessibleName = null;
+           resources.ApplyResources(this.cancelButton, "cancelButton");
+           this.cancelButton.BackgroundImage = null;
+           this.cancelButton.Font = null;
            this.cancelButton.Name = "cancelButton";
-           this.cancelButton.Size = new System.Drawing.Size(75, 23);
-           this.cancelButton.TabIndex = 1;
-           this.cancelButton.Text = Properties.StringTable.Cancel;
            this.cancelButton.UseVisualStyleBackColor = true;
            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
            // 
            // okButton
            // 
-           this.okButton.Location = new System.Drawing.Point(150, 10);
+           this.okButton.AccessibleDescription = null;
+           this.okButton.AccessibleName = null;
+           resources.ApplyResources(this.okButton, "okButton");
+           this.okButton.BackgroundImage = null;
+           this.okButton.Font = null;
            this.okButton.Name = "okButton";
-           this.okButton.Size = new System.Drawing.Size(75, 23);
-           this.okButton.TabIndex = 0;
-           this.okButton.Text = Properties.StringTable.OK ;
            this.okButton.UseVisualStyleBackColor = true;
            this.okButton.Click += new System.EventHandler(this.okButton_Click);
            // 
            // parameterInputPanel
            // 
-           this.parameterInputPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-           this.parameterInputPanel.Location = new System.Drawing.Point(0, 0);
+           this.parameterInputPanel.AccessibleDescription = null;
+           this.parameterInputPanel.AccessibleName = null;
+           resources.ApplyResources(this.parameterInputPanel, "parameterInputPanel");
+           this.parameterInputPanel.BackgroundImage = null;
+           this.parameterInputPanel.Font = null;
            this.parameterInputPanel.Name = "parameterInputPanel";
-           this.parameterInputPanel.Size = new System.Drawing.Size(343, 148);
-           this.parameterInputPanel.TabIndex = 1;
            // 
-           // ParamInputDlg
+           // ParameterInputDialog
            // 
-           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+           this.AccessibleDescription = null;
+           this.AccessibleName = null;
+           resources.ApplyResources(this, "$this");
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-           this.ClientSize = new System.Drawing.Size(343, 193);
+           this.BackgroundImage = null;
            this.Controls.Add(this.parameterInputPanel);
            this.Controls.Add(this.buttonsPanel);
-           this.Name = "ParamInputDlg";
-           this.Text = Properties.StringTable.PleaseEnterParameters;
+           this.Font = null;
+           this.Icon = null;
+           this.Name = "ParameterInputDialog";
            this.buttonsPanel.ResumeLayout(false);
            this.ResumeLayout(false);
 

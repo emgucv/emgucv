@@ -117,12 +117,72 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+    <comment>Cancel description</comment>
+  </data>
+  <data name="ColorIntensity" xml:space="preserve">
+    <value>色彩深度</value>
+    <comment>ColorIntensity description</comment>
+  </data>
+  <data name="DefaultHistogramTitle" xml:space="preserve">
+    <value>柱状图</value>
+    <comment>DefaultHistogram description</comment>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+    <comment>File description</comment>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确认</value>
+    <comment>OK description</comment>
+  </data>
+  <data name="Only1DHistogramSupported" xml:space="preserve">
+    <value>Only 1D histogram is supported</value>
+    <comment>Only1DHistogramSupported description</comment>
+  </data>
+  <data name="ParameterIsInvalid" xml:space="preserve">
+    <value>Parameter {0} is invalid.</value>
+    <comment>ParameterIsInvalid description</comment>
+  </data>
+  <data name="ParameterTypeIsNotSupported" xml:space="preserve">
+    <value>Parameter type '{0}' is not supported</value>
+    <comment>ParameterTypeIsNotSupported description</comment>
+  </data>
+  <data name="PixelCount" xml:space="preserve">
+    <value>Pixel Count</value>
+    <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
+  </data>
+  <data name="PleaseLoadAnImageFirst" xml:space="preserve">
+    <value>Please load an image first</value>
+    <comment>PleaseLoadAnImageFirst description</comment>
+  </data>
+  <data name="PopOperation" xml:space="preserve">
+    <value>Pop Operation</value>
+    <comment>PopOperation description</comment>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>属性</value>
+    <comment>Property description</comment>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Remove All</value>
+    <comment>RemoveAll description</comment>
+  </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>Save As(C)</value>
+    <value>保存为</value>
     <comment>SaveAs description</comment>
   </data>
-  <data name="SaveImageDialogTitle" xml:space="preserve">
-    <value>File Saving(C)</value>
+  <data name="SaveImageDialogText" xml:space="preserve">
+    <value>文件保存</value>
     <comment>SaveImageDialogTitle description</comment>
+  </data>
+  <data name="ShowColorHistogram" xml:space="preserve">
+    <value>Show Color Histogram</value>
+    <comment>ShowColorHistogram description</comment>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+    <comment>Unknown description</comment>
   </data>
 </root>

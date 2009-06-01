@@ -453,7 +453,13 @@ namespace Emgu.CV.Test
       {
          System.Threading.Thread.CurrentThread.CurrentUICulture =
             new System.Globalization.CultureInfo("zh-CN");
-         Application.Run(new ImageViewer(null));
+
+         ImageViewer viewer = new ImageViewer(null);
+         viewer.Image = new Image<Bgr, Byte>(50, 50);
+         //viewer.Image = null;
+         viewer.ShowDialog();
+         //Application.Run(new ImageViewer(null));
+         
       }
 
       /*
@@ -677,18 +683,18 @@ namespace Emgu.CV.Test
         
          ImageViewer viewer = new ImageViewer();
 
-         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
+         BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
          //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.ForgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          //param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF);
          param.FGTrainFrames = 10;
-         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
+         BlobTrackerAuto<Gray> tracker = new BlobTrackerAuto<Gray>(param);
 
          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
 
          Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
          {
-            tracker.Process(capture.QuerySmallFrame().PyrUp());
+            tracker.Process(capture.QuerySmallFrame().PyrUp().Convert<Gray, Byte>());
             
             Image<Gray, Byte> img = tracker.ForgroundMask;
             //viewer.Image = tracker.GetForgroundMask();
@@ -730,7 +736,7 @@ namespace Emgu.CV.Test
                   (float)(img.Height / 2 - img.Width / 3 * Math.Sin(radianAngle)));
             };
 
-         Toolbox.Action<PointF, Bgr> drawCross =
+         Action<PointF, Bgr> drawCross =
            delegate(PointF point, Bgr color)
            {
               img.Draw(new Cross2DF(point, 15, 15), color, 1);
