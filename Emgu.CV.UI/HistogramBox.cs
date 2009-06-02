@@ -75,7 +75,7 @@ namespace Emgu.CV.UI
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
       /// <param name="histogram">The 1D histogram to be drawn</param>
-      public void AddHistogram(String name, Color color, Histogram histogram)
+      public void AddHistogram(String name, Color color, DenseHistogram histogram)
       {
          Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
 
@@ -99,7 +99,7 @@ namespace Emgu.CV.UI
 
          PointPairList pointList = new PointPairList(
             bin,
-            Array.ConvertAll<float, double>(histogram.Data, System.Convert.ToDouble));
+            Array.ConvertAll<float, double>( (float[]) histogram.MatND.ManagedArray, System.Convert.ToDouble));
 
          pane.AddCurve(name, pointList, color);
          #endregion
@@ -150,7 +150,7 @@ namespace Emgu.CV.UI
          #endregion
 
          for (int i = 0; i < channels.Length; i++)
-            using (Histogram hist = new Histogram(numberOfBins, new RangeF(minVal, maxVal)))
+            using (DenseHistogram hist = new DenseHistogram(numberOfBins, new RangeF(minVal, maxVal)))
             {
                hist.Calculate(new IImage[1] { channels[i] }, true, null);
                AddHistogram(channelNames[i], colors[i], hist);

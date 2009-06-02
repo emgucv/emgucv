@@ -10,6 +10,7 @@ namespace Emgu.CV
    public static class StructSize
    {
       private static readonly int _PointF;
+      private static readonly int _RangF;
       private static readonly int _MCvMat;
       private static readonly int _MCvSeq;
       private static readonly int _MCvContour;
@@ -18,6 +19,8 @@ namespace Emgu.CV
       private static readonly int _MCvPoint3D32f;
       private static readonly int _MCvMatND;
       private static readonly int _MCvPoint2D64f;
+      private static readonly int _MCvHistogram;
+      private static readonly int _MCvBlob;
 
       /// <summary>
       /// The size of PointF
@@ -25,6 +28,14 @@ namespace Emgu.CV
       public static int PointF
       {
          get { return _PointF; }
+      }
+
+      /// <summary>
+      /// The size of RangF
+      /// </summary>
+      public static int RangF
+      {
+         get { return _RangF; }
       }
 
       /// <summary>
@@ -91,9 +102,26 @@ namespace Emgu.CV
          get { return _MCvMatND; }
       }
 
+      /// <summary>
+      /// The size of MCvHistogram
+      /// </summary>
+      public static int MCvHistogram
+      {
+         get { return _MCvHistogram; }
+      }
+
+      /// <summary>
+      /// The size of MCvBlob
+      /// </summary>
+      public static int MCvBlob
+      {
+         get { return _MCvBlob; }
+      }
+
       static StructSize()
       {
          _PointF = Marshal.SizeOf(typeof(System.Drawing.PointF));
+         _RangF = Marshal.SizeOf(typeof(RangeF));
          _MCvMat = Marshal.SizeOf(typeof(MCvMat));
          _MCvSeq = Marshal.SizeOf(typeof(MCvSeq));
          _MCvContour = Marshal.SizeOf(typeof(MCvContour));
@@ -102,6 +130,8 @@ namespace Emgu.CV
          _MCvPoint3D32f = Marshal.SizeOf(typeof(MCvPoint3D32f));
          _MCvMatND = Marshal.SizeOf(typeof(MCvMatND));
          _MCvPoint2D64f = Marshal.SizeOf(typeof(MCvPoint2D64f));
+         _MCvHistogram = Marshal.SizeOf(typeof(MCvHistogram));
+         _MCvBlob = Marshal.SizeOf(typeof(MCvBlob));
       }
    }
 }

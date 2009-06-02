@@ -293,7 +293,7 @@ namespace Emgu.CV.Test
          {
             Image<Gray, Byte>[] HSVs = img2.Split();
 
-            using (Histogram h = new Histogram(20, new RangeF(0, 180)))
+            using (DenseHistogram h = new DenseHistogram(20, new RangeF(0, 180)))
             {
                h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
                using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))

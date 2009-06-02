@@ -64,7 +64,7 @@ namespace Emgu.CV.Test
       private Image<Gray, Byte> _h;
       private Image<Gray, Byte> _s;
       private Image<Gray, Byte> _v;
-      private Histogram _hueHtg;
+      private DenseHistogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
       private Rectangle _rect;
       private HaarCascade _eyeCascade;
@@ -164,14 +164,14 @@ namespace Emgu.CV.Test
          }
       }
 
-      public Histogram HueHistogram
+      public DenseHistogram HueHistogram
       {
          get
          {
             if (_hueHtg == null)
             {
                int size = 60;
-               _hueHtg = new Histogram(size ,  new RangeF(0, 180) );
+               _hueHtg = new DenseHistogram(size ,  new RangeF(0, 180) );
             }
             return _hueHtg;
          }

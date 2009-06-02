@@ -89,7 +89,7 @@ namespace Emgu.CV
                Contour<System.Drawing.PointF> contour = new Contour<PointF>(stor);
                contour.PushMulti(currentRegion.GetVertices(), Emgu.CV.CvEnum.BACK_OR_FRONT.BACK);
 
-               CvInvoke.cvBoundingRect(contour, 1); //this is required before calling the InContour function
+               CvInvoke.cvBoundingRect(contour.Ptr, 1); //this is required before calling the InContour function
 
                featuesInCurrentRegion = Array.FindAll(matchedFeature,
                   delegate(MatchedSURFFeature f)
@@ -278,7 +278,7 @@ namespace Emgu.CV
          
          int scaleBinSize = (int) Math.Max( ((maxScale - minScale) / Math.Log10(scaleIncrement)), 1) ;
 
-         using (Histogram h = new Histogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
+         using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
          {
             GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
             GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
@@ -527,6 +527,10 @@ namespace Emgu.CV
          /// Release the unmanaged memory associate with this matcher
          /// </summary>
          protected override void DisposeObject()
+         {
+         }
+
+         protected override void ReleaseManagedResources()
          {
             _positiveTree.Dispose();
             _negativeTree.Dispose();

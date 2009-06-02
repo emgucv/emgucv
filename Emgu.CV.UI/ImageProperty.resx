@@ -134,6 +134,9 @@
   <data name="&gt;&gt;showHistogramButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
   <data name="&gt;&gt;tabPage1.Parent" xml:space="preserve">
     <value>tabControl1</value>
   </data>
@@ -147,14 +150,8 @@
   <data name="&gt;&gt;colorIntensityTextbox.Name" xml:space="preserve">
     <value>colorIntensityTextbox</value>
   </data>
-  <data name="cSharpOperationView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
   <data name="&gt;&gt;typeOfColorTexbox.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>36, 69</value>
   </data>
   <data name="&gt;&gt;mousePositionTextbox.ZOrder" xml:space="preserve">
     <value>15</value>
@@ -180,6 +177,9 @@
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 13</value>
   </data>
@@ -191,9 +191,6 @@
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
-  </data>
-  <data name="tabPage1.Text" xml:space="preserve">
-    <value>C#</value>
   </data>
   <data name="zoomLevelComboBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>91, 103</value>
@@ -213,8 +210,8 @@
   <data name="&gt;&gt;typeOfDepthTextBox.Name" xml:space="preserve">
     <value>typeOfDepthTextBox</value>
   </data>
-  <data name="&gt;&gt;colorIntensityTextbox.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>C#</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -249,8 +246,8 @@
   <data name="&gt;&gt;label8.Name" xml:space="preserve">
     <value>label8</value>
   </data>
-  <data name="colorIntensityTextbox.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>36, 69</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Size:</value>
@@ -357,8 +354,8 @@
   <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
     <value>213, 45</value>
   </data>
-  <data name="typeOfColorTexbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>204, 4</value>
+  <data name="cSharpOperationView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
   <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 13</value>
@@ -371,9 +368,6 @@
   </data>
   <data name="&gt;&gt;cPlusPlusOperationView.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="showHistogramButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 142</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -390,9 +384,6 @@
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <data name="label9.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>
   </data>
@@ -402,17 +393,14 @@
   <data name="showHistogramButton.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
   </data>
-  <data name="&gt;&gt;label9.Name" xml:space="preserve">
-    <value>label9</value>
-  </data>
   <data name="&gt;&gt;heightTextBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>14, 13</value>
+  <data name="label9.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="cSharpOperationView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="&gt;&gt;label6.Name" xml:space="preserve">
     <value>label6</value>
@@ -428,6 +416,9 @@
   </data>
   <data name="fpsTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>249, 42</value>
+  </data>
+  <data name="typeOfColorTexbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>204, 4</value>
   </data>
   <data name="&gt;&gt;showHistogramButton.Name" xml:space="preserve">
     <value>showHistogramButton</value>
@@ -456,6 +447,9 @@
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 45</value>
   </data>
+  <data name="showHistogramButton.Text" xml:space="preserve">
+    <value>Show Histogram</value>
+  </data>
   <data name="&gt;&gt;label5.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -464,6 +458,9 @@
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
     <value>10</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>14, 13</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>349, 437</value>
@@ -492,8 +489,8 @@
   <data name="&gt;&gt;label4.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="label8.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
+  <data name="showHistogramButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 142</value>
   </data>
   <data name="label8.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -591,6 +588,9 @@
   <data name="tabPage1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;colorIntensityTextbox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <data name="popOperationButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 23</value>
   </data>
@@ -605,9 +605,6 @@
   </data>
   <data name="&gt;&gt;mousePositionTextbox.Name" xml:space="preserve">
     <value>mousePositionTextbox</value>
-  </data>
-  <data name="cSharpOperationView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
   </data>
   <data name="&gt;&gt;cSharpOperationView.Type" xml:space="preserve">
     <value>Emgu.CV.UI.OperationsView, Emgu.CV.UI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=987a5607bf4f198c</value>
@@ -642,8 +639,11 @@
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
-  <data name="colorIntensityTextbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 20</value>
+  <data name="&gt;&gt;label9.Name" xml:space="preserve">
+    <value>label9</value>
+  </data>
+  <data name="colorIntensityTextbox.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
   </data>
   <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -674,6 +674,9 @@
   </data>
   <data name="&gt;&gt;clearOperationsBtn.Name" xml:space="preserve">
     <value>clearOperationsBtn</value>
+  </data>
+  <data name="colorIntensityTextbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 20</value>
   </data>
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
     <value>0</value>

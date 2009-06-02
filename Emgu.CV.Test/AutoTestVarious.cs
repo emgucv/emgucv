@@ -41,11 +41,27 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestHistogram()
+      public void TestDenseHistogramRuntimeSerialization()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
-         Histogram hist = new Histogram(256, new RangeF(0.0f, 255.0f));
+         img.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         DenseHistogram hist = new DenseHistogram(256, new RangeF(0.0f, 255.0f));
          hist.Calculate<Byte>(new Image<Gray, byte>[] { img }, true, null);
+
+         using (MemoryStream ms = new MemoryStream())
+         {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter.Serialize(ms, hist);
+            Byte[] bytes = ms.GetBuffer();
+
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+               Object o = formatter.Deserialize(ms2);
+               DenseHistogram hist2 = (DenseHistogram)o;
+               Assert.IsTrue(hist.Equals(hist2));
+            }
+         }
       }
 
       [Test]
@@ -1044,6 +1060,27 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Seq<PointF> seq = new Seq<PointF>(stor);
+            }
+         }
+      }
+
+      [Test]
+      public void TestMatND()
+      {
+         using (MatND<float> mat = new MatND<float>(3, 5, 1))
+         {
+            mat.SetRandNormal(new MCvScalar(), new MCvScalar(255));
+            MatND<double> matD = mat.Convert<double>();
+            MCvMatND matND = matD.MCvMatND;
+            int rows = matND.dim[0].Size;
+            int cols = matND.dims >= 2 ? matND.dim[1].Size : 1;
+            int channels = matND.dims >= 3 ? matND.dim[2].Size : 1;
+            Matrix<double> matrix = new Matrix<double>(rows, cols, channels);
+            CvInvoke.cvCopy(matD, matrix, IntPtr.Zero);
+            using (MatrixViewer viewer = new MatrixViewer())
+            {
+               viewer.Matrix = matrix;
+               //viewer.ShowDialog();
             }
          }
       }

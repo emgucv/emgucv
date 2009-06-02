@@ -44,7 +44,7 @@ namespace Emgu.CV.UI
       /// </summary>
       /// <param name="hist">The 1 dimension histogram to be displayed</param>
       /// <param name="title">The name of the histogram</param>
-      public static void Show(Histogram hist, string title)
+      public static void Show(DenseHistogram hist, string title)
       {
          HistogramViewer viewer = new HistogramViewer();
          if (hist.Dimension == 1)

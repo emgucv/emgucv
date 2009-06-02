@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="Histogram.cs" />
     <Compile Include="PInvoke\CvInvokeCv.cs" />
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
@@ -173,7 +174,7 @@
     <Compile Include="PInvoke\CvInvoke.cs" />
     <Compile Include="Shape\Ellipse.cs" />
     <Compile Include="HaarCascade.cs" />
-    <Compile Include="Histogram.cs" />
+    <Compile Include="DenseHistogram.cs" />
     <Compile Include="Capture\ICapture.cs" />
     <Compile Include="Capture\IDuplexCapture.cs" />
     <Compile Include="Capture\IDuplexCaptureCallback.cs" />

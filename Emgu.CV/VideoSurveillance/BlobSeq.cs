@@ -23,7 +23,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       public BlobSeq()
       {
-         _ptr = CvInvoke.CvBlobSeqCreate(Marshal.SizeOf(typeof(MCvBlob)));
+         _ptr = CvInvoke.CvBlobSeqCreate(StructSize.MCvBlob);
       }
 
       #region BolbSeqBase Members

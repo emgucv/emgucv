@@ -6,8 +6,9 @@ namespace Emgu.CV.Structure
    /// <summary>
    /// The range use to setup the histogram
    /// </summary>
+   [Serializable]
    [StructLayout(LayoutKind.Sequential)]
-   public struct RangeF
+   public struct RangeF : IEquatable<RangeF>
    {
       private float _min;
       private float _max;
@@ -40,5 +41,17 @@ namespace Emgu.CV.Structure
          get { return _max; }
          set { _max = value; }
       }
+
+      #region IEquatable<RangeF> Members
+      /// <summary>
+      /// Return true if the two RangeF equals
+      /// </summary>
+      /// <param name="other">The other RangeF to compare with</param>
+      /// <returns>True if the two RangeF equals</returns>
+      public bool Equals(RangeF other)
+      {
+         return Min == other.Min && Max == other.Max;
+      }
+      #endregion
    }
 }

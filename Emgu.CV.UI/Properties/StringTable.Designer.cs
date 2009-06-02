@@ -196,15 +196,6 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Color Histogram.
-        /// </summary>
-        internal static string ShowColorHistogram {
-            get {
-                return ResourceManager.GetString("ShowColorHistogram", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         internal static string Unknown {

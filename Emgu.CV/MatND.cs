@@ -183,6 +183,19 @@ namespace Emgu.CV
             return (MCvMatND)Marshal.PtrToStructure(_ptr, typeof(MCvMatND));
          }
       }
+
+      /// <summary>
+      /// Convert this matrix to different depth
+      /// </summary>
+      /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
+      /// <returns>Matrix of different depth</returns>
+      public MatND<TOtherDepth> Convert<TOtherDepth>()
+         where TOtherDepth : new()
+      {
+         MatND<TOtherDepth> res = new MatND<TOtherDepth>(GetDimension());
+         CvInvoke.cvConvertScale(Ptr, res.Ptr, 1.0, 0.0);
+         return res;
+      }
      
       #region IEquatable<MatND<TDepth>> Members
       /// <summary>

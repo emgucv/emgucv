@@ -9,6 +9,10 @@ namespace Emgu.CV.Structure
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvMSERParams
    {
+      /// <summary>
+      /// Get the default MSER parameters
+      /// </summary>
+      /// <returns></returns>
       public static MCvMSERParams GetDefaultParameter()
       {
          MCvMSERParams param = new MCvMSERParams();

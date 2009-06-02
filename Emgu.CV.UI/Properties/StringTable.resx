@@ -137,10 +137,6 @@
     <value>Unknown</value>
     <comment>Unknown description</comment>
   </data>
-  <data name="ShowColorHistogram" xml:space="preserve">
-    <value>Show Color Histogram</value>
-    <comment>ShowColorHistogram description</comment>
-  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
     <comment>Cancel description</comment>

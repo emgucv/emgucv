@@ -196,6 +196,10 @@
 			ReferencedProjectIdentifier="{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
 			RelativePathToProject="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj"
 		/>
+		<AssemblyReference
+			RelativePath="System.Core.dll"
+			AssemblyName="System.Core, Version=3.5.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+		/>
 	</References>
 	<Files>
 		<Filter

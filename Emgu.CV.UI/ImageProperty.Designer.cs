@@ -267,7 +267,6 @@ namespace Emgu.CV.UI
          this.showHistogramButton.BackgroundImage = null;
          this.showHistogramButton.Font = null;
          this.showHistogramButton.Name = "showHistogramButton";
-         this.showHistogramButton.Text = global::Emgu.CV.UI.Properties.StringTable.ShowColorHistogram;
          this.showHistogramButton.UseVisualStyleBackColor = true;
          this.showHistogramButton.Click += new System.EventHandler(this.showHistogramButton_Click);
          // 

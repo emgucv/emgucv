@@ -177,10 +177,6 @@
     <value>文件保存</value>
     <comment>SaveImageDialogTitle description</comment>
   </data>
-  <data name="ShowColorHistogram" xml:space="preserve">
-    <value>Show Color Histogram</value>
-    <comment>ShowColorHistogram description</comment>
-  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
     <comment>Unknown description</comment>

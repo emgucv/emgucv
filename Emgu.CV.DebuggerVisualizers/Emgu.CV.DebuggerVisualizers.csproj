@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenseHistogramVisualizer.cs" />
     <Compile Include="ImageVisualizer.cs" />
+    <Compile Include="MatNDVisualizer.cs" />
     <Compile Include="MatrixVisualizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
