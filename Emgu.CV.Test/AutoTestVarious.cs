@@ -219,7 +219,7 @@ namespace Emgu.CV.Test
          ExtrinsicCameraParameters extrin = new ExtrinsicCameraParameters();
          MCvPoint3D32f point = new MCvPoint3D32f();
 
-         PointF[] points = CameraCalibration.ProjectPoints2(new MCvPoint3D32f[] { point }, extrin, intrin);
+         PointF[] points = CameraCalibration.ProjectPoints(new MCvPoint3D32f[] { point }, extrin, intrin);
       }
 
       //TODO: Find out why Blob tracker no longer accepts color images since svn 1611
