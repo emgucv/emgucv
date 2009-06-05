@@ -428,49 +428,39 @@ namespace Emgu.CV
       ///<summary>
       ///Inplace compute the elementwise minimum value 
       ///</summary>
-      public void _Min(double val)
+      ///<param name="value">The value to compare with</param>
+      [ExposableMethod(Exposable = true, Category = "Logic")]
+      public void _Min(double value)
       {
-         CvInvoke.cvMinS(Ptr, val, Ptr);
+         CvInvoke.cvMinS(Ptr, value, Ptr);
       }
 
       /// <summary>
-      /// Inplace elementwise minimize the current Array with <paramref name="src2"/>
+      /// Inplace elementwise minimize the current Array with <paramref name="other"/>
       /// </summary>
-      /// <param name="src2">The other array to be elementwise minimized with this array</param>
-      public void _Min(CvArray<TDepth> src2)
+      /// <param name="other">The other array to be elementwise minimized with this array</param>
+      public void _Min(CvArray<TDepth> other)
       {
-         CvInvoke.cvMin(Ptr, src2.Ptr, Ptr);
+         CvInvoke.cvMin(Ptr, other.Ptr, Ptr);
       }
 
       /// <summary>
       /// Inplace compute the elementwise maximum value with <paramref name="val"/>
       /// </summary>
-      /// <param name="val">The value to be compare with</param>
-      public void _Max(double val)
+      /// <param name="value">The value to be compare with</param>
+      [ExposableMethod(Exposable = true, Category = "Logic")]
+      public void _Max(double value)
       {
-         CvInvoke.cvMaxS(Ptr, val, Ptr);
+         CvInvoke.cvMaxS(Ptr, value, Ptr);
       }
 
       /// <summary>
-      /// Inplace elementwise maximize the current Array with <paramref name="src2"/>
+      /// Inplace elementwise maximize the current Array with <paramref name="other"/>
       /// </summary>
-      /// <param name="src2">The other array to be elementwise maximized with this array</param>
-      public void _Max(CvArray<TDepth> src2)
+      /// <param name="other">The other array to be elementwise maximized with this array</param>
+      public void _Max(CvArray<TDepth> other)
       {
-         CvInvoke.cvMax(Ptr, src2.Ptr, Ptr);
-      }
-
-      ///<summary>
-      ///Determine if the size (width and height) of <i>this</i> Array
-      ///equals the size of <paramref name="src2"/>
-      ///</summary>
-      /// <typeparam name="TOtherDepth">The depth type of the other CvArray</typeparam>
-      ///<param name="src2"> The other Array to compare size with</param>
-      ///<returns> True if the two Array has the same size</returns>
-      public bool EqualSize<TOtherDepth>(CvArray<TOtherDepth> src2)
-         where TOtherDepth : new ()
-      {
-         return Size.Equals(src2.Size);
+         CvInvoke.cvMax(Ptr, other.Ptr, Ptr);
       }
       #endregion
 
@@ -496,6 +486,7 @@ namespace Emgu.CV
       ///<summary> 
       ///Inplace compute the complement for all Array Elements
       ///</summary>
+      [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Not()
       {
          CvInvoke.cvNot(Ptr, Ptr);

@@ -1157,6 +1157,22 @@ namespace Emgu.CV
       [DllImport(CV_LIBRARY)]
       public static extern MCvSURFParams cvSURFParams(double hessianThreshold, int extended);
 
+      /// <summary>
+      /// Extracts the contours of Maximally Stable Extremal Regions
+      /// </summary>
+      /// <param name="img">The image where MSER will be extracted</param>
+      /// <param name="mask">The mask for region of interest</param>
+      /// <param name="contours">The contours where MSER will be stored</param>
+      /// <param name="storage">Memory storage</param>
+      /// <param name="parameters">MSER parameters</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvExtractMSER(
+         IntPtr img, 
+         IntPtr mask, 
+         ref IntPtr contours, 
+         IntPtr storage, 
+         MCvMSERParams parameters );
+
       #region Camera Calibration
       /// <summary>
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.

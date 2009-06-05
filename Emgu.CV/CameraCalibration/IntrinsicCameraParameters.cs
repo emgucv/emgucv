@@ -97,7 +97,7 @@ namespace Emgu.CV
       /// <param name="src">The observed point coordinates</param>
       /// <param name="R">Optional rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
       /// <param name="P">Optional new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
-      public PointF[] UndistortPoints(PointF[] src, Matrix<double> R, Matrix<double> P)
+      public PointF[] Undistort(PointF[] src, Matrix<double> R, Matrix<double> P)
       {
          PointF[] dst = new PointF[src.Length]; 
          GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
@@ -125,7 +125,7 @@ namespace Emgu.CV
       /// <typeparam name="TDepth">The depth of the image</typeparam>
       /// <param name="src">The distorted image</param>
       /// <returns>The corrected image</returns>
-      public Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src)
+      public Image<TColor, TDepth> Undistort<TColor, TDepth>(Image<TColor, TDepth> src)
          where TColor : struct, IColor
          where TDepth : new()
       {

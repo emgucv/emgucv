@@ -405,8 +405,8 @@ namespace Emgu.CV.UI
             _zoomScale != zoomScale //the scale has been changed
             && //and, the scale is not too small
             !(zoomScale < _zoomScale &&
-               (Image.Size.Width * zoomScale < (2.0 + verticalScrollBar.Width)
-               || Image.Size.Height * zoomScale < (2.0 + horizontalScrollBar.Height)))
+               (Image.Size.Width * zoomScale < 2.0 
+               || Image.Size.Height * zoomScale < 2.0))
             && //and, the scale is not too big
             !(zoomScale > _zoomScale &&
                (GetViewSize().Width < zoomScale * 2

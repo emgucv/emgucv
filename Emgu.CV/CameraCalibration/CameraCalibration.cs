@@ -176,7 +176,7 @@ namespace Emgu.CV
       /// <param name="src">The distorted image</param>
       /// <param name="intrin">The intrinsic camera parameters</param>
       /// <returns>The corrected image</returns>
-      [Obsolete("Will be removed in the next version, use IntrinsicCameraParameters.Undistor2 function instead")]
+      [Obsolete("Will be removed in the next version, use IntrinsicCameraParameters.Undistor function instead")]
       public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
          where TColor : struct, IColor
          where TDepth : new()
@@ -198,7 +198,7 @@ namespace Emgu.CV
       /// <param name="intrin">Intrinsic parameters</param>
       /// <param name="mats">Optional matrix supplied in the following order: dpdrot, dpdt, dpdf, dpdc, dpddist</param>
       /// <returns>The array of image points which is the projection of <paramref name="objectPoints"/></returns>
-      public static PointF[] ProjectPoints2(
+      public static PointF[] ProjectPoints(
           MCvPoint3D32f[] objectPoints,
           ExtrinsicCameraParameters extrin,
           IntrinsicCameraParameters intrin,

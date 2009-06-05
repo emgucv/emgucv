@@ -844,6 +844,20 @@ namespace Emgu.CV.Test
          Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
       }
 
+      [Test]
+      public void TestMSER()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");
+         MCvMSERParams param = MCvMSERParams.GetDefaultParameter();
+         using (MemStorage storage = new MemStorage())
+         {
+            Seq<Point>[] mser = image.ExtractMSER(null, ref param, storage);
+            {
+               foreach(Seq<Point> region in mser)
+                  image.Draw(region, new Gray(255.0), 2);
+            }
+         }
+      }
       /*
       [Test]
       public void T()

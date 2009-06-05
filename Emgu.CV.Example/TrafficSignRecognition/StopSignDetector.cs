@@ -91,17 +91,7 @@ namespace TrafficSignRecognition
                //set the value of pixels not in the contour region to zero
                using (Image<Gray, Byte> mask = new Image<Gray, byte>(box.Size))
                {
-                  //TODO: Find out why cvDrawContours no longer works after SVN 1611
-                  //CvInvoke.cvDrawContours(mask, contours, new MCvScalar(255), new MCvScalar(255), 0, -1, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, new Point(-box.X, -box.Y));
-                  #region alternative code to cvDrawContours
-                  Point[] pts = contours.ToArray();
-                  for (int i = 0; i < pts.Length; i++)
-                  {
-                     pts[i].X -= box.X;
-                     pts[i].Y -= box.Y;
-                  }
-                  CvInvoke.cvFillConvexPoly(mask, pts, pts.Length, new MCvScalar(255), Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
-                  #endregion
+                  mask.Draw(contours, new Gray(255), new Gray(255), 0, -1, new Point(-box.X, -box.Y));
 
                   double mean = CvInvoke.cvAvg(candidate, mask).v0;
                   candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));

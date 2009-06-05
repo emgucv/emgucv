@@ -1,5 +1,5 @@
 REM == FORCE OVERWRITE ==
-SET COPYCMD=/Y
+REM SET COPYCMD=/Y
 
 SET CMAKE="C:\Program Files\CMake 2.6\bin\cmake.exe"
 SET VS2005="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"

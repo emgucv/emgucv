@@ -376,7 +376,7 @@ namespace Emgu.CV.UI
 
             operationMenuItem.Text = String.Format(
                "{0}{1}({2})",
-               mi.Name,
+               mi.Name.Substring(0, 1).Equals("_") ? mi.Name.Substring(1, mi.Name.Length -1) : mi.Name, //remove leading underscore
                genericArgString,
                String.Join(",", System.Array.ConvertAll<ParameterInfo, String>(mi.GetParameters(), delegate(ParameterInfo pi) { return pi.Name; })));
 

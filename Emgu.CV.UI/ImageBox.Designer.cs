@@ -38,7 +38,7 @@ namespace Emgu.CV.UI
             this.operationsToolStripMenuItem,
             this.propertyToolStripMenuItem});
            this.contextMenuStrip1.Name = "contextMenuStrip1";
-           this.contextMenuStrip1.Size = new System.Drawing.Size(128, 70);
+           this.contextMenuStrip1.Size = new System.Drawing.Size(117, 70);
            // 
            // fileOperationToolStripMenuItem
            // 
@@ -46,40 +46,41 @@ namespace Emgu.CV.UI
             this.loadImageToolStripMenuItem,
             this.saveAsToolStripMenuItem});
            this.fileOperationToolStripMenuItem.Name = "fileOperationToolStripMenuItem";
-           this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+           this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
            this.fileOperationToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.File;
            // 
            // loadImageToolStripMenuItem
            // 
            this.loadImageToolStripMenuItem.Name = "loadImageToolStripMenuItem";
-           this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-           this.loadImageToolStripMenuItem.Text = "Load Image";
+           this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+           this.loadImageToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
            this.loadImageToolStripMenuItem.Click += new System.EventHandler(this.loadImageToolStripMenuItem_Click);
            // 
            // saveAsToolStripMenuItem
            // 
            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-           this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+           this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
            this.saveAsToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.SaveAs;
            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
            // 
            // operationsToolStripMenuItem
            // 
            this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
-           this.operationsToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-           this.operationsToolStripMenuItem.Text = "Operations";
+           this.operationsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+           this.operationsToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Filters;
            // 
            // propertyToolStripMenuItem
            // 
            this.propertyToolStripMenuItem.Name = "propertyToolStripMenuItem";
-           this.propertyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+           this.propertyToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
            this.propertyToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Property;
            this.propertyToolStripMenuItem.Click += new System.EventHandler(this.propertyToolStripMenuItem_Click);
            // 
            // loadImageFromFileDialog
            // 
-           this.loadImageFromFileDialog.Filter = "Image Files (*.jpg; *.bmp;*.png)|*.jpg;*.bmp;*.png|All Files(*.*)|*.*";
-           this.loadImageFromFileDialog.Title = "Open Image File";
+           this.loadImageFromFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif*.bmp" +
+               ";*.png;*.tiff;*.tif|All Files(*.*)|*.*";
+           this.loadImageFromFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
            // 
            // saveImageToFileDialog
            // 

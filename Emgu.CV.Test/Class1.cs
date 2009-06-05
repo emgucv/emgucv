@@ -451,8 +451,7 @@ namespace Emgu.CV.Test
 
       public void TestImageViewer()
       {
-         System.Threading.Thread.CurrentThread.CurrentUICulture =
-            new System.Globalization.CultureInfo("zh-CN");
+         //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-CN");
 
          ImageViewer viewer = new ImageViewer(null);
          viewer.Image = new Image<Bgr, Byte>(50, 50);

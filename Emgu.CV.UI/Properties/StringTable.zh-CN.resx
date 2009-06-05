@@ -133,6 +133,14 @@
     <value>文件</value>
     <comment>File description</comment>
   </data>
+  <data name="Filters" xml:space="preserve">
+    <value>滤镜</value>
+    <comment>Filters description</comment>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>读取图像...</value>
+    <comment>LoadImage description</comment>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>确认</value>
     <comment>OK description</comment>
@@ -157,20 +165,12 @@
     <value>Please load an image first</value>
     <comment>PleaseLoadAnImageFirst description</comment>
   </data>
-  <data name="PopOperation" xml:space="preserve">
-    <value>Pop Operation</value>
-    <comment>PopOperation description</comment>
-  </data>
   <data name="Property" xml:space="preserve">
     <value>属性</value>
     <comment>Property description</comment>
   </data>
-  <data name="RemoveAll" xml:space="preserve">
-    <value>Remove All</value>
-    <comment>RemoveAll description</comment>
-  </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>保存为</value>
+    <value>保存为...</value>
     <comment>SaveAs description</comment>
   </data>
   <data name="SaveImageDialogText" xml:space="preserve">
@@ -178,7 +178,7 @@
     <comment>SaveImageDialogTitle description</comment>
   </data>
   <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>未知</value>
     <comment>Unknown description</comment>
   </data>
 </root>

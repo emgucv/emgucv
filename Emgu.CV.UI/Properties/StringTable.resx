@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SaveAs" xml:space="preserve">
-    <value>Save As</value>
+    <value>Save As...</value>
     <comment>SaveAs description</comment>
   </data>
   <data name="SaveImageDialogText" xml:space="preserve">
@@ -157,14 +157,6 @@
     <value>Please load an image first</value>
     <comment>PleaseLoadAnImageFirst description</comment>
   </data>
-  <data name="RemoveAll" xml:space="preserve">
-    <value>Remove All</value>
-    <comment>RemoveAll description</comment>
-  </data>
-  <data name="PopOperation" xml:space="preserve">
-    <value>Pop Operation</value>
-    <comment>PopOperation description</comment>
-  </data>
   <data name="PixelCount" xml:space="preserve">
     <value>Pixel Count</value>
     <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
@@ -180,5 +172,13 @@
   <data name="DefaultHistogramTitle" xml:space="preserve">
     <value>Histogram</value>
     <comment>DefaultHistogram description</comment>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filters</value>
+    <comment>Filters description</comment>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Load Image...</value>
+    <comment>LoadImage description</comment>
   </data>
 </root>

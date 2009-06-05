@@ -97,6 +97,24 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        internal static string Filters {
+            get {
+                return ResourceManager.GetString("Filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Image....
+        /// </summary>
+        internal static string LoadImage {
+            get {
+                return ResourceManager.GetString("LoadImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string OK {
@@ -151,15 +169,6 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pop Operation.
-        /// </summary>
-        internal static string PopOperation {
-            get {
-                return ResourceManager.GetString("PopOperation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Property.
         /// </summary>
         internal static string Property {
@@ -169,16 +178,7 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove All.
-        /// </summary>
-        internal static string RemoveAll {
-            get {
-                return ResourceManager.GetString("RemoveAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save As.
+        ///   Looks up a localized string similar to Save As....
         /// </summary>
         internal static string SaveAs {
             get {

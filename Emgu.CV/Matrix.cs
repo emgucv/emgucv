@@ -768,7 +768,7 @@ namespace Emgu.CV
       /// <returns>true if every element of this matrix equals elements in <paramref name="mat2"/></returns>
       public bool Equals(Matrix<TDepth> mat2)
       {
-         if (!EqualSize(mat2)) return false;
+         if (!Size.Equals(mat2.Size)) return false;
          int numberOfChannels = NumberOfChannels;
          if (numberOfChannels != mat2.NumberOfChannels) return false;
 

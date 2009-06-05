@@ -68,8 +68,7 @@ namespace Emgu.CV.Reflection
       /// </summary>
       public ExposableMethodAttribute()
       {
-         //_exposable = false;
-         _category = "Various Tools";
+         _category = "Various";
       }
    }
 }

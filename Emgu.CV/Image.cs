@@ -28,7 +28,7 @@ namespace Emgu.CV
       /// <summary>
       /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
       /// </summary>
-      public static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
+      private static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
 
       /// <summary>
       /// The dimension of color
@@ -839,6 +839,22 @@ namespace Emgu.CV
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
       public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
       {
+         
+         {  //TODO: Find out why cvDrawContours no longer works after SVN 1611
+            #region alternative code to cvDrawContours
+            Point[] pts = c.ToArray();
+            for (int i = 0; i < pts.Length; i++)
+            {
+               pts[i].X += offset.X;
+               pts[i].Y += offset.Y;
+            }
+            if (thickness <= 1)
+               FillConvexPoly(pts, externalColor);
+            else
+               DrawPolyline(pts, true, externalColor, thickness);
+            #endregion
+         }
+         /*
          CvInvoke.cvDrawContours(
              Ptr,
              c.Ptr,
@@ -848,6 +864,7 @@ namespace Emgu.CV
              thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
              offset);
+         */
       }
       #endregion
 
@@ -1372,8 +1389,6 @@ namespace Emgu.CV
             stor.Ptr, 
             param,
             0);
-         //watch.Stop();
-         //System.Diagnostics.Trace.WriteLine(watch.ElapsedMilliseconds);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
       }
       #endregion
@@ -1390,6 +1405,21 @@ namespace Emgu.CV
             Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
             return keyPoints.ToArray();
          }
+      }
+
+      /// <summary>
+      /// Extracts the contours of Maximally Stable Extremal Regions
+      /// </summary>
+      /// <param name="mask">Can be null if not needed. Optional parameter for the region of interest</param>
+      /// <param name="param">MSER parameter</param>
+      /// <param name="storage">The storage where the contour will be saved</param>
+      /// <returns>The MSER regions</returns>
+      public Seq<Point>[] ExtractMSER(Image<Gray, Byte> mask, ref MCvMSERParams param, MemStorage storage)
+      {
+         IntPtr mserPtr = new IntPtr();
+         CvInvoke.cvExtractMSER(Ptr, mask, ref mserPtr, storage, param);
+         IntPtr[] mserSeq =  new Seq<IntPtr>(mserPtr, storage).ToArray();
+         return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }
 
       /// <summary>
@@ -1641,7 +1671,7 @@ namespace Emgu.CV
       ///<summary> Perform an elementwise OR operation with some color</summary>
       ///<param name="val">The value for the OR operation</param>
       ///<returns> The result of the OR operation</returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<TColor, TDepth> Or(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1689,7 +1719,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="val">The value for the XOR operation</param>
       /// <returns> The result of the XOR operation</returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<TColor, TDepth> Xor(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1715,7 +1745,6 @@ namespace Emgu.CV
       ///Compute the complement image
       ///</summary>
       ///<returns> The complement image</returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Not()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1738,7 +1767,6 @@ namespace Emgu.CV
       ///<summary> Find the elementwise maximum value </summary>
       ///<param name="value">The value to compare with</param>
       ///<returns> An image where each pixel is the maximum of <i>this</i> image and <paramref name="value"/></returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Max(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1759,7 +1787,6 @@ namespace Emgu.CV
       ///<summary> Find the elementwise minimum value </summary>
       ///<param name="value">The value to compare with</param>
       ///<returns> An image where each pixel is the minimum of <i>this</i> image and <paramref name="value"/></returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
       public Image<TColor, TDepth> Min(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1771,7 +1798,7 @@ namespace Emgu.CV
       ///<param name="lower"> The lower limit of color value</param>
       ///<param name="higher"> The upper limit of color value</param>
       ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
+      [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<TColor, Byte> InRange(TColor lower, TColor higher)
       {
          Image<TColor, Byte> res = new Image<TColor, Byte>(Size);
@@ -1823,34 +1850,26 @@ namespace Emgu.CV
       /// This function compare the current image with <paramref name="value"/> and returns the comparison mask
       /// </summary>
       /// <param name="value">The value to compare with</param>
-      /// <param name="cmp_type">The comparison type</param>
+      /// <param name="comparisonType">The comparison type</param>
       /// <returns>The result of the comparison as a mask</returns>
-      [ExposableMethod(Exposable = true, Category = "Logic Operation")]
-      public Image<TColor, Byte> Cmp(double value, CvEnum.CMP_TYPE cmp_type)
+      [ExposableMethod(Exposable = true, Category = "Logic")]
+      public Image<TColor, Byte> Cmp(double value, CvEnum.CMP_TYPE comparisonType)
       {
          Size size = Size;
          Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
          if (NumberOfChannels == 1)
          {
-            CvInvoke.cvCmpS(Ptr, value, res.Ptr, cmp_type);
+            CvInvoke.cvCmpS(Ptr, value, res.Ptr, comparisonType);
          }
          else
          {
-            using (Image<Gray, TDepth> src1 = new Image<Gray, TDepth>(size))
-            using (Image<Gray, TDepth> dest = new Image<Gray, TDepth>(size))
-               for (int i = 0; i < NumberOfChannels; i++)
+            ForEachDuplicateChannel<Byte>(
+               delegate(IntPtr img1, IntPtr img2, int channel)
                {
-                  CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                  CvInvoke.cvCopy(Ptr, src1.Ptr, IntPtr.Zero);
-
-                  CvInvoke.cvCmpS(src1.Ptr, value, dest.Ptr, cmp_type);
-
-                  CvInvoke.cvSetImageCOI(res.Ptr, i + 1);
-                  CvInvoke.cvCopy(dest.Ptr, res.Ptr, IntPtr.Zero);
-               }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
-            CvInvoke.cvSetImageCOI(res.Ptr, 0);
+                  CvInvoke.cvCmpS(img1, value, img2, comparisonType);
+               },
+               res);
          }
 
          return res;
@@ -1867,7 +1886,7 @@ namespace Emgu.CV
          if (Object.ReferenceEquals(this, img2)) return true;
 
          //false if size are not equal
-         if (!EqualSize(img2)) return false;
+         if (!Size.Equals(img2.Size)) return false;
 
          using (Image<TColor, TDepth> neqMask = new Image<TColor, TDepth>(Size))
          {
@@ -1946,7 +1965,7 @@ namespace Emgu.CV
       ///<summary> Elementwise subtrace a color from the current image</summary>
       ///<param name="val">The color value to be subtraced from the current image</param>
       ///<returns> The result of elementwise subtracting color 'val' from the current image</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Sub(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -1959,7 +1978,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="val">the value which subtract this image</param>
       /// <returns>val - this</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> SubR(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2004,7 +2023,7 @@ namespace Emgu.CV
       ///<summary> Elementwise add a color <paramref name="val"/> to the current image</summary>
       ///<param name="val">The color value to be added to the current image</param>
       ///<returns> The result of elementwise adding color <paramref name="val"/> from the current image</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Add(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2036,7 +2055,7 @@ namespace Emgu.CV
       ///<summary> Elementwise multiply the current image with <paramref name="scale"/></summary>
       ///<param name="scale">The scale to be multiplied</param>
       ///<returns> The scaled image </returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Mul(double scale)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2112,7 +2131,7 @@ namespace Emgu.CV
       ///</summary>
       ///<param name="color">The color to compute absolute different with</param>
       ///<returns> The image that contains the absolute different value</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> AbsDiff(TColor color)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
@@ -2129,7 +2148,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="power">The exponent of power</param>
       /// <returns>The power image</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Pow(double power)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2143,7 +2162,7 @@ namespace Emgu.CV
       /// Maximum relative error is ~7e-6. Currently, the function converts denormalized values to zeros on output.
       /// </summary>
       /// <returns>The exponent image</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Exp()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2155,7 +2174,7 @@ namespace Emgu.CV
       /// Calculates natural logarithm of absolute value of every element of input array
       /// </summary>
       /// <returns>Natural logarithm of absolute value of every element of input array</returns>
-      [ExposableMethod(Exposable = true, Category = "Math Functions")]
+      [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Log()
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2178,7 +2197,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="line">The line to obtain samples</param>
       /// <param name="type">The sampling type</param>
-      /// <returns>The values on the line</returns>
+      /// <returns>The values on the line, the first dimension is the index of the point, the second dimension is the index of color channel</returns>
       public TDepth[,] Sample(LineSegment2D line, CvEnum.CONNECTIVITY type)
       {
          int size = type == Emgu.CV.CvEnum.CONNECTIVITY.EIGHT_CONNECTED ?
@@ -2365,7 +2384,7 @@ namespace Emgu.CV
       /// <param name="background">The color with wich to fill the background</param>
       /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
       /// <returns>The rotated image</returns>
-      [ExposableMethod(Exposable = true)]
+      [ExposableMethod(Exposable = true, Category = "Transform")]
       public Image<TColor, TDepth> Rotate(double angle, TColor background, bool crop)
       {
          Size size = Size;
@@ -2385,13 +2404,11 @@ namespace Emgu.CV
             int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
             int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
             int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
-            Size newSize = new Size(maxX - minX + 1, maxY - minY + 1);
+
             rotationMatrix[0, 2] -= minX;
             rotationMatrix[1, 2] -= minY;
 
-            Image<TColor, TDepth> res = new Image<TColor, TDepth>(newSize);
-            CvInvoke.cvWarpAffine(Ptr, res.Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background.MCvScalar);
-            return res;
+            return WarpAffine(rotationMatrix, maxX - minX + 1, maxY - minY + 1, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
          }
       }
 
@@ -2935,7 +2952,6 @@ namespace Emgu.CV
       ///Erosion are applied serveral (iterations) times
       ///</summary>
       ///<returns> The eroded image</returns>
-      [ExposableMethod(Exposable = true, Category = "Morphological Operations")]
       public Image<TColor, TDepth> Erode(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2948,7 +2964,6 @@ namespace Emgu.CV
       ///Dilation are applied serveral (iterations) times
       ///</summary>
       ///<returns> The dialated image</returns>
-      [ExposableMethod(Exposable = true, Category = "Morphological Operations")]
       public Image<TColor, TDepth> Dilate(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2986,6 +3001,7 @@ namespace Emgu.CV
       ///Erodes <i>this</i> image inplace using a 3x3 rectangular structuring element.
       ///Erosion are applied serveral (iterations) times
       ///</summary>
+      [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Erode(int iterations)
       {
          CvInvoke.cvErode(Ptr, Ptr, IntPtr.Zero, iterations);
@@ -2995,6 +3011,7 @@ namespace Emgu.CV
       ///Dilates <i>this</i> image inplace using a 3x3 rectangular structuring element.
       ///Dilation are applied serveral (iterations) times
       ///</summary>
+      [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Dilate(int iterations)
       {
          CvInvoke.cvDilate(Ptr, Ptr, IntPtr.Zero, iterations);
@@ -3031,7 +3048,7 @@ namespace Emgu.CV
       public void Action<TOtherDepth>(Image<TColor, TOtherDepth> img2, Action<TDepth, TOtherDepth> action)
                   where TOtherDepth : new()
       {
-         Debug.Assert(EqualSize(img2));
+         Debug.Assert(Size.Equals(img2.Size));
 
          Int64 data1;
          int height1, cols1, width1, step1;
@@ -3123,7 +3140,7 @@ namespace Emgu.CV
          where TDepth2 : new()
          where TDepth3 : new()
       {
-         Debug.Assert(EqualSize(img2), "Image size do not match");
+         Debug.Assert(Size.Equals(img2.Size), "Image size do not match");
 
          Image<TColor, TDepth3> res = new Image<TColor, TDepth3>(Width, Height);
 
@@ -3167,7 +3184,7 @@ namespace Emgu.CV
          where TDepth3 : new()
          where TDepth4 : new()
       {
-         Debug.Assert(EqualSize(img2) && EqualSize(img3), "Image size do not match");
+         Debug.Assert(Size.Equals(img2.Size) && Size.Equals(img3.Size), "Image size do not match");
 
          Image<TColor, TDepth4> res = new Image<TColor, TDepth4>(Width, Height);
 
@@ -3221,7 +3238,7 @@ namespace Emgu.CV
          where TDepth4 : new()
          where TDepth5 : new()
       {
-         Debug.Assert(EqualSize(img2) && EqualSize(img3) && EqualSize(img4), "Image size do not match");
+         Debug.Assert(Size.Equals(img2.Size) && Size.Equals(img3.Size) && Size.Equals(img4.Size), "Image size do not match");
 
          Image<TColor, TDepth5> res = new Image<TColor, TDepth5>(Width, Height);
 
@@ -3691,33 +3708,26 @@ namespace Emgu.CV
       ///<param name="kernel"> The convolution kernel</param>
       public Image<TColor, Single> Convolution(ConvolutionKernelF kernel)
       {
-         bool isFloat = (typeof(TDepth) == typeof(Single));
+         Image<TColor, Single> floatImage =
+            (typeof(TDepth) == typeof(Single)) ?
+            this as Image<TColor, Single> 
+            : Convert<TColor, Single>();
 
-         Action<IntPtr, IntPtr, int> act =
-             delegate(IntPtr src, IntPtr dest, int channel)
+         Image<TColor, Single> res = new Image<TColor, Single>(Size);
+         ForEachDuplicateChannel(
+            delegate(IntPtr srcFloat, IntPtr dest, int channel)
              {
-                IntPtr srcFloat = src;
-                if (!isFloat)
-                {
-                   srcFloat = CvInvoke.cvCreateImage(new Size(Width, Height), CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
-                   CvInvoke.cvConvertScale(src, srcFloat, 1.0, 0.0);
-                }
-
                 //perform the convolution operation
                 CvInvoke.cvFilter2D(
                     srcFloat,
                     dest,
                     kernel.Ptr,
                     kernel.Center);
+             }, 
+            res);
 
-                if (!isFloat)
-                {
-                   CvInvoke.cvReleaseImage(ref srcFloat);
-                }
-             };
-
-         Image<TColor, Single> res = new Image<TColor, Single>(Width, Height);
-         ForEachDuplicateChannel(act, res);
+         if (!object.ReferenceEquals(floatImage, this))
+            floatImage.Dispose();
 
          return res;
       }
@@ -3725,11 +3735,12 @@ namespace Emgu.CV
       /// <summary>
       /// Calculates integral images for the source image
       /// </summary>
-      /// <param name="sum">The integral image</param>
-      public void Integral(out Image<TColor, double> sum)
+      /// <return>The integral image</return>
+      public Image<TColor, double> Integral()
       {
-         sum = new Image<TColor, double>(Width + 1, Height + 1);
+         Image<TColor, double> sum = new Image<TColor, double>(Width + 1, Height + 1);
          CvInvoke.cvIntegral(Ptr, sum.Ptr, IntPtr.Zero, IntPtr.Zero);
+         return sum;
       }
 
       /// <summary>
@@ -3767,17 +3778,16 @@ namespace Emgu.CV
       {
          double[] t = threshold.MCvScalar.ToArray();
          double[] m = maxValue.MCvScalar.ToArray();
-         Action<IntPtr, IntPtr, int> act =
-             delegate(IntPtr src, IntPtr dst, int channel)
-             {
-                CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
-             };
-         ForEachDuplicateChannel<TDepth>(act, dest);
+         ForEachDuplicateChannel<TDepth>(
+            delegate(IntPtr src, IntPtr dst, int channel)
+            {
+              CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
+            }, 
+            dest);
       }
 
       ///<summary> Threshold the image such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
       ///<returns> dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </returns>
-      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdToZero(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3790,7 +3800,6 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="threshold">The threshold to apply</param>
       /// <returns>The image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise</returns>
-      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdToZeroInv(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3801,9 +3810,8 @@ namespace Emgu.CV
       /// <summary>
       /// Threshold the image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise 
       /// </summary>
-      /// <param name="threshold">The threshold to apply</param>
+      /// <param name="threshold">The threshold to apply to the image</param>
       /// <returns>The image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise</returns>
-      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdTrunc(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3814,7 +3822,6 @@ namespace Emgu.CV
       /// <summary> 
       /// Threshold the image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise 
       /// </summary>
-      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdBinary(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3823,7 +3830,6 @@ namespace Emgu.CV
       }
 
       ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
-      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public Image<TColor, TDepth> ThresholdBinaryInv(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3832,27 +3838,35 @@ namespace Emgu.CV
       }
 
       ///<summary> Threshold the image inplace such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdToZero(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO);
       }
 
       ///<summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdToZeroInv(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO_INV);
       }
+
       ///<summary> Threshold the image inplace such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdTrunc(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TRUNC);
       }
+
       ///<summary> Threshold the image inplace such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdBinary(TColor threshold, TColor max_value)
       {
          ThresholdBase(this, threshold, max_value, CvEnum.THRESH.CV_THRESH_BINARY);
       }
+
       ///<summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdBinaryInv(TColor threshold, TColor max_value)
       {
          ThresholdBase(this, threshold, max_value, CvEnum.THRESH.CV_THRESH_BINARY_INV);
@@ -3957,7 +3971,7 @@ namespace Emgu.CV
       ///<summary> Inplace flip the image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
-      [ExposableMethod(Exposable = true)]
+      [ExposableMethod(Exposable = true, Category="Transform")]
       public void _Flip(CvEnum.FLIP flipType)
       {
          if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
@@ -4032,9 +4046,8 @@ namespace Emgu.CV
 
          Byte[,] gammaLUT = new Byte[256, 1];
          for (int i = 0; i < 256; i++)
-         {
             gammaLUT[i, 0] = (Byte)(Math.Pow(i / 255.0, gamma) * 255.0);
-         }
+
          using (Matrix<Byte> lut = new Matrix<byte>(gammaLUT))
          {
             Matrix<Byte> lookupTable;
@@ -4120,8 +4133,9 @@ namespace Emgu.CV
             //Get an hsv representation of this image
             Image<Hsv, TDepth> hsv = this as Image<Hsv, TDepth> ?? Convert<Hsv, TDepth>();
 
+            //equalize the V (value) channel
             using (Image<Gray, TDepth> v = new Image<Gray, TDepth>(Size))
-            {  //equalize the V (value) channel
+            {  
                CvInvoke.cvSetImageCOI(hsv.Ptr, 3);
                CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
                v._EqualizeHist();
@@ -4141,17 +4155,10 @@ namespace Emgu.CV
       #region IImage
       IImage[] IImage.Split()
       {
-         return Array.ConvertAll<Image<Gray, TDepth>, IImage>(Split(), delegate(Image<Gray, TDepth> img) { return (IImage)img; });
-      }
-
-      IImage IImage.Resize(int width, int height, CvEnum.INTER interpolationType, bool preserveScale)
-      {
-         return Resize(width, height, interpolationType, preserveScale);
-      }
-
-      IImage IImage.Copy(Rectangle roi)
-      {
-         return Copy(roi);
+         return 
+            Array.ConvertAll<Image<Gray, TDepth>, IImage>(
+               Split(), 
+               delegate(Image<Gray, TDepth> img) { return (IImage)img; });
       }
       #endregion
 
