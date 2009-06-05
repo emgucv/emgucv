@@ -1,0 +1,90 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{03215a85-5e82-40d0-8fc1-aa1795446be1}</ProjectGuid>
+    <SHFBSchemaVersion>1.8.0.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>.\Help\</OutputPath>
+    <HtmlHelpName>Emgu_CV_Documentation</HtmlHelpName>
+    <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux and Mac OS X.</ProjectSummary>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath>
+    </HtmlHelp1xCompilerPath>
+    <HtmlHelp2xCompilerPath>
+    </HtmlHelp2xCompilerPath>
+    <SandcastlePath>C:\Program Files\Sandcastle\</SandcastlePath>
+    <WorkingPath>
+    </WorkingPath>
+    <KeepLogFile>False</KeepLogFile>
+    <BuildLogFile>
+    </BuildLogFile>
+    <HelpFileFormat>Website</HelpFileFormat>
+    <CppCommentsFixup>True</CppCommentsFixup>
+    <FrameworkVersion>3.5</FrameworkVersion>
+    <HelpTitle>Emgu CV Library Documentation</HelpTitle>
+    <CopyrightText>2009 Emgu, All Rights Reserved,</CopyrightText>
+    <FeedbackEMailAddress>emgucv%40gmail.com</FeedbackEMailAddress>
+    <HeaderText><![CDATA[
+<div id="main">
+<script type="text/javascript"><!--
+google_ad_client = "pub-0111567351193216";
+/* 728x90, created 8/14/08 */
+google_ad_slot = "3483381042";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+]]></HeaderText>
+    <FooterText>For questions and discussions please visit www.emgu.com/forum</FooterText>
+    <PresentationStyle>hana</PresentationStyle>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="Solution\VS2005_MonoDevelop\Emgu.CV.sln" />
+    </DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
+Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
+      <NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
+    </NamespaceSummaries>
+    <PlugInConfigurations>
+    </PlugInConfigurations>
+    <Preliminary>True</Preliminary>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

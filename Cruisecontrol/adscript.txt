@@ -1,1 +1,0 @@
-s/<div id="main">/<div id="main"><script type="text\/javascript"><!--\ngoogle_ad_client = "pub-0111567351193216";\n\/* 728x90, created 8\/14\/08 *\/\ngoogle_ad_slot = "3483381042";\ngoogle_ad_width = 728;\ngoogle_ad_height = 90;\n\/\/-->\n<\/script>\n<script type="text\/javascript"\nsrc="http:\/\/pagead2.googlesyndication.com\/pagead\/show_ads.js">\n<\/script><\/p>/g
