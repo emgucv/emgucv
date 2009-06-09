@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Emgu.CV
 {
    /// <summary>
-   /// The extrinsic camera parameters
+   /// Extrinsic camera parameters
    /// </summary>
    [Serializable]
    public class ExtrinsicCameraParameters : IEquatable<ExtrinsicCameraParameters>

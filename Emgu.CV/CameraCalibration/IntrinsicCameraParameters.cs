@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// The intrinsic camera parameters
+   /// Intrinsic camera parameters
    /// </summary>
    [Serializable]
    public class IntrinsicCameraParameters : IEquatable<IntrinsicCameraParameters>

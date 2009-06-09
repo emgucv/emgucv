@@ -8,7 +8,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A wrapper for CvMatND 
+   /// A MatND is a wrapper to cvMatND of OpenCV. 
    /// </summary>
    /// <typeparam name="TDepth">The type of depth</typeparam>
    [Serializable]

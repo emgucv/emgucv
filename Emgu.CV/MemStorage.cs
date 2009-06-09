@@ -4,7 +4,7 @@ using Emgu.Util;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Wrapper to the OpenCV MemStorage
+   /// A MemStorage is a wrapper to cvMemStorage of OpenCV. 
    /// </summary>
    public class MemStorage : UnmanagedObject
    {

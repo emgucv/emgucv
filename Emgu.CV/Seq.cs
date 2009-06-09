@@ -8,7 +8,7 @@ using System.Drawing;
 namespace Emgu.CV
 {
    ///<summary>
-   /// Wrapper to OpenCV Seq 
+   /// A Seq is a wrapper to cvSeq of OpenCV. 
    ///</summary>
    ///<typeparam name="T">The type of elements in this sequence, must be a structure</typeparam>
    public class Seq<T> : IEnumerable<T> where T : struct

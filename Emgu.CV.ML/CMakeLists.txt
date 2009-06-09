@@ -9,7 +9,7 @@ GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 
 ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;System.Drawing.dll")
 
-SIGN_ASSEMBLY(ML.snk)
+SIGN_ASSEMBLY((${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
 
 #FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
 IF (WIN32)

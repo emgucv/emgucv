@@ -14,7 +14,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>..\Help\</OutputPath>
     <HtmlHelpName>Emgu_CV_Documentation</HtmlHelpName>
     <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux and Mac OS X.</ProjectSummary>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
@@ -53,7 +53,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <FooterText>For questions and discussions please visit www.emgu.com/forum</FooterText>
     <PresentationStyle>hana</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="Solution\VS2005_MonoDevelop\Emgu.CV.sln" />
+      <DocumentationSource sourceFile="..\Solution\VS2005_MonoDevelop\Emgu.CV.sln" />
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</NamespaceSummaryItem>

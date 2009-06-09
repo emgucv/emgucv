@@ -8,7 +8,7 @@ using System.Drawing;
 namespace Emgu.CV
 {
    /// <summary> 
-   /// The Matrix class that wrap around CvMat in OpenCV 
+   /// A Matrix is a wrapper to cvMat of OpenCV. 
    /// </summary>
    /// <typeparam name="TDepth">Depth of this matrix (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]

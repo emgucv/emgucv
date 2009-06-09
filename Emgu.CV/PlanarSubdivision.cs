@@ -10,7 +10,7 @@ using System.Drawing;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Plannar Subdivision
+   /// Plannar Subdivision, can be use to compute Delaunnay's triangulation or Voroni diagram.
    /// </summary>
    public class PlanarSubdivision : UnmanagedObject, IEnumerable<MCvQuadEdge2D>
    {
