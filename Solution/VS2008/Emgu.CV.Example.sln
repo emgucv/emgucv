@@ -51,13 +51,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV.UI\Emgu.CV.UI.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simlpe3DReconstruction", "..\..\Emgu.CV.Example\Simlpe3DReconstruction\Simlpe3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\LicensePlateRecognition\LicensePlateRecognition.csproj", "{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveilance", "..\..\Emgu.CV.Example\VideoSurveilance\VideoSurveilance.csproj", "{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\TrafficSignRecognition\TrafficSignRecognition.csproj", "{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple3DReconstruction", "..\..\Emgu.CV.Example\Simple3DReconstruction\Simple3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -275,20 +275,6 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|.NET.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Win32.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -331,6 +317,20 @@ Global
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|x86.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
