@@ -3,7 +3,7 @@ using System;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Attributes used to specify color information
+   /// Attribute used to specify color information
    /// </summary>
    [AttributeUsage(AttributeTargets.Struct)]
    public sealed class ColorInfoAttribute : Attribute

@@ -9,7 +9,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary> 
-   /// Create a image capture base on opencv's capture object 
+   /// Capture images from either camera or video file. 
    /// </summary>
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
    public class Capture :

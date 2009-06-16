@@ -80,6 +80,7 @@ namespace Emgu.Util
       }
       #endregion
 
+      /*
       /// <summary>
       /// Read a text file to an array of string, each row are seperated using by the input seperator
       /// </summary>
@@ -95,7 +96,7 @@ namespace Emgu.Util
                res.AppendFormat("{0}{1}", input, seperator);
 
          return res.ToString();
-      }
+      }*/
 
       /// <summary>
       /// Merges two byte vector into one

@@ -549,12 +549,12 @@ namespace Emgu.CV
 
       /// <summary>
       /// Erodes the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the minimum is taken:
-      /// dst=erode(src,element):  dst(x,y)=min((x',y') in element))src(x+x',y+y')
-      ///The function supports the in-place mode. Erosion can be applied several (iterations) times. In case of color image each channel is processed independently.
+      /// dst=erode(src,element):  dst(x,y)=min((x',y') in element)) src(x+x',y+y')
+      /// The function supports the in-place mode. Erosion can be applied several (iterations) times. In case of color image each channel is processed independently.
       /// </summary>
       /// <param name="src">Source image. </param>
       /// <param name="dst">Destination image</param>
-      /// <param name="element">Structuring element used for erosion. If it is NULL, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="element">Structuring element used for erosion. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="iterations">Number of times erosion is applied.</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvErode(IntPtr src, IntPtr dst, IntPtr element, int iterations);
@@ -565,7 +565,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source image</param>
       /// <param name="dst">Destination image</param>
-      /// <param name="element">Structuring element used for erosion. If it is NULL, a 3x3 rectangular structuring element is used</param>
+      /// <param name="element">Structuring element used for erosion. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used</param>
       /// <param name="iterations">Number of times erosion is applied</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvDilate(IntPtr src, IntPtr dst, IntPtr element, int iterations);
@@ -617,28 +617,32 @@ namespace Emgu.CV
 
       /// <summary>
       /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative. The first case corresponds to
-      /// <pre> |-1  0  1|
+      /// <pre> 
+      ///  |-1  0  1|
       ///  |-2  0  2|
       ///  |-1  0  1|</pre>
-      ///kernel and the second one corresponds to
+      /// kernel and the second one corresponds to
+      /// <pre>
       ///  |-1 -2 -1|
       ///  | 0  0  0|
-      ///  | 1  2  1|
-      ///or
+      ///  | 1  2  1|</pre>
+      /// or
+      /// <pre>
       ///  | 1  2  1|
       ///  | 0  0  0|
-      ///  |-1 -2 -1|
-      ///kernel, depending on the image origin (origin field of IplImage structure). No scaling is done, so the destination image usually has larger by absolute value numbers than the source image. To avoid overflow, the function requires 16-bit destination image if the source image is 8-bit. The result can be converted back to 8-bit using cvConvertScale or cvConvertScaleAbs functions. Besides 8-bit images the function can process 32-bit floating-point images. Both source and destination must be single-channel images of equal size or ROI size
+      ///  |-1 -2 -1|</pre>
+      /// kernel, depending on the image origin (origin field of IplImage structure). No scaling is done, so the destination image usually has larger by absolute value numbers than the source image. To avoid overflow, the function requires 16-bit destination image if the source image is 8-bit. The result can be converted back to 8-bit using cvConvertScale or cvConvertScaleAbs functions. Besides 8-bit images the function can process 32-bit floating-point images. Both source and destination must be single-channel images of equal size or ROI size
       /// </summary>
       /// <param name="src">Source image.</param>
       /// <param name="dst">Destination image</param>
       /// <param name="xorder">Order of the derivative x </param>
       /// <param name="yorder">Order of the derivative y</param>
       /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, <paramref name="appertureSize"/> x <paramref name="appertureSize"/> separable kernel will be used to calculate the derivative. For aperture_size=1 3x1 or 1x3 kernel is used (Gaussian smoothing is not done). There is also special value CV_SCHARR (=-1) that corresponds to 3x3 Scharr filter that may give more accurate results than 3x3 Sobel. Scharr aperture is: 
+      /// <pre>
       /// | -3 0  3|
       /// |-10 0 10|
-      /// | -3 0  3|
-      ///for x-derivative or transposed for y-derivative. 
+      /// | -3 0  3|</pre>
+      /// for x-derivative or transposed for y-derivative. 
       ///</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvSobel(IntPtr src, IntPtr dst, int xorder, int yorder, int apertureSize);
@@ -961,7 +965,7 @@ namespace Emgu.CV
          Size minSize);
 
       /// <summary>
-      /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or NULL if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
+      /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or IntPtr.Zero if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
       /// </summary>
       /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1s, zero pixels remain 0s - that is image treated as binary. To get such a binary image from grayscale, one may use cvThreshold, cvAdaptiveThreshold or cvCanny. The function modifies the source image content</param>
       /// <param name="storage">Container of the retrieved contours</param>
@@ -1070,7 +1074,7 @@ namespace Emgu.CV
       /// <param name="cornerCount">Output parameter. Number of detected corners</param>
       /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
       /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
-      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is NULL</param>
+      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is IntPtr.Zero</param>
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
       /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
@@ -1103,7 +1107,7 @@ namespace Emgu.CV
       /// <param name="cornerCount">Output parameter. Number of detected corners</param>
       /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
       /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
-      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is NULL</param>
+      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is IntPtr.Zero</param>
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
       /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
@@ -1128,7 +1132,7 @@ namespace Emgu.CV
       /// <param name="image">The input 8-bit grayscale image</param>
       /// <param name="mask">The optional input 8-bit mask. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
       /// <param name="keypoints">The output parameter; double pointer to the sequence of keypoints. This will be the sequence of MCvSURFPoint structures</param>
-      /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is NULL, the descriptors are not computed</param>
+      /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is IntPtr.Zero, the descriptors are not computed</param>
       /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
       /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
       /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
@@ -1182,7 +1186,7 @@ namespace Emgu.CV
       /// <param name="rotationVector">The rotation vector, 1x3 or 3x1</param>
       /// <param name="translationVector">The translation vector, 1x3 or 3x1</param>
       /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's</param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's</param>
       /// <param name="imagePoints">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
       /// <param name="dpdrot">Optional Nx3 matrix of derivatives of image points with respect to components of the rotation vector</param>
       /// <param name="dpdt">Optional Nx3 matrix of derivatives of image points w.r.t. components of the translation vector</param>
@@ -1247,7 +1251,7 @@ namespace Emgu.CV
           CvEnum.CALIB_TYPE flags);
 
       /// <summary>
-      /// computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
+      /// Computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
       /// </summary>
       /// <param name="calibMatr">The matrix of intrinsic parameters</param>
       /// <param name="imgWidth">Image width in pixels</param>
@@ -1279,7 +1283,7 @@ namespace Emgu.CV
       /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
       /// <param name="imagePoints">The array of corresponding image points, 2xN or Nx2, where N is the number of points in the view</param>
       /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is NULL, all distortion coefficients are considered 0's.</param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's.</param>
       /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
       /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
       /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
@@ -1419,7 +1423,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="cameraMatrix">The camera matrix A=[fx 0 cx; 0 fy cy; 0 0 1]</param>
       /// <param name="distCoeffs">The vector of distortion coefficients, 4x1, 1x4, 5x1 or 1x5</param>
-      /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is NULL, the identity matrix is used</param>
+      /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used</param>
       /// <param name="newCameraMatrix">The new camera matrix A'=[fx' 0 cx'; 0 fy' cy'; 0 0 1]</param>
       /// <param name="mapx">The output array of x-coordinates of the map</param>
       /// <param name="mapy">The output array of y-coordinates of the map</param>
@@ -1458,7 +1462,7 @@ namespace Emgu.CV
       /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">The output array of corners detected</param>
-      /// <param name="cornerCount">The output corner counter. If it is not NULL, the function stores there the number of corners found</param>
+      /// <param name="cornerCount">The output corner counter. If it is not IntPtr.Zero, the function stores there the number of corners found</param>
       /// <param name="flags">Various operation flags</param>
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
@@ -1476,7 +1480,7 @@ namespace Emgu.CV
       /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">The output array of corners detected</param>
-      /// <param name="cornerCount">The output corner counter. If it is not NULL, the function stores there the number of corners found</param>
+      /// <param name="cornerCount">The output corner counter. If it is not IntPtr.Zero, the function stores there the number of corners found</param>
       /// <param name="flags">Various operation flags</param>
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
@@ -1707,7 +1711,7 @@ namespace Emgu.CV
       /// <param name="window">Initial search window</param>
       /// <param name="criteria">Criteria applied to determine when the window search should be finished</param>
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field).</param>
-      /// <param name="box">Circumscribed box for the object. If not NULL, contains object size and orientation</param>
+      /// <param name="box">Circumscribed box for the object. If not IntPtr.Zero, contains object size and orientation</param>
       /// <returns>number of iterations made within cvMeanShift</returns>
       [DllImport(CV_LIBRARY)]
       public static extern int cvCamShift(
@@ -1857,7 +1861,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvCreateStructuringElementEx creates an structuring element.
+      /// Creates an structuring element.
       /// </summary>
       /// <param name="cols">Number of columns in the structuring element.</param>
       /// <param name="rows">Number of rows in the structuring element.</param>
@@ -1867,7 +1871,7 @@ namespace Emgu.CV
       /// <param name="values">
       /// Pointer to the structuring element data, representing row-by-row scanning of the element matrix.
       /// Non-zero values indicate points that belong to the element.
-      /// If the pointer is NULL, then all values are considered non-zero, that is, the element is of a rectangular shape.
+      /// If the pointer is IntPtr.Zero, then all values are considered non-zero, that is, the element is of a rectangular shape.
       /// This parameter is considered only if the shape is CV_SHAPE_CUSTOM.
       /// </param>
       [DllImport(CV_LIBRARY)]
@@ -2627,7 +2631,7 @@ namespace Emgu.CV
       /// but the fills mask (that must be non-NULL in this case). </param>
       /// <param name="mask">Operation mask,
       /// should be singe-channel 8-bit image, 2 pixels wider and 2 pixels taller than image.
-      /// If not NULL, the function uses and updates the mask, so user takes responsibility of initializing mask content.
+      /// If not IntPtr.Zero, the function uses and updates the mask, so user takes responsibility of initializing mask content.
       /// Floodfilling can't go across non-zero pixels in the mask, for example, an edge detector output can be used as a mask to stop filling at edges.
       /// Or it is possible to use the same mask in multiple calls to the function to make sure the filled area do not overlap.
       /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
@@ -2659,7 +2663,7 @@ namespace Emgu.CV
       /// <param name="comp">Pointer to structure the function fills with the information about the repainted domain.</param>
       /// <param name="mask">Operation mask,
       /// should be singe-channel 8-bit image, 2 pixels wider and 2 pixels taller than image.
-      /// If not NULL, the function uses and updates the mask, so user takes responsibility of initializing mask content.
+      /// If not IntPtr.Zero, the function uses and updates the mask, so user takes responsibility of initializing mask content.
       /// Floodfilling can't go across non-zero pixels in the mask, for example, an edge detector output can be used as a mask to stop filling at edges.
       /// Or it is possible to use the same mask in multiple calls to the function to make sure the filled area do not overlap.
       /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>

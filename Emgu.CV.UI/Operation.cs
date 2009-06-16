@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using Emgu.Util;
 using Emgu.Util.TypeEnum;

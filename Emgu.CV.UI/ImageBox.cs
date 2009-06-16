@@ -283,7 +283,7 @@ namespace Emgu.CV.UI
          }
          catch
          {  //if pushing the operation generate exceptions
-            PopOperation();
+            PopOperation(); //remove the operation 
             throw; //rethrow the exception
          }
       }
@@ -316,7 +316,6 @@ namespace Emgu.CV.UI
       private ToolStripMenuItem[] BuildOperationTree(IEnumerable<KeyValuePair<string, MethodInfo>> catelogMiPairList)
       {
          List<ToolStripMenuItem> res = new List<ToolStripMenuItem>();
-
          SortedDictionary<String, List<KeyValuePair<String, MethodInfo>>> catelogDic = new SortedDictionary<string, List<KeyValuePair<String, MethodInfo>>>();
          SortedDictionary<String, MethodInfo> operationItem = new SortedDictionary<string, MethodInfo>();
 

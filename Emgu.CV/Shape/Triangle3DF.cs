@@ -39,6 +39,24 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
+      /// Get the area of this triangle
+      /// </summary>
+      public double Area
+      {
+         get
+         {
+            #region use Heron's formula to find the area of the triangle
+            double a = new LineSegment3DF(V0, V1).Length;
+            double b = new LineSegment3DF(V1, V2).Length;
+            double c = new LineSegment3DF(V2, V0).Length;
+            double s = (a + b + c) / 2.0;
+            return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+            #endregion
+            
+         }
+      }
+
+      /// <summary>
       /// Get the normal of this triangle
       /// </summary>
       public MCvPoint3D32f Normal
@@ -46,6 +64,17 @@ namespace Emgu.CV.Structure
          get
          {
             return V0.CrossProduct(V1).GetNormalizePoint();
+         }
+      }
+
+      /// <summary>
+      /// Returns the centroid of this triangle
+      /// </summary>
+      public MCvPoint3D32f Centeroid
+      {
+         get
+         {
+            return new MCvPoint3D32f((V0.x + V1.x + V2.x) / 3.0f, (V0.y + V1.y + V2.y) / 3.0f, (V0.z + V1.z + V2.z)/3.0f);
          }
       }
 

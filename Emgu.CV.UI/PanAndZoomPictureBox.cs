@@ -360,23 +360,15 @@ namespace Emgu.CV.UI
          rect.Intersect(new Rectangle(Point.Empty, viewSize));
 
          if ((double)rect.Width / rect.Height > (double)viewSize.Width / viewSize.Height)
-         {
             rect.Width = (int)((double)viewSize.Width / viewSize.Height * rect.Height);
-         }
          else if ((double)rect.Width / rect.Height < (double)viewSize.Width / viewSize.Height)
-         {
             rect.Height = (int)((double)rect.Width / viewSize.Width * viewSize.Height);
-         }
 
          if (rect.Y != _mouseDownPosition.Y)
-         {
-            rect.Y =  _mouseDownPosition.Y - rect.Height;
-         }
+            rect.Y = _mouseDownPosition.Y - rect.Height;
 
          if (rect.X != _mouseDownPosition.X)
-         {
             rect.X = _mouseDownPosition.X - rect.Width;
-         }
 
          return rect;
       }

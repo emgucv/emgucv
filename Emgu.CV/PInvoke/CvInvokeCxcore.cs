@@ -9,7 +9,7 @@ namespace Emgu.CV
       /// <summary>
       /// Returns information about one of or all of the registered modules
       /// </summary>
-      /// <param name="moduleName">Name of the module of interest, or NULL, which means all the modules.</param>
+      /// <param name="moduleName">Name of the module of interest, or IntPtr.Zero, which means all the modules.</param>
       /// <param name="version">Information about the module(s), including version</param>
       /// <param name="loadedAddonPlugins">The list of names and versions of the optimized plugins that CXCORE was able to find and load</param>
       [DllImport(CXCORE_LIBRARY)]
@@ -122,7 +122,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The Error callback that can be registered by cvRedirectError
+      /// Define an error callback that can be registered using cvRedirectError function
       /// </summary>
       /// <param name="status">The numeric code for error status</param>
       /// <param name="funcName">The source file name where error is encountered</param>
@@ -389,7 +389,7 @@ namespace Emgu.CV
       public static extern void cvRepeat(IntPtr src, IntPtr dst);
 
       /// <summary>
-      /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not NULL, all they are copied to the destination array, otherwise if only a single source channel of the first N is not NULL, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be NULL. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
+      /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not IntPtr.Zero, all they are copied to the destination array, otherwise if only a single source channel of the first N is not IntPtr.Zero, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
       /// </summary>
       /// <param name="src0">Input channels.</param>
       /// <param name="src1">Input channels.</param>
@@ -446,7 +446,7 @@ namespace Emgu.CV
       public static extern void cvRandShuffle( IntPtr mat, IntPtr rng, double iterFactor );
 
       /// <summary>
-      /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not NULL, all they are copied to the destination array, otherwise if only a single source channel of the first N is not NULL, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be NULL. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
+      /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not IntPtr.Zero, all they are copied to the destination array, otherwise if only a single source channel of the first N is not IntPtr.Zero, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
       /// </summary>
       /// <param name="src0">Input channels.</param>
       /// <param name="src1">Input channels.</param>
@@ -754,8 +754,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="x">The array of x-coordinates </param>
       /// <param name="y">The array of y-coordinates</param>
-      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to IntPtr.Zero if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to IntPtr.Zero if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvCartToPolar(
@@ -773,8 +773,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="x">The array of x-coordinates </param>
       /// <param name="y">The array of y-coordinates</param>
-      /// <param name="magnitude">The destination array of magnitudes, may be set to NULL if it is not needed </param>
-      /// <param name="angle">The destination array of angles, may be set to NULL if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
+      /// <param name="magnitude">The destination array of magnitudes, may be set to IntPtr.Zero if it is not needed </param>
+      /// <param name="angle">The destination array of angles, may be set to IntPtr.Zero if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       public static void cvCartToPolar(
          IntPtr x,
@@ -791,10 +791,10 @@ namespace Emgu.CV
       /// x(I)=magnitude(I)*cos(angle(I)),
       /// y(I)=magnitude(I)*sin(angle(I))
       /// </summary>
-      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="magnitude">The array of magnitudes. If it is IntPtr.Zero, the magnitudes are assumed all 1's</param>
       /// <param name="angle">The array of angles, whether in radians or degrees</param>
-      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
-      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to IntPtr.Zero if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to IntPtr.Zero if it is not needed</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvPolarToCart(
@@ -809,10 +809,10 @@ namespace Emgu.CV
       /// x(I)=magnitude(I)*cos(angle(I)),
       /// y(I)=magnitude(I)*sin(angle(I))
       /// </summary>
-      /// <param name="magnitude">The array of magnitudes. If it is NULL, the magnitudes are assumed all 1's</param>
+      /// <param name="magnitude">The array of magnitudes. If it is IntPtr.Zero, the magnitudes are assumed all 1's</param>
       /// <param name="angle">The array of angles, whether in radians or degrees</param>
-      /// <param name="x">The destination array of x-coordinates, may be set to NULL if it is not needed</param>
-      /// <param name="y">The destination array of y-coordinates, mau be set to NULL if it is not needed</param>
+      /// <param name="x">The destination array of x-coordinates, may be set to IntPtr.Zero if it is not needed</param>
+      /// <param name="y">The destination array of y-coordinates, mau be set to IntPtr.Zero if it is not needed</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       public static void cvPolarToCart(
          IntPtr magnitude,
@@ -1001,7 +1001,7 @@ namespace Emgu.CV
       /// Returns the calculated norm. The multiple-channel array are treated as single-channel, that is, the results for all channels are combined. 
       /// </summary>
       /// <param name="arr1">The first source image</param>
-      /// <param name="arr2">The second source image. If it is NULL, the absolute norm of arr1 is calculated, otherwise absolute or relative norm of arr1-arr2 is calculated</param>
+      /// <param name="arr2">The second source image. If it is IntPtr.Zero, the absolute norm of arr1 is calculated, otherwise absolute or relative norm of arr1-arr2 is calculated</param>
       /// <param name="normType">Type of norm</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>The calculated norm</returns>
@@ -1247,8 +1247,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="fileName">File name</param>
       /// <param name="memstorage">Memory storage for dynamic structures, such as CvSeq or CvGraph. It is not used for matrices or images</param>
-      /// <param name="name">Optional object name. If it is NULL, the first top-level object in the storage will be loaded</param>
-      /// <param name="realName">Optional output parameter that will contain name of the loaded object (useful if name=NULL). </param>
+      /// <param name="name">Optional object name. If it is IntPtr.Zero, the first top-level object in the storage will be loaded</param>
+      /// <param name="realName">Optional output parameter that will contain name of the loaded object (useful if name=IntPtr.Zero). </param>
       /// <returns>Loaded object from file</returns>
       [DllImport(CXCORE_LIBRARY, EntryPoint = "cvLoad")]
       private static extern IntPtr _cvLoad(
@@ -1291,7 +1291,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="slice">The part of the sequence to extract</param>
-      /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is NULL, the function uses the storage containing the input sequence.</param>
+      /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is IntPtr.Zero, the function uses the storage containing the input sequence.</param>
       /// <param name="copyData">The flag that indicates whether to copy the elements of the extracted slice (copy_data!=0) or not (copy_data=0)</param>
       /// <returns>A pointer to CvSeq</returns>
       [DllImport(CXCORE_LIBRARY)]
@@ -1306,7 +1306,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="slice">The part of the sequence to extract</param>
-      /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is NULL, the function uses the storage containing the input sequence.</param>
+      /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is IntPtr.Zero, the function uses the storage containing the input sequence.</param>
       /// <param name="copyData">The flag that indicates whether to copy the elements of the extracted slice (copyData == true) or not (copyData=false)</param>
       /// <returns>A pointer to CvSeq</returns>
       public static IntPtr cvSeqSlice(IntPtr seq, MCvSlice slice, IntPtr storage, bool copyData)
@@ -1600,7 +1600,7 @@ namespace Emgu.CV
          int shift);
 
       /// <summary>
-      /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not NULL, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not NULL, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be NULL. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
+      /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not IntPtr.Zero, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not IntPtr.Zero, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
       /// </summary>
       /// <param name="src">Source array</param>
       /// <param name="dst0">Destination channels</param>
@@ -1849,7 +1849,7 @@ namespace Emgu.CV
       public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
 
       /// <summary>
-      /// Initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have NULL storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
+      /// Initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have IntPtr.Zero storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
       /// </summary>
       /// <param name="seqType">Type of the created sequence</param>
       /// <param name="headerSize">Size of the header of the sequence. Parameter sequence must point to the structure of that size or greater size.</param>
@@ -1870,7 +1870,7 @@ namespace Emgu.CV
          IntPtr block);
 
       /// <summary>
-      /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array, selected ROI (in case of IplImage) or, if mask is not NULL, in the specified array region. If the array has more than one channel, it must be IplImage with COI set. In case if multi-dimensional arrays min_loc->x and max_loc->x will contain raw (linear) positions of the extremums
+      /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array, selected ROI (in case of IplImage) or, if mask is not IntPtr.Zero, in the specified array region. If the array has more than one channel, it must be IplImage with COI set. In case if multi-dimensional arrays min_loc->x and max_loc->x will contain raw (linear) positions of the extremums
       /// </summary>
       /// <param name="arr">The source array, single-channel or multi-channel with COI set</param>
       /// <param name="minVal">Pointer to returned minimum value</param>
@@ -2060,7 +2060,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array. </param>
       /// <param name="src2">The second source array. </param>
       /// <param name="alpha"></param>
-      /// <param name="src3">The third source array (shift). Can be NULL, if there is no shift.</param>
+      /// <param name="src3">The third source array (shift). Can be IntPtr.Zero, if there is no shift.</param>
       /// <param name="beta"></param>
       /// <param name="dst">The destination array.</param>
       /// <param name="tABC"></param>

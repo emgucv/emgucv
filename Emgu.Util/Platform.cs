@@ -4,7 +4,7 @@ using Emgu.Util.TypeEnum;
 namespace Emgu.Util
 {
    /// <summary>
-   /// Provide information for the platform which is using 
+   /// Provide information for the platform which is using. 
    /// </summary>
    public static class Platform
    {
@@ -20,7 +20,7 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// The operating system that is using
+      /// Get the type of the current operating system
       /// </summary>
       public static OS OperationSystem
       {
@@ -31,7 +31,7 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// Get the current runtime environment
+      /// Get the type of the current runtime environment
       /// </summary>
       public static Runtime Runtime
       {

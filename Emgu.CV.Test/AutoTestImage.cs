@@ -845,6 +845,15 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSetRandome()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(400, 200);
+         //image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+         //TODO: Find out why Random normal no longer works for multi channel images
+         image.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(20, 20, 20));
+      }
+
+      [Test]
       public void TestMSER()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");

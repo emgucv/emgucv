@@ -20,7 +20,7 @@ namespace Emgu.CV.Structure
       public PointF P2 { get { return _p2; } set { _p2 = value; } }
 
       /// <summary> 
-      /// Create a line segment with the specific starting point and end point 
+      /// Create a line segment with the specific start point and end point 
       /// </summary>
       /// <param name="p1">The first point on the line segment</param>
       /// <param name="p2">The second point on the line segment</param>

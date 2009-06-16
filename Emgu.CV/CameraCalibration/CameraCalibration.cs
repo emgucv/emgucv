@@ -7,7 +7,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Functions used form camera calibration
+   /// Camera calibration functions
    /// </summary>
    public static class CameraCalibration
    {

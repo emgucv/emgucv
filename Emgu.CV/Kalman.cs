@@ -5,7 +5,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A Kalman Filter 
+   /// Kalman Filter 
    /// </summary>
    public class Kalman : DisposableObject
    {

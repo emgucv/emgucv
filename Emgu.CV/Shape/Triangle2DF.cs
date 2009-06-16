@@ -59,15 +59,6 @@ namespace Emgu.CV.Structure
          {
             float area = ((V1.X - V0.X) * (V2.Y - V0.Y) - (V1.Y - V0.Y) * (V2.X - V0.X)) * 0.5f;
             return area < 0 ? -area : area;
-            /*
-            #region use Heron's formula to find the area of the triangle
-            double a = new LineSegment2DF(V0, V1).Length;
-            double b = new LineSegment2DF(V1, V2).Length;
-            double c = new LineSegment2DF(V2, V0).Length;
-            double s = (a + b + c) / 2.0;
-            return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
-            #endregion
-            */
          }
       }
 
@@ -78,7 +69,6 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            //return new PointF((V0.X + V1.X + V2.X) * (1.0f / 3.0f), (V0.Y + V1.Y + V2.Y) * (1.0f / 3.0f));
             return new PointF((V0.X + V1.X + V2.X) / 3.0f, (V0.Y + V1.Y + V2.Y) / 3.0f);
          }
       }

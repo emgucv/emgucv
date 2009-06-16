@@ -17,8 +17,6 @@ namespace Simlpe3DReconstruction
       private MCvPoint3D32f[] _points;
       private Image<Bgr, Byte> _left;
 
-      private Viewer _osgViewer;
-
       /// <summary>
       /// Convert an Emgu CV image to Osg Image
       /// </summary>
@@ -53,7 +51,6 @@ namespace Simlpe3DReconstruction
       public Simple3DReconstruction()
       {
          InitializeComponent();
-         _osgViewer = viewer3D.Viewer;
 
          _left = new Image<Bgr, byte>("left.jpg");
          Image<Bgr, Byte> right = new Image<Bgr, byte>("right.jpg");
@@ -105,10 +102,10 @@ namespace Simlpe3DReconstruction
             Osg.Matrix.rotate(90.0 / 180.0 * Math.PI, new Osg.Vec3d(1.0, 0.0, 0.0)) *
             Osg.Matrix.rotate(180.0 / 180.0 * Math.PI, new Osg.Vec3d(0.0, 1.0, 0.0)));
          transform.addChild(geode);
-         #endregion
+         #endregion         
 
-         _osgViewer.setSceneData(transform);
-         _osgViewer.realize();
+         viewer3D.Viewer.setSceneData(transform);
+         viewer3D.Viewer.realize();
       }
 
       /// <summary>
@@ -148,10 +145,10 @@ namespace Simlpe3DReconstruction
       /// <param name="e"></param>
       private void viewer3D_Paint(object sender, PaintEventArgs e)
       {
-         if (_osgViewer != null && !_osgViewer.done())
+         if (viewer3D.Viewer != null && !viewer3D.Viewer.done())
          {
-            _osgViewer.updateTraversal();
-            _osgViewer.frame();
+            viewer3D.Viewer.updateTraversal();
+            viewer3D.Viewer.frame();
          }
 
          viewer3D.Invalidate(); //this create a repaint loop
@@ -163,9 +160,11 @@ namespace Simlpe3DReconstruction
       /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
       protected override void Dispose(bool disposing)
       {
-         if (disposing && (components != null))
+         if (disposing)
          {
-            components.Dispose();
+            if (components != null)
+               components.Dispose();
+
             viewer3D.Dispose();
          }
          base.Dispose(disposing);
