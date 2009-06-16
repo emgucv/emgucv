@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="ImageDatabase" assembly="ImageDatabase">
+   <class name="PersistentImage" table="Images" lazy="false">
+      <id name="Id">
+         <generator class="native" />
+      </id>
+      <property name ="DateCreated" not-null="false" column="DateCreated" type="DateTime" />
+      <property name ="XmlImage" />
+   </class>
+</hibernate-mapping>
+
+
