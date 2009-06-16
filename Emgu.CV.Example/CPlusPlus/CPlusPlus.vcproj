@@ -6,7 +6,7 @@
 	ProjectGUID="{32330110-727C-41A1-9377-6BA41002983D}"
 	RootNamespace="CPlusPlus"
 	Keyword="ManagedCProj"
-	TargetFrameworkVersion="131072"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -207,6 +207,11 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
 			RelativePathToProject="..\..\Emgu.Util\Emgu.Util.csproj"
+		/>
+		<AssemblyReference
+			RelativePath="System.Core.dll"
+			AssemblyName="System.Core, Version=3.5.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="196613"
 		/>
 	</References>
 	<Files>
