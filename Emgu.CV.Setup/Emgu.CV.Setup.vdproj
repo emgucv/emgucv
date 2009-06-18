@@ -225,6 +225,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6C55C35EA4664B8EA4645ECB9DA734E7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_77D66D328CD84841AB3E24410211A0B2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1298,6 +1304,26 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6C55C35EA4664B8EA4645ECB9DA734E7"
+            {
+            "SourcePath" = "8:..\\Emgu.CV\\README.tt"
+            "TargetName" = "8:README.tt"
+            "Tag" = "8:"
+            "Folder" = "8:_CD1732743AB943E3AAA894D744D506A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F0DFB8DBB69485285CB01BA937374F3"
