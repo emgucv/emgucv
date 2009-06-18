@@ -63,7 +63,7 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            return V0.CrossProduct(V1).GetNormalizePoint();
+            return (V1-V0).CrossProduct(V2-V1).GetNormalizedPoint();
          }
       }
 
