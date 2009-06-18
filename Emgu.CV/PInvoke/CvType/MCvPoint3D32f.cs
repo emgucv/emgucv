@@ -66,10 +66,21 @@ namespace Emgu.CV.Structure
       /// Get the normalized point
       /// </summary>
       /// <returns></returns>
-      public MCvPoint3D32f GetNormalizePoint()
+      public MCvPoint3D32f GetNormalizedPoint()
       {
          float norm = (float) Norm;
          return new MCvPoint3D32f(x / norm, y / norm, z / norm);
+      }
+
+      /// <summary>
+      /// Substract one point from the other
+      /// </summary>
+      /// <param name="p1">The point to substract from</param>
+      /// <param name="p2">The value to be substracted</param>
+      /// <returns>The substraction of one point from the other</returns>
+      public static MCvPoint3D32f operator -(MCvPoint3D32f p1, MCvPoint3D32f p2)
+      {
+         return new MCvPoint3D32f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
       }
 
       #region IEquatable<MCvPoint3D32f> Members
