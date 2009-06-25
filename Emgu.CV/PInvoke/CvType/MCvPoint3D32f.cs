@@ -52,6 +52,16 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
+      /// Return the dot product of two 3D point
+      /// </summary>
+      /// <param name="point">the other 3D point</param>
+      /// <returns>The dot product of the two 3D point</returns>
+      public float DotProduct(MCvPoint3D32f point)
+      {
+         return x * point.x + y * point.y + z * point.z;
+      }
+
+      /// <summary>
       /// return the norm of this 3D point
       /// </summary>
       public double Norm

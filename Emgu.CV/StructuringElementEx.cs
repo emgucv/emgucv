@@ -1,6 +1,7 @@
 using System;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -9,6 +10,9 @@ namespace Emgu.CV
    /// </summary>
    public class StructuringElementEx : UnmanagedObject
    {
+      private int[,] _values;
+      private GCHandle _handle;
+
       /// <summary>
       /// Create a custome shape Structuring Element
       /// </summary>
@@ -17,13 +21,15 @@ namespace Emgu.CV
       /// <param name="anchorY">Relative vertical offset of the anchor point</param>
       public StructuringElementEx(int[,] values, int anchorX, int anchorY)
       {
+         _values = values;
+         _handle = GCHandle.Alloc(_values, GCHandleType.Pinned);
          _ptr = CvInvoke.cvCreateStructuringElementEx(
                    values.GetLength(1),
                    values.GetLength(0),
                    anchorX,
                    anchorY,
                    CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_CUSTOM,
-                   values);
+                   _handle.AddrOfPinnedObject());
       }
 
       /// <summary>
@@ -37,7 +43,7 @@ namespace Emgu.CV
       public StructuringElementEx(int cols, int rows, int anchorX, int anchorY, CvEnum.CV_ELEMENT_SHAPE shape)
       {
          Debug.Assert(shape != Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_CUSTOM, "For custome shape please use a different constructor");
-         _ptr = CvInvoke.cvCreateStructuringElementEx(cols, rows, anchorX, anchorY, shape, null);
+         _ptr = CvInvoke.cvCreateStructuringElementEx(cols, rows, anchorX, anchorY, shape, IntPtr.Zero);
       }
 
       /// <summary>
@@ -46,6 +52,8 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          CvInvoke.cvReleaseStructuringElement(ref _ptr);
+         if (_handle.IsAllocated)
+            _handle.Free();
       }
    }
 }

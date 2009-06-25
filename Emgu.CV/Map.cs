@@ -79,12 +79,11 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pt"></param>
       /// <returns></returns>
-      private Point MapPointToImagePoint(PointF pt)
+      public Point MapPointToImagePoint(PointF pt)
       {
          return
-            new Point(
-             (int)((pt.X - Area.Left) / Resolution.X),
-             (int)((pt.Y - Area.Top) / Resolution.Y));
+            Point.Round(
+            new PointF( (pt.X - Area.Left) / Resolution.X,  (pt.Y - Area.Top) / Resolution.Y));
       }
 
       private Rectangle MapRectangleToImageRectangle(RectangleF rect)
@@ -99,7 +98,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pt">The point on image</param>
       /// <returns>The point on map</returns>
-      private PointF ImagePointToMapPoint(Point pt)
+      public PointF ImagePointToMapPoint(Point pt)
       {
          return
             new PointF(
