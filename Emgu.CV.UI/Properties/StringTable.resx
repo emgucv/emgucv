@@ -157,13 +157,13 @@
     <value>Please load an image first</value>
     <comment>PleaseLoadAnImageFirst description</comment>
   </data>
-  <data name="PixelCount" xml:space="preserve">
-    <value>Pixel Count</value>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
     <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
   </data>
-  <data name="ColorIntensity" xml:space="preserve">
-    <value>Color Intensity</value>
-    <comment>ColorIntensity description</comment>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+    <comment>The text to be displayed on the horizontal dimension of the histogram</comment>
   </data>
   <data name="Only1DHistogramSupported" xml:space="preserve">
     <value>Only 1D histogram is supported</value>

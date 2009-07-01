@@ -70,11 +70,11 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color Intensity.
+        ///   Looks up a localized string similar to Count.
         /// </summary>
-        internal static string ColorIntensity {
+        internal static string Count {
             get {
-                return ResourceManager.GetString("ColorIntensity", resourceCulture);
+                return ResourceManager.GetString("Count", resourceCulture);
             }
         }
         
@@ -151,15 +151,6 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pixel Count.
-        /// </summary>
-        internal static string PixelCount {
-            get {
-                return ResourceManager.GetString("PixelCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please load an image first.
         /// </summary>
         internal static string PleaseLoadAnImageFirst {
@@ -194,6 +185,7 @@ namespace Emgu.CV.UI.Properties {
                 return ResourceManager.GetString("SaveImageDialogText", resourceCulture);
             }
         }
+
         
         /// <summary>
         ///   Looks up a localized string similar to Unknown.
@@ -201,6 +193,15 @@ namespace Emgu.CV.UI.Properties {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        internal static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
     }

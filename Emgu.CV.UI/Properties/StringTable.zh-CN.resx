@@ -121,9 +121,9 @@
     <value>取消</value>
     <comment>Cancel description</comment>
   </data>
-  <data name="ColorIntensity" xml:space="preserve">
-    <value>色彩深度</value>
-    <comment>ColorIntensity description</comment>
+  <data name="Count" xml:space="preserve">
+    <value>总数</value>
+    <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
   </data>
   <data name="DefaultHistogramTitle" xml:space="preserve">
     <value>柱状图</value>
@@ -157,10 +157,6 @@
     <value>Parameter type '{0}' is not supported</value>
     <comment>ParameterTypeIsNotSupported description</comment>
   </data>
-  <data name="PixelCount" xml:space="preserve">
-    <value>Pixel Count</value>
-    <comment>The text to be displayed on the verticle dimension of the histogram  </comment>
-  </data>
   <data name="PleaseLoadAnImageFirst" xml:space="preserve">
     <value>Please load an image first</value>
     <comment>PleaseLoadAnImageFirst description</comment>
@@ -180,5 +176,9 @@
   <data name="Unknown" xml:space="preserve">
     <value>未知</value>
     <comment>Unknown description</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>数值</value>
+    <comment>The text to be displayed on the horizontal dimension of the histogram</comment>
   </data>
 </root>

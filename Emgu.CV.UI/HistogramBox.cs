@@ -82,8 +82,8 @@ namespace Emgu.CV.UI
          GraphPane pane = new GraphPane();
          // Set the Title
          pane.Title.Text = name;
-         pane.XAxis.Title.Text = Properties.StringTable.ColorIntensity;
-         pane.YAxis.Title.Text = Properties.StringTable.PixelCount;
+         pane.XAxis.Title.Text = Properties.StringTable.Value;
+         pane.YAxis.Title.Text = Properties.StringTable.Count;
 
          #region draw the histogram
          RangeF range = histogram.Ranges[0];
