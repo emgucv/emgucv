@@ -280,7 +280,7 @@ namespace Emgu.CV
       /// <returns>The result convex hull</returns>
       public Seq<T> GetConvexHull(CvEnum.ORIENTATION orientation, MemStorage stor)
       {
-         IntPtr hull = CvInvoke.cvConvexHull2(Ptr, stor.Ptr, orientation, 1);
+         IntPtr hull = CvInvoke.cvConvexHull2(Ptr, stor, orientation, 1);
          return new Seq<T>(hull, stor);
       }
 
@@ -567,6 +567,20 @@ namespace Emgu.CV
       public double MatchShapes(Seq<T> objectToMatch, CvEnum.CONTOURS_MATCH_TYPE method)
       {
          return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
+      }
+
+      /// <summary>
+      /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 
+      /// </summary>
+      /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used.</param>
+      /// <param name="orientation">Orientation where the convexity Defacts is returned.</param>
+      /// <returns>The sequence of the CvConvexityDefect structures.</returns>
+      public Seq<MCvConvexityDefect> GetConvexityDefacts(MemStorage storage, Emgu.CV.CvEnum.ORIENTATION orientation)
+      {
+         MemStorage stor = storage ?? Storage;
+         IntPtr convexHull = CvInvoke.cvConvexHull2(Ptr, stor, orientation, 0);
+         IntPtr seq = CvInvoke.cvConvexityDefects(Ptr, convexHull, stor);
+         return new Seq<MCvConvexityDefect>(seq, stor);
       }
 
       /// <summary>
