@@ -839,7 +839,6 @@ namespace Emgu.CV
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
       public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
       {
-         
          {  //TODO: Find out why cvDrawContours no longer works after SVN 1611
             #region alternative code to cvDrawContours
             Point[] pts = c.ToArray();
@@ -848,8 +847,14 @@ namespace Emgu.CV
                pts[i].X += offset.X;
                pts[i].Y += offset.Y;
             }
-            if (thickness <= 1)
+            if (thickness < 1)
+            {
+               if (!c.Convex)
+               {
+                  throw new NotSupportedException("The current OpenCV's implementation of cvDrawContours is broken, workaround is not yet available for non convex polygon"); 
+               }
                FillConvexPoly(pts, externalColor);
+            }
             else
                DrawPolyline(pts, true, externalColor, thickness);
             #endregion
