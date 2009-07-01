@@ -16,6 +16,7 @@ namespace Emgu.CV
       where TDepth : new()
    {
       private RectangleF _area;
+      private PointF _resolution;
 
       /// <summary>
       /// Get the area of this map as a rectangle
@@ -30,7 +31,7 @@ namespace Emgu.CV
       /// </summary>
       public PointF Resolution
       {
-         get { return new PointF(Area.Width / Width, Area.Height / Height); }
+         get { return _resolution; }
       }
 
       /// <summary>
@@ -41,12 +42,9 @@ namespace Emgu.CV
       /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
       /// <param name="color"> The initial color of the map</param>
       public Map(RectangleF area, PointF resolution, TColor color)
-         : base(
-              (int)((area.Width) / resolution.X),
-              (int)((area.Height) / resolution.Y),
-              color)
+         : this(area, resolution)
       {
-         _area = area;
+         SetValue(color);
       }
 
       /// <summary>
@@ -56,10 +54,15 @@ namespace Emgu.CV
       /// <param name="area"></param>
       /// <param name="resolution">The resolution of x (y), (e.g. a value of 0.5 means each cell in the map is 0.5 unit in x (y) dimension)</param>
       public Map(RectangleF area, PointF resolution)
-         : this(area, resolution, new TColor())
+         : base(               
+            (int) Math.Round((area.Width) / resolution.X),
+            (int) Math.Round((area.Height) / resolution.Y))
       {
+         _area = area;
+         _resolution = resolution;
       }
 
+      /*
       /// <summary>
       /// Create a new Map using the specific image and the rectangle area
       /// </summary>
@@ -70,7 +73,8 @@ namespace Emgu.CV
       {
          image.CopyTo(this);
          _area = area;
-      }
+         _resolution = new PointF( area.Width / image.Width, area.Height / image.Height);
+      }*/
 
       //private delegate Point PointTransformationFunction(PointF point);
 
@@ -79,11 +83,23 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pt"></param>
       /// <returns></returns>
+      public Point MapPointToImagePoint(MCvPoint2D64f pt)
+      {
+         return new Point(
+           (int)Math.Round(( pt.x - Area.Left) / Resolution.X),
+           (int)Math.Round(( pt.y - Area.Top) / Resolution.Y));
+      }
+
+      /// <summary>
+      /// Map a point to a position in the internal image
+      /// </summary>
+      /// <param name="pt"></param>
+      /// <returns></returns>
       public Point MapPointToImagePoint(PointF pt)
       {
-         return
-            Point.Round(
-            new PointF( (pt.X - Area.Left) / Resolution.X,  (pt.Y - Area.Top) / Resolution.Y));
+         return new Point(
+           (int)Math.Round((pt.X - Area.Left) / Resolution.X),
+           (int)Math.Round((pt.Y - Area.Top) / Resolution.Y));
       }
 
       private Rectangle MapRectangleToImageRectangle(RectangleF rect)
@@ -114,19 +130,39 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Make a copy of the specific ROI (Region of Interest) from the map
+      /// Get a copy of the map in the specific area
       /// </summary>
-      /// <param name="roi">The roi to be copied</param>
-      /// <returns>The roi region on the map</returns>
-      public Map<TColor, TDepth> Copy(RectangleF roi)
+      /// <param name="area">the area of the map to be retrieve</param>
+      /// <returns>The area of the map</returns>
+      public Map<TColor, TDepth> Copy(RectangleF area)
       {
-         return new Map<TColor, TDepth>(
-            base.Copy(MapRectangleToImageRectangle(roi)),
-            roi);
+         Map<TColor, TDepth> res = new Map<TColor, TDepth>(area, _resolution);
+         if (Area.Contains(area))
+         {  //the specific area is a subregion of current area
+            ROI = area;
+            CvInvoke.cvCopy(Ptr, res, IntPtr.Zero);
+            ROI = RectangleF.Empty;
+         }
+         else if (Area.IntersectsWith(area))
+         {  //partial intersect
+            RectangleF intersectRegion = Area;
+            intersectRegion.Intersect(area);
+            ROI = intersectRegion;
+            res.ROI = intersectRegion;
+            CvInvoke.cvCopy(Ptr, res, IntPtr.Zero);
+            ROI = RectangleF.Empty;
+            res.ROI = RectangleF.Empty;
+         }
+         //else
+         {  //the specific area do not over lap with current area at all
+            //do nothing
+         }
+         return res;
       }
 
+
       ///<summary> 
-      /// Get or Set the region of interest for this map. To clear the ROI, set it to System.Drawing.Rectangle.Empty
+      /// Get or Set the region of interest for this map. To clear the ROI, set it to System.Drawing.RectangleF.Empty
       ///</summary>
       public new RectangleF ROI
       {
@@ -230,6 +266,7 @@ namespace Emgu.CV
              thickness);
       }
 
+      /*
       /// <summary>
       /// Compute a new map where each element is obtained from converter
       /// </summary>
@@ -248,7 +285,7 @@ namespace Emgu.CV
                 return converter(data, col * rx + ox, row * ry + oy);
              };
          return new Map<TColor, TOtherDepth>(base.Convert<TOtherDepth>(iconverter), Area);
-      }
+      }*/
    }
 }
 
