@@ -190,6 +190,32 @@ namespace Emgu.CV.Test
          Assert.AreEqual(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)), s2);
       }
 
+      [Test]
+      public void TestConvexityDefacts()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(300, 300);
+         Point[] polyline = new Point[] {
+            new Point(10, 10),
+            new Point(10, 250),
+            new Point(100, 100),
+            new Point(250, 250),
+            new Point(250, 10)};
+
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<Point> contour = new Seq<Point>(stor);
+            contour.PushMulti(polyline, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+            image.Draw(contour, new Gray(255), 1);
+            Seq<MCvConvexityDefect> defactSeq = contour.GetConvexityDefacts(stor, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+            MCvConvexityDefect[] defacts = defactSeq.ToArray();
+            Assert.AreEqual(1, defacts.Length);
+            Assert.AreEqual(new Point(100, 100), defacts[0].DepthPoint);
+
+            //TODO: Find out why cvPointPolygonTest in SVN do not work anymore
+            //Assert.IsTrue(contour.InContour(new PointF(90, 90)) < 0);
+         }
+      }
+
       //TODO: Request Willow Garage to accept patch to resume cvRedirectError functionality
       [Test]
       public void TestException()
