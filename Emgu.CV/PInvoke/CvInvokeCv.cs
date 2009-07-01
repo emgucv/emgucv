@@ -703,6 +703,19 @@ namespace Emgu.CV
           int measureDist);
 
       /// <summary>
+      /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 
+      /// </summary>
+      /// <param name="contour">Input contour</param>
+      /// <param name="convexhull">Convex hull obtained using cvConvexHull2 that should contain pointers or indices to the contour points, not the hull points themselves, i.e. return_points parameter in cvConvexHull2 should be 0</param>
+      /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used</param>
+      /// <returns>Pointer to the sequence of the CvConvexityDefect structures. </returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvConvexityDefects( 
+         IntPtr contour, 
+         IntPtr convexhull,
+         IntPtr storage);
+
+      /// <summary>
       /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex). It returns positive, negative or zero value, correspondingly
       /// </summary>
       /// <param name="contour">Input contour</param>

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -10,20 +11,56 @@ namespace Emgu.CV.Structure
    public struct MCvConvexityDefect
    {
       /// <summary>
-      /// Point of the contour where the defect begins
+      /// Pointer to the point of the contour where the defect begins
       /// </summary>
-      public IntPtr start; 
+      public IntPtr StartPointPointer;
+
       /// <summary>
-      /// Point of the contour where the defect ends
+      /// Pointer to the point of the contour where the defect ends
       /// </summary>
-      public IntPtr end; 
+      public IntPtr EndPointPointer;
+
       /// <summary>
-      /// The farthest from the convex hull point within the defect
+      /// Pointer to the farthest point from the convex hull within the defect
       /// </summary>
-      public IntPtr depth_point;
+      public IntPtr DepthPointPointer;
+
       /// <summary>
       /// Distance between the farthest point and the convex hull
       /// </summary>
       public float depth; 
+
+      /// <summary>
+      /// Point of the contour where the defect begins
+      /// </summary>
+      public Point StartPoint
+      {
+         get
+         {
+            return (Point)Marshal.PtrToStructure(StartPointPointer, typeof(Point));
+         }
+      }
+
+      /// <summary>
+      /// Point of the contour where the defect ends
+      /// </summary>
+      public Point EndPoint
+      {
+         get
+         {
+            return (Point)Marshal.PtrToStructure(EndPointPointer, typeof(Point));
+         }
+      }
+
+      /// <summary>
+      /// The farthest from the convex hull point within the defect
+      /// </summary>
+      public Point DepthPoint
+      {
+         get
+         {
+            return (Point)Marshal.PtrToStructure(DepthPointPointer, typeof(Point));
+         }
+      }
    }
 }
