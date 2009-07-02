@@ -206,7 +206,10 @@ namespace Emgu.CV.Test
             Seq<Point> contour = new Seq<Point>(stor);
             contour.PushMulti(polyline, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
             image.Draw(contour, new Gray(255), 1);
-            Seq<MCvConvexityDefect> defactSeq = contour.GetConvexityDefacts(stor, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+            Seq<MCvConvexityDefect> defactSeq = 
+               contour.GetConvexityDefacts(
+                  stor, 
+                  Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
             Assert.AreEqual(1, defacts.Length);
             Assert.AreEqual(new Point(100, 100), defacts[0].DepthPoint);
