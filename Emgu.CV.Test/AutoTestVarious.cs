@@ -251,9 +251,47 @@ namespace Emgu.CV.Test
          PointF[] points = CameraCalibration.ProjectPoints(new MCvPoint3D32f[] { point }, extrin, intrin);
       }
 
-      //TODO: Find out why Blob tracker no longer accepts color images since svn 1611
       [Test]
-      public void TestBlob()
+      public void TestBlobColor()
+      {
+         int width = 300;
+         int height = 400;
+         Image<Bgr, Byte> bg = new Image<Bgr, byte>(width, height);
+         bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
+
+         Size size = new Size(width / 10, height / 10);
+         Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
+
+         Rectangle rect = new Rectangle(topLeft, size);
+
+         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
+         param.FGTrainFrames = 5;
+         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
+
+         ImageViewer viewer = new ImageViewer();
+         //viewer.Show();
+         for (int i = 0; i < 20; i++)
+         {
+            using (Image<Bgr, Byte> img1 = bg.Copy())
+            {
+               rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
+               img1.Draw(rect, new Bgr(Color.Red), -1);
+               tracker.Process(img1);
+               viewer.Image = img1;
+               //viewer.Refresh();
+            }
+         }
+
+         //MCvBlob blob = tracker[0];
+         //int id = blob.ID;
+         //ImageViewer.Show(forground);
+      } 
+
+      [Test]
+      public void TestBlobGray()
       {
          int width = 300;
          int height = 400;
@@ -521,9 +559,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
          Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
-
-      //TODO: find out why BGModel test failes since svn 1611
-      /*
+    
       [Test]
       public void TestBGModel()
       {
@@ -552,7 +588,7 @@ namespace Emgu.CV.Test
 
          //ImageViewer.Show(model2.Foreground);
          //ImageViewer.Show(model1.Background);
-      }*/
+      }
 
       [Test]
       public void TestPlanarSubdivision1()

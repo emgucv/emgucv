@@ -19,7 +19,7 @@ namespace Emgu.UI
       public XmlViewDialog(XmlDocument doc)
       {
          InitializeComponent();
-         tempFile = String.Format("{0}{1}emguTemperaryFile.xml", Directory.GetCurrentDirectory(), Path.PathSeparator);
+         tempFile = Path.Combine(Directory.GetCurrentDirectory(), "emguTemperaryFile.xml");
          doc.Save(tempFile);
          webBrowser1.Navigate(tempFile);
          //webBrowser1.DocumentText = doc.OuterXml;

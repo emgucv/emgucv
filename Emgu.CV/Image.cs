@@ -849,10 +849,11 @@ namespace Emgu.CV
             }
             if (thickness < 1)
             {
+               /*
                if (!c.Convex)
                {
                   throw new NotSupportedException("The current OpenCV's implementation of cvDrawContours is broken, workaround is not yet available for non convex polygon"); 
-               }
+               }*/
                FillConvexPoly(pts, externalColor);
             }
             else

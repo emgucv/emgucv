@@ -137,6 +137,5 @@ namespace Emgu.CV.UI
          return gen == null ? Convert.ToString(parameter) :
             gen.ToCode(language);
       }
-
    }
 }

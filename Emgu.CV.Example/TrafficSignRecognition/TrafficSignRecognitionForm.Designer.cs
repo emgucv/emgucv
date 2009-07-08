@@ -33,12 +33,12 @@ namespace TrafficSignRecognition
          this.panel1 = new System.Windows.Forms.Panel();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.panel2 = new System.Windows.Forms.Panel();
+         this.processTimeLabel = new System.Windows.Forms.Label();
          this.informationLabel = new System.Windows.Forms.Label();
          this.textBox1 = new System.Windows.Forms.TextBox();
          this.button1 = new System.Windows.Forms.Button();
          this.label1 = new System.Windows.Forms.Label();
          this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-         this.processTimeLabel = new System.Windows.Forms.Label();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -96,6 +96,14 @@ namespace TrafficSignRecognition
          this.panel2.Size = new System.Drawing.Size(567, 81);
          this.panel2.TabIndex = 3;
          // 
+         // processTimeLabel
+         // 
+         this.processTimeLabel.AutoSize = true;
+         this.processTimeLabel.Location = new System.Drawing.Point(33, 55);
+         this.processTimeLabel.Name = "processTimeLabel";
+         this.processTimeLabel.Size = new System.Drawing.Size(0, 13);
+         this.processTimeLabel.TabIndex = 4;
+         // 
          // informationLabel
          // 
          this.informationLabel.AutoSize = true;
@@ -135,14 +143,6 @@ namespace TrafficSignRecognition
          // 
          this.openFileDialog1.FileName = "openFileDialog1";
          // 
-         // ProcessTimeLabel
-         // 
-         this.processTimeLabel.AutoSize = true;
-         this.processTimeLabel.Location = new System.Drawing.Point(33, 55);
-         this.processTimeLabel.Name = "ProcessTimeLabel";
-         this.processTimeLabel.Size = new System.Drawing.Size(0, 13);
-         this.processTimeLabel.TabIndex = 4;
-         // 
          // TrafficSignRecognitionForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -150,7 +150,7 @@ namespace TrafficSignRecognition
          this.ClientSize = new System.Drawing.Size(786, 380);
          this.Controls.Add(this.splitContainer1);
          this.Name = "TrafficSignRecognitionForm";
-         this.Text = "License Plate Recognition";
+         this.Text = "Traffic Sign Recognition";
          this.splitContainer1.Panel1.ResumeLayout(false);
          this.splitContainer1.Panel2.ResumeLayout(false);
          this.splitContainer1.ResumeLayout(false);

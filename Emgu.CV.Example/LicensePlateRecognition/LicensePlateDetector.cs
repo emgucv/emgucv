@@ -10,10 +10,16 @@ using System.Diagnostics;
 
 namespace LicensePlateRecognition
 {
+   /// <summary>
+   /// A license plate detector
+   /// </summary>
    public class LicensePlateDetector : DisposableObject
    {
       private Tesseract _ocr;
 
+      /// <summary>
+      /// Create a license plate detector
+      /// </summary>
       public LicensePlateDetector()
       {
          //create OCR
@@ -26,6 +32,14 @@ namespace LicensePlateRecognition
          _ocr.Init("eng", false);
       }
 
+      /// <summary>
+      /// Detect license plate from the given image
+      /// </summary>
+      /// <param name="img">The image to search license plate from</param>
+      /// <param name="licensePlateList">A list of images where the detected license plate region is stored</param>
+      /// <param name="filteredLicensePlateList">A list of images where the detected license plate region with noise removed is stored</param>
+      /// <param name="boxList">A list where the region of license plate, defined by an MCvBox2D is stored</param>
+      /// <returns>The list of words for each license plate</returns>
       public List<List<Word>> DetectLicensePlate(Image<Bgr, byte> img, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
       {
          //Stopwatch w = Stopwatch.StartNew();
@@ -92,6 +106,11 @@ namespace LicensePlateRecognition
          }
       }
 
+      /// <summary>
+      /// Check if the four points forms a parallelogram
+      /// </summary>
+      /// <param name="pts">The four points that defines a polygon</param>
+      /// <returns>True if the four points defines a parallelogram</returns>
       private static bool IsParallelogram(Point[] pts)
       {
          LineSegment2D[] edges = PointCollection.PolyLine(pts, true);

@@ -1,4 +1,3 @@
-//#define SHOW_IMAGE
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -154,10 +153,6 @@ namespace Emgu.CV.ML.UnitTest
                img.Draw(new CircleF(new PointF(samples.Data[i, 0], samples.Data[i, 1]), 1), colors[labels.Data[i, 0]], 0);
             }
             #endregion 
-
-#if SHOW_IMAGE
-            Emgu.CV.UI.ImageViewer.Show(img);
-#endif
          }
       }
 
@@ -243,10 +238,6 @@ namespace Emgu.CV.ML.UnitTest
             PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
             img.Draw(new CircleF(p3, 2.0f), new Bgr(100, 100, 255), -1);
          }
-
-#if SHOW_IMAGE
-         Emgu.CV.UI.ImageViewer.Show(img);
-#endif
       }
       #endregion
 
@@ -314,10 +305,6 @@ namespace Emgu.CV.ML.UnitTest
             PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
             img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
          }
-
-#if SHOW_IMAGE
-         Emgu.CV.UI.ImageViewer.Show(img);
-#endif
       }
 
       [Test]

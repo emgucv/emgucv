@@ -46,11 +46,11 @@ namespace Emgu.CV.UI
       public void DisplayOperations(List<Operation> operations)
       {
          dataGridView1.Rows.Clear();
-         String[] codes = GetOperationCode(operations);
-         if (codes.Length > 0)
+         List<String> codes = GetOperationCode(operations);
+         if (codes.Count > 0)
          {
-            dataGridView1.Rows.Add(codes.Length);
-            for (int i = 0; i < codes.Length; i++)
+            dataGridView1.Rows.Add(codes.Count);
+            for (int i = 0; i < codes.Count; i++)
                dataGridView1.Rows[i].Cells[_codeColumn.Name].Value = codes[i];
          }
       }
@@ -84,10 +84,10 @@ namespace Emgu.CV.UI
          }
       }
 
-      private String[] GetOperationCode(List<Operation> operationList)
+      private List<String> GetOperationCode(List<Operation> operationList)
       {
          if (operationList.Count == 0) 
-            return new string[0];
+            return new List<String>();
 
          Type imageType = operationList[0].Method.DeclaringType;
 
@@ -139,7 +139,7 @@ namespace Emgu.CV.UI
          }
 
          ops[0] = ops[0].Replace("IImage", ImageTypeToString(imageType));
-         return ops.ToArray();
+         return ops;
       }
    }
 }

@@ -21,7 +21,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The SURF descriptor as a matrix (64x1 for regular descriptor; 128x1 for extended descriptor)
+      /// The SURF descriptor as an array (size 64 for regular descriptor; 128 for extended descriptor)
       /// </summary>
       public float[] Descriptor
       {

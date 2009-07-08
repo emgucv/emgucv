@@ -337,8 +337,7 @@ namespace Emgu.CV.Test
          Assert.AreEqual(img.Width, imgRotated.Height);
          Assert.AreEqual(img.Height, imgRotated.Width);
          imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
-         //ImageViewer.Show(img);
-         //ImageViewer.Show(imgRotated);
+         
       }
 
       [Test]
@@ -377,8 +376,6 @@ namespace Emgu.CV.Test
                }
             }
          }
-
-         //ImageViewer.Show(image);
       }
 
       [Test]
@@ -616,13 +613,11 @@ namespace Emgu.CV.Test
             {
                PointF[] points = pts.Clone() as PointF[];
                homography.ProjectPoints(points);
-               
+
                for (int i = 0; i < points.Length; i++)
                   points[i].Y += modelImage.Height;
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
             }
-
-            //ImageViewer.Show(res.Resize(200, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true));
          }
       }
 
@@ -647,8 +642,6 @@ namespace Emgu.CV.Test
 
             img.Draw(pts, new Gray(120), 1);
             img.Draw(snake, new Gray(80), 2);
-
-            //ImageViewer.Show(img));
          }
       }
 
@@ -723,8 +716,6 @@ namespace Emgu.CV.Test
          CvInvoke.cvMulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT);
          CvInvoke.cvDFT(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convolvedImage.Rows);
          dftA.GetSubRect(new Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
-
-         //ImageViewer.Show(convolvedImage);
       }
 
       [Test]
@@ -780,7 +771,6 @@ namespace Emgu.CV.Test
 
             foreach (PointF p in pts[0])
                img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
-            //ImageViewer.Show(img);
          }
       }
 
@@ -809,7 +799,6 @@ namespace Emgu.CV.Test
             }
             contour = contour.HNext;
          }
-         //ImageViewer.Show(res);
       }
 
       [Test]

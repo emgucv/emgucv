@@ -218,13 +218,8 @@ namespace Emgu.CV
          using (MatND<TDepth> diff = new MatND<TDepth>(dim1))
          {
             CvInvoke.cvXor(_ptr, other.Ptr, diff.Ptr, IntPtr.Zero);
-            Byte[] bytes = diff.Bytes;
-            for (int i = 0; i < bytes.Length; i++)
-            {
-               if (bytes[i] != 0) return false;
-            }
+            return Array.TrueForAll(diff.Bytes, delegate(Byte b) { return b == 0; });
          }
-         return true;
       }
 
       #endregion
