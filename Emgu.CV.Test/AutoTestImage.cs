@@ -507,6 +507,8 @@ namespace Emgu.CV.Test
 
          //make sure canny works for multi channel image
          Image<Bgr, Byte> image2 = image.Canny(new Bgr(200, 200, 200), new Bgr(100, 100, 100));
+
+         Size size = image2.Size;
       }
 
       [Test]
@@ -853,6 +855,72 @@ namespace Emgu.CV.Test
             {
                foreach(Seq<Point> region in mser)
                   image.Draw(region, new Gray(255.0), 2);
+            }
+         }
+      }
+
+      [Test]
+      public void TestGenericConvert()
+      {
+         Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
+         Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
+      }
+
+      [Test]
+      public void TestDrawHorizontalLine()
+      {
+         Point p1 = new Point(10, 10);
+         Point p2 = new Point(20, 10);
+         LineSegment2D l1 = new LineSegment2D(p1, p2);
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
+         img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
+      }
+
+      [Test]
+      public void TestMapDrawRectangle()
+      {
+         PointF p1 = new PointF(1.1f, 2.2f);
+         SizeF p2 = new SizeF(2.2f, 4.4f);
+         RectangleF rect = new RectangleF();
+         rect.Location = PointF.Empty;
+         rect.Size = p2;
+
+         Map<Gray, Byte> map = new Map<Gray, Byte>(new RectangleF(PointF.Empty, new SizeF(4.0f, 8.0f)), new PointF(0.1f, 0.1f), new Gray(255.0));
+         map.Draw(rect, new Gray(0.0), 1);
+      }
+
+      [Test]
+      public void TestImageLoader()
+      {
+         using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
+         using (Image<Bgr, Single> img2 = img.Resize(100, 100, CvEnum.INTER.CV_INTER_AREA, true))
+         {
+            Rectangle r = img2.ROI;
+            r.Width >>= 1;
+            r.Height >>= 1;
+            img2.ROI = r;
+         }
+      }
+
+      [Test]
+      public void TestBgrSplit()
+      {
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
+         {
+            Image<Gray, Byte>[] channels = img.Split();
+            Assert.AreEqual(img.NumberOfChannels, channels.Length);
+         }
+      }
+
+      [Test]
+      public void TestDrawFont()
+      {
+         using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
+         {
+            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
+            {
+               img.Draw("h.", ref f, new Point(100, 10), new Gray(255.0));
+               img.Draw("a.", ref f, new Point(100, 50), new Gray(255.0));
             }
          }
       }

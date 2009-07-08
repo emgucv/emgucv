@@ -1184,6 +1184,27 @@ namespace Emgu.CV.Test
          IntPtr comp;
          CvInvoke.cvPyrSegmentation(image, segImage, storage, out comp, 4, 255, 30);
       }
+
+      [Test]
+      public void TestHistogram()
+      {
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
+         using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
+         {
+            Image<Gray, Byte>[] HSVs = img2.Split();
+
+            using (DenseHistogram h = new DenseHistogram(20, new RangeF(0, 180)))
+            {
+               h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
+               using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
+               {
+                  Size sz = bpj.Size;
+               }
+            }
+
+            foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
+         }
+      }
       
       [Test]
       public void TestVideoWriter()

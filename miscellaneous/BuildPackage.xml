@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+   <Target Name="Package">
+      <!-- Clean UP -->
+      <Exec WorkingDirectory=".." Command="c:\cygwin\bin\perl.exe miscellaneous\svn-clean.pl --force"  />
+      
+      <!-- Call CMAKE to build unmanged code -->
+      <Exec WorkingDirectory=".." Command="BinaryBuild.bat" />
+      
+      <!-- Build Emgu CV in Release mode-->
+      <MSBuild Projects="..\Solution\VS2008\Emgu.CV.sln" Properties="Configuration=Release" />
+      
+      <!-- Build mshelp Document -->
+      <MSBuild Projects="Emgu.CV.mshelp.shfbproj" />
+      
+      <!-- Build Setup Project-->
+      <MSBuild Projects="..\Solution\VS2008\Emgu.CV.Setup.sln" Properties="Configuration=Release" />
+   </Target>
+</Project>

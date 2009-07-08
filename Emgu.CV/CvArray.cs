@@ -25,11 +25,6 @@ namespace Emgu.CV
       protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
 
       /// <summary>
-      /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
-      /// </summary>
-      public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
-
-      /// <summary>
       /// The pinned GCHandle to _array;
       /// </summary>
       protected GCHandle _dataHandle;
@@ -468,7 +463,7 @@ namespace Emgu.CV
       /// <summary>
       /// Inplace And operation with <paramref name="src2"/>
       /// </summary>
-      /// <param name="src2">The other array to perform And operation</param>
+      /// <param name="src2">The other array to perform AND operation</param>
       public void _And(CvArray<TDepth> src2)
       {
          CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
@@ -477,14 +472,14 @@ namespace Emgu.CV
       /// <summary>
       /// Inplace Or operation with <paramref name="src2"/>
       /// </summary>
-      /// <param name="src2">The other array to perform And operation</param>
+      /// <param name="src2">The other array to perform OR operation</param>
       public void _Or(CvArray<TDepth> src2)
       {
          CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
       }
 
       ///<summary> 
-      ///Inplace compute the complement for all Array Elements
+      ///Inplace compute the complement for all array elements
       ///</summary>
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Not()
@@ -503,7 +498,7 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
+         if (Array.Exists(ImageConstants.OpencvFileFormats, fi.Extension.ToLower().Equals))
          {
             //if the file can be imported from Open CV
             CvInvoke.cvSaveImage(fileName, Ptr);

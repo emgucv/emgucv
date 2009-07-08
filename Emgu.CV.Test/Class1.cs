@@ -155,37 +155,6 @@ namespace Emgu.CV.Test
          }
       }
 
-      public void TestConvert()
-      {
-         Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
-         Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
-         ImageViewer.Show(g2);
-      }
-
-      public void TestHorizontalLine()
-      {
-         Point p1 = new Point(10, 10);
-         Point p2 = new Point(20, 10);
-         LineSegment2D l1 = new LineSegment2D(p1, p2);
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 400, new Bgr(255, 255, 255));
-         img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
-         ImageViewer.Show(img);
-      }
-      
-      public void TestRectangle()
-      {
-         PointF p1 = new PointF(1.1f, 2.2f);
-         SizeF p2 = new SizeF(2.2f, 4.4f);
-         RectangleF rect = new RectangleF();
-         rect.Location = PointF.Empty;
-         rect.Size = p2;
-
-         Map<Gray, Byte> map = new Map<Gray, Byte>(new RectangleF(PointF.Empty, new SizeF(4.0f, 8.0f)), new PointF(0.1f, 0.1f), new Gray(255.0));
-         map.Draw(rect, new Gray(0.0), 1);
-
-         ImageViewer.Show(map);
-      }
-
       public void TestModuleInfo()
       {
          string pluginName;
@@ -230,84 +199,15 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
       }
 
-      public void TestImageLoader()
-      {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-         using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))
-         using (Image<Bgr, Single> img2 = img.Resize(100, 100, CvEnum.INTER.CV_INTER_AREA, true))
-         {
-            Application.Run(new ImageViewer(img2));
-            Rectangle r = img2.ROI;
-            r.Width >>= 1;
-            r.Height >>= 1;
-            img2.ROI = r;
-            ImageViewer.Show(img2);
-         }
-      }
-
-      public void TestBgr()
-      {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
-         {
-            Application.Run(new ImageViewer(img));
-            Image<Gray, Byte>[] channels = img.Split();
-            foreach (Image<Gray, Byte> i in channels)
-               Application.Run(new ImageViewer(i));
-         }
-      }
-
       public void TestBgra()
       {
          Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
          img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
          Image<Gray, Byte>[] channels = img.Split();
-         foreach (Image<Gray, Byte> i in channels)
-            Application.Run(new ImageViewer(i));
-         Application.Run(new ImageViewer(img));
-      }
-
-      public void TestFont()
-      {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-         using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
-         {
-            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
-            {
-               img.Draw("h.", ref f, new Point(100, 10), new Gray(255.0));
-               img.Draw("a.", ref f, new Point(100, 50), new Gray(255.0));
-            }
-            ImageViewer.Show(img);
-         }
-      }
-
-      public void TestHistogram()
-      {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
-         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
-         using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
-         {
-            Image<Gray, Byte>[] HSVs = img2.Split();
-
-            using (DenseHistogram h = new DenseHistogram(20, new RangeF(0, 180)))
-            {
-               h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
-               using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
-                  ImageViewer.Show(bpj);
-            }
-
-            foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
-         }
       }
 
       public void TestSplitMerge()
       {
-         Application.EnableVisualStyles();
-         Application.SetCompatibleTextRenderingDefault(false);
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
          {
             using (Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>())
@@ -344,7 +244,7 @@ namespace Emgu.CV.Test
                         foreach (CircleF c in cs)
                            imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
 
-                     Application.Run(new ImageViewer(imageRGB));
+                     //Application.Run(new ImageViewer(imageRGB));
 
                      bool applied = false;
                      foreach (CircleF[] cs in circles)
@@ -441,12 +341,6 @@ namespace Emgu.CV.Test
          }
          TimeSpan timeSpan = DateTime.Now.Subtract(timeStart);
          Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
-      }
-
-      public void TestReadImage()
-      {
-         ImageViewer.Show(new Image<Gray, Byte>("lena.jpg"));
-         ImageViewer.Show(new Image<Bgr, Byte>("lena.jpg").Convert<Gray, Byte>());
       }
 
       public void TestImageViewer()

@@ -26,19 +26,9 @@ namespace Emgu.CV
       private TDepth[, ,] _array;
 
       /// <summary>
-      /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
-      /// </summary>
-      private static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
-
-      /// <summary>
       /// The dimension of color
       /// </summary>
       private static int _numberOfChannels;
-
-      /// <summary>
-      /// Offset of roi
-      /// </summary>
-      private static readonly int _roiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
 
       #region constructors
       ///<summary>
@@ -49,9 +39,9 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create image from the specific multi-dimensional data, where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (cols) and the 3rd dimension is the channel
+      /// Create image from the specific multi-dimensional data, where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel
       /// </summary>
-      /// <param name="data">The multi-dimensional data where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (cols) and the 3rd dimension is the channel </param>
+      /// <param name="data">The multi-dimensional data where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel </param>
       public Image(TDepth[, ,] data)
       {
          Data = data;
@@ -64,7 +54,7 @@ namespace Emgu.CV
       /// <param name="height">The height of the image</param>
       /// <param name="stride">size of aligned image row in bytes</param>
       /// <param name="scan0">Pointer to aligned image data, <b>where each row should be 4-align</b> </param>
-      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Bitmap is released. </remarks>
+      /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Image is released. </remarks>
       public Image(int width, int height, int stride, IntPtr scan0)
       {
          _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
@@ -82,7 +72,7 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (Array.Exists(OpencvFileFormats, fi.Extension.ToLower().Equals))
+         if (Array.Exists(ImageConstants.OpencvFileFormats, fi.Extension.ToLower().Equals))
          {  //if the file can be imported from Open CV
             try
             {
@@ -429,7 +419,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Marshal.ReadIntPtr(Ptr, _roiOffset) != IntPtr.Zero;
+            return Marshal.ReadIntPtr(Ptr, ImageConstants.RoiOffset) != IntPtr.Zero;
          }
       }
 
@@ -1702,9 +1692,7 @@ namespace Emgu.CV
       ///<returns> The result of the XOR operation</returns>
       public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
-         return res;
+         return Xor(img2, null);
       }
 
       /// <summary>
@@ -1716,7 +1704,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
+         CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, mask);
          return res;
       }
 
@@ -1728,9 +1716,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<TColor, TDepth> Xor(TColor val)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
-         return res;
+         return Xor(val, null);
       }
 
       /// <summary>
@@ -1742,7 +1728,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Xor(TColor val, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
+         CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, mask);
          return res;
       }
       #endregion
@@ -1813,19 +1799,19 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// This function compare the current image with <paramref name="img2"/> and returns the comparison mask
+      /// Compare the current image with <paramref name="img2"/> and returns the comparison mask
       /// </summary>
       /// <param name="img2">The other image to compare with</param>
-      /// <param name="cmp_type">The comparison type</param>
+      /// <param name="cmpType">The comparison type</param>
       /// <returns>The result of the comparison as a mask</returns>
-      public Image<TColor, Byte> Cmp(Image<TColor, TDepth> img2, CvEnum.CMP_TYPE cmp_type)
+      public Image<TColor, Byte> Cmp(Image<TColor, TDepth> img2, CvEnum.CMP_TYPE cmpType)
       {
          Size size = Size;
          Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
          if (NumberOfChannels == 1)
          {
-            CvInvoke.cvCmp(Ptr, img2.Ptr, res.Ptr, cmp_type);
+            CvInvoke.cvCmp(Ptr, img2.Ptr, res.Ptr, cmpType);
          }
          else
          {
@@ -1839,7 +1825,7 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(Ptr, src1.Ptr, IntPtr.Zero);
                   CvInvoke.cvCopy(img2.Ptr, src2.Ptr, IntPtr.Zero);
 
-                  CvInvoke.cvCmp(src1.Ptr, src2.Ptr, dest.Ptr, cmp_type);
+                  CvInvoke.cvCmp(src1.Ptr, src2.Ptr, dest.Ptr, cmpType);
 
                   CvInvoke.cvSetImageCOI(res.Ptr, i + 1);
                   CvInvoke.cvCopy(dest.Ptr, res.Ptr, IntPtr.Zero);
@@ -1853,7 +1839,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// This function compare the current image with <paramref name="value"/> and returns the comparison mask
+      /// Compare the current image with <paramref name="value"/> and returns the comparison mask
       /// </summary>
       /// <param name="value">The value to compare with</param>
       /// <param name="comparisonType">The comparison type</param>
@@ -2092,6 +2078,11 @@ namespace Emgu.CV
       ///<summary> 
       ///Return the weighted sum such that: res = this * alpha + img2 * beta + gamma
       ///</summary>
+      ///<param name="img2">img2 in: res = this * alpha + img2 * beta + gamma </param>
+      ///<param name="alpha">alpha in: res = this * alpha + img2 * beta + gamma</param>
+      ///<param name="beta">beta in: res = this * alpha + img2 * beta + gamma</param>
+      ///<param name="gamma">gamma in: res = this * alpha + img2 * beta + gamma</param>
+      ///<returns>this * alpha + img2 * beta + gamma</returns>
       public Image<TColor, TDepth> AddWeighted(Image<TColor, TDepth> img2, double alpha, double beta, double gamma)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2163,10 +2154,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// calculates exponent of every element of input array:
+      /// Calculates exponent of every element of input array:
       /// dst(I)=exp(src(I))
-      /// Maximum relative error is ~7e-6. Currently, the function converts denormalized values to zeros on output.
       /// </summary>
+      /// <remarks>Maximum relative error is ~7e-6. Currently, the function converts denormalized values to zeros on output.</remarks>
       /// <returns>The exponent image</returns>
       [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Exp()
@@ -2440,7 +2431,7 @@ namespace Emgu.CV
       ///<returns> Image of the specific color and depth </returns>
       [ExposableMethod(
          Exposable = true,
-         Category = "Convertion",
+         Category = "Conversion",
          GenericParametersOptions = new Type[] {
             typeof(Bgr), typeof(Gray), typeof(Hsv), typeof(Hls), typeof(Lab), typeof(Luv), typeof(Xyz), typeof(Ycc),
             typeof(Single), typeof(Byte), typeof(Double)},
@@ -2953,11 +2944,12 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary>
-      ///Erodes <i>this</i> image using a 3x3 rectangular structuring element.
-      ///Erosion are applied serveral (iterations) times
-      ///</summary>
-      ///<returns> The eroded image</returns>
+      /// <summary>
+      /// Erodes <i>this</i> image using a 3x3 rectangular structuring element.
+      /// Erosion are applied serveral (iterations) times
+      /// </summary>
+      /// <param name="iterations">The number of erode iterations</param>
+      /// <returns> The eroded image</returns>
       public Image<TColor, TDepth> Erode(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -2965,11 +2957,12 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary>
-      ///Dilates <i>this</i> image using a 3x3 rectangular structuring element.
-      ///Dilation are applied serveral (iterations) times
-      ///</summary>
-      ///<returns> The dialated image</returns>
+      /// <summary>
+      /// Dilates <i>this</i> image using a 3x3 rectangular structuring element.
+      /// Dilation are applied serveral (iterations) times
+      /// </summary>
+      /// <param name="iterations">The number of dilate iterations</param>
+      /// <returns> The dialated image</returns>
       public Image<TColor, TDepth> Dilate(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3003,20 +2996,22 @@ namespace Emgu.CV
          if (temp != null) temp.Dispose();
       }
 
-      ///<summary>
-      ///Erodes <i>this</i> image inplace using a 3x3 rectangular structuring element.
-      ///Erosion are applied serveral (iterations) times
-      ///</summary>
+      /// <summary>
+      /// Erodes <i>this</i> image inplace using a 3x3 rectangular structuring element.
+      /// Erosion are applied serveral (iterations) times
+      /// </summary>
+      /// <param name="iterations">The number of erode iterations</param>
       [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Erode(int iterations)
       {
          CvInvoke.cvErode(Ptr, Ptr, IntPtr.Zero, iterations);
       }
 
-      ///<summary>
-      ///Dilates <i>this</i> image inplace using a 3x3 rectangular structuring element.
-      ///Dilation are applied serveral (iterations) times
-      ///</summary>
+      /// <summary>
+      /// Dilates <i>this</i> image inplace using a 3x3 rectangular structuring element.
+      /// Dilation are applied serveral (iterations) times
+      /// </summary>
+      /// <param name="iterations">The number of dilate iterations</param>
       [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Dilate(int iterations)
       {
@@ -3025,7 +3020,10 @@ namespace Emgu.CV
       #endregion
 
       #region generic operations
-      ///<summary> perform an generic action based on each element of the Image</summary>
+      /// <summary> 
+      /// perform an generic action based on each element of the image
+      /// </summary>
+      /// <param name="action">The action to be applied to each element of the image</param>
       public void Action(Action<TDepth> action)
       {
          int cols1 = Width * new TColor().Dimension;
@@ -3046,7 +3044,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// perform an generic operation based on the elements of the two images
+      /// Perform an generic operation based on the elements of the two images
       /// </summary>
       /// <typeparam name="TOtherDepth">The depth of the second image</typeparam>
       /// <param name="img2">The second image to perform action on</param>
@@ -3079,7 +3077,9 @@ namespace Emgu.CV
          handle2.Free();
       }
 
-      ///<summary> Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image</summary> 
+      /// <summary> 
+      /// Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image
+      /// </summary> 
       public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, int, int, TOtherDepth> converter)
          where TOtherDepth : new()
       {
@@ -3709,9 +3709,10 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///performs a convolution using the provided kernel 
+      ///Performs a convolution using the specific <paramref name="kernel"/> 
       ///</summary>
-      ///<param name="kernel"> The convolution kernel</param>
+      ///<param name="kernel">The convolution kernel</param>
+      ///<returns>The result of the convolution</returns>
       public Image<TColor, Single> Convolution(ConvolutionKernelF kernel)
       {
          Image<TColor, Single> floatImage =
@@ -3762,7 +3763,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// calculates one or more integral images for the source image
+      /// Calculates one or more integral images for the source image
       /// </summary>
       /// <param name="sum">The integral image</param>
       /// <param name="squareSum">The integral image for squared pixel values</param>
@@ -3950,7 +3951,7 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region image flipping
+      #region Image Flipping
       private static int GetCodeFromFlipType(CvEnum.FLIP flipType)
       {
          return
@@ -4048,7 +4049,7 @@ namespace Emgu.CV
       {
          Image<TColor, Byte> img = this as Image<TColor, Byte>;
          if (img == null)
-            throw new NotImplementedException("Gamma correct requires Depth of Byte");
+            throw new NotImplementedException("Gamma correction only implemented for Image of Byte as Depth");
 
          Byte[,] gammaLUT = new Byte[256, 1];
          for (int i = 0; i < 256; i++)
@@ -4083,7 +4084,7 @@ namespace Emgu.CV
       ///in the array represent a single color channel of the original image
       ///</summary>
       ///<returns> 
-      ///An array of gray scale images where each element 
+      ///An array of gray scale images where each element  
       ///in the array represent a single color channel of the original image 
       ///</returns>
       public Image<Gray, TDepth>[] Split()
@@ -4178,6 +4179,9 @@ namespace Emgu.CV
       #endregion
    }
 
+   /// <summary>
+   /// A cached color conversion code lookup table
+   /// </summary>
    internal static class ColorConversionCodeLookupTable
    {
       private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
@@ -4200,6 +4204,28 @@ namespace Emgu.CV
          return table.ContainsKey(destType) ? 
             table[destType] : (table[destType] = GetCode(srcType, destType));
       }
+   }
+
+   /// <summary>
+   /// Constants used by the image class
+   /// </summary>
+   internal static class ImageConstants
+   {
+      /// <summary>
+      /// Offset of roi
+      /// </summary>
+      public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
+
+      /// <summary>
+      /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
+      /// </summary>
+      public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
+
+      /// <summary>
+      /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
+      /// </summary>
+      private static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
+
    }
 }
 
