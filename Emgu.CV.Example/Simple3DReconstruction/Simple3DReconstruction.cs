@@ -64,7 +64,7 @@ namespace Simlpe3DReconstruction
          }
 
          //Display the disparity map
-         //imageBox1.Image = leftDisparityMap;
+         imageBox1.Image = leftDisparityMap;
 
          Osg.Geode geode = new Osg.Geode();
          Osg.Geometry geometry = new Osg.Geometry();

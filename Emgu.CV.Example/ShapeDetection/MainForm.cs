@@ -33,13 +33,13 @@ namespace ShapeDetection
 
             Gray cannyThreshold = new Gray(180);
             Gray cannyThresholdLinking = new Gray(120);
-            Gray circleAccumulatorThreshold = new Gray(120);
+            Gray circleAccumulatorThreshold = new Gray(500);
 
             CircleF[] circles = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
-                5.0, //Resolution of the accumulator used to detect centers of the circles
-                10.0, //min distance 
+                4.0, //Resolution of the accumulator used to detect centers of the circles
+                15.0, //min distance 
                 5, //min radius
                 0 //max radius
                 )[0]; //Get the circles from the first channel
