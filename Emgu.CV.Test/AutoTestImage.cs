@@ -803,6 +803,38 @@ namespace Emgu.CV.Test
          }
       }
 
+      public void TestContour2()
+      {
+         Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 200);
+         Image<Bgr, Byte> img2 = new Image<Bgr, byte>(200, 200);
+         using (MemStorage stor = new MemStorage())
+         {
+            Point[] polyline = new Point[] {
+               new Point(20, 20),
+               new Point(20, 30),
+               new Point(30, 30),
+               new Point(30, 20)};
+
+
+
+            Contour<Point> c = new Contour<Point>(stor);
+            c.PushMulti(polyline, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+
+            img1.Draw(c, new Bgr(255, 0, 0), new Bgr(), 0, -1, new Point(0, 0));
+            img1.Draw(c, new Bgr(0, 255, 0), new Bgr(), 0, -1, new Point(20, 10));
+            img1.Draw(c, new Bgr(0, 0, 255), new Bgr(), 0, 1, new Point(20, 10));
+
+            /*
+            for (int i = 0; i < polyline.Length; i++)
+            {
+               polyline[i].X += 20;
+               polyline[i].Y += 10;
+            }
+            img1.DrawPolyline(polyline, true, new Bgr(0, 0, 255), 1);
+             */
+         }
+      }
+
       [Test]
       public void TestGamma()
       {
@@ -836,11 +868,10 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestSetRandome()
+      public void TestSetRandomNormal()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(400, 200);
          //image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
-         //TODO: Find out why Random normal no longer works for multi channel images
          image.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(20, 20, 20));
       }
 

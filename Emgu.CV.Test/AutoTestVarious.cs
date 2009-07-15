@@ -214,8 +214,9 @@ namespace Emgu.CV.Test
             Assert.AreEqual(1, defacts.Length);
             Assert.AreEqual(new Point(100, 100), defacts[0].DepthPoint);
 
-            //TODO: Find out why cvPointPolygonTest in SVN do not work anymore
-            //Assert.IsTrue(contour.InContour(new PointF(90, 90)) < 0);
+            Assert.IsTrue(contour.InContour(new PointF(90, 90)) > 0);
+            Assert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
+            Assert.IsTrue(contour.InContour(new PointF(10, 10)) == 0);
          }
       }
 

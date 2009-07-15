@@ -632,8 +632,6 @@ namespace Emgu.CV.ML.UnitTest
          }
       }
 
-      //TODO: Findout why KMeans fails in SVN 1892
-      /*
       [Test]
       public void TestKMeans()
       {
@@ -680,6 +678,6 @@ namespace Emgu.CV.ML.UnitTest
             PointF p = new PointF(points.Data[i, 0], points.Data[i, 1]);
             image.Draw(new CircleF(p, 1.0f), colors[clusters[i, 0]], 1);
          }
-      }*/
+      }
    }
 }
