@@ -829,38 +829,15 @@ namespace Emgu.CV
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
       public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
       {
-         {  //TODO: Find out why cvDrawContours no longer works after SVN 1611
-            #region alternative code to cvDrawContours
-            Point[] pts = c.ToArray();
-            for (int i = 0; i < pts.Length; i++)
-            {
-               pts[i].X += offset.X;
-               pts[i].Y += offset.Y;
-            }
-            if (thickness < 1)
-            {
-               /*
-               if (!c.Convex)
-               {
-                  throw new NotSupportedException("The current OpenCV's implementation of cvDrawContours is broken, workaround is not yet available for non convex polygon"); 
-               }*/
-               FillConvexPoly(pts, externalColor);
-            }
-            else
-               DrawPolyline(pts, true, externalColor, thickness);
-            #endregion
-         }
-         /*
          CvInvoke.cvDrawContours(
-             Ptr,
-             c.Ptr,
-             externalColor.MCvScalar,
-             holeColor.MCvScalar,
-             maxLevel,
-             thickness,
-             CvEnum.LINE_TYPE.EIGHT_CONNECTED,
-             offset);
-         */
+          Ptr,
+          c.Ptr,
+          externalColor.MCvScalar,
+          holeColor.MCvScalar,
+          maxLevel,
+          thickness,
+          CvEnum.LINE_TYPE.EIGHT_CONNECTED,
+          offset);
       }
       #endregion
 
@@ -932,17 +909,17 @@ namespace Emgu.CV
             return ForEachDuplicateChannel<LineSegment2D[]>(
                delegate(IImage img, int channel)
                {
-                   IntPtr lines = CvInvoke.cvHoughLines2(
-                      img.Ptr, 
-                      stor.Ptr, 
-                      CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC, 
-                      rhoResolution, 
-                      thetaResolution, 
-                      threshold, 
-                      minLineWidth, 
-                      gapBetweenLines);
-                   Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
-                   return segments.ToArray();
+                  IntPtr lines = CvInvoke.cvHoughLines2(
+                     img.Ptr,
+                     stor.Ptr,
+                     CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC,
+                     rhoResolution,
+                     thetaResolution,
+                     threshold,
+                     minLineWidth,
+                     gapBetweenLines);
+                  Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
+                  return segments.ToArray();
                });
          }
       }
@@ -964,10 +941,10 @@ namespace Emgu.CV
          using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
             return canny.HoughLinesBinary(
-               rhoResolution, 
-               thetaResolution, 
-               threshold, 
-               minLineWidth, 
+               rhoResolution,
+               thetaResolution,
+               threshold,
+               minLineWidth,
                gapBetweenLines);
          }
       }
@@ -1376,13 +1353,13 @@ namespace Emgu.CV
 
       private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
       {
-         IntPtr keypointsPtr = new IntPtr() ;
+         IntPtr keypointsPtr = new IntPtr();
          descriptorPtr = new IntPtr();
          CvInvoke.cvExtractSURF(
-            Ptr, mask == null ? IntPtr.Zero : mask.Ptr, 
-            ref keypointsPtr, 
-            ref descriptorPtr, 
-            stor.Ptr, 
+            Ptr, mask == null ? IntPtr.Zero : mask.Ptr,
+            ref keypointsPtr,
+            ref descriptorPtr,
+            stor.Ptr,
             param,
             0);
          keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
@@ -1414,7 +1391,7 @@ namespace Emgu.CV
       {
          IntPtr mserPtr = new IntPtr();
          CvInvoke.cvExtractMSER(Ptr, mask, ref mserPtr, storage, param);
-         IntPtr[] mserSeq =  new Seq<IntPtr>(mserPtr, storage).ToArray();
+         IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }
 
@@ -1466,23 +1443,23 @@ namespace Emgu.CV
             return ForEachDuplicateChannel<PointF[]>(
                delegate(IImage img, int channel)
                {
-                   int cornercount = maxFeaturesPerChannel;
-                   PointF[] pts = new PointF[maxFeaturesPerChannel];
+                  int cornercount = maxFeaturesPerChannel;
+                  PointF[] pts = new PointF[maxFeaturesPerChannel];
 
-                   CvInvoke.cvGoodFeaturesToTrack(
-                       img.Ptr,
-                       eigImage.Ptr,
-                       tmpImage.Ptr,
-                       pts,
-                       ref cornercount,
-                       qualityLevel,
-                       minDistance,
-                       IntPtr.Zero,
-                       blockSize,
-                       useHarris ? 1 : 0,
-                       k);
-                   Array.Resize(ref pts, cornercount);
-                   return pts;
+                  CvInvoke.cvGoodFeaturesToTrack(
+                      img.Ptr,
+                      eigImage.Ptr,
+                      tmpImage.Ptr,
+                      pts,
+                      ref cornercount,
+                      qualityLevel,
+                      minDistance,
+                      IntPtr.Zero,
+                      blockSize,
+                      useHarris ? 1 : 0,
+                      k);
+                  Array.Resize(ref pts, cornercount);
+                  return pts;
                });
          }
       }
@@ -2982,7 +2959,7 @@ namespace Emgu.CV
             (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
             || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT) ?
-            CopyBlank() 
+            CopyBlank()
             : null;
 
          CvInvoke.cvMorphologyEx(
@@ -3717,20 +3694,20 @@ namespace Emgu.CV
       {
          Image<TColor, Single> floatImage =
             (typeof(TDepth) == typeof(Single)) ?
-            this as Image<TColor, Single> 
+            this as Image<TColor, Single>
             : Convert<TColor, Single>();
 
          Image<TColor, Single> res = new Image<TColor, Single>(Size);
          ForEachDuplicateChannel(
             delegate(IntPtr srcFloat, IntPtr dest, int channel)
-             {
-                //perform the convolution operation
-                CvInvoke.cvFilter2D(
-                    srcFloat,
-                    dest,
-                    kernel.Ptr,
-                    kernel.Center);
-             }, 
+            {
+               //perform the convolution operation
+               CvInvoke.cvFilter2D(
+                   srcFloat,
+                   dest,
+                   kernel.Ptr,
+                   kernel.Center);
+            },
             res);
 
          if (!object.ReferenceEquals(floatImage, this))
@@ -3788,8 +3765,8 @@ namespace Emgu.CV
          ForEachDuplicateChannel<TDepth>(
             delegate(IntPtr src, IntPtr dst, int channel)
             {
-              CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
-            }, 
+               CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
+            },
             dest);
       }
 
@@ -3978,7 +3955,7 @@ namespace Emgu.CV
       ///<summary> Inplace flip the image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
-      [ExposableMethod(Exposable = true, Category="Transform")]
+      [ExposableMethod(Exposable = true, Category = "Transform")]
       public void _Flip(CvEnum.FLIP flipType)
       {
          if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
@@ -4142,7 +4119,7 @@ namespace Emgu.CV
 
             //equalize the V (value) channel
             using (Image<Gray, TDepth> v = new Image<Gray, TDepth>(Size))
-            {  
+            {
                CvInvoke.cvSetImageCOI(hsv.Ptr, 3);
                CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
                v._EqualizeHist();
@@ -4162,9 +4139,9 @@ namespace Emgu.CV
       #region IImage
       IImage[] IImage.Split()
       {
-         return 
+         return
             Array.ConvertAll<Image<Gray, TDepth>, IImage>(
-               Split(), 
+               Split(),
                delegate(Image<Gray, TDepth> img) { return (IImage)img; });
       }
       #endregion
@@ -4201,7 +4178,7 @@ namespace Emgu.CV
          Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcType) ?
             _lookupTable[srcType] : (_lookupTable[srcType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
 
-         return table.ContainsKey(destType) ? 
+         return table.ContainsKey(destType) ?
             table[destType] : (table[destType] = GetCode(srcType, destType));
       }
    }
