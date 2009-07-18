@@ -995,7 +995,31 @@ namespace Emgu.CV
       /// <param name="upper">The exclusive upper boundary</param>
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvInRangeS(IntPtr src, MCvScalar lower, MCvScalar upper, IntPtr dst);
+      public static extern void cvInRangeS(
+         IntPtr src, 
+         MCvScalar lower, 
+         MCvScalar upper, 
+         IntPtr dst);
+
+      /// <summary>
+      /// Performs range check for every element of the input array:
+      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt; upper(I)_0
+      /// For single-channel arrays,
+      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt; upper(I)_0 &amp;&amp;
+      /// lower(I)_1 &lt;= src(I)_1 &lt; upper(I)_1
+      /// For two-channel arrays etc.
+      /// dst(I) is set to 0xff (all '1'-bits) if src(I) is within the range and 0 otherwise. All the arrays must have the same type, except the destination, and the same size (or ROI size)
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="lower">The lower values stored in an image of same type &amp; size as <paramref name="src"/></param>
+      /// <param name="upper">The upper values stored in an image of same type &amp; size as <paramref name="src"/></param>
+      /// <param name="dst">The resulting mask</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvInRange(
+         IntPtr src, 
+         IntPtr lower, 
+         IntPtr upper, 
+         IntPtr dst);
 
       /// <summary>
       /// Returns the calculated norm. The multiple-channel array are treated as single-channel, that is, the results for all channels are combined. 
