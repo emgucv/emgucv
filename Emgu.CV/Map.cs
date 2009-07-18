@@ -2,6 +2,8 @@ using System;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace Emgu.CV
 {
@@ -11,6 +13,7 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
+   [Serializable]
    public class Map<TColor, TDepth> : Image<TColor, TDepth>
       where TColor : struct, IColor
       where TDepth : new()
@@ -265,6 +268,33 @@ namespace Emgu.CV
              color,
              thickness);
       }
+
+      #region Implement ISerializable interface
+      /// <summary>
+      /// Constructor used to deserialize runtime serialized object
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public Map(SerializationInfo info, StreamingContext context)
+         :base(info, context)
+      {
+         _area = (RectangleF)info.GetValue("Area", typeof(RectangleF));
+         _resolution = (PointF)info.GetValue("Resolution", typeof(PointF));
+      }
+
+      /// <summary>
+      /// A function used for runtime serilization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">streaming context</param>
+      [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+      public override void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+         base.GetObjectData(info, context);
+         info.AddValue("Area", _area);
+         info.AddValue("Resolution", _resolution);
+      }
+      #endregion
 
       /*
       /// <summary>
