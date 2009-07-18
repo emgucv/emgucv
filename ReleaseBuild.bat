@@ -14,7 +14,7 @@ IF %DEVENV%==%VS2008% SET BUILD_CMD=%DEVENV% %BUILD_TYPE% Solution\VS2008\%RELEA
 if exist %RELEASE-FOLDER% rd /s /q %RELEASE-FOLDER%
 if exist %RELEASE-NAME% rd /s /q %RELEASE-NAME%
 
-mkdir %RELEASE-FOLDER%
+md %RELEASE-FOLDER%
 xcopy lib\3rdParty\* %RELEASE-NAME%\
 xcopy bin\*.dll %RELEASE-NAME%\ /Y
 FOR %%F IN (Emgu.CV\README.txt Emgu.CV\Emgu.CV.License.txt bin\Emgu.CV.dll.config bin\Emgu.CV.ML.XML bin\Emgu.CV.ML.dll bin\Emgu.CV.ML.dll.config bin\Emgu.CV.XML bin\Emgu.CV.UI.XML bin\Emgu.Util.dll bin\Emgu.Util.XML) DO COPY %%F %RELEASE-NAME%\
