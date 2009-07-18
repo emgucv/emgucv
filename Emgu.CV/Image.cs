@@ -1768,10 +1768,21 @@ namespace Emgu.CV
       ///<param name="higher"> The upper limit of color value</param>
       ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
       [ExposableMethod(Exposable = true, Category = "Logic")]
-      public Image<TColor, Byte> InRange(TColor lower, TColor higher)
+      public Image<Gray, Byte> InRange(TColor lower, TColor higher)
       {
-         Image<TColor, Byte> res = new Image<TColor, Byte>(Size);
+         Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
          CvInvoke.cvInRangeS(Ptr, lower.MCvScalar, higher.MCvScalar, res.Ptr);
+         return res;
+      }
+
+      ///<summary>Checks that image elements lie between values defined by two images of same size and type</summary>
+      ///<param name="lower"> The lower limit of color value</param>
+      ///<param name="higher"> The upper limit of color value</param>
+      ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
+      public Image<Gray, Byte> InRange(Image<TColor, TDepth> lower, Image<TColor, TDepth> higher)
+      {
+         Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
+         CvInvoke.cvInRange(Ptr, lower, higher, res);
          return res;
       }
 
