@@ -96,22 +96,22 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
-      /// The function GetSpatialMoment retrieves the spatial moment, which in case of image moments is defined as:
-      /// Mx_order,y_order=sumx,y(I(x,y)?x_order?y_order)
+      /// Retrieves the spatial moment, which in case of image moments is defined as:
+      /// M_{x_order,y_order}=sum_{x,y}(I(x,y) * x^{x_order} * y^{y_order})
       /// where I(x,y) is the intensity of the pixel (x, y). 
       /// </summary>
-      /// <param name="x_order">x order of the retrieved moment, x_order &gt;= 0</param>
-      /// <param name="y_order">y order of the retrieved moment, y_order &gt;= 0 and x_order + y_order &lt;= 3</param>
-      /// <returns>the spatial moment</returns>
-      public double GetSpatialMoment(int x_order, int y_order)
+      /// <param name="xOrder">x order of the retrieved moment, x_order &gt;= 0</param>
+      /// <param name="yOrder">y order of the retrieved moment, y_order &gt;= 0 and x_order + y_order &lt;= 3</param>
+      /// <returns>The spatial moment of the specific order</returns>
+      public double GetSpatialMoment(int xOrder, int yOrder)
       {
-         return CvInvoke.cvGetSpatialMoment(ref this, x_order, y_order);
+         return CvInvoke.cvGetSpatialMoment(ref this, xOrder, yOrder);
       }
 
       /// <summary>
-      /// The function cvGetCentralMoment retrieves the central moment, which in case of image moments is defined as:
-      /// ?x_order,y_order=sumx,y(I(x,y)?x-xc)x_order?y-yc)y_order),
-      /// where xc=M10/M00, yc=M01/M00 - coordinates of the gravity center
+      /// Retrieves the central moment, which in case of image moments is defined as:
+      /// mu_{x_order,y_order}=sum_{x,y}(I(x,y)*(x-x_c)^{x_order} * (y-y_c)^{y_order}),
+      /// where x_c=M10/M00, y_c=M01/M00 - coordinates of the gravity center
       /// </summary>
       /// <param name="x_order">x order of the retrieved moment, x_order &gt;= 0.</param>
       /// <param name="y_order">y order of the retrieved moment, y_order &gt;= 0 and x_order + y_order &lt;= 3</param>
@@ -122,8 +122,22 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
+      /// Retrieves normalized central moment, which in case of image moments is defined as:
+      /// eta_{x_order,y_order}=mu_{x_order,y_order} / M00^{(y_order+x_order)/2+1},
+      /// where mu_{x_order,y_order} is the central moment
+      /// </summary>
+      /// <param name="x_order">x order of the retrieved moment, x_order &gt;= 0.</param>
+      /// <param name="y_order">y order of the retrieved moment, y_order &gt;= 0 and x_order + y_order &lt;= 3</param>
+      /// <returns>The normalized center moment</returns>
+      public double GetNormalizedCentralMoment(int x_order, int y_order)
+      {
+         return CvInvoke.cvGetNormalizedCentralMoment(ref this, x_order, y_order);
+      }
+
+      /// <summary>
       /// Get the HuMoments 
       /// </summary>
+      /// <returns>The Hu moment computed from this moment</returns>
       public MCvHuMoments GetHuMoment()
       {
          MCvHuMoments huMoment = new MCvHuMoments();

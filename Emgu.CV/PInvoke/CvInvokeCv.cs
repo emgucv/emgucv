@@ -2366,7 +2366,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Retrieves the spatial moment, which in case of image moments is defined as:
-      /// MxOrder,yOrder=sumx,y(I(x,y) * xxOrder * yyOrder)
+      /// M_{x_order,y_order}=sum_{x,y}(I(x,y) * x^{x_order} * y^{y_order})
       /// where I(x,y) is the intensity of the pixel (x, y). 
       /// </summary>
       /// <param name="moments">The moment state</param>
@@ -2381,15 +2381,30 @@ namespace Emgu.CV
 
       /// <summary>
       /// Retrieves the central moment, which in case of image moments is defined as:
-      /// Mu xOrder,yOrder=sumx,y(I(x,y) * (x-xc)xOrder *(y-yc)yOrder),
-      /// where xc=M10/M00, yc=M01/M00 - coordinates of the gravity center
+      /// mu_{x_order,y_order}=sum_{x,y}(I(x,y)*(x-x_c)^{x_order} * (y-y_c)^{y_order}),
+      /// where x_c=M10/M00, y_c=M01/M00 - coordinates of the gravity center
       /// </summary>
-      /// <param name="moments">Pointer to the moment state structure</param>
+      /// <param name="moments">Reference to the moment state structure</param>
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The center moment</returns>
       [DllImport(CV_LIBRARY)]
       public static extern double cvGetCentralMoment(
+          ref MCvMoments moments,
+          int xOrder,
+          int yOrder);
+
+      /// <summary>
+      /// Retrieves normalized central moment, which in case of image moments is defined as:
+      /// eta_{x_order,y_order}=mu_{x_order,y_order} / M00^{(y_order+x_order)/2+1},
+      /// where mu_{x_order,y_order} is the central moment
+      /// </summary>
+      /// <param name="moments">Reference to the moment state structure</param>
+      /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
+      /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
+      /// <returns>The normalized center moment</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern double cvGetNormalizedCentralMoment(
           ref MCvMoments moments,
           int xOrder,
           int yOrder);
