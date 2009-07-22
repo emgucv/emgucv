@@ -1206,6 +1206,43 @@ namespace Emgu.CV.Test
             foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
          }
       }
+
+      [Test]
+      public void TestHOG()
+      {
+         using (HOGDescriptor hog = new HOGDescriptor())
+         {
+            float[] desc = HOGDescriptor.GetDefaultPeopleDetector();
+            hog.SetSVMDetector(desc);
+            Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png");
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] rects = hog.DetectMultiScale(image);
+            watch.Stop();
+            foreach (Rectangle rect in rects)
+            {
+               image.Draw(rect, new Bgr(Color.Red), 1);
+            }
+            //ImageViewer.Show(image);
+         }
+      }
+
+      [Test]
+      public void TestOctTree()
+      {
+         MCvPoint3D32f[] pts = new MCvPoint3D32f[] 
+         {
+            new MCvPoint3D32f(1, 2, 3),
+            new MCvPoint3D32f(2, 3, 4),
+            new MCvPoint3D32f(4, 5, 6),
+            new MCvPoint3D32f(2, 2, 2)
+         };
+
+         using (OctTree tree = new OctTree(pts, 10, 10))
+         {
+            MCvPoint3D32f[] p = tree.GetPointsWithinSphere(new MCvPoint3D32f(0, 0, 0), 5);
+            int i = p.Length;
+         }
+      }
       
       [Test]
       public void TestVideoWriter()

@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="Histogram.cs" />
+    <Compile Include="HOGDescriptor.cs" />
+    <Compile Include="OctTree.cs" />
     <Compile Include="PInvoke\CvInvokeCv.cs" />
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
