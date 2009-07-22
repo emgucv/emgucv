@@ -56,5 +56,13 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="fileName">The file name of the image</param>
       void Save(String fileName);
+
+      /// <summary>
+      /// Get the number of channels for this image
+      /// </summary>
+      int NumberOfChannels
+      {
+         get;
+      }
    }
 }
