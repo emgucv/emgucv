@@ -191,6 +191,22 @@ namespace Emgu.CV
          PointF center,
          double M,
          int flags);
+
+      /// <summary>
+      /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="center">The transformation center, where the output precision is maximal</param>
+      /// <param name="M">Maximum radius</param>
+      /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvLinearPolar(
+         IntPtr src,
+         IntPtr dst,
+         PointF center,
+         double maxRadius,
+         int flags);
       #endregion
 
       /// <summary>
