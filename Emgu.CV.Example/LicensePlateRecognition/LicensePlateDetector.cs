@@ -42,7 +42,6 @@ namespace LicensePlateRecognition
       /// <returns>The list of words for each license plate</returns>
       public List<List<Word>> DetectLicensePlate(Image<Bgr, byte> img, List<Image<Gray, Byte>> licensePlateList, List<Image<Gray, Byte>> filteredLicensePlateList, List<MCvBox2D> boxList)
       {
-         //Stopwatch w = Stopwatch.StartNew();
          List<List<Word>> licenses = new List<List<Word>>();
          using (Image<Gray, byte> gray = img.Convert<Gray, Byte>())
          using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
@@ -56,8 +55,20 @@ namespace LicensePlateRecognition
                  stor);
             FindLicensePlate(contours, gray, canny, licensePlateList, filteredLicensePlateList, boxList, licenses);
          }
-         //w.Stop();
          return licenses;
+      }
+
+      private int GetNumberOfChildren(Contour<Point> contours)
+      {
+         Contour<Point> child = contours.VNext;
+         if (child == null) return 0;
+         int count = 0;
+         while (child != null)
+         {
+            count++;
+            child = child.HNext;
+         }
+         return count;
       }
 
       private void FindLicensePlate(
@@ -67,30 +78,31 @@ namespace LicensePlateRecognition
       {
          for (; contours != null; contours = contours.HNext)
          {
-            Contour<Point> approxContour = contours.ApproxPoly(contours.Perimeter * 0.05, contours.Storage);
+            int numberOfChildren = GetNumberOfChildren(contours);      
+            //if it does not contains any children (charactor), it is not a license plate region
+            if (numberOfChildren == 0) continue;
 
-            if (approxContour.Area > 100 && approxContour.Total == 4)
+            if (contours.Area > 100)
             {
-               //img.Draw(contours, new Bgr(Color.Red), 1);
-               if (!IsParallelogram(approxContour.ToArray()))
+               if (numberOfChildren < 3) 
                {
-                  Contour<Point> child = contours.VNext;
-                  if (child != null)
-                     FindLicensePlate(child, gray, canny, licensePlateList, filteredLicensePlateList, boxList, licenses);
+                  //If the contour has less than 3 children, it is not a license plate (assuming license plate has at least 3 charactor)
+                  //However we should search the children of this contour to see if any of them is a license plate
+                  FindLicensePlate(contours.VNext, gray, canny, licensePlateList, filteredLicensePlateList, boxList, licenses);
                   continue;
                }
 
-               MCvBox2D box = approxContour.GetMinAreaRect();
-
+               MCvBox2D box = contours.GetMinAreaRect();
                double whRatio = (double)box.size.Width / box.size.Height;
-               if (!(3.0 < whRatio && whRatio < 8.0))
+               if (!(3.0 < whRatio && whRatio < 10.0))
                {
                   Contour<Point> child = contours.VNext;
                   if (child != null)
                      FindLicensePlate(child, gray, canny, licensePlateList, filteredLicensePlateList, boxList, licenses);
                   continue;
                }
-
+               box.size.Width -= 2;
+               box.size.Height -= 2;
                Image<Gray, Byte> plate = gray.Copy(box);
                Image<Gray, Byte> filteredPlate = FilterPlate(plate);
 
@@ -104,25 +116,6 @@ namespace LicensePlateRecognition
                boxList.Add(box);
             }
          }
-      }
-
-      /// <summary>
-      /// Check if the four points forms a parallelogram
-      /// </summary>
-      /// <param name="pts">The four points that defines a polygon</param>
-      /// <returns>True if the four points defines a parallelogram</returns>
-      private static bool IsParallelogram(Point[] pts)
-      {
-         LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
-
-         double diff1 = Math.Abs(edges[0].Length - edges[2].Length);
-         double diff2 = Math.Abs(edges[1].Length - edges[3].Length);
-         if (diff1 / edges[0].Length <= 0.05 && diff1 / edges[2].Length <= 0.05
-            && diff2 / edges[1].Length <= 0.05 && diff2 / edges[3].Length <= 0.05)
-         {
-            return true;
-         }
-         return false;
       }
 
       /// <summary>
