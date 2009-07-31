@@ -51,7 +51,7 @@ namespace Emgu.CV
 	{
 		get
 		{	
-			return "110";
+			return "111";
 		}
 	}
 	
