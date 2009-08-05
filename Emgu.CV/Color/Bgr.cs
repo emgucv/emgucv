@@ -88,7 +88,103 @@ namespace Emgu.CV.Structure
       /// <returns>The string representation of this color</returns>
       public override string ToString()
       {
-         return String.Format("[{0},{1},{2}]", Blue, Green, Red); 
+         return String.Format("[{0},{1},{2}]", Blue, Green, Red);
       }
+
+      #region Operators; Contribution from yoavhacohen
+      /// <summary>
+      /// Return the sum of two color
+      /// </summary>
+      /// <param name="a">The first color</param>
+      /// <param name="b">The second color</param>
+      /// <returns>The sum of two color</returns>
+      public static Bgr operator +(Bgr a, Bgr b)
+      {
+         return new Bgr(
+             a.Blue + b.Blue,
+             a.Green + b.Green,
+             a.Red + b.Red);
+      }
+
+      /// <summary>
+      /// Return the different of two color
+      /// </summary>
+      /// <param name="a">The first color</param>
+      /// <param name="b">The second color</param>
+      /// <returns>The different of two color</returns>
+      public static Bgr operator -(Bgr a, Bgr b)
+      {
+         return new Bgr(
+             a.Blue - b.Blue,
+             a.Green - b.Green,
+             a.Red - b.Red);
+      }
+
+      /// <summary>
+      /// Elementwise divide the first color by the second color
+      /// </summary>
+      /// <param name="a">The first color</param>
+      /// <param name="b">The second color</param>
+      /// <returns>The result of elementwise dividing the first color by the second color</returns>
+      public static Bgr operator /(Bgr a, Bgr b)
+      {
+         return new Bgr(
+             a.Blue / b.Blue,
+             a.Green / b.Green,
+             a.Red / b.Red);
+      }
+
+      /// <summary>
+      /// Elementwise multiply the first color by the second color
+      /// </summary>
+      /// <param name="a">The first color</param>
+      /// <param name="b">The second color</param>
+      /// <returns>The result of elementwise multiplying the first color by the second color</returns>
+      public static Bgr operator *(Bgr a, Bgr b)
+      {
+         return new Bgr(
+             a.Blue * b.Blue,
+             a.Green * b.Green,
+             a.Red * b.Red);
+      }
+
+      /// <summary>
+      /// Multiply the color by a scalar
+      /// </summary>
+      /// <param name="a">The color</param>
+      /// <param name="scalar">The scalar</param>
+      /// <returns>The result of multiplying the color by a scalar</returns>
+      public static Bgr operator *(Bgr a, double scalar)
+      {
+         return new Bgr(
+             a.Blue * scalar,
+             a.Green * scalar,
+             a.Red * scalar);
+      }
+
+      /// <summary>
+      /// Divide the color by a scalar
+      /// </summary>
+      /// <param name="a">The color</param>
+      /// <param name="scalar">The scalar</param>
+      /// <returns>The result of dividing the color by a scalar</returns>
+      public static Bgr operator /(Bgr a, double scalar)
+      {
+         return new Bgr(
+             a.Blue / scalar,
+             a.Green / scalar,
+             a.Red / scalar);
+      }
+
+      /// <summary>
+      /// Convert a scalar to a Bgr color
+      /// </summary>
+      /// <param name="scalar">The scalar</param>
+      /// <returns>The Bgr color</returns>
+      public static implicit operator Bgr(double scalar)
+      {
+         return new Bgr(scalar, scalar, scalar);
+      }
+      #endregion
    }
 }
