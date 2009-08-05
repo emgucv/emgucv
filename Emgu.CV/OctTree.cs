@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Oct Tree
+   /// Oct-Tree
    /// </summary>
    public class OctTree : UnmanagedObject
    {
@@ -30,7 +30,7 @@ namespace Emgu.CV
       private Seq<MCvPoint3D32f> _pointSeq;
 
       /// <summary>
-      /// Create an empty Oct Tree
+      /// Create an empty Oct-Tree
       /// </summary>
       public OctTree()
       {
@@ -39,12 +39,24 @@ namespace Emgu.CV
          _pointSeq = new Seq<MCvPoint3D32f>(_storage);
       }
 
+      /// <summary>
+      /// Create an Oct-Tree from the given points
+      /// </summary>
+      /// <param name="points">The points to be inserted into the Oct-Tree</param>
+      /// <param name="maxLevels">The maximum levels of the Oct-Tree</param>
+      /// <param name="minPoints">The minimum number of points in each level</param>
       public OctTree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
          :this()
       {
          BuildTree(points, maxLevels, minPoints);
       }
 
+      /// <summary>
+      /// Build an Oct-Tree from the given points
+      /// </summary>
+      /// <param name="points">The points to be inserted into the Oct-Tree</param>
+      /// <param name="maxLevels">The maximum levels of the Oct-Tree</param>
+      /// <param name="minPoints">The minimum number of points in each level</param>
       public void BuildTree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
@@ -52,6 +64,12 @@ namespace Emgu.CV
          handle.Free();
       }
 
+      /// <summary>
+      /// Get the points within the specific sphere
+      /// </summary>
+      /// <param name="center">The center of the sphere</param>
+      /// <param name="radius">The radius of the sphere</param>
+      /// <returns>The points withing the specific sphere</returns>
       public MCvPoint3D32f[] GetPointsWithinSphere(MCvPoint3D32f center, float radius)
       {
          cvOctTreeGetPointsWithinSphere(_ptr, center, radius, _pointSeq);

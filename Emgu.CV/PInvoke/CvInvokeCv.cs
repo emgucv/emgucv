@@ -198,7 +198,7 @@ namespace Emgu.CV
       /// <param name="src">Source image</param>
       /// <param name="dst">Destination image</param>
       /// <param name="center">The transformation center, where the output precision is maximal</param>
-      /// <param name="M">Maximum radius</param>
+      /// <param name="maxRadius">Maximum radius</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvLinearPolar(
