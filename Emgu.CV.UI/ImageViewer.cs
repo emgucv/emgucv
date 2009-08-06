@@ -62,6 +62,17 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
+      /// Get the image box hosted in this viewer
+      /// </summary>
+      public ImageBox ImageBox
+      {
+         get
+         {
+            return this.imageBox1;
+         }
+      }
+
+      /// <summary>
       /// Create a ImageViewer with the specific image and show it.
       /// </summary>
       /// <param name="image">The image to be displayed in ImageViewer</param>

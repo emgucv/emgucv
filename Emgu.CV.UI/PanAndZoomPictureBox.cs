@@ -97,19 +97,19 @@ namespace Emgu.CV.UI
          if (e.Button == MouseButtons.Left && _mouseDownButton == MouseButtons.Left)
          {
             ReverseRectangle();
-            Size viewSize = GetViewSize();
-            Rectangle imageRegion = new Rectangle(Point.Empty, viewSize);
+            Size size = Min(GetViewSize(), GetImageSize());
+            Rectangle imageRegion = new Rectangle(Point.Empty, size);
             if (!imageRegion.Contains(_mouseDownPosition))
                return;
 
-            Rectangle selectedRectangle = GetSelectedRectangle(e.X, e.Y);
+            Rectangle selectedRectangle = GetSelectedRectangle(e.Location, _mouseDownPosition);
 
             if ((selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
             {
                int h = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value + (int)(selectedRectangle.Location.X / _zoomScale));
                int v = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value + (int)(selectedRectangle.Location.Y / _zoomScale));
 
-               _zoomScale = _zoomScale * viewSize.Width / selectedRectangle.Width;
+               _zoomScale = _zoomScale * size.Width / selectedRectangle.Width;
 
                SetScrollBarVisibilityAndMaxMin();
 
@@ -195,8 +195,8 @@ namespace Emgu.CV.UI
       {
          if (Image != null          //image is set
             &&          //either pan or zoom
-            (_zoomScale != 1.0f || 
-            (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) || 
+            (_zoomScale != 1.0f ||
+            (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) ||
             (verticalScrollBar.Visible && verticalScrollBar.Value != 0)))
          {
             using (Matrix transform = pe.Graphics.Transform)
@@ -230,7 +230,7 @@ namespace Emgu.CV.UI
          // If the image is taller than the PictureBox, show the VScrollBar.
          verticalScrollBar.Visible =
             (int)(Image.Size.Height * _zoomScale) > ClientSize.Height;
-         
+
          #endregion
 
          // Set the Maximum, LargeChange and SmallChange properties.
@@ -317,7 +317,7 @@ namespace Emgu.CV.UI
             //reverse the previous highlighted rectangle, if there is any
             ReverseRectangle();
 
-            Rectangle rect = GetSelectedRectangle(e.X, e.Y);
+            Rectangle rect = GetSelectedRectangle(e.Location, _mouseDownPosition);
             rect.Location = PointToScreen(rect.Location);
             ControlPaint.DrawReversibleFrame(
                rect,
@@ -331,7 +331,7 @@ namespace Emgu.CV.UI
       {
          if (!_bufferPoint.IsEmpty)
          {
-            Rectangle rect = GetSelectedRectangle(_bufferPoint.X, _bufferPoint.Y);
+            Rectangle rect = GetSelectedRectangle(_bufferPoint, _mouseDownPosition);
             rect.Location = PointToScreen(rect.Location);
             ControlPaint.DrawReversibleFrame(
                rect,
@@ -341,34 +341,71 @@ namespace Emgu.CV.UI
          }
       }
 
-      private Size GetViewSize()
+      /// <summary>
+      /// Get the size of the view area
+      /// </summary>
+      /// <returns>The size of the view area</returns>
+      protected internal Size GetViewSize()
       {
          return new Size(
-            ClientSize.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0) ,
+            ClientSize.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0),
             ClientSize.Height - (horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0));
       }
 
-      private Rectangle GetSelectedRectangle(int x, int y)
+      /// <summary>
+      /// Get the size of the image
+      /// </summary>
+      /// <returns>The size of the image</returns>
+      protected internal Size GetImageSize()
       {
-         int top = Math.Min(y, _mouseDownPosition.Y);
-         int bottom = Math.Max(y, _mouseDownPosition.Y);
-         int left = Math.Min(x, _mouseDownPosition.X);
-         int right = Math.Max(x, _mouseDownPosition.X);
-         Size viewSize = GetViewSize();
+         if (base.Image == null) return new Size();
+         Size imageSize = base.Image.Size;
+         return new Size(
+            (int)Math.Round(imageSize.Width * _zoomScale),
+            (int)Math.Round(imageSize.Height * _zoomScale));
+      }
+
+      /// <summary>
+      /// Get the minimum of the two sizes
+      /// </summary>
+      /// <param name="s1">The first size</param>
+      /// <param name="s2">The second size</param>
+      /// <returns>The minimum of the two sizes</returns>
+      protected internal static Size Min(Size s1, Size s2)
+      {
+         return new Size(
+            s1.Width < s2.Width ? s1.Width : s2.Width,
+            s1.Height < s2.Height ? s1.Height : s2.Height);
+      }
+
+      /// <summary>
+      /// Get the rectangle defined by the two points
+      /// </summary>
+      /// <param name="p1">The first point</param>
+      /// <param name="p2">The second point</param>
+      /// <returns>the rectangle defined by the two points</returns>
+      private Rectangle GetSelectedRectangle(Point p1, Point p2)
+      {
+         int top = Math.Min(p1.Y, p2.Y);
+         int bottom = Math.Max(p1.Y, p2.Y);
+         int left = Math.Min(p1.X, p2.X);
+         int right = Math.Max(p1.X, p2.X);
+
+         Size size = Min(GetViewSize(), GetImageSize());
 
          Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
-         rect.Intersect(new Rectangle(Point.Empty, viewSize));
+         rect.Intersect(new Rectangle(Point.Empty, size));
 
-         if ((double)rect.Width / rect.Height > (double)viewSize.Width / viewSize.Height)
-            rect.Width = (int)((double)viewSize.Width / viewSize.Height * rect.Height);
-         else if ((double)rect.Width / rect.Height < (double)viewSize.Width / viewSize.Height)
-            rect.Height = (int)((double)rect.Width / viewSize.Width * viewSize.Height);
+         if ((double)rect.Width / rect.Height > (double)size.Width / size.Height)
+            rect.Width = (int)((double)size.Width / size.Height * rect.Height);
+         else if ((double)rect.Width / rect.Height < (double)size.Width / size.Height)
+            rect.Height = (int)((double)rect.Width / size.Width * size.Height);
 
-         if (rect.Y != _mouseDownPosition.Y)
-            rect.Y = _mouseDownPosition.Y - rect.Height;
+         if (rect.Y != p2.Y)
+            rect.Y = p2.Y - rect.Height;
 
-         if (rect.X != _mouseDownPosition.X)
-            rect.X = _mouseDownPosition.X - rect.Width;
+         if (rect.X != p2.X)
+            rect.X = p2.X - rect.Width;
 
          return rect;
       }
@@ -397,7 +434,7 @@ namespace Emgu.CV.UI
             _zoomScale != zoomScale //the scale has been changed
             && //and, the scale is not too small
             !(zoomScale < _zoomScale &&
-               (Image.Size.Width * zoomScale < 2.0 
+               (Image.Size.Width * zoomScale < 2.0
                || Image.Size.Height * zoomScale < 2.0))
             && //and, the scale is not too big
             !(zoomScale > _zoomScale &&

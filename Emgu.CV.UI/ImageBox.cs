@@ -78,12 +78,21 @@ namespace Emgu.CV.UI
          get { return _functionalMode; }
          set
          {
+            PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
+
             //right click menu enabled
             bool rightClickMenuEnabled = ((int)value & (int)FunctionalModeOption.RightClickMenu) != 0;
             foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
-               mi.Visible = rightClickMenuEnabled;
-
-            PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
+            {
+               if (mi == zoomToolStripMenuItem)
+               {
+                  mi.Visible = PanableAndZoomable && rightClickMenuEnabled;
+               }
+               else
+               {
+                  mi.Visible = rightClickMenuEnabled;
+               }
+            }
 
             _functionalMode = value;
          }
@@ -466,6 +475,30 @@ namespace Emgu.CV.UI
             {
                MessageBox.Show(excpt.Message);
             }
+      }
+
+      private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (Image != null)
+         {
+            SetZoomScale(ZoomScale * 2.0, new Point());
+         }
+      }
+
+      private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (Image != null)
+         {
+            SetZoomScale(ZoomScale / 2.0, new Point());
+         }
+      }
+
+      private void unZoomToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (Image != null)
+         {
+            SetZoomScale(1.0, new Point());
+         }
       }
 
       private void propertyToolStripMenuItem_Click(object sender, EventArgs e)
