@@ -3296,7 +3296,7 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
          {
             CvInvoke.cvReleaseImageHeader(ref _ptr);
-            _ptr = IntPtr.Zero;
+            Debug.Assert(_ptr == IntPtr.Zero);
             GC.RemoveMemoryPressure(StructSize.MIplImage);
          }
 
