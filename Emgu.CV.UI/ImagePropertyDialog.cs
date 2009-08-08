@@ -6,28 +6,25 @@ namespace Emgu.CV.UI
    /// <summary>
    /// A dialog to display the property of an image
    /// </summary>
-   internal partial class PropertyDialog : Form
+   internal partial class ImagePropertyDialog : Form
    {
-      private ImageBox _imageBox;
-
       /// <summary>
       /// Constructor
       /// </summary>
-      public PropertyDialog(ImageBox imageBox)
+      public ImagePropertyDialog(ImageBox imageBox)
       {
          InitializeComponent();
-         _imageBox = imageBox;
-         imageProperty1.ImageBox = _imageBox;
+         imagePropertyControl.ImageBox = imageBox;
       }
 
       /// <summary>
       /// Get the image property panel
       /// </summary>
-      public ImageProperty ImagePropertyPanel
+      public ImageProperty ImagePropertyControl
       {
          get
          {
-            return imageProperty1;
+            return imagePropertyControl;
          }
       }
    }

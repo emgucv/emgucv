@@ -36,15 +36,15 @@ namespace Emgu.CV.UI
          this.fpsTextBox = new System.Windows.Forms.TextBox();
          this.tabControl1 = new System.Windows.Forms.TabControl();
          this.tabPage1 = new System.Windows.Forms.TabPage();
+         this.cSharpOperationView = new Emgu.CV.UI.OperationsView();
          this.tabPage2 = new System.Windows.Forms.TabPage();
+         this.splitter1 = new System.Windows.Forms.Splitter();
+         this.cPlusPlusOperationView = new Emgu.CV.UI.OperationsView();
          this.removeAllFilterButton = new System.Windows.Forms.Button();
          this.removeFilterButton = new System.Windows.Forms.Button();
          this.showHistogramButton = new System.Windows.Forms.Button();
          this.zoomLevelComboBox = new System.Windows.Forms.ComboBox();
-         this.label9 = new System.Windows.Forms.Label();
-         this.splitter1 = new System.Windows.Forms.Splitter();
-         this.cSharpOperationView = new Emgu.CV.UI.OperationsView();
-         this.cPlusPlusOperationView = new Emgu.CV.UI.OperationsView();
+         this.zoomLabel = new System.Windows.Forms.Label();
          this.tabControl1.SuspendLayout();
          this.tabPage1.SuspendLayout();
          this.tabPage2.SuspendLayout();
@@ -147,6 +147,11 @@ namespace Emgu.CV.UI
          this.tabPage1.Name = "tabPage1";
          this.tabPage1.UseVisualStyleBackColor = true;
          // 
+         // cSharpOperationView
+         // 
+         resources.ApplyResources(this.cSharpOperationView, "cSharpOperationView");
+         this.cSharpOperationView.Name = "cSharpOperationView";
+         // 
          // tabPage2
          // 
          this.tabPage2.Controls.Add(this.splitter1);
@@ -154,6 +159,17 @@ namespace Emgu.CV.UI
          resources.ApplyResources(this.tabPage2, "tabPage2");
          this.tabPage2.Name = "tabPage2";
          this.tabPage2.UseVisualStyleBackColor = true;
+         // 
+         // splitter1
+         // 
+         resources.ApplyResources(this.splitter1, "splitter1");
+         this.splitter1.Name = "splitter1";
+         this.splitter1.TabStop = false;
+         // 
+         // cPlusPlusOperationView
+         // 
+         resources.ApplyResources(this.cPlusPlusOperationView, "cPlusPlusOperationView");
+         this.cPlusPlusOperationView.Name = "cPlusPlusOperationView";
          // 
          // removeAllFilterButton
          // 
@@ -183,32 +199,16 @@ namespace Emgu.CV.UI
          this.zoomLevelComboBox.Name = "zoomLevelComboBox";
          this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
          // 
-         // label9
+         // zoomLabel
          // 
-         resources.ApplyResources(this.label9, "label9");
-         this.label9.Name = "label9";
-         // 
-         // splitter1
-         // 
-         resources.ApplyResources(this.splitter1, "splitter1");
-         this.splitter1.Name = "splitter1";
-         this.splitter1.TabStop = false;
-         // 
-         // cSharpOperationView
-         // 
-         resources.ApplyResources(this.cSharpOperationView, "cSharpOperationView");
-         this.cSharpOperationView.Name = "cSharpOperationView";
-         // 
-         // cPlusPlusOperationView
-         // 
-         resources.ApplyResources(this.cPlusPlusOperationView, "cPlusPlusOperationView");
-         this.cPlusPlusOperationView.Name = "cPlusPlusOperationView";
+         resources.ApplyResources(this.zoomLabel, "zoomLabel");
+         this.zoomLabel.Name = "zoomLabel";
          // 
          // ImageProperty
          // 
          resources.ApplyResources(this, "$this");
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.Controls.Add(this.label9);
+         this.Controls.Add(this.zoomLabel);
          this.Controls.Add(this.zoomLevelComboBox);
          this.Controls.Add(this.showHistogramButton);
          this.Controls.Add(this.removeFilterButton);
@@ -264,7 +264,7 @@ namespace Emgu.CV.UI
       private System.Windows.Forms.Button removeFilterButton;
       private System.Windows.Forms.Button showHistogramButton;
       private System.Windows.Forms.ComboBox zoomLevelComboBox;
-      private System.Windows.Forms.Label label9;
+      private System.Windows.Forms.Label zoomLabel;
       private System.Windows.Forms.Splitter splitter1;
    }
 }

@@ -34,7 +34,24 @@ namespace Emgu.CV.UI
       public ImageBox ImageBox
       {
          get { return _imageBox; }
-         set { _imageBox = value; }
+         set 
+         { 
+            _imageBox = value;
+            if (_imageBox != null)
+            {
+               //update control base on current funtional mode
+               HandleFunctionalModeChange(this, new EventArgs());
+ 
+               //register event such that feature change in functional mode will also trigger an update to the control
+               _imageBox.OnFunctionalModeChanged += HandleFunctionalModeChange; 
+            }
+         }
+      }
+
+      private void HandleFunctionalModeChange(Object sender, EventArgs args)
+      {
+         bool zoom = (_imageBox.FunctionalMode & ImageBox.FunctionalModeOption.PanAndZoom) == ImageBox.FunctionalModeOption.PanAndZoom;
+         zoomLabel.Visible = zoomLevelComboBox.Visible = zoom;
       }
 
       public void SetImage(IImage image)
@@ -179,6 +196,8 @@ namespace Emgu.CV.UI
                _histogramViewer.Dispose();
                _histogramViewer = null;
             }
+
+            _imageBox.OnFunctionalModeChanged -= HandleFunctionalModeChange;
          }
          base.Dispose(disposing);
       }

@@ -23,7 +23,7 @@ namespace Emgu.CV.UI
       /// The image that is displayed
       /// </summary>
       private IImage _displayedImage;
-      private PropertyDialog _propertyDlg;
+      private ImagePropertyDialog _propertyDlg;
 
       private FunctionalModeOption _functionalMode = FunctionalModeOption.Everything;
 
@@ -61,7 +61,7 @@ namespace Emgu.CV.UI
          OnZoomScaleChange += delegate
          {
             if (_propertyDlg != null)
-               _propertyDlg.ImagePropertyPanel.UpdateZoomScale();
+               _propertyDlg.ImagePropertyControl.UpdateZoomScale();
          };
          
       }
@@ -78,6 +78,8 @@ namespace Emgu.CV.UI
          get { return _functionalMode; }
          set
          {
+            if (_functionalMode == value) return;
+
             PanableAndZoomable = ((int)value & (int)FunctionalModeOption.PanAndZoom) != 0;
 
             //right click menu enabled
@@ -95,8 +97,16 @@ namespace Emgu.CV.UI
             }
 
             _functionalMode = value;
+
+            if (OnFunctionalModeChanged != null)
+               OnFunctionalModeChanged(this, new EventArgs());
          }
       }
+
+      /// <summary>
+      /// The event which will be trigerred when functional mode is changed
+      /// </summary>
+      public event EventHandler OnFunctionalModeChanged;
 
       private void ImageBox_MouseMove(object sender, MouseEventArgs e)
       {
@@ -125,7 +135,7 @@ namespace Emgu.CV.UI
             if (value)
             {   //this is a call to enable the property dlg
                if (_propertyDlg == null)
-                  _propertyDlg = new PropertyDialog(this);
+                  _propertyDlg = new ImagePropertyDialog(this);
 
                _propertyDlg.Show();
 
@@ -510,7 +520,7 @@ namespace Emgu.CV.UI
       {
          get
          {
-            return EnablePropertyPanel ? _propertyDlg.ImagePropertyPanel : null;
+            return EnablePropertyPanel ? _propertyDlg.ImagePropertyControl : null;
          }
       }
 

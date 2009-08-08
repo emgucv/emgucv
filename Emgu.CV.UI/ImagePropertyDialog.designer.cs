@@ -1,6 +1,6 @@
 namespace Emgu.CV.UI
 {
-    partial class PropertyDialog
+    partial class ImagePropertyDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,21 +28,21 @@ namespace Emgu.CV.UI
         /// </summary>
         private void InitializeComponent()
         {
-           System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyDialog));
-           this.imageProperty1 = new Emgu.CV.UI.ImageProperty();
+           System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImagePropertyDialog));
+           this.imagePropertyControl = new Emgu.CV.UI.ImageProperty();
            this.SuspendLayout();
            // 
            // imageProperty1
            // 
-           resources.ApplyResources(this.imageProperty1, "imageProperty1");
-           this.imageProperty1.ImageBox = null;
-           this.imageProperty1.Name = "imageProperty1";
+           resources.ApplyResources(this.imagePropertyControl, "imageProperty1");
+           this.imagePropertyControl.ImageBox = null;
+           this.imagePropertyControl.Name = "imageProperty1";
            // 
            // PropertyDialog
            // 
            resources.ApplyResources(this, "$this");
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-           this.Controls.Add(this.imageProperty1);
+           this.Controls.Add(this.imagePropertyControl);
            this.Name = "PropertyDialog";
            this.ResumeLayout(false);
 
@@ -50,6 +50,6 @@ namespace Emgu.CV.UI
 
         #endregion
 
-        private ImageProperty imageProperty1;
+        private ImageProperty imagePropertyControl;
     }
 }

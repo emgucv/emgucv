@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -117,11 +117,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringTable.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Include="PropertyDialog.cs">
+    <Compile Include="ImagePropertyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertyDialog.designer.cs">
-      <DependentUpon>PropertyDialog.cs</DependentUpon>
+    <Compile Include="ImagePropertyDialog.designer.cs">
+      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -204,8 +204,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringTable.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyDialog.resx">
-      <DependentUpon>PropertyDialog.cs</DependentUpon>
+    <EmbeddedResource Include="ImagePropertyDialog.resx">
+      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\StringTable.zh-CN.resx">
@@ -213,9 +213,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringTable.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyDialog.zh-CN.resx">
+    <EmbeddedResource Include="ImagePropertyDialog.zh-CN.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>PropertyDialog.cs</DependentUpon>
+      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
