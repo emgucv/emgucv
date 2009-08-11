@@ -78,7 +78,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestLineFitting()
+      public void TestLineFitting1()
       {
          List<PointF> pts = new List<PointF>();
 
@@ -1099,23 +1099,24 @@ namespace Emgu.CV.Test
          System.Random r = new Random();
          int sampleCount = 100;
 
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400);
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
          PointF[] pts = new PointF[sampleCount];
          for (int i = 0; i < pts.Length; i++)
          {
-            int x = r.Next(100) + 20;
+            int x = r.Next(200) + 50;
             int y = r.Next(300) + 50;
-            img[y, x] = new Bgr(255.0, 255.0, 255.0);
             pts[i] = new PointF(x, y);
+
+            img.Draw(new CircleF(pts[i], 2), new Bgr(Color.Green), 1);
+
          }
 
          Stopwatch watch = Stopwatch.StartNew();
          Ellipse e = PointCollection.EllipseLeastSquareFitting(pts);
          watch.Stop();
-         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + "milliseconds");
 
-         img.Draw(e, new Bgr(120.0, 120.0, 120.0), 2);
-         //ImageViewer.Show(img);
+         img.Draw(e, new Bgr(Color.Red), 2);
+         //ImageViewer.Show(img, String.Format("Time used: {0}milliseconds", watch.ElapsedMilliseconds));
       }
 
       [Test]
@@ -1212,17 +1213,19 @@ namespace Emgu.CV.Test
       {
          using (HOGDescriptor hog = new HOGDescriptor())
          {
-            float[] desc = HOGDescriptor.GetDefaultPeopleDetector();
-            hog.SetSVMDetector(desc);
+            float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
+            hog.SetSVMDetector(pedestrianDescriptor);
+
             Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png");
+            
             Stopwatch watch = Stopwatch.StartNew();
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
+
             foreach (Rectangle rect in rects)
-            {
                image.Draw(rect, new Bgr(Color.Red), 1);
-            }
-            //ImageViewer.Show(image);
+            
+            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 

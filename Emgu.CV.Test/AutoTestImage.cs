@@ -955,6 +955,21 @@ namespace Emgu.CV.Test
             }
          }
       }
+
+      [Test]
+      public void TestThreshold()
+      {
+         using (Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg"))
+         {
+            Image<Gray, Byte> thresh1 = new Image<Gray, byte>(image.Size);
+            Image<Gray, Byte> thresh2 = new Image<Gray, byte>(image.Size);
+            CvInvoke.cvThreshold(image, thresh1, 0, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
+            CvInvoke.cvThreshold(image, thresh2, 255, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
+
+            Assert.IsTrue(thresh1.Equals(thresh2));
+         }
+      }
+
       /*
       [Test]
       public void T()

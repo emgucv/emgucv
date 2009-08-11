@@ -348,11 +348,13 @@ namespace Emgu.CV.Test
          //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-CN");
 
          ImageViewer viewer = new ImageViewer(null);
-         viewer.Image = new Image<Bgr, Byte>(50, 50);
+         //viewer.Image = new Image<Bgr, Byte>(50, 50);
          //viewer.Image = null;
+         //viewer.ImageBox.FunctionalMode = ImageBox.FunctionalModeOption.RightClickMenu;
          viewer.ShowDialog();
+
          //Application.Run(new ImageViewer(null));
-         
+
       }
 
       /*
