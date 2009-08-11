@@ -84,7 +84,7 @@ namespace Emgu.CV.UI
 
             //right click menu enabled
             bool rightClickMenuEnabled = ((int)value & (int)FunctionalModeOption.RightClickMenu) != 0;
-            foreach (ToolStripMenuItem mi in contextMenuStrip1.Items)
+            foreach (ToolStripMenuItem mi in rightClickContextMenuStrip.Items)
             {
                if (mi == zoomToolStripMenuItem)
                {
@@ -179,12 +179,21 @@ namespace Emgu.CV.UI
             }
             else
             {
-               _image = value;
+               bool emptyOldImage = (_image == null);
+               bool emptyNewImage = (value == null);
 
-               IImage imageToBeDisplayed = _image;
+               IImage imageToBeDisplayed = _image = value;
 
-               if (imageToBeDisplayed != null)
+               if (!emptyNewImage)
                {
+                  if (emptyOldImage)
+                  {
+                     filtersToolStripMenuItem.Enabled = true;
+                     zoomToolStripMenuItem.Enabled = true;
+                     saveImageToolStripMenuItem.Enabled = true;
+                     propertyToolStripMenuItem.Enabled = true;
+                  }
+
                   #region perform operations on _operationList if there is any
                   if (_operationLists.Count > 0)
                   {
@@ -225,9 +234,18 @@ namespace Emgu.CV.UI
                   }
                   #endregion
                }
+               else
+               {
+                  if (emptyNewImage)
+                  {
+                     filtersToolStripMenuItem.Enabled = false;
+                     zoomToolStripMenuItem.Enabled = false;
+                     saveImageToolStripMenuItem.Enabled = false;
+                     propertyToolStripMenuItem.Enabled = false;
+                  }
+               }
 
                DisplayedImage = imageToBeDisplayed;
-               operationsToolStripMenuItem.Enabled = (_image != null);
             }
          }
       }
@@ -445,7 +463,7 @@ namespace Emgu.CV.UI
       {
          Type typeOfImage = image.GetType();
 
-         operationsToolStripMenuItem.DropDownItems.Clear();
+         filtersToolStripMenuItem.DropDownItems.Clear();
 
          //check if the menu for the specific image type has been built before
          if (!_typeToToolStripMenuItemsDictionary.ContainsKey(typeOfImage))
@@ -457,7 +475,7 @@ namespace Emgu.CV.UI
                );
          }
 
-         operationsToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
+         filtersToolStripMenuItem.DropDownItems.AddRange(_typeToToolStripMenuItemsDictionary[typeOfImage]);
       }
 
       private void loadImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -474,7 +492,7 @@ namespace Emgu.CV.UI
             }
       }
 
-      private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+      private void saveImageToolStripMenuItem_Click(object sender, EventArgs e)
       {
          if (saveImageToFileDialog.ShowDialog() == DialogResult.OK)
             try

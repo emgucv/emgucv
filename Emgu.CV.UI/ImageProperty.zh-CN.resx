@@ -181,10 +181,10 @@
   <data name="showHistogramButton.Text" xml:space="preserve">
     <value>显示柱状图</value>
   </data>
-  <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="zoomLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 13</value>
   </data>
-  <data name="label9.Text" xml:space="preserve">
+  <data name="zoomLabel.Text" xml:space="preserve">
     <value>缩放:</value>
   </data>
 </root>

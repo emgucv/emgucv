@@ -19,11 +19,11 @@ namespace Emgu.CV.UI
       private void InitializeComponent()
       {
          this.components = new System.ComponentModel.Container();
-         this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+         this.rightClickContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
          this.fileOperationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.loadImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.saveImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.filtersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.zoomInToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.zoomOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -31,25 +31,25 @@ namespace Emgu.CV.UI
          this.propertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.loadImageFromFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.saveImageToFileDialog = new System.Windows.Forms.SaveFileDialog();
-         this.contextMenuStrip1.SuspendLayout();
+         this.rightClickContextMenuStrip.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
          this.SuspendLayout();
          // 
-         // contextMenuStrip1
+         // rightClickContextMenuStrip
          // 
-         this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+         this.rightClickContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileOperationToolStripMenuItem,
-            this.operationsToolStripMenuItem,
+            this.filtersToolStripMenuItem,
             this.zoomToolStripMenuItem,
             this.propertyToolStripMenuItem});
-         this.contextMenuStrip1.Name = "contextMenuStrip1";
-         this.contextMenuStrip1.Size = new System.Drawing.Size(117, 92);
+         this.rightClickContextMenuStrip.Name = "contextMenuStrip1";
+         this.rightClickContextMenuStrip.Size = new System.Drawing.Size(117, 92);
          // 
          // fileOperationToolStripMenuItem
          // 
          this.fileOperationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadImageToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveImageToolStripMenuItem});
          this.fileOperationToolStripMenuItem.Name = "fileOperationToolStripMenuItem";
          this.fileOperationToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
          this.fileOperationToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.File;
@@ -61,18 +61,18 @@ namespace Emgu.CV.UI
          this.loadImageToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
          this.loadImageToolStripMenuItem.Click += new System.EventHandler(this.loadImageToolStripMenuItem_Click);
          // 
-         // saveAsToolStripMenuItem
+         // saveImageToolStripMenuItem
          // 
-         this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-         this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-         this.saveAsToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.SaveAs;
-         this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+         this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
+         this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+         this.saveImageToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.SaveAs;
+         this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
          // 
-         // operationsToolStripMenuItem
+         // filtersToolStripMenuItem
          // 
-         this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
-         this.operationsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-         this.operationsToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Filters;
+         this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
+         this.filtersToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+         this.filtersToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Filters;
          // 
          // zoomToolStripMenuItem
          // 
@@ -82,27 +82,27 @@ namespace Emgu.CV.UI
             this.unZoomToolStripMenuItem});
          this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
          this.zoomToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-         this.zoomToolStripMenuItem.Text = "Zoom";
+         this.zoomToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.Zoom;
          // 
          // zoomInToolStripMenuItem
          // 
          this.zoomInToolStripMenuItem.Name = "zoomInToolStripMenuItem";
          this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-         this.zoomInToolStripMenuItem.Text = "Zoom In";
+         this.zoomInToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.ZoomIn;
          this.zoomInToolStripMenuItem.Click += new System.EventHandler(this.zoomInToolStripMenuItem_Click);
          // 
          // zoomOutToolStripMenuItem
          // 
          this.zoomOutToolStripMenuItem.Name = "zoomOutToolStripMenuItem";
          this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-         this.zoomOutToolStripMenuItem.Text = "Zoom Out";
+         this.zoomOutToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.ZoomOut;
          this.zoomOutToolStripMenuItem.Click += new System.EventHandler(this.zoomOutToolStripMenuItem_Click);
          // 
          // unZoomToolStripMenuItem
          // 
          this.unZoomToolStripMenuItem.Name = "unZoomToolStripMenuItem";
          this.unZoomToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-         this.unZoomToolStripMenuItem.Text = "Un-Zoom";
+         this.unZoomToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.UnZoom;
          this.unZoomToolStripMenuItem.Click += new System.EventHandler(this.unZoomToolStripMenuItem_Click);
          // 
          // propertyToolStripMenuItem
@@ -124,11 +124,11 @@ namespace Emgu.CV.UI
          // 
          // ImageBox
          // 
-         this.ContextMenuStrip = this.contextMenuStrip1;
+         this.ContextMenuStrip = this.rightClickContextMenuStrip;
          this.Size = new System.Drawing.Size(0, 0);
          this.TabIndex = 2;
          this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImageBox_MouseMove);
-         this.contextMenuStrip1.ResumeLayout(false);
+         this.rightClickContextMenuStrip.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
          this.ResumeLayout(false);
 
@@ -136,13 +136,13 @@ namespace Emgu.CV.UI
 
       #endregion
 
-      private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+      private System.Windows.Forms.ContextMenuStrip rightClickContextMenuStrip;
       private System.Windows.Forms.ToolStripMenuItem fileOperationToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem loadImageToolStripMenuItem;
       private System.Windows.Forms.OpenFileDialog loadImageFromFileDialog;
       private System.Windows.Forms.SaveFileDialog saveImageToFileDialog;
-      private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-      private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem saveImageToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem filtersToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem propertyToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem zoomToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem zoomInToolStripMenuItem;

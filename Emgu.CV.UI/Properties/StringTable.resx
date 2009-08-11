@@ -181,4 +181,16 @@
     <value>Load Image...</value>
     <comment>LoadImage description</comment>
   </data>
+  <data name="Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="UnZoom" xml:space="preserve">
+    <value>Un-Zoom</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
 </root>

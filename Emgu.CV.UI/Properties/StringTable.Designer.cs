@@ -185,7 +185,6 @@ namespace Emgu.CV.UI.Properties {
                 return ResourceManager.GetString("SaveImageDialogText", resourceCulture);
             }
         }
-
         
         /// <summary>
         ///   Looks up a localized string similar to Unknown.
@@ -197,11 +196,47 @@ namespace Emgu.CV.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Un-Zoom.
+        /// </summary>
+        internal static string UnZoom {
+            get {
+                return ResourceManager.GetString("UnZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value.
         /// </summary>
         internal static string Value {
             get {
                 return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom.
+        /// </summary>
+        internal static string Zoom {
+            get {
+                return ResourceManager.GetString("Zoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom In.
+        /// </summary>
+        internal static string ZoomIn {
+            get {
+                return ResourceManager.GetString("ZoomIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom Out.
+        /// </summary>
+        internal static string ZoomOut {
+            get {
+                return ResourceManager.GetString("ZoomOut", resourceCulture);
             }
         }
     }

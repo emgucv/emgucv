@@ -177,8 +177,20 @@
     <value>未知</value>
     <comment>Unknown description</comment>
   </data>
+  <data name="UnZoom" xml:space="preserve">
+    <value>取消</value>
+  </data>
   <data name="Value" xml:space="preserve">
     <value>数值</value>
     <comment>The text to be displayed on the horizontal dimension of the histogram</comment>
+  </data>
+  <data name="Zoom" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>缩小</value>
   </data>
 </root>
