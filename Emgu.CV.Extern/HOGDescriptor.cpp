@@ -37,3 +37,20 @@ CVAPI(void) cvHOGDescriptorDetectMultiScale(
    descriptor->detectMultiScale(mat, rects, hitThreshold, winStride, padding, scale, groupThreshold);
    cvSeqPushMulti(foundLocations, rects.begin(), rects.size());
 }
+
+/*
+CVAPI(void) cvHOGDescriptorDetect(
+   cv::HOGDescriptor* descriptor, 
+   CvArr* img, 
+   CvSeq* foundLocations,
+   double hitThreshold, 
+   CvSize winStride,
+   CvSize padding)
+{
+   cvClearSeq(foundLocations);
+
+   cv::Vector<cv::Rect> rects;
+   cv::Mat mat = cv::cvarrToMat(img);
+   descriptor->detect(mat, rects, hitThreshold, winStride, padding);
+   cvSeqPushMulti(foundLocations, rects.begin(), rects.size());
+}*/

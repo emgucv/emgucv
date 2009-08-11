@@ -32,7 +32,7 @@ namespace Emgu.CV.Structure
       public float dir;
 
       /// <summary>
-      /// value of the hessian (can be used to approximately estimate the feature strengths;
+      /// Value of the hessian (can be used to approximately estimate the feature strengths;
       /// see also params.hessianThreshold.
       /// </summary>
       public float hessian;
