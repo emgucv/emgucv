@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -12,14 +13,15 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The center of the box
       /// </summary>
-      public System.Drawing.PointF center;
+      public PointF center;
       /// <summary>
       /// The size of the box
       /// </summary>
-      public System.Drawing.SizeF size;
+      public SizeF size;
       /// <summary>
-      /// The angle of the box in degrees
+      /// The angle between the horizontal axis and the first side (i.e. width) in degrees
       /// </summary>
+      /// <remarks>Possitive value means counter-clock wise rotation</remarks>
       public float angle;
 
       /// <summary>
@@ -28,7 +30,7 @@ namespace Emgu.CV.Structure
       /// <param name="center">The center of the box</param>
       /// <param name="size">The size of the box</param>
       /// <param name="angle">The angle of the box in degrees</param>
-      public MCvBox2D(System.Drawing.PointF center, System.Drawing.SizeF size, float angle)
+      public MCvBox2D(PointF center, SizeF size, float angle)
       {
          this.center = center;
          this.size = size;
@@ -64,7 +66,7 @@ namespace Emgu.CV.Structure
       /// <returns></returns>
       public System.Drawing.PointF[] GetVertices()
       {
-         System.Drawing.PointF[] coordinates = new System.Drawing.PointF[4];
+         PointF[] coordinates = new PointF[4];
          CvInvoke.cvBoxPoints(this, coordinates);
          return coordinates;
       }
@@ -83,7 +85,7 @@ namespace Emgu.CV.Structure
          int maxX = (int)Math.Round(Math.Max(Math.Max(data[0], data[2]), Math.Max(data[4], data[6])));
          int minY = (int)Math.Round(Math.Min(Math.Min(data[1], data[3]), Math.Min(data[5], data[7])));
          int maxY = (int)Math.Round(Math.Max(Math.Max(data[1], data[3]), Math.Max(data[5], data[7])));
-         return new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
+         return new Rectangle(minX, minY, maxX - minX, maxY - minY);
       }
 
       #region IEquatable<MCvBox2D> Members
@@ -107,7 +109,7 @@ namespace Emgu.CV.Structure
       public static implicit operator MCvBox2D(System.Drawing.RectangleF rectangle)
       {
          return new MCvBox2D(
-            new System.Drawing.PointF(
+            new PointF(
                rectangle.Location.X + (rectangle.Width * 0.5f), 
                rectangle.Location.Y + (rectangle.Height* 0.5f) ), 
             rectangle.Size, 

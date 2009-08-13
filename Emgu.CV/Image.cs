@@ -754,6 +754,7 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
       public void Draw(Ellipse ellipse, TColor color, int thickness)
       {
+         /*
          CvInvoke.cvEllipse(
              Ptr,
              Point.Round(ellipse.MCvBox2D.center),
@@ -764,7 +765,8 @@ namespace Emgu.CV
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
-             0);
+             0);*/
+         CvInvoke.cvEllipseBox(Ptr, ellipse.MCvBox2D, color.MCvScalar, thickness, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
       }
 
       /// <summary>
