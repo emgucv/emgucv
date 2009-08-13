@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-
+using System.Drawing;
 namespace Emgu.CV
 {
    public partial class CvInvoke
@@ -1657,8 +1657,28 @@ namespace Emgu.CV
           double endAngle,
           MCvScalar color,
           int thickness,
-          [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
+          CvEnum.LINE_TYPE lineType,
           int shift);
+
+      /// <summary>
+      /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
+      /// </summary>
+      /// <param name="img">Image</param>
+      /// <param name="box">The box the define the ellipse area</param>
+      /// <param name="color">Ellipse color</param>
+      /// <param name="thickness">Thickness of the ellipse arc</param>
+      /// <param name="lineType">Type of the ellipse boundary</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
+      public static void cvEllipseBox(
+          IntPtr img,
+          MCvBox2D box,
+          MCvScalar color,
+          int thickness,
+          CvEnum.LINE_TYPE lineType,
+          int shift)
+      {
+         cvEllipse(img, Point.Round( box.center), Size.Round(box.size), box.angle, 0, 360, color, thickness, lineType, shift);
+      }
 
       /// <summary>
       /// Fills the destination array with values from the look-up table. Indices of the entries are taken from the source array. That is, the function processes each element of src as following:
