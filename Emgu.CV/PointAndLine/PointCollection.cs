@@ -116,6 +116,15 @@ namespace Emgu.CV
             seq,
             block);
          Ellipse e = new Ellipse(CvInvoke.cvFitEllipse2(seq));
+
+         //The angle returned by cvFitEllipse2 has the wrong sign.
+         //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
+         //For this, we needs to change the sign of the angle
+         MCvBox2D b = e.MCvBox2D;
+         b.angle = -b.angle;
+         if (b.angle < 0) b.angle += 360;
+         e.MCvBox2D = b;
+         
          handle.Free();
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
@@ -277,6 +286,29 @@ namespace Emgu.CV
 
          handle.Free();
          return points3D;
+      }
+
+      /// <summary>
+      /// Generate a random point cloud around the ellipse. 
+      /// </summary>
+      /// <param name="e">The region where the point cloud will be generated. The axes of e corresponds to std of the random point cloud.</param>
+      /// <param name="numberOfPoints">The number of points to be generated</param>
+      /// <returns>A random point cloud around the ellipse</returns>
+      public static PointF[] GeneratePointCloud(Ellipse e, int numberOfPoints)
+      {
+         PointF[] cloud = new PointF[numberOfPoints];
+         GCHandle handle = GCHandle.Alloc(cloud, GCHandleType.Pinned);
+         using (Matrix<float> points = new Matrix<float>(numberOfPoints, 2, handle.AddrOfPinnedObject()))
+         using (Matrix<float> xValues = points.GetCol(0))
+         using (Matrix<float> yValues = points.GetCol(1))
+         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.MCvBox2D.center, e.MCvBox2D.angle, 1.0))
+         {
+            xValues.SetRandNormal(new MCvScalar(e.MCvBox2D.center.X), new MCvScalar(e.MCvBox2D.size.Width / 2.0f));
+            yValues.SetRandNormal(new MCvScalar(e.MCvBox2D.center.Y), new MCvScalar(e.MCvBox2D.size.Height / 2.0f));
+            rotation.RotatePoints(points);
+         }
+         handle.Free();
+         return cloud;
       }
    }
 }

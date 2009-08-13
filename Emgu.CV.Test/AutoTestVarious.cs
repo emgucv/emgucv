@@ -1092,7 +1092,6 @@ namespace Emgu.CV.Test
          }
       }
 
-
       [Test]
       public void TestEllipseFitting()
       {
@@ -1100,22 +1099,18 @@ namespace Emgu.CV.Test
          int sampleCount = 100;
 
          Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
-         PointF[] pts = new PointF[sampleCount];
-         for (int i = 0; i < pts.Length; i++)
-         {
-            int x = r.Next(200) + 50;
-            int y = r.Next(300) + 50;
-            pts[i] = new PointF(x, y);
 
-            img.Draw(new CircleF(pts[i], 2), new Bgr(Color.Green), 1);
-
-         }
+         Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 30);
+         PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
+         foreach (PointF p in pts)
+            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
 
          Stopwatch watch = Stopwatch.StartNew();
-         Ellipse e = PointCollection.EllipseLeastSquareFitting(pts);
+         Ellipse fittedEllipse = PointCollection.EllipseLeastSquareFitting(pts);
          watch.Stop();
 
-         img.Draw(e, new Bgr(Color.Red), 2);
+         //img.Draw(modelEllipse, new Bgr(Color.Orange), 2);
+         img.Draw(fittedEllipse, new Bgr(Color.Red), 2);
          //ImageViewer.Show(img, String.Format("Time used: {0}milliseconds", watch.ElapsedMilliseconds));
       }
 
