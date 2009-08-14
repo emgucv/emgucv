@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv110.lib cvaux110.lib cxcore110.lib highgui110.lib "
+				AdditionalDependencies="cv111.lib cvaux111.lib cxcore111.lib highgui111.lib "
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv110.lib cvaux110.lib cxcore110.lib highgui110.lib "
+				AdditionalDependencies="cv111.lib cvaux111.lib cxcore111.lib highgui111.lib "
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
