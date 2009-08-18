@@ -187,7 +187,7 @@ namespace Emgu.CV.Test
       {
          ImageViewer viewer = new ImageViewer();
          Capture capture = new Capture();
-         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         Application.Idle += delegate(object sender, EventArgs e)
          {
             Image<Bgr, Byte> img = capture.QueryFrame();
             img = img.Resize(0.8, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
@@ -195,84 +195,8 @@ namespace Emgu.CV.Test
             gray._EqualizeHist();
 
             viewer.Image = gray;
-         });
+         };
          viewer.ShowDialog();
-      }
-
-      public void TestBgra()
-      {
-         Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
-         img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
-         Image<Gray, Byte>[] channels = img.Split();
-      }
-
-      public void TestSplitMerge()
-      {
-         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
-         {
-            using (Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>())
-            {
-               Image<Gray, Byte>[] imgs = imgHsv.Split();
-               using (Image<Hsv, Byte> imgHsv2 = new Image<Hsv, Byte>(imgs))
-               {
-                  using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
-                  {
-                     LineSegment2D[][] lines = imgHsv2.HoughLines(
-                         new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
-                         1, Math.PI / 180.0, 50, 50, 10);
-
-                     CircleF[][] circles = img.HoughCircles(
-                         new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
-                         4.0, 1.0, 0, 0);
-
-                     for (int i = 0; i < lines[0].Length; i++)
-                     {
-                        imageRGB.Draw(lines[0][i], new Bgr(255.0, 0.0, 0.0), 1);
-                     }
-
-                     for (int i = 0; i < lines[1].Length; i++)
-                     {
-                        imageRGB.Draw(lines[1][i], new Bgr(0.0, 255.0, 0.0), 1);
-                     }
-
-                     for (int i = 0; i < lines[2].Length; i++)
-                     {
-                        imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
-                     }
-
-                     foreach (CircleF[] cs in circles)
-                        foreach (CircleF c in cs)
-                           imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
-
-                     //Application.Run(new ImageViewer(imageRGB));
-
-                     bool applied = false;
-                     foreach (CircleF[] cs in circles)
-                        foreach (CircleF c in cs)
-                        {
-                           if (!applied)
-                           {
-                              CircleF cir = c;
-                              cir.Radius += 30;
-                              using (Image<Gray, Byte> mask = new Image<Gray, Byte>(imageRGB.Width, imageRGB.Height, new Gray(0.0)))
-                              {
-                                 mask.Draw(cir, new Gray(255.0), -1);
-
-                                 using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
-                                 {
-
-                                 }
-                              }
-                              applied = true;
-                           }
-                        }
-                  }
-               }
-
-               foreach (Image<Gray, Byte> i in imgs)
-                  i.Dispose();
-            }
-         }
       }
 
       public void TestHaarPerformance()
@@ -355,6 +279,56 @@ namespace Emgu.CV.Test
 
          //Application.Run(new ImageViewer(null));
 
+      }
+
+      public static void TestCodeBook()
+      {
+         int learningFrames = 40;
+         using (Capture capture = new Capture("tree.avi"))
+         using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
+         {
+            
+            #region Set color thresholds values
+            MCvBGCodeBookModel param = bgmodel.MCvBGCodeBookModel;
+            param.modMin[0] = param.modMin[1] = param.modMin[2] = 5;
+            param.modMax[0] = param.modMax[1] = param.modMax[2] = 10;
+            param.cbBounds[0] = param.cbBounds[1] = param.cbBounds[2] = 10;
+            bgmodel.MCvBGCodeBookModel = param;
+            #endregion
+            
+
+            ImageViewer viewer = new ImageViewer();
+            int count = 0;
+            EventHandler processFrame = delegate(Object sender, EventArgs e)
+            {
+               Image<Bgr, Byte> img = capture.QueryFrame();
+               if (img == null)
+               {
+                  //Application.Idle -= processFrame;
+                  return;
+               }
+
+               viewer.Text = String.Format("Processing {0}th image. {1}", count++, learningFrames > 0 ? "(Learning)" : String.Empty);
+               using (Image<Ycc, Byte> ycc = img.Convert<Ycc, Byte>()) //using YCC color space for BGCodeBook
+               {
+                  bgmodel.Update(ycc);
+
+                  if (learningFrames == 0) //training is completed
+                     bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.t / 2, Rectangle.Empty, null);
+                  
+                  learningFrames--;
+                  viewer.Image = bgmodel.ForgroundMask;
+                  //viewer.Image = img;
+                  System.Threading.Thread.Sleep(100);
+               }
+
+               img.Dispose();
+            };
+
+            Application.Idle += processFrame;
+
+            viewer.ShowDialog();
+         }
       }
 
       /*
@@ -537,8 +511,8 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          for (int i = 0; i < total; i++)
          {
-            b += (i / 2) * 2;
-            //b /= 2;
+            b += (i / 4) * 4;
+            b /= 2;
          }
          watch.Stop();
          Trace.WriteLine(watch.ElapsedMilliseconds);
@@ -547,8 +521,8 @@ namespace Emgu.CV.Test
          watch.Reset(); watch.Start();
          for (int i = 0; i < total; i++)
          {
-            b += (i >> 1 ) << 1;
-            //b >>= 1;
+            b += (i >> 2 ) << 2;
+            b >>= 1;
          }
          Trace.WriteLine(watch.ElapsedMilliseconds);
 
@@ -639,7 +613,7 @@ namespace Emgu.CV.Test
 
          ImageViewer viewer = new ImageViewer();
          System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-         timer.Interval = 1000;
+         timer.Interval = 200;
          timer.Tick += new EventHandler(delegate(object sender, EventArgs e)
          {
             Matrix<float> measurement = syntheticData.GetMeasurement();

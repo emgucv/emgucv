@@ -979,33 +979,26 @@ namespace Emgu.CV.Test
       {
          #region Create some random points
          Random r = new Random();
-         PointF[] pts = new PointF[40];
+         PointF[] pts = new PointF[200];
          for (int i = 0; i < pts.Length; i++)
          {
-            pts[i] = new PointF((float)(r.NextDouble() * 600), (float)(r.NextDouble() * 600));
+            pts[i] = new PointF((float)(100 + r.NextDouble() * 400), (float)(100 + r.NextDouble() * 400));
          }
          #endregion
 
-         #region Find the convex hull
-         PointF[] hull;
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600, new Bgr(255.0, 255.0, 255.0));
+         //Draw the points 
+         foreach (PointF p in pts)
+            img.Draw(new CircleF(p, 3), new Bgr(0.0, 0.0, 0.0), 1);
+
+         //Find and draw the convex hull
          using (MemStorage storage = new MemStorage())
          {
-            Seq<PointF> seq = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
-            hull = seq.ToArray();
+            PointF[] hull = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+            img.DrawPolyline(
+                Array.ConvertAll<PointF, Point>(hull, Point.Round),
+                true, new Bgr(255.0, 0.0, 0.0), 1);
          }
-         #endregion
-
-         #region Draw the points and the convex hull
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600, new Bgr(255.0, 255.0, 255.0));
-         foreach (PointF p in pts)
-         {
-            img.Draw(new CircleF(p, 3), new Bgr(0.0, 0.0, 0.0), 1);
-         }
-
-         img.DrawPolyline(
-             Array.ConvertAll<PointF, Point>(hull, Point.Round),
-             true, new Bgr(255.0, 0.0, 0.0), 1);
-         #endregion
 
          //ImageViewer.Show(img);
       }
@@ -1207,11 +1200,10 @@ namespace Emgu.CV.Test
       public void TestHOG()
       {
          using (HOGDescriptor hog = new HOGDescriptor())
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
          {
             float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
             hog.SetSVMDetector(pedestrianDescriptor);
-
-            Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png");
             
             Stopwatch watch = Stopwatch.StartNew();
             Rectangle[] rects = hog.DetectMultiScale(image);

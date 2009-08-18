@@ -970,6 +970,83 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestBgra()
+      {
+         Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
+         img.SetValue(new Bgra(255.0, 120.0, 0.0, 120.0));
+         Image<Gray, Byte>[] channels = img.Split();
+      }
+
+      [Test]
+      public void TestMixed()
+      {
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
+         {
+            using (Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>())
+            {
+               Image<Gray, Byte>[] imgs = imgHsv.Split();
+               using (Image<Hsv, Byte> imgHsv2 = new Image<Hsv, Byte>(imgs))
+               {
+                  using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
+                  {
+                     LineSegment2D[][] lines = imgHsv2.HoughLines(
+                         new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
+                         1, Math.PI / 180.0, 50, 50, 10);
+
+                     CircleF[][] circles = img.HoughCircles(
+                         new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
+                         4.0, 1.0, 0, 0);
+
+                     for (int i = 0; i < lines[0].Length; i++)
+                     {
+                        imageRGB.Draw(lines[0][i], new Bgr(255.0, 0.0, 0.0), 1);
+                     }
+
+                     for (int i = 0; i < lines[1].Length; i++)
+                     {
+                        imageRGB.Draw(lines[1][i], new Bgr(0.0, 255.0, 0.0), 1);
+                     }
+
+                     for (int i = 0; i < lines[2].Length; i++)
+                     {
+                        imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
+                     }
+
+                     foreach (CircleF[] cs in circles)
+                        foreach (CircleF c in cs)
+                           imageRGB.Draw(c, new Bgr(0.0, 0.0, 0.0), 1);
+
+                     //Application.Run(new ImageViewer(imageRGB));
+
+                     bool applied = false;
+                     foreach (CircleF[] cs in circles)
+                        foreach (CircleF c in cs)
+                        {
+                           if (!applied)
+                           {
+                              CircleF cir = c;
+                              cir.Radius += 30;
+                              using (Image<Gray, Byte> mask = new Image<Gray, Byte>(imageRGB.Width, imageRGB.Height, new Gray(0.0)))
+                              {
+                                 mask.Draw(cir, new Gray(255.0), -1);
+
+                                 using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
+                                 {
+
+                                 }
+                              }
+                              applied = true;
+                           }
+                        }
+                  }
+               }
+
+               foreach (Image<Gray, Byte> i in imgs)
+                  i.Dispose();
+            }
+         }
+      }
       /*
       [Test]
       public void T()
