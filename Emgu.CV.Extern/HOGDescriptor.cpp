@@ -17,7 +17,7 @@ CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreate(
 {
    return new cv::HOGDescriptor(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
-CVAPI(void) cvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) { cv::Vector<float> v = cv::Vector<float>(svmDetector, detectorSize);  descriptor->setSVMDetector(v); }
+CVAPI(void) cvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) { cv::vector<float> v = cv::vector<float>(detectorSize); memcpy(&v[0], svmDetector, detectorSize * sizeof(float));  descriptor->setSVMDetector(v); }
 CVAPI(void) cvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { descriptor->~HOGDescriptor(); }
 
 CVAPI(void) cvHOGDescriptorDetectMultiScale(
@@ -32,10 +32,10 @@ CVAPI(void) cvHOGDescriptorDetectMultiScale(
 {
    cvClearSeq(foundLocations);
 
-   cv::Vector<cv::Rect> rects;
+   cv::vector<cv::Rect> rects;
    cv::Mat mat = cv::cvarrToMat(img);
    descriptor->detectMultiScale(mat, rects, hitThreshold, winStride, padding, scale, groupThreshold);
-   cvSeqPushMulti(foundLocations, rects.begin(), rects.size());
+   cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }
 
 /*
