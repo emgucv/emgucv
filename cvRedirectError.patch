@@ -1,8 +1,8 @@
 Index: include/opencv/cxcore.h
 ===================================================================
---- include/opencv/cxcore.h	(revision 2026)
+--- include/opencv/cxcore.h	(revision 2033)
 +++ include/opencv/cxcore.h	(working copy)
-@@ -1530,6 +1530,8 @@
+@@ -1531,6 +1531,8 @@
  typedef int (CV_CDECL *CvErrorCallback)( int status, const char* func_name,
                      const char* err_msg, const char* file_name, int line, void* userdata );
  
@@ -13,7 +13,7 @@ Index: include/opencv/cxcore.h
                                         void* userdata CV_DEFAULT(NULL),
 Index: src/cxcore/cxsystem.cpp
 ===================================================================
---- src/cxcore/cxsystem.cpp	(revision 2026)
+--- src/cxcore/cxsystem.cpp	(revision 2037)
 +++ src/cxcore/cxsystem.cpp	(working copy)
 @@ -173,6 +173,12 @@
      static volatile int* p = 0;
