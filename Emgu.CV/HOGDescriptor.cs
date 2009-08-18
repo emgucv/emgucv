@@ -120,6 +120,16 @@ namespace Emgu.CV
          handle.Free();
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="hitThreshold"></param>
+      /// <param name="winStride"></param>
+      /// <param name="padding"></param>
+      /// <param name="scale"></param>
+      /// <param name="groupThreshold"></param>
+      /// <returns></returns>
       public Rectangle[] DetectMultiScale(
          Image<Bgr, Byte> image,
          double hitThreshold,
@@ -132,6 +142,11 @@ namespace Emgu.CV
          return _rectSeq.ToArray();
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <returns></returns>
       public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(), new Size(), 1.05, 2);
