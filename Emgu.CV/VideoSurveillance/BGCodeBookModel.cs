@@ -3,6 +3,7 @@ using Emgu.Util;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.VideoSurveillance
 {
@@ -14,6 +15,7 @@ namespace Emgu.CV.VideoSurveillance
       where TColor : struct, IColor
    {
       private Image<Gray, Byte> _forgroundMask;
+      private Image<Gray, Byte> _backgroundMask;
 
       /// <summary>
       /// Create a background code book model
@@ -46,24 +48,27 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
-      /// Get the forground mask. Do not dispose this image
+      /// Get the forground mask. Do not dispose this image.
       /// </summary>
       public Image<Gray, Byte> ForgroundMask
       {
          get
          {
-            return _forgroundMask; 
+            return _forgroundMask;
          }
       }
 
       /// <summary>
-      /// Get the background mask.
+      /// Get the background mask. Do not dispose this image.
       /// </summary>
       public Image<Gray, Byte> BackgroundMask
       {
          get
          {
-            return _forgroundMask.Not();
+            if (_forgroundMask == null) return null;
+            if (_backgroundMask == null) _backgroundMask = new Image<Gray, byte>(_forgroundMask.Size);
+            CvInvoke.cvNot(_forgroundMask, _backgroundMask);
+            return _backgroundMask;
          }
       }
 
@@ -84,6 +89,30 @@ namespace Emgu.CV.VideoSurveillance
       protected override void DisposeObject()
       {
          CvInvoke.cvReleaseBGCodeBookModel(ref _ptr);
+      }
+
+      /// <summary>
+      /// Release the managed resource
+      /// </summary>
+      protected override void ReleaseManagedResources()
+      {
+         if (_backgroundMask != null) _backgroundMask.Dispose();
+         if (_forgroundMask != null) _forgroundMask.Dispose();
+      }
+
+      /// <summary>
+      /// Get or Set the equivalent CVBGCodeBookModel structure
+      /// </summary>
+      public MCvBGCodeBookModel MCvBGCodeBookModel
+      {
+         get
+         {
+            return (MCvBGCodeBookModel)Marshal.PtrToStructure(Ptr, typeof(MCvBGCodeBookModel));
+         }
+         set
+         {
+            Marshal.StructureToPtr(value, _ptr, false);
+         }
       }
    }
 }

@@ -65,6 +65,7 @@
       <DependentUpon>CvInvokeEntryPoints.tt</DependentUpon>
     </Compile>
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
+    <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
