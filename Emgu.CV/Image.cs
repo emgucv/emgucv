@@ -2900,7 +2900,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> InPaint(Image<Gray, Byte> mask, double radius)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvInpaint(Ptr, mask.Ptr, res.Ptr, CvEnum.INPAINT_TYPE.CV_INPAINT_TELEA, radius);
+         CvInvoke.cvInpaint(Ptr, mask.Ptr, res.Ptr, radius, CvEnum.INPAINT_TYPE.CV_INPAINT_TELEA);
          return res;
       }
       #endregion

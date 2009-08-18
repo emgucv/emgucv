@@ -602,7 +602,7 @@ namespace Emgu.CV
       /// <param name="flags">The inpainting method</param>
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvInpaint(IntPtr src, IntPtr mask, IntPtr dst, CvEnum.INPAINT_TYPE flags, double inpaintRadius);
+      public static extern void cvInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags);
 
       /// <summary>
       /// Smooths image using one of several methods. Every of the methods has some features and restrictions listed below
