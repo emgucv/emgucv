@@ -921,6 +921,27 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGetSubRect2()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(2048, 2048);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+         Rectangle rect = new Rectangle(new Point(99, 99), new Size(105, 103));
+         image.ROI = rect;
+         Image<Bgr, Byte> region = image.Copy();
+         image.ROI = Rectangle.Empty;
+         Assert.IsTrue(image.GetSubRect(rect).Equals(region));
+
+         Stopwatch watch = Stopwatch.StartNew();
+         for (int i = 0; i < 100000; i++)
+         {
+            Image<Bgr, Byte> tmp = image.GetSubRect(rect);
+         }
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         
+      }
+
+      [Test]
       public void TestImageLoader()
       {
          using (Image<Bgr, Single> img = new Image<Bgr, Single>("stuff.jpg"))

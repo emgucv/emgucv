@@ -583,6 +583,12 @@ namespace Emgu.CV
       /// <returns>A subimage which image data is shared with the current image</returns>
       public Image<TColor, TDepth> GetSubRect(Rectangle rect)
       {
+         /*
+         MIplImage iplImage = MIplImage;
+         IntPtr scan0 = new IntPtr(iplImage.imageData.ToInt64() +  rect.Y * iplImage.widthStep + rect.X * NumberOfChannels * _sizeOfElement);
+         return new Image<TColor, TDepth>(rect.Width, rect.Height, iplImage.widthStep, scan0);
+         */
+         
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
          subRect._ptr = CvInvoke.cvCreateImageHeader(rect.Size, CvDepth, NumberOfChannels);
