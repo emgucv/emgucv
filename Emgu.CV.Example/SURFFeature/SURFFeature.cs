@@ -6,6 +6,7 @@ using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using System.Diagnostics;
 
 namespace SURFFeatureExample
 {
@@ -30,19 +31,22 @@ namespace SURFFeatureExample
          //extract features from the object image
          SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref surfParam);
 
-         Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
-         // extract features from the observed image
-         SURFFeature[] imageFeatures = observedImage.ExtractSURF(ref surfParam);
-
          //Create a SURF Tracker using k-d Tree
          SURFTracker tracker = new SURFTracker(modelFeatures);
          //Comment out above and uncomment below if you wish to use spill-tree instead
          //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
 
+         Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
+
+         Stopwatch watch = Stopwatch.StartNew();
+         // extract features from the observed image
+         SURFFeature[] imageFeatures = observedImage.ExtractSURF(ref surfParam);
+
          SURFTracker.MatchedSURFFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
          matchedFeatures = SURFTracker.VoteForUniqueness(matchedFeatures, 0.8);
          matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
          HomographyMatrix homography = SURFTracker.GetHomographyMatrixFromMatchedFeatures(matchedFeatures);
+         watch.Stop();
 
          //Merge the object image and the observed image into one image for display
          Image<Gray, Byte> res = modelImage.ConcateVertical(observedImage);
@@ -52,7 +56,7 @@ namespace SURFFeatureExample
          {
             PointF p = matchedFeature.ObservedFeature.Point.pt;
             p.Y += modelImage.Height;
-            res.Draw(new LineSegment2DF(matchedFeature.ModelFeatures[0].Point.pt, p), new Gray(0), 1);
+            res.Draw(new LineSegment2DF(matchedFeature.SimilarFeatures[0].Feature.Point.pt, p), new Gray(0), 1);
          }
          #endregion
 
@@ -74,7 +78,7 @@ namespace SURFFeatureExample
          }
          #endregion
 
-         ImageViewer.Show(res);
+         ImageViewer.Show(res, String.Format("Matched in {0} milliseconds", watch.ElapsedMilliseconds));
       }
    }
 }

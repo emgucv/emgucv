@@ -106,7 +106,7 @@ namespace TrafficSignRecognition
 
                int goodMatchCount = 0;
                foreach (SURFTracker.MatchedSURFFeature ms in matchedFeatures)
-                  if (ms.Distances[0] < 0.5) goodMatchCount++;
+                  if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
 
                if (goodMatchCount >= 10)
                {
