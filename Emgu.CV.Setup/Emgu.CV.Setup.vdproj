@@ -1,4 +1,4 @@
-﻿"DeployProject"
+"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -1229,8 +1229,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18B005CDD70A435583CE6570A580D1AC"
             {
-            "SourcePath" = "8:..\\bin\\highgui110.dll"
-            "TargetName" = "8:highgui110.dll"
+            "SourcePath" = "8:..\\bin\\highgui111.dll"
+            "TargetName" = "8:highgui111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
@@ -1289,8 +1289,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C06180A3EBB4A8AA2A85247F846DC71"
             {
-            "SourcePath" = "8:..\\lib\\Release\\highgui110.lib"
-            "TargetName" = "8:highgui110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\highgui111.lib"
+            "TargetName" = "8:highgui111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -1400,8 +1400,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_270E463A8DB8457BA06C975FA2CAF5D4"
             {
-            "SourcePath" = "8:..\\bin\\ml110.dll"
-            "TargetName" = "8:ml110.dll"
+            "SourcePath" = "8:..\\bin\\ml111.dll"
+            "TargetName" = "8:ml111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -1451,8 +1451,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FAA72DDAE644483BBC8326FF4F003AB"
             {
-            "SourcePath" = "8:..\\lib\\Release\\ml110.lib"
-            "TargetName" = "8:ml110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\ml111.lib"
+            "TargetName" = "8:ml111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -1622,8 +1622,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_44225FCF686E4446AD32A90C3E18896E"
             {
-            "SourcePath" = "8:..\\bin\\cv110.dll"
-            "TargetName" = "8:cv110.dll"
+            "SourcePath" = "8:..\\bin\\cv111.dll"
+            "TargetName" = "8:cv111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -1793,8 +1793,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4FCD23B6C02B4042A80A1D9B850D4E21"
             {
-            "SourcePath" = "8:..\\bin\\highgui110.dll"
-            "TargetName" = "8:highgui110.dll"
+            "SourcePath" = "8:..\\bin\\highgui111.dll"
+            "TargetName" = "8:highgui111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -1884,8 +1884,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_591778359DD44FB7B4529E6C468CC295"
             {
-            "SourcePath" = "8:..\\bin\\cxcore110.dll"
-            "TargetName" = "8:cxcore110.dll"
+            "SourcePath" = "8:..\\bin\\cxcore111.dll"
+            "TargetName" = "8:cxcore111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -1935,8 +1935,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F1DB502727B40F8AD521C7036C3E460"
             {
-            "SourcePath" = "8:..\\bin\\cvaux110.dll"
-            "TargetName" = "8:cvaux110.dll"
+            "SourcePath" = "8:..\\bin\\cvaux111.dll"
+            "TargetName" = "8:cvaux111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -1955,8 +1955,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_664AEFDCE67B41ACABF7E979B0B49D44"
             {
-            "SourcePath" = "8:..\\bin\\cv110.dll"
-            "TargetName" = "8:cv110.dll"
+            "SourcePath" = "8:..\\bin\\cv111.dll"
+            "TargetName" = "8:cv111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
@@ -2086,8 +2086,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F0DFB8DBB69485285CB01BA937374F3"
             {
-            "SourcePath" = "8:..\\bin\\cxcore110.dll"
-            "TargetName" = "8:cxcore110.dll"
+            "SourcePath" = "8:..\\bin\\cxcore111.dll"
+            "TargetName" = "8:cxcore111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
@@ -2106,8 +2106,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_84B0136F6F8A44D4B76D7EA716B73212"
             {
-            "SourcePath" = "8:..\\bin\\cvaux110.dll"
-            "TargetName" = "8:cvaux110.dll"
+            "SourcePath" = "8:..\\bin\\cvaux111.dll"
+            "TargetName" = "8:cvaux111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
@@ -2279,8 +2279,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_961A89F0D5BB429683D588922346A0F8"
             {
-            "SourcePath" = "8:..\\lib\\Release\\opencv_ffmpeg110.lib"
-            "TargetName" = "8:opencv_ffmpeg110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\opencv_ffmpeg111.lib"
+            "TargetName" = "8:opencv_ffmpeg111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2452,8 +2452,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9D775082CD49422686767F1B68B5AABC"
             {
-            "SourcePath" = "8:..\\bin\\opencv_ffmpeg110.dll"
-            "TargetName" = "8:opencv_ffmpeg110.dll"
+            "SourcePath" = "8:..\\bin\\opencv_ffmpeg111.dll"
+            "TargetName" = "8:opencv_ffmpeg111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -2563,8 +2563,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A444B219FF1B453A8FA4BAF4C6C2EA92"
             {
-            "SourcePath" = "8:..\\bin\\opencv_ffmpeg110.dll"
-            "TargetName" = "8:opencv_ffmpeg110.dll"
+            "SourcePath" = "8:..\\bin\\opencv_ffmpeg111.dll"
+            "TargetName" = "8:opencv_ffmpeg111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -2663,8 +2663,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B0F31D00EE064411B1E4E59DB88AB2BD"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cxcore110.lib"
-            "TargetName" = "8:cxcore110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cxcore111.lib"
+            "TargetName" = "8:cxcore111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2683,8 +2683,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B16CFB7DC9B8477583BA7F133F19713D"
             {
-            "SourcePath" = "8:..\\bin\\ml110.dll"
-            "TargetName" = "8:ml110.dll"
+            "SourcePath" = "8:..\\bin\\ml111.dll"
+            "TargetName" = "8:ml111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -2703,8 +2703,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8EAC15F1BBF469A9ABB3876A34EFC7F"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cv110.lib"
-            "TargetName" = "8:cv110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cv111.lib"
+            "TargetName" = "8:cv111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2845,8 +2845,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C9EDD71BA4B24C658CEED74CC3DDBAA2"
             {
-            "SourcePath" = "8:..\\bin\\opencv_ffmpeg110.dll"
-            "TargetName" = "8:opencv_ffmpeg110.dll"
+            "SourcePath" = "8:..\\bin\\opencv_ffmpeg111.dll"
+            "TargetName" = "8:opencv_ffmpeg111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
@@ -2967,8 +2967,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CC69620FF64946AEB8B29AA8FC135ABC"
             {
-            "SourcePath" = "8:..\\bin\\highgui110.dll"
-            "TargetName" = "8:highgui110.dll"
+            "SourcePath" = "8:..\\bin\\highgui111.dll"
+            "TargetName" = "8:highgui111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -3007,8 +3007,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1D33E7833204D0B88DE4C25B9332801"
             {
-            "SourcePath" = "8:..\\bin\\cxcore110.dll"
-            "TargetName" = "8:cxcore110.dll"
+            "SourcePath" = "8:..\\bin\\cxcore111.dll"
+            "TargetName" = "8:cxcore111.dll"
             "Tag" = "8:"
             "Folder" = "8:_0096B94BA349407F93A2813B6DEE9498"
             "Condition" = "8:"
@@ -3067,8 +3067,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D4749A79700D45DF83777FA53B828DFF"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cvaux110.lib"
-            "TargetName" = "8:cvaux110.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cvaux111.lib"
+            "TargetName" = "8:cvaux111.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -3289,8 +3289,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F967A5E5D3B142048CE05607B1337C14"
             {
-            "SourcePath" = "8:..\\bin\\cv110.dll"
-            "TargetName" = "8:cv110.dll"
+            "SourcePath" = "8:..\\bin\\cv111.dll"
+            "TargetName" = "8:cv111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -3309,8 +3309,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA1507F331AA4AB39D846FBC0E910B0C"
             {
-            "SourcePath" = "8:..\\bin\\cvaux110.dll"
-            "TargetName" = "8:cvaux110.dll"
+            "SourcePath" = "8:..\\bin\\cvaux111.dll"
+            "TargetName" = "8:cvaux111.dll"
             "Tag" = "8:"
             "Folder" = "8:_93AD2DEB94CD4AD19BB16F79ECE1D4AE"
             "Condition" = "8:"
@@ -3349,8 +3349,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FCDE1D2F1FBB42F8B2AFA7937E444014"
             {
-            "SourcePath" = "8:..\\bin\\ml110.dll"
-            "TargetName" = "8:ml110.dll"
+            "SourcePath" = "8:..\\bin\\ml111.dll"
+            "TargetName" = "8:ml111.dll"
             "Tag" = "8:"
             "Folder" = "8:_D85CDFC429144D5E9B619017382D5130"
             "Condition" = "8:"
