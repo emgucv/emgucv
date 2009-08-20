@@ -270,6 +270,33 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Find the minimum enclosing circle for the specific array of points
+      /// </summary>
+      /// <param name="points">The collection of points</param>
+      /// <returns>The minimum enclosing circle for the array of points</returns>
+      public static CircleF MinEnclosingCircle(PointF[] points)
+      {
+         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
+         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
+         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+         CvInvoke.cvMakeSeqHeaderForArray(
+            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            StructSize.MCvSeq,
+            StructSize.PointF,
+            handle.AddrOfPinnedObject(),
+            points.Length,
+            seq,
+            block);
+         PointF center;
+         float radius;
+         CvInvoke.cvMinEnclosingCircle(seq, out center, out radius);
+         handle.Free();
+         Marshal.FreeHGlobal(seq);
+         Marshal.FreeHGlobal(block);
+         return new CircleF(center, radius);
+      }
+
+      /// <summary>
       /// Reproject pixels on a 1-channel disparity map to array of 3D points.
       /// </summary>
       /// <param name="disparity">Disparity map</param>
