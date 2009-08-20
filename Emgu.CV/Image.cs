@@ -582,25 +582,14 @@ namespace Emgu.CV
       /// <param name="rect">The rectangle area of the sub-image</param>
       /// <returns>A subimage which image data is shared with the current image</returns>
       public Image<TColor, TDepth> GetSubRect(Rectangle rect)
-      {
-         /*
-         MIplImage iplImage = MIplImage;
-         IntPtr scan0 = new IntPtr(iplImage.imageData.ToInt64() +  rect.Y * iplImage.widthStep + rect.X * NumberOfChannels * _sizeOfElement);
-         return new Image<TColor, TDepth>(rect.Width, rect.Height, iplImage.widthStep, scan0);
-         */
-         
+      {  
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
-         subRect._ptr = CvInvoke.cvCreateImageHeader(rect.Size, CvDepth, NumberOfChannels);
 
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
-         IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
-         CvInvoke.cvGetSubRect(_ptr, matPtr, rect);
-         CvInvoke.cvGetImage(matPtr, subRect.Ptr);
-         Marshal.FreeHGlobal(matPtr);
-
-         return subRect;
+         subRect._ptr = ImageUtil.cvGetImageSubRect(_ptr, ref rect);
+         return subRect;  
       }
 
       #endregion
@@ -4173,6 +4162,12 @@ namespace Emgu.CV
       }
 
       #endregion
+   }
+
+   internal static class ImageUtil
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      public static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
    }
 
    /// <summary>
