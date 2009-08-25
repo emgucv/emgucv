@@ -10,20 +10,20 @@ namespace Emgu.CV
    /// <summary>
    /// Oct-Tree
    /// </summary>
-   public class OctTree : UnmanagedObject
+   public class Octree : UnmanagedObject
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static IntPtr cvOctTreeCreate();
+      private extern static IntPtr CvOctreeCreate();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvOctTreeRelease(IntPtr tree);
+      private extern static void CvOctreeRelease(IntPtr tree);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvOctTreeBuildTree(IntPtr tree, IntPtr points, int numberOfPoints, int maxLevels, int minPoints);
+      private extern static void CvOctreeBuildTree(IntPtr tree, IntPtr points, int numberOfPoints, int maxLevels, int minPoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvOctTreeGetPointsWithinSphere(IntPtr tree, MCvPoint3D32f center, float radius, IntPtr pointSeq);
+      private extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, MCvPoint3D32f center, float radius, IntPtr pointSeq);
       #endregion
 
       private MemStorage _storage;
@@ -32,9 +32,9 @@ namespace Emgu.CV
       /// <summary>
       /// Create an empty Oct-Tree
       /// </summary>
-      public OctTree()
+      public Octree()
       {
-         _ptr = cvOctTreeCreate();
+         _ptr = CvOctreeCreate();
          _storage = new MemStorage();
          _pointSeq = new Seq<MCvPoint3D32f>(_storage);
       }
@@ -45,7 +45,7 @@ namespace Emgu.CV
       /// <param name="points">The points to be inserted into the Oct-Tree</param>
       /// <param name="maxLevels">The maximum levels of the Oct-Tree</param>
       /// <param name="minPoints">The minimum number of points in each level</param>
-      public OctTree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
+      public Octree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
          :this()
       {
          BuildTree(points, maxLevels, minPoints);
@@ -60,7 +60,7 @@ namespace Emgu.CV
       public void BuildTree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         cvOctTreeBuildTree(_ptr, handle.AddrOfPinnedObject(), points.Length, maxLevels, minPoints);
+         CvOctreeBuildTree(_ptr, handle.AddrOfPinnedObject(), points.Length, maxLevels, minPoints);
          handle.Free();
       }
 
@@ -72,7 +72,7 @@ namespace Emgu.CV
       /// <returns>The points withing the specific sphere</returns>
       public MCvPoint3D32f[] GetPointsWithinSphere(MCvPoint3D32f center, float radius)
       {
-         cvOctTreeGetPointsWithinSphere(_ptr, center, radius, _pointSeq);
+         CvOctreeGetPointsWithinSphere(_ptr, center, radius, _pointSeq);
          return _pointSeq.ToArray();
       }
 
@@ -90,7 +90,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         cvOctTreeRelease(_ptr);
+         CvOctreeRelease(_ptr);
       }
    }
 }
