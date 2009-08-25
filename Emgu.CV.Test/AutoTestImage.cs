@@ -551,7 +551,7 @@ namespace Emgu.CV.Test
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
-            MCvSURFParams param1 = new MCvSURFParams(500, false);
+            SURFDetector param1 = new SURFDetector(500, false);
             SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref param1);
             SURFTracker tracker = new SURFTracker(modelFeatures);
             stopwatch.Stop();
@@ -567,7 +567,7 @@ namespace Emgu.CV.Test
             //observedImage._EqualizeHist();
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
-            MCvSURFParams param2 = new MCvSURFParams(500, false);
+            SURFDetector param2 = new SURFDetector(500, false);
             SURFFeature[] observedFeatures = observedImage.ExtractSURF(ref param2);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
@@ -835,6 +835,16 @@ namespace Emgu.CV.Test
          }
       }
 
+
+      [Test]
+      public void TestBayerBG2BGR()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(200, 200);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(image.Size);
+         CvInvoke.cvCvtColor(image, img, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BayerBG2BGR);
+      }
+
       [Test]
       public void TestGamma()
       {
@@ -1068,6 +1078,84 @@ namespace Emgu.CV.Test
             }
          }
       }
+
+      [Test]
+      public void TestFASTKeyPoints()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         MKeyPoint[] keypoints = box.GetFASTKeyPoints(100, true);
+         foreach(MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }
+      }
+
+      [Test]
+      public void TestLDetector()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         LDetector detector = new LDetector();
+         detector.SetDefaultParameters();
+
+         MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }
+      }
+
+      [Test]
+      public void TestStarDetector()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         StarDetector detector = new StarDetector();
+         detector.SetDefaultParameters();
+
+         MKeyPoint[] keypoints = detector.DetectKeyPoints(box);
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }
+      }
+
+      [Test]
+      public void TestSURFDetector()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         SURFDetector detector = new SURFDetector(400, false);
+
+         Stopwatch watch = Stopwatch.StartNew();
+         MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
+         //detector.Detect(box, null);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         /*
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }*/
+      }
+
+      [Test]
+      public void TestPlanarObjectDetector()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         using (PlanarObjectDetector detector = new PlanarObjectDetector())
+         {
+            detector.Train(box);
+
+            Stopwatch watch = Stopwatch.StartNew();
+
+            watch.Stop();
+            Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         }
+         /*
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }*/
+      }
+
       /*
       [Test]
       public void T()

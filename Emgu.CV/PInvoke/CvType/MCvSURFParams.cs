@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
 
-namespace Emgu.CV.Structure
+namespace Emgu.CV
 {
    /// <summary>
    /// Wrapped CvSURFParams structure
@@ -9,6 +10,23 @@ namespace Emgu.CV.Structure
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvSURFParams
    {
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void CvSURFDetectorDetectKeyPoints(
+         ref MCvSURFParams detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void CvSURFDetectorDetect(
+         ref MCvSURFParams detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints,
+         IntPtr descriptors,
+         [MarshalAs(UnmanagedType.I1)]
+         bool useProvidedKeyPoints);
+
       /// <summary>
       /// Create a MCvSURFParams using the specific values
       /// </summary>
@@ -53,5 +71,27 @@ namespace Emgu.CV.Structure
       /// The number of layers within each octave (4 by default)
       /// </summary>
       public int nOctaveLayers;
+
+      public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
+            CvSURFDetectorDetectKeyPoints(ref this, image, mask, seq.Ptr);
+            return seq.ToArray();
+         }
+      }
+
+      /*
+      public void Detect(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MKeyPoint> pts = new Seq<MKeyPoint>(stor);
+            Seq<float> desc = new Seq<float>(stor);
+
+            CvSURFDetectorDetect(ref this, image, mask, pts, desc, false);
+         }
+      }*/
    }
 }

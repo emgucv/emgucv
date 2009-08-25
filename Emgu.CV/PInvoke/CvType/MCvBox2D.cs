@@ -29,7 +29,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="center">The center of the box</param>
       /// <param name="size">The size of the box</param>
-      /// <param name="angle">The angle of the box in degrees</param>
+      /// <param name="angle">The angle of the box in degrees. Possitive value means counter-clock wise rotation</param>
       public MCvBox2D(PointF center, SizeF size, float angle)
       {
          this.center = center;

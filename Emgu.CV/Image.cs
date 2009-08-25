@@ -1367,13 +1367,23 @@ namespace Emgu.CV
       /// Get the star keypoints from this image
       /// </summary>
       /// <param name="param">The Star Detector parameters</param>
-      public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
+      public MCvStarKeypoint[] GetStarKeypoints(ref StarDetector param)
       {
          using (MemStorage stor = new MemStorage())
          {
             IntPtr keyPointsPtr = CvInvoke.cvGetStarKeypoints(_ptr, stor.Ptr, param);
             Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
             return keyPoints.ToArray();
+         }
+      }
+
+      public MKeyPoint[] GetFASTKeyPoints(int threshold, bool nonmaxSupression)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MKeyPoint> keypoints = new Seq<MKeyPoint>(stor);
+            CvInvoke.CvFASTKeyPoints(Ptr, keypoints, threshold, nonmaxSupression);
+            return keypoints.ToArray();
          }
       }
 
@@ -1442,12 +1452,12 @@ namespace Emgu.CV
                {
                   int cornercount = maxFeaturesPerChannel;
                   PointF[] pts = new PointF[maxFeaturesPerChannel];
-
+                  GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
                   CvInvoke.cvGoodFeaturesToTrack(
                       img.Ptr,
                       eigImage.Ptr,
                       tmpImage.Ptr,
-                      pts,
+                      handle.AddrOfPinnedObject(),
                       ref cornercount,
                       qualityLevel,
                       minDistance,
@@ -1455,6 +1465,7 @@ namespace Emgu.CV
                       blockSize,
                       useHarris ? 1 : 0,
                       k);
+                  handle.Free();
                   Array.Resize(ref pts, cornercount);
                   return pts;
                });

@@ -994,13 +994,15 @@ namespace Emgu.CV.Test
          //Find and draw the convex hull
          using (MemStorage storage = new MemStorage())
          {
+            Stopwatch watch = Stopwatch.StartNew();
             PointF[] hull = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+            watch.Stop();
             img.DrawPolyline(
                 Array.ConvertAll<PointF, Point>(hull, Point.Round),
                 true, new Bgr(255.0, 0.0, 0.0), 1);
-         }
 
-         //ImageViewer.Show(img);
+            //ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
+         }
       }
 
       [Test]
@@ -1088,24 +1090,75 @@ namespace Emgu.CV.Test
       [Test]
       public void TestEllipseFitting()
       {
+         #region generate random points
          System.Random r = new Random();
          int sampleCount = 100;
-
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
-
          Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 30);
          PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-         foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
+         #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
          Ellipse fittedEllipse = PointCollection.EllipseLeastSquareFitting(pts);
          watch.Stop();
 
-         //img.Draw(modelEllipse, new Bgr(Color.Orange), 2);
+         #region draw the points and the fitted ellipse
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
+         foreach (PointF p in pts)
+            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
          img.Draw(fittedEllipse, new Bgr(Color.Red), 2);
-         //ImageViewer.Show(img, String.Format("Time used: {0}milliseconds", watch.ElapsedMilliseconds));
+         #endregion
+
+         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
+
+      [Test]
+      public void TestMinAreaRect()
+      {
+         #region generate random points
+         System.Random r = new Random();
+         int sampleCount = 100;
+         Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
+         PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
+         #endregion
+
+         Stopwatch watch = Stopwatch.StartNew();
+         MCvBox2D box = PointCollection.MinAreaRect(pts);
+         watch.Stop();
+
+         #region draw the points and the box
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
+         img.Draw(box, new Bgr(Color.Red), 1);
+         foreach (PointF p in pts)
+            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
+         #endregion
+
+         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+      }
+
+      [Test]
+      public void TestMinEnclosingCircle()
+      {
+         #region generate random points
+         System.Random r = new Random();
+         int sampleCount = 100;
+         Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
+         PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
+         #endregion
+
+         Stopwatch watch = Stopwatch.StartNew();
+         CircleF circle = PointCollection.MinEnclosingCircle(pts);
+         watch.Stop();
+
+         #region draw the points and the circle
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
+         img.Draw(circle, new Bgr(Color.Red), 1);
+         foreach (PointF p in pts)
+            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
+         #endregion
+
+         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+      }
+
 
       [Test]
       public void TestMemstorage()
@@ -1227,7 +1280,7 @@ namespace Emgu.CV.Test
             new MCvPoint3D32f(2, 2, 2)
          };
 
-         using (OctTree tree = new OctTree(pts, 10, 10))
+         using (Octree tree = new Octree(pts, 10, 10))
          {
             MCvPoint3D32f[] p = tree.GetPointsWithinSphere(new MCvPoint3D32f(0, 0, 0), 5);
             int i = p.Length;

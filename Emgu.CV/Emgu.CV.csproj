@@ -52,9 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="LDetector.cs" />
+    <Compile Include="Octree.cs" />
     <Compile Include="Histogram.cs" />
     <Compile Include="HOGDescriptor.cs" />
-    <Compile Include="OctTree.cs" />
     <Compile Include="PInvoke\CvInvokeCv.cs" />
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
@@ -66,9 +67,12 @@
     </Compile>
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
-    <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
+    <Compile Include="PlanarObjectDetector.cs" />
+    <Compile Include="StarDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
+    <Compile Include="PInvoke\CvType\MKeyPoint.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="PointAndLine\LineSegment3DF.cs" />
     <Compile Include="Properties\StringTable.Designer.cs">
@@ -142,7 +146,6 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
-    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />

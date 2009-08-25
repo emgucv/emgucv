@@ -57,6 +57,31 @@ namespace Emgu.CV.Test
          bg_header.Save("bg_header.gif");
       }
 
+      public void TestImage()
+      {
+
+
+         ImageViewer viewer = new ImageViewer();
+         Application.Idle += delegate(Object sender, EventArgs e)
+         {
+            Image<Bgr, Byte> image = new Image<Bgr, byte>(400, 400);
+            image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            image.Save("temp.jpeg");
+            Image<Bgr, Byte> img = new Image<Bgr, byte>("temp.jpeg");
+            viewer.Image = img;
+         };
+
+         viewer.ShowDialog();
+         /*
+         for (int i = 0; i < 10000; i++)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>("temp.jpeg");
+            viewer.Image = img;
+         }*/
+
+
+      }
+
       /*
       public void TestPointPerformance()
       {

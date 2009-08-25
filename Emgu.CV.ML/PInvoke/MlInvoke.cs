@@ -89,6 +89,7 @@ namespace Emgu.CV.ML
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
+         [MarshalAs(UnmanagedType.I1)]
          bool update);
 
       /// <summary>
@@ -131,6 +132,7 @@ namespace Emgu.CV.ML
          IntPtr trainData,
          IntPtr responses,
          IntPtr sampleIdx,
+         [MarshalAs(UnmanagedType.I1)]
          bool isRegression,
          int maxK);
 
@@ -154,8 +156,10 @@ namespace Emgu.CV.ML
          IntPtr trainData,
          IntPtr responses,
          IntPtr sampleIdx,
+         [MarshalAs(UnmanagedType.I1)]
          bool isRegression,
-         int maxK, 
+         int maxK,
+        [MarshalAs(UnmanagedType.I1)]
          bool updateBase);
 
       /// <summary>
@@ -331,6 +335,7 @@ namespace Emgu.CV.ML
       /// <param name="degreeGrid">degreeGrid</param>
       /// <returns></returns>
       [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
       public static extern bool CvSVMTrainAuto(
          IntPtr model,
          IntPtr trainData,
@@ -512,6 +517,7 @@ namespace Emgu.CV.ML
          IntPtr model,
          IntPtr sample,
          IntPtr missingDataMask,
+         [MarshalAs(UnmanagedType.I1)]
          bool rawMode);
       #endregion
 
@@ -657,6 +663,7 @@ namespace Emgu.CV.ML
          IntPtr varType,
          IntPtr missingMask,
          MCvBoostParams param,
+         [MarshalAs(UnmanagedType.I1)]
          bool update);
 
       /// <summary>
@@ -676,6 +683,7 @@ namespace Emgu.CV.ML
          IntPtr missing,
          IntPtr weakResponses,
          Emgu.CV.Structure.MCvSlice slice,
+         [MarshalAs(UnmanagedType.I1)]
          bool rawMode);
 
       /// <summary>

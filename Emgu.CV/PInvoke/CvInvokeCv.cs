@@ -1121,6 +1121,7 @@ namespace Emgu.CV
           int useHarris,
           double k);
 
+      /*
       /// <summary>
       /// Finds corners with big eigenvalues in the image. 
       /// </summary>
@@ -1154,6 +1155,7 @@ namespace Emgu.CV
          int blockSize,
          int useHarris,
          double k);
+      */
 
       /// <summary>
       /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
@@ -2820,7 +2822,7 @@ namespace Emgu.CV
       public static extern IntPtr cvGetStarKeypoints(
          IntPtr img, 
          IntPtr storage,
-         MCvStarDetectorParams param);
+         StarDetector param);
 
       /*
               /// <summary>

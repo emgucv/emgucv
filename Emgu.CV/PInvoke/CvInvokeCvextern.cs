@@ -314,5 +314,13 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
       #endregion
+
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvFASTKeyPoints(
+         IntPtr image, 
+         IntPtr KeyPointSeq, 
+         int threshold, 
+         [MarshalAs(UnmanagedType.I1)]
+         bool nonmaxSupression);
    }
 }

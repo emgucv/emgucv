@@ -155,7 +155,7 @@ namespace Emgu.CV.ML.UnitTest
             #endregion 
          }
       }
-      /*
+      
       [Test]
       public void TestEM2()
       {
@@ -179,7 +179,7 @@ namespace Emgu.CV.ML.UnitTest
 
          Em.Train(featuresM, null, pars, labels);
       }
-      */
+      
       #region contribution from Albert G
       [Test]
       public void TestSVM()

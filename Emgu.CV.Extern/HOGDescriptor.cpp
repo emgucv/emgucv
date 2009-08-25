@@ -1,7 +1,11 @@
 #include "cvaux.h"
 
-CVAPI(void) cvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) {   cv::Vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  cvSeqPushMulti(seq, v.begin(), v.size()); }
-CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor(); }
+CVAPI(void) cvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
+{   
+   cv::Vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
+   cvSeqPushMulti(seq, v.begin(), v.size()); 
+}
+CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
 CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreate(
    cv::Size _winSize, 
@@ -17,8 +21,14 @@ CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreate(
 {
    return new cv::HOGDescriptor(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
-CVAPI(void) cvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) { cv::vector<float> v = cv::vector<float>(detectorSize); memcpy(&v[0], svmDetector, detectorSize * sizeof(float));  descriptor->setSVMDetector(v); }
-CVAPI(void) cvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { descriptor->~HOGDescriptor(); }
+CVAPI(void) cvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) 
+{ 
+   std::vector<float> v = std::vector<float>(detectorSize); 
+   memcpy(&v[0], svmDetector, detectorSize * sizeof(float));  
+   descriptor->setSVMDetector(v); 
+}
+
+CVAPI(void) cvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
 
 CVAPI(void) cvHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
@@ -32,7 +42,7 @@ CVAPI(void) cvHOGDescriptorDetectMultiScale(
 {
    cvClearSeq(foundLocations);
 
-   cv::vector<cv::Rect> rects;
+   std::vector<cv::Rect> rects;
    cv::Mat mat = cv::cvarrToMat(img);
    descriptor->detectMultiScale(mat, rects, hitThreshold, winStride, padding, scale, groupThreshold);
    cvSeqPushMulti(foundLocations, &rects[0], rects.size());
