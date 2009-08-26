@@ -551,7 +551,7 @@ namespace Emgu.CV.Test
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
-            SURFDetector param1 = new SURFDetector(500, false);
+            MCvSURFParams param1 = new MCvSURFParams(500, false);
             SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref param1);
             SURFTracker tracker = new SURFTracker(modelFeatures);
             stopwatch.Stop();
@@ -567,7 +567,7 @@ namespace Emgu.CV.Test
             //observedImage._EqualizeHist();
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
-            SURFDetector param2 = new SURFDetector(500, false);
+            MCvSURFParams param2 = new MCvSURFParams(500, false);
             SURFFeature[] observedFeatures = observedImage.ExtractSURF(ref param2);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
@@ -1122,7 +1122,7 @@ namespace Emgu.CV.Test
       public void TestSURFDetector()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         SURFDetector detector = new SURFDetector(400, false);
+         MCvSURFParams detector = new MCvSURFParams(400, false);
 
          Stopwatch watch = Stopwatch.StartNew();
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
