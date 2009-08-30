@@ -588,7 +588,7 @@ namespace Emgu.CV
 
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
-         subRect._ptr = ImageUtil.cvGetImageSubRect(_ptr, ref rect);
+         subRect._ptr = Util.cvGetImageSubRect(_ptr, ref rect);
          return subRect;  
       }
 
@@ -1377,7 +1377,13 @@ namespace Emgu.CV
          }
       }
 
-      public MKeyPoint[] GetFASTKeyPoints(int threshold, bool nonmaxSupression)
+      /// <summary>
+      /// Get the FAST keypoints from this image
+      /// </summary>
+      /// <param name="threshold">FAST threshold</param>
+      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used</param>
+      /// <returns>The FAST keypoints in this image</returns>
+      public MKeyPoint[] GetFASTKeypoints(int threshold, bool nonmaxSupression)
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -4173,12 +4179,6 @@ namespace Emgu.CV
       }
 
       #endregion
-   }
-
-   internal static class ImageUtil
-   {
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      public static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
    }
 
    /// <summary>

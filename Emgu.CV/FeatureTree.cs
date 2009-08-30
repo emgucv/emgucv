@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// <param name="descriptors">The array of feature descriptors</param>
       public FeatureTree(float[][] descriptors)
       {
-         _descriptorMatrix = DescriptorsToMatrix(descriptors);
+         _descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors);
          _ptr = CvInvoke.cvCreateKDTree(_descriptorMatrix.Ptr);
       }
 
@@ -52,7 +52,7 @@ namespace Emgu.CV
       /// <param name="tau">A good value is .1</param>
       public FeatureTree(float[][] descriptors, int naive, double rho, double tau)
       {
-         _descriptorMatrix = DescriptorsToMatrix(descriptors);
+         _descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors);
          _ptr = CvInvoke.cvCreateSpillTree(_descriptorMatrix.Ptr, naive, rho, tau);
       }
 
@@ -67,28 +67,6 @@ namespace Emgu.CV
       {
          _descriptorMatrix = descriptors.Clone();
          _ptr = CvInvoke.cvCreateSpillTree(_descriptorMatrix.Ptr, naive, rho, tau);
-      }
-
-      /// <summary>
-      /// Convert an array of descriptors to row by row matrix
-      /// </summary>
-      /// <param name="descriptors">An array of descriptors</param>
-      /// <returns>A matrix where each row is a descriptor</returns>
-      private static Matrix<float> DescriptorsToMatrix(float[][] descriptors)
-      {
-         int rows = descriptors.Length;
-         int cols = descriptors[0].Length;
-         Matrix<float> res = new Matrix<float>(rows, cols);
-         MCvMat mat = res.MCvMat;
-         long dataPos = mat.data.ToInt64();
-
-         for (int i = 0; i < rows; i++)
-         {
-            Marshal.Copy(descriptors[i], 0, new IntPtr(dataPos), cols);
-            dataPos += mat.step;
-         }
-
-         return res;
       }
       
       /// <summary>
@@ -127,7 +105,7 @@ namespace Emgu.CV
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
       private void FindFeatures(float[][] descriptors, Matrix<Int32> results, Matrix<double> dist, int k, int emax)
       {
-         using (Matrix<float> descriptorMatrix = DescriptorsToMatrix(descriptors))
+         using (Matrix<float> descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors))
             CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
       }
 

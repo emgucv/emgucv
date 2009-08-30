@@ -185,7 +185,6 @@ namespace Emgu.CV
       /// <param name="matchedFeatures">The matched features to be sorted</param>
       private static void SortIndividualMatchedFeatureByDistance(MatchedSURFFeature[] matchedFeatures)
       {
-         //SortedList<double, SURFFeature> sortedList = new SortedList<double, SURFFeature>();
          List<SimilarFeature> pairs = new List<SimilarFeature>();
          foreach (MatchedSURFFeature ms in matchedFeatures)
          {
@@ -208,9 +207,17 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
       public struct SimilarFeature
       {
          private double _distance;
+         private SURFFeature _feature;
+
+         /// <summary>
+         /// 
+         /// </summary>
          public double Distance
          {
             get
@@ -223,8 +230,9 @@ namespace Emgu.CV
             }
          }
 
-         private SURFFeature _feature;
-
+         /// <summary>
+         /// 
+         /// </summary>
          public SURFFeature Feature
          {
             get
@@ -237,6 +245,11 @@ namespace Emgu.CV
             }
          }
 
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="distance"></param>
+         /// <param name="feature"></param>
          public SimilarFeature(double distance, SURFFeature feature)
          {
             _distance = distance;
@@ -390,6 +403,9 @@ namespace Emgu.CV
 
          private SimilarFeature[] _similarFeatures;
 
+         /// <summary>
+         /// 
+         /// </summary>
          public SimilarFeature[] SimilarFeatures
          {
             get

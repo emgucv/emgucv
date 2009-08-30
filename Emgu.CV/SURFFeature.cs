@@ -21,7 +21,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The SURF descriptor as an array (size 64 for regular descriptor; 128 for extended descriptor)
+      /// The feature descriptor as an array
       /// </summary>
       public float[] Descriptor
       {
@@ -33,7 +33,7 @@ namespace Emgu.CV
       /// Create a SURF feature from the specific point and descriptor
       /// </summary>
       /// <param name="point">The MCvSURFPoint structure</param>
-      /// <param name="descriptor">The point descriptor</param>
+      /// <param name="descriptor">The feature descriptor</param>
       public SURFFeature(ref MCvSURFPoint point, float[] descriptor)
       {
          _point = point;

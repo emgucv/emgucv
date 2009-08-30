@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -89,7 +90,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="typeOfDepth">The depth of type</param>
       /// <returns>OpenCV Matrix depth</returns>
-      internal static CvEnum.MAT_DEPTH GetMatrixDepth(Type typeOfDepth)
+      public static CvEnum.MAT_DEPTH GetMatrixDepth(Type typeOfDepth)
       {
          if (typeOfDepth == typeof(Single))
             return CvEnum.MAT_DEPTH.CV_32F;
@@ -108,5 +109,29 @@ namespace Emgu.CV
          throw new NotImplementedException("Unsupported matrix depth");
       }
 
+      /// <summary>
+      /// Convert an array of descriptors to row by row matrix
+      /// </summary>
+      /// <param name="descriptors">An array of descriptors</param>
+      /// <returns>A matrix where each row is a descriptor</returns>
+      public static Matrix<float> GetMatrixFromDescriptors(float[][] descriptors)
+      {
+         int rows = descriptors.Length;
+         int cols = descriptors[0].Length;
+         Matrix<float> res = new Matrix<float>(rows, cols);
+         MCvMat mat = res.MCvMat;
+         long dataPos = mat.data.ToInt64();
+
+         for (int i = 0; i < rows; i++)
+         {
+            Marshal.Copy(descriptors[i], 0, new IntPtr(dataPos), cols);
+            dataPos += mat.step;
+         }
+
+         return res;
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
    }
 }
