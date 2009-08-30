@@ -72,6 +72,12 @@ namespace Emgu.CV
       /// </summary>
       public int nOctaveLayers;
 
+      /// <summary>
+      /// Detect the SURF keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract SURF features from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>An array of SURF key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          using (MemStorage stor = new MemStorage())
@@ -91,6 +97,10 @@ namespace Emgu.CV
             Seq<float> desc = new Seq<float>(stor);
 
             CvSURFDetectorDetect(ref this, image, mask, pts, desc, false);
+            MKeyPoint[] kpts = pts.ToArray();
+            int n = kpts.Length;
+            float[] values = desc.ToArray();
+            int l = values.Length;
          }
       }*/
    }

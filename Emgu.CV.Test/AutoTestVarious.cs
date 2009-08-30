@@ -402,8 +402,8 @@ namespace Emgu.CV.Test
       }*/
 
       
-      /*
-      private float[,] ProjectPoints(float[,] points3D, RotationVector3D rotation, Matrix<double> translation, float focalLength)
+      
+      private static float[,] ProjectPoints(float[,] points3D, RotationVector3D rotation, Matrix<double> translation, float focalLength)
       {
          using (Matrix<float> imagePointMat = new Matrix<float>(points3D.GetLength(0), 2))
          {
@@ -417,7 +417,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      
+      /*
       [Test]
       public void TestPOSIT()
       {
@@ -474,8 +474,8 @@ namespace Emgu.CV.Test
          }
 
          CvInvoke.cvReleasePOSITObject(ref posit);
-      }
-      */
+      }*/
+      
 
       [Test]
       public void TestXmlSerialize()
@@ -880,6 +880,66 @@ namespace Emgu.CV.Test
          tree.FindFeatures(features2, out result, out distance, 1, 20);
          Assert.AreEqual(result[0, 0], 5);
          Assert.AreEqual(distance[0, 0], 0.0);
+      }
+
+      [Test]
+      public void TestFlannLinear()
+      {
+         float[][] features = new float[10][];
+         for (int i = 0; i < features.Length; i++)
+            features[i] = new float[] { (float)i };
+
+         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features));
+
+         float[][] features2 = new float[1][];
+         features2[0] = new float[] { 5.0f };
+
+         Matrix<int> indices = new Matrix<int>(features2.Length, 1);
+         Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+
+         Assert.AreEqual(indices[0, 0], 5);
+         Assert.AreEqual(distances[0, 0], 0.0);
+      }
+
+      [Test]
+      public void TestFlannKDTree()
+      {
+         float[][] features = new float[10][];
+         for (int i = 0; i < features.Length; i++)
+            features[i] = new float[] { (float)i };
+
+         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features), 4);
+
+         float[][] features2 = new float[1][];
+         features2[0] = new float[] { 5.0f };
+
+         Matrix<int> indices = new Matrix<int>(features2.Length, 1);
+         Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+
+         Assert.AreEqual(indices[0, 0], 5);
+         Assert.AreEqual(distances[0, 0], 0.0);
+      }
+
+      [Test]
+      public void TestFlannCompositeTree()
+      {
+         float[][] features = new float[10][];
+         for (int i = 0; i < features.Length; i++)
+            features[i] = new float[] { (float)i };
+
+         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
+
+         float[][] features2 = new float[1][];
+         features2[0] = new float[] { 5.0f };
+
+         Matrix<int> indices = new Matrix<int>(features2.Length, 1);
+         Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+
+         Assert.AreEqual(indices[0, 0], 5);
+         Assert.AreEqual(distances[0, 0], 0.0);
       }
 
       [Test]

@@ -1083,7 +1083,7 @@ namespace Emgu.CV.Test
       public void TestFASTKeyPoints()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         MKeyPoint[] keypoints = box.GetFASTKeyPoints(100, true);
+         MKeyPoint[] keypoints = box.GetFASTKeypoints(100, true);
          foreach(MKeyPoint kp in keypoints)
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
@@ -1091,17 +1091,26 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestLDetector()
+      public void TestLDetectorAndSelfSimDescriptor()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
          LDetector detector = new LDetector();
          detector.SetDefaultParameters();
 
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
+
+         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) { return Point.Round(k.Point); });
+
+         SelfSimDescriptor descriptor = new SelfSimDescriptor(5, 41, 3, 7, 20);
+         int descriptorSize = descriptor.DescriptorSize;
+
+         float[] descriptors = descriptor.Compute(box, new Size(20, 20), pts);
+         int i = descriptors.Length;
+         /*
          foreach (MKeyPoint kp in keypoints)
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }
+         }*/
       }
 
       [Test]
@@ -1136,36 +1145,54 @@ namespace Emgu.CV.Test
          }*/
       }
 
+      
+      //TODO:Find out why this is not working
       [Test]
       public void TestPlanarObjectDetector()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         //Image<Gray, byte> scene = new Image<Gray,byte>("box_in_scene.png");
+         Image<Gray, Byte> scene = box.Rotate(1, new Gray(), false);
+
          using (PlanarObjectDetector detector = new PlanarObjectDetector())
          {
-            detector.Train(box);
-
             Stopwatch watch = Stopwatch.StartNew();
+            LDetector keypointDetector = new LDetector();
+            keypointDetector.SetDefaultParameters();
 
+            PatchGenerator pGen = new PatchGenerator();
+
+            detector.Train(box, 300, 31, 50, 9, 5000, keypointDetector, pGen);
             watch.Stop();
-            Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
-         }
-         /*
-         foreach (MKeyPoint kp in keypoints)
-         {
-            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }*/
+            Trace.WriteLine(String.Format("Training time: {0} milliseconds.", watch.ElapsedMilliseconds));
+
+            MKeyPoint[] modelPoints = detector.GetModelPoints();
+            int i = modelPoints.Length;
+
+            HomographyMatrix h = new HomographyMatrix();
+            watch = Stopwatch.StartNew();
+            PointF[] corners = detector.Detect(scene, h);
+            watch.Stop();
+            Trace.WriteLine(String.Format("Detection time: {0} milliseconds.", watch.ElapsedMilliseconds));
+
+            foreach (PointF c in corners)
+            {
+               scene.Draw(new CircleF(c, 2), new Gray(255), 1);
+            }
+         }  
       }
 
-      /*
+      
       [Test]
       public void T()
       {
          DateTime t1 = DateTime.Now;
          for (int i = 0; i < 100; i++)
          {
-            Image<Gray, Byte> img = new Image<Gray, byte>("01E01002.TIF");
+            Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
+            img.Save("tmp.jpg");
          }
          Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds / 100);
-      }*/
+      }
    }
 }

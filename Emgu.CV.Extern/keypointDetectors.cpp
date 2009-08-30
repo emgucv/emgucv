@@ -40,6 +40,23 @@ CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image,
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
+//SelfSimDescriptor
+CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
+{  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
+CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, CvSeq* descriptors, cv::Size winStride, cv::Point* locations, int numberOfLocation)
+{
+   std::vector<float> descriptorVec;
+   std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
+   memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
+
+   descriptor->compute(cv::cvarrToMat(image), descriptorVec, winStride, locationVec);
+   
+   if (descriptorVec.size() > 0)
+      cvSeqPushMulti(descriptors, &descriptorVec[0], descriptorVec.size());
+}
+CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
+
 //StarDetector
 CVAPI(void) CvStarDetectorDetectKeyPoints(cv::StarDetector* detector, IplImage* image, CvSeq* keypoints)
 {
@@ -109,10 +126,31 @@ CVAPI(void) CvFASTKeyPoints( IplImage* image, CvSeq* keypoints, int threshold, b
 //Plannar Object Detector
 CVAPI(cv::PlanarObjectDetector*) CvPlanarObjectDetectorDefaultCreate() { return new cv::PlanarObjectDetector; }
 CVAPI(void) CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector) { delete detector; }
-CVAPI(void) CvPlanarObjectDetectorTrain(cv::PlanarObjectDetector* detector, IplImage* image)
+CVAPI(void) CvPlanarObjectDetectorTrain(
+   cv::PlanarObjectDetector* objectDetector, 
+   IplImage* image, 
+   int _npoints,
+   int _patchSize,
+   int _nstructs,
+   int _structSize,
+   int _nviews,
+   cv::LDetector* detector,
+   cv::PatchGenerator* patchGenerator)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
    std::vector<cv::Mat> pyr;
-   cv::buildPyramid(mat, pyr, 20);
-   detector->train(pyr);
+   pyr.push_back(cv::cvarrToMat(image));
+   objectDetector->train(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, *detector, *patchGenerator);
+}
+CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners)
+{
+   std::vector<cv::Point2f> cornerVec;
+   (*detector)(cv::cvarrToMat(image), cv::cvarrToMat(homography), cornerVec);
+   if (cornerVec.size() > 0)
+      cvSeqPushMulti(corners, &cornerVec[0], cornerVec.size());
+}
+CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
+{
+   std::vector<cv::KeyPoint> modelPtVec = detector->getModelPoints();
+   if (modelPtVec.size() > 0)
+      cvSeqPushMulti(modelPoints, &modelPtVec[0], modelPtVec.size());
 }

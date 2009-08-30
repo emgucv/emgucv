@@ -51,11 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="Flann\CenterInitType.cs" />
+    <Compile Include="Flann\Index.cs" />
     <Compile Include="LDetector.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="Histogram.cs" />
     <Compile Include="HOGDescriptor.cs" />
+    <Compile Include="PatchGenerator.cs" />
     <Compile Include="PInvoke\CvInvokeCv.cs" />
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PlanarObjectDetector.cs" />
+    <Compile Include="SelfSimDescriptor.cs" />
     <Compile Include="StarDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />

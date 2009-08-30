@@ -315,6 +315,13 @@ namespace Emgu.CV
       public extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
       #endregion
 
+      /// <summary>
+      /// Extract FAST keypoints
+      /// </summary>
+      /// <param name="image">The image to extract keypoint from</param>
+      /// <param name="KeyPointSeq">The pre-allocated sequence of MKeyPoints where the result will be stored</param>
+      /// <param name="threshold"></param>
+      /// <param name="nonmaxSupression">Indicates if nonmaximum supression should be used</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvFASTKeyPoints(
          IntPtr image, 
