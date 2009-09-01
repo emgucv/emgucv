@@ -49,8 +49,8 @@ CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplIma
    std::vector<float> descriptorVec;
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
-
-   descriptor->compute(cv::cvarrToMat(image), descriptorVec, winStride, locationVec);
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   descriptor->compute(imageMat, descriptorVec, winStride, locationVec);
    
    if (descriptorVec.size() > 0)
       cvSeqPushMulti(descriptors, &descriptorVec[0], descriptorVec.size());
@@ -110,7 +110,6 @@ CVAPI(void) CvSURFDetectorDetect(cv::SURF* detector, IplImage* image, IplImage* 
    }
 }
 
-
 // detect corners using FAST algorithm
 CVAPI(void) CvFASTKeyPoints( IplImage* image, CvSeq* keypoints, int threshold, bool nonmax_supression)
 {
@@ -138,13 +137,16 @@ CVAPI(void) CvPlanarObjectDetectorTrain(
    cv::PatchGenerator* patchGenerator)
 {
    std::vector<cv::Mat> pyr;
-   pyr.push_back(cv::cvarrToMat(image));
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   pyr.push_back(imageMat);
    objectDetector->train(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, *detector, *patchGenerator);
 }
 CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners)
 {
    std::vector<cv::Point2f> cornerVec;
-   (*detector)(cv::cvarrToMat(image), cv::cvarrToMat(homography), cornerVec);
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   cv::Mat homographyMat = cv::cvarrToMat(homography);
+   (*detector)(imageMat, homographyMat,  cornerVec);
    if (cornerVec.size() > 0)
       cvSeqPushMulti(corners, &cornerVec[0], cornerVec.size());
 }

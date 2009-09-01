@@ -38,7 +38,10 @@ CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(CvMat* features, int trees,
 CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, CvMat* queries, CvMat* indices, CvMat* dists, int knn, int checks)
 {
    cv::flann::SearchParams p = cv::flann::SearchParams(checks);
-   index->knnSearch(cv::cvarrToMat(queries), cv::cvarrToMat(indices), cv::cvarrToMat(dists), knn, p);
+   cv::Mat queriesMat = cv::cvarrToMat(queries); 
+   cv::Mat indicesMat = cv::cvarrToMat(indices);
+   cv::Mat distsMat = cv::cvarrToMat(dists);
+   index->knnSearch(queriesMat, indicesMat, distsMat, knn, p);
 }
 
 CVAPI(void) CvFlannIndexRelease(cv::flann::Index* index) { delete index; }
