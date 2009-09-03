@@ -1,13 +1,13 @@
 #include "cvaux.h"
 
-CVAPI(void) cvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
+CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
    cv::Vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
    cvSeqPushMulti(seq, v.begin(), v.size()); 
 }
-CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
+CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
-CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreate(
+CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
    cv::Size _winSize, 
    cv::Size _blockSize, 
    cv::Size _blockStride,
@@ -21,16 +21,16 @@ CVAPI(cv::HOGDescriptor*) cvHOGDescriptorCreate(
 {
    return new cv::HOGDescriptor(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
-CVAPI(void) cvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) 
+CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) 
 { 
    std::vector<float> v = std::vector<float>(detectorSize); 
    memcpy(&v[0], svmDetector, detectorSize * sizeof(float));  
    descriptor->setSVMDetector(v); 
 }
 
-CVAPI(void) cvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
+CVAPI(void) CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
 
-CVAPI(void) cvHOGDescriptorDetectMultiScale(
+CVAPI(void) CvHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
    CvArr* img, 
    CvSeq* foundLocations,

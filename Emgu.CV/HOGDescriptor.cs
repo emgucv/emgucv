@@ -15,13 +15,13 @@ namespace Emgu.CV
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
+      private extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static IntPtr cvHOGDescriptorCreateDefault();
+      private extern static IntPtr CvHOGDescriptorCreateDefault();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static IntPtr cvHOGDescriptorCreate(
+      private extern static IntPtr CvHOGDescriptorCreate(
          Size winSize,
          Size blockSize,
          Size blockStride,
@@ -35,13 +35,13 @@ namespace Emgu.CV
          bool gammaCorrection);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvHOGDescriptorRelease(IntPtr descriptor);
+      private extern static void CvHOGDescriptorRelease(IntPtr descriptor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector, int detectorSize);
+      private extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector, int detectorSize);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void cvHOGDescriptorDetectMultiScale(
+      private extern static void CvHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,
          IntPtr foundLocations,
@@ -60,7 +60,7 @@ namespace Emgu.CV
       /// </summary>
       public HOGDescriptor()
       {
-         _ptr = cvHOGDescriptorCreateDefault();
+         _ptr = CvHOGDescriptorCreateDefault();
          _rectStorage = new MemStorage();
          _rectSeq = new Seq<Rectangle>(_rectStorage);
       }
@@ -79,7 +79,7 @@ namespace Emgu.CV
          double L2HysThreshold,
          bool gammaCorrection)
       {
-         _ptr = cvHOGDescriptorCreate(
+         _ptr = CvHOGDescriptorCreate(
             winSize,
             blockSize,
             blockStride,
@@ -104,7 +104,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<float> desc = new Seq<float>(stor);
-            cvHOGDescriptorPeopleDetectorCreate(desc);
+            CvHOGDescriptorPeopleDetectorCreate(desc);
             return desc.ToArray();
          }
       }
@@ -116,7 +116,7 @@ namespace Emgu.CV
       public void SetSVMDetector(float[] detector)
       {
          GCHandle handle = GCHandle.Alloc(detector, GCHandleType.Pinned);
-         cvHOGSetSVMDetector(_ptr, handle.AddrOfPinnedObject(), detector.Length);
+         CvHOGSetSVMDetector(_ptr, handle.AddrOfPinnedObject(), detector.Length);
          handle.Free();
       }
 
@@ -138,7 +138,7 @@ namespace Emgu.CV
          double scale,
          int groupThreshold)
       {
-         cvHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+         CvHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
          return _rectSeq.ToArray();
       }
 
@@ -166,7 +166,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         cvHOGDescriptorRelease(_ptr);
+         CvHOGDescriptorRelease(_ptr);
       }
    }
 }
