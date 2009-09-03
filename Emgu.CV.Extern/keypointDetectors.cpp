@@ -23,8 +23,12 @@ CVAPI(void) CvFernClassifierTrainFromSingleView(
 }
 
 //Patch Genetator
-CVAPI(cv::PatchGenerator*) CvPatchGeneratorDefaultCreate() { return new cv::PatchGenerator; }
-CVAPI(void) CvPatchGeneratorRelease(cv::PatchGenerator* pg) { delete pg ;}
+CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg) 
+{ 
+   cv::PatchGenerator defaultPG;
+   memcpy(pg, &defaultPG, sizeof(cv::PatchGenerator));
+}
+
 
 //LDetector
 CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, CvSeq* keypoints, int maxCount, bool scaleCoords)

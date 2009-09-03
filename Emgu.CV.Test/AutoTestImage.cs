@@ -1161,8 +1161,9 @@ namespace Emgu.CV.Test
             keypointDetector.SetDefaultParameters();
 
             PatchGenerator pGen = new PatchGenerator();
+            pGen.SetDefaultParameters();
 
-            detector.Train(box, 300, 31, 50, 9, 5000, keypointDetector, pGen);
+            detector.Train(box, 300, 31, 50, 9, 5000, ref keypointDetector, ref pGen);
             watch.Stop();
             Trace.WriteLine(String.Format("Training time: {0} milliseconds.", watch.ElapsedMilliseconds));
 

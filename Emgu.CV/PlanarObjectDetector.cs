@@ -29,7 +29,7 @@ namespace Emgu.CV
          int structSize,
          int nviews,
          ref LDetector keyPointDetector,
-         IntPtr patchGenerator);
+         ref PatchGenerator patchGenerator);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvPlanarObjectDetectorDetect(IntPtr detector, IntPtr image, IntPtr homography, IntPtr corners);
@@ -70,10 +70,10 @@ namespace Emgu.CV
          int nstructs,
          int structSize,
          int nviews,
-         LDetector keyPointDetector,
-         PatchGenerator patchGenerator)
+         ref LDetector keyPointDetector,
+         ref PatchGenerator patchGenerator)
       {
-         CvPlanarObjectDetectorTrain(Ptr, image, npoints, patchSize, nstructs, structSize, nviews, ref keyPointDetector, patchGenerator);
+         CvPlanarObjectDetectorTrain(Ptr, image, npoints, patchSize, nstructs, structSize, nviews, ref keyPointDetector, ref patchGenerator);
       }
 
       /// <summary>
