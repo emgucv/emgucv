@@ -2811,6 +2811,41 @@ namespace Emgu.CV
          IntPtr userParam);
       #endregion
 
+      #region condensation
+      /// <summary>
+      /// Creates CvConDensation structure and returns pointer to the structure
+      /// </summary>
+      /// <param name="dynamParams">Dimension of the state vector</param>
+      /// <param name="measureParams">Dimension of the measurement vector</param>
+      /// <param name="sampleCount">Number of samples</param>
+      /// <returns>Pointer to the CvConDensation structure</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvCreateConDensation(int dynamParams, int measureParams, int sampleCount);
+
+      /// <summary>
+      /// Releases the structure CvConDensation (see cvConDensation) and frees all memory previously allocated for the structure. 
+      /// </summary>
+      /// <param name="condens">Pointer to the CvConDensation structure</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvReleaseConDensation(ref IntPtr condens);
+
+      /// <summary>
+      /// Fills the samples arrays in the structure CvConDensation with values within specified ranges. 
+      /// </summary>
+      /// <param name="condens">Pointer to a structure to be initialized</param>
+      /// <param name="lowerBound">Vector of the lower boundary for each dimension</param>
+      /// <param name="upperBound">Vector of the upper boundary for each dimension</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvConDensInitSampleSet(IntPtr condens, IntPtr lowerBound, IntPtr upperBound);
+
+      /// <summary>
+      /// Estimates the subsequent stochastic model state from its current state
+      /// </summary>
+      /// <param name="condens">Pointer to the structure to be updated</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvConDensUpdateByTime(IntPtr condens);
+      #endregion
+
       /// <summary>
       /// 
       /// </summary>

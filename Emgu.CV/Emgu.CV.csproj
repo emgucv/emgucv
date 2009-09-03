@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
+    <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PlanarObjectDetector.cs" />
     <Compile Include="SelfSimDescriptor.cs" />
