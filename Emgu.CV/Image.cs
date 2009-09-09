@@ -1328,9 +1328,18 @@ namespace Emgu.CV
       {
          using (MemStorage stor = new MemStorage())
          {
-            IntPtr descriptorPtr;
-            Seq<MCvSURFPoint> keypoints;
-            ExtractSURF(mask, ref param, stor, out keypoints, out descriptorPtr);
+            IntPtr descriptorPtr = new IntPtr();
+            IntPtr keypointsPtr = new IntPtr();
+
+            CvInvoke.cvExtractSURF(
+               Ptr, mask == null ? IntPtr.Zero : mask.Ptr,
+               ref keypointsPtr,
+               ref descriptorPtr,
+               stor.Ptr,
+               param,
+               0);
+            Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+
             MCvSURFPoint[] surfPoints = keypoints.ToArray();
 
             SURFFeature[] res = new SURFFeature[surfPoints.Length];
@@ -1348,19 +1357,48 @@ namespace Emgu.CV
          }
       }
 
-      private void ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param, MemStorage stor, out Seq<MCvSURFPoint> keypoints, out IntPtr descriptorPtr)
+      /*
+      /// <summary>
+      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+      /// </summary>
+      /// <param name="points">The locations where SURF features will be extracted from</param>
+      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+      /// <param name="param">The SURF parameters</param>
+      public SURFFeature[] ExtractSURF(PointF[] points, Image<Gray, Byte> mask, ref MCvSURFParams param)
       {
-         IntPtr keypointsPtr = new IntPtr();
-         descriptorPtr = new IntPtr();
-         CvInvoke.cvExtractSURF(
-            Ptr, mask == null ? IntPtr.Zero : mask.Ptr,
-            ref keypointsPtr,
-            ref descriptorPtr,
-            stor.Ptr,
-            param,
-            0);
-         keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
-      }
+         using (MemStorage stor = new MemStorage())
+         {
+            IntPtr descriptorPtr = new IntPtr();
+
+            MCvSURFPoint[] locations = Array.ConvertAll<PointF, MCvSURFPoint>(points, delegate(PointF p) { MCvSURFPoint sp = new MCvSURFPoint(); sp.pt = p; return sp;  });
+            Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(stor);
+            keypoints.PushMulti(locations, Emgu.CV.CvEnum.BACK_OR_FRONT.BACK);
+            IntPtr keypointsPtr = keypoints.Ptr;
+            CvInvoke.cvExtractSURF(
+               Ptr, mask,
+               ref keypointsPtr,
+               ref descriptorPtr,
+               stor.Ptr,
+               param,
+               1);
+
+            MCvSURFPoint[] surfPoints = keypoints.ToArray();
+
+            SURFFeature[] res = new SURFFeature[surfPoints.Length];
+
+            int elementsInDescriptor = param.extended == 0 ? 64 : 128;
+
+            for (int i = 0; i < res.Length; i++)
+            {
+               float[] descriptor = new float[elementsInDescriptor];
+               Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
+               res[i] = new SURFFeature(ref surfPoints[i], descriptor);
+            }
+
+            return res;
+         }
+      }*/
+
       #endregion
 
       /// <summary>
@@ -2901,6 +2939,23 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width << 1, Height << 1);
          CvInvoke.cvPyrUp(Ptr, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
          return res;
+      }
+
+      /// <summary>
+      /// Compute the image pyramid
+      /// </summary>
+      /// <param name="maxLevel">The number of level's for the pyramid; Level 0 referes to the current image, level n is computed by calling the PyrDown() function on level n-1</param>
+      /// <returns>The image pyramid</returns>
+      public Image<TColor, TDepth>[] BuildPyramid(int maxLevel)
+      {
+         Debug.Assert(maxLevel >= 0, "The pyramid should have at lease maxLevel of 0");
+         Image<TColor, TDepth>[] pyr = new Image<TColor, TDepth>[maxLevel + 1];
+         pyr[0] = this;
+
+         for (int i = 1; i <= maxLevel; i++)
+            pyr[i] = pyr[i-1].PyrDown();
+
+         return pyr;
       }
       #endregion
 
