@@ -3716,12 +3716,13 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="colorSigma">Color sigma</param>
       /// <param name="spaceSigma">Space sigma</param>
+      /// <param name="kernelSize">The size of the bilatral kernel</param>
       /// <returns>The result of bilateral smooth</returns>
       [ExposableMethod(Exposable = true, Category = "Smoothing")]
-      public Image<TColor, TDepth> SmoothBilatral(int colorSigma, int spaceSigma)
+      public Image<TColor, TDepth> SmoothBilatral(int kernelSize, int colorSigma, int spaceSigma)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BILATERAL, colorSigma, spaceSigma, 0, 0);
+         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SMOOTH_TYPE.CV_BILATERAL, kernelSize, kernelSize, colorSigma, spaceSigma);
          return res;
       }
 
