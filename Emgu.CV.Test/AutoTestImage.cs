@@ -536,6 +536,7 @@ namespace Emgu.CV.Test
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          image.ThresholdToZero(new Gray(120));
          MCvMoments moment = image.GetMoments(true);
+         MCvHuMoments huMoment = moment.GetHuMoment();
       }
 
       [Test]
@@ -1135,6 +1136,11 @@ namespace Emgu.CV.Test
 
          Stopwatch watch = Stopwatch.StartNew();
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
+
+         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) { return mkp.Point; });
+         //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
+         //int count = features.Length;
+
          //detector.Detect(box, null);
          watch.Stop();
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
@@ -1146,13 +1152,13 @@ namespace Emgu.CV.Test
       }
 
       
-      //TODO:Find out why this is not working
+      //TODO:Find out why this is not working well
       [Test]
       public void TestPlanarObjectDetector()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         //Image<Gray, byte> scene = new Image<Gray,byte>("box_in_scene.png");
-         Image<Gray, Byte> scene = box.Rotate(1, new Gray(), false);
+         Image<Gray, byte> scene = new Image<Gray,byte>("box_in_scene.png");
+         //Image<Gray, Byte> scene = box.Rotate(1, new Gray(), false);
 
          using (PlanarObjectDetector detector = new PlanarObjectDetector())
          {
@@ -1180,6 +1186,7 @@ namespace Emgu.CV.Test
             {
                scene.Draw(new CircleF(c, 2), new Gray(255), 1);
             }
+            scene.DrawPolyline(Array.ConvertAll<PointF, Point>(corners, Point.Round), true, new Gray(255), 2);
          }  
       }
 

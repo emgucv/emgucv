@@ -220,7 +220,6 @@ namespace Emgu.CV.Test
          }
       }
 
-      //TODO: Request Willow Garage to accept patch to resume cvRedirectError functionality
       [Test]
       public void TestException()
       {
@@ -232,9 +231,9 @@ namespace Emgu.CV.Test
             {
                double det = mat.Det;
             }
-            catch (CvException)
+            catch (CvException excpt)
             {
-               //Assert.AreEqual(-201, excpt.Status);
+               Assert.AreEqual(-215, excpt.Status);
                exceptionCaught = true;
             }
             Assert.IsTrue(exceptionCaught);
