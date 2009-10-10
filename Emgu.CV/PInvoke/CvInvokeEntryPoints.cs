@@ -10,19 +10,19 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cxcore library
       /// </summary>
-      public const string CXCORE_LIBRARY = "cxcore111.dll";
+      public const string CXCORE_LIBRARY = "cxcore200.dll";
       /// <summary>
       /// The file name of the cv library
       /// </summary>
-      public const string CV_LIBRARY = "cv111.dll";
+      public const string CV_LIBRARY = "cv200.dll";
       /// <summary>
       /// The file name of the highgui library
       /// </summary>
-      public const string HIGHGUI_LIBRARY = "highgui111.dll";
+      public const string HIGHGUI_LIBRARY = "highgui200.dll";
       /// <summary>
       /// The file name of the cvaux library
       /// </summary>
-      public const string CVAUX_LIBRARY = "cvaux111.dll";
+      public const string CVAUX_LIBRARY = "cvaux200.dll";
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
