@@ -2083,4 +2083,27 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       FGD_SIMPLE = 2
    }
+
+   /// <summary>
+   /// The available flags for farneback optical flow computation
+   /// </summary>
+   [Flags]
+   public enum OPTICALFLOW_FARNEBACK_FLAG
+   {
+      /// <summary>
+      /// Default
+      /// </summary>
+      DEFAULT = 0,
+      /// <summary>
+      /// Use the input flow as the initial flow approximation
+      /// </summary>
+      USE_INITIAL_FLOW = 4,
+      /// <summary>
+      /// Use a Gaussian winsize x winsizefilter instead of box
+      /// filter of the same size for optical flow estimation. Usually, this option gives more accurate
+      /// flow than with a box filter, at the cost of lower speed (and normally winsize for a
+      /// Gaussian window should be set to a larger value to achieve the same level of robustness)
+      /// </summary>
+      FARNEBACK_GAUSSIAN = 256
+   }
 }

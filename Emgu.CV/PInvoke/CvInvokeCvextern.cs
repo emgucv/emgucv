@@ -316,6 +316,32 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="prev0"></param>
+      /// <param name="next0"></param>
+      /// <param name="flow0"></param>
+      /// <param name="pyrScale"></param>
+      /// <param name="levels"></param>
+      /// <param name="winSize"></param>
+      /// <param name="iterations"></param>
+      /// <param name="polyN"></param>
+      /// <param name="polySigma"></param>
+      /// <param name="flags"></param>
+      [DllImport(EXTERN_LIBRARY)]
+      public extern static void CvCalcOpticalFlowFarneback(
+         IntPtr prev0,
+         IntPtr next0,
+         IntPtr flow0,
+         double pyrScale,
+         int levels,
+         int winSize,
+         int iterations,
+         int polyN,
+         double polySigma,
+         CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags);
+
+      /// <summary>
       /// Extract FAST keypoints
       /// </summary>
       /// <param name="image">The image to extract keypoint from</param>
@@ -324,9 +350,9 @@ namespace Emgu.CV
       /// <param name="nonmaxSupression">Indicates if nonmaximum supression should be used</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvFASTKeyPoints(
-         IntPtr image, 
-         IntPtr KeyPointSeq, 
-         int threshold, 
+         IntPtr image,
+         IntPtr KeyPointSeq,
+         int threshold,
          [MarshalAs(UnmanagedType.I1)]
          bool nonmaxSupression);
    }
