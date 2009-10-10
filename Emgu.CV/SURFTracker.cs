@@ -18,24 +18,12 @@ namespace Emgu.CV
       private static int _randsacRequiredMatch = 10;
 
       /// <summary>
-      /// Create a SURF tracker, where SURF is matched with k-d Tree
+      /// Create a SURF tracker, where SURF is matched with flann
       /// </summary>
       /// <param name="modelFeatures">The SURF feature from the model image</param>
       public SURFTracker(SURFFeature[] modelFeatures)
       {
          _matcher = new SURFMatcher(modelFeatures);
-      }
-
-      /// <summary>
-      /// Create a SURF tracker, where SURF is matched with k-d Tree
-      /// </summary>
-      /// <param name="naive">A good value is 50</param>
-      /// <param name="rho">A good value is .7</param>
-      /// <param name="tau">A good value is .1</param>
-      /// <param name="modelFeatures">The SURF feature from the model image</param>
-      public SURFTracker(SURFFeature[] modelFeatures, int naive, double rho, double tau)
-      {
-         _matcher = new SURFMatcher(modelFeatures, naive, rho, tau);
       }
 
       /// <summary>
@@ -55,7 +43,7 @@ namespace Emgu.CV
             Single[, ,] matchMaskData = matchMask.Data;
 
             MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
-            SortIndividualMatchedFeatureByDistance(matchedFeature);
+            //SortIndividualMatchedFeatureByDistance(matchedFeature);
             matchedFeature = VoteForUniqueness(matchedFeature, matchDistanceRatio);
 
             foreach (MatchedSURFFeature f in matchedFeature)
@@ -179,6 +167,7 @@ namespace Emgu.CV
          }
       }
 
+      /*
       /// <summary>
       /// For each MatchedSURFFeature, sort the model SURF feature by distance (closer distance has smaller index).
       /// </summary>
@@ -205,7 +194,7 @@ namespace Emgu.CV
                   break;
             }
          }
-      }
+      }*/
 
       /// <summary>
       /// 
@@ -257,15 +246,7 @@ namespace Emgu.CV
          }
       }
 
-      private static int CompareSimilarFeature(SimilarFeature f1, SimilarFeature f2)
-      {
-         if (f1.Distance < f2.Distance)
-            return -1;
-         if (f1.Distance == f2.Distance)
-            return 0;
-         else
-            return 1;
-      }
+
 
       /// <summary>
       /// Sorted the matched SURF feature, such that a matchedFeature with smaller distance has a lower index
@@ -386,9 +367,7 @@ namespace Emgu.CV
       /// <returns>The matched features</returns>
       public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
       {
-         MatchedSURFFeature[] res = _matcher.MatchFeature(observedFeatures, k, emax);
-         SortIndividualMatchedFeatureByDistance(res);
-         return res;
+         return _matcher.MatchFeature(observedFeatures, k, emax);
       }
 
       /// <summary>
@@ -441,7 +420,7 @@ namespace Emgu.CV
       {
          private SURFFeature[] _modelFeatures;
 
-         private FeatureTree _modelFeatureTree;
+         private Flann.Index _modelIndex;
 
          /// <summary>
          /// Create k-d feature trees using the SURF feature extracted from the model image.
@@ -451,29 +430,23 @@ namespace Emgu.CV
          {
             Debug.Assert(modelFeatures.Length > 0, "Model Features should have size > 0");
 
-            _modelFeatureTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, float[]>(
-                  modelFeatures,
-                  delegate(SURFFeature f) { return f.Descriptor; }));
+            _modelIndex = new Flann.Index(
+               Util.GetMatrixFromDescriptors(
+                  Array.ConvertAll<SURFFeature, float[]>(
+                     modelFeatures,
+                     delegate(SURFFeature f) { return f.Descriptor; })),
+                  4);
             _modelFeatures = modelFeatures;
          }
 
-         /// <summary>
-         /// Create spill trees using SURF feature extracted from the model image.
-         /// </summary>
-         /// <param name="modelFeatures">The SURF feature extracted from the model image</param>
-         /// <param name="naive">A good value is 50</param>
-         /// <param name="rho">A good value is .7</param>
-         /// <param name="tau">A good value is .1</param>
-         public SURFMatcher(SURFFeature[] modelFeatures, int naive, double rho, double tau)
+         private static int CompareSimilarFeature(SimilarFeature f1, SimilarFeature f2)
          {
-            _modelFeatureTree = new FeatureTree(
-               Array.ConvertAll<SURFFeature, float[]>(
-                  modelFeatures,
-                  delegate(SURFFeature f) { return f.Descriptor; }),
-                  naive,
-                  rho,
-                  tau);
+            if (f1.Distance < f2.Distance)
+               return -1;
+            if (f1.Distance == f2.Distance)
+               return 0;
+            else
+               return 1;
          }
 
          /// <summary>
@@ -485,47 +458,57 @@ namespace Emgu.CV
          /// <returns>The matched features</returns>
          public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
          {
-            return MatchFeatureWithModel(observedFeatures, _modelFeatures, _modelFeatureTree, k, emax);
-         }
-
-         private static MatchedSURFFeature[] MatchFeatureWithModel(SURFFeature[] observedFeatures, SURFFeature[] modelFeatures, FeatureTree modelFeatureTree, int k, int emax)
-         {
             if (observedFeatures.Length == 0) return new MatchedSURFFeature[0];
-
-            Matrix<Int32> result1;
-            Matrix<double> dist1;
 
             float[][] descriptors = new float[observedFeatures.Length][];
             for (int i = 0; i < observedFeatures.Length; i++)
                descriptors[i] = observedFeatures[i].Descriptor;
-
-            modelFeatureTree.FindFeatures(descriptors, out result1, out dist1, k, emax);
-
-            int[,] indexes = result1.Data;
-            double[,] distances = dist1.Data;
-
-            MatchedSURFFeature[] res = new MatchedSURFFeature[observedFeatures.Length];
-            List<SimilarFeature> matchedFeatures = new List<SimilarFeature>();
-            
-            for (int i = 0; i < res.Length; i++)
+            using(Matrix<int> result1 = new Matrix<int>(descriptors.Length, k))
+            using (Matrix<float> dist1 = new Matrix<float>(descriptors.Length, k))
             {
-               matchedFeatures.Clear();
-               
-               for (int j = 0; j < k; j++)
+               _modelIndex.KnnSearch(Util.GetMatrixFromDescriptors(descriptors), result1, dist1, k, emax);
+
+               int[,] indexes = result1.Data;
+               float[,] distances = dist1.Data;
+
+               MatchedSURFFeature[] res = new MatchedSURFFeature[observedFeatures.Length];
+               List<SimilarFeature> matchedFeatures = new List<SimilarFeature>();
+
+               for (int i = 0; i < res.Length; i++)
                {
-                  int index = indexes[i, j];
-                  if (index >= 0)
+                  matchedFeatures.Clear();
+
+                  for (int j = 0; j < k; j++)
                   {
-                     matchedFeatures.Add(new SimilarFeature(distances[i, j], modelFeatures[index]));
+                     int index = indexes[i, j];
+                     if (index >= 0)
+                     {
+                        matchedFeatures.Add(new SimilarFeature(distances[i, j], _modelFeatures[index]));
+                     }
                   }
+
+                  switch (matchedFeatures.Count)
+                  {
+                     case 1: //no need to sort if only 1 match
+                        break;
+                     case 2: //fast implementation for 2 features
+                        if (matchedFeatures[1].Distance < matchedFeatures[0].Distance)
+                        {
+                           SimilarFeature tmp = matchedFeatures[0];
+                           matchedFeatures[0] = matchedFeatures[1];
+                           matchedFeatures[1] = tmp;
+                        }
+                        break;
+                     default: //generic sort for 2 or more matches
+                        matchedFeatures.Sort(CompareSimilarFeature);
+                        break;
+                  }
+
+                  res[i].ObservedFeature = observedFeatures[i];
+                  res[i].SimilarFeatures = matchedFeatures.ToArray();
                }
-             
-               res[i].ObservedFeature = observedFeatures[i];
-               res[i].SimilarFeatures = matchedFeatures.ToArray();
+               return res;
             }
-            result1.Dispose();
-            dist1.Dispose();
-            return res;
          }
 
          /// <summary>
@@ -537,7 +520,7 @@ namespace Emgu.CV
 
          protected override void ReleaseManagedResources()
          {
-            _modelFeatureTree.Dispose();
+            _modelIndex.Dispose();
          }
       }
    }

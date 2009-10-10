@@ -31,10 +31,8 @@ namespace SURFFeatureExample
          //extract features from the object image
          SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref surfParam);
 
-         //Create a SURF Tracker using k-d Tree
+         //Create a SURF Tracker
          SURFTracker tracker = new SURFTracker(modelFeatures);
-         //Comment out above and uncomment below if you wish to use spill-tree instead
-         //SURFTracker tracker = new SURFTracker(modelFeatures, 50, .7, .1);
 
          Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
 
