@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    public struct MCvHistogram
    {
       /// <summary>
-      /// 
+      /// The type of histogram
       /// </summary>
       public int type;
 

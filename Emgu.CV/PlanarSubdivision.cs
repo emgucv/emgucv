@@ -16,8 +16,21 @@ namespace Emgu.CV
    {
       private readonly MemStorage _storage;
       private readonly Rectangle _roi;
-
       private bool _isVoronoiDirty;
+
+      #region PInvoke
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer, ref int count);
+      #endregion
 
       #region constructor
       /// <summary>
@@ -121,23 +134,11 @@ namespace Emgu.CV
          get { return (MCvSubdiv2D)Marshal.PtrToStructure(_ptr, typeof(MCvSubdiv2D)); }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer, ref int count);
-
       /// <summary>
       /// Finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point.
       /// </summary>
       /// <param name="point">Input point</param>
-      /// <returns>returns the found subdivision vertex</returns>
+      /// <returns>The nearest subdivision vertex</returns>
       public MCvSubdiv2DPoint FindNearestPoint2D(ref PointF point)
       {
          return (MCvSubdiv2DPoint)Marshal.PtrToStructure(
@@ -201,7 +202,8 @@ namespace Emgu.CV
       /// <summary>
       /// Retruns the triangles subdivision of the current planar subdivision. 
       /// </summary>
-      /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points, if you do not want those points, set <param name="includeVirtualPoints"> to false</param></remarks>
+      /// <param name="includeVirtualPoints">Indicates if virtual points should be included or not</param>
+      /// <remarks>The triangles might contains virtual points that do not belongs to the inserted points, if you do not want those points, set <paramref name="includeVirtualPoints"> to false</paramref></remarks>
       /// <returns>The triangles subdivision in the current plannar subdivision</returns>
       public Triangle2DF[] GetDelaunayTriangles(bool includeVirtualPoints)
       {
@@ -233,7 +235,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get an enumerator of the QuadEdges in this plannar subdivision
       /// </summary>
-      /// <returns></returns>
+      /// <returns>An enumerator of all MCvQuadEdge2D</returns>
       public IEnumerator<MCvQuadEdge2D> GetEnumerator()
       {
          IntPtr subdivEdges = MCvSubdiv2D.edges;

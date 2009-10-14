@@ -28,7 +28,7 @@ namespace Emgu.CV
       /// <param name="obj">Input object (Pointer to IplImage)</param>
       /// <param name="eigInput">Pointer to the array of IplImage input objects</param>
       /// <param name="avg">Averaged object (Pointer to IplImage)</param>
-      /// <return>Calculated coefficients; an output parameter</return>
+      /// <returns>Calculated coefficients; an output parameter</returns>
       public static float[] cvEigenDecomposite(
           IntPtr obj,
           IntPtr[] eigInput,
@@ -76,7 +76,7 @@ namespace Emgu.CV
       /// <param name="avg">Averaged object</param>
       /// <param name="eigVals">Pointer to the eigenvalues array in the descending order; may be NULL</param>
       /// <param name="eigVecs">Pointer either to the array of eigen objects</param>
-      /// <return>Pointer either to the array of eigen objects or to the write callback function</return>
+      /// <returns>Pointer either to the array of eigen objects or to the write callback function</returns>
       public static void cvCalcEigenObjects(
          IntPtr[] input,
          ref MCvTermCriteria calcLimit,

@@ -10,17 +10,17 @@ namespace Emgu.CV.Structure
    public struct MCvBGStatModel
    {
       /// <summary>
-      /// type of BG model
+      /// The type of BG model
       /// </summary>
       public int type;
 
       /// <summary>
-      /// 
+      /// Pointer to the function that can be used to release this BGStatModel
       /// </summary>
       public IntPtr CvReleaseBGStatModel;
 
       /// <summary>
-      /// 
+      /// Pointer to the function that can be used to update this BGStatModel
       /// </summary>
       public IntPtr CvUpdateBGStatModel;
 
@@ -40,17 +40,17 @@ namespace Emgu.CV.Structure
       public IntPtr layers;
 
       /// <summary>
-      /// can be zero
+      /// Can be zero
       /// </summary>
       public int layer_count;
 
       /// <summary>
-      /// storage for foreground_regions
+      /// Storage for foreground_regions
       /// </summary>
       public IntPtr storage;
 
       /// <summary>
-      /// foreground object contours
+      /// Foreground object contours
       /// </summary>
       public IntPtr foreground_regions;
 

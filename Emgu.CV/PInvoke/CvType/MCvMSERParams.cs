@@ -12,7 +12,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Get the default MSER parameters
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The default MSER parameter</returns>
       public static MCvMSERParams GetDefaultParameter()
       {
          MCvMSERParams param = new MCvMSERParams();

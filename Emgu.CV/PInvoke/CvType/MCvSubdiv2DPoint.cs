@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -16,14 +17,14 @@ namespace Emgu.CV.Structure
       public int flags;
 
       /// <summary>
-      /// 
+      /// The first edge associate with this point
       /// </summary>
       public MCvSubdiv2DEdge first;
 
       /// <summary>
-      /// 
+      /// The PointF
       /// </summary>
-      public System.Drawing.PointF pt;
+      public PointF pt;
 
       /// <summary>
       /// Return true if this is a valid point

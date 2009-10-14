@@ -372,7 +372,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 3 triangle vertices in the source image. If the array contains more than 3 points, only the first 3 will be used</param>
       /// <param name="dest">Coordinates of the 3 corresponding triangle vertices in the destination image. If the array contains more than 3 points, only the first 3 will be used</param>
-      /// <return>The 2×3 rotation matrix that defines the Affine transform</return>
+      /// <returns>The 2×3 rotation matrix that defines the Affine transform</returns>
       public static RotationMatrix2D<double> GetAffineTransform(PointF[] src, PointF[] dest)
       {
          Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");

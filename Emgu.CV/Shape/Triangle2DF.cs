@@ -90,7 +90,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Get the vertices of this triangle
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The vertices of this triangle</returns>
       public PointF[] GetVertices()
       {
          return new PointF[] { V0, V1, V2 };

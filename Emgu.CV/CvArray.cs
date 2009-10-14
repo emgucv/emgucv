@@ -260,6 +260,7 @@ namespace Emgu.CV
       /// <param name="array1D">The destination single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
+      /// <typeparam name="TOtherDepth">The type of depth of the reduced array</typeparam>
       public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type)
          where TOtherDepth : new ()
       {

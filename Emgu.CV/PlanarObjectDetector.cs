@@ -54,16 +54,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// 
+      /// Train the planar object detector using the specific image
       /// </summary>
-      /// <param name="image"></param>
+      /// <param name="image">The training image</param>
       /// <param name="npoints">Use 300 for default</param>
       /// <param name="patchSize">Use 31 for default</param>
       /// <param name="nstructs">Use 50 for default</param>
       /// <param name="structSize">Use 9 for default</param>
       /// <param name="nviews">Use 5000 for default</param>
-      /// <param name="keyPointDetector"></param>
-      /// <param name="patchGenerator"></param>
+      /// <param name="keyPointDetector">The keypoint detector to be used</param>
+      /// <param name="patchGenerator">The patch generator to be used</param>
       public void Train(Image<Gray, byte> image, 
          int npoints,
          int patchSize,
@@ -77,11 +77,11 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// 
+      /// Detect planar object from the specific image
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="h"></param>
-      /// <returns></returns>
+      /// <param name="image">The image where the planar object will be detected</param>
+      /// <param name="h">The homography matrix which will be updated</param>
+      /// <returns>The four corners of the detected region</returns>
       public PointF[] Detect(Image<Gray, Byte> image, HomographyMatrix h)
       {
          using (MemStorage stor = new MemStorage())

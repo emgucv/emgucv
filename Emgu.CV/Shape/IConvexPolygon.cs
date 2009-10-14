@@ -10,6 +10,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the vertices of this convex polygon
       /// </summary>
+      /// <returns>The vertices of this convex polygon</returns>
       System.Drawing.Point[] GetVertices();
    }
 }

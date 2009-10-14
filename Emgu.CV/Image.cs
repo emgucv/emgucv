@@ -444,7 +444,8 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary>Get the sum for each color channel </summary>
+      /// <summary>Get the sum for each color channel </summary>
+      /// <returns>The sum for each color channel</returns>
       public TColor GetSum()
       {
          TColor res = new TColor();
@@ -582,14 +583,14 @@ namespace Emgu.CV
       /// <param name="rect">The rectangle area of the sub-image</param>
       /// <returns>A subimage which image data is shared with the current image</returns>
       public Image<TColor, TDepth> GetSubRect(Rectangle rect)
-      {  
+      {
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
 
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
          subRect._ptr = Util.cvGetImageSubRect(_ptr, ref rect);
-         return subRect;  
+         return subRect;
       }
 
       #endregion
@@ -1314,6 +1315,7 @@ namespace Emgu.CV
       /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
       /// <param name="param">The SURF parameters</param>
+      /// <returns>The SURF features</returns>
       public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
       {
          return ExtractSURF(null, ref param);
@@ -1324,6 +1326,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
       /// <param name="param">The SURF parameters</param>
+      /// <returns>The SURF features</returns>
       public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
       {
          using (MemStorage stor = new MemStorage())
@@ -1405,6 +1408,7 @@ namespace Emgu.CV
       /// Get the star keypoints from this image
       /// </summary>
       /// <param name="param">The Star Detector parameters</param>
+      /// <returns>The Star keypoints in this image</returns>
       public MCvStarKeypoint[] GetStarKeypoints(ref StarDetector param)
       {
          using (MemStorage stor = new MemStorage())
@@ -2283,6 +2287,7 @@ namespace Emgu.CV
       /// <summary>
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
+      /// <param name="scale">The resize scale</param>
       /// <returns>The scaled image</returns>
       [Obsolete("Please use Resize(double scale, CvEnum.INTER interpolationType) instead. This function will be removed in the next version")]
       public Image<TColor, TDepth> Resize(double scale)
@@ -2325,7 +2330,7 @@ namespace Emgu.CV
       /// <summary>
       /// Scale the image to the specific size: width *= scale; height *= scale  
       /// </summary>
-      /// <param name="scale">The scale of resize</param>
+      /// <param name="scale">The scale to resize</param>
       /// <param name="interpolationType">The type of interpolation</param>
       /// <returns>The scaled image</returns>
       [ExposableMethod(Exposable = true)]
@@ -2341,7 +2346,8 @@ namespace Emgu.CV
       /// Rotate the image the specified angle cropping the result to the original size
       /// </summary>
       /// <param name="angle">The angle of rotation in degrees.</param>
-      /// <param name="background">The color with wich to fill the background</param>        
+      /// <param name="background">The color with wich to fill the background</param>   
+      /// <returns>The image rotates by the specific angle</returns>
       public Image<TColor, TDepth> Rotate(double angle, TColor background)
       {
          return Rotate(angle, background, true);
@@ -2953,7 +2959,7 @@ namespace Emgu.CV
          pyr[0] = this;
 
          for (int i = 1; i <= maxLevel; i++)
-            pyr[i] = pyr[i-1].PyrDown();
+            pyr[i] = pyr[i - 1].PyrDown();
 
          return pyr;
       }
@@ -3434,8 +3440,10 @@ namespace Emgu.CV
          return img1.And(val);
       }
 
-      ///<summary> Perform an elementwise OR operation with another image and return the result</summary>
-      ///<returns> The result of the OR operation</returns>
+      /// <summary> Perform an elementwise OR operation with another image and return the result</summary>
+      /// <param name="img1">The first image to apply bitwise OR operation</param>
+      /// <param name="img2">The second image to apply bitwise OR operation</param>
+      /// <returns> The result of the OR operation</returns>
       public static Image<TColor, TDepth> operator |(Image<TColor, TDepth> img1, Image<TColor, TDepth> img2)
       {
          return img1.Or(img2);
@@ -3728,7 +3736,7 @@ namespace Emgu.CV
 
       #region Gaussian Smooth
       ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
-      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
+      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
       ///<returns> The smoothed image</returns>
       public Image<TColor, TDepth> SmoothGaussian(int kernelSize)
       {
@@ -3750,7 +3758,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
-      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref>kernelSize</paramref> x <paramref>kernelSize</paramref>)</param>
+      ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
       public void _SmoothGaussian(int kernelSize)
       {
          _SmoothGaussian(kernelSize, 0, 0, 0);
@@ -3800,7 +3808,7 @@ namespace Emgu.CV
       /// <summary>
       /// Calculates integral images for the source image
       /// </summary>
-      /// <return>The integral image</return>
+      /// <returns>The integral image</returns>
       public Image<TColor, double> Integral()
       {
          Image<TColor, double> sum = new Image<TColor, double>(Width + 1, Height + 1);
@@ -3813,6 +3821,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="sum">The integral image</param>
       /// <param name="squareSum">The integral image for squared pixel values</param>
+      /// <returns>The integral image</returns>
       public void Integral(out Image<TColor, double> sum, out Image<TColor, double> squareSum)
       {
          sum = new Image<TColor, double>(Width + 1, Height + 1);
@@ -3851,8 +3860,9 @@ namespace Emgu.CV
             dest);
       }
 
-      ///<summary> Threshold the image such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
-      ///<returns> dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </returns>
+      /// <summary> Threshold the image such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
+      /// <returns> dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </returns>
       public Image<TColor, TDepth> ThresholdToZero(TColor threshold)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3863,7 +3873,7 @@ namespace Emgu.CV
       /// <summary> 
       /// Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise 
       /// </summary>
-      /// <param name="threshold">The threshold to apply</param>
+      /// <param name="threshold">The threshold value</param>
       /// <returns>The image such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise</returns>
       public Image<TColor, TDepth> ThresholdToZeroInv(TColor threshold)
       {
@@ -3875,7 +3885,7 @@ namespace Emgu.CV
       /// <summary>
       /// Threshold the image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise 
       /// </summary>
-      /// <param name="threshold">The threshold to apply to the image</param>
+      /// <param name="threshold">The threshold value</param>
       /// <returns>The image such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise</returns>
       public Image<TColor, TDepth> ThresholdTrunc(TColor threshold)
       {
@@ -3887,6 +3897,7 @@ namespace Emgu.CV
       /// <summary> 
       /// Threshold the image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise 
       /// </summary>
+      /// <returns>The image such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </returns>
       public Image<TColor, TDepth> ThresholdBinary(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3894,7 +3905,10 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      /// <summary> Threshold the image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
+      /// <param name="maxValue">The maximum value of the pixel on the result</param>
+      /// <returns>The image such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise</returns>
       public Image<TColor, TDepth> ThresholdBinaryInv(TColor threshold, TColor maxValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
@@ -3902,39 +3916,46 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Threshold the image inplace such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
+      /// <summary> Threshold the image inplace such that: dst(x,y) = src(x,y), if src(x,y)>threshold;  0, otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
       [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdToZero(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO);
       }
 
-      ///<summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
+      /// <summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  src(x,y), otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
       [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdToZeroInv(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TOZERO_INV);
       }
 
-      ///<summary> Threshold the image inplace such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise </summary>
+      /// <summary> Threshold the image inplace such that: dst(x,y) = threshold, if src(x,y)>threshold; src(x,y), otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
       [ExposableMethod(Exposable = true, Category = "Threshold")]
       public void _ThresholdTrunc(TColor threshold)
       {
          ThresholdBase(this, threshold, new TColor(), CvEnum.THRESH.CV_THRESH_TRUNC);
       }
 
-      ///<summary> Threshold the image inplace such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </summary>
+      /// <summary> Threshold the image inplace such that: dst(x,y) = max_value, if src(x,y)>threshold; 0, otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
+      /// <param name="maxValue">The maximum value of the pixel on the result</param>
       [ExposableMethod(Exposable = true, Category = "Threshold")]
-      public void _ThresholdBinary(TColor threshold, TColor max_value)
+      public void _ThresholdBinary(TColor threshold, TColor maxValue)
       {
-         ThresholdBase(this, threshold, max_value, CvEnum.THRESH.CV_THRESH_BINARY);
+         ThresholdBase(this, threshold, maxValue, CvEnum.THRESH.CV_THRESH_BINARY);
       }
 
-      ///<summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      /// <summary> Threshold the image inplace such that: dst(x,y) = 0, if src(x,y)>threshold;  max_value, otherwise </summary>
+      /// <param name="threshold">The threshold value</param>
+      /// <param name="maxValue">The maximum value of the pixel on the result</param>
       [ExposableMethod(Exposable = true, Category = "Threshold")]
-      public void _ThresholdBinaryInv(TColor threshold, TColor max_value)
+      public void _ThresholdBinaryInv(TColor threshold, TColor maxValue)
       {
-         ThresholdBase(this, threshold, max_value, CvEnum.THRESH.CV_THRESH_BINARY_INV);
+         ThresholdBase(this, threshold, maxValue, CvEnum.THRESH.CV_THRESH_BINARY_INV);
       }
       #endregion
       #endregion

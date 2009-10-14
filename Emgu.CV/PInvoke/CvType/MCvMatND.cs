@@ -23,7 +23,7 @@ namespace Emgu.CV.Structure
       public IntPtr refcount;
 
       /// <summary>
-      /// 
+      /// Header reference count
       /// </summary>
       public int hdr_refcount;
 

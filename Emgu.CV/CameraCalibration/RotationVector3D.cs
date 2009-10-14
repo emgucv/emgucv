@@ -32,7 +32,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create a rotation vector using the specific values
       /// </summary>
-      /// <param name="value"></param>
+      /// <param name="value">The values of the rotation vector, should contains only 3 values</param>
       public RotationVector3D(double[] value)
          : base(value)
       {

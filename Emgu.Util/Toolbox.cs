@@ -103,7 +103,7 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="a">the first byte vector to be merged</param>
       /// <param name="b">the second byte vector to be merged</param>
-      /// <returns></returns>
+      /// <returns>The bytes that is a concatenation of a and b</returns>
       public static Byte[] MergeBytes(Byte[] a, Byte[] b)
       {
          Byte[] c = new byte[a.Length + b.Length]; // just one array allocation

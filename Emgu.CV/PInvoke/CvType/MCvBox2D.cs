@@ -63,7 +63,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Get the 4 verticies of this Box.
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The vertives of this MCvBox2D</returns>
       public System.Drawing.PointF[] GetVertices()
       {
          PointF[] coordinates = new PointF[4];

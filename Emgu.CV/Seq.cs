@@ -8,7 +8,7 @@ using System.Drawing;
 namespace Emgu.CV
 {
    ///<summary>
-   /// A Seq is a wrapper to cvSeq of OpenCV. 
+   /// Wrapper to cvSeq of OpenCV. 
    ///</summary>
    ///<typeparam name="T">The type of elements in this sequence, must be a structure</typeparam>
    public class Seq<T> : IEnumerable<T> where T : struct
@@ -180,6 +180,7 @@ namespace Emgu.CV
       /// <summary>
       /// Pop an element from the back of the sequence 
       /// </summary>
+      /// <returns>An element from the back of the sequence</returns>
       public T Pop()
       {
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
@@ -192,6 +193,7 @@ namespace Emgu.CV
       /// <summary>
       /// Pop an element from the front of the sequence 
       /// </summary>
+      /// <returns>An element from the front of the sequence</returns>
       public T PopFront()
       {
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);

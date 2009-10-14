@@ -33,7 +33,7 @@ namespace Emgu.CV
       /// Grabs a frame from camera or video file, decompresses and returns it. This function is just a combination of cvGrabFrame and cvRetrieveFrame in one call. The returned image should not be released or modified by user. 
       /// </summary>
       /// <param name="capture">video capturing structure</param>
-      /// <returns></returns>
+      /// <returns>Pointer to the queryed frame</returns>
       [DllImport(HIGHGUI_LIBRARY)]
       public static extern IntPtr cvQueryFrame(IntPtr capture);
 
@@ -67,7 +67,7 @@ namespace Emgu.CV
       /// JPEG 2000 images - jp2. 
       /// </summary>
       /// <param name="filename">The name of the file to be loaded</param>
-      /// <param name="loadType"></param>
+      /// <param name="loadType">The load image type</param>
       /// <returns>The loaded image</returns>
       [DllImport(HIGHGUI_LIBRARY)]
       public static extern IntPtr cvLoadImage(

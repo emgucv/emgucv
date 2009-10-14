@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -67,9 +68,9 @@ namespace Emgu.CV.Structure
       public IntPtr first;
 
       /// <summary>
-      /// 
+      /// The origin of the chain
       /// </summary>
-      public System.Drawing.Point origin;
+      public Point origin;
 
    }
 }

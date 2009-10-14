@@ -155,6 +155,7 @@ namespace Emgu.CV.ML
       /// The method retrieves a given support vector
       /// </summary>
       /// <param name="i">The index of the support vector</param>       
+      /// <returns>The <paramref name="i"/>th support vector</returns>
       public float[] GetSupportVector(int i)
       {
          int k = GetVarCount();
@@ -167,6 +168,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The method retrieves the number of support vectors
       /// </summary>
+      /// <returns>The number of support vectors</returns>
       public int GetSupportVectorCount()
       {
          return MlInvoke.CvSVMGetSupportVectorCount(Ptr);
@@ -175,6 +177,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The method retrieves the number of vars
       /// </summary>
+      /// <returns>The number of variables</returns>
       public int GetVarCount()
       {
          return MlInvoke.CvSVMGetVarCount(Ptr);

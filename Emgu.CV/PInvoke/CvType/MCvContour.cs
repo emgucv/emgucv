@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -10,68 +11,68 @@ namespace Emgu.CV.Structure
    public struct MCvContour
    {
       ///<summary>
-      /// micsellaneous flags 
+      /// Micsellaneous flags 
       ///</summary>
       public int flags;
       ///<summary>
-      /// size of sequence header 
+      /// Size of sequence header 
       ///</summary>
       public int header_size;
       ///<summary>
-      /// previous sequence 
+      /// Pointer to the previous sequence 
       ///</summary>
       public IntPtr h_prev;
       ///<summary>
-      /// next sequence 
+      /// Pointer to the next sequence 
       ///</summary>
       public IntPtr h_next;
       ///<summary>
-      /// 2nd previous sequence 
+      /// Pointer to the 2nd previous sequence 
       ///</summary>
       public IntPtr v_prev;
       ///<summary>
-      /// 2nd next sequence 
+      /// Pointer to the 2nd next sequence 
       ///</summary>
       public IntPtr v_next;
       ///<summary>
-      /// total number of elements 
+      /// Total number of elements 
       ///</summary>
       public int total;
       ///<summary>
-      /// size of sequence element in bytes 
+      /// Size of sequence element in bytes 
       ///</summary>
       public int elem_size;
       ///<summary>
-      /// maximal bound of the last block 
+      /// Maximal bound of the last block 
       ///</summary>
       public IntPtr block_max;
       ///<summary>
-      /// current write pointer 
+      /// Current write pointer 
       ///</summary>
       public IntPtr ptr;
       ///<summary>
-      /// how many elements allocated when the seq grows 
+      /// How many elements allocated when the seq grows 
       ///</summary>
       public int delta_elems;
       ///<summary>
-      /// where the seq is stored 
+      /// Where the seq is stored 
       ///</summary>
       public IntPtr storage;
       ///<summary>
-      /// free blocks list 
+      /// Free blocks list 
       ///</summary>
       public IntPtr free_blocks;
       ///<summary>
-      /// pointer to the first sequence block 
+      /// Pointer to the first sequence block 
       ///</summary>
       public IntPtr first;
 
       /// <summary>
-      /// 
+      /// If computed, stores the minimum enclosing rectangle
       /// </summary>
       public System.Drawing.Rectangle rect;
       /// <summary>
-      /// 
+      /// Color
       /// </summary>
       public int color;
       /// <summary>

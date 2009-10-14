@@ -11,7 +11,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Save the statistic model to file
       /// </summary>
-      /// <param name="fileName"></param>
+      /// <param name="fileName">The file name where this StatModel will be saved</param>
       public void Save(String fileName)
       {
          MlInvoke.StatModelSave(_ptr, fileName, IntPtr.Zero);

@@ -210,14 +210,14 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Finds all the motion segments and marks them in seg_mask with individual values each (1,2,...). It also returns a sequence of CvConnectedComp structures, one per each motion components. After than the motion direction for every component can be calculated with cvCalcGlobalOrientation using extracted mask of the particular component (using cvCmp) 
+      /// Finds all the motion segments and marks them in segMask with individual values each (1,2,...). It also returns a sequence of CvConnectedComp structures, one per each motion components. After than the motion direction for every component can be calculated with cvCalcGlobalOrientation using extracted mask of the particular component (using cvCmp) 
       /// </summary>
       /// <param name="mhi">Motion history image</param>
       /// <param name="segMask">Image where the mask found should be stored, single-channel, 32-bit floating-point</param>
       /// <param name="storage">Memory storage that will contain a sequence of motion connected components</param>
       /// <param name="timestamp">Current time in milliseconds or other units</param>
       /// <param name="segThresh">Segmentation threshold; recommended to be equal to the interval between motion history "steps" or greater</param>
-      /// <returns></returns>
+      /// <returns>Pointer to the sequence of MCvConnectedComp</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvSegmentMotion(
           IntPtr mhi,
@@ -1347,7 +1347,7 @@ namespace Emgu.CV
       /// <param name="E">The optional output essential matrix</param>
       /// <param name="F">The optional output fundamental matrix </param>
       /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
-      /// <param name="flags"></param>
+      /// <param name="flags">The calibration flags</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvStereoCalibrate(
          IntPtr objectPoints,
@@ -1773,7 +1773,7 @@ namespace Emgu.CV
       /// <param name="object2">Second contour or grayscale image</param>
       /// <param name="method">Comparison method</param>
       /// <param name="parameter">Method-specific parameter (is not used now)</param>
-      /// <returns></returns>
+      /// <returns>The result of the comparison</returns>
       [DllImport(CV_LIBRARY)]
       public static extern double cvMatchShapes(
          IntPtr object1,
@@ -2494,7 +2494,7 @@ namespace Emgu.CV
       /// <param name="dynamParams">dimensionality of the state vector</param>
       /// <param name="measureParams">dimensionality of the measurement vector </param>
       /// <param name="controlParams">dimensionality of the control vector </param>
-      /// <returns></returns>
+      /// <returns>Pointer to the created Kalman filter</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
 
@@ -2847,12 +2847,12 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// 
+      /// Retrieve the star keypoint location from the specific image
       /// </summary>
       /// <param name="img">The image to detect start keypoints</param>
       /// <param name="storage">The storage for the returned sequence</param>
       /// <param name="param">The star detector parameters</param>
-      /// <returns></returns>
+      /// <returns>Pointer to the sequence of star keypoint locations</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetStarKeypoints(
          IntPtr img, 

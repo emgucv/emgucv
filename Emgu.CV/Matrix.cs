@@ -282,6 +282,7 @@ namespace Emgu.CV
       }
 
       ///<summary> Returns the transpose of this matrix</summary>
+      ///<returns>The transpose of this matrix</returns>
       public Matrix<TDepth> Transpose()
       {
          Matrix<TDepth> res = new Matrix<TDepth>(Cols, Rows);
@@ -294,7 +295,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="row">the row of the element</param>
       /// <param name="col">the col of the element</param>
-      /// <returns></returns>
+      /// <returns>The element on the specific <paramref name="row"/> and <paramref name="col"/></returns>
       public TDepth this[int row, int col]
       {
          get
@@ -743,7 +744,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get all channels for the multi channel matrix
       /// </summary>
-      /// <returns></returns>
+      /// <returns>Each individual channel of this matrix</returns>
       public Matrix<TDepth>[] Split()
       {
          int channelCount = NumberOfChannels;

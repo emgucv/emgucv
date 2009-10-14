@@ -25,7 +25,7 @@ namespace Emgu.Util
       /// <summary>
       /// Get the address of the pinned array
       /// </summary>
-      /// <returns></returns>
+      /// <returns>A pointer to the address of the the pinned array</returns>
       public IntPtr AddrOfPinnedObject()
       {
          return _handle.AddrOfPinnedObject();

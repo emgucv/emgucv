@@ -15,7 +15,8 @@ namespace Emgu.CV.Reflection
       /// <summary>
       /// Get all the methods that belongs to the IImage and Image class with ExposableMethodAttribute set true.
       /// </summary>
-      /// <returns></returns>
+      /// <param name="image">The IImage object to be refelected for methods marked with ExposableMethodAttribute</param>
+      /// <returns>All the methods that belongs to the IImage and Image class with ExposableMethodAttribute set true</returns>
       public static IEnumerable<KeyValuePair<String, MethodInfo>> GetImageMethods(IImage image)
       {
          if (image != null)
@@ -36,8 +37,8 @@ namespace Emgu.CV.Reflection
       /// <summary>
       /// Get the color type of the image
       /// </summary>
-      /// <param name="image">the image to apply reflection on</param>
-      /// <returns>the color type of the image</returns>
+      /// <param name="image">The image to apply reflection on</param>
+      /// <returns>The color type of the image</returns>
       public static Type GetTypeOfColor(IImage image)
       {
          return 
@@ -49,7 +50,7 @@ namespace Emgu.CV.Reflection
       /// <summary>
       /// Get the depth type of the image
       /// </summary>
-      /// <param name="image">the image to apply reflection on</param>
+      /// <param name="image">The image to apply reflection on</param>
       /// <returns>The depth type of the image</returns>
       public static Type GetTypeOfDepth(IImage image)
       {

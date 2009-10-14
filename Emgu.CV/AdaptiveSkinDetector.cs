@@ -52,7 +52,7 @@ namespace Emgu.CV
       /// Create an Adaptive Skin Detector
       /// </summary>
       /// <param name="samplingDivider"></param>
-      /// <param name="morphingMethod"></param>
+      /// <param name="morphingMethod">The morphine method for the skin detector</param>
       public AdaptiveSkinDetector(int samplingDivider, MorphingMethod morphingMethod)
       {
          _ptr = CvAdaptiveSkinDetectorCreate(samplingDivider, morphingMethod);

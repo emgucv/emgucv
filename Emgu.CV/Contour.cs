@@ -16,7 +16,7 @@ namespace Emgu.CV
       /// Craete a contour from the specific IntPtr and storage
       /// </summary>
       /// <param name="ptr">The unmanged Pointer to the sequence</param>
-      /// <param name="storage"></param>
+      /// <param name="storage">The storage used by this contour</param>
       public Contour(IntPtr ptr, MemStorage storage)
          : base(ptr, storage)
       {
@@ -26,7 +26,7 @@ namespace Emgu.CV
       /// Create a contour using the specific <paramref name="seqFlag"/> and <paramref name="storage"/>
       /// </summary>
       /// <param name="seqFlag">Flags of the created contour. If the contour is not passed to any function working with a specific type of sequences, the sequence value may be set to 0, otherwise the appropriate type must be selected from the list of predefined contour types</param>
-      /// <param name="storage">the storage</param>
+      /// <param name="storage">The storage</param>
       public Contour(int seqFlag, MemStorage storage)
          : this(IntPtr.Zero, storage)
       {

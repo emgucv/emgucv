@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -11,7 +12,7 @@ namespace Emgu.CV
       /// <summary>
       /// The center of the convolution kernel
       /// </summary>
-      protected System.Drawing.Point _center;
+      protected Point _center;
 
       /// <summary>
       /// Create a convolution kernel with the specific number of <paramref name="rows"/> and <paramref name="cols"/>
@@ -22,7 +23,7 @@ namespace Emgu.CV
          : base(rows, cols)
       {
          Debug.Assert(!(rows <= 1 || cols <= 1));
-         _center = new System.Drawing.Point(-1, -1);
+         _center = new Point(-1, -1);
       }
 
       /// <summary>
@@ -40,7 +41,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="kernel">the values for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel)
-         : this(kernel, new System.Drawing.Point(-1, -1))
+         : this(kernel, new Point(-1, -1))
       {
       }
 
@@ -103,8 +104,8 @@ namespace Emgu.CV
       /// <summary>
       /// The center of the convolution kernel
       /// </summary>
-      public System.Drawing.Point Center 
-      { 
+      public Point Center
+      {
          get { return _center; }
          set { _center = value; }
       }
@@ -112,12 +113,12 @@ namespace Emgu.CV
       /// <summary>
       /// Obtain the transpose of the convolution kernel
       /// </summary>
-      /// <returns></returns>
+      /// <returns>A transposed convolution kernel</returns>
       public new ConvolutionKernelF Transpose()
       {
          return new ConvolutionKernelF(
          base.Transpose(),
-         _center);
+         new Point(_center.Y, _center.X));
       }
    }
 }

@@ -90,11 +90,11 @@ namespace Emgu.CV.Structure
       /// </summary>
       public MCvSubdiv2DEdge recent_edge;
       /// <summary>
-      /// 
+      /// The virtual topleft corner of this subdivision
       /// </summary>
       public System.Drawing.PointF topleft;
       /// <summary>
-      /// 
+      /// The virtual bottom right corner of this subdivision
       /// </summary>
       public System.Drawing.PointF bottomright;
    }

@@ -301,7 +301,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="disparity">Disparity map</param>
       /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
-      /// <return>The reprojected 3D points</return>
+      /// <returns>The reprojected 3D points</returns>
       public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Int16> disparity, Matrix<double> Q)
       {
          Size size = disparity.Size;
