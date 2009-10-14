@@ -1289,8 +1289,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C06180A3EBB4A8AA2A85247F846DC71"
             {
-            "SourcePath" = "8:..\\lib\\Release\\highgui111.lib"
-            "TargetName" = "8:highgui111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\highgui200.lib"
+            "TargetName" = "8:highgui200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -1451,8 +1451,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FAA72DDAE644483BBC8326FF4F003AB"
             {
-            "SourcePath" = "8:..\\lib\\Release\\ml111.lib"
-            "TargetName" = "8:ml111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\ml200.lib"
+            "TargetName" = "8:ml200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2279,8 +2279,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_961A89F0D5BB429683D588922346A0F8"
             {
-            "SourcePath" = "8:..\\lib\\Release\\opencv_ffmpeg111.lib"
-            "TargetName" = "8:opencv_ffmpeg111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\opencv_ffmpeg200.lib"
+            "TargetName" = "8:opencv_ffmpeg200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2663,8 +2663,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B0F31D00EE064411B1E4E59DB88AB2BD"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cxcore111.lib"
-            "TargetName" = "8:cxcore111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cxcore200.lib"
+            "TargetName" = "8:cxcore200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -2703,8 +2703,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8EAC15F1BBF469A9ABB3876A34EFC7F"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cv111.lib"
-            "TargetName" = "8:cv111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cv200.lib"
+            "TargetName" = "8:cv200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"
@@ -3067,8 +3067,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D4749A79700D45DF83777FA53B828DFF"
             {
-            "SourcePath" = "8:..\\lib\\Release\\cvaux111.lib"
-            "TargetName" = "8:cvaux111.lib"
+            "SourcePath" = "8:..\\lib\\Release\\cvaux200.lib"
+            "TargetName" = "8:cvaux200.lib"
             "Tag" = "8:"
             "Folder" = "8:_78463FF9F7674FF89DCE08F818C18BE8"
             "Condition" = "8:"

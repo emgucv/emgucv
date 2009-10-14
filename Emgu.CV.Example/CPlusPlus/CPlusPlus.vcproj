@@ -61,6 +61,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cv111.lib cvaux111.lib cxcore111.lib highgui111.lib "
+				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
@@ -137,7 +138,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv111.lib cvaux111.lib cxcore111.lib highgui111.lib "
+				AdditionalDependencies="cv200.lib cvaux200.lib cxcore200.lib highgui200.lib "
+				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
 				GenerateDebugInformation="true"
