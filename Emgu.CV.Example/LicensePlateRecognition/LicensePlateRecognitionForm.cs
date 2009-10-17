@@ -29,13 +29,13 @@ namespace LicensePlateRecognition
       {
          Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-         List<Image<Gray, Byte>> licensePlateList = new List<Image<Gray, byte>>();
-         List<Image<Gray, Byte>> filteredLicensePlateList = new List<Image<Gray, byte>>();
+         List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
+         List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
          List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
          List<List<Word>> words = _licensePlateDetector.DetectLicensePlate(
             image,
-            licensePlateList,
-            filteredLicensePlateList,
+            licensePlateImagesList,
+            filteredLicensePlateImagesList,
             licenseBoxList);
 
          watch.Stop(); //stop the timer
@@ -48,7 +48,7 @@ namespace LicensePlateRecognition
             AddLabelAndImage(
                ref startPoint,
                String.Format("License: {0}", String.Join(" ", words[i].ConvertAll<String>(delegate(Word w) { return w.Text; }).ToArray())),
-               licensePlateList[i].ConcateVertical(filteredLicensePlateList[i]));
+               licensePlateImagesList[i].ConcateVertical(filteredLicensePlateImagesList[i]));
             image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
          }
 
