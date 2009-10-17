@@ -57,27 +57,27 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
+      <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
 Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
-<NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
-<NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
+      <NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
+      <NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
-    <Preliminary>True</Preliminary>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
