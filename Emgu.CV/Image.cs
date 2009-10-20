@@ -4102,8 +4102,9 @@ namespace Emgu.CV
          CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
          Rectangle rect = otherImage.ROI;
          rect.X += Width;
+         res.ROI = rect;
          CvInvoke.cvCopy(otherImage.Ptr, res.Ptr, IntPtr.Zero);
-         ROI = Rectangle.Empty;
+         res.ROI = Rectangle.Empty;
          return res;
       }
 
