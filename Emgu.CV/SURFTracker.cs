@@ -15,7 +15,7 @@ namespace Emgu.CV
    public class SURFTracker : DisposableObject
    {
       private SURFMatcher _matcher;
-      private static int _randsacRequiredMatch = 10;
+      private const int _randsacRequiredMatch = 10;
 
       /// <summary>
       /// Create a SURF tracker, where SURF is matched with flann
@@ -35,16 +35,14 @@ namespace Emgu.CV
       /// <returns>If a match is found, the homography projection matrix is returned. Otherwise null is returned</returns>
       public HomographyMatrix CamShiftTrack(SURFFeature[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
       {
-         double matchDistanceRatio = 0.8;
-
          using (Image<Gray, Single> matchMask = new Image<Gray, Single>(priorMask.Size))
          {
             #region get the list of matched point on the observed image
             Single[, ,] matchMaskData = matchMask.Data;
 
+            //Compute the matched features
             MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
-            //SortIndividualMatchedFeatureByDistance(matchedFeature);
-            matchedFeature = VoteForUniqueness(matchedFeature, matchDistanceRatio);
+            matchedFeature = VoteForUniqueness(matchedFeature, 0.8);
 
             foreach (MatchedSURFFeature f in matchedFeature)
             {
@@ -85,7 +83,7 @@ namespace Emgu.CV
             }
             #endregion
 
-            return GetHomographyMatrixFromMatchedFeatures(featuesInCurrentRegion);
+            return GetHomographyMatrixFromMatchedFeatures(VoteForSizeAndOrientation(featuesInCurrentRegion, 1.5, 20 ));
          }
       }
 
@@ -167,37 +165,8 @@ namespace Emgu.CV
          }
       }
 
-      /*
       /// <summary>
-      /// For each MatchedSURFFeature, sort the model SURF feature by distance (closer distance has smaller index).
-      /// </summary>
-      /// <param name="matchedFeatures">The matched features to be sorted</param>
-      private static void SortIndividualMatchedFeatureByDistance(MatchedSURFFeature[] matchedFeatures)
-      {
-         List<SimilarFeature> pairs = new List<SimilarFeature>();
-         foreach (MatchedSURFFeature ms in matchedFeatures)
-         {
-            switch (ms.SimilarFeatures.Length)
-            {
-               case 1: //no need to sort if only 1 match
-                  break;
-               case 2: //fast implementation for 2 features
-                  if (ms.SimilarFeatures[1].Distance < ms.SimilarFeatures[0].Distance)
-                  {
-                     SimilarFeature tmp = ms.SimilarFeatures[0];
-                     ms.SimilarFeatures[0] = ms.SimilarFeatures[1];
-                     ms.SimilarFeatures[1] = tmp;
-                  }
-                  break;
-               default: //generic sort for 2 or more matches
-                  Array.Sort<SimilarFeature>( ms.SimilarFeatures, CompareSimilarFeature);
-                  break;
-            }
-         }
-      }*/
-
-      /// <summary>
-      /// 
+      /// A similar feature is a structure that contains a SURF feature and its corresponding distance to the comparing SURF feature
       /// </summary>
       public struct SimilarFeature
       {
@@ -205,7 +174,7 @@ namespace Emgu.CV
          private SURFFeature _feature;
 
          /// <summary>
-         /// 
+         /// The distance to the comparing SURF feature
          /// </summary>
          public double Distance
          {
@@ -220,7 +189,7 @@ namespace Emgu.CV
          }
 
          /// <summary>
-         /// 
+         /// A similar SURF feature
          /// </summary>
          public SURFFeature Feature
          {
@@ -235,30 +204,15 @@ namespace Emgu.CV
          }
 
          /// <summary>
-         /// 
+         /// Create a similar SURF feature
          /// </summary>
-         /// <param name="distance"></param>
-         /// <param name="feature"></param>
+         /// <param name="distance">The distance to the comparing SURF feature</param>
+         /// <param name="feature">A similar SURF feature</param>
          public SimilarFeature(double distance, SURFFeature feature)
          {
             _distance = distance;
             _feature = feature;
          }
-      }
-
-
-
-      /// <summary>
-      /// Sorted the matched SURF feature, such that a matchedFeature with smaller distance has a lower index
-      /// </summary>
-      /// <param name="matchedFeatures">The matched features to be sorted</param>
-      public static void SortMatchedSURFFeatures(MatchedSURFFeature[] matchedFeatures)
-      {
-         SortedList<double, MatchedSURFFeature> list = new SortedList<double, MatchedSURFFeature>(matchedFeatures.Length);
-         foreach (MatchedSURFFeature ms in matchedFeatures)
-            list.Add(ms.SimilarFeatures[0].Distance, ms);
-
-         list.Values.CopyTo(matchedFeatures, 0);
       }
 
       /// <summary>
@@ -274,7 +228,7 @@ namespace Emgu.CV
             {
                return
                   f.SimilarFeatures.Length == 1 //this is the only match
-                  || f.SimilarFeatures[0].Distance / f.SimilarFeatures[1].Distance <= uniquenessThreshold; //if the first model feature is a good match 
+                  || (f.SimilarFeatures[0].Distance / f.SimilarFeatures[1].Distance <= uniquenessThreshold); //if the first model feature is a good match 
             });
       }
 
@@ -306,7 +260,7 @@ namespace Emgu.CV
          }
 
          int scaleBinSize = (int)Math.Max(((maxScale - minScale) / Math.Log10(scaleIncrement)), 1);
-
+         int count;
          using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
          {
             GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
@@ -326,20 +280,19 @@ namespace Emgu.CV
                h.Threshold(maxVal * 0.5);
 
                CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
+               count = CvInvoke.cvCountNonZero(flagsMat);
             }
             scaleHandle.Free();
             rotationHandle.Free();
             flagsHandle.Free();
 
-            List<MatchedSURFFeature> matchedGoodFeatures = new List<MatchedSURFFeature>();
+            MatchedSURFFeature[] matchedGoodFeatures = new MatchedSURFFeature[count];
+            int index = 0;
             for (int i = 0; i < matchedFeatures.Length; i++)
-            {
                if (flags[i] != 0)
-               {
-                  matchedGoodFeatures.Add(matchedFeatures[i]);
-               }
-            }
-            return matchedGoodFeatures.ToArray();
+                  matchedGoodFeatures[index++] = matchedFeatures[i];
+
+            return matchedGoodFeatures;
          }
       }
 
@@ -383,7 +336,7 @@ namespace Emgu.CV
          private SimilarFeature[] _similarFeatures;
 
          /// <summary>
-         /// 
+         /// An array of similar features from the model image
          /// </summary>
          public SimilarFeature[] SimilarFeatures
          {
@@ -409,12 +362,11 @@ namespace Emgu.CV
             _similarFeatures = new SimilarFeature[modelFeatures.Length];
             for (int i = 0; i < modelFeatures.Length; i++)
                _similarFeatures[i] = new SimilarFeature(dist[i], modelFeatures[i]); 
-
          }
       }
 
       /// <summary>
-      /// A simple class that use two feature trees (postive/negative laplacian) to match SURF features. 
+      /// A simple class that use flann to match SURF features. 
       /// </summary>
       private class SURFMatcher : DisposableObject
       {
@@ -485,23 +437,6 @@ namespace Emgu.CV
                      {
                         matchedFeatures.Add(new SimilarFeature(distances[i, j], _modelFeatures[index]));
                      }
-                  }
-
-                  switch (matchedFeatures.Count)
-                  {
-                     case 1: //no need to sort if only 1 match
-                        break;
-                     case 2: //fast implementation for 2 features
-                        if (matchedFeatures[1].Distance < matchedFeatures[0].Distance)
-                        {
-                           SimilarFeature tmp = matchedFeatures[0];
-                           matchedFeatures[0] = matchedFeatures[1];
-                           matchedFeatures[1] = tmp;
-                        }
-                        break;
-                     default: //generic sort for 2 or more matches
-                        matchedFeatures.Sort(CompareSimilarFeature);
-                        break;
                   }
 
                   res[i].ObservedFeature = observedFeatures[i];
