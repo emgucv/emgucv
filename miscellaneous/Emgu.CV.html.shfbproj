@@ -51,7 +51,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </div>
 ]]></HeaderText>
     <FooterText>For questions and discussions please visit www.emgu.com/forum</FooterText>
-    <PresentationStyle>hana</PresentationStyle>
+    <PresentationStyle>vs2005</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Solution\VS2005_MonoDevelop\Emgu.CV.sln" />
     </DocumentationSources>
