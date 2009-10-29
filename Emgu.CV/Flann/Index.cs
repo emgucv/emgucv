@@ -27,10 +27,17 @@ namespace Emgu.CV.Flann
       private static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern void CvFlannIndexRelease(IntPtr index);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern void CvFlannIndexKnnSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, int knn, int checks);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void CvFlannIndexRadiusSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, float radius, int checks);
+
       #endregion
 
       #region constructors
@@ -79,6 +86,19 @@ namespace Emgu.CV.Flann
       {
          _ptr = CvFlannIndexCreateLinear(values);
       }
+
+      /// <summary>
+      /// Create an auto-tuned flann index
+      /// </summary>
+      /// <param name="values">A row by row matrix of descriptors</param>
+      /// <param name="targetPrecision">Precision desired, use 0.9 if not sure</param>
+      /// <param name="buildWeight">build tree time weighting factor, use 0.01 if not sure</param>
+      /// <param name="memoryWeight">index memory weighting factor, use 0 if not sure</param>
+      /// <param name="sampleFraction">what fraction of the dataset to use for autotuning, use 0.1 if not sure</param>
+      public Index(Matrix<float> values, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
+      {
+         _ptr = CvFlannIndexCreateAutotuned(values, targetPrecision, buildWeight, memoryWeight, sampleFraction);
+      }
       #endregion
 
       /// <summary>
@@ -87,11 +107,32 @@ namespace Emgu.CV.Flann
       /// <param name="queries">A row by row matrix of descriptors to be query for nearest neighbours</param>
       /// <param name="indices">The result of the indices of the k-nearest neighbours</param>
       /// <param name="distances">The distance of between the neighbours</param>
-      /// <param name="knn">The number of neighbours to be searched</param>
-      /// <param name="checks">Use 32 for default</param>
+      /// <param name="knn">Number of nearest neighbors to search for</param>
+      /// <param name="checks">The number of times the tree(s) in the index should be recursively traversed. A
+      /// higher value for this parameter would give better search precision, but also take more
+      /// time. If automatic configuration was used when the index was created, the number of
+      /// checks required to achieve the specified precision was also computed, in which case
+      /// this parameter is ignored </param>
       public void KnnSearch(Matrix<float> queries, Matrix<int> indices, Matrix<float> distances, int knn, int checks)
       {
          CvFlannIndexKnnSearch(_ptr, queries, indices, distances, knn, checks);
+      }
+
+      /// <summary>
+      /// Performs a radius nearest neighbor search for multiple query points
+      /// </summary>
+      /// <param name="queries">The query points, one per row</param>
+      /// <param name="indices">Indices of the nearest neighbors found</param>
+      /// <param name="distances">Distances to the nearest neighbors found</param>
+      /// <param name="radius">The search radius</param>
+      /// <param name="checks">The number of times the tree(s) in the index should be recursively traversed. A
+      /// higher value for this parameter would give better search precision, but also take more
+      /// time. If automatic configuration was used when the index was created, the number of
+      /// checks required to achieve the specified precision was also computed, in which case
+      /// this parameter is ignored </param>
+      public void RadiusSearch(Matrix<float> queries, Matrix<int> indices, Matrix<float> distances, float radius, int checks)
+      {
+         CvFlannIndexRadiusSearch(_ptr, queries, indices, distances, radius, checks);
       }
 
       /// <summary>
