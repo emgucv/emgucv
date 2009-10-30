@@ -312,8 +312,19 @@ namespace Emgu.CV
       [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
       public override void GetObjectData(SerializationInfo info, StreamingContext context)
       {
-         base.GetObjectData(info, context);
-         info.AddValue("Roi", ROI);
+         if (IsROISet)
+         {  
+            Rectangle roi = ROI;
+            ROI = Rectangle.Empty;
+            base.GetObjectData(info, context);
+            ROI = roi;
+            info.AddValue("Roi", roi);
+         }
+         else
+         {
+            base.GetObjectData(info, context);
+            info.AddValue("Roi", ROI);
+         }
       }
       #endregion
 
