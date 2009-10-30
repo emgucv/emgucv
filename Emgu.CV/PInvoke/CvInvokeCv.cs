@@ -1905,30 +1905,6 @@ namespace Emgu.CV
       /// If the pointer is IntPtr.Zero, then all values are considered non-zero, that is, the element is of a rectangular shape.
       /// This parameter is considered only if the shape is CV_SHAPE_CUSTOM.
       /// </param>
-      [Obsolete("This might create problem when values is not Pinned, will be removed in the next version")]
-      [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvCreateStructuringElementEx(
-          int cols,
-          int rows,
-          int anchorX,
-          int anchorY,
-          CvEnum.CV_ELEMENT_SHAPE shape,
-          int[,] values);
-
-      /// <summary>
-      /// Creates an structuring element.
-      /// </summary>
-      /// <param name="cols">Number of columns in the structuring element.</param>
-      /// <param name="rows">Number of rows in the structuring element.</param>
-      /// <param name="anchorX">Relative horizontal offset of the anchor point.</param>
-      /// <param name="anchorY">Relative vertical offset of the anchor point.</param>
-      /// <param name="shape">Shape of the structuring element.</param>
-      /// <param name="values">
-      /// Pointer to the structuring element data, representing row-by-row scanning of the element matrix.
-      /// Non-zero values indicate points that belong to the element.
-      /// If the pointer is IntPtr.Zero, then all values are considered non-zero, that is, the element is of a rectangular shape.
-      /// This parameter is considered only if the shape is CV_SHAPE_CUSTOM.
-      /// </param>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvCreateStructuringElementEx(
           int cols,

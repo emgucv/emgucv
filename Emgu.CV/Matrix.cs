@@ -337,21 +337,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get a submatrix corresponding to a specified rectangle
-      /// </summary>
-      /// <param name="rect">the rectangle area of the sub-matrix</param>
-      /// <returns>A submatrix corresponding to a specified rectangle</returns>
-      [Obsolete("Use GetSubRect instead, will be removed in the next version")]
-      public Matrix<TDepth> GetSubMatrix(Rectangle rect)
-      {
-         Matrix<TDepth> subMat = new Matrix<TDepth>();
-         subMat._array = _array;
-         subMat.AllocateHeader();
-         CvInvoke.cvGetSubRect(_ptr, subMat.Ptr, rect);
-         return subMat;
-      }
-
-      /// <summary>
       /// Get the specific row of the matrix
       /// </summary>
       /// <param name="row">the index of the row to be reterived</param>

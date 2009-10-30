@@ -168,25 +168,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Transforms the image to compensate radial and tangential lens distortion. 
-      /// The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same
-      /// </summary>
-      /// <typeparam name="TColor">The color type of the image</typeparam>
-      /// <typeparam name="TDepth">The depth of the image</typeparam>
-      /// <param name="src">The distorted image</param>
-      /// <param name="intrin">The intrinsic camera parameters</param>
-      /// <returns>The corrected image</returns>
-      [Obsolete("Will be removed in the next version, use IntrinsicCameraParameters.Undistor function instead")]
-      public static Image<TColor, TDepth> Undistort2<TColor, TDepth>(Image<TColor, TDepth> src, IntrinsicCameraParameters intrin)
-         where TColor : struct, IColor
-         where TDepth : new()
-      {
-         Image<TColor, TDepth> res = src.CopyBlank();
-         CvInvoke.cvUndistort2(src.Ptr, res.Ptr, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr);
-         return res;
-      }
-
-      /// <summary>
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. 
       /// Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. 
       /// The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. 
@@ -226,34 +207,6 @@ namespace Emgu.CV
          handle1.Free();
          handle2.Free();
          return imagePoints;
-      }
-
-      /// <summary>
-      /// Use all points to find perspective transformation H=||h_ij|| between the source and the destination planes
-      /// </summary>
-      /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
-      /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
-      /// <returns>The 3x3 homography matrix. </returns>
-      [Obsolete("Will be removed in the next version, use other overloaded FindHomography function instead")]
-      public static Matrix<double> FindHomography(Matrix<float> srcPoints, Matrix<float> dstPoints)
-      {
-         return FindHomography(srcPoints, dstPoints, Emgu.CV.CvEnum.HOMOGRAPHY_METHOD.DEFAULT, 0.0);
-      }
-
-      /// <summary>
-      /// Use RANDSAC to finds perspective transformation H=||h_ij|| between the source and the destination planes
-      /// </summary>
-      /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates), where N is the number of points</param>
-      /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogenious coordinates) </param>
-      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
-      /// <returns>The 3x3 homography matrix. </returns>
-      [Obsolete("Will be removed in the next version, use other overloaded FindHomography function instead")]
-      public static Matrix<double> FindHomography(
-         Matrix<float> srcPoints,
-         Matrix<float> dstPoints,
-         double ransacReprojThreshold)
-      {
-         return FindHomography(srcPoints, dstPoints, CvEnum.HOMOGRAPHY_METHOD.RANSAC, ransacReprojThreshold);
       }
 
       /// <summary>
