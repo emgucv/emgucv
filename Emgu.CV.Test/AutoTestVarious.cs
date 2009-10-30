@@ -832,7 +832,6 @@ namespace Emgu.CV.Test
             new MCvTermCriteria(0.05));
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
-         //Application.Run(new ImageViewer(chessboardImage));
       }
 
       /*
@@ -1345,7 +1344,21 @@ namespace Emgu.CV.Test
             int i = p.Length;
          }
       }
-      
+
+      /*
+      [Test]
+      public void TestVectorOfFloat()
+      {
+         int k = 0;
+         for (int i = 0; i < 1000000; i++)
+         {
+            using (VectorOfFloat v = new VectorOfFloat(1000))
+            {
+               k += v.Size;
+            }
+         }
+      }*/
+
       [Test]
       public void TestVideoWriter()
       {

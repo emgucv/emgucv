@@ -281,6 +281,31 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestRuntimeSerializeWithROI()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
+
+         using (MemoryStream ms = new MemoryStream())
+         {
+            img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            img.SerializationCompressionRatio = 9;
+            img.ROI = new Rectangle(10, 10, 20, 30);
+
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter.Serialize(ms, img);
+            Byte[] bytes = ms.GetBuffer();
+
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+               Object o = formatter.Deserialize(ms2);
+               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)o;
+               Assert.IsTrue(img.Equals(img2));
+            }
+         }
+      }
+
+      [Test]
       public void TestSampleLine()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
@@ -1135,15 +1160,35 @@ namespace Emgu.CV.Test
          MCvSURFParams detector = new MCvSURFParams(400, false);
 
          Stopwatch watch = Stopwatch.StartNew();
+         ImageFeature[] features1 = detector.DetectFeatures(box, null);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+
+         watch.Reset(); watch.Start();
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
+         ImageFeature[] features2 = detector.ComputeDescriptors(box, null, keypoints);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+
+         watch.Reset(); watch.Start();
+         SURFFeature[] features3 = box.ExtractSURF(ref detector);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+
 
          PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) { return mkp.Point; });
          //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
          //int count = features.Length;
 
-         //detector.Detect(box, null);
-         watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         for (int i = 0; i < features1.Length; i++)
+         {
+            Assert.AreEqual(features1[i].KeyPoint.Point, features2[i].KeyPoint.Point);
+            float[] d1 = features1[i].Descriptor;
+            float[] d2 = features2[i].Descriptor;
+
+            for (int j = 0; j < d1.Length; j++)
+               Assert.AreEqual(d1[j], d2[j]);
+         }
          /*
          foreach (MKeyPoint kp in keypoints)
          {
@@ -1151,7 +1196,7 @@ namespace Emgu.CV.Test
          }*/
       }
 
-      
+
       //TODO:Find out why this is not working well
       [Test]
       public void TestPlanarObjectDetector()
