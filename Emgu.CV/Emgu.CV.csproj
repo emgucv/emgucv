@@ -55,9 +55,9 @@
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
     <Compile Include="Flann\Index.cs" />
+    <Compile Include="ImageFeature.cs" />
     <Compile Include="LDetector.cs" />
     <Compile Include="Octree.cs" />
-    <Compile Include="Histogram.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="PatchGenerator.cs" />
     <Compile Include="PInvoke\CvInvokeCv.cs" />
@@ -89,6 +89,7 @@
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
     <Compile Include="SURFTracker.cs" />
+    <Compile Include="VectorOfFloat.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />

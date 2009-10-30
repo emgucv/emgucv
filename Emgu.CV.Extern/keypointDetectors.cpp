@@ -1,4 +1,6 @@
 #include "cvaux.h"
+#include "vectorOfFloat.h"
+
 //FernClassifier
 CVAPI(cv::FernClassifier*) CvFernClassifierCreate() { return new cv::FernClassifier; }
 CVAPI(void) CvFernClassifierRelease(cv::FernClassifier* classifier) { delete classifier;}
@@ -93,25 +95,29 @@ CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, I
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
-CVAPI(void) CvSURFDetectorDetect(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, CvSeq* descriptors, bool useProvidedKeyPoints)
+CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, vectorOfFloat* descriptors)
 {
-   cvClearSeq(keypoints);
-   cvClearSeq(descriptors);
-   std::vector<cv::KeyPoint> pts;
-   std::vector<float> desc;
-
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-
-   (*detector)(mat, maskMat, pts, desc, useProvidedKeyPoints);
+   std::vector<cv::KeyPoint> pts;
+   (*detector)(mat, maskMat, pts, descriptors->data, false);
 
    int count = pts.size();
    if (count > 0)
    {
       cvSeqPushMulti(keypoints, &pts[0], count);
-      cvSeqPushMulti(descriptors, &desc[0], desc.size());
    }
+}
+
+CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, vectorOfFloat* descriptors)
+{
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat maskMat;
+   if (mask) maskMat = cv::cvarrToMat(mask);
+   std::vector<cv::KeyPoint> pts = std::vector<cv::KeyPoint>(numberOfKeyPoints);
+   memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
+   (*detector)(mat, maskMat, pts, descriptors->data, true);
 }
 
 // detect corners using FAST algorithm

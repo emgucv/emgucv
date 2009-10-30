@@ -18,14 +18,21 @@ namespace Emgu.CV
          IntPtr keypoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void CvSURFDetectorDetect(
+      private extern static void CvSURFDetectorDetectFeature(
          ref MCvSURFParams detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         IntPtr descriptors,
-         [MarshalAs(UnmanagedType.I1)]
-         bool useProvidedKeyPoints);
+         IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void CvSURFDetectorComputeDescriptors(
+         ref MCvSURFParams detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints,
+         int numberOfKeyPoints,
+         IntPtr descriptors);
 
       /// <summary>
       /// Create a MCvSURFParams using the specific values
@@ -87,21 +94,66 @@ namespace Emgu.CV
             return seq.ToArray();
          }
       }
-
-      /*
-      public void Detect(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      
+      /// <summary>
+      /// Detect image features from the given image
+      /// </summary>
+      /// <param name="image">The image to detect features from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>The Image features detected from the given image</returns>
+      public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          using (MemStorage stor = new MemStorage())
+         using (VectorOfFloat descs = new VectorOfFloat())
          {
             Seq<MKeyPoint> pts = new Seq<MKeyPoint>(stor);
-            Seq<float> desc = new Seq<float>(stor);
-
-            CvSURFDetectorDetect(ref this, image, mask, pts, desc, false);
+            CvSURFDetectorDetectFeature(ref this, image, mask, pts, descs);
             MKeyPoint[] kpts = pts.ToArray();
             int n = kpts.Length;
-            float[] values = desc.ToArray();
-            int l = values.Length;
+            long add = descs.StartAddress.ToInt64();
+
+            ImageFeature[] features = new ImageFeature[n];
+            int sizeOfdescriptor = extended == 0 ? 64 : 128;
+            for (int i = 0; i < n; i++, add += sizeOfdescriptor * sizeof(float))
+            {
+               features[i].KeyPoint = kpts[i];
+               float[] desc = new float[sizeOfdescriptor];
+               Marshal.Copy(new IntPtr(add), desc, 0, sizeOfdescriptor);
+               features[i].Descriptor = desc;
+            }
+            return features;
+         }         
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the image and the point location
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <returns>The image features founded on the keypoint location</returns>
+      public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
+      {
+         using (VectorOfFloat descs = new VectorOfFloat())
+         {
+            GCHandle handle = GCHandle.Alloc(keyPoints, GCHandleType.Pinned);
+            CvSURFDetectorComputeDescriptors(ref this, image, mask, handle.AddrOfPinnedObject(), keyPoints.Length, descs );
+            handle.Free();
+
+            int n = keyPoints.Length;
+            long add = descs.StartAddress.ToInt64();
+
+            ImageFeature[] features = new ImageFeature[n];
+            int sizeOfdescriptor = extended == 0 ? 64 : 128;
+            for (int i = 0; i < n; i++, add += sizeOfdescriptor * sizeof(float))
+            {
+               features[i].KeyPoint = keyPoints[i];
+               float[] desc = new float[sizeOfdescriptor];
+               Marshal.Copy(new IntPtr(add), desc, 0, sizeOfdescriptor);
+               features[i].Descriptor = desc;
+            }
+            return features;
          }
-      }*/
+      }
    }
 }
