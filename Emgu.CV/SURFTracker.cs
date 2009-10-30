@@ -381,16 +381,17 @@ namespace Emgu.CV
          public SURFMatcher(SURFFeature[] modelFeatures)
          {
             Debug.Assert(modelFeatures.Length > 0, "Model Features should have size > 0");
-
+            
             _modelIndex = new Flann.Index(
                Util.GetMatrixFromDescriptors(
                   Array.ConvertAll<SURFFeature, float[]>(
                      modelFeatures,
                      delegate(SURFFeature f) { return f.Descriptor; })),
-                  4);
+               1);
             _modelFeatures = modelFeatures;
          }
 
+         /*
          private static int CompareSimilarFeature(SimilarFeature f1, SimilarFeature f2)
          {
             if (f1.Distance < f2.Distance)
@@ -399,7 +400,7 @@ namespace Emgu.CV
                return 0;
             else
                return 1;
-         }
+         }*/
 
          /// <summary>
          /// Match the SURF feature from the observed image to the features from the model image
