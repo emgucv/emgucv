@@ -120,6 +120,8 @@ namespace Emgu.CV.UI
          // 
          // saveImageToFileDialog
          // 
+         this.saveImageToFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif*.bmp" +
+             ";*.png;*.tiff;*.tif|All Files(*.*)|*.*";
          this.saveImageToFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.SaveImageDialogText;
          // 
          // ImageBox
