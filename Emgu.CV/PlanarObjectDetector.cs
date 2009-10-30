@@ -13,6 +13,7 @@ namespace Emgu.CV
    /// </summary>
    public class PlanarObjectDetector : UnmanagedObject
    {
+      #region PInvokes
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static IntPtr CvPlanarObjectDetectorDefaultCreate();
 
@@ -36,6 +37,7 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvPlanarObjectDetectorGetModelPoints(IntPtr detector, IntPtr modelPoints);
+      #endregion
 
       /// <summary>
       /// Create a planar Object detector
