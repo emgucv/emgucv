@@ -10,6 +10,7 @@ SET(SRC_CV
    PInvoke/CvType/*.cs 
    Color/*.cs 
    Capture/*.cs 
+   Flann/*.cs
    CameraCalibration/*.cs
    Reflection/*.cs 
    VideoSurveillance/*.cs 
