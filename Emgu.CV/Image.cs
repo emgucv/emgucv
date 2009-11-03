@@ -2586,13 +2586,25 @@ namespace Emgu.CV
             // if the direct conversion exist, apply the conversion
             CvInvoke.cvCvtColor(src, dest, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, destColor));
          }
-         catch (Exception)
+         catch
          {
-            //if a direct conversion doesn't exist, apply a two step conversion
-            using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
+            try
             {
-               CvInvoke.cvCvtColor(src, tmp.Ptr, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, typeof(Bgr)));
-               CvInvoke.cvCvtColor(tmp.Ptr, dest, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), destColor));
+               //if a direct conversion doesn't exist, apply a two step conversion
+               using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
+               {
+                  CvInvoke.cvCvtColor(src, tmp.Ptr, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, typeof(Bgr)));
+                  CvInvoke.cvCvtColor(tmp.Ptr, dest, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), destColor));
+               }
+            }
+            catch
+            {
+               throw new NotSupportedException(String.Format(
+                  "Convertion from Image<{0}, {1}> to Image<{2}, {3}> is not supported by OpenCV",
+                  srcColor.ToString(),
+                  typeof(TDepth).ToString(),
+                  destColor.ToString(),
+                  typeof(TDepth).ToString()));
             }
          }
       }

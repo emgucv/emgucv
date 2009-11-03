@@ -1154,6 +1154,21 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestImageConvert()
+      {
+         try
+         {
+            Image<Bgr, double> img1 = new Image<Bgr, double>("box.png");
+            Image<Gray, double> img2 = img1.Convert<Gray, double>();
+         }
+         catch (NotSupportedException)
+         {
+            return;
+         }
+         Assert.Fail("NotSupportedException should be thrown");
+      }
+
+      [Test]
       public void TestSURFDetector()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
