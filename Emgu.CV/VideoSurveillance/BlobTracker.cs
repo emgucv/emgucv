@@ -18,7 +18,7 @@ namespace Emgu.CV.VideoSurveillance
          switch (type)
          {
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CC:
-               _ptr = CvInvoke.CvCreateBlobDetectorCC();
+               _ptr = CvInvoke.CvCreateBlobTrackerCC();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF:
                _ptr = CvInvoke.CvCreateBlobTrackerCCMSPF();
