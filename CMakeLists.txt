@@ -43,8 +43,14 @@ set_target_properties(cxcore PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(cv PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(cvaux PROPERTIES PREFIX ${extra_bin_prefix})
 set_target_properties(ml PROPERTIES PREFIX ${extra_bin_prefix})
-set_target_properties(highgui PROPERTIES PREFIX ${extra_bin_prefix})
-set_target_properties(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
+
+if(highgui)
+  set_target_properties(highgui PROPERTIES PREFIX ${extra_bin_prefix})
+endif()
+
+if(opencv_ffmpeg)
+  set_target_properties(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
+endif ()
 
 #End building opencv and Emgu.CV.Extern
 
