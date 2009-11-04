@@ -41,7 +41,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source image</param>
       /// <param name="dst">Extracted quadrangle</param>
-      /// <param name="mapMatrix">The transformation 2 × 3 matrix [A|b]</param>
+      /// <param name="mapMatrix">The transformation 2 x 3 matrix [A|b]</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvGetQuadrangleSubPix(IntPtr src, IntPtr dst, IntPtr mapMatrix);
 
@@ -77,8 +77,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Pointer to an array of PointF, Coordinates of 3 triangle vertices in the source image.</param>
       /// <param name="dst">Pointer to an array of PointF, Coordinates of the 3 corresponding triangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 2×3 matrix</param>
-      /// <returns>Pointer to the destination 2×3 matrix</returns>
+      /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
+      /// <returns>Pointer to the destination 2x3 matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetAffineTransform(
          IntPtr src, 
@@ -92,8 +92,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 3 triangle vertices in the source image.</param>
       /// <param name="dst">Coordinates of the 3 corresponding triangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 2×3 matrix</param>
-      /// <returns>Pointer to the destination 2×3 matrix</returns>
+      /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
+      /// <returns>Pointer to the destination 2x3 matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetAffineTransform(
          PointF[] src,
@@ -2752,13 +2752,13 @@ namespace Emgu.CV
       /// relate to the same object.
       /// </summary>
       /// <param name="signature1">
-      /// First signature, size1¡Ádims+1 floating-point matrix. Each row stores the point weight followed by the point coordinates. The matrix is allowed to have a single column (weights only) if the user-defined cost matrix is used.
+      /// First signature, size1*dims+1 floating-point matrix. Each row stores the point weight followed by the point coordinates. The matrix is allowed to have a single column (weights only) if the user-defined cost matrix is used.
       /// </param>
       /// <param name="signature2">Second signature of the same format as signature1, though the number of rows may be different. The total weights may be different, in this case an extra "dummy" point is added to either signature1 or signature2. </param>
       /// <param name="distType">Metrics used; CV_DIST_L1, CV_DIST_L2, and CV_DIST_C stand for one of the standard metrics; CV_DIST_USER means that a user-defined function distance_func or pre-calculated cost_matrix is used. </param>
       /// <param name="distFunc">The user-defined distance function. It takes coordinates of two points and returns the distance between the points.</param>
-      /// <param name="costMatrix">The user-defined size1¡Ásize2 cost matrix. At least one of cost_matrix and distance_func must be NULL. Also, if a cost matrix is used, lower boundary (see below) can not be calculated, because it needs a metric function.</param>
-      /// <param name="flow">The resultant size1¡Ásize2 flow matrix: flow,,ij,, is a flow from i-th point of signature1 to j-th point of signature2</param>
+      /// <param name="costMatrix">The user-defined size1*size2 cost matrix. At least one of cost_matrix and distance_func must be NULL. Also, if a cost matrix is used, lower boundary (see below) can not be calculated, because it needs a metric function.</param>
+      /// <param name="flow">The resultant size1*size2 flow matrix: flow,,ij,, is a flow from i-th point of signature1 to j-th point of signature2</param>
       /// <param name="lowerBound">
       /// Optional input/output parameter: lower boundary of
       /// distance between the two signatures that is a distance between mass centers.

@@ -209,10 +209,9 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get or Set the data for this matrix
+      /// Get or Set the data for this matrix. The Get function has O(1) complexity. The Set function make a copy of the data
       /// </summary>
-      /// <remarks> 
-      /// The Get function has O(1) complexity. 
+      /// <remarks>
       /// If the image contains Byte and width is not a multiple of 4. The second dimension of the array might be larger than the Width of this image.  
       /// This is necessary since the length of a row need to be 4 align for OpenCV optimization. 
       /// The Set function always make a copy of the specific value. If the image contains Byte and width is not a multiple of 4. The second dimension of the array created might be larger than the Width of this image.  

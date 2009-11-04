@@ -316,7 +316,7 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Computes dense optical flow using Gunnar Farneback’s algorithm
+      /// Computes dense optical flow using Gunnar Farneback's algorithm
       /// </summary>
       /// <param name="prev0">The first 8-bit single-channel input image</param>
       /// <param name="next0">The second input image of the same size and the same type as prevImg</param>
