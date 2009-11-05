@@ -93,18 +93,23 @@ MACRO(ADD_CS_FILE_TO_DEPLOY file)
 	COMMAND ${CMAKE_COMMAND} copy -E ${file} ${CS_LIBRARY_TARGET_DIR}) 
 ENDMACRO(ADD_CS_FILE_TO_DEPLOY)
 
+MACRO(GET_CS_EXECUTABLE_EXTENSION)
+	IF (MSVC)
+	SET(CS_EXECUTABLE_EXTENSION "exe")
+      ELSE(MSVC)
+	SET(CS_EXECUTABLE_EXTENSION "monoexe")
+	ENDIF(MSVC)
+ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
+
 MACRO(ADD_CS_EXECUTABLE target source)
 	GET_CS_EXECUTABLE_TARGET_DIR()
+	GET_CS_EXECUTABLE_EXTENSION()
 
 	# FIXME:
 	# Seems like cmake doesn't like the ".exe" ending for custom commands.
 	# If we call it ${target}.exe, 'make' will later complain about a missing rule.
 	# mono doesn't care about endings, so temporarily add ".monoexe".
-	IF (MSVC)
-	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.exe")
-      ELSE(MSVC)
-	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.monoexe")
-	ENDIF(MSVC)
+	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
 
 	MAKE_PROPER_FILE_LIST("${source}")
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})

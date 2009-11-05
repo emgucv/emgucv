@@ -66,19 +66,31 @@ endif ()
 
 add_subdirectory(Emgu.Util)
 add_subdirectory(Emgu.CV)
-add_subdirectory(Emgu.CV.ML)
 add_subdirectory(Emgu.CV.UI)
+add_subdirectory(Emgu.CV.ML)
 
 add_subdirectory(Emgu.CV.Example)
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV")
-SET(CPACK_GENERATOR "TGZ")
+SET(PACKAGE "emgucv")
+SET(PACKAGE_BUGREPORT "emgucv@gmail.com")
+SET(PACKAGE_NAME "emgucv")
+
+SET(CPACK_PACKAGE_NAME "emgucv")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper to the Intel OpenCV image processing library.")
+#SET(CPACK_GENERATOR "TGZ")
 SET(CPACK_PACKAGE_VENDOR "Emgu")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2")
 SET(CPACK_PACKAGE_VERSION_MINOR "1")
 SET(CPACK_PACKAGE_VERSION_PATCH "0")
 SET(CPACK_PACKAGE_FILE_NAME "Emgu.CV")
-SET(CPACK_SOURCE_GENERATOR "TGZ")
+SET(CPACK_PACKAGE_CONTACT "emgucv@gmail.com")
+
+#SET(CPACK_SOURCE_GENERATOR "TGZ")
+
+#Debian specific info
+SET(DEBIAN_PACKAGE_PRIORITY "optional")
+SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian/postinst;")
+SET(DEBIAN_PACKAGE_BUILDS_DEPENDS "mono-runtime (>> 2.4.2), libmono-wcf3.0-cil")
 
 INCLUDE (CPack)
 
