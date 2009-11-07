@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ "$1" = "configure" ]; then
+if [ "$1" = "remove" ]; then
 	ldconfig
 fi
 
