@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>usr\lib\mono\gac\System.ServiceModel\3.0.0.0__b77a5c561934e089\System.ServiceModel.dll</HintPath>
+      <HintPath>\usr\lib\mono\gac\System.ServiceModel\3.0.0.0__b77a5c561934e089\System.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
