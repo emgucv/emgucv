@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("2.1.0.0")]
 [assembly: AssemblyFileVersion("2.1.0.0")]
-[assembly: AssemblyKeyFile("../Emgu.CV.snk")]
+//[assembly: AssemblyKeyFile("../Emgu.CV.snk")]
