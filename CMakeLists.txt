@@ -49,9 +49,9 @@ add_subdirectory(Emgu.CV.Extern)
 
 
 if(MSVC)
-set(extra_bin_prefix "../")
+  set(extra_bin_prefix "../")
 else(MSVC)
-set(extra_bin_prefix "../bin/")
+  set(extra_bin_prefix "../bin/")
 endif()
 
 set_target_properties(cvextern PROPERTIES PREFIX ${extra_bin_prefix})
@@ -92,9 +92,25 @@ add_subdirectory(Emgu.CV.Example)
 #SET(CPACK_SOURCE_GENERATOR "TGZ")
 
 #Debian specific info
-SET(DEBIAN_PACKAGE_PRIORITY "optional")
-SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
-SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), libmono-wcf3.0-cil")
+if (NOT WIN32)
+  SET(DEBIAN_PACKAGE_PRIORITY "optional")
+  SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
+  SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil")
+
+  FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/clifilelist.txt
+"/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.Util.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.ML.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.UI.dll")
+  INSTALL(
+    FILES
+    ${DEBIAN_CONTROL_FILE_FOLDER}/clifilelist.txt
+    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+    COMPONENT binary)
+
+  FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
+"#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  gacutil -il ${DEBIAN_CONTROL_FILE_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
+   FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
+"#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\ngacutil -u Emgu.CV.UI\ngacutil -u Emgu.CV.ML\ngacutil -u Emgu.CV\ngacutil -u Emgu.Util\nfi\n")
+
+endif()
 
 INCLUDE (CPack)
