@@ -26,6 +26,8 @@ add_dependencies(${the_target} cxcore cv cvaux ml)
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} cxcore cv cvaux ml)
 
-INSTALL(TARGETS ${the_target}
-  LIBRARY DESTINATION lib COMPONENT main)
+INSTALL(TARGETS ${the_target} 
+    RUNTIME DESTINATION bin COMPONENT main
+    LIBRARY DESTINATION lib COMPONENT main
+    ARCHIVE DESTINATION lib COMPONENT main)
   
