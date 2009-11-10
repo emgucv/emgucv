@@ -16,6 +16,7 @@
 #
 # copyright (c) 2007 Arno Rehn arno@arnorehn.de
 # copyright (c) 2008 Helio castro helio@kde.org
+# copyright (c) 2009 Canming Huang emgucv@gmail.com
 #
 # Redistribution and use is allowed according to the terms of the GPL license.
 
