@@ -5,7 +5,7 @@ Version <#= AssemblyVersion #>
 ==================================================================
 
 For online documentation please visit
-<#= EmguUrl #>wiki/files/<#= AssemblyVersion #>/Help/Index.html
+<#= EmguUrl #>wiki/files/<#= AssemblyVersion #>/Index.html
 
 For tutorials and helps please visit the Emgu CV wiki 
 <#= EmguUrl #>wiki/

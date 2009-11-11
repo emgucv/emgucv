@@ -2,7 +2,7 @@ Version 2.1.0.0
 ==================================================================
 
 For online documentation please visit
-http://www.emgu.com/wiki/files/2.1.0.0/Help/Index.html
+http://www.emgu.com/wiki/files/2.1.0.0/Index.html
 
 For tutorials and helps please visit the Emgu CV wiki 
 http://www.emgu.com/wiki/

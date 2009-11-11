@@ -1,4 +1,4 @@
-set RELEASE-NAME=Emgu.CV.Binary-2.0.1.0
+set RELEASE-NAME=Emgu.CV.Binary-2.1.0.0
 set RELEASE-FOLDER=release_zip
 set RELEASE-ZIP=%RELEASE-NAME%.zip
 set RELEASE-SOLUTION-NAME=Emgu.CV.DebuggerVisualizers.sln
