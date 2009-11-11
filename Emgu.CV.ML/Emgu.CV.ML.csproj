@@ -63,6 +63,7 @@
     <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />
     <Compile Include="PInvoke\MlInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="RTrees.cs" />
     <Compile Include="StatModel.cs" />
     <Compile Include="SVM.cs" />

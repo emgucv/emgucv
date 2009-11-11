@@ -89,6 +89,7 @@
     <Compile Include="PinnedArray.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="Toolbox.cs" />
     <Compile Include="TypeEnum.cs" />
     <Compile Include="UnmanagedObject.cs" />

@@ -2,11 +2,14 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 
 PROJECT(Emgu.CV.UI)
 
-SET(SRC_CV_UI *.cs Properties/*.cs)
+SET(SRC_CV_UI 
+  ../CommonAssemblyInfo.cs
+  *.cs 
+  Properties/*.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
+SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
 ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;System.Drawing.dll;System.Data.dll;System.Windows.Forms.dll;${LIBRARY_3RDPARTY_PATH}/ZedGraph.dll")
-#SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
 
 FILE(GLOB RESX_SRC 
    "${CMAKE_CURRENT_SOURCE_DIR}/*.resx" 

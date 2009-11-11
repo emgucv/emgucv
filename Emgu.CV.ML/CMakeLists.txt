@@ -3,21 +3,15 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 PROJECT(Emgu.CV.ML)
 
 SET(SRC_CV_ML 
+  ../CommonAssemblyInfo.cs
   *.cs 
   PInvoke/*.cs 
   PInvoke/CvType/*.cs
   Properties/*.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
-
+SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
 ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;System.Drawing.dll")
-
-#SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
-
-#FOR Linux, copy the dll mapping file such that mono can find the unmanaged libraries
-IF (NOT WIN32)
-  ADD_CS_FILE_TO_DEPLOY(${PROJECT_NAME}.dll.config)
-ENDIF()
 
 ADD_CS_LIBRARY(${PROJECT_NAME} "${SRC_CV_ML}" ALL)
 
@@ -26,7 +20,6 @@ INSTALL(
   FILES 
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.XML 
-  ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.dll.config
   DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
   COMPONENT binary)
 

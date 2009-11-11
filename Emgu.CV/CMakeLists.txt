@@ -3,18 +3,19 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 PROJECT(Emgu.CV)
 
 SET(SRC_CV 
-   *.cs 
-   Shape/*.cs 
-   PointAndLine/*.cs 
-   PInvoke/*.cs
-   PInvoke/CvType/*.cs 
-   Color/*.cs 
-   Capture/*.cs 
-   Flann/*.cs
-   CameraCalibration/*.cs
-   Reflection/*.cs 
-   VideoSurveillance/*.cs 
-   Properties/*.cs)
+  ../CommonAssemblyInfo.cs
+  *.cs 
+  Shape/*.cs 
+  PointAndLine/*.cs 
+  PInvoke/*.cs
+  PInvoke/CvType/*.cs 
+  Color/*.cs 
+  Capture/*.cs 
+  Flann/*.cs
+  CameraCalibration/*.cs
+  Reflection/*.cs 
+  VideoSurveillance/*.cs 
+  Properties/*.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)

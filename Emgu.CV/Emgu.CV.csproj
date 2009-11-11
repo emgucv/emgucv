@@ -208,6 +208,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="TimedImage.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="VideoSurveillance\IBGFGDetector.cs" />

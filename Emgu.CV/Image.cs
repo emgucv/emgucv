@@ -4323,11 +4323,12 @@ namespace Emgu.CV
       /// </summary>
       public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
 
+/*
       /// <summary>
       /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
       /// </summary>
       private static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
-
+*/
    }
 }
 
