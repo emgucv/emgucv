@@ -26,6 +26,6 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
-      public const string EXTERN_LIBRARY = "cvextern.dll";
+      public const string EXTERN_LIBRARY = "cvextern";
    }
 }
