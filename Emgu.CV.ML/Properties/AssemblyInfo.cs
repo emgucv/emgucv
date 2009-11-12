@@ -7,12 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Emgu.CV.ML")]
 [assembly: AssemblyDescription("A wrapper to the OpenCV Machine Learning library")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("Emgu.CV.ML")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -7,12 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Emgu.CV.UI")]
 [assembly: AssemblyDescription("A Collection of User Interfaces for Emgu CV")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Emgu")]
-[assembly: AssemblyProduct("Emgu.CV.UI")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

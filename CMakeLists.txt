@@ -29,6 +29,9 @@ IF(SVNVERSION_PATH)
        SET(EMGUCV_SVNVERSION "0")
     ELSE()
 	STRING(REPLACE M "" EMGUCV_SVNVERSION "${SVNVERSION_RESULT}")
+	STRING(REPLACE P "" EMGUCV_SVNVERSION "${EMGUCV_SVNVERSION}")
+	STRING(REPLACE S "" EMGUCV_SVNVERSION "${EMGUCV_SVNVERSION}")
+	STRING(REPLACE ":" "" EMGUCV_SVNVERSION "${EMGUCV_SVNVERSION}")
     ENDIF()
     MESSAGE(STATUS "Emgu CV SVNVERSION: ${EMGUCV_SVNVERSION}")
 ELSE()
@@ -107,6 +110,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(\"${CPACK_PACKAGE_VERSION}\")]
 [assembly: AssemblyFileVersion(\"${CPACK_PACKAGE_VERSION}\")]
+[assembly: AssemblyConfiguration(\"\")]
+[assembly: AssemblyCompany(\"Emgu\")]
+[assembly: AssemblyProduct(\"Emgu.CV\")]
+[assembly: AssemblyCopyright(\"Copyright © Emgu 2009\")]
+[assembly: AssemblyTrademark(\"\")]
+[assembly: AssemblyCulture(\"\")]
 ")
 
 ADD_SUBDIRECTORY(Emgu.Util)
