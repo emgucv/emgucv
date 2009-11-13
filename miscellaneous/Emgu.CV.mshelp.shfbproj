@@ -34,7 +34,7 @@
     <FrameworkVersion>3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
     <CopyrightText>2009 Emgu, All Rights Reserved,</CopyrightText>
-    <FeedbackEMailAddress>emgucv%40gmail.com</FeedbackEMailAddress>
+    <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit www.emgu.com/forum</FooterText>
     <PresentationStyle>hana</PresentationStyle>
