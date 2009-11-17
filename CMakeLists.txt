@@ -124,6 +124,8 @@ ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.UI)
 ADD_SUBDIRECTORY(Emgu.CV.ML)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
+ADD_SUBDIRECTORY(Emgu.UI)
+ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(lib)
 
 #ADD_SUBDIRECTORY(Emgu.RPC)
@@ -148,10 +150,21 @@ IF (NOT WIN32)
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT binary)
     
+    SET(DEBIAN_GACUTIL_EXEC "gacutil")
+
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  gacutil -il ${DEBIAN_CONTROL_FILE_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
+      "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${DEBIAN_GACUTIL_EXEC} -il ${DEBIAN_CONTROL_FILE_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\ngacutil -u Emgu.CV.UI\ngacutil -u Emgu.CV.ML\ngacutil -u Emgu.CV\ngacutil -u Emgu.Util\ngacutil -u ZedGraph\ngacutil -u zlib.net\nfi\n")
+      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\nfor dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph zlib.net; do ${DEBIAN_GACUTIL_EXEC} -u $dll; done\nfi\n")
+    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+#      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nRequires: libmono-wcf3.0-cil\nCflags: -I:\${apidir}/Emgu.CV.xml -I:\${apidir}/Emgu.Util.xml -I:\${apidir}/Emgu.CV.ML.xml -I:\${apidir}/Emgu.CV.UI.xml -I:\${apidir}/ZedGraph.xml \nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
+      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
+    INSTALL(
+      FILES
+      ${DEBIAN_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+      DESTINATION /usr/lib/pkgconfig
+      COMPONENT binary)
+
   ENDIF()  
   
 ENDIF()
