@@ -82,14 +82,9 @@ IF(MSVC)
   SET_TARGET_PROPERTIES(cv PROPERTIES PREFIX ${extra_bin_prefix})
   SET_TARGET_PROPERTIES(cvaux PROPERTIES PREFIX ${extra_bin_prefix})
   SET_TARGET_PROPERTIES(ml PROPERTIES PREFIX ${extra_bin_prefix})
-  
-  IF(highgui)
-    SET_TARGET_PROPERTIES(highgui PROPERTIES PREFIX ${extra_bin_prefix})
-  ENDIF()
-  
-  IF(opencv_ffmpeg)
-    SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
-  ENDIF ()
+
+  SET_TARGET_PROPERTIES(highgui PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
 ENDIF()
 
 IF (WIN32)
