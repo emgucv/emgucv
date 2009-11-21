@@ -1,7 +1,11 @@
 REM == FORCE OVERWRITE ==
 REM SET COPYCMD=/Y
 
-SET CMAKE="C:\Program Files\CMake 2.6\bin\cmake.exe"
+SET CMAKE="cmake.exe"
+IF EXIST "C:\Program Files\CMake 2.6\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.6\bin\cmake.exe"
+IF EXIST "C:\Program Files\CMake 2.8\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.8\bin\cmake.exe"
+
+
 SET VS2005="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
 SET VS2008="C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
 SET MSBUILD35="C:\WINDOWS\Microsoft.NET\Framework\v3.5\MSBuild.exe"
