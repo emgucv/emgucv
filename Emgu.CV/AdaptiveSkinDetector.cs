@@ -63,9 +63,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The input image</param>
       /// <param name="hueMask">The resulting mask</param>
-      public void Process(Image<Bgr, Byte> image, Image<Bgr, Byte> hueMask)
+      public void Process(Image<Bgr, Byte> image, Image<Gray, Byte> hueMask)
       {
-         CvAdaptiveSkinDetectorProcess(_ptr, image, hueMask);
+         CvAdaptiveSkinDetectorProcess(_ptr, image.Ptr, hueMask.Ptr);
       }
 
       /// <summary>
