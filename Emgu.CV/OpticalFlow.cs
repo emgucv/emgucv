@@ -28,7 +28,7 @@ namespace Emgu.CV
          Size winSize,
          int level,
          MCvTermCriteria criteria,
-         out System.Drawing.PointF[] currFeatures,
+         out PointF[] currFeatures,
          out Byte[] status,
          out float[] trackError)
       {
@@ -60,7 +60,7 @@ namespace Emgu.CV
          int level,
          MCvTermCriteria criteria,
          Emgu.CV.CvEnum.LKFLOW_TYPE flags,
-         out System.Drawing.PointF[] currFeatures,
+         out PointF[] currFeatures,
          out Byte[] status,
          out float[] trackError)
       {
@@ -70,7 +70,7 @@ namespace Emgu.CV
          status = new Byte[prevFeatures.Length];
          trackError = new float[prevFeatures.Length];
 
-         currFeatures = new System.Drawing.PointF[prevFeatures.Length];
+         currFeatures = new PointF[prevFeatures.Length];
 
          CvInvoke.cvCalcOpticalFlowPyrLK(
             prev,
