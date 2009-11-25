@@ -46,6 +46,9 @@ namespace Emgu.CV.ML.UnitTest
 
          using (KNearest knn = new KNearest(trainData, trainClasses, null, false, K))
          {
+            //TODO: find out when knn.save will be implemented
+            //knn.Save("knn.xml");
+
             for (int i = 0; i < img.Height; i++)
             {
                for (int j = 0; j < img.Width; j++)
@@ -133,6 +136,9 @@ namespace Emgu.CV.ML.UnitTest
                         
             emModel2.Train(samples, null, parameters2, labels);
             
+            //TODO: Find out when saving of EM model will be enable
+            //emModel2.Save("emModel.xml");
+
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
@@ -226,7 +232,9 @@ namespace Emgu.CV.ML.UnitTest
 
             //bool trained = model.Train(trainData, trainClasses, null, null, p);
             bool trained = model.TrainAuto(trainData, trainClasses, null, null, p.MCvSVMParams, 5);
-            
+
+            model.Save("svmModel.xml");
+
             for (int i = 0; i < img.Height; i++)
             {
                for (int j = 0; j < img.Width; j++)
@@ -304,6 +312,9 @@ namespace Emgu.CV.ML.UnitTest
          using (NormalBayesClassifier classifier = new NormalBayesClassifier() )
          {
             classifier.Train(trainData, trainClasses, null, null, false);
+
+            classifier.Save("normalBayes.xml");
+
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
@@ -563,6 +574,8 @@ namespace Emgu.CV.ML.UnitTest
                null,
                param);
 
+            forest.Save("ERTree.xml");
+
             if (!success) return;
 
             double trainDataCorrectRatio = 0;
@@ -628,6 +641,7 @@ namespace Emgu.CV.ML.UnitTest
          using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
          {
             network.Train(trainData, trainClasses, null, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
+            network.Save("ann_nlp_model.xml");
 
             for (int i = 0; i < img.Height; i++)
             {

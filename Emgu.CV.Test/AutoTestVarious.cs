@@ -1360,6 +1360,17 @@ namespace Emgu.CV.Test
       }*/
 
       [Test]
+      public void TestAdaptiveSkinDetector()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
+         using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.NONE))
+         {
+            Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
+            detector.Process(image, mask);
+         }
+      }
+
+      [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 10;
