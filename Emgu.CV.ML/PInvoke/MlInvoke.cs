@@ -351,6 +351,14 @@ namespace Emgu.CV.ML
          MCvParamGrid coefGrid,
          MCvParamGrid degreeGrid);
 
+      /// <summary>
+      /// Get the parameters of the SVM model
+      /// </summary>
+      /// <param name="model">The SVM model</param>
+      /// <param name="param">The parameters of the SVM model</param>
+      [DllImport(EXTERN_LIBRARY)]
+      public static extern void CvSVMGetParameters(IntPtr model, ref MCvSVMParams param);
+
       #region contribution from Albert G
       /// <summary>
       /// Predicts response for the input sample.

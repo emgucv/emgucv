@@ -76,6 +76,7 @@ CVAPI(int) CvSVMGetSupportVectorCount(CvSVM* model)
 { return model->get_support_vector_count(); }
 CVAPI(int) CvSVMGetVarCount(CvSVM* model)
 { return model->get_var_count(); }
+CVAPI(void) CvSVMGetParameters(CvSVM* model, CvSVMParams* param) { CvSVMParams p = model->get_params(); memcpy(param, &p, sizeof(CvSVMParams)); }
 
 //ANN_MLP
 CVAPI(CvANN_MLP*) CvANN_MLPCreate(const CvMat* _layer_sizes,

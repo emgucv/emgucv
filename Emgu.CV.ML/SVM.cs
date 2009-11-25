@@ -26,6 +26,19 @@ namespace Emgu.CV.ML
       }
 
       /// <summary>
+      /// Get a copy of the SVM parameters
+      /// </summary>
+      public MCvSVMParams Parameters
+      {
+         get
+         {
+            MCvSVMParams p = new MCvSVMParams();
+            MlInvoke.CvSVMGetParameters(Ptr, ref p);
+            return p;
+         }
+      }
+
+      /// <summary>
       /// Train the SVM model with the specific paramters
       /// </summary>
       /// <param name="trainData">The training data.</param>
