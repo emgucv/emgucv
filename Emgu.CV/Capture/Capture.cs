@@ -105,7 +105,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
          if (_ptr == IntPtr.Zero)
          {
-            throw new NullReferenceException("Error: Unable to create capture from camera" + camIndex);
+            throw new NullReferenceException(String.Format("Error: Unable to create capture from camera{0}", camIndex));
          }
 #endif
       }
