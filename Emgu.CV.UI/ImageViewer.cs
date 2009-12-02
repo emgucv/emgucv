@@ -68,7 +68,7 @@ namespace Emgu.CV.UI
       {
          get
          {
-            return this.imageBox1;
+            return imageBox1;
          }
       }
 
