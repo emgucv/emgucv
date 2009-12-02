@@ -945,7 +945,7 @@ namespace Emgu.CV
       /// <param name="pt2">Second ending point of the line segment. It is modified by the function.</param>
       /// <returns>It returns 0 if the line segment is completely outside the image and 1 otherwise.</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern int cvClipLine(System.Drawing.Size imgSize, ref System.Drawing.Point pt1, ref System.Drawing.Point pt2);
+      public static extern int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2);
 
       /// <summary>
       /// Calculates absolute difference between two arrays.
@@ -1049,7 +1049,7 @@ namespace Emgu.CV
       /// <returns>A pointer to IplImage </returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvCreateImage(
-         System.Drawing.Size size,
+         Size size,
          CvEnum.IPL_DEPTH depth,
          int channels);
 
@@ -1065,7 +1065,7 @@ namespace Emgu.CV
       /// <returns> The structure IplImage</returns>
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvCreateImageHeader(
-         System.Drawing.Size size,
+         Size size,
          CvEnum.IPL_DEPTH depth,
          int channels);
 
@@ -1082,7 +1082,7 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
-         System.Drawing.Size size,
+         Size size,
          CvEnum.IPL_DEPTH depth,
          int channels,
          int origin,
@@ -1171,7 +1171,7 @@ namespace Emgu.CV
       /// <param name="image">Image header.</param>
       /// <param name="rect">ROI rectangle.</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvSetImageROI(IntPtr image, System.Drawing.Rectangle rect);
+      public static extern void cvSetImageROI(IntPtr image, Rectangle rect);
 
       /// <summary>
       /// Returns channel of interest of the image (it returns 0 if all the channels are selected).
@@ -1179,7 +1179,7 @@ namespace Emgu.CV
       /// <param name="image">Image header.</param>
       /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern System.Drawing.Rectangle cvGetImageROI(IntPtr image);
+      public static extern Rectangle cvGetImageROI(IntPtr image);
 
       /// <summary>
       /// Allocates header for the new matrix and underlying data, and returns a pointer to the created matrix. Matrices are stored row by row. All the rows are aligned by 4 bytes. 
@@ -1436,8 +1436,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvLine(
           IntPtr img,
-          System.Drawing.Point pt1,
-          System.Drawing.Point pt2,
+          Point pt1,
+          Point pt2,
           MCvScalar color,
           int thickness,
           [MarshalAs(UnmanagedType.U4)] 
@@ -1518,8 +1518,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvRectangle(
          IntPtr img,
-         System.Drawing.Point pt1,
-         System.Drawing.Point pt2,
+         Point pt1,
+         Point pt2,
          MCvScalar color,
          int thickness,
          [MarshalAs(UnmanagedType.U4)] 
@@ -1535,7 +1535,7 @@ namespace Emgu.CV
       /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
       /// <returns>the resultant sub-array header</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, System.Drawing.Rectangle rect);
+      public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, Rectangle rect);
 
       /// <summary>
       /// Return the header, corresponding to a specified row span of the input array
@@ -1601,7 +1601,7 @@ namespace Emgu.CV
       /// <param name="arr">array header</param>
       /// <returns>number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.</returns>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern System.Drawing.Size cvGetSize(IntPtr arr);
+      public static extern Size cvGetSize(IntPtr arr);
 
       /// <summary>
       /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.
@@ -1616,7 +1616,7 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvCircle(
          IntPtr img,
-         System.Drawing.Point center,
+         Point center,
          int radius,
          MCvScalar color,
          int thickness,
@@ -1650,8 +1650,8 @@ namespace Emgu.CV
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvEllipse(
           IntPtr img,
-          System.Drawing.Point center,
-          System.Drawing.Size axes,
+          Point center,
+          Size axes,
           double angle,
           double startAngle,
           double endAngle,
@@ -1818,7 +1818,7 @@ namespace Emgu.CV
           int maxLevel,
           int thickness,
           [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
-          System.Drawing.Point offset);
+          Point offset);
 
       /// <summary>
       /// Fills convex polygon interior. This function is much faster than The function cvFillPoly and can fill not only the convex polygons but any monotonic polygon, i.e. a polygon whose contour intersects every horizontal line (scan line) twice at the most
@@ -1833,7 +1833,7 @@ namespace Emgu.CV
       public static extern void cvFillConvexPoly(
          IntPtr img,
          [In]
-         System.Drawing.Point[] pts,
+         Point[] pts,
          int npts,
          MCvScalar color,
          [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
@@ -1869,7 +1869,7 @@ namespace Emgu.CV
       /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, System.Drawing.Point org, ref MCvFont font, MCvScalar color);
+      public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, Point org, ref MCvFont font, MCvScalar color);
 
       /// <summary>
       /// Calculates the binding rectangle for the given text string when a specified font is used
@@ -1879,7 +1879,7 @@ namespace Emgu.CV
       /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref System.Drawing.Size textSize, ref int baseline);
+      public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref Size textSize, ref int baseline);
       #endregion
 
       /// <summary>
@@ -1927,8 +1927,8 @@ namespace Emgu.CV
          IntPtr arr,
          ref double minVal,
          ref double maxVal,
-         ref System.Drawing.Point minLoc,
-         ref System.Drawing.Point maxLoc,
+         ref Point minLoc,
+         ref Point maxLoc,
          IntPtr mask);
 
       /// <summary>
@@ -2290,7 +2290,7 @@ namespace Emgu.CV
       /// <param name="step">Output full row length in bytes</param>
       /// <param name="roiSize">Output ROI size</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out System.Drawing.Size roiSize);
+      public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out Size roiSize);
 
       /// <summary>
       /// Returns matrix header for the input array that can be matrix - CvMat, image - IplImage or multi-dimensional dense array - CvMatND* (latter case is allowed only if allowND != 0) . In the case of matrix the function simply returns the input pointer. In the case of IplImage* or CvMatND* it initializes header structure with parameters of the current image ROI and returns pointer to this temporary structure. Because COI is not supported by CvMat, it is returned separately. 
