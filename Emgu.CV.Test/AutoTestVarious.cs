@@ -760,6 +760,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestOpticalFlowFarneback()
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         OptiocalFlowImage(out prevImg, out currImg);
+         Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
+         Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
+         OpticalFlow.Farneback(prevImg, currImg, flowx, flowy,  0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.DEFAULT);
+      }
+
+      [Test]
       public void TestOpticalFlowBM()
       {
          Image<Gray, Byte> prevImg, currImg;
@@ -1322,7 +1332,8 @@ namespace Emgu.CV.Test
 
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
-            
+            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
@@ -1358,6 +1369,56 @@ namespace Emgu.CV.Test
             }
          }
       }*/
+
+      [Test]
+      public void TestGrabCut1()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>("airplane.jpg");
+
+         Rectangle rect = new Rectangle(new Point(24, 126), new Size(483, 294));
+         Matrix<Single> bgdModel = new Matrix<float>(1, 13 * 5);
+         Matrix<Single> fgdModel = new Matrix<float>(1, 13 * 5);
+         Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
+
+         CvInvoke.CvGrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
+         CvInvoke.CvGrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
+
+      }
+
+      [Test]
+      public void TestGrabCut2()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
+         HOGDescriptor desc = new HOGDescriptor();
+         desc.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
+         
+         Rectangle[] humanRegions = desc.DetectMultiScale(img);
+
+         Image<Gray, byte> pedestrianMask = new Image<Gray, byte>(img.Size);
+         foreach (Rectangle rect in humanRegions)
+         {
+            //generate the mask where 3 indicates forground and 2 indicates background 
+            using (Image<Gray, byte> mask = img.GrabCut(rect, 2)) 
+            {
+               //get the mask of the forground
+               CvInvoke.cvCmpS(mask, 3, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
+
+               pedestrianMask._Or(mask);
+            }
+         }
+      }
+
+      [Test]
+      public void TestDiatanceTransform()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>(480, 320);
+         img.Draw(new Rectangle(200, 100, 160, 90), new Gray(255), 1);
+         img._Not();
+         Image<Gray, Single> dst = new Image<Gray,Single>(img.Size);
+
+         CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, 3, null, IntPtr.Zero);
+      }
+
 
       [Test]
       public void TestAdaptiveSkinDetector()

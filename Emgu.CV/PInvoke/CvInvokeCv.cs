@@ -2356,6 +2356,32 @@ namespace Emgu.CV
          MCvTermCriteria criteria,
          CvEnum.LKFLOW_TYPE flags);
 
+      /// <summary>
+      /// Computes dense optical flow using Gunnar Farneback's algorithm
+      /// </summary>
+      /// <param name="prev0">The first 8-bit single-channel input image</param>
+      /// <param name="next0">The second input image of the same size and the same type as prevImg</param>
+      /// <param name="flow0">The computed flow image; will have the same size as prevImg and type CV 32FC2</param>
+      /// <param name="pyrScale">Specifies the image scale (!1) to build the pyramids for each image. pyrScale=0.5 means the classical pyramid, where each next layer is twice smaller than the previous</param>
+      /// <param name="levels">The number of pyramid layers, including the initial image. levels=1 means that no extra layers are created and only the original images are used</param>
+      /// <param name="winSize">The averaging window size; The larger values increase the algorithm robustness to image noise and give more chances for fast motion detection, but yield more blurred motion field</param>
+      /// <param name="iterations">The number of iterations the algorithm does at each pyramid level</param>
+      /// <param name="polyN">Size of the pixel neighborhood used to find polynomial expansion in each pixel. The larger values mean that the image will be approximated with smoother surfaces, yielding more robust algorithm and more blurred motion field. Typically, poly n=5 or 7</param>
+      /// <param name="polySigma">Standard deviation of the Gaussian that is used to smooth derivatives that are used as a basis for the polynomial expansion. For poly n=5 you can set poly sigma=1.1, for poly n=7 a good value would be poly sigma=1.5</param>
+      /// <param name="flags">The operation flags</param>
+      [DllImport(CV_LIBRARY)]
+      public extern static void cvCalcOpticalFlowFarneback(
+         IntPtr prev0,
+         IntPtr next0,
+         IntPtr flow0,
+         double pyrScale,
+         int levels,
+         int winSize,
+         int iterations,
+         int polyN,
+         double polySigma,
+         CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags);
+
       #endregion
 
       /// <summary>

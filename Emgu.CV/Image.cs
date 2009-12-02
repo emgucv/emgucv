@@ -1984,6 +1984,25 @@ namespace Emgu.CV
       }
       #endregion
       */
+      #region Segmentation
+      /// <summary>
+      /// Use grabcut to perform background forground segmentation.
+      /// </summary>
+      /// <param name="rect">The initial rectangle region for the forground</param>
+      /// <param name="iteration">The number of iterations to run GrabCut</param>
+      /// <returns>The background forground mask where 2 indicates background and 3 indicates forground</returns>
+      public Image<Gray, Byte> GrabCut(Rectangle rect, int iteration)
+      {
+         Image<Gray, Byte> mask = new Image<Gray, byte>(Size);
+         using(Matrix<Single> bgdModel = new Matrix<float>(1, 13 * 5))
+         using (Matrix<Single> fgdModel = new Matrix<float>(1, 13 * 5))
+         {
+            CvInvoke.CvGrabCut(Ptr, mask.Ptr, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
+            CvInvoke.CvGrabCut(Ptr, mask.Ptr, rect, bgdModel, fgdModel, iteration, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
+         }
+         return mask;
+      }
+      #endregion
 
       #region Arithmatic
       #region Substraction methods

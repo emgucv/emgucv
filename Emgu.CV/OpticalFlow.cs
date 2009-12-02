@@ -163,7 +163,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev0">The first 8-bit single-channel input image</param>
       /// <param name="next0">The second input image of the same size and the same type as prevImg</param>
-      /// <param name="flow0">The computed flow image; will have the same size as prevImg and type CV 32FC2</param>
+      /// <param name="flowX">The computed flow image for x-velocity; will have the same size as prevImg</param>
+      /// <param name="flowY">The computed flow image for y-velocity; will have the same size as prevImg</param>
       /// <param name="pyrScale">Specifies the image scale (!1) to build the pyramids for each image. pyrScale=0.5 means the classical pyramid, where each next layer is twice smaller than the previous</param>
       /// <param name="levels">The number of pyramid layers, including the initial image. levels=1 means that no extra layers are created and only the original images are used</param>
       /// <param name="winSize">The averaging window size; The larger values increase the algorithm robustness to image noise and give more chances for fast motion detection, but yield more blurred motion field</param>
@@ -174,7 +175,8 @@ namespace Emgu.CV
       public static void Farneback(
          Image<Gray, Byte> prev0,
          Image<Gray, Byte> next0,
-         Image<Gray, Byte> flow0,
+         Image<Gray, Single> flowX,
+         Image<Gray, Single> flowY,
          double pyrScale,
          int levels,
          int winSize,
@@ -183,7 +185,22 @@ namespace Emgu.CV
          double polySigma,
          CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags)
       {
-         CvInvoke.CvCalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+
+         IntPtr flow0 = CvInvoke.cvCreateImage(prev0.Size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
+         try
+         {
+            if ((int) (flags  & Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.USE_INITIAL_FLOW) != 0)
+            {  //use initial flow
+               CvInvoke.cvMerge(flowX.Ptr, flowY.Ptr, IntPtr.Zero, IntPtr.Zero, flow0);
+            }
+
+            CvInvoke.cvCalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+            CvInvoke.cvSplit(flow0, flowX.Ptr, flowY.Ptr, IntPtr.Zero, IntPtr.Zero);
+         }
+         finally
+         {
+            CvInvoke.cvReleaseImage(ref flow0);
+         }
       }
    }
 }

@@ -2106,4 +2106,47 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       FARNEBACK_GAUSSIAN = 256
    }
+
+   /*
+   /// <summary>
+   /// Grabcut type
+   /// </summary>
+   public enum GRABCUT_TYPE
+   {
+      /// <summary>
+      /// background
+      /// </summary>
+      BGD = 0, 
+      /// <summary>
+      /// foreground
+      /// </summary>
+      FGD = 1,  
+      /// <summary>
+      /// most probably background
+      /// </summary>
+      PR_BGD = 2,  
+      /// <summary>
+      /// most probably foreground 
+      /// </summary>
+      PR_FGD = 3  
+   }*/
+
+   /// <summary>
+   /// Grabcut initialization type
+   /// </summary>
+   public enum GRABCUT_INIT_TYPE
+   {
+      /// <summary>
+      /// Initialize with rectangle
+      /// </summary>
+      INIT_WITH_RECT = 0,
+      /// <summary>
+      /// Initialize with mask
+      /// </summary>
+      INIT_WITH_MASK = 1,
+      /// <summary>
+      /// Eval
+      /// </summary>
+      EVAL = 2
+   }
 }

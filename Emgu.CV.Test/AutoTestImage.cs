@@ -1264,5 +1264,36 @@ namespace Emgu.CV.Test
          }
          Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds / 100);
       }
+
+      [Test]
+      public void TestAdd()
+      {
+         Image<Gray, Byte> img1 = new Image<Gray, byte>(1920, 1080);
+         Image<Gray, Byte> img2 = new Image<Gray, byte>(img1.Size);
+         Image<Gray, Byte> sum1 = new Image<Gray,byte>(img1.Size);
+         Image<Gray, Byte> sum2 = new Image<Gray, byte>(img1.Size);
+
+         img1.SetRandUniform(new MCvScalar(0), new MCvScalar(50));
+         img2.SetRandUniform(new MCvScalar(0), new MCvScalar(50));
+
+         Stopwatch w = Stopwatch.StartNew();
+         CvInvoke.cvAdd(img1, img2, sum2, IntPtr.Zero);
+         w.Stop();
+         Trace.WriteLine(String.Format("Time: {0}ms", w.ElapsedMilliseconds));
+
+         w.Reset(); w.Start();
+         Byte[, ,] data1 = img1.Data;
+         Byte[, ,] data2 = img2.Data;
+         Byte[, ,] dataSum = sum1.Data;
+         int rows = img1.Rows;
+         int cols = img1.Cols;
+         for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+               dataSum[i, j, 0] = (Byte) (data1[i, j, 0] + data2[i, j, 0]);
+         w.Stop();
+         Trace.WriteLine(String.Format("Time: {0}ms", w.ElapsedMilliseconds));
+
+         Assert.IsTrue(sum1.Equals(sum2));
+      }
    }
 }
