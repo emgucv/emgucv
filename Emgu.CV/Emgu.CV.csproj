@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -74,11 +74,7 @@
     <Compile Include="PInvoke\CvInvokeCvaux.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
     <Compile Include="PInvoke\CvInvokeCxcore.cs" />
-    <Compile Include="PInvoke\CvInvokeEntryPoints.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CvInvokeEntryPoints.tt</DependentUpon>
-    </Compile>
+    <Compile Include="PInvoke\CvInvokeEntryPoints.cs" />
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
@@ -216,10 +212,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />
-    <None Include="PInvoke\CvInvokeEntryPoints.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CvInvokeEntryPoints.cs</LastGenOutput>
-    </None>
     <None Include="README.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.txt</LastGenOutput>

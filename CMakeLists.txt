@@ -63,7 +63,11 @@ SET(CPACK_PACKAGE_VERSION_PATCH "0")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
 SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${EMGUCV_ARCH}")
 
+IF (WIN32)
+SET(CPACK_PACKAGE_CLI_FOLDER bin)
+ELSE (WIN32)
 SET(CPACK_PACKAGE_CLI_FOLDER lib/cli/${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
+ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Build opencv and Emgu.CV.Extern
@@ -84,18 +88,18 @@ IF(MSVC)
   SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
 ENDIF()
 
-IF (WIN32)
+#IF (WIN32)
   #As default, do not build EMGU on Windows. It can be build using Visual Studio
-  SET(EMGU_CV_BUILD OFF CACHE BOOL "Build Emgu CV")
-  SET(EMGU_CV_EXAMPLE_BUILD OFF CACHE BOOL "Build Emgu CV Example")
-ELSE (WIN32)
+  #SET(EMGU_CV_BUILD OFF CACHE BOOL "Build Emgu CV")
+  #SET(EMGU_CV_EXAMPLE_BUILD OFF CACHE BOOL "Build Emgu CV Example")
+#ELSE (WIN32)
   #As default, build Emgu CV on Linux
   SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
   SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
-ENDIF ()
+#ENDIF ()
 
 # ----------------------------------------------------------------------------
-#  Build the managed dlls of Emgu CV
+#  Generate required .cs files for Emgu CV project
 # ----------------------------------------------------------------------------
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs
   "using System.Reflection;
@@ -111,6 +115,46 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture(\"\")]
 ")
 
+GET_TARGET_PROPERTY(CXCORE_OUTPUT_NAME cxcore OUTPUT_NAME)
+GET_TARGET_PROPERTY(CV_OUTPUT_NAME cv OUTPUT_NAME)
+GET_TARGET_PROPERTY(HIGHGUI_OUTPUT_NAME highgui OUTPUT_NAME)
+GET_TARGET_PROPERTY(CVAUX_OUTPUT_NAME cvaux OUTPUT_NAME)
+GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
+
+FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
+  "//This file is automatically generate by CMAKE. DO NOT MODIFY.
+using System;
+
+namespace Emgu.CV
+{
+   public partial class CvInvoke
+   {
+      /// <summary>
+      /// The file name of the cxcore library
+      /// </summary>
+      public const string CXCORE_LIBRARY = \"${CXCORE_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the cv library
+      /// </summary>
+      public const string CV_LIBRARY = \"${CV_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the highgui library
+      /// </summary>
+      public const string HIGHGUI_LIBRARY = \"${HIGHGUI_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the cvaux library
+      /// </summary>
+      public const string CVAUX_LIBRARY = \"${CVAUX_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the cvextern library
+      /// </summary>
+      public const string EXTERN_LIBRARY = \"${CVEXTERN_OUTPUT_NAME}\";
+   }
+}")
+
+# ----------------------------------------------------------------------------
+#  Build the managed dlls of Emgu CV
+# ----------------------------------------------------------------------------
 ADD_SUBDIRECTORY(Emgu.Util)
 ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.UI)
@@ -122,7 +166,12 @@ ADD_SUBDIRECTORY(lib)
 
 #ADD_SUBDIRECTORY(Emgu.RPC)
 
-IF (NOT WIN32)
+# ----------------------------------------------------------------------------
+#  Build the package
+# ----------------------------------------------------------------------------
+IF (WIN32)
+  SET(CPACK_GENERATOR TBZ2)
+ELSE (WIN32)
   FIND_PROGRAM(DPKG_CMD dpkg)
   IF (DPKG_CMD)
     # ----------------------------------------------------------------------------

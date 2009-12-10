@@ -14,6 +14,13 @@ set(the_target "cvextern")
 
 add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
 
+# For dynamic link numbering convenions
+set_target_properties(${the_target} PROPERTIES
+    VERSION ${OPENCV_VERSION}
+    SOVERSION ${OPENCV_SOVERSION}
+    OUTPUT_NAME "${the_target}"
+    )
+
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"

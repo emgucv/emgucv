@@ -1,10 +1,7 @@
-REM == FORCE OVERWRITE ==
-REM SET COPYCMD=/Y
-
+@echo off
 SET CMAKE="cmake.exe"
 IF EXIST "C:\Program Files\CMake 2.6\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.6\bin\cmake.exe"
 IF EXIST "C:\Program Files\CMake 2.8\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.8\bin\cmake.exe"
-
 
 SET VS2005="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
 SET VS2008="C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
@@ -26,5 +23,3 @@ REM %CMAKE% -G %CMAKE_CONF% -DOPENCV_WHOLE_PROGRAM_OPTIMIZATION:BOOL=TRUE -DBUIL
 %CMAKE% -G %CMAKE_CONF% -DBUILD_TESTS:BOOL=FALSE -DBUILD_NEW_PYTHON_SUPPORT=FALSE .  
 %DEVENV% %BUILD_TYPE% emgucv.sln
 
-FOR %%F IN (cxcore200.dll cv200.dll cvaux200.dll cvextern.dll highgui200.dll ml200.dll opencv_ffmpeg200.dll) DO xcopy /D /Y bin\%%F Emgu.CV.Example\WebDynamicImage\Bin 
- 
