@@ -7,7 +7,7 @@ namespace Emgu.CV.VideoSurveillance
    /// <summary>
    /// A blob tracker auto
    /// </summary>
-   /// <typeparam name="TColor">The type of color for the image to be tracked. Due to a bug in OpenCV, only Gray is supported at the moment</typeparam>
+   /// <typeparam name="TColor">The type of color for the image to be tracked.</typeparam>
    public class BlobTrackerAuto<TColor> : BlobSeqBase
       where TColor : struct, IColor
    {
@@ -79,10 +79,10 @@ namespace Emgu.CV.VideoSurveillance
          {
             return _param;
          }
-         set
-         {
-            _param = value;
-         }
+         //set
+         //{
+         //   _param = value;
+         //}
       }
 
       #region BolbSeqBase Members
