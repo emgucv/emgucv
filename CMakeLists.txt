@@ -164,7 +164,15 @@ ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(lib)
 
-#ADD_SUBDIRECTORY(Emgu.RPC)
+if (WIN32)
+ADD_SUBDIRECTORY(Emgu.RPC)
+ENDIF()
+
+# ----------------------------------------------------------------------------
+#  Build the documents of Emgu CV
+# ----------------------------------------------------------------------------
+ADD_SUBDIRECTORY(miscellaneous)
+
 
 # ----------------------------------------------------------------------------
 #  Build the package

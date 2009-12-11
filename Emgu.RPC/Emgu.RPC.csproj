@@ -2,9 +2,9 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1B836E5B-FB84-4A6D-B676-D813A3FD5915}</ProjectGuid>
+    <ProjectGuid>{12DE4DD2-A3AD-4431-96DC-B1607E58800A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.RPC</RootNamespace>
@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Capture\DuplexCaptureCallback.cs" />
+    <Compile Include="CommonAssemblyInfo.cs" />
     <Compile Include="Serial\ISerialService.cs" />
     <Compile Include="Serial\ISerialServiceCallback.cs" />
     <Compile Include="Speech\ISpeechService.cs" />
