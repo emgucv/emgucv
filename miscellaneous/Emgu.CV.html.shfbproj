@@ -15,7 +15,7 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <OutputPath>..\Help\</OutputPath>
-    <HtmlHelpName>Emgu_CV_Documentation</HtmlHelpName>
+    <HtmlHelpName>Emgu.CV.Documentation</HtmlHelpName>
     <ProjectSummary>A cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux and Mac OS X.</ProjectSummary>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>

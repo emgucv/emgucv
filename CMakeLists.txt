@@ -46,6 +46,16 @@ ELSE ()
 ENDIF()
 
 # ----------------------------------------------------------------------------
+#  FIND MSBUILD
+# ----------------------------------------------------------------------------
+FIND_PROGRAM(MSBUILD_PROGRAM
+  NAMES MSBuild
+  HINTS
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
+  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
+)
+
+# ----------------------------------------------------------------------------
 #  Setup Package information
 # ----------------------------------------------------------------------------
 SET(PACKAGE "${PROJECT_NAME}")
@@ -62,6 +72,7 @@ SET(CPACK_PACKAGE_VERSION_MINOR "1")
 SET(CPACK_PACKAGE_VERSION_PATCH "0")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
 SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${EMGUCV_ARCH}")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/License.txt")
 
 IF (WIN32)
 SET(CPACK_PACKAGE_CLI_FOLDER bin)
@@ -164,21 +175,132 @@ ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(lib)
 
-if (WIN32)
-ADD_SUBDIRECTORY(Emgu.RPC)
-ENDIF()
+IF (WIN32)
+  SET(CPACK_GENERATOR NSIS)
+  
+  SET(CPACK_NSIS_MODIFY_PATH ON)
+  
+  ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
+  ADD_SUBDIRECTORY(Emgu.RPC)
+  
+  # ----------------------------------------------------------------------------
+  #  Build the documents of Emgu CV
+  # ----------------------------------------------------------------------------
+  ADD_SUBDIRECTORY(miscellaneous)
+  
+  # ----------------------------------------------------------------------------
+  #  The source files
+  # ----------------------------------------------------------------------------
+INSTALL(
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
+  "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
+  DESTINATION ./
+  COMPONENT emgucv_source
+  )
 
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
+  DESTINATION ./
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.dll"
+  PATTERN "*.txt"
+  PATTERN "*.xml"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMake*" EXCLUDE
+  PATTERN "Release" EXCLUDE
+  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+)
+  
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+  DESTINATION ./
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "Emgu.CV.sln"
+  PATTERN "Emgu.CV.DebuggerVisualizers.sln"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "bin" EXCLUDE
+)
 # ----------------------------------------------------------------------------
-#  Build the documents of Emgu CV
+#  The example files
 # ----------------------------------------------------------------------------
-ADD_SUBDIRECTORY(miscellaneous)
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+  DESTINATION ./
+  COMPONENT emgucv_examples
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.resx"
+  PATTERN "*.h"
+  PATTERN "*.cpp"
+  PATTERN "*.resX"
+  PATTERN "*.ico"
+  PATTERN "*.rc"
+  PATTERN "CPlusPlus/*.vcproj"
+  PATTERN "*.vb"
+  PATTERN "*.vbproj"
+  PATTERN "*.aspx" 
+  PATTERN "*.dll"
+  PATTERN "*.txt"
+  PATTERN "*.xml"
+  PATTERN "*.jpg"
+  PATTERN "*.png"  
+  PATTERN "*.settings"
+  PATTERN "tessdata/*"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMake*" EXCLUDE
+  PATTERN "Release" EXCLUDE
+  PATTERN "Debug" EXCLUDE
+  PATTERN "*.dir" EXCLUDE
+)
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+  DESTINATION ./
+  COMPONENT emgucv_examples
+  FILES_MATCHING 
+  PATTERN "Emgu.CV.Example.sln"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "bin" EXCLUDE
+)
 
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
+  DESTINATION ./
+  COMPONENT emgucv_examples
+  FILES_MATCHING 
+  PATTERN "*.h"
+  PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
 
 # ----------------------------------------------------------------------------
 #  Build the package
 # ----------------------------------------------------------------------------
-IF (WIN32)
-  SET(CPACK_GENERATOR TBZ2)
+
+set(CPACK_COMPONENTS_ALL 
+	main #opencv components 
+	emgucv_binary 
+	emgucv_source
+	emgucv_examples
+	)
+set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Libraray")
+set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV Binary")
+set(CPACK_COMPONENT_EMGUCV_BINARY_DEPENDS main)
+set(CPACK_COMPONENT_EMGUCV_SOURCE_DISPLAY_NAME "Emgu CV Source")
+set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS main)
+set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DISPLAY_NAME "Emgu CV Examples")
+set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DEPENDS emgucv_source)
+
 ELSE (WIN32)
   FIND_PROGRAM(DPKG_CMD dpkg)
   IF (DPKG_CMD)
