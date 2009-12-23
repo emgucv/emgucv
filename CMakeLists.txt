@@ -316,11 +316,13 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DISPLAY_NAME "Emgu CV Examples")
 set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DEPENDS emgucv_source)
 
 ELSE (WIN32)
+  MESSAGE(STATUS "Checking for CPACK build type...")
   FIND_PROGRAM(DPKG_CMD dpkg)
   IF (DPKG_CMD)
     # ----------------------------------------------------------------------------
     #  Building .deb package for Debian 
     # ----------------------------------------------------------------------------
+    MESSAGE(STATUS "FOUND dpkg: ${DPKG_CMD}")
     SET(CPACK_GENERATOR DEB)
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
@@ -349,9 +351,19 @@ ELSE (WIN32)
       ${DEBIAN_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
       DESTINATION /usr/lib/pkgconfig
       COMPONENT binary)
-
+  ELSE()  
+    FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
+    IF(RPMBUILD_CMD)
+      # ----------------------------------------------------------------------------
+      #  Building .rpm package  
+      # ----------------------------------------------------------------------------
+      MESSAGE(STATUS "FOUND rpmbuild: ${RPMBUILD_CMD}")
+      SET(CPACK_GENERATOR RPM)
+      
+    ENDIF()	
   ENDIF()  
   
 ENDIF()
 
+MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
 INCLUDE (CPack)
