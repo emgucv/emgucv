@@ -45,7 +45,8 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
    std::vector<cv::Rect> rects;
    cv::Mat mat = cv::cvarrToMat(img);
    descriptor->detectMultiScale(mat, rects, hitThreshold, winStride, padding, scale, groupThreshold);
-   cvSeqPushMulti(foundLocations, &rects[0], rects.size());
+   if (rects.size() > 0)
+      cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }
 
 /*

@@ -1318,7 +1318,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestHOG()
+      public void TestHOG1()
       {
          using (HOGDescriptor hog = new HOGDescriptor())
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
@@ -1335,6 +1335,27 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+         }
+      }
+
+      [Test]
+      public void TestHOG2()
+      {
+         using (HOGDescriptor hog = new HOGDescriptor())
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
+         {
+            float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
+            hog.SetSVMDetector(pedestrianDescriptor);
+
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] rects = hog.DetectMultiScale(image);
+            watch.Stop();
+
+            foreach (Rectangle rect in rects)
+               image.Draw(rect, new Bgr(Color.Red), 1);
+            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+
+            ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 
