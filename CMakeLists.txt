@@ -181,6 +181,19 @@ IF (WIN32)
   SET(CPACK_NSIS_MODIFY_PATH ON)
   
   ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+"
+installDebuggerVisualizer4VS2008:
+	ClearErrors
+	var /GLOBAL VS2008InstallDir
+	ReadRegStr $VS2008InstallDir HKLM \\\"SOFTWARE\\\\Microsoft\\\\VisualStudio\\\\9.0\\\" \\\"InstallDir\\\" 
+	IfErrors installDebuggerVisualizer4VS2008Done
+	MessageBox MB_YESNO \\\"Install $INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll to $VS2008InstallDir..\\\\Packages\\\\Debugger\\\\Visualizers ?\\\" IDNO installDebuggerVisualizer4VS2008Done	
+#	MessageBox MB_YESNO \\\"Install Debugger Visualizer for Visual Studio 2008?\\\" IDNO installDebuggerVisualizer4VS2008Done
+	CopyFiles /SILENT \\\"$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll\\\" \\\"$VS2008InstallDir..\\\\Packages\\\\Debugger\\\\Visualizers\\\"
+installDebuggerVisualizer4VS2008Done:
+")
+
   ADD_SUBDIRECTORY(Emgu.RPC)
   
   # ----------------------------------------------------------------------------
@@ -292,6 +305,7 @@ set(CPACK_COMPONENTS_ALL
 	emgucv_binary 
 	emgucv_source
 	emgucv_examples
+	#emgucv_document
 	)
 set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Libraray")
 set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV Binary")
