@@ -212,18 +212,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />
-    <None Include="README.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.txt</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\License.txt" />
-    <Content Include="README.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>README.tt</DependentUpon>
-    </Content>
+    <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">

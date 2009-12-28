@@ -12,4 +12,3 @@ http://www.emgu.com/forum/
 
 To report a bug, please visit
 http://www.emgu.com/bugs/
-

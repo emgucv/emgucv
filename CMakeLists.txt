@@ -130,11 +130,30 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture(\"\")]
 ")
 
+FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt
+  "Version ${CPACK_PACKAGE_VERSION}
+==================================================================
+
+For online documentation please visit
+http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0/Index.html
+
+For tutorials and helps please visit the Emgu CV wiki 
+http://www.emgu.com/wiki/
+
+For questions and discussions please visit the Emgu CV forum
+http://www.emgu.com/forum/
+
+To report a bug, please visit
+http://www.emgu.com/bugs/
+")
+
 GET_TARGET_PROPERTY(CXCORE_OUTPUT_NAME cxcore OUTPUT_NAME)
 GET_TARGET_PROPERTY(CV_OUTPUT_NAME cv OUTPUT_NAME)
 GET_TARGET_PROPERTY(HIGHGUI_OUTPUT_NAME highgui OUTPUT_NAME)
+GET_TARGET_PROPERTY(ML_OUTPUT_NAME ml OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVAUX_OUTPUT_NAME cvaux OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
+
 
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
@@ -185,19 +204,69 @@ IF (WIN32)
   SET(CPACK_NSIS_MODIFY_PATH ON)
   
   ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
-"
-installDebuggerVisualizer4VS2008:
-	ClearErrors
-	var /GLOBAL VS2008InstallDir
-	ReadRegStr $VS2008InstallDir HKLM \\\"SOFTWARE\\\\Microsoft\\\\VisualStudio\\\\9.0\\\" \\\"InstallDir\\\" 
-	IfErrors installDebuggerVisualizer4VS2008Done
-	MessageBox MB_YESNO \\\"Install $INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll to $VS2008InstallDir..\\\\Packages\\\\Debugger\\\\Visualizers ?\\\" IDNO installDebuggerVisualizer4VS2008Done	
-#	MessageBox MB_YESNO \\\"Install Debugger Visualizer for Visual Studio 2008?\\\" IDNO installDebuggerVisualizer4VS2008Done
-	CopyFiles /SILENT \\\"$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll\\\" \\\"$VS2008InstallDir..\\\\Packages\\\\Debugger\\\\Visualizers\\\"
-installDebuggerVisualizer4VS2008Done:
+  
+  SET(DEBUGER_VISUALIZER_FILES 
+	"Emgu.Util"
+	"Emgu.CV"
+	"Emgu.CV.UI"
+	"Emgu.CV.DebuggerVisualizers"
+	${CXCORE_OUTPUT_NAME}
+	${CV_OUTPUT_NAME}
+    ${CVAUX_OUTPUT_NAME}
+	${HIGHGUI_OUTPUT_NAME}
+	${CVEXTERN_OUTPUT_NAME})
+	
+  MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
+ClearErrors
+ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
+IfErrors installDebuggerVisualizer4${vs_version}Done
+MessageBox MB_YESNO 'Install Debugger Visualizer for ${vs_description}?' IDNO installDebuggerVisualizer4${vs_version}Done")
+	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
+		SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+		"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ENDFOREACH()
+  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+		"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+installDebuggerVisualizer4${vs_version}Done:
 ")
+  ENDMACRO()
+  
+  MACRO(UNINSTALL_DEBUGER_VISUALIZER vs_version hklm_key)
+	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND "uninstallDebuggerVisualizer4${vs_version}:
+ClearErrors
+ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
+IfErrors uninstallDebuggerVisualizer4${vs_version}Done")
+	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
+		SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+		"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${file}.dll'")
+	ENDFOREACH()
+  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+		"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+uninstallDebuggerVisualizer4${vs_version}Done:
+")
+  ENDMACRO()
+  
+  INSTALL_DEBUGER_VISUALIZER("VS2005" "Visual Studio 2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 
+  INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
+  
+  INSTALL_DEBUGER_VISUALIZER("VS2010" "Visual Studio 2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
+
+  UNINSTALL_DEBUGER_VISUALIZER("VS2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+  
+  UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+  
+  UNINSTALL_DEBUGER_VISUALIZER("VS2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+  
   ADD_SUBDIRECTORY(Emgu.RPC)
   
   # ----------------------------------------------------------------------------
