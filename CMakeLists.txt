@@ -103,18 +103,11 @@ IF(MSVC)
   SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
 ENDIF()
 
-#IF (WIN32)
-  #As default, do not build EMGU on Windows. It can be build using Visual Studio
-  #SET(EMGU_CV_BUILD OFF CACHE BOOL "Build Emgu CV")
-  #SET(EMGU_CV_EXAMPLE_BUILD OFF CACHE BOOL "Build Emgu CV Example")
-#ELSE (WIN32)
-  #As default, build Emgu CV on Linux
-  SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
-  SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
-#ENDIF ()
+SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
+SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
 
 # ----------------------------------------------------------------------------
-#  Generate required .cs files for Emgu CV project
+#  Generate required common assembly file for Emgu CV project
 # ----------------------------------------------------------------------------
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs
   "using System.Reflection;
@@ -130,6 +123,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture(\"\")]
 ")
 
+# ----------------------------------------------------------------------------
+#  Generate readme file for Emgu CV project
+# ----------------------------------------------------------------------------
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt
   "Version ${CPACK_PACKAGE_VERSION}
 ==================================================================
@@ -147,6 +143,9 @@ To report a bug, please visit
 http://www.emgu.com/bugs/
 ")
 
+# ----------------------------------------------------------------------------
+#  Generate CvInvokeEntryPoints.cs file for Emgu CV project
+# ----------------------------------------------------------------------------
 GET_TARGET_PROPERTY(CXCORE_OUTPUT_NAME cxcore OUTPUT_NAME)
 GET_TARGET_PROPERTY(CV_OUTPUT_NAME cv OUTPUT_NAME)
 GET_TARGET_PROPERTY(HIGHGUI_OUTPUT_NAME highgui OUTPUT_NAME)
@@ -272,7 +271,10 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   # ----------------------------------------------------------------------------
   #  Build the documents of Emgu CV
   # ----------------------------------------------------------------------------
-  ADD_SUBDIRECTORY(miscellaneous)
+  SET(EMGU_CV_DOCUMENTATION_BUILD OFF CACHE BOOL "Build Emgu CV Documentation")
+  IF(EMGU_CV_DOCUMENTATION_BUILD)
+     ADD_SUBDIRECTORY(miscellaneous)
+  ENDIF()
   
   # ----------------------------------------------------------------------------
   #  The source files
@@ -361,7 +363,7 @@ INSTALL(
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
-  DESTINATION ./
+  DESTINATION ./opencv/include
   COMPONENT emgucv_examples
   FILES_MATCHING 
   PATTERN "*.h"
@@ -378,9 +380,18 @@ set(CPACK_COMPONENTS_ALL
 	emgucv_binary 
 	emgucv_source
 	emgucv_examples
-	#emgucv_document
 	)
+
+set(CPACK_NSIS_MENU_LINKS
+  "doc/opencv.pdf" "Open CV Documentation")
+IF(EMGU_CV_DOCUMENTATION_BUILD)
+set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
+set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
+  "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+ENDIF()
+	
 set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Libraray")
+set(CPACK_COMPONENT_MAIN_REQUIRED ON)
 set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV Binary")
 set(CPACK_COMPONENT_EMGUCV_BINARY_DEPENDS main)
 set(CPACK_COMPONENT_EMGUCV_SOURCE_DISPLAY_NAME "Emgu CV Source")

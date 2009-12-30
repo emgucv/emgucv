@@ -1,26 +1,79 @@
-set RELEASE-NAME=Emgu.CV.Binary-2.1.0.0
-set RELEASE-FOLDER=release_zip
-set RELEASE-ZIP=%RELEASE-NAME%.zip
-set RELEASE-SOLUTION-NAME=Emgu.CV.DebuggerVisualizers.sln
+@echo off
 
-call BinaryBuild.bat
+REM =============================================
+REM FIND VISUAL STUDIO
+REM =============================================
+set devenv=""
+set devenv_version=""
 
-IF %DEVENV%==%MSBUILD35% SET BUILD_CMD=%DEVENV% %BUILD_TYPE% Solution\VS2005_MonoDevelop\%RELEASE-SOLUTION-NAME%
-IF %DEVENV%==%VS2005% SET BUILD_CMD=%DEVENV% %BUILD_TYPE% Solution\VS2005_MonoDevelop\%RELEASE-SOLUTION-NAME%
-IF %DEVENV%==%VS2008% SET BUILD_CMD=%DEVENV% %BUILD_TYPE% Solution\VS2008\%RELEASE-SOLUTION-NAME%
+echo searching for VS2010
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2010"
+ GOTO devenv_found
+)
+echo not found
 
-%BUILD_CMD%
+echo searching for VS2008
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\9.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2008"
+ GOTO devenv_found
+)
+echo not found
 
-if exist %RELEASE-FOLDER% rd /s /q %RELEASE-FOLDER%
-if exist %RELEASE-NAME% rd /s /q %RELEASE-NAME%
+echo searching for VS2005
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\8.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2005"
+ GOTO devenv_found
+)
+echo not found
 
-md %RELEASE-FOLDER%
-xcopy lib\3rdParty\* %RELEASE-NAME%\
-xcopy bin\*.dll %RELEASE-NAME%\ /Y
-FOR %%F IN (Emgu.CV\README.txt Emgu.CV\Emgu.CV.License.txt bin\Emgu.CV.dll.config bin\Emgu.CV.ML.XML bin\Emgu.CV.ML.dll bin\Emgu.CV.ML.dll.config bin\Emgu.CV.XML bin\Emgu.CV.UI.XML bin\Emgu.Util.dll bin\Emgu.Util.XML) DO COPY %%F %RELEASE-NAME%\
+:devenv_not_found
+GOTO:EOF
 
-c:\cygwin\bin\zip.exe -r %RELEASE-FOLDER%/%RELEASE-ZIP% %RELEASE-NAME% 
-set RELEASE-NAME=
-set RELEASE-FOLDER=
-set RELEASE-ZIP=
-set RELEASE-SOLUTION-NAME=
+:devenv_found
+
+REM =============================================
+REM FIND CMAKE
+REM =============================================
+
+set cmake=""
+echo searching for CMake
+start /w regedit /e %Temp%.\cmake.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Kitware"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\cmake.reg ^| FIND "@"') DO (
+ SET cmake=%%B
+ GOTO cmake_found
+)
+
+:cmake_not_found
+echo not found
+GOTO:EOFread
+
+:cmake_found
+
+REM =============================================
+REM Make build script
+REM =============================================
+
+set cmake="%cmake:~1,-1%\\bin\\cmake.exe"
+
+set CMAKE_CONF=""
+REM IF %devenv_version%=="VS2005" SET CMAKE_CONF=-G "Visual Studio 8 2005"
+REM IF %devenv_version%=="VS2008" SET CMAKE_CONF=-G "Visual Studio 9 2008"
+REM IF %devenv_version%=="VS2010" SET CMAKE_CONF=-G "Visual Studio 10"
+
+set CMAKE_COMMAND=%cmake% %CMAKE_CONF% -DBUILD_TESTS:BOOL=FALSE -DBUILD_NEW_PYTHON_SUPPORT=FALSE -DEMGU_CV_DOCUMENTATION_BUILD:BOOL=TRUE .  
+
+SET devenv="%devenv:~1,-1%devenv.exe"
+set BUILD_TYPE=/Build Release /Project Package
+set BUILD_COMMAND=%devenv% %BUILD_TYPE% emgucv.sln
+
+@echo on
+%CMAKE_COMMAND%
+%BUILD_COMMAND%
+

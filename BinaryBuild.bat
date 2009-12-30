@@ -1,25 +1,78 @@
 @echo off
-SET CMAKE="cmake.exe"
-IF EXIST "C:\Program Files\CMake 2.6\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.6\bin\cmake.exe"
-IF EXIST "C:\Program Files\CMake 2.8\bin\cmake.exe" SET CMAKE="C:\Program Files\CMake 2.8\bin\cmake.exe"
 
-SET VS2005="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
-SET VS2008="C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
-SET MSBUILD35="C:\WINDOWS\Microsoft.NET\Framework\v3.5\MSBuild.exe"
+REM =============================================
+REM FIND VISUAL STUDIO
+REM =============================================
+set devenv=""
+set devenv_version=""
 
-IF EXIST %MSBUILD35% SET DEVENV=%MSBUILD35%
-IF EXIST %VS2005% SET DEVENV=%VS2005% 
-IF EXIST %VS2008% SET DEVENV=%VS2008%
+echo searching for VS2010
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2010"
+ GOTO devenv_found
+)
+echo not found
 
-IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Release
-IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build Release
+echo searching for VS2008
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\9.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2008"
+ GOTO devenv_found
+)
+echo not found
 
-IF %DEVENV%==%MSBUILD35% SET CMAKE_CONF="Visual Studio 8 2005"
-IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005"
-IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008"
+echo searching for VS2005
+start /w regedit /e %Temp%.\vs.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\8.0"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\vs.reg ^| FIND "InstallDir"') DO (
+ SET devenv=%%B
+ SET devenv_version="VS2005"
+ GOTO devenv_found
+)
+echo not found
 
-REM %CMAKE% -G %CMAKE_CONF% -DOPENCV_WHOLE_PROGRAM_OPTIMIZATION:BOOL=TRUE -DBUILD_TESTS:BOOL=FALSE . 
-%CMAKE% -G %CMAKE_CONF% -DBUILD_TESTS:BOOL=FALSE -DBUILD_NEW_PYTHON_SUPPORT=FALSE .  
-%DEVENV% %BUILD_TYPE% emgucv.sln
+:devenv_not_found
+GOTO:EOF
+
+:devenv_found
+
+REM =============================================
+REM FIND CMAKE
+REM =============================================
+
+set cmake=""
+echo searching for CMake
+start /w regedit /e %Temp%.\cmake.reg "HKEY_LOCAL_MACHINE\SOFTWARE\Kitware"
+FOR /F "tokens=1* delims==" %%A IN ('TYPE %Temp%.\cmake.reg ^| FIND "@"') DO (
+ SET cmake=%%B
+ GOTO cmake_found
+)
+
+:cmake_not_found
+echo not found
+GOTO:EOFread
+
+:cmake_found
+
+REM =============================================
+REM Make build script
+REM =============================================
+
+set cmake="%cmake:~1,-1%\\bin\\cmake.exe"
+
+set CMAKE_CONF=""
+REM IF %devenv_version%=="VS2005" SET CMAKE_CONF=-G "Visual Studio 8 2005"
+REM IF %devenv_version%=="VS2008" SET CMAKE_CONF=-G "Visual Studio 9 2008"
+REM IF %devenv_version%=="VS2010" SET CMAKE_CONF=-G "Visual Studio 10"
+set CMAKE_COMMAND=%cmake% %CMAKE_CONF% -DBUILD_TESTS:BOOL=FALSE -DBUILD_NEW_PYTHON_SUPPORT=FALSE .  
+
+SET devenv="%devenv:~1,-1%devenv.exe"
+set BUILD_TYPE=/Build Release
+set BUILD_COMMAND=%devenv% %BUILD_TYPE% emgucv.sln
+
+@echo on
+%CMAKE_COMMAND%
+%BUILD_COMMAND%
 
