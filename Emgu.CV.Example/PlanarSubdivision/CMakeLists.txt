@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.PlanarSubdivision)
+PROJECT(Example.PlanarSubdivision)
 
-SET(SRC_Example_PlanarSubdivision *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_PlanarSubdivision RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_PlanarSubdivision ${SRC_Example_PlanarSubdivision} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 

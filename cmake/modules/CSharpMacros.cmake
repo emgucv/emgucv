@@ -115,12 +115,17 @@ MACRO(ADD_CS_EXECUTABLE target source)
 	MAKE_PROPER_FILE_LIST("${source}")
 	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
 	
-	ADD_CUSTOM_COMMAND (OUTPUT ${target_EXE}
+	ADD_CUSTOM_TARGET (
+		${target} ${ARGV2}
+		SOURCES ${source})
+
+	ADD_CUSTOM_COMMAND (
+		TARGET ${target}
 		${CS_PREBUILD_COMMAND}	   
 		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
 		DEPENDS ${source}
 		COMMENT "Building ${relative_path}")
-	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_EXE})
+	
 	SET(relative_path "")
 	SET(proper_file_list "")
 	SET(CS_FLAGS "")

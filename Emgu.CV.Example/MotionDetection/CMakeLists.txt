@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.MotionDetection)
+PROJECT(Example.MotionDetection)
 
-SET(SRC_Example_MotionDetection *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_MotionDetection RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_MotionDetection ${SRC_Example_MotionDetection} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 

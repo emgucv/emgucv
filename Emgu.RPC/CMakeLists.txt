@@ -1,12 +1,7 @@
 PROJECT(Emgu.RPC)
 
-SET(SRC_RPC
-  ../CommonAssemblyInfo.cs
-  Capture/*.cs
-  Serial/*.cs
-  Speech/*.cs
-  *.cs 
-  Properties/*.cs)
+FILE(GLOB_RECURSE SRC_RPC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_RPC ${SRC_RPC} ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)

@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.HelloWorld)
+PROJECT(Example.HelloWorld)
 
-SET(SRC_Example_HelloWorld *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_HelloWorld RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_HelloWorld ${SRC_Example_HelloWorld} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 

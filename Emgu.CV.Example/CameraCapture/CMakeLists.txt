@@ -1,14 +1,14 @@
-PROJECT(Example.ShapeDetection)
+PROJECT(Example.CameraCapture)
 
-FILE(GLOB_RECURSE SRC_Example_ShapeDetection RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-SET(SRC_Example_ShapeDetection ${SRC_Example_ShapeDetection} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+FILE(GLOB_RECURSE SRC_Example_CameraCapture RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_CameraCapture ${SRC_Example_CameraCapture} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
 #copy the test image for this example
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/pic3.png)
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_ShapeDetection}" ALL)
+ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_CameraCapture}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

@@ -17,7 +17,12 @@ Module Module1
       'Convert the image to Grayscale
       Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
 
-      For Each face As MCvAvgComp In imgGray.DetectHaarCascade(objectToDetect)(0)
+      For Each face As MCvAvgComp In imgGray.DetectHaarCascade( _
+         objectToDetect, _
+         1.1, _
+         50, _
+         CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, _
+         New Size(20, 20))(0)
          img.Draw(face.rect, New Bgr(Color.White), 1)
       Next
 

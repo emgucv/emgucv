@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.SURFFeature)
+PROJECT(Example.SURFFeature)
 
-SET(SRC_Example_SURFFeature *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_SURFFeature RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_SURFFeature ${SRC_Example_SURFFeature} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 

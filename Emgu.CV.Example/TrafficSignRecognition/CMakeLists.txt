@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.TrafficSignRecognition)
+PROJECT(Example.TrafficSignRecognition)
 
-SET(SRC_Example_TrafficSignRecognition *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_TrafficSignRecognition RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_TrafficSignRecognition ${SRC_Example_TrafficSignRecognition} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 

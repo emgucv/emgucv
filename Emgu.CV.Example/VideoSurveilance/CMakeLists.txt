@@ -1,6 +1,7 @@
-PROJECT(Emgu.CV.Example.VideoSurveilance)
+PROJECT(Example.VideoSurveilance)
 
-SET(SRC_Example_VideoSurveilance *.cs Properties/*.cs)
+FILE(GLOB_RECURSE SRC_Example_VideoSurveilance RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+SET(SRC_Example_VideoSurveilance ${SRC_Example_VideoSurveilance} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
