@@ -28,7 +28,7 @@ CVAPI(CvKNearest*) CvKNearestCreate(CvMat* _train_data, CvMat* _responses,
 { return new CvKNearest(_train_data, _responses, _sample_idx, _is_regression, max_k); }
 CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMat* results,
                                    float** neighbors, CvMat* neighbor_responses, CvMat* dist )
-{ classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
+{ return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
 
 //EM
 CVAPI(CvEM*) CvEMDefaultCreate() { return new CvEM; }
