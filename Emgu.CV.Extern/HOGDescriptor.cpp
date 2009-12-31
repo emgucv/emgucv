@@ -8,10 +8,10 @@ CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq)
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
-   cv::Size _winSize, 
-   cv::Size _blockSize, 
-   cv::Size _blockStride,
-   cv::Size _cellSize, 
+   cv::Size* _winSize, 
+   cv::Size* _blockSize, 
+   cv::Size* _blockStride,
+   cv::Size* _cellSize, 
    int _nbins, 
    int _derivAperture, 
    double _winSigma,
@@ -19,7 +19,7 @@ CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
    double _L2HysThreshold, 
    bool _gammaCorrection)
 {
-   return new cv::HOGDescriptor(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
+   return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
 CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) 
 { 

@@ -433,7 +433,7 @@ namespace Emgu.CV.ML
          IntPtr responses,
          IntPtr sampleWeights, 
          IntPtr sampleIdx,
-         MCvANN_MLP_TrainParams parameters,
+         ref MCvANN_MLP_TrainParams parameters,
          MlEnum.ANN_MLP_TRAINING_FLAG flags );
 
       /// <summary>

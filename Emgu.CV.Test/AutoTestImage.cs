@@ -676,7 +676,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestWaterShed()
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>("Stuff.jpg");
+         Image<Bgr, Byte> image = new Image<Bgr, byte>("stuff.jpg");
          Image<Gray, Int32> marker = new Image<Gray, Int32>(image.Width, image.Height);
          Rectangle rect = image.ROI;
          marker.Draw(

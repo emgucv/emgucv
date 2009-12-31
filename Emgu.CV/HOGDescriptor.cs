@@ -22,10 +22,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static IntPtr CvHOGDescriptorCreate(
-         Size winSize,
-         Size blockSize,
-         Size blockStride,
-         Size cellSize,
+         ref Size winSize,
+         ref Size blockSize,
+         ref Size blockStride,
+         ref Size cellSize,
          int nbins,
          int derivAperture,
          double winSigma,
@@ -80,10 +80,10 @@ namespace Emgu.CV
          bool gammaCorrection)
       {
          _ptr = CvHOGDescriptorCreate(
-            winSize,
-            blockSize,
-            blockStride,
-            cellSize,
+            ref winSize,
+            ref blockSize,
+            ref blockStride,
+            ref cellSize,
             nbins,
             derivAperture,
             winSigma,

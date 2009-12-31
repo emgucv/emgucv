@@ -271,7 +271,7 @@ namespace Emgu.CV.Test
          param.FGTrainFrames = 5;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
-         ImageViewer viewer = new ImageViewer();
+         //ImageViewer viewer = new ImageViewer();
          //viewer.Show();
          for (int i = 0; i < 20; i++)
          {
@@ -280,8 +280,7 @@ namespace Emgu.CV.Test
                rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
                img1.Draw(rect, new Bgr(Color.Red), -1);
                tracker.Process(img1);
-               viewer.Image = img1;
-               //viewer.Refresh();
+               //viewer.Image = img1;
             }
          }
 
@@ -310,7 +309,7 @@ namespace Emgu.CV.Test
          param.FGTrainFrames = 5;
          BlobTrackerAuto<Gray> tracker = new BlobTrackerAuto<Gray>(param);
 
-         ImageViewer viewer = new ImageViewer();
+         //ImageViewer viewer = new ImageViewer();
          //viewer.Show();
          for (int i = 0; i < 20; i++)
          {
@@ -319,7 +318,7 @@ namespace Emgu.CV.Test
                rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
                img1.Draw(rect, new Bgr(Color.Red), -1);
                tracker.Process(img1.Convert<Gray, Byte>());
-               viewer.Image = img1;
+               //viewer.Image = img1;
                //viewer.Refresh();
             }
          }
@@ -1253,9 +1252,9 @@ namespace Emgu.CV.Test
             int channels = matND.dims >= 3 ? matND.dim[2].Size : 1;
             Matrix<double> matrix = new Matrix<double>(rows, cols, channels);
             CvInvoke.cvCopy(matD, matrix, IntPtr.Zero);
-            using (MatrixViewer viewer = new MatrixViewer())
+            //using (MatrixViewer viewer = new MatrixViewer())
             {
-               viewer.Matrix = matrix;
+               //viewer.Matrix = matrix;
                //viewer.ShowDialog();
             }
          }
@@ -1355,7 +1354,7 @@ namespace Emgu.CV.Test
                image.Draw(rect, new Bgr(Color.Red), 1);
             Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
-            ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 
@@ -1401,8 +1400,8 @@ namespace Emgu.CV.Test
          Matrix<Single> fgdModel = new Matrix<float>(1, 13 * 5);
          Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
 
-         CvInvoke.CvGrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
-         CvInvoke.CvGrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
+         CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
+         CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
 
       }
 

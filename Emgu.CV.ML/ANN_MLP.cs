@@ -53,7 +53,7 @@ namespace Emgu.CV.ML
                responses.Ptr,
                sampleWeights == null? IntPtr.Zero : sampleWeights.Ptr,
                sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
-               parameters,
+               ref parameters,
                flag);
       }
 

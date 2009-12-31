@@ -345,7 +345,7 @@ namespace Emgu.CV
       public extern static void CvGrabCut(
          IntPtr img,
          IntPtr mask,
-         Rectangle rect,
+         ref Rectangle rect,
          IntPtr bgdModel,
          IntPtr fgdModel, 
          int iterCount, 

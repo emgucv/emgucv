@@ -10,27 +10,27 @@
 #endif
 */
 
-void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, const CvPoint2D32f* points, int count)
+void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, int count)
 {
    CvPoint2D32f* point = (CvPoint2D32f*) points;
    for (int i = 0; i < count; i++)
       cvSubdivDelaunay2DInsert(subdiv, *(point++));
 }
 
-void PlanarSubdivisionEdgeToTriangle(const CvSubdiv2DEdge e, Triangle2DF* triangle)
+void PlanarSubdivisionEdgeToTriangle(CvSubdiv2DEdge e, Triangle2DF* triangle)
 {
    triangle->V0 = cvSubdiv2DEdgeOrg(e)->pt;
    triangle->V1 = cvSubdiv2DEdgeDst(cvSubdiv2DGetEdge(e, CV_NEXT_AROUND_LEFT))->pt;
    triangle->V2 = cvSubdiv2DEdgeDst(e)->pt;
 }
 
-bool PointInRegion(CvPoint2D32f pt, const CvSubdiv2D* subdiv)
+bool PointInRegion(CvPoint2D32f pt, CvSubdiv2D* subdiv)
 {
    return 
       pt.x >= subdiv->topleft.x && pt.y >= subdiv->topleft.y && pt.x <= subdiv->bottomright.x  && pt.y <= subdiv->bottomright.y;
 }
 
-bool TriangleInRegion (Triangle2DF tri, const CvSubdiv2D* subdiv)
+bool TriangleInRegion (Triangle2DF tri, CvSubdiv2D* subdiv)
 {
    return
       PointInRegion(tri.V0, subdiv)
@@ -56,7 +56,7 @@ CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
    return point;
 };
 
-void PlanarSubdivisionGetTriangles(const CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  int includeVirtualPoint)
+void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  int includeVirtualPoint)
 {
    set<CvPoint2D32f, ltpt> pointSet;
 
@@ -126,7 +126,7 @@ void PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvPoint2D32f* buffer, int*
    if (*count <= 2) *count = 0;
 }
 
-void PlanarSubdivisionGetSubdiv2DPoints(const CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
+void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
 {
    set<CvPoint2D32f, ltpt> pointSet;
 

@@ -5,9 +5,6 @@ SET(SRC_Example_CameraCapture ${SRC_Example_CameraCapture} ${CMAKE_CURRENT_SOURC
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-#copy the test image for this example
-ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/pic3.png)
-
 ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_CameraCapture}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)

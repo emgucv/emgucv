@@ -23,7 +23,7 @@ namespace Emgu.CV
       private extern static void CvOctreeBuildTree(IntPtr tree, IntPtr points, int numberOfPoints, int maxLevels, int minPoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, MCvPoint3D32f center, float radius, IntPtr pointSeq);
+      private extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, ref MCvPoint3D32f center, float radius, IntPtr pointSeq);
       #endregion
 
       private MemStorage _storage;
@@ -72,7 +72,7 @@ namespace Emgu.CV
       /// <returns>The points withing the specific sphere</returns>
       public MCvPoint3D32f[] GetPointsWithinSphere(MCvPoint3D32f center, float radius)
       {
-         CvOctreeGetPointsWithinSphere(_ptr, center, radius, _pointSeq);
+         CvOctreeGetPointsWithinSphere(_ptr, ref center, radius, _pointSeq);
          return _pointSeq.ToArray();
       }
 

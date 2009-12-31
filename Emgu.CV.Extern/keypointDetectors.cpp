@@ -50,13 +50,13 @@ CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image,
 CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
 CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, CvSeq* descriptors, cv::Size winStride, cv::Point* locations, int numberOfLocation)
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, CvSeq* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
 {
    std::vector<float> descriptorVec;
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
    cv::Mat imageMat = cv::cvarrToMat(image);
-   descriptor->compute(imageMat, descriptorVec, winStride, locationVec);
+   descriptor->compute(imageMat, descriptorVec, *winStride, locationVec);
    
    if (descriptorVec.size() > 0)
       cvSeqPushMulti(descriptors, &descriptorVec[0], descriptorVec.size());
