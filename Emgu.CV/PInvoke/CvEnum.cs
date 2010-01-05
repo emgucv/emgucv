@@ -691,7 +691,7 @@ namespace Emgu.CV.CvEnum
       ///<summary>
       ///  (x,y) 
       ///</summary>
-      CV_SEQ_ELTYPE_POINT = (((int)MAT_DEPTH.CV_32S) + (((2) - 1) << 3)) ,
+      CV_SEQ_ELTYPE_POINT = (((int)MAT_DEPTH.CV_32S) + (((2) - 1) << 3)),
       ///<summary>  
       ///freeman code: 0..7 
       ///</summary>
@@ -1095,7 +1095,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Conjugate the second argument of cvMulSpectrums
       /// </summary>
-      CV_DXT_MUL_CONJ =8
+      CV_DXT_MUL_CONJ = 8
    }
 
    /// <summary>
@@ -1672,15 +1672,19 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Use adaptive thresholding to convert the image to black-n-white, rather than a fixed threshold level (computed from the average image brightness)
       /// </summary>
-      ADAPTIVE_THRESH  = 1,
+      ADAPTIVE_THRESH = 1,
       /// <summary>
       /// Normalize the image using cvNormalizeHist before applying fixed or adaptive thresholding.
       /// </summary>
-      NORMALIZE_IMAGE  = 2,
+      NORMALIZE_IMAGE = 2,
       /// <summary>
       /// Use additional criteria (like contour area, perimeter, square-like shape) to filter out false quads that are extracted at the contour retrieval stage
       /// </summary>
-      FILTER_QUADS     = 4 
+      FILTER_QUADS = 4,
+      /// <summary>
+      /// If it is on, then this check is performed before the main algorithm and if a chessboard is not found, the function returns 0 instead of wasting 0.3-1s on doing the full search.
+      /// </summary>
+      FAST_CHECK = 8,
    }
 
    /// <summary>
@@ -1791,7 +1795,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Least-Median robust method
       /// </summary>
-      LMEDS  = 4,
+      LMEDS = 4,
       /// <summary>
       /// RANSAC-based robust method
       /// </summary>
@@ -1925,7 +1929,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// 
       /// </summary>
-      CONTOUR_TREES_MATCH_I1  = 1
+      CONTOUR_TREES_MATCH_I1 = 1
    }
 
    /// <summary>
@@ -1955,7 +1959,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Simple blob detector
       /// </summary>
-      Simple, 
+      Simple,
       /// <summary>
       /// Conected Component blob detector
       /// </summary>
@@ -1976,7 +1980,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       PROFILE_DOG = 1
    }
-   
+
    /// <summary>
    /// The types of blob trakcer
    /// </summary>
