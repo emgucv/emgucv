@@ -118,7 +118,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration(\"\")]
 [assembly: AssemblyCompany(\"Emgu\")]
 [assembly: AssemblyProduct(\"Emgu.CV\")]
-[assembly: AssemblyCopyright(\"Copyright © Emgu 2009\")]
+[assembly: AssemblyCopyright(\"Copyright © Emgu 2010\")]
 [assembly: AssemblyTrademark(\"\")]
 [assembly: AssemblyCulture(\"\")]
 ")
