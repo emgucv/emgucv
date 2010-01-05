@@ -443,7 +443,7 @@ namespace Emgu.CV
       /// <param name="rng">Pointer to MCvRNG radom number generator. Use IntPtr.Zero if not sure</param>
       /// <param name="iterFactor">The relative parameter that characterizes intensity of the shuffling performed. The number of iterations (i.e. pairs swapped) is round(iter_factor*rows(mat)*cols(mat)), so iter_factor=0 means that no shuffling is done, iter_factor=1 means that the function swaps rows(mat)*cols(mat) random pairs etc</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvRandShuffle( IntPtr mat, IntPtr rng, double iterFactor );
+      public static extern void cvRandShuffle(IntPtr mat, IntPtr rng, double iterFactor);
 
       /// <summary>
       /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not IntPtr.Zero, all they are copied to the destination array, otherwise if only a single source channel of the first N is not IntPtr.Zero, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
@@ -996,9 +996,9 @@ namespace Emgu.CV
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvInRangeS(
-         IntPtr src, 
-         MCvScalar lower, 
-         MCvScalar upper, 
+         IntPtr src,
+         MCvScalar lower,
+         MCvScalar upper,
          IntPtr dst);
 
       /// <summary>
@@ -1016,9 +1016,9 @@ namespace Emgu.CV
       /// <param name="dst">The resulting mask</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvInRange(
-         IntPtr src, 
-         IntPtr lower, 
-         IntPtr upper, 
+         IntPtr src,
+         IntPtr lower,
+         IntPtr upper,
          IntPtr dst);
 
       /// <summary>
@@ -1677,7 +1677,7 @@ namespace Emgu.CV
           CvEnum.LINE_TYPE lineType,
           int shift)
       {
-         cvEllipse(img, Point.Round( box.center), Size.Round(box.size), box.angle, 0, 360, color, thickness, lineType, shift);
+         cvEllipse(img, Point.Round(box.center), Size.Round(box.size), box.angle, 0, 360, color, thickness, lineType, shift);
       }
 
       /// <summary>
@@ -2071,6 +2071,26 @@ namespace Emgu.CV
       public static extern double cvDotProduct(IntPtr src1, IntPtr src2);
 
       /// <summary>
+      /// Computes eigenvalues and eigenvectors of a symmetric matrix
+      /// </summary>
+      /// <param name="mat">The input symmetric square matrix, modified during the processing</param>
+      /// <param name="evects">The output matrix of eigenvectors, stored as subsequent rows</param>
+      /// <param name="evals">The output vector of eigenvalues, stored in the descending order (order of eigenvalues and eigenvectors is syncronized, of course)</param>
+      /// <param name="eps">Accuracy of diagonalization. Typically, DBL EPSILON (about 10^(-15)) works well. THIS PARAMETER IS CURRENTLY IGNORED.</param>
+      /// <param name="lowindex">Optional index of largest eigenvalue/-vector to calculate. If either low- or highindex is supplied the other is required, too. Indexing is 1-based. Use 0 for default.</param>
+      /// <param name="highindex">Optional index of smallest eigenvalue/-vector to calculate. If either low- or highindex is supplied the other is required, too. Indexing is 1-based. Use 0 for default.</param>
+      /// <remarks>Currently the function is slower than cvSVD yet less accurate, so if A is known to be positivelydefined (for example, it is a covariance matrix)it is recommended to use cvSVD to find eigenvalues and eigenvectors of A, especially if eigenvectors are not required.</remarks>
+      /// <example>To calculate the largest eigenvector/-value set lowindex = highindex = 1. For legacy reasons this function always returns a square matrix the same size as the source matrix with eigenvectors and a vector the length of the source matrix with eigenvalues. The selected eigenvectors/-values are always in the first highindex - lowindex + 1 rows.</example>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvEigenVV(
+         IntPtr mat,
+         IntPtr evects,
+         IntPtr evals,
+         double eps,
+         int lowindex,
+         int highindex);
+
+      /// <summary>
       /// normalizes the input array so that it's norm or value range takes the certain value(s).
       /// </summary>
       /// <param name="src">The input array</param>
@@ -2147,14 +2167,20 @@ namespace Emgu.CV
 
       /// <summary>
       /// Calculates the product of src and its transposition.
-      /// The function evaluates dst=(src-delta)*(src-delta)^T if order=0, and dst=(src-delta)^T*(src-delta) otherwise.
+      /// The function evaluates dst=scale(src-delta)*(src-delta)^T if order=0, and dst=scale(src-delta)^T*(src-delta) otherwise.
       /// </summary>
       /// <param name="src">The source matrix</param>
       /// <param name="dst">The destination matrix</param>
       /// <param name="order">Order of multipliers</param>
       /// <param name="delta">An optional array, subtracted from <paramref name="src"/> before multiplication</param>
+      /// <param name="scale">An optional scaling</param>
       [DllImport(CXCORE_LIBRARY)]
-      public static extern void cvMulTransposed(IntPtr src, IntPtr dst, int order, IntPtr delta);
+      public static extern void cvMulTransposed(
+         IntPtr src,
+         IntPtr dst,
+         int order,
+         IntPtr delta,
+         double scale);
 
       /// <summary>
       /// Returns sum of diagonal elements of the matrix <paramref name="src1"/>.
@@ -2470,7 +2496,7 @@ namespace Emgu.CV
          int attempts,
          IntPtr rng,
          int flags,
-         IntPtr centers, 
+         IntPtr centers,
          IntPtr compactness);
       #endregion
    }
