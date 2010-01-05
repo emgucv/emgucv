@@ -1,6 +1,6 @@
 @echo off
 SET PROGRAMFILES_DIR=%programfiles(x86)%
-if PROGRAMFILES_DIR=="" SET PROGRAMFILES_DIR=%programfiles%
+if NOT EXIST "%PROGRAMFILES_DIR%" SET PROGRAMFILES_DIR=%programfiles%
 
 SET CMAKE="cmake.exe"
 IF EXIST "%PROGRAMFILES_DIR%\CMake 2.6\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR%\CMake 2.6\bin\cmake.exe"
