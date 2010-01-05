@@ -81,8 +81,8 @@ namespace Emgu.CV
       /// <returns>Pointer to the destination 2x3 matrix</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetAffineTransform(
-         IntPtr src, 
-         IntPtr dst, 
+         IntPtr src,
+         IntPtr dst,
          IntPtr mapMatrix);
 
       /// <summary>
@@ -726,8 +726,8 @@ namespace Emgu.CV
       /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used</param>
       /// <returns>Pointer to the sequence of the CvConvexityDefect structures. </returns>
       [DllImport(CV_LIBRARY)]
-      public static extern IntPtr cvConvexityDefects( 
-         IntPtr contour, 
+      public static extern IntPtr cvConvexityDefects(
+         IntPtr contour,
          IntPtr convexhull,
          IntPtr storage);
 
@@ -1202,11 +1202,11 @@ namespace Emgu.CV
       /// <param name="parameters">MSER parameters</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvExtractMSER(
-         IntPtr img, 
-         IntPtr mask, 
-         ref IntPtr contours, 
-         IntPtr storage, 
-         MCvMSERParams parameters );
+         IntPtr img,
+         IntPtr mask,
+         ref IntPtr contours,
+         IntPtr storage,
+         MCvMSERParams parameters);
 
       #region Camera Calibration
       /// <summary>
@@ -1479,8 +1479,8 @@ namespace Emgu.CV
       /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
       /// <param name="P">The new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvUndistortPoints( 
-         IntPtr src, 
+      public static extern void cvUndistortPoints(
+         IntPtr src,
          IntPtr dst,
          IntPtr camera_matrix,
          IntPtr dist_coeffs,
@@ -1498,6 +1498,7 @@ namespace Emgu.CV
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
       [DllImport(CV_LIBRARY)]
+      [Obsolete("Use the other cvFindChessboardCorners function instead, will be removed in the next version")]
       public static extern int cvFindChessboardCorners(
          IntPtr image,
          Size patternSize,
@@ -1510,7 +1511,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The output array of corners detected</param>
+      /// <param name="corners">Pointer to the output array of corners(PointF) detected</param>
       /// <param name="cornerCount">The output corner counter. If it is not IntPtr.Zero, the function stores there the number of corners found</param>
       /// <param name="flags">Various operation flags</param>
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
@@ -2803,13 +2804,13 @@ namespace Emgu.CV
       /// <returns>"minimal work" distance between two weighted point configurations</returns>
       [DllImport(CV_LIBRARY)]
       public static extern float cvCalcEMD2(
-         IntPtr signature1, 
-         IntPtr signature2, 
+         IntPtr signature1,
+         IntPtr signature2,
          CvEnum.DIST_TYPE distType,
          CvDistanceFunction distFunc,
-         IntPtr costMatrix, 
+         IntPtr costMatrix,
          IntPtr flow,
-         IntPtr lowerBound, 
+         IntPtr lowerBound,
          IntPtr userParam);
       #endregion
 
@@ -2857,7 +2858,7 @@ namespace Emgu.CV
       /// <returns>Pointer to the sequence of star keypoint locations</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvGetStarKeypoints(
-         IntPtr img, 
+         IntPtr img,
          IntPtr storage,
          StarDetector param);
 
