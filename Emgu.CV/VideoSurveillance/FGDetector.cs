@@ -14,7 +14,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Create a forground detector of the specific type
       /// </summary>
-      /// <param name="type">The type of the detectir to be created</param>
+      /// <param name="type">The type of the detector to be created</param>
       public FGDetector(CvEnum.FORGROUND_DETECTOR_TYPE type)
       {
          _ptr = CvInvoke.CvCreateFGDetectorBase(type, IntPtr.Zero);
