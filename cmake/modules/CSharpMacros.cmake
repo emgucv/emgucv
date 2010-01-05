@@ -23,160 +23,174 @@
 
 # ----- support macros -----
 MACRO(GET_CS_LIBRARY_TARGET_DIR)
-	IF (NOT LIBRARY_OUTPUT_PATH)
-		SET(CS_LIBRARY_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
-	ELSE (NOT LIBRARY_OUTPUT_PATH)
-		SET(CS_LIBRARY_TARGET_DIR ${LIBRARY_OUTPUT_PATH})
-	ENDIF (NOT LIBRARY_OUTPUT_PATH)
+  IF (NOT LIBRARY_OUTPUT_PATH)
+    SET(CS_LIBRARY_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
+  ELSE (NOT LIBRARY_OUTPUT_PATH)
+    SET(CS_LIBRARY_TARGET_DIR ${LIBRARY_OUTPUT_PATH})
+  ENDIF (NOT LIBRARY_OUTPUT_PATH)
 ENDMACRO(GET_CS_LIBRARY_TARGET_DIR)
 
 MACRO(GET_CS_EXECUTABLE_TARGET_DIR)
-	IF (NOT EXECUTABLE_OUTPUT_PATH)
-		SET(CS_EXECUTABLE_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
-	ELSE (NOT EXECUTABLE_OUTPUT_PATH)
-		SET(CS_EXECUTABLE_TARGET_DIR ${EXECUTABLE_OUTPUT_PATH})
-	ENDIF (NOT EXECUTABLE_OUTPUT_PATH)
+  IF (NOT EXECUTABLE_OUTPUT_PATH)
+    SET(CS_EXECUTABLE_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
+  ELSE (NOT EXECUTABLE_OUTPUT_PATH)
+    SET(CS_EXECUTABLE_TARGET_DIR ${EXECUTABLE_OUTPUT_PATH})
+  ENDIF (NOT EXECUTABLE_OUTPUT_PATH)
 ENDMACRO(GET_CS_EXECUTABLE_TARGET_DIR)
 
 MACRO(MAKE_PROPER_FILE_LIST source)
-	FOREACH(file ${source})
-		# first assume it's a relative path
-		FILE(GLOB globbed ${CMAKE_CURRENT_SOURCE_DIR}/${file})
-		IF(globbed)
-			FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${file} native)
-		ELSE(globbed)
-			FILE(TO_NATIVE_PATH ${file} native)
-		ENDIF(globbed)
-		SET(proper_file_list ${proper_file_list} ${native})
-		SET(native "")
-	ENDFOREACH(file)
+  FOREACH(file ${source})
+    # first assume it's a relative path
+    FILE(GLOB globbed ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+    IF(globbed)
+      FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${file} native)
+    ELSE(globbed)
+      FILE(TO_NATIVE_PATH ${file} native)
+    ENDIF(globbed)
+    SET(proper_file_list ${proper_file_list} ${native})
+    SET(native "")
+  ENDFOREACH(file)
 ENDMACRO(MAKE_PROPER_FILE_LIST)
 
 # ----- end support macros -----
 MACRO(ADD_CS_MODULE target source)
-	GET_CS_LIBRARY_TARGET_DIR()
-	
-	SET(target_module "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
-	MAKE_PROPER_FILE_LIST("${source}")
-	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_module})
-	
-	ADD_CUSTOM_COMMAND (OUTPUT ${target_module}
-		COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_module} -target:module ${proper_file_list}
-		DEPENDS ${source}
-		COMMENT "Building ${relative_path}")
-	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_module})
-	SET(relative_path "")
-	SET(proper_file_list "")
-	SET(CS_FLAGS "")
+  GET_CS_LIBRARY_TARGET_DIR()
+  
+  SET(target_module "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
+  MAKE_PROPER_FILE_LIST("${source}")
+  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_module})
+  
+  ADD_CUSTOM_COMMAND (OUTPUT ${target_module}
+    COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_module} -target:module ${proper_file_list}
+    DEPENDS ${source}
+    COMMENT "Building ${relative_path}")
+  ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_module})
+  SET(relative_path "")
+  SET(proper_file_list "")
+  SET(CS_FLAGS "")
 ENDMACRO(ADD_CS_MODULE)
 
 MACRO(ADD_CS_LIBRARY target source)
-	GET_CS_LIBRARY_TARGET_DIR()
-	
-	SET(target_DLL "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
-	MAKE_PROPER_FILE_LIST("${source}")
-	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_DLL})
-	
-	ADD_CUSTOM_COMMAND (OUTPUT ${target_DLL}
-		${CS_PREBUILD_COMMAND}	   
-		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
-		DEPENDS ${source}
-		COMMENT "Building ${relative_path}")
-	ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_DLL})
-	SET(relative_path "")
-	SET(proper_file_list "")
-	SET(CS_FLAGS "")
+  GET_CS_LIBRARY_TARGET_DIR()
+  
+  SET(target_DLL "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
+  MAKE_PROPER_FILE_LIST("${source}")
+  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_DLL})
+  
+  ADD_CUSTOM_COMMAND (OUTPUT ${target_DLL}
+    ${CS_PREBUILD_COMMAND}	   
+    COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
+    DEPENDS ${source}
+    COMMENT "Building ${relative_path}")
+  ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_DLL})
+  SET(relative_path "")
+  SET(proper_file_list "")
+  SET(CS_FLAGS "")
 ENDMACRO(ADD_CS_LIBRARY)
 
 MACRO(ADD_CS_FILE_TO_DEPLOY file)
-        GET_CS_LIBRARY_TARGET_DIR()
-        SET(CS_PREBUILD_COMMAND ${CS_PREBUILD_COMMAND} 
-	COMMAND ${CMAKE_COMMAND} copy -E ${file} ${CS_LIBRARY_TARGET_DIR}) 
+  GET_CS_LIBRARY_TARGET_DIR()
+
+  IF ("${ARGV1}" STREQUAL "")
+    SET(CS_FILE_TO_DEPLOY_DEST_PATH ${CS_LIBRARY_TARGET_DIR})
+  ELSE()
+    SET(CS_FILE_TO_DEPLOY_DEST_PATH "${CS_LIBRARY_TARGET_DIR}/${ARGV1}")
+  ENDIF()
+  SET(CS_PREBUILD_COMMAND 
+    ${CS_PREBUILD_COMMAND} 
+    COMMAND ${CMAKE_COMMAND} copy -E ${ARGV0} ${CS_FILE_TO_DEPLOY_DEST_PATH})
 ENDMACRO(ADD_CS_FILE_TO_DEPLOY)
 
 MACRO(GET_CS_EXECUTABLE_EXTENSION)
-	IF (MSVC)
-	SET(CS_EXECUTABLE_EXTENSION "exe")
-      ELSE(MSVC)
-	SET(CS_EXECUTABLE_EXTENSION "monoexe")
-	ENDIF(MSVC)
+  IF (MSVC)
+    SET(CS_EXECUTABLE_EXTENSION "exe")
+  ELSE(MSVC)
+    SET(CS_EXECUTABLE_EXTENSION "monoexe")
+  ENDIF(MSVC)
 ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
 
 MACRO(ADD_CS_EXECUTABLE target source)
-	GET_CS_EXECUTABLE_TARGET_DIR()
-	GET_CS_EXECUTABLE_EXTENSION()
-
-	# FIXME:
-	# Seems like cmake doesn't like the ".exe" ending for custom commands.
-	# If we call it ${target}.exe, 'make' will later complain about a missing rule.
-	# mono doesn't care about endings, so temporarily add ".monoexe".
-	SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
-
-	MAKE_PROPER_FILE_LIST("${source}")
-	FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
-	
-	ADD_CUSTOM_TARGET (
-		${target} ${ARGV2}
-		SOURCES ${source})
-
-	ADD_CUSTOM_COMMAND (
-		TARGET ${target}
-		${CS_PREBUILD_COMMAND}	   
-		COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
-		DEPENDS ${source}
-		COMMENT "Building ${relative_path}")
-	
-	SET(relative_path "")
-	SET(proper_file_list "")
-	SET(CS_FLAGS "")
-	SET(CS_PREBUILD_COMMAND "")
+  GET_CS_EXECUTABLE_TARGET_DIR()
+  GET_CS_EXECUTABLE_EXTENSION()
+  
+  # FIXME:
+  # Seems like cmake doesn't like the ".exe" ending for custom commands.
+  # If we call it ${target}.exe, 'make' will later complain about a missing rule.
+  # mono doesn't care about endings, so temporarily add ".monoexe".
+  SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
+  
+  MAKE_PROPER_FILE_LIST("${source}")
+  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
+  
+  ADD_CUSTOM_TARGET (
+    ${target} ${ARGV2}
+    SOURCES ${source})
+  
+  ADD_CUSTOM_COMMAND (
+    TARGET ${target}
+    ${CS_PREBUILD_COMMAND}	   
+    COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
+    DEPENDS ${source}
+    COMMENT "Building ${relative_path}")
+  
+  SET(relative_path "")
+  SET(proper_file_list "")
+  SET(CS_FLAGS "")
+  SET(CS_PREBUILD_COMMAND "")
 ENDMACRO(ADD_CS_EXECUTABLE)
 
 MACRO(ADD_CS_REFERENCES references)
-	FOREACH(ref ${references})
-        SET(CS_FLAGS ${CS_FLAGS} -r:${ref})
-	ENDFOREACH(ref)
+  FOREACH(ref ${references})
+    SET(CS_FLAGS ${CS_FLAGS} -r:${ref})
+  ENDFOREACH(ref)
 ENDMACRO(ADD_CS_REFERENCES references)
 
+MACRO(ADD_CS_PACKAGE_REFERENCES references)
+  FOREACH(ref ${references})
+    SET(CS_FLAGS ${CS_FLAGS} -pkg:${ref})
+  ENDFOREACH(ref)
+ENDMACRO(ADD_CS_PACKAGE_REFERENCES references)
+
 MACRO(ADD_CS_RESOURCES resx resources)
-      SET(CS_PREBUILD_COMMAND 
-	${CS_PREBUILD_COMMAND} 
-	COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources})
-	SET(CS_FLAGS ${CS_FLAGS} -resource:${resources})
+  SET(CS_PREBUILD_COMMAND 
+    ${CS_PREBUILD_COMMAND} 
+    COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources}
+    )
+  SET(CS_FLAGS ${CS_FLAGS} -resource:${resources})
 ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key)
-	SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
+  SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
 ENDMACRO(SIGN_ASSEMBLY)
 
 MACRO(GENERATE_DOCUMENT file)
-	SET(CS_FLAGS ${CS_FLAGS} -doc:${file}.xml)
+  SET(CS_FLAGS ${CS_FLAGS} -doc:${file}.xml)
 ENDMACRO(GENERATE_DOCUMENT)
 
 MACRO(INSTALL_GAC target)
-	GET_CS_LIBRARY_TARGET_DIR()
-
-	IF(NOT WIN32)
-		INCLUDE(FindPkgConfig)
-		PKG_SEARCH_MODULE(MONO_CECIL mono-cecil)
-		if(MONO_CECIL_FOUND)
-			EXECUTE_PROCESS(COMMAND ${PKG_CONFIG_EXECUTABLE} mono-cecil --variable=assemblies_dir OUTPUT_VARIABLE GAC_ASSEMBLY_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-		endif(MONO_CECIL_FOUND)
-		
-		PKG_SEARCH_MODULE(CECIL cecil)
-		if(CECIL_FOUND)
-			EXECUTE_PROCESS(COMMAND ${PKG_CONFIG_EXECUTABLE} cecil --variable=assemblies_dir OUTPUT_VARIABLE GAC_ASSEMBLY_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-		endif(CECIL_FOUND)
-
-		if(CECIL_FOUND OR MONO_CECIL_FOUND)
-			INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${GACUTIL_EXECUTABLE} -i ${CS_LIBRARY_TARGET_DIR}/${target}.dll -package 2.0 -root ${CMAKE_CURRENT_BINARY_DIR})")
-			MAKE_DIRECTORY(${CMAKE_CURRENT_BINARY_DIR}/mono/)
-			INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mono/ DESTINATION ${GAC_ASSEMBLY_DIR} )
-		endif(CECIL_FOUND OR MONO_CECIL_FOUND)
-	ELSE(NOT WIN32)
-		INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${GACUTIL_EXECUTABLE} -i ${CS_LIBRARY_TARGET_DIR}/${target}.dll -package 2.0)")
-	ENDIF(NOT WIN32)
-
+  GET_CS_LIBRARY_TARGET_DIR()
+  
+  IF(NOT WIN32)
+    INCLUDE(FindPkgConfig)
+    PKG_SEARCH_MODULE(MONO_CECIL mono-cecil)
+    if(MONO_CECIL_FOUND)
+      EXECUTE_PROCESS(COMMAND ${PKG_CONFIG_EXECUTABLE} mono-cecil --variable=assemblies_dir OUTPUT_VARIABLE GAC_ASSEMBLY_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif(MONO_CECIL_FOUND)
+    
+    PKG_SEARCH_MODULE(CECIL cecil)
+    if(CECIL_FOUND)
+      EXECUTE_PROCESS(COMMAND ${PKG_CONFIG_EXECUTABLE} cecil --variable=assemblies_dir OUTPUT_VARIABLE GAC_ASSEMBLY_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif(CECIL_FOUND)
+    
+    if(CECIL_FOUND OR MONO_CECIL_FOUND)
+      INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${GACUTIL_EXECUTABLE} -i ${CS_LIBRARY_TARGET_DIR}/${target}.dll -package 2.0 -root ${CMAKE_CURRENT_BINARY_DIR})")
+      MAKE_DIRECTORY(${CMAKE_CURRENT_BINARY_DIR}/mono/)
+      INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mono/ DESTINATION ${GAC_ASSEMBLY_DIR} )
+    endif(CECIL_FOUND OR MONO_CECIL_FOUND)
+  ELSE(NOT WIN32)
+    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${GACUTIL_EXECUTABLE} -i ${CS_LIBRARY_TARGET_DIR}/${target}.dll -package 2.0)")
+  ENDIF(NOT WIN32)
+  
 ENDMACRO(INSTALL_GAC target)
 
 
