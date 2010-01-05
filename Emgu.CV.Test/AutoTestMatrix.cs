@@ -316,6 +316,21 @@ namespace Emgu.CV.Test
          Assert.IsTrue(m.Equals(m2));
       }
 
+      [Test]
+      public void TestEigenVV()
+      {
+         int size = 3;
+         Matrix<float> tmp = new Matrix<float>(size, size);
+         tmp.SetRandNormal(new MCvScalar(0), new MCvScalar(1));
+         Matrix<float> symMat = new Matrix<float>(tmp.Size);
+         CvInvoke.cvMulTransposed(tmp, symMat, 1, IntPtr.Zero, 1.0);
+         Matrix<float> clone = symMat.Clone();
+
+         Matrix<float> evects = new Matrix<float>(symMat.Size);
+         Matrix<float> evals = new Matrix<float>(symMat.Rows, 1);
+         CvInvoke.cvEigenVV(symMat, evects, evals, 1.0e-15, 0, 0);
+      }
+
       /*
       [Test]
       public void TestDataContractSerializer()

@@ -102,6 +102,13 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestBgrFloat()
+      {
+         Image<Bgr, float> img = new Image<Bgr, float>("lena.jpg");
+         Size s = img.Size;
+      }
+
+      [Test]
       public void TestGenericOperation()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
@@ -1132,11 +1139,11 @@ namespace Emgu.CV.Test
 
          float[] descriptors = descriptor.Compute(box, new Size(20, 20), pts);
          int i = descriptors.Length;
-         /*
+         
          foreach (MKeyPoint kp in keypoints)
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }*/
+         }
       }
 
       [Test]
@@ -1168,8 +1175,6 @@ namespace Emgu.CV.Test
          Assert.Fail("NotSupportedException should be thrown");
       }
 
-      /*
-       * TODO: Find out why this fails
       [Test]
       public void TestSURFDetector()
       {
@@ -1209,9 +1214,9 @@ namespace Emgu.CV.Test
          
          foreach (MKeyPoint kp in keypoints)
          {
-            //box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
          }
-      }*/
+      }
 
 
       //TODO:Find out why this is not working well
