@@ -376,9 +376,9 @@ namespace Emgu.CV.Test
       public void TestFaceDetect()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>("lena.jpg");
-         //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\eye_12.xml"))
-         using (HaarCascade cascade = new HaarCascade(@".\haarcascades\haarcascade_eye.xml"))
-         //using (HaarCascade cascade = new HaarCascade(@".\haarcascades\haarcascade_frontalface_alt2.xml"))
+         //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
+         using (HaarCascade cascade = new HaarCascade("haarcascade_eye.xml"))
+         //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
          {
             MCvAvgComp[][] objects = image.DetectHaarCascade(cascade, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10));
 

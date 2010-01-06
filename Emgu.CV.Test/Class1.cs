@@ -226,7 +226,7 @@ namespace Emgu.CV.Test
 
       public void TestHaarPerformance()
       {
-         HaarCascade face = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
+         HaarCascade face = new HaarCascade("haarcascade_frontalface_alt2.xml");
          Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
          Stopwatch watch = Stopwatch.StartNew();
          img.DetectHaarCascade(face);
@@ -312,16 +312,14 @@ namespace Emgu.CV.Test
          using (Capture capture = new Capture("tree.avi"))
          using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
          {
-            
             #region Set color thresholds values
             MCvBGCodeBookModel param = bgmodel.MCvBGCodeBookModel;
-            param.modMin[0] = param.modMin[1] = param.modMin[2] = 5;
+            param.modMin[0] = param.modMin[1] = param.modMin[2] = 3;
             param.modMax[0] = param.modMax[1] = param.modMax[2] = 10;
             param.cbBounds[0] = param.cbBounds[1] = param.cbBounds[2] = 10;
             bgmodel.MCvBGCodeBookModel = param;
             #endregion
             
-
             ImageViewer viewer = new ImageViewer();
             int count = 0;
             EventHandler processFrame = delegate(Object sender, EventArgs e)
@@ -329,20 +327,28 @@ namespace Emgu.CV.Test
                Image<Bgr, Byte> img = capture.QueryFrame();
                if (img == null)
                {
-                  //Application.Idle -= processFrame;
                   return;
                }
+               Image<Gray, byte> mask = new Image<Gray, Byte>(img.Size);
+               mask.SetValue(255);
 
                viewer.Text = String.Format("Processing {0}th image. {1}", count++, learningFrames > 0 ? "(Learning)" : String.Empty);
+
                using (Image<Ycc, Byte> ycc = img.Convert<Ycc, Byte>()) //using YCC color space for BGCodeBook
                {
-                  bgmodel.Update(ycc);
+                  bgmodel.Update(ycc, ycc.ROI, mask);
 
                   if (learningFrames == 0) //training is completed
-                     bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.t / 2, Rectangle.Empty, null);
+                     bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.t / 2, ycc.ROI, mask);
                   
                   learningFrames--;
-                  viewer.Image = bgmodel.ForgroundMask;
+                  Image<Gray, Byte> m = bgmodel.ForgroundMask.Clone();
+                  if (count == 56)
+                  {
+                     m = bgmodel.ForgroundMask.Clone();
+                  }
+                  //m._EqualizeHist();
+                  viewer.Image = m;
                   //viewer.Image = img;
                   System.Threading.Thread.Sleep(100);
                }

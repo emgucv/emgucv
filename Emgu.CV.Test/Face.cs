@@ -12,7 +12,7 @@ namespace Emgu.CV.Test
 
       public FaceDetector()
       {
-         _faceCascade = new HaarCascade(".\\haarcascades\\haarcascade_frontalface_alt2.xml");
+         _faceCascade = new HaarCascade("haarcascade_frontalface_alt2.xml");
 
       }
 
@@ -73,7 +73,7 @@ namespace Emgu.CV.Test
       {
          _image = img;
          _rect = rect;
-         _eyeCascade = new HaarCascade(".\\haarcascades\\haarcascade_eye_tree_eyeglasses.xml");
+         _eyeCascade = new HaarCascade("haarcascade_eye_tree_eyeglasses.xml");
       }
 
       public List<Eye> DetectEye()

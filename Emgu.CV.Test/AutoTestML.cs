@@ -641,7 +641,7 @@ namespace Emgu.CV.ML.UnitTest
          using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
          {
             network.Train(trainData, trainClasses, null, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
-            network.Save("ann_nlp_model.xml");
+            network.Save("ann_mlp_model.xml");
 
             for (int i = 0; i < img.Height; i++)
             {
