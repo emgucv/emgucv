@@ -38,7 +38,7 @@ namespace Emgu.CV
       private extern static void CvHOGDescriptorRelease(IntPtr descriptor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector, int detectorSize);
+      private extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvHOGDescriptorDetectMultiScale(
@@ -54,7 +54,7 @@ namespace Emgu.CV
 
       private MemStorage _rectStorage;
       private Seq<Rectangle> _rectSeq;
-
+      private VectorOfFloat _vector; 
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
@@ -63,6 +63,7 @@ namespace Emgu.CV
          _ptr = CvHOGDescriptorCreateDefault();
          _rectStorage = new MemStorage();
          _rectSeq = new Seq<Rectangle>(_rectStorage);
+         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -115,9 +116,9 @@ namespace Emgu.CV
       /// <param name="detector">The SVM detector</param>
       public void SetSVMDetector(float[] detector)
       {
-         GCHandle handle = GCHandle.Alloc(detector, GCHandleType.Pinned);
-         CvHOGSetSVMDetector(_ptr, handle.AddrOfPinnedObject(), detector.Length);
-         handle.Free();
+         _vector.Clear();
+         _vector.Push(detector);
+         CvHOGSetSVMDetector(_ptr, _vector);
       }
 
       /// <summary>
@@ -158,6 +159,7 @@ namespace Emgu.CV
       protected override void ReleaseManagedResources()
       {
          _rectStorage.Dispose();
+         _vector.Dispose();
          base.ReleaseManagedResources();
       }
 

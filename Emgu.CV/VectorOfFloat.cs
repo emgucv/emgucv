@@ -25,6 +25,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private static extern IntPtr VectorOfFloatGetStartAddress(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void VectorOfFloatPushMulti(IntPtr v, IntPtr values, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void VectorOfFloatClear(IntPtr v);
       #endregion
 
       public VectorOfFloat()
@@ -37,12 +43,24 @@ namespace Emgu.CV
          _ptr = VectorOfFloatCreateSize(size);
       }
 
+      public void Push(float[] value)
+      {
+         GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+         VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+         handle.Free();
+      }
+
       public int Size
       {
          get
          {
             return VectorOfFloatGetSize(_ptr);
          }
+      }
+
+      public void Clear()
+      {
+         VectorOfFloatClear(_ptr);
       }
 
       public IntPtr StartAddress

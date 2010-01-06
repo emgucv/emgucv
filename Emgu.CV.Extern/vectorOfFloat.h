@@ -1,6 +1,6 @@
 using namespace std;
 
-class CV_EXPORTS vectorOfFloat
+class vectorOfFloat
 { 
 public:
    vector<float> data;

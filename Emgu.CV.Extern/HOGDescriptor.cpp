@@ -1,4 +1,5 @@
 #include "cvaux.h"
+#include "vectorOfFloat.h"
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
@@ -21,11 +22,9 @@ CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
 {
    return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
-CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, float* svmDetector, int detectorSize) 
+CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, vectorOfFloat* vector) 
 { 
-   std::vector<float> v = std::vector<float>(detectorSize); 
-   memcpy(&v[0], svmDetector, detectorSize * sizeof(float));  
-   descriptor->setSVMDetector(v); 
+   descriptor->setSVMDetector(vector->data); 
 }
 
 CVAPI(void) CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }

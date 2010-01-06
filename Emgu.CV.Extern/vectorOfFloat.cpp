@@ -26,6 +26,16 @@ CVAPI(int) VectorOfFloatGetSize(vectorOfFloat* v)
    return v->data.size();
 }
 
+CVAPI(void) VectorOfFloatPushMulti(vectorOfFloat* v, float* values, int count)
+{
+   for(int i=0; i < count; i++) v->data.push_back(*values++);
+}
+
+CVAPI(void) VectorOfFloatClear(vectorOfFloat* v)
+{
+   v->data.clear();
+}
+
 CVAPI(void) VectorOfFloatRelease(vectorOfFloat* v)
 {
    delete v;
