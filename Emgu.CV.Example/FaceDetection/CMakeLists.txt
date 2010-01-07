@@ -10,7 +10,7 @@ ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/lena.jpg)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/data/haarcascades/haarcascade_eye.xml)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/data/haarcascades/haarcascade_frontalface_alt_tree.xml)
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_FaceDetection}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_FaceDetection}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

@@ -11,33 +11,33 @@
 # Redistribution and use is allowed according to the terms of the GPL license.
 #
 # Modified by canming to find .NET on Windows
-# copyright (c) 2009 Canming Huang emgucv@gmail.com
+# copyright (c) 2009, 2010 Canming Huang support@emgu.com
 
 IF(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE csc 
-"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
-"C:/Windows/Microsoft.NET/Framework/v3.5")
+$ENV{windir}/Microsoft.NET/Framework/v3.5/
+$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/)
 ELSE(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE gmcs)
 ENDIF(WIN32)
 
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
-"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
-"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin" 
-"/usr/lib/mono/2.0")
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/bin" 
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/bin" 
+/usr/lib/mono/2.0)
 
 FIND_PROGRAM (AL_EXECUTABLE al
-"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
-"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
-"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
-"C:/Windows/Microsoft.NET/Framework/v3.5" 
-"/usr/lib/mono/2.0")
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/bin" 
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/bin"
+$ENV{windir}/Microsoft.NET/Framework/v3.5
+$ENV{windir}/Microsoft.NET/Framework/v2.0.50727
+/usr/lib/mono/2.0)
 
 FIND_PROGRAM (RESGEN_EXECUTABLE resgen
-"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
-"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
-"C:/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin"
-"/usr/bin/resgen")
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/bin" 
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/bin"
+"$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
+/usr/bin/resgen)
 
 SET (CSharp_FOUND FALSE)
 
@@ -69,5 +69,4 @@ following programs: csc, gacutil, al, resgen")
 ENDIF (CSharp_FOUND)
 
 MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE)
-
 

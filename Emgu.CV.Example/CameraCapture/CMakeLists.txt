@@ -5,7 +5,7 @@ SET(SRC_Example_CameraCapture ${SRC_Example_CameraCapture} ${CMAKE_CURRENT_SOURC
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_CameraCapture}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_CameraCapture}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

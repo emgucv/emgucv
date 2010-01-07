@@ -5,7 +5,7 @@ SET(SRC_Example_MotionDetection ${SRC_Example_MotionDetection} ${CMAKE_CURRENT_S
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_MotionDetection}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_MotionDetection}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

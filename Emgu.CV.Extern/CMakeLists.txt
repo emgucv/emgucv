@@ -12,7 +12,7 @@ source_group("Include" FILES ${extern_hdrs})
 
 set(the_target "cvextern")
 
-add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs})
+add_library(${the_target} ${extern_srcs} ${extern_hdrs})
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
@@ -24,6 +24,7 @@ set_target_properties(${the_target} PROPERTIES
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
 	DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)

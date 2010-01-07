@@ -5,7 +5,7 @@ SET(SRC_Example_HelloWorld ${SRC_Example_HelloWorld} ${CMAKE_CURRENT_SOURCE_DIR}
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_HelloWorld}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_HelloWorld}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

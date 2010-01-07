@@ -8,7 +8,7 @@ SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 #copy the test image for this example
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/pic3.png)
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_ShapeDetection}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_ShapeDetection}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

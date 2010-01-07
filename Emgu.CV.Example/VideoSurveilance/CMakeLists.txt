@@ -5,7 +5,7 @@ SET(SRC_Example_VideoSurveilance ${SRC_Example_VideoSurveilance} ${CMAKE_CURRENT
 
 SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
 
-ADD_CS_EXECUTABLE(${PROJECT_NAME} "${SRC_Example_VideoSurveilance}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_VideoSurveilance}" ALL)
 
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 

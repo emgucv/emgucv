@@ -8,7 +8,7 @@ IF EXIST "%PROGRAMFILES_DIR%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_D
 
 SET VS2005="%PROGRAMFILES_DIR%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
 SET VS2008="%PROGRAMFILES_DIR%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
-SET MSBUILD35="C:\WINDOWS\Microsoft.NET\Framework\v3.5\MSBuild.exe"
+SET MSBUILD35="%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe"
 
 IF EXIST %MSBUILD35% SET DEVENV=%MSBUILD35%
 IF EXIST %VS2005% SET DEVENV=%VS2005% 

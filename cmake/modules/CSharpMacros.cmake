@@ -16,7 +16,7 @@
 #
 # copyright (c) 2007 Arno Rehn arno@arnorehn.de
 # copyright (c) 2008 Helio castro helio@kde.org
-# copyright (c) 2009 Canming Huang emgucv@gmail.com
+# copyright (c) 2009, 2010 Canming Huang emgucv@gmail.com
 #
 # Redistribution and use is allowed according to the terms of the GPL license.
 
@@ -52,41 +52,14 @@ MACRO(MAKE_PROPER_FILE_LIST source)
   ENDFOREACH(file)
 ENDMACRO(MAKE_PROPER_FILE_LIST)
 
-# ----- end support macros -----
-MACRO(ADD_CS_MODULE target source)
-  GET_CS_LIBRARY_TARGET_DIR()
-  
-  SET(target_module "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
-  MAKE_PROPER_FILE_LIST("${source}")
-  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_module})
-  
-  ADD_CUSTOM_COMMAND (OUTPUT ${target_module}
-    COMMAND ${GMCS_EXECUTABLE} ${CS_FLAGS} -out:${target_module} -target:module ${proper_file_list}
-    DEPENDS ${source}
-    COMMENT "Building ${relative_path}")
-  ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_module})
-  SET(relative_path "")
-  SET(proper_file_list "")
-  SET(CS_FLAGS "")
-ENDMACRO(ADD_CS_MODULE)
+MACRO(GET_CS_EXECUTABLE_EXTENSION)
+  IF (MSVC)
+    SET(CS_EXECUTABLE_EXTENSION "exe")
+  ELSE(MSVC)
+    SET(CS_EXECUTABLE_EXTENSION "monoexe")
+  ENDIF(MSVC)
+ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
 
-MACRO(ADD_CS_LIBRARY target source)
-  GET_CS_LIBRARY_TARGET_DIR()
-  
-  SET(target_DLL "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
-  MAKE_PROPER_FILE_LIST("${source}")
-  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_DLL})
-  
-  ADD_CUSTOM_COMMAND (OUTPUT ${target_DLL}
-    ${CS_PREBUILD_COMMAND}	   
-    COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_DLL} -target:library ${proper_file_list}
-    DEPENDS ${source}
-    COMMENT "Building ${relative_path}")
-  ADD_CUSTOM_TARGET (${target} ${ARGV2} DEPENDS ${target_DLL})
-  SET(relative_path "")
-  SET(proper_file_list "")
-  SET(CS_FLAGS "")
-ENDMACRO(ADD_CS_LIBRARY)
 
 MACRO(ADD_CS_FILE_TO_DEPLOY file)
   GET_CS_LIBRARY_TARGET_DIR()
@@ -101,43 +74,50 @@ MACRO(ADD_CS_FILE_TO_DEPLOY file)
     COMMAND ${CMAKE_COMMAND} copy -E ${ARGV0} ${CS_FILE_TO_DEPLOY_DEST_PATH})
 ENDMACRO(ADD_CS_FILE_TO_DEPLOY)
 
-MACRO(GET_CS_EXECUTABLE_EXTENSION)
-  IF (MSVC)
-    SET(CS_EXECUTABLE_EXTENSION "exe")
-  ELSE(MSVC)
-    SET(CS_EXECUTABLE_EXTENSION "monoexe")
-  ENDIF(MSVC)
-ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
+# ----- end support macros -----
+MACRO(ADD_CS_MODULE target source)
 
-MACRO(ADD_CS_EXECUTABLE target source)
-  GET_CS_EXECUTABLE_TARGET_DIR()
-  GET_CS_EXECUTABLE_EXTENSION()
+ENDMACRO(ADD_CS_MODULE)
+
+MACRO(COMPILE_CS target target_type source)
+IF(${target_type} STREQUAL "library")
+  GET_CS_LIBRARY_TARGET_DIR()
+  SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
+ELSE(${target_type} STREQUAL "library")
+  IF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+    GET_CS_EXECUTABLE_TARGET_DIR()
+    GET_CS_EXECUTABLE_EXTENSION()
+    # FIXME:
+    # Seems like cmake doesn't like the ".exe" ending for custom commands.
+    # If we call it ${target}.exe, 'make' will later complain about a missing rule.
+    # mono doesn't care about endings, so temporarily add ".monoexe".
+    SET(target_name "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
+  ELSE(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+    #module
+    GET_CS_LIBRARY_TARGET_DIR()
+    SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
+  ENDIF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+ENDIF(${target_type} STREQUAL "library")
+
+    MAKE_PROPER_FILE_LIST("${source}")
+    FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_name})
+
+    ADD_CUSTOM_TARGET (
+      ${target} ${ARGV3}
+      SOURCES ${source})
   
-  # FIXME:
-  # Seems like cmake doesn't like the ".exe" ending for custom commands.
-  # If we call it ${target}.exe, 'make' will later complain about a missing rule.
-  # mono doesn't care about endings, so temporarily add ".monoexe".
-  SET(target_EXE "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
-  
-  MAKE_PROPER_FILE_LIST("${source}")
-  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_EXE})
-  
-  ADD_CUSTOM_TARGET (
-    ${target} ${ARGV2}
-    SOURCES ${source})
-  
-  ADD_CUSTOM_COMMAND (
-    TARGET ${target}
-    ${CS_PREBUILD_COMMAND}	   
-    COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_EXE} ${proper_file_list}
-    DEPENDS ${source}
-    COMMENT "Building ${relative_path}")
-  
-  SET(relative_path "")
-  SET(proper_file_list "")
-  SET(CS_FLAGS "")
-  SET(CS_PREBUILD_COMMAND "")
-ENDMACRO(ADD_CS_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      ${CS_PREBUILD_COMMAND}	   
+      COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_name} -target:${target_type} ${proper_file_list}
+      DEPENDS ${source}
+      COMMENT "Building ${relative_path}")
+
+    SET(relative_path "")
+    SET(proper_file_list "")
+    SET(CS_FLAGS "")
+    SET(CS_PREBUILD_COMMAND "")
+ENDMACRO(COMPILE_CS)
 
 MACRO(ADD_CS_REFERENCES references)
   FOREACH(ref ${references})
@@ -159,7 +139,7 @@ MACRO(ADD_CS_RESOURCES resx resources)
   SET(CS_FLAGS ${CS_FLAGS} -resource:${resources})
 ENDMACRO(ADD_CS_RESOURCES)
 
-MACRO(SIGN_ASSEMBLY key)
+MACRO(SIGN_ASSEMBLY key) 
   SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
 ENDMACRO(SIGN_ASSEMBLY)
 
