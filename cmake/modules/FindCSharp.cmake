@@ -17,16 +17,24 @@ IF(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE csc 
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/)
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
+"C:/Windows/Microsoft.NET/Framework/v3.5")
 ELSE(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE gmcs)
 ENDIF(WIN32)
 
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin" 
+"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
+"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin" 
 /usr/lib/mono/2.0)
 
 FIND_PROGRAM (AL_EXECUTABLE al
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
+"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
+"C:/Windows/Microsoft.NET/Framework/v3.5" 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
 $ENV{windir}/Microsoft.NET/Framework/v3.5
@@ -34,6 +42,9 @@ $ENV{windir}/Microsoft.NET/Framework/v2.0.50727
 /usr/lib/mono/2.0)
 
 FIND_PROGRAM (RESGEN_EXECUTABLE resgen
+"C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
+"C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
+"C:/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
 "$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
@@ -69,4 +80,5 @@ following programs: csc, gacutil, al, resgen")
 ENDIF (CSharp_FOUND)
 
 MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE)
+
 
