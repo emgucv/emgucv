@@ -16,7 +16,7 @@
 IF(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE csc 
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
-$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/)
+$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
 "C:/Windows/Microsoft.NET/Framework/v3.5")
 ELSE(WIN32)
