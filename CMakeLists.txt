@@ -43,11 +43,14 @@ ENDIF()
 # ----------------------------------------------------------------------------
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
-IF (CMAKE_SIZEOF_VOID_P MATCHES "4")
-  SET(EMGUCV_ARCH "x86")
-ELSE ()
-  SET(EMGUCV_ARCH "x86-64")
+SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
+IF (WIN32)
+  STRING(REGEX MATCH "Win64" CPACK_CMAKE_GENERATOR ${EMGUCV_ARCH})
+  IF(NOT EMGU_ARCH)
+	SET(EMGUCV_ARCH "Win32")
+  ENDIF()
 ENDIF()
+MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
 
 # ----------------------------------------------------------------------------
 #  FIND MSBUILD
@@ -116,9 +119,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(\"${CPACK_PACKAGE_VERSION}\")]
 [assembly: AssemblyFileVersion(\"${CPACK_PACKAGE_VERSION}\")]
 [assembly: AssemblyConfiguration(\"\")]
-[assembly: AssemblyCompany(\"Emgu\")]
+[assembly: AssemblyCompany(\"${CPACK_PACKAGE_VENDOR}\")]
 [assembly: AssemblyProduct(\"Emgu.CV\")]
-[assembly: AssemblyCopyright(\"Copyright © Emgu 2010\")]
+[assembly: AssemblyCopyright(\"Copyright © ${CPACK_PACKAGE_VENDOR} 2010\")]
 [assembly: AssemblyTrademark(\"\")]
 [assembly: AssemblyCulture(\"\")]
 ")
