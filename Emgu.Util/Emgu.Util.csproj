@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="DisposableObject.cs" />
     <Compile Include="ICodeGenerable.cs" />
+    <Compile Include="Iterator.cs" />
     <Compile Include="PinnedArray.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
