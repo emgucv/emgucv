@@ -43,13 +43,16 @@ ENDIF()
 # ----------------------------------------------------------------------------
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
-SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 IF (WIN32)
-  STRING(REGEX MATCH "Win64" CPACK_CMAKE_GENERATOR ${EMGUCV_ARCH})
-  IF(NOT EMGU_ARCH)
-	SET(EMGUCV_ARCH "Win32")
-  ENDIF()
-ENDIF()
+  STRING(REGEX MATCH "Win64" EMGUCV_ARCH "${CPACK_CMAKE_GENERATOR}" )
+  IF(NOT EMGUCV_ARCH)
+	SET(EMGUCV_ARCH win32)
+  ELSE(NOT EMGUCV_ARCH)
+    SET(EMGUCV_ARCH win64)
+  ENDIF(NOT EMGUCV_ARCH)
+ELSE(WIN32)
+  SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
+ENDIF(WIN32)
 MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
 
 # ----------------------------------------------------------------------------
@@ -79,7 +82,7 @@ SET(CPACK_PACKAGE_VERSION_MINOR "1")
 SET(CPACK_PACKAGE_VERSION_PATCH "0")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
 SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${EMGUCV_ARCH}")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/License.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Emgu.CV.License.txt")
 
 IF (WIN32)
 SET(CPACK_PACKAGE_CLI_FOLDER bin)
@@ -198,10 +201,9 @@ ADD_SUBDIRECTORY(Emgu.CV.ML)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
-ADD_SUBDIRECTORY(lib)
 
 IF (WIN32)
-  SET(CPACK_GENERATOR NSIS)
+  SET(CPACK_GENERATOR NSIS;ZIP)
   
   SET(CPACK_NSIS_MODIFY_PATH ON)
   
@@ -269,7 +271,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   UNINSTALL_DEBUGER_VISUALIZER("VS2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
   
-  ADD_SUBDIRECTORY(Emgu.RPC)
+
   
   # ----------------------------------------------------------------------------
   #  Build the documents of Emgu CV
@@ -277,6 +279,14 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   SET(EMGU_CV_DOCUMENTATION_BUILD OFF CACHE BOOL "Build Emgu CV Documentation")
   IF(EMGU_CV_DOCUMENTATION_BUILD)
      ADD_SUBDIRECTORY(miscellaneous)
+  ENDIF()
+  
+  # ----------------------------------------------------------------------------
+  #  Build the extra components of Emgu CV
+  # ----------------------------------------------------------------------------
+  SET(EMGU_CV_EXTRA_BUILD OFF CACHE BOOL "Build Emgu CV Extra")
+  IF(EMGU_CV_EXTRA_BUILD)
+       ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
   
   # ----------------------------------------------------------------------------
@@ -324,7 +334,7 @@ INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
   DESTINATION ./
-  COMPONENT emgucv_examples
+  COMPONENT emgucv_example_source
   FILES_MATCHING 
   PATTERN "*.cs"
   PATTERN "*.csproj"
@@ -356,7 +366,7 @@ INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}/Solution
   DESTINATION ./
-  COMPONENT emgucv_examples
+  COMPONENT emgucv_example_source
   FILES_MATCHING 
   PATTERN "Emgu.CV.Example.sln"
   PATTERN ".svn" EXCLUDE
@@ -367,7 +377,7 @@ INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
   DESTINATION ./opencv/include
-  COMPONENT emgucv_examples
+  COMPONENT emgucv_example_source
   FILES_MATCHING 
   PATTERN "*.h"
   PATTERN "*.hpp"
@@ -382,27 +392,29 @@ set(CPACK_COMPONENTS_ALL
 	main #opencv components 
 	emgucv_binary 
 	emgucv_source
-	emgucv_examples
+	emgucv_example_source
 	)
 
-set(CPACK_NSIS_MENU_LINKS
-  "doc/opencv.pdf" "Open CV Documentation")
+set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=7828
+set(CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
+
 IF(EMGU_CV_DOCUMENTATION_BUILD)
 set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
-set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
-  "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS} "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
 ENDIF()
 	
-set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Libraray")
+set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Library")
 set(CPACK_COMPONENT_MAIN_REQUIRED ON)
-set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV Binary")
+set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV (Binary)")
+set(CPACK_COMPONENT_EMGUCV_BINARY_REQUIRED ON)
 set(CPACK_COMPONENT_EMGUCV_BINARY_DEPENDS main)
-set(CPACK_COMPONENT_EMGUCV_SOURCE_DISPLAY_NAME "Emgu CV Source")
+set(CPACK_COMPONENT_EMGUCV_SOURCE_DISPLAY_NAME "Emgu CV (Source)")
 set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS main)
-set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DISPLAY_NAME "Emgu CV Examples")
-set(CPACK_COMPONENT_EMGUCV_EXAMPLES_DEPENDS emgucv_source)
+set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DISPLAY_NAME "Emgu CV Examples (Source)")
+set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 
 ELSE (WIN32)
+  SET(CPACK_STRIP_FILES "")
   MESSAGE(STATUS "Checking for CPACK build type...")
   FIND_PROGRAM(DPKG_CMD dpkg)
   IF (DPKG_CMD)

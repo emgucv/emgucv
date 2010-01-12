@@ -21,6 +21,9 @@ INSTALL(
   FILES 
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
+  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll
+  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.license.txt
+  ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.License.txt
   DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
   COMPONENT emgucv_binary)
 

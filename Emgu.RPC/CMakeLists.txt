@@ -5,19 +5,13 @@ SET(SRC_RPC ${SRC_RPC} ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
-ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_3RDPARTY_PATH}/zlib.net.dll")
-IF(WIN32)
-  ADD_CS_REFERENCES(C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.0/System.ServiceModel.dll)
-  ADD_CS_REFERENCES(C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.0/System.Speech.dll)
-  ADD_CS_REFERENCES(C:/Program\ Files/Reference\ Assemblies/Microsoft/Framework/v3.5/System.Core.dll)
-ELSE(WIN32)
-  ADD_CS_REFERENCES(System.ServiceModel.dll)
-  ADD_CS_REFERENCES(System.Core.dll)
-ENDIF(WIN32)
+ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.Core.dll;System.ServiceModel.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_3RDPARTY_PATH}/zlib.net.dll")
 
-IF(NOT WIN32)
+IF(WIN32)
+  ADD_CS_REFERENCES(System.Speech.dll)
+ELSE(WIN32)
   SET(CS_FLAGS ${CS_FLAGS} "-d:LINUX")
-ENDIF()
+ENDIF(WIN32)
 
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_RPC}")
 
@@ -28,6 +22,6 @@ INSTALL(
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.XML 
   DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-  COMPONENT binary)
+  COMPONENT emgucv_extra_binary)
 
 
