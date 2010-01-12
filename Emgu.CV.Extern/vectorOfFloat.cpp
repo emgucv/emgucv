@@ -11,42 +11,42 @@ vectorOfFloat::vectorOfFloat(int size)
 {
 }
 
-CVAPI(vectorOfFloat*) VectorOfFloatCreate() 
+CVAPI(vector<float>*) VectorOfFloatCreate() 
 { 
-   return new vectorOfFloat(); 
+   return new vector<float>(); 
 }
 
-CVAPI(vectorOfFloat*) VectorOfFloatCreateSize(int size) 
+CVAPI(vector<float>*) VectorOfFloatCreateSize(int size) 
 { 
-   return new vectorOfFloat(size); 
+   return new vector<float>(size); 
 }
 
-CVAPI(int) VectorOfFloatGetSize(vectorOfFloat* v)
+CVAPI(int) VectorOfFloatGetSize(vector<float>* v)
 {
-   return v->data.size();
+   return v->size();
 }
 
-CVAPI(void) VectorOfFloatPushMulti(vectorOfFloat* v, float* values, int count)
+CVAPI(void) VectorOfFloatPushMulti(vector<float>* v, float* values, int count)
 {
-   for(int i=0; i < count; i++) v->data.push_back(*values++);
+   for(int i=0; i < count; i++) v->push_back(*values++);
 }
 
-CVAPI(void) VectorOfFloatClear(vectorOfFloat* v)
+CVAPI(void) VectorOfFloatClear(vector<float>* v)
 {
-   v->data.clear();
+   v->clear();
 }
 
-CVAPI(void) VectorOfFloatRelease(vectorOfFloat* v)
+CVAPI(void) VectorOfFloatRelease(vector<float>* v)
 {
    delete v;
 }
 
-CVAPI(void) VectorOfFloatCopyData(vectorOfFloat* v, float* data)
+CVAPI(void) VectorOfFloatCopyData(vector<float>* v, float* data)
 {
-   memcpy(data, &v->data[0], v->data.size());
+   memcpy(data, &v->front(), v->size());
 }
 
-CVAPI(float*) VectorOfFloatGetStartAddress(vectorOfFloat* v)
+CVAPI(float*) VectorOfFloatGetStartAddress(vector<float>* v)
 {
-   return &v->data[0];
+   return &v->front();
 }
