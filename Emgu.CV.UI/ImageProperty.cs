@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.Util.TypeEnum;
+using Emgu.CV.Structure;
+using System.Text;
 
 namespace Emgu.CV.UI
 {
@@ -23,7 +25,7 @@ namespace Emgu.CV.UI
          for (int i = 0; i < ImageBox.ZoomLevels.Length; i++)
          {
             zoomLevelComboBox.Items.Add(String.Format("{0}%", (int)(ImageBox.ZoomLevels[i] * 100)));
-         }    
+         }
       }
 
       private ImageBox _imageBox;
@@ -34,16 +36,16 @@ namespace Emgu.CV.UI
       public ImageBox ImageBox
       {
          get { return _imageBox; }
-         set 
-         { 
+         set
+         {
             _imageBox = value;
             if (_imageBox != null)
             {
                //update control base on current funtional mode
                HandleFunctionalModeChange(this, new EventArgs());
- 
+
                //register event such that feature change in functional mode will also trigger an update to the control
-               _imageBox.OnFunctionalModeChanged += HandleFunctionalModeChange; 
+               _imageBox.OnFunctionalModeChanged += HandleFunctionalModeChange;
             }
          }
       }
@@ -84,6 +86,11 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
+      /// A buffer used by SetMousePositionOnImage function
+      /// </summary>
+      private double[] _buffer = new double[4];
+
+      /// <summary>
       /// Set the mouse position over the image. 
       /// It also set the color intensity of the pixel on the image where is mouse is at
       /// </summary>
@@ -93,12 +100,19 @@ namespace Emgu.CV.UI
          mousePositionTextbox.Text = location.ToString();
 
          IImage img = _imageBox.DisplayedImage;
-         IColor pixelColor =
-            img == null ?
-            null :
-            Reflection.ReflectIImage.GetPixelColor(img, location);
-         colorIntensityTextbox.Text =
-                pixelColor == null ? String.Empty : pixelColor.ToString();
+         Size size = img.Size;
+         location.X = Math.Min(location.X, size.Width - 1);
+         location.Y = Math.Min(location.Y, size.Height - 1);
+
+         MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
+         _buffer[0] = scalar.v0; _buffer[1] = scalar.v1; _buffer[2] = scalar.v2; _buffer[3] = scalar.v3;
+
+         StringBuilder sb = new StringBuilder(String.Format("[{0}", _buffer[0]));
+         for (int i = 1; i < img.NumberOfChannels; i++)
+            sb.AppendFormat(",{0}", _buffer[i]);
+         sb.Append("]");
+
+         colorIntensityTextbox.Text = sb.ToString();
       }
 
       /// <summary>
@@ -178,7 +192,7 @@ namespace Emgu.CV.UI
       {
          if (_imageBox != null)
          {
-            _imageBox.SetZoomScale( ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex], Point.Empty );
+            _imageBox.SetZoomScale(ImageBox.ZoomLevels[zoomLevelComboBox.SelectedIndex], Point.Empty);
          }
       }
 
