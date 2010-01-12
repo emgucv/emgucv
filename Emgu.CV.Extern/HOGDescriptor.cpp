@@ -3,8 +3,8 @@
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
-   cv::Vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
-   cvSeqPushMulti(seq, v.begin(), v.size()); 
+   std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
+   cvSeqPushMulti(seq, &v.front(), v.size()); 
 }
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
@@ -59,8 +59,8 @@ CVAPI(void) cvHOGDescriptorDetect(
 {
    cvClearSeq(foundLocations);
 
-   cv::Vector<cv::Rect> rects;
+   std::vector<cv::Point> hits;
    cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detect(mat, rects, hitThreshold, winStride, padding);
-   cvSeqPushMulti(foundLocations, rects.begin(), rects.size());
+   descriptor->detect(mat, hits, hitThreshold, winStride, padding);
+   cvSeqPushMulti(foundLocations, &hits.front(), hits.size());
 }*/

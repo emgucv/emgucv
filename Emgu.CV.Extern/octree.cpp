@@ -9,10 +9,10 @@ CVAPI(void) CvOctreeBuildTree(cv::Octree* tree, cv::Point3f* points, int numberO
 }
 CVAPI(void) CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float radius, CvSeq* pointSeq )
 {
-   cv::vector<cv::Point3f> points; 
+   std::vector<cv::Point3f> points; 
    tree->getPointsWithinSphere(*center, radius, points);
    cvClearSeq(pointSeq);
    if (points.size() > 0)
-     cvSeqPushMulti(pointSeq, &points[0], points.size());
+      cvSeqPushMulti(pointSeq, &points.front(), points.size());
 }
 CVAPI(void) CvOctreeRelease(cv::Octree* tree) { delete tree; } 
