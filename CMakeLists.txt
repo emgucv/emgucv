@@ -44,7 +44,7 @@ ENDIF()
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
 IF (WIN32)
-  STRING(REGEX MATCH "Win64" EMGUCV_ARCH "${CPACK_CMAKE_GENERATOR}" )
+  STRING(REGEX MATCH "Win64" EMGUCV_ARCH "${CMAKE_GENERATOR}" )
   IF(NOT EMGUCV_ARCH)
 	SET(EMGUCV_ARCH win32)
   ELSE(NOT EMGUCV_ARCH)
@@ -106,7 +106,9 @@ IF(MSVC)
   SET_TARGET_PROPERTIES(ml PROPERTIES PREFIX ${extra_bin_prefix})
 
   SET_TARGET_PROPERTIES(highgui PROPERTIES PREFIX ${extra_bin_prefix})
-  SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
+  IF(opencv_ffmpeg)
+    SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
+  ENDIF()
 ENDIF()
 
 SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
