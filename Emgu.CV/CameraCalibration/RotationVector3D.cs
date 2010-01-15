@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A 3D rotation matrix
+   /// A (3x1) Rodrigues rotation vector
    /// </summary>
    [Serializable]
    public class RotationVector3D : Matrix<double>
@@ -32,11 +32,11 @@ namespace Emgu.CV
       /// <summary>
       /// Create a rotation vector using the specific values
       /// </summary>
-      /// <param name="value">The values of the rotation vector, should contains only 3 values</param>
+      /// <param name="value">The values of the (3 x 1) Rodrigues rotation vector</param>
       public RotationVector3D(double[] value)
          : base(value)
       {
-         Debug.Assert(value.Length == 3, "Rotation Vector must have size == 3");
+         Debug.Assert(value.Length == 3, "Rodrigues rotation Vector must have size == 3");
       }
 
       /// <summary>
