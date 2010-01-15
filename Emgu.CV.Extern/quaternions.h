@@ -17,7 +17,7 @@ CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, d
 /* convert quaternions to (3x3) rotation matrix  */
 CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation);
 
-/* rotate the (3x1 or nx3) matrix of points using the quaternions */
+/* rotate a single point using the quaternions */
 CVAPI(void) quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst);
 
 /* rotate the (3x1 or nx3) matrix of points using the quaternions */
