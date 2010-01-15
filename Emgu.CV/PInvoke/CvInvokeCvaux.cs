@@ -212,6 +212,49 @@ namespace Emgu.CV
          double param1, double param2, double param3,
          double param4, double param5);
 
+      #region Condensation
+      /// <summary>
+      /// Creates CvConDensation structure and returns pointer to the structure
+      /// </summary>
+      /// <param name="dynamParams">Dimension of the state vector</param>
+      /// <param name="measureParams">Dimension of the measurement vector</param>
+      /// <param name="sampleCount">Number of samples</param>
+      /// <returns>Pointer to the CvConDensation structure</returns>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern IntPtr cvCreateConDensation(int dynamParams, int measureParams, int sampleCount);
+
+      /// <summary>
+      /// Releases the structure CvConDensation (see cvConDensation) and frees all memory previously allocated for the structure. 
+      /// </summary>
+      /// <param name="condens">Pointer to the CvConDensation structure</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern void cvReleaseConDensation(ref IntPtr condens);
+
+      /// <summary>
+      /// Fills the samples arrays in the structure CvConDensation with values within specified ranges. 
+      /// </summary>
+      /// <param name="condens">Pointer to a structure to be initialized</param>
+      /// <param name="lowerBound">Vector of the lower boundary for each dimension</param>
+      /// <param name="upperBound">Vector of the upper boundary for each dimension</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern void cvConDensInitSampleSet(IntPtr condens, IntPtr lowerBound, IntPtr upperBound);
+
+      /// <summary>
+      /// Estimates the subsequent stochastic model state from its current state
+      /// </summary>
+      /// <param name="condens">Pointer to the structure to be updated</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern void cvConDensUpdateByTime(IntPtr condens);
+      #endregion
+
+      /// <summary>
+      /// Calculates 2D pair-wise geometrical histogram (PGH), described in [Iivarinen97], for the contour. The algorithm considers every pair of the contour edges. The angle between the edges and the minimum/maximum distances are determined for every pair. To do this each of the edges in turn is taken as the base, while the function loops through all the other edges. When the base edge and any other edge are considered, the minimum and maximum distances from the points on the non-base edge and line of the base edge are selected. The angle between the edges defines the row of the histogram in which all the bins that correspond to the distance between the calculated minimum and maximum distances are incremented (that is, the histogram is transposed relatively to [Iivarninen97] definition). The histogram can be used for contour matching
+      /// </summary>
+      /// <param name="contour">Input contour. Currently, only integer point coordinates are allowed</param>
+      /// <param name="hist">Calculated histogram; must be two-dimensional</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
+
       #region Codebook background model
       /// <summary>
       /// Create a BG code book model
