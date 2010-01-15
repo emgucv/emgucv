@@ -88,8 +88,8 @@ namespace Emgu.CV.Test
          pts.Add(new PointF(4.0f, 4.0f));
 
          PointF direction, pointOnLine;
-         PointCollection.Line2DFitting(pts.ToArray(),  Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, out direction, out pointOnLine );
-         
+         PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, out direction, out pointOnLine);
+
          //check if the line is 45 degree from +x axis
          Assert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
       }
@@ -206,9 +206,9 @@ namespace Emgu.CV.Test
             Seq<Point> contour = new Seq<Point>(stor);
             contour.PushMulti(polyline, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
             image.Draw(contour, new Gray(255), 1);
-            Seq<MCvConvexityDefect> defactSeq = 
+            Seq<MCvConvexityDefect> defactSeq =
                contour.GetConvexityDefacts(
-                  stor, 
+                  stor,
                   Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
             Assert.AreEqual(1, defacts.Length);
@@ -287,7 +287,7 @@ namespace Emgu.CV.Test
          //MCvBlob blob = tracker[0];
          //int id = blob.ID;
          //ImageViewer.Show(forground);
-      } 
+      }
 
       [Test]
       public void TestBlobGray()
@@ -322,11 +322,11 @@ namespace Emgu.CV.Test
                //viewer.Refresh();
             }
          }
-         
+
          //MCvBlob blob = tracker[0];
          //int id = blob.ID;
          //ImageViewer.Show(forground);
-      } 
+      }
 
       [Test]
       public void TestEigenObjects()
@@ -376,7 +376,7 @@ namespace Emgu.CV.Test
          }
          #endregion
       }
-      
+
       /*
       [Test]
       public void TestPointInPolygon()
@@ -399,8 +399,8 @@ namespace Emgu.CV.Test
          Assert.IsFalse(p2.InConvexPolygon(rect));
       }*/
 
-      
-      
+
+
       private static float[,] ProjectPoints(float[,] points3D, RotationVector3D rotation, Matrix<double> translation, float focalLength)
       {
          using (Matrix<float> imagePointMat = new Matrix<float>(points3D.GetLength(0), 2))
@@ -473,7 +473,7 @@ namespace Emgu.CV.Test
 
          CvInvoke.cvReleasePOSITObject(ref posit);
       }*/
-      
+
 
       [Test]
       public void TestXmlSerialize()
@@ -558,7 +558,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
          Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
-    
+
       [Test]
       public void TestBGModel()
       {
@@ -620,11 +620,11 @@ namespace Emgu.CV.Test
 
          //foreach (Triangle2DF t in triangles)
          //{
-            //int equalCount = triangles.FindAll(delegate(Triangle2DF t2) { return t2.Equals(t); }).Count;
-            //Assert.AreEqual(1, equalCount, "Triangle duplicates");
+         //int equalCount = triangles.FindAll(delegate(Triangle2DF t2) { return t2.Equals(t); }).Count;
+         //Assert.AreEqual(1, equalCount, "Triangle duplicates");
 
-            //int overlapCount = triangles.FindAll(delegate(Triangle2D t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
-            //Assert.AreEqual(1, overlapCount, "Triangle overlaps");
+         //int overlapCount = triangles.FindAll(delegate(Triangle2D t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
+         //Assert.AreEqual(1, overlapCount, "Triangle overlaps");
          //}
       }
 
@@ -765,7 +765,7 @@ namespace Emgu.CV.Test
          OptiocalFlowImage(out prevImg, out currImg);
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
-         OpticalFlow.Farneback(prevImg, currImg, flowx, flowy,  0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.DEFAULT);
+         OpticalFlow.Farneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.DEFAULT);
       }
 
       [Test]
@@ -777,8 +777,8 @@ namespace Emgu.CV.Test
          Size shiftSize = new Size(1, 1);
          Size maxRange = new Size(10, 10);
          Size velSize = new Size(
-            (int) Math.Floor((prevImg.Width - blockSize.Width)/(double)shiftSize.Width),
-            (int) Math.Floor((prevImg.Height - blockSize.Height)/(double)shiftSize.Height));
+            (int)Math.Floor((prevImg.Width - blockSize.Width) / (double)shiftSize.Width),
+            (int)Math.Floor((prevImg.Height - blockSize.Height) / (double)shiftSize.Height));
          Image<Gray, float> velx = new Image<Gray, float>(velSize);
          Image<Gray, float> vely = new Image<Gray, float>(velSize);
 
@@ -819,7 +819,7 @@ namespace Emgu.CV.Test
             watch.ElapsedMilliseconds));
 
       }
-     
+
       [Test]
       public void TestChessboardCalibration()
       {
@@ -864,7 +864,7 @@ namespace Emgu.CV.Test
          Matrix<Int32> result;
          Matrix<double> distance;
          float[][] features2 = new float[1][];
-         features2[0] = new float[]{ 5.0f};
+         features2[0] = new float[] { 5.0f };
 
          tree.FindFeatures(features2, out result, out distance, 1, 20);
          Assert.AreEqual(result[0, 0], 5);
@@ -961,7 +961,7 @@ namespace Emgu.CV.Test
          MCvTermCriteria termCrit = new MCvTermCriteria(10, 1.0e-6);
 
          EigenObjectRecognizer rec = new EigenObjectRecognizer(images, ref termCrit);
-         foreach(Image<Gray, Byte> img in images)
+         foreach (Image<Gray, Byte> img in images)
          {
             rec.Recognize(img);
             //Trace.WriteLine(rec.Recognize(img));
@@ -1092,15 +1092,15 @@ namespace Emgu.CV.Test
          Matrix<double> q = new Matrix<double>(4, 4);
          q.SetIdentity();
          MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(leftDisparity * (-16), q);
-         
-         float min = (float) 1.0e10, max = 0;
+
+         float min = (float)1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
             if (p.z < min) min = p.z;
             else if (p.z > max) max = p.z;
          }
          Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
-         
+
          //ImageViewer.Show(leftDisparity*(-16));
       }
 
@@ -1108,7 +1108,7 @@ namespace Emgu.CV.Test
       public void TestExtrinsicCameraParametersRuntimeSerialize()
       {
          ExtrinsicCameraParameters param = new ExtrinsicCameraParameters();
-      
+
          param.RotationVector.SetRandUniform(new MCvScalar(), new MCvScalar(1.0));
          param.TranslationVector.SetRandUniform(new MCvScalar(), new MCvScalar(100));
 
@@ -1124,7 +1124,7 @@ namespace Emgu.CV.Test
          using (MemoryStream ms2 = new MemoryStream(bytes))
          {
             ExtrinsicCameraParameters param2 = (ExtrinsicCameraParameters)formatter.Deserialize(ms2);
-            
+
             Assert.IsTrue(param.Equals(param2));
          }
       }
@@ -1268,7 +1268,7 @@ namespace Emgu.CV.Test
             using (MemoryStream ms = new MemoryStream())
             {
                mat.SetRandNormal(new MCvScalar(100), new MCvScalar(50));
-               
+
                mat.SerializationCompressionRatio = 6;
                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                    formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -1324,7 +1324,7 @@ namespace Emgu.CV.Test
          {
             float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
             hog.SetSVMDetector(pedestrianDescriptor);
-            
+
             Stopwatch watch = Stopwatch.StartNew();
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
@@ -1411,14 +1411,14 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
          HOGDescriptor desc = new HOGDescriptor();
          desc.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-         
+
          Rectangle[] humanRegions = desc.DetectMultiScale(img);
 
          Image<Gray, byte> pedestrianMask = new Image<Gray, byte>(img.Size);
          foreach (Rectangle rect in humanRegions)
          {
             //generate the mask where 3 indicates forground and 2 indicates background 
-            using (Image<Gray, byte> mask = img.GrabCut(rect, 2)) 
+            using (Image<Gray, byte> mask = img.GrabCut(rect, 2))
             {
                //get the mask of the forground
                CvInvoke.cvCmpS(mask, 3, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
@@ -1429,12 +1429,68 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestQuaternions()
+      {
+         Quaternions q = new Quaternions();
+         double epsilon = 1.0e-10;
+
+         Matrix<double> point = new Matrix<double>(3, 1);
+         point.SetRandNormal(new MCvScalar(), new MCvScalar(20));
+         using (Matrix<double> pt1 = new Matrix<double>(3, 1))
+         using (Matrix<double> pt2 = new Matrix<double>(3, 1))
+         using (Matrix<double> pt3 = new Matrix<double>(3, 1))
+         {
+            double x1 = 1.0, y1 = 0.2, z1 = 0.1;
+            double x2 = 0.0, y2 = 0.0, z2 = 0.0;
+
+            q.SetEuler(x1, y1, z1);
+            q.GetEuler(ref x2, ref y2, ref z2);
+
+            Assert.IsTrue(
+               Math.Abs(x2 - x1) < epsilon &&
+               Math.Abs(y2 - y1) < epsilon &&
+               Math.Abs(z2 - z1) < epsilon);
+
+            q.RotatePoints(point, pt1);
+
+            Matrix<double> rMat = new Matrix<double>(3, 3);
+            q.GetRotationMatrix(rMat);
+            CvInvoke.cvGEMM(rMat, point, 1.0, IntPtr.Zero, 0.0, pt2, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+
+            CvInvoke.cvAbsDiff(pt1, pt2, pt3);
+
+            Assert.IsTrue(
+               pt3[0, 0] < epsilon &&
+               pt3[1, 0] < epsilon &&
+               pt3[2, 0] < epsilon);
+
+         }
+
+         double rotationAngle = 0.2;
+         q.SetEuler(rotationAngle, 0.0, 0.0);
+         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+         q.SetEuler(0.0, rotationAngle, 0.0);
+         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+         q.SetEuler(0.0, 0.0, rotationAngle);
+         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+
+         q = q * q;
+         Assert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - rotationAngle) < epsilon);
+
+         q.SetEuler(0.2, 0.1, 0.05);
+         double t = q.RotationAngle;
+         q = q*q;
+         Assert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - t) < epsilon);
+
+      }
+
+      [Test]
       public void TestDiatanceTransform()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(480, 320);
          img.Draw(new Rectangle(200, 100, 160, 90), new Gray(255), 1);
          img._Not();
-         Image<Gray, Single> dst = new Image<Gray,Single>(img.Size);
+         Image<Gray, Single> dst = new Image<Gray, Single>(img.Size);
 
          CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, 3, null, IntPtr.Zero);
       }
@@ -1449,6 +1505,13 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
             detector.Process(image, mask);
          }
+      }
+
+      [Test]
+      public void TestCondensation()
+      {
+         IntPtr conden = CvInvoke.cvCreateConDensation(5, 5, 100);
+         CvInvoke.cvReleaseConDensation(ref conden);
       }
 
       [Test]
@@ -1493,6 +1556,6 @@ namespace Emgu.CV.Test
          }
          File.Delete(fi.FullName);
       }
-      
+
    }
 }
