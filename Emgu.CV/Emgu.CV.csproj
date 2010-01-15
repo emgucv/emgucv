@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="CameraCalibration\Quaternions.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
     <Compile Include="Flann\Index.cs" />
     <Compile Include="ImageFeature.cs" />
