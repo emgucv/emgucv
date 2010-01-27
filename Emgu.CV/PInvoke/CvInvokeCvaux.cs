@@ -255,6 +255,13 @@ namespace Emgu.CV
       [DllImport(CVAUX_LIBRARY)]
       public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
+      /// <summary>
+      /// Checks planar subdivision for correctness. It is not an absolute check, but it verifies some relations between quad-edges
+      /// </summary>
+      /// <param name="subdiv">Pointer to the MCvSubdiv2D</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public static extern int icvSubdiv2DCheck(IntPtr subdiv );
+
       #region Codebook background model
       /// <summary>
       /// Create a BG code book model
