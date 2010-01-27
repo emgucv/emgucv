@@ -27,6 +27,11 @@ namespace Emgu.CV.Structure
       public PointF pt;
 
       /// <summary>
+      /// The ID
+      /// </summary>
+      public int id;
+
+      /// <summary>
       /// Return true if this is a valid point
       /// </summary>
       public bool IsValid
