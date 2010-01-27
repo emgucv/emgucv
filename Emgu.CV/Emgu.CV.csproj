@@ -66,6 +66,8 @@
     <Compile Include="CameraCalibration\Quaternions.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
     <Compile Include="Flann\Index.cs" />
+    <Compile Include="Geodetic\GeodeticCoordinate.cs" />
+    <Compile Include="Geodetic\TransformationWGS84.cs" />
     <Compile Include="ImageFeature.cs" />
     <Compile Include="LDetector.cs" />
     <Compile Include="Octree.cs" />
