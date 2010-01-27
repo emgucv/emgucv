@@ -36,5 +36,27 @@ namespace Emgu.CV.Structure
          this.y = y;
          this.z = z;
       }
+
+      /// <summary>
+      /// Compute the sum of two 3D points
+      /// </summary>
+      /// <param name="p1">The first point to be added</param>
+      /// <param name="p2">The second point to be added</param>
+      /// <returns>The sum of two points</returns>
+      public static MCvPoint3D64f operator +(MCvPoint3D64f p1, MCvPoint3D64f p2)
+      {
+         return new MCvPoint3D64f(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+      }
+
+      /// <summary>
+      /// Subtract <paramref name="p2"/> from <paramref name="p1"/>
+      /// </summary>
+      /// <param name="p1">The first point</param>
+      /// <param name="p2">The point to be added</param>
+      /// <returns>The sum of two points</returns>
+      public static MCvPoint3D64f operator -(MCvPoint3D64f p1, MCvPoint3D64f p2)
+      {
+         return new MCvPoint3D64f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+      }
    }
 }
