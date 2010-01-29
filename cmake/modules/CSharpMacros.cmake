@@ -83,10 +83,12 @@ MACRO(COMPILE_CS target target_type source)
 IF(${target_type} STREQUAL "library")
   GET_CS_LIBRARY_TARGET_DIR()
   SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
+  SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
 ELSE(${target_type} STREQUAL "library")
   IF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
     GET_CS_EXECUTABLE_TARGET_DIR()
     GET_CS_EXECUTABLE_EXTENSION()
+	SET(COMPILE_CS_TARGET_DIR "${CS_EXECUTABLE_TARGET_DIR}")
     # FIXME:
     # Seems like cmake doesn't like the ".exe" ending for custom commands.
     # If we call it ${target}.exe, 'make' will later complain about a missing rule.
@@ -96,6 +98,7 @@ ELSE(${target_type} STREQUAL "library")
     #module
     GET_CS_LIBRARY_TARGET_DIR()
     SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
+	SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
   ENDIF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
 ENDIF(${target_type} STREQUAL "library")
 
@@ -106,6 +109,12 @@ ENDIF(${target_type} STREQUAL "library")
       ${target} ${ARGV3}
       SOURCES ${source})
   
+    #Make sure the destination folder exist
+    SET(CS_PREBUILD_COMMAND 
+      ${CS_PREBUILD_COMMAND} 
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
+      )
+
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       ${CS_PREBUILD_COMMAND}	   
