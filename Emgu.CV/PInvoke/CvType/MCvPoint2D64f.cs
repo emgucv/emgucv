@@ -29,6 +29,51 @@ namespace Emgu.CV.Structure
          this.x = x; this.y = y;
       }
 
+      #region operator overloads
+      /// <summary>
+      /// Compute the sum of two 3D points
+      /// </summary>
+      /// <param name="p1">The first point to be added</param>
+      /// <param name="p2">The second point to be added</param>
+      /// <returns>The sum of two points</returns>
+      public static MCvPoint2D64f operator +(MCvPoint2D64f p1, MCvPoint2D64f p2)
+      {
+         return new MCvPoint2D64f(p1.x + p2.x, p1.y + p2.y);
+      }
+
+      /// <summary>
+      /// Subtract <paramref name="p2"/> from <paramref name="p1"/>
+      /// </summary>
+      /// <param name="p1">The first point</param>
+      /// <param name="p2">The point to be added</param>
+      /// <returns>The sum of two points</returns>
+      public static MCvPoint2D64f operator -(MCvPoint2D64f p1, MCvPoint2D64f p2)
+      {
+         return new MCvPoint2D64f(p1.x - p2.x, p1.y - p2.y);
+      }
+
+      /// <summary>
+      /// Multiply the point with a scale
+      /// </summary>
+      /// <param name="p">The point to be multiplied</param>
+      /// <param name="scale">The scale</param>
+      /// <returns>The point multiplied by the scale</returns>
+      public static MCvPoint2D64f operator *(MCvPoint2D64f p, double scale)
+      {
+         return new MCvPoint2D64f(p.x * scale, p.y * scale);
+      }
+
+      /// <summary>
+      /// Multiply the point with a scale
+      /// </summary>
+      /// <param name="p">The point to be multiplied</param>
+      /// <param name="scale">The scale</param>
+      /// <returns>The point multiplied by the scale</returns>
+      public static MCvPoint2D64f operator *(double scale, MCvPoint2D64f p)
+      {
+         return p * scale;
+      }
+      #endregion
 
       #region IEquatable<MCvPoint2D64f> Members
       /// <summary>

@@ -82,6 +82,7 @@ namespace Emgu.CV.Structure
          return new MCvPoint3D32f(x / norm, y / norm, z / norm);
       }
 
+      #region operator overloads
       /// <summary>
       /// Substract one point from the other
       /// </summary>
@@ -92,6 +93,40 @@ namespace Emgu.CV.Structure
       {
          return new MCvPoint3D32f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
       }
+
+      /// <summary>
+      /// Compute the sum of two 3D points
+      /// </summary>
+      /// <param name="p1">The first point to be added</param>
+      /// <param name="p2">The second point to be added</param>
+      /// <returns>The sum of two points</returns>
+      public static MCvPoint3D32f operator +(MCvPoint3D32f p1, MCvPoint3D32f p2)
+      {
+         return new MCvPoint3D32f(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+      }
+
+      /// <summary>
+      /// Multiply the point with a scale
+      /// </summary>
+      /// <param name="p">The point to be multiplied</param>
+      /// <param name="scale">The scale</param>
+      /// <returns>The point multiplied by the scale</returns>
+      public static MCvPoint3D32f operator *(MCvPoint3D32f p, float scale)
+      {
+         return new MCvPoint3D32f(p.x * scale, p.y * scale, p.z * scale);
+      }
+
+      /// <summary>
+      /// Multiply the point with a scale
+      /// </summary>
+      /// <param name="p">The point to be multiplied</param>
+      /// <param name="scale">The scale</param>
+      /// <returns>The point multiplied by the scale</returns>
+      public static MCvPoint3D32f operator *(float scale, MCvPoint3D32f p)
+      {
+         return p * scale;
+      }
+      #endregion
 
       #region IEquatable<MCvPoint3D32f> Members
       /// <summary>
