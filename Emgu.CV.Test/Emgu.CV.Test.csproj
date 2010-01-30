@@ -55,6 +55,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AutoTestGeodetic.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestVarious.cs" />
     <Compile Include="Class1.cs" />

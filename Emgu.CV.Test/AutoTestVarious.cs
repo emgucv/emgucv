@@ -603,16 +603,18 @@ namespace Emgu.CV.Test
          }
          #endregion
 
-         Stopwatch watch = Stopwatch.StartNew();
          PlanarSubdivision division;
 
-         watch.Reset(); watch.Start();
+         Stopwatch watch = Stopwatch.StartNew();
          division = new PlanarSubdivision(points, true);
          Triangle2DF[] triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length));
+         watch.Reset();
 
-         watch.Reset(); watch.Start();
+         Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division) == 1);
+         
+         watch.Start();
          division = new PlanarSubdivision(points);
          VoronoiFacet[] facets = division.GetVoronoiFacets();
          watch.Stop();
@@ -1429,7 +1431,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestQuaternions()
+      public void TestQuaternions1()
       {
          Quaternions q = new Quaternions();
          double epsilon = 1.0e-10;
@@ -1481,6 +1483,26 @@ namespace Emgu.CV.Test
          double t = q.RotationAngle;
          q = q*q;
          Assert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - t) < epsilon);
+
+      }
+
+      [Test]
+      public void TestQuaternion2()
+      {
+         Random r = new Random();
+         Quaternions q1 = new Quaternions();
+         q1.SetEuler(r.NextDouble(), r.NextDouble(), r.NextDouble());
+
+         Quaternions q2 = new Quaternions();
+         q2.SetEuler(r.NextDouble(), r.NextDouble(), r.NextDouble());
+
+         MCvPoint3D64f p = new MCvPoint3D64f(r.NextDouble() * 10, r.NextDouble() * 10, r.NextDouble() * 10);
+
+         MCvPoint3D64f delta = (q1 * q2).RotatePoint(p) - q1.RotatePoint(q2.RotatePoint(p));
+         double epsilon = 1.0e-8;
+         Assert.Less(delta.x, epsilon);
+         Assert.Less(delta.y, epsilon);
+         Assert.Less(delta.z, epsilon);
 
       }
 
