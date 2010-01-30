@@ -21,9 +21,9 @@ namespace Emgu.CV.Geodetic
       /// <summary>
       /// Create a geodetic coordinate using the specific values
       /// </summary>
-      /// <param name="latitude">Latitude</param>
-      /// <param name="longitude">Longitude</param>
-      /// <param name="altitude">Altitude</param>
+      /// <param name="latitude">Latitude in radian</param>
+      /// <param name="longitude">Longitude in radian</param>
+      /// <param name="altitude">Altitude in meters</param>
       public GeodeticCoordinate(double latitude, double longitude, double altitude)
       {
          _latitude = latitude;
@@ -32,7 +32,7 @@ namespace Emgu.CV.Geodetic
       }
 
       /// <summary>
-      /// Latitude (phi)
+      /// Latitude (phi) in radian
       /// </summary>
       public double Latitude
       {
@@ -47,7 +47,7 @@ namespace Emgu.CV.Geodetic
       }
 
       /// <summary>
-      /// Longitude (lambda)
+      /// Longitude (lambda) in radian
       /// </summary>
       public double Longitude
       {
@@ -62,7 +62,7 @@ namespace Emgu.CV.Geodetic
       }
 
       /// <summary>
-      /// Altitude (height)
+      /// Altitude (height) in meters
       /// </summary>
       public double Altitude
       {
@@ -104,12 +104,26 @@ namespace Emgu.CV.Geodetic
             coor1.Altitude - coor2.Altitude);
       }
 
+      /// <summary>
+      /// Compute <paramref name="coor"/> * <paramref name="scale"/>
+      /// </summary>
+      /// <param name="coor">The coordinate</param>
+      /// <param name="scale">The scale to be multiplied</param>
+      /// <returns><paramref name="coor"/> * <paramref name="scale"/></returns>
+      public static GeodeticCoordinate operator *(GeodeticCoordinate coor, double scale)
+      {
+         return new GeodeticCoordinate(
+            coor.Latitude * scale,
+            coor.Longitude * scale,
+            coor.Altitude * scale);
+      }
+
       #region IEquatable<GeodeticCoordinate> Members
       /// <summary>
       /// Check if this Geodetic coordinate equals <paramref name="other"/>
       /// </summary>
-      /// <param name="other"></param>
-      /// <returns></returns>
+      /// <param name="other">The other coordinate to be compared with</param>
+      /// <returns>True if two coordinates equals</returns>
       public bool Equals(GeodeticCoordinate other)
       {
          return
