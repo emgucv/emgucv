@@ -111,17 +111,14 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create a capture from file
+      /// Create a capture from file or a video stream
       /// </summary>
-      /// <param name="fileName">The file name of the movie</param>
+      /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
       public Capture(String fileName)
       {
-         if (!System.IO.File.Exists(fileName) )
-            throw new System.IO.FileNotFoundException(String.Format("The file '{0}' cannot be found", fileName));
-
          _ptr = CvInvoke.cvCreateFileCapture(fileName);
          if (_ptr == IntPtr.Zero)
-            throw new NullReferenceException(String.Format("Unable to create capture from file: {0}", fileName));
+            throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
       }
       #endregion
 
