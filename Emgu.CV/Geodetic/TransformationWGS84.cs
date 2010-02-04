@@ -61,7 +61,7 @@ namespace Emgu.CV.Geodetic
       /// </summary>
       /// <param name="ecef">The ecef coordinate</param>
       /// <returns>The geodetic coordinate</returns>
-      public static GeodeticCoordinate Geodetic2LLA(MCvPoint3D64f ecef)
+      public static GeodeticCoordinate ECEF2Geodetic(MCvPoint3D64f ecef)
       {
          GeodeticCoordinate coor = new GeodeticCoordinate();
          double p = Math.Sqrt(ecef.x * ecef.x + ecef.y * ecef.y);
@@ -131,7 +131,7 @@ namespace Emgu.CV.Geodetic
             cosLambda * enu.x - sinPhi * sinLambda * enu.y + cosPhi * sinLambda * enu.z,
             cosPhi * enu.y + sinPhi * enu.z);
 
-         return Geodetic2LLA(ecefDelta + Geodetic2ECEF(refCoor));
+         return ECEF2Geodetic(ecefDelta + Geodetic2ECEF(refCoor));
       }
 
       /// <summary>
