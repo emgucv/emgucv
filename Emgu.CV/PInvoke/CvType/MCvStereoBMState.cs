@@ -84,5 +84,9 @@ namespace Emgu.CV.Structure
       /// internal buffers, do not modify (!)
       /// </summary>
       public IntPtr dbmax;
+      /// <summary>
+      /// internal buffers, do not modify (!)
+      /// </summary>
+      public IntPtr disp;
    }
 }
