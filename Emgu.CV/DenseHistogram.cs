@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Runtime.Serialization;
+using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -42,7 +43,7 @@ namespace Emgu.CV
       {
          _matND = matND;
          MCvMatND cvMatND = _matND.MCvMatND;
-         
+
          Debug.Assert(
             ranges.Length == cvMatND.dims,
             "incompatible dimension");
@@ -184,12 +185,12 @@ namespace Emgu.CV
       /// Compares histogram over each possible rectangular patch of the specified size in the input images, and stores the results to the output map dst.
       /// </summary>
       /// <param name="srcs">Source images, all are of the same size and type</param>
-      /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1. if unsure. </param>
+      /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1 if unsure. </param>
       /// <param name="patchSize">Size of patch slid though the source images.</param>
       /// <param name="method">Comparison method, passed to cvCompareHist.</param>
       /// <typeparam name="TDepth">The type of depth of the image</typeparam>
       /// <returns>Destination back projection image of the same type as the source images</returns>
-      public Image<Gray, TDepth> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, float factor) where TDepth : new()
+      public Image<Gray, Single> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, float factor) where TDepth : new()
       {
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
@@ -197,8 +198,8 @@ namespace Emgu.CV
              Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
                  srcs,
                  delegate(Image<Gray, TDepth> img) { return img.Ptr; });
-
-         Image<Gray, TDepth> res = srcs[0].CopyBlank();
+         Size imgSize = srcs[0].Size;
+         Image<Gray, Single> res = new Image<Gray, float>(imgSize.Width - patchSize.Width + 1, imgSize.Height - patchSize.Height + 1);
          CvInvoke.cvCalcBackProjectPatch(imgPtrs, res.Ptr, patchSize, Ptr, method, factor);
          return res;
       }
@@ -392,7 +393,7 @@ namespace Emgu.CV
       {
          RangeF[] ranges1 = Ranges;
          RangeF[] ranges2 = other.Ranges;
-         if (ranges1.Length != ranges2.Length) 
+         if (ranges1.Length != ranges2.Length)
             return false;
 
          for (int i = 0; i < ranges1.Length; i++)

@@ -2186,7 +2186,7 @@ namespace Emgu.CV
       /// <param name="hist">Histogram </param>
       /// <param name="method">Comparison methof</param>
       /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1. if unsure.</param>
-      [DllImport(CV_LIBRARY)]
+      [DllImport(CV_LIBRARY, EntryPoint = "cvCalcArrBackProjectPatch")]
       public static extern void cvCalcBackProjectPatch(
          IntPtr[] images,
          IntPtr dst,
