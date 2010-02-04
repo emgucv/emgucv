@@ -30,6 +30,12 @@ namespace Emgu.CV.Test
          //Trace.WriteLine(Emgu.Toolbox.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
       }
 
+      public void TestCapture()
+      {
+         Capture capture = new Capture("abc.efg");
+         Image<Bgr, Byte> image = capture.QueryFrame();
+      }
+
       public void GenerateLogo()
       {
          Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));

@@ -1312,6 +1312,14 @@ namespace Emgu.CV.Test
                {
                   Size sz = bpj.Size;
                }
+               using (Image<Gray, Single> patchBpj = h.BackProjectPatch(
+                  new Image<Gray, Byte>[1] { HSVs[0] }, 
+                  new Size(5, 5), 
+                  Emgu.CV.CvEnum.HISTOGRAM_COMP_METHOD.CV_COMP_CHISQR,
+                  1.0f))
+               {
+                  Size sz = patchBpj.Size;
+               }
             }
 
             foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
