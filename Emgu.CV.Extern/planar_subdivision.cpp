@@ -1,15 +1,5 @@
 #include "planar_subdivision.h"
 
-/*
-#if CV_SSE2 && defined(__GNUC__)
-#define align(x) __attribute__ ((aligned (x)))
-#elif CV_SSE2 && (defined(__ICL) || defined _MSC_VER && _MSC_VER >= 1300)
-#define align(x) __declspec(align(x))
-#else
-#define align(x)
-#endif
-*/
-
 void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, int count)
 {
    CvPoint2D32f* point = (CvPoint2D32f*) points;
@@ -51,7 +41,7 @@ struct ltpt
 CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
 {
    CvPoint2D32f point;
-   point.x = t->V0.x +t->V1.x + t->V2.x;
+   point.x = t->V0.x + t->V1.x + t->V2.x;
    point.y = t->V0.y + t->V1.y + t->V2.y;
    return point;
 };
