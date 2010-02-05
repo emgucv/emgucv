@@ -3,17 +3,21 @@
 CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {
    double 
-      sinX = sin(x / 2.0), 
-      cosX = cos(x / 2.0),
-      sinY = sin(y / 2.0),
-      cosY = cos(y / 2.0),
-      sinZ = sin(z / 2.0),
-      cosZ = cos(z / 2.0);
+      halfX = x *0.5,
+      halfY = y *0.5,
+      halfZ = z *0.5,
+      sinX = sin(halfX), 
+      cosX = cos(halfX),
+      sinY = sin(halfY),
+      cosY = cos(halfY),
+      sinZ = sin(halfZ),
+      cosZ = cos(halfZ);
 
    quaternions->w = cosX*cosY*cosZ + sinX*sinY*sinZ;
    quaternions->x = sinX*cosY*cosZ - cosX*sinY*sinZ;
    quaternions->y = cosX*sinY*cosZ + sinX*cosY*sinZ;
    quaternions->z = cosX*cosY*sinZ - sinX*sinY*cosZ;
+
 }
 
 CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
@@ -23,9 +27,9 @@ CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, d
    double q2 = quaternions->y;
    double q3 = quaternions->z;
 
-   *x = atan2(2 * (q0 * q1 + q2 * q3), 1.0 - 2.0 * (q1 * q1 + q2*q2));
-   *y = asin(2 * (q0 * q2 - q3 * q1));
-   *z = atan2(2 * (q0 * q3 + q1 * q2), 1.0 - 2.0 * (q2*q2 + q3*q3));
+   *x = atan2(2.0 * (q0 * q1 + q2 * q3), 1.0 - 2.0 * (q1*q1 + q2*q2));
+   *y = asin(2.0 * (q0 * q2 - q3 * q1));
+   *z = atan2(2.0 * (q0 * q3 + q1 * q2), 1.0 - 2.0 * (q2*q2 + q3*q3));
 }
 
 CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
@@ -56,9 +60,9 @@ void quaternionsRotate(double w, double x, double y, double z, double v1, double
       t9 =   y*z,
       t10 = -z*z;
 
-      *vr++  = 2*( (t8 + t10)* v1 + (t6 -  t4)* v2 + (t3 + t7)* v3 ) + v1,
-      *vr++ = 2*( (t4 +  t6)* v1 + (t5 + t10)* v2 + (t9 - t2)* v3 ) + v2,
-      *vr = 2*( (t7 -  t3)* v1 + (t2 +  t9)* v2 + (t5 + t8)* v3 ) + v3;
+   *vr++  = 2.0*( (t8 + t10)* v1 + (t6 -  t4)* v2 + (t3 + t7)* v3 ) + v1,
+   *vr++ = 2.0*( (t4 +  t6)* v1 + (t5 + t10)* v2 + (t9 - t2)* v3 ) + v2,
+   *vr = 2.0*( (t7 -  t3)* v1 + (t2 +  t9)* v2 + (t5 + t8)* v3 ) + v3;
 }
 
 CVAPI(void) quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst)
