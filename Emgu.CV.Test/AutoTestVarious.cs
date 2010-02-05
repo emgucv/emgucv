@@ -1316,7 +1316,7 @@ namespace Emgu.CV.Test
                   new Image<Gray, Byte>[1] { HSVs[0] }, 
                   new Size(5, 5), 
                   Emgu.CV.CvEnum.HISTOGRAM_COMP_METHOD.CV_COMP_CHISQR,
-                  1.0f))
+                  1.0))
                {
                   Size sz = patchBpj.Size;
                }
