@@ -2193,7 +2193,7 @@ namespace Emgu.CV
          Size patchSize,
          IntPtr hist,
          CvEnum.HISTOGRAM_COMP_METHOD method,
-         float factor);
+         double factor);
 
       /// <summary>
       /// calculates the object probability density from the two histograms as:

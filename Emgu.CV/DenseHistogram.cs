@@ -190,7 +190,7 @@ namespace Emgu.CV
       /// <param name="method">Comparison method, passed to cvCompareHist.</param>
       /// <typeparam name="TDepth">The type of depth of the image</typeparam>
       /// <returns>Destination back projection image of the same type as the source images</returns>
-      public Image<Gray, Single> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, float factor) where TDepth : new()
+      public Image<Gray, Single> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, double factor) where TDepth : new()
       {
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
