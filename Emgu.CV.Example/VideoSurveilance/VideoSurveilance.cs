@@ -19,7 +19,7 @@ namespace VideoSurveilance
       private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
       private static Capture _cameraCapture;
       private static BlobTrackerAuto<Bgr> _tracker;
-      private static BGCodeBookModel<Bgr> _bgCodeBookModel;
+      private static IBGFGDetector<Bgr> _detector;
 
       public VideoSurveilance()
       {
@@ -38,7 +38,8 @@ namespace VideoSurveilance
             MessageBox.Show(e.Message);
             return;
          }
-         _bgCodeBookModel = new BGCodeBookModel<Bgr>();
+         
+         _detector = new FGDetector<Bgr>(FORGROUND_DETECTOR_TYPE.FGD);
 
          _tracker = new BlobTrackerAuto<Bgr>();
 
@@ -48,11 +49,11 @@ namespace VideoSurveilance
       void ProcessFrame(object sender, EventArgs e)
       {
          Image<Bgr, Byte> frame = _cameraCapture.QueryFrame();
-         frame._SmoothGaussian(3); //filter our noises
+         frame._SmoothGaussian(3); //filter out noises
 
          #region use the background code book model to find the forground mask
-         _bgCodeBookModel.Update(frame, Rectangle.Empty, null);
-         Image<Gray, Byte> forgroundMask = _bgCodeBookModel.ForgroundMask;
+         _detector.Update(frame);
+         Image<Gray, Byte> forgroundMask = _detector.ForgroundMask;
          #endregion
 
          _tracker.Process(frame, forgroundMask);
