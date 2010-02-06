@@ -13,13 +13,25 @@ namespace Emgu.CV.Geodetic
    /// </summary>
    public static class TransformationWGS84
    {
+#if PINVOKE
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void transformGeodetic2ECEF(ref GeodeticCoordinate coordinate, ref MCvPoint3D64f ecef);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void transformECEF2Geodetic(ref MCvPoint3D64f ecef, ref GeodeticCoordinate coordinate);
 
-#if !PINVOKE
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void transformGeodetic2ENU(ref GeodeticCoordinate coor, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref MCvPoint3D64f enu);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void transformENU2Geodetic(ref MCvPoint3D64f enu, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref GeodeticCoordinate coor);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void transformGeodetic2NED(ref GeodeticCoordinate coor, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref MCvPoint3D64f ned);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void transformNED2Geodetic(ref MCvPoint3D64f ned, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref GeodeticCoordinate coor);
+#else
       /// <summary>
       /// Value of a from WGS84
       /// </summary>
@@ -124,6 +136,11 @@ namespace Emgu.CV.Geodetic
       /// <returns>The ENU (East North UP) coordinate related to the reference coordinate</returns>
       public static MCvPoint3D64f Geodetic2ENU(GeodeticCoordinate coor, GeodeticCoordinate refCoor, MCvPoint3D64f refEcef)
       {
+#if PINVOKE
+         MCvPoint3D64f p = new MCvPoint3D64f();
+         transformGeodetic2ENU(ref coor, ref refCoor, ref refEcef, ref p);
+         return p;
+#else
          MCvPoint3D64f delta = Geodetic2ECEF(coor) - refEcef;
          double sinPhi = Math.Sin(refCoor.Latitude);
          double cosPhi = Math.Cos(refCoor.Latitude);
@@ -137,6 +154,7 @@ namespace Emgu.CV.Geodetic
             -sinLambda * delta.x + cosLambda * delta.y,
             -sinPhi * cosLambda_DeltaX - sinPhi * sinLambda_DeltaY + cosPhi * delta.z,
             cosPhi * cosLambda_DeltaX + cosPhi * sinLambda_DeltaY + sinPhi * delta.z);
+#endif
       }
 
       /// <summary>
@@ -159,8 +177,14 @@ namespace Emgu.CV.Geodetic
       /// <returns>The NED (North East Down) coordinate related to the reference coordinate</returns>
       public static MCvPoint3D64f Geodetic2NED(GeodeticCoordinate coor, GeodeticCoordinate refCoor, MCvPoint3D64f refEcef)
       {
+#if PINVOKE
+         MCvPoint3D64f ned = new MCvPoint3D64f();
+         transformGeodetic2NED(ref coor, ref refCoor, ref refEcef, ref ned);
+         return ned;
+#else
          MCvPoint3D64f enu = Geodetic2ENU(coor, refCoor, refEcef);
          return new MCvPoint3D64f(enu.y, enu.x, -enu.z);
+#endif
       }
 
       /// <summary>
@@ -183,6 +207,11 @@ namespace Emgu.CV.Geodetic
       /// <returns>The Geodetic coordinate</returns>
       public static GeodeticCoordinate ENU2Geodetic(MCvPoint3D64f enu, GeodeticCoordinate refCoor, MCvPoint3D64f refEcef)
       {
+#if PINVOKE
+         GeodeticCoordinate coor = new GeodeticCoordinate();
+         transformENU2Geodetic(ref enu, ref refCoor, ref refEcef, ref coor);
+         return coor;
+#else
          double sinPhi = Math.Sin(refCoor.Latitude);
          double cosPhi = Math.Cos(refCoor.Latitude);
          double sinLambda = Math.Sin(refCoor.Longitude);
@@ -196,6 +225,7 @@ namespace Emgu.CV.Geodetic
             cosPhi * enu.y + sinPhi * enu.z);
 
          return ECEF2Geodetic(ecefDelta + refEcef);
+#endif
       }
 
       /// <summary>
@@ -207,8 +237,14 @@ namespace Emgu.CV.Geodetic
       /// <returns>The Geodetic coordinate</returns>
       public static GeodeticCoordinate NED2Geodetic(MCvPoint3D64f ned, GeodeticCoordinate refCoor, MCvPoint3D64f refEcef)
       {
+#if PINVOKE
+         GeodeticCoordinate coor = new GeodeticCoordinate();
+         transformNED2Geodetic(ref ned, ref refCoor, ref refEcef, ref coor);
+         return coor;
+#else
          MCvPoint3D64f enu = new MCvPoint3D64f(ned.y, ned.x, -ned.z);
          return ENU2Geodetic(enu, refCoor, refEcef);
+#endif
       }
 
       /// <summary>

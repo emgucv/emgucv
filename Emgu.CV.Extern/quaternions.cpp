@@ -98,6 +98,28 @@ CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, 
 
 CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst)
 {
+#if CV_SSE2
+   __m128d _w1w1 = _mm_set1_pd(quaternions1->w);
+   __m128d _x1x1 = _mm_set1_pd(quaternions1->x);
+   __m128d _y1y1 = _mm_set1_pd(quaternions1->y);
+   __m128d _z1z1 = _mm_set1_pd(quaternions1->z);
+   __m128d _w2x2 = _mm_set_pd(quaternions2->w, quaternions2->x);
+   __m128d _nx2w2 = _mm_set_pd(-quaternions2->x, quaternions2->w);
+   __m128d _z2y2 = _mm_set_pd(quaternions2->z, quaternions2->y);
+   __m128d _ny2z2 = _mm_set_pd(-quaternions2->y, quaternions2->z);
+
+   __m128d _wx = _mm_add_pd(
+      _mm_add_pd(_mm_mul_pd(_w1w1, _w2x2), _mm_mul_pd(_x1x1, _nx2w2)),
+      _mm_sub_pd(_mm_mul_pd(_y1y1, _ny2z2), _mm_mul_pd(_z1z1, _z2y2)));
+   __m128d _zy = _mm_add_pd(
+      _mm_sub_pd(_mm_mul_pd(_w1w1, _z2y2), _mm_mul_pd(_x1x1, _ny2z2)),
+      _mm_add_pd(_mm_mul_pd(_y1y1, _nx2w2), _mm_mul_pd(_z1z1, _w2x2)));
+   
+   quaternionsDst->w = _wx.m128d_f64[1];
+   quaternionsDst->x = _wx.m128d_f64[0];
+   quaternionsDst->z = _zy.m128d_f64[1];
+   quaternionsDst->y = _zy.m128d_f64[0];
+#else
    double w1 = quaternions1->w;
    double x1 = quaternions1->x;
    double y1 = quaternions1->y;
@@ -110,8 +132,11 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 
    quaternionsDst->w = (w1*w2 - x1*x2 - y1*y2 - z1*z2);
    quaternionsDst->x = (w1*x2 + x1*w2 + y1*z2 - z1*y2);
-   quaternionsDst->y = (w1*y2 - x1*z2 + y1*w2 + z1*x2);
+
    quaternionsDst->z = (w1*z2 + x1*y2 - y1*x2 + z1*w2);
+   quaternionsDst->y = (w1*y2 - x1*z2 + y1*w2 + z1*x2);
+
+#endif
 }
 
 
