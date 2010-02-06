@@ -498,16 +498,7 @@ namespace Emgu.CV
       public virtual void Save(String fileName)
       {
          FileInfo fi = new FileInfo(fileName);
-
-         if (Array.Exists(ImageConstants.OpencvFileFormats, fi.Extension.ToLower().Equals))
-         {
-            //if the file can be imported from Open CV
-            CvInvoke.cvSaveImage(fileName, Ptr);
-         }
-         else
-         {
-            throw new NotImplementedException(String.Format("Saving to {0} Format is not implemented", fi.Extension));
-         }
+         CvInvoke.cvSaveImage(fileName, Ptr);
       }
       #endregion
 

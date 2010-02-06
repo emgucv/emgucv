@@ -72,29 +72,14 @@ namespace Emgu.CV
       {
          FileInfo fi = new FileInfo(fileName);
 
-         if (Array.Exists(ImageConstants.OpencvFileFormats, fi.Extension.ToLower().Equals))
-         {  //if the file can be imported from Open CV
-            try
-            {
-               LoadImageUsingOpenCV(fi);
-            }
-            catch
-            {  //give Bitmap a try
-               //and if it cannot load the image, exception will be thrown
-               LoadFileUsingBitmap(fi);
-            }
-            return;
-         }
-
-         //if the file format is not recognized by OpenCV
          try
          {
-            LoadFileUsingBitmap(fi);
+            LoadImageUsingOpenCV(fi);
          }
          catch
-         {  //give OpenCV a try any way, 
+         {  //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
-            LoadImageUsingOpenCV(fi);
+            LoadFileUsingBitmap(fi);
          }
       }
 
@@ -4240,8 +4225,34 @@ namespace Emgu.CV
          }
          catch
          {
+            //Saving with OpenCV fails
+            //Try to save the image using .NET's Bitmap class
             using (Bitmap bmp = Bitmap)
-               bmp.Save(fileName); //save the image using Bitmap
+            {
+               String extension = Path.GetExtension(fileName).ToLower();
+               switch (extension)
+               {
+                  case ".jpg":
+                  case ".jpeg":
+                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                     break;
+                  case ".bmp":
+                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                     break;
+                  case ".png":
+                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
+                     break;
+                  case ".tiff":
+                  case ".tif":
+                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Tiff);
+                     break;
+                  case ".gif":
+                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Gif);
+                     break;
+                  default:
+                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
+               }
+            }
          }
       }
 
@@ -4336,18 +4347,6 @@ namespace Emgu.CV
       /// Offset of roi
       /// </summary>
       public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
-
-      /// <summary>
-      /// File formats supported by OpenCV. File operations are natively handled by OpenCV if the type file belongs to one of following format.
-      /// </summary>
-      public static String[] OpencvFileFormats = new string[] { ".jpe", ".dib", ".pbm", ".pgm", ".ppm", ".sr", ".ras", ".exr", ".jp2" };
-
-/*
-      /// <summary>
-      /// File formats supported by Bitmap. Image are converted to Bitmap then perform file operations if the file type belongs to one of following format.
-      /// </summary>
-      private static String[] BitmapFormats = new string[] { ".jpg", ".jpeg", ".gif", ".exig", ".png", ".tiff", ".bmp", ".tif" };
-*/
    }
 }
 
