@@ -1494,6 +1494,24 @@ namespace Emgu.CV.Test
 
       }
 
+      public void TestQuaternionsPerformance()
+      {
+         Quaternions q = new Quaternions();
+         Random r = new Random();
+         q.SetEuler(r.NextDouble(), r.NextDouble(), r.NextDouble());
+
+         Stopwatch watch = Stopwatch.StartNew();
+         double counter = 0.0;
+         for (int i = 0; i < 1000000; i++)
+         {
+            Quaternions q2 = q * q;
+            counter += q2.W;
+         }
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+
+      }
+
       [Test]
       public void TestQuaternion2()
       {
@@ -1544,13 +1562,22 @@ namespace Emgu.CV.Test
          CvInvoke.cvReleaseConDensation(ref conden);
       }
 
+      private static String GetTempFileName()
+      {
+         string filename = Path.GetTempFileName();
+
+         File.Delete(filename);
+
+         return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
+      }
+
       [Test]
       public void TestVideoWriter()
       {
          int numberOfFrames = 10;
          int width = 300;
          int height = 200;
-         String fileName = "tmp.avi";
+         String fileName = GetTempFileName() + ".mpeg";
 
          Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
          for (int i = 0; i < images.Length; i++)

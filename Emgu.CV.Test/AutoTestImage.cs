@@ -480,6 +480,84 @@ namespace Emgu.CV.Test
          }*/
       }
 
+      private static String GetTempFileName()
+      {
+         string filename = Path.GetTempFileName();
+
+         File.Delete(filename);
+      
+         return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
+      }
+
+
+      [Test]
+      public void TestImageSave()
+      {
+         TestImageSaveHelper(".bmp", System.Drawing.Imaging.ImageFormat.Bmp, 0.0);
+         TestImageSaveHelper(".png", System.Drawing.Imaging.ImageFormat.Png, 0.0);
+         TestImageSaveHelper(".tiff", System.Drawing.Imaging.ImageFormat.Tiff, 0.0);
+         TestImageSaveHelper(".tif", System.Drawing.Imaging.ImageFormat.Tiff, 0.0);
+         TestImageSaveHelper(".gif", System.Drawing.Imaging.ImageFormat.Gif, 255.0);
+         TestImageSaveHelper(".jpg", System.Drawing.Imaging.ImageFormat.Jpeg, 255.0);
+         TestImageSaveHelper(".jpeg", System.Drawing.Imaging.ImageFormat.Jpeg, 255.0);
+         //TestImageSaveHelper(".ico", System.Drawing.Imaging.ImageFormat.Icon, 255.0);
+      }
+
+      private static void TestImageSaveHelper(String extension, System.Drawing.Imaging.ImageFormat format, double epsilon)
+      {
+         String fileName = GetTempFileName() + extension;
+         try
+         {
+            using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(601, 479))
+            {
+               tmp.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+
+               tmp.Save(fileName);
+
+               using (Image i = Image.FromFile(fileName))
+               {
+                  /*
+                  if (System.Drawing.Imaging.ImageFormat.Jpeg.Equals(i.RawFormat))
+                     Trace.WriteLine("jpeg");
+                  else if (System.Drawing.Imaging.ImageFormat.Gif.Equals(i.RawFormat))
+                     Trace.WriteLine("gif");
+                  else if (System.Drawing.Imaging.ImageFormat.Png.Equals(i.RawFormat))
+                     Trace.WriteLine("png");
+                  else if (System.Drawing.Imaging.ImageFormat.Bmp.Equals(i.RawFormat))
+                     Trace.WriteLine("bmp");
+                  */
+                  Assert.IsTrue(i.RawFormat.Equals(format));
+               }
+               if (epsilon == 0.0)
+                  Assert.IsTrue(tmp.Equals(new Image<Bgr, Byte>(fileName)));
+               else
+               {
+                  /*
+                  using (Image<Bgr, Byte> delta = new Image<Bgr, Byte>(tmp.Size))
+                  using (Image<Gray, Byte> mask = new Image<Gray, byte>(tmp.Size))
+                  {
+                     CvInvoke.cvAbsDiff(tmp, new Image<Bgr, Byte>(fileName), delta);
+                     for (int i = 0; i < delta.NumberOfChannels; i++)
+                     {
+                        CvInvoke.cvCmpS(delta[i], epsilon, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_GE);
+                        int count = CvInvoke.cvCountNonZero(mask);
+                        Assert.AreEqual(0, count);
+                     }
+                  }*/
+               }
+            }
+         }
+         catch (Exception e)
+         {
+            throw e;
+         }
+         finally
+         {
+            File.Delete(fileName);
+         }
+
+      }
+
       [Test]
       public void TestBitmapConstructor()
       {
