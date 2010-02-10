@@ -79,6 +79,7 @@
     <Compile Include="PInvoke\CvInvokeCxcore.cs" />
     <Compile Include="PInvoke\CvInvokeEntryPoints.cs" />
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
+    <Compile Include="PInvoke\CvType\Cuboid.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
