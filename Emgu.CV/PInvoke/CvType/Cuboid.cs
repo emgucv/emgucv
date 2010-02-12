@@ -24,7 +24,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="point">The point to be checked</param>
       /// <returns>True if the point is in the cuboid</returns>
-      public bool PointInCuboid(MCvPoint3D64f point)
+      public bool Contains(MCvPoint3D64f point)
       {
          return point.x >= Min.x && point.y >= Min.y && point.z >= Min.z
             && point.x <= Max.x && point.y <= Max.y && point.z <= Max.z;
