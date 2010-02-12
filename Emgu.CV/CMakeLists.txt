@@ -37,6 +37,7 @@ INSTALL(
   PATTERN "*.cs"
   PATTERN "*.csproj"
   PATTERN "*.resx"
+  PATTERN "README.txt"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMakeFiles" EXCLUDE

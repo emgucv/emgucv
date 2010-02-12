@@ -215,6 +215,33 @@ IF (WIN32)
   
   ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
   
+  # ----------------------------------------------------------------------------
+  #  Bundle MSCVRT into deployment package
+  # ----------------------------------------------------------------------------
+  IF("${EMGUCV_ARCH}" STREQUAL "win32")
+    INSTALL(
+	FILES
+	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x86.exe"
+	  DESTINATION ./
+	  COMPONENT emgucv_binary 
+	  )
+	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
+  ELSE()
+    IF("${EMGUCV_ARCH}" STREQUAL "win64")
+	  INSTALL(
+	  FILES
+	    "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x64.exe"
+	    DESTINATION ./
+	    COMPONENT emgucv_binary 
+	    )
+	  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe'")
+	ELSE()
+	ENDIF()
+  ENDIF()
+  
+  # ----------------------------------------------------------------------------
+  #  Install Debugger Visualizer
+  # ----------------------------------------------------------------------------
   SET(DEBUGER_VISUALIZER_FILES 
 	"Emgu.Util"
 	"Emgu.CV"
@@ -225,7 +252,6 @@ IF (WIN32)
     ${CVAUX_OUTPUT_NAME}
 	${HIGHGUI_OUTPUT_NAME}
 	${CVEXTERN_OUTPUT_NAME})
-	
   MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
 ClearErrors
@@ -276,7 +302,6 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   
   UNINSTALL_DEBUGER_VISUALIZER("VS2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
-  
 
   
   # ----------------------------------------------------------------------------
@@ -294,6 +319,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   IF(EMGU_CV_EXTRA_BUILD)
        ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
+
   
   # ----------------------------------------------------------------------------
   #  The source files
@@ -302,6 +328,7 @@ INSTALL(
   FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
   "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
   DESTINATION ./
   COMPONENT emgucv_source
   )
@@ -357,6 +384,7 @@ INSTALL(
   PATTERN "*.dll"
   PATTERN "*.txt"
   PATTERN "*.xml"
+  PATTERN "*.xaml"
   PATTERN "*.jpg"
   PATTERN "*.png"  
   PATTERN "*.settings"
@@ -387,6 +415,16 @@ INSTALL(
   FILES_MATCHING 
   PATTERN "*.h"
   PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
+
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades
+  DESTINATION ./opencv/data
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.xml"
   PATTERN ".svn" EXCLUDE
 )
 
