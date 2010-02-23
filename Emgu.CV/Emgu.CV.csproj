@@ -85,6 +85,7 @@
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PlanarObjectDetector.cs" />
     <Compile Include="SelfSimDescriptor.cs" />
+    <Compile Include="SparseMatrix.cs" />
     <Compile Include="StarDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
