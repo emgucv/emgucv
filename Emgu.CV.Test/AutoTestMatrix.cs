@@ -331,6 +331,21 @@ namespace Emgu.CV.Test
          CvInvoke.cvEigenVV(symMat, evects, evals, 1.0e-15, 0, 0);
       }
 
+      [Test]
+      public void TestSparseMatrix()
+      {
+         int[] dimension = new int[2];
+         dimension[0] = 1000000;
+         dimension[1] = 1000000;
+         //without sparase matrix, a matrix of this size is almost impossible to create in memory 
+
+         using (SparseMatrix<double> m1 = new SparseMatrix<double>(dimension))
+         {
+            m1[3, 10009] = 2.0;
+            Assert.AreEqual(2.0, m1[3, 10009]);
+         }
+      }
+
       /*
       [Test]
       public void TestDataContractSerializer()
