@@ -1232,6 +1232,27 @@ namespace Emgu.CV
       /// <param name="mat">Double pointer to the matrix.</param>
       [DllImport(CXCORE_LIBRARY)]
       public static extern void cvReleaseMat(ref IntPtr mat);
+
+      /// <summary>
+      /// The function allocates a multi-dimensional sparse array. Initially the array contain no elements, that is Get or GetReal returns zero for every index
+      /// </summary>
+      /// <param name="dims">Number of array dimensions</param>
+      /// <param name="sizes">Array of dimension sizes</param>
+      /// <param name="type">Type of array elements</param>
+      /// <returns>Pointer to the array header</returns>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern IntPtr cvCreateSparseMat(
+         int dims,
+         IntPtr sizes,
+         CV.CvEnum.MAT_DEPTH type);
+
+      /// <summary>
+      /// The function releases the sparse array and clears the array pointer upon exit.
+      /// </summary>
+      /// <param name="mat">Reference of the pointer to the array</param>
+      [DllImport(CXCORE_LIBRARY)]
+      public static extern void cvReleaseSparseMat(ref IntPtr mat);
+
       #endregion
 
       #region Memory Storages
