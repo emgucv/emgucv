@@ -1656,6 +1656,19 @@ namespace Emgu.CV
       public static extern void cvSplit(IntPtr src, IntPtr dst0, IntPtr dst1, IntPtr dst2, IntPtr dst3);
 
       /// <summary>
+      /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not IntPtr.Zero, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not IntPtr.Zero, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
+      /// </summary>
+      /// <param name="src">Source array</param>
+      /// <param name="dst0">Destination channels</param>
+      /// <param name="dst1">Destination channels</param>
+      /// <param name="dst2">Destination channels</param>
+      /// <param name="dst3">Destination channels</param>
+      public static void cvCvtPixToPlane(IntPtr src, IntPtr dst0, IntPtr dst1, IntPtr dst2, IntPtr dst3)
+      {
+         cvSplit(src, dst0, dst1, dst2, dst3);
+      }
+
+      /// <summary>
       /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
       /// </summary>
       /// <param name="img">Image</param>
