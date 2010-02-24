@@ -15,7 +15,7 @@ namespace Emgu.CV.Structure
       public MCvPoint3D64f Min;
 
       /// <summary>
-      /// The corrdinate of the lower corner
+      /// The coordinate of the lower corner
       /// </summary>
       public MCvPoint3D64f Max;
 
