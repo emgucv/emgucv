@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.Structure
 {
    /// <summary>
-   /// Some declarations for specific Likelihood tracker
+   /// Some declarations for specific likelihood tracker
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvBlobTrackerParamLH
