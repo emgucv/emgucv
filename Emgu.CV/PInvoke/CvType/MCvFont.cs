@@ -10,9 +10,9 @@ namespace Emgu.CV.Structure
    public struct MCvFont
    {
       ///<summary>
-      /// =CV_FONT_* 
+      /// Font type
       ///</summary>
-      public int font_face;
+      public CvEnum.FONT font_face;
       ///<summary>
       /// font data and metrics 
       ///</summary>
