@@ -115,10 +115,20 @@ ENDIF(${target_type} STREQUAL "library")
       COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
       )
 
+	SET(TMP "-out:${target_name} -target:${target_type}")
+	FOREACH(TMP_NAME ${CS_FLAGS})
+	  SET(TMP "${TMP} ${TMP_NAME}")
+	ENDFOREACH()
+	FOREACH(TMP_NAME ${proper_file_list})
+	  SET(TMP "${TMP} ${TMP_NAME}")
+	ENDFOREACH()
+	
+	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/cscSourceList.rsp  "${TMP}")
+	  
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       ${CS_PREBUILD_COMMAND}	   
-      COMMAND ${CSC_EXECUTABLE} ${CS_FLAGS} -out:${target_name} -target:${target_type} ${proper_file_list}
+      COMMAND ${CSC_EXECUTABLE} @cscSourceList.rsp
       DEPENDS ${source}
       COMMENT "Building ${relative_path}")
 
