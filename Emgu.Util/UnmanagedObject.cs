@@ -3,7 +3,7 @@ using System;
 namespace Emgu.Util
 {
    /// <summary>
-   /// An abstract class that wrap around an unmanaged object
+   /// An Unmanaged Object is a disposable object with a Ptr property pointing to the unmanaged object
    /// </summary>
    public abstract class UnmanagedObject : DisposableObject
    {
