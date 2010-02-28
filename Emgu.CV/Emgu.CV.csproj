@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
+    <Compile Include="StereoSGBM.cs" />
     <Compile Include="SURFTracker.cs" />
     <Compile Include="VectorOfFloat.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
