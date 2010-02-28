@@ -1772,15 +1772,30 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Basic type
       /// </summary>
-      CV_STEREO_BM_BASIC = 0,
+      BASIC = 0,
       /// <summary>
       /// Fish eye
       /// </summary>
-      CV_STEREO_BM_FISH_EYE = 1,
+      FISH_EYE = 1,
       /// <summary>
       /// Narrow
       /// </summary>
-      CV_STEREO_BM_NARROW = 2
+      NARROW = 2
+   }
+
+   /// <summary>
+   /// Stereo Block Matching Prefilter type
+   /// </summary>
+   public enum STEREO_BM_PREFILTER
+   {
+      /// <summary>
+      /// No prefilter
+      /// </summary>
+      NORMALIZED_RESPONSE  =0,
+      /// <summary>
+      /// XSobel
+      /// </summary>
+      XSOBEL               =1
    }
 
    /// <summary>
