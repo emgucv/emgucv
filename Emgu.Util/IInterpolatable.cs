@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Emgu.Util
+{
+   /// <summary>
+   /// An object that can be interpolated
+   /// </summary>
+   public interface IInterpolatable<T> where T: new()
+   {
+      /// <summary>
+      /// The index that will be used for interpolation
+      /// </summary>
+      double InterpolationIndex { get; }
+
+      /// <summary>
+      /// Multiplication with a scale
+      /// </summary>
+      /// <param name="scale">The multiplication scale</param>
+      void Mul (double scale);
+
+      /// <summary>
+      /// Computes the sum of the two elements
+      /// </summary>
+      /// <param name="i">The other element to be added</param>
+      /// <returns>The sum of the two elements</returns>
+      void Add(T i);
+
+      /// <summary>
+      /// Substract the other element from the current element
+      /// </summary>
+      /// <param name="i">The element to be substracted</param>
+      /// <returns>The result of substracting the other element</returns>
+      void Sub(T i);
+   }
+}

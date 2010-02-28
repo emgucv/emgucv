@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Emgu.Util
 {
@@ -234,6 +235,95 @@ namespace Emgu.Util
             handle.Free();
          }
       }
+
+      /// <summary>
+      /// Perform first degree interpolation give the sorted data <paramref name="src"/> and the interpolation <paramref name="indexes"/>
+      /// </summary>
+      /// <param name="src">The sorted data that will be interpolated from</param>
+      /// <param name="indexes">The indexes of the interpolate result</param>
+      /// <returns></returns>
+      public static IEnumerable<T> LinearInterpolate<T> (IEnumerable<T> src, IEnumerable<double> indexes) where T:IInterpolatable<T>, new()
+      {
+         using (IEnumerator<T> sampleEnumerator = src.GetEnumerator())
+         {
+            if (!sampleEnumerator.MoveNext()) yield break;
+            T old = sampleEnumerator.Current;
+            if (!sampleEnumerator.MoveNext()) yield break;
+
+            T current = sampleEnumerator.Current;
+
+            foreach (double index in indexes)
+            {
+               while (index > current.InterpolationIndex && sampleEnumerator.MoveNext())
+               {
+                  old = current;
+                  current = sampleEnumerator.Current;
+               }
+               yield return LinearInterpolate(old, current, index);
+            }
+         }
+      }
+
+      /// <summary>
+      /// Get subsamples with the specific rate
+      /// </summary>
+      /// <param name="src">The source which the subsamples will be derived from</param>
+      /// <param name="subsampleRate">The subsample rate</param>
+      /// <returns><paramref name="src"/> subsampled with the specific rate </returns>
+      public static IEnumerable<T> LinearSubsample<T>(IEnumerable<T> src, double subsampleRate) where T : IInterpolatable<T>, new()
+      {
+         using (IEnumerator<T> sampleEnumerator = src.GetEnumerator())
+         {
+            if (!sampleEnumerator.MoveNext()) yield break;
+            T old = sampleEnumerator.Current;
+            yield return old;
+
+            if (!sampleEnumerator.MoveNext()) yield break;
+            T current = sampleEnumerator.Current;
+            double currentIndex = old.InterpolationIndex + subsampleRate;
+
+            bool endOfSubsample = false;
+            while (!endOfSubsample)
+            {
+               while (currentIndex > current.InterpolationIndex )
+               {
+                  if (endOfSubsample = !sampleEnumerator.MoveNext()) break;
+
+                  old = current;
+                  current = sampleEnumerator.Current;
+               }
+
+               if (!endOfSubsample)
+               {
+                  yield return LinearInterpolate(old, current, currentIndex);
+                  currentIndex += subsampleRate;
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Use the two IInterpolatable and the index to perform first degree interpolation
+      /// </summary>
+      /// <param name="i1">The first element to interpolate from</param>
+      /// <param name="i2">The second eleemnt to interpolate from</param>
+      /// <param name="index">The interpolation index</param>
+      /// <returns>The interpolatation result</returns>
+      private static T LinearInterpolate<T>(T i1, T i2, double index) where T : IInterpolatable<T>, new()
+      {
+         double f = (i2.InterpolationIndex - index) / (i2.InterpolationIndex - i1.InterpolationIndex);
+
+         //compute result = i1 * f + i2 * (1.0 - f)
+         T a = new T();
+         a.Add(i1);
+         a.Mul(f);
+         T b = new T();
+         b.Add(i2);
+         b.Mul(1.0 - f);
+         a.Add(b);
+         return a;
+      }
+
 
       /// <summary>
       /// memcpy function
