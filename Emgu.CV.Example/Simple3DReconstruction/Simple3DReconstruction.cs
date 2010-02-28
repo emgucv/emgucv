@@ -121,11 +121,14 @@ namespace Simlpe3DReconstruction
 
          using (Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(size))
          using (Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(size))
-         using (StereoGC gc = new StereoGC(16, 2))
+         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0, 0, 0, 0, 0, 0, 0, 0))
+         using (StereoGC stereoSolver = new StereoGC(16, 2))
          {
-            gc.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
+            stereoSolver.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
+            //stereoSolver.FindStereoCorrespondence(left, right, leftDisparity);
 
             leftDisparityMap = leftDisparity * (-16);
+            //leftDisparityMap = leftDisparity.Clone();
 
             //Construct a simple Q matrix, if you have a matrix from cvStereoRectify, you should use that instead
             using (Matrix<double> q = new Matrix<double>(
