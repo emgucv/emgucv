@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Emgu.Util;
 
 namespace Emgu.CV.Structure
 {
@@ -7,7 +8,7 @@ namespace Emgu.CV.Structure
    /// Managed Structure equivalent to CvPoint2D64f
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvPoint2D64f : IEquatable<MCvPoint2D64f>
+   public struct MCvPoint2D64f : IEquatable<MCvPoint2D64f>, IInterpolatable<MCvPoint2D64f>
    {
       /// <summary>
       /// x-coordinate
@@ -84,6 +85,33 @@ namespace Emgu.CV.Structure
       public bool Equals(MCvPoint2D64f other)
       {
          return x == other.x && y == other.y;
+      }
+
+      #endregion
+
+      #region IInterpolatable<MCvPoint2D64f> Members
+
+      double IInterpolatable<MCvPoint2D64f>.InterpolationIndex
+      {
+         get { return x; }
+      }
+
+      void IInterpolatable<MCvPoint2D64f>.Mul(double scale)
+      {
+         x *= scale;
+         y *= scale;
+      }
+
+      void IInterpolatable<MCvPoint2D64f>.Add(MCvPoint2D64f i)
+      {
+         x += i.x;
+         y += i.y;
+      }
+
+      void IInterpolatable<MCvPoint2D64f>.Sub(MCvPoint2D64f i)
+      {
+         x -= i.x;
+         y -= i.y;
       }
 
       #endregion

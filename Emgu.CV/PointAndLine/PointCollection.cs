@@ -11,6 +11,7 @@ namespace Emgu.CV
    /// </summary>
    public static class PointCollection
    {
+      /*
       /// <summary>
       /// A comparator which compares only the X value of the point
       /// </summary>
@@ -63,7 +64,7 @@ namespace Emgu.CV
          return Array.ConvertAll<float, float>(
              indexes,
              delegate(float d) { return FirstDegreeInterpolate(points, d); });
-      }
+      }*/
 
       /// <summary>
       /// Fit a line to the points collection
