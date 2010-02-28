@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Emgu.CV.Test
 {
@@ -67,14 +68,20 @@ namespace Emgu.CV.Test
       [Test]
       public void TestLookup()
       {
-         float[] b = new float[4] { 0, 1, 2, 3 };
-         float[] a = new float[4] { 1, 3, 2, 0 };
-         PointF[] pts = new PointF[b.Length];
+         double[] b = new double[4] { 0, 1, 2, 3 };
+         double[] a = new double[4] { 1, 3, 2, 0 };
+         MCvPoint2D64f [] pts = new MCvPoint2D64f[b.Length];
          for (int i = 0; i < pts.Length; i++)
-            pts[i] = new PointF(b[i], a[i]);
+            pts[i] = new MCvPoint2D64f(b[i], a[i]);
 
-         Assert.AreEqual(2.5f, PointCollection.FirstDegreeInterpolate(pts, 1.5f));
-         Assert.AreEqual(-1f, PointCollection.FirstDegreeInterpolate(pts, 3.5f));
+         IEnumerable<MCvPoint2D64f> interPts = Toolbox.LinearInterpolate(pts, new double[2] { 1.5, 3.5 });
+         IEnumerator<MCvPoint2D64f> enumerator = interPts.GetEnumerator();
+         enumerator.MoveNext();
+         Assert.AreEqual(1.5, enumerator.Current.x);
+         Assert.AreEqual(2.5, enumerator.Current.y);
+         enumerator.MoveNext();
+         Assert.AreEqual(3.5, enumerator.Current.x);
+         Assert.AreEqual(-1, enumerator.Current.y);
       }
 
       [Test]
@@ -542,11 +549,18 @@ namespace Emgu.CV.Test
          Assert.IsTrue(img.Equals(img2));
 
          stopwatch.Reset(); stopwatch.Start();
-         Image<Gray, Byte> img3 = new Image<Gray, byte>("tmp.png");
-         stopwatch.Stop();
-         Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
+         using (Bitmap bmp = new Bitmap("tmp.png"))
+         using (Image bmpImage = Bitmap.FromFile("tmp.png"))
+         {
+            Assert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
 
-         Assert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+            Image<Gray, Byte> img3 = new Image<Gray, byte>(bmp);
+            stopwatch.Stop();
+            Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
+            Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
+            Assert.AreEqual(0, CvInvoke.cvCountNonZero(diff));
+            Assert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+         }
       }
 
       [Test]
@@ -1075,19 +1089,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestStereoCorrespondence()
+      public void TestStereoGCCorrespondence()
       {
          Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
          Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 
-         //StereoBM bm = new StereoBM(Emgu.CV.CvEnum.STEREO_BM_TYPE.CV_STEREO_BM_BASIC, 0);
-         //bm.FindStereoCorrespondence(left, right, leftDisparity);
-
-         StereoGC gc = new StereoGC(10, 5);
+         StereoGC stereoSolver = new StereoGC(10, 5);
          Stopwatch watch = Stopwatch.StartNew();
-         gc.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
+         stereoSolver.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
          watch.Stop();
          Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
@@ -1104,6 +1115,65 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
          //ImageViewer.Show(leftDisparity*(-16));
+      }
+
+      [Test]
+      public void TestStereoBMCorrespondence()
+      {
+         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
+         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
+         Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
+
+         StereoBM bm = new StereoBM(Emgu.CV.CvEnum.STEREO_BM_TYPE.BASIC, 0);
+         Stopwatch watch = Stopwatch.StartNew();
+         bm.FindStereoCorrespondence(left, right, leftDisparity);
+         watch.Stop();
+
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+
+         Matrix<double> q = new Matrix<double>(4, 4);
+         q.SetIdentity();
+         MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(leftDisparity * (-16), q);
+
+         float min = (float)1.0e10, max = 0;
+         foreach (MCvPoint3D32f p in points)
+         {
+            if (p.z < min) min = p.z;
+            else if (p.z > max) max = p.z;
+         }
+         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+
+      }
+
+      [Test]
+      public void TestStereoSGBMCorrespondence()
+      {
+         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
+         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Size size = left.Size;
+
+         Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
+
+         StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0);
+         Stopwatch watch = Stopwatch.StartNew();
+         bm.FindStereoCorrespondence(left, right, disparity);
+         watch.Stop();
+
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+
+         Matrix<double> q = new Matrix<double>(4, 4);
+         q.SetIdentity();
+         MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparity * (-16), q);
+
+         float min = (float)1.0e10, max = 0;
+         foreach (MCvPoint3D32f p in points)
+         {
+            if (p.z < min) min = p.z;
+            else if (p.z > max) max = p.z;
+         }
+         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+
       }
 
       [Test]
