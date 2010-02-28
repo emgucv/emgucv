@@ -105,7 +105,7 @@ namespace Emgu.CV
          #region read the image into ptr ( of TColor, Byte )
          if (typeof(TColor) == typeof(Gray)) //TColor type is gray, load the image as grayscale
          {
-            ptr = CvInvoke.cvLoadImage(file.FullName, Emgu.CV.CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
+            ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
             size = CvInvoke.cvGetSize(ptr);
          }
          else //color type is not gray
