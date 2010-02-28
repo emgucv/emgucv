@@ -61,7 +61,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="cv200.lib cxcore200.lib highgui200.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\release\"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="2"
