@@ -6,8 +6,15 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.Util
 {
+   /// <summary>
+   /// A raw data storage
+   /// </summary>
+   /// <typeparam name="T">The type of elments in the storage</typeparam>
    public class BinaryFileStorage<T> : IEnumerable<T> where T : struct
    {
+      /// <summary>
+      /// The file info
+      /// </summary>
       protected FileInfo _fileInfo;
 
       /// <summary>
@@ -46,6 +53,33 @@ namespace Emgu.Util
       }
 
       /// <summary>
+      /// Get a copy of the first element in the storage. If the storage is empty, a default value will be returned
+      /// </summary>
+      /// <returns>A copy of the first element in the storage. If the storage is empty, a default value will be returned</returns>
+      public T Peek()
+      {
+         using (FileStream stream = _fileInfo.OpenRead())
+         {
+            int elementSize = Marshal.SizeOf(typeof(T));
+            Byte[] buffer = new byte[elementSize];
+            GCHandle handler = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            IntPtr addr = handler.AddrOfPinnedObject();
+
+            T res;
+            if (stream.Read(buffer, 0, elementSize)> 0)
+            {
+               res = (T)Marshal.PtrToStructure(addr, typeof(T));
+            }
+            else
+            {
+               res = new T();
+            }
+            handler.Free();
+            return res;
+         }
+      }
+
+      /// <summary>
       /// The file name of the storage
       /// </summary>
       public String FileName
@@ -54,6 +88,15 @@ namespace Emgu.Util
          {
             return _fileInfo.FullName;
          }
+      }
+
+      /// <summary>
+      /// Estimate the number of elements in this storage as the size of the storage divided by the size of the elements
+      /// </summary>
+      /// <returns>An estimation of the number of elements in this storage</returns>
+      public int EstimateSize()
+      {
+         return (int) (_fileInfo.Length / (Marshal.SizeOf(typeof(T))));
       }
 
       #region IEnumerable<T> Members
