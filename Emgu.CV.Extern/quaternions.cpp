@@ -139,4 +139,49 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 #endif
 }
 
+/* convert axis angle vector to quaternions. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle  */
+void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
+{
+   double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
+   double halfAngle = theta / 2.0;
+   double sinHalfAngle = sin(halfAngle);
+   double scale = sinHalfAngle / theta;
+   quaternions->w = cos(halfAngle);
+   quaternions->x = axisAngle->x * scale;
+   quaternions->y = axisAngle->y * scale;
+   quaternions->z = axisAngle->z * scale;
 
+   quaternionsRenorm(quaternions);
+}
+
+/* convert quaternions to axis angle vector. (x,y,z) is the rotatation matrix and |(x,y,z)| is the rotation angle  */
+void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
+{
+   double theta = 2.0 * acos(quaternions->w);
+   if (theta == 0)
+   {
+      axisAngle->x = axisAngle->y = axisAngle->z = 1.0e-16;
+   } else
+   {
+      double norm = sqrt(quaternions->x * quaternions->x + quaternions->y * quaternions->y + quaternions->z * quaternions->z);
+      double scale = theta / norm;
+      axisAngle->x = quaternions->x * scale;
+      axisAngle->y = quaternions->y * scale;
+      axisAngle->z = quaternions->z * scale;
+   }
+}
+
+CVAPI(void) quaternionsRenorm(Quaternions* quaternions)
+{
+   double norm = sqrt(quaternions->w * quaternions->w 
+      + quaternions->x * quaternions->x 
+      + quaternions->y * quaternions->y 
+      + quaternions->z * quaternions->z);
+   
+   double scale = 1.0 / norm;
+
+   quaternions->w *= scale;
+   quaternions->x *= scale;
+   quaternions->y *= scale;
+   quaternions->z *= scale;
+}

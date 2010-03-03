@@ -12,7 +12,7 @@ namespace Emgu.CV
    /// </summary>
    [Serializable]
    //TODO: Check if mono has System.Windows.Media.Media3D.Quaternion implemented and if it comes as a package on Ubuntu and fedora
-   public struct Quaternions 
+   public struct Quaternions : IEquatable<Quaternions>
    {
       private double _w;
       private double _x;
@@ -62,6 +62,12 @@ namespace Emgu.CV
       private extern static void quaternionsToEuler(ref Quaternions q, ref double x, ref double y, ref double z);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void axisAngleToQuaternions(ref MCvPoint3D64f axisAngle, ref Quaternions q);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void quaternionsToAxisAngle(ref Quaternions q, ref MCvPoint3D64f axisAngle);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void quaternionsToRotationMatrix(ref Quaternions quaternions, IntPtr rotation);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
@@ -96,6 +102,23 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Get or Set the equaivalent axis angle representation. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle in radians
+      /// </summary>
+      public MCvPoint3D64f AxisAngle
+      {
+         get
+         {
+            MCvPoint3D64f axisAngle = new MCvPoint3D64f();
+            quaternionsToAxisAngle(ref this, ref axisAngle);
+            return axisAngle;
+         }
+         set
+         {
+            axisAngleToQuaternions(ref value, ref this);
+         }
+      }
+
+      /// <summary>
       /// Fill the (3x3) rotation matrix with the value such that it represent the quaternions
       /// </summary>
       /// <param name="rotation">The (3x3) rotation matrix which values will be set to represent this quaternions</param>
@@ -127,7 +150,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the rotation axis of the quaternion
+      /// Get or Set the unit rotation axis of the quaternion
       /// </summary>
       public MCvPoint3D64f RotationAxis
       {
@@ -144,7 +167,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Returns the rotation angle in radian
+      /// Get or Set the rotation angle in radian
       /// </summary>
       public double RotationAngle
       {
@@ -180,5 +203,18 @@ namespace Emgu.CV
       {
          return q1.Multiply(q2);
       }
+
+      #region IEquatable<Quaternions> Members
+      /// <summary>
+      /// Check if this quaternions equals to <paramref name="other"/>
+      /// </summary>
+      /// <param name="other">The quaternions to be compared</param>
+      /// <returns>True if two quaternions equals, false otherwise</returns>
+      public bool Equals(Quaternions other)
+      {
+         return W == other.W && X == other.X && Y == other.Y && Z == other.Z;
+      }
+
+      #endregion
    }
 }
