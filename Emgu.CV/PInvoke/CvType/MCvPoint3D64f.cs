@@ -37,6 +37,30 @@ namespace Emgu.CV.Structure
          this.z = z;
       }
 
+      /// <summary>
+      /// Return the cross product of two 3D point
+      /// </summary>
+      /// <param name="point">the other 3D point</param>
+      /// <returns>The cross product of the two 3D point</returns>
+      public MCvPoint3D64f CrossProduct(MCvPoint3D64f point)
+      {
+         //A x B = <Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx>
+         return new MCvPoint3D64f(
+            y * point.z - z * point.y,
+            z * point.x - x * point.z,
+            x * point.y - y * point.x);
+      }
+
+      /// <summary>
+      /// Return the dot product of two 3D point
+      /// </summary>
+      /// <param name="point">the other 3D point</param>
+      /// <returns>The dot product of the two 3D point</returns>
+      public double DotProduct(MCvPoint3D64f point)
+      {
+         return x * point.x + y * point.y + z * point.z;
+      }
+
       #region operator overloads
       /// <summary>
       /// Compute the sum of two 3D points
