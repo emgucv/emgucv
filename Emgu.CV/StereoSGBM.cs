@@ -20,8 +20,9 @@ namespace Emgu.CV
          int minDisparity, int numDisparities, int SADWindowSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
-         int speckleWindowSize, int speckleRange);
-
+         int speckleWindowSize, int speckleRange,
+         [MarshalAs(UnmanagedType.I1)]
+         bool fullDP);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvStereoSGBMRelease(IntPtr obj);
@@ -43,12 +44,14 @@ namespace Emgu.CV
       /// <param name="uniquenessRatio">Use 0 for default</param>
       /// <param name="speckleWindowSize">Use 0 for default</param>
       /// <param name="speckleRange">Use 0 for default</param>
+      /// <param name="fullDP">Use false for default</param>
       public StereoSGBM(int minDisparity, int numDisparities, int SADWindowSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
-         int speckleWindowSize, int speckleRange)
+         int speckleWindowSize, int speckleRange,
+         bool fullDP)
       {
-         _ptr = CvStereoSGBMCreate(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange);
+         _ptr = CvStereoSGBMCreate(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, fullDP);
       }
 
       /// <summary>

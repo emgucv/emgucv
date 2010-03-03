@@ -29,9 +29,10 @@ CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
   int minDisparity, int numDisparities, int SADWindowSize,
   int P1, int P2, int disp12MaxDiff,
   int preFilterCap, int uniquenessRatio,
-  int speckleWindowSize, int speckleRange)
+  int speckleWindowSize, int speckleRange,
+  bool fullDP)
 {
-   return new cv::StereoSGBM(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap,uniquenessRatio,speckleWindowSize,speckleRange);
+   return new cv::StereoSGBM(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap,uniquenessRatio,speckleWindowSize,speckleRange, fullDP);
 }
 CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM* obj) { delete obj;}
 CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity)
