@@ -7,8 +7,6 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
-
-
    /// <summary>
    /// Adaptive Skin Detector
    /// </summary>
@@ -51,7 +49,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create an Adaptive Skin Detector
       /// </summary>
-      /// <param name="samplingDivider"></param>
+      /// <param name="samplingDivider">Use 1 for default</param>
       /// <param name="morphingMethod">The morphine method for the skin detector</param>
       public AdaptiveSkinDetector(int samplingDivider, MorphingMethod morphingMethod)
       {
