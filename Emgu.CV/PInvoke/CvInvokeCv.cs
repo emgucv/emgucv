@@ -2465,7 +2465,7 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. The rotation matrix R, corresponding to the rotation vector r.
+      /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
       /// </summary>
       /// <param name="src">The input rotation vector (3x1 or 1x3) or rotation matrix (3x3). </param>
       /// <param name="dst">The output rotation matrix (3x3) or rotation vector (3x1 or 1x3), respectively</param>
