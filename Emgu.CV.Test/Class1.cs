@@ -312,6 +312,22 @@ namespace Emgu.CV.Test
 
       }
 
+      public void TestImageViewerFrameRate()
+      {
+         ImageViewer viewer = new ImageViewer(null);
+         Image<Bgr, Byte> img = new Image<Bgr, Byte>(1024, 1024);
+         
+         Application.Idle += delegate(Object sender, EventArgs e)
+         {
+            double v = DateTime.Now.Ticks % 30;
+            img.SetValue(new Bgr(v, v, v));
+
+            viewer.Image = img;
+         };
+         viewer.ShowDialog();
+
+      }
+
       public static void TestCodeBook()
       {
          int learningFrames = 40;

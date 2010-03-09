@@ -1155,7 +1155,7 @@ namespace Emgu.CV.Test
 
          Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
 
-         StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0);
+         StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, false);
          Stopwatch watch = Stopwatch.StartNew();
          bm.FindStereoCorrespondence(left, right, disparity);
          watch.Stop();
@@ -1603,6 +1603,33 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestQuaternion3()
+      {
+         Random r = new Random();
+         Quaternions q1 = new Quaternions();
+         q1.AxisAngle = new MCvPoint3D64f(r.NextDouble(), r.NextDouble(), r.NextDouble());
+
+         Quaternions q2 = new Quaternions();
+         q2.AxisAngle = q1.AxisAngle;
+
+         double epsilon = 1.0e-12;
+         Assert.Less(Math.Abs(q1.W - q2.W), epsilon);
+         Assert.Less(Math.Abs(q1.X - q2.X), epsilon);
+         Assert.Less(Math.Abs(q1.Y - q2.Y), epsilon);
+         Assert.Less(Math.Abs(q1.Z - q2.Z), epsilon);
+
+         RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.x, q1.AxisAngle.y, q1.AxisAngle.z });
+         Matrix<double> m1 = rVec.RotationMatrix;
+         Matrix<double> m2 = new Matrix<double>(3, 3);
+         q1.GetRotationMatrix(m2);
+         Matrix<double> diff = new Matrix<double>(3, 3);
+         CvInvoke.cvAbsDiff(m1, m2, diff);
+         double norm = CvInvoke.cvNorm(diff, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_C, IntPtr.Zero);
+         Assert.Less(norm, epsilon);
+      }
+
+
+      [Test]
       public void TestDiatanceTransform()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(480, 320);
@@ -1618,10 +1645,12 @@ namespace Emgu.CV.Test
       public void TestAdaptiveSkinDetector()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
-         using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.NONE))
+         using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.ERODE_DILATE))
          {
             Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
             detector.Process(image, mask);
+            //mask._EqualizeHist();
+            //ImageViewer.Show(mask);
          }
       }
 
