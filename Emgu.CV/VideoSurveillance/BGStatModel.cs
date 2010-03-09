@@ -42,13 +42,24 @@ namespace Emgu.CV.VideoSurveillance
       /// Update the statistic model
       /// </summary>
       /// <param name="image"></param>
-      public virtual void Update(Image<TColor, Byte> image)
+      /// <param name="learningRate">Use -1 for default</param>
+      /// <returns>The number of found forground regions</returns>
+      public virtual int Update(Image<TColor, Byte> image, double learningRate)
       {
          if (updateFunction == null)
          {
             updateFunction = (BGStatModelDelegates.UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(BGStatModelDelegates.UpdateFunctionDelagate));
          }
-         updateFunction(image.Ptr, _ptr);
+         return updateFunction(image.Ptr, _ptr, learningRate);
+      }
+
+      /// <summary>
+      /// Update the statistic model
+      /// </summary>
+      /// <param name="image"></param>
+      public virtual void Update(Image<TColor, Byte> image)
+      {
+         Update(image, -1);
       }
 
       /// <summary>
@@ -105,8 +116,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="img">The image to be used for update</param>
       /// <param name="statModel">The stat model to update</param>
+      /// <param name="learningRate">Use -1 for default</param>
       /// <returns></returns>
-      public delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel);
+      public delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel, double learningRate);
 
       /// <summary>
       /// Define the Release function
