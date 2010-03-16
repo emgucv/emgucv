@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Emgu.CV.Structure
 {
@@ -24,6 +25,7 @@ namespace Emgu.CV.Structure
       public int preFilterCap;
       #endregion
 
+      #region correspondence using Sum of Absolute Difference (SAD)
       /// <summary>
       /// Could be 5x5..21x21. Correspondence using Sum of Absolute Difference (SAD):
       /// </summary>
@@ -36,6 +38,7 @@ namespace Emgu.CV.Structure
       /// maximum disparity - minimum disparity
       /// </summary>
       public int numberOfDisparities;
+      #endregion
 
       #region post filters (knock out bad matches)
       /// <summary>
@@ -63,6 +66,19 @@ namespace Emgu.CV.Structure
       /// If 1, the results may be more accurate at the expense of slower processing.
       /// </summary>
       public int trySmallerWindows;
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public Rectangle roi1;
+      /// <summary>
+      /// 
+      /// </summary>
+      public Rectangle roi2;
+      /// <summary>
+      /// 
+      /// </summary>
+      int disp12MaxDiff; 
 
       /// <summary>
       /// internal buffers, do not modify (!)
