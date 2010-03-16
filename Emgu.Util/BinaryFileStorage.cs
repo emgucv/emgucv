@@ -38,18 +38,17 @@ namespace Emgu.Util
             _fileInfo.Delete();
 
          int size = Marshal.SizeOf(typeof(T));
-         Byte[] buffer = new Byte[size];
-         GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-         IntPtr ptr = handle.AddrOfPinnedObject();
+
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(size))
          using (FileStream stream = _fileInfo.OpenWrite())
          {
+            IntPtr ptr = buffer.AddrOfPinnedObject();
             foreach (T s in samples)
             {
                Marshal.StructureToPtr(s, ptr, false);
-               stream.Write(buffer, 0, size);
+               stream.Write(buffer.Array, 0, size);
             }
          }
-         handle.Free();
       }
 
       /// <summary>
@@ -58,24 +57,13 @@ namespace Emgu.Util
       /// <returns>A copy of the first element in the storage. If the storage is empty, a default value will be returned</returns>
       public T Peek()
       {
+         int elementSize = Marshal.SizeOf(typeof(T));
          using (FileStream stream = _fileInfo.OpenRead())
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
          {
-            int elementSize = Marshal.SizeOf(typeof(T));
-            Byte[] buffer = new byte[elementSize];
-            GCHandle handler = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            IntPtr addr = handler.AddrOfPinnedObject();
-
-            T res;
-            if (stream.Read(buffer, 0, elementSize)> 0)
-            {
-               res = (T)Marshal.PtrToStructure(addr, typeof(T));
-            }
-            else
-            {
-               res = new T();
-            }
-            handler.Free();
-            return res;
+            return (stream.Read(buffer.Array, 0, elementSize) > 0) ?
+               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
+               new T();
          }
       }
 
@@ -96,7 +84,7 @@ namespace Emgu.Util
       /// <returns>An estimation of the number of elements in this storage</returns>
       public int EstimateSize()
       {
-         return (int) (_fileInfo.Length / (Marshal.SizeOf(typeof(T))));
+         return (int)(_fileInfo.Length / (Marshal.SizeOf(typeof(T))));
       }
 
       #region IEnumerable<T> Members
@@ -109,15 +97,18 @@ namespace Emgu.Util
          using (FileStream stream = _fileInfo.OpenRead())
          {
             int elementSize = Marshal.SizeOf(typeof(T));
-            Byte[] buffer = new byte[elementSize];
-            GCHandle handler = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            IntPtr addr = handler.AddrOfPinnedObject();
 
-            while (stream.Read(buffer, 0, elementSize) > 0)
+            using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
+            using (PinnedArray<T> structure = new PinnedArray<T>(1))
             {
-               yield return (T)Marshal.PtrToStructure(addr, typeof(T));
+               IntPtr structAddr = structure.AddrOfPinnedObject();
+               IntPtr addr = buffer.AddrOfPinnedObject();
+               while (stream.Read(buffer.Array, 0, elementSize) > 0)
+               {
+                  Toolbox.memcpy(structAddr, addr, elementSize);
+                  yield return structure.Array[0];
+               }
             }
-            handler.Free();
          }
       }
 
