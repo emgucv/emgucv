@@ -31,6 +31,17 @@ CVAPI(void) transformGeodetic2ECEF(geodeticCoordinate* coordinate, CvPoint3D64f*
 #if CV_SSE2
 const __m128d _ECEF2GeodeticConst0 = _mm_set_pd(A, B);
 const __m128d _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
+
+double _dot_product(__m128d v0, __m128d v1)
+{
+   __m128d v = _mm_mul_pd(v0, v1);
+   return v.m128d_f64[1] + v.m128d_f64[0];
+}
+
+double _cross_product(__m128d v0, __m128d v1)
+{
+   return v0.m128d_f64[1] * v1.m128d_f64[0] - v0.m128d_f64[0] * v1.m128d_f64[1];
+}
 #endif
 
 CVAPI(void) transformECEF2Geodetic(CvPoint3D64f* ecef, geodeticCoordinate* coor)
@@ -63,22 +74,42 @@ CVAPI(void) transformECEF2Geodetic(CvPoint3D64f* ecef, geodeticCoordinate* coor)
 
 CVAPI(void) transformGeodetic2ENU(geodeticCoordinate* coor, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, CvPoint3D64f* enu)
 {
-   double sinPhi, cosPhi, sinLambda, cosLambda;
-   CvPoint3D64f ecef, delta;
+   double sinPhi, cosPhi;
+   CvPoint3D64f ecef;
 
    transformGeodetic2ECEF(coor, &ecef);
+
+#if CV_SSE2
+   __m128d refEcefXY = _mm_set_pd(refEcef->x, refEcef->y);
+   __m128d ecefXY = _mm_set_pd(ecef.x, ecef.y);
+   __m128d deltaXY = _mm_sub_pd(ecefXY, refEcefXY);
+
+   sinPhi = sin(refCoor->latitude);
+   cosPhi = cos(refCoor->latitude);
+   
+   __m128d cosSinLambda = _mm_set_pd( cos(refCoor->longitude), sin(refCoor->longitude));
+   enu->x = _cross_product(cosSinLambda, deltaXY); 
+   double tmp = _dot_product(cosSinLambda, deltaXY);
+   double deltaZ = ecef.z - refEcef->z;
+   enu->y = cosPhi * deltaZ -sinPhi * tmp ;
+   enu->z = sinPhi * deltaZ + cosPhi * tmp ;
+#else
+   CvPoint3D64f delta;
    delta.x = ecef.x - refEcef->x;
    delta.y = ecef.y - refEcef->y;
    delta.z = ecef.z - refEcef->z;
 
    sinPhi = sin(refCoor->latitude);
    cosPhi = cos(refCoor->latitude);
-   sinLambda = sin(refCoor->longitude);
-   cosLambda = cos(refCoor->longitude);
+   double sinLambda = sin(refCoor->longitude);
+   double cosLambda = cos(refCoor->longitude);
 
    enu->x = -sinLambda * delta.x + cosLambda * delta.y;
-   enu->y = -sinPhi * cosLambda * delta.x - sinPhi * sinLambda * delta.y + cosPhi * delta.z;
-   enu->z = cosPhi * cosLambda * delta.x + cosPhi * sinLambda * delta.y + sinPhi * delta.z;
+
+   double tmp = cosLambda * delta.x + sinLambda * delta.y;
+   enu->y = -sinPhi * tmp + cosPhi * delta.z;
+   enu->z = cosPhi * tmp + sinPhi * delta.z;
+#endif
 }
 
 CVAPI(void) transformENU2Geodetic(CvPoint3D64f* enu, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, geodeticCoordinate* coor)
@@ -88,12 +119,11 @@ CVAPI(void) transformENU2Geodetic(CvPoint3D64f* enu, geodeticCoordinate* refCoor
    double sinLambda = sin(refCoor->longitude);
    double cosLambda = cos(refCoor->longitude);
 
-   double sinPhi_EnuY = sinPhi * enu->y;
-   double cosPhi_EnuZ = cosPhi * enu->z;
-   CvPoint3D64f ecef;
+   double tmp = sinPhi * enu->y - cosPhi * enu->z;
 
-   ecef.x =   -sinLambda * enu->x - cosLambda * sinPhi_EnuY + cosLambda * cosPhi_EnuZ + refEcef->x;
-   ecef.y =   cosLambda * enu->x - sinLambda * sinPhi_EnuY + sinLambda * cosPhi_EnuZ + refEcef->y;
+   CvPoint3D64f ecef;
+   ecef.x =   -sinLambda * enu->x - cosLambda * tmp + refEcef->x;
+   ecef.y =   cosLambda * enu->x - sinLambda * tmp + refEcef->y;
    ecef.z =   cosPhi * enu->y + sinPhi * enu->z + refEcef->z;
 
    transformECEF2Geodetic(&ecef, coor);
