@@ -32,7 +32,7 @@ namespace LicensePlateRecognition
          //http://code.google.com/p/tesseract-ocr/downloads/list
          //Languages supported includes:
          //Dutch, Spanish, German, Italian, French and English
-         _ocr.Init("eng", false);
+         _ocr.Init(null, "eng", false);
       }
 
       /// <summary>
