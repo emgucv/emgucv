@@ -141,15 +141,15 @@ namespace Emgu.CV
             handle.Free();
 
             int n = keyPoints.Length;
-            long add = descs.StartAddress.ToInt64();
+            long address = descs.StartAddress.ToInt64();
 
             ImageFeature[] features = new ImageFeature[n];
             int sizeOfdescriptor = extended == 0 ? 64 : 128;
-            for (int i = 0; i < n; i++, add += sizeOfdescriptor * sizeof(float))
+            for (int i = 0; i < n; i++, address += sizeOfdescriptor * sizeof(float))
             {
                features[i].KeyPoint = keyPoints[i];
                float[] desc = new float[sizeOfdescriptor];
-               Marshal.Copy(new IntPtr(add), desc, 0, sizeOfdescriptor);
+               Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
                features[i].Descriptor = desc;
             }
             return features;
