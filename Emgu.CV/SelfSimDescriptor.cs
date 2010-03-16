@@ -76,13 +76,12 @@ namespace Emgu.CV
       /// <returns></returns>
       public float[] Compute(Image<Gray, Byte> image, Size winStride, Point[] locations)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfFloat vof = new VectorOfFloat()) 
          {
-            Seq<float> seq = new Seq<float>(stor);
             GCHandle handle = GCHandle.Alloc(locations, GCHandleType.Pinned);
-            CvSelfSimDescriptorCompute(_ptr, image, seq.Ptr, ref winStride, handle.AddrOfPinnedObject(), locations.Length);
+            CvSelfSimDescriptorCompute(_ptr, image, vof, ref winStride, handle.AddrOfPinnedObject(), locations.Length);
             handle.Free();
-            return seq.ToArray();
+            return vof.ToArray();
          }
       }
 

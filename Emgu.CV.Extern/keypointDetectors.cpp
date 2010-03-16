@@ -50,16 +50,20 @@ CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image,
 CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
 CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, CvSeq* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, vectorOfFloat* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
 {
-   std::vector<float> descriptorVec;
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
+   //CV_Assert(numberOfLocation == locationVec.size());
    cv::Mat imageMat = cv::cvarrToMat(image);
-   descriptor->compute(imageMat, descriptorVec, *winStride, locationVec);
+   descriptor->compute(imageMat, descriptors->data, *winStride, locationVec);
+
+   //float sumAbs = 0.0f;
+   //for (int i = 0; i < descriptors->data.size(); i++)
+   //   sumAbs += descriptors->data[i];
    
-   if (descriptorVec.size() > 0)
-      cvSeqPushMulti(descriptors, &descriptorVec[0], descriptorVec.size());
+   //CV_Assert(sumAbs != 0.0f);
+   
 }
 CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
 
