@@ -1655,6 +1655,27 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestBinaryStorage()
+      {
+         Point[] pts = new Point[10000000];
+         String fileName = GetTempFileName();
+         Stopwatch watch = Stopwatch.StartNew();
+         BinaryFileStorage<Point> stor = new BinaryFileStorage<Point>(fileName, pts);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+
+         watch.Reset(); watch.Start();
+         int counter = 0;
+         foreach (Point p in stor)
+         {
+            counter++;
+         }
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+         File.Delete(fileName);
+      }
+
+      [Test]
       public void TestCondensation()
       {
          IntPtr conden = CvInvoke.cvCreateConDensation(5, 5, 100);

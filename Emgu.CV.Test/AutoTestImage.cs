@@ -640,6 +640,17 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestFlipPerformance()
+      {
+         Image<Bgr, byte> image = new Image<Bgr, byte>(2048, 1024);
+         image.SetRandNormal(new MCvScalar(), new MCvScalar(255, 255, 255));
+         Stopwatch watch = Stopwatch.StartNew();
+         image._Flip(Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+      }
+
+      [Test]
       public void TestMoment()
       {
          Image<Gray, byte> image = new Image<Gray, byte>(100, 200);
@@ -1216,8 +1227,16 @@ namespace Emgu.CV.Test
          int descriptorSize = descriptor.DescriptorSize;
 
          float[] descriptors = descriptor.Compute(box, new Size(20, 20), pts);
-         int i = descriptors.Length;
-         
+
+         float absSum = 0;
+         foreach (float f in descriptors)
+            absSum += Math.Abs(f);
+
+         //TODO: Find out why selfsimilarity always return descriptors of all zeros. Probaboly a bug in the opencv C++ code
+         //Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
+
+         Assert.AreEqual(descriptors.Length / descriptor.DescriptorSize, pts.Length);
+        
          foreach (MKeyPoint kp in keypoints)
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
@@ -1349,34 +1368,44 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestAdd()
+      public void PerformanceComparison()
       {
          Image<Gray, Byte> img1 = new Image<Gray, byte>(1920, 1080);
          Image<Gray, Byte> img2 = new Image<Gray, byte>(img1.Size);
-         Image<Gray, Byte> sum1 = new Image<Gray,byte>(img1.Size);
-         Image<Gray, Byte> sum2 = new Image<Gray, byte>(img1.Size);
+
 
          img1.SetRandUniform(new MCvScalar(0), new MCvScalar(50));
          img2.SetRandUniform(new MCvScalar(0), new MCvScalar(50));
 
          Stopwatch w = Stopwatch.StartNew();
-         CvInvoke.cvAdd(img1, img2, sum2, IntPtr.Zero);
+         Image<Gray, Byte> sum1 = img1 + img2;
          w.Stop();
-         Trace.WriteLine(String.Format("Time: {0}ms", w.ElapsedMilliseconds));
+         Trace.WriteLine(String.Format("OpenCV Time:\t\t\t\t\t\t{0} ms", w.ElapsedMilliseconds));
+
 
          w.Reset(); w.Start();
+         Image<Gray, Byte> sum2 = new Image<Gray, byte>(img1.Size);
          Byte[, ,] data1 = img1.Data;
          Byte[, ,] data2 = img2.Data;
-         Byte[, ,] dataSum = sum1.Data;
+         Byte[, ,] dataSum = sum2.Data;
          int rows = img1.Rows;
          int cols = img1.Cols;
          for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                dataSum[i, j, 0] = (Byte) (data1[i, j, 0] + data2[i, j, 0]);
          w.Stop();
-         Trace.WriteLine(String.Format("Time: {0}ms", w.ElapsedMilliseconds));
+         Trace.WriteLine(String.Format(".NET array manipulation Time:\t\t{0} ms", w.ElapsedMilliseconds));
 
-         Assert.IsTrue(sum1.Equals(sum2));
+         Assert.IsTrue(sum2.Equals(sum1));
+
+         w.Reset(); w.Start();
+         Func<Byte, Byte, Byte> convertor = delegate(Byte b1, Byte b2) { return (Byte)(b1 + b2); };
+         Image<Gray, Byte> sum3 = img1.Convert<Byte, Byte>(img2, convertor);
+         w.Stop();
+         Trace.WriteLine(String.Format("Generic image manipulation Time:\t{0} ms", w.ElapsedMilliseconds));
+
+         Assert.IsTrue(sum3.Equals(sum1));
+
       }
    }
 }
