@@ -1676,6 +1676,31 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSeqPerformance()
+      {
+         Point[] pts = new Point[1000000];
+         
+         using (MemStorage stor = new MemStorage())
+         {
+            Stopwatch watch = Stopwatch.StartNew();
+            Seq<Point> seq = new Seq<Point>(stor);
+            seq.PushMulti(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+            watch.Stop();
+            Trace.WriteLine(String.Format("Time for storing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+
+            watch.Reset(); watch.Start();
+            int counter = 0;
+            foreach (Point p in seq)
+            {
+               counter++;
+            }
+            watch.Stop();
+            Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+            
+         }
+      }
+
+      [Test]
       public void TestCondensation()
       {
          IntPtr conden = CvInvoke.cvCreateConDensation(5, 5, 100);
