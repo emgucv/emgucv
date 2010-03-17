@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.Util;
 using System.Drawing;
 
 namespace Emgu.CV
@@ -328,8 +329,17 @@ namespace Emgu.CV
       /// <returns>an enumerator of the elements in the sequence</returns>
       public IEnumerator<T> GetEnumerator()
       {
-         for (int i = 0; i < Total; i++)
-            yield return this[i];
+         using (PinnedArray<T> buffer = new PinnedArray<T>(1))
+         {
+            IntPtr address = buffer.AddrOfPinnedObject();
+            for (int i = 0; i < Total; i++)
+            {
+               Toolbox.memcpy(address, CvInvoke.cvGetSeqElem(_ptr, i), _sizeOfElement);
+               yield return buffer.Array[0];
+               //yield return (T)Marshal.PtrToStructure(CvInvoke.cvGetSeqElem(_ptr, i), typeof(T));
+               //yield return this[i];
+            }
+         }
       }
 
       /// <summary>
