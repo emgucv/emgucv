@@ -115,12 +115,12 @@ ENDIF(${target_type} STREQUAL "library")
       COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
       )
 
-	SET(TMP "-out:${target_name} -target:${target_type}")
+	SET(TMP "-out:\"${target_name}\" -target:${target_type}")
 	FOREACH(TMP_NAME ${CS_FLAGS})
 	  SET(TMP "${TMP} ${TMP_NAME}")
 	ENDFOREACH()
 	FOREACH(TMP_NAME ${proper_file_list})
-	  SET(TMP "${TMP} ${TMP_NAME}")
+	  SET(TMP "${TMP} \"${TMP_NAME}\"")
 	ENDFOREACH()
 	
 	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/cscSourceList.rsp  "${TMP}")
@@ -140,7 +140,7 @@ ENDMACRO(COMPILE_CS)
 
 MACRO(ADD_CS_REFERENCES references)
   FOREACH(ref ${references})
-    SET(CS_FLAGS ${CS_FLAGS} -r:${ref})
+    SET(CS_FLAGS ${CS_FLAGS} -r:\"${ref}\")
   ENDFOREACH(ref)
 ENDMACRO(ADD_CS_REFERENCES references)
 
@@ -155,15 +155,15 @@ MACRO(ADD_CS_RESOURCES resx resources)
     ${CS_PREBUILD_COMMAND} 
     COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources}
     )
-  SET(CS_FLAGS ${CS_FLAGS} -resource:${resources})
+  SET(CS_FLAGS ${CS_FLAGS} -resource:\"${resources}\")
 ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key) 
-  SET(CS_FLAGS ${CS_FLAGS} -keyfile:${key})
+  SET(CS_FLAGS ${CS_FLAGS} -keyfile:\"${key}\")
 ENDMACRO(SIGN_ASSEMBLY)
 
 MACRO(GENERATE_DOCUMENT file)
-  SET(CS_FLAGS ${CS_FLAGS} -doc:${file}.xml)
+  SET(CS_FLAGS ${CS_FLAGS} -doc:\"${file}.xml\")
 ENDMACRO(GENERATE_DOCUMENT)
 
 MACRO(INSTALL_GAC target)
