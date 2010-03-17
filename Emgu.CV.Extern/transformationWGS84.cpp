@@ -1,4 +1,5 @@
 #include "transformationWGS84.h"
+#include "sse.h"
 
 // Value of a from WGS84
 const double A = 6378137.0;
@@ -15,6 +16,11 @@ const double E = sqrt((A * A - B*B)/ (A*A));
 // Value of e' from WGS84
 const double EP = sqrt((A * A - B*B)/ (B*B));
 
+#if CV_SSE2
+const __m128d _ECEF2GeodeticConst0 = _mm_set_pd(A, B); 
+const __m128d _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
+#endif
+
 CVAPI(void) transformGeodetic2ECEF(geodeticCoordinate* coordinate, CvPoint3D64f* ecef)
 {
    double sinPhi = sin(coordinate->latitude);
@@ -27,22 +33,6 @@ CVAPI(void) transformGeodetic2ECEF(geodeticCoordinate* coordinate, CvPoint3D64f*
    ecef->y = tmp1 * sin(coordinate->longitude);
    ecef->z = ((B * B) / (A * A) * N + coordinate->altitude) * sinPhi;
 }
-
-#if CV_SSE2
-const __m128d _ECEF2GeodeticConst0 = _mm_set_pd(A, B);
-const __m128d _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
-
-double _dot_product(__m128d v0, __m128d v1)
-{
-   __m128d v = _mm_mul_pd(v0, v1);
-   return v.m128d_f64[1] + v.m128d_f64[0];
-}
-
-double _cross_product(__m128d v0, __m128d v1)
-{
-   return v0.m128d_f64[1] * v1.m128d_f64[0] - v0.m128d_f64[0] * v1.m128d_f64[1];
-}
-#endif
 
 CVAPI(void) transformECEF2Geodetic(CvPoint3D64f* ecef, geodeticCoordinate* coor)
 {
@@ -91,8 +81,8 @@ CVAPI(void) transformGeodetic2ENU(geodeticCoordinate* coor, geodeticCoordinate* 
    enu->x = _cross_product(cosSinLambda, deltaXY); 
    double tmp = _dot_product(cosSinLambda, deltaXY);
    double deltaZ = ecef.z - refEcef->z;
-   enu->y = cosPhi * deltaZ -sinPhi * tmp ;
-   enu->z = sinPhi * deltaZ + cosPhi * tmp ;
+   enu->y = cosPhi * deltaZ -sinPhi * tmp;
+   enu->z = sinPhi * deltaZ + cosPhi * tmp;
 #else
    CvPoint3D64f delta;
    delta.x = ecef.x - refEcef->x;

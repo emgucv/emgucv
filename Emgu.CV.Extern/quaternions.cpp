@@ -1,4 +1,5 @@
 #include "quaternions.h"
+#include "sse.h"
 
 CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {
@@ -13,11 +14,33 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
       sinZ = sin(halfZ),
       cosZ = cos(halfZ);
 
-   quaternions->w = cosX*cosY*cosZ + sinX*sinY*sinZ;
-   quaternions->x = sinX*cosY*cosZ - cosX*sinY*sinZ;
-   quaternions->y = cosX*sinY*cosZ + sinX*cosY*sinZ;
-   quaternions->z = cosX*cosY*sinZ - sinX*sinY*cosZ;
+#if CV_SSE2
+   __m128d cosSinY = _mm_set_pd(cosY, sinY);
+   __m128d cosSinZ = _mm_set_pd(cosZ, sinZ);
+   __m128d sinCosZ = _mm_set_pd(sinZ, cosZ);
+   __m128d cosSinX = _mm_set_pd(cosX, sinX);  
+   __m128d sinCosX = _mm_set_pd(sinX, cosX);
+   __m128d tmp1 = _mm_mul_pd(cosSinY, cosSinZ);
+   __m128d tmp2 = _mm_mul_pd(cosSinY, sinCosZ);
 
+   quaternions->w = _dot_product(cosSinX, tmp1);
+   quaternions->x = _cross_product(tmp1, cosSinX); 
+   quaternions->y = _dot_product(sinCosX, tmp2);
+   quaternions->z = _cross_product(tmp2, sinCosX); 
+
+#else
+   double cosYcosZ = cosY*cosZ;
+   double sinYsinZ = sinY*sinZ;
+   
+   quaternions->w = cosX*cosYcosZ + sinX*sinYsinZ;
+   quaternions->x = sinX*cosYcosZ - cosX*sinYsinZ;
+
+   double cosYsinZ = cosY*sinZ;
+   double sinYcosZ = sinY*cosZ;
+
+   quaternions->y = cosX*sinYcosZ + sinX*cosYsinZ;
+   quaternions->z = cosX*cosYsinZ - sinX*sinYcosZ;
+#endif
 }
 
 CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
@@ -143,7 +166,7 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
 {
    double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
-   double halfAngle = theta / 2.0;
+   double halfAngle = theta * 0.5;
    double sinHalfAngle = sin(halfAngle);
    double scale = sinHalfAngle / theta;
    quaternions->w = cos(halfAngle);
