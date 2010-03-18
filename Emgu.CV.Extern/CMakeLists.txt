@@ -16,8 +16,6 @@ add_library(${the_target} ${extern_srcs} ${extern_hdrs})
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
-    VERSION ${OPENCV_VERSION}
-    SOVERSION ${OPENCV_SOVERSION}
     OUTPUT_NAME "${the_target}"
     )
 
