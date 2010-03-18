@@ -460,27 +460,14 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 ELSE (WIN32)
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-    FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
-      "/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.Util.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.ML.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.UI.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/ZedGraph.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/zlib.net.dll")
-    INSTALL(
-      FILES
-      ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-      COMPONENT binary)
-    
-    FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/postinst
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
-    FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/prerm
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\nfor dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph zlib.net; do ${MONO_GACUTIL_EXEC} -u $dll; done\nfi\n")
-    FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
-#      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nRequires: libmono-wcf3.0-cil\nCflags: -I:\${apidir}/Emgu.CV.xml -I:\${apidir}/Emgu.Util.xml -I:\${apidir}/Emgu.CV.ML.xml -I:\${apidir}/Emgu.CV.UI.xml -I:\${apidir}/ZedGraph.xml \nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
-      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
-    INSTALL(
-      FILES
-      ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
-      DESTINATION /usr/lib/pkgconfig
-      COMPONENT binary)
-
+  FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
+    "/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.Util.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.ML.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.UI.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/ZedGraph.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/zlib.net.dll")
+  INSTALL(
+    FILES
+    ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
+    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+    COMPONENT binary)
+  
   SET(CPACK_STRIP_FILES "")
   MESSAGE(STATUS "Checking for CPACK build type...")
   FIND_PROGRAM(DPKG_CMD dpkg)
@@ -490,9 +477,26 @@ ELSE (WIN32)
     # ----------------------------------------------------------------------------
     MESSAGE(STATUS "FOUND dpkg: ${DPKG_CMD}")
     SET(CPACK_GENERATOR DEB)
+
+    SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
+
+    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
+      "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
+    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
+      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\nfor dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph zlib.net; do ${MONO_GACUTIL_EXEC} -u $dll; done\nfi\n")
+    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+#      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nRequires: libmono-wcf3.0-cil\nCflags: -I:\${apidir}/Emgu.CV.xml -I:\${apidir}/Emgu.Util.xml -I:\${apidir}/Emgu.CV.ML.xml -I:\${apidir}/Emgu.CV.UI.xml -I:\${apidir}/ZedGraph.xml \nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
+      "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll -r:\${libdir}/zlib.net.dll\n")
+    INSTALL(
+      FILES
+      ${DEBIAN_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+      DESTINATION /usr/lib/pkgconfig
+      COMPONENT binary)
+    
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
-    SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${LINUX_CONTROL_FILE_FOLDER}/postinst;${LINUX_CONTROL_FILE_FOLDER}/prerm;${LINUX_CONTROL_FILE_FOLDER}/postrm")
+    SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil")
+        
     
   ELSE()  
     FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
@@ -504,6 +508,17 @@ ELSE (WIN32)
       SET(CPACK_GENERATOR RPM)
       SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
       SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.4")
+
+      SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
+      
+      FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
+	"ldconfig\n${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\n")
+      FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/prerm
+	"for dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph zlib.net; do ${MONO_GACUTIL_EXEC} -u $dll; done\n")
+
+      SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postinst")
+      SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/prerm")
+      SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
     ENDIF()	
   ENDIF()  
   
