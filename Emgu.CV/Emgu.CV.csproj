@@ -84,6 +84,7 @@
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PlanarObjectDetector.cs" />
+    <Compile Include="RTreeClassifier.cs" />
     <Compile Include="SelfSimDescriptor.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="StarDetector.cs" />

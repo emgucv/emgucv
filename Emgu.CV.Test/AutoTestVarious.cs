@@ -1759,5 +1759,23 @@ namespace Emgu.CV.Test
          File.Delete(fi.FullName);
       }
 
+      [Test]
+      public void TestRTreeClassifier()
+      {
+         using(Image<Bgr, Byte> image = new Image<Bgr, byte>("box_in_scene.png"))
+         using(Image<Gray, Byte> gray = image.Convert<Gray, byte>())
+         using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
+         {
+            MCvSURFParams surf = new MCvSURFParams(300, false);
+            MKeyPoint[] keypoints = surf.DetectKeyPoints(gray, null);
+            Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) { return Point.Round(kp.Point); });
+            Stopwatch watch = Stopwatch.StartNew();
+            classifier.Train(image, points, 48, 9, 50, 176, 4);
+            watch.Stop();
+            Trace.WriteLine(String.Format("Training time: {0} milliseconds", watch.ElapsedMilliseconds));
+            float[] signiture = classifier.GetSigniture(image, points[0], 15);
+            Assert.AreEqual(signiture.Length, classifier.NumberOfClasses);
+         }
+      }
    }
 }
