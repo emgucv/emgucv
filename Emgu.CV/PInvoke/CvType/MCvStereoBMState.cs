@@ -78,7 +78,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// 
       /// </summary>
-      int disp12MaxDiff; 
+      public int disp12MaxDiff; 
 
       /// <summary>
       /// internal buffers, do not modify (!)
