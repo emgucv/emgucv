@@ -497,7 +497,7 @@ namespace Emgu.CV
       /// <param name="fileName">The name of the image to save</param>
       public virtual void Save(String fileName)
       {
-         FileInfo fi = new FileInfo(fileName);
+         //FileInfo fi = new FileInfo(fileName);
          CvInvoke.cvSaveImage(fileName, Ptr);
       }
       #endregion
