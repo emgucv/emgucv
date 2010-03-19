@@ -114,6 +114,12 @@ namespace Emgu.CV.Structure
          y -= i.y;
       }
 
+      MCvPoint2D64f IInterpolatable<MCvPoint2D64f>.LinearInterpolate(MCvPoint2D64f other, double index)
+      {
+         double f1 = (other.x - index) / (other.x - this.x);
+         double f2 = 1.0-f1;
+         return new MCvPoint2D64f(x * f1 + other.x * f2, y * f1 + other.y * f2);
+      }
       #endregion
    }
 }

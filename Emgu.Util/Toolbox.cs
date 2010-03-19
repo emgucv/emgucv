@@ -259,7 +259,8 @@ namespace Emgu.Util
                   old = current;
                   current = sampleEnumerator.Current;
                }
-               yield return LinearInterpolate(old, current, index);
+               //yield return LinearInterpolate(old, current, index);
+               yield return old.LinearInterpolate(current, index);
             }
          }
       }
@@ -295,13 +296,15 @@ namespace Emgu.Util
 
                if (!endOfSubsample)
                {
-                  yield return LinearInterpolate(old, current, currentIndex);
+                  yield return old.LinearInterpolate(current, currentIndex);
+                  //yield return LinearInterpolate(old, current, currentIndex);
                   currentIndex += subsampleRate;
                }
             }
          }
       }
 
+      /*
       /// <summary>
       /// Use the two IInterpolatable and the index to perform first degree interpolation
       /// </summary>
@@ -311,6 +314,7 @@ namespace Emgu.Util
       /// <returns>The interpolatation result</returns>
       private static T LinearInterpolate<T>(T i1, T i2, double index) where T : IInterpolatable<T>, new()
       {
+         
          double f = (i2.InterpolationIndex - index) / (i2.InterpolationIndex - i1.InterpolationIndex);
 
          //compute result = i1 * f + i2 * (1.0 - f)
@@ -322,7 +326,7 @@ namespace Emgu.Util
          b.Mul(1.0 - f);
          a.Add(b);
          return a;
-      }
+      }*/
 
 
       /// <summary>

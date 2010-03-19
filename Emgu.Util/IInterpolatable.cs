@@ -33,5 +33,13 @@ namespace Emgu.Util
       /// <param name="i">The element to be substracted</param>
       /// <returns>The result of substracting the other element</returns>
       void Sub(T i);
+
+      /// <summary>
+      /// Interpolate base on this point and the other point with the given index
+      /// </summary>
+      /// <param name="other">The other point</param>
+      /// <param name="index">The interpolation index</param>
+      /// <returns>The interpolated point</returns>
+      T LinearInterpolate(T other, double index);
    }
 }
