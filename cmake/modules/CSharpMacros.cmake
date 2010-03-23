@@ -115,6 +115,9 @@ ENDIF(${target_type} STREQUAL "library")
       COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
       )
 
+	#enable optimization
+	SET(CS_FLAGS "${CS_FLAGS} -optimize+")
+	
 	SET(TMP "-out:\"${target_name}\" -target:${target_type}")
 	FOREACH(TMP_NAME ${CS_FLAGS})
 	  SET(TMP "${TMP} ${TMP_NAME}")
