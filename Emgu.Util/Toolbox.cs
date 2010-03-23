@@ -304,6 +304,88 @@ namespace Emgu.Util
          }
       }
 
+      /// <summary>
+      /// Joining multiple index ascending IInterpolatables together as a single index ascending IInterpolatable. 
+      /// </summary>
+      /// <typeparam name="T">The type of objects that will be joined</typeparam>
+      /// <param name="enums">The enumerables, each should be stored in index ascending order</param>
+      /// <returns>A single enumerable sorted in index ascending order</returns>
+      public static IEnumerable<T> JoinInterpolatables<T>(params IEnumerable<T>[] enums) where T : IInterpolatable<T>, new()
+      {
+         if (enums.Length == 0)
+            yield break;
+         else if (enums.Length == 1)
+         {
+            foreach (T sample in enums[0])
+               yield return sample;
+         }
+         else if (enums.Length == 2)
+         {
+            foreach (T sample in JoinTwoInterpolatables(enums[0], enums[1]))
+               yield return sample;
+         }
+         else
+         {
+            int middle = enums.Length / 2;
+            IEnumerable<T>[] lower = new IEnumerable<T>[middle];
+            IEnumerable<T>[] upper = new IEnumerable<T>[enums.Length - middle];
+            Array.Copy(enums, lower, middle);
+            Array.Copy(enums, middle, upper, 0, enums.Length - middle);
+
+            foreach (T sample in JoinTwoInterpolatables<T>(JoinInterpolatables<T>(lower), JoinInterpolatables<T>(upper)))
+               yield return sample;
+         }
+      }
+
+      private static IEnumerable<T> JoinTwoInterpolatables<T>(IEnumerable<T> enum1, IEnumerable<T> enum2) where T : IInterpolatable<T>, new()
+      {
+         IEnumerator<T> l1 = enum1.GetEnumerator();
+         IEnumerator<T> l2 = enum2.GetEnumerator();
+         if (!l1.MoveNext())
+         {
+            while (l2.MoveNext())
+               yield return l2.Current;
+            yield break;
+         }
+         else if (!l2.MoveNext())
+         {
+            while (l1.MoveNext())
+               yield return l1.Current;
+            yield break;
+         }
+
+         T s1 = l1.Current;
+         T s2 = l2.Current;
+
+         while (true)
+         {
+            if (s1.InterpolationIndex < s2.InterpolationIndex)
+            {
+               yield return s1;
+               if (l1.MoveNext())
+                  s1 = l1.Current;
+               else
+               {
+                  while (l2.MoveNext())
+                     yield return l2.Current;
+                  yield break;
+               }
+            }
+            else
+            {
+               yield return s2;
+               if (l2.MoveNext())
+                  s2 = l2.Current;
+               else
+               {
+                  while (l1.MoveNext())
+                     yield return l1.Current;
+                  yield break;
+               }
+            }
+         }
+      }
+
       /*
       /// <summary>
       /// Use the two IInterpolatable and the index to perform first degree interpolation
