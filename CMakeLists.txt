@@ -113,6 +113,7 @@ ENDIF()
 
 SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
 SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
+SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
 
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project

@@ -14,7 +14,7 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
       sinZ = sin(halfZ),
       cosZ = cos(halfZ);
 
-#if CV_SSE2
+#if EMGU_SSE2
    __m128d cosSinY = _mm_set_pd(cosY, sinY);
    __m128d cosSinZ = _mm_set_pd(cosZ, sinZ);
    __m128d sinCosZ = _mm_set_pd(sinZ, cosZ);
@@ -121,7 +121,7 @@ CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, 
 
 CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst)
 {
-#if CV_SSE2
+#if EMGU_SSE2
    __m128d _w1w1 = _mm_set1_pd(quaternions1->w);
    __m128d _x1x1 = _mm_set1_pd(quaternions1->x);
    __m128d _y1y1 = _mm_set1_pd(quaternions1->y);

@@ -29,6 +29,10 @@ set_target_properties(${the_target} PROPERTIES
 
 add_dependencies(${the_target} cxcore cv cvaux ml)
 
+IF(EMGU_ENABLE_SSE)
+  ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
+ENDIF()
+
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} cxcore cv cvaux ml)
 
