@@ -886,7 +886,7 @@ namespace Emgu.CV
 
       #region Hough line and circles
       ///<summary> 
-      ///Apply Hough transform to find line segments. 
+      ///Apply Probabilistic Hough transform to find line segments. 
       ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
       ///</summary> 
       ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
@@ -918,8 +918,7 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hough transform to find line segments 
+      /// Apply Canny Edge Detector follows by Probabilistic Hough transform to find line segments in the image 
       ///</summary>
       ///<param name="cannyThreshold"> The threshhold to find initial segments of strong edges</param>
       ///<param name="cannyThresholdLinking"> The threshold used for edge Linking</param>
