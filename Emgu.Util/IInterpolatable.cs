@@ -14,6 +14,7 @@ namespace Emgu.Util
       /// </summary>
       double InterpolationIndex { get; }
 
+      /*
       /// <summary>
       /// Multiplication with a scale
       /// </summary>
@@ -32,7 +33,7 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="i">The element to be substracted</param>
       /// <returns>The result of substracting the other element</returns>
-      void Sub(T i);
+      void Sub(T i);*/
 
       /// <summary>
       /// Interpolate base on this point and the other point with the given index

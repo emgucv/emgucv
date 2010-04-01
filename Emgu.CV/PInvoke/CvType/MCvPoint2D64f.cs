@@ -95,7 +95,7 @@ namespace Emgu.CV.Structure
       {
          get { return x; }
       }
-
+      /*
       void IInterpolatable<MCvPoint2D64f>.Mul(double scale)
       {
          x *= scale;
@@ -112,7 +112,7 @@ namespace Emgu.CV.Structure
       {
          x -= i.x;
          y -= i.y;
-      }
+      }*/
 
       MCvPoint2D64f IInterpolatable<MCvPoint2D64f>.LinearInterpolate(MCvPoint2D64f other, double index)
       {
