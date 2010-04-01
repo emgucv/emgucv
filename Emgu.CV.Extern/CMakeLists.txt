@@ -10,7 +10,7 @@ source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
 source_group("Include" FILES ${extern_hdrs})
 
-set(the_target "cvextern")
+set(the_target ${PROJECT_NAME})
 
 add_library(${the_target} ${extern_srcs} ${extern_hdrs})
 
