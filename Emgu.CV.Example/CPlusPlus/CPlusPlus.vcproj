@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv200.lib cvaux200.lib cxcore200.lib highgui200.lib "
+				AdditionalDependencies="cv210.lib cvaux210.lib cxcore210.lib highgui210.lib "
 				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv200.lib cvaux200.lib cxcore200.lib highgui200.lib "
+				AdditionalDependencies="cv210.lib cvaux210.lib cxcore210.lib highgui210.lib "
 				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\Release"
