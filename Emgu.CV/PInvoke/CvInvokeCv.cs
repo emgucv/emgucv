@@ -827,9 +827,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Seq (sequence or array of vertices). </param>
       /// <param name="slice">Starting and ending points of the contour section of interest, by default area of the whole contour is calculated</param>
+      /// <param name="oriented">If zero, the absolute area will be returned. Otherwise the returned value mighted be negative</param>
       /// <returns>The area of the whole contour or contour section</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern double cvContourArea(IntPtr contour, MCvSlice slice);
+      public static extern double cvContourArea(IntPtr contour, MCvSlice slice, int oriented);
 
       /// <summary>
       /// Calculates length or curve as sum of lengths of segments between subsequent points
@@ -970,10 +971,10 @@ namespace Emgu.CV
       /// <param name="image">Image to detect objects in.</param>
       /// <param name="cascade">Haar classifier cascade in internal representation</param>
       /// <param name="storage">Memory storage to store the resultant sequence of the object candidate rectangles</param>
-      /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
-      /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
+      /// <param name="scaleFactor">Use 1.1 as default. The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
+      /// <param name="minNeighbors">Use 3 as default. Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
       /// <param name="flags">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing</param>
-      /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
+      /// <param name="minSize">Use Size.Empty as default. Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
       /// <returns>Rectangular regions in the given image that are likely to contain objects the cascade has been trained for</returns>
       [DllImport(CV_LIBRARY)]
       public static extern IntPtr cvHaarDetectObjects(

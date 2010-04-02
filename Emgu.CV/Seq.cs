@@ -449,7 +449,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Math.Abs(CvInvoke.cvContourArea(Ptr, MCvSlice.WholeSeq));
+            return CvInvoke.cvContourArea(Ptr, MCvSlice.WholeSeq, 0);
          }
       }
 
