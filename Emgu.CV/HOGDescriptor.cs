@@ -150,7 +150,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
       {
-         return DetectMultiScale(image, 0, new Size(), new Size(), 1.05, 2);
+         return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2);
       }
 
       /// <summary>
