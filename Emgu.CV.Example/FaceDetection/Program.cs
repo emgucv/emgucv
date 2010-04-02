@@ -41,7 +41,7 @@ namespace FaceDetection
          MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(
             face, 
             1.1, 
-            50, 
+            10, 
             Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, 
             new Size(20, 20));
 
@@ -55,7 +55,7 @@ namespace FaceDetection
             MCvAvgComp[][] eyesDetected = gray.DetectHaarCascade(
                eye, 
                1.1, 
-               100, 
+               10, 
                Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, 
                new Size(20, 20));
             gray.ROI = Rectangle.Empty;
