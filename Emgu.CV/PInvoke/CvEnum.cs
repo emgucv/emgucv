@@ -1395,7 +1395,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Neither FILL_OUTLIERS nor CV_WRAP_INVERSE_MAP
       /// </summary>
-      CV_WRAP_DEFAULT = 0,
+      CV_WARP_DEFAULT = 0,
       /// <summary>
       /// Fill all the destination image pixels. If some of them correspond to outliers in the source image, they are set to fillval.
       /// </summary>

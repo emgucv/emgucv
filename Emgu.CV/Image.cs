@@ -523,7 +523,7 @@ namespace Emgu.CV
          using (RotationMatrix2D<double> rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
          {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.size.Width, (int)box.size.Height);
-            CvInvoke.cvWarpAffine(Ptr, res.Ptr, rot.Ptr, (int)Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR | (int)Emgu.CV.CvEnum.WARP.CV_WRAP_DEFAULT, new MCvScalar());
+            CvInvoke.cvWarpAffine(Ptr, res.Ptr, rot.Ptr, (int)Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR | (int)Emgu.CV.CvEnum.WARP.CV_WARP_DEFAULT, new MCvScalar());
 
             //TODO: Find out why cvGetQuadrangleSubPix do not return the expected output.
             //CvInvoke.cvGetQuadrangleSubPix(Ptr, res.Ptr, rot.Ptr); 
