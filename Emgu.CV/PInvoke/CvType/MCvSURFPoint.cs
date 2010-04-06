@@ -7,6 +7,7 @@ namespace Emgu.CV.Structure
    /// Wrapped CvSURFPoint structure
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
+   [Serializable]
    public struct MCvSURFPoint
    {
       /// <summary>

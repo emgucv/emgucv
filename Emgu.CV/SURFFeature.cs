@@ -1,11 +1,13 @@
 using System;
 using Emgu.CV.Structure;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// A SURF feature
    /// </summary>
+   [Serializable]
    public class SURFFeature
    {
       private MCvSURFPoint _point;

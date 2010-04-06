@@ -603,6 +603,7 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(model1.Background);
       }
 
+
       [Test]
       public void TestPlanarSubdivision1()
       {
@@ -1333,6 +1334,29 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSURFFeatureRuntimeSerialization()
+      {
+         MCvSURFPoint p = new MCvSURFPoint();
+         float[] desc = new float[36];
+         SURFFeature sf = new SURFFeature(ref p, desc);
+         using (MemoryStream ms = new MemoryStream())
+         {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                   formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter.Serialize(ms, sf);
+
+            Byte[] bytes = ms.GetBuffer();
+
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+               Object o = formatter.Deserialize(ms2);
+               SURFFeature sf2 = (SURFFeature)o;
+            }
+         }
+      }
+
+
+      [Test]
       public void TestMatNDRuntimeSerialization()
       {
          using (MatND<float> mat = new MatND<float>(2, 3, 4, 5))
@@ -1409,6 +1433,8 @@ namespace Emgu.CV.Test
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
+            Assert.AreEqual(1, rects.Length);
+
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
             Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
@@ -1430,6 +1456,7 @@ namespace Emgu.CV.Test
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
+            Assert.AreEqual(0, rects.Length);
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
             Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
