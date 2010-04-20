@@ -38,16 +38,23 @@ namespace Emgu.CV.Test
 
       public void GenerateLogo()
       {
-         Image<Bgr, Byte> semgu = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-         Image<Bgr, Byte> scv = new Image<Bgr, byte>(160, 72, new Bgr(0, 0, 0));
-         MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5, 1.5);
-         MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6, 2.2);
-         semgu.Draw("Emgu", ref f1, new Point(6, 50), new Bgr(55, 155, 255));
-         semgu._Dilate(1);
-         scv.Draw("CV", ref f2, new Point(50, 60), new Bgr(255, 55, 255));
-         scv._Dilate(2);
+         GenerateLogo(1600);
+      }
+
+      public void GenerateLogo(int width)
+      {
+         int height = (int)(width / 160.0 * 72.0);
+         double scale = width / 160.0;
+         Image<Bgr, Byte> semgu = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
+         Image<Bgr, Byte> scv = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
+         MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5 * scale, 1.5 * scale);
+         MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6 * scale, 2.2 * scale);
+         semgu.Draw("Emgu", ref f1, Point.Round(new PointF((float)(6 * scale), (float)(50 * scale))), new Bgr(55, 155, 255));
+         semgu._Dilate((int)(1 * scale));
+         scv.Draw("CV", ref f2, Point.Round(new PointF((float)(50 * scale), (float)(60 * scale))), new Bgr(255, 55, 255));
+         scv._Dilate((int)(2 * scale));
          Image<Bgr, Byte> logoBgr = semgu.Or(scv);
-         Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Width, logoBgr.Height);
+         Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Size);
          logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
          logoBgr._Not();
          logoA._Not();
@@ -57,15 +64,15 @@ namespace Emgu.CV.Test
          logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
          logoBgra.Save("EmguCVLogo.gif");
 
+         /*
          Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
          for (int i = 0; i < 92; i++)
             bg_header[i, 0] = new Bgr(210, 210 - i * 0.4, 210 - i * 0.9);
-         bg_header.Save("bg_header.gif");
+         bg_header.Save("bg_header.gif");*/
       }
 
       public void TestImage()
       {
-
 
          ImageViewer viewer = new ImageViewer();
          Application.Idle += delegate(Object sender, EventArgs e)
