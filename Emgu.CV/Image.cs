@@ -3024,12 +3024,40 @@ namespace Emgu.CV
          CvInvoke.cvMorphologyEx(
             Ptr, res.Ptr,
             buffer == null ? IntPtr.Zero : buffer.Ptr,
-            element.Ptr,
+            element == null? IntPtr.Zero : element.Ptr,
             operation,
             iterations);
 
+         //release the temporary buffer if it is created
          if (buffer != null) buffer.Dispose();
+
          return res;
+      }
+
+      /// <summary>
+      /// Perform inplace advanced morphological transformations using erosion and dilation as basic operations.
+      /// </summary>
+      /// <param name="element">Structuring element</param>
+      /// <param name="operation">Type of morphological operation</param>
+      /// <param name="iterations">Number of times erosion and dilation are applied</param>
+      public void _MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
+      {
+         Image<TColor, TDepth> temp =
+            (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
+            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
+            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT) ?
+            CopyBlank()
+            : null;
+
+         CvInvoke.cvMorphologyEx(
+            Ptr,
+            Ptr,
+            temp == null ? IntPtr.Zero : temp.Ptr,
+            element == null ? IntPtr.Zero : element.Ptr,
+            operation,
+            iterations);
+
+         if (temp != null) temp.Dispose();
       }
 
       /// <summary>
@@ -3056,32 +3084,6 @@ namespace Emgu.CV
          Image<TColor, TDepth> res = CopyBlank();
          CvInvoke.cvDilate(Ptr, res.Ptr, IntPtr.Zero, iterations);
          return res;
-      }
-
-      /// <summary>
-      /// Perform inplace advanced morphological transformations using erosion and dilation as basic operations.
-      /// </summary>
-      /// <param name="element">Structuring element</param>
-      /// <param name="operation">Type of morphological operation</param>
-      /// <param name="iterations">Number of times erosion and dilation are applied</param>
-      public void _MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
-      {
-         Image<TColor, TDepth> temp =
-            (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
-            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
-            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT) ?
-            CopyBlank()
-            : null;
-
-         CvInvoke.cvMorphologyEx(
-            Ptr,
-            Ptr,
-            temp == null ? IntPtr.Zero : temp.Ptr,
-            element.Ptr,
-            operation,
-            iterations);
-
-         if (temp != null) temp.Dispose();
       }
 
       /// <summary>
