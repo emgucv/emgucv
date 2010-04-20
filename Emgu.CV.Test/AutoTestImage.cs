@@ -372,8 +372,6 @@ namespace Emgu.CV.Test
          
       }
 
-      //TODO: Find out why this test failes
-      /*
       [Test]
       public void TestFaceDetect()
       {
@@ -410,7 +408,7 @@ namespace Emgu.CV.Test
                }
             }
          }
-      }*/
+      }
 
       [Test]
       public void TestConstructor()
