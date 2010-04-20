@@ -987,7 +987,8 @@ namespace Emgu.CV
          Size minSize);
 
       /// <summary>
-      /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer first_contour is filled by the function. It will contain pointer to the first most outer contour or IntPtr.Zero if no contours is detected (if the image is completely black). Other contours may be reached from first_contour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
+      /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer firstContour is filled by the function. It will contain pointer to the first most outer contour or IntPtr.Zero if no contours is detected (if the image is completely black). Other contours may be reached from firstContour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
+      /// The function modifies the source image’s content
       /// </summary>
       /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1s, zero pixels remain 0s - that is image treated as binary. To get such a binary image from grayscale, one may use cvThreshold, cvAdaptiveThreshold or cvCanny. The function modifies the source image content</param>
       /// <param name="storage">Container of the retrieved contours</param>
@@ -1006,6 +1007,57 @@ namespace Emgu.CV
          CvEnum.RETR_TYPE mode,
          CvEnum.CHAIN_APPROX_METHOD method,
          Point offset);
+
+      /// <summary>
+      /// Initializes and returns a pointer to the contour scanner. The scanner is used in
+      /// cvFindNextContour to retrieve the rest of the contours.
+      /// </summary>
+      /// <param name="image">The 8-bit, single channel, binary source image</param>
+      /// <param name="storage">Container of the retrieved contours</param>
+      /// <param name="headerSize">Size of the sequence header, &gt;=sizeof(CvChain) if method=CV_CHAIN_CODE, and &gt;=sizeof(CvContour) otherwise</param>
+      /// <param name="mode">Retrieval mode</param>
+      /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
+      /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
+      /// <returns>Pointer to the contour scaner</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvStartFindContours(
+         IntPtr image, 
+         IntPtr storage, 
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method, 
+         Point offset);
+
+      /// <summary>
+      /// Finds the next contour in the image
+      /// </summary>
+      /// <param name="scanner">Pointer to the contour scaner</param>
+      /// <returns>The next contour in the image</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvFindNextContour(IntPtr scanner);
+
+      /// <summary>
+      /// The function replaces the retrieved contour, that was returned from the preceding call of
+      /// cvFindNextContour and stored inside the contour scanner state, with the user-specified contour.
+      /// The contour is inserted into the resulting structure, list, two-level hierarchy, or tree, depending on
+      /// the retrieval mode. If the parameter new contour is IntPtr.Zero, the retrieved contour is not included
+      /// in the resulting structure, nor are any of its children that might be added to this structure later.
+      /// </summary>
+      /// <param name="scanner">Contour scanner initialized by cvStartFindContours</param>
+      /// <param name="newContour">Substituting contour</param>
+      [DllImport(CV_LIBRARY)]
+      public static extern void cvSubstituteContour(
+         IntPtr scanner,
+         IntPtr newContour);
+
+      /// <summary>
+      /// Finishes the scanning process and returns a pointer to the first contour on the
+      /// highest level.
+      /// </summary>
+      /// <param name="scanner">Reference to the contour scanner</param>
+      /// <returns>pointer to the first contour on the highest level</returns>
+      [DllImport(CV_LIBRARY)]
+      public static extern IntPtr cvEndFindContour(ref IntPtr scanner);
 
       /// <summary>
       /// Finds circles in grayscale image using some modification of Hough transform
