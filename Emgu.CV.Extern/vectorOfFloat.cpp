@@ -1,4 +1,3 @@
-#include <cvaux.h>
 #include "vectorOfFloat.h"
 
 vectorOfFloat::vectorOfFloat()

@@ -1,5 +1,4 @@
 #include "transformationWGS84.h"
-#include "sse.h"
 
 // Value of a from WGS84
 const double A = 6378137.0;
@@ -21,7 +20,7 @@ const __m128d _ECEF2GeodeticConst0 = _mm_set_pd(A, B);
 const __m128d _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
 #endif
 
-CVAPI(void) transformGeodetic2ECEF(geodeticCoordinate* coordinate, CvPoint3D64f* ecef)
+void transformGeodetic2ECEF(const geodeticCoordinate* coordinate, CvPoint3D64f* ecef)
 {
    double sinPhi = sin(coordinate->latitude);
 
@@ -34,7 +33,7 @@ CVAPI(void) transformGeodetic2ECEF(geodeticCoordinate* coordinate, CvPoint3D64f*
    ecef->z = ((B * B) / (A * A) * N + coordinate->altitude) * sinPhi;
 }
 
-CVAPI(void) transformECEF2Geodetic(CvPoint3D64f* ecef, geodeticCoordinate* coor)
+void transformECEF2Geodetic(const CvPoint3D64f* ecef, geodeticCoordinate* coor)
 {
    coor->longitude = atan2(ecef->y, ecef->x);
 
@@ -64,11 +63,9 @@ CVAPI(void) transformECEF2Geodetic(CvPoint3D64f* ecef, geodeticCoordinate* coor)
    coor->altitude = p / cos(coor->latitude) - N;
 }
 
-CVAPI(void) transformGeodetic2ENU(geodeticCoordinate* coor, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, CvPoint3D64f* enu)
+void transformGeodetic2ENU(const geodeticCoordinate* coor, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* enu)
 {
-   double sinPhi, cosPhi;
    CvPoint3D64f ecef;
-
    transformGeodetic2ECEF(coor, &ecef);
 
 #if EMGU_SSE2
@@ -84,6 +81,7 @@ CVAPI(void) transformGeodetic2ENU(geodeticCoordinate* coor, geodeticCoordinate* 
    enu->y = _cross_product(cosSinPhi, tmp); 
    enu->z = _dot_product(cosSinPhi, tmp);
 #else
+   double sinPhi, cosPhi;
    CvPoint3D64f delta;
    delta.x = ecef.x - refEcef->x;
    delta.y = ecef.y - refEcef->y;
@@ -102,7 +100,7 @@ CVAPI(void) transformGeodetic2ENU(geodeticCoordinate* coor, geodeticCoordinate* 
 #endif
 }
 
-CVAPI(void) transformENU2Geodetic(CvPoint3D64f* enu, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, geodeticCoordinate* coor)
+void transformENU2Geodetic(const CvPoint3D64f* enu, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, geodeticCoordinate* coor)
 {
    double sinPhi = sin(refCoor->latitude);
    double cosPhi = cos(refCoor->latitude);
@@ -119,7 +117,7 @@ CVAPI(void) transformENU2Geodetic(CvPoint3D64f* enu, geodeticCoordinate* refCoor
    transformECEF2Geodetic(&ecef, coor);
 }
 
-CVAPI(void) transformGeodetic2NED(geodeticCoordinate* coor, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, CvPoint3D64f* ned)
+void transformGeodetic2NED(const geodeticCoordinate* coor, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* ned)
 {
    CvPoint3D64f enu;
    transformGeodetic2ENU(coor, refCoor, refEcef, &enu);
@@ -128,7 +126,7 @@ CVAPI(void) transformGeodetic2NED(geodeticCoordinate* coor, geodeticCoordinate* 
    ned->z = -enu.z;
 }
 
-CVAPI(void) transformNED2Geodetic(CvPoint3D64f* ned, geodeticCoordinate* refCoor, CvPoint3D64f* refEcef, geodeticCoordinate* coor)
+void transformNED2Geodetic(const CvPoint3D64f* ned, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, geodeticCoordinate* coor)
 {
    CvPoint3D64f enu;
    enu.x = ned->y;

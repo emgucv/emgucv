@@ -1,5 +1,4 @@
 #include "quaternions.h"
-#include "sse.h"
 
 CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {

@@ -6,7 +6,7 @@
        #include "emmintrin.h"
        #define EMGU_SSE 1
        #define EMGU_SSE2 1
-       #if defined __SSE3__ || _MSC_VER >= 1400
+       #if defined __SSE3__ || _MSC_VER >= 1500 //Visual Studio 2008
             #include "pmmintrin.h"
             #define EMGU_SSE3 1
             #if defined __SSE4_1__ || _MSC_VER >= 1500 //Visual Studio 2008

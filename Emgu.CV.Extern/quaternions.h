@@ -1,4 +1,8 @@
+#ifndef QUATERNIONS_H
+#define QUATERNIONS_H
+
 #include "cxcore.h"
+#include "sse.h"
 
 typedef struct Quaternions
 {
@@ -34,3 +38,5 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 
 /* renormalize the quaternions */ 
 CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
+
+#endif
