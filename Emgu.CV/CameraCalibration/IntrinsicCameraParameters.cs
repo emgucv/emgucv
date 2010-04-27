@@ -130,7 +130,12 @@ namespace Emgu.CV
          where TDepth : new()
       {
          Image<TColor, TDepth> res = src.CopyBlank();
-         CvInvoke.cvUndistort2(src.Ptr, res.Ptr, _intrinsicMatrix.Ptr, _distortionCoeffs.Ptr);
+         CvInvoke.cvUndistort2(
+            src.Ptr, 
+            res.Ptr, 
+            _intrinsicMatrix.Ptr, 
+            _distortionCoeffs.Ptr, 
+            IntPtr.Zero);
          return res;
       }
 

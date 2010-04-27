@@ -20,7 +20,8 @@ namespace Emgu.CV
       /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
       /// <param name="flags">Flags</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
-      public static void CalibrateCamera(
+      /// <returns>The final reprojection error</returns>
+      public static double CalibrateCamera(
          MCvPoint3D32f[][] objectPoints,
          PointF[][] imagePoints,
          Size imageSize,
@@ -40,13 +41,14 @@ namespace Emgu.CV
          }
          #endregion
 
+         double reprojectionError = -1;
          using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
          using (Matrix<float> imagePointMatrix = ToMatrix(imagePoints))
          using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
          using (Matrix<double> rotationVectors = new Matrix<double>(imageCount, 3))
          using (Matrix<double> translationVectors = new Matrix<double>(imageCount, 3))
          {
-            CvInvoke.cvCalibrateCamera2(
+            reprojectionError = CvInvoke.cvCalibrateCamera2(
                 objectPointMatrix.Ptr,
                 imagePointMatrix.Ptr,
                 pointCountsMatrix.Ptr,
@@ -70,6 +72,7 @@ namespace Emgu.CV
             }
             Marshal.FreeHGlobal(matPtr);
          }
+         return reprojectionError;
       }
 
       /// <summary>

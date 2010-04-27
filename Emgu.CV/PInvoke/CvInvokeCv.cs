@@ -1314,8 +1314,9 @@ namespace Emgu.CV
       /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
       /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
       /// <param name="flags">Different flags</param>
+      /// <returns>The final reprojection error</returns>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvCalibrateCamera2(
+      public static extern double cvCalibrateCamera2(
           IntPtr objectPoints,
           IntPtr imagePoints,
           IntPtr pointCounts,
@@ -1473,12 +1474,14 @@ namespace Emgu.CV
       /// <param name="dst">The output (corrected) image</param>
       /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1].</param>
       /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2].</param>
+      /// <param name="newIntrinsicMatrix">Camera matrix of the distorted image. By default it is the same as cameraMatrix, but you may additionally scale and shift the result by using some different matrix</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvUndistort2(
           IntPtr src,
           IntPtr dst,
           IntPtr intrinsicMatrix,
-          IntPtr distortionCoeffs);
+          IntPtr distortionCoeffs,
+          IntPtr newIntrinsicMatrix);
 
       /// <summary>
       /// Pre-computes the undistortion map - coordinates of the corresponding pixel in the distorted image for every pixel in the corrected image. Then, the map (together with input and output images) can be passed to cvRemap function. 
