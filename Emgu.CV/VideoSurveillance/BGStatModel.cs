@@ -34,6 +34,16 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
+      /// Create a Gaussian Background statistic model using the given parameters
+      /// </summary>
+      /// <param name="image">The image used for initiating the statistic model</param>
+      /// <param name="parameters">GaussStatModel</param>
+      public BGStatModel(Image<TColor, Byte> image, ref MCvGaussBGStatModelParams parameters)
+      {
+         _ptr = CvInvoke.cvCreateGaussianBGModel(image, ref parameters);
+      }
+
+      /// <summary>
       /// A cache of the update function
       /// </summary>
       private BGStatModelDelegates.UpdateFunctionDelagate updateFunction;

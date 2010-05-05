@@ -189,6 +189,14 @@ namespace Emgu.CV
       /// <returns>Pointer to the forground model</returns>
       [DllImport(CVAUX_LIBRARY)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
+
+      /// <summary>
+      /// Create a Gaussian background model
+      /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="parameters">Parameters for the background model</param>
+      [DllImport(CVAUX_LIBRARY)]
+      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, ref MCvGaussBGStatModelParams parameters);
       #endregion
 
       /// <summary>
