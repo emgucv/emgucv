@@ -31,6 +31,9 @@ add_dependencies(${the_target} cxcore cv cvaux ml)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
+  IF(MSVC AND EMGUCV_ARCH MATCHES "win32") 
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimize
+  ENDIF()
 ENDIF()
 
 # Add the required libraries for linking:

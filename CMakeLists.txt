@@ -219,7 +219,7 @@ IF (WIN32)
   # ----------------------------------------------------------------------------
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
-  IF("${EMGUCV_ARCH}" STREQUAL "win32")
+  IF(EMGUCV_ARCH STREQUAL "win32")
     INSTALL(
 	FILES
 	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x86.exe"
@@ -228,7 +228,7 @@ IF (WIN32)
 	  )
 	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
   ELSE()
-    IF("${EMGUCV_ARCH}" STREQUAL "win64")
+    IF(EMGUCV_ARCH STREQUAL "win64")
 	  INSTALL(
 	  FILES
 	    "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x64.exe"
@@ -499,8 +499,6 @@ ELSE (WIN32)
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil")
-        
-    
   ELSE()  
     FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
     IF(RPMBUILD_CMD)

@@ -1,11 +1,11 @@
 PROJECT(Example.Webservice_Host)
 
 FILE(GLOB_RECURSE SRC_Example_Webservice_Host RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-SET(SRC_Example_Webservice_Host ${SRC_Example_Webservice_Host} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+LIST(APPEND SRC_Example_Webservice_Host ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 ADD_CS_REFERENCES(System.ServiceModel.dll)
 
-SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
+LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 COMPILE_CS(${PROJECT_NAME} "exe" "${SRC_Example_Webservice_Host}" ALL)
 

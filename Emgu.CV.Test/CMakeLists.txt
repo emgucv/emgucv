@@ -3,12 +3,12 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 PROJECT(Emgu.CV.Test)
 
 FILE(GLOB_RECURSE SRC_CV_TEST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-SET(SRC_CV_TEST ${SRC_CV_TEST} ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
+LIST(APPEND SRC_CV_TEST ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 #copy the test data for this example
 FILE(GLOB_RECURSE SRC_CV_TEST_DATA RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.jpg" "*.png" "*.gif" "*.data" "*.xml" "*.avi")
-SET(SRC_CV_TEST_DATA 
-	${SRC_CV_TEST_DATA} 
+LIST(APPEND
+	SRC_CV_TEST_DATA 
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_eye.xml
 	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll)

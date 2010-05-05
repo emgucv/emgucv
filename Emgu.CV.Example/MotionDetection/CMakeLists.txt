@@ -1,9 +1,9 @@
 PROJECT(Example.MotionDetection)
 
 FILE(GLOB_RECURSE SRC_Example_MotionDetection RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-SET(SRC_Example_MotionDetection ${SRC_Example_MotionDetection} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+LIST(APPEND SRC_Example_MotionDetection ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
-SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
+LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_MotionDetection}" ALL)
 

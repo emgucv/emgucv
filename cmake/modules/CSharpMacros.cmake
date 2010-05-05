@@ -16,7 +16,7 @@
 #
 # copyright (c) 2007 Arno Rehn arno@arnorehn.de
 # copyright (c) 2008 Helio castro helio@kde.org
-# copyright (c) 2009, 2010 Canming Huang emgucv@gmail.com
+# copyright (c) 2009, 2010 Canming Huang support@emgu.com
 #
 # Redistribution and use is allowed according to the terms of the GPL license.
 
@@ -60,7 +60,6 @@ MACRO(GET_CS_EXECUTABLE_EXTENSION)
   ENDIF(MSVC)
 ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
 
-
 MACRO(ADD_CS_FILE_TO_DEPLOY file)
   GET_CS_LIBRARY_TARGET_DIR()
 
@@ -69,8 +68,8 @@ MACRO(ADD_CS_FILE_TO_DEPLOY file)
   ELSE()
     SET(CS_FILE_TO_DEPLOY_DEST_PATH "${CS_LIBRARY_TARGET_DIR}/${ARGV1}")
   ENDIF()
-  SET(CS_PREBUILD_COMMAND 
-    ${CS_PREBUILD_COMMAND} 
+  LIST(APPEND
+	CS_PREBUILD_COMMAND  
     COMMAND ${CMAKE_COMMAND} copy -E ${ARGV0} ${CS_FILE_TO_DEPLOY_DEST_PATH})
 ENDMACRO(ADD_CS_FILE_TO_DEPLOY)
 
@@ -110,13 +109,13 @@ ENDIF(${target_type} STREQUAL "library")
       SOURCES ${source})
   
     #Make sure the destination folder exist
-    SET(CS_PREBUILD_COMMAND 
-      ${CS_PREBUILD_COMMAND} 
+    LIST(APPEND
+	  CS_PREBUILD_COMMAND  
       COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
       )
 
 	#enable optimization
-	SET(CS_FLAGS "${CS_FLAGS} -optimize+")
+	LIST(APPEND CS_FLAGS -optimize+)
 	
 	SET(TMP "-out:\"${target_name}\" -target:${target_type}")
 	FOREACH(TMP_NAME ${CS_FLAGS})
@@ -125,8 +124,7 @@ ENDIF(${target_type} STREQUAL "library")
 	FOREACH(TMP_NAME ${proper_file_list})
 	  SET(TMP "${TMP} \"${TMP_NAME}\"")
 	ENDFOREACH()
-	
-	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/cscSourceList.rsp  "${TMP}")
+	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/cscSourceList.rsp  ${TMP})
 	  
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
@@ -143,30 +141,30 @@ ENDMACRO(COMPILE_CS)
 
 MACRO(ADD_CS_REFERENCES references)
   FOREACH(ref ${references})
-    SET(CS_FLAGS ${CS_FLAGS} -r:\"${ref}\")
+    LIST(APPEND CS_FLAGS -r:\"${ref}\")
   ENDFOREACH(ref)
 ENDMACRO(ADD_CS_REFERENCES references)
 
 MACRO(ADD_CS_PACKAGE_REFERENCES references)
   FOREACH(ref ${references})
-    SET(CS_FLAGS ${CS_FLAGS} -pkg:${ref})
+    LIST(APPEND CS_FLAGS -pkg:${ref})
   ENDFOREACH(ref)
 ENDMACRO(ADD_CS_PACKAGE_REFERENCES references)
 
 MACRO(ADD_CS_RESOURCES resx resources)
-  SET(CS_PREBUILD_COMMAND 
-    ${CS_PREBUILD_COMMAND} 
+  LIST(APPEND
+	CS_PREBUILD_COMMAND 
     COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources}
     )
-  SET(CS_FLAGS ${CS_FLAGS} -resource:\"${resources}\")
+  LIST(APPEND CS_FLAGS -resource:\"${resources}\")
 ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key) 
-  SET(CS_FLAGS ${CS_FLAGS} -keyfile:\"${key}\")
+  LIST(APPEND CS_FLAGS -keyfile:\"${key}\")
 ENDMACRO(SIGN_ASSEMBLY)
 
 MACRO(GENERATE_DOCUMENT file)
-  SET(CS_FLAGS ${CS_FLAGS} -doc:\"${file}.xml\")
+  LIST(APPEND CS_FLAGS -doc:\"${file}.xml\")
 ENDMACRO(GENERATE_DOCUMENT)
 
 MACRO(INSTALL_GAC target)
@@ -194,5 +192,3 @@ MACRO(INSTALL_GAC target)
   ENDIF(NOT WIN32)
   
 ENDMACRO(INSTALL_GAC target)
-
-

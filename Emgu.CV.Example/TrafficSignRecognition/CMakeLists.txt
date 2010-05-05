@@ -1,9 +1,9 @@
 PROJECT(Example.TrafficSignRecognition)
 
 FILE(GLOB_RECURSE SRC_Example_TrafficSignRecognition RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-SET(SRC_Example_TrafficSignRecognition ${SRC_Example_TrafficSignRecognition} ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+LIST(APPEND SRC_Example_TrafficSignRecognition ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
-SET(CS_FLAGS ${CS_FLAGS} ${EMGU_CV_REFERENCE})
+LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 #copy the test image for this example
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/stop-sign.jpg)
