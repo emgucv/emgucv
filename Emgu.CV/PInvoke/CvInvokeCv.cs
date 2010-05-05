@@ -1269,19 +1269,21 @@ namespace Emgu.CV
       /// <param name="dpdf">Optional Nx2 matrix of derivatives of image points w.r.t. fx and fy</param>
       /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
       /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
+      /// <param name="aspectRatio">Aspect ratio</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvProjectPoints2(
-          IntPtr objectPoints,
-          IntPtr rotationVector,
-          IntPtr translationVector,
-          IntPtr intrinsicMatrix,
-          IntPtr distortionCoeffs,
-          IntPtr imagePoints,
-          IntPtr dpdrot,
-          IntPtr dpdt,
-          IntPtr dpdf,
-          IntPtr dpdc,
-          IntPtr dpddist);
+         IntPtr objectPoints,
+         IntPtr rotationVector,
+         IntPtr translationVector,
+         IntPtr intrinsicMatrix,
+         IntPtr distortionCoeffs,
+         IntPtr imagePoints,
+         IntPtr dpdrot,
+         IntPtr dpdt,
+         IntPtr dpdf,
+         IntPtr dpdc,
+         IntPtr dpddist,
+         double aspectRatio);
 
       /// <summary>
       /// Finds perspective transformation H=||hij|| between the source and the destination planes
@@ -1394,8 +1396,9 @@ namespace Emgu.CV
       /// <param name="F">The optional output fundamental matrix </param>
       /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
       /// <param name="flags">The calibration flags</param>
+      /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvStereoCalibrate(
+      public static extern double cvStereoCalibrate(
          IntPtr objectPoints,
          IntPtr imagePoints1,
          IntPtr imagePoints2,
@@ -1425,8 +1428,9 @@ namespace Emgu.CV
       /// <param name="H1">The rectification homography matrices for the first images</param>
       /// <param name="H2">The rectification homography matrices for the second images</param>
       /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
+      /// <returns></returns>
       [DllImport(CV_LIBRARY)]
-      public static extern void cvStereoRectifyUncalibrated(
+      public static extern int cvStereoRectifyUncalibrated(
          IntPtr points1,
          IntPtr points2,
          IntPtr F,
@@ -1450,7 +1454,11 @@ namespace Emgu.CV
       /// <param name="P1">3x4 Projection matrices in the new (rectified) coordinate systems</param>
       /// <param name="P2">3x4 Projection matrices in the new (rectified) coordinate systems</param>
       /// <param name="Q">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
-      /// <param name="flags">The operation flags</param>
+      /// <param name="flags">The operation flags, use CALIB_ZERO_DISPARITY for default</param>
+      /// <param name="alpha">Use -1 for default</param>
+      /// <param name="newImageSize">Use Size.Empty for default</param>
+      /// <param name="validPixROI1">The valid pixel ROI for image1</param>
+      /// <param name="validPixROI2">The valid pixel ROI for image2</param>
       [DllImport(CV_LIBRARY)]
       public static extern void cvStereoRectify(
          IntPtr cameraMatrix1,
@@ -1465,7 +1473,12 @@ namespace Emgu.CV
          IntPtr P1,
          IntPtr P2,
          IntPtr Q,
-         CvEnum.STEREO_RECTIFY_TYPE flags);
+         CvEnum.STEREO_RECTIFY_TYPE flags, 
+         double alpha,
+         Size newImageSize,
+         ref Rectangle validPixROI1,
+         ref Rectangle validPixROI2
+         );
 
       /// <summary>
       /// Transforms the image to compensate radial and tangential lens distortion. The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same.
@@ -1534,25 +1547,6 @@ namespace Emgu.CV
          IntPtr dist_coeffs,
          IntPtr R,
          IntPtr P);
-
-      /// <summary>
-      /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
-      /// </summary>
-      /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
-      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The output array of corners detected</param>
-      /// <param name="cornerCount">The output corner counter. If it is not IntPtr.Zero, the function stores there the number of corners found</param>
-      /// <param name="flags">Various operation flags</param>
-      /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
-      /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
-      [DllImport(CV_LIBRARY)]
-      [Obsolete("Use the other cvFindChessboardCorners function instead, will be removed in the next version")]
-      public static extern int cvFindChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         float[,] corners,
-         ref int cornerCount,
-         CvEnum.CALIB_CB_TYPE flags);
 
       /// <summary>
       /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners

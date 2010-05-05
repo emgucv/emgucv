@@ -206,7 +206,8 @@ namespace Emgu.CV
                   matsLength > 1 ? mats[1] : IntPtr.Zero,
                   matsLength > 2 ? mats[2] : IntPtr.Zero,
                   matsLength > 3 ? mats[3] : IntPtr.Zero,
-                  matsLength > 4 ? mats[4] : IntPtr.Zero);
+                  matsLength > 4 ? mats[4] : IntPtr.Zero, 
+                  0.0);
          handle1.Free();
          handle2.Free();
          return imagePoints;

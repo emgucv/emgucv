@@ -2275,46 +2275,6 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="width">The width of the returned image.</param>
       /// <param name="height">The height of the returned image.</param>
-      /// <returns>The resized image</returns>
-      [Obsolete("Please use Resize(int width, int height, CvEnum.INTER interpolationType) instead. This function will be removed in the next version")]
-      public Image<TColor, TDepth> Resize(int width, int height)
-      {
-         return Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
-      }
-
-      /// <summary>
-      /// Scale the image to the specific size
-      /// </summary>
-      /// <param name="width">The width of the returned image.</param>
-      /// <param name="height">The height of the returned image.</param>
-      /// <param name="preserverScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
-      /// <returns></returns>
-      [Obsolete("Please use Resize(int width, int height, CvEnum.INTER interpolationType, bool preserverScale) instead. This function will be removed in the next version")]
-      public Image<TColor, TDepth> Resize(int width, int height, bool preserverScale)
-      {
-         return preserverScale ?
-            Resize(Math.Min((double)width / Width, (double)height / Height))
-            : Resize(width, height);
-      }
-
-      /// <summary>
-      /// Scale the image to the specific size: width *= scale; height *= scale  
-      /// </summary>
-      /// <param name="scale">The resize scale</param>
-      /// <returns>The scaled image</returns>
-      [Obsolete("Please use Resize(double scale, CvEnum.INTER interpolationType) instead. This function will be removed in the next version")]
-      public Image<TColor, TDepth> Resize(double scale)
-      {
-         return Resize(
-             (int)(Width * scale),
-             (int)(Height * scale));
-      }
-
-      /// <summary>
-      /// Scale the image to the specific size 
-      /// </summary>
-      /// <param name="width">The width of the returned image.</param>
-      /// <param name="height">The height of the returned image.</param>
       /// <param name="interpolationType">The type of interpolation</param>
       /// <returns>The resized image</returns>
       [ExposableMethod(Exposable = true)]
