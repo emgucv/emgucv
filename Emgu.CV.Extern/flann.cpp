@@ -51,13 +51,13 @@ CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, CvMat* queries, CvMat
    index->knnSearch(queriesMat, indicesMat, distsMat, knn, p);
 }
 
-CVAPI(void) CvFlannIndexRadiusSearch(cv::flann::Index* index, CvMat* queries, CvMat* indices, CvMat* dists, float radius, int checks)
+CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, CvMat* queries, CvMat* indices, CvMat* dists, float radius, int checks)
 {
    cv::flann::SearchParams p = cv::flann::SearchParams(checks);
    cv::Mat queriesMat = cv::cvarrToMat(queries); 
    cv::Mat indicesMat = cv::cvarrToMat(indices);
    cv::Mat distsMat = cv::cvarrToMat(dists);
-   index->radiusSearch(queriesMat, indicesMat, distsMat, radius, p);
+   return index->radiusSearch(queriesMat, indicesMat, distsMat, radius, p);
 }
 
 CVAPI(void) CvFlannIndexRelease(cv::flann::Index* index) { delete index; }

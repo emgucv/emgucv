@@ -417,7 +417,7 @@ namespace Emgu.CV.Test
                {focalLength, 0, 0},
                {0, focalLength, 0}, 
                {0,0,1}}),
-            IntPtr.Zero, imagePointMat, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            IntPtr.Zero, imagePointMat, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0.0);
             return imagePointMat.Data;
          }
       }
@@ -985,8 +985,8 @@ namespace Emgu.CV.Test
          }
       }
 
-      //TODO: find out why CameraCalibration test go to infinite loop since svn 1611
       /*
+      //This took ~ 60 seconds to finishes
       [Test]
       public void TestCameraCalibration()
       {
@@ -1803,6 +1803,43 @@ namespace Emgu.CV.Test
             float[] signiture = classifier.GetSigniture(image, points[0], 15);
             Assert.AreEqual(signiture.Length, classifier.NumberOfClasses);
          }
+      }
+      
+      [Test]
+      public void TestIndex3D()
+      {
+         Random r = new Random();
+         MCvPoint3D32f[] points =  new MCvPoint3D32f[1000];
+
+         for (int i = 0; i < points.Length; i++)
+         {
+            points[i].x = (float) r.NextDouble();
+            points[i].y = (float) r.NextDouble();
+            points[i].z = (float) r.NextDouble();
+         }
+
+         MCvPoint3D32f searchPoint = new MCvPoint3D32f();
+         searchPoint.x = (float)r.NextDouble();
+         searchPoint.y = (float)r.NextDouble();
+         searchPoint.z = (float)r.NextDouble();
+
+         int indexOfClosest1 = 0;
+         double shortestDistance1 = double.MaxValue;
+         for (int i = 0; i < points.Length; i++)
+         {
+            double dist = (searchPoint - points[i]).Norm;
+            if (dist < shortestDistance1)
+            {
+               shortestDistance1 = dist;
+               indexOfClosest1 = i;
+            }
+         }
+
+         Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points);
+         double shortestDistance2;
+         int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
+         Assert.AreEqual(indexOfClosest1, indexOfClosest2);
+         Assert.AreEqual(shortestDistance1, shortestDistance2);
       }
    }
 }
