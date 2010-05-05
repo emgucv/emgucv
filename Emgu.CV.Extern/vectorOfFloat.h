@@ -1,3 +1,4 @@
+#pragma once
 #ifndef VECTOR_OF_FLOAT_H
 #define VECTOR_OF_FLOAT_H
 

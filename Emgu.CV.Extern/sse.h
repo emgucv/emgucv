@@ -1,3 +1,4 @@
+#pragma once
 #ifndef EMGU_SSE_H
 #define EMGU_SSE_H
 

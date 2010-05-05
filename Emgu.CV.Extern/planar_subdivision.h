@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PLANAR_SUBDIVISION_H
 #define PLANAR_SUBDIVISION_H
 #include "cxcore.h"

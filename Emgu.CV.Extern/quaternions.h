@@ -1,3 +1,4 @@
+#pragma once
 #ifndef QUATERNIONS_H
 #define QUATERNIONS_H
 

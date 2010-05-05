@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TRANSFORMATION_WGS84_H
 #define TRANSFORMATION_WGS84_H
 

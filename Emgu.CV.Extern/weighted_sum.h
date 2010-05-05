@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cvaux.h"
 #include "sse.h"
 
