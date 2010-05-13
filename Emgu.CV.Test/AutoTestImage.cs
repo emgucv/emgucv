@@ -1258,6 +1258,22 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSIFTDetector()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         SIFTDetector detector = new SIFTDetector(4, 3, -1, 0.04 / 3 / 2.0, 10.0, SIFTDetector.AngleMode.AVERAGE_ANGLE, 3.0, true);
+
+         MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }
+
+         ImageFeature[] features = detector.ComputeDescriptors(box, null, keypoints);
+         //ImageViewer.Show(box);
+      }
+
+      [Test]
       public void TestImageConvert()
       {
          try

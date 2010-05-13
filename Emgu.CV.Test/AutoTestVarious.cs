@@ -1838,8 +1838,10 @@ namespace Emgu.CV.Test
          Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points);
          double shortestDistance2;
          int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
+         shortestDistance2 = Math.Sqrt(shortestDistance2);
+
          Assert.AreEqual(indexOfClosest1, indexOfClosest2);
-         Assert.AreEqual(shortestDistance1, shortestDistance2);
+         Assert.LessOrEqual( Math.Sqrt(shortestDistance1 - shortestDistance2), 1.0e-3 * shortestDistance1);
       }
    }
 }

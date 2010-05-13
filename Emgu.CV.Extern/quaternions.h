@@ -2,7 +2,8 @@
 #ifndef QUATERNIONS_H
 #define QUATERNIONS_H
 
-#include "cxcore.h"
+#include "core_c.h"
+#include "core.hpp"
 #include "sse.h"
 
 typedef struct Quaternions

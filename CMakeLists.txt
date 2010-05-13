@@ -100,12 +100,16 @@ ADD_SUBDIRECTORY(Emgu.CV.Extern)
 IF(MSVC)
   SET(extra_bin_prefix "../")
   SET_TARGET_PROPERTIES(cvextern PROPERTIES PREFIX ${extra_bin_prefix})
-  SET_TARGET_PROPERTIES(cxcore PROPERTIES PREFIX ${extra_bin_prefix})
-  SET_TARGET_PROPERTIES(cv PROPERTIES PREFIX ${extra_bin_prefix})
-  SET_TARGET_PROPERTIES(cvaux PROPERTIES PREFIX ${extra_bin_prefix})
-  SET_TARGET_PROPERTIES(ml PROPERTIES PREFIX ${extra_bin_prefix})
-
-  SET_TARGET_PROPERTIES(highgui PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_core PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_imgproc PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_contrib PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_ml PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_highgui PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_features2d PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_calib3d PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_legacy PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_objdetect PROPERTIES PREFIX ${extra_bin_prefix})
+  SET_TARGET_PROPERTIES(opencv_video PROPERTIES PREFIX ${extra_bin_prefix})
   IF(opencv_ffmpeg)
     SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
   ENDIF()
@@ -155,13 +159,17 @@ http://www.emgu.com/bugs/
 # ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project
 # ----------------------------------------------------------------------------
-GET_TARGET_PROPERTY(CXCORE_OUTPUT_NAME cxcore OUTPUT_NAME)
-GET_TARGET_PROPERTY(CV_OUTPUT_NAME cv OUTPUT_NAME)
-GET_TARGET_PROPERTY(HIGHGUI_OUTPUT_NAME highgui OUTPUT_NAME)
-GET_TARGET_PROPERTY(ML_OUTPUT_NAME ml OUTPUT_NAME)
-GET_TARGET_PROPERTY(CVAUX_OUTPUT_NAME cvaux OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_CORE_OUTPUT_NAME opencv_core OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_IMGPROC_OUTPUT_NAME opencv_imgproc OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_HIGHGUI_OUTPUT_NAME opencv_highgui OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_ML_OUTPUT_NAME opencv_ml OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_FEATURES2D_OUTPUT_NAME opencv_features2d OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_OBJDETECT_OUTPUT_NAME opencv_objdetect OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_LEGACY_OUTPUT_NAME opencv_legacy OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
-
 
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
@@ -172,21 +180,37 @@ namespace Emgu.CV
    public partial class CvInvoke
    {
       /// <summary>
-      /// The file name of the cxcore library
+      /// The file name of the core library
       /// </summary>
-      public const string CXCORE_LIBRARY = \"${CXCORE_OUTPUT_NAME}\";
+      public const string OPENCV_CORE_LIBRARY = \"${OPENCV_CORE_OUTPUT_NAME}\";
       /// <summary>
-      /// The file name of the cv library
+      /// The file name of the imgproc library
       /// </summary>
-      public const string CV_LIBRARY = \"${CV_OUTPUT_NAME}\";
+      public const string OPENCV_IMGPROC_LIBRARY = \"${OPENCV_IMGPROC_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the highgui library
       /// </summary>
-      public const string HIGHGUI_LIBRARY = \"${HIGHGUI_OUTPUT_NAME}\";
+      public const string OPENCV_HIGHGUI_LIBRARY = \"${OPENCV_HIGHGUI_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the cvaux library
       /// </summary>
-      public const string CVAUX_LIBRARY = \"${CVAUX_OUTPUT_NAME}\";
+      public const string OPENCV_FEATURES2D_LIBRARY = \"${OPENCV_FEATURES2D_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the objdetect library
+      /// </summary>
+      public const string OPENCV_OBJDETECT_LIBRARY = \"${OPENCV_OBJDETECT_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the objdetect library
+      /// </summary>
+      public const string OPENCV_CALIB3D_LIBRARY = \"${OPENCV_CALIB3D_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the objdetect library
+      /// </summary>
+      public const string OPENCV_LEGACY_LIBRARY = \"${OPENCV_LEGACY_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the objdetect library
+      /// </summary>
+      public const string OPENCV_VIDEO_LIBRARY = \"${OPENCV_VIDEO_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>

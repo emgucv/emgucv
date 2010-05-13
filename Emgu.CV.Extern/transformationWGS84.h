@@ -2,7 +2,7 @@
 #ifndef TRANSFORMATION_WGS84_H
 #define TRANSFORMATION_WGS84_H
 
-#include "cxcore.h"
+#include "core_c.h"
 #include <math.h>
 #include "sse.h"
 

@@ -1,8 +1,8 @@
 #pragma once
 #ifndef PLANAR_SUBDIVISION_H
 #define PLANAR_SUBDIVISION_H
-#include "cxcore.h"
-#include "cv.h"
+#include "core_c.h"
+#include "opencv2/imgproc/imgproc_c.h"
 #include <set>
 
 using namespace std;

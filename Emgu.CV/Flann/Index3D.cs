@@ -43,16 +43,16 @@ namespace Emgu.CV.Flann
       /// Find the approximate nearest position in 3D
       /// </summary>
       /// <param name="position">The position to start the search from</param>
-      /// <param name="dist">The distance of the nearest neighbour</param>
+      /// <param name="squareDist">The square distance of the nearest neighbour</param>
       /// <returns>The index with the nearest 3D position</returns>
-      public int ApproximateNearestNeighbour(MCvPoint3D32f position, out double dist)
+      public int ApproximateNearestNeighbour(MCvPoint3D32f position, out double squareDist)
       {
          _query.Data[0, 0] = position.x;
          _query.Data[0, 1] = position.y;
          _query.Data[0, 2] = position.z;
          _flannIndex.KnnSearch(_query, _index, _distance, 1, 1);
 
-         dist = _distance.Data[0, 0];
+         squareDist = _distance.Data[0, 0];
          return _index.Data[0, 0];
       }
 

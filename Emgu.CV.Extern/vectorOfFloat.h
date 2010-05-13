@@ -2,7 +2,8 @@
 #ifndef VECTOR_OF_FLOAT_H
 #define VECTOR_OF_FLOAT_H
 
-#include <cxcore.h>
+#include <core_c.h>
+#include <vector>
 
 class vectorOfFloat
 { 

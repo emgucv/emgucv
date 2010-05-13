@@ -121,7 +121,7 @@ namespace Simlpe3DReconstruction
 
          using (Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(size))
          using (Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(size))
-         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0, 0, 0, 0, 0, 0, 0, 0))
+         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0, 0, 0, 0, 0, 0, 0, 0, false))
          using (StereoGC stereoSolver = new StereoGC(16, 2))
          {
             stereoSolver.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);

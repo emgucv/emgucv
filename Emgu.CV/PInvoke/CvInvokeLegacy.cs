@@ -1,24 +1,123 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Runtime.InteropServices;
-using Emgu.CV.Structure;
 using System.Drawing;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-   public partial class CvInvoke
+   /// <summary>
+   /// Library to invoke OpenCV functions
+   /// </summary>
+   public static partial class CvInvoke
    {
-      /*
-        /// <summary>
-        /// Wrapped CvCallBack function pointer in CvAux
-        /// </summary>
-        /// <param name="index">index for the elements of user data</param>
-        /// <param name="buffer">buffer used to store the returned element</param>
-        /// <param name="user_data">user data</param>
-        /// <returns>error code</returns>
-        public delegate int CvCallBack(int index, IntPtr buffer, ref MUserData user_data);
-        */
+      /// <summary>
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
+      /// </summary>
+      /// <param name="image">The source image or external energy field</param>
+      /// <param name="points">Seq points (snake). </param>
+      /// <param name="length">Number of points in the contour</param>
+      /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
+      /// <param name="beta">Weight[s] of curvature energy, similar to alpha</param>
+      /// <param name="gamma">Weight[s] of image energy, similar to alpha</param>
+      /// <param name="coeffUsage">Variant of usage of the previous three parameters: 
+      /// CV_VALUE indicates that each of alpha, beta, gamma is a pointer to a single value to be used for all points; 
+      /// CV_ARRAY indicates that each of alpha, beta, gamma is a pointer to an array of coefficients different for all the points of the snake. All the arrays must have the size equal to the contour size.
+      /// </param>
+      /// <param name="win">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
+      /// <param name="criteria">Termination criteria</param>
+      /// <param name="calcGradient">
+      /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
+      /// otherwise the input image itself is considered
+      /// </param>
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      public static extern void cvSnakeImage(
+          IntPtr image,
+          IntPtr points,
+          int length,
+          [MarshalAs(UnmanagedType.LPArray)] float[] alpha,
+          [MarshalAs(UnmanagedType.LPArray)] float[] beta,
+          [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
+          int coeffUsage,
+          Size win,
+          MCvTermCriteria criteria,
+          int calcGradient);
+
+      /// <summary>
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
+      /// </summary>
+      /// <param name="image">The source image or external energy field</param>
+      /// <param name="points">Seq points (snake). </param>
+      /// <param name="length">Number of points in the contour</param>
+      /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
+      /// <param name="beta">Weight[s] of curvature energy, similar to alpha</param>
+      /// <param name="gamma">Weight[s] of image energy, similar to alpha</param>
+      /// <param name="coeffUsage">Variant of usage of the previous three parameters: 
+      /// CV_VALUE indicates that each of alpha, beta, gamma is a pointer to a single value to be used for all points; 
+      /// CV_ARRAY indicates that each of alpha, beta, gamma is a pointer to an array of coefficients different for all the points of the snake. All the arrays must have the size equal to the contour size.
+      /// </param>
+      /// <param name="win">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
+      /// <param name="criteria">Termination criteria</param>
+      /// <param name="calcGradient">
+      /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
+      /// otherwise the input image itself is considered
+      /// </param>
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      public static extern void cvSnakeImage(
+         IntPtr image,
+         [In, Out]
+         Point[] points,
+         int length,
+         [MarshalAs(UnmanagedType.LPArray)] float[] alpha,
+         [MarshalAs(UnmanagedType.LPArray)] float[] beta,
+         [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
+         int coeffUsage,
+         Size win,
+         MCvTermCriteria criteria,
+         int calcGradient);
+
+      /// <summary>
+      /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
+      /// </summary>
+      /// <param name="image">The source image or external energy field</param>
+      /// <param name="points">Seq points (snake). </param>
+      /// <param name="length">Number of points in the contour</param>
+      /// <param name="alpha">Weight[s] of continuity energy, single float or array of length floats, one per each contour point</param>
+      /// <param name="beta">Weight[s] of curvature energy, similar to alpha</param>
+      /// <param name="gamma">Weight[s] of image energy, similar to alpha</param>
+      /// <param name="coeffUsage">Variant of usage of the previous three parameters: 
+      /// CV_VALUE indicates that each of alpha, beta, gamma is a pointer to a single value to be used for all points; 
+      /// CV_ARRAY indicates that each of alpha, beta, gamma is a pointer to an array of coefficients different for all the points of the snake. All the arrays must have the size equal to the contour size.
+      /// </param>
+      /// <param name="win">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
+      /// <param name="criteria">Termination criteria</param>
+      /// <param name="calcGradient">
+      /// Gradient flag. If true, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
+      /// otherwise the input image itself is considered
+      /// </param>
+      public static void cvSnakeImage(
+           IntPtr image,
+           IntPtr points,
+           int length,
+           float[] alpha,
+           float[] beta,
+           float[] gamma,
+           int coeffUsage,
+           Size win,
+           MCvTermCriteria criteria,
+           bool calcGradient)
+      {
+         cvSnakeImage(
+            image,
+            points,
+            length,
+            alpha,
+            beta,
+            gamma,
+            coeffUsage,
+            win,
+            criteria,
+            calcGradient ? 1 : 0);
+      }
 
       #region Eigen Objects
       #region cvEigenDecomposite function
@@ -56,7 +155,7 @@ namespace Emgu.CV
       /// <param name="userData">Pointer to the structure that contains all necessary data for the callback functions</param>
       /// <param name="avg">Averaged object (Pointer to IplImage)</param>
       /// <param name="coeffs">Calculated coefficients; an output parameter</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       private static extern void cvEigenDecomposite(
          IntPtr obj,
          int eigenvecCount,
@@ -108,7 +207,7 @@ namespace Emgu.CV
       /// <param name="calcLimit">Criteria that determine when to stop calculation of eigen objects. Depending on the parameter calcLimit, calculations are finished either after first calcLimit.max_iter dominating eigen objects are retrieved or if the ratio of the current eigenvalue to the largest eigenvalue comes down to calcLimit.epsilon threshold. The value calcLimit -> type must be CV_TERMCRIT_NUMB, CV_TERMCRIT_EPS, or CV_TERMCRIT_NUMB | CV_TERMCRIT_EPS . The function returns the real values calcLimit->max_iter and calcLimit->epsilon</param>
       /// <param name="avg">Averaged object</param>
       /// <param name="eigVals">Pointer to the eigenvalues array in the descending order; may be NULL</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       private static extern void cvCalcEigenObjects(
          int nObjects,
          IntPtr[] input,
@@ -153,7 +252,7 @@ namespace Emgu.CV
       /// <param name="coeffs">Previously calculated decomposition coefficients</param>
       /// <param name="avg">Average vector</param>
       /// <param name="proj">Projection to the eigen sub-space</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       private extern static void cvEigenProjection(
          IntPtr[] inputVecs,
          int eigenvecCount,
@@ -164,62 +263,6 @@ namespace Emgu.CV
          IntPtr proj);
       #endregion
 
-      #region background / forground  statistic
-      /// <summary>
-      /// Create a Gaussian background model
-      /// </summary>
-      /// <param name="image">Background image</param>
-      /// <param name="param">Parameters for the background model</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, IntPtr param);
-
-      /// <summary>
-      /// Create a background model
-      /// </summary>
-      /// <param name="image">Background image</param>
-      /// <param name="param">Parameters for the background model</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
-
-      /// <summary>
-      /// Create a forground model
-      /// </summary>
-      /// <param name="firstFrame">The first frame</param>
-      /// <param name="parameters">The forground statistic parameters</param>
-      /// <returns>Pointer to the forground model</returns>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
-
-      /// <summary>
-      /// Create a Gaussian background model
-      /// </summary>
-      /// <param name="image">Background image</param>
-      /// <param name="parameters">Parameters for the background model</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, ref MCvGaussBGStatModelParams parameters);
-      #endregion
-
-      /// <summary>
-      /// Calculates disparity for stereo-pair 
-      /// </summary>
-      /// <param name="leftImage">Left image of stereo pair, rectified grayscale 8-bit image</param>
-      /// <param name="rightImage">Right image of stereo pair, rectified grayscale 8-bit image</param>
-      /// <param name="mode">Algorithm used to find a disparity</param>
-      /// <param name="depthImage">Destination depth image, grayscale 8-bit image that codes the scaled disparity, so that the zero disparity (corresponding to the points that are very far from the cameras) maps to 0, maximum disparity maps to 255.</param>
-      /// <param name="maxDisparity">Maximum possible disparity. The closer the objects to the cameras, the larger value should be specified here. Too big values slow down the process significantly</param>
-      /// <param name="param1">constant occlusion penalty</param>
-      /// <param name="param2">constant match reward</param>
-      /// <param name="param3">defines a highly reliable region (set of contiguous pixels whose reliability is at least param3)</param>
-      /// <param name="param4">defines a moderately reliable region</param>
-      /// <param name="param5">defines a slightly reliable region</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static void cvFindStereoCorrespondence(
-         IntPtr leftImage, IntPtr rightImage,
-         int mode, IntPtr depthImage,
-         int maxDisparity,
-         double param1, double param2, double param3,
-         double param4, double param5);
-
       #region Condensation
       /// <summary>
       /// Creates CvConDensation structure and returns pointer to the structure
@@ -228,14 +271,14 @@ namespace Emgu.CV
       /// <param name="measureParams">Dimension of the measurement vector</param>
       /// <param name="sampleCount">Number of samples</param>
       /// <returns>Pointer to the CvConDensation structure</returns>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern IntPtr cvCreateConDensation(int dynamParams, int measureParams, int sampleCount);
 
       /// <summary>
       /// Releases the structure CvConDensation (see cvConDensation) and frees all memory previously allocated for the structure. 
       /// </summary>
       /// <param name="condens">Pointer to the CvConDensation structure</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern void cvReleaseConDensation(ref IntPtr condens);
 
       /// <summary>
@@ -244,14 +287,14 @@ namespace Emgu.CV
       /// <param name="condens">Pointer to a structure to be initialized</param>
       /// <param name="lowerBound">Vector of the lower boundary for each dimension</param>
       /// <param name="upperBound">Vector of the upper boundary for each dimension</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern void cvConDensInitSampleSet(IntPtr condens, IntPtr lowerBound, IntPtr upperBound);
 
       /// <summary>
       /// Estimates the subsequent stochastic model state from its current state
       /// </summary>
       /// <param name="condens">Pointer to the structure to be updated</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern void cvConDensUpdateByTime(IntPtr condens);
       #endregion
 
@@ -260,73 +303,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Input contour. Currently, only integer point coordinates are allowed</param>
       /// <param name="hist">Calculated histogram; must be two-dimensional</param>
-      [DllImport(CVAUX_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
       /// <summary>
       /// Checks planar subdivision for correctness. It is not an absolute check, but it verifies some relations between quad-edges
       /// </summary>
       /// <param name="subdiv">Pointer to the MCvSubdiv2D</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public static extern int icvSubdiv2DCheck(IntPtr subdiv );
-
-      #region Codebook background model
-      /// <summary>
-      /// Create a BG code book model
-      /// </summary>
-      /// <returns>Poionter to BG code book model</returns>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static IntPtr cvCreateBGCodeBookModel();
-
-      /// <summary>
-      /// Update the BG code book model
-      /// </summary>
-      /// <param name="model">Pointer to the BGCodeBookModel</param>
-      /// <param name="image">The image for update</param>
-      /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
-      /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static void cvBGCodeBookUpdate( 
-         IntPtr model, 
-         IntPtr image,
-         Rectangle roi,
-         IntPtr mask);
-
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="model">Pointer to the BGCodeBookModel</param>
-      /// <param name="image">The image to find diff</param>
-      /// <param name="fgmask">The returned forground mask</param>
-      /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
-      /// <returns></returns>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static int cvBGCodeBookDiff( 
-         IntPtr model, 
-         IntPtr image,
-         IntPtr fgmask, 
-         Rectangle roi);
-
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="model"></param>
-      /// <param name="staleThresh"></param>
-      /// <param name="roi"></param>
-      /// <param name="mask"></param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static void cvBGCodeBookClearStale( 
-         IntPtr model, 
-         int staleThresh,
-         Rectangle roi,
-         IntPtr mask);
-
-      /// <summary>
-      /// Release the BG code book model
-      /// </summary>
-      /// <param name="model">The BG code book model to be released</param>
-      [DllImport(CVAUX_LIBRARY)]
-      public extern static void cvReleaseBGCodeBookModel(ref IntPtr model);
-      #endregion
+      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      public static extern int icvSubdiv2DCheck(IntPtr subdiv);
    }
 }

@@ -12,7 +12,7 @@ namespace Emgu.CV
       /// <param name="moduleName">Name of the module of interest, or IntPtr.Zero, which means all the modules.</param>
       /// <param name="version">Information about the module(s), including version</param>
       /// <param name="loadedAddonPlugins">The list of names and versions of the optimized plugins that CXCORE was able to find and load</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvGetModuleInfo(
          IntPtr moduleName,
          ref IntPtr version,
@@ -52,7 +52,7 @@ namespace Emgu.CV
       /// <param name="allocFunc">Allocation function</param>
       /// <param name="freeFunc">Deallocation function</param>
       /// <param name="userdata">User data that is transparetly passed to the custom functions</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetMemoryManager(
          CvAllocFunc allocFunc,
          CvFreeFunc freeFunc,
@@ -141,7 +141,7 @@ namespace Emgu.CV
       /// <param name="userdata">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvRedirectError(
           CvErrorCallback errorHandler,
           IntPtr userdata,
@@ -154,7 +154,7 @@ namespace Emgu.CV
       /// <param name="userdata">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvRedirectError(
           IntPtr errorHandler,
           IntPtr userdata,
@@ -165,28 +165,28 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="errorMode">The error mode</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvSetErrMode(int errorMode);
 
       /// <summary>
       /// Returns the current error mode
       /// </summary>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetErrMode();
 
       /// <summary>
       /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occured, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
       /// </summary>
       /// <returns>the current error status</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetErrStatus();
 
       /// <summary>
       /// Sets the error status to the specified value. Mostly, the function is used to reset the error status (set to it CV_StsOk) to recover after error. In other cases it is more natural to call cvError or CV_ERROR.
       /// </summary>
       /// <param name="code">The error status.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetErrStatus(CvEnum.ERROR_CODES code);
       #endregion
 
@@ -199,7 +199,7 @@ namespace Emgu.CV
       /// <param name="elemSize">Size of the sequence elements in bytes. The size must be consistent with the sequence type. For example, for a sequence of points to be created, the element type CV_SEQ_ELTYPE_POINT should be specified and the parameter elem_size must be equal to sizeof(CvPoint). </param>
       /// <param name="storage">Sequence location.</param>
       /// <returns>A pointer to the sequence</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateSeq(
          int seqFlags,
          int headerSize,
@@ -211,7 +211,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">Added element</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPush(IntPtr seq, IntPtr element);
 
       /// <summary>
@@ -219,7 +219,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">Added element</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPushFront(IntPtr seq, IntPtr element);
 
       /// <summary>
@@ -227,7 +227,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">If the pointer is not zero, the function copies the removed element to this location</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPop(IntPtr seq, IntPtr element);
 
       /// <summary>
@@ -235,7 +235,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">If the pointer is not zero, the function copies the removed element to this location</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPopFront(IntPtr seq, IntPtr element);
 
       /// <summary>
@@ -243,7 +243,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="index">Index of removed element</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqRemove(IntPtr seq, int index);
 
       /// <summary>
@@ -253,7 +253,7 @@ namespace Emgu.CV
       /// <param name="beforeIndex">Index before which the element is inserted. Inserting before 0 (the minimal allowed value of the parameter) is equal to cvSeqPushFront and inserting before seq->total (the maximal allowed value of the parameter) is equal to cvSeqPush</param>
       /// <param name="element">Inserted element</param>
       /// <returns>Pointer to the inserted element</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvSeqInsert(IntPtr seq, int beforeIndex, IntPtr element);
 
       /// <summary>
@@ -265,7 +265,7 @@ namespace Emgu.CV
       /// <param name="backOrFront">
       /// If != 0, the elements are added to the beginning of sequence;
       /// Otherwise the elements are added to the end of sequence </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPushMulti(
           IntPtr seq,
           IntPtr elements,
@@ -281,7 +281,7 @@ namespace Emgu.CV
       /// <param name="backOrFront">
       /// If != 0, the elements are added to the beginning of sequence;
       /// Otherwise the elements are added to the end of sequence </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSeqPopMulti(
           IntPtr seq,
           IntPtr elements,
@@ -293,7 +293,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="reader"></param>
       /// <param name="direction"></param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvChangeSeqBlock(
          ref MCvSeqReader reader,
          int direction);
@@ -341,7 +341,7 @@ namespace Emgu.CV
       /// <param name="seq">Sequence</param>
       /// <param name="reader">Reader state; initialized by the function</param>
       /// <param name="reverse">Determines the direction of the sequence traversal. If reverse is 0, the reader is positioned at the first sequence element, otherwise it is positioned at the last element.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvStartReadSeq(
           IntPtr seq,
           ref MCvSeqReader reader,
@@ -353,14 +353,14 @@ namespace Emgu.CV
       /// <param name="seq">Sequence</param>
       /// <param name="index">Index of element</param>
       /// <returns>the pointer to the element with the given index in the sequence</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetSeqElem(IntPtr seq, int index);
 
       /// <summary>
       /// Removes all elements from the sequence. The function does not return the memory to the storage, but this memory is reused later when new elements are added to the sequence. This function time complexity is O(1). 
       /// </summary>
       /// <param name="seq">Sequence</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvClearSeq(IntPtr seq);
       #endregion
 
@@ -372,7 +372,7 @@ namespace Emgu.CV
       /// <param name="new_cn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
       /// <param name="new_rows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvReshape(
          IntPtr arr,
          IntPtr header,
@@ -385,7 +385,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source array, image or matrix</param>
       /// <param name="dst">Destination array, image or matrix</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvRepeat(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -396,7 +396,7 @@ namespace Emgu.CV
       /// <param name="src2">Input channels.</param>
       /// <param name="src3">Input channels.</param>
       /// <param name="dst">Destination array. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMerge(
           IntPtr src0,
           IntPtr src1,
@@ -413,7 +413,7 @@ namespace Emgu.CV
       /// <param name="dstCount">The number of output arrays</param>
       /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
       /// <param name="pairCount">The number of pairs in from_to, or the number of the planes copied</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMixChannels(
          IntPtr[] src,
          int srcCount,
@@ -442,7 +442,7 @@ namespace Emgu.CV
       /// <param name="mat">The input/output matrix. It is shuffled in-place. </param>
       /// <param name="rng">Pointer to MCvRNG radom number generator. Use IntPtr.Zero if not sure</param>
       /// <param name="iterFactor">The relative parameter that characterizes intensity of the shuffling performed. The number of iterations (i.e. pairs swapped) is round(iter_factor*rows(mat)*cols(mat)), so iter_factor=0 means that no shuffling is done, iter_factor=1 means that the function swaps rows(mat)*cols(mat) random pairs etc</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvRandShuffle(IntPtr mat, IntPtr rng, double iterFactor);
 
       /// <summary>
@@ -453,7 +453,7 @@ namespace Emgu.CV
       /// <param name="src2">Input channels.</param>
       /// <param name="src3">Input channels.</param>
       /// <param name="dst">Destination array. </param>
-      [DllImport(CXCORE_LIBRARY, EntryPoint = "cvMerge")]
+      [DllImport(OPENCV_CORE_LIBRARY, EntryPoint = "cvMerge")]
       public static extern void cvCvtPlaneToPix(
           IntPtr src0,
           IntPtr src1,
@@ -466,7 +466,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source array</param>
       /// <param name="des">The destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvNot(IntPtr src, IntPtr des);
 
       /// <summary>
@@ -477,7 +477,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array. </param>
       /// <param name="dst">The destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMax(IntPtr src1, IntPtr src2, IntPtr dst);
 
       /// <summary>
@@ -488,7 +488,7 @@ namespace Emgu.CV
       /// <param name="src">The first source array</param>
       /// <param name="value">The scalar value</param>
       /// <param name="dst">The destination array. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMaxS(IntPtr src, double value, IntPtr dst);
 
       /// <summary>
@@ -498,7 +498,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">The image</param>
       /// <returns>the number of non-zero elements in image</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvCountNonZero(IntPtr arr);
 
       /// <summary>
@@ -509,7 +509,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMin(IntPtr src1, IntPtr src2, IntPtr dst);
 
       /// <summary>
@@ -520,7 +520,7 @@ namespace Emgu.CV
       /// <param name="src">The first source array</param>
       /// <param name="value">The scalar value</param>
       /// <param name="dst">The destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMinS(IntPtr src, double value, IntPtr dst);
 
       /// <summary>
@@ -531,7 +531,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array.</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAdd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -543,7 +543,7 @@ namespace Emgu.CV
       /// <param name="value">Added scalar.</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAddS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -555,7 +555,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSub(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -585,7 +585,7 @@ namespace Emgu.CV
       /// <param name="value">Subtracted scalar</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSubRS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -598,7 +598,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="scale">Optional scale factor </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvDiv(IntPtr src1, IntPtr src2, IntPtr dst, double scale);
 
       /// <summary>
@@ -610,7 +610,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="scale">Optional scale factor</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMul(IntPtr src1, IntPtr src2, IntPtr dst, double scale);
 
       /// <summary>
@@ -622,7 +622,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -634,7 +634,7 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAndS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -646,7 +646,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -658,7 +658,7 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvOrS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -670,7 +670,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">mask, 8-bit single channel array; specifies elements of destination array to be changed.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -682,7 +682,7 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvXorS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
 
       #region Copying and Filling
@@ -694,7 +694,7 @@ namespace Emgu.CV
       /// <param name="src">The source array</param>
       /// <param name="des">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
 
       /// <summary>
@@ -705,14 +705,14 @@ namespace Emgu.CV
       /// <param name="arr">The destination array</param>
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSet(IntPtr arr, MCvScalar value, IntPtr mask);
 
       /// <summary>
       /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
       /// </summary>
       /// <param name="arr">array to be cleared</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetZero(IntPtr arr);
 
       /// <summary>
@@ -731,7 +731,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mat">The matrix to initialize (not necesserily square).</param>
       /// <param name="value">The value to assign to the diagonal elements.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetIdentity(IntPtr mat, MCvScalar value);
 
       /// <summary>
@@ -741,7 +741,7 @@ namespace Emgu.CV
       /// <param name="mat">The matrix to initialize. It should be single-channel 32-bit, integer or floating-point</param>
       /// <param name="start">The lower inclusive boundary of the range</param>
       /// <param name="end">The upper exclusive boundary of the range</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvRange(IntPtr mat, double start, double end);
       #endregion
 
@@ -757,7 +757,7 @@ namespace Emgu.CV
       /// <param name="magnitude">The destination array of magnitudes, may be set to IntPtr.Zero if it is not needed </param>
       /// <param name="angle">The destination array of angles, may be set to IntPtr.Zero if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCartToPolar(
          IntPtr x,
          IntPtr y,
@@ -796,7 +796,7 @@ namespace Emgu.CV
       /// <param name="x">The destination array of x-coordinates, may be set to IntPtr.Zero if it is not needed</param>
       /// <param name="y">The destination array of y-coordinates, mau be set to IntPtr.Zero if it is not needed</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvPolarToCart(
          IntPtr magnitude,
          IntPtr angle,
@@ -840,7 +840,7 @@ namespace Emgu.CV
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array, should be the same type as the source</param>
       /// <param name="power">The exponent of power</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvPow(IntPtr src, IntPtr dst, double power);
 
       /// <summary>
@@ -850,7 +850,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvExp(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -861,7 +861,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array, it should have double type or the same type as the source</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvLog(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -875,7 +875,7 @@ namespace Emgu.CV
       /// <param name="coeffs">The equation coefficients, array of 3 or 4 elements</param>
       /// <param name="roots">The output array of real roots. Should have 3 elements. Padded with zeros if there is only one root</param>
       /// <returns>the number of real roots found</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvSolveCubic(IntPtr coeffs, IntPtr roots);
 
       /// <summary>
@@ -885,7 +885,7 @@ namespace Emgu.CV
       /// <param name="roots">The degree-length output array of real or complex roots (CV_32FC2 or CV_64FC2)</param>
       /// <param name="maxiter">The maximum number of iterations</param>
       /// <param name="fig">The required figures of precision required</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSolvePoly(
          IntPtr coeffs,
          IntPtr roots,
@@ -902,7 +902,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination array of the same size and same type as the source</param>
       /// <param name="flags">Transformation flags</param>
       /// <param name="nonzeroRows">Number of nonzero rows to in the source array (in case of forward 2d transform), or a number of rows of interest in the destination array (in case of inverse 2d transform). If the value is negative, zero, or greater than the total number of rows, it is ignored. The parameter can be used to speed up 2d convolution/correlation when computing them via DFT. See the sample below</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvDFT(
          IntPtr src,
          IntPtr dst,
@@ -914,7 +914,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="size0">Vector size</param>
       /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetOptimalDFTSize(int size0);
 
       /// <summary>
@@ -924,7 +924,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array of the same type and the same size of the sources</param>
       /// <param name="flags"></param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.MUL_SPECTRUMS_TYPE flags);
 
       /// <summary>
@@ -933,7 +933,7 @@ namespace Emgu.CV
       /// <param name="src">Source array, real 1D or 2D array</param>
       /// <param name="dst">Destination array of the same size and same type as the source</param>
       /// <param name="flags">Transformation flags</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvDCT(IntPtr src, IntPtr dst, CvEnum.CV_DCT_TYPE flags);
       #endregion
 
@@ -944,7 +944,7 @@ namespace Emgu.CV
       /// <param name="pt1">First ending point of the line segment. It is modified by the function</param>
       /// <param name="pt2">Second ending point of the line segment. It is modified by the function.</param>
       /// <returns>It returns 0 if the line segment is completely outside the image and 1 otherwise.</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2);
 
       /// <summary>
@@ -955,7 +955,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAbsDiff(IntPtr src1, IntPtr src2, IntPtr dst);
 
       /// <summary>
@@ -964,7 +964,7 @@ namespace Emgu.CV
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="value">The scalar</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAbsDiffS(IntPtr src, IntPtr dst, MCvScalar value);
 
       /// <summary>
@@ -978,7 +978,7 @@ namespace Emgu.CV
       /// <param name="beta">Weight of the second array elements.</param>
       /// <param name="gamma">Scalar, added to each sum. </param>
       /// <param name="dst">The destination array.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst);
 
       /// <summary>
@@ -994,7 +994,7 @@ namespace Emgu.CV
       /// <param name="lower">The inclusive lower boundary</param>
       /// <param name="upper">The exclusive upper boundary</param>
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvInRangeS(
          IntPtr src,
          MCvScalar lower,
@@ -1014,7 +1014,7 @@ namespace Emgu.CV
       /// <param name="lower">The lower values stored in an image of same type &amp; size as <paramref name="src"/></param>
       /// <param name="upper">The upper values stored in an image of same type &amp; size as <paramref name="src"/></param>
       /// <param name="dst">The resulting mask</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvInRange(
          IntPtr src,
          IntPtr lower,
@@ -1029,7 +1029,7 @@ namespace Emgu.CV
       /// <param name="normType">Type of norm</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>The calculated norm</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvNorm(
           IntPtr arr1,
           IntPtr arr2,
@@ -1047,7 +1047,7 @@ namespace Emgu.CV
       /// b0 g0 r0 b1 g1 r1 ...
       /// </param>
       /// <returns>A pointer to IplImage </returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateImage(
          Size size,
          CvEnum.IPL_DEPTH depth,
@@ -1063,7 +1063,7 @@ namespace Emgu.CV
       /// b0 g0 r0 b1 g1 r1 ...
       /// </param>
       /// <returns> The structure IplImage</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateImageHeader(
          Size size,
          CvEnum.IPL_DEPTH depth,
@@ -1079,7 +1079,7 @@ namespace Emgu.CV
       /// <param name="origin">IPL_ORIGIN_TL or IPL_ORIGIN_BL.</param>
       /// <param name="align">Alignment for image rows, typically 4 or 8 bytes.</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
          Size size,
@@ -1094,14 +1094,14 @@ namespace Emgu.CV
       /// <param name="arr">Array header.</param>
       /// <param name="data">User data.</param>
       /// <param name="step">Full row length in bytes.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetData(IntPtr arr, IntPtr data, int step);
 
       /// <summary>
       /// Releases the header.
       /// </summary>
       /// <param name="image">Pointer to the deallocated header.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseImageHeader(ref IntPtr image);
 
       /// <summary>
@@ -1114,7 +1114,7 @@ namespace Emgu.CV
       /// <param name="data">Optional data pointer assigned to the matrix header</param>
       /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvInitMatHeader(
          IntPtr mat,
          int rows,
@@ -1133,7 +1133,7 @@ namespace Emgu.CV
       /// <param name="data">Optional data pointer assigned to the matrix header</param>
       /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvInitMatHeader(
          IntPtr mat,
          int rows,
@@ -1147,7 +1147,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Image header</param>
       /// <param name="coi">Channel of interest starting from 1. If 0, the COI is unset.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetImageCOI(IntPtr image, int coi);
 
       /// <summary>
@@ -1155,14 +1155,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Image header. </param>
       /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetImageCOI(IntPtr image);
 
       /// <summary>
       /// Releases image ROI. After that the whole image is considered selected.
       /// </summary>
       /// <param name="image">Image header</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvResetImageROI(IntPtr image);
 
       /// <summary>
@@ -1170,7 +1170,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Image header.</param>
       /// <param name="rect">ROI rectangle.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetImageROI(IntPtr image, Rectangle rect);
 
       /// <summary>
@@ -1178,7 +1178,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Image header.</param>
       /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern Rectangle cvGetImageROI(IntPtr image);
 
       /// <summary>
@@ -1188,7 +1188,7 @@ namespace Emgu.CV
       /// <param name="cols">Number of columns in the matrix.</param>
       /// <param name="type">Type of the matrix elements.</param>
       /// <returns>A pointer to the created matrix</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateMat(int rows, int cols, CvEnum.MAT_DEPTH type);
 
       /// <summary>
@@ -1217,7 +1217,7 @@ namespace Emgu.CV
       /// <param name="type">Type of array elements</param>
       /// <param name="data">Optional data pointer assigned to the matrix header</param>
       /// <returns>Pointer to the array header</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvInitMatNDHeader(
          IntPtr mat,
          int dims,
@@ -1230,7 +1230,7 @@ namespace Emgu.CV
       /// Decrements the matrix data reference counter and releases matrix header
       /// </summary>
       /// <param name="mat">Double pointer to the matrix.</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseMat(ref IntPtr mat);
 
       /// <summary>
@@ -1240,7 +1240,7 @@ namespace Emgu.CV
       /// <param name="sizes">Array of dimension sizes</param>
       /// <param name="type">Type of array elements</param>
       /// <returns>Pointer to the array header</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateSparseMat(
          int dims,
          IntPtr sizes,
@@ -1250,7 +1250,7 @@ namespace Emgu.CV
       /// The function releases the sparse array and clears the array pointer upon exit.
       /// </summary>
       /// <param name="mat">Reference of the pointer to the array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseSparseMat(ref IntPtr mat);
 
       #endregion
@@ -1261,7 +1261,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="blockSize"></param>
       /// <returns>Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is 64K. </returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateMemStorage(int blockSize);
 
       /// <summary>
@@ -1269,21 +1269,21 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="parent">Parent memory storage</param>
       /// <returns>ChildMemStorage</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCreateChildMemStorage(IntPtr parent);
 
       /// <summary>
       /// Resets the top (free space boundary) of the storage to the very beginning. This function does not deallocate any memory. If the storage has a parent, the function returns all blocks to the parent.
       /// </summary>
       /// <param name="storage">Memory storage</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvClearMemStorage(IntPtr storage);
 
       /// <summary>
       /// Deallocates all storage memory blocks or returns them to the parent, if any. Then it deallocates the storage header and clears the pointer to the storage. All children of the storage must be released before the parent is released.
       /// </summary>
       /// <param name="storage">Pointer to the released storage</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseMemStorage(ref IntPtr storage);
       #endregion
 
@@ -1295,7 +1295,7 @@ namespace Emgu.CV
       /// <param name="name">Optional object name. If it is IntPtr.Zero, the first top-level object in the storage will be loaded</param>
       /// <param name="realName">Optional output parameter that will contain name of the loaded object (useful if name=IntPtr.Zero). </param>
       /// <returns>Loaded object from file</returns>
-      [DllImport(CXCORE_LIBRARY, EntryPoint = "cvLoad")]
+      [DllImport(OPENCV_CORE_LIBRARY, EntryPoint = "cvLoad")]
       private static extern IntPtr _cvLoad(
           [MarshalAs(_stringMarshalType)] String fileName,
           IntPtr memstorage,
@@ -1339,7 +1339,7 @@ namespace Emgu.CV
       /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is IntPtr.Zero, the function uses the storage containing the input sequence.</param>
       /// <param name="copyData">The flag that indicates whether to copy the elements of the extracted slice (copy_data!=0) or not (copy_data=0)</param>
       /// <returns>A pointer to CvSeq</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvSeqSlice(
          IntPtr seq,
          MCvSlice slice,
@@ -1365,7 +1365,7 @@ namespace Emgu.CV
       /// <param name="arr">Input array</param>
       /// <param name="idx0">The first zero-based component of the element index </param>
       /// <param name="value">The assigned value </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetReal1D(IntPtr arr, int idx0, double value);
 
       /// <summary>
@@ -1375,7 +1375,7 @@ namespace Emgu.CV
       /// <param name="idx0">The first zero-based component of the element index </param>
       /// <param name="idx1">The second zero-based component of the element index </param>
       /// <param name="value">The assigned value </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetReal2D(IntPtr arr, int idx0, int idx1, double value);
 
       /// <summary>
@@ -1386,7 +1386,7 @@ namespace Emgu.CV
       /// <param name="idx1">The second zero-based component of the element index </param>
       /// <param name="idx2">The third zero-based component of the element index </param>
       /// <param name="value">The assigned value </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetReal3D(IntPtr arr, int idx0, int idx1, int idx2, double value);
 
       /// <summary>
@@ -1395,7 +1395,7 @@ namespace Emgu.CV
       /// <param name="arr">Input array</param>
       /// <param name="idx">Array of the element indices </param>
       /// <param name="value">The assigned value </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetRealND(
          IntPtr arr,
          [In]
@@ -1407,7 +1407,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">Input array</param>
       /// <param name="idx">Array of the element indices </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvClearND(
          IntPtr arr,
          [In]
@@ -1420,7 +1420,7 @@ namespace Emgu.CV
       /// <param name="idx0">The first zero-based component of the element index</param>
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <param name="value">The assigned value</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSet2D(IntPtr arr, int idx0, int idx1, MCvScalar value);
 
       /// <summary>
@@ -1437,7 +1437,7 @@ namespace Emgu.CV
       /// flip_mode &gt; 0 (e.g. 1) means flipping around y-axis and 
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
       ///</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvFlip(IntPtr src, IntPtr dst, int flipMode);
 
       /// <summary>
@@ -1454,7 +1454,7 @@ namespace Emgu.CV
       /// CV_AA - antialiased line. 
       /// </param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvLine(
           IntPtr img,
           Point pt1,
@@ -1480,7 +1480,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the polyline edges</param>
       /// <param name="lineType">Type of the line segments, see cvLine description</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvPolyLine(
          IntPtr img,
          [In]
@@ -1536,7 +1536,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
       /// <param name="lineType">Type of the line</param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvRectangle(
          IntPtr img,
          Point pt1,
@@ -1555,7 +1555,7 @@ namespace Emgu.CV
       /// <param name="submat">Pointer to the resultant sub-array header.</param>
       /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
       /// <returns>the resultant sub-array header</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, Rectangle rect);
 
       /// <summary>
@@ -1567,7 +1567,7 @@ namespace Emgu.CV
       /// <param name="endRow">Zero-based index of the ending row (exclusive) of the span</param>
       /// <param name="deltaRow">Index step in the row span. That is, the function extracts every delta_row-th row from start_row and up to (but not including) end_row</param>
       /// <returns>The header, corresponding to a specified row span of the input array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetRows(IntPtr arr, IntPtr submat, int startRow, int endRow, int deltaRow);
 
       /// <summary>
@@ -1590,7 +1590,7 @@ namespace Emgu.CV
       /// <param name="startCol">Zero-based index of the selected column</param>
       /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
       /// <returns>The header, corresponding to a specified col span of the input array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetCols(IntPtr arr, IntPtr submat, int startCol, int endCol);
 
       /// <summary>
@@ -1613,7 +1613,7 @@ namespace Emgu.CV
       /// <param name="submat">Pointer to the resulting sub-array header</param>
       /// <param name="diag">Array diagonal. Zero corresponds to the main diagonal, -1 corresponds to the diagonal above the main etc., 1 corresponds to the diagonal below the main etc</param>
       /// <returns>Pointer to the resulting sub-array header</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
 
       /// <summary>
@@ -1621,7 +1621,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">array header</param>
       /// <returns>number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern Size cvGetSize(IntPtr arr);
 
       /// <summary>
@@ -1634,7 +1634,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the circle outline if positive, otherwise indicates that a filled circle has to be drawn</param>
       /// <param name="lineType">Type of the circle boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCircle(
          IntPtr img,
          Point center,
@@ -1652,7 +1652,7 @@ namespace Emgu.CV
       /// <param name="dst1">Destination channels</param>
       /// <param name="dst2">Destination channels</param>
       /// <param name="dst3">Destination channels</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSplit(IntPtr src, IntPtr dst0, IntPtr dst1, IntPtr dst2, IntPtr dst3);
 
       /// <summary>
@@ -1681,7 +1681,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the ellipse arc</param>
       /// <param name="lineType">Type of the ellipse boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvEllipse(
           IntPtr img,
           Point center,
@@ -1722,7 +1722,7 @@ namespace Emgu.CV
       /// <param name="src">Source array of 8-bit elements</param>
       /// <param name="dst">Destination array of arbitrary depth and of the same number of channels as the source array</param>
       /// <param name="lut">Look-up table of 256 elements; should have the same depth as the destination array. In case of multi-channel source and destination arrays, the table should either have a single-channel (in this case the same table is used for all channels), or the same number of channels as the source/destination array</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvLUT(IntPtr src, IntPtr dst, IntPtr lut);
 
       /// <summary>
@@ -1736,7 +1736,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination array</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source array elements</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvConvertScale(IntPtr src, IntPtr dst, double scale, double shift);
 
       /// <summary>
@@ -1750,7 +1750,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination array</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source array elements</param>
-      [DllImport(CXCORE_LIBRARY, EntryPoint = "cvConvertScale")]
+      [DllImport(OPENCV_CORE_LIBRARY, EntryPoint = "cvConvertScale")]
       public static extern void cvCvtScale(IntPtr src, IntPtr dst, double scale, double shift);
 
       /// <summary>
@@ -1772,7 +1772,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination array (should have 8u depth). </param>
       /// <param name="scale">ScaleAbs factor</param>
       /// <param name="shift">Value added to the scaled source array elements</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvConvertScaleAbs(IntPtr src, IntPtr dst, double scale, double shift);
 
       #region statistic
@@ -1785,7 +1785,7 @@ namespace Emgu.CV
       /// <param name="arr">The array</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>average (mean) of array elements</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvAvg(IntPtr arr, IntPtr mask);
 
       /// <summary>
@@ -1796,7 +1796,7 @@ namespace Emgu.CV
       /// <param name="mean">Pointer to the mean value</param>
       /// <param name="stdDev">Pointer to the standard deviation</param>
       /// <param name="mask">The optional operation mask</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvAvgSdv(IntPtr arr, ref MCvScalar mean, ref MCvScalar stdDev, IntPtr mask);
 
       /// <summary>
@@ -1806,7 +1806,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">The array</param>
       /// <returns>The sum of arary elements</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvSum(IntPtr arr);
 
       /// <summary>
@@ -1821,7 +1821,7 @@ namespace Emgu.CV
       /// <param name="dst">The output single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type);
       #endregion
 
@@ -1829,7 +1829,7 @@ namespace Emgu.CV
       /// Releases the header and the image data.
       /// </summary>
       /// <param name="image">Double pointer to the header of the deallocated image</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseImage(ref IntPtr image);
 
       /// <summary>
@@ -1843,7 +1843,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
       /// <param name="lineType">Type of the contour segments</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvDrawContours(
           IntPtr img,
           IntPtr contour,
@@ -1863,7 +1863,7 @@ namespace Emgu.CV
       /// <param name="color">Polygon color</param>
       /// <param name="lineType">Type of the polygon boundaries</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvFillConvexPoly(
          IntPtr img,
          [In]
@@ -1884,7 +1884,7 @@ namespace Emgu.CV
       /// <param name="shear">Approximate tangent of the character slope relative to the vertical line. Zero value means a non-italic font, 1.0f means 45 slope, etc. thickness Thickness of lines composing letters outlines. The function cvLine is used for drawing letters</param>
       /// <param name="thickness">Thickness of the text strokes</param>
       /// <param name="lineType">Type of the strokes</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvInitFont(
           ref MCvFont font,
           CvEnum.FONT fontFace,
@@ -1902,7 +1902,7 @@ namespace Emgu.CV
       /// <param name="org">Coordinates of the bottom-left corner of the first letter</param>
       /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, Point org, ref MCvFont font, MCvScalar color);
 
       /// <summary>
@@ -1912,7 +1912,7 @@ namespace Emgu.CV
       /// <param name="font">The font structure</param>
       /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref Size textSize, ref int baseline);
       #endregion
 
@@ -1923,7 +1923,7 @@ namespace Emgu.CV
       /// <param name="elements">Pointer to the destination array that must be large enough. It should be a pointer to data, not a matrix header</param>
       /// <param name="slice">The sequence part to copy to the array</param>
       /// <returns>the pointer to the buffer</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
 
       /// <summary>
@@ -1937,7 +1937,7 @@ namespace Emgu.CV
       /// <param name="seq">Pointer to the local variable that is used as the sequence header. </param>
       /// <param name="block">Pointer to the local variable that is the header of the single sequence block. </param>
       /// <returns>Pointer to the local variable that is used as the sequence header</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvMakeSeqHeaderForArray(
          int seqType,
          int headerSize,
@@ -1956,7 +1956,7 @@ namespace Emgu.CV
       /// <param name="minLoc">Pointer to returned minimum location</param>
       /// <param name="maxLoc">Pointer to returned maximum location</param>
       /// <param name="mask">The optional mask that is used to select a subarray</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMinMaxLoc(
          IntPtr arr,
          ref double minVal,
@@ -1971,7 +1971,7 @@ namespace Emgu.CV
       /// <param name="arr">Input array. Must have a single channel</param>
       /// <param name="idx0">The first zero-based component of the element index</param>
       /// <returns>the particular array element</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvGet1D(IntPtr arr, int idx0);
 
       /// <summary>
@@ -1981,7 +1981,7 @@ namespace Emgu.CV
       /// <param name="idx0">The first zero-based component of the element index</param>
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <returns>the particular array element</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvGet2D(IntPtr arr, int idx0, int idx1);
 
       /// <summary>
@@ -1992,7 +1992,7 @@ namespace Emgu.CV
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <param name="idx2">The third zero-based component of the element index</param>
       /// <returns>the particular array element</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvGet3D(IntPtr arr, int idx0, int idx1, int idx2);
 
       /// <summary>
@@ -2001,7 +2001,7 @@ namespace Emgu.CV
       /// <param name="arr">Input array. Must have a single channel</param>
       /// <param name="idx0">The first zero-based component of the element index </param>
       /// <returns>the particular element of single-channel array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvGetReal1D(IntPtr arr, int idx0);
 
       /// <summary>
@@ -2011,7 +2011,7 @@ namespace Emgu.CV
       /// <param name="idx0">The first zero-based component of the element index </param>
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <returns>the particular element of single-channel array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvGetReal2D(IntPtr arr, int idx0, int idx1);
 
       /// <summary>
@@ -2022,7 +2022,7 @@ namespace Emgu.CV
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <param name="idx2">The third zero-based component of the element index </param>
       /// <returns>the particular element of single-channel array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvGetReal3D(IntPtr arr, int idx0, int idx1, int idx2);
 
       /// <summary>
@@ -2068,7 +2068,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="optimize">1 to turn on optimization, 0 to turn off</param>
       /// <returns>The number of optimized functions loaded</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvUseOptimized(int optimize);
 
       /// <summary>
@@ -2089,7 +2089,7 @@ namespace Emgu.CV
       /// <param name="dist_type">Distribution type</param>
       /// <param name="param1">The first parameter of distribution. In case of uniform distribution it is the inclusive lower boundary of random numbers range. In case of normal distribution it is the mean value of random numbers</param>
       /// <param name="param2">The second parameter of distribution. In case of uniform distribution it is the exclusive upper boundary of random numbers range. In case of normal distribution it is the standard deviation of random numbers</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE dist_type, MCvScalar param1, MCvScalar param2);
 
       #region Linear Algebra
@@ -2101,7 +2101,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array.</param>
       /// <param name="src2">The second source array</param>
       /// <returns>the Euclidean dot product of two arrays</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvDotProduct(IntPtr src1, IntPtr src2);
 
       /// <summary>
@@ -2115,7 +2115,7 @@ namespace Emgu.CV
       /// <param name="highindex">Optional index of smallest eigenvalue/-vector to calculate. If either low- or highindex is supplied the other is required, too. Indexing is 1-based. Use 0 for default.</param>
       /// <remarks>Currently the function is slower than cvSVD yet less accurate, so if A is known to be positivelydefined (for example, it is a covariance matrix)it is recommended to use cvSVD to find eigenvalues and eigenvectors of A, especially if eigenvectors are not required.</remarks>
       /// <example>To calculate the largest eigenvector/-value set lowindex = highindex = 1. For legacy reasons this function always returns a square matrix the same size as the source matrix with eigenvectors and a vector the length of the source matrix with eigenvalues. The selected eigenvectors/-values are always in the first highindex - lowindex + 1 rows.</example>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvEigenVV(
          IntPtr mat,
          IntPtr evects,
@@ -2133,7 +2133,7 @@ namespace Emgu.CV
       /// <param name="b">The maximum/minimum value of the output array</param>
       /// <param name="norm_type">The normalization type</param>
       /// <param name="mask">The operation mask. Makes the function consider and normalize only certain array elements</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvNormalize(
          IntPtr src,
          IntPtr dst,
@@ -2148,7 +2148,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source vector</param>
       /// <param name="src2">The second source vector</param>
       /// <param name="dst">The destination vect</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCrossProduct(IntPtr src1, IntPtr src2, IntPtr dst);
 
       /// <summary>
@@ -2162,7 +2162,7 @@ namespace Emgu.CV
       /// <param name="beta"></param>
       /// <param name="dst">The destination array.</param>
       /// <param name="tABC"></param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvGEMM(
           IntPtr src1,
           IntPtr src2,
@@ -2180,7 +2180,7 @@ namespace Emgu.CV
       /// <param name="dst">The destination array</param>
       /// <param name="transmat">Transformation matrix</param>
       /// <param name="shiftvec">Optional shift vector</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvTransform(IntPtr src, IntPtr dst, IntPtr transmat, IntPtr shiftvec);
 
       /// <summary>
@@ -2196,7 +2196,7 @@ namespace Emgu.CV
       /// <param name="src">The source three-channel floating-point array</param>
       /// <param name="dst">The destination three-channel floating-point array</param>
       /// <param name="mat">3x3 or 4x4 transformation matrix</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvPerspectiveTransform(IntPtr src, IntPtr dst, IntPtr mat);
 
       /// <summary>
@@ -2208,7 +2208,7 @@ namespace Emgu.CV
       /// <param name="order">Order of multipliers</param>
       /// <param name="delta">An optional array, subtracted from <paramref name="src"/> before multiplication</param>
       /// <param name="scale">An optional scaling</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvMulTransposed(
          IntPtr src,
          IntPtr dst,
@@ -2221,7 +2221,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mat">the matrix</param>
       /// <returns>sum of diagonal elements of the matrix src1</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern MCvScalar cvTrace(IntPtr mat);
 
       /// <summary>
@@ -2231,7 +2231,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source matrix</param>
       /// <param name="dst">The destination matrix</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvTranspose(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -2239,7 +2239,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mat">The pointer to the matrix</param>
       /// <returns>determinant of the square matrix mat</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvDet(IntPtr mat);
 
       /// <summary>
@@ -2249,7 +2249,7 @@ namespace Emgu.CV
       /// <param name="dst">The destination matrix</param>
       /// <param name="method">Inversion method</param>
       /// <returns></returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvInvert(IntPtr src, IntPtr dst, CvEnum.INVERT_METHOD method);
 
       /// <summary>
@@ -2269,7 +2269,7 @@ namespace Emgu.CV
       /// <param name="U">Optional left orthogonal matrix (MxM or MxN). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
       /// <param name="V">Optional right orthogonal matrix (NxN)</param>
       /// <param name="flags">Operation flags</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSVD(IntPtr A, IntPtr W, IntPtr U, IntPtr V, CvEnum.SVD_TYPE flags);
 
       /// <summary>
@@ -2281,7 +2281,7 @@ namespace Emgu.CV
       /// <param name="covMat">The output covariation matrix that should be floating-point and square</param>
       /// <param name="avg">The input or output (depending on the flags) array - the mean (average) vector of the input vectors. </param>
       /// <param name="flags">The operation flags</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCalcCovarMatrix(
           IntPtr[] vects,
           int count,
@@ -2296,7 +2296,7 @@ namespace Emgu.CV
       /// <param name="vec2">The second 1D source vector</param>
       /// <param name="mat">The inverse covariation matrix</param>
       /// <returns>the Mahalanobis distance</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern double cvMahalanobis(IntPtr vec1, IntPtr vec2, IntPtr mat);
 
       /// <summary>
@@ -2307,7 +2307,7 @@ namespace Emgu.CV
       /// <param name="eigenvalues">The output eigenvalues of covariation matrix. </param>
       /// <param name="eigenvectors">The output eigenvectors of covariation matrix (i.e. principal components); one vector per row.</param>
       /// <param name="flags"></param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCalcPCA(
           IntPtr data,
           IntPtr avg,
@@ -2334,7 +2334,7 @@ namespace Emgu.CV
       /// That it is less, the input vectors are projected into subspace of the first cols(result)
       /// principle components.
       /// </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvProjectPCA(
           IntPtr data,
           IntPtr avg,
@@ -2349,7 +2349,7 @@ namespace Emgu.CV
       /// <param name="data">Output pointer to the whole image origin or ROI origin if ROI is set</param>
       /// <param name="step">Output full row length in bytes</param>
       /// <param name="roiSize">Output ROI size</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out Size roiSize);
 
       /// <summary>
@@ -2360,7 +2360,7 @@ namespace Emgu.CV
       /// <param name="coi">Optional output parameter for storing COI</param>
       /// <param name="allowND">If non-zero, the function accepts multi-dimensional dense arrays (CvMatND*) and returns 2D (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or more than 2 dimensions). The array must be continuous</param>
       /// <returns>Returns matrix header for the input array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetMat(IntPtr arr, IntPtr header, out int coi, int allowND);
 
       /// <summary>
@@ -2369,7 +2369,7 @@ namespace Emgu.CV
       /// <param name="arr">Input array. </param>
       /// <param name="imageHeader">Pointer to IplImage structure used as a temporary buffer.</param>
       /// <returns>Returns image header for the input array</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetImage(IntPtr arr, IntPtr imageHeader);
 
       /// <summary>
@@ -2383,28 +2383,28 @@ namespace Emgu.CV
       /// <param name="minVal">The inclusive lower boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
       /// <param name="maxVal">The exclusive upper boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
       /// <returns>Returns nonzero if the check succeeded, i.e. all elements are valid and within the range, and zero otherwise. In the latter case if CV_CHECK_QUIET flag is not set, the function raises runtime error.</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvCheckArr(IntPtr arr, CvEnum.CHECK_TYPE flags, double minVal, double maxVal);
 
       /// <summary>
       /// Return the current number of threads that are used by parallelized (via OpenMP) OpenCV functions.
       /// </summary>
       /// <returns>the current number of threads that are used by parallelized (via OpenMP) OpenCV functions</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetNumThreads();
 
       /// <summary>
       /// Sets the number of threads that are used by parallelized OpenCV functions. 
       /// </summary>
       /// <param name="threadsCount">The number of threads that are used by parallelized OpenCV functions. When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvSetNumThreads(int threadsCount);
 
       /// <summary>
       /// Returns the index, from 0 to cvGetNumThreads()-1, of the thread that called the function. It is a wrapper for the function omp_get_thread_num() from OpenMP runtime. The retrieved index may be used to access local-thread data inside the parallelized code fragments. 
       /// </summary>
       /// <returns>The index, from 0 to cvGetNumThreads()-1, of the thread that called the function. It is a wrapper for the function omp_get_thread_num() from OpenMP runtime. The retrieved index may be used to access local-thread data inside the parallelized code fragments. </returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvGetThreadNum();
 
       /// <summary>
@@ -2417,7 +2417,7 @@ namespace Emgu.CV
       /// <param name="src2">The second image to comapare with</param>
       /// <param name="dst">dst(I) is set to 0xff (all '1'-bits) if the particular relation between the elements is true and 0 otherwise.</param>
       /// <param name="cmpOp">The comparison operator type</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCmp(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.CMP_TYPE cmpOp);
 
       /// <summary>
@@ -2430,7 +2430,7 @@ namespace Emgu.CV
       /// <param name="value">The scalar value to compare each array element with</param>
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
       /// <param name="cmpOp">The flag specifying the relation between the elements to be checked</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvCmpS(IntPtr src, double value, IntPtr dst, CvEnum.CMP_TYPE cmpOp);
 
       /// <summary>
@@ -2438,7 +2438,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="status">The error status</param>
       /// <returns>the textual description for the specified error status code.</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern String cvErrorStr(int status);
 
       #region File Storage
@@ -2449,7 +2449,7 @@ namespace Emgu.CV
       /// <param name="memstorage">Memory storage used for temporary data and for storing dynamic structures, such as CvSeq or CvGraph. If it is NULL, a temporary memory storage is created and used</param>
       /// <param name="flags"></param>
       /// <returns>Pointer to CvFileStorage structure</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvOpenFileStorage(
          [MarshalAs(_stringMarshalType)] String filename,
          IntPtr memstorage,
@@ -2459,7 +2459,7 @@ namespace Emgu.CV
       /// Closes the file associated with the storage and releases all the temporary structures. It must be called after all I/O operations with the storage are finished
       /// </summary>
       /// <param name="fs">Reference to the pointer of the released file storage</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvReleaseFileStorage(ref IntPtr fs);
       #endregion
 
@@ -2487,7 +2487,7 @@ namespace Emgu.CV
       /// <param name="node">The root object node</param>
       /// <param name="attributes">Unused parameter</param>
       /// <returns>Pointer to the user object</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvRead(
          IntPtr fs,
          IntPtr node,
@@ -2500,7 +2500,7 @@ namespace Emgu.CV
       /// <param name="map">The parent map. If it is NULL, the function searches in all the top-level nodes (streams), starting from the first one. </param>
       /// <param name="name">The file node name</param>
       /// <returns>Pointer to the specific file node</returns>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern IntPtr cvGetFileNodeByName(
          IntPtr fs,
          IntPtr map,
@@ -2521,7 +2521,7 @@ namespace Emgu.CV
       /// <param name="flags">Flags, use 0 if not sure</param>
       /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
       /// <param name="compactness">Pointer to array of doubles, use IntPtr.Zero if not sure</param>
-      [DllImport(CXCORE_LIBRARY)]
+      [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern int cvKMeans2(
          IntPtr samples,
          int clusterCount,

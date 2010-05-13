@@ -81,6 +81,79 @@ CVAPI(void) CvStarDetectorDetectKeyPoints(cv::StarDetector* detector, IplImage* 
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
+//SIFTDetector
+CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
+   int nOctaves, int nOctaveLayers, int firstOctave, //common parameters
+   double threshold, double edgeThreshold, int angleMode, //detector parameters
+   double magnification, bool isNormalize)
+{
+   cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave);
+   cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold, angleMode);
+   cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize);
+   return new cv::SIFT(p, detectorP, descriptorP);
+}
+
+CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector)
+{
+   delete *detector;
+   detector = 0;
+}
+
+CVAPI(int) CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
+{
+   return detector->descriptorSize();
+}
+
+CVAPI(void) CvSIFTDetectorDetectKeyPoints(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints)
+{
+   cvClearSeq(keypoints);
+
+   std::vector<cv::KeyPoint> pts;
+
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat maskMat;
+   if (mask) maskMat = cv::cvarrToMat(mask);
+
+   (*detector)(mat, maskMat, pts);
+
+   int count = pts.size();
+   if (count > 0)
+      cvSeqPushMulti(keypoints, &pts[0], count);
+}
+
+CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, vectorOfFloat* descriptors)
+{
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat maskMat;
+   if (mask) maskMat = cv::cvarrToMat(mask);
+   std::vector<cv::KeyPoint> pts;
+   cv::Mat descriptorsMat;
+   (*detector)(mat, maskMat, pts, descriptorsMat, false);
+
+   int count = pts.size();
+   if (count > 0)
+   {
+      cvSeqPushMulti(keypoints, &pts[0], count);
+      descriptors->data.resize(count);
+      memcpy(&descriptors->data[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
+   }
+}
+
+CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, vectorOfFloat* descriptors)
+{
+   if (numberOfKeyPoints <= 0) return;
+   
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat maskMat;
+   if (mask) maskMat = cv::cvarrToMat(mask);
+   std::vector<cv::KeyPoint> pts = std::vector<cv::KeyPoint>(numberOfKeyPoints);
+   memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
+   cv::Mat descriptorsMat;
+   (*detector)(mat, maskMat, pts, descriptorsMat, true);
+   descriptors->data.resize(detector->descriptorSize() * numberOfKeyPoints);
+   memcpy(&descriptors->data[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptors->data.size());
+}
+
 //SURFDetector
 CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints)
 {
