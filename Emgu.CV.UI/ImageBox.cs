@@ -575,7 +575,7 @@ namespace Emgu.CV.UI
       {
          if (disposing && (components != null))
          {
-            if (Image != null) Image.Dispose();
+            //if (Image != null) Image.Dispose();
             if (_propertyDlg != null) _propertyDlg.Dispose();
             components.Dispose();
          }
