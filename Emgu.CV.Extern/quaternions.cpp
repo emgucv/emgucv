@@ -165,6 +165,15 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
 {
    double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
+   if (theta < 1.0e-16) 
+   {
+      quaternions->w = 1.0e-16;
+      quaternions->x = 1.0;
+      quaternions->y = 0.0;
+      quaternions->x = 0.0;
+      quaternionsRenorm(quaternions);
+      return;
+   }
    double halfAngle = theta * 0.5;
    double sinHalfAngle = sin(halfAngle);
    double scale = sinHalfAngle / theta;
