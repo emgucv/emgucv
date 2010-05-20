@@ -6,6 +6,7 @@ using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Features2D;
 using System.Diagnostics;
 
 namespace SURFFeatureExample
@@ -25,36 +26,36 @@ namespace SURFFeatureExample
 
       static void Run()
       {
-         MCvSURFParams surfParam = new MCvSURFParams(500, false);
+         SURFDetector surfParam = new SURFDetector(500, false);
 
          Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png");
          //extract features from the object image
-         SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref surfParam);
+         ImageFeature[] modelFeatures = surfParam.DetectFeatures(modelImage, null);
 
-         //Create a SURF Tracker
-         SURFTracker tracker = new SURFTracker(modelFeatures);
+         //Create a Feature Tracker
+         Features2DTracker tracker = new Features2DTracker(modelFeatures);
 
          Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
 
          Stopwatch watch = Stopwatch.StartNew();
          // extract features from the observed image
-         SURFFeature[] imageFeatures = observedImage.ExtractSURF(ref surfParam);
+         ImageFeature[] imageFeatures = surfParam.DetectFeatures(observedImage, null);
 
-         SURFTracker.MatchedSURFFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
-         matchedFeatures = SURFTracker.VoteForUniqueness(matchedFeatures, 0.8);
-         matchedFeatures = SURFTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
-         HomographyMatrix homography = SURFTracker.GetHomographyMatrixFromMatchedFeatures(matchedFeatures);
+         Features2DTracker.MatchedImageFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
+         matchedFeatures = Features2DTracker.VoteForUniqueness(matchedFeatures, 0.8);
+         matchedFeatures = Features2DTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
+         HomographyMatrix homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(matchedFeatures);
          watch.Stop();
 
          //Merge the object image and the observed image into one image for display
          Image<Gray, Byte> res = modelImage.ConcateVertical(observedImage);
 
          #region draw lines between the matched features
-         foreach (SURFTracker.MatchedSURFFeature matchedFeature in matchedFeatures)
+         foreach (Features2DTracker.MatchedImageFeature matchedFeature in matchedFeatures)
          {
-            PointF p = matchedFeature.ObservedFeature.Point.pt;
+            PointF p = matchedFeature.ObservedFeature.KeyPoint.Point;
             p.Y += modelImage.Height;
-            res.Draw(new LineSegment2DF(matchedFeature.SimilarFeatures[0].Feature.Point.pt, p), new Gray(0), 1);
+            res.Draw(new LineSegment2DF(matchedFeature.SimilarFeatures[0].Feature.KeyPoint.Point, p), new Gray(0), 1);
          }
          #endregion
 

@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace Emgu.CV.Structure
 {
    /// <summary>
    /// OpenCV's KeyPoint class
    /// </summary>
+   [Serializable]
    public struct MKeyPoint
    {
       /// <summary>

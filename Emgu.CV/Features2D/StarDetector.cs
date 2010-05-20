@@ -2,13 +2,13 @@ using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// CvStarDetectorParams
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct StarDetector
+   public struct StarDetector : IKeyPointDetector
    {
       /// <summary>
       /// Maximum size of the features. The following
@@ -59,10 +59,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Detect STAR key points from the image
+      /// Detect the keypoints in the image
       /// </summary>
-      /// <param name="image">The image to extract key points from</param>
-      /// <returns>The STAR key points of the image</returns>
+      /// <param name="image">The image from which the key point will be detected from</param>
+      /// <returns>The key pionts in the image</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image)
       {
          using (MemStorage stor = new MemStorage())

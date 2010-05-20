@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Diagnostics;
 using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// SelfSimDescriptor

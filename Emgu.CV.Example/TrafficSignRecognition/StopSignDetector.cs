@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.Features2D;
 using Emgu.Util;
 using System.Diagnostics;
 
@@ -11,18 +12,18 @@ namespace TrafficSignRecognition
 {
    public class StopSignDetector : DisposableObject
    {
-      private SURFTracker _tracker;
-      private MCvSURFParams _surfParam;
+      private Features2DTracker _tracker;
+      private SURFDetector _detector;
       private MemStorage _octagonStorage;
       private Contour<Point> _octagon;
 
       public StopSignDetector()
       {
-         _surfParam = new MCvSURFParams(500, false);
+         _detector = new SURFDetector(500, false);
          using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
-            _tracker = new SURFTracker(redMask.ExtractSURF(ref _surfParam));
+            _tracker = new Features2DTracker(_detector.DetectFeatures(redMask, null));  
          }
          _octagonStorage = new MemStorage();
          _octagon = new Contour<Point>(_octagonStorage);
@@ -100,12 +101,12 @@ namespace TrafficSignRecognition
                   candidate.SetValue(0, mask);
                }
 
-               SURFFeature[] features = candidate.ExtractSURF(ref _surfParam);
+               ImageFeature[] features = _detector.DetectFeatures(candidate, null);
 
-               SURFTracker.MatchedSURFFeature[] matchedFeatures = _tracker.MatchFeature(features, 2, 20);
+               Features2DTracker.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2, 20);
 
                int goodMatchCount = 0;
-               foreach (SURFTracker.MatchedSURFFeature ms in matchedFeatures)
+               foreach (Features2DTracker.MatchedImageFeature ms in matchedFeatures)
                   if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
 
                if (goodMatchCount >= 10)

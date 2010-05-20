@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using System.Runtime.Serialization;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// An ImageFeature contains a keypoint and its descriptor
    /// </summary>
+   [Serializable]
    public struct ImageFeature
    {
       private MKeyPoint _keyPoint;

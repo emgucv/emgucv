@@ -1,25 +1,27 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Features2D;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvSURFParams
+   public struct SURFDetector : IKeyPointDetector, IDescriptorGenerator
    {
+      #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvSURFDetectorDetectKeyPoints(
-         ref MCvSURFParams detector,
+         ref SURFDetector detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvSURFDetectorDetectFeature(
-         ref MCvSURFParams detector,
+         ref SURFDetector detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
@@ -27,12 +29,13 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvSURFDetectorComputeDescriptors(
-         ref MCvSURFParams detector,
+         ref SURFDetector detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
          int numberOfKeyPoints,
          IntPtr descriptors);
+      #endregion
 
       /// <summary>
       /// Create a MCvSURFParams using the specific values
@@ -46,9 +49,9 @@ namespace Emgu.CV
       /// false means basic descriptors (64 elements each),
       /// true means extended descriptors (128 elements each)
       /// </param>
-      public MCvSURFParams(double hessianThresh, bool extendedFlag)
+      public SURFDetector(double hessianThresh, bool extendedFlag)
       {
-         MCvSURFParams p = CvInvoke.cvSURFParams(hessianThresh, extendedFlag ? 1 : 0);
+         SURFDetector p = CvInvoke.cvSURFParams(hessianThresh, extendedFlag ? 1 : 0);
          extended = p.extended;
          hessianThreshold = p.hessianThreshold;
          nOctaves = p.nOctaves;
@@ -155,5 +158,32 @@ namespace Emgu.CV
             return features;
          }
       }
+
+      #region IKeyPointDetector Members
+      /// <summary>
+      /// Detect the keypoints in the image
+      /// </summary>
+      /// <param name="image">The image from which the key point will be detected from</param>
+      /// <returns>The key pionts in the image</returns>
+      public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
+      {
+         return DetectKeyPoints(image, null);
+      }
+
+      #endregion
+
+      #region IDescriptorGenerator Members
+      /// <summary>
+      /// Compute the ImageFeature on the image from the given keypoint locations.
+      /// </summary>
+      /// <param name="image">The image to compute descriptors from</param>
+      /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
+      /// <returns>The ImageFeature from the given keypoints</returns>
+      public ImageFeature[] ComputeDescriptors(Image<Gray, byte> image, MKeyPoint[] keyPoints)
+      {
+         return ComputeDescriptors(image, null, keyPoints);
+      }
+
+      #endregion
    }
 }

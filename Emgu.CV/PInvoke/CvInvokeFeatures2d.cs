@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
+using Emgu.CV.Features2D;
 
 namespace Emgu.CV
 {
@@ -42,7 +43,7 @@ namespace Emgu.CV
          ref IntPtr keypoints,
          ref IntPtr descriptors,
          IntPtr storage,
-         MCvSURFParams parameters,
+         SURFDetector parameters,
          int useProvidedKeyPoints);
 
       /// <summary>
@@ -59,6 +60,19 @@ namespace Emgu.CV
       /// </param>
       /// <returns>The MCvSURFParams structure</returns>
       [DllImport(OPENCV_FEATURES2D_LIBRARY)]
-      public static extern MCvSURFParams cvSURFParams(double hessianThreshold, int extended);
+      public static extern SURFDetector cvSURFParams(double hessianThreshold, int extended);
+
+      /// <summary>
+      /// Retrieve the star keypoint location from the specific image
+      /// </summary>
+      /// <param name="img">The image to detect start keypoints</param>
+      /// <param name="storage">The storage for the returned sequence</param>
+      /// <param name="param">The star detector parameters</param>
+      /// <returns>Pointer to the sequence of star keypoint locations</returns>
+      [DllImport(OPENCV_FEATURES2D_LIBRARY)]
+      public static extern IntPtr cvGetStarKeypoints(
+         IntPtr img,
+         IntPtr storage,
+         StarDetector param);
    }
 }

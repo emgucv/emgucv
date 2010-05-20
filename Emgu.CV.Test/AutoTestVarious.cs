@@ -6,6 +6,7 @@ using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
+using Emgu.CV.Features2D;
 using Emgu.UI;
 using Emgu.Util;
 using System.Diagnostics;
@@ -1793,7 +1794,7 @@ namespace Emgu.CV.Test
          using(Image<Gray, Byte> gray = image.Convert<Gray, byte>())
          using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
          {
-            MCvSURFParams surf = new MCvSURFParams(300, false);
+            SURFDetector surf = new SURFDetector(300, false);
             MKeyPoint[] keypoints = surf.DetectKeyPoints(gray, null);
             Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) { return Point.Round(kp.Point); });
             Stopwatch watch = Stopwatch.StartNew();

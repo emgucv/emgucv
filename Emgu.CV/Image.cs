@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
+using Emgu.CV.Features2D;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -1310,7 +1311,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="param">The SURF parameters</param>
       /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
+      public SURFFeature[] ExtractSURF(ref SURFDetector param)
       {
          return ExtractSURF(null, ref param);
       }
@@ -1321,7 +1322,7 @@ namespace Emgu.CV
       /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
       /// <param name="param">The SURF parameters</param>
       /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref SURFDetector param)
       {
          using (MemStorage stor = new MemStorage())
          {

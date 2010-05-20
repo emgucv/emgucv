@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
@@ -7,23 +7,23 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// This class use SURF and CamShift to track object
+   /// This class use Image and CamShift to track object
    /// </summary>
-   public class SURFTracker : DisposableObject
+   public class Features2DTracker : DisposableObject
    {
-      private SURFMatcher _matcher;
+      private ImageFeatureMatcher _matcher;
       private const int _randsacRequiredMatch = 10;
 
       /// <summary>
-      /// Create a SURF tracker, where SURF is matched with flann
+      /// Create a Image tracker, where Image is matched with flann
       /// </summary>
-      /// <param name="modelFeatures">The SURF feature from the model image</param>
-      public SURFTracker(SURFFeature[] modelFeatures)
+      /// <param name="modelFeatures">The Image feature from the model image</param>
+      public Features2DTracker(ImageFeature[] modelFeatures)
       {
-         _matcher = new SURFMatcher(modelFeatures);
+         _matcher = new ImageFeatureMatcher(modelFeatures);
       }
 
       /// <summary>
@@ -33,7 +33,7 @@ namespace Emgu.CV
       /// <param name="initRegion">The predicted location of the model in the observed image. If not known, use MCvBox2D.Empty as default</param>
       /// <param name="priorMask">The mask that should be the same size as the observed image. Contains a priori value of the probability a match can be found. If you are not sure, pass an image fills with 1.0s</param>
       /// <returns>If a match is found, the homography projection matrix is returned. Otherwise null is returned</returns>
-      public HomographyMatrix CamShiftTrack(SURFFeature[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
+      public HomographyMatrix CamShiftTrack(ImageFeature[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
       {
          using (Image<Gray, Single> matchMask = new Image<Gray, Single>(priorMask.Size))
          {
@@ -41,13 +41,13 @@ namespace Emgu.CV
             Single[, ,] matchMaskData = matchMask.Data;
 
             //Compute the matched features
-            MatchedSURFFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
+            MatchedImageFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
             matchedFeature = VoteForUniqueness(matchedFeature, 0.8);
 
-            foreach (MatchedSURFFeature f in matchedFeature)
+            foreach (MatchedImageFeature f in matchedFeature)
             {
-               PointF p = f.ObservedFeature.Point.pt;
-               matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float) f.SimilarFeatures[0].Distance;
+               PointF p = f.ObservedFeature.KeyPoint.Point; 
+               matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.SimilarFeatures[0].Distance;
             }
             #endregion
 
@@ -68,8 +68,8 @@ namespace Emgu.CV
             //Updates the current location
             CvInvoke.cvCamShift(matchMask.Ptr, startRegion, new MCvTermCriteria(10, 1.0e-8), out comp, out currentRegion);
 
-            #region find the SURF features that belongs to the current Region
-            MatchedSURFFeature[] featuesInCurrentRegion;
+            #region find the Image features that belongs to the current Region
+            MatchedImageFeature[] featuesInCurrentRegion;
             using (MemStorage stor = new MemStorage())
             {
                Contour<System.Drawing.PointF> contour = new Contour<PointF>(stor);
@@ -78,12 +78,12 @@ namespace Emgu.CV
                CvInvoke.cvBoundingRect(contour.Ptr, 1); //this is required before calling the InContour function
 
                featuesInCurrentRegion = Array.FindAll(matchedFeature,
-                  delegate(MatchedSURFFeature f)
-                  { return contour.InContour(f.ObservedFeature.Point.pt) >= 0; });
+                  delegate(MatchedImageFeature f)
+                  { return contour.InContour(f.ObservedFeature.KeyPoint.Point) >= 0; });
             }
             #endregion
 
-            return GetHomographyMatrixFromMatchedFeatures(VoteForSizeAndOrientation(featuesInCurrentRegion, 1.5, 20 ));
+            return GetHomographyMatrixFromMatchedFeatures(VoteForSizeAndOrientation(featuesInCurrentRegion, 1.5, 20));
          }
       }
 
@@ -93,9 +93,9 @@ namespace Emgu.CV
       /// <param name="observedFeatures">The observed features</param>
       /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
       /// <returns>If the model features exist in the observed features, an homography matrix is returned, otherwise, null is returned.</returns>
-      public HomographyMatrix Detect(SURFFeature[] observedFeatures, double uniquenessThreshold)
+      public HomographyMatrix Detect(ImageFeature[] observedFeatures, double uniquenessThreshold)
       {
-         MatchedSURFFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2, 20);
+         MatchedImageFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2, 20);
 
          //Stopwatch w1 = Stopwatch.StartNew();
          matchedGoodFeatures = VoteForUniqueness(matchedGoodFeatures, uniquenessThreshold);
@@ -119,7 +119,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="matchedFeatures">The Matched Features, only the first ModelFeature will be considered</param>
       /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
-      public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(MatchedSURFFeature[] matchedFeatures)
+      public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(MatchedImageFeature[] matchedFeatures)
       {
          if (matchedFeatures.Length < 4)
             return null;
@@ -131,8 +131,8 @@ namespace Emgu.CV
             PointF[] pts2 = new PointF[4];
             for (int i = 0; i < 4; i++)
             {
-               pts1[i] = matchedFeatures[i].SimilarFeatures[0].Feature.Point.pt;
-               pts2[i] = matchedFeatures[i].ObservedFeature.Point.pt;
+               pts1[i] = matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Point;
+               pts2[i] = matchedFeatures[i].ObservedFeature.KeyPoint.Point;
             }
             homography = CameraCalibration.GetPerspectiveTransform(pts1, pts2);
          }
@@ -143,8 +143,8 @@ namespace Emgu.CV
             PointF[] pts2 = new PointF[matchedFeatures.Length];
             for (int i = 0; i < matchedFeatures.Length; i++)
             {
-               pts1[i] = matchedFeatures[i].SimilarFeatures[0].Feature.Point.pt;
-               pts2[i] = matchedFeatures[i].ObservedFeature.Point.pt;
+               pts1[i] = matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Point;
+               pts2[i] = matchedFeatures[i].ObservedFeature.KeyPoint.Point;
             }
 
             homography = CameraCalibration.FindHomography(
@@ -166,15 +166,15 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// A similar feature is a structure that contains a SURF feature and its corresponding distance to the comparing SURF feature
+      /// A similar feature is a structure that contains a Image feature and its corresponding distance to the comparing Image feature
       /// </summary>
       public struct SimilarFeature
       {
          private double _distance;
-         private SURFFeature _feature;
+         private ImageFeature _feature;
 
          /// <summary>
-         /// The distance to the comparing SURF feature
+         /// The distance to the comparing Image feature
          /// </summary>
          public double Distance
          {
@@ -189,9 +189,9 @@ namespace Emgu.CV
          }
 
          /// <summary>
-         /// A similar SURF feature
+         /// A similar Image feature
          /// </summary>
-         public SURFFeature Feature
+         public ImageFeature Feature
          {
             get
             {
@@ -204,11 +204,11 @@ namespace Emgu.CV
          }
 
          /// <summary>
-         /// Create a similar SURF feature
+         /// Create a similar Image feature
          /// </summary>
-         /// <param name="distance">The distance to the comparing SURF feature</param>
-         /// <param name="feature">A similar SURF feature</param>
-         public SimilarFeature(double distance, SURFFeature feature)
+         /// <param name="distance">The distance to the comparing Image feature</param>
+         /// <param name="feature">A similar Image feature</param>
+         public SimilarFeature(double distance, ImageFeature feature)
          {
             _distance = distance;
             _feature = feature;
@@ -218,13 +218,13 @@ namespace Emgu.CV
       /// <summary>
       /// Filter the matched Features, such that if a match is not unique, it is rejected.
       /// </summary>
-      /// <param name="matchedFeatures">The Matched SURF features, each of them has the model feature sorted by distance. (e.g. SortMatchedFeaturesByDistance )</param>
+      /// <param name="matchedFeatures">The Matched Image features, each of them has the model feature sorted by distance. (e.g. SortMatchedFeaturesByDistance )</param>
       /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
-      /// <returns>The filtered matched SURF Features</returns>
-      public static MatchedSURFFeature[] VoteForUniqueness(MatchedSURFFeature[] matchedFeatures, double uniquenessThreshold)
+      /// <returns>The filtered matched Image Features</returns>
+      public static MatchedImageFeature[] VoteForUniqueness(MatchedImageFeature[] matchedFeatures, double uniquenessThreshold)
       {
-         return Array.FindAll<MatchedSURFFeature>(matchedFeatures,
-            delegate(MatchedSURFFeature f)
+         return Array.FindAll<MatchedImageFeature>(matchedFeatures,
+            delegate(MatchedImageFeature f)
             {
                return
                   f.SimilarFeatures.Length == 1 //this is the only match
@@ -238,9 +238,11 @@ namespace Emgu.CV
       /// <param name="rotationBins">The numbers of bins for rotation, a good value might be 20 (which means each bin covers 18 degree)</param>
       /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
       /// <param name="matchedFeatures">The matched feature that will be participated in the voting. For each matchedFeatures, only the zero indexed ModelFeature will be considered.</param>
-      public static MatchedSURFFeature[] VoteForSizeAndOrientation(MatchedSURFFeature[] matchedFeatures, double scaleIncrement, int rotationBins)
+      public static MatchedImageFeature[] VoteForSizeAndOrientation(MatchedImageFeature[] matchedFeatures, double scaleIncrement, int rotationBins)
       {
          int elementsCount = matchedFeatures.Length;
+         if (elementsCount < 1) return matchedFeatures;
+
          float[] scales = new float[elementsCount];
          float[] rotations = new float[elementsCount];
          float[] flags = new float[elementsCount];
@@ -249,50 +251,88 @@ namespace Emgu.CV
 
          for (int i = 0; i < matchedFeatures.Length; i++)
          {
-            float scale = (float)matchedFeatures[i].ObservedFeature.Point.size / (float)matchedFeatures[i].SimilarFeatures[0].Feature.Point.size;
+            float scale = (float)matchedFeatures[i].ObservedFeature.KeyPoint.Size / (float)matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Size;
             scale = (float)Math.Log10(scale);
             scales[i] = scale;
             if (scale < minScale) minScale = scale;
             if (scale > maxScale) maxScale = scale;
 
-            float rotation = matchedFeatures[i].ObservedFeature.Point.dir - matchedFeatures[i].SimilarFeatures[0].Feature.Point.dir;
+            float rotation = matchedFeatures[i].ObservedFeature.KeyPoint.Angle - matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Angle;
             rotations[i] = rotation < 0.0 ? rotation + 360 : rotation;
          }
 
          int scaleBinSize = (int)Math.Max(((maxScale - minScale) / Math.Log10(scaleIncrement)), 1);
-         int count;
-         using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
+
+         if (scaleBinSize == 1)
          {
-            GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
-            GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
-            GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
-
-            using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
-            using (Matrix<float> scalesMat = new Matrix<float>(1, elementsCount, scaleHandle.AddrOfPinnedObject()))
-            using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
+            //handle the case where there is only one scale bin
+            using (DenseHistogram h = new DenseHistogram(new int[] { rotationBins }, new RangeF[] { new RangeF(0, 360) }))
             {
-               h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
+               int count;
+               GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
+               GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
 
-               float minVal, maxVal;
-               int[] minLoc, maxLoc;
-               h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+               using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
+               using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
+               {
+                  h.Calculate(new Matrix<float>[] { rotationsMat }, true, null);
 
-               h.Threshold(maxVal * 0.5);
+                  float minVal, maxVal;
+                  int[] minLoc, maxLoc;
+                  h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
-               CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
-               count = CvInvoke.cvCountNonZero(flagsMat);
+                  h.Threshold(maxVal * 0.5);
+
+                  CvInvoke.cvCalcBackProject(new IntPtr[] { rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
+                  count = CvInvoke.cvCountNonZero(flagsMat);
+               }
+               rotationHandle.Free();
+               flagsHandle.Free();
+
+               MatchedImageFeature[] matchedGoodFeatures = new MatchedImageFeature[count];
+               int index = 0;
+               for (int i = 0; i < matchedFeatures.Length; i++)
+                  if (flags[i] != 0)
+                     matchedGoodFeatures[index++] = matchedFeatures[i];
+
+               return matchedGoodFeatures;
             }
-            scaleHandle.Free();
-            rotationHandle.Free();
-            flagsHandle.Free();
+         } else
+         {
+            using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
+            {
+               int count;
+               GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
+               GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
+               GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
 
-            MatchedSURFFeature[] matchedGoodFeatures = new MatchedSURFFeature[count];
-            int index = 0;
-            for (int i = 0; i < matchedFeatures.Length; i++)
-               if (flags[i] != 0)
-                  matchedGoodFeatures[index++] = matchedFeatures[i];
+               using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
+               using (Matrix<float> scalesMat = new Matrix<float>(1, elementsCount, scaleHandle.AddrOfPinnedObject()))
+               using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
+               {
+                  h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
 
-            return matchedGoodFeatures;
+                  float minVal, maxVal;
+                  int[] minLoc, maxLoc;
+                  h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+
+                  h.Threshold(maxVal * 0.5);
+
+                  CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
+                  count = CvInvoke.cvCountNonZero(flagsMat);
+               }
+               scaleHandle.Free();
+               rotationHandle.Free();
+               flagsHandle.Free();
+
+               MatchedImageFeature[] matchedGoodFeatures = new MatchedImageFeature[count];
+               int index = 0;
+               for (int i = 0; i < matchedFeatures.Length; i++)
+                  if (flags[i] != 0)
+                     matchedGoodFeatures[index++] = matchedFeatures[i];
+
+               return matchedGoodFeatures;
+            }
          }
       }
 
@@ -304,7 +344,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the memory assocaited with this SURF Tracker
+      /// Release the memory assocaited with this Image Tracker
       /// </summary>
       protected override void ReleaseManagedResources()
       {
@@ -312,26 +352,26 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Match the SURF feature from the observed image to the features from the model image
+      /// Match the Image feature from the observed image to the features from the model image
       /// </summary>
-      /// <param name="observedFeatures">The SURF feature from the observed image</param>
+      /// <param name="observedFeatures">The Image feature from the observed image</param>
       /// <param name="k">The number of neighbors to find</param>
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
       /// <returns>The matched features</returns>
-      public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
+      public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k, int emax)
       {
          return _matcher.MatchFeature(observedFeatures, k, emax);
       }
 
       /// <summary>
-      /// The matched SURF feature
+      /// The matched Image feature
       /// </summary>
-      public struct MatchedSURFFeature
+      public struct MatchedImageFeature
       {
          /// <summary>
          /// The observed feature
          /// </summary>
-         public SURFFeature ObservedFeature;
+         public ImageFeature ObservedFeature;
 
          private SimilarFeature[] _similarFeatures;
 
@@ -356,37 +396,37 @@ namespace Emgu.CV
          /// <param name="observedFeature">The feature from the observed image</param>
          /// <param name="modelFeatures">The matched feature from the model</param>
          /// <param name="dist">The distances between the feature from the observerd image and the matched feature from the model image</param>
-         public MatchedSURFFeature(SURFFeature observedFeature, SURFFeature[] modelFeatures, double[] dist)
+         public MatchedImageFeature(ImageFeature observedFeature, ImageFeature[] modelFeatures, double[] dist)
          {
             ObservedFeature = observedFeature;
             _similarFeatures = new SimilarFeature[modelFeatures.Length];
             for (int i = 0; i < modelFeatures.Length; i++)
-               _similarFeatures[i] = new SimilarFeature(dist[i], modelFeatures[i]); 
+               _similarFeatures[i] = new SimilarFeature(dist[i], modelFeatures[i]);
          }
       }
 
       /// <summary>
-      /// A simple class that use flann to match SURF features. 
+      /// A simple class that use flann to match Image features. 
       /// </summary>
-      private class SURFMatcher : DisposableObject
+      private class ImageFeatureMatcher : DisposableObject
       {
-         private SURFFeature[] _modelFeatures;
+         private ImageFeature[] _modelFeatures;
 
          private Flann.Index _modelIndex;
 
          /// <summary>
-         /// Create k-d feature trees using the SURF feature extracted from the model image.
+         /// Create k-d feature trees using the Image feature extracted from the model image.
          /// </summary>
-         /// <param name="modelFeatures">The SURF feature extracted from the model image</param>
-         public SURFMatcher(SURFFeature[] modelFeatures)
+         /// <param name="modelFeatures">The Image feature extracted from the model image</param>
+         public ImageFeatureMatcher(ImageFeature[] modelFeatures)
          {
             Debug.Assert(modelFeatures.Length > 0, "Model Features should have size > 0");
-            
+
             _modelIndex = new Flann.Index(
                Util.GetMatrixFromDescriptors(
-                  Array.ConvertAll<SURFFeature, float[]>(
+                  Array.ConvertAll<ImageFeature, float[]>(
                      modelFeatures,
-                     delegate(SURFFeature f) { return f.Descriptor; })),
+                     delegate(ImageFeature f) { return f.Descriptor; })),
                1);
             _modelFeatures = modelFeatures;
          }
@@ -403,20 +443,20 @@ namespace Emgu.CV
          }*/
 
          /// <summary>
-         /// Match the SURF feature from the observed image to the features from the model image
+         /// Match the Image feature from the observed image to the features from the model image
          /// </summary>
-         /// <param name="observedFeatures">The SURF feature from the observed image</param>
+         /// <param name="observedFeatures">The Image feature from the observed image</param>
          /// <param name="k">The number of neighbors to find</param>
          /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
          /// <returns>The matched features</returns>
-         public MatchedSURFFeature[] MatchFeature(SURFFeature[] observedFeatures, int k, int emax)
+         public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k, int emax)
          {
-            if (observedFeatures.Length == 0) return new MatchedSURFFeature[0];
+            if (observedFeatures.Length == 0) return new MatchedImageFeature[0];
 
             float[][] descriptors = new float[observedFeatures.Length][];
             for (int i = 0; i < observedFeatures.Length; i++)
                descriptors[i] = observedFeatures[i].Descriptor;
-            using(Matrix<int> result1 = new Matrix<int>(descriptors.Length, k))
+            using (Matrix<int> result1 = new Matrix<int>(descriptors.Length, k))
             using (Matrix<float> dist1 = new Matrix<float>(descriptors.Length, k))
             {
                _modelIndex.KnnSearch(Util.GetMatrixFromDescriptors(descriptors), result1, dist1, k, emax);
@@ -424,7 +464,7 @@ namespace Emgu.CV
                int[,] indexes = result1.Data;
                float[,] distances = dist1.Data;
 
-               MatchedSURFFeature[] res = new MatchedSURFFeature[observedFeatures.Length];
+               MatchedImageFeature[] res = new MatchedImageFeature[observedFeatures.Length];
                List<SimilarFeature> matchedFeatures = new List<SimilarFeature>();
 
                for (int i = 0; i < res.Length; i++)

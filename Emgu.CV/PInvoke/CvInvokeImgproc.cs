@@ -1903,19 +1903,6 @@ namespace Emgu.CV
          IntPtr userParam);
       #endregion
 
-      /// <summary>
-      /// Retrieve the star keypoint location from the specific image
-      /// </summary>
-      /// <param name="img">The image to detect start keypoints</param>
-      /// <param name="storage">The storage for the returned sequence</param>
-      /// <param name="param">The star detector parameters</param>
-      /// <returns>Pointer to the sequence of star keypoint locations</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
-      public static extern IntPtr cvGetStarKeypoints(
-         IntPtr img,
-         IntPtr storage,
-         StarDetector param);
-
       /*
               /// <summary>
               ///  Fits a line into set of 2d points in a robust way (M-estimator technique) 

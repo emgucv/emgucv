@@ -1327,6 +1327,12 @@ namespace Emgu.CV
             {
                dummy._Erode(1);
             }
+            //After opencv structure reorganization, opencv_objdetect is needed in memory
+            //This can be done by loading the HOG detector
+            using (HOGDescriptor desc = new HOGDescriptor())
+            {
+            }
+
             return _cvLoad(fileName, memstorage, name, realName);
          }
       }

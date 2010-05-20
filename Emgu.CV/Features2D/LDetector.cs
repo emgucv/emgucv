@@ -5,13 +5,13 @@ using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// V. Lepetit keypoint detector
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct LDetector
+   public struct LDetector : IKeyPointDetector
    {
       /// <summary>
       /// Radius
@@ -71,7 +71,7 @@ namespace Emgu.CV
       /// Detect the Lepetit keypoints from the image
       /// </summary>
       /// <param name="image">The image to extract Lepetit keypoints</param>
-      /// <param name="maxCount">The maximum number of keypoints to be extracted</param>
+      /// <param name="maxCount">The maximum number of keypoints to be extracted, use 0 to ignore the max count</param>
       /// <param name="scaleCoords">Indicates if the coordinates should be scaled</param>
       /// <returns>The array of Lepetit keypoints</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, int maxCount, bool scaleCoords)
@@ -83,5 +83,18 @@ namespace Emgu.CV
             return seq.ToArray();
          }
       }
+
+      #region IKeyPointDetector Members
+      /// <summary>
+      /// Detect the keypoints in the image
+      /// </summary>
+      /// <param name="image">The image from which the key point will be detected from</param>
+      /// <returns>The key pionts in the image</returns>
+      public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
+      {
+         return DetectKeyPoints(image, 0, false);
+      }
+
+      #endregion
    }
 }

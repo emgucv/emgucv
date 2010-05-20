@@ -2,7 +2,7 @@ using System;
 using Emgu.CV.Structure;
 using System.Runtime.Serialization;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// A SURF feature

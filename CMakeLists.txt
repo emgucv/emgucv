@@ -171,6 +171,19 @@ GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 
+SET(OPENCV_LIBRARY_OUTPUT_NAMES 
+${OPENCV_CORE_OUTPUT_NAME}
+${OPENCV_IMGPROC_OUTPUT_NAME}
+${OPENCV_HIGHGUI_OUTPUT_NAME}
+${OPENCV_ML_OUTPUT_NAME}
+${OPENCV_CALIB3D_OUTPUT_NAME}
+${OPENCV_FEATURES2D_OUTPUT_NAME}
+${OPENCV_OBJDETECT_OUTPUT_NAME}
+${OPENCV_LEGACY_OUTPUT_NAME}
+${OPENCV_CALIB3D_OUTPUT_NAME}
+${OPENCV_VIDEO_OUTPUT_NAME}
+${CVEXTERN_OUTPUT_NAME})
+
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
 using System;
@@ -192,7 +205,7 @@ namespace Emgu.CV
       /// </summary>
       public const string OPENCV_HIGHGUI_LIBRARY = \"${OPENCV_HIGHGUI_OUTPUT_NAME}\";
       /// <summary>
-      /// The file name of the cvaux library
+      /// The file name of the feature2d library
       /// </summary>
       public const string OPENCV_FEATURES2D_LIBRARY = \"${OPENCV_FEATURES2D_OUTPUT_NAME}\";
       /// <summary>
@@ -200,15 +213,15 @@ namespace Emgu.CV
       /// </summary>
       public const string OPENCV_OBJDETECT_LIBRARY = \"${OPENCV_OBJDETECT_OUTPUT_NAME}\";
       /// <summary>
-      /// The file name of the objdetect library
+      /// The file name of the calib3d library
       /// </summary>
       public const string OPENCV_CALIB3D_LIBRARY = \"${OPENCV_CALIB3D_OUTPUT_NAME}\";
       /// <summary>
-      /// The file name of the objdetect library
+      /// The file name of the legacy library
       /// </summary>
       public const string OPENCV_LEGACY_LIBRARY = \"${OPENCV_LEGACY_OUTPUT_NAME}\";
       /// <summary>
-      /// The file name of the objdetect library
+      /// The file name of the video library
       /// </summary>
       public const string OPENCV_VIDEO_LIBRARY = \"${OPENCV_VIDEO_OUTPUT_NAME}\";
       /// <summary>
@@ -272,11 +285,7 @@ IF (WIN32)
 	"Emgu.CV"
 	"Emgu.CV.UI"
 	"Emgu.CV.DebuggerVisualizers"
-	${CXCORE_OUTPUT_NAME}
-	${CV_OUTPUT_NAME}
-    ${CVAUX_OUTPUT_NAME}
-	${HIGHGUI_OUTPUT_NAME}
-	${CVEXTERN_OUTPUT_NAME})
+	${OPENCV_LIBRARY_OUTPUT_NAMES})
   MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
 ClearErrors
