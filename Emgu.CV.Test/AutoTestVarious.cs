@@ -1656,6 +1656,11 @@ namespace Emgu.CV.Test
          Assert.Less(norm, epsilon);
       }
 
+      [Test]
+      public void TestQuaternionsSize()
+      {
+         Assert.AreEqual(4 * Marshal.SizeOf(typeof(double)),   Marshal.SizeOf(typeof(Quaternions)) );
+      }
 
       [Test]
       public void TestDiatanceTransform()
