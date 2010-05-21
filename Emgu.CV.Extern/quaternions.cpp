@@ -1,6 +1,6 @@
 #include "quaternions.h"
 
-CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
+void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {
    double 
       halfX = x *0.5,
@@ -42,7 +42,7 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
 #endif
 }
 
-CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
+void quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
 {
    double q0 = quaternions->w;
    double q1 = quaternions->x;
@@ -54,7 +54,7 @@ CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, d
    *z = atan2(2.0 * (q0 * q3 + q1 * q2), 1.0 - 2.0 * (q2*q2 + q3*q3));
 }
 
-CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
+void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
 {
    double a = quaternions->w;
    double b = quaternions->x;
@@ -69,7 +69,7 @@ CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotatio
    *rIter++ = 2.0*b*d-2.0*a*c; *rIter++ = 2.0*c*d+2.0*a*b; *rIter++ = a*a-b*b-c*c+d*d;
 }
 
-void quaternionsRotate(double w, double x, double y, double z, double v1, double v2, double v3, double*vr)
+inline void quaternionsRotate(double w, double x, double y, double z, double v1, double v2, double v3, double*vr)
 {
    double
       t2 =   w*x,
@@ -87,12 +87,12 @@ void quaternionsRotate(double w, double x, double y, double z, double v1, double
    *vr = 2.0*( (t7 -  t3)* v1 + (t2 +  t9)* v2 + (t5 + t8)* v3 ) + v3;
 }
 
-CVAPI(void) quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst)
+void quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst)
 {
    quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, point->x, point->y, point->z, (double*) pointDst);
 }
 
-CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, CvMat* pointDst)
+void quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, CvMat* pointDst)
 {
    cv::Mat p = cv::cvarrToMat(pointSrc);
    cv::Mat pDst = cv::cvarrToMat(pointDst);
@@ -118,7 +118,7 @@ CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, 
    }
 }
 
-CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst)
+void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst)
 {
 #if EMGU_SSE2
    __m128d _w1w1 = _mm_set1_pd(quaternions1->w);
@@ -202,7 +202,7 @@ void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
    }
 }
 
-CVAPI(void) quaternionsRenorm(Quaternions* quaternions)
+void quaternionsRenorm(Quaternions* quaternions)
 {
    double norm = sqrt(quaternions->w * quaternions->w 
       + quaternions->x * quaternions->x 
