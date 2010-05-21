@@ -12,6 +12,7 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorGenerator
    {
+      #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvSIFTDetectorDetectKeyPoints(
          IntPtr detector,
@@ -41,12 +42,13 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static IntPtr CvSIFTDetectorCreate(
-         int nOctaves, int nOctaveLayers, int firstOctave, //common parameters
-         double threshold, double edgeThreshold, AngleMode angleMode, //detector parameters
-         double magnification, [MarshalAs(UnmanagedType.I1)] bool isNormalize); //descriptor parameters
+         int nOctaves, int nOctaveLayers, int firstOctave, AngleMode angleMode, //common parameters
+         double threshold, double edgeThreshold, //detector parameters
+         double magnification, [MarshalAs(UnmanagedType.I1)] bool isNormalize, [MarshalAs(UnmanagedType.I1)] bool recalculateAngles); //descriptor parameters
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       private extern static void CvSIFTDetectorRelease(ref IntPtr detector);
+      #endregion
 
       /// <summary>
       /// The angle mode for the key point detector
@@ -69,24 +71,25 @@ namespace Emgu.CV.Features2D
       /// <param name="nOctaves">The number of octaves. Use 4 for default</param>
       /// <param name="nOctaveLayers">The number of octaves layers. Use 3 for default</param>
       /// <param name="firstOctave">Use -1 for default</param>
-      /// <param name="threshold">Use 0.04 / nOctavesLayers / 2.0 as default</param>
-      /// <param name="edgeThreshold">Use 10.0 as default</param>
+      /// <param name="threshold">Detector parameter. Use 0.04 / nOctavesLayers / 2.0 as default</param>
+      /// <param name="edgeThreshold">Detector parameter. Use 10.0 as default</param>
       /// <param name="angleMode">Angle mode</param>
-      /// <param name="magnification">Use 3.0 as default</param>
-      /// <param name="isNormalize">Use true as default</param>
+      /// <param name="magnification">Descriptor parameter. Use 3.0 as default</param>
+      /// <param name="isNormalize">Descriptor parameter. Use true as default</param>
+      /// <param name="recalculateAngles">Descriptor parameter. Use true as default</param>
       public SIFTDetector(
-         int nOctaves, int nOctaveLayers, int firstOctave, //common parameters
-         double threshold, double edgeThreshold, AngleMode angleMode, //detector parameters
-         double magnification, bool isNormalize) //descriptor parameters
+         int nOctaves, int nOctaveLayers, int firstOctave, AngleMode angleMode,//common parameters
+         double threshold, double edgeThreshold,  //detector parameters
+         double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
       {
-         _ptr = CvSIFTDetectorCreate(nOctaves, nOctaveLayers, firstOctave, threshold, edgeThreshold, angleMode, magnification, isNormalize);
+         _ptr = CvSIFTDetectorCreate(nOctaves, nOctaveLayers, firstOctave, angleMode, threshold, edgeThreshold, magnification, isNormalize, recalculateAngles);
       }
 
       /// <summary>
       /// Create a SIFT detector with the default parameters
       /// </summary>
       public SIFTDetector()
-         :this(4, 3, -1, 0.04 / 3 / 2.0, 10.0, SIFTDetector.AngleMode.AVERAGE_ANGLE, 3.0, true)
+         : this(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true)
       {
       }
 

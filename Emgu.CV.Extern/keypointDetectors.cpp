@@ -83,13 +83,13 @@ CVAPI(void) CvStarDetectorDetectKeyPoints(cv::StarDetector* detector, IplImage* 
 
 //SIFTDetector
 CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
-   int nOctaves, int nOctaveLayers, int firstOctave, //common parameters
-   double threshold, double edgeThreshold, int angleMode, //detector parameters
-   double magnification, bool isNormalize)
+   int nOctaves, int nOctaveLayers, int firstOctave, int angleMode,//common parameters
+   double threshold, double edgeThreshold, //detector parameters
+   double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
 {
-   cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave);
-   cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold, angleMode);
-   cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize);
+   cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave, angleMode);
+   cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold);
+   cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize, recalculateAngles);
    return new cv::SIFT(p, detectorP, descriptorP);
 }
 
