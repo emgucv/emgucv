@@ -26,7 +26,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSIFT()
       {
-         SIFTDetector detector = new SIFTDetector(4, 3, -1, 0.04 / 3 / 2.0, 10.0, SIFTDetector.AngleMode.AVERAGE_ANGLE, 3.0, true);
+         SIFTDetector detector = new SIFTDetector();
          TestFeature2DTracker(detector, detector);
       }
 
@@ -44,7 +44,7 @@ namespace Emgu.CV.Test
          keyPointDetector.SetDefaultParameters();
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
-         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, 0.04 / 3 / 2.0, 10.0, SIFTDetector.AngleMode.AVERAGE_ANGLE, 3.0, true);
+         SIFTDetector descriptorGenerator = new SIFTDetector();
          
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
@@ -56,7 +56,7 @@ namespace Emgu.CV.Test
          keyPointDetector.SetDefaultParameters();
          
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
-         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, 0.04 / 3 / 2.0, 10.0, SIFTDetector.AngleMode.AVERAGE_ANGLE, 3.0, true);
+         SIFTDetector descriptorGenerator = new SIFTDetector();
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
