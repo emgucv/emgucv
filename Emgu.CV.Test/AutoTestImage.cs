@@ -562,6 +562,20 @@ namespace Emgu.CV.Test
       [Test]
       public void TestBitmapConstructor()
       {
+         using(Bitmap bmp0 = new Bitmap(1200, 1080, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+         using (Graphics g = Graphics.FromImage(bmp0))
+         {
+            g.Clear(Color.Blue);
+
+            Stopwatch watch = Stopwatch.StartNew();
+            Image<Bgr, Byte> image0 = new Image<Bgr, byte>(bmp0);
+            watch.Stop();
+            Trace.WriteLine(String.Format("Convertsion Time: {0} milliseconds", watch.ElapsedMilliseconds));
+            Image<Bgr, Byte> imageCmp0 = new Image<Bgr, byte>(image0.Size);
+            imageCmp0.SetValue(new Bgr(255, 0, 0));
+            Assert.IsTrue(image0.Equals(imageCmp0));
+         }
+
          #region test byte images
          Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
          image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));

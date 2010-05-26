@@ -2672,6 +2672,33 @@ namespace Emgu.CV
 
             switch (value.PixelFormat)
             {
+               case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
+                  if (this is Image<Bgr, Byte>)
+                  {
+                     System.Drawing.Imaging.BitmapData data = value.LockBits(
+                        new Rectangle(Point.Empty, value.Size),
+                        System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                        value.PixelFormat);
+
+                     using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height,  data.Stride, data.Scan0))
+                     {
+                        for (int i = 0; i < 3; i++)
+                        {
+                           CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                           CvInvoke.cvSetImageCOI(mat, i + 1);
+                           CvInvoke.cvCopy(mat, Ptr, IntPtr.Zero);
+                        }
+                        CvInvoke.cvSetImageCOI(Ptr, 0);
+                     }
+
+                     value.UnlockBits(data);
+                  }
+                  else
+                  {
+                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                        ConvertFrom(tmp);
+                  }
+                  break;
                case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
                   if (this is Image<Bgra, Byte>)
                      CopyFromBitmap(value);
