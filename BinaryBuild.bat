@@ -8,19 +8,23 @@ IF EXIST "%PROGRAMFILES_DIR%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_D
 
 SET VS2005="%PROGRAMFILES_DIR%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
 SET VS2008="%PROGRAMFILES_DIR%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
+SET VS2010="%PROGRAMFILES_DIR%\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"
 SET MSBUILD35="%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe"
 
 IF EXIST %MSBUILD35% SET DEVENV=%MSBUILD35%
 IF EXIST %VS2005% SET DEVENV=%VS2005% 
 IF EXIST %VS2008% SET DEVENV=%VS2008%
+IF EXIST %VS2010% SET DEVENV=%VS2010%
 
 IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Release
 IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build Release
 
 IF %DEVENV%==%MSBUILD35% SET CMAKE_CONF="Visual Studio 8 2005"
 IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005"
 IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008"
+IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10"
 
 @echo on
 del CMakeCache.txt
