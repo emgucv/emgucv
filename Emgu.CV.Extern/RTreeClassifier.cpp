@@ -1,4 +1,5 @@
-#include "cvaux.h"
+#include "core_c.h"
+#include "opencv2\features2d\features2d.hpp"
 #include <vector>
 
 CVAPI(cv::RTreeClassifier*) CvRTreeClassifierCreate() { return new cv::RTreeClassifier(); }

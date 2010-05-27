@@ -9,8 +9,8 @@ class vectorOfFloat
 { 
 public:
    std::vector<float> data;
-   vectorOfFloat();
-   vectorOfFloat(int size);
+   vectorOfFloat() : data() {};
+   vectorOfFloat(int size) : data(size) {};
 };
 
 #endif

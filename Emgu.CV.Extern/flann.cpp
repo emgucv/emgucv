@@ -1,4 +1,5 @@
-#include "cvaux.h"
+#include "core_c.h"
+#include "opencv2\features2d\features2d.hpp"
 
 CVAPI(int) CvHierarchicalClustering(CvMat* features, CvMat* centers, cv::cvflann::KMeansIndexParams* params)
 {

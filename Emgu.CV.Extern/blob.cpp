@@ -1,4 +1,5 @@
-#include "cvaux.h"
+#include "core_c.h"
+#include "opencv2\video\blobtrack.hpp"
 
 //Blob
 CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob)) { return new CvBlobSeq(BlobSize); }

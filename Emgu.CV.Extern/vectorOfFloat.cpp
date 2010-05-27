@@ -1,15 +1,5 @@
 #include "vectorOfFloat.h"
 
-vectorOfFloat::vectorOfFloat()
-:data()
-{
-}
-
-vectorOfFloat::vectorOfFloat(int size)
-:data(size)
-{
-}
-
 CVAPI(vectorOfFloat*) VectorOfFloatCreate() 
 { 
    return new vectorOfFloat(); 
