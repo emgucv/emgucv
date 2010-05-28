@@ -25,7 +25,7 @@ namespace Emgu.CV
          IntPtr mask,
          ref IntPtr contours,
          IntPtr storage,
-         MCvMSERParams parameters);
+         MSERDetector parameters);
 
       /// <summary>
       /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc

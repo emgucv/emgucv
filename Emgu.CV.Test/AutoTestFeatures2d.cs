@@ -26,7 +26,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSIFT()
       {
-         SIFTDetector detector = new SIFTDetector();
+         SIFTDetector detector = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
          TestFeature2DTracker(detector, detector);
       }
 
@@ -41,10 +41,10 @@ namespace Emgu.CV.Test
       public void TestStar()
       {
          StarDetector keyPointDetector = new StarDetector();
-         keyPointDetector.SetDefaultParameters();
+         keyPointDetector.Init();
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
-         SIFTDetector descriptorGenerator = new SIFTDetector();
+         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
          
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
@@ -53,15 +53,42 @@ namespace Emgu.CV.Test
       public void TestLDetector()
       {
          LDetector keyPointDetector = new LDetector();
-         keyPointDetector.SetDefaultParameters();
+         keyPointDetector.Init();
          
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
-         SIFTDetector descriptorGenerator = new SIFTDetector();
+         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
-      public static void TestFeature2DTracker(IKeyPointDetector keyPointDetector, IDescriptorGenerator descriptorGenerator)
+      [Test]
+      public void TestMSER()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");
+         MSERDetector param = new MSERDetector();
+         param.Init();
+
+         using (MemStorage storage = new MemStorage())
+         {
+            Seq<Point>[] mser = param.ExtractContours(image, null, ref param, storage);
+            {
+               foreach (Seq<Point> region in mser)
+                  image.Draw(region, new Gray(255.0), 2);
+            }
+         }
+      }
+
+      [Test]
+      public void TestFAST()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         FastDetector keyPointDetector = new FastDetector(100, true);
+         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
+
+         TestFeature2DTracker(keyPointDetector, descriptorGenerator);
+      }
+
+      public static void TestFeature2DTracker(IKeyPointDetector keyPointDetector, IDescriptorExtractor descriptorGenerator)
       {
          for (int k = 0; k < 1; k++)
          {
@@ -185,6 +212,37 @@ namespace Emgu.CV.Test
             for (int j = 0; j < d1.Length; j++)
                Assert.AreEqual(d1[j], d2[j]);
          }
+
+         foreach (MKeyPoint kp in keypoints)
+         {
+            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
+         }
+      }
+
+      [Test]
+      public void TestLDetectorAndSelfSimDescriptor()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         LDetector detector = new LDetector();
+         detector.Init();
+
+         MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
+
+         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) { return Point.Round(k.Point); });
+
+         SelfSimDescriptor descriptor = new SelfSimDescriptor(5, 41, 3, 7, 20);
+         int descriptorSize = descriptor.DescriptorSize;
+
+         float[] descriptors = descriptor.Compute(box, new Size(20, 20), pts);
+
+         float absSum = 0;
+         foreach (float f in descriptors)
+            absSum += Math.Abs(f);
+
+         //TODO: Find out why selfsimilarity always return descriptors of all zeros. Probaboly a bug in the opencv C++ code
+         //Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
+
+         Assert.AreEqual(descriptors.Length / descriptor.DescriptorSize, pts.Length);
 
          foreach (MKeyPoint kp in keypoints)
          {

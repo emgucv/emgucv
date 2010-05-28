@@ -10,7 +10,7 @@ using Emgu.Util;
 namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// This class use Image and CamShift to track object
+   /// This class use ImageFeature to match or track object
    /// </summary>
    public class Features2DTracker : DisposableObject
    {

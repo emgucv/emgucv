@@ -9,7 +9,7 @@ namespace Emgu.CV.Features2D
    /// Wrapped CvSURFParams structure
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct SURFDetector : IKeyPointDetector, IDescriptorGenerator
+   public struct SURFDetector : IKeyPointDetector, IDescriptorExtractor
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]

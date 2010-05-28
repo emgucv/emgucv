@@ -57,13 +57,14 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Set the parameters to default value
       /// </summary>
-      public void SetDefaultParameters()
+      public void Init()
       {
          Radius = 7;
          Threshold = 20;
          NOctaves = 3;
          NViews = 1000;
-         Verbose = false; BaseFeatureSize = 32;
+         Verbose = false; 
+         BaseFeatureSize = 32;
          ClusteringDistance = 2;
       }
 

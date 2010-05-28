@@ -8,7 +8,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// An interface for a descriptor generator
    /// </summary>
-   public interface IDescriptorGenerator
+   public interface IDescriptorExtractor
    {
       /// <summary>
       /// Compute the ImageFeature on the image from the given keypoint locations.

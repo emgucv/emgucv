@@ -10,7 +10,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped SIFT detector structure
    /// </summary>
-   public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorGenerator
+   public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]

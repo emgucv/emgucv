@@ -49,13 +49,45 @@ namespace Emgu.CV.Features2D
       /// Get the default star detector parameters
       /// </summary>
       /// <returns>The default star detector parameters</returns>
-      public void SetDefaultParameters()
+      public void Init()
       {
          MaxSize = 45;
          ResponseThreshold = 30;
          LineThresholdProjected = 10;
          LineThresholdBinarized = 8;
          SuppressNonmaxSize = 5;
+      }
+
+      /// <summary>
+      /// Create a star detector with the specific parameters
+      /// </summary>
+      /// <param name="maxSize">
+      /// Use 45 as default. Maximum size of the features. The following
+      /// values of the parameter are supported:
+      /// 4, 6, 8, 11, 12, 16, 22, 23, 32, 45, 46, 64, 90, 128</param>
+      /// <param name="responseThreshold">
+      /// Use 30 as default. Threshold for the approximated laplacian,
+      /// used to eliminate weak features. The larger it is,
+      /// the less features will be retrieved
+      /// </param>
+      /// <param name="lineThresholdProjected">
+      /// Use 10 as default. Another threshold for the laplacian to eliminate edges.
+      /// The larger the threshold, the more points you get.
+      /// </param>
+      /// <param name="lineThresholdBinarized">
+      /// Use 8 as default. Another threshold for the feature size to eliminate edges. 
+      /// The larger the threshold, the more points you get.</param>
+      /// <param name="suppressNonmaxSize">
+      /// Use 5 as default.
+      /// </param>
+      public StarDetector(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
+      {
+         MaxSize = maxSize;
+         ResponseThreshold = responseThreshold;
+         LineThresholdProjected = lineThresholdProjected;
+         LineThresholdBinarized = lineThresholdBinarized;
+         SuppressNonmaxSize = suppressNonmaxSize;
+         
       }
 
       /// <summary>

@@ -1420,6 +1420,7 @@ namespace Emgu.CV
       /// <param name="threshold">FAST threshold</param>
       /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used</param>
       /// <returns>The FAST keypoints in this image</returns>
+      [Obsolete("Use Features2D.FastDetector instead, will be removed in the next version.")]
       public MKeyPoint[] GetFASTKeypoints(int threshold, bool nonmaxSupression)
       {
          using (MemStorage stor = new MemStorage())
@@ -1437,7 +1438,8 @@ namespace Emgu.CV
       /// <param name="param">MSER parameter</param>
       /// <param name="storage">The storage where the contour will be saved</param>
       /// <returns>The MSER regions</returns>
-      public Seq<Point>[] ExtractMSER(Image<Gray, Byte> mask, ref MCvMSERParams param, MemStorage storage)
+      [Obsolete("Use MSERDetector.ExtractContours function instead, will be removed in the next version")]
+      public Seq<Point>[] ExtractMSER(Image<Gray, Byte> mask, ref MSERDetector param, MemStorage storage)
       {
          IntPtr mserPtr = new IntPtr();
          CvInvoke.cvExtractMSER(Ptr, mask, ref mserPtr, storage, param);

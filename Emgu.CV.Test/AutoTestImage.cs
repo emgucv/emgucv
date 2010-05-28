@@ -938,21 +938,6 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestMSER()
-      {
-         Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");
-         MCvMSERParams param = MCvMSERParams.GetDefaultParameter();
-         using (MemStorage storage = new MemStorage())
-         {
-            Seq<Point>[] mser = image.ExtractMSER(null, ref param, storage);
-            {
-               foreach(Seq<Point> region in mser)
-                  image.Draw(region, new Gray(255.0), 2);
-            }
-         }
-      }
-
-      [Test]
       public void TestGenericConvert()
       {
          Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
@@ -1132,62 +1117,6 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestFASTKeyPoints()
-      {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         MKeyPoint[] keypoints = box.GetFASTKeypoints(100, true);
-         foreach(MKeyPoint kp in keypoints)
-         {
-            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }
-      }
-
-      [Test]
-      public void TestLDetectorAndSelfSimDescriptor()
-      {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         LDetector detector = new LDetector();
-         detector.SetDefaultParameters();
-
-         MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
-
-         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) { return Point.Round(k.Point); });
-
-         SelfSimDescriptor descriptor = new SelfSimDescriptor(5, 41, 3, 7, 20);
-         int descriptorSize = descriptor.DescriptorSize;
-
-         float[] descriptors = descriptor.Compute(box, new Size(20, 20), pts);
-
-         float absSum = 0;
-         foreach (float f in descriptors)
-            absSum += Math.Abs(f);
-
-         //TODO: Find out why selfsimilarity always return descriptors of all zeros. Probaboly a bug in the opencv C++ code
-         //Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
-
-         Assert.AreEqual(descriptors.Length / descriptor.DescriptorSize, pts.Length);
-        
-         foreach (MKeyPoint kp in keypoints)
-         {
-            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }
-      }
-
-      [Test]
-      public void TestStarDetector()
-      {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         StarDetector detector = new StarDetector();
-         detector.SetDefaultParameters();
-
-         MKeyPoint[] keypoints = detector.DetectKeyPoints(box);
-         foreach (MKeyPoint kp in keypoints)
-         {
-            box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
-         }
-      }
-
-      [Test]
       public void TestImageConvert()
       {
          try
@@ -1215,7 +1144,7 @@ namespace Emgu.CV.Test
          {
             Stopwatch watch = Stopwatch.StartNew();
             LDetector keypointDetector = new LDetector();
-            keypointDetector.SetDefaultParameters();
+            keypointDetector.Init();
 
             PatchGenerator pGen = new PatchGenerator();
             pGen.SetDefaultParameters();

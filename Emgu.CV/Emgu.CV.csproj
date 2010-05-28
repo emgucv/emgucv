@@ -64,8 +64,9 @@
     <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
+    <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
-    <Compile Include="Features2D\IDescriptorGenerator.cs" />
+    <Compile Include="Features2D\IDescriptorExtractor.cs" />
     <Compile Include="Features2D\IKeyPointDetector.cs" />
     <Compile Include="Features2D\SIFTDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="Features2D\StarDetector.cs" />
-    <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
+    <Compile Include="Features2D\MSERDetector.cs" />
     <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
     <Compile Include="PInvoke\CvType\MKeyPoint.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
