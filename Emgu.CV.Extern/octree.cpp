@@ -1,5 +1,5 @@
 #include "core_c.h"
-#include "opencv2\contrib\contrib.hpp"
+#include "opencv2/contrib/contrib.hpp"
 
 CVAPI(cv::Octree*) CvOctreeCreate() { return new cv::Octree(); }
 CVAPI(void) CvOctreeBuildTree(cv::Octree* tree, cv::Point3f* points, int numberOfPoints, int maxLevels, int minPoints ) 

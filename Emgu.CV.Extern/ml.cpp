@@ -1,5 +1,5 @@
 #include "core_c.h"
-#include "opencv2\ml\ml.hpp"
+#include "opencv2/ml/ml.hpp"
 
 //StatModel
 CVAPI(void) StatModelSave(CvStatModel* model, char* filename, char* name=0 ) { model->save(filename, name); }

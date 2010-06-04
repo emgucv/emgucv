@@ -1,6 +1,6 @@
 #include "core_c.h"
-#include "opencv2\features2d\features2d.hpp"
-#include "opencv2\contrib\contrib.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/contrib/contrib.hpp"
 #include "vectorOfFloat.h"
 
 //FernClassifier

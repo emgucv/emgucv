@@ -1,6 +1,6 @@
 #include "core_c.h"
 #include "vectorOfFloat.h"
-#include "opencv2\objdetect\objdetect.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
