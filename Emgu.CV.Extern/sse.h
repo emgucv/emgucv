@@ -2,6 +2,8 @@
 #ifndef EMGU_SSE_H
 #define EMGU_SSE_H
 
+#include "opencv2/core/core.hpp"
+
 #if __EMGU_ENABLE_SSE__
    #if defined __SSE2__ || _MSC_VER >= 1300
        #include "emmintrin.h"
@@ -23,14 +25,16 @@
    #endif
 
    #if EMGU_SSE2
+   const bool simdSSE4_1 = cv::checkHardwareSupport(CV_CPU_SSE4_1);
+
    inline double _dot_product(__m128d v0, __m128d v1)
    {
    #if EMGU_SSE4_1
-      return _mm_dp_pd(v0, v1, 0x31).m128d_f64[0];
-   #else
+      if(simdSSE4_1)
+         return _mm_dp_pd(v0, v1, 0x31).m128d_f64[0]; 
+   #endif 
       __m128d v = _mm_mul_pd(v0, v1);
       return v.m128d_f64[1] + v.m128d_f64[0];
-   #endif
    }
 
    inline double _cross_product(__m128d v0, __m128d v1)
