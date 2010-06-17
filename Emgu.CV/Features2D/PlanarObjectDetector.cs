@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using Emgu.Util;
 using System.Drawing;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// A Planar object detector

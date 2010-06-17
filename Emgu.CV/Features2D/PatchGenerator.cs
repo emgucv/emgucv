@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
-namespace Emgu.CV 
+namespace Emgu.CV.Features2D 
 {
    /// <summary>
    /// OpenCV's PatchGenerator

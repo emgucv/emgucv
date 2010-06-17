@@ -78,7 +78,7 @@
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
-    <Compile Include="PatchGenerator.cs" />
+    <Compile Include="Features2D\PatchGenerator.cs" />
     <Compile Include="PInvoke\CvInvokeCalib3d.cs" />
     <Compile Include="PInvoke\CvInvokeImgproc.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
     <Compile Include="Features2D\SURFDetector.cs" />
-    <Compile Include="PlanarObjectDetector.cs" />
+    <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
     <Compile Include="SparseMatrix.cs" />
