@@ -14,13 +14,13 @@ void PlanarSubdivisionEdgeToTriangle(CvSubdiv2DEdge e, Triangle2DF* triangle)
    triangle->V2 = cvSubdiv2DEdgeDst(e)->pt;
 }
 
-bool PointInRegion(CvPoint2D32f pt, CvSubdiv2D* subdiv)
+inline bool PointInRegion(const CvPoint2D32f pt, const CvSubdiv2D* subdiv)
 {
    return 
       pt.x >= subdiv->topleft.x && pt.y >= subdiv->topleft.y && pt.x <= subdiv->bottomright.x  && pt.y <= subdiv->bottomright.y;
 }
 
-bool TriangleInRegion (Triangle2DF tri, CvSubdiv2D* subdiv)
+inline bool TriangleInRegion(const Triangle2DF tri, const CvSubdiv2D* subdiv)
 {
    return
       PointInRegion(tri.V0, subdiv)
@@ -38,7 +38,7 @@ struct ltpt
    }
 };
 
-CvPoint2D32f TriangleVertexSum(Triangle2DF* t)
+inline CvPoint2D32f TriangleVertexSum(const Triangle2DF* t)
 {
    CvPoint2D32f point;
    point.x = t->V0.x + t->V1.x + t->V2.x;
