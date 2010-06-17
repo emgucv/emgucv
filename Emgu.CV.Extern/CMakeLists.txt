@@ -42,7 +42,7 @@ add_dependencies(${the_target} opencv_core opencv_calib3d opencv_contrib opencv_
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
   IF(MSVC AND EMGUCV_ARCH MATCHES "win32") 
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimize
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
   ENDIF()
 ENDIF()
 
