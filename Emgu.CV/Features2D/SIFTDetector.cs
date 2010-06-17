@@ -159,6 +159,7 @@ namespace Emgu.CV.Features2D
       /// <returns>The image features founded on the keypoint location</returns>
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
+         if (keyPoints.Length == 0) return new ImageFeature[0];
          using (VectorOfFloat descs = new VectorOfFloat())
          {
             GCHandle handle = GCHandle.Alloc(keyPoints, GCHandleType.Pinned);
