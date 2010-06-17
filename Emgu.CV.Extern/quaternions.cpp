@@ -56,17 +56,17 @@ void quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* 
 
 void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
 {
-   double a = quaternions->w;
-   double b = quaternions->x;
-   double c = quaternions->y;
-   double d = quaternions->z;
+   double w = quaternions->w;
+   double x = quaternions->x;
+   double y = quaternions->y;
+   double z = quaternions->z;
 
    cv::Mat r = cv::cvarrToMat(rotation);
    CV_Assert(r.rows == 3 && r.cols == 3);
    cv::MatIterator_<double> rIter = r.begin<double>();
-   *rIter++ = a*a+b*b-c*c-d*d; *rIter++ = 2.0*b*c-2.0*a*d; *rIter++ = 2.0*b*d+2.0*a*c;
-   *rIter++ = 2.0*b*c+2.0*a*d; *rIter++ = a*a-b*b+c*c-d*d; *rIter++ = 2.0*c*d-2.0*a*b;
-   *rIter++ = 2.0*b*d-2.0*a*c; *rIter++ = 2.0*c*d+2.0*a*b; *rIter++ = a*a-b*b-c*c+d*d;
+   *rIter++ = w*w+x*x-y*y-z*z; *rIter++ = 2.0*(x*y-w*z); *rIter++ = 2.0*(x*z+w*y);
+   *rIter++ = 2.0*(x*y+w*z); *rIter++ = w*w-x*x+y*y-z*z; *rIter++ = 2.0*(y*z-w*x);
+   *rIter++ = 2.0*(x*z-w*y); *rIter++ = 2.0*(y*z+w*x); *rIter++ = w*w-x*x-y*y+z*z;
 }
 
 inline void quaternionsRotate(double w, double x, double y, double z, double v1, double v2, double v3, double*vr)
