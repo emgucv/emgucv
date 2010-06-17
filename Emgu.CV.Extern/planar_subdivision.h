@@ -1,7 +1,7 @@
 #pragma once
 #ifndef PLANAR_SUBDIVISION_H
 #define PLANAR_SUBDIVISION_H
-#include "core_c.h"
+#include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc_c.h"
 #include <set>
 

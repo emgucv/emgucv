@@ -1,4 +1,4 @@
-#include "core_c.h"
+#include "opencv2/core/core_c.h"
 #include "opencv2/contrib/contrib.hpp"
 
 CVAPI(cv::Octree*) CvOctreeCreate() { return new cv::Octree(); }

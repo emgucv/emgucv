@@ -2,7 +2,7 @@
 #ifndef VECTOR_OF_FLOAT_H
 #define VECTOR_OF_FLOAT_H
 
-#include <core_c.h>
+#include "opencv2/core/core_c.h"
 #include <vector>
 
 class vectorOfFloat
