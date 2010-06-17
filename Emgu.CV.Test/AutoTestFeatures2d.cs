@@ -61,8 +61,18 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
+      /*
       [Test]
       public void TestMSER()
+      {
+         MSERDetector keyPointDetector = new MSERDetector(5, 60, 14400, .25f, .2f, 200, 1.01, 0.003, 5);
+         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
+
+         TestFeature2DTracker(keyPointDetector, descriptorGenerator);
+      }*/
+
+      [Test]
+      public void TestMSERContour()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");
          MSERDetector param = new MSERDetector();

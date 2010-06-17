@@ -125,6 +125,26 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGetDiagColRow()
+      {
+         Matrix<double> m = new Matrix<double>(new double[,] { {1, 2}, {3, 4}});
+         Matrix<double> diag = m.GetDiag();
+         Assert.AreEqual(diag[0, 0], 1);
+         Assert.AreEqual(diag[1, 0], 4);
+         Assert.AreEqual(diag.Sum, m.Trace.v0);
+
+         Matrix<double> col1 = m.GetCol(1);
+         Assert.AreEqual(col1[0, 0], 2);
+         Assert.AreEqual(col1[1, 0], 4);
+         Assert.AreEqual(col1.Sum, 2 + 4);
+
+         Matrix<double> row1 = m.GetRow(1);
+         Assert.AreEqual(row1[0, 0], 3);
+         Assert.AreEqual(row1[0, 1], 4);
+         Assert.AreEqual(row1.Sum, 3 + 4);
+      }
+
+      [Test]
       public void TestXmlSerializeAndDeserialize()
       {
          using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
