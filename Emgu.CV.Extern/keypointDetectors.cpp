@@ -33,7 +33,6 @@ CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg)
    memcpy(pg, &defaultPG, sizeof(cv::PatchGenerator));
 }
 
-
 //LDetector
 CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, CvSeq* keypoints, int maxCount, bool scaleCoords)
 {
@@ -206,6 +205,21 @@ CVAPI(void) CvFASTKeyPoints( IplImage* image, CvSeq* keypoints, int threshold, b
    std::vector<cv::KeyPoint> pts;
    cv::FAST(mat, pts, threshold, nonmax_supression);
    
+   int count = pts.size();
+   if (count > 0)
+      cvSeqPushMulti(keypoints, &pts[0], count);
+}
+
+// MSER detector
+CVAPI(void) CvMSERKeyPoints(IplImage* image, IplImage* mask, CvSeq* keypoints, CvMSERParams* param)
+{
+   cv::MserFeatureDetector mser = cv::MserFeatureDetector(param->delta, param->minArea, param->maxArea, param->maxVariation, param->minDiversity, param->maxEvolution, param->areaThreshold, param->minMargin, param->edgeBlurSize);
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
+   //if (mask) maskMat = cv::cvarrToMat(mask);
+   std::vector<cv::KeyPoint> pts;
+   mser.detect(mat, pts, maskMat);
+
    int count = pts.size();
    if (count > 0)
       cvSeqPushMulti(keypoints, &pts[0], count);

@@ -1,15 +1,25 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using Emgu.CV.Structure;
 
-namespace Emgu.CV.Structure
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// Wrapped CvMSERParams structure
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MSERDetector
+   public struct MSERDetector : IKeyPointDetector
    {
+      #region PInvoke
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void CvMSERKeyPoints(
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints,
+         ref MSERDetector mser);
+      #endregion
+
       /// <summary>
       /// Create a MSER detector using the specific parameters
       /// </summary>
@@ -114,5 +124,34 @@ namespace Emgu.CV.Structure
          IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }
+
+      /// <summary>
+      /// Detect the MSER keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract MSER keypoints from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>An array of MSER key points</returns>
+      public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
+            CvMSERKeyPoints(image, mask, seq.Ptr, ref this);
+            return seq.ToArray();
+         }
+      }
+
+      #region IKeyPointDetector Members
+      /// <summary>
+      /// Detect the MSER keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract keypoints from</param>
+      /// <returns>The array of fast keypoints</returns>
+      public Emgu.CV.Structure.MKeyPoint[] DetectKeyPoints(Image<Emgu.CV.Structure.Gray, byte> image)
+      {
+         return DetectKeyPoints(image, null);
+      }
+
+      #endregion
    }
 }
