@@ -13,7 +13,14 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE (CSharpMacros)
 
-SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+#MESSAGE(STATUS "Detected library output path of '${LIBRARY_OUTPUT_PATH}'")
+IF (NOT GLOBAL_LIBRARY_OUTPUT_PATH)
+  SET(GLOBAL_LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+ENDIF()
+
+SET(LIBRARY_OUTPUT_PATH ${GLOBAL_LIBRARY_OUTPUT_PATH})
+#MESSAGE(STATUS "Changing library output path to '${LIBRARY_OUTPUT_PATH}'")
+
 SET(LIBRARY_3RDPARTY_PATH ${CMAKE_SOURCE_DIR}/lib/3rdParty)
 
 # ----------------------------------------------------------------------------
@@ -22,22 +29,22 @@ SET(LIBRARY_3RDPARTY_PATH ${CMAKE_SOURCE_DIR}/lib/3rdParty)
 FIND_PROGRAM(SVNVERSION_PATH svnversion)
 MARK_AS_ADVANCED(force SVNVERSION_PATH)
 IF(SVNVERSION_PATH)
-    MESSAGE(STATUS "Extracting Emgu CV svn version, please wait...")
-    EXECUTE_PROCESS(COMMAND ${SVNVERSION_PATH} -n ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE SVNVERSION_RESULT)
-    IF(SVNVERSION_RESULT MATCHES "exported")
-       # This is NOT a svn repository:
-       SET(EMGUCV_SVNVERSION "0")
-    ELSE()
-	STRING(REGEX REPLACE "^([0123456789]+).*" "\\1" EMGUCV_SVNVERSION "${SVNVERSION_RESULT}")
-	IF(EMGUCV_SVNVERSION MATCHES "^$")
-	  # This is NOT a svn repository:
-	  SET(EMGUCV_SVNVERSION "0")
-	ENDIF()
-    ENDIF()
-    MESSAGE(STATUS "Emgu CV SVNVERSION: ${EMGUCV_SVNVERSION}")
-ELSE()
-    # We don't have svnversion:
+  MESSAGE(STATUS "Extracting Emgu CV svn version, please wait...")
+  EXECUTE_PROCESS(COMMAND ${SVNVERSION_PATH} -n ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE SVNVERSION_RESULT)
+  IF(SVNVERSION_RESULT MATCHES "exported")
+    # This is NOT a svn repository:
     SET(EMGUCV_SVNVERSION "0")
+  ELSE()
+    STRING(REGEX REPLACE "^([0123456789]+).*" "\\1" EMGUCV_SVNVERSION "${SVNVERSION_RESULT}")
+    IF(EMGUCV_SVNVERSION MATCHES "^$")
+      # This is NOT a svn repository:
+      SET(EMGUCV_SVNVERSION "0")
+    ENDIF()
+  ENDIF()
+  MESSAGE(STATUS "Emgu CV SVNVERSION: ${EMGUCV_SVNVERSION}")
+ELSE()
+  # We don't have svnversion:
+  SET(EMGUCV_SVNVERSION "0")
 ENDIF()
 
 # ----------------------------------------------------------------------------
@@ -46,7 +53,7 @@ ENDIF()
 IF (WIN32)
   STRING(REGEX MATCH "Win64" EMGUCV_ARCH "${CMAKE_GENERATOR}" )
   IF(NOT EMGUCV_ARCH)
-	SET(EMGUCV_ARCH win32)
+    SET(EMGUCV_ARCH win32)
   ELSE(NOT EMGUCV_ARCH)
     SET(EMGUCV_ARCH win64)
   ENDIF(NOT EMGUCV_ARCH)
@@ -63,7 +70,7 @@ FIND_PROGRAM(MSBUILD_PROGRAM
   HINTS
   "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
   "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
-)
+  )
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -85,9 +92,9 @@ SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${EMGUC
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Emgu.CV.License.txt")
 
 IF (WIN32)
-SET(CPACK_PACKAGE_CLI_FOLDER bin)
+  SET(CPACK_PACKAGE_CLI_FOLDER bin)
 ELSE (WIN32)
-SET(CPACK_PACKAGE_CLI_FOLDER lib/cli/${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
+  SET(CPACK_PACKAGE_CLI_FOLDER lib/cli/${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
 ENDIF()
 
 # ----------------------------------------------------------------------------
@@ -258,70 +265,70 @@ IF (WIN32)
   # ----------------------------------------------------------------------------
   IF(EMGUCV_ARCH STREQUAL "win32")
     INSTALL(
-	FILES
-	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x86.exe"
-	  DESTINATION ./
-	  COMPONENT emgucv_binary 
-	  )
-	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
+      FILES
+      "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x86.exe"
+      DESTINATION ./
+      COMPONENT emgucv_binary 
+      )
+    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
   ELSE()
     IF(EMGUCV_ARCH STREQUAL "win64")
-	  INSTALL(
-	  FILES
-	    "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x64.exe"
-	    DESTINATION ./
-	    COMPONENT emgucv_binary 
-	    )
-	  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe'")
-	ELSE()
-	ENDIF()
+      INSTALL(
+	FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x64.exe"
+	DESTINATION ./
+	COMPONENT emgucv_binary 
+	)
+      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe'")
+    ELSE()
+    ENDIF()
   ENDIF()
   
   # ----------------------------------------------------------------------------
   #  Install Debugger Visualizer
   # ----------------------------------------------------------------------------
   SET(DEBUGER_VISUALIZER_FILES 
-	"Emgu.Util"
-	"Emgu.CV"
-	"Emgu.CV.UI"
-	"Emgu.CV.DebuggerVisualizers"
-	${OPENCV_LIBRARY_OUTPUT_NAMES})
+    "Emgu.Util"
+    "Emgu.CV"
+    "Emgu.CV.UI"
+    "Emgu.CV.DebuggerVisualizers"
+    ${OPENCV_LIBRARY_OUTPUT_NAMES})
   MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
-	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
+    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
 ClearErrors
 ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
 IfErrors installDebuggerVisualizer4${vs_version}Done
 MessageBox MB_YESNO 'Install Debugger Visualizer for ${vs_description}?' IDNO installDebuggerVisualizer4${vs_version}Done")
-	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
-		SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
-		"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+    FOREACH (file ${DEBUGER_VISUALIZER_FILES})
+      SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
-	ENDFOREACH()
-  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
-		"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+    ENDFOREACH()
+    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+      "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 installDebuggerVisualizer4${vs_version}Done:
 ")
   ENDMACRO()
   
   MACRO(UNINSTALL_DEBUGER_VISUALIZER vs_version hklm_key)
-	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND "uninstallDebuggerVisualizer4${vs_version}:
+    SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND "uninstallDebuggerVisualizer4${vs_version}:
 ClearErrors
 ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
 IfErrors uninstallDebuggerVisualizer4${vs_version}Done")
-	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
-		SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
-		"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+    FOREACH (file ${DEBUGER_VISUALIZER_FILES})
+      SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${file}.dll'")
-	ENDFOREACH()
-  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
-		"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+    ENDFOREACH()
+    SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+      "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 uninstallDebuggerVisualizer4${vs_version}Done:
 ")
   ENDMACRO()
   
   INSTALL_DEBUGER_VISUALIZER("VS2005" "Visual Studio 2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
-
+  
   INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
   
@@ -343,7 +350,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   # ----------------------------------------------------------------------------
   SET(EMGU_CV_DOCUMENTATION_BUILD OFF CACHE BOOL "Build Emgu CV Documentation")
   IF(EMGU_CV_DOCUMENTATION_BUILD)
-     ADD_SUBDIRECTORY(miscellaneous)
+    ADD_SUBDIRECTORY(miscellaneous)
   ENDIF()
   
   # ----------------------------------------------------------------------------
@@ -351,136 +358,136 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   # ----------------------------------------------------------------------------
   SET(EMGU_CV_EXTRA_BUILD OFF CACHE BOOL "Build Emgu CV Extra")
   IF(EMGU_CV_EXTRA_BUILD)
-       ADD_SUBDIRECTORY(Emgu.RPC)
+    ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
 
   
   # ----------------------------------------------------------------------------
   #  The source files
   # ----------------------------------------------------------------------------
-INSTALL(
-  FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
-  "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
-  DESTINATION ./
-  COMPONENT emgucv_source
-  )
-
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib
-  DESTINATION ./
-  COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "*.dll"
-  PATTERN "*.txt"
-  PATTERN "*.xml"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMake*" EXCLUDE
-  PATTERN "Release" EXCLUDE
-  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-)
+  INSTALL(
+    FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
+    "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
+    DESTINATION ./
+    COMPONENT emgucv_source
+    )
   
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-  DESTINATION ./
-  COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "Emgu.CV.sln"
-  PATTERN "Emgu.CV.DebuggerVisualizers.sln"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "bin" EXCLUDE
-)
-# ----------------------------------------------------------------------------
-#  The example files
-# ----------------------------------------------------------------------------
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-  DESTINATION ./
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.resx"
-  PATTERN "*.h"
-  PATTERN "*.cpp"
-  PATTERN "*.resX"
-  PATTERN "*.ico"
-  PATTERN "*.rc"
-  PATTERN "CPlusPlus/*.vcproj"
-  PATTERN "*.vb"
-  PATTERN "*.vbproj"
-  PATTERN "*.aspx" 
-  PATTERN "*.dll"
-  PATTERN "*.txt"
-  PATTERN "*.xml"
-  PATTERN "*.xaml"
-  PATTERN "*.jpg"
-  PATTERN "*.png"  
-  PATTERN "*.settings"
-  PATTERN "tessdata/*"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMake*" EXCLUDE
-  PATTERN "Release" EXCLUDE
-  PATTERN "Debug" EXCLUDE
-  PATTERN "*.dir" EXCLUDE
-)
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-  DESTINATION ./
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "Emgu.CV.Example.sln"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "bin" EXCLUDE
-)
-
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
-  DESTINATION ./opencv/include
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "*.h"
-  PATTERN "*.hpp"
-  PATTERN ".svn" EXCLUDE
-)
-
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades
-  DESTINATION ./opencv/data
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "*.xml"
-  PATTERN ".svn" EXCLUDE
-)
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    DESTINATION ./
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "*.dll"
+    PATTERN "*.txt"
+    PATTERN "*.xml"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMake*" EXCLUDE
+    PATTERN "Release" EXCLUDE
+    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+    )
+  
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION ./
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.sln"
+    PATTERN "Emgu.CV.DebuggerVisualizers.sln"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    )
+  # ----------------------------------------------------------------------------
+  #  The example files
+  # ----------------------------------------------------------------------------
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+    DESTINATION ./
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "*.cs"
+    PATTERN "*.csproj"
+    PATTERN "*.resx"
+    PATTERN "*.h"
+    PATTERN "*.cpp"
+    PATTERN "*.resX"
+    PATTERN "*.ico"
+    PATTERN "*.rc"
+    PATTERN "CPlusPlus/*.vcproj"
+    PATTERN "*.vb"
+    PATTERN "*.vbproj"
+    PATTERN "*.aspx" 
+    PATTERN "*.dll"
+    PATTERN "*.txt"
+    PATTERN "*.xml"
+    PATTERN "*.xaml"
+    PATTERN "*.jpg"
+    PATTERN "*.png"  
+    PATTERN "*.settings"
+    PATTERN "tessdata/*"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMake*" EXCLUDE
+    PATTERN "Release" EXCLUDE
+    PATTERN "Debug" EXCLUDE
+    PATTERN "*.dir" EXCLUDE
+    )
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION ./
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Example.sln"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    )
+  
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
+    DESTINATION ./opencv/include
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+    PATTERN ".svn" EXCLUDE
+    )
+  
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades
+    DESTINATION ./opencv/data
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "*.xml"
+    PATTERN ".svn" EXCLUDE
+    )
 
 # ----------------------------------------------------------------------------
 #  Build the package
 # ----------------------------------------------------------------------------
 
 set(CPACK_COMPONENTS_ALL 
-	main #opencv components 
-	emgucv_binary 
-	emgucv_source
-	emgucv_example_source
-	)
+  main #opencv components 
+  emgucv_binary 
+  emgucv_source
+  emgucv_example_source
+  )
 
 set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=7828
 set(CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
 
 IF(EMGU_CV_DOCUMENTATION_BUILD)
-set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
-set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS} "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+  set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
+  set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS} "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
 ENDIF()
-	
+
 set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Library")
 set(CPACK_COMPONENT_MAIN_REQUIRED ON)
 set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV (Binary)")
@@ -494,7 +501,7 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 ELSE (WIN32)
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-
+  
   FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
     "/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.Util.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.ML.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.UI.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/ZedGraph.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/zlib.net.dll")
   INSTALL(
