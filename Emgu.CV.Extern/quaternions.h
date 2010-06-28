@@ -41,4 +41,7 @@ CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaterni
 /* renormalize the quaternions */ 
 CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
 
+/* interpolate the quaternions */ 
+CVAPI(void) quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm);
+
 #endif
