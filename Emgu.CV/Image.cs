@@ -4059,7 +4059,7 @@ namespace Emgu.CV
             0;
       }
 
-      ///<summary> Return a filpped copy of the current image</summary>
+      ///<summary> Return a flipped copy of the current image</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
       public Image<TColor, TDepth> Flip(CvEnum.FLIP flipType)
