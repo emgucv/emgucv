@@ -176,7 +176,7 @@ namespace Emgu.CV
       public static extern int cvGetErrMode();
 
       /// <summary>
-      /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occured, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
+      /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
       /// </summary>
       /// <returns>the current error status</returns>
       [DllImport(OPENCV_CORE_LIBRARY)]
@@ -1409,7 +1409,7 @@ namespace Emgu.CV
          double value);
 
       /// <summary>
-      /// clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
+      /// Clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
       /// </summary>
       /// <param name="arr">Input array</param>
       /// <param name="idx">Array of the element indices </param>
@@ -2261,7 +2261,7 @@ namespace Emgu.CV
       /// <summary>
       /// Decomposes matrix A into a product of a diagonal matrix and two orthogonal matrices:
       /// A=U*W*VT
-      /// Where W is diagonal matrix of singular values that can be coded as a 1D vector of singular values and U and V. All the singular values are non-negative and sorted (together with U and and V columns) in descenting order.
+      /// Where W is diagonal matrix of singular values that can be coded as a 1D vector of singular values and U and V. All the singular values are non-negative and sorted (together with U and V columns) in descenting order.
       /// </summary>
       /// <remarks>
       /// SVD algorithm is numerically robust and its typical applications include: 

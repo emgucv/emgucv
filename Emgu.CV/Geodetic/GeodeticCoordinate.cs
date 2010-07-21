@@ -94,7 +94,7 @@ namespace Emgu.CV.Geodetic
       /// Compute <paramref name="coor1"/> - <paramref name="coor2"/>
       /// </summary>
       /// <param name="coor1">The first coordinate</param>
-      /// <param name="coor2">The coordinate to be substracted</param>
+      /// <param name="coor2">The coordinate to be subtracted</param>
       /// <returns><paramref name="coor1"/> - <paramref name="coor2"/></returns>
       public static GeodeticCoordinate operator -(GeodeticCoordinate coor1, GeodeticCoordinate coor2)
       {

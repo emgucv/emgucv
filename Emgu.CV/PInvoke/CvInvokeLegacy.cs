@@ -31,16 +31,16 @@ namespace Emgu.CV
       /// </param>
       [DllImport(OPENCV_LEGACY_LIBRARY)]
       public static extern void cvSnakeImage(
-          IntPtr image,
-          IntPtr points,
-          int length,
-          [MarshalAs(UnmanagedType.LPArray)] float[] alpha,
-          [MarshalAs(UnmanagedType.LPArray)] float[] beta,
-          [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
-          int coeffUsage,
-          Size win,
-          MCvTermCriteria criteria,
-          int calcGradient);
+         IntPtr image,
+         IntPtr points,
+         int length,
+         [MarshalAs(UnmanagedType.LPArray)] float[] alpha,
+         [MarshalAs(UnmanagedType.LPArray)] float[] beta,
+         [MarshalAs(UnmanagedType.LPArray)] float[] gamma,
+         int coeffUsage,
+         Size win,
+         MCvTermCriteria criteria,
+         int calcGradient);
 
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
@@ -95,16 +95,16 @@ namespace Emgu.CV
       /// otherwise the input image itself is considered
       /// </param>
       public static void cvSnakeImage(
-           IntPtr image,
-           IntPtr points,
-           int length,
-           float[] alpha,
-           float[] beta,
-           float[] gamma,
-           int coeffUsage,
-           Size win,
-           MCvTermCriteria criteria,
-           bool calcGradient)
+         IntPtr image,
+         IntPtr points,
+         int length,
+         float[] alpha,
+         float[] beta,
+         float[] gamma,
+         int coeffUsage,
+         Size win,
+         MCvTermCriteria criteria,
+         bool calcGradient)
       {
          cvSnakeImage(
             image,
@@ -129,9 +129,9 @@ namespace Emgu.CV
       /// <param name="avg">Averaged object (Pointer to IplImage)</param>
       /// <returns>Calculated coefficients; an output parameter</returns>
       public static float[] cvEigenDecomposite(
-          IntPtr obj,
-          IntPtr[] eigInput,
-          IntPtr avg)
+         IntPtr obj,
+         IntPtr[] eigInput,
+         IntPtr avg)
       {
          float[] coeffs = new float[eigInput.Length];
          cvEigenDecomposite(

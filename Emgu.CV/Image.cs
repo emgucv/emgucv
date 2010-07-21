@@ -42,7 +42,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create image from the specific multi-dimensional data, where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel
       /// </summary>
-      /// <param name="data">The multi-dimensional data where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel </param>
+      /// <param name="data">The multi-dimensional data where the 1st dimension is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel </param>
       public Image(TDepth[, ,] data)
       {
          Data = data;
@@ -53,7 +53,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="width">The width of the image</param>
       /// <param name="height">The height of the image</param>
-      /// <param name="stride">size of aligned image row in bytes</param>
+      /// <param name="stride">Size of aligned image row in bytes</param>
       /// <param name="scan0">Pointer to aligned image data, <b>where each row should be 4-align</b> </param>
       /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Image is released. </remarks>
       public Image(int width, int height, int stride, IntPtr scan0)
@@ -290,7 +290,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// A function used for runtime serilization of the object
+      /// A function used for runtime serialization of the object
       /// </summary>
       /// <param name="info">Serialization info</param>
       /// <param name="context">streaming context</param>
@@ -838,7 +838,7 @@ namespace Emgu.CV
       #region Object Detection
       #region Haar detection
       /// <summary>
-      /// Detect HaarCascade object in the current image, using predifined parameters
+      /// Detect HaarCascade object in the current image, using predefined parameters
       /// </summary>
       /// <param name="haarObj">The object to be detected</param>
       /// <returns>The objects detected, one array per channel</returns>
@@ -1973,11 +1973,11 @@ namespace Emgu.CV
       */
       #region Segmentation
       /// <summary>
-      /// Use grabcut to perform background forground segmentation.
+      /// Use grabcut to perform background foreground segmentation.
       /// </summary>
-      /// <param name="rect">The initial rectangle region for the forground</param>
+      /// <param name="rect">The initial rectangle region for the foreground</param>
       /// <param name="iteration">The number of iterations to run GrabCut</param>
-      /// <returns>The background forground mask where 2 indicates background and 3 indicates forground</returns>
+      /// <returns>The background foreground mask where 2 indicates background and 3 indicates foreground</returns>
       public Image<Gray, Byte> GrabCut(Rectangle rect, int iteration)
       {
          Image<Gray, Byte> mask = new Image<Gray, byte>(Size);
@@ -1992,9 +1992,9 @@ namespace Emgu.CV
       #endregion
 
       #region Arithmatic
-      #region Substraction methods
+      #region Subtraction methods
       ///<summary> Elementwise subtract another image from the current image </summary>
-      ///<param name="img2">The second image to be subtraced from the current image</param>
+      ///<param name="img2">The second image to be subtracted from the current image</param>
       ///<returns> The result of elementwise subtracting img2 from the current image</returns>
       public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2)
       {
@@ -2003,8 +2003,8 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Elementwise subtrace another image from the current image, using a mask</summary>
-      ///<param name="img2">The image to be subtraced from the current image</param>
+      ///<summary> Elementwise subtract another image from the current image, using a mask</summary>
+      ///<param name="img2">The image to be subtracted from the current image</param>
       ///<param name="mask">The mask for the subtract operation</param>
       ///<returns> The result of elementwise subtrating img2 from the current image, using the specific mask</returns>
       public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
@@ -2014,8 +2014,8 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Elementwise subtrace a color from the current image</summary>
-      ///<param name="val">The color value to be subtraced from the current image</param>
+      ///<summary> Elementwise subtract a color from the current image</summary>
+      ///<param name="val">The color value to be subtracted from the current image</param>
       ///<returns> The result of elementwise subtracting color 'val' from the current image</returns>
       [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> Sub(TColor val)
@@ -2042,7 +2042,7 @@ namespace Emgu.CV
       /// result = val - this, using a mask
       /// </summary>
       /// <param name="val">the value which subtract this image</param>
-      /// <param name="mask"> The mask for substraction</param>
+      /// <param name="mask"> The mask for subtraction</param>
       /// <returns>val - this, with mask</returns>
       public Image<TColor, TDepth> SubR(TColor val, Image<Gray, Byte> mask)
       {
@@ -2981,7 +2981,7 @@ namespace Emgu.CV
       #endregion
 
       #region Special Image Transforms
-      ///<summary> Use impaint to recover the intensity of the pixels which location defined by <paramref>mask</paramref> on <i>this</i> image </summary>
+      ///<summary> Use inpaint to recover the intensity of the pixels which location defined by <paramref>mask</paramref> on <i>this</i> image </summary>
       ///<param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
       ///<param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
       ///<returns> The inpainted image </returns>
@@ -3052,7 +3052,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Erodes <i>this</i> image using a 3x3 rectangular structuring element.
-      /// Erosion are applied serveral (iterations) times
+      /// Erosion are applied several (iterations) times
       /// </summary>
       /// <param name="iterations">The number of erode iterations</param>
       /// <returns> The eroded image</returns>
@@ -3065,7 +3065,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Dilates <i>this</i> image using a 3x3 rectangular structuring element.
-      /// Dilation are applied serveral (iterations) times
+      /// Dilation are applied several (iterations) times
       /// </summary>
       /// <param name="iterations">The number of dilate iterations</param>
       /// <returns> The dialated image</returns>
@@ -3078,7 +3078,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Erodes <i>this</i> image inplace using a 3x3 rectangular structuring element.
-      /// Erosion are applied serveral (iterations) times
+      /// Erosion are applied several (iterations) times
       /// </summary>
       /// <param name="iterations">The number of erode iterations</param>
       [ExposableMethod(Exposable = true, Category = "Morphology")]
@@ -3089,7 +3089,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Dilates <i>this</i> image inplace using a 3x3 rectangular structuring element.
-      /// Dilation are applied serveral (iterations) times
+      /// Dilation are applied several (iterations) times
       /// </summary>
       /// <param name="iterations">The number of dilate iterations</param>
       [ExposableMethod(Exposable = true, Category = "Morphology")]
@@ -3580,8 +3580,8 @@ namespace Emgu.CV
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="image1">The image to be substracted</param>
-      /// <param name="image2">The second image to be subtraced from <paramref name="image1"/></param>
+      /// <param name="image1">The image to be subtracted</param>
+      /// <param name="image2">The second image to be subtracted from <paramref name="image1"/></param>
       /// <returns> The result of elementwise subtracting img2 from <paramref name="image1"/> </returns>
       public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image1, Image<TColor, TDepth> image2)
       {
@@ -3591,7 +3591,7 @@ namespace Emgu.CV
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="image">The image to be substracted</param>
+      /// <param name="image">The image to be subtracted</param>
       /// <param name="value">The color to be subtracted</param>
       /// <returns> The result of elementwise subtracting <paramred name="val"/> from <paramref name="image"/> </returns>
       public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, TColor value)
@@ -3602,7 +3602,7 @@ namespace Emgu.CV
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="image">The image to be substracted</param>
+      /// <param name="image">The image to be subtracted</param>
       /// <param name="value">The color to be subtracted</param>
       /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
       public static Image<TColor, TDepth> operator -(TColor value, Image<TColor, TDepth> image)
@@ -3613,7 +3613,7 @@ namespace Emgu.CV
       /// <summary>
       /// <paramred name="val"/> - <paramref name="image"/>
       /// </summary>
-      /// <param name="image">The image to be substracted</param>
+      /// <param name="image">The image to be subtracted</param>
       /// <param name="value">The value to be subtracted</param>
       /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
       public static Image<TColor, TDepth> operator -(double value, Image<TColor, TDepth> image)
@@ -3626,7 +3626,7 @@ namespace Emgu.CV
       /// <summary>
       /// Elementwise subtract another image from the current image
       /// </summary>
-      /// <param name="image">The image to be substracted</param>
+      /// <param name="image">The image to be subtracted</param>
       /// <param name="value">The value to be subtracted</param>
       /// <returns> <paramref name="image"/> - <paramred name="val"/>   </returns>
       public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, double value)
@@ -4126,7 +4126,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Calculates spatial and central moments up to the third order and writes them to moments. The moments may be used then to calculate gravity center of the shape, its area, main axises and various shape characeteristics including 7 Hu invariants.
+      /// Calculates spatial and central moments up to the third order and writes them to moments. The moments may be used then to calculate gravity center of the shape, its area, main axises and various shape characteristics including 7 Hu invariants.
       /// </summary>
       /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1's</param>
       /// <returns>spatial and central moments up to the third order</returns>
@@ -4138,7 +4138,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Gamma correct this image inplace. The image must have a depth type of Byte.
+      /// Gamma corrects this image inplace. The image must have a depth type of Byte.
       /// </summary>
       /// <param name="gamma">The gamma value</param>
       [ExposableMethod(Exposable = true)]

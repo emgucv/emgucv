@@ -12,7 +12,7 @@ namespace Emgu.CV
    /// </remarks>
    public class MotionHistory : DisposableObject
    {
-      private Image<Gray, Byte> _forgroundMask;
+      private Image<Gray, Byte> _foregroundMask;
       private double _mhiDuration;
       private Image<Gray, Single> _mhi;
       private Image<Gray, Byte> _mask;
@@ -88,19 +88,19 @@ namespace Emgu.CV
       /// <summary>
       /// Update the motion history with the specific image and the specific timestamp
       /// </summary>
-      /// <param name="forgroundMask">The forground of the image to be added to history</param>
+      /// <param name="foregroundMask">The foreground of the image to be added to history</param>
       /// <param name="timestamp">The time when the image is captured</param>
-      public void Update(Image<Gray, Byte> forgroundMask, DateTime timestamp)
+      public void Update(Image<Gray, Byte> foregroundMask, DateTime timestamp)
       {
          _lastTime = timestamp;
          TimeSpan ts = _lastTime.Subtract(_initTime);
 
-         _forgroundMask = forgroundMask;
-         if (_mhi == null) _mhi = new Image<Gray, float>(forgroundMask.Size);
-         if (_mask == null) _mask = forgroundMask.CopyBlank();
-         if (_orientation == null) _orientation = new Image<Gray, float>(forgroundMask.Size);
+         _foregroundMask = foregroundMask;
+         if (_mhi == null) _mhi = new Image<Gray, float>(foregroundMask.Size);
+         if (_mask == null) _mask = foregroundMask.CopyBlank();
+         if (_orientation == null) _orientation = new Image<Gray, float>(foregroundMask.Size);
 
-         CvInvoke.cvUpdateMotionHistory(forgroundMask.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
+         CvInvoke.cvUpdateMotionHistory(foregroundMask.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
          double scale = 255.0 / _mhiDuration;
          CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
 
@@ -131,7 +131,7 @@ namespace Emgu.CV
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
          // select component ROI
-         CvInvoke.cvSetImageROI(_forgroundMask, motionRectangle);
+         CvInvoke.cvSetImageROI(_foregroundMask, motionRectangle);
          CvInvoke.cvSetImageROI(_mhi, motionRectangle);
          CvInvoke.cvSetImageROI(_orientation, motionRectangle);
          CvInvoke.cvSetImageROI(_mask, motionRectangle);
@@ -141,13 +141,13 @@ namespace Emgu.CV
          angle = 360.0 - angle; // adjust for images with top-left origin
 
          // caculate number of points within silhoute ROI
-         motionPixelCount = CvInvoke.cvNorm(_forgroundMask.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
+         motionPixelCount = CvInvoke.cvNorm(_foregroundMask.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
 
          // reset the ROI
          CvInvoke.cvResetImageROI(_mhi);
          CvInvoke.cvResetImageROI(_orientation);
          CvInvoke.cvResetImageROI(_mask);
-         CvInvoke.cvResetImageROI(_forgroundMask);
+         CvInvoke.cvResetImageROI(_foregroundMask);
       }
 
       /// <summary>

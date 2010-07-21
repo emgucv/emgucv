@@ -283,7 +283,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// A function used for runtime serilization of the object
+      /// A function used for runtime serialization of the object
       /// </summary>
       /// <param name="info">Serialization info</param>
       /// <param name="context">streaming context</param>

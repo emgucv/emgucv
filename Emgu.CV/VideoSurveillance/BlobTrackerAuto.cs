@@ -49,23 +49,23 @@ namespace Emgu.CV.VideoSurveillance
       /// Process a frame
       /// </summary>
       /// <param name="currentFrame">The frame to be processed</param>
-      /// <param name="forgroundMask">the forground mask to be used</param>
-      public void Process(Image<TColor, Byte> currentFrame, Image<Gray, Byte> forgroundMask)
+      /// <param name="foregroundMask">the foreground mask to be used</param>
+      public void Process(Image<TColor, Byte> currentFrame, Image<Gray, Byte> foregroundMask)
       {
-         CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, forgroundMask == null ? IntPtr.Zero : forgroundMask.Ptr);
+         CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, foregroundMask == null ? IntPtr.Zero : foregroundMask.Ptr);
       }
 
       /// <summary>
-      /// Get the forground mask
+      /// Get the foreground mask
       /// </summary>
-      /// <returns>The forground mask</returns>
+      /// <returns>The foreground mask</returns>
       public Image<Gray, Byte> ForgroundMask
       {
          get
          {
-            IntPtr forground = CvInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
-            if (forground == IntPtr.Zero) return null;
-            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(forground, typeof(MIplImage));
+            IntPtr foreground = CvInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
+            if (foreground == IntPtr.Zero) return null;
+            MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(foreground, typeof(MIplImage));
             return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
          }
       }

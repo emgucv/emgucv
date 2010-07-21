@@ -62,15 +62,15 @@ namespace Emgu.CV
       /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
       /// </summary>
       /// <param name="point">The point to be tested</param>
-      /// <returns>positive if inside; negative if out side; 0 if on the contour</returns>
-      /// <remarks>requires MCvContour.rect to be pre-computed</remarks>
+      /// <returns>Positive if inside; negative if out side; 0 if on the contour</returns>
+      /// <remarks>Requires MCvContour.rect to be pre-computed</remarks>
       public override double InContour(PointF point)
       {
          Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
          return base.InContour(point);
       }
 
-      ///<summary> Get the smallest bouding rectangle </summary>
+      ///<summary>Get the smallest bouding rectangle </summary>
       ///<remarks>Requires MCvContour.rect to be pre-computed</remarks>
       public override Rectangle BoundingRectangle
       {

@@ -50,10 +50,10 @@ namespace Emgu.CV
       /// Sets the specified property of video capturing
       /// </summary>
       /// <param name="capture">Video capturing structure</param>
-      /// <param name="property_id">Property identifier</param>
+      /// <param name="propertyId">Property identifier</param>
       /// <param name="value">Value of the property</param>
       [DllImport(OPENCV_HIGHGUI_LIBRARY)]
-      public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP property_id, double value);
+      public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP propertyId, double value);
 
       /// <summary>
       /// Loads an image from the specified file and returns the pointer to the loaded image. Currently the following file formats are supported: 

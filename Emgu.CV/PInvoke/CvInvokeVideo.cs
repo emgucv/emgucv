@@ -11,7 +11,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       /// <summary>
-      /// Implements CAMSHIFT object tracking algrorithm ([Bradski98]). First, it finds an object center using cvMeanShift and, after that, calculates the object size and orientation. 
+      /// Implements CAMSHIFT object tracking algorithm ([Bradski98]). First, it finds an object center using cvMeanShift and, after that, calculates the object size and orientation. 
       /// </summary>
       /// <param name="probImage">Back projection of object histogram </param>
       /// <param name="window">Initial search window</param>
@@ -256,7 +256,7 @@ namespace Emgu.CV
                   double duration);
       #endregion
 
-      #region background / forground  statistic
+      #region background / foreground  statistic
       /// <summary>
       /// Create a Gaussian background model
       /// </summary>
@@ -274,11 +274,11 @@ namespace Emgu.CV
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
 
       /// <summary>
-      /// Create a forground model
+      /// Create a foreground model
       /// </summary>
       /// <param name="firstFrame">The first frame</param>
-      /// <param name="parameters">The forground statistic parameters</param>
-      /// <returns>Pointer to the forground model</returns>
+      /// <param name="parameters">The foreground statistic parameters</param>
+      /// <returns>Pointer to the foreground model</returns>
       [DllImport(OPENCV_VIDEO_LIBRARY)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
 
@@ -318,7 +318,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="model">Pointer to the BGCodeBookModel</param>
       /// <param name="image">The image to find diff</param>
-      /// <param name="fgmask">The returned forground mask</param>
+      /// <param name="fgmask">The returned foreground mask</param>
       /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
       [DllImport(OPENCV_VIDEO_LIBRARY)]

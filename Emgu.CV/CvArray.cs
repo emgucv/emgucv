@@ -575,7 +575,7 @@ namespace Emgu.CV
 
       #region ISerializable Members
       /// <summary>
-      /// A function used for runtime serilization of the object
+      /// A function used for runtime serialization of the object
       /// </summary>
       /// <param name="info">Serialization info</param>
       /// <param name="context">Streaming context</param>

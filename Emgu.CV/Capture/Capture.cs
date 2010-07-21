@@ -224,7 +224,7 @@ namespace Emgu.CV
 
       ///<summary> 
       /// Capture a Bgr image frame that is half width and half height. 
-      /// Mainly used by WCF when sending image to remote locations in a band width conservertive senario
+      /// Mainly used by WCF when sending image to remote locations in a bandwidth conservative scenario 
       ///</summary>
       ///<remarks>Internally, this is a cvQueryFrame operation follow by a cvPyrDown</remarks>
       ///<returns> A Bgr image frame that is half width and half height</returns>

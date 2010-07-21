@@ -43,15 +43,15 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blob">Structure with blob parameters (ID is ignored)</param>
       /// <param name="currentImage">current image</param>
-      /// <param name="currentForgroundMask">Current foreground mask</param>
+      /// <param name="currentForegroundMask">Current foreground mask</param>
       /// <returns>Newly added blob</returns>
-      public MCvBlob Add(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForgroundMask)
+      public MCvBlob Add(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForegroundMask)
       {
          IntPtr bobPtr = CvInvoke.CvBlobTrackerAddBlob(
             _ptr, 
             ref blob, 
             currentImage == null ? IntPtr.Zero : currentImage.Ptr, 
-            currentForgroundMask);
+            currentForegroundMask);
          return (MCvBlob)Marshal.PtrToStructure(bobPtr, typeof(MCvBlob));
       }
 

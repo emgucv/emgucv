@@ -9,45 +9,45 @@ namespace Emgu.CV
 {
    public partial class CvInvoke
    {
-      #region Forground detector
+      #region Foreground detector
       /// <summary>
-      /// Create a simple forground detector
+      /// Create a simple foreground detector
       /// </summary>
       /// <param name="type">The type of the detector</param>
       /// <param name="param">Pointer to the parameters of the detector</param>
-      /// <returns>Pointer the to forground detector</returns>
+      /// <returns>Pointer the to foreground detector</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, IntPtr param);
 
       /// <summary>
-      /// Get the forground mask from the forground detector
+      /// Get the foreground mask from the foreground detector
       /// </summary>
-      /// <param name="detector">The forground detector</param>
-      /// <returns>The forground mask</returns>
+      /// <param name="detector">The foreground detector</param>
+      /// <returns>The foreground mask</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvFGDetectorGetMask(IntPtr detector);
 
       /// <summary>
       /// Update the FGDetector with new image
       /// </summary>
-      /// <param name="detector">The forground detector</param>
+      /// <param name="detector">The foreground detector</param>
       /// <param name="image">The image which will be used to update the FGDetector</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvFGDetectorProcess(IntPtr detector, IntPtr image);
 
       /// <summary>
-      /// Create a simple forground detector
+      /// Create a simple foreground detector
       /// </summary>
       /// <param name="type">The type of the detector</param>
       /// <param name="param">The parameters of the detector</param>
-      /// <returns>Pointer the to forground detector</returns>
+      /// <returns>Pointer the to foreground detector</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, ref MCvFGDStatModelParams param);
 
       /// <summary>
-      /// Release the forground detector
+      /// Release the foreground detector
       /// </summary>
-      /// <param name="detector">The forground detector to be released</param>
+      /// <param name="detector">The foreground detector to be released</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvFGDetectorRelease(IntPtr detector);
       #endregion
@@ -108,7 +108,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="detector">The blob detector</param>
       /// <param name="img">The image</param>
-      /// <param name="imgFG">The forground mask</param>
+      /// <param name="imgFG">The foreground mask</param>
       /// <param name="newBlobList">The new blob list</param>
       /// <param name="oldBlobList">The old blob list</param>
       [DllImport(EXTERN_LIBRARY)]
@@ -221,10 +221,10 @@ namespace Emgu.CV
       /// <param name="tracker">The tracker</param>
       /// <param name="blob">pointer to structure with blob parameters (ID is ignored)</param>
       /// <param name="currentImage">current image</param>
-      /// <param name="currentForgroundMask">current foreground mask</param>
+      /// <param name="currentForegroundMask">current foreground mask</param>
       /// <returns>Pointer to new added blob</returns>
       [DllImport(EXTERN_LIBRARY)]
-      public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForgroundMask);
+      public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForegroundMask);
 
       #endregion
 
@@ -303,15 +303,15 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="pImg">The frame to process</param>
-      /// <param name="pMask">The forground mask, can be IntPtr.Zero if not needed</param>
+      /// <param name="pMask">The foreground mask, can be IntPtr.Zero if not needed</param>
       [DllImport(EXTERN_LIBRARY)]
       public extern static void CvBlobTrackerAutoProcess(IntPtr tracker, IntPtr pImg, IntPtr pMask);
 
       /// <summary>
-      /// Get the forground mask
+      /// Get the foreground mask
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
-      /// <returns>Pointer to the forground mask</returns>
+      /// <returns>Pointer to the foreground mask</returns>
       [DllImport(EXTERN_LIBRARY)]
       public extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
       #endregion
@@ -338,7 +338,7 @@ namespace Emgu.CV
       /// <param name="mask">The mask to initialize segmentation</param>
       /// <param name="rect">The rectangle to initialize the segmentation</param>
       /// <param name="bgdModel">The background model</param>
-      /// <param name="fgdModel">The forground model</param>
+      /// <param name="fgdModel">The foreground model</param>
       /// <param name="iterCount">The number of iternations</param>
       /// <param name="type">The initilization type</param>
       [DllImport(EXTERN_LIBRARY)]

@@ -24,7 +24,7 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
-      /// Create a forground statistic model using the given parameters
+      /// Create a foreground statistic model using the given parameters
       /// </summary>
       /// <param name="image">The image used for initiating the statistic model</param>
       /// <param name="parameters">FGDStatModel</param>
@@ -53,7 +53,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image"></param>
       /// <param name="learningRate">Use -1 for default</param>
-      /// <returns>The number of found forground regions</returns>
+      /// <returns>The number of found foreground regions</returns>
       public virtual int Update(Image<TColor, Byte> image, double learningRate)
       {
          if (updateFunction == null)
@@ -97,7 +97,7 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
-      /// Get a copy of the mask for the current forground
+      /// Get a copy of the mask for the current foreground
       /// </summary>
       public Image<Gray, Byte> ForgroundMask
       {

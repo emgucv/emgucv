@@ -14,7 +14,7 @@ namespace Emgu.CV.VideoSurveillance
    public class BGCodeBookModel<TColor> : UnmanagedObject, IBGFGDetector<TColor>
       where TColor : struct, IColor
    {
-      private Image<Gray, Byte> _forgroundMask;
+      private Image<Gray, Byte> _foregroundMask;
       private Image<Gray, Byte> _backgroundMask;
 
       /// <summary>
@@ -34,8 +34,8 @@ namespace Emgu.CV.VideoSurveillance
       public void Update(Image<TColor, Byte> image, Rectangle roi, Image<Gray, Byte> mask)
       {
          CvInvoke.cvBGCodeBookUpdate(_ptr, image.Ptr, roi, mask);
-         if (_forgroundMask == null) _forgroundMask = new Image<Gray, byte>(image.Size);
-         CvInvoke.cvBGCodeBookDiff(_ptr, image, _forgroundMask, roi);
+         if (_foregroundMask == null) _foregroundMask = new Image<Gray, byte>(image.Size);
+         CvInvoke.cvBGCodeBookDiff(_ptr, image, _foregroundMask, roi);
       }
 
       /// <summary>
@@ -48,13 +48,13 @@ namespace Emgu.CV.VideoSurveillance
       }
 
       /// <summary>
-      /// Get the forground mask. Do not dispose this image.
+      /// Get the foreground mask. Do not dispose this image.
       /// </summary>
       public Image<Gray, Byte> ForgroundMask
       {
          get
          {
-            return _forgroundMask;
+            return _foregroundMask;
          }
       }
 
@@ -65,9 +65,9 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            if (_forgroundMask == null) return null;
-            if (_backgroundMask == null) _backgroundMask = new Image<Gray, byte>(_forgroundMask.Size);
-            CvInvoke.cvNot(_forgroundMask, _backgroundMask);
+            if (_foregroundMask == null) return null;
+            if (_backgroundMask == null) _backgroundMask = new Image<Gray, byte>(_foregroundMask.Size);
+            CvInvoke.cvNot(_foregroundMask, _backgroundMask);
             return _backgroundMask;
          }
       }
@@ -97,7 +97,7 @@ namespace Emgu.CV.VideoSurveillance
       protected override void ReleaseManagedResources()
       {
          if (_backgroundMask != null) _backgroundMask.Dispose();
-         if (_forgroundMask != null) _forgroundMask.Dispose();
+         if (_foregroundMask != null) _foregroundMask.Dispose();
       }
 
       /// <summary>

@@ -5,7 +5,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
-   /// The interface for a Background / Forground Detector
+   /// The interface for a background foreground Detector
    /// </summary>
    /// <typeparam name="TColor">The type of color image to be analyzed</typeparam>
    public interface IBGFGDetector<TColor> 

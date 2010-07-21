@@ -99,7 +99,7 @@ namespace Emgu.CV
       /// <summary>
       /// Return the default people detector
       /// </summary>
-      /// <returns>the default people detector</returns>
+      /// <returns>The default people detector</returns>
       public static float[] GetDefaultPeopleDetector()
       {
          using (MemStorage stor = new MemStorage())

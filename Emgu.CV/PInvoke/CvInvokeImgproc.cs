@@ -374,18 +374,18 @@ namespace Emgu.CV
       /// <summary>
       /// Creates new subdivision
       /// </summary>
-      /// <param name="subdiv_type"></param>
-      /// <param name="header_size"></param>
-      /// <param name="vtx_size"></param>
-      /// <param name="quadedge_size"></param>
+      /// <param name="subdivType"></param>
+      /// <param name="headerSize"></param>
+      /// <param name="vtxSize"></param>
+      /// <param name="quadedgeSize"></param>
       /// <param name="storage"></param>
       /// <returns></returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY)]
       public static extern IntPtr cvCreateSubdiv2D(
-          int subdiv_type,
-          int header_size,
-          int vtx_size,
-          int quadedge_size,
+          int subdivType,
+          int headerSize,
+          int vtxSize,
+          int quadedgeSize,
           IntPtr storage);
 
       /// <summary>
@@ -514,7 +514,7 @@ namespace Emgu.CV
          int emax);
 
       /// <summary>
-      /// Performs orthogonal range seaching on the given kd-tree. That is, it returns the set of vectors v in tr that satisfy bounds_min[i] &lt;= v[i] &lt;= bounds_max[i], 0 &lt;= i &lt; d, where d is the dimension of vectors in the tree. The function returns the number of such vectors found
+      /// Performs orthogonal range searching on the given kd-tree. That is, it returns the set of vectors v in tr that satisfy bounds_min[i] &lt;= v[i] &lt;= bounds_max[i], 0 &lt;= i &lt; d, where d is the dimension of vectors in the tree. The function returns the number of such vectors found
       /// </summary>
       /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
       /// <param name="boundsMin">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving minimum value for each dimension</param>
@@ -633,25 +633,25 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source image. </param>
       /// <param name="dst">Destination image. </param>
-      /// <param name="aperture_size">Aperture size </param>
+      /// <param name="apertureSize">Aperture size </param>
       [DllImport(OPENCV_IMGPROC_LIBRARY)]
-      public static extern void cvLaplace(IntPtr src, IntPtr dst, int aperture_size);
+      public static extern void cvLaplace(IntPtr src, IntPtr dst, int apertureSize);
 
       /// <summary>
-      /// Finds the edges on the input image image and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
+      /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
       /// </summary>
       /// <param name="image">Input image</param>
       /// <param name="edges">Image to store the edges found by the function</param>
       /// <param name="threshold1">The first threshold</param>
       /// <param name="threshold2">The second threshold.</param>
-      /// <param name="aperture_size">Aperture parameter for Sobel operator </param>
+      /// <param name="apertureSize">Aperture parameter for Sobel operator </param>
       [DllImport(OPENCV_IMGPROC_LIBRARY)]
       public static extern void cvCanny(
           IntPtr image,
           IntPtr edges,
           double threshold1,
           double threshold2,
-          int aperture_size);
+          int apertureSize);
 
       /// <summary>
       /// Tests whether the input contour is convex or not. The contour must be simple, i.e. without self-intersections. 
@@ -796,15 +796,15 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="curve">Sequence or array of the curve points</param>
       /// <param name="slice">Starting and ending points of the curve, by default the whole curve length is calculated</param>
-      /// <param name="is_closed">
+      /// <param name="isClosed">
       /// Indicates whether the curve is closed or not. There are 3 cases:
-      /// is_closed=0 - the curve is assumed to be unclosed. 
-      /// is_closed&gt;0 - the curve is assumed to be closed. 
-      /// is_closed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
+      /// isClosed=0 - the curve is assumed to be unclosed. 
+      /// isClosed&gt;0 - the curve is assumed to be closed. 
+      /// isClosed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
       /// </param>
       /// <returns></returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY)]
-      public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int is_closed);
+      public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int isClosed);
 
       /// <summary>
       /// Find the perimeter of the contour
@@ -1578,7 +1578,7 @@ namespace Emgu.CV
       public static extern void cvAcc(IntPtr image, IntPtr sum, IntPtr mask);
 
       /// <summary>
-      /// Adds the input image image or its selected region, raised to power 2, to the accumulator sqsum
+      /// Adds the input <paramref name="image"/> or its selected region, raised to power 2, to the accumulator sqsum
       /// </summary>
       /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently)</param>
       /// <param name="sqsum">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point</param>
@@ -1597,7 +1597,7 @@ namespace Emgu.CV
       public static extern void cvMultiplyAcc(IntPtr image1, IntPtr image2, IntPtr acc, IntPtr mask);
 
       /// <summary>
-      /// Calculates weighted sum of input image image and the accumulator acc so that acc becomes a running average of frame sequence:
+      /// Calculates weighted sum of input <paramref name="image"/> and the accumulator acc so that acc becomes a running average of frame sequence:
       /// acc(x,y)=(1-<paramref name="alpha"/>) * acc(x,y) + <paramref name="alpha"/> * image(x,y) if mask(x,y)!=0
       /// where <paramref name="alpha"/> regulates update speed (how fast accumulator forgets about previous frames). 
       /// </summary>
@@ -1613,9 +1613,9 @@ namespace Emgu.CV
       /// Calculates seven Hu invariants
       /// </summary>
       /// <param name="moments">Pointer to the moment state structure</param>
-      /// <param name="hu_moments">Pointer to Hu moments structure.</param>
+      /// <param name="huMoments">Pointer to Hu moments structure.</param>
       [DllImport(OPENCV_IMGPROC_LIBRARY)]
-      public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments hu_moments);
+      public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments huMoments);
 
       #region Kalman Filter
       /// <summary>
@@ -1928,7 +1928,7 @@ namespace Emgu.CV
       /// <summary>
       /// Computes earth mover distance and/or a lower boundary of the distance
       /// between the two weighted point configurations. One of the application
-      /// desctibed in [RubnerSept98] is multi-dimensional histogram comparison
+      /// described in [RubnerSept98] is multi-dimensional histogram comparison
       /// for image retrieval. EMD is a transportation problem that is solved
       /// using some modification of simplex algorithm, thus the complexity is
       /// exponential in the worst case, though, it is much faster in average.

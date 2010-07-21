@@ -29,8 +29,8 @@ namespace Emgu.CV
       /// <summary>
       /// Create a convolution kernel using the specific matrix and center
       /// </summary>
-      /// <param name="kernel">the values for the convolution kernel</param>
-      /// <param name="center">the center of the kernel</param>
+      /// <param name="kernel">The values for the convolution kernel</param>
+      /// <param name="center">The center of the kernel</param>
       public ConvolutionKernelF(Matrix<float> kernel, System.Drawing.Point center)
          : this(kernel.Data, center)
       {
@@ -39,7 +39,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create a convolution kernel using the specific floating point matrix
       /// </summary>
-      /// <param name="kernel">the values for the convolution kernel</param>
+      /// <param name="kernel">The values for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel)
          : this(kernel, new Point(-1, -1))
       {
@@ -48,8 +48,8 @@ namespace Emgu.CV
       /// <summary>
       /// Create a convolution kernel using the specific floating point matrix and center
       /// </summary>
-      /// <param name="kernel">the values for the convolution kernel</param>
-      /// <param name="center">the center for the convolution kernel</param>
+      /// <param name="kernel">The values for the convolution kernel</param>
+      /// <param name="center">The center for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel, System.Drawing.Point center)
       {
          int rows = kernel.GetLength(0);

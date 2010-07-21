@@ -207,7 +207,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The function cvDet returns determinant of the square matrix
+      /// Returns determinant of the square matrix
       /// </summary>
       [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
       public double Det
@@ -515,10 +515,10 @@ namespace Emgu.CV
       }
       #endregion
 
-      #region Substraction
-      ///<summary> Elementwise substract another matrix from the current matrix </summary>
-      ///<param name="mat2"> The matrix to be substracted to the current matrix</param>
-      ///<returns> The result of elementwise substracting mat2 from the current matrix</returns>
+      #region Subtraction
+      ///<summary> Elementwise subtract another matrix from the current matrix </summary>
+      ///<param name="mat2"> The matrix to be subtracted to the current matrix</param>
+      ///<returns> The result of elementwise subtracting mat2 from the current matrix</returns>
       public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
@@ -526,9 +526,9 @@ namespace Emgu.CV
          return res;
       }
 
-      ///<summary> Elementwise substract a color <paramref name="val"/> to the current matrix</summary>
-      ///<param name="val"> The value to be substracted from the current matrix</param>
-      ///<returns> The result of elementwise substracting <paramref name="val"/> from the current matrix</returns>
+      ///<summary> Elementwise subtract a color <paramref name="val"/> to the current matrix</summary>
+      ///<param name="val"> The value to be subtracted from the current matrix</param>
+      ///<returns> The result of elementwise subtracting <paramref name="val"/> from the current matrix</returns>
       public Matrix<TDepth> Sub(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();

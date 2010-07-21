@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    {
       ///<summary> A point on the line </summary>
       private Point _p1;
-      ///<value> An other point on the line </value>
+      ///<summary> An other point on the line </summary>
       private Point _p2;
 
       ///<summary> A point on the line </summary>

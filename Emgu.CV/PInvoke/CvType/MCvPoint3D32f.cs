@@ -84,11 +84,11 @@ namespace Emgu.CV.Structure
 
       #region operator overloads
       /// <summary>
-      /// Substract one point from the other
+      /// Subtract one point from the other
       /// </summary>
-      /// <param name="p1">The point to substract from</param>
-      /// <param name="p2">The value to be substracted</param>
-      /// <returns>The substraction of one point from the other</returns>
+      /// <param name="p1">The point to subtract from</param>
+      /// <param name="p2">The value to be subtracted</param>
+      /// <returns>The subtraction of one point from the other</returns>
       public static MCvPoint3D32f operator -(MCvPoint3D32f p1, MCvPoint3D32f p2)
       {
          return new MCvPoint3D32f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);

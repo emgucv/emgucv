@@ -18,7 +18,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// FGDetector module. If this field is NULL the Process FG mask is used.
       /// </summary>
-      private FGDetector<TColor> _forgroundDetector;
+      private FGDetector<TColor> _foregroundDetector;
 
       /// <summary>
       /// Selected blob detector module. If this field is NULL default blobdetector module will be created.
@@ -111,11 +111,11 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return _forgroundDetector;
+            return _foregroundDetector;
          }
          set
          {
-            _forgroundDetector = value;
+            _foregroundDetector = value;
          }
       }
 

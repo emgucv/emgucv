@@ -11,7 +11,7 @@ namespace Emgu.CV.Structure
    {
       ///<summary> A point on the line </summary>
       private MCvPoint3D32f _p1;
-      ///<value> An other point on the line </value>
+      ///<summary> An other point on the line </summary>
       private MCvPoint3D32f _p2;
 
       ///<summary> A point on the line </summary>

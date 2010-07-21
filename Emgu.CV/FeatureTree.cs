@@ -78,7 +78,7 @@ namespace Emgu.CV
       /// For each row the k neareast neighbors are not sorted. To findout the closet neighbour, look at the output matrix <paramref name="dist"/>.
       /// </param>
       /// <param name="dist">
-      /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
+      /// A m x <paramref name="k"/> Matrix of the distances to k nearest neighbors
       /// </param>
       /// <param name="k">The number of neighbors to find</param>
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
@@ -99,7 +99,7 @@ namespace Emgu.CV
       /// For each row the k neareast neighbors are not sorted. To findout the closet neighbour, look at the output matrix <paramref name="dist"/>.
       /// </param>
       /// <param name="dist">
-      /// A m x <paramref name="k"/> matrix of the distances to k nearest neighbors
+      /// A m x <paramref name="k"/> Matrix of the distances to k nearest neighbors
       /// </param>
       /// <param name="k">The number of neighbors to find</param>
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>

@@ -30,12 +30,12 @@ namespace Emgu.CV.VideoSurveillance
       /// Detect new blobs
       /// </summary>
       /// <param name="image">The image</param>
-      /// <param name="imageForground">The forground mask</param>
+      /// <param name="imageForeground">The foreground mask</param>
       /// <param name="newBlob">The new blob list</param>
       /// <param name="oldBlob">The old blob list</param>
-      public int DetectNewBlob(IImage image, Image<Gray, Byte> imageForground, BlobSeq newBlob, BlobSeq oldBlob)
+      public int DetectNewBlob(IImage image, Image<Gray, Byte> imageForeground, BlobSeq newBlob, BlobSeq oldBlob)
       {
-         return CvInvoke.CvBlobDetectorDetectNewBlob(_ptr, image.Ptr, imageForground.Ptr, newBlob.Ptr, oldBlob.Ptr);
+         return CvInvoke.CvBlobDetectorDetectNewBlob(_ptr, image.Ptr, imageForeground.Ptr, newBlob.Ptr, oldBlob.Ptr);
       }
 
       /// <summary>
