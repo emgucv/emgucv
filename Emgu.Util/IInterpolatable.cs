@@ -29,10 +29,10 @@ namespace Emgu.Util
       void Add(T i);
 
       /// <summary>
-      /// Substract the other element from the current element
+      /// Subtract the other element from the current element
       /// </summary>
-      /// <param name="i">The element to be substracted</param>
-      /// <returns>The result of substracting the other element</returns>
+      /// <param name="i">The element to be subtracted</param>
+      /// <returns>The result of subtracting the other element</returns>
       void Sub(T i);*/
 
       /// <summary>

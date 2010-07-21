@@ -52,7 +52,7 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// Release the managed resouces. This function will be called during the disposal of the current object.
+      /// Release the managed resources. This function will be called during the disposal of the current object.
       /// override ride this function if you need to call the Dispose() function on any managed IDisposable object created by the current object
       /// </summary>
       protected virtual void ReleaseManagedResources()
