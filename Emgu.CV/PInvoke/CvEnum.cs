@@ -392,6 +392,31 @@ namespace Emgu.CV.CvEnum
       ///Convert HLS color to BGR color
       ///</summary>
       CV_HLS2BGR = 60,
+      /// <summary>
+      /// Convert BayerBG pattern to BGR color using VNG
+      /// </summary>
+      CV_BayerBG2BGR_VNG = 62,
+      /// <summary>
+      /// Convert BayerGB pattern to BGR color using VNG
+      /// </summary>
+      CV_BayerGB2BGR_VNG = 63,
+      /// <summary>
+      /// Convert BayerRG pattern to BGR color using VNG
+      /// </summary>
+      CV_BayerRG2BGR_VNG = 64,
+      /// <summary>
+      /// Convert BayerGR pattern to BGR color using VNG
+      /// </summary>
+      CV_BayerGR2BGR_VNG = 65,
+      /// <summary>
+      /// Convert HSV color to BGR color
+      /// </summary>
+      CV_HSV2BGR_FULL = 70,
+      /// <summary>
+      /// Convert HLS color to BGR color
+      /// </summary>
+      CV_HLS2BGR_FULL = 72,
+
    }
 
    /// <summary>
@@ -666,7 +691,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// The bit to shift for SEQ_ELTYPE
       /// </summary>
-      public const int CV_SEQ_ELTYPE_BITS = 9;
+      public const int CV_SEQ_ELTYPE_BITS = 12;
 
       /// <summary>
       /// The mask of CV_SEQ_ELTYPE
@@ -676,7 +701,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// The bits to shift for SEQ_KIND
       /// </summary>
-      public const int CV_SEQ_KIND_BITS = 3;
+      public const int CV_SEQ_KIND_BITS = 2;
       /// <summary>
       /// The bits to shift for SEQ_FLAG
       /// </summary>
@@ -755,11 +780,11 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// sparse sequence (or set) subtypes 
       /// </summary>
-      CV_SEQ_KIND_GRAPH = (3 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      CV_SEQ_KIND_GRAPH = (1 << SeqConst.CV_SEQ_ELTYPE_BITS),
       /// <summary>
       /// sparse sequence (or set) subtypes 
       /// </summary>
-      CV_SEQ_KIND_SUBDIV2D = (4 << SeqConst.CV_SEQ_ELTYPE_BITS)
+      CV_SEQ_KIND_SUBDIV2D = (2 << SeqConst.CV_SEQ_ELTYPE_BITS)
    }
 
    /// <summary>
@@ -2085,7 +2110,7 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// Type of forground detector
+   /// Type of foreground detector
    /// </summary>
    public enum FORGROUND_DETECTOR_TYPE
    {
