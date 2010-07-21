@@ -333,7 +333,7 @@ namespace Emgu.CV.Test
 
          //MCvBlob blob = tracker[0];
          //int id = blob.ID;
-         //ImageViewer.Show(forground);
+         //ImageViewer.Show(foreground);
       }
 
       [Test]
@@ -384,6 +384,19 @@ namespace Emgu.CV.Test
          }
          #endregion
       }
+
+      /*
+      [Test]
+      public void StressMemoryTestHaar()
+      {
+         Image<Bgr, Byte> img;
+         for (int i = 0; i < 10000; i++)
+         {
+            //HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml");
+            img = new Image<Bgr, Byte>("lena.jpg");
+            //MCvAvgComp[] comps = img.DetectHaarCascade(cascade)[0];
+         }
+      }*/
 
       /*
       [Test]
@@ -1525,10 +1538,10 @@ namespace Emgu.CV.Test
          Image<Gray, byte> pedestrianMask = new Image<Gray, byte>(img.Size);
          foreach (Rectangle rect in humanRegions)
          {
-            //generate the mask where 3 indicates forground and 2 indicates background 
+            //generate the mask where 3 indicates foreground and 2 indicates background 
             using (Image<Gray, byte> mask = img.GrabCut(rect, 2))
             {
-               //get the mask of the forground
+               //get the mask of the foreground
                CvInvoke.cvCmpS(mask, 3, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
 
                pedestrianMask._Or(mask);
