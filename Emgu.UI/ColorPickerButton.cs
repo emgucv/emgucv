@@ -6,8 +6,14 @@ using System.Drawing;
 
 namespace Emgu.UI
 {
+   /// <summary>
+   /// A button for picking the color. The picked color is accesible from the BackColor property.
+   /// </summary>
    public class ColorPickerButton : Button
    {
+      /// <summary>
+      /// Create a button for picking the color
+      /// </summary>
       public ColorPickerButton()
          : base()
       {

@@ -1,8 +1,8 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{48D846E6-61A2-4B9C-83B1-DB73F977A626}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorPickerButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -83,6 +86,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ColorPickerButton.resx">
+      <DependentUpon>ColorPickerButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComboBoxSelector.resx">
       <DependentUpon>ComboBoxSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
