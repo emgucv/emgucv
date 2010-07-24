@@ -7,11 +7,11 @@ LIST(APPEND SRC_CV ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
-ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.ServiceModel.dll;System.Core.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_3RDPARTY_PATH}/zlib.net.dll")
+ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.ServiceModel.dll;System.Core.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
 
 ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources)
 
-ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll)
+#ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll)
 
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV}" ALL)
 
@@ -21,8 +21,8 @@ INSTALL(
   FILES 
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll
   ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
-  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll
-  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.license.txt
+  #${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll
+  #${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.license.txt
   ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.License.txt
   DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
   COMPONENT emgucv_binary)

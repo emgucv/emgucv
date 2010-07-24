@@ -1,7 +1,6 @@
 IF(EMGU_CV_EXAMPLE_BUILD)
 
 SET(EMGU_CV_REFERENCE 
--r:"${LIBRARY_3RDPARTY_PATH}/zlib.net.dll"
 -r:System.Xml.dll 
 -r:System.Drawing.dll 
 -r:System.Data.dll 

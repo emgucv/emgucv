@@ -43,10 +43,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\3rdParty\zlib.net.dll</HintPath>
-    </Reference>
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\usr\lib\mono\gac\System.ServiceModel\3.0.0.0__b77a5c561934e089\System.ServiceModel.dll</HintPath>
@@ -227,6 +223,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="VideoSurveillance\IBGFGDetector.cs" />
     <Compile Include="VideoWriter.cs" />
+    <Compile Include="ZlibCompression.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />

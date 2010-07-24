@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
 using Emgu.Util;
-using zlib;
+//using zlib;
 
 namespace Emgu.CV
 {
@@ -139,8 +139,12 @@ namespace Emgu.CV
             }
             else
             {
+               return ZlibCompression.Compress(data, SerializationCompressionRatio);
+        
+               /*
                using (MemoryStream ms = new MemoryStream())
                {
+
                   //using (GZipStream compressedStream = new GZipStream(ms, CompressionMode.Compress))
                   using (ZOutputStream compressedStream = new ZOutputStream(ms, SerializationCompressionRatio))
                   {
@@ -148,7 +152,7 @@ namespace Emgu.CV
                      compressedStream.Flush();
                   }
                   return ms.ToArray();
-               }
+               }*/
             }
 
          }
@@ -165,6 +169,8 @@ namespace Emgu.CV
             {
                try
                {  //try to use zlib to decompressed the data
+                  bytes = ZlibCompression.Uncompress(value, size);
+                  /*
                   using (MemoryStream ms = new MemoryStream())
                   {
                      using (ZOutputStream stream = new ZOutputStream(ms))
@@ -173,7 +179,7 @@ namespace Emgu.CV
                         stream.Flush();
                      }
                      bytes = ms.ToArray();
-                  }
+                  }*/
                }
                catch
                {  //if using zlib decompression fails, try to use .NET GZipStream to decompress
