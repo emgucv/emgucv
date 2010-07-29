@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Capture\CaptureClient.cs" />
     <Compile Include="Capture\DuplexCaptureCallback.cs" />
-    <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="Serial\ISerialService.cs" />
     <Compile Include="Serial\ISerialServiceCallback.cs" />
     <Compile Include="Speech\ISpeechService.cs" />
