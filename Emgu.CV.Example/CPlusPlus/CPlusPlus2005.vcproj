@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(ProjectDir)..\..\opencv\include\opencv"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -59,7 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv210.lib cxcore210.lib highgui210.lib"
+				AdditionalDependencies="opencv_core211.lib opencv_highgui211.lib opencv_imgproc211.lib opencv_objdetect211.lib "
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)..\..\opencv\include\opencv"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -137,9 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cv111.lib cxcore111.lib highgui111.lib"
+				AdditionalDependencies="opencv_core211.lib opencv_highgui211.lib opencv_imgproc211.lib opencv_objdetect211.lib "
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(ProjectDir)..\..\lib\release\"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				EntryPointSymbol="main"
