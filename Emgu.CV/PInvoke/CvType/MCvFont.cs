@@ -9,6 +9,15 @@ namespace Emgu.CV.Structure
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvFont
    {
+      /// <summary>
+      /// For QT
+      /// </summary>
+      public IntPtr fontName;
+      /// <summary>
+      /// For QT
+      /// </summary>
+      public MCvScalar color;
+      
       ///<summary>
       /// Font type
       ///</summary>
