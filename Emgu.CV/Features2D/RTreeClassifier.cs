@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using Emgu.Util;
-using Emgu.CV.Structure;
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.Features2D
 {
    internal class RTreeClassifierExtern
    {
@@ -21,15 +21,13 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       public static extern void CvRTreeClassifierTrain(
          IntPtr classifier,
-         IntPtr train_image,
-         IntPtr train_points,
+         IntPtr trainImage,
+         IntPtr trainPoints,
          int numberOfPoints,
          ref UInt64 rng,
-         int num_trees, int depth,
-         int views, IntPtr reduced_num_dim,
-         int num_quant_bits,
-         [MarshalAs(UnmanagedType.I1)]
-         bool print_status);
+         int numTrees, int depth,
+         int views, IntPtr reducedNumDim,
+         int numQuantBits);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       public static extern int CvRTreeClassifierGetSigniture(
@@ -90,8 +88,7 @@ namespace Emgu.CV
             depth,
             views,
             new IntPtr(reducedNumDim),
-            numQuantBits,
-            false);
+            numQuantBits);
 
          handle.Free();
       }

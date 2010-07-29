@@ -12,7 +12,7 @@ CVAPI(void) CvRTreeClassifierTrain(
 		cv::RNG* rng, 
       int num_trees, int depth,
 		int views, size_t reduced_num_dim,
-		int num_quant_bits, bool print_status)
+		int num_quant_bits)
 {
    std::vector<cv::BaseKeypoint> base_set;
    for (int i=0;i<numberOfPoints;i++)
@@ -20,7 +20,7 @@ CVAPI(void) CvRTreeClassifierTrain(
       base_set.push_back(cv::BaseKeypoint(train_points[i].x,train_points[i].y,const_cast<IplImage*>(train_image)));
 	}
 
-   classifier->train(base_set, *rng, num_trees, depth, views, reduced_num_dim, num_quant_bits, print_status);
+   classifier->train(base_set, *rng, num_trees, depth, views, reduced_num_dim, num_quant_bits);
 }
 
 CVAPI(int) CvRTreeClassifierGetOriginalNumClasses(cv::RTreeClassifier* classifier) { return classifier->original_num_classes(); }
