@@ -27,14 +27,14 @@ namespace Emgu.CV.Test
       public void TestSIFT()
       {
          SIFTDetector detector = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
-         TestFeature2DTracker(detector, detector);
+         Assert.IsTrue( TestFeature2DTracker(detector, detector), "Unable to find homography matrix" );
       }
 
       [Test]
       public void TestSURF()
       {
          SURFDetector detector = new SURFDetector(500, false);
-         TestFeature2DTracker(detector, detector);
+         Assert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
       [Test]
@@ -98,9 +98,9 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
-      public static void TestFeature2DTracker(IKeyPointDetector keyPointDetector, IDescriptorExtractor descriptorGenerator)
+      public static bool TestFeature2DTracker(IKeyPointDetector keyPointDetector, IDescriptorExtractor descriptorGenerator)
       {
-         for (int k = 0; k < 1; k++)
+         //for (int k = 0; k < 1; k++)
          {
             Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png");
             //Image<Gray, Byte> modelImage = new Image<Gray, byte>("stop.jpg");
@@ -181,7 +181,13 @@ namespace Emgu.CV.Test
                for (int i = 0; i < points.Length; i++)
                   points[i].Y += modelImage.Height;
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
+               return true;
             }
+            else
+            {
+               return false;
+            }
+
          }
       }
 
