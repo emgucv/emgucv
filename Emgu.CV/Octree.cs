@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Emgu.Util;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV
 {

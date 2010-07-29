@@ -1,9 +1,9 @@
 using System;
-using Emgu.CV;
-using Emgu.CV.Structure;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {

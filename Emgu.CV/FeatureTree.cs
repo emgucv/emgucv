@@ -1,7 +1,7 @@
 using System;
-using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV
 {

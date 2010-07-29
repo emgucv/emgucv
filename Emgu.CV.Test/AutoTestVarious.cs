@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Emgu.CV;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using Emgu.CV.VideoSurveillance;
-using Emgu.CV.Features2D;
-using Emgu.UI;
-using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using System.Linq;
+using Emgu.CV;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.CV.UI;
+using Emgu.CV.VideoSurveillance;
+using Emgu.UI;
+using Emgu.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {

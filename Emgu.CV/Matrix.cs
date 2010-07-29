@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
-using System.Drawing;
 
 namespace Emgu.CV
 {

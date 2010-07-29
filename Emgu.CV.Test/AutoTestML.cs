@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using NUnit.Framework;
-using Emgu.CV.Structure;
-using Emgu.CV.ML.Structure;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.ML.Structure;
+using Emgu.CV.Structure;
+using NUnit.Framework;
 
 namespace Emgu.CV.ML.UnitTest
 {
