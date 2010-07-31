@@ -131,6 +131,22 @@ namespace Emgu.CV
          return res;
       }
 
+      public static void GetMinMax(IEnumerable<MCvPoint3D64f> points, out MCvPoint3D64f min, out MCvPoint3D64f max)
+      {
+         min = new MCvPoint3D64f() { x = double.MaxValue, y = double.MaxValue, z = double.MaxValue };
+         max = new MCvPoint3D64f() { x = double.MinValue, y = double.MinValue, z = double.MinValue };
+
+         foreach (MCvPoint3D64f p in points)
+         {
+            min.x = Math.Min(min.x, p.x);
+            min.y = Math.Min(min.y, p.y);
+            min.z = Math.Min(min.z, p.z);
+            max.x = Math.Max(max.x, p.x);
+            max.y = Math.Max(max.y, p.y);
+            max.z = Math.Max(max.z, p.z);
+         }
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
    }
