@@ -117,7 +117,7 @@ IF(MSVC)
   SET_TARGET_PROPERTIES(opencv_legacy PROPERTIES PREFIX ${extra_bin_prefix})
   SET_TARGET_PROPERTIES(opencv_objdetect PROPERTIES PREFIX ${extra_bin_prefix})
   SET_TARGET_PROPERTIES(opencv_video PROPERTIES PREFIX ${extra_bin_prefix})
-  IF(opencv_ffmpeg)
+  IF(TARGET opencv_ffmpeg)
     SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
   ENDIF()
 ENDIF()
@@ -178,6 +178,12 @@ GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 
+IF(TARGET opencv_ffmpeg)
+GET_TARGET_PROPERTY(OPENCV_FFMPEG_OUTPUT_NAME opencv_ffmpeg OUTPUT_NAME)
+ELSE()
+SET(OPENCV_FFMPEG_OUTPUT_NAME "")
+ENDIF()
+
 SET(OPENCV_LIBRARY_OUTPUT_NAMES 
 ${OPENCV_CORE_OUTPUT_NAME}
 ${OPENCV_IMGPROC_OUTPUT_NAME}
@@ -189,7 +195,13 @@ ${OPENCV_OBJDETECT_OUTPUT_NAME}
 ${OPENCV_LEGACY_OUTPUT_NAME}
 ${OPENCV_CALIB3D_OUTPUT_NAME}
 ${OPENCV_VIDEO_OUTPUT_NAME}
+${OPENCV_FFMPEG_OUTPUT_NAME}
 ${CVEXTERN_OUTPUT_NAME})
+
+IF(TARGET opencv_ffmpeg)
+ELSE()
+SET(OPENCV_FFMPEG_OUTPUT_NAME "unknown")
+ENDIF()
 
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
@@ -235,6 +247,12 @@ namespace Emgu.CV
       /// The file name of the cvextern library
       /// </summary>
       public const string EXTERN_LIBRARY = \"${CVEXTERN_OUTPUT_NAME}\";
+	  
+      /// <summary>
+      /// The file name of the opencv_ffmpeg library
+      /// </summary>
+      public const string OPENCV_FFMPEG_LIBRARY = \"${OPENCV_FFMPEG_OUTPUT_NAME}\";
+
    }
 }")
 

@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Emgu.CV.Structure;
+using System.IO;
 
 namespace Emgu.CV
 {
@@ -13,6 +14,25 @@ namespace Emgu.CV
    /// </summary>
    public static class Util
    {
+      static Util()
+      {
+         String tempFile = Path.GetTempFileName();
+         File.Delete(tempFile);
+         String fileName =  Path.Combine( Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile) ) + ".avi";
+         try
+         {
+            //IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(tempFileName, -1, 1, new Size(100, 100), true);
+            IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
+            HasFFMPEG = (capture != IntPtr.Zero);
+            CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
+         } catch (Exception e)
+         {
+            String msg = e.Message;
+            HasFFMPEG = false;
+         }
+
+      }
+      
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
       /// </summary>
@@ -149,5 +169,11 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
+
+      /// <summary>
+      /// Indicates if opencv_ffmpeg is presented
+      /// </summary>
+      internal static readonly bool HasFFMPEG;
+
    }
 }

@@ -1768,7 +1768,7 @@ namespace Emgu.CV.Test
          int numberOfFrames = 10;
          int width = 300;
          int height = 200;
-         String fileName = GetTempFileName() + ".mpeg";
+         String fileName = GetTempFileName() + ".avi";
 
          Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
          for (int i = 0; i < images.Length; i++)
@@ -1777,7 +1777,7 @@ namespace Emgu.CV.Test
             images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          }
 
-         using (VideoWriter writer = new VideoWriter(fileName, 5, width, height, true))
+         using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 5, width, height, true))
          {
             for (int i = 0; i < numberOfFrames; i++)
             {

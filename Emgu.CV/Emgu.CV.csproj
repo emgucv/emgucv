@@ -76,6 +76,7 @@
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
     <Compile Include="PInvoke\CvInvokeCalib3d.cs" />
+    <Compile Include="PInvoke\CvInvokeFFMPEG.cs" />
     <Compile Include="PInvoke\CvInvokeImgproc.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
     <Compile Include="PInvoke\CvInvokeCore.cs" />
