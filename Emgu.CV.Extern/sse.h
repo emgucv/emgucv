@@ -2,6 +2,7 @@
 #ifndef EMGU_SSE_H
 #define EMGU_SSE_H
 
+#include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
 
 #if __EMGU_ENABLE_SSE__
