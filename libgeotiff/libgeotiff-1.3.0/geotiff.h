@@ -13,6 +13,8 @@
 #ifndef __geotiff_h_
 #define __geotiff_h_
 
+#include "stdlib.h"
+
 /**
  * \file geotiff.h
  *

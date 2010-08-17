@@ -13,9 +13,9 @@
  *    18 Sep 1995   -- Deprecated Integraph Matrix tag with new one.
  *                     Backward compatible support provided.  --NDR.
  */
- 
-#include "xtiffio.h"
+
 #include <stdio.h>
+#include "xtiffio.h"
 #include "cpl_serv.h"
 
 /*  Tiff info structure.
