@@ -50,6 +50,16 @@ namespace Emgu.CV
          Size padding,
          double scale,
          int groupThreshold);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private extern static void  CvHOGDescriptorCompute(
+         IntPtr descriptor,
+         IntPtr img, 
+         IntPtr descriptors,
+         Size winStride,
+         Size padding, 
+         IntPtr locations); 
+
       #endregion
 
       private MemStorage _rectStorage;
@@ -151,6 +161,32 @@ namespace Emgu.CV
       public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="winStride"></param>
+      /// <param name="padding"></param>
+      /// <param name="locations">Locations for the computation. Can be null if not needed</param>
+      /// <returns>The descriptor vector</returns>
+      public float[] Compute(Image<Bgr, Byte> image, Size winStride, Size padding, Point[] locations)
+      {
+         using (VectorOfFloat desc = new VectorOfFloat())
+         {
+            if (locations == null)
+               CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
+            else
+            {
+               using (MemStorage stor = new MemStorage())
+               {
+                  Seq<Point> locationSeq = new Seq<Point>(stor);
+                  CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
+               }
+            }
+            return desc.ToArray();
+         }
       }
 
       /// <summary>

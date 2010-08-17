@@ -23,6 +23,7 @@ CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
 {
    return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
+
 CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, vectorOfFloat* vector) 
 { 
    descriptor->setSVMDetector(vector->data); 
@@ -48,6 +49,31 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
    if (rects.size() > 0)
       cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }
+
+CVAPI(void) CvHOGDescriptorCompute(
+    cv::HOGDescriptor *descriptor,
+    CvArr *img, 
+    vectorOfFloat *descriptors,
+    CvSize winStride,
+    CvSize padding,
+    CvSeq* locationSeq) 
+{
+    cv::Mat mat = cv::cvarrToMat(img);
+    std::vector<cv::Point> location(0);
+    if (locationSeq)
+    {
+       location.resize(locationSeq->total);
+       cvSeqPopMulti(locationSeq, &location[0], locationSeq->total);
+    }
+    
+    descriptor->compute(
+       mat, 
+       descriptors->data,
+       winStride,
+       padding,
+       location); 
+}
+
 
 /*
 CVAPI(void) cvHOGDescriptorDetect(
