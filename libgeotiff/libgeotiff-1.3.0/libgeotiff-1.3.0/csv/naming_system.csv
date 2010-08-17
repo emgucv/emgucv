@@ -1,0 +1,14 @@
+"NAMING_SYSTEM_CODE","NAMING_SYSTEM_NAME","REMARKS","INFORMATION_SOURCE","DATA_SOURCE","REVISION_DATE","CHANGE_ID","DEPRECATED"
+7300,EPSG alternative spelling,An alternative spelling of the EPSG name; assigned by EPSG.,EPSG,EPSG,2000-05-07 00:00:00,,0
+7301,EPSG alias,An alternative name assigned by EPSG.,EPSG,EPSG,2000-05-07 00:00:00,,0
+7302,EPSG abbreviation,An abbreviation assigned by EPSG.,EPSG,EPSG,2000-05-07 00:00:00,,0
+7303,User name,An alternative name assigned by user; not populated by EPSG.,(User to insert),EPSG,2000-05-07 00:00:00,,0
+7304,User alias,A secondary alternative name assigned by user; not populated by EPSG.,(User to insert),EPSG,2000-05-07 00:00:00,,0
+7305,User abbreviation,An abbreviation assigned by user; not populated by EPSG.,(User to insert),EPSG,2000-05-07 00:00:00,,0
+7306,POSC acronym,An abbreviation assigned by the Petrotechnical Open Software Corporation (POSC).,POSC,EPSG,2000-05-07 00:00:00,,0
+7307,EuroGeographics Identifier,A unique identifier used in the compilation of European national mapping agency data by EuroGeographics.,EuroGeographics; http://crs.ifag.de/,EPSG,2001-06-05 00:00:00,,0
+7308,Croatia alternative identifier,,EPSG,EPSG,2001-06-05 00:00:00,,0
+7309,Slovenia alternative identifier,,EPSG,EPSG,2001-06-05 00:00:00,,0
+7310,Germany alternative identifier,An alternative name used by the BfK.,EPSG,EPSG,2001-06-05 00:00:00,,0
+7311,Indonesian alternative identifier,An alternative name used by Bakosurtanal.,EPSG,EPSG,2002-06-22 00:00:00,,0
+7312,Austrian alternative identifier,An alternative name used by the BEV.,EPSG,EPSG,2002-09-19 00:00:00,,0
