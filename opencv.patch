@@ -1,0 +1,31 @@
+Index: modules/features2d/include/opencv2/features2d/features2d.hpp
+===================================================================
+--- modules/features2d/include/opencv2/features2d/features2d.hpp	(revision 3525)
++++ modules/features2d/include/opencv2/features2d/features2d.hpp	(working copy)
+@@ -264,7 +264,7 @@
+ class CV_EXPORTS SIFT
+ {
+ public:
+-    struct CommonParams
++    struct CV_EXPORTS CommonParams
+     {
+         static const int DEFAULT_NOCTAVES = 4;
+         static const int DEFAULT_NOCTAVE_LAYERS = 3;
+@@ -277,7 +277,7 @@
+         int angleMode;
+     };
+ 
+-    struct DetectorParams
++    struct CV_EXPORTS DetectorParams
+     {
+         static double GET_DEFAULT_THRESHOLD() { return 0.04 / SIFT::CommonParams::DEFAULT_NOCTAVE_LAYERS / 2.0; }
+         static double GET_DEFAULT_EDGE_THRESHOLD() { return 10.0; }
+@@ -287,7 +287,7 @@
+         double threshold, edgeThreshold;
+     };
+ 
+-    struct DescriptorParams
++    struct CV_EXPORTS DescriptorParams
+     {
+         static double GET_DEFAULT_MAGNIFICATION() { return 3.0; }
+         static const bool DEFAULT_IS_NORMALIZE = true;
