@@ -89,7 +89,7 @@ CHECK_INCLUDE_FILES(string.h HAVE_STRING_H)
 
 SET(GEOTIFF_CSV_NAMES area.csv codes.csv datum.csv gcs.csv pcs.csv)
 FIND_PATH(GEOTIFF_CSV_DATA_DIR NAMES ${GEOTIFF_CSV_NAMES}
-    PATHS "${CMAKE_SOURCE_DIR}/csv"
+    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/csv"
     DOC "Default location of GeoTIFF CSV files"
     NO_DEFAULT_PATH)
 
