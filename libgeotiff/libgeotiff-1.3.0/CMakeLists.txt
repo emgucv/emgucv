@@ -24,7 +24,7 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 MARK_AS_ADVANCED(CMAKE_VERBOSE_MAKEFILE)
 
 # Path to additional CMake modules
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake ${CMAKE_MODULE_PATH})
 
 ###############################################################################
 # General build settings
@@ -152,7 +152,7 @@ ADD_DEFINITIONS(-DHAVE_JPEG=${HAVE_JPEG})
 
 MESSAGE(STATUS "Generating geo_config.h header")
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/geo_config.h.in
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/geo_config.h.in
     ${CMAKE_CURRENT_SOURCE_DIR}/geo_config.h)
 
 MESSAGE(STATUS "Generating geo_config.h header - done")
