@@ -16,6 +16,10 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/features2d/include"
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/legacy/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
+
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0/libxtiff")
+
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
@@ -38,7 +42,10 @@ set_target_properties(${the_target} PROPERTIES
 	DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
-add_dependencies(${the_target} opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect zlib)
+add_dependencies(${the_target} 
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  zlib 
+  xtiff libtiff geotiff_archive)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -48,7 +55,10 @@ IF(EMGU_ENABLE_SSE)
 ENDIF()
 
 # Add the required libraries for linking:
-target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect zlib)
+target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  zlib 
+  xtiff libtiff geotiff_archive)
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main

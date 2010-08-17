@@ -131,7 +131,27 @@ namespace Emgu.CV.Geodetic
             && Longitude == other.Longitude
             && Altitude == other.Altitude;
       }
-
       #endregion
+
+      /// <summary>
+      /// Convert radian to degree
+      /// </summary>
+      /// <param name="radian">radian</param>
+      /// <returns>degree</returns>
+      public static double RadianToDegree(double radian)
+      {
+         return radian * (180.0 / Math.PI);
+      }
+
+      /// <summary>
+      /// Convert degree to radian
+      /// </summary>
+      /// <param name="degree">degree</param>
+      /// <returns>radian</returns>
+      public static double DegreeToRadian(double degree)
+      {
+         return degree * (Math.PI / 180.0);
+      }
+
    }
 }

@@ -72,6 +72,7 @@
     <Compile Include="Geodetic\TransformationWGS84.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
+    <Compile Include="Geotiff\Geotiff.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />

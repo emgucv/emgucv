@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.Geodetic;
 using Emgu.CV.Structure;
+using Emgu.CV.Geotiff;
 using System.Diagnostics;
 
 namespace Emgu.CV.Test
@@ -56,7 +57,10 @@ namespace Emgu.CV.Test
 
       public void TestPerformance2()
       {
-         GeodeticCoordinate coor = new GeodeticCoordinate(43.853626 * Math.PI / 180.0, -79.358981 * Math.PI / 180.0, 231.0);
+         GeodeticCoordinate coor = new GeodeticCoordinate(
+            GeodeticCoordinate.DegreeToRadian(43.853626),
+            GeodeticCoordinate.DegreeToRadian(-79.358981),
+            231.0);
 
          Stopwatch watch = Stopwatch.StartNew();
          double tmp;
@@ -68,6 +72,20 @@ namespace Emgu.CV.Test
          }
          watch.Stop();
          Trace.WriteLine(watch.ElapsedMilliseconds);
+      }
+
+      [Test]
+      public void TestGeotiff()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(1000, 1000);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         Geotiff.Geotiff.Save("temp.gif", image,
+            new GeodeticCoordinate(
+               GeodeticCoordinate.DegreeToRadian(43.853626),
+               GeodeticCoordinate.DegreeToRadian(-79.358981),
+               231.0),
+            new MCvPoint2D64f(0.05, 0.05));
+
       }
    }
 }

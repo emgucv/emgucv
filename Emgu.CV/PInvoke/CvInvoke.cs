@@ -11,7 +11,7 @@ namespace Emgu.CV
       /// <summary>
       /// string marshaling type
       /// </summary>
-      private const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
+     internal const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
 
       /// <summary>
       /// Static Constructor to setup opencv environment
