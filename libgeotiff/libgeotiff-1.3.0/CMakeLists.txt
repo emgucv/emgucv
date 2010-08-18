@@ -26,6 +26,8 @@ MARK_AS_ADVANCED(CMAKE_VERBOSE_MAKEFILE)
 # Path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake ${CMAKE_MODULE_PATH})
 
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
+
 ###############################################################################
 # General build settings
 

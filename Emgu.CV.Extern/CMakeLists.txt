@@ -45,7 +45,7 @@ set_target_properties(${the_target} PROPERTIES
 add_dependencies(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
   zlib 
-  xtiff libtiff geotiff_archive)
+  xtiff tiff geotiff_archive)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -58,10 +58,9 @@ ENDIF()
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
   zlib 
-  xtiff libtiff geotiff_archive)
+  xtiff tiff geotiff_archive)
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
-  
