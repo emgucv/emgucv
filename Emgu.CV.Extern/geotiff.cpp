@@ -22,7 +22,7 @@ CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, geodeticCoordinat
    TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
    TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, mat.cols);
    TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, mat.rows);
-   TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, mat.elemSize()); 
+   TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, mat.elemSize()*8); 
    TIFFSetField(pTiff, TIFFTAG_SAMPLESPERPIXEL, mat.channels());
 
    TIFFSetField(pTiff, TIFFTAG_PHOTOMETRIC, 
@@ -41,9 +41,11 @@ CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, geodeticCoordinat
    TIFFSetField(pTiff, GTIFF_PIXELSCALE, 3, ModelPixelScale);
 
    GTIF* gTiff = GTIFNew(pTiff);
-   //GTIFKeySet(gTiff, ProjectedCSTypeGeoKey, TYPE_SHORT,  1, 0); //TODO: find out the projected cstype geo key
+
    GTIFKeySet(gTiff, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelTypeGeographic);
    GTIFKeySet(gTiff, GTRasterTypeGeoKey, TYPE_SHORT, 1, RasterPixelIsArea);
+   GTIFKeySet(gTiff, GeographicTypeGeoKey, TYPE_SHORT, 1, GCS_WGS_84);
+   GTIFKeySet(gTiff, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
    GTIFWriteKeys(gTiff);
    GTIFFree(gTiff);
 
