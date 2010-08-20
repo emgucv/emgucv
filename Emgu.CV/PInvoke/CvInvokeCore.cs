@@ -343,9 +343,10 @@ namespace Emgu.CV
       /// <param name="reverse">Determines the direction of the sequence traversal. If reverse is 0, the reader is positioned at the first sequence element, otherwise it is positioned at the last element.</param>
       [DllImport(OPENCV_CORE_LIBRARY)]
       public static extern void cvStartReadSeq(
-          IntPtr seq,
-          ref MCvSeqReader reader,
-          bool reverse);
+         IntPtr seq,
+         ref MCvSeqReader reader,
+         [MarshalAs(UnmanagedType.I1)]
+         bool reverse);
 
       /// <summary>
       /// Finds the element with the given index in the sequence and returns the pointer to it. If the element is not found, the function returns 0. The function supports negative indices, where -1 stands for the last sequence element, -2 stands for the one before last, etc. If the sequence is most likely to consist of a single sequence block or the desired element is likely to be located in the first block, then the macro CV_GET_SEQ_ELEM( elemType, seq, index ) should be used, where the parameter elemType is the type of sequence elements ( CvPoint for example), the parameter seq is a sequence, and the parameter index is the index of the desired element. The macro checks first whether the desired element belongs to the first block of the sequence and returns it if it does, otherwise the macro calls the main function GetSeqElem. Negative indices always cause the cvGetSeqElem call. The function has O(1) time complexity assuming that number of blocks is much smaller than the number of elements.
