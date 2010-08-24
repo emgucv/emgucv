@@ -13,7 +13,7 @@ CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, geodeticCoordinat
    double ModelTiepoint[6] = { 
       0, 0, 0, 
       longitude, latitude, 0 };
-      double ModelPixelScale[3] = { pixelSize->x, pixelSize->y, pixelSize->z };
+   double ModelPixelScale[3] = { pixelSize->x, pixelSize->y, pixelSize->z };
 
    cv::Mat mat = cv::cvarrToMat(image);
    TIFF *pTiff = XTIFFOpen(fileSpec, "w");
@@ -22,13 +22,23 @@ CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, geodeticCoordinat
    TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
    TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, mat.cols);
    TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, mat.rows);
-   TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, mat.elemSize()*8); 
+   //int esize1 = mat.elemSize1();
+   //int esize = mat.elemSize();
+   //int counte = esize1 + esize;
+   TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, mat.elemSize1()*8); 
    TIFFSetField(pTiff, TIFFTAG_SAMPLESPERPIXEL, mat.channels());
-
+   
    TIFFSetField(pTiff, TIFFTAG_PHOTOMETRIC, 
       mat.channels() == 1 ? 1 //BlackIsZero. For bilevel and grayscale images: 0 is imaged as black.
       : 2 //RGB. RGB value of (0,0,0) represents black, and (255,255,255) represents white, assuming 8-bit components. The components are stored in the indicated order: first Red, then Green, then Blue.
-      ); 
+      );
+
+   //for RGBA, define the fourth channel as alpha
+   if (mat.channels() == 4)
+   {
+      uint16 extraSampleType[] = {EXTRASAMPLE_UNASSALPHA};
+      TIFFSetField(pTiff, TIFFTAG_EXTRASAMPLES, 1, extraSampleType);
+   }
 
    //write scaneline image data
    for (int row = 0; row < mat.rows; row++)
