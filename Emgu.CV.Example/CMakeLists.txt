@@ -22,6 +22,7 @@ add_subdirectory(Webservice_Host)
 add_subdirectory(Webservice_Client)
 IF(WIN32)
 add_subdirectory(WebDynamicImage)
+add_subdirectory(Simple3DReconstruction)
 ENDIF()
 
 ENDIF()
