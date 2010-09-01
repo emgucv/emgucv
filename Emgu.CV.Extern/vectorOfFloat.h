@@ -5,12 +5,12 @@
 #include "opencv2/core/core_c.h"
 #include <vector>
 
-class vectorOfFloat
+class VectorOfFloat
 { 
 public:
    std::vector<float> data;
-   vectorOfFloat() : data() {};
-   vectorOfFloat(int size) : data(size) {};
+   VectorOfFloat() : data() {};
+   VectorOfFloat(int size) : data(size) {};
 };
 
 #endif

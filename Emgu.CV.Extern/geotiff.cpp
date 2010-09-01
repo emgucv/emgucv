@@ -6,7 +6,7 @@
 #include "xtiffio.h"
 #include "transformationWGS84.h"
 
-CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, geodeticCoordinate* coor, CvPoint3D64f* pixelSize)
+CVAPI(void) geotiffWriteImage(char* fileSpec, IplImage* image, GeodeticCoordinate* coor, CvPoint3D64f* pixelSize)
 {
    double latitude = coor->latitude * (180.0 / CV_PI);
    double longitude = coor->longitude * (180.0 / CV_PI);

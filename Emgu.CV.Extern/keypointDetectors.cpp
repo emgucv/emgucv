@@ -51,7 +51,7 @@ CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image,
 CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
 CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, vectorOfFloat* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, VectorOfFloat* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
 {
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
@@ -122,7 +122,7 @@ CVAPI(void) CvSIFTDetectorDetectKeyPoints(cv::SIFT* detector, IplImage* image, I
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
-CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, vectorOfFloat* descriptors)
+CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, VectorOfFloat* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -140,7 +140,7 @@ CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, Ipl
    }
 }
 
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, vectorOfFloat* descriptors)
+CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, VectorOfFloat* descriptors)
 {
    if (numberOfKeyPoints <= 0) return;
    
@@ -173,7 +173,7 @@ CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, I
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
-CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, vectorOfFloat* descriptors)
+CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, VectorOfFloat* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -188,7 +188,7 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
    }
 }
 
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, vectorOfFloat* descriptors)
+CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, VectorOfFloat* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;

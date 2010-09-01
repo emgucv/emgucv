@@ -1,4 +1,10 @@
+/**
+ * @file quaternions.cpp
+ *
+ * @brief   Implement functions for quaternions struct. 
+**/
 #include "quaternions.h"
+
 
 void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {
@@ -185,7 +191,7 @@ void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
    quaternionsRenorm(quaternions);
 }
 
-/* convert quaternions to axis angle vector. (x,y,z) is the rotatation matrix and |(x,y,z)| is the rotation angle  */
+/* convert quaternions to axis angle vector. The vector (x,y,z) defines the rotatation axis and the norm |(x,y,z)| defines the rotation angle  */
 void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
 {
    double theta = 2.0 * acos(quaternions->w);

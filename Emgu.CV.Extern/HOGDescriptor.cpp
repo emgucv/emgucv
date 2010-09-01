@@ -24,7 +24,7 @@ CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
    return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
 
-CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, vectorOfFloat* vector) 
+CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, VectorOfFloat* vector) 
 { 
    descriptor->setSVMDetector(vector->data); 
 }
@@ -53,7 +53,7 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
 CVAPI(void) CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
     CvArr *img, 
-    vectorOfFloat *descriptors,
+    VectorOfFloat *descriptors,
     CvSize winStride,
     CvSize padding,
     CvSeq* locationSeq) 

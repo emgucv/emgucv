@@ -1,3 +1,8 @@
+/**
+ * @file transformationWGS84.cpp
+ *
+ * @brief   Implement functions for WGS84 transformation. 
+**/
 #include "transformationWGS84.h"
 
 // Value of a from WGS84
@@ -20,7 +25,7 @@ const __m128d _ECEF2GeodeticConst0 = _mm_set_pd(A, B);
 const __m128d _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
 #endif
 
-void transformGeodetic2ECEF(const geodeticCoordinate* coordinate, CvPoint3D64f* ecef)
+void transformGeodetic2ECEF(const GeodeticCoordinate* coordinate, CvPoint3D64f* ecef)
 {
    double sinPhi = sin(coordinate->latitude);
 
@@ -33,7 +38,7 @@ void transformGeodetic2ECEF(const geodeticCoordinate* coordinate, CvPoint3D64f* 
    ecef->z = ((B * B) / (A * A) * N + coordinate->altitude) * sinPhi;
 }
 
-void transformECEF2Geodetic(const CvPoint3D64f* ecef, geodeticCoordinate* coor)
+void transformECEF2Geodetic(const CvPoint3D64f* ecef, GeodeticCoordinate* coor)
 {
    coor->longitude = atan2(ecef->y, ecef->x);
 
@@ -63,7 +68,7 @@ void transformECEF2Geodetic(const CvPoint3D64f* ecef, geodeticCoordinate* coor)
    coor->altitude = p / cos(coor->latitude) - N;
 }
 
-void transformGeodetic2ENU(const geodeticCoordinate* coor, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* enu)
+void transformGeodetic2ENU(const GeodeticCoordinate* coor, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* enu)
 {
    CvPoint3D64f ecef;
    transformGeodetic2ECEF(coor, &ecef);
@@ -100,7 +105,7 @@ void transformGeodetic2ENU(const geodeticCoordinate* coor, const geodeticCoordin
 #endif
 }
 
-void transformENU2Geodetic(const CvPoint3D64f* enu, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, geodeticCoordinate* coor)
+void transformENU2Geodetic(const CvPoint3D64f* enu, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, GeodeticCoordinate* coor)
 {
    double sinPhi = sin(refCoor->latitude);
    double cosPhi = cos(refCoor->latitude);
@@ -117,7 +122,7 @@ void transformENU2Geodetic(const CvPoint3D64f* enu, const geodeticCoordinate* re
    transformECEF2Geodetic(&ecef, coor);
 }
 
-void transformGeodetic2NED(const geodeticCoordinate* coor, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* ned)
+void transformGeodetic2NED(const GeodeticCoordinate* coor, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* ned)
 {
    CvPoint3D64f enu;
    transformGeodetic2ENU(coor, refCoor, refEcef, &enu);
@@ -126,7 +131,7 @@ void transformGeodetic2NED(const geodeticCoordinate* coor, const geodeticCoordin
    ned->z = -enu.z;
 }
 
-void transformNED2Geodetic(const CvPoint3D64f* ned, const geodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, geodeticCoordinate* coor)
+void transformNED2Geodetic(const CvPoint3D64f* ned, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, GeodeticCoordinate* coor)
 {
    CvPoint3D64f enu;
    enu.x = ned->y;

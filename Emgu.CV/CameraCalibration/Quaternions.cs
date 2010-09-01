@@ -11,7 +11,6 @@ namespace Emgu.CV
    /// A unit quaternions that defines rotation in 3D
    /// </summary>
    [Serializable]
-   //TODO: Check if mono has System.Windows.Media.Media3D.Quaternion implemented and if it comes as a package on Ubuntu and fedora
    public struct Quaternions : IEquatable<Quaternions>
    {
       private double _w;
@@ -20,7 +19,7 @@ namespace Emgu.CV
       private double _z;
 
       /// <summary>
-      /// The W component of the quaternion.
+      /// The W component of the quaternion: the value for cos(rotation angle / 2)
       /// </summary>
       public double W
       {
@@ -29,7 +28,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The X component of the quaternion.
+      /// The X component of the vector: rotation axis * sin(rotation angle / 2)
       /// </summary>
       public double X
       {
@@ -38,7 +37,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The Y component of the quaternion.
+      /// The Y component of the vector: rotation axis * sin(rotation angle / 2)
       /// </summary>
       public double Y
       {
@@ -47,7 +46,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// The Z component of the quaternion.
+      /// The Z component of the vector: rotation axis * sin(rotation angle / 2)
       /// </summary>
       public double Z
       {
