@@ -1,10 +1,10 @@
 /**
  * @file quaternions.cpp
  *
- * @brief   Implement functions for quaternions struct. 
+ * @brief   Implement functions for Quaternions structure. 
 **/
+#pragma warning( disable: 4251 )
 #include "quaternions.h"
-
 
 void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 {
@@ -48,7 +48,7 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 #endif
 }
 
-void quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
+void quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z)
 {
    double q0 = quaternions->w;
    double q1 = quaternions->x;
@@ -60,7 +60,7 @@ void quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* 
    *z = atan2(2.0 * (q0 * q3 + q1 * q2), 1.0 - 2.0 * (q2*q2 + q3*q3));
 }
 
-void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
+void quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation)
 {
    double w = quaternions->w;
    double x = quaternions->x;
@@ -93,12 +93,12 @@ inline void quaternionsRotate(double w, double x, double y, double z, double v1,
    *vr = 2.0*( (t7 -  t3)* v1 + (t2 +  t9)* v2 + (t5 + t8)* v3 ) + v3;
 }
 
-void quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst)
+void quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint3D64f* point, CvPoint3D64f* pointDst)
 {
    quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, point->x, point->y, point->z, (double*) pointDst);
 }
 
-void quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, CvMat* pointDst)
+void quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointSrc, CvMat* pointDst)
 {
    cv::Mat p = cv::cvarrToMat(pointSrc);
    cv::Mat pDst = cv::cvarrToMat(pointDst);
@@ -124,7 +124,7 @@ void quaternionsRotatePoints(Quaternions* quaternions,  CvMat* pointSrc, CvMat* 
    }
 }
 
-void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst)
+void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst)
 {
 #if EMGU_SSE2
    __m128d _w1w1 = _mm_set1_pd(quaternions1->w);
@@ -167,17 +167,18 @@ void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Q
 #endif
 }
 
+const double THETA_EPS = 1.0e-30;
+
 /* convert axis angle vector to quaternions. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle  */
-void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
+void axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions)
 {
    double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
-   if (theta < 1.0e-16) 
+   if (theta < THETA_EPS) 
    {
-      quaternions->w = 1.0e-16;
-      quaternions->x = 1.0;
-      quaternions->y = 0.0;
+      quaternions->w = 0;
       quaternions->x = 0.0;
-      quaternionsRenorm(quaternions);
+      quaternions->y = 0.0;
+      quaternions->z = 1.0;
       return;
    }
    double halfAngle = theta * 0.5;
@@ -192,12 +193,12 @@ void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
 }
 
 /* convert quaternions to axis angle vector. The vector (x,y,z) defines the rotatation axis and the norm |(x,y,z)| defines the rotation angle  */
-void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
+void quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAngle)
 {
    double theta = 2.0 * acos(quaternions->w);
-   if (theta == 0)
+   if (theta < THETA_EPS)
    {
-      axisAngle->x = axisAngle->y = axisAngle->z = 1.0e-16;
+      axisAngle->x = axisAngle->y = axisAngle->z = 0.0;
    } else
    {
       double norm = sqrt(quaternions->x * quaternions->x + quaternions->y * quaternions->y + quaternions->z * quaternions->z);
@@ -229,7 +230,7 @@ void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* q
    double cosHalfTheta = qa->w * qb->w + qa->x * qb->x + qa->y * qb->y + qa->z * qb->z;
    // if qa=qb or qa=-qb then theta = 0 and we can return qa
    if (abs(cosHalfTheta) >= 1.0){
-      qm->w = qa->w;qm->x = qa->x;qm->y = qa->y;qm->z = qa->z;
+      memcpy(qm, qa, sizeof(Quaternions));// qm->w = qa->w;qm->x = qa->x;qm->y = qa->y;qm->z = qa->z;
       return;
    }
    // Calculate temporary values.
@@ -237,18 +238,14 @@ void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* q
    double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
    // if theta = 180 degrees then result is not fully defined
    // we could rotate around any axis normal to qa or qb
-   if (fabs(sinHalfTheta) < 0.001){ // fabs is floating point absolute
-      qm->w = (qa->w * 0.5 + qb->w * 0.5);
-      qm->x = (qa->x * 0.5 + qb->x * 0.5);
-      qm->y = (qa->y * 0.5 + qb->y * 0.5);
-      qm->z = (qa->z * 0.5 + qb->z * 0.5);
-      return;
+   if (fabs(sinHalfTheta) < 0.001)
+   { 
+      weightedSum((double*)qa, (double*)qb, 4, 0.5, 0.5, (double*)qm);
+   } else
+   {
+      double ratioA = sin((1.0 - t) * halfTheta) / sinHalfTheta;
+      double ratioB = sin(t * halfTheta) / sinHalfTheta; 
+      //calculate Quaternion.
+      weightedSum((double*)qa, (double*)qb, 4, ratioA, ratioB, (double*)qm);
    }
-   double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-   double ratioB = sin(t * halfTheta) / sinHalfTheta; 
-   //calculate Quaternion.
-   qm->w = (qa->w * ratioA + qb->w * ratioB);
-   qm->x = (qa->x * ratioA + qb->x * ratioB);
-   qm->y = (qa->y * ratioA + qb->y * ratioB);
-   qm->z = (qa->z * ratioA + qb->z * ratioB);
 }

@@ -1,8 +1,11 @@
 #pragma once
 
+#ifndef WEIGHTED_SUM_H
+#define WEIGHTED_SUM_H
+
 #include "sse.h"
 
-inline void weightedSum(double* d1, double* d2, int elementCount, double w1, double w2, double* r)
+inline void weightedSum(const double* d1, const double* d2, int elementCount, double w1, double w2, double* r)
 {
 #if EMGU_SSE2
    __m128d f = _mm_set_pd(w1, w2);
@@ -14,3 +17,5 @@ inline void weightedSum(double* d1, double* d2, int elementCount, double w1, dou
       *r++ = *d1++ * w1 + *d2++ * w2;
 #endif
 }
+
+#endif

@@ -5,6 +5,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
 #include "sse.h"
+#include "weightedSum.h"
 
 /**
  * @struct  Quaternions
@@ -47,7 +48,7 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
  * @author  Canming
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z);
+CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z);
 
 
 /**
@@ -58,7 +59,7 @@ CVAPI(void) quaternionsToEuler(Quaternions* quaternions, double* x, double* y, d
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions);
+CVAPI(void) axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions);
 
 /**
  * @fn   void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
@@ -68,7 +69,7 @@ CVAPI(void) axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quatern
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle);
+CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAngle);
 
 /**
  * @fn   void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
@@ -78,7 +79,7 @@ CVAPI(void) quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisA
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation);
+CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation);
 
 /**
  * @fn   void quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point,
@@ -89,7 +90,7 @@ CVAPI(void) quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotatio
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point, CvPoint3D64f* pointDst);
+CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint3D64f* point, CvPoint3D64f* pointDst);
 
 /**
  * @fn   void quaternionsRotatePoints(Quaternions* quaternions, CvMat* pointSrc,
@@ -100,7 +101,7 @@ CVAPI(void) quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions, CvMat* pointSrc, CvMat* pointDst);
+CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointSrc, CvMat* pointDst);
 
 /**
  * @fn   void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2,
@@ -112,7 +113,7 @@ CVAPI(void) quaternionsRotatePoints(Quaternions* quaternions, CvMat* pointSrc, C
  * @author  Canming Huang
  * @date 8/31/2010
 **/
-CVAPI(void) quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2, Quaternions* quaternionsDst);
+CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst);
 
 /**
  * @fn   void quaternionsRenorm(Quaternions* quaternions)
@@ -129,6 +130,10 @@ CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
  *
  * @brief   Use Slerp to interpolate the quaternions. 
  *
+ * @param qa The first Quaternions
+ * @param qb The second Quaternions
+ * @param t This is the weight for qb. 0<=t<=1; if t=0, qm=qa; if t=1, qm - qb;
+ * @param qm The result of slerp
  * @author  Canming Huang
  * @date 8/31/2010
 **/
