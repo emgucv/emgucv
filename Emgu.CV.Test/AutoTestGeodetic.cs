@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.Geodetic;
 using Emgu.CV.Structure;
-using Emgu.CV.Geotiff;
+using Emgu.CV.Tiff;
 using System.Diagnostics;
 
 namespace Emgu.CV.Test
@@ -79,13 +79,32 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(1000, 1000);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         Geotiff.Geotiff.Save("temp.gif", image,
-            new GeodeticCoordinate(
+         using (TiffWriter writer = new TiffWriter("temp.tif"))
+         {
+            writer.WriteImage(image);
+            writer.WriteGeoTag(new GeodeticCoordinate(
                GeodeticCoordinate.DegreeToRadian(43.853626),
                GeodeticCoordinate.DegreeToRadian(-79.358981),
                231.0),
-            new MCvPoint2D64f(0.05, 0.05));
+               image.Size,
+               new MCvPoint2D64f(0.05, 0.05));
+         }
+      }
 
+      [Test]
+      public void TestGeotiff2()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(1000, 1000);
+         image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         using (TiffWriter writer = new TiffWriter("temp.tif"))
+         {
+            writer.WriteGeoTag(new GeodeticCoordinate(
+               GeodeticCoordinate.DegreeToRadian(43.853626),
+               GeodeticCoordinate.DegreeToRadian(-79.358981),
+               231.0),
+               image.Size,
+               new MCvPoint2D64f(0.05, 0.05));
+         }
       }
    }
 }
