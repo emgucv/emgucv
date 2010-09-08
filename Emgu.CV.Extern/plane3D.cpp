@@ -1,3 +1,5 @@
+#pragma warning( disable: 4251 )
+
 #include "plane3D.h"
 
 void setPlane3D(Plane3D* plane, CvPoint3D64f* normal, CvPoint3D64f* pointInPlane)
@@ -110,12 +112,12 @@ void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPo
    CvPoint3D64f nor1;
    CvPoint3D64f crossProduct;
    CvPoint3D64f planeNormal = cvPoint3D64f(plane->a, plane->b, plane->c);
-   for (int i = 1; i < intersections.size(); i++)
+   for (unsigned int i = 1; i < intersections.size(); i++)
    {
       for (int j = i; j > 0; j--)
       {
-         cvPoint3d64fSubstract(&intersections[j-1], &c, &nor0);
-         cvPoint3d64fSubstract(&intersections[j], &c, &nor1);
+         cvPoint3D64fSub(&intersections[j-1], &c, &nor0);
+         cvPoint3D64fSub(&intersections[j], &c, &nor1);
          cvPoint3D64fCrossProduct(&nor0, &nor1, &crossProduct);
          bool sameSide = cvPoint3D64fDotProduct(&crossProduct, &planeNormal) >= 0;
          if (sameSide) break;

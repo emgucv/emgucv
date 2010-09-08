@@ -1,3 +1,5 @@
+#pragma warning( disable: 4251 )
+
 #include "opencv2/core/core_c.h"
 #include "opencv2/contrib/contrib.hpp"
 #include "opencv2/imgproc/imgproc.hpp"

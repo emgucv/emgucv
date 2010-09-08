@@ -40,10 +40,7 @@ struct ltpt
 
 inline CvPoint2D32f TriangleVertexSum(const Triangle2DF* t)
 {
-   CvPoint2D32f point;
-   point.x = t->V0.x + t->V1.x + t->V2.x;
-   point.y = t->V0.y + t->V1.y + t->V2.y;
-   return point;
+   return cvPoint2D32f(t->V0.x + t->V1.x + t->V2.x, t->V0.y + t->V1.y + t->V2.y);
 };
 
 void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  int includeVirtualPoint)
@@ -109,7 +106,7 @@ void PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvPoint2D32f* buffer, int*
       if (v->flags == -1) { *count = 0; return; }
       *currentBuffer++ = v->pt;
 
-      if (v->pt.x == v0->pt.x && v->pt.y == v0->pt.y)
+      if (0 == memcmp(&v->pt, &v0->pt, sizeof(CvPoint2D32f)))
          break;
    }
    *count = currentBuffer - buffer;
