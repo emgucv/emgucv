@@ -1717,7 +1717,7 @@ namespace Emgu.CV.Test
             counter++;
          }
          watch.Stop();
-         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", counter, watch.ElapsedMilliseconds));
          File.Delete(fileName);
       }
 
