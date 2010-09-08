@@ -12,8 +12,7 @@ namespace Emgu.Util
    /// <typeparam name="T">The type of elments in the storage</typeparam>
    public class BinaryFileStorage<T> : IEnumerable<T> where T : struct
    {
-      //private const int _trunkSize = 1;
-      private int _trunkSize = 100;
+      private int _trunkSize;
 
       /// <summary>
       /// The file info
@@ -33,7 +32,7 @@ namespace Emgu.Util
       /// Create a binary File Storage
       /// </summary>
       /// <param name="fileName">The file name of the storage</param>
-      /// <param name="trunkSize">The data will be read in trunk of this size internally. Can be use to seed up the file read. A good number will be 100</param>
+      /// <param name="trunkSize">The data will be read in trunk of this size internally. Can be use to seed up the file read. A good number will be 4096</param>
       public BinaryFileStorage(String fileName, int trunkSize)
       {
          _fileInfo = new FileInfo(fileName);
@@ -55,12 +54,13 @@ namespace Emgu.Util
 
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(size))
          using (FileStream stream = _fileInfo.OpenWrite())
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
          {
             IntPtr ptr = buffer.AddrOfPinnedObject();
             foreach (T s in samples)
             {
                Marshal.StructureToPtr(s, ptr, false);
-               stream.Write(buffer.Array, 0, size);
+               bufferStream.Write(buffer.Array, 0, size);
             }
          }
       }
@@ -108,21 +108,20 @@ namespace Emgu.Util
       /// <returns>The subsampled data in this storage</returns>
       public IEnumerable<T> GetSubsamples(int subsampleRate)
       {
-         using (FileStream stream = _fileInfo.OpenRead())
-         {
-            int elementSize = Marshal.SizeOf(typeof(T));
-            int bufferSize = elementSize * subsampleRate;
+         int elementSize = Marshal.SizeOf(typeof(T));
+         int bufferSize = elementSize * subsampleRate;
 
-            using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
-            using (PinnedArray<T> structure = new PinnedArray<T>(subsampleRate))
+         using (FileStream stream = _fileInfo.OpenRead())
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
+         using (PinnedArray<T> structure = new PinnedArray<T>(subsampleRate))
+         {
+            IntPtr structAddr = structure.AddrOfPinnedObject();
+            IntPtr addr = buffer.AddrOfPinnedObject();
+            while (bufferStream.Read(buffer.Array, 0, bufferSize) > 0)
             {
-               IntPtr structAddr = structure.AddrOfPinnedObject();
-               IntPtr addr = buffer.AddrOfPinnedObject();
-               while (stream.Read(buffer.Array, 0, bufferSize) > 0)
-               {
-                  Toolbox.memcpy(structAddr, addr, bufferSize);
-                  yield return structure.Array[0];
-               }
+               Toolbox.memcpy(structAddr, addr, bufferSize);
+               yield return structure.Array[0];
             }
          }
       }
@@ -134,50 +133,20 @@ namespace Emgu.Util
       /// <returns>The data in this storage</returns>
       public IEnumerator<T> GetEnumerator()
       {
+         
+         int elementSize = Marshal.SizeOf(typeof(T));
          using (FileStream stream = _fileInfo.OpenRead())
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
+         using (PinnedArray<T> structure = new PinnedArray<T>(1))
          {
-            int elementSize = Marshal.SizeOf(typeof(T));
+            IntPtr structAddr = structure.AddrOfPinnedObject();
+            IntPtr addr = buffer.AddrOfPinnedObject();
 
-            if (_trunkSize <= 1)
+            while (bufferStream.Read(buffer.Array, 0, elementSize) > 0)
             {
-               using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
-               using (PinnedArray<T> structure = new PinnedArray<T>(1))
-               {
-                  IntPtr structAddr = structure.AddrOfPinnedObject();
-                  IntPtr addr = buffer.AddrOfPinnedObject();
-                  while (stream.Read(buffer.Array, 0, elementSize) > 0)
-                  {
-                     Toolbox.memcpy(structAddr, addr, elementSize);
-                     yield return structure.Array[0];
-                  }
-               }
-            }
-            else
-            {
-               int bufferSize = elementSize * _trunkSize;
-               using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
-               using (PinnedArray<T> structure = new PinnedArray<T>(_trunkSize))
-               {
-                  IntPtr structAddr = structure.AddrOfPinnedObject();
-                  IntPtr addr = buffer.AddrOfPinnedObject();
-
-                  for (
-                     int count = stream.Read(buffer.Array, 0, bufferSize) / elementSize; 
-                     count > 0; 
-                     count = stream.Read(buffer.Array, 0, bufferSize) / elementSize)
-                  {
-                     Toolbox.memcpy(structAddr, addr, bufferSize);
-                     if (count == _trunkSize)
-                        foreach (T e in structure.Array) yield return e;
-                     else
-                     {
-                        for (int i = 0; i < count; i++)
-                        {
-                           yield return structure.Array[i];
-                        }
-                     }
-                  }
-               }
+               Toolbox.memcpy(structAddr, addr, elementSize);
+               yield return structure.Array[0];
             }
          }
       }
