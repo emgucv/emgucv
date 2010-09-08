@@ -2,6 +2,7 @@ using System;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Emgu.CV
 {
@@ -15,15 +16,19 @@ namespace Emgu.CV
       private Matrix<double> _distortionCoeffs;
 
       /// <summary>
-      /// Get or Set the DistortionCoeffs ( as a 5x1 (default) or 4x1 matrix ). 
+      /// Get or Set the DistortionCoeffs ( as a 5x1 (default), 4x1 or 8x1 matrix ). 
       /// The ordering of the distortion coefficients is the following:
-      /// (k1, k2, p1, p2[, k3]).
+      /// (k1, k2, p1, p2[, k3 [,k4, k5, k6]]).
       /// That is, the first 2 radial distortion coefficients are followed by 2 tangential distortion coefficients and then, optionally, by the third radial distortion coefficients. Such ordering is used to keep backward compatibility with previous versions of OpenCV
       /// </summary>
       public Matrix<double> DistortionCoeffs
       {
          get { return _distortionCoeffs; }
-         set { _distortionCoeffs = value; }
+         set 
+         {
+            Debug.Assert((value.Rows == 4 || value.Rows == 5 || value.Rows == 8) && value.Cols == 1, "The distortion coefficient should be either 4x1, 5x1 or 8x1");
+            _distortionCoeffs = value; 
+         }
       }
 
       /// <summary>
@@ -32,7 +37,11 @@ namespace Emgu.CV
       public Matrix<double> IntrinsicMatrix
       {
          get { return _intrinsicMatrix; }
-         set { _intrinsicMatrix = value; }
+         set 
+         {
+            Debug.Assert(value.Rows == 3 && value.Cols == 3, "The intrinsic matrix should be 3x3");
+            _intrinsicMatrix = value; 
+         }
       }
 
       /// <summary>
@@ -40,8 +49,8 @@ namespace Emgu.CV
       /// </summary>
       public IntrinsicCameraParameters()
       {
-         _intrinsicMatrix = new Matrix<double>(3, 3);
-         _distortionCoeffs = new Matrix<double>(5, 1);
+         IntrinsicMatrix = new Matrix<double>(3, 3);
+         DistortionCoeffs = new Matrix<double>(5, 1);
       }
 
       /// <summary>
@@ -109,8 +118,8 @@ namespace Emgu.CV
                 srcPointMatrix, dstPointMatrix,
                 _intrinsicMatrix.Ptr,
                 _distortionCoeffs.Ptr,
-                R == null ? IntPtr.Zero : R.Ptr,
-                P == null ? IntPtr.Zero : P.Ptr);
+                R,
+                P);
          }
          srcHandle.Free();
          dstHandle.Free();
