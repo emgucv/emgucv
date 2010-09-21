@@ -2,19 +2,15 @@
 
 #include "plane3D.h"
 
-void setPlane3D(Plane3D* plane, CvPoint3D64f* normal, CvPoint3D64f* pointInPlane)
+void setPlane3D(Plane3D* plane, const CvPoint3D64f* unitNormal, const CvPoint3D64f* pointInPlane)
 {
-   plane->a = normal->x;
-   plane->b = normal->y;
-   plane->c = normal->z;
-   plane->d = - (normal->x * pointInPlane->x + normal->y * pointInPlane->y + normal->z * pointInPlane->z);
+   memcpy(&plane->unitNormal, unitNormal, sizeof(CvPoint3D64f));
+   plane->p = - cvPoint3D64fDotProduct(unitNormal, pointInPlane);
 }
 
-double pointToPlane3DSignedDistance(CvPoint3D64f* point, Plane3D* plane)
+double pointToPlane3DSignedDistance(const CvPoint3D64f* point, const Plane3D* plane)
 {
-   return 
-      fabs(point->x * plane->a + point->y * plane->b + point->z * plane->c + plane->d) 
-      / sqrt(plane->a * plane->a + plane->b * plane->b + plane->c * plane->c);
+   return cvPoint3D64fDotProduct(point, &plane->unitNormal) + plane->p;
 }
 
 bool computePlane3DIntersection(Plane3D* plane0, Plane3D* plane1, Plane3D* plane2, CvPoint3D64f* intersectionPoint)
@@ -26,9 +22,9 @@ bool computePlane3DIntersection(Plane3D* plane0, Plane3D* plane1, Plane3D* plane
 
    cv::Mat_<double> right(3, 1);
    double* rightPtr = right.ptr<double>();
-   *rightPtr++ = -plane0->d;
-   *rightPtr++ = -plane1->d;
-   *rightPtr++ = -plane2->d;
+   *rightPtr++ = -plane0->p;
+   *rightPtr++ = -plane1->p;
+   *rightPtr++ = -plane2->p;
 
    cv::Mat_<double> intersection(3, 1);
 
@@ -40,21 +36,20 @@ bool computePlane3DIntersection(Plane3D* plane0, Plane3D* plane1, Plane3D* plane
    return false;
 }
 
-void setEdge3D(Edge3D* edge, CvPoint3D64f* start, CvPoint3D64f* end)
+void setEdge3D(Edge3D* edge, const CvPoint3D64f* start, const CvPoint3D64f* end)
 {
    memcpy(&edge->startPoint, start, sizeof(CvPoint3D64f));
-   edge->delta.x = end->x - start->x;
-   edge->delta.y = end->y - start->y;
-   edge->delta.z = end->z - start->z;
+   cvPoint3D64fSub(end, start, &edge->delta);
 }
 
 bool computeEdge3DPlane3DIntersection(Edge3D* edge, Plane3D* plane, CvPoint3D64f* intersection)
 {
-   double denominator = plane->a * edge->delta.x + plane->b * edge->delta.y + plane->c * edge->delta.z;
+   double denominator = cvPoint3D64fDotProduct(&plane->unitNormal, &edge->delta);
    if (denominator == 0) return false;
-   double numerator = plane->d - (plane->a * edge->startPoint.x + plane->b * edge->startPoint.y + plane->c * edge->startPoint.z);
+   double numerator = plane->p - cvPoint3D64fDotProduct(&plane->unitNormal, &edge->startPoint);
    double fraction = numerator / denominator;
    if ( fraction < 0 || fraction > 1) return false;
+   
    intersection->x = edge->startPoint.x + fraction*edge->delta.x;
    intersection->y = edge->startPoint.y + fraction*edge->delta.y;
    intersection->z = edge->startPoint.z + fraction*edge->delta.z;
@@ -64,7 +59,8 @@ bool computeEdge3DPlane3DIntersection(Edge3D* edge, Plane3D* plane, CvPoint3D64f
 void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPoint3D64f* size, std::vector<CvPoint3D64f>& intersections)
 {  
    std::vector<CvPoint3D64f> vertices;
-   CvPoint3D64f halfSize = cvPoint3D64f(size->x / 2, size->y / 2, size->z / 2);
+   CvPoint3D64f halfSize;
+   cvPoint3D64fMul(size, 0.5, &halfSize);
    vertices.push_back(cvPoint3D64f(center->x - halfSize.x, center->y - halfSize.y, center->z - halfSize.z));
    vertices.push_back(cvPoint3D64f(center->x - halfSize.x, center->y - halfSize.y, center->z + halfSize.z));
    vertices.push_back(cvPoint3D64f(center->x - halfSize.x, center->y + halfSize.y, center->z - halfSize.z));
@@ -111,7 +107,6 @@ void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPo
    CvPoint3D64f nor0;
    CvPoint3D64f nor1;
    CvPoint3D64f crossProduct;
-   CvPoint3D64f planeNormal = cvPoint3D64f(plane->a, plane->b, plane->c);
    for (unsigned int i = 1; i < intersections.size(); i++)
    {
       for (int j = i; j > 0; j--)
@@ -119,7 +114,7 @@ void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPo
          cvPoint3D64fSub(&intersections[j-1], &c, &nor0);
          cvPoint3D64fSub(&intersections[j], &c, &nor1);
          cvPoint3D64fCrossProduct(&nor0, &nor1, &crossProduct);
-         bool sameSide = cvPoint3D64fDotProduct(&crossProduct, &planeNormal) >= 0;
+         bool sameSide = cvPoint3D64fDotProduct(&crossProduct, &plane->unitNormal) >= 0;
          if (sameSide) break;
          std::swap<CvPoint3D64f>(intersections[j-1], intersections[j]);
       }
