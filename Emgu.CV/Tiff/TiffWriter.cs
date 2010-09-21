@@ -11,26 +11,36 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Tiff
 {
-   /// <summary>
-   /// A class that can be used for writing geotiff
-   /// </summary>
-   public class TiffWriter : UnmanagedObject
+
+   internal static partial class TIFFInvoke
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static IntPtr tiffWriterOpen(
+      public extern static IntPtr tiffWriterOpen(
          [MarshalAs(CvInvoke._stringMarshalType)]
          string fileSpec);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void tiffWriterClose(ref IntPtr pTiff);
+      public extern static void tiffWriterClose(ref IntPtr pTiff);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void tiffWriteGeoTag(IntPtr pTiff, IntPtr modelTiepoint, IntPtr ModelPixelScale);
+      public extern static void tiffWriteGeoTag(IntPtr pTiff, IntPtr modelTiepoint, IntPtr ModelPixelScale);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void tiffWriteImage(IntPtr pTiff, IntPtr image);
+      public extern static void tiffWriteImage(IntPtr pTiff, IntPtr image);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      public extern static void tiffWriteImageInfo(IntPtr pTiff, int bitsPerSample, int samplesPerPixel);
       #endregion
+   }
+
+   /// <summary>
+   /// A class that can be used for writing geotiff
+   /// </summary>
+   public class TiffWriter<TColor, TDepth> : UnmanagedObject
+      where TColor : struct, IColor
+      where TDepth : new()
+   {
 
       /// <summary>
       /// Create a tiff writer to save an image
@@ -38,22 +48,19 @@ namespace Emgu.CV.Tiff
       /// <param name="fileName">The file name to be saved</param>
       public TiffWriter(String fileName)
       {
-         _ptr = tiffWriterOpen(fileName);
+         _ptr = TIFFInvoke.tiffWriterOpen(fileName);
+         TIFFInvoke.tiffWriteImageInfo(_ptr, Image<TColor, TDepth>.SizeOfElement * 8, new TColor().Dimension);
       }
 
       /// <summary>
       /// 
       /// </summary>
-      /// <typeparam name="TColor"></typeparam>
-      /// <typeparam name="TDepth"></typeparam>
       /// <param name="image"></param>
-      public virtual void WriteImage<TColor, TDepth>(Image<TColor, TDepth> image)
-         where TColor : struct, IColor
-         where TDepth : new()
+      public virtual void WriteImage(Image<TColor, TDepth> image)
       {
          if (image is Image<Gray, Byte>)
          {
-            tiffWriteImage(_ptr, image.Ptr);
+            TIFFInvoke.tiffWriteImage(_ptr, image.Ptr);
          }
          else if (image is Image<Bgra, Byte>)
          {
@@ -64,7 +71,7 @@ namespace Emgu.CV.Tiff
             {
                clone[2] = b;
                clone[0] = r;
-               tiffWriteImage(_ptr, clone.Ptr);
+               TIFFInvoke.tiffWriteImage(_ptr, clone.Ptr);
             }
          }
          else if (image is Image<Bgr, Byte>)
@@ -76,7 +83,7 @@ namespace Emgu.CV.Tiff
             {
                clone[2] = b;
                clone[0] = r;
-               tiffWriteImage(_ptr, clone);
+               TIFFInvoke.tiffWriteImage(_ptr, clone);
             }
          }
          else
@@ -122,7 +129,7 @@ namespace Emgu.CV.Tiff
          GCHandle tiepointHandle = GCHandle.Alloc(modelTiepoint, GCHandleType.Pinned);
          GCHandle pixelScaleHandle = GCHandle.Alloc(modelPixelScale, GCHandleType.Pinned);
 
-         tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
+         TIFFInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
 
          tiepointHandle.Free();
          pixelScaleHandle.Free();
@@ -133,7 +140,7 @@ namespace Emgu.CV.Tiff
       /// </summary>
       protected override void DisposeObject()
       {
-         tiffWriterClose(ref _ptr);
+         TIFFInvoke.tiffWriterClose(ref _ptr);
       }
    }
 }
