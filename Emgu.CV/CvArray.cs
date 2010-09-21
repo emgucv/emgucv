@@ -20,9 +20,9 @@ namespace Emgu.CV
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable where TDepth : new()
    {
       /// <summary>
-      /// The size of the elements in the CvArray
+      /// The size of the elements in the CvArray, it is the cached value of Marshal.SizeOf(typeof(TDepth)).
       /// </summary>
-      protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
+      private static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
 
       /// <summary>
       /// The pinned GCHandle to _array;
@@ -42,6 +42,17 @@ namespace Emgu.CV
          {
             Debug.Assert(0 <= value && value <= 9, "Compression ratio must >=0 and <=9");
             _serializationCompressionRatio = value;
+         }
+      }
+
+      /// <summary>
+      /// Get the size of element in bytes
+      /// </summary>
+      public static int SizeOfElement
+      {
+         get
+         {
+            return _sizeOfElement;
          }
       }
 

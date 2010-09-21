@@ -17,6 +17,7 @@ using Emgu.CV.UI;
 using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
 using Emgu.Util;
+using Emgu.CV.Tiff;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test
@@ -1861,6 +1862,19 @@ namespace Emgu.CV.Test
 
          Assert.AreEqual(indexOfClosest1, indexOfClosest2);
          Assert.LessOrEqual( Math.Sqrt(shortestDistance1 - shortestDistance2), 1.0e-3 * shortestDistance1);
+      }
+
+      [Test]
+      public void TestTiffWriter()
+      {
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(320, 240);
+         Size tileSize = new Size(32, 32);
+
+         using (TileTiffWriter<Bgr, Byte> writer = new TileTiffWriter<Bgr, byte>("temp.tiff", image.Size, tileSize))
+         {
+            Assert.AreEqual(tileSize, writer.TileSize, "tile size not equals");
+            writer.WriteImage(image);
+         }
       }
    }
 }

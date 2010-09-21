@@ -79,7 +79,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(1000, 1000);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         using (TiffWriter writer = new TiffWriter("temp.tif"))
+         using (TiffWriter<Gray, Byte> writer = new TiffWriter<Gray, Byte>("temp.tif"))
          {
             writer.WriteImage(image);
             writer.WriteGeoTag(new GeodeticCoordinate(
@@ -96,7 +96,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(1000, 1000);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         using (TiffWriter writer = new TiffWriter("temp.tif"))
+         using (TiffWriter<Gray,Byte> writer = new TiffWriter<Gray, Byte>("temp.tif"))
          {
             writer.WriteGeoTag(new GeodeticCoordinate(
                GeodeticCoordinate.DegreeToRadian(43.853626),

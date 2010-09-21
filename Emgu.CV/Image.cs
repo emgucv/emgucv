@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// <summary>
       /// The dimension of color
       /// </summary>
-      private static int _numberOfChannels;
+      private static readonly int _numberOfChannels = new TColor().Dimension;
 
       #region constructors
       ///<summary>
@@ -247,7 +247,7 @@ namespace Emgu.CV
          }
 
          _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-         CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * _sizeOfElement);
+         CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * SizeOfElement);
       }
 
       ///<summary>
@@ -357,10 +357,6 @@ namespace Emgu.CV
       {
          get
          {
-            if (_numberOfChannels == 0)
-            {
-               _numberOfChannels = new TColor().Dimension;
-            }
             return _numberOfChannels;
          }
       }
@@ -3113,7 +3109,7 @@ namespace Emgu.CV
          Size roiSize;
          CvInvoke.cvGetRawData(Ptr, out start, out step1, out roiSize);
          Int64 data1 = start.ToInt64();
-         int width1 = _sizeOfElement * cols1;
+         int width1 = SizeOfElement * cols1;
 
          using (PinnedArray<TDepth> row1 = new PinnedArray<TDepth>(cols1))
             for (int row = 0; row < Height; row++, data1 += step1)
