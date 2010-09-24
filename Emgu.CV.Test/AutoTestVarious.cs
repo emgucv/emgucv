@@ -1668,6 +1668,15 @@ namespace Emgu.CV.Test
          CvInvoke.cvAbsDiff(m1, m2, diff);
          double norm = CvInvoke.cvNorm(diff, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_C, IntPtr.Zero);
          Assert.Less(norm, epsilon);
+
+         Quaternions q3 = new Quaternions();
+         q3.W = 1;
+         q3.X = 0;
+         q3.Y = 0;
+         q3.Z = 0;
+
+         Quaternions q4 = q1 * q3;
+         Assert.AreEqual(q4, q1);  
       }
 
       [Test]

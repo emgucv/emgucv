@@ -175,10 +175,10 @@ void axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaterni
    double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
    if (theta < THETA_EPS) 
    {
-      quaternions->w = 0;
+      quaternions->w = 1.0;
       quaternions->x = 0.0;
       quaternions->y = 0.0;
-      quaternions->z = 1.0;
+      quaternions->z = 0.0;
       return;
    }
    double halfAngle = theta * 0.5;
