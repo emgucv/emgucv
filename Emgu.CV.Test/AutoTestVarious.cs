@@ -1885,5 +1885,32 @@ namespace Emgu.CV.Test
             writer.WriteImage(image);
          }
       }
+
+
+      #region TestUnmanagedStatusUpdate
+
+      [Test]
+      public void TestUnmanagedStatusUpdate()
+      {
+         UnmanagedStatusUpdate.Updated += UnmanagedStatusUpdate_Updated;
+
+         UnmanagedStatusUpdate_Updated_Visited = false;
+         unmanagedUpdateStatusRequestTestMessage();
+         Assert.IsTrue(UnmanagedStatusUpdate_Updated_Visited);
+      }
+
+      private static bool UnmanagedStatusUpdate_Updated_Visited;
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void unmanagedUpdateStatusRequestTestMessage();
+
+      private static void UnmanagedStatusUpdate_Updated(object sender, EventArgs<string, int> e)
+      {
+         Assert.AreEqual(e.Value1, "Test");
+         Assert.AreEqual(e.Value2, 1);
+         UnmanagedStatusUpdate_Updated_Visited = true;
+      }
+
+      #endregion
    }
 }

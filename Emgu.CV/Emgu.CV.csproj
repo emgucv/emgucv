@@ -94,6 +94,7 @@
     <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="Features2D\RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
+    <Compile Include="PInvoke\UnmanagedStatusUpdate.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="Features2D\StarDetector.cs" />
     <Compile Include="Features2D\MSERDetector.cs" />
