@@ -6,31 +6,174 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
-   public static class UnmanagedStatusUpdate
+   /// <summary>
+   /// A DataLogger for unmanaged code to log data back to managed code, using callback.
+   /// </summary>
+   public class DataLogger : UnmanagedObject
    {
-      public static event UnmanagedStatusUpdateHandler Updated;
-
-      public delegate void UnmanagedStatusUpdateHandler(object sender, EventArgs<String, int> e);
-
-      static UnmanagedStatusUpdate()
-      {
-         redirectUnmanagedStatusUpdate(_customeHandler);
-      }
+      #region PInvoke
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern IntPtr DataLoggerCreate();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void redirectUnmanagedStatusUpdate(
-         MessageCallback statusReport_handler);
+      private static extern void DataLoggerRelease(ref IntPtr logger);
 
-      private delegate void MessageCallback(String message, int type);
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void DataLoggerRegisterCallback(
+         IntPtr logger,
+         DataCallback messageCallback);
 
-      private static readonly MessageCallback _customeHandler = ( MessageCallback ) MessageHandler;
+      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      private static extern void DataLoggerLog(
+         IntPtr logger, 
+         IntPtr data);
+      #endregion
 
-      private static void MessageHandler(String message, int type)
+      /// <summary>
+      /// The event that will be raised when the unmanaged code send over data
+      /// </summary>
+      public event DataCallbackHandler OnDataReceived;
+
+      /// <summary>
+      /// Define the type of callback when data is received
+      /// </summary>
+      /// <param name="sender">The DataLogger that send the message</param>
+      /// <param name="e">The data</param>
+      public delegate void DataCallbackHandler(object sender, EventArgs<IntPtr> e);
+
+      private DataCallback _handler;
+
+      /// <summary>
+      /// Create a MessageLogger and register the callback function
+      /// </summary>
+      public DataLogger()
       {
-         if (Updated != null)
+         _ptr = DataLoggerCreate();
+         _handler = DataHandler;
+         DataLoggerRegisterCallback(_ptr, _handler);
+      }
+
+      /// <summary>
+      /// Log some data
+      /// </summary>
+      /// <param name="data">Pointer to some unmanaged data</param>
+      public void Log(IntPtr data)
+      {
+         DataLoggerLog(_ptr, data);
+      }
+
+      private delegate void DataCallback(IntPtr data);
+
+      private void DataHandler(IntPtr data)
+      {
+         if (OnDataReceived != null)
+            OnDataReceived(this, new EventArgs<IntPtr>(data));
+      }
+
+      /// <summary>
+      /// Release the DataLogger and all the unmanaged memory associated with it.
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         DataLoggerRelease(ref _ptr);
+      }
+   }
+
+   /// <summary>
+   /// A generic version of the DataLogger
+   /// </summary>
+   /// <typeparam name="T">The supported type includes System.String and System.ValueType</typeparam>
+   public class DataLogger<T> : DisposableObject
+   {
+      private DataLogger _logger; 
+
+      /// <summary>
+      /// Define the type of callback when data is received
+      /// </summary>
+      /// <param name="sender">The DataLogger that send the message</param>
+      /// <param name="e">The data</param>
+      public delegate void DataCallbackHandler(object sender, EventArgs<T> e);
+
+      private DataLogger.DataCallbackHandler _handler;
+
+      /// <summary>
+      /// Create a new DataLogger
+      /// </summary>
+      public DataLogger()
+      {
+         _logger = new DataLogger();
+         _handler = DataHandler;
+         _logger.OnDataReceived += _handler;
+      }
+
+      /// <summary>
+      /// The event that will be raised when the unmanaged code send over data
+      /// </summary>
+      public event DataCallbackHandler OnDataReceived;
+
+      /// <summary>
+      /// Log some data
+      /// </summary>
+      /// <param name="data">The data to be logged</param>
+      public void Log(T data)
+      {
+         if (typeof(T) == typeof(String))
          {
-            Updated(null, new EventArgs<string, int>(message, type));
+            String d = data as String;
+            _logger.Log(Marshal.StringToHGlobalAnsi(d));
          }
+         else
+         {
+            IntPtr ptr = new IntPtr();
+            Marshal.StructureToPtr(data, ptr, false);
+            _logger.Log(ptr);
+         }
+      }
+
+      private void DataHandler(Object sender, EventArgs<IntPtr> e)
+      {
+         if (OnDataReceived != null)
+         {
+            T result;
+            if (typeof(T) == typeof(String))
+            {
+               result = (T)((Object)Marshal.PtrToStringAnsi(e.Value));
+            }
+            else
+            {
+               result = (T)Marshal.PtrToStructure(e.Value, typeof(T));
+            }
+            OnDataReceived(this, new EventArgs<T>(result));
+         }
+      }
+
+      /// <summary>
+      /// Pointer to the unmanaged object
+      /// </summary>
+      public IntPtr Ptr
+      {
+         get
+         {
+            return _logger.Ptr;
+         }
+      }
+
+      /// <summary>
+      /// Implicit operator for IntPtr
+      /// </summary>
+      /// <param name="obj">The DataLogger</param>
+      /// <returns>The unmanaged pointer for this DataLogger</returns>
+      public static implicit operator IntPtr(DataLogger<T> obj)
+      {
+         return obj == null ? IntPtr.Zero : obj.Ptr;
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this DataLogger
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         _logger.Dispose();
       }
    }
 }

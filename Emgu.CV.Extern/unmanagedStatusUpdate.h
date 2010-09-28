@@ -1,10 +1,34 @@
 #include "opencv2/core/core.hpp"
 
-typedef void (_stdcall *UnmanagedStatusUpdateCallback)( const char* message, int updateType);
+namespace emgu {
 
-/* Assigns a new status update function */
-CVAPI(void) redirectUnmanagedStatusUpdate( UnmanagedStatusUpdateCallback statusUpdate_handler );
+   typedef void (_stdcall *DataCallback)(void* data);
 
-CVAPI(void) unmanagedUpdateStatus(char* message, int updateType);
+   class CV_EXPORTS DataLogger
+   {
+   public:
+      DataCallback callback;
 
-CVAPI(void) unmanagedUpdateStatusRequestTestMessage();
+      DataLogger()
+         : callback(0)  {};
+
+      void registerCallback(DataCallback dataCallback)
+      {
+         callback = dataCallback;
+      }
+
+      void log(void* data)
+      {
+         if (callback) callback(data);
+      }
+   };
+};
+
+/* DataLogger */
+CVAPI(emgu::DataLogger*) DataLoggerCreate();
+
+CVAPI(void) DataLoggerRelease(emgu::DataLogger** logger);
+
+CVAPI(void) DataLoggerRegisterCallback(emgu::DataLogger* logger, emgu::DataCallback messageCallback );
+
+CVAPI(void) DataLoggerLog(emgu::DataLogger* logger, void* data);

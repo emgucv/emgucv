@@ -1887,30 +1887,27 @@ namespace Emgu.CV.Test
       }
 
 
-      #region TestUnmanagedStatusUpdate
-
       [Test]
-      public void TestUnmanagedStatusUpdate()
+      public void TestMessageLogger()
       {
-         UnmanagedStatusUpdate.Updated += UnmanagedStatusUpdate_Updated;
 
-         UnmanagedStatusUpdate_Updated_Visited = false;
-         unmanagedUpdateStatusRequestTestMessage();
-         Assert.IsTrue(UnmanagedStatusUpdate_Updated_Visited);
+         bool dataLogged = false;
+
+         using (DataLogger<String> logger = new DataLogger<String>())
+         {
+          logger.OnDataReceived += 
+               delegate(object sender, EventArgs<string> e)
+               {
+                  Assert.AreEqual(e.Value, "Test");
+                  dataLogged = true;
+               };
+
+            logger.Log("Test");
+
+            Assert.IsTrue(dataLogged);
+         }
       }
 
-      private static bool UnmanagedStatusUpdate_Updated_Visited;
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private static extern void unmanagedUpdateStatusRequestTestMessage();
-
-      private static void UnmanagedStatusUpdate_Updated(object sender, EventArgs<string, int> e)
-      {
-         Assert.AreEqual(e.Value1, "Test");
-         Assert.AreEqual(e.Value2, 1);
-         UnmanagedStatusUpdate_Updated_Visited = true;
-      }
-
-      #endregion
    }
 }

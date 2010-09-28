@@ -1,21 +1,19 @@
 #include "unmanagedStatusUpdate.h"
 
-static UnmanagedStatusUpdateCallback unmanagedStatusUpdateCallback = 0;
+using namespace emgu;
 
-void redirectUnmanagedStatusUpdate( UnmanagedStatusUpdateCallback statusUpdate_handler )
+DataLogger* DataLoggerCreate() { return new DataLogger(); }
+
+void DataLoggerRelease(DataLogger** logger) { if (*logger) { delete *logger; *logger = 0; } }
+
+void DataLoggerRegisterCallback(DataLogger* logger, DataCallback dataCallback )
 {
-   unmanagedStatusUpdateCallback = statusUpdate_handler;
+   logger->callback = dataCallback;
 }
 
-void unmanagedUpdateStatus(char* message, int updateType)
+void DataLoggerLog(DataLogger* logger, void* data)
 {
-   if (unmanagedStatusUpdateCallback)
-   {
-      unmanagedStatusUpdateCallback(message, updateType);
-   }
+   logger->log(data);
 }
 
-void unmanagedUpdateStatusRequestTestMessage()
-{
-   unmanagedUpdateStatus("Test", 1);
-}
+
