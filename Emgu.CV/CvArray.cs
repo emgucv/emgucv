@@ -265,6 +265,21 @@ namespace Emgu.CV
          return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
       }
 
+      /// <summary>
+      /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
+      /// is between <paramref name="min"/> and <paramref name="max"/>. in the case of multi-channel arrays each channel is processed
+      /// independently. If some values are out of range, position of the first outlier is stored in pos, 
+      /// and then the functions return false.
+      /// </summary>
+      /// <param name="min">The inclusive lower boundary of valid values range</param>
+      /// <param name="max">The exclusive upper boundary of valid values range</param>
+      /// <param name="position">This will be filled with the position of the first outlier</param>
+      /// <returns>True if all values are in range</returns>
+      public bool CheckRange(double min, double max, ref System.Drawing.Point position)
+      {
+         return CvInvoke.cvCheckRange(_ptr, true, ref position, min, max);
+      }
+
       #region statistic
       /// <summary>
       /// Reduces matrix to a vector by treating the matrix rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 

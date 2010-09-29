@@ -351,5 +351,28 @@ namespace Emgu.CV
          int iterCount, 
          CvEnum.GRABCUT_INIT_TYPE type);
 
+
+      /// <summary>
+      /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
+      /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed
+      /// independently. If some values are out of range, position of the first outlier is stored in pos, 
+      /// and then the functions either return false (when quiet=true) or throw an exception.
+      /// </summary>
+      /// <param name="arr">The array to check</param>
+      /// <param name="quiet">The flag indicating whether the functions quietly return false when the array elements are
+      /// out of range, or they throw an exception</param>
+      /// <param name="pos">This will be filled with the position of the first outlier</param>
+      /// <param name="minVal">The inclusive lower boundary of valid values range</param>
+      /// <param name="maxVal">The exclusive upper boundary of valid values range</param>
+      /// <returns>If quiet, return true if all values are in range</returns>
+      [DllImport(EXTERN_LIBRARY)]
+      [return: MarshalAs(UnmanagedType.I1)]
+      internal extern static bool cvCheckRange(
+         IntPtr arr, 
+         [MarshalAs(UnmanagedType.I1)]
+         bool quiet, 
+         ref Point pos, 
+         double minVal, 
+         double maxVal);
    }
 }

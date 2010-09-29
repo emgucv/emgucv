@@ -47,3 +47,13 @@ CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplI
    cv::Mat dispMat = cv::cvarrToMat(disparity);
    (*disparitySolver)(leftMat, rightMat, dispMat);
 }
+
+CVAPI(bool) cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, double maxVal)
+{
+   cv::Mat mat = cv::cvarrToMat(arr);
+   cv::Point p;
+   bool result = cv::checkRange(mat, quiet, &p , minVal, maxVal);
+   index->x = p.x;
+   index->y = p.y;
+   return result;
+}
