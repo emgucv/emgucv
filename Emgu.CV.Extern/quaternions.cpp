@@ -160,9 +160,11 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
 
    quaternionsDst->w = (w1*w2 - x1*x2 - y1*y2 - z1*z2);
    quaternionsDst->x = (w1*x2 + x1*w2 + y1*z2 - z1*y2);
-
-   quaternionsDst->z = (w1*z2 + x1*y2 - y1*x2 + z1*w2);
    quaternionsDst->y = (w1*y2 - x1*z2 + y1*w2 + z1*x2);
+   quaternionsDst->z = (w1*z2 + x1*y2 - y1*x2 + z1*w2);
+
+   //this is done to improve the numerical stability
+   quaternionsRenorm(quaternionsDst); 
 
 #endif
 }
