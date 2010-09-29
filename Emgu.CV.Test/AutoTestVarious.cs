@@ -1637,7 +1637,7 @@ namespace Emgu.CV.Test
          MCvPoint3D64f p = new MCvPoint3D64f(r.NextDouble() * 10, r.NextDouble() * 10, r.NextDouble() * 10);
 
          MCvPoint3D64f delta = (q1 * q2).RotatePoint(p) - q1.RotatePoint(q2.RotatePoint(p));
-         double epsilon = 1.0e-8;
+         double epsilon = 1.0e-12;
          Assert.Less(delta.x, epsilon);
          Assert.Less(delta.y, epsilon);
          Assert.Less(delta.z, epsilon);
@@ -1677,6 +1677,23 @@ namespace Emgu.CV.Test
 
          Quaternions q4 = q1 * q3;
          Assert.AreEqual(q4, q1);  
+      }
+
+      [Test]
+      public void TestAxisAngleCompose()
+      {
+         MCvPoint3D64f angle1 = new MCvPoint3D64f(4.1652539565753417e-022,-9.4229054916424228e-022, 5.1619136559035708e-008 );
+         MCvPoint3D64f angle2 = new MCvPoint3D64f(4.3209729769679014e-023,3.2042397847543764e-023,-6.4083339340765912e-008 );
+         Quaternions q1 = new Quaternions();
+         q1.AxisAngle = angle1;
+         Quaternions q2 = new Quaternions();
+         q2.AxisAngle = angle2;
+         Quaternions q = q1 * q2;
+         
+         MCvPoint3D64f angle = q.AxisAngle;
+         Assert.AreNotEqual(double.NaN, angle.x, "Invalid value x");
+         Assert.AreNotEqual(double.NaN, angle.y, "Invalid value y");
+         Assert.AreNotEqual(double.NaN, angle.z, "Invalid value z");
       }
 
       [Test]
