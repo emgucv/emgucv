@@ -1,3 +1,7 @@
+#pragma once
+#ifndef DATA_LOGGER_H
+#define DATA_LOGGER_H
+
 #include "opencv2/core/core.hpp"
 
 namespace emgu {
@@ -32,3 +36,5 @@ CVAPI(void) DataLoggerRelease(emgu::DataLogger** logger);
 CVAPI(void) DataLoggerRegisterCallback(emgu::DataLogger* logger, emgu::DataCallback messageCallback );
 
 CVAPI(void) DataLoggerLog(emgu::DataLogger* logger, void* data);
+
+#endif

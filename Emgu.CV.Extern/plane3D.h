@@ -1,3 +1,7 @@
+#pragma once
+#ifndef PLANE3D_H
+#define PLANE3D__H
+
 #include "opencv2/core/core.hpp"
 #include "pointUtil.h"
 
@@ -37,3 +41,4 @@ CVAPI(void) setEdge3D(Edge3D* edge, const CvPoint3D64f* start, const CvPoint3D64
 //Return true if there is an intersection, false otherwise
 CVAPI(bool) computeEdge3DPlane3DIntersection(Edge3D* edge, Plane3D* plane, CvPoint3D64f* intersection);
 
+#endif
