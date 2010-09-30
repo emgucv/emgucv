@@ -5,7 +5,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
 #include "sse.h"
-#include "weightedSum.h"
+#include "doubleOps.h"
 
 /**
  * @struct  Quaternions
