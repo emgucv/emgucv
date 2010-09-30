@@ -88,9 +88,21 @@ CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
    double threshold, double edgeThreshold, //detector parameters
    double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
 {
-   cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave, angleMode);
-   cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold);
-   cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize, recalculateAngles);
+   cv::SIFT tmp;
+   cv::SIFT::CommonParams p = tmp.getCommonParams();
+   p.nOctaves=nOctaves;
+   p.nOctaveLayers=nOctaveLayers; 
+   p.firstOctave=firstOctave;
+   p.angleMode=angleMode;
+
+   cv::SIFT::DetectorParams detectorP = tmp.getDetectorParams();
+   detectorP.threshold=threshold;
+   detectorP.edgeThreshold=edgeThreshold;
+
+   cv::SIFT::DescriptorParams descriptorP = tmp.getDescriptorParams();
+   descriptorP.magnification=magnification;
+   descriptorP.isNormalize=isNormalize;
+   descriptorP.recalculateAngles=recalculateAngles;
    return new cv::SIFT(p, detectorP, descriptorP);
 }
 
