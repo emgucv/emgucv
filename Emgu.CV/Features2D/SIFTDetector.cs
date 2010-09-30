@@ -13,14 +13,14 @@ namespace Emgu.CV.Features2D
    public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorDetectKeyPoints(
          IntPtr detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorDetectFeature(
          IntPtr detector,
          IntPtr image,
@@ -28,10 +28,10 @@ namespace Emgu.CV.Features2D
          IntPtr keypoints,
          IntPtr descriptors);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static int CvSIFTDetectorGetDescriptorSize(IntPtr detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorComputeDescriptors(
          IntPtr detector,
          IntPtr image,
@@ -40,13 +40,13 @@ namespace Emgu.CV.Features2D
          int numberOfKeyPoints,
          IntPtr descriptors);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvSIFTDetectorCreate(
          int nOctaves, int nOctaveLayers, int firstOctave, AngleMode angleMode, //common parameters
          double threshold, double edgeThreshold, //detector parameters
-         double magnification, [MarshalAs(UnmanagedType.I1)] bool isNormalize, [MarshalAs(UnmanagedType.I1)] bool recalculateAngles); //descriptor parameters
+         double magnification, [MarshalAs(CvInvoke.BoolMarshalType)] bool isNormalize, [MarshalAs(CvInvoke.BoolMarshalType)] bool recalculateAngles); //descriptor parameters
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorRelease(ref IntPtr detector);
       #endregion
 

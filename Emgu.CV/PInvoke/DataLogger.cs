@@ -12,18 +12,18 @@ namespace Emgu.CV
    public class DataLogger : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention=CvInvoke.CvCallingConvention)]
       private static extern IntPtr DataLoggerCreate();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void DataLoggerRelease(ref IntPtr logger);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void DataLoggerRegisterCallback(
          IntPtr logger,
          DataCallback messageCallback);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void DataLoggerLog(
          IntPtr logger, 
          IntPtr data);
@@ -62,6 +62,7 @@ namespace Emgu.CV
          DataLoggerLog(_ptr, data);
       }
 
+      [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       private delegate void DataCallback(IntPtr data);
 
       private void DataHandler(IntPtr data)

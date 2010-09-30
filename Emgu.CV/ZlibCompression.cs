@@ -11,13 +11,13 @@ namespace Emgu.CV
    internal static class ZlibCompression
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int zlibCompressBound(int length);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void zlibCompress2(IntPtr dataCompressed, ref int sizeDataCompressed, IntPtr dataOriginal, int sizeDataOriginal, int compressionLevel);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void zlibUncompress(IntPtr dataUncompressed, ref int sizeDataUncompressed, IntPtr compressedData, int sizeDataCompressed);
       #endregion
 

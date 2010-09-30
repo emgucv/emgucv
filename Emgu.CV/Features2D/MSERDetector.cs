@@ -12,7 +12,7 @@ namespace Emgu.CV.Features2D
    public struct MSERDetector : IKeyPointDetector
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvMSERKeyPoints(
          IntPtr image,
          IntPtr mask,

@@ -39,7 +39,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public int SuppressNonmaxSize;
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvStarDetectorDetectKeyPoints(
          ref StarDetector detector,
          IntPtr image,
@@ -87,7 +87,7 @@ namespace Emgu.CV.Features2D
          LineThresholdProjected = lineThresholdProjected;
          LineThresholdBinarized = lineThresholdBinarized;
          SuppressNonmaxSize = suppressNonmaxSize;
-         
+
       }
 
       /// <summary>

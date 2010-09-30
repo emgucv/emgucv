@@ -14,22 +14,22 @@ namespace Emgu.CV.Geodetic
    public static class TransformationWGS84
    {
 #if PINVOKE
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformGeodetic2ECEF(ref GeodeticCoordinate coordinate, ref MCvPoint3D64f ecef);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformECEF2Geodetic(ref MCvPoint3D64f ecef, ref GeodeticCoordinate coordinate);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformGeodetic2ENU(ref GeodeticCoordinate coor, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref MCvPoint3D64f enu);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformENU2Geodetic(ref MCvPoint3D64f enu, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref GeodeticCoordinate coor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformGeodetic2NED(ref GeodeticCoordinate coor, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref MCvPoint3D64f ned);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void transformNED2Geodetic(ref MCvPoint3D64f ned, ref GeodeticCoordinate refCoor, ref MCvPoint3D64f refEcef, ref GeodeticCoordinate coor);
 #else
       /// <summary>

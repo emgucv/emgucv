@@ -11,7 +11,17 @@ namespace Emgu.CV
       /// <summary>
       /// string marshaling type
       /// </summary>
-     internal const UnmanagedType _stringMarshalType = UnmanagedType.LPStr;
+      public const UnmanagedType StringMarshalType = UnmanagedType.LPStr;
+
+      /// <summary>
+      /// bool marshaling type
+      /// </summary>
+      public const UnmanagedType BoolMarshalType = UnmanagedType.U1;
+
+      /// <summary>
+      /// Opencv's calling convention
+      /// </summary>
+      public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;
 
       /// <summary>
       /// Static Constructor to setup opencv environment

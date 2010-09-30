@@ -12,13 +12,13 @@ namespace Emgu.CV.Features2D
    internal class RTreeClassifierExtern
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr CvRTreeClassifierCreate();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvRTreeClassifierRelease(IntPtr classifier);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvRTreeClassifierTrain(
          IntPtr classifier,
          IntPtr trainImage,
@@ -29,7 +29,7 @@ namespace Emgu.CV.Features2D
          int views, IntPtr reducedNumDim,
          int numQuantBits);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int CvRTreeClassifierGetSigniture(
          IntPtr classifier,
          IntPtr image,
@@ -38,7 +38,7 @@ namespace Emgu.CV.Features2D
          IntPtr signiture);
 
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int CvRTreeClassifierGetNumClasses(IntPtr classifier);
       #endregion
    }
@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public RTreeClassifier()
       {
-         _ptr = RTreeClassifierExtern.CvRTreeClassifierCreate(); 
+         _ptr = RTreeClassifierExtern.CvRTreeClassifierCreate();
       }
 
       /// <summary>
@@ -74,9 +74,9 @@ namespace Emgu.CV.Features2D
       int numQuantBits)
       {
          Debug.Assert(reducedNumDim <= keypoints.Length, "ReducedNumDim should be smaller or equals the number of keypoints");
-         
+
          Random r = new Random();
-         UInt64 rng = (UInt64) r.Next();
+         UInt64 rng = (UInt64)r.Next();
          GCHandle handle = GCHandle.Alloc(keypoints, GCHandleType.Pinned);
          RTreeClassifierExtern.CvRTreeClassifierTrain(
             _ptr,

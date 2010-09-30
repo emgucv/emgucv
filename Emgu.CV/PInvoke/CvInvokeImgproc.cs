@@ -17,7 +17,7 @@ namespace Emgu.CV
       /// <param name="buffer">Buffer to store the line points; must have enough size to store max( |pt2.x-pt1.x|+1, |pt2.y-pt1.y|+1 ) points in case of 8-connected line and |pt2.x-pt1.x|+|pt2.y-pt1.y|+1 in case of 4-connected line</param>
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvSampleLine(IntPtr image, Point pt1, Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
 
       /// <summary>
@@ -28,7 +28,7 @@ namespace Emgu.CV
       /// <param name="src">Source image</param>
       /// <param name="dst">Extracted rectangle</param>
       /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center);
 
       /// <summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV
       /// <param name="src">Source image</param>
       /// <param name="dst">Extracted quadrangle</param>
       /// <param name="mapMatrix">The transformation 2 x 3 matrix [A|b]</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetQuadrangleSubPix(IntPtr src, IntPtr dst, IntPtr mapMatrix);
 
       /// <summary>
@@ -51,7 +51,7 @@ namespace Emgu.CV
       /// <param name="src">Source image.</param>
       /// <param name="dst">Destination image</param>
       /// <param name="interpolation">Interpolation method</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
 
       /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV
       /// <param name="mapMatrix">2x3 transformation matrix</param>
       /// <param name="flags"> flags </param>
       /// <param name="fillval">A value used to fill outliers</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvWarpAffine(
           IntPtr src,
           IntPtr dst,
@@ -79,7 +79,7 @@ namespace Emgu.CV
       /// <param name="dst">Pointer to an array of PointF, Coordinates of the 3 corresponding triangle vertices in the destination image</param>
       /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
       /// <returns>Pointer to the destination 2x3 matrix</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetAffineTransform(
          IntPtr src,
          IntPtr dst,
@@ -94,7 +94,7 @@ namespace Emgu.CV
       /// <param name="dst">Coordinates of the 3 corresponding triangle vertices in the destination image</param>
       /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
       /// <returns>Pointer to the destination 2x3 matrix</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetAffineTransform(
          PointF[] src,
          PointF[] dst,
@@ -108,7 +108,7 @@ namespace Emgu.CV
       /// <param name="scale">Isotropic scale factor</param>
       /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
       /// <returns>Pointer to the destination 2x3 matrix</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cv2DRotationMatrix(
           PointF center,
           double angle,
@@ -123,7 +123,7 @@ namespace Emgu.CV
       /// <param name="mapMatrix">3? transformation matrix</param>
       /// <param name="flags"></param>
       /// <param name="fillval">A value used to fill outliers</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvWarpPerspective(
          IntPtr src,
          IntPtr dst,
@@ -140,7 +140,7 @@ namespace Emgu.CV
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
       /// <param name="mapMatrix">Pointer to the destination 3x3 matrix</param>
       /// <returns>Pointer to the perspective transform matrix</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetPerspectiveTransform(
          PointF[] src,
          PointF[] dst,
@@ -155,7 +155,7 @@ namespace Emgu.CV
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
       /// <param name="mapMatrix">Pointer to the destination 3x3 matrix</param>
       /// <returns>Pointer to the perspective transform matrix</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetPerspectiveTransform(
          IntPtr src,
          IntPtr dst,
@@ -170,7 +170,7 @@ namespace Emgu.CV
       /// <param name="mapy">The map of y-coordinates (32fC1 image)</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS </param>
       /// <param name="fillval">A value used to fill outliers</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRemap(IntPtr src, IntPtr dst,
             IntPtr mapx, IntPtr mapy,
             int flags,
@@ -184,7 +184,7 @@ namespace Emgu.CV
       /// <param name="center">The transformation center, where the output precision is maximal</param>
       /// <param name="M">Magnitude scale parameter</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLogPolar(
          IntPtr src,
          IntPtr dst,
@@ -200,7 +200,7 @@ namespace Emgu.CV
       /// <param name="center">The transformation center, where the output precision is maximal</param>
       /// <param name="maxRadius">Maximum radius</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLinearPolar(
          IntPtr src,
          IntPtr dst,
@@ -215,7 +215,7 @@ namespace Emgu.CV
       /// <param name="src">The source image.</param>
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
       /// <param name="filter">Type of the filter used for convolution; only CV_GAUSSIAN_5x5 is currently supported.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrDown(IntPtr src, IntPtr dst, CvEnum.FILTER_TYPE filter);
 
       /// <summary>
@@ -224,7 +224,7 @@ namespace Emgu.CV
       /// <param name="src">The source image.</param>
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
       /// <param name="filter">Type of the filter used for convolution; only CV_GAUSSIAN_5x5 is currently supported.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrUp(IntPtr src, IntPtr dst, CvEnum.FILTER_TYPE filter);
 
       /// <summary>
@@ -241,7 +241,7 @@ namespace Emgu.CV
       /// <param name="level">Maximum level of the pyramid for the segmentation</param>
       /// <param name="threshold1">Error threshold for establishing the links</param>
       /// <param name="threshold2">Error threshold for the segments clustering</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrSegmentation(
           IntPtr src,
           IntPtr dst,
@@ -257,7 +257,7 @@ namespace Emgu.CV
       /// <remarks>Note, that it is not necessary that every two neighbor connected components are separated by a watershed boundary (-1's pixels), for example, in case when such tangent components exist in the initial marker image. </remarks>
       /// <param name="image">The input 8-bit 3-channel image</param>
       /// <param name="markers">The input/output Int32 depth single-channel image (map) of markers. </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvWatershed(IntPtr image, IntPtr markers);
 
       #region Computational Geometry
@@ -267,7 +267,7 @@ namespace Emgu.CV
       /// <param name="rect1">First rectangle </param>
       /// <param name="rect2">Second rectangle </param>
       /// <returns>The minimum area rectangle that contains both input rectangles inside</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern Rectangle cvMaxRect(ref Rectangle rect1, ref Rectangle rect2);
 
       /// <summary>
@@ -279,7 +279,7 @@ namespace Emgu.CV
       /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line),  0.01 would be a good default</param>
       /// <param name="aeps">Sufficient accuracy for angle, 0.01 would be a good default</param>
       /// <param name="line">The output line parameters. In case of 2d fitting it is array of 4 floats (vx, vy, x0, y0) where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is some point on the line. In case of 3D fitting it is array of 6 floats (vx, vy, vz, x0, y0, z0) where (vx, vy, vz) is a normalized vector collinear to the line and (x0, y0, z0) is some point on the line.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFitLine(
           IntPtr points,
           CvEnum.DIST_TYPE distType,
@@ -293,7 +293,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="box">The box</param>
       /// <param name="pt">An array of size 8, where the coordinate for ith point is: [pt[i&gt;&gt;1], pt[(i&gt;&gt;1)+1]]</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvBoxPoints(
          MCvBox2D box,
          [Out]
@@ -304,7 +304,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="box">The box</param>
       /// <param name="pt">An array of size 4 points</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvBoxPoints(
          MCvBox2D box,
          [Out]
@@ -315,7 +315,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">Sequence or array of points</param>
       /// <returns>The ellipse that fits best (in least-squares sense) to a set of 2D points</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern MCvBox2D cvFitEllipse2(IntPtr points);
 
       /// <summary>
@@ -326,7 +326,7 @@ namespace Emgu.CV
       /// <param name="orientation">Desired orientation of convex hull: CV_CLOCKWISE or CV_COUNTER_CLOCKWISE</param>
       /// <param name="returnPoints">If non-zero, the points themselves will be stored in the hull instead of indices if hull_storage is array, or pointers if hull_storage is memory storage</param>
       /// <returns>If hull_storage is memory storage, the function creates a sequence containing the hull points or pointers to them, depending on return_points value and returns the sequence on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvConvexHull2(
           IntPtr input,
           IntPtr hullStorage,
@@ -359,7 +359,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="subdiv"></param>
       /// <param name="rect"></param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, Rectangle rect);
 
       /// <summary>
@@ -368,7 +368,7 @@ namespace Emgu.CV
       /// <param name="subdiv">Delaunay or another subdivision</param>
       /// <param name="pt">Input point</param>
       /// <returns>pointer to the found subdivision vertex (CvSubdiv2DPoint)</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvFindNearestPoint2D(IntPtr subdiv, PointF pt);
 
       /// <summary>
@@ -380,7 +380,7 @@ namespace Emgu.CV
       /// <param name="quadedgeSize"></param>
       /// <param name="storage"></param>
       /// <returns></returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateSubdiv2D(
           int subdivType,
           int headerSize,
@@ -393,7 +393,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision created by function cvCreateSubdivDelaunay2D</param>
       /// <param name="pt">Inserted point.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, PointF pt);
 
       /// <summary>
@@ -404,7 +404,7 @@ namespace Emgu.CV
       /// <param name="edge">The output edge the point falls onto or right to</param>
       /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
       /// <returns>The type of location for the point</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, PointF pt,
                                            out IntPtr edge,
                                            ref IntPtr vertex);
@@ -413,7 +413,7 @@ namespace Emgu.CV
       /// Calculates coordinates of virtual points. All virtual points corresponding to some vertex of original subdivision form (when connected together) a boundary of Voronoi cell of that point
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcSubdivVoronoi2D(IntPtr subdiv);
 
       #endregion
@@ -428,7 +428,7 @@ namespace Emgu.CV
       /// <param name="points3D">A two dimensional array contains the points of the 3D object model, the second dimension must be 3. </param>
       /// <param name="pointCount">Number of object points</param>
       /// <returns>A pointer to the CvPOSITObject</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreatePOSITObject(float[,] points3D, int pointCount);
 
       /// <summary>
@@ -441,7 +441,7 @@ namespace Emgu.CV
       /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
       /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
       /// <param name="translationVector">Translation vector (3x1)</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPOSIT(IntPtr positObject, float[,] imagePoints, double focalLength,
               MCvTermCriteria criteria, float[] rotationMatrix, float[] translationVector);
 
@@ -455,7 +455,7 @@ namespace Emgu.CV
       /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
       /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
       /// <param name="translationVector">Translation vector (3x1)</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPOSIT(IntPtr positObject, IntPtr imagePoints, double focalLength,
               MCvTermCriteria criteria, IntPtr rotationMatrix, IntPtr translationVector);
 
@@ -463,7 +463,7 @@ namespace Emgu.CV
       /// The function cvReleasePOSITObject releases memory previously allocated by the function cvCreatePOSITObject. 
       /// </summary>
       /// <param name="positObject">pointer to CvPOSIT structure</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
 
@@ -473,7 +473,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
       /// <returns>A balanced kd-tree index of the given feature vectors</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateKDTree(IntPtr desc);
 
       /// <summary>
@@ -484,14 +484,14 @@ namespace Emgu.CV
       /// <param name="rho"></param>
       /// <param name="tau"></param>
       /// <returns>A spill tree index of the given feature vectors</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateSpillTree(IntPtr desc, int naive, double rho, double tau);
 
       /// <summary>
       /// Deallocates the given kd-tree
       /// </summary>
       /// <param name="tr">Pointer to tree being destroyed</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseFeatureTree(IntPtr tr);
 
       /// <summary>
@@ -504,7 +504,7 @@ namespace Emgu.CV
       /// <param name="dist">m x k matrix of distances to k nearest neighbors</param>
       /// <param name="k">The number of neighbors to find</param>
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindFeatures(
          IntPtr tr,
          IntPtr desc,
@@ -520,7 +520,7 @@ namespace Emgu.CV
       /// <param name="boundsMin">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving minimum value for each dimension</param>
       /// <param name="boundsMax">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving maximum value for each dimension</param>
       /// <param name="results">1 x m or m x 1 vector (CV_32SC1) to contain output row indices (referring to matrix passed to cvCreateFeatureTree)</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindFeaturesBoxed(
          IntPtr tr,
          IntPtr boundsMin,
@@ -538,7 +538,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination image</param>
       /// <param name="element">Structuring element used for erosion. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="iterations">Number of times erosion is applied.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvErode(IntPtr src, IntPtr dst, IntPtr element, int iterations);
 
       /// <summary>
@@ -549,7 +549,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination image</param>
       /// <param name="element">Structuring element used for erosion. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used</param>
       /// <param name="iterations">Number of times erosion is applied</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDilate(IntPtr src, IntPtr dst, IntPtr element, int iterations);
 
       /// <summary>
@@ -560,7 +560,7 @@ namespace Emgu.CV
       /// <param name="dst">The output image of the same format and the same size as input</param>
       /// <param name="flags">The inpainting method</param>
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags);
 
       /// <summary>
@@ -580,7 +580,7 @@ namespace Emgu.CV
       /// With the standard sigma for small kernels (3x3 to 7x7) the performance is better. If param3 is not zero, while param1 and param2 are zeros, the kernel size is calculated from the sigma (to provide accurate enough operation). 
       /// </param>
       /// <param name="param4">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSmooth(
           IntPtr src,
           IntPtr dst,
@@ -619,7 +619,7 @@ namespace Emgu.CV
       /// | -3 0  3|</pre>
       /// for x-derivative or transposed for y-derivative. 
       ///</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSobel(IntPtr src, IntPtr dst, int xorder, int yorder, int apertureSize);
 
       /// <summary>
@@ -634,7 +634,7 @@ namespace Emgu.CV
       /// <param name="src">Source image. </param>
       /// <param name="dst">Destination image. </param>
       /// <param name="apertureSize">Aperture size </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLaplace(IntPtr src, IntPtr dst, int apertureSize);
 
       /// <summary>
@@ -645,7 +645,7 @@ namespace Emgu.CV
       /// <param name="threshold1">The first threshold</param>
       /// <param name="threshold2">The second threshold.</param>
       /// <param name="apertureSize">Aperture parameter for Sobel operator </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCanny(
           IntPtr image,
           IntPtr edges,
@@ -658,7 +658,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Tested contour (sequence or array of points). </param>
       /// <returns>true if convex</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvCheckContourConvexity(IntPtr contour);
 
       /// <summary>
@@ -671,7 +671,7 @@ namespace Emgu.CV
       /// When measureDist = 0, the return value is &gt;0 (inside), &lt;0 (outside) and =0 (on edge), respectively. 
       /// When measureDist != 0, it is a signed distance between the point and the nearest contour edge
       /// </returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvPointPolygonTest(
           IntPtr contour,
           PointF pt,
@@ -684,7 +684,7 @@ namespace Emgu.CV
       /// <param name="convexhull">Convex hull obtained using cvConvexHull2 that should contain pointers or indices to the contour points, not the hull points themselves, i.e. return_points parameter in cvConvexHull2 should be 0</param>
       /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used</param>
       /// <returns>Pointer to the sequence of the CvConvexityDefect structures. </returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvConvexityDefects(
          IntPtr contour,
          IntPtr convexhull,
@@ -714,7 +714,7 @@ namespace Emgu.CV
       /// <param name="points">Sequence of points, or two channel int/float depth matrix</param>
       /// <param name="storage">temporary memory storage</param>
       /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern MCvBox2D cvMinAreaRect2(IntPtr points, IntPtr storage);
 
       /// <summary>
@@ -724,7 +724,7 @@ namespace Emgu.CV
       /// <param name="center">Output parameter. The center of the enclosing circle</param>
       /// <param name="radius">Output parameter. The radius of the enclosing circle.</param>
       /// <returns>Nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvMinEnclosingCircle(IntPtr points, out PointF center, out float radius);
 
       #region Contour Processing Functions
@@ -742,7 +742,7 @@ namespace Emgu.CV
       /// And if srcSeq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). 
       /// </param>
       /// <returns>The approximation result</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvApproxPoly(
           IntPtr srcSeq,
           int headerSize,
@@ -761,7 +761,7 @@ namespace Emgu.CV
       /// points is CvSeq* or CvMat*: update is ignored, the bounding rectangle is calculated and returned. 
       /// </param>
       /// <returns>The up-right bounding rectangle for 2d point set</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern Rectangle cvBoundingRect(
           IntPtr points,
           int update);
@@ -788,7 +788,7 @@ namespace Emgu.CV
       /// <param name="slice">Starting and ending points of the contour section of interest, by default area of the whole contour is calculated</param>
       /// <param name="oriented">If zero, the absolute area will be returned. Otherwise the returned value mighted be negative</param>
       /// <returns>The area of the whole contour or contour section</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvContourArea(IntPtr contour, MCvSlice slice, int oriented);
 
       /// <summary>
@@ -803,7 +803,7 @@ namespace Emgu.CV
       /// isClosed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
       /// </param>
       /// <returns></returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int isClosed);
 
       /// <summary>
@@ -823,7 +823,7 @@ namespace Emgu.CV
       /// <param name="storage">Container for output tree</param>
       /// <param name="threshold">If the parameter threshold is less than or equal to 0, the function creates full binary tree representation. If the threshold is greater than 0, the function creates representation with the precision threshold: if the vertices with the interceptive area of its base line are less than threshold, the tree should not be built any further</param>
       /// <returns>The binary tree representation for the input contour</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateContourTree(
          IntPtr contour,
          IntPtr storage,
@@ -836,7 +836,7 @@ namespace Emgu.CV
       /// <param name="storage">Container for the reconstructed contour</param>
       /// <param name="criteria">Criteria, where to stop reconstruction</param>
       /// <returns>The contour represented by this contour tree</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvContourFromContourTree(
          IntPtr tree,
          IntPtr storage,
@@ -850,7 +850,7 @@ namespace Emgu.CV
       /// <param name="method">Similarity measure, only CV_CONTOUR_TREES_MATCH_I1 is supported</param>
       /// <param name="threshold">Similarity threshold</param>
       /// <returns>The value of the matching measure for two contour trees</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvMatchContourTrees(
          IntPtr tree1,
          IntPtr tree2,
@@ -865,7 +865,7 @@ namespace Emgu.CV
       /// <param name="dst">The destination image</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix. If you want to apply different kernels to different channels, split the image using cvSplit into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
 
       /// <summary>
@@ -876,7 +876,7 @@ namespace Emgu.CV
       /// <param name="offset">Coordinates of the top-left corner (or bottom-left in case of images with bottom-left origin) of the destination image rectangle where the source image (or its ROI) is copied. Size of the rectangle matches the source image size/ROI size</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="value">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCopyMakeBorder(
          IntPtr src,
          IntPtr dst,
@@ -892,7 +892,7 @@ namespace Emgu.CV
       /// <param name="threshold">Threshold value</param>
       /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
       /// <param name="thresholdType">Thresholding type </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvThreshold(
          IntPtr src,
          IntPtr dst,
@@ -914,7 +914,7 @@ namespace Emgu.CV
       /// <param name="thresholdType">Thresholding type. must be one of CV_THRESH_BINARY, CV_THRESH_BINARY_INV  </param>
       /// <param name="blockSize">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
       /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvAdaptiveThreshold(
          IntPtr src,
          IntPtr dst,
@@ -926,7 +926,7 @@ namespace Emgu.CV
 
       /// <summary>
       /// Retrieves contours from the binary image and returns the number of retrieved contours. The pointer firstContour is filled by the function. It will contain pointer to the first most outer contour or IntPtr.Zero if no contours is detected (if the image is completely black). Other contours may be reached from firstContour using h_next and v_next links. The sample in cvDrawContours discussion shows how to use contours for connected component detection. Contours can be also used for shape analysis and object recognition - see squares.c in OpenCV sample directory
-      /// The function modifies the source image’s content
+      /// The function modifies the source image? content
       /// </summary>
       /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1s, zero pixels remain 0s - that is image treated as binary. To get such a binary image from grayscale, one may use cvThreshold, cvAdaptiveThreshold or cvCanny. The function modifies the source image content</param>
       /// <param name="storage">Container of the retrieved contours</param>
@@ -936,7 +936,7 @@ namespace Emgu.CV
       /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
       /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
       /// <returns></returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindContours(
          IntPtr image,
          IntPtr storage,
@@ -957,13 +957,13 @@ namespace Emgu.CV
       /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
       /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
       /// <returns>Pointer to the contour scaner</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvStartFindContours(
-         IntPtr image, 
-         IntPtr storage, 
+         IntPtr image,
+         IntPtr storage,
          int headerSize,
          CvEnum.RETR_TYPE mode,
-         CvEnum.CHAIN_APPROX_METHOD method, 
+         CvEnum.CHAIN_APPROX_METHOD method,
          Point offset);
 
       /// <summary>
@@ -971,7 +971,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="scanner">Pointer to the contour scaner</param>
       /// <returns>The next contour in the image</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvFindNextContour(IntPtr scanner);
 
       /// <summary>
@@ -983,7 +983,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="scanner">Contour scanner initialized by cvStartFindContours</param>
       /// <param name="newContour">Substituting contour</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSubstituteContour(
          IntPtr scanner,
          IntPtr newContour);
@@ -994,7 +994,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="scanner">Reference to the contour scanner</param>
       /// <returns>pointer to the first contour on the highest level</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvEndFindContour(ref IntPtr scanner);
 
       /// <summary>
@@ -1010,7 +1010,7 @@ namespace Emgu.CV
       /// <param name="minRadius">Minimal radius of the circles to search for</param>
       /// <param name="maxRadius">Maximal radius of the circles to search for. By default the maximal radius is set to max(image_width, image_height). </param>
       /// <returns>Pointer to the sequence of circles</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvHoughCircles(
          IntPtr image,
          IntPtr circleStorage,
@@ -1028,7 +1028,7 @@ namespace Emgu.CV
       /// <param name="src">The source 8-bit (8u), 16-bit (16u) or single-precision floating-point (32f) image</param>
       /// <param name="dst">The destination image of the same data type as the source one. The number of channels may be different</param>
       /// <param name="code">Color conversion operation that can be specifed using CV_src_color_space2dst_color_space constants </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code);
 
       /// <summary>
@@ -1051,7 +1051,7 @@ namespace Emgu.CV
       /// For multi-scale Hough transform it is divisor for angle resolution theta. (The coarse angle resolution will be theta and the accurate resolution will be (theta / param2)). 
       /// </param>
       /// <returns>Pointer to the decetected lines</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvHoughLines2(
          IntPtr image,
          IntPtr lineStorage,
@@ -1068,7 +1068,7 @@ namespace Emgu.CV
       /// <param name="arr">Image (1-channel or 3-channel with COI set) or polygon (CvSeq of points or a vector of points)</param>
       /// <param name="moments">Pointer to returned moment state structure</param>
       /// <param name="binary">(For images only) If the flag is non-zero, all the zero pixel values are treated as zeroes, all the others are treated as 1s</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvMoments(IntPtr arr, ref MCvMoments moments, int binary);
 
       /// <summary>
@@ -1090,7 +1090,7 @@ namespace Emgu.CV
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
       /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGoodFeaturesToTrack(
           IntPtr image,
           IntPtr eigImage,
@@ -1124,7 +1124,7 @@ namespace Emgu.CV
       /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
       /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
       /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
-      [DllImport(CV_LIBRARY)]
+      [DllImport(CV_LIBRARY, CallingConvention=CvInvoke.CvCallingConvention)]
       public static extern void cvGoodFeaturesToTrack(
          IntPtr image,
          IntPtr eigImage,
@@ -1148,7 +1148,7 @@ namespace Emgu.CV
       /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
       /// <returns>the number of iterations made</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvMeanShift(
          IntPtr probImage,
          Rectangle window,
@@ -1162,7 +1162,7 @@ namespace Emgu.CV
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvMatchTemplate(
           IntPtr image,
           IntPtr templ,
@@ -1177,7 +1177,7 @@ namespace Emgu.CV
       /// <param name="method">Comparison method</param>
       /// <param name="parameter">Method-specific parameter (is not used now)</param>
       /// <returns>The result of the comparison</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvMatchShapes(
          IntPtr object1,
          IntPtr object2,
@@ -1198,7 +1198,7 @@ namespace Emgu.CV
       /// If the pointer is IntPtr.Zero, then all values are considered non-zero, that is, the element is of a rectangular shape.
       /// This parameter is considered only if the shape is CV_SHAPE_CUSTOM.
       /// </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateStructuringElementEx(
           int cols,
           int rows,
@@ -1211,7 +1211,7 @@ namespace Emgu.CV
       /// Releases the structuring element.
       /// </summary>
       /// <param name="ppElement">Pointer to the deallocated structuring element.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseStructuringElement(ref IntPtr ppElement);
 
       /// <summary>
@@ -1226,7 +1226,7 @@ namespace Emgu.CV
       /// <param name="element">Structuring element.</param>
       /// <param name="operation">Type of morphological operation.</param>
       /// <param name="iterations">Number of times erosion and dilation are applied.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvMorphologyEx(
          IntPtr src,
          IntPtr dst,
@@ -1250,7 +1250,7 @@ namespace Emgu.CV
       /// And if uniform == 0, then i-th element of ranges array contains dims[i]+1 elements: lower0, upper0, lower1, upper1 == lower2, ..., upperdims[i]-1, where lowerj and upperj are lower and upper boundaries of i-th input tuple value for j-th bin, respectively. 
       /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject</param>
       /// <returns>A pointer to the histogram</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateHist(
          int dims,
          [In]
@@ -1272,7 +1272,7 @@ namespace Emgu.CV
       /// <param name="maxValue">Pointer to the maximum value of the histogram </param>
       /// <param name="minIdx">Pointer to the array of coordinates for minimum </param>
       /// <param name="maxIdx">Pointer to the array of coordinates for maximum </param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetMinMaxHistValue(
          IntPtr hist,
          ref float minValue,
@@ -1285,7 +1285,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="hist">Pointer to the histogram</param>
       /// <param name="factor">Normalization factor</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvNormalizeHist(IntPtr hist, double factor);
 
       /// <summary>
@@ -1293,7 +1293,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="hist">Pointer to the histogram</param>
       /// <param name="threshold">Threshold level</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvThreshHist(IntPtr hist, double threshold);
 
 
@@ -1301,7 +1301,7 @@ namespace Emgu.CV
       /// Sets all histogram bins to 0 in case of dense histogram and removes all histogram bins in case of sparse array
       /// </summary>
       /// <param name="hist">Histogram</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvClearHist(IntPtr hist);
 
       /// <summary>
@@ -1320,7 +1320,7 @@ namespace Emgu.CV
       /// In either case, the input values that are beyond the specified range for a histogram bin, are not counted by cvCalcHist and filled with 0 by cvCalcBackProject
       /// </param>
       /// <returns>Pointer to the histogram</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvMakeHistHeaderForArray(
          int dims,
          [In] int[] sizes,
@@ -1363,7 +1363,7 @@ namespace Emgu.CV
       /// <param name="hist">Pointer to the histogram</param>
       /// <param name="accumulate">Accumulation flag. If it is set, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online</param>
       /// <param name="mask">The operation mask, determines what pixels of the source images are counted</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcArrHist(
           IntPtr[] image,
           IntPtr hist,
@@ -1387,7 +1387,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source histogram</param>
       /// <param name="dst">The destination histogram</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCopyHist(IntPtr src, ref IntPtr dst);
 
       /// <summary>
@@ -1397,7 +1397,7 @@ namespace Emgu.CV
       /// <param name="hist2">The second dense histogram.</param>
       /// <param name="method">Comparison method</param>
       /// <returns>Result of the comparison</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvCompareHist(
          IntPtr hist1,
          IntPtr hist2,
@@ -1434,7 +1434,7 @@ namespace Emgu.CV
       /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
       /// <param name="backProject">Destination back projection image of the same type as the source images</param>
       /// <param name="hist">Histogram</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcArrBackProject(IntPtr[] image, IntPtr backProject, IntPtr hist);
 
       /// <summary>
@@ -1442,7 +1442,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The input 8-bit single-channel image</param>
       /// <param name="dst">The output image of the same size and the same data type as src</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvEqualizeHist(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -1460,7 +1460,7 @@ namespace Emgu.CV
       /// <param name="image">Source images (though you may pass CvMat** as well), all are of the same size and type </param>
       /// <param name="backProject">Destination back projection image of the same type as the source images</param>
       /// <param name="hist">Histogram</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, EntryPoint = "cvCalcArrBackProject")]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvCalcArrBackProject")]
       public static extern void cvCalcBackProject(
          IntPtr[] image,
          IntPtr backProject,
@@ -1486,7 +1486,7 @@ namespace Emgu.CV
       /// <param name="hist">Histogram </param>
       /// <param name="method">Comparison methof</param>
       /// <param name="factor">Normalization factor for histograms, will affect normalization scale of destination image, pass 1. if unsure.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, EntryPoint = "cvCalcArrBackProjectPatch")]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvCalcArrBackProjectPatch")]
       public static extern void cvCalcBackProjectPatch(
          IntPtr[] images,
          IntPtr dst,
@@ -1505,7 +1505,7 @@ namespace Emgu.CV
       /// <param name="hist2">Second histogram.</param>
       /// <param name="dstHist">Destination histogram. </param>
       /// <param name="scale">Scale factor for the destination histogram.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcProbDensity(
          IntPtr hist1,
          IntPtr hist2,
@@ -1518,7 +1518,7 @@ namespace Emgu.CV
       /// If *hist pointer is already NULL, the function does nothing.
       /// </summary>
       /// <param name="hist">Double pointer to the released histogram</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseHist(ref IntPtr hist);
       #endregion
 
@@ -1531,7 +1531,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0. </param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The spatial moment</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetSpatialMoment(
           ref MCvMoments moments,
           int xOrder,
@@ -1546,7 +1546,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The center moment</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetCentralMoment(
           ref MCvMoments moments,
           int xOrder,
@@ -1561,7 +1561,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The normalized center moment</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetNormalizedCentralMoment(
           ref MCvMoments moments,
           int xOrder,
@@ -1574,7 +1574,7 @@ namespace Emgu.CV
       /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point. (each channel of multi-channel image is processed independently). </param>
       /// <param name="sum">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point. </param>
       /// <param name="mask">Optional operation mask</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvAcc(IntPtr image, IntPtr sum, IntPtr mask);
 
       /// <summary>
@@ -1583,7 +1583,7 @@ namespace Emgu.CV
       /// <param name="image">Input image, 1- or 3-channel, 8-bit or 32-bit floating point (each channel of multi-channel image is processed independently)</param>
       /// <param name="sqsum">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point</param>
       /// <param name="mask">Optional operation mask</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSquareAcc(IntPtr image, IntPtr sqsum, IntPtr mask);
 
       /// <summary>
@@ -1593,7 +1593,7 @@ namespace Emgu.CV
       /// <param name="image2">Second input image, the same format as the first one</param>
       /// <param name="acc">Accumulator of the same number of channels as input images, 32-bit or 64-bit floating-point</param>
       /// <param name="mask">Optional operation mask</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvMultiplyAcc(IntPtr image1, IntPtr image2, IntPtr acc, IntPtr mask);
 
       /// <summary>
@@ -1605,7 +1605,7 @@ namespace Emgu.CV
       /// <param name="acc">Accumulator of the same number of channels as input image, 32-bit or 64-bit floating-point. </param>
       /// <param name="alpha">Weight of input image</param>
       /// <param name="mask">Optional operation mask</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRunningAvg(IntPtr image, IntPtr acc, double alpha, IntPtr mask);
       #endregion
 
@@ -1614,7 +1614,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="moments">Pointer to the moment state structure</param>
       /// <param name="huMoments">Pointer to Hu moments structure.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments huMoments);
 
       #region Kalman Filter
@@ -1625,7 +1625,7 @@ namespace Emgu.CV
       /// <param name="measureParams">dimensionality of the measurement vector </param>
       /// <param name="controlParams">dimensionality of the control vector </param>
       /// <returns>Pointer to the created Kalman filter</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
 
       /// <summary>
@@ -1635,7 +1635,7 @@ namespace Emgu.CV
       /// <param name="kalman">Pointer to the structure to be updated</param>
       /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
       /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanCorrect(IntPtr kalman, IntPtr measurement);
 
       /// <summary>
@@ -1645,7 +1645,7 @@ namespace Emgu.CV
       /// <param name="kalman">Pointer to the structure to be updated</param>
       /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
       /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanCorrect(ref MCvKalman kalman, IntPtr measurement);
 
       /// <summary>
@@ -1655,7 +1655,7 @@ namespace Emgu.CV
       /// <param name="kalman">Kalman filter state</param>
       /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
       /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanPredict(IntPtr kalman, IntPtr control);
 
       /// <summary>
@@ -1665,14 +1665,14 @@ namespace Emgu.CV
       /// <param name="kalman">Kalman filter state</param>
       /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
       /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanPredict(ref MCvKalman kalman, IntPtr control);
 
       /// <summary>
       /// Releases the structure CvKalman and all underlying matrices
       /// </summary>
       /// <param name="kalman">reference of the pointer to the Kalman filter structure.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseKalman(ref IntPtr kalman);
       #endregion
 
@@ -1686,7 +1686,7 @@ namespace Emgu.CV
       /// <param name="blockSize">Neighborhood size </param>
       /// <param name="apertureSize">Aperture parameter for Sobel operator (see cvSobel). format. In the case of floating-point input format this parameter is the number of the fixed float filter used for differencing. </param>
       /// <param name="k">Harris detector free parameter.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCornerHarris(
           IntPtr image,
           IntPtr harrisResponce,
@@ -1703,7 +1703,7 @@ namespace Emgu.CV
       /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
       /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
       /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindCornerSubPix(
          IntPtr image,
          float[,] corners,
@@ -1721,7 +1721,7 @@ namespace Emgu.CV
       /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
       /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
       /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindCornerSubPix(
          IntPtr image,
          [In, Out]
@@ -1740,7 +1740,7 @@ namespace Emgu.CV
       /// <param name="sum">The integral image, W+1xH+1, 32-bit integer or double precision floating-point (64f). </param>
       /// <param name="sqsum">The integral image for squared pixel values, W+1xH+1, double precision floating-point (64f). </param>
       /// <param name="tiltedSum">The integral for the image rotated by 45 degrees, W+1xH+1, the same data type as sum.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvIntegral(
          IntPtr image,
          IntPtr sum,
@@ -1759,7 +1759,7 @@ namespace Emgu.CV
       /// It consists of 2 numbers (horizontal/vertical shift cost, diagonal shift cost) in case of 3x3 mask
       /// and 3 numbers (horizontal/vertical shift cost, diagonal shift cost, knights move cost) in case of 5x5 mask.</param>
       /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDistTransform(
          IntPtr src,
          IntPtr dst,
@@ -1797,7 +1797,7 @@ namespace Emgu.CV
       /// Floodfilling can't go across non-zero pixels in the mask, for example, an edge detector output can be used as a mask to stop filling at edges.
       /// Or it is possible to use the same mask in multiple calls to the function to make sure the filled area do not overlap.
       /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFloodFill(
          IntPtr src,
          Point seedPoint,
@@ -1854,7 +1854,7 @@ namespace Emgu.CV
       /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1].</param>
       /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2].</param>
       /// <param name="newIntrinsicMatrix">Camera matrix of the distorted image. By default it is the same as cameraMatrix, but you may additionally scale and shift the result by using some different matrix</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvUndistort2(
           IntPtr src,
           IntPtr dst,
@@ -1869,7 +1869,7 @@ namespace Emgu.CV
       /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. </param>
       /// <param name="mapx">The output array of x-coordinates of the map</param>
       /// <param name="mapy">The output array of y-coordinates of the map</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInitUndistortMap(
          IntPtr intrinsicMatrix,
          IntPtr distortionCoeffs,
@@ -1885,7 +1885,7 @@ namespace Emgu.CV
       /// <param name="newCameraMatrix">The new camera matrix A'=[fx' 0 cx'; 0 fy' cy'; 0 0 1]</param>
       /// <param name="mapx">The output array of x-coordinates of the map</param>
       /// <param name="mapy">The output array of y-coordinates of the map</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInitUndistortRectifyMap(
          IntPtr cameraMatrix,
          IntPtr distCoeffs,
@@ -1905,7 +1905,7 @@ namespace Emgu.CV
       /// <param name="dist_coeffs">The vector of distortion coefficients, 4x1, 1x4, 5x1 or 1x5. </param>
       /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
       /// <param name="P">The new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvUndistortPoints(
          IntPtr src,
          IntPtr dst,
@@ -1961,7 +1961,7 @@ namespace Emgu.CV
       /// </param>
       /// <param name="userParam">Pointer to optional data that is passed into the user-defined distance function. </param>
       /// <returns>"minimal work" distance between two weighted point configurations</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY)]
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern float cvCalcEMD2(
          IntPtr signature1,
          IntPtr signature2,

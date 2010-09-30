@@ -10,19 +10,19 @@ namespace Emgu.CV.Tiff
    internal static partial class TIFFInvoke
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteTileInfo(IntPtr pTiff, ref Size tileSize);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteTile(IntPtr pTiff, int row, int col, IntPtr tileImage);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int tiffTileRowSize(IntPtr pTiff);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int tiffTileSize(IntPtr pTiff);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteImageSize(IntPtr pTiff, ref Size imageSize);
       #endregion
    }
@@ -85,10 +85,10 @@ namespace Emgu.CV.Tiff
       {
          get
          {
-            int width = TileRowSizeInBytes / (Image<TColor, TDepth>.SizeOfElement * (new TColor().Dimension)) ;
+            int width = TileRowSizeInBytes / (Image<TColor, TDepth>.SizeOfElement * (new TColor().Dimension));
             return new Size(width, TileSizeInBytes / TileRowSizeInBytes);
          }
-      
+
       }
 
       /// <summary>

@@ -13,7 +13,7 @@ namespace Emgu.CV.Features2D
    public class SelfSimDescriptor : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvSelfSimDescriptorCreate(
          int smallSize,
          int largeSize,
@@ -21,10 +21,10 @@ namespace Emgu.CV.Features2D
          int numberOfDistanceBuckets,
          int numberOfAngles);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSelfSimDescriptorRelease(IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSelfSimDescriptorCompute(
          IntPtr descriptor,
          IntPtr image,
@@ -34,7 +34,7 @@ namespace Emgu.CV.Features2D
          int sizeOfLocation
          );
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static int CvSelfSimDescriptorGetDescriptorSize(IntPtr descriptor);
       #endregion
 
@@ -76,7 +76,7 @@ namespace Emgu.CV.Features2D
       /// <returns></returns>
       public float[] Compute(Image<Gray, Byte> image, Size winStride, Point[] locations)
       {
-         using (VectorOfFloat vof = new VectorOfFloat()) 
+         using (VectorOfFloat vof = new VectorOfFloat())
          {
             GCHandle handle = GCHandle.Alloc(locations, GCHandleType.Pinned);
             CvSelfSimDescriptorCompute(_ptr, image, vof, ref winStride, handle.AddrOfPinnedObject(), locations.Length);

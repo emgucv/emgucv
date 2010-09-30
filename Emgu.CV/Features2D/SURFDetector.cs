@@ -12,14 +12,14 @@ namespace Emgu.CV.Features2D
    public struct SURFDetector : IKeyPointDetector, IDescriptorExtractor
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorDetectKeyPoints(
          ref SURFDetector detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorDetectFeature(
          ref SURFDetector detector,
          IntPtr image,
@@ -27,7 +27,7 @@ namespace Emgu.CV.Features2D
          IntPtr keypoints,
          IntPtr descriptors);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorComputeDescriptors(
          ref SURFDetector detector,
          IntPtr image,
@@ -97,7 +97,7 @@ namespace Emgu.CV.Features2D
             return seq.ToArray();
          }
       }
-      
+
       /// <summary>
       /// Detect image features from the given image
       /// </summary>
@@ -125,7 +125,7 @@ namespace Emgu.CV.Features2D
                features[i].Descriptor = desc;
             }
             return features;
-         }         
+         }
       }
 
       /// <summary>
@@ -140,7 +140,7 @@ namespace Emgu.CV.Features2D
          using (VectorOfFloat descs = new VectorOfFloat())
          {
             GCHandle handle = GCHandle.Alloc(keyPoints, GCHandleType.Pinned);
-            CvSURFDetectorComputeDescriptors(ref this, image, mask, handle.AddrOfPinnedObject(), keyPoints.Length, descs );
+            CvSURFDetectorComputeDescriptors(ref this, image, mask, handle.AddrOfPinnedObject(), keyPoints.Length, descs);
             handle.Free();
 
             int n = keyPoints.Length;

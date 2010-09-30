@@ -20,7 +20,7 @@ namespace Emgu.CV
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
       /// <returns>1 if the homography matrix is found, 0 otherwise.</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindHomography(
          IntPtr srcPoints,
          IntPtr dstPoints,
@@ -36,7 +36,7 @@ namespace Emgu.CV
       /// <param name="dst">The output rotation matrix (3x3) or rotation vector (3x1 or 1x3), respectively</param>
       /// <param name="jacobian">Optional output Jacobian matrix, 3x9 or 9x3 - partial derivatives of the output array components w.r.t the input array components</param>
       /// <returns></returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvRodrigues2(IntPtr src, IntPtr dst, IntPtr jacobian);
 
 
@@ -52,7 +52,7 @@ namespace Emgu.CV
       /// <param name="param2">Use 0.99 for default. The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
       /// <param name="status">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1?.</param>
       /// <returns>the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindFundamentalMat(IntPtr points1,
          IntPtr points2,
          IntPtr fundamentalMatrix,
@@ -73,7 +73,7 @@ namespace Emgu.CV
       /// <param name="whichImage">Index of the image (1 or 2) that contains the points</param>
       /// <param name="fundamentalMatrix">Fundamental matrix </param>
       /// <param name="correspondentLines">Computed epilines, 3xN or Nx3 array </param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvComputeCorrespondEpilines(
          IntPtr points,
          int whichImage,
@@ -85,7 +85,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The input point array, 2xN, Nx2, 3xN, Nx3, 4xN or Nx4 (where N is the number of points). Multi-channel 1xN or Nx1 array is also acceptable</param>
       /// <param name="dst">The output point array, must contain the same number of points as the input; The dimensionality must be the same, 1 less or 1 more than the input, and also within 2..4.</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConvertPointsHomogeneous(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -94,7 +94,7 @@ namespace Emgu.CV
       /// <param name="type">ID of one of the pre-defined parameter sets. Any of the parameters can be overridden after creating the structure.</param>
       /// <param name="numberOfDisparities">The number of disparities. If the parameter is 0, it is taken from the preset, otherwise the supplied value overrides the one from preset. </param>
       /// <returns>Pointer to the stereo correspondece structure</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateStereoBMState(
          CvEnum.STEREO_BM_TYPE type,
          int numberOfDisparities);
@@ -103,7 +103,7 @@ namespace Emgu.CV
       /// Releases the stereo correspondence structure and all the associated internal buffers
       /// </summary>
       /// <param name="state">The state to be released</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseStereoBMState(ref IntPtr state);
 
       /// <summary>
@@ -113,7 +113,7 @@ namespace Emgu.CV
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
       /// <param name="state">Stereo correspondence structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceBM(
          IntPtr left,
          IntPtr right,
@@ -127,7 +127,7 @@ namespace Emgu.CV
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
       /// <param name="state">Stereo correspondence structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceBM(
          IntPtr left,
          IntPtr right,
@@ -140,7 +140,7 @@ namespace Emgu.CV
       /// <param name="disparity">Disparity map</param>
       /// <param name="image3D">3-channel, 16-bit integer or 32-bit floating-point image - the output map of 3D points</param>
       /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReprojectImageTo3D(
          IntPtr disparity,
          IntPtr image3D,
@@ -153,7 +153,7 @@ namespace Emgu.CV
       /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
       /// <param name="maxIters">Maximum number of iterations. On each iteration all possible (or reasonable) alpha-expansions are tried. The algorithm may terminate earlier if it could not find an alpha-expansion that decreases the overall cost function value</param>
       /// <returns>The initialized stereo correspondence structure</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateStereoGCState(
          int numberOfDisparities,
          int maxIters);
@@ -162,7 +162,7 @@ namespace Emgu.CV
       /// Releases the stereo correspondence structure and all the associated internal buffers
       /// </summary>
       /// <param name="state">A reference to the pointer of StereoGCState structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseStereoGCState(ref IntPtr state);
 
       /// <summary>
@@ -174,7 +174,7 @@ namespace Emgu.CV
       /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
       /// <param name="state">Stereo correspondence structure</param>
       /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceGC(
          IntPtr left,
          IntPtr right,
@@ -192,7 +192,7 @@ namespace Emgu.CV
       /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
       /// <param name="state">Stereo correspondence structure</param>
       /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceGC(
          IntPtr left,
          IntPtr right,
@@ -216,7 +216,7 @@ namespace Emgu.CV
       /// <param name="param3">defines a highly reliable region (set of contiguous pixels whose reliability is at least param3)</param>
       /// <param name="param4">defines a moderately reliable region</param>
       /// <param name="param5">defines a slightly reliable region</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvFindStereoCorrespondence(
          IntPtr leftImage, IntPtr rightImage,
          int mode, IntPtr depthImage,
@@ -241,7 +241,7 @@ namespace Emgu.CV
       /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
       /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
       /// <param name="aspectRatio">Aspect ratio</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvProjectPoints2(
          IntPtr objectPoints,
          IntPtr rotationVector,
@@ -269,7 +269,7 @@ namespace Emgu.CV
       /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
       /// <param name="flags">Different flags</param>
       /// <returns>The final reprojection error</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvCalibrateCamera2(
           IntPtr objectPoints,
           IntPtr imagePoints,
@@ -294,7 +294,7 @@ namespace Emgu.CV
       /// <param name="focalLength">Focal length in realworld units </param>
       /// <param name="principalPoint">The principal point in realworld units </param>
       /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalibrationMatrixValues(
          IntPtr calibMatr,
          int imgWidth,
@@ -318,7 +318,7 @@ namespace Emgu.CV
       /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
       /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
       /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindExtrinsicCameraParams2(
          IntPtr objectPoints,
          IntPtr imagePoints,
@@ -349,7 +349,7 @@ namespace Emgu.CV
       /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
       /// <param name="flags">The calibration flags</param>
       /// <returns></returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvStereoCalibrate(
          IntPtr objectPoints,
          IntPtr imagePoints1,
@@ -381,7 +381,7 @@ namespace Emgu.CV
       /// <param name="H2">The rectification homography matrices for the second images</param>
       /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
       /// <returns></returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvStereoRectifyUncalibrated(
          IntPtr points1,
          IntPtr points2,
@@ -411,7 +411,7 @@ namespace Emgu.CV
       /// <param name="newImageSize">Use Size.Empty for default</param>
       /// <param name="validPixROI1">The valid pixel ROI for image1</param>
       /// <param name="validPixROI2">The valid pixel ROI for image2</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvStereoRectify(
          IntPtr cameraMatrix1,
          IntPtr cameraMatrix2,
@@ -442,7 +442,7 @@ namespace Emgu.CV
       /// <param name="flags">Various operation flags</param>
       /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindChessboardCorners(
          IntPtr image,
          Size patternSize,
@@ -458,7 +458,7 @@ namespace Emgu.CV
       /// <param name="corners">The array of corners detected</param>
       /// <param name="count">The number of corners</param>
       /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDrawChessboardCorners(
          IntPtr image,
          Size patternSize,
@@ -474,7 +474,7 @@ namespace Emgu.CV
       /// <param name="corners">The array of corners detected</param>
       /// <param name="count">The number of corners</param>
       /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY)]
+      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDrawChessboardCorners(
          IntPtr image,
          Size patternSize,

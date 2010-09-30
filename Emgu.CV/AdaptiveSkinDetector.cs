@@ -13,13 +13,13 @@ namespace Emgu.CV
    public class AdaptiveSkinDetector : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvAdaptiveSkinDetectorCreate(int samplingDivider, MorphingMethod morphingMethod);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvAdaptiveSkinDetectorRelease(IntPtr detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvAdaptiveSkinDetectorProcess(IntPtr detector, IntPtr inputBGRImage, IntPtr outputHueMask);
       #endregion
 

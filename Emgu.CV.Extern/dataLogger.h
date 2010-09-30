@@ -6,7 +6,7 @@
 
 namespace emgu {
 
-   typedef void (_stdcall *DataCallback)(void* data);
+   typedef void (CV_CDECL *DataCallback)(void* data);
 
    class CV_EXPORTS DataLogger
    {

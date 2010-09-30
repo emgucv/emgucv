@@ -29,7 +29,7 @@ namespace Emgu.CV
       /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
       /// otherwise the input image itself is considered
       /// </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSnakeImage(
          IntPtr image,
          IntPtr points,
@@ -61,7 +61,7 @@ namespace Emgu.CV
       /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
       /// otherwise the input image itself is considered
       /// </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSnakeImage(
          IntPtr image,
          [In, Out]
@@ -155,7 +155,7 @@ namespace Emgu.CV
       /// <param name="userData">Pointer to the structure that contains all necessary data for the callback functions</param>
       /// <param name="avg">Averaged object (Pointer to IplImage)</param>
       /// <param name="coeffs">Calculated coefficients; an output parameter</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvEigenDecomposite(
          IntPtr obj,
          int eigenvecCount,
@@ -207,7 +207,7 @@ namespace Emgu.CV
       /// <param name="calcLimit">Criteria that determine when to stop calculation of eigen objects. Depending on the parameter calcLimit, calculations are finished either after first calcLimit.max_iter dominating eigen objects are retrieved or if the ratio of the current eigenvalue to the largest eigenvalue comes down to calcLimit.epsilon threshold. The value calcLimit -> type must be CV_TERMCRIT_NUMB, CV_TERMCRIT_EPS, or CV_TERMCRIT_NUMB | CV_TERMCRIT_EPS . The function returns the real values calcLimit->max_iter and calcLimit->epsilon</param>
       /// <param name="avg">Averaged object</param>
       /// <param name="eigVals">Pointer to the eigenvalues array in the descending order; may be NULL</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvCalcEigenObjects(
          int nObjects,
          IntPtr[] input,
@@ -252,7 +252,7 @@ namespace Emgu.CV
       /// <param name="coeffs">Previously calculated decomposition coefficients</param>
       /// <param name="avg">Average vector</param>
       /// <param name="proj">Projection to the eigen sub-space</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cvEigenProjection(
          IntPtr[] inputVecs,
          int eigenvecCount,
@@ -271,14 +271,14 @@ namespace Emgu.CV
       /// <param name="measureParams">Dimension of the measurement vector</param>
       /// <param name="sampleCount">Number of samples</param>
       /// <returns>Pointer to the CvConDensation structure</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateConDensation(int dynamParams, int measureParams, int sampleCount);
 
       /// <summary>
       /// Releases the structure CvConDensation (see cvConDensation) and frees all memory previously allocated for the structure. 
       /// </summary>
       /// <param name="condens">Pointer to the CvConDensation structure</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseConDensation(ref IntPtr condens);
 
       /// <summary>
@@ -287,14 +287,14 @@ namespace Emgu.CV
       /// <param name="condens">Pointer to a structure to be initialized</param>
       /// <param name="lowerBound">Vector of the lower boundary for each dimension</param>
       /// <param name="upperBound">Vector of the upper boundary for each dimension</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConDensInitSampleSet(IntPtr condens, IntPtr lowerBound, IntPtr upperBound);
 
       /// <summary>
       /// Estimates the subsequent stochastic model state from its current state
       /// </summary>
       /// <param name="condens">Pointer to the structure to be updated</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConDensUpdateByTime(IntPtr condens);
       #endregion
 
@@ -303,14 +303,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Input contour. Currently, only integer point coordinates are allowed</param>
       /// <param name="hist">Calculated histogram; must be two-dimensional</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
       /// <summary>
       /// Checks planar subdivision for correctness. It is not an absolute check, but it verifies some relations between quad-edges
       /// </summary>
       /// <param name="subdiv">Pointer to the MCvSubdiv2D</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY)]
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int icvSubdiv2DCheck(IntPtr subdiv);
    }
 }

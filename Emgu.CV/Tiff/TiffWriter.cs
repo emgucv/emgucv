@@ -15,21 +15,21 @@ namespace Emgu.CV.Tiff
    internal static partial class TIFFInvoke
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr tiffWriterOpen(
-         [MarshalAs(CvInvoke._stringMarshalType)]
+         [MarshalAs(CvInvoke.StringMarshalType)]
          string fileSpec);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriterClose(ref IntPtr pTiff);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteGeoTag(IntPtr pTiff, IntPtr modelTiepoint, IntPtr ModelPixelScale);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteImage(IntPtr pTiff, IntPtr image);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void tiffWriteImageInfo(IntPtr pTiff, int bitsPerSample, int samplesPerPixel);
       #endregion
    }
@@ -75,7 +75,7 @@ namespace Emgu.CV.Tiff
             }
          }
          else if (image is Image<Bgr, Byte>)
-         {         
+         {
             //swap the B and R channel since geotiff assume RGB for 3 channels image of depth Byte
             using (Image<Bgr, Byte> clone = (image as Image<Bgr, Byte>).Clone())
             using (Image<Gray, Byte> b = clone[0])

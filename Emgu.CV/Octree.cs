@@ -13,16 +13,16 @@ namespace Emgu.CV
    public class Octree : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvOctreeCreate();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvOctreeRelease(IntPtr tree);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvOctreeBuildTree(IntPtr tree, IntPtr points, int numberOfPoints, int maxLevels, int minPoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, ref MCvPoint3D32f center, float radius, IntPtr pointSeq);
       #endregion
 
@@ -46,7 +46,7 @@ namespace Emgu.CV
       /// <param name="maxLevels">The maximum levels of the Oct-Tree</param>
       /// <param name="minPoints">The minimum number of points in each level</param>
       public Octree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
-         :this()
+         : this()
       {
          BuildTree(points, maxLevels, minPoints);
       }

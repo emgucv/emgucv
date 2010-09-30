@@ -19,16 +19,16 @@ namespace Emgu.CV
       private bool _isVoronoiDirty;
 
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer, ref int count);
       #endregion
 

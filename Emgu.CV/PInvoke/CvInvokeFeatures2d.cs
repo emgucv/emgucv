@@ -19,7 +19,7 @@ namespace Emgu.CV
       /// <param name="contours">The contours where MSER will be stored</param>
       /// <param name="storage">Memory storage</param>
       /// <param name="parameters">MSER parameters</param>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY)]
+      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvExtractMSER(
          IntPtr img,
          IntPtr mask,
@@ -37,7 +37,7 @@ namespace Emgu.CV
       /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
       /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
       /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY)]
+      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
          ref IntPtr keypoints,
@@ -59,7 +59,7 @@ namespace Emgu.CV
       /// 1 means extended descriptors (128 elements each)
       /// </param>
       /// <returns>The MCvSURFParams structure</returns>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY)]
+      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern SURFDetector cvSURFParams(double hessianThreshold, int extended);
 
       /// <summary>
@@ -69,7 +69,7 @@ namespace Emgu.CV
       /// <param name="storage">The storage for the returned sequence</param>
       /// <param name="param">The star detector parameters</param>
       /// <returns>Pointer to the sequence of star keypoint locations</returns>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY)]
+      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetStarKeypoints(
          IntPtr img,
          IntPtr storage,

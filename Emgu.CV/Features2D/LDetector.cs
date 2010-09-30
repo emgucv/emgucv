@@ -33,7 +33,7 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Verbose
       /// </summary>
-      [MarshalAs(UnmanagedType.I1)]
+      [MarshalAs(CvInvoke.BoolMarshalType)]
       public bool Verbose;
 
       /// <summary>
@@ -45,13 +45,13 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public double ClusteringDistance;
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvLDetectorDetectKeyPoints(
          ref LDetector detector,
          IntPtr image,
          IntPtr keypoints,
          int maxCount,
-         [MarshalAs(UnmanagedType.I1)]
+         [MarshalAs(CvInvoke.BoolMarshalType)]
          bool scaleCoords);
 
       /// <summary>
@@ -63,7 +63,7 @@ namespace Emgu.CV.Features2D
          Threshold = 20;
          NOctaves = 3;
          NViews = 1000;
-         Verbose = false; 
+         Verbose = false;
          BaseFeatureSize = 32;
          ClusteringDistance = 2;
       }

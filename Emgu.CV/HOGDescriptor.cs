@@ -14,13 +14,13 @@ namespace Emgu.CV
    public class HOGDescriptor : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvHOGDescriptorCreateDefault();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvHOGDescriptorCreate(
          ref Size winSize,
          ref Size blockSize,
@@ -31,16 +31,16 @@ namespace Emgu.CV
          double winSigma,
          int histogramNormType,
          double L2HysThreshold,
-         [MarshalAs(UnmanagedType.I1)]
+         [MarshalAs(CvInvoke.BoolMarshalType)]
          bool gammaCorrection);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvHOGDescriptorRelease(IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,
@@ -51,20 +51,20 @@ namespace Emgu.CV
          double scale,
          int groupThreshold);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
-      private extern static void  CvHOGDescriptorCompute(
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvHOGDescriptorCompute(
          IntPtr descriptor,
-         IntPtr img, 
+         IntPtr img,
          IntPtr descriptors,
          Size winStride,
-         Size padding, 
-         IntPtr locations); 
+         Size padding,
+         IntPtr locations);
 
       #endregion
 
       private MemStorage _rectStorage;
       private Seq<Rectangle> _rectSeq;
-      private VectorOfFloat _vector; 
+      private VectorOfFloat _vector;
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>

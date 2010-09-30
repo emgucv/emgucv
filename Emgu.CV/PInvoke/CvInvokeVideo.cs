@@ -19,7 +19,7 @@ namespace Emgu.CV
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field).</param>
       /// <param name="box">Circumscribed box for the object. If not IntPtr.Zero, contains object size and orientation</param>
       /// <returns>number of iterations made within cvMeanShift</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvCamShift(
          IntPtr probImage,
          Rectangle window,
@@ -36,7 +36,7 @@ namespace Emgu.CV
       /// <param name="winSize">Size of the averaging window used for grouping pixels. </param>
       /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowLK(
               IntPtr prev,
               IntPtr curr,
@@ -54,7 +54,7 @@ namespace Emgu.CV
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
       /// <param name="lambda">Lagrangian multiplier</param>
       /// <param name="criteria">Criteria of termination of velocity computing</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowHS(
               IntPtr prev,
               IntPtr curr,
@@ -75,7 +75,7 @@ namespace Emgu.CV
       /// <param name="usePrevious">Uses previous (input) velocity field. </param>
       /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
       /// <param name="vely">Vertical component of the optical flow of the same size velx, 32-bit floating-point, single-channel.</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowBM(
               IntPtr prev,
               IntPtr curr,
@@ -103,7 +103,7 @@ namespace Emgu.CV
       /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
       /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
       /// <param name="flags">Miscellaneous flags</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowPyrLK(
           IntPtr prev,
           IntPtr curr,
@@ -136,7 +136,7 @@ namespace Emgu.CV
       /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
       /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
       /// <param name="flags">Miscellaneous flags</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowPyrLK(
          IntPtr prev,
          IntPtr curr,
@@ -167,7 +167,7 @@ namespace Emgu.CV
       /// <param name="polyN">Size of the pixel neighborhood used to find polynomial expansion in each pixel. The larger values mean that the image will be approximated with smoother surfaces, yielding more robust algorithm and more blurred motion field. Typically, poly n=5 or 7</param>
       /// <param name="polySigma">Standard deviation of the Gaussian that is used to smooth derivatives that are used as a basis for the polynomial expansion. For poly n=5 you can set poly sigma=1.1, for poly n=7 a good value would be poly sigma=1.5</param>
       /// <param name="flags">The operation flags</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvCalcOpticalFlowFarneback(
          IntPtr prev0,
          IntPtr next0,
@@ -194,7 +194,7 @@ namespace Emgu.CV
       /// <param name="mhi">Motion history image, that is updated by the function (single-channel, 32-bit floating-point) </param>
       /// <param name="timestamp">Current time in milliseconds or other units. </param>
       /// <param name="duration">Maximal duration of motion track in the same units as timestamp. </param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvUpdateMotionHistory(
           IntPtr silhouette,
           IntPtr mhi,
@@ -212,7 +212,7 @@ namespace Emgu.CV
       /// <param name="delta1">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2). </param>
       /// <param name="delta2">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2).</param>
       /// <param name="apertureSize">Aperture size of derivative operators used by the function: CV_SCHARR, 1, 3, 5 or 7 (see cvSobel). </param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcMotionGradient(
           IntPtr mhi,
           IntPtr mask,
@@ -230,7 +230,7 @@ namespace Emgu.CV
       /// <param name="timestamp">Current time in milliseconds or other units</param>
       /// <param name="segThresh">Segmentation threshold; recommended to be equal to the interval between motion history "steps" or greater</param>
       /// <returns>Pointer to the sequence of MCvConnectedComp</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvSegmentMotion(
           IntPtr mhi,
           IntPtr segMask,
@@ -247,7 +247,7 @@ namespace Emgu.CV
       /// <param name="timestamp">Current time in milliseconds or other units, it is better to store time passed to cvUpdateMotionHistory before and reuse it here, because running cvUpdateMotionHistory and cvCalcMotionGradient on large images may take some time.</param>
       /// <param name="duration">Maximal duration of motion track in milliseconds, the same as in cvUpdateMotionHistory</param>
       /// <returns>The angle</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvCalcGlobalOrientation(
                   IntPtr orientation,
                   IntPtr mask,
@@ -262,7 +262,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="param">Parameters for the background model</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, IntPtr param);
 
       /// <summary>
@@ -270,7 +270,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="param">Parameters for the background model</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
 
       /// <summary>
@@ -279,7 +279,7 @@ namespace Emgu.CV
       /// <param name="firstFrame">The first frame</param>
       /// <param name="parameters">The foreground statistic parameters</param>
       /// <returns>Pointer to the foreground model</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
 
       /// <summary>
@@ -287,7 +287,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="parameters">Parameters for the background model</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, ref MCvGaussBGStatModelParams parameters);
       #endregion
 
@@ -296,7 +296,7 @@ namespace Emgu.CV
       /// Create a BG code book model
       /// </summary>
       /// <returns>Poionter to BG code book model</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateBGCodeBookModel();
 
       /// <summary>
@@ -306,7 +306,7 @@ namespace Emgu.CV
       /// <param name="image">The image for update</param>
       /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
       /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookUpdate(
          IntPtr model,
          IntPtr image,
@@ -321,7 +321,7 @@ namespace Emgu.CV
       /// <param name="fgmask">The returned foreground mask</param>
       /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int cvBGCodeBookDiff(
          IntPtr model,
          IntPtr image,
@@ -335,7 +335,7 @@ namespace Emgu.CV
       /// <param name="staleThresh"></param>
       /// <param name="roi"></param>
       /// <param name="mask"></param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookClearStale(
          IntPtr model,
          int staleThresh,
@@ -346,7 +346,7 @@ namespace Emgu.CV
       /// Release the BG code book model
       /// </summary>
       /// <param name="model">The BG code book model to be released</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY)]
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvReleaseBGCodeBookModel(ref IntPtr model);
       #endregion
 

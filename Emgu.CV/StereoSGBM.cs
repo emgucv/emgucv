@@ -15,19 +15,19 @@ namespace Emgu.CV
    public class StereoSGBM : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvStereoSGBMCreate(
          int minDisparity, int numDisparities, int SADWindowSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
          int speckleWindowSize, int speckleRange,
-         [MarshalAs(UnmanagedType.I1)]
+         [MarshalAs(CvInvoke.BoolMarshalType)]
          bool fullDP);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvStereoSGBMRelease(IntPtr obj);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvStereoSGBMFindCorrespondence(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
       #endregion
 

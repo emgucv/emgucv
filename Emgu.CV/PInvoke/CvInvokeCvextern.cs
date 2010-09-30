@@ -16,7 +16,7 @@ namespace Emgu.CV
       /// <param name="type">The type of the detector</param>
       /// <param name="param">Pointer to the parameters of the detector</param>
       /// <returns>Pointer the to foreground detector</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, IntPtr param);
 
       /// <summary>
@@ -24,7 +24,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="detector">The foreground detector</param>
       /// <returns>The foreground mask</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvFGDetectorGetMask(IntPtr detector);
 
       /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="detector">The foreground detector</param>
       /// <param name="image">The image which will be used to update the FGDetector</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvFGDetectorProcess(IntPtr detector, IntPtr image);
 
       /// <summary>
@@ -41,14 +41,14 @@ namespace Emgu.CV
       /// <param name="type">The type of the detector</param>
       /// <param name="param">The parameters of the detector</param>
       /// <returns>Pointer the to foreground detector</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, ref MCvFGDStatModelParams param);
 
       /// <summary>
       /// Release the foreground detector
       /// </summary>
       /// <param name="detector">The foreground detector to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvFGDetectorRelease(IntPtr detector);
       #endregion
 
@@ -58,14 +58,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="blobSize">The size of the blob in bytes</param>
       /// <returns>Pointer to the BlobSeq</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobSeqCreate(int blobSize);
 
       /// <summary>
       /// Release the blob sequence
       /// </summary>
       /// <param name="blobSeq">The BlobSeq to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobSeqRelease(IntPtr blobSeq);
 
       /// <summary>
@@ -74,7 +74,7 @@ namespace Emgu.CV
       /// <param name="blobSeq">the blob sequence</param>
       /// <param name="blobIndex">the index of the blob to be retrieved</param>
       /// <returns>Pointer to the specific blob</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobSeqGetBlob(IntPtr blobSeq, int blobIndex);
 
       /// <summary>
@@ -83,7 +83,7 @@ namespace Emgu.CV
       /// <param name="blobSeq">the blob sequence</param>
       /// <param name="blobIndex">the index of the blob to be retrieved</param>
       /// <returns>Pointer to the specific blob</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobSeqGetBlobByID(IntPtr blobSeq, int blobIndex);
 
       /// <summary>
@@ -91,7 +91,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="blobSeq">The blob sequence</param>
       /// <returns>The number of blob in the blob sequence</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int CvBlobSeqGetBlobNum(IntPtr blobSeq);
       #endregion
 
@@ -100,7 +100,7 @@ namespace Emgu.CV
       /// Release the blob detector
       /// </summary>
       /// <param name="detector">the detector to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobDetectorRelease(IntPtr detector);
 
       /// <summary>
@@ -111,21 +111,21 @@ namespace Emgu.CV
       /// <param name="imgFG">The foreground mask</param>
       /// <param name="newBlobList">The new blob list</param>
       /// <param name="oldBlobList">The old blob list</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int CvBlobDetectorDetectNewBlob(IntPtr detector, IntPtr img, IntPtr imgFG, IntPtr newBlobList, IntPtr oldBlobList);
 
       /// <summary>
       /// Get a simple blob detector 
       /// </summary>
       /// <returns>Pointer to the blob detector</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobDetectorSimple();
 
       /// <summary>
       /// Get a CC blob detector 
       /// </summary>
       /// <returns>Pointer to the blob detector</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobDetectorCC();
       #endregion
 
@@ -134,35 +134,35 @@ namespace Emgu.CV
       /// Simple blob tracker based on connected component tracking
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerCC();
 
       /// <summary>
       /// Connected component tracking and mean-shift particle filter collion-resolver
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerCCMSPF();
 
       /// <summary>
       /// Blob tracker that integrates meanshift and connected components
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerMSFG();
 
       /// <summary>
       /// Blob tracker that integrates meanshift and connected components:
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerMSFGS();
 
       /// <summary>
       /// Meanshift without connected-components
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerMS();
 
       /// <summary>
@@ -171,14 +171,14 @@ namespace Emgu.CV
       /// </summary>
       /// <remarks>See: Real-Time Tracking of Non-Rigid Objects using Mean Shift Comanicius, Ramesh, Meer, 2000, 8p</remarks>
       /// <returns>Pointer to the blob tracker</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerMSPF();
 
       /// <summary>
       /// Release the blob tracker
       /// </summary>
       /// <param name="tracker">The tracker to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobTrackerRealease(IntPtr tracker);
 
       /// <summary>
@@ -186,7 +186,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tracker">The tracker</param>
       /// <returns>Number of currently tracked blobs</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int CvBlobTrackerGetBlobNum(IntPtr tracker);
 
       /// <summary>
@@ -195,7 +195,7 @@ namespace Emgu.CV
       /// <param name="tracker">The tracker</param>
       /// <param name="blobIndex">The index of the blob</param>
       /// <returns>Pointer to the blob with the specific index</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerGetBlob(IntPtr tracker, int blobIndex);
 
       /// <summary>
@@ -204,7 +204,7 @@ namespace Emgu.CV
       /// <param name="tracker">The tracker</param>
       /// <param name="blobId">The id of the blob</param>
       /// <returns>Pointer to the blob with specific id</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerGetBlobByID(IntPtr tracker, int blobId);
 
       /// <summary>
@@ -212,7 +212,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tracker">The tracker</param>
       /// <param name="blobIndex">The index of the blob</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobTrackerDelBlob(IntPtr tracker, int blobIndex);
 
       /// <summary>
@@ -223,7 +223,7 @@ namespace Emgu.CV
       /// <param name="currentImage">current image</param>
       /// <param name="currentForegroundMask">current foreground mask</param>
       /// <returns>Pointer to new added blob</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForegroundMask);
 
       #endregion
@@ -233,28 +233,28 @@ namespace Emgu.CV
       /// Returns a Kalman blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateModuleBlobTrackPostProcKalman();
 
       /// <summary>
       /// Returns a TimeAverRect blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverRect();
 
       /// <summary>
       /// Returns a TimeAverExp blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverExp();
 
       /// <summary>
       /// Release the blob tracking post process module
       /// </summary>
       /// <param name="postProc">The post process module to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobTrackPostProcRelease(IntPtr postProc);
       #endregion
 
@@ -264,14 +264,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="param">The parameters for the tracker</param>
       /// <returns>Pointer to the blob tracker auto</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvCreateBlobTrackerAuto1(ref MCvBlobTrackerAutoParam1 param);
 
       /// <summary>
       /// Release the blob tracker auto
       /// </summary>
       /// <param name="tracker">The tracker to be released</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobTrackerAutoRelease(IntPtr tracker);
 
       /// <summary>
@@ -280,7 +280,7 @@ namespace Emgu.CV
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="index">The index of the blob</param>
       /// <returns>Pointer to the the blob</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerAutoGetBlob(IntPtr tracker, int index);
       /// <summary>
       /// Get the blob of specific id from the auto blob tracker
@@ -288,14 +288,14 @@ namespace Emgu.CV
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="blobID">The id of the blob</param>
       /// <returns>Pointer to the blob of specific ID</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerAutoGetBlobByID(IntPtr tracker, int blobID);
       /// <summary>
       /// Get the number of blobs in the auto blob tracker 
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
       /// <returns>The number of blobs</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int CvBlobTrackerAutoGetBlobNum(IntPtr tracker);
 
       /// <summary>
@@ -304,7 +304,7 @@ namespace Emgu.CV
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="pImg">The frame to process</param>
       /// <param name="pMask">The foreground mask, can be IntPtr.Zero if not needed</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvBlobTrackerAutoProcess(IntPtr tracker, IntPtr pImg, IntPtr pMask);
 
       /// <summary>
@@ -312,7 +312,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
       /// <returns>Pointer to the foreground mask</returns>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
       #endregion
 
@@ -323,12 +323,12 @@ namespace Emgu.CV
       /// <param name="KeyPointSeq">The pre-allocated sequence of MKeyPoints where the result will be stored</param>
       /// <param name="threshold"></param>
       /// <param name="nonmaxSupression">Indicates if nonmaximum supression should be used</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvFASTKeyPoints(
          IntPtr image,
          IntPtr KeyPointSeq,
          int threshold,
-         [MarshalAs(UnmanagedType.I1)]
+         [MarshalAs(CvInvoke.BoolMarshalType)]
          bool nonmaxSupression);
 
       /// <summary>
@@ -341,14 +341,14 @@ namespace Emgu.CV
       /// <param name="fgdModel">The foreground model</param>
       /// <param name="iterCount">The number of iternations</param>
       /// <param name="type">The initilization type</param>
-      [DllImport(EXTERN_LIBRARY)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void CvGrabCut(
          IntPtr img,
          IntPtr mask,
          ref Rectangle rect,
          IntPtr bgdModel,
-         IntPtr fgdModel, 
-         int iterCount, 
+         IntPtr fgdModel,
+         int iterCount,
          CvEnum.GRABCUT_INIT_TYPE type);
 
 
@@ -365,14 +365,14 @@ namespace Emgu.CV
       /// <param name="minVal">The inclusive lower boundary of valid values range</param>
       /// <param name="maxVal">The exclusive upper boundary of valid values range</param>
       /// <returns>If quiet, return true if all values are in range</returns>
-      [DllImport(EXTERN_LIBRARY)]
-      [return: MarshalAs(UnmanagedType.I1)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool cvCheckRange(
-         IntPtr arr, 
-         [MarshalAs(UnmanagedType.I1)]
-         bool quiet, 
-         ref Point pos, 
-         double minVal, 
+         IntPtr arr,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool quiet,
+         ref Point pos,
+         double minVal,
          double maxVal);
    }
 }

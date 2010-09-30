@@ -18,21 +18,22 @@ namespace Emgu.CV
       {
          String tempFile = Path.GetTempFileName();
          File.Delete(tempFile);
-         String fileName =  Path.Combine( Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile) ) + ".avi";
+         String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
          try
          {
             //IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(tempFileName, -1, 1, new Size(100, 100), true);
             IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
             HasFFMPEG = (capture != IntPtr.Zero);
             CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
-         } catch (Exception e)
+         }
+         catch (Exception e)
          {
             String msg = e.Message;
             HasFFMPEG = false;
          }
 
       }
-      
+
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
       /// </summary>
@@ -74,10 +75,10 @@ namespace Emgu.CV
          for (int i = 0; i < colors.Length; i++)
          {
             Color c = colors[i];
-            bData[i,0] = c.B;
-            gData[i,0] = c.G;
-            rData[i,0] = c.R;
-            aData[i,0] = c.A;
+            bData[i, 0] = c.B;
+            gData[i, 0] = c.G;
+            rData[i, 0] = c.R;
+            aData[i, 0] = c.A;
          }
       }
 
@@ -95,7 +96,7 @@ namespace Emgu.CV
          pluginName = Marshal.PtrToStringAnsi(pluginInfo);
          versionName = Marshal.PtrToStringAnsi(version);
       }
-      
+
       /// <summary>
       /// Enable or diable IPL optimization for opencv
       /// </summary>
@@ -173,7 +174,7 @@ namespace Emgu.CV
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
 
       /// <summary>

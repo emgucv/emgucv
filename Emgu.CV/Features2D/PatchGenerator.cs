@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D 
+namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// OpenCV's PatchGenerator
@@ -12,7 +12,7 @@ namespace Emgu.CV.Features2D
    public struct PatchGenerator
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvPatchGeneratorInit(ref PatchGenerator pg);
       #endregion
 
@@ -31,7 +31,7 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// 
       /// </summary>
-      [MarshalAs(UnmanagedType.I1)]
+      [MarshalAs(CvInvoke.BoolMarshalType)]
       public bool RandomBlur;
       /// <summary>
       /// 

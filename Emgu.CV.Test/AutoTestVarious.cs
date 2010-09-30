@@ -1905,9 +1905,8 @@ namespace Emgu.CV.Test
 
 
       [Test]
-      public void TestMessageLogger()
+      public void TestDataLogger()
       {
-
          bool dataLogged = false;
 
          using (DataLogger<String> logger = new DataLogger<String>())

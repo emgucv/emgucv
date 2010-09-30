@@ -15,13 +15,13 @@ namespace Emgu.CV.Features2D
    public class PlanarObjectDetector : UnmanagedObject
    {
       #region PInvokes
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvPlanarObjectDetectorDefaultCreate();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvPlanarObjectDetectorRelease(IntPtr detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvPlanarObjectDetectorTrain(
          IntPtr objectDetector,
          IntPtr image,
@@ -33,10 +33,10 @@ namespace Emgu.CV.Features2D
          ref LDetector keyPointDetector,
          ref PatchGenerator patchGenerator);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvPlanarObjectDetectorDetect(IntPtr detector, IntPtr image, IntPtr homography, IntPtr corners);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvPlanarObjectDetectorGetModelPoints(IntPtr detector, IntPtr modelPoints);
       #endregion
 
@@ -67,7 +67,7 @@ namespace Emgu.CV.Features2D
       /// <param name="nviews">Use 5000 for default</param>
       /// <param name="keyPointDetector">The keypoint detector to be used</param>
       /// <param name="patchGenerator">The patch generator to be used</param>
-      public void Train(Image<Gray, byte> image, 
+      public void Train(Image<Gray, byte> image,
          int npoints,
          int patchSize,
          int nstructs,

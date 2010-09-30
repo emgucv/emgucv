@@ -20,9 +20,9 @@ namespace Emgu.CV
       /// <param name="frameSize">Size of video frames.</param>
       /// <param name="isColor">If != 0, the encoder will expect and encode color frames, otherwise it will work with grayscale frames </param>
       /// <returns>The video writer</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY)]
+      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateVideoWriter_FFMPEG(
-          [MarshalAs(_stringMarshalType)] String filename,
+          [MarshalAs(StringMarshalType)] String filename,
           int fourcc,
           double fps,
           System.Drawing.Size frameSize,
@@ -51,7 +51,7 @@ namespace Emgu.CV
       /// Finishes writing to video file and releases the structure.
       /// </summary>
       /// <param name="writer">pointer to video file writer structure</param>
-      [DllImport(OPENCV_FFMPEG_LIBRARY)]
+      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseVideoWriter_FFMPEG(ref IntPtr writer);
 
       /// <summary>
@@ -60,7 +60,7 @@ namespace Emgu.CV
       /// <param name="writer">video writer structure.</param>
       /// <param name="image">the written frame</param>
       /// <returns></returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY)]
+      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvWriteFrame_FFMPEG(IntPtr writer, IntPtr image);
 
    }
