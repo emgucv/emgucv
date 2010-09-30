@@ -133,7 +133,7 @@ namespace Emgu.CV
       /// Rotate the points in <paramref name="pointsSrc"/> and save the result in <paramref name="pointsDst"/>. Inplace operation is supported (<paramref name="pointsSrc"/> == <paramref name="pointsDst"/>).
       /// </summary>
       /// <param name="pointsSrc">The points to be rotated</param>
-      /// <param name="pointsDst">The result of the rotation, should be the same size as <paramref name="pointsSrc"/>, can be <paramref name="pointSrc"/> as well for inplace rotation</param>
+      /// <param name="pointsDst">The result of the rotation, should be the same size as <paramref name="pointsSrc"/>, can be <paramref name="pointsSrc"/> as well for inplace rotation</param>
       public void RotatePoints(Matrix<double> pointsSrc, Matrix<double> pointsDst)
       {
          quaternionsRotatePoints(ref this, pointsSrc, pointsDst);

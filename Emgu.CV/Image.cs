@@ -1071,19 +1071,19 @@ namespace Emgu.CV
       /// Get or Set the color in the <paramref name="row"/>th row (y direction) and <paramref name="column"/>th column (x direction)
       /// </summary>
       /// <param name="row">The zero-based row (y direction) of the pixel </param>
-      /// <param name="col">The zero-based column (x direction) of the pixel</param>
+      /// <param name="column">The zero-based column (x direction) of the pixel</param>
       /// <returns>The color in the specific <paramref name="row"/> and <paramref name="column"/></returns>
-      public TColor this[int row, int col]
+      public TColor this[int row, int column]
       {
          get
          {
             TColor res = new TColor();
-            res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, col);
+            res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, column);
             return res;
          }
          set
          {
-            CvInvoke.cvSet2D(Ptr, row, col, value.MCvScalar);
+            CvInvoke.cvSet2D(Ptr, row, column, value.MCvScalar);
          }
       }
 
@@ -1215,7 +1215,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// If the image has only one channel, apply the action directly on the IntPtr of this image and <paramref name="image2"/>,
+      /// If the image has only one channel, apply the action directly on the IntPtr of this image and <paramref name="dest"/>,
       /// otherwise, make copy each channel of this image to a temperary one, apply action on it and another temperory image and copy the resulting image back to image2
       /// </summary>
       /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>

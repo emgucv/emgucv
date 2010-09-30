@@ -454,7 +454,7 @@ namespace Emgu.CV
       /// Concate the current matrix with another matrix vertically. If this matrix is n1 x m and <paramref name="otherMatrix"/> is n2 x m, the resulting matrix is (n1+n2) x m.
       /// </summary>
       /// <param name="otherMatrix">The other matrix to concate</param>
-      /// <returns>A new matrix that is the vertical concatening of this matrix and <paramref name="otheMatrix"/></returns>
+      /// <returns>A new matrix that is the vertical concatening of this matrix and <paramref name="otherMatrix"/></returns>
       public Matrix<TDepth> ConcateVertical(Matrix<TDepth> otherMatrix)
       {
          Debug.Assert(Cols == otherMatrix.Cols, "The number of columns must be the same when concatening matrices verticly.");
@@ -470,7 +470,7 @@ namespace Emgu.CV
       /// Concate the current matrix with another matrix horizontally. If this matrix is n x m1 and <paramref name="otherMatrix"/> is n x m2, the resulting matrix is n x (m1 + m2).
       /// </summary>
       /// <param name="otherMatrix">The other matrix to concate</param>
-      /// <returns>A matrix that is the horizontal concatening of this matrix and <paramref name="otheMatrix"/></returns>
+      /// <returns>A matrix that is the horizontal concatening of this matrix and <paramref name="otherMatrix"/></returns>
       public Matrix<TDepth> ConcateHorizontal(Matrix<TDepth> otherMatrix)
       {
          Debug.Assert(Rows == otherMatrix.Rows, "The number of rows must be the same when concatening matrices horizontally.");

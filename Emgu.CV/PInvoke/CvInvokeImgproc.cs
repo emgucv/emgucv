@@ -612,7 +612,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination image</param>
       /// <param name="xorder">Order of the derivative x </param>
       /// <param name="yorder">Order of the derivative y</param>
-      /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, <paramref name="appertureSize"/> x <paramref name="appertureSize"/> separable kernel will be used to calculate the derivative. For aperture_size=1 3x1 or 1x3 kernel is used (Gaussian smoothing is not done). There is also special value CV_SCHARR (=-1) that corresponds to 3x3 Scharr filter that may give more accurate results than 3x3 Sobel. Scharr aperture is: 
+      /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, <paramref name="apertureSize"/> x <paramref name="apertureSize"/> separable kernel will be used to calculate the derivative. For aperture_size=1 3x1 or 1x3 kernel is used (Gaussian smoothing is not done). There is also special value CV_SCHARR (=-1) that corresponds to 3x3 Scharr filter that may give more accurate results than 3x3 Sobel. Scharr aperture is: 
       /// <pre>
       /// | -3 0  3|
       /// |-10 0 10|

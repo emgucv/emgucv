@@ -2227,7 +2227,7 @@ namespace Emgu.CV
          double scale);
 
       /// <summary>
-      /// Returns sum of diagonal elements of the matrix <paramref name="src1"/>.
+      /// Returns sum of diagonal elements of the matrix <paramref name="mat"/>.
       /// </summary>
       /// <param name="mat">the matrix</param>
       /// <returns>sum of diagonal elements of the matrix src1</returns>

@@ -473,7 +473,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Inplace compute the elementwise maximum value with <paramref name="val"/>
+      /// Inplace compute the elementwise maximum value with <paramref name="value"/>
       /// </summary>
       /// <param name="value">The value to be compare with</param>
       [ExposableMethod(Exposable = true, Category = "Logic")]

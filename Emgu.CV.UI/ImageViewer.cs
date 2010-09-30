@@ -18,7 +18,7 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Create an ImageViewer from the specific <paramref name="img"/>
+      /// Create an ImageViewer from the specific <paramref name="image"/>
       /// </summary>
       /// <param name="image">The image to be displayed in this viewer</param>
       public ImageViewer(IImage image)
@@ -36,7 +36,7 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Create an ImageViewer from the specific <paramref name="img"/>, using <paramref name="imageName"/> as window name
+      /// Create an ImageViewer from the specific <paramref name="image"/>, using <paramref name="imageName"/> as window name
       /// </summary>
       /// <param name="image">The image to be displayed</param>
       /// <param name="imageName">The name of the image</param>

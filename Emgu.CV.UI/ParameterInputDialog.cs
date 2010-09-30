@@ -305,7 +305,7 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Obtain the parameters for <paramref name="method"/> and put them in <paramref name="paramList"/>
+      /// Obtain the parameters for <paramref name="method"/> and put them in <paramref name="defaultParameterValues"/>
       /// </summary>
       /// <param name="method">The method to Obtain parameters from</param>
       /// <param name="defaultParameterValues">The list that will be used as the storage for the retrieved parameters, if it contains elements, those elements will be used as default value</param>

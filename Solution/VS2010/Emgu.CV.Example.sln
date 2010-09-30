@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\PlanarSubdivision\PlanarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.Example\CPlusPlus\CPlusPlus.vcproj", "{32330110-727C-41A1-9377-6BA41002983D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.Example\CPlusPlus\CPlusPlus2010.vcxproj", "{32330110-727C-41A1-9377-6BA41002983D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emgu.CV.Example\ShapeDetection\ShapeDetection.csproj", "{F42D1B92-5722-41F4-B8F1-98185CD09D87}"
 EndProject
