@@ -162,11 +162,10 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
    quaternionsDst->x = (w1*x2 + x1*w2 + y1*z2 - z1*y2);
    quaternionsDst->y = (w1*y2 - x1*z2 + y1*w2 + z1*x2);
    quaternionsDst->z = (w1*z2 + x1*y2 - y1*x2 + z1*w2);
+#endif
 
    //this is done to improve the numerical stability
    quaternionsRenorm(quaternionsDst); 
-
-#endif
 }
 
 const double THETA_EPS = 1.0e-30;
@@ -213,41 +212,36 @@ void quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAn
 
 void quaternionsRenorm(Quaternions* quaternions)
 {
-   double norm = sqrt(quaternions->w * quaternions->w 
-      + quaternions->x * quaternions->x 
-      + quaternions->y * quaternions->y 
-      + quaternions->z * quaternions->z);
-   
-   double scale = 1.0 / norm;
-
-   quaternions->w *= scale;
-   quaternions->x *= scale;
-   quaternions->y *= scale;
-   quaternions->z *= scale;
+   double scale = 1.0 / sqrt(quaternionsDotProduct(quaternions, quaternions) );
+   doubleOps::mulS((double*)quaternions, scale, 4, (double*) quaternions);
 }
 
 void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
 {
    // Calculate angle between them.
-   double cosHalfTheta = qa->w * qb->w + qa->x * qb->x + qa->y * qb->y + qa->z * qb->z;
+   double cosHalfTheta = quaternionsDotProduct(qa, qb);
+
    // if qa=qb or qa=-qb then theta = 0 and we can return qa
    if (abs(cosHalfTheta) >= 1.0){
       memcpy(qm, qa, sizeof(Quaternions));// qm->w = qa->w;qm->x = qa->x;qm->y = qa->y;qm->z = qa->z;
       return;
    }
+   
    // Calculate temporary values.
    double halfTheta = acos(cosHalfTheta);
    double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
+   
    // if theta = 180 degrees then result is not fully defined
    // we could rotate around any axis normal to qa or qb
-   if (fabs(sinHalfTheta) < 0.001)
+   if (fabs(sinHalfTheta) < 1.0e-4)
    { 
-      weightedSum((double*)qa, (double*)qb, 4, 0.5, 0.5, (double*)qm);
+      doubleOps::weightedSum((double*)qa, (double*)qb, 4, 1.0-t, t, (double*)qm);
    } else
    {
       double ratioA = sin((1.0 - t) * halfTheta) / sinHalfTheta;
       double ratioB = sin(t * halfTheta) / sinHalfTheta; 
       //calculate Quaternion.
-      weightedSum((double*)qa, (double*)qb, 4, ratioA, ratioB, (double*)qm);
+      doubleOps::weightedSum((double*)qa, (double*)qb, 4, ratioA, ratioB, (double*)qm);
    }
+   quaternionsRenorm(qm);
 }
