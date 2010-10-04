@@ -1845,6 +1845,21 @@ namespace Emgu.CV
          cvFloodFill(src, seedPoint, newVal, loDiff, upDiff, out comp, (int)connectivity | (int)flags, mask);
       }
 
+      /// <summary>
+      /// Filters image using meanshift algorithm
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Result image</param>
+      /// <param name="sp"></param>
+      /// <param name="sr"></param>
+      /// <param name="max_level">Use 1 as default value</param>
+      /// <param name="termcrit">Use new MCvTermCriteria(5, 1) as default value</param>
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvPyrMeanShiftFiltering(
+         IntPtr src, IntPtr dst,
+         double sp, double sr, int max_level,
+         MCvTermCriteria termcrit);
+
       #region image undistortion
       /// <summary>
       /// Transforms the image to compensate radial and tangential lens distortion. The camera matrix and distortion parameters can be determined using cvCalibrateCamera2. For every pixel in the output image the function computes coordinates of the corresponding location in the input image using the formulae in the section beginning. Then, the pixel value is computed using bilinear interpolation. If the resolution of images is different from what was used at the calibration stage, fx, fy, cx and cy need to be adjusted appropriately, while the distortion coefficients remain the same.
