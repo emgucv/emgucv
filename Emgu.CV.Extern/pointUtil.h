@@ -45,7 +45,12 @@ inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* 
 **/
 inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
 {
+#if EMGU_SSE2
+   __m128d tmp = _mm_mul_pd( _mm_loadu_pd(&p1->x), _mm_loadu_pd(&p2->x));
+   return tmp.m128d_f64[0] + tmp.m128d_f64[1] + p1->z * p2->z;
+#else
    return p1->x * p2->x + p1->y * p2->y + p1->z * p2->z;
+#endif
 };
 
 /**
@@ -63,10 +68,10 @@ inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f*
 **/
 inline void cvPoint3D64fCrossProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* crossProduct)
 {
-#if EMGU_SSE2 
-   crossProduct->x = _cross_product(_mm_loadu_pd(&p2->y), _mm_loadu_pd(&p1->y)); //p1->y * p2->z - p1->z * p2->y;
-   crossProduct->y = p1->z * p2->x - p1->x * p2->z;
-   crossProduct->z = _cross_product(_mm_loadu_pd(&p2->x), _mm_loadu_ps(&p1->x)); //p1->x * p2->y - p1->y * p2->x;
+#if EMGU_SSE2
+   crossProduct->x = _cross_product(_mm_loadu_pd(&p2->y), _mm_loadu_pd(&p1->y)); 
+   crossProduct->y = _cross_product(_mm_set_pd(p2->x, p2->z), _mm_set_pd(p1->x, p1->z));
+   crossProduct->z = _cross_product(_mm_loadu_pd(&p2->x), _mm_loadu_pd(&p1->x)); 
 #else
    crossProduct->x = p1->y * p2->z - p1->z * p2->y;
    crossProduct->y = p1->z * p2->x - p1->x * p2->z;
