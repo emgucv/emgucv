@@ -40,7 +40,9 @@
 
    inline double _cross_product(__m128d v0, __m128d v1)
    {
-      return v0.m128d_f64[1] * v1.m128d_f64[0] - v0.m128d_f64[0] * v1.m128d_f64[1];
+      __m128d val = _mm_mul_pd(v0, _mm_shuffle_pd(v1, v1, _MM_SHUFFLE2(0, 1)));
+      return val.m128d_f64[1] - val.m128d_f64[0];
+      //return v0.m128d_f64[1] * v1.m128d_f64[0] - v0.m128d_f64[0] * v1.m128d_f64[1];
    }
    #endif
 

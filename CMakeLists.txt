@@ -144,7 +144,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration(\"\")]
 [assembly: AssemblyCompany(\"${CPACK_PACKAGE_VENDOR}\")]
 [assembly: AssemblyProduct(\"Emgu.CV\")]
-[assembly: AssemblyCopyright(\"Copyright © ${CPACK_PACKAGE_VENDOR} 2010\")]
+[assembly: AssemblyCopyright(\"Copyright ?${CPACK_PACKAGE_VENDOR} 2010\")]
 [assembly: AssemblyTrademark(\"\")]
 [assembly: AssemblyCulture(\"\")]
 ")
@@ -591,3 +591,10 @@ ENDIF()
 
 MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
 INCLUDE (CPack)
+
+ENABLE_TESTING()
+ADD_SUBDIRECTORY(tests/cvextern_test)
+IF(MSVC)
+  SET_TARGET_PROPERTIES(cvextern_test PROPERTIES PREFIX ${extra_bin_prefix})
+ENDIF()
+

@@ -25,19 +25,13 @@ namespace doubleOps
       const double* end = d+length;
 #if EMGU_SSE2
       __m128d _scale = _mm_set1_pd(scale);
-      for(const double* stop = d + (length & -2); current < stop; current+=2)
-      {
-         __m128d _val = _mm_set_pd(*current, *(current+1));
-         __m128d _res = _mm_mul_pd(_val, _scale);
-         *result++ = _res.m128d_f64[1];
-         *result++ = _res.m128d_f64[0];
-      }
-#else
+      for(const double* stop = d + (length & -2); current < stop; current+=2, result+=2)
+         _mm_storeu_pd(result,_mm_mul_pd(_mm_loadu_pd(current), _scale));
+#endif
       while (current < end)
       {
          *result++ = (*current++) * scale;
       }
-#endif
    }
 }
 #endif
