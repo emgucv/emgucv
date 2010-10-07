@@ -11,30 +11,32 @@ namespace emgu {
    class CV_EXPORTS DataLogger
    {
    public:
+      int logLevel;
+
       DataCallback callback;
 
-      DataLogger()
-         : callback(0)  {};
+      DataLogger(int level)
+         : callback(0), logLevel(level)  {};
 
       void registerCallback(DataCallback dataCallback)
       {
          callback = dataCallback;
       }
 
-      void log(void* data)
+      void log(void* data, int level)
       {
-         if (callback) callback(data);
+         if (callback && level >=logLevel) callback(data);
       }
    };
 };
 
 /* DataLogger */
-CVAPI(emgu::DataLogger*) DataLoggerCreate();
+CVAPI(emgu::DataLogger*) DataLoggerCreate(int logLevel);
 
 CVAPI(void) DataLoggerRelease(emgu::DataLogger** logger);
 
 CVAPI(void) DataLoggerRegisterCallback(emgu::DataLogger* logger, emgu::DataCallback messageCallback );
 
-CVAPI(void) DataLoggerLog(emgu::DataLogger* logger, void* data);
+CVAPI(void) DataLoggerLog(emgu::DataLogger* logger, void* data, int logLevel);
 
 #endif

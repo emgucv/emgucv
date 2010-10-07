@@ -13,7 +13,7 @@ namespace Emgu.CV
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention=CvInvoke.CvCallingConvention)]
-      private static extern IntPtr DataLoggerCreate();
+      private static extern IntPtr DataLoggerCreate(int logLevel);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void DataLoggerRelease(ref IntPtr logger);
@@ -26,7 +26,8 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void DataLoggerLog(
          IntPtr logger, 
-         IntPtr data);
+         IntPtr data,
+         int logLevel);
       #endregion
 
       /// <summary>
@@ -46,9 +47,10 @@ namespace Emgu.CV
       /// <summary>
       /// Create a MessageLogger and register the callback function
       /// </summary>
-      public DataLogger()
+      /// <param name="logLevel">The log level.</param>
+      public DataLogger(int logLevel)
       {
-         _ptr = DataLoggerCreate();
+         _ptr = DataLoggerCreate(logLevel);
          _handler = DataHandler;
          DataLoggerRegisterCallback(_ptr, _handler);
       }
@@ -57,9 +59,10 @@ namespace Emgu.CV
       /// Log some data
       /// </summary>
       /// <param name="data">Pointer to some unmanaged data</param>
-      public void Log(IntPtr data)
+      /// <param name="logLevel">The logLevel. The Log function only logs when the <paramref name="logLevel"/> is greater or equals to the DataLogger's logLevel</param>
+      public void Log(IntPtr data, int logLevel)
       {
-         DataLoggerLog(_ptr, data);
+         DataLoggerLog(_ptr, data, logLevel);
       }
 
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
@@ -100,9 +103,10 @@ namespace Emgu.CV
       /// <summary>
       /// Create a new DataLogger
       /// </summary>
-      public DataLogger()
+      /// <param name="logLevel">The log level.</param>
+      public DataLogger(int logLevel)
       {
-         _logger = new DataLogger();
+         _logger = new DataLogger(logLevel);
          _handler = DataHandler;
          _logger.OnDataReceived += _handler;
       }
@@ -116,18 +120,19 @@ namespace Emgu.CV
       /// Log some data
       /// </summary>
       /// <param name="data">The data to be logged</param>
-      public void Log(T data)
+      /// <param name="logLevel">The logLevel. The Log function only logs when the <paramref name="logLevel"/> is greater or equals to the DataLogger's logLevel</param>
+      public void Log(T data, int logLevel)
       {
          if (typeof(T) == typeof(String))
          {
             String d = data as String;
-            _logger.Log(Marshal.StringToHGlobalAnsi(d));
+            _logger.Log(Marshal.StringToHGlobalAnsi(d), logLevel);
          }
          else
          {
             IntPtr ptr = new IntPtr();
             Marshal.StructureToPtr(data, ptr, false);
-            _logger.Log(ptr);
+            _logger.Log(ptr, logLevel);
          }
       }
 

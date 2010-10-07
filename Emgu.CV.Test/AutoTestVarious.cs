@@ -1909,16 +1909,19 @@ namespace Emgu.CV.Test
       {
          bool dataLogged = false;
 
-         using (DataLogger<String> logger = new DataLogger<String>())
+         using (DataLogger<String> logger = new DataLogger<String>(1))
          {
-          logger.OnDataReceived += 
-               delegate(object sender, EventArgs<string> e)
-               {
-                  Assert.AreEqual(e.Value, "Test");
-                  dataLogged = true;
-               };
+            logger.OnDataReceived +=
+                 delegate(object sender, EventArgs<string> e)
+                 {
+                    Assert.AreEqual(e.Value, "Test");
+                    dataLogged = true;
+                 };
 
-            logger.Log("Test");
+            logger.Log("Test", 0);
+            Assert.IsFalse(dataLogged);
+
+            logger.Log("Test", 1);
 
             Assert.IsTrue(dataLogged);
          }
