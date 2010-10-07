@@ -27,6 +27,11 @@ namespace emgu {
       {
          if (callback && level >=logLevel) callback(data);
       }
+
+      void log(void* data)
+      {
+         if (callback) callback(data);
+      }
    };
 };
 
