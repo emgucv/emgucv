@@ -27,6 +27,11 @@ namespace Emgu.CV.Tiff
       #endregion
    }
 
+   /// <summary>
+   /// A writer for writing GeoTiff
+   /// </summary>
+   /// <typeparam name="TColor">The color type of the image to be written</typeparam>
+   /// <typeparam name="TDepth">The depth type of the image to be written</typeparam>
    public class TileTiffWriter<TColor, TDepth> : TiffWriter<TColor, TDepth>
       where TColor : struct, IColor
       where TDepth : new()
