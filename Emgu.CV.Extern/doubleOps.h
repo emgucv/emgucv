@@ -33,5 +33,20 @@ namespace doubleOps
          *result++ = (*current++) * scale;
       }
    }
+
+   inline void add(const double* d1, const double* d2, int length, double* result)
+   {
+      const double* current1 = d1;
+      const double* current2 = d2;
+      const double* end1 = d1 + length;
+#if EMGU_SSE2
+      for(const double* stop1 = d1 + (length &-2); current1 < stop1; current1+=2, current2 +=2, result +=2)
+         _mm_storeu_pd(result, _mm_add_pd(_mm_loadu_pd(current1), _mm_loadu_pd(current2)));
+#endif
+      while(current1 < end1)
+      {
+         *result++ = (*current1++) + (*current2++);
+      }
+   }
 }
 #endif
