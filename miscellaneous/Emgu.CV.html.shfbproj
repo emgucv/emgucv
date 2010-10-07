@@ -33,7 +33,7 @@
     <CppCommentsFixup>True</CppCommentsFixup>
     <FrameworkVersion>3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2009 Emgu, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2010 Emgu, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText><![CDATA[
 <div id="main">

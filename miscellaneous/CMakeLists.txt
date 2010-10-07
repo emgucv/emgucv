@@ -11,8 +11,8 @@ ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML)
 PROJECT(Emgu.CV.Documentation.chm)
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
-   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.mshelp.shfbproj
-   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.mshelp.shfbproj
+   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath=. /property:HelpFileFormat=HtmlHelp1x /property:HeaderText="http://www.emgu.com"
+   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML)
 
