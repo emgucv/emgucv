@@ -8,7 +8,6 @@ using namespace std;
 #if EMGU_SSE2
 void Test_cross_product()
 {
-   //char msg[1024];
    __m128d v0 = _mm_set_pd(0.01, 0.02);
    __m128d v1 = _mm_set_pd(0.03, 0.04);
 
@@ -40,8 +39,6 @@ void Test_double_MulS()
    }
 
    cout <<"Test mulS: " << (success ? "Passed" : "Failed") << std::endl;
-
-
 }
 int main(int atgc, const char* argv[])
 {
@@ -49,7 +46,9 @@ int main(int atgc, const char* argv[])
    Test_cross_product();
    Test_double_MulS();
  
-   cin >>tmp;
+#ifdef _MSC_VER
+   cin >>tmp; //wait for input only if compiling with visual C++ 
+#endif
 }
 
 #endif

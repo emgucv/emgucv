@@ -6,6 +6,7 @@
 #include "opencv2/core/core.hpp"
 #include "sse.h"
 #include "doubleOps.h"
+#include "pointUtil.h"
 
 /**
  * @struct  Quaternions

@@ -145,8 +145,8 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
    
    quaternionsDst->w = _wx.m128d_f64[1];
    quaternionsDst->x = _wx.m128d_f64[0];
-   quaternionsDst->z = _zy.m128d_f64[1];
-   quaternionsDst->y = _zy.m128d_f64[0];
+   _mm_storeu_pd( &quaternionsDst->y, _zy);
+
 #else
    double w1 = quaternions1->w;
    double x1 = quaternions1->x;
@@ -173,7 +173,7 @@ const double THETA_EPS = 1.0e-30;
 /* convert axis angle vector to quaternions. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle  */
 void axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions)
 {
-   double theta = sqrt(axisAngle->x * axisAngle->x + axisAngle->y * axisAngle->y + axisAngle->z * axisAngle->z);
+   double theta = sqrt(cvPoint3D64fDotProduct(axisAngle, axisAngle));
    if (theta < THETA_EPS) 
    {
       quaternions->w = 1.0;

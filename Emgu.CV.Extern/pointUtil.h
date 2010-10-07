@@ -3,6 +3,7 @@
 #define POINT_UTIL_H
 
 #include "opencv2/core/core.hpp"
+#include "sse.h"
 
 /**
  * @fn   inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* p2)
@@ -19,7 +20,14 @@
 **/
 inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* p2)
 {
+#if EMGU_SSE
+   __m128 ps1 = _mm_set_ps(p1->x, p1->y, p1->z, 0);
+   __m128 ps2 = _mm_set_ps(p2->x, p2->y, p2->z, 0);
+   __m128 product = _mm_mul_ps(ps1, ps2);
+   return product.m128_f32[3] + product.m128_f32[2] + product.m128_f32[1];
+#else
    return p1->x * p2->x + p1->y * p2->y + p1->z * p2->z;
+#endif
 };
 
 /**
@@ -55,29 +63,47 @@ inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f*
 **/
 inline void cvPoint3D64fCrossProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* crossProduct)
 {
+#if EMGU_SSE2 
+   crossProduct->x = _cross_product(_mm_loadu_pd(&p2->y), _mm_loadu_pd(&p1->y)); //p1->y * p2->z - p1->z * p2->y;
+   crossProduct->y = p1->z * p2->x - p1->x * p2->z;
+   crossProduct->z = _cross_product(_mm_loadu_pd(&p2->x), _mm_loadu_ps(&p1->x)); //p1->x * p2->y - p1->y * p2->x;
+#else
    crossProduct->x = p1->y * p2->z - p1->z * p2->y;
    crossProduct->y = p1->z * p2->x - p1->x * p2->z;
    crossProduct->z = p1->x * p2->y - p1->y * p2->x;
+#endif
 };
 
 inline void cvPoint3D64fSub(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* result)
 {
+#if EMGU_SSE2
+   _mm_storeu_pd((double*)result, _mm_sub_pd(_mm_loadu_pd((const double*) p1), _mm_loadu_pd((const double*) p2)));
+#else
    result->x = p1->x - p2->x;
    result->y = p1->y - p2->y;
+#endif
    result->z = p1->z - p2->z;
 }
 
 inline void cvPoint3D64fAdd(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* result)
 {
+#if EMGU_SSE2
+   _mm_storeu_pd((double*)result, _mm_add_pd(_mm_loadu_pd((const double*) p1), _mm_loadu_pd((const double*) p2)));
+#else
    result->x = p1->x + p2->x;
    result->y = p1->y + p2->y;
+#endif
    result->z = p1->z + p2->z;
 }
 
 inline void cvPoint3D64fMul(const CvPoint3D64f* p1, double scale, CvPoint3D64f* result)
 {
+#if EMGU_SSE2
+   _mm_storeu_pd((double*)result, _mm_mul_pd(_mm_loadu_pd((const double*) p1), _mm_set1_pd(scale)));
+#else
    result->x = p1->x * scale;
    result->y = p1->y * scale;
+#endif
    result->z = p1->z * scale;
 }
 
