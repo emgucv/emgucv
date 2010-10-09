@@ -1205,6 +1205,7 @@ namespace Emgu.CV
       /// <param name="type">Type of the matrix elements (see CreateMat).</param>
       /// <param name="data">Optional data pointer assigned to the matrix header.</param>
       /// <returns></returns>
+      [Obsolete("The generated header should only be released with Marshal.AllocHGlobal, this is DANGEROUS! Will be removed in the next version. Use CvInvoke.cvInitMatHeader instead")]
       public static IntPtr cvMat(int rows, int cols, CV.CvEnum.MAT_DEPTH type, IntPtr data)
       {
          IntPtr mat = Marshal.AllocHGlobal(StructSize.MCvMat);
