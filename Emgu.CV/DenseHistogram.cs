@@ -65,6 +65,8 @@ namespace Emgu.CV
             rangesPts,
             1);
 
+         rangesHandle.Free();
+
       }
 
       /// <summary>
@@ -354,6 +356,11 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
+         if (_ptr != IntPtr.Zero)
+         {
+            Marshal.FreeHGlobal(_ptr);
+            _ptr = IntPtr.Zero;
+         }
       }
 
       /// <summary>
