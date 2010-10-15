@@ -19,8 +19,8 @@ namespace Emgu.CV.Test
       public void TestConvertion()
       {
          GeodeticCoordinate coor = new GeodeticCoordinate(43.853626 * Math.PI / 180.0, -79.358981 * Math.PI / 180.0, 231.0);
-         MCvPoint3D64f ecef = TransformationWGS84.Geodetic2ECEF(coor);
-         GeodeticCoordinate coorTransformed = TransformationWGS84.ECEF2Geodetic(ecef);
+         MCvPoint3D64f ecef = Datum.WGS84.Geodetic2ECEF(coor);
+         GeodeticCoordinate coorTransformed = Datum.WGS84.ECEF2Geodetic(ecef);
 
          GeodeticCoordinate refCoor = new GeodeticCoordinate(43.853374 * Math.PI / 180.0, -79.358321 * Math.PI / 180.0, 230.312);
 
@@ -29,8 +29,8 @@ namespace Emgu.CV.Test
          Assert.Less(Math.Abs(delta.Latitude), _epsilon);
          Assert.Less(Math.Abs(delta.Longitude), _epsilon);
 
-         MCvPoint3D64f ned = TransformationWGS84.Geodetic2NED(coor, refCoor);
-         coorTransformed = TransformationWGS84.NED2Geodetic(ned, refCoor);
+         MCvPoint3D64f ned = Datum.WGS84.Geodetic2NED(coor, refCoor);
+         coorTransformed = Datum.WGS84.NED2Geodetic(ned, refCoor);
          delta = coorTransformed - coor;
          Assert.Less(Math.Abs(delta.Altitude), _epsilon);
          Assert.Less(Math.Abs(delta.Latitude), _epsilon);
@@ -46,8 +46,8 @@ namespace Emgu.CV.Test
          double tmp;
          for (int i = 0; i < 10000000; i++)
          {
-            MCvPoint3D64f ned = TransformationWGS84.Geodetic2NED(coor, refCoor);
-            GeodeticCoordinate coorTransformed = TransformationWGS84.NED2Geodetic(ned, refCoor);
+            MCvPoint3D64f ned = Datum.WGS84.Geodetic2NED(coor, refCoor);
+            GeodeticCoordinate coorTransformed = Datum.WGS84.NED2Geodetic(ned, refCoor);
             tmp = coorTransformed.Altitude;
          }
          watch.Stop();
@@ -66,8 +66,8 @@ namespace Emgu.CV.Test
          double tmp;
          for (int i = 0; i < 10000000; i++)
          {
-            MCvPoint3D64f ecef = TransformationWGS84.Geodetic2ECEF(coor);
-            GeodeticCoordinate coorTransformed = TransformationWGS84.ECEF2Geodetic(ecef);
+            MCvPoint3D64f ecef = Datum.WGS84.Geodetic2ECEF(coor);
+            GeodeticCoordinate coorTransformed = Datum.WGS84.ECEF2Geodetic(ecef);
             tmp = coorTransformed.Altitude;
          }
          watch.Stop();

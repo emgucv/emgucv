@@ -100,7 +100,7 @@ namespace Emgu.CV.Tiff
       /// <param name="imageSize">The size of the image</param>
       public void WriteGeoTag(GeodeticCoordinate originCoordinate, Size imageSize, MCvPoint2D64f pixelResolution)
       {
-         GeodeticCoordinate lowerRight = TransformationWGS84.NED2Geodetic(
+         GeodeticCoordinate lowerRight = Datum.WGS84.NED2Geodetic(
             new MCvPoint3D64f(pixelResolution.x * imageSize.Height, pixelResolution.y * imageSize.Width, 0.0),
             originCoordinate);
          MCvPoint3D64f res = new MCvPoint3D64f(
