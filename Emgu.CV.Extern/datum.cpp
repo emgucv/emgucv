@@ -5,7 +5,7 @@
 **/
 #include "datum.h"
 
-CVAPI(datum*) datumCreateWGS84() { return new datum(); }
+CVAPI(const datum*) datumCreateWGS84() { return &wgs84; }
 
 CVAPI(datum*) datumCreate(double a, double b) { return new datum(a, b); }
 
