@@ -58,32 +58,24 @@ namespace Emgu.CV.Tiff
       /// <param name="image"></param>
       public virtual void WriteImage(Image<TColor, TDepth> image)
       {
-         if (image is Image<Gray, Byte>)
+         if (image is Image<Gray, Byte> || image is Image<Rgb, Byte> || image is Image<Rgba, Byte>)
          {
-            TIFFInvoke.tiffWriteImage(_ptr, image.Ptr);
+            TIFFInvoke.tiffWriteImage(_ptr, image);
          }
          else if (image is Image<Bgra, Byte>)
          {
             //swap the B and R channel since geotiff assume RGBA for 4 channels image of depth Byte
-            using (Image<Bgra, Byte> clone = (image as Image<Bgra, Byte>).Clone())
-            using (Image<Gray, Byte> b = clone[0])
-            using (Image<Gray, Byte> r = clone[2])
+            using (Image<Rgba, Byte> rgba = (image as Image<Bgra, Byte>).Convert<Rgba, Byte>())
             {
-               clone[2] = b;
-               clone[0] = r;
-               TIFFInvoke.tiffWriteImage(_ptr, clone.Ptr);
+               TIFFInvoke.tiffWriteImage(_ptr, rgba);
             }
          }
          else if (image is Image<Bgr, Byte>)
          {
             //swap the B and R channel since geotiff assume RGB for 3 channels image of depth Byte
-            using (Image<Bgr, Byte> clone = (image as Image<Bgr, Byte>).Clone())
-            using (Image<Gray, Byte> b = clone[0])
-            using (Image<Gray, Byte> r = clone[2])
+            using (Image<Rgb, Byte> rgb = (image as Image<Bgr, Byte>).Convert<Rgb, Byte>())
             {
-               clone[2] = b;
-               clone[0] = r;
-               TIFFInvoke.tiffWriteImage(_ptr, clone);
+               TIFFInvoke.tiffWriteImage(_ptr, rgb);
             }
          }
          else
