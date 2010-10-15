@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TRANSFORMATION_WGS84_H
-#define TRANSFORMATION_WGS84_H
+#ifndef DATUM_H
+#define DATUM_H
 
 #include "opencv2/core/core_c.h"
 #include <math.h>

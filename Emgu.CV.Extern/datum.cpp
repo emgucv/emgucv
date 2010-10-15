@@ -1,9 +1,9 @@
 /**
-* @file transformationWGS84.cpp
+* @file datum.cpp
 *
-* @brief   Implement functions for WGS84 transformation. 
+* @brief   Implement functions for datum
 **/
-#include "transformationWGS84.h"
+#include "datum.h"
 
 CVAPI(datum*) datumCreateWGS84() { return new datum(); }
 
