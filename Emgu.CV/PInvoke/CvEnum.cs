@@ -260,42 +260,115 @@ namespace Emgu.CV.CvEnum
       ///Convert BGR color to BGRA color
       ///</summary>
       CV_BGR2BGRA = 0,
+      /// <summary>
+      /// Convert RGB color to RGBA color
+      /// </summary>
+      CV_RGB2RGBA = CV_BGR2BGRA,
+
       ///<summary>
       ///Convert BGRA color to BGR color
       ///</summary>
       CV_BGRA2BGR = 1,
+      /// <summary>
+      /// Convert RGBA color to RGB color
+      /// </summary>
+      CV_RGBA2RGB = CV_BGRA2BGR,
+      /// <summary>
+      /// Convert BGR color to RGBA color
+      /// </summary>
+      CV_BGR2RGBA = 2,
+      /// <summary>
+      /// Convert RGB color to BGRA color
+      /// </summary>
+      CV_RGB2BGRA = CV_BGR2RGBA,
+      /// <summary>
+      /// Convert RGBA color to BGR color
+      /// </summary>
+      CV_RGBA2BGR = 3,
+      /// <summary>
+      /// Convert BGRA color to RGB color
+      /// </summary>
+      CV_BGRA2RGB = CV_RGBA2BGR,
+      /// <summary>
+      /// Convert BGR color to RGB color
+      /// </summary>
+      CV_BGR2RGB = 4,
+      /// <summary>
+      /// Convert RGB color to BGR color
+      /// </summary>
+      CV_RGB2BGR = CV_BGR2RGB,
+      /// <summary>
+      /// Convert BGRA color to RGBA color
+      /// </summary>
+      CV_BGRA2RGBA = 5,
+      /// <summary>
+      /// Convert RGBA color to BGRA color
+      /// </summary>
+      CV_RGBA2BGRA = CV_BGRA2RGBA,
       ///<summary>
       ///Convert BGR color to GRAY color
       ///</summary>
       CV_BGR2GRAY = 6,
+      /// <summary>
+      /// Convert RGB color to GRAY color
+      /// </summary>
+      CV_RGB2GRAY = 7,
       ///<summary>
       ///Convert GRAY color to BGR color
       ///</summary>
       CV_GRAY2BGR = 8,
+      /// <summary>
+      /// Convert GRAY color to RGB color
+      /// </summary>
+      CV_GRAY2RGB = CV_GRAY2BGR,
       ///<summary>
       ///Convert GRAY color to BGRA color
       ///</summary>
       CV_GRAY2BGRA = 9,
+      /// <summary>
+      /// Convert GRAY color to RGBA color
+      /// </summary>
+      CV_GRAY2RGBA = CV_GRAY2BGRA,
       ///<summary>
       ///Convert BGRA color to GRAY color
       ///</summary>
       CV_BGRA2GRAY = 10,
+      /// <summary>
+      /// Convert RGBA color to GRAY color
+      /// </summary>
+      CV_RGBA2GRAY = 11,
       ///<summary>
       ///Convert BGR color to BGR565 color
       ///</summary>
       CV_BGR2BGR565 = 12,
+      /// <summary>
+      /// Convert RGB color to BGR565 color
+      /// </summary>
+      CV_RGB2BGR565 = 13,
       ///<summary>
       ///Convert BGR565 color to BGR color
       ///</summary>
       CV_BGR5652BGR = 14,
+      /// <summary>
+      /// Convert BGR565 color to RGB color
+      /// </summary>
+      CV_BGR5652RGB = 15,
       ///<summary>
       ///Convert BGRA color to BGR565 color
       ///</summary>
       CV_BGRA2BGR565 = 16,
+      /// <summary>
+      /// Convert RGBA color to BGR565 color
+      /// </summary>
+      CV_RGBA2BGR565 = 17,
       ///<summary>
       ///Convert BGR565 color to BGRA color
       ///</summary>
       CV_BGR5652BGRA = 18,
+      /// <summary>
+      /// Convert BGR565 color to RGBA color
+      /// </summary>
+      CV_BGR5652RGBA = 19,
       ///<summary>
       ///Convert GRAY color to BGR565 color
       ///</summary>
@@ -308,18 +381,34 @@ namespace Emgu.CV.CvEnum
       ///Convert BGR color to BGR555 color
       ///</summary>
       CV_BGR2BGR555 = 22,
+      /// <summary>
+      /// Convert RGB color to BGR555 color
+      /// </summary>
+      CV_RGB2BGR555 = 23,
       ///<summary>
       ///Convert BGR555 color to BGR color
       ///</summary>
       CV_BGR5552BGR = 24,
+      /// <summary>
+      /// Convert BGR555 color to RGB color
+      /// </summary>
+      CV_BGR5552RGB = 25,
       ///<summary>
       ///Convert BGRA color to BGR555 color
       ///</summary>
       CV_BGRA2BGR555 = 26,
+      /// <summary>
+      /// Convert RGBA color to BGR555 color
+      /// </summary>
+      CV_RGBA2BGR555 = 27,
       ///<summary>
       ///Convert BGR555 color to BGRA color
       ///</summary>
       CV_BGR5552BGRA = 28,
+      /// <summary>
+      /// Convert BGR555 color to RGBA color
+      /// </summary>
+      CV_BGR5552RGBA = 29,
       ///<summary>
       ///Convert GRAY color to BGR555 color
       ///</summary>
@@ -332,26 +421,50 @@ namespace Emgu.CV.CvEnum
       ///Convert BGR color to XYZ color
       ///</summary>
       CV_BGR2XYZ = 32,
+      /// <summary>
+      /// Convert RGB color to XYZ color
+      /// </summary>
+      CV_RGB2XYZ = 33,
       ///<summary>
       ///Convert XYZ color to BGR color
       ///</summary>
       CV_XYZ2BGR = 34,
+      /// <summary>
+      /// Convert XYZ color to RGB color
+      /// </summary>
+      CV_XYZ2RGB = 35,
       ///<summary>
       ///Convert BGR color to YCrCb color
       ///</summary>
       CV_BGR2YCrCb = 36,
+      /// <summary>
+      /// Convert RGB color to YCrCb color
+      /// </summary>
+      CV_RGB2YCrCb = 37,
       ///<summary>
       ///Convert YCrCb color to BGR color
       ///</summary>
       CV_YCrCb2BGR = 38,
+      /// <summary>
+      /// Convert YCrCb color to RGB color
+      /// </summary>
+      CV_YCrCb2RGB = 39,
       ///<summary>
       ///Convert BGR color to HSV color
       ///</summary>
       CV_BGR2HSV = 40,
+      /// <summary>
+      /// Convert RGB colot to HSV color
+      /// </summary>
+      CV_RGB2HSV = 41,
       ///<summary>
       ///Convert BGR color to Lab color
       ///</summary>
       CV_BGR2Lab = 44,
+      /// <summary>
+      /// Convert RGB color to Lab color
+      /// </summary>
+      CV_RGB2Lab = 45,
       ///<summary>
       ///Convert BayerBG color to BGR color
       ///</summary>
@@ -368,30 +481,70 @@ namespace Emgu.CV.CvEnum
       ///Convert BayerGR color to BGR color
       ///</summary>
       CV_BayerGR2BGR = 49,
+      /// <summary>
+      /// Convert BayerBG color to BGR color
+      /// </summary>
+      CV_BayerBG2RGB = CV_BayerRG2BGR,
+      /// <summary>
+      /// Convert BayerRG color to BGR color
+      /// </summary>
+      CV_BayerGB2RGB = CV_BayerGR2BGR,
+      /// <summary>
+      /// Convert BayerRG color to RGB color
+      /// </summary>
+      CV_BayerRG2RGB = CV_BayerBG2BGR,
+      /// <summary>
+      /// Convert BayerGR color to RGB color
+      /// </summary>
+      CV_BayerGR2RGB = CV_BayerGB2BGR,
       ///<summary>
       ///Convert BGR color to Luv color
       ///</summary>
       CV_BGR2Luv = 50,
+      /// <summary>
+      /// Convert RGB color to Luv color
+      /// </summary>
+      CV_RGB2Luv = 51,
       ///<summary>
       ///Convert BGR color to HLS color
       ///</summary>
       CV_BGR2HLS = 52,
+      /// <summary>
+      /// Convert RGB color to HLS color
+      /// </summary>
+      CV_RGB2HLS = 53,
       ///<summary>
       ///Convert HSV color to BGR color
       ///</summary>
       CV_HSV2BGR = 54,
+      /// <summary>
+      /// Convert HSV color to RGB color
+      /// </summary>
+      CV_HSV2RGB = 55,
       ///<summary>
       ///Convert Lab color to BGR color
       ///</summary>
       CV_Lab2BGR = 56,
+      /// <summary>
+      /// Convert Lab color to RGB color
+      /// </summary>
+      CV_Lab2RGB = 57,
       ///<summary>
       ///Convert Luv color to BGR color
       ///</summary>
       CV_Luv2BGR = 58,
+      /// <summary>
+      /// Convert Luv color to RGB color
+      /// </summary>
+      CV_Luv2RGB = 59,
       ///<summary>
       ///Convert HLS color to BGR color
       ///</summary>
       CV_HLS2BGR = 60,
+      /// <summary>
+      /// Convert HLS color to RGB color
+      /// </summary>
+      CV_HLS2RGB = 61,
       /// <summary>
       /// Convert BayerBG pattern to BGR color using VNG
       /// </summary>
@@ -409,14 +562,111 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_BayerGR2BGR_VNG = 65,
       /// <summary>
+      /// Convert BayerBG pattern to RGB color using VNG
+      /// </summary>
+      CV_BayerBG2RGB_VNG = CV_BayerRG2BGR_VNG,
+      /// <summary>
+      /// Convert BayerGB pattern to RGB color using VNG
+      /// </summary>
+      CV_BayerGB2RGB_VNG = CV_BayerGR2BGR_VNG,
+      /// <summary>
+      /// Convert BayerRG pattern to RGB color using VNG
+      /// </summary>
+      CV_BayerRG2RGB_VNG = CV_BayerBG2BGR_VNG,
+      /// <summary>
+      /// Convert BayerGR pattern to RGB color using VNG
+      /// </summary>
+      CV_BayerGR2RGB_VNG = CV_BayerGB2BGR_VNG,
+
+      /// <summary>
+      /// Convert BGR to HSV
+      /// </summary>
+      CV_BGR2HSV_FULL = 66,
+      /// <summary>
+      /// Convert RGB to HSV
+      /// </summary>
+      CV_RGB2HSV_FULL = 67,
+      /// <summary>
+      /// Convert BGR to HLS
+      /// </summary>
+      CV_BGR2HLS_FULL = 68,
+      /// <summary>
+      /// Convert RGB to HLS
+      /// </summary>
+      CV_RGB2HLS_FULL = 69,
+
+      /// <summary>
       /// Convert HSV color to BGR color
       /// </summary>
       CV_HSV2BGR_FULL = 70,
       /// <summary>
+      /// Convert HSV color to RGB color
+      /// </summary>
+      CV_HSV2RGB_FULL = 71,
+      /// <summary>
       /// Convert HLS color to BGR color
       /// </summary>
       CV_HLS2BGR_FULL = 72,
+      /// <summary>
+      /// Convert HLS color to RGB color
+      /// </summary>
+      CV_HLS2RGB_FULL = 73,
 
+      /// <summary>
+      /// Convert sBGR color to Lab color
+      /// </summary>
+      CV_LBGR2Lab = 74,
+      /// <summary>
+      /// Convert sRGB color to Lab color
+      /// </summary>
+      CV_LRGB2Lab = 75,
+      /// <summary>
+      /// Convert sBGR color to Luv color
+      /// </summary>
+      CV_LBGR2Luv = 76,
+      /// <summary>
+      /// Convert sRGB color to Luv color
+      /// </summary>
+      CV_LRGB2Luv = 77,
+
+      /// <summary>
+      /// Convert Lab color to sBGR color
+      /// </summary>
+      CV_Lab2LBGR = 78,
+      /// <summary>
+      /// Convert Lab color to sRGB color
+      /// </summary>
+      CV_Lab2LRGB = 79,
+      /// <summary>
+      /// Convert Luv color to sBGR color
+      /// </summary>
+      CV_Luv2LBGR = 80,
+      /// <summary>
+      /// Convert Luv color to sRGB color
+      /// </summary>
+      CV_Luv2LRGB = 81,
+
+      /// <summary>
+      /// Convert BGR color to YUV
+      /// </summary>
+      CV_BGR2YUV = 82,
+      /// <summary>
+      /// Convert RGB color to YUV
+      /// </summary>
+      CV_RGB2YUV = 83,
+      /// <summary>
+      /// Convert YUV color to BGR
+      /// </summary>
+      CV_YUV2BGR = 84,
+      /// <summary>
+      /// Convert YUV color to RGB
+      /// </summary>
+      CV_YUV2RGB = 85,
+
+      /// <summary>
+      /// The max number, do not use
+      /// </summary>
+      CV_COLORCVT_MAX = 100
    }
 
    /// <summary>
@@ -1816,11 +2066,11 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// No prefilter
       /// </summary>
-      NORMALIZED_RESPONSE  =0,
+      NORMALIZED_RESPONSE = 0,
       /// <summary>
       /// XSobel
       /// </summary>
-      XSOBEL               =1
+      XSOBEL = 1
    }
 
    /// <summary>

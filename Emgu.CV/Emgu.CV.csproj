@@ -79,6 +79,7 @@
     <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
+    <Compile Include="Color\Rgb.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
