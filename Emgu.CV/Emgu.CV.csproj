@@ -89,7 +89,7 @@
     <Compile Include="Flann\Index.cs" />
     <Compile Include="Flann\Index3D.cs" />
     <Compile Include="Geodetic\GeodeticCoordinate.cs" />
-    <Compile Include="Geodetic\TransformationWGS84.cs" />
+    <Compile Include="Geodetic\Datum.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="Octree.cs" />
