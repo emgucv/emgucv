@@ -39,6 +39,21 @@ namespace Emgu.CV
       private extern static void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
       #endregion
 
+      /// <summary>
+      /// Create a quaternion with the specific values
+      /// </summary>
+      /// <param name="w">The W component of the quaternion: the value for cos(rotation angle / 2)</param>
+      /// <param name="x">The X component of the vector: rotation axis * sin(rotation angle / 2)</param>
+      /// <param name="y">The Y component of the vector: rotation axis * sin(rotation angle / 2)</param>
+      /// <param name="z">The Z component of the vector: rotation axis * sin(rotation angle / 2)</param>
+      public Quaternions(double w, double x, double y, double z)
+      {
+         _w = w;
+         _x = x;
+         _y = y;
+         _z = z;
+      }
+
       private double _w;
       private double _x;
       private double _y;
@@ -104,7 +119,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get or Set the equaivalent axis angle representation. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle in radians
+      /// Get or set the equaivalent axis angle representation. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle in radians
       /// </summary>
       public MCvPoint3D64f AxisAngle
       {
@@ -152,24 +167,31 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get or Set the unit rotation axis of the quaternion
+      /// Get the rotation axis of the quaternion
       /// </summary>
       public MCvPoint3D64f RotationAxis
       {
          get
          {
-            return new MCvPoint3D64f(X, Y, Z);
+            if (this.Equals(Empty)) 
+               return new MCvPoint3D64f(0, 0, 1); //For empty quaternion, return a random axis
+            else
+            {
+               double norm = Math.Sqrt(X * X + Y * Y + Z * Z);
+               return new MCvPoint3D64f(X/norm, Y/norm, Z/norm);
+            }
          }
+         /*
          set
          {
             X = value.x;
             Y = value.y;
             Z = value.z;
-         }
+         }*/
       }
 
       /// <summary>
-      /// Get or Set the rotation angle in radian
+      /// Get the rotation angle in radian
       /// </summary>
       public double RotationAngle
       {
@@ -177,10 +199,11 @@ namespace Emgu.CV
          {
             return 2.0 * Math.Acos(W);
          }
+         /*
          set
          {
             W = Math.Cos(value / 2.0);
-         }
+         }*/
       }
 
       /// <summary>
@@ -205,6 +228,11 @@ namespace Emgu.CV
       {
          return q1.Multiply(q2);
       }
+
+      /// <summary>
+      /// Get the quaternions that represent a rotation of 0 degrees.
+      /// </summary>
+      public static readonly Quaternions Empty = new Quaternions(1.0, 0.0, 0.0, 0.0);
 
       #region IEquatable<Quaternions> Members
       /// <summary>
