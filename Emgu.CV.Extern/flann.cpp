@@ -1,12 +1,13 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/features2d/features2d.hpp"
 
+/*
 CVAPI(int) CvHierarchicalClustering(CvMat* features, CvMat* centers, cv::flann::KMeansIndexParams* params)
 {
    cv::Mat f = cv::cvarrToMat(features);
    cv::Mat c = cv::cvarrToMat(centers);
    return cv::flann::hierarchicalClustering(f, c, *params);
-}
+}*/
 
 CVAPI(cv::flann::Index*) CvFlannIndexCreateKDTree(CvMat* features, int trees)
 {
@@ -22,14 +23,14 @@ CVAPI(cv::flann::Index*) CvFlannIndexCreateLinear(CvMat* features)
    return new cv::flann::Index(f, param);
 }
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateKMeans(CvMat* features, int branching_, int iterations_, cv::flann::flann_centers_init_t centers_init_, float cb_index_)
+CVAPI(cv::flann::Index*) CvFlannIndexCreateKMeans(CvMat* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_)
 {
    cv::flann::KMeansIndexParams param = cv::flann::KMeansIndexParams(branching_, iterations_, centers_init_, cb_index_);
    cv::Mat f = cv::cvarrToMat(features);
    return new cv::flann::Index(f, param);
 }
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(CvMat* features, int trees, int branching_, int iterations_, cv::flann::flann_centers_init_t centers_init_, float cb_index_)
+CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(CvMat* features, int trees, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_)
 {
    cv::flann::CompositeIndexParams param = cv::flann::CompositeIndexParams(trees, branching_, iterations_, centers_init_, cb_index_);
    cv::Mat f = cv::cvarrToMat(features);

@@ -112,14 +112,14 @@ void quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointS
 
    if ((p.rows == 3 && p.cols == 1))
    {  
-      v = pIter.ptr;
-      quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, *v, *(v+1), *(v+2), pDstIter.ptr);
+      v = (double*)pIter.ptr;
+      quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, *v, *(v+1), *(v+2), (double*)pDstIter.ptr);
    } else 
    {
       for(int i = 0; i < p.rows; i++, pIter+=3, pDstIter+=3)
       {
-         v = pIter.ptr;
-         quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, *v, *(v+1), *(v+2),  pDstIter.ptr);
+         v = (double*)pIter.ptr;
+         quaternionsRotate(quaternions->w, quaternions->x, quaternions->y, quaternions->z, *v, *(v+1), *(v+2), (double*)pDstIter.ptr);
       }
    }
 }
