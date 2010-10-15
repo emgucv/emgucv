@@ -6,7 +6,7 @@
 #include "geo_tiffp.h"
 #include "geotiffio.h" //writing geotiff
 #include "xtiffio.h"
-#include "transformationWGS84.h"
+#include "datum.h"
 
 CVAPI(TIFF*) tiffWriterOpen(char* fileName)
 {
