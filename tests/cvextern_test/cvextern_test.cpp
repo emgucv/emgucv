@@ -40,7 +40,7 @@ void Test_double_MulS()
 
    cout <<"Test mulS: " << (success ? "Passed" : "Failed") << std::endl;
 }
-int main(int atgc, const char* argv[])
+int main()
 {
    char tmp;
    Test_cross_product();
