@@ -116,7 +116,7 @@ void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPo
          cvPoint3D64fCrossProduct(&nor0, &nor1, &crossProduct);
          bool sameSide = cvPoint3D64fDotProduct(&crossProduct, &plane->unitNormal) >= 0;
          if (sameSide) break;
-         std::swap<CvPoint3D64f>(intersections[j-1], intersections[j]);
+         std::swap(intersections[j-1], intersections[j]);
       }
    }  
 }
