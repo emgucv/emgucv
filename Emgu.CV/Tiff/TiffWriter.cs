@@ -102,10 +102,11 @@ namespace Emgu.CV.Tiff
 
          double latitude = lowerRight.Latitude * (180.0 / Math.PI);
          double longitude = lowerRight.Longitude * (180.0 / Math.PI);
-         double[] ModelTiepoint = { 
+         double[] modelTiepoint = { 
             0, 0, 0, 
             longitude, latitude, 0 };
-         double[] ModelPixelScale = { pixelResolution.x, pixelResolution.y, 0.0 };
+         double[] modelPixelScale = { res.x, res.y, 0.0 };
+         WriteGeoTag(modelTiepoint, modelPixelScale);
       }
 
       /// <summary>
