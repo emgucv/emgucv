@@ -21,14 +21,18 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../libgeotiff/libgeotiff-1.3.0")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../libgeotiff/libgeotiff-1.3.0/libxtiff")
 
-file(GLOB extern_srcs "./*.cpp")
-source_group("Src" FILES ${extern_srcs})
-file(GLOB extern_hdrs "./*.h*")
-source_group("Include" FILES ${extern_hdrs})
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
+endif()
+
+file(GLOB cvextern_test_srcs "./*.cpp")
+source_group("Src" FILES ${cvextern_test_srcs})
+file(GLOB cvextern_test_hdrs "./*.h*")
+source_group("Include" FILES ${cvextern_test_hdrs})
 
 set(the_target ${PROJECT_NAME})
 
-add_executable(${the_target} ${extern_srcs} ${extern_hdrs})
+add_executable(${the_target} ${cvextern_test_srcs} ${cvextern_test_hdrs})
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
@@ -40,7 +44,7 @@ set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
-	DEFINE_SYMBOL "CVAPI_EXPORTS"
+	#DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
 FIND_PACKAGE(TIFF)
