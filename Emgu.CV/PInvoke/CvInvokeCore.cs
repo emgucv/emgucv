@@ -1722,7 +1722,11 @@ namespace Emgu.CV
           CvEnum.LINE_TYPE lineType,
           int shift)
       {
-         cvEllipse(img, Point.Round(box.center), Size.Round(box.size), box.angle, 0, 360, color, thickness, lineType, shift);
+         Size axes = new Size();
+         axes.Width = (int)Math.Round(box.size.Height * 0.5);
+         axes.Height = (int)Math.Round(box.size.Width * 0.5);
+
+         cvEllipse(img, Point.Round(box.center), axes, box.angle, 0, 360, color, thickness, lineType, shift);
       }
 
       /// <summary>
