@@ -4,7 +4,8 @@
 #include <iostream>
 using namespace std;
 
-#define fequal(a, b) (fabs((a) - (b))<1.0e-30) 
+#define ERROR_EPS 1.0e-12
+#define fequal(a, b) (fabs((a) - (b))< ( (fabs(a) + fabs(b)) / 2 * ERROR_EPS)) 
 void Test_cross_product()
 {
 #if EMGU_SSE2
