@@ -218,6 +218,10 @@ void quaternionsRenorm(Quaternions* quaternions)
 
 void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
 {
+   //making sure t is in the valid range
+   t = t < 0 ? 0 : t;
+   t = t > 1.0 ? 1.0 : t;
+
    // Calculate angle between them.
    double cosHalfTheta = quaternionsDotProduct(qa, qb);
 
