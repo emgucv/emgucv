@@ -48,16 +48,30 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 #endif
 }
 
-void quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z)
-{
-   double q0 = quaternions->w;
-   double q1 = quaternions->x;
-   double q2 = quaternions->y;
-   double q3 = quaternions->z;
+#if EMGU_SSE2
+__m128d __m128d_one = _mm_set1_pd(1.0);
+__m128d __m128d_two = _mm_set1_pd(2.0);
+#endif
 
-   *x = atan2(2.0 * (q0 * q1 + q2 * q3), 1.0 - 2.0 * (q1*q1 + q2*q2));
-   *y = asin(2.0 * (q0 * q2 - q3 * q1));
-   *z = atan2(2.0 * (q0 * q3 + q1 * q2), 1.0 - 2.0 * (q2*q2 + q3*q3));
+void quaternionsToEuler(const Quaternions* quaternions, double* xDst, double* yDst, double* zDst)
+{
+#if EMGU_SSE2
+   __m128d _yx = _mm_loadu_pd(&quaternions->x);
+   __m128d _zy = _mm_loadu_pd(&quaternions->y);
+   __m128d tmp2 = _mm_sub_pd(__m128d_one, _mm_mul_pd(__m128d_two, _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy))));
+   __m128d tmp1 = _mm_mul_pd(__m128d_two, _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&quaternions->w), _mm_set_pd(quaternions->x, quaternions->z)), _mm_mul_pd(_yx, _zy)));
+   *xDst = atan2(tmp1.m128d_f64[1], tmp2.m128d_f64[0]);
+   *yDst = asin(2.0 * (quaternions->w * quaternions->y - quaternions->z * quaternions->x));
+   *zDst = atan2(tmp1.m128d_f64[0], tmp2.m128d_f64[1]);
+#else
+   double w = quaternions->w;
+   double x = quaternions->x;
+   double y = quaternions->y;
+   double z = quaternions->z;
+   *xDst = atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x*x + y*y));
+   *yDst = asin(2.0 * (w * y - z * x));
+   *zDst = atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y*y + z*z));
+#endif
 }
 
 void quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation)
@@ -183,8 +197,7 @@ void axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaterni
       return;
    }
    double halfAngle = theta * 0.5;
-   double sinHalfAngle = sin(halfAngle);
-   double scale = sinHalfAngle / theta;
+   double scale = sin(halfAngle) / theta;
    quaternions->w = cos(halfAngle);
    quaternions->x = axisAngle->x * scale;
    quaternions->y = axisAngle->y * scale;
@@ -219,8 +232,7 @@ void quaternionsRenorm(Quaternions* quaternions)
 void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
 {
    //making sure t is in the valid range
-   t = t < 0 ? 0 : t;
-   t = t > 1.0 ? 1.0 : t;
+   t = t < 0 ? 0 : ( t > 1.0 ? 1.0 : t );
 
    // Calculate angle between them.
    double cosHalfTheta = quaternionsDotProduct(qa, qb);
@@ -232,7 +244,6 @@ void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* q
    }
    
    // Calculate temporary values.
-   double halfTheta = acos(cosHalfTheta);
    double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
    
    // if theta = 180 degrees then result is not fully defined
@@ -242,6 +253,7 @@ void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* q
       doubleOps::weightedSum((double*)qa, (double*)qb, 4, 1.0-t, t, (double*)qm);
    } else
    {
+      double halfTheta = acos(cosHalfTheta);
       double ratioA = sin((1.0 - t) * halfTheta) / sinHalfTheta;
       double ratioB = sin(t * halfTheta) / sinHalfTheta; 
       //calculate Quaternion.

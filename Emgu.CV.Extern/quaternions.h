@@ -143,14 +143,10 @@ CVAPI(void) quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quatern
 inline double quaternionsDotProduct(const Quaternions* q0, const Quaternions* q1)
 {
 #if EMGU_SSE2
-   __m128d _w0x0 = _mm_set_pd(q0->w, q0->x);
-   __m128d _w1x1 = _mm_set_pd(q1->w, q1->x);
-   __m128d _y0z0 = _mm_set_pd(q0->y, q0->z);
-   __m128d _y1z1 = _mm_set_pd(q1->y, q1->z);
-
-   __m128d _wx = _mm_mul_pd(_w0x0, _w1x1); //w0 * w1, x0 * x1
-   __m128d _yz = _mm_mul_pd(_y0z0, _y1z1); //y0 * y1, z0 * z1
-   __m128d _sum = _mm_add_pd(_wx, _yz); //w0w1 + y0y1, x0x1 + z0z1
+   __m128d _sum = _mm_add_pd(
+      _mm_mul_pd(_mm_loadu_pd(&q0->w), _mm_loadu_pd(&q1->w)), //x0 * x1, w0 * w1
+      _mm_mul_pd(_mm_loadu_pd(&q0->y), _mm_loadu_pd(&q1->y)) //z0 * z1, y0 * y1 
+      ); //x0x1 + z0z1, w0w1 + y0y1
    return _sum.m128d_f64[1] + _sum.m128d_f64[0];
 #else
    return q0->w * q1->w + q0->x * q1->x + q0->y * q1->y + q0->z * q1->z;
