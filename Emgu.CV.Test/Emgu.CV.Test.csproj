@@ -78,6 +78,7 @@
     <Compile Include="AutoTestFeatures2d.cs" />
     <Compile Include="AutoTestGeodetic.cs" />
     <Compile Include="AutoTestMatrix.cs" />
+    <Compile Include="AutoTestQuaternions.cs" />
     <Compile Include="AutoTestVarious.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Face.cs" />

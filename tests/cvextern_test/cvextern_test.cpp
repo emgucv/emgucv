@@ -2,6 +2,13 @@
 #include "doubleOps.h"
 #include "stdio.h"
 #include <iostream>
+#include "quaternions.h"
+
+#ifdef _MSC_VER
+#include "windows.h"
+#include "time.h"
+#endif
+
 using namespace std;
 
 #define ERROR_EPS 1.0e-12
@@ -47,6 +54,46 @@ void Test_double_MulS()
    cout <<"Test mulS: " << (success ? "Passed" : "Failed") << std::endl;
 }
 
+#ifdef _MSC_VER
+void Test_quaternions_performance()
+{
+   LARGE_INTEGER begin;
+   LARGE_INTEGER end;
+
+   Quaternions q1, q2, q;
+
+   /* initialize random seed: */
+   srand ( time(NULL) );
+
+   q1.w = rand(); q1.x = rand(); q1.y = rand(); q1.z = rand();
+   q2.w = rand(); q2.x = rand(); q2.y = rand(); q2.z = rand();
+   quaternionsRenorm(&q1);
+   quaternionsRenorm(&q2);
+
+   int count = 10000;
+   {
+      QueryPerformanceCounter(&begin); 
+      for (int i = 0; i < count; i++)
+      {
+         //perform tasks
+         quaternionsMultiply(&q1, &q2, &q);
+      }
+      QueryPerformanceCounter(&end); 
+      cout <<"Quaternions multiplication total CPU Cycle: " << (end.QuadPart - begin.QuadPart) << std::endl;
+   }
+   {
+      QueryPerformanceCounter(&begin); 
+      for (int i = 0; i < count; i++)
+      {
+         //perform tasks
+         quaternionsRenorm(&q1);
+      }
+      QueryPerformanceCounter(&end); 
+      cout <<"Quaternions renorm total CPU Cycle: " << (end.QuadPart - begin.QuadPart) << std::endl;
+   }
+}
+#endif
+
 int main()
 {
    char tmp;
@@ -54,6 +101,7 @@ int main()
    Test_double_MulS();
  
 #ifdef _MSC_VER
+   Test_quaternions_performance();
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
 }

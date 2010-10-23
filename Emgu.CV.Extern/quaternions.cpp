@@ -141,13 +141,13 @@ void quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointS
 void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst)
 {
 #if EMGU_SSE2
-   __m128d _w1w1 = _mm_set1_pd(quaternions1->w);
-   __m128d _x1x1 = _mm_set1_pd(quaternions1->x);
-   __m128d _y1y1 = _mm_set1_pd(quaternions1->y);
-   __m128d _z1z1 = _mm_set1_pd(quaternions1->z);
+   __m128d _w1w1 = _mm_load1_pd(&quaternions1->w);
+   __m128d _x1x1 = _mm_load1_pd(&quaternions1->x);
+   __m128d _y1y1 = _mm_load1_pd(&quaternions1->y);
+   __m128d _z1z1 = _mm_load1_pd(&quaternions1->z);
    __m128d _w2x2 = _mm_set_pd(quaternions2->w, quaternions2->x);
    __m128d _nx2w2 = _mm_set_pd(-quaternions2->x, quaternions2->w);
-   __m128d _z2y2 = _mm_set_pd(quaternions2->z, quaternions2->y);
+   __m128d _z2y2 = _mm_loadu_pd(&quaternions2->y);
    __m128d _ny2z2 = _mm_set_pd(-quaternions2->y, quaternions2->z);
 
    __m128d _wx = _mm_add_pd(
