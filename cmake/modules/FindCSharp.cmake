@@ -56,6 +56,20 @@ FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 "$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 /usr/bin/resgen)
 
+# ----------------------------------------------------------------------------
+#  FIND MSBUILD
+# ----------------------------------------------------------------------------
+FIND_PROGRAM(MSBUILD_PROGRAM
+  NAMES MSBuild
+  HINTS
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework64/v4.0.30319"
+  "C:/WINDOWS/Microsoft.NET/Framework64/v4.0.30319"
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v4.0.30319"
+  "C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319"
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
+  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
+  )
+  
 SET (CSharp_FOUND FALSE)
 
 IF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE)

@@ -62,19 +62,6 @@ ELSE(WIN32)
 ENDIF(WIN32)
 MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
 
-# ----------------------------------------------------------------------------
-#  FIND MSBUILD
-# ----------------------------------------------------------------------------
-FIND_PROGRAM(MSBUILD_PROGRAM
-  NAMES MSBuild
-  HINTS
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework64/v4.0.30319"
-  "C:/WINDOWS/Microsoft.NET/Framework64/v4.0.30319"
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v4.0.30319"
-  "C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319"
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
-  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
-  )
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -106,27 +93,11 @@ ENDIF()
 # ----------------------------------------------------------------------------
 SET(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 
-IF(MSVC)
+#IF(MSVC)
   SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin" )
   SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
   SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-#  SET(extra_bin_prefix "../")
-#  SET_TARGET_PROPERTIES(cvextern PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_core PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_imgproc PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_contrib PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_ml PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_highgui PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_features2d PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_calib3d PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_legacy PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_objdetect PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_video PROPERTIES PREFIX ${extra_bin_prefix})
-#  SET_TARGET_PROPERTIES(opencv_flann PROPERTIES PREFIX ${extra_bin_prefix})
-#  IF(TARGET opencv_ffmpeg)
-#    SET_TARGET_PROPERTIES(opencv_ffmpeg PROPERTIES PREFIX ${extra_bin_prefix})
-#  ENDIF()
-ENDIF()
+#ENDIF()
 
 ADD_SUBDIRECTORY(opencv)
 ADD_SUBDIRECTORY(Emgu.CV.Extern)
