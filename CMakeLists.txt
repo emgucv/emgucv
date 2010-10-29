@@ -72,7 +72,7 @@ SET(PACKAGE_BUGREPORT "${CPACK_PACKAGE_CONTACT}")
 SET(PACKAGE_NAME "${PROJECT_NAME}")
 
 SET(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper to the Intel OpenCV image processing library.")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
 SET(CPACK_PACKAGE_VENDOR "Emgu")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2")
@@ -109,7 +109,6 @@ SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
 # ----------------------------------------------------------------------------
 #  Build libgeotiff 
 # ----------------------------------------------------------------------------
-SET(TIFF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/opencv/3rdparty/include")
 ADD_SUBDIRECTORY(libgeotiff/libgeotiff-1.3.0)
 
 # ----------------------------------------------------------------------------
@@ -367,7 +366,6 @@ uninstallDebuggerVisualizer4${vs_version}Done:
     ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
 
-  
   # ----------------------------------------------------------------------------
   #  The source files
   # ----------------------------------------------------------------------------
@@ -574,10 +572,6 @@ ENDIF()
 MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
 INCLUDE (CPack)
 
-
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(tests/cvextern_test)
-#IF(MSVC)
-#  SET_TARGET_PROPERTIES(cvextern_test PROPERTIES PREFIX ${extra_bin_prefix})
-#ENDIF()
 
