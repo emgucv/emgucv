@@ -1,9 +1,11 @@
 @echo off
+IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
+IF NOT "%1%"=="64" ECHO "BUILDING 32bit solution"
+  
 SET PROGRAMFILES_DIR=%programfiles(x86)%
 if NOT EXIST "%PROGRAMFILES_DIR%" SET PROGRAMFILES_DIR=%programfiles%
-
+  
 SET CMAKE="cmake.exe"
-IF EXIST "%PROGRAMFILES_DIR%\CMake 2.6\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR%\CMake 2.6\bin\cmake.exe"
 IF EXIST "%PROGRAMFILES_DIR%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR%\CMake 2.8\bin\cmake.exe"
 
 SET VS2005="%PROGRAMFILES_DIR%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
@@ -21,10 +23,12 @@ IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build Release
 
-IF %DEVENV%==%MSBUILD35% SET CMAKE_CONF="Visual Studio 8 2005"
-IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005"
-IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008"
-IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10"
+SET OS_MODE=
+IF "%1%"=="64" SET OS_MODE= Win64
+IF %DEVENV%==%MSBUILD35% SET CMAKE_CONF="Visual Studio 8 2005%OS_MODE%"
+IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005%OS_MODE%"
+IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008%OS_MODE%"
+IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10%OS_MODE%"
 
 @echo on
 del CMakeCache.txt
