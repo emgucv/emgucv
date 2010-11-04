@@ -7,19 +7,19 @@
 #include "sse.h"
 
 /**
- * @struct  GeodeticCoordinate
- *
- * @brief   A Geodetic Coordinate is defined by its latitude, longitude and altitude
- *
- * @author  Canming Huang
- * @date 8/31/2010
+* @struct  GeodeticCoordinate
+*
+* @brief   A Geodetic Coordinate is defined by its latitude, longitude and altitude
+*
+* @author  Canming Huang
+* @date 8/31/2010
 **/
 typedef struct GeodeticCoordinate
 {
 
    /// The latitude (phi) in radian
    double latitude;
-   
+
    /// The longitude (lambda) in radian
    double longitude;
 
@@ -87,15 +87,20 @@ public:
       coor->longitude = atan2(ecef->y, ecef->x);
 
 #if EMGU_SSE2
+      double buffer[2];
       __m128d _yx = _mm_loadu_pd(&ecef->x);
-      double p = sqrt(_dot_product(_yx, _yx));
-      __m128d _t2 = _mm_set_pd(ecef->z, p);
-      __m128d _t3 = _mm_mul_pd(_t2, _ECEF2GeodeticConst0);
-      double theta = atan2(_t3.m128d_f64[1], _t3.m128d_f64[0]);
+      __m128d p = _mm_sqrt_pd(_dot_product(_yx, _yx));
+      __m128d _t2 = _mm_unpacklo_pd(p, _mm_load_sd(&ecef->z)); 
+      _mm_storeu_pd(buffer, _mm_mul_pd(_t2, _ECEF2GeodeticConst0));
+      double theta = atan2(buffer[1], buffer[0]);
       __m128d _t1 = _mm_set_pd(sin(theta), cos(theta)); //1:sinTheta, 0:cosTheta
 
-      __m128d _t4 = _mm_add_pd(_t2, _mm_mul_pd(_ECEF2GeodeticConst1, _mm_mul_pd(_t1,_mm_mul_pd(_t1, _t1)))); 
-      coor->latitude = atan2(_t4.m128d_f64[1] , _t4.m128d_f64[0]);
+      _mm_storeu_pd(buffer, _mm_add_pd(_t2, _mm_mul_pd(_ECEF2GeodeticConst1, _mm_mul_pd(_t1,_mm_mul_pd(_t1, _t1))))); 
+      coor->latitude = atan2(buffer[1] , buffer[0]);
+      _mm_store_sd(&coor->altitude, p);
+      double sinLat = sin(coor->latitude);
+      double N = A / sqrt(1.0 - E * E * sinLat * sinLat);
+      coor->altitude = coor->altitude /cos(coor->latitude) - N;
 #else
       double p = sqrt(ecef->x * ecef->x + ecef->y * ecef->y);
       double theta = atan2(ecef->z * A, p * B);
@@ -104,12 +109,10 @@ public:
       coor->latitude = atan2(
          ecef->z + EP * EP * B * sinTheta * sinTheta * sinTheta,
          p - E * E * A * cosTheta * cosTheta * cosTheta);
-#endif
-
       double sinLat = sin(coor->latitude);
       double N = A / sqrt(1.0 - E * E * sinLat * sinLat);
-
       coor->altitude = p / cos(coor->latitude) - N;
+#endif
    }
 
    void transformGeodetic2ENU(const GeodeticCoordinate* coor, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, CvPoint3D64f* enu) const
@@ -121,10 +124,10 @@ public:
       __m128d deltaYX = _mm_sub_pd(_mm_loadu_pd(&ecef.x), _mm_loadu_pd(&refEcef->x));
       __m128d cosSinPhi= _mm_set_pd(cos(refCoor->latitude), sin(refCoor->latitude));
       __m128d sinCosLambda = _mm_set_pd(sin(refCoor->longitude), cos(refCoor->longitude));
-      enu->x = _cross_product(deltaYX, sinCosLambda); 
-      __m128d tmp = _mm_set_pd(_dot_product(sinCosLambda, deltaYX), ecef.z - refEcef->z);
-      enu->y = _cross_product(cosSinPhi, tmp); 
-      enu->z = _dot_product(cosSinPhi, tmp);
+      _mm_store_sd(&enu->x, _cross_product(sinCosLambda, deltaYX)); 
+      __m128d tmp = _mm_unpacklo_pd(_mm_set_sd(ecef.z - refEcef->z), _dot_product(sinCosLambda, deltaYX));
+      _mm_store_sd(&enu->y, _cross_product(tmp, cosSinPhi)); 
+      _mm_store_sd(&enu->z, _dot_product(tmp, cosSinPhi));
 #else
       double sinPhi, cosPhi;
       CvPoint3D64f delta;
@@ -147,16 +150,15 @@ public:
 
    void transformENU2Geodetic(const CvPoint3D64f* enu, const GeodeticCoordinate* refCoor, const CvPoint3D64f* refEcef, GeodeticCoordinate* coor) const
    {
+      CvPoint3D64f ecef;
 #if EMGU_SSE2
       __m128d sinCosPhi = _mm_set_pd(sin(refCoor->latitude), cos(refCoor->latitude));
       __m128d cosSinLambda = _mm_set_pd(cos(refCoor->longitude), sin(refCoor->longitude));
-
-      CvPoint3D64f ecef;
       __m128d zy = _mm_loadu_pd(&enu->y);
-      __m128d tmpX = _mm_set_pd( _cross_product(sinCosPhi, zy), enu->x);
-      _mm_storeu_pd(&ecef.y, _mm_add_pd( _mm_loadu_pd(&refEcef->y), _mm_set_pd(_dot_product(sinCosPhi, zy), _cross_product(cosSinLambda, tmpX))));
-
-      ecef.x =   refEcef->x - _dot_product(cosSinLambda, tmpX);
+      __m128d tmpX = _mm_unpacklo_pd(_mm_load_sd(&enu->x), _cross_product(zy, sinCosPhi));
+      _mm_storeu_pd(&ecef.y, _mm_add_pd( _mm_loadu_pd(&refEcef->y), _mm_unpackhi_pd(_cross_product(cosSinLambda, tmpX), _dot_product(sinCosPhi, zy))));
+      _mm_store_sd(&ecef.x, _dot_product(cosSinLambda, tmpX));
+      ecef.x = refEcef->x - ecef.x;
 #else
       double sinPhi = sin(refCoor->latitude);
       double cosPhi = cos(refCoor->latitude);
@@ -164,7 +166,6 @@ public:
       double cosLambda = cos(refCoor->longitude);
 
       double tmp = sinPhi * enu->y - cosPhi * enu->z;
-      CvPoint3D64f ecef;
       ecef.x =   -(cosLambda * tmp + sinLambda * enu->x ) + refEcef->x;
       ecef.y =   cosLambda * enu->x - sinLambda * tmp + refEcef->y;
       ecef.z =   cosPhi * enu->y + sinPhi * enu->z + refEcef->z;

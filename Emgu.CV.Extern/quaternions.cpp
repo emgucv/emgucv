@@ -21,10 +21,10 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
    __m128d tmp1 = _mm_mul_pd(cosSinY, cosSinZ);
    __m128d tmp2 = _mm_mul_pd(cosSinY, _mm_shuffle_pd(cosSinZ, cosSinZ, 1));
 
-   quaternions->w = _dot_product(cosSinX, tmp1);
-   quaternions->x = _cross_product(tmp1, cosSinX); 
-   quaternions->y = _dot_product(sinCosX, tmp2);
-   quaternions->z = _cross_product(tmp2, sinCosX); 
+   _mm_store_sd(&quaternions->w, _dot_product(tmp1, cosSinX));
+   _mm_store_sd(&quaternions->x, _cross_product(cosSinX,tmp1)); 
+   _mm_store_sd(&quaternions->y, _dot_product(tmp2, sinCosX));
+   _mm_store_sd(&quaternions->z, _cross_product(sinCosX, tmp2)); 
 #else
 	double
       sinX = sin(halfX), 
@@ -50,13 +50,14 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 void quaternionsToEuler(const Quaternions* quaternions, double* xDst, double* yDst, double* zDst)
 {
 #if EMGU_SSE2
+   double buffer[4];
    __m128d _yx = _mm_loadu_pd(&quaternions->x);
    __m128d _zy = _mm_loadu_pd(&quaternions->y);
-   __m128d tmp2 = _mm_sub_pd(_mm_set1_pd(1.0), _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy))));
-   __m128d tmp1 = _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&quaternions->w), _mm_set_pd(quaternions->x, quaternions->z)), _mm_mul_pd(_yx, _zy)));
-   *xDst = atan2(tmp1.m128d_f64[1], tmp2.m128d_f64[0]);
+   _mm_storeu_pd(buffer+2, _mm_sub_pd(_mm_set1_pd(1.0), _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy)))));
+   _mm_storeu_pd(buffer, _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&quaternions->w), _mm_shuffle_pd( _zy,_yx, _MM_SHUFFLE2(0,1)) ), _mm_mul_pd(_yx, _zy))));
+   *xDst = atan2(buffer[1], buffer[2]);
    *yDst = asin(2.0 * (quaternions->w * quaternions->y - quaternions->z * quaternions->x));
-   *zDst = atan2(tmp1.m128d_f64[0], tmp2.m128d_f64[1]);
+   *zDst = atan2(buffer[0], buffer[3]);
 #else
    double w = quaternions->w;
    double x = quaternions->x;
@@ -147,12 +148,16 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
    __m128d _wx = _mm_add_pd(
       _mm_add_pd(_mm_mul_pd(_w1w1, _w2x2), _mm_mul_pd(_x1x1, _nx2w2)),
       _mm_sub_pd(_mm_mul_pd(_y1y1, _ny2z2), _mm_mul_pd(_z1z1, _z2y2)));
+   __m128d _xw = _mm_shuffle_pd(_wx, _wx, 1);
+
    __m128d _zy = _mm_add_pd(
       _mm_sub_pd(_mm_mul_pd(_w1w1, _z2y2), _mm_mul_pd(_x1x1, _ny2z2)),
       _mm_add_pd(_mm_mul_pd(_y1y1, _nx2w2), _mm_mul_pd(_z1z1, _w2x2)));
    
-   _mm_storeu_pd( &quaternionsDst->w, _mm_shuffle_pd(_wx, _wx, 1) );
-   _mm_storeu_pd( &quaternionsDst->y, _zy);
+   //this is done to improve the numerical stability
+   __m128d denorm = _mm_add_pd( _dot_product(_xw, _xw), _dot_product(_zy, _zy) );
+   _mm_storeu_pd(&quaternionsDst->w, _mm_div_pd(_xw, denorm));
+   _mm_storeu_pd(&quaternionsDst->y, _mm_div_pd(_zy, denorm));
 
 #else
    double w1 = quaternions1->w;
@@ -169,10 +174,10 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
    quaternionsDst->x = (w1*x2 + x1*w2 + y1*z2 - z1*y2);
    quaternionsDst->y = (w1*y2 - x1*z2 + y1*w2 + z1*x2);
    quaternionsDst->z = (w1*z2 + x1*y2 - y1*x2 + z1*w2);
-#endif
 
    //this is done to improve the numerical stability
    quaternionsDst->renorm(); 
+#endif
 }
 
 const double THETA_EPS = 1.0e-30;
@@ -226,14 +231,13 @@ void quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAn
 **/
 CVAPI(void) quaternionsRenorm(Quaternions* quaternions) { quaternions->renorm(); }
 
-
 void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
 {
    //making sure t is in the valid range
    t = t < 0 ? 0 : ( t > 1.0 ? 1.0 : t );
 
    // Calculate angle between them.
-   double cosHalfTheta = quaternionsDotProduct(qa, qb);
+   double cosHalfTheta = qa->dotProduct(qb);
 
    // if qa=qb or qa=-qb then theta = 0 and we can return qa
    if (abs(cosHalfTheta) >= 1.0){
@@ -257,5 +261,5 @@ void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* q
       //calculate Quaternion.
       doubleOps::weightedSum((double*)qa, (double*)qb, 4, ratioA, ratioB, (double*)qm);
    }
-   quaternionsRenorm(qm);
+   qm->renorm();
 }

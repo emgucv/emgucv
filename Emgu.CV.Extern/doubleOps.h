@@ -12,7 +12,7 @@ namespace doubleOps
 #if EMGU_SSE2
       __m128d f = _mm_set_pd(w1, w2);
       while(r < end)
-         *r++ = _dot_product(_mm_set_pd(*d1++, *d2++), f);
+         _mm_store_sd(r++, _dot_product(_mm_set_pd(*d1++, *d2++), f));
 #else
       while( r < end) 
          *r++ = *d1++ * w1 + *d2++ * w2;

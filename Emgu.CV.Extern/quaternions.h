@@ -34,9 +34,13 @@ typedef struct Quaternions
    {
 #if EMGU_SSE2
       __m128d _xw = _mm_loadu_pd(&w);
-      __m128d _zy = _mm_loadu_pd(&y); 
+      __m128d _zy = _mm_loadu_pd(&y);
+#if EMGU_SSE4_1
+      __m128d _denorm = _mm_sqrt_pd( _mm_add_pd( _mm_dp_pd(_xw, _xw, 0x33), _mm_dp_pd(_zy, _zy, 0x33) ));
+#else
       __m128d _tmp = _mm_add_pd( _mm_mul_pd(_xw, _xw),  _mm_mul_pd(_zy, _zy)); //x*x + z*z, w*w + y*y
       __m128d _denorm = _mm_sqrt_pd(_mm_add_pd(_tmp, _mm_shuffle_pd(_tmp, _tmp, 1))); 
+#endif
       _mm_storeu_pd(&w, _mm_div_pd(_xw, _denorm));
       _mm_storeu_pd(&y, _mm_div_pd(_zy, _denorm));
 #else
@@ -45,6 +49,27 @@ typedef struct Quaternions
       x /= scale;
       y /= scale;
       z /= scale;
+#endif
+   }
+
+   double dotProduct (const Quaternions* q1) const
+   {
+#if EMGU_SSE2
+      double result;
+#if EMGU_SSE4_1
+      _mm_store_sd(&result, _mm_add_pd(
+         _mm_dp_pd(_mm_loadu_pd(&w), _mm_loadu_pd(&q1->w), 0x33),
+         _mm_dp_pd(_mm_loadu_pd(&y), _mm_loadu_pd(&q1->y), 0x33)));
+#else
+      __m128d _sum = _mm_add_pd(
+         _mm_mul_pd(_mm_loadu_pd(&w), _mm_loadu_pd(&q1->w)), //x0 * x1, w0 * w1
+         _mm_mul_pd(_mm_loadu_pd(&y), _mm_loadu_pd(&q1->y)) //z0 * z1, y0 * y1 
+         ); //x0x1 + z0z1, w0w1 + y0y1
+      _mm_store_sd(&result, _mm_add_pd(_sum, _mm_shuffle_pd(_sum, _sum, 1)));
+#endif
+      return result;
+#else
+      return w * q1->w + x * q1->x + y * q1->y + z * q1->z;
 #endif
    }
 } Quaternions;
@@ -68,7 +93,6 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
  * @date 8/31/2010
 **/
 CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z);
-
 
 /**
  * @fn   void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
@@ -148,16 +172,5 @@ CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternio
 **/
 CVAPI(void) quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm);
 
-inline double quaternionsDotProduct(const Quaternions* q0, const Quaternions* q1)
-{
-#if EMGU_SSE2
-   __m128d _sum = _mm_add_pd(
-      _mm_mul_pd(_mm_loadu_pd(&q0->w), _mm_loadu_pd(&q1->w)), //x0 * x1, w0 * w1
-      _mm_mul_pd(_mm_loadu_pd(&q0->y), _mm_loadu_pd(&q1->y)) //z0 * z1, y0 * y1 
-      ); //x0x1 + z0z1, w0w1 + y0y1
-   return _sum.m128d_f64[1] + _sum.m128d_f64[0];
-#else
-   return q0->w * q1->w + q0->x * q1->x + q0->y * q1->y + q0->z * q1->z;
-#endif
-}
+
 #endif

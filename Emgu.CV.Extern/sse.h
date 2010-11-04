@@ -28,20 +28,21 @@
    #if EMGU_SSE2
    const bool simdSSE4_1 = cv::checkHardwareSupport(CV_CPU_SSE4_1);
 
-   inline double _dot_product(__m128d v0, __m128d v1)
+   inline __m128d _dot_product(__m128d v0, __m128d v1)
    {
    #if EMGU_SSE4_1
       //if(simdSSE4_1)
-      return _mm_dp_pd(v0, v1, 0x31).m128d_f64[0]; 
+      return _mm_dp_pd(v0, v1, 0x33); 
    #endif 
       __m128d v = _mm_mul_pd(v0, v1);
-      return v.m128d_f64[1] + v.m128d_f64[0];
+      return _mm_add_pd(v, _mm_shuffle_pd(v, v, 1));
    }
 
-   inline double _cross_product(__m128d v0, __m128d v1)
+   //returns a1: v0 x v1; a2: v1 x v0;
+   inline __m128d _cross_product(__m128d v0, __m128d v1)
    {
       __m128d val = _mm_mul_pd(v0, _mm_shuffle_pd(v1, v1, 1));
-      return val.m128d_f64[1] - val.m128d_f64[0];
+      return _mm_sub_pd(val, _mm_shuffle_pd(val, val, 1));
    }
    #endif
 

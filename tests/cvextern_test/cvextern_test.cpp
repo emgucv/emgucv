@@ -19,8 +19,9 @@ void Test_cross_product()
    __m128d v0 = _mm_set_pd(0.01, 0.02);
    __m128d v1 = _mm_set_pd(0.03, 0.04);
 
-   double val0 = _cross_product(v0, v1);
-   double val1 = v0.m128d_f64[1] * v1.m128d_f64[0] - v0.m128d_f64[0] * v1.m128d_f64[1];
+   double val0;
+   _mm_store_sd(&val0, _cross_product(v1, v0));
+   double val1 = 0.01 * 0.04 - 0.02 * 0.03;
    cout <<"Test cross product: " << (fequal(val0, val1) ? "Passed" : "Failed") << std::endl;
 #endif
 }
