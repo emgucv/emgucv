@@ -82,6 +82,16 @@ namespace Emgu.CV.Structure
          return new MCvPoint3D32f(x / norm, y / norm, z / norm);
       }
 
+      /// <summary>
+      /// The implicit operator to convert MCvPoint3D32f to MCvPoint3D64f
+      /// </summary>
+      /// <param name="point">The point to be converted</param>
+      /// <returns>The converted point</returns>
+      public static implicit operator MCvPoint3D64f(MCvPoint3D32f point)
+      {
+         return new MCvPoint3D64f(point.x, point.y, point.z);
+      }
+
       #region operator overloads
       /// <summary>
       /// Subtract one point from the other
