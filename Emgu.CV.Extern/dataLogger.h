@@ -3,6 +3,7 @@
 #define DATA_LOGGER_H
 
 #include "opencv2/core/core.hpp"
+#include <stdarg.h>
 
 namespace emgu {
 
@@ -31,6 +32,20 @@ namespace emgu {
       void log(void* data)
       {
          if (callback) callback(data);
+      }
+
+      //Use this function only if you are trying to log messages
+      void logMsg(const char* format, int level, ...)
+      {
+         if (callback && level >=logLevel)
+         {
+            char buffer[1024];
+            va_list args;
+            va_start(args, level);
+            vsprintf(buffer, format, args);
+            va_end(args);
+            callback(buffer);
+         }
       }
    };
 };
