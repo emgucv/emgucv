@@ -154,7 +154,7 @@ ENDMACRO(ADD_CS_PACKAGE_REFERENCES references)
 MACRO(ADD_CS_RESOURCES resx resources)
   LIST(APPEND
 	CS_PREBUILD_COMMAND 
-    COMMAND ${RESGEN_EXECUTABLE} ${resx} ${resources}
+    COMMAND ${RESGEN_EXECUTABLE} \"${resx}\" \"${resources}\"
     )
   LIST(APPEND CS_FLAGS -resource:\"${resources}\")
 ENDMACRO(ADD_CS_RESOURCES)
