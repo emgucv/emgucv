@@ -67,10 +67,10 @@ void Test_quaternions_performance()
 
    q1.w = rand(); q1.x = rand(); q1.y = rand(); q1.z = rand();
    q2.w = rand(); q2.x = rand(); q2.y = rand(); q2.z = rand();
-   quaternionsRenorm(&q1);
-   quaternionsRenorm(&q2);
+   q1.renorm();
+   q2.renorm();
 
-   int count = 10000;
+   int count = 100000;
    {
       QueryPerformanceCounter(&begin); 
       for (int i = 0; i < count; i++)
@@ -86,7 +86,7 @@ void Test_quaternions_performance()
       for (int i = 0; i < count; i++)
       {
          //perform tasks
-         quaternionsRenorm(&q1);
+         q1.renorm();
       }
       QueryPerformanceCounter(&end); 
       cout <<"Quaternions renorm total CPU Cycle: " << (end.QuadPart - begin.QuadPart) << std::endl;

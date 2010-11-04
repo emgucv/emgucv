@@ -11,29 +11,28 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
    double 
       halfX = x *0.5,
       halfY = y *0.5,
-      halfZ = z *0.5,
+      halfZ = z *0.5;
+
+#if EMGU_SSE2
+   __m128d cosSinY = _mm_set_pd(cos(halfY), sin(halfY));
+   __m128d cosSinZ = _mm_set_pd(cos(halfZ), sin(halfZ));
+   __m128d cosSinX = _mm_set_pd(cos(halfX), sin(halfX));  
+   __m128d sinCosX = _mm_shuffle_pd(cosSinX, cosSinX, 1);
+   __m128d tmp1 = _mm_mul_pd(cosSinY, cosSinZ);
+   __m128d tmp2 = _mm_mul_pd(cosSinY, _mm_shuffle_pd(cosSinZ, cosSinZ, 1));
+
+   quaternions->w = _dot_product(cosSinX, tmp1);
+   quaternions->x = _cross_product(tmp1, cosSinX); 
+   quaternions->y = _dot_product(sinCosX, tmp2);
+   quaternions->z = _cross_product(tmp2, sinCosX); 
+#else
+	double
       sinX = sin(halfX), 
       cosX = cos(halfX),
       sinY = sin(halfY),
       cosY = cos(halfY),
       sinZ = sin(halfZ),
       cosZ = cos(halfZ);
-
-#if EMGU_SSE2
-   __m128d cosSinY = _mm_set_pd(cosY, sinY);
-   __m128d cosSinZ = _mm_set_pd(cosZ, sinZ);
-   __m128d sinCosZ = _mm_set_pd(sinZ, cosZ);
-   __m128d cosSinX = _mm_set_pd(cosX, sinX);  
-   __m128d sinCosX = _mm_set_pd(sinX, cosX);
-   __m128d tmp1 = _mm_mul_pd(cosSinY, cosSinZ);
-   __m128d tmp2 = _mm_mul_pd(cosSinY, sinCosZ);
-
-   quaternions->w = _dot_product(cosSinX, tmp1);
-   quaternions->x = _cross_product(tmp1, cosSinX); 
-   quaternions->y = _dot_product(sinCosX, tmp2);
-   quaternions->z = _cross_product(tmp2, sinCosX); 
-
-#else
    double cosYcosZ = cosY*cosZ;
    double sinYsinZ = sinY*sinZ;
    
@@ -48,18 +47,13 @@ void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
 #endif
 }
 
-#if EMGU_SSE2
-__m128d __m128d_one = _mm_set1_pd(1.0);
-__m128d __m128d_two = _mm_set1_pd(2.0);
-#endif
-
 void quaternionsToEuler(const Quaternions* quaternions, double* xDst, double* yDst, double* zDst)
 {
 #if EMGU_SSE2
    __m128d _yx = _mm_loadu_pd(&quaternions->x);
    __m128d _zy = _mm_loadu_pd(&quaternions->y);
-   __m128d tmp2 = _mm_sub_pd(__m128d_one, _mm_mul_pd(__m128d_two, _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy))));
-   __m128d tmp1 = _mm_mul_pd(__m128d_two, _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&quaternions->w), _mm_set_pd(quaternions->x, quaternions->z)), _mm_mul_pd(_yx, _zy)));
+   __m128d tmp2 = _mm_sub_pd(_mm_set1_pd(1.0), _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy))));
+   __m128d tmp1 = _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&quaternions->w), _mm_set_pd(quaternions->x, quaternions->z)), _mm_mul_pd(_yx, _zy)));
    *xDst = atan2(tmp1.m128d_f64[1], tmp2.m128d_f64[0]);
    *yDst = asin(2.0 * (quaternions->w * quaternions->y - quaternions->z * quaternions->x));
    *zDst = atan2(tmp1.m128d_f64[0], tmp2.m128d_f64[1]);
@@ -157,8 +151,7 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
       _mm_sub_pd(_mm_mul_pd(_w1w1, _z2y2), _mm_mul_pd(_x1x1, _ny2z2)),
       _mm_add_pd(_mm_mul_pd(_y1y1, _nx2w2), _mm_mul_pd(_z1z1, _w2x2)));
    
-   quaternionsDst->w = _wx.m128d_f64[1];
-   quaternionsDst->x = _wx.m128d_f64[0];
+   _mm_storeu_pd( &quaternionsDst->w, _mm_shuffle_pd(_wx, _wx, 1) );
    _mm_storeu_pd( &quaternionsDst->y, _zy);
 
 #else
@@ -179,7 +172,7 @@ void quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* qua
 #endif
 
    //this is done to improve the numerical stability
-   quaternionsRenorm(quaternionsDst); 
+   quaternionsDst->renorm(); 
 }
 
 const double THETA_EPS = 1.0e-30;
@@ -203,7 +196,7 @@ void axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaterni
    quaternions->y = axisAngle->y * scale;
    quaternions->z = axisAngle->z * scale;
 
-   quaternionsRenorm(quaternions);
+   quaternions->renorm();
 }
 
 /* convert quaternions to axis angle vector. The vector (x,y,z) defines the rotatation axis and the norm |(x,y,z)| defines the rotation angle  */
@@ -223,11 +216,16 @@ void quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAn
    }
 }
 
-void quaternionsRenorm(Quaternions* quaternions)
-{
-   double scale = 1.0 / sqrt(quaternionsDotProduct(quaternions, quaternions) );
-   doubleOps::mulS((double*)quaternions, scale, 4, (double*) quaternions);
-}
+/**
+ * @fn   void quaternionsRenorm(Quaternions* quaternions)
+ *
+ * @brief   Renormalize the given quaternions such that the norm becomes 1
+ *
+ * @author  Canming Huang
+ * @date 8/31/2010
+**/
+CVAPI(void) quaternionsRenorm(Quaternions* quaternions) { quaternions->renorm(); }
+
 
 void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
 {

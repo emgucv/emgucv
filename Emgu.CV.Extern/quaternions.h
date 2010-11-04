@@ -29,6 +29,24 @@ typedef struct Quaternions
 
    /// The z component of the vector: rotation axis * sin(rotation angle / 2)
    double z;
+
+   void renorm()
+   {
+#if EMGU_SSE2
+      __m128d _xw = _mm_loadu_pd(&w);
+      __m128d _zy = _mm_loadu_pd(&y); 
+      __m128d _tmp = _mm_add_pd( _mm_mul_pd(_xw, _xw),  _mm_mul_pd(_zy, _zy)); //x*x + z*z, w*w + y*y
+      __m128d _denorm = _mm_sqrt_pd(_mm_add_pd(_tmp, _mm_shuffle_pd(_tmp, _tmp, 1))); 
+      _mm_storeu_pd(&w, _mm_div_pd(_xw, _denorm));
+      _mm_storeu_pd(&y, _mm_div_pd(_zy, _denorm));
+#else
+      double scale = 1.0 / sqrt(w * w + x * x + y * y + z * z);
+      w /= scale;
+      x /= scale;
+      y /= scale;
+      z /= scale;
+#endif
+   }
 } Quaternions;
 
 /**
@@ -115,16 +133,6 @@ CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat*
  * @date 8/31/2010
 **/
 CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst);
-
-/**
- * @fn   void quaternionsRenorm(Quaternions* quaternions)
- *
- * @brief   Renormalize the given quaternions such that the norm becomes 1
- *
- * @author  Canming Huang
- * @date 8/31/2010
-**/
-CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
 
 /**
  * @fn   void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)

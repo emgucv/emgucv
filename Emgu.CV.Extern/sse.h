@@ -31,8 +31,8 @@
    inline double _dot_product(__m128d v0, __m128d v1)
    {
    #if EMGU_SSE4_1
-      if(simdSSE4_1)
-         return _mm_dp_pd(v0, v1, 0x31).m128d_f64[0]; 
+      //if(simdSSE4_1)
+      return _mm_dp_pd(v0, v1, 0x31).m128d_f64[0]; 
    #endif 
       __m128d v = _mm_mul_pd(v0, v1);
       return v.m128d_f64[1] + v.m128d_f64[0];
