@@ -4,6 +4,7 @@
 
 #include "opencv2/core/core.hpp"
 #include <stdarg.h>
+#include <stdio.h>
 
 namespace emgu {
 
