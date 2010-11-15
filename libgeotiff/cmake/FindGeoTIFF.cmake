@@ -58,9 +58,9 @@ ELSEIF(UNIX)
 
     FIND_PATH(
       GEOTIFF_INCLUDE_DIR geotiff.h 
-      PATH_PREFIXES geotiff
+#      PATH_PREFIXES geotiff
       PATHS
-        /usr/include
+        /usr/include/geotiff
 )
 
     FIND_LIBRARY(GEOTIFF_LIBRARY NAMES ${GEOTIFF_NAMES})
