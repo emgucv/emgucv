@@ -18,9 +18,6 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0/libxtiff")
-
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
@@ -52,18 +49,38 @@ ENDIF()
 INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
 
 FIND_PACKAGE(ZLIB)
+IF(ZLIB_FOUND)
+  MESSAGE(STATUS "CVEXTERN: ZLIB found.")
+ENDIF()
 IF(NOT ZLIB_FOUND)
+  MESSAGE(STATUS "CVEXTERN: ZLIB not found, building from source")
   ADD_DEPENDENCIES(${the_target} zlib)
   SET(ZLIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
   SET(ZLIB_LIBRARY "zlib")
 ENDIF()
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../libgeotiff/cmake)
+FIND_PACKAGE(GeoTIFF)
+IF(GEOTIFF_FOUND)
+  MESSAGE(STATUS "CVEXTERN: GEOTIFF found.")
+ENDIF()
+IF (NOT GEOTIFF_FOUND)
+  MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building geotiff")
+  # ----------------------------------------------------------------------------
+  #  Build libgeotiff 
+  # ----------------------------------------------------------------------------
+  ADD_SUBDIRECTORY(${CMAKE_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0)
+
+  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0")
+  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0/libxtiff")
+  SET(${GEOTIFF_LIBRARY} geotiff_archive)
+ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
   ${ZLIB_LIBRARY} 
-  xtiff ${TIFF_LIBRARY} geotiff_archive)
+  xtiff ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -76,7 +93,7 @@ ENDIF()
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
   ${ZLIB_LIBRARY} 
-  xtiff ${TIFF_LIBRARY} geotiff_archive)
+  xtiff ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main

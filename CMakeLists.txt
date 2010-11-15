@@ -107,11 +107,6 @@ SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
 SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
 
 # ----------------------------------------------------------------------------
-#  Build libgeotiff 
-# ----------------------------------------------------------------------------
-ADD_SUBDIRECTORY(libgeotiff/libgeotiff-1.3.0)
-
-# ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
 # ----------------------------------------------------------------------------
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs
