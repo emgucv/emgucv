@@ -10,11 +10,14 @@
 # GEOTIFF_LIBRARY, where to find the PROJ.4 library.
 #
 # Copyright (c) 2009 Mateusz Loskot <mateusz@loskot.net>
-#
+# 
 # Module source: http://github.com/mloskot/workshop/tree/master/cmake/
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# Copyright (c) 2010 Canming Huang <support@emgu.com>
+# Nov 14, 2010 modified to find libgeotiff on linux
 #
 ###############################################################################
 
@@ -53,7 +56,12 @@ IF(WIN32)
   
 ELSEIF(UNIX)
 
-    FIND_PATH(GEOTIFF_INCLUDE_DIR geotiff.h PATH_PREFIXES geotiff)
+    FIND_PATH(
+      GEOTIFF_INCLUDE_DIR geotiff.h 
+      PATH_PREFIXES geotiff
+      PATHS
+        /usr/include
+)
 
     FIND_LIBRARY(GEOTIFF_LIBRARY NAMES ${GEOTIFF_NAMES})
 
