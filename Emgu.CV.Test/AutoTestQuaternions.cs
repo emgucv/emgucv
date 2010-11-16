@@ -176,5 +176,30 @@ namespace Emgu.CV.Test
       {
          Assert.AreEqual(4 * Marshal.SizeOf(typeof(double)), Marshal.SizeOf(typeof(Quaternions)));
       }
+
+      [Test]
+      public void TestQuaternionsSlerp()
+      {
+         Random r = new Random();
+         Quaternions q1 = new Quaternions();
+         q1.AxisAngle = new MCvPoint3D64f(r.NextDouble(), r.NextDouble(), r.NextDouble());
+         Quaternions q2 = new Quaternions();
+         q2.AxisAngle = new MCvPoint3D64f(r.NextDouble(), r.NextDouble(), r.NextDouble());
+
+         double epsilon = 1.0e-12;
+
+         Quaternions q = q1.Slerp(q2, 0.0);
+         Assert.Less(Math.Abs(q1.W - q.W), epsilon);
+         Assert.Less(Math.Abs(q1.X - q.X), epsilon);
+         Assert.Less(Math.Abs(q1.Y - q.Y), epsilon);
+         Assert.Less(Math.Abs(q1.Z - q.Z), epsilon);
+
+         q = q1.Slerp(q2, 1.0);
+         Assert.Less(Math.Abs(q2.W - q.W), epsilon);
+         Assert.Less(Math.Abs(q2.X - q.X), epsilon);
+         Assert.Less(Math.Abs(q2.Y - q.Y), epsilon);
+         Assert.Less(Math.Abs(q2.Z - q.Z), epsilon);
+
+      }
    }
 }

@@ -37,6 +37,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void quaternionsSlerp(ref Quaternions qa, ref Quaternions qb, double t, ref Quaternions qm);
       #endregion
 
       /// <summary>
@@ -215,6 +218,19 @@ namespace Emgu.CV
       {
          Quaternions result = new Quaternions();
          quaternionsMultiply(ref this, ref quaternionsOther, ref result);
+         return result;
+      }
+
+      /// <summary>
+      /// Perform quaternions linear interpolation
+      /// </summary>
+      /// <param name="quaternionsOther">The other quaternions to interpolate with</param>
+      /// <param name="weightForOther">If 0.0, the result is the same as this quaternions. If 1.0 the result is the same as <paramref name="quaternionsOther"/></param>
+      /// <returns>The linear interpolated quaternions</returns>
+      public Quaternions Slerp(Quaternions quaternionsOther, double weightForOther)
+      {
+         Quaternions result = new Quaternions();
+         quaternionsSlerp(ref this, ref quaternionsOther, weightForOther, ref result);
          return result;
       }
 
