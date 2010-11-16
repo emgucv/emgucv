@@ -60,22 +60,21 @@ IF(NOT ZLIB_FOUND)
 ENDIF()
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../libgeotiff/cmake)
+SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libgeotiff/cmake")
 FIND_PACKAGE(GeoTIFF)
 IF(GEOTIFF_FOUND)
   MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
-  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 ENDIF()
 IF (NOT GEOTIFF_FOUND)
-  MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building geotiff")
+  MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building from source")
   # ----------------------------------------------------------------------------
   #  Build libgeotiff 
   # ----------------------------------------------------------------------------
-  ADD_SUBDIRECTORY(${CMAKE_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0)
-  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0")
-  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../libgeotiff/libgeotiff-1.3.0/libxtiff")
-  SET(${GEOTIFF_LIBRARY} geotiff_archive)
+  ADD_SUBDIRECTORY(libgeotiff/libgeotiff-1.3.0)
+  SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libgeotiff/libgeotiff-1.3.0" "${PROJECT_SOURCE_DIR}/libgeotiff/libgeotiff-1.3.0/libxtiff")
+  SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
 ENDIF()
+INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 

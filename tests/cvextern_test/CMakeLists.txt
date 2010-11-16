@@ -4,8 +4,6 @@
 # ----------------------------------------------------------------------------
 project(cvextern_test)
 
-#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/core/include/opencv2/core")
-#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/core/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/imgproc/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/video/include")
@@ -18,8 +16,9 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/contrib/include"
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../libgeotiff/libgeotiff-1.3.0")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../libgeotiff/libgeotiff-1.3.0/libxtiff")
+#INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+#INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
+#INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
@@ -47,26 +46,11 @@ set_target_properties(${the_target} PROPERTIES
 	#DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
-FIND_PACKAGE(TIFF)
-IF(NOT TIFF_FOUND)
-  ADD_DEPENDENCIES(${the_target} libtiff)
-  SET(TIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
-  SET(TIFF_LIBRARY "libtiff")
-ENDIF()
-INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-
-FIND_PACKAGE(ZLIB)
-IF(NOT ZLIB_FOUND)
-  ADD_DEPENDENCIES(${the_target} zlib)
-  SET(ZLIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
-  SET(ZLIB_LIBRARY "zlib")
-ENDIF()
-INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
-
 ADD_DEPENDENCIES(${the_target} 
   cvextern opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
-  ${ZLIB_LIBRARY} 
-  xtiff ${TIFF_LIBRARY} geotiff_archive)
+#  ${ZLIB_LIBRARY} 
+#  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY}
+)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -78,8 +62,10 @@ ENDIF()
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   cvextern opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
-  ${ZLIB_LIBRARY} 
-  xtiff ${TIFF_LIBRARY} geotiff_archive)
+#  ${ZLIB_LIBRARY} 
+#  ${TIFF_LIBRARY} 
+#  ${GEOTIFF_LIBRARY}
+)
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main
