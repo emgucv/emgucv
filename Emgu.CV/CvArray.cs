@@ -552,18 +552,13 @@ namespace Emgu.CV
       public virtual void ReadXml(System.Xml.XmlReader reader)
       {
          #region read the size of the matrix and assign storage
-         reader.MoveToAttribute("Rows");
-         int rows = reader.ReadContentAsInt();
-         reader.MoveToAttribute("Cols");
-         int cols = reader.ReadContentAsInt();
-
-         reader.MoveToAttribute("NumberOfChannels");
-         int numberOfChannels = reader.ReadContentAsInt();
+         int rows = Int32.Parse( reader.GetAttribute("Rows") );
+         int cols = Int32.Parse( reader.GetAttribute("Cols"));
+         int numberOfChannels = Int32.Parse( reader.GetAttribute("NumberOfChannels"));
          AllocateData(rows, cols, numberOfChannels);
          #endregion
-
-         reader.MoveToAttribute("CompressionRatio");
-         SerializationCompressionRatio = reader.ReadContentAsInt();
+         
+         SerializationCompressionRatio = Int32.Parse (reader.GetAttribute ("CompressionRatio"));
 
          #region decode the data from Xml and assign the value to the matrix
          reader.MoveToContent();
