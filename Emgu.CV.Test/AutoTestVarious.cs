@@ -1518,8 +1518,8 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>("airplane.jpg");
 
          Rectangle rect = new Rectangle(new Point(24, 126), new Size(483, 294));
-         Matrix<Single> bgdModel = new Matrix<float>(1, 13 * 5);
-         Matrix<Single> fgdModel = new Matrix<float>(1, 13 * 5);
+         Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5);
+         Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5);
          Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
 
          CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);

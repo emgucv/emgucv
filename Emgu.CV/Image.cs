@@ -1977,8 +1977,8 @@ namespace Emgu.CV
       public Image<Gray, Byte> GrabCut(Rectangle rect, int iteration)
       {
          Image<Gray, Byte> mask = new Image<Gray, byte>(Size);
-         using(Matrix<Single> bgdModel = new Matrix<float>(1, 13 * 5))
-         using (Matrix<Single> fgdModel = new Matrix<float>(1, 13 * 5))
+         using(Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5))
+         using (Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5))
          {
             CvInvoke.CvGrabCut(Ptr, mask.Ptr, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
             CvInvoke.CvGrabCut(Ptr, mask.Ptr, ref rect, bgdModel, fgdModel, iteration, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
