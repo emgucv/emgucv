@@ -30,18 +30,12 @@ GeodeticCoordinate;
 
 struct datum
 {
-private:
-   double E;
-   double EP;
-
-#if EMGU_SSE2
-   __m128d _ECEF2GeodeticConst0; //= _mm_set_pd(A, B); 
-   __m128d _ECEF2GeodeticConst1; //= _mm_set_pd(EP*EP*B, -E*E*A);
-#endif
-
 public:
    double A; // Value of the major (transverse) radius (in meter)
    double B; // Value of the minor (conjugate) radius (in meter)
+
+   double Esquare;
+   double EPsquare;
 
    datum() //WGS84 datum 
    {
@@ -57,19 +51,15 @@ public:
    {
       A = a;
       B = b;
-      E = sqrt((A * A - B*B)/ (A*A));
-      EP = sqrt((A * A - B*B)/ (B*B));
-#if EMGU_SSE2
-      _ECEF2GeodeticConst0 = _mm_set_pd(A, B);
-      _ECEF2GeodeticConst1 = _mm_set_pd(EP*EP*B, -E*E*A);
-#endif
+      Esquare = (A * A - B*B)/ (A*A);
+      EPsquare = (A * A - B*B)/ (B*B);
    }
 
    void transformGeodetic2ECEF (const GeodeticCoordinate* coordinate, CvPoint3D64f* ecef) const 
    {
       double sinPhi = sin(coordinate->latitude);
 
-      double N = A / sqrt(1.0 - E * E * sinPhi * sinPhi);
+      double N = A / sqrt(1.0 - Esquare * sinPhi * sinPhi);
 
 #if EMGU_SSE2
       _mm_storeu_pd(&ecef->x, _mm_mul_pd(_mm_set_pd(sin(coordinate->longitude), cos(coordinate->longitude)), _mm_set1_pd( (N + coordinate->altitude) * cos(coordinate->latitude))));
@@ -91,15 +81,17 @@ public:
       __m128d _yx = _mm_loadu_pd(&ecef->x);
       __m128d p = _mm_sqrt_pd(_dot_product(_yx, _yx));
       __m128d _t2 = _mm_unpacklo_pd(p, _mm_load_sd(&ecef->z)); 
-      _mm_storeu_pd(buffer, _mm_mul_pd(_t2, _ECEF2GeodeticConst0));
+      __m128d _AB = _mm_set_pd(A, B);
+      _mm_storeu_pd(buffer, _mm_mul_pd(_t2, _AB));
       double theta = atan2(buffer[1], buffer[0]);
       __m128d _t1 = _mm_set_pd(sin(theta), cos(theta)); //1:sinTheta, 0:cosTheta
-
-      _mm_storeu_pd(buffer, _mm_add_pd(_t2, _mm_mul_pd(_ECEF2GeodeticConst1, _mm_mul_pd(_t1,_mm_mul_pd(_t1, _t1))))); 
+      
+      _mm_storeu_pd(buffer, _mm_add_pd(_t2, _mm_mul_pd( _mm_mul_pd( _mm_loadu_pd(&Esquare), _mm_set_pd(B, -A)) , _mm_mul_pd(_t1,_mm_mul_pd(_t1, _t1))))); 
       coor->latitude = atan2(buffer[1] , buffer[0]);
-      _mm_store_sd(&coor->altitude, p);
+
       double sinLat = sin(coor->latitude);
-      double N = A / sqrt(1.0 - E * E * sinLat * sinLat);
+      double N = A / sqrt(1.0 - Esquare * sinLat * sinLat);
+      _mm_store_sd(&coor->altitude, p);
       coor->altitude = coor->altitude /cos(coor->latitude) - N;
 #else
       double p = sqrt(ecef->x * ecef->x + ecef->y * ecef->y);
@@ -107,10 +99,10 @@ public:
       double sinTheta = sin(theta);
       double cosTheta = cos(theta);
       coor->latitude = atan2(
-         ecef->z + EP * EP * B * sinTheta * sinTheta * sinTheta,
-         p - E * E * A * cosTheta * cosTheta * cosTheta);
+         ecef->z + EPsquare * B * sinTheta * sinTheta * sinTheta,
+         p - Esquare * A * cosTheta * cosTheta * cosTheta);
       double sinLat = sin(coor->latitude);
-      double N = A / sqrt(1.0 - E * E * sinLat * sinLat);
+      double N = A / sqrt(1.0 - Esquare * sinLat * sinLat);
       coor->altitude = p / cos(coor->latitude) - N;
 #endif
    }
@@ -193,7 +185,5 @@ public:
       transformENU2Geodetic(&enu, refCoor, refEcef, coor);
    }
 };
-
-static const datum wgs84;
 
 #endif

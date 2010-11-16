@@ -5,11 +5,11 @@
 **/
 #include "datum.h"
 
-CVAPI(const datum*) datumCreateWGS84() { return &wgs84; }
+CVAPI(datum*) datumCreateWGS84() { return new datum; }
 
 CVAPI(datum*) datumCreate(double a, double b) { return new datum(a, b); }
 
-CVAPI(void) datumRelease(datum** d) { delete *d; d = 0; }
+CVAPI(void) datumRelease(datum** d) { delete *d; }
 
 /**
  * @fn   void transformGeodetic2ECEF(const datum* d, const GeodeticCoordinate* coordinate,
