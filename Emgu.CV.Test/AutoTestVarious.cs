@@ -1333,7 +1333,7 @@ namespace Emgu.CV.Test
             }
          }
       }
-
+      /*
       [Test]
       public void TestMatND()
       {
@@ -1353,7 +1353,7 @@ namespace Emgu.CV.Test
                //viewer.ShowDialog();
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestSURFFeatureRuntimeSerialization()
