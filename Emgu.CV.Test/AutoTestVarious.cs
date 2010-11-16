@@ -564,7 +564,7 @@ namespace Emgu.CV.Test
          Image<Bgra, Byte> absDiff = new Image<Bgra, Byte>(320, 240);
          CvInvoke.cvAbsDiff(img, img2, absDiff);
          double[] min, max; Point[] minLoc, maxLoc; double eps = 1;
-         absDiff.MinMax(out min, out max, out minLoc, out maxLoc); ImageViewer.Show(absDiff);
+         absDiff.MinMax(out min, out max, out minLoc, out maxLoc); //ImageViewer.Show(absDiff);
          Assert.Less(max[0], eps);
 	     Assert.Less(max[0], eps);
 		 Assert.Less(max[0], eps);

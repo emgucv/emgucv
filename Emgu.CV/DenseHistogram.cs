@@ -34,7 +34,7 @@ namespace Emgu.CV
       /// <param name="context">The streaming context</param>
       public DenseHistogram(SerializationInfo info, StreamingContext context)
       {
-         MatND<float> matND = (MatND<float>)info.GetValue("MatND", typeof(MatND<float>));
+         MatND<float> matND = new MatND<float>(info, context);
          RangeF[] ranges = (RangeF[])info.GetValue("Ranges", typeof(RangeF[]));
          InitializeComponent(matND, ranges);
       }
@@ -384,7 +384,8 @@ namespace Emgu.CV
       /// <param name="context">Streaming context</param>
       public void GetObjectData(SerializationInfo info, StreamingContext context)
       {
-         info.AddValue("MatND", MatND);
+         //info.AddValue("MatND", MatND);
+		 _matND.GetObjectData(info, context);
          info.AddValue("Ranges", Ranges);
       }
 
