@@ -77,7 +77,7 @@ void Test_quaternions_performance()
       for (int i = 0; i < count; i++)
       {
          //perform tasks
-         quaternionsMultiply(&q1, &q2, &q);
+         q1.multiply(&q2, &q1); 
       }
       QueryPerformanceCounter(&end); 
       cout <<"Quaternions multiplication total CPU Cycle: " << (end.QuadPart - begin.QuadPart) << std::endl;
