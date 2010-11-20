@@ -20,6 +20,15 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 #INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 #INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
+############################### IPP START ##############################
+IF (USE_IPP AND IPP_PATH)
+  message(STATUS "CVEXTERN: USING IPP: ${IPP_PATH} ")
+  add_definitions(-DHAVE_IPP)
+  include_directories("${IPP_PATH}/../include")
+  LINK_DIRECTORIES("${IPP_PATH}/../lib")
+ENDIF()
+############################### IPP END ################################
+
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
 endif()

@@ -18,13 +18,21 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 
+############################### IPP START ##############################
+IF (USE_IPP AND IPP_PATH)
+  message(STATUS "CVEXTERN: USING IPP: ${IPP_PATH} ")
+  add_definitions(-DHAVE_IPP)
+  include_directories("${IPP_PATH}/../include")
+  LINK_DIRECTORIES("${IPP_PATH}/../lib")
+ENDIF()
+############################### IPP END ################################
+
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
 source_group("Include" FILES ${extern_hdrs})
 
 set(the_target ${PROJECT_NAME})
-
 add_library(${the_target} ${extern_srcs} ${extern_hdrs})
 
 # For dynamic link numbering convenions
