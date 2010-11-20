@@ -65,11 +65,11 @@ namespace Emgu.CV.Structure
       ///<summary>
       ///  temp1->data.fl 
       ///</summary>
-      public IntPtr Temp1;
+      public IntPtr Temp1Data;
       ///<summary>
       ///  temp2->data.fl 
       ///</summary>
-      public IntPtr Temp2;
+      public IntPtr Temp2Data;
       #endregion
       
       ///<summary>
