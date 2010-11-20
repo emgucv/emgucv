@@ -131,9 +131,10 @@ typedef struct Quaternions
          t9 =   y*z,
          t10 = -z*z;
 
-      pointDst->x = 2.0*( (t8 + t10)* point->x + (t6 -  t4)* point->y + (t3 + t7)* point->z ) + point->x;
-      pointDst->y = 2.0*( (t4 +  t6)* point->x + (t5 + t10)* point->y + (t9 - t2)* point->z ) + point->y;
-      pointDst->z = 2.0*( (t7 -  t3)* point->x + (t2 +  t9)* point->y + (t5 + t8)* point->z ) + point->z;
+      double xx = 2.0*( (t8 + t10)* point->x + (t6 -  t4)* point->y + (t3 + t7)* point->z ) + point->x;
+      double yy = 2.0*( (t4 +  t6)* point->x + (t5 + t10)* point->y + (t9 - t2)* point->z ) + point->y;
+      double zz = 2.0*( (t7 -  t3)* point->x + (t2 +  t9)* point->y + (t5 + t8)* point->z ) + point->z;
+      pointDst->x = xx; pointDst->y = yy; pointDst->z = zz;
    }
 
    void setEuler(double roll, double pitch, double raw)
