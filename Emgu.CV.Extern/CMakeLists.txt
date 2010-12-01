@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/features2d/include"
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/legacy/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 
 ############################### IPP START ##############################
@@ -85,7 +86,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
@@ -99,7 +100,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
