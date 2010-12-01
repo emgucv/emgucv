@@ -46,12 +46,13 @@ inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* 
 **/
 inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
 {
-   /*
 #if EMGU_SSE2
-   return _dot_product(_mm_loadu_pd(&p1->x), _mm_loadu_pd(&p2->x)).m128d_f64[0] + p1->z * p1->z;
-#else*/
+   double tmp;
+   _mm_store_sd(&tmp, _dot_product(_mm_loadu_pd(&p1->x), _mm_loadu_pd(&p2->x)));
+   return tmp + p1->z * p2->z;
+#else
    return p1->x * p2->x + p1->y * p2->y + p1->z * p2->z;
-//#endif
+#endif
 };
 
 /**
