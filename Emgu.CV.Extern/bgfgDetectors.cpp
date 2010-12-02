@@ -1,5 +1,5 @@
 #include "opencv2/core/core_c.h"
-#include "opencv2/video/blobtrack.hpp"
+#include "opencv2/legacy/blobtrack.hpp"
 
 //Forground detector
 CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
