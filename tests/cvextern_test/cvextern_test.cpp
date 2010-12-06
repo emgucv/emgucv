@@ -13,7 +13,7 @@ using namespace std;
 
 #define ERROR_EPS 1.0e-12
 #define fequal(a, b) (fabs((a) - (b))< ( (fabs(a) + fabs(b)) / 2 * ERROR_EPS)) 
-void Test_cross_product()
+void Test_2D_cross_product()
 {
 #if EMGU_SSE2
    __m128d v0 = _mm_set_pd(0.01, 0.02);
@@ -22,8 +22,27 @@ void Test_cross_product()
    double val0;
    _mm_store_sd(&val0, _cross_product(v1, v0));
    double val1 = 0.01 * 0.04 - 0.02 * 0.03;
-   cout <<"Test cross product: " << (fequal(val0, val1) ? "Passed" : "Failed") << std::endl;
+   cout <<"Test 2D cross product: " << (fequal(val0, val1) ? "Passed" : "Failed") << std::endl;
 #endif
+}
+
+void Test_3D_cross_product()
+{
+   CvPoint3D64f 
+      x = cvPoint3D64f(1.0, 0.0, 0.0), 
+      y = cvPoint3D64f(0.0, 1.0, 0.0),
+      z = cvPoint3D64f(0.0, 0.0, 1.0),
+      temp;
+
+   bool pass = true;
+   cvPoint3D64fCrossProduct(&x, &y, &temp);
+   pass &= cvPoint3D64Equals(&temp, &z);
+   cvPoint3D64fCrossProduct(&y, &z, &temp);
+   pass &= cvPoint3D64Equals(&temp, &x);
+   cvPoint3D64fCrossProduct(&z, &x, &temp);
+   pass &= cvPoint3D64Equals(&temp, &y);
+
+   cout <<"Test cvPoint3D64f cross product: " << (pass ? "Passed" : "Failed") << std::endl;
 }
 
 void Test_double_MulS()
@@ -98,7 +117,8 @@ void Test_quaternions_performance()
 int main()
 {
    char tmp;
-   Test_cross_product();
+   Test_2D_cross_product();
+   Test_3D_cross_product();
    Test_double_MulS();
  
 #ifdef _MSC_VER
