@@ -14,17 +14,40 @@
 # copyright (c) 2009, 2010 Canming Huang support@emgu.com
 
 IF(WIN32)
-FIND_PROGRAM (CSC_EXECUTABLE csc 
-$ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
-"C:/Microsoft.NET/Framework64/v4.0.30319/"
-$ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
-"C:/Microsoft.NET/Framework/v4.0.30319/"
+FIND_PROGRAM (CSC_EXECUTABLE_20 csc
+$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
+IF(CSC_EXECUTABLE_20)
+SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
+ENDIF()
+
+FIND_PROGRAM (CSC_EXECUTABLE_35 csc
 $ENV{windir}/Microsoft.NET/Framework64/v3.5/
 "C:/Windows/Microsoft.NET/Framework64/v3.5"
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 "C:/Windows/Microsoft.NET/Framework/v3.5"
-$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
-"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
+)
+IF(CSC_EXECUTABLE_35)
+SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
+ENDIF()
+
+FIND_PROGRAM (CSC_EXECUTABLE_40 csc 
+$ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
+"C:/Microsoft.NET/Framework64/v4.0.30319/"
+$ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
+"C:/Microsoft.NET/Framework/v4.0.30319/")
+IF(CSC_EXECUTABLE_40)
+SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_40})
+ENDIF()
+
+IF(CSC_EXECUTABLE_20 AND CSC_PREFERRED_VERSION MATCHES "2.0")
+SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
+ENDIF()
+
+IF(CSC_EXECUTABLE_35 AND CSC_PREFERRED_VERSION MATCHES "3.5")
+SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
+ENDIF()
+
 ELSE(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE gmcs)
 ENDIF(WIN32)
