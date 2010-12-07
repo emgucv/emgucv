@@ -56,7 +56,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\opencv\include\opencv;$(ProjectDir)..\..\opencv\modules\core\include;$(ProjectDir)..\..\opencv\modules\imgproc\include;$(ProjectDir)..\..\opencv\modules\video\include;$(ProjectDir)..\..\opencv\modules\features2D\include;$(ProjectDir)..\..\opencv\modules\calib3D\include;$(ProjectDir)..\..\opencv\modules\objdetect\include;$(ProjectDir)..\..\opencv\modules\highgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\opencv\include\opencv;$(ProjectDir)..\..\opencv\modules\core\include;$(ProjectDir)..\..\opencv\modules\imgproc\include;$(ProjectDir)..\..\opencv\modules\video\include;$(ProjectDir)..\..\opencv\modules\features2D\include;$(ProjectDir)..\..\opencv\modules\calib3D\include;$(ProjectDir)..\..\opencv\modules\objdetect\include;$(ProjectDir)..\..\opencv\modules\highgui\include;$(ProjectDir)..\..\opencv\modules\flann\include;$(ProjectDir)..\..\opencv\modules\legacy\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\opencv\include\opencv;$(ProjectDir)..\..\opencv\modules\core\include;$(ProjectDir)..\..\opencv\modules\imgproc\include;$(ProjectDir)..\..\opencv\modules\video\include;$(ProjectDir)..\..\opencv\modules\features2D\include;$(ProjectDir)..\..\opencv\modules\calib3D\include;$(ProjectDir)..\..\opencv\modules\objdetect\include;$(ProjectDir)..\..\opencv\modules\highgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\opencv\include\opencv;$(ProjectDir)..\..\opencv\modules\core\include;$(ProjectDir)..\..\opencv\modules\imgproc\include;$(ProjectDir)..\..\opencv\modules\video\include;$(ProjectDir)..\..\opencv\modules\features2D\include;$(ProjectDir)..\..\opencv\modules\calib3D\include;$(ProjectDir)..\..\opencv\modules\objdetect\include;$(ProjectDir)..\..\opencv\modules\highgui\include;$(ProjectDir)..\..\opencv\modules\flann\include;$(ProjectDir)..\..\opencv\modules\legacy\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
