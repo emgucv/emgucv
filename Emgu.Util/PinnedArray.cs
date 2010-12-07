@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.Util
 {
    /// <summary>
-   /// A Pinnned array of type <paramref name="T"/>
+   /// A Pinnned array of the specific type
    /// </summary>
    /// <typeparam name="T">The type of the array</typeparam>
    public class PinnedArray<T> : DisposableObject
@@ -13,7 +13,7 @@ namespace Emgu.Util
       private GCHandle _handle;
 
       /// <summary>
-      /// Create a Pinnned array of type <paramref name="T"/>
+      /// Create a Pinnned array of the specific type
       /// </summary>
       /// <param name="size">The size of the array</param>
       public PinnedArray(int size)
