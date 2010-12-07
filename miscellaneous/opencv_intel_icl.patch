@@ -1,0 +1,42 @@
+Index: 3rdparty/libjpeg/CMakeLists.txt
+===================================================================
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4298)
++++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
+@@ -42,6 +42,11 @@
+     set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
+ endif()
+ 
++#IF(WIN32 AND CV_ICC)
++set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++#ENDIF()
++
+ set_target_properties(${the_target}
+ 	PROPERTIES OUTPUT_NAME "${the_target}"
+ 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+Index: modules/legacy/src/3dtracker.cpp
+===================================================================
+--- modules/legacy/src/3dtracker.cpp	(revision 4298)
++++ modules/legacy/src/3dtracker.cpp	(working copy)
+@@ -331,7 +331,7 @@
+     int i;
+     int x, y;
+     CvPoint prev_pt = { 0, 0 };
+-    static const CvScalar rgb_colors[] = {
++    static CvScalar rgb_colors[] = {
+         {{0,0,255}},
+         {{0,128,255}},
+         {{0,200,200}},
+@@ -339,10 +339,10 @@
+         {{200,200,0}},
+         {{255,0,0}},
+         {{255,0,255}} };
+-    static const CvScalar gray_colors[] = {
++    static CvScalar gray_colors[] = {
+         {{80}}, {{120}}, {{160}}, {{200}}, {{100}}, {{140}}, {{180}}
+     };
+-    const CvScalar* colors = img->nChannels == 3 ? rgb_colors : gray_colors;
++    CvScalar* colors = img->nChannels == 3 ? rgb_colors : gray_colors;
+ 
+     CvScalar color = colors[0];
+     for (y = 0, i = 0; y < etalon_size.height; y++)
