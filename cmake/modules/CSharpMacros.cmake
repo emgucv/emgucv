@@ -117,10 +117,13 @@ ENDIF(${target_type} STREQUAL "library")
 	#enable optimization
 	LIST(APPEND CS_FLAGS -optimize+)
 	
+	#set the output target
 	SET(TMP "-out:\"${target_name}\" -target:${target_type}")
+	#set the compiler flags
 	FOREACH(TMP_NAME ${CS_FLAGS})
 	  SET(TMP "${TMP} ${TMP_NAME}")
 	ENDFOREACH()
+	#set the source files
 	FOREACH(TMP_NAME ${proper_file_list})
 	  SET(TMP "${TMP} \"${TMP_NAME}\"")
 	ENDFOREACH()
@@ -130,6 +133,7 @@ ENDIF(${target_type} STREQUAL "library")
       TARGET ${target}
       ${CS_PREBUILD_COMMAND}	   
       COMMAND ${CSC_EXECUTABLE} @cscSourceList.rsp
+	  ${CS_POSTBUILD_COMMAND}
       DEPENDS ${source}
       COMMENT "Building ${relative_path}")
 
@@ -137,6 +141,7 @@ ENDIF(${target_type} STREQUAL "library")
     SET(proper_file_list "")
     SET(CS_FLAGS "")
     SET(CS_PREBUILD_COMMAND "")
+	SET(CS_POSTBUILD_COMMAND "")
 ENDMACRO(COMPILE_CS)
 
 MACRO(ADD_CS_REFERENCES references)
@@ -157,6 +162,10 @@ MACRO(ADD_CS_RESOURCES resx resources)
     COMMAND ${RESGEN_EXECUTABLE} \"${resx}\" \"${resources}\"
     )
   LIST(APPEND CS_FLAGS -resource:\"${resources}\")
+  LIST(APPEND
+    CS_POSTBUILD_COMMAND
+	COMMAND ${CMAKE_COMMAND} -E remove \"${resources}\"
+	)
 ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key) 
