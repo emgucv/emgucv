@@ -93,7 +93,7 @@ ADD_DEPENDENCIES(${the_target}
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
-  IF(MSVC AND EMGUCV_ARCH MATCHES "win32") 
+  IF(MSVC AND EMGUCV_ARCH MATCHES "win32" AND (NOT CV_ICC)) 
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
   ENDIF()
 ENDIF()
@@ -109,3 +109,28 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
+	
+IF(WIN32)
+IF(USE_IPP)
+   FILE(GLOB IPP_REDIST    
+   ${IPP_PATH}/ippcore-*.dll
+   ${IPP_PATH}/ippcv-*.dll
+   ${IPP_PATH}/ipps-*.dll
+   ${IPP_PATH}/ippvm-*.dll)
+   MESSAGE (STATUS "${IPP_REDIST}")
+   FOREACH (file ${IPP_REDIST})
+   LIST(APPEND
+	copy_command  
+    COMMAND ${CMAKE_COMMAND} copy -E ${file} ${CMAKE_BINARY_DIR}/bin)
+   ENDFOREACH()
+   add_custom_command(TARGET ${the_target} POST_BUILD ${copy_command} COMMENT "Copying dependencies")
+   
+   INSTALL(FILES 
+   ${IPP_REDIST}
+   DESTINATION bin COMPONENT main)
+ENDIF()
+IF(CV_ICL)
+#   FILE(GLOB ICL_REDIST
+#   ${IPP_PATH)/   
+ENDIF()
+ENDIF()  

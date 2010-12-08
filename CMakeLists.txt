@@ -64,6 +64,23 @@ ELSE(WIN32)
 ENDIF(WIN32)
 MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
 
+# ----------------------------------------------------------------------------
+#  Check if using INTEL Compiler on windows 
+# ----------------------------------------------------------------------------
+if(WIN32)
+	IF(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+	   SET (CV_ICC ${CMAKE_CXX_COMPILER})
+	ENDIF()
+	IF(WIN32 AND CV_ICC)
+       get_filename_component(CV_ICL_PATH "${CMAKE_CXX_COMPILER}" PATH)
+	   IF (EMGUCV_ARCH STREQUAL "win32")
+	      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/ia32")
+	   ELSEIF(EMGUCV_ARCH STREQUAL "win64")
+	      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/intel64")
+	   ENDIF()
+	ENDIF()
+	MESSAGE(STATUS "Building with Intel Compiler: ${CV_ICC}")
+endif()
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
