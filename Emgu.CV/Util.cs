@@ -21,15 +21,20 @@ namespace Emgu.CV
          String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
          try
          {
-            //IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(tempFileName, -1, 1, new Size(100, 100), true);
             IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
             HasFFMPEG = (capture != IntPtr.Zero);
-            CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
+            if (HasFFMPEG) 
+               CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
          }
          catch (Exception e)
          {
             String msg = e.Message;
             HasFFMPEG = false;
+         }
+         finally
+         {
+            if (File.Exists(fileName))
+               File.Delete(fileName);
          }
 
       }
