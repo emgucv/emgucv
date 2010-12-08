@@ -61,7 +61,7 @@ namespace Emgu.CV.ML
       }
 
       /// <summary>
-      /// Given the NormalBayesClassifier <paramref name="model"/>, predit the probability of the <paramref name="samples"/>
+      /// Given the NormalBayesClassifier, predit the probability of the <paramref name="samples"/>
       /// </summary>
       /// <param name="samples">The input samples</param>
       /// <param name="results">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
