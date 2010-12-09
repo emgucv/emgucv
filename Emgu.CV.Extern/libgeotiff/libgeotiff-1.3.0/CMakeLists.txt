@@ -3,9 +3,11 @@
 # CMake main configuration file to build GeoTIFF library and utilities.
 #
 # Author: Mateusz Loskot <mateusz@loskot.net>
+#
 # Modified by Canming:
-# Changed all CMAKE_SOURCE_DIR to CMAKE_CURRENT_SOURCE_DIR
-# Build only geotiff_archieve for emgucv
+#               Changed all CMAKE_SOURCE_DIR to CMAKE_CURRENT_SOURCE_DIR
+#               Build only geotiff_archieve for emgucv
+# Dec 9, 2010   Not to include source or header file for emgucv installation
 #
 ###############################################################################
 PROJECT(GeoTIFF)
@@ -262,15 +264,15 @@ SET(GEOTIFF_INCLUDE_DIR ${GEOTIFF_INCLUDE_SUBDIR})
 SET(GEOTIFF_DATA_DIR ${GEOTIFF_DATA_SUBDIR})
 
 # Install doc files
-INSTALL(FILES
-    AUTHORS ChangeLog COPYING INSTALL LICENSE README README_BIN README.WIN
-    DESTINATION ${GEOTIFF_DATA_DIR}/doc)
+#INSTALL(FILES
+#    AUTHORS ChangeLog COPYING INSTALL LICENSE README README_BIN README.WIN
+#    DESTINATION ${GEOTIFF_DATA_DIR}/doc)
 
 # Install CSV data files
-INSTALL(FILES ${GEOTIFF_CSV_DATA} DESTINATION ${GEOTIFF_DATA_DIR}/epsg_csv)
+#INSTALL(FILES ${GEOTIFF_CSV_DATA} DESTINATION ${GEOTIFF_DATA_DIR}/epsg_csv)
 
 # Install header files for development distribution
-INSTALL(FILES ${GEOTIFF_LIB_HEADERS} DESTINATION ${GEOTIFF_INCLUDE_DIR})
+#INSTALL(FILES ${GEOTIFF_LIB_HEADERS} DESTINATION ${GEOTIFF_INCLUDE_DIR})
 
 ###############################################################################
 # Build libxtiff library
@@ -306,7 +308,7 @@ IF (GEOTIFF_ENABLE_INCODE_EPSG)
         csv/prime_meridian.c
         csv/projop_wparm.c
         csv/unit_of_measure.c)
-    SOURCE_GROUP("CSV Source Files" FILES ${GEOTIFF_LIB_CSV_SOURCES})
+    #SOURCE_GROUP("CSV Source Files" FILES ${GEOTIFF_LIB_CSV_SOURCES})
 ENDIF()
 
 # Static libgeotiff archive 
@@ -332,12 +334,12 @@ SET_TARGET_PROPERTIES(${GEOTIFF_ARCHIVE_TARGET} PROPERTIES
 #	${ZLIB_LIBRARIES}
 #	${JPEG_LIBRARIES})
 
-INSTALL(TARGETS ${GEOTIFF_ARCHIVE_TARGET} #${GEOTIFF_LIBRARY_TARGET}
-    RUNTIME DESTINATION ${GEOTIFF_BIN_DIR}
-    LIBRARY DESTINATION ${GEOTIFF_LIB_DIR}
-    ARCHIVE DESTINATION ${GEOTIFF_LIB_DIR})
+#INSTALL(TARGETS ${GEOTIFF_ARCHIVE_TARGET} #${GEOTIFF_LIBRARY_TARGET}
+#    RUNTIME DESTINATION ${GEOTIFF_BIN_DIR}
+#    LIBRARY DESTINATION ${GEOTIFF_LIB_DIR}
+#    ARCHIVE DESTINATION ${GEOTIFF_LIB_DIR})
 
 # Define grouping of source files in PROJECT file (e.g. Visual Studio)
-SOURCE_GROUP("CMake Files" FILES CMakeLists.txt)
-SOURCE_GROUP("Header Files" FILES ${GEOTIFF_LIB_HEADERS})
-SOURCE_GROUP("Source Files" FILES ${GEOTIFF_LIB_SOURCES})
+#SOURCE_GROUP("CMake Files" FILES CMakeLists.txt)
+#SOURCE_GROUP("Header Files" FILES ${GEOTIFF_LIB_HEADERS})
+#SOURCE_GROUP("Source Files" FILES ${GEOTIFF_LIB_SOURCES})
