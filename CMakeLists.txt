@@ -288,10 +288,15 @@ IF (WIN32)
   # ----------------------------------------------------------------------------
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
+  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
+  IF(MSVC90)
+    SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
+  ENDIF()
+  
   IF(EMGUCV_ARCH STREQUAL "win32")
     INSTALL(
       FILES
-      "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x86.exe"
+      "${MSVC_REDIST_FOLDER}/vcredist_x86.exe"
       DESTINATION ./
       COMPONENT emgucv_binary 
       )
@@ -300,7 +305,7 @@ IF (WIN32)
     IF(EMGUCV_ARCH STREQUAL "win64")
       INSTALL(
 	FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/vcredist_x64.exe"
+	"${MSVC_REDIST_FOLDER}/vcredist_x64.exe"
 	DESTINATION ./
 	COMPONENT emgucv_binary 
 	)
@@ -443,6 +448,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
     PATTERN "*.ico"
     PATTERN "*.rc"
     PATTERN "CPlusPlus/*.vcproj"
+    PATTERN "CPlusPlus/*.vcxproj"
     PATTERN "*.vb"
     PATTERN "*.vbproj"
     PATTERN "*.aspx" 
