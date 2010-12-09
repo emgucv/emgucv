@@ -17,7 +17,8 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 # Copyright (c) 2010 Canming Huang <support@emgu.com>
-# Nov 14, 2010 modified to find libgeotiff on linux
+# Nov 14, 2010 modified to find libgeotiff on ubuntu 10.10
+# Dec 8, 2010 modified to find libgeotiff on Fedora 14
 #
 ###############################################################################
 
@@ -61,6 +62,7 @@ ELSEIF(UNIX)
 #      PATH_PREFIXES geotiff
       PATHS
         /usr/include/geotiff
+        /usr/include/libgeotiff
 )
 
     FIND_LIBRARY(GEOTIFF_LIBRARY NAMES ${GEOTIFF_NAMES})
