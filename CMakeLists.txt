@@ -176,6 +176,7 @@ GET_TARGET_PROPERTY(OPENCV_LEGACY_OUTPUT_NAME opencv_legacy OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_FLANN_OUTPUT_NAME opencv_flann OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_GPU_OUTPUT_NAME opencv_gpu OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 
 IF(TARGET opencv_ffmpeg)
@@ -197,6 +198,7 @@ ${OPENCV_CALIB3D_OUTPUT_NAME}
 ${OPENCV_VIDEO_OUTPUT_NAME}
 ${OPENCV_FFMPEG_OUTPUT_NAME}
 ${OPENCV_FLANN_OUTPUT_NAME}
+${OPENCV_GPU_OUTPUT_NAME}
 ${CVEXTERN_OUTPUT_NAME})
 
 IF(TARGET opencv_ffmpeg)
@@ -244,6 +246,10 @@ namespace Emgu.CV
       /// The file name of the video library
       /// </summary>
       public const string OPENCV_VIDEO_LIBRARY = \"${OPENCV_VIDEO_OUTPUT_NAME}\";
+      /// <summary>
+      /// The file name of the gpu library
+      /// </summary>
+      public const string OPENCV_GPU_LIBRARY = \"${OPENCV_GPU_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
@@ -556,7 +562,7 @@ ELSE (WIN32)
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff, libgtk2.0, libgstreamer0.10, libavcodec, libswscale, libavformat, libopenexr, libjasper, libdc1394-22, libv4l, libqt4")
   ELSE()  
     FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
     IF(RPMBUILD_CMD)
@@ -566,7 +572,7 @@ ELSE (WIN32)
       MESSAGE(STATUS "FOUND rpmbuild: ${RPMBUILD_CMD}")
       SET(CPACK_GENERATOR RPM)
       SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
-      SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.4,mono-wcf")
+      SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.4, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
 
       SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
       
