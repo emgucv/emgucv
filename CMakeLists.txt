@@ -459,6 +459,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
     PATTERN "*.jpg"
     PATTERN "*.png"  
     PATTERN "*.settings"
+    PATTERN "*.config"
     PATTERN "tessdata/*"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
