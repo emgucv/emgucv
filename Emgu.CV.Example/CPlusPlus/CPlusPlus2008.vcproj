@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;;&quot;$(ProjectDir)..\..\include\opencv2\core&quot;;&quot;$(ProjectDir)..\..\include\opencv2\imgproc&quot;;&quot;$(ProjectDir)..\..\include\opencv2\video&quot;;&quot;$(ProjectDir)..\..\include\opencv2\feature2D&quot;;&quot;$(ProjectDir)..\..\include\opencv2\calib3D&quot;;&quot;$(ProjectDir)..\..\include\opencv2\objdetect&quot;;&quot;$(ProjectDir)..\..\include\opencv2\highgui&quot;;&quot;$(ProjectDir)..\..\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\opencv\include\opencv&quot;;&quot;$(ProjectDir)..\..\opencv\modules\core\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\imgproc\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\video\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\features2D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\calib3D\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\objdetect\include&quot;;&quot;$(ProjectDir)..\..\opencv\modules\highgui\include&quot;;&quot;$(ProjectDir)..\..\include\opencv2\core&quot;;&quot;$(ProjectDir)..\..\include\opencv2\imgproc&quot;;&quot;$(ProjectDir)..\..\include\opencv2\video&quot;;&quot;$(ProjectDir)..\..\include\opencv2\feature2D&quot;;&quot;$(ProjectDir)..\..\include\opencv2\calib3D&quot;;&quot;$(ProjectDir)..\..\include\opencv2\objdetect&quot;;&quot;$(ProjectDir)..\..\include\opencv2\highgui&quot;;&quot;$(ProjectDir)..\..\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
