@@ -297,7 +297,7 @@ IF (WIN32)
     INSTALL(
       FILES
       "${MSVC_REDIST_FOLDER}/vcredist_x86.exe"
-      DESTINATION ./
+      DESTINATION .
       COMPONENT emgucv_binary 
       )
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
@@ -306,7 +306,7 @@ IF (WIN32)
       INSTALL(
 	FILES
 	"${MSVC_REDIST_FOLDER}/vcredist_x64.exe"
-	DESTINATION ./
+	DESTINATION .
 	COMPONENT emgucv_binary 
 	)
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe'")
@@ -399,14 +399,14 @@ uninstallDebuggerVisualizer4${vs_version}Done:
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
     "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
-    DESTINATION ./
+    DESTINATION .
     COMPONENT emgucv_source
     )
   
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
-    DESTINATION ./
+    DESTINATION .
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "*.dll"
@@ -422,7 +422,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-    DESTINATION ./
+    DESTINATION .
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.sln"
@@ -436,7 +436,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-    DESTINATION ./
+    DESTINATION .
     COMPONENT emgucv_example_source
     FILES_MATCHING 
     PATTERN "*.cs"
@@ -471,7 +471,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-    DESTINATION ./
+    DESTINATION .
     COMPONENT emgucv_example_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Example.sln"
