@@ -39,9 +39,9 @@ namespace LicensePlateRecognition
       /// Detect license plate from the given image
       /// </summary>
       /// <param name="img">The image to search license plate from</param>
-      /// <param name="licensePlateImagesList">A list of images where the detected license plate region is stored</param>
-      /// <param name="filteredLicensePlateImagesList">A list of images where the detected license plate region with noise removed is stored</param>
-      /// <param name="detectedLicensePlateRegionList">A list where the region of license plate, defined by an MCvBox2D is stored</param>
+      /// <param name="licensePlateImagesList">A list of images where the detected license plate regions are stored</param>
+      /// <param name="filteredLicensePlateImagesList">A list of images where the detected license plate regions (with noise removed) are stored</param>
+      /// <param name="detectedLicensePlateRegionList">A list where the regions of license plate (defined by an MCvBox2D) are stored</param>
       /// <returns>The list of words for each license plate</returns>
       public List<List<Word>> DetectLicensePlate(
          Image<Bgr, byte> img, 
@@ -55,7 +55,7 @@ namespace LicensePlateRecognition
          using (MemStorage stor = new MemStorage())
          {
             CvInvoke.cvCanny(gray, canny, 100, 50, 3);
-
+            
             Contour<Point> contours = canny.FindContours(
                  Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
                  Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
@@ -89,7 +89,7 @@ namespace LicensePlateRecognition
             //if it does not contains any children (charactor), it is not a license plate region
             if (numberOfChildren == 0) continue;
 
-            if (contours.Area > 100)
+            if (contours.Area > 400)
             {
                if (numberOfChildren < 3) 
                {
@@ -100,6 +100,21 @@ namespace LicensePlateRecognition
                }
 
                MCvBox2D box = contours.GetMinAreaRect();
+               if (box.angle < -45.0)
+               {
+                  float tmp = box.size.Width;
+                  box.size.Width = box.size.Height;
+                  box.size.Height = tmp;
+                  box.angle += 90.0f;
+               }
+               else if (box.angle > 45.0)
+               {
+                  float tmp = box.size.Width;
+                  box.size.Width = box.size.Height;
+                  box.size.Height = tmp;
+                  box.angle -= 90.0f;
+               }
+
                double whRatio = (double)box.size.Width / box.size.Height;
                if (!(3.0 < whRatio && whRatio < 10.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 
