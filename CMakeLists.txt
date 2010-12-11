@@ -38,7 +38,7 @@ IF(SVNVERSION_PATH)
     SET(EMGUCV_SVNVERSION "0")
   ELSE()
     STRING(REGEX REPLACE "^([0123456789]+).*" "\\1" EMGUCV_SVNVERSION "${SVNVERSION_RESULT}")
-    IF(EMGUCV_SVNVERSION MATCHES "^$")
+    IF(EMGUCV_SVNVERSION MATCHES "^$" OR EMGUCV_SVNVERSION MATCHES "^-")
       # This is NOT a svn repository:
       SET(EMGUCV_SVNVERSION "0")
     ENDIF()
@@ -281,7 +281,7 @@ IF (WIN32)
     SET(CPACK_GENERATOR ZIP)
   ENDIF()
   
-  SET(CPACK_NSIS_MODIFY_PATH ON)
+  SET(CPACK_NSIS_MODIFY_PATH OFF)
   
   ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
   
@@ -300,7 +300,7 @@ IF (WIN32)
       DESTINATION .
       COMPONENT emgucv_binary 
       )
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe'")
+    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe /passive'")
   ELSE()
     IF(EMGUCV_ARCH STREQUAL "win64")
       INSTALL(
@@ -309,7 +309,7 @@ IF (WIN32)
 	DESTINATION .
 	COMPONENT emgucv_binary 
 	)
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe'")
+      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe /passive'")
     ELSE()
     ENDIF()
   ENDIF()
@@ -321,7 +321,7 @@ IF (WIN32)
     "Emgu.Util"
     "Emgu.CV"
     "Emgu.CV.UI"
-    "Emgu.CV.DebuggerVisualizers"
+#    "Emgu.CV.DebuggerVisualizers"
     ${OPENCV_LIBRARY_OUTPUT_NAMES})
   MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
     SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
@@ -334,10 +334,12 @@ MessageBox MB_YESNO 'Install Debugger Visualizer for ${vs_description}?' IDNO in
 	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
     ENDFOREACH()
-    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
-      "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-installDebuggerVisualizer4${vs_version}Done:
-")
+	
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
+installDebuggerVisualizer4${vs_version}Done:")
+
   ENDMACRO()
   
   MACRO(UNINSTALL_DEBUGER_VISUALIZER vs_version hklm_key)
@@ -350,14 +352,16 @@ IfErrors uninstallDebuggerVisualizer4${vs_version}Done")
 	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${file}.dll'")
     ENDFOREACH()
+
     SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
       "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll'
 uninstallDebuggerVisualizer4${vs_version}Done:
 ")
   ENDMACRO()
   
-  INSTALL_DEBUGER_VISUALIZER("VS2005" "Visual Studio 2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
+#  INSTALL_DEBUGER_VISUALIZER("VS2005" "Visual Studio 2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
+#  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
   
   INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -365,8 +369,8 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   INSTALL_DEBUGER_VISUALIZER("VS2010" "Visual Studio 2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 
-  UNINSTALL_DEBUGER_VISUALIZER("VS2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
-  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+#  UNINSTALL_DEBUGER_VISUALIZER("VS2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
+#  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
   
   UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -479,16 +483,16 @@ uninstallDebuggerVisualizer4${vs_version}Done:
     PATTERN "bin" EXCLUDE
     )
   
-  INSTALL(
-    DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
-    DESTINATION ./opencv/include
-    COMPONENT emgucv_example_source
-    FILES_MATCHING 
-    PATTERN "*.h"
-    PATTERN "*.hpp"
-    PATTERN ".svn" EXCLUDE
-    )
+#  INSTALL(
+#    DIRECTORY
+#    ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/opencv
+#    DESTINATION ./opencv/include
+#    COMPONENT emgucv_example_source
+#    FILES_MATCHING 
+#    PATTERN "*.h"
+#    PATTERN "*.hpp"
+#    PATTERN ".svn" EXCLUDE
+#    )
   
   INSTALL(
     DIRECTORY
@@ -513,6 +517,9 @@ set(CPACK_COMPONENTS_ALL
 
 set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=7828
 set(CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
+set(CPACK_NSIS_MENU_LINKS "Solution/VS2008/Emgu.CV.Example.sln" "Visual Studio 2008 Examples")
+set(CPACK_NSIS_MENU_LINKS "Solution/VS2010/Emgu.CV.Example.sln" "Visual Studio 2010 Examples")
+SET(CPACK_NSIS_CONTACT "support@emgu.com")
 
 IF(EMGU_CV_DOCUMENTATION_BUILD)
   set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
