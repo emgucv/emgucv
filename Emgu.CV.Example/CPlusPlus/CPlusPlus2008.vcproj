@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core211.lib opencv_highgui211.lib opencv_imgproc211.lib opencv_objdetect211.lib "
+				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib "
 				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
