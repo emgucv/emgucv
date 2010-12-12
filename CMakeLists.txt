@@ -70,6 +70,7 @@ MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
 if(WIN32)
 	IF(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 	   SET (CV_ICC ${CMAKE_CXX_COMPILER})
+	   MESSAGE(STATUS "Building with Intel Compiler: ${CV_ICC}")
 	ENDIF()
 	IF(WIN32 AND CV_ICC)
        get_filename_component(CV_ICL_PATH "${CMAKE_CXX_COMPILER}" PATH)
@@ -79,7 +80,6 @@ if(WIN32)
 	      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/intel64")
 	   ENDIF()
 	ENDIF()
-	MESSAGE(STATUS "Building with Intel Compiler: ${CV_ICC}")
 endif()
 
 # ----------------------------------------------------------------------------
@@ -516,14 +516,14 @@ set(CPACK_COMPONENTS_ALL
   )
 
 set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=7828
-set(CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
-set(CPACK_NSIS_MENU_LINKS "Solution/VS2008/Emgu.CV.Example.sln" "Visual Studio 2008 Examples")
-set(CPACK_NSIS_MENU_LINKS "Solution/VS2010/Emgu.CV.Example.sln" "Visual Studio 2010 Examples")
+LIST(APPEND CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
+LIST(APPEND CPACK_NSIS_MENU_LINKS "Solution/VS2008/Emgu.CV.Example.sln" "Visual Studio 2008 Examples")
+LIST(APPEND CPACK_NSIS_MENU_LINKS "Solution/VS2010/Emgu.CV.Example.sln" "Visual Studio 2010 Examples")
 SET(CPACK_NSIS_CONTACT "support@emgu.com")
 
 IF(EMGU_CV_DOCUMENTATION_BUILD)
-  set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} emgucv_document)
-  set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS} "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+  LIST(APPEND CPACK_COMPONENTS_ALL emgucv_document)
+  LIST(APPEND CPACK_NSIS_MENU_LINKS "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
 ENDIF()
 
 set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Library")
