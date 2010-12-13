@@ -572,14 +572,16 @@ ELSE (WIN32)
   LIST(FIND CPACK_GENERATOR "DEB" TEMP)
   IF(NOT (${TEMP} EQUAL -1))
     SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
+    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/preinst
+      "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc /usr/share/opencv/doc/vidsurv /usr/share/opencv/doc/papers\n") 
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
       "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
       "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\nfor dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph; do ${MONO_GACUTIL_EXEC} -u $dll; done\nfi\n")
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
-    SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff, libgtk2.0, libgstreamer0.10, libavcodec, libswscale, libavformat, libopenexr, libjasper, libdc1394-22, libv4l, libqt4")
+    SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff1.2, gtk2-engines, libgstreamer0.10-0, libavcodec52, libswscale0, libavformat52, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
   ENDIF()
   
   LIST(FIND CPACK_GENERATOR "RPM" TEMP)
@@ -588,12 +590,13 @@ ELSE (WIN32)
     SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.4, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
     
     SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
-    
+    FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/preinst
+      "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc /usr/share/opencv/doc/vidsurv /usr/share/opencv/doc/papers\n") 
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
       "ldconfig\n${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\n")
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/prerm
       "for dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util ZedGraph; do ${MONO_GACUTIL_EXEC} -u $dll; done\n")
-    
+    SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/preinst")
     SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postinst")
     SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/prerm")
     SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
