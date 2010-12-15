@@ -14,31 +14,6 @@ namespace Emgu.CV
    /// </summary>
    public static class Util
    {
-      static Util()
-      {
-         String tempFile = Path.GetTempFileName();
-         File.Delete(tempFile);
-         String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
-         try
-         {
-            IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
-            HasFFMPEG = (capture != IntPtr.Zero);
-            if (HasFFMPEG) 
-               CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
-         }
-         catch (Exception e)
-         {
-            String msg = e.Message;
-            HasFFMPEG = false;
-         }
-         finally
-         {
-            if (File.Exists(fileName))
-               File.Delete(fileName);
-         }
-
-      }
-
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
       /// </summary>
@@ -182,10 +157,41 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
 
+      private static bool _hasFFMPEG;
+      private static bool _ffmpegChecked = false;
+
       /// <summary>
       /// Indicates if opencv_ffmpeg is presented
       /// </summary>
-      internal static readonly bool HasFFMPEG;
-
+      internal static bool HasFFMPEG
+      {
+         get
+         {
+            if (!_ffmpegChecked)
+            {
+               String tempFile = Path.GetTempFileName();
+               File.Delete(tempFile);
+               String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
+               try
+               {
+                  IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
+                  _hasFFMPEG = (capture != IntPtr.Zero);
+                  if (HasFFMPEG)
+                     CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
+               }
+               catch (Exception e)
+               {
+                  String msg = e.Message;
+                  _hasFFMPEG = false;
+               }
+               finally
+               {
+                  if (File.Exists(fileName))
+                     File.Delete(fileName);
+               }
+            }
+            return _hasFFMPEG;
+         }
+      }
    }
 }
