@@ -53,16 +53,18 @@ ENDIF()
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
 IF (WIN32)
-  STRING(REGEX MATCH "Win64" EMGUCV_ARCH "${CMAKE_GENERATOR}" )
-  IF(NOT EMGUCV_ARCH)
-    SET(EMGUCV_ARCH win32)
-  ELSE(NOT EMGUCV_ARCH)
+  IF(CMAKE_CL_64)
     SET(EMGUCV_ARCH win64)
-  ENDIF(NOT EMGUCV_ARCH)
+  ELSE()
+    SET(EMGUCV_ARCH win32)
+  ENDIF()
 ELSE(WIN32)
   SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 ENDIF(WIN32)
-MESSAGE(STATUS "BUILDING FOR ${EMGUCV_ARCH}")
+
+IF (CMAKE_CL_64)
+  MESSAGE(STATUS "Building 64bit library")
+ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Check if using INTEL Compiler on windows 
@@ -74,10 +76,10 @@ if(WIN32)
   ENDIF()
   IF(WIN32 AND CV_ICC)
     get_filename_component(CV_ICL_PATH "${CMAKE_CXX_COMPILER}" PATH)
-    IF (EMGUCV_ARCH STREQUAL "win32")
-      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/ia32")
-    ELSEIF(EMGUCV_ARCH STREQUAL "win64")
+    IF (CMAKE_CL_64)
       SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/intel64")
+    ELSE()
+      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/ia32")
     ENDIF()
   ENDIF()
 endif()
@@ -275,10 +277,10 @@ ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 
 IF (WIN32)
-  IF(EMGUCV_ARCH STREQUAL "win32")
-    SET(CPACK_GENERATOR NSIS;ZIP)
-  ELSE()
+  IF(CMAKE_CL_64)
     SET(CPACK_GENERATOR ZIP)
+  ELSE()
+    SET(CPACK_GENERATOR NSIS;ZIP)
   ENDIF()
   
   SET(CPACK_NSIS_MODIFY_PATH OFF)
@@ -293,26 +295,18 @@ IF (WIN32)
     SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
   ENDIF()
   
-  IF(EMGUCV_ARCH STREQUAL "win32")
-    INSTALL(
-      FILES
-      "${MSVC_REDIST_FOLDER}/vcredist_x86.exe"
-      DESTINATION .
-      COMPONENT emgucv_binary 
-      )
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x86.exe /passive'")
-  ELSE()
-    IF(EMGUCV_ARCH STREQUAL "win64")
-      INSTALL(
-	FILES
-	"${MSVC_REDIST_FOLDER}/vcredist_x64.exe"
-	DESTINATION .
-	COMPONENT emgucv_binary 
-	)
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\vcredist_x64.exe /passive'")
-    ELSE()
-    ENDIF()
+  SET(VCRT_REDIST_NAME "vcredist_x86.exe")
+  IF(CMAKE_CL_64)
+      SET(VCRT_REDIST_NAME "vcredist_x64.exe")
   ENDIF()
+  
+  INSTALL(
+    FILES
+    "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
+    DESTINATION .
+    COMPONENT emgucv_binary 
+    )
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
   
   # ----------------------------------------------------------------------------
   #  Install Debugger Visualizer
