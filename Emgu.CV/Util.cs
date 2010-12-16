@@ -174,9 +174,9 @@ namespace Emgu.CV
                String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
                try
                {
-                  IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 1, new Size(100, 100), false);
+                  IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('U', '2', '6', '3'), 10, new Size(480, 320), true);
                   _hasFFMPEG = (capture != IntPtr.Zero);
-                  if (HasFFMPEG)
+                  if (_hasFFMPEG)
                      CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
                }
                catch (Exception e)
@@ -188,6 +188,7 @@ namespace Emgu.CV
                {
                   if (File.Exists(fileName))
                      File.Delete(fileName);
+                  _ffmpegChecked = true;
                }
             }
             return _hasFFMPEG;
