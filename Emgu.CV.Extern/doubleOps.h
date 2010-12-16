@@ -48,5 +48,12 @@ namespace doubleOps
          *result++ = (*current1++) + (*current2++);
       }
    }
+
+   inline bool containsNaN(const double* d, int length)
+   {
+      for (int i = 0; i < length; i++)
+         if (d[i] != d[i]) return true;
+      return false;
+   }
 }
 #endif
