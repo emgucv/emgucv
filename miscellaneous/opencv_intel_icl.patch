@@ -1,14 +1,14 @@
 Index: 3rdparty/libjpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/libjpeg/CMakeLists.txt	(revision 4310)
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4349)
 +++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
 @@ -42,6 +42,11 @@
      set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
  endif()
  
-+IF(WIN32)
-+set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
-+set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++IF(WIN32 AND CV_ICC)
++    set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++    set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
 +ENDIF()
 +
  set_target_properties(${the_target}
@@ -16,7 +16,7 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
  	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4310)
+--- CMakeLists.txt	(revision 4349)
 +++ CMakeLists.txt	(working copy)
 @@ -648,6 +648,8 @@
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
@@ -72,10 +72,10 @@ Index: CMakeLists.txt
 -
 +	IF (IPP_VERSION STREQUAL "7.0")
 +		#MESSAGE(STATUS "IPP 7.0")
-+		IF(EMGUCV_ARCH STREQUAL "win32")
-+			link_directories("${IPP_PATH}/../../../ipp/lib/ia32")
-+		ELSEIF(EMGUCV_ARCH STREQUAL "win64")
++		IF(CMAKE_CL_64 AND WIN32)
 +			link_directories("${IPP_PATH}/../../../ipp/lib/intel64")
++		ELSEIF((NOT CMAKE_CL_64) AND WIN32)
++			link_directories("${IPP_PATH}/../../../ipp/lib/ia32")
 +		ENDIF()
 +		
 +		set(A ${CMAKE_STATIC_LIBRARY_PREFIX})
@@ -108,7 +108,7 @@ Index: CMakeLists.txt
  ################## Extra HighGUI libs on Windows ###################
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4310)
+--- modules/legacy/src/3dtracker.cpp	(revision 4349)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;

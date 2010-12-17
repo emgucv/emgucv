@@ -109,28 +109,4 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
-	
-IF(WIN32)
-IF(USE_IPP)
-   FILE(GLOB IPP_REDIST    
-   ${IPP_PATH}/ippcore-*.dll
-   ${IPP_PATH}/ippcv-*.dll
-   ${IPP_PATH}/ipps-*.dll
-   ${IPP_PATH}/ippvm-*.dll)
-   MESSAGE (STATUS "${IPP_REDIST}")
-   FOREACH (file ${IPP_REDIST})
-   LIST(APPEND
-	copy_command  
-    COMMAND ${CMAKE_COMMAND} copy -E ${file} ${CMAKE_BINARY_DIR}/bin)
-   ENDFOREACH()
-   add_custom_command(TARGET ${the_target} POST_BUILD ${copy_command} COMMENT "Copying dependencies")
-   
-   INSTALL(FILES 
-   ${IPP_REDIST}
-   DESTINATION bin COMPONENT main)
-ENDIF()
-IF(CV_ICL)
-#   FILE(GLOB ICL_REDIST
-#   ${IPP_PATH)/   
-ENDIF()
-ENDIF()  
+

@@ -306,8 +306,26 @@ IF (WIN32)
     DESTINATION .
     COMPONENT emgucv_binary 
     )
+	
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
-  
+
+  # ----------------------------------------------------------------------------
+  #  Bundle intel c++ compiler xe 11 redistributable into deployment package
+  # ----------------------------------------------------------------------------
+  IF(WIN32 AND CV_ICC)
+    SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_ia32_2011.1.127.msi")
+    IF(CMAKE_CL_64)
+      SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_intel64_2011.1.127.msi")
+    ENDIF()
+	
+	INSTALL(
+	  FILES 
+	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/intel_ccompxe_redist/${CV_ICC_REDIST_NAME}"
+	  DESTINATION .
+	  COMPONENT mgucv_binary
+	  )
+	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${CV_ICC_REDIST_NAME} /passive'")
+  ENDIF()    
   # ----------------------------------------------------------------------------
   #  Install Debugger Visualizer
   # ----------------------------------------------------------------------------
