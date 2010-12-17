@@ -1,14 +1,14 @@
 Index: 3rdparty/libjpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/libjpeg/CMakeLists.txt	(revision 4349)
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4374)
 +++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
 @@ -42,6 +42,11 @@
      set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
  endif()
  
-+IF(WIN32 AND CV_ICC)
-+    set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
-+    set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++IF(WIN32)
++set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
 +ENDIF()
 +
  set_target_properties(${the_target}
@@ -16,7 +16,7 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
  	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4349)
+--- CMakeLists.txt	(revision 4374)
 +++ CMakeLists.txt	(working copy)
 @@ -648,6 +648,8 @@
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
@@ -27,14 +27,18 @@ Index: CMakeLists.txt
                     endif()
                     set(TBB_LIB_DIR "${_TBB_LIB_PATH}" CACHE PATH "Full path of TBB library directory")
                     link_directories("${TBB_LIB_DIR}")
-@@ -731,17 +733,25 @@
+@@ -731,17 +733,29 @@
  endif()
  endif()
  
 -foreach(v "6.1" "6.0" "5.3" "5.2" "5.1")
 +IF(WIN32 AND CV_ICC)
 +  get_filename_component(IPP_SEARCH_PATH "${CMAKE_CXX_COMPILER}" PATH)
-+  SET(IPP_SEARCH_PATH ${IPP_PATH}/../../redist/ia32/ipp)
++  IF(CMAKE_CL_64)
++    SET(IPP_SEARCH_PATH ${IPP_SEARCH_PATH}/../../redist/intel64/ipp)
++  ELSE()
++    SET(IPP_SEARCH_PATH ${IPP_SEARCH_PATH}/../../redist/ia32/ipp)
++  ENDIF()
 +ENDIF()
 +
 +foreach(v "7.0" "6.1" "6.0" "5.3" "5.2" "5.1")
@@ -55,7 +59,7 @@ Index: CMakeLists.txt
          endif()
          if(UNIX)
              find_path(IPP_PATH "libippi${CMAKE_SHARED_LIBRARY_SUFFIX}.${v}"
-@@ -754,7 +764,7 @@
+@@ -754,7 +768,7 @@
              endif()
          endif()
          if(IPP_PATH)
@@ -64,19 +68,32 @@ Index: CMakeLists.txt
              if(IPP_HDRS)
                  set(IPP_FOUND TRUE)
              endif()
-@@ -773,8 +783,30 @@
+@@ -772,28 +786,59 @@
+ 
  if(IPP_FOUND AND USE_IPP)
      add_definitions(-DHAVE_IPP)
-     include_directories("${IPP_PATH}/../include")
+-    include_directories("${IPP_PATH}/../include")
 -    link_directories("${IPP_PATH}/../lib")
--
+ 
+-    file(GLOB em64t_files "${IPP_PATH}/../lib/*em64t*")
+-    set(IPP_ARCH)
+-    if(em64t_files)
+-        set(IPP_ARCH "em64t")
+-    endif()
 +	IF (IPP_VERSION STREQUAL "7.0")
 +		#MESSAGE(STATUS "IPP 7.0")
-+		IF(CMAKE_CL_64 AND WIN32)
-+			link_directories("${IPP_PATH}/../../../ipp/lib/intel64")
-+		ELSEIF((NOT CMAKE_CL_64) AND WIN32)
-+			link_directories("${IPP_PATH}/../../../ipp/lib/ia32")
++		include_directories("${IPP_PATH}/../../../ipp/include")
++		
++		IF(WIN32 AND NOT CMAKE_CL_64)
++			link_directories(
++			"${IPP_PATH}/../../../ipp/lib/ia32"
++			"${IPP_PATH}/../../../compiler/lib/ia32")
++		ELSEIF(WIN32 AND CMAKE_CL_64)
++			link_directories(
++			"${IPP_PATH}/../../../ipp/lib/intel64"
++			"${IPP_PATH}/../../../compiler/lib/intel64")
 +		ENDIF()
++		LIST(APPEND OPENCV_LINKER_LIBS libiomp5md)
 +		
 +		set(A ${CMAKE_STATIC_LIBRARY_PREFIX})
 +		set(B ${IPP_ARCH}${CMAKE_STATIC_LIBRARY_SUFFIX})
@@ -92,23 +109,43 @@ Index: CMakeLists.txt
 +                 ${A}ippcv${B}
 +                 ${A}ippcore${IPP_ARCH}${L}${CMAKE_STATIC_LIBRARY_SUFFIX})
 +	ELSE()
-+	
-+	link_directories("${IPP_PATH}/../lib")
-     file(GLOB em64t_files "${IPP_PATH}/../lib/*em64t*")
-     set(IPP_ARCH)
-     if(em64t_files)
-@@ -794,6 +826,8 @@
++	    include_directories("${IPP_PATH}/../include")
++		link_directories("${IPP_PATH}/../lib")
++		file(GLOB em64t_files "${IPP_PATH}/../lib/*em64t*")
++		set(IPP_ARCH)
++		if(em64t_files)
++			set(IPP_ARCH "em64t")
++		endif()
+ 
+-    set(A ${CMAKE_STATIC_LIBRARY_PREFIX})
+-    set(B ${IPP_ARCH}${CMAKE_STATIC_LIBRARY_SUFFIX})
+-    if(WIN32)
+-        set(L l)
+-    else()
+-        set(L)
+-    endif()
+-    set(IPP_LIBS ${A}ippsmerged${B} ${A}ippsemerged${B}
++		set(A ${CMAKE_STATIC_LIBRARY_PREFIX})
++		set(B ${IPP_ARCH}${CMAKE_STATIC_LIBRARY_SUFFIX})
++		if(WIN32)
++			set(L l)
++		else()
++			set(L)
++		endif()
++		set(IPP_LIBS ${A}ippsmerged${B} ${A}ippsemerged${B}
+                  ${A}ippimerged${B} ${A}ippiemerged${B}
+                  ${A}ippvmmerged${B} ${A}ippvmemerged${B}
                   ${A}ippccmerged${B} ${A}ippccemerged${B}
                   ${A}ippcvmerged${B} ${A}ippcvemerged${B}
                   ${A}ippcore${IPP_ARCH}${L}${CMAKE_STATIC_LIBRARY_SUFFIX})
-+    ENDIF()
++	ENDIF()
 +	MESSAGE(STATUS "IPP_LIBS: ${IPP_LIBS}")
  endif()
  
  ################## Extra HighGUI libs on Windows ###################
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4349)
+--- modules/legacy/src/3dtracker.cpp	(revision 4374)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;

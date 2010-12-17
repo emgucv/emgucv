@@ -25,8 +25,27 @@ IF (USE_IPP AND IPP_PATH)
   add_definitions(-DHAVE_IPP)
   include_directories("${IPP_PATH}/../include")
   LINK_DIRECTORIES("${IPP_PATH}/../lib")
+
+  IF(WIN32 AND NOT CMAKE_CL_64)
+	link_directories(
+	"${IPP_PATH}/../../../ipp/lib/ia32"
+	"${IPP_PATH}/../../../compiler/lib/ia32")
+  ELSEIF(WIN32 AND CMAKE_CL_64)
+	link_directories(
+	"${IPP_PATH}/../../../ipp/lib/intel64"
+	"${IPP_PATH}/../../../compiler/lib/intel64")
+  ENDIF()
 ENDIF()
 ############################### IPP END ################################
+
+############################### TBB START ##############################
+if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
+  MESSAGE(STATUS "CVEXTERN: using TBB")
+  add_definitions(-DHAVE_TBB)
+  include_directories(${TBB_INCLUDE_DIR})
+  link_directories(${TBB_LIB_DIR})
+endif()
+############################### TBB END ################################
 
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
