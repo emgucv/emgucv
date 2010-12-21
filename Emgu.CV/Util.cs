@@ -140,8 +140,10 @@ namespace Emgu.CV
       /// <param name="max">The maximum x,y,z values</param>
       public static void GetMinMax(IEnumerable<MCvPoint3D64f> points, out MCvPoint3D64f min, out MCvPoint3D64f max)
       {
-         min = new MCvPoint3D64f() { x = double.MaxValue, y = double.MaxValue, z = double.MaxValue };
-         max = new MCvPoint3D64f() { x = double.MinValue, y = double.MinValue, z = double.MinValue };
+         min = new MCvPoint3D64f();
+         min.x = min.y = min.z = double.MaxValue;
+         max = new MCvPoint3D64f();
+         max.x = max.y = max.z = double.MinValue;
 
          foreach (MCvPoint3D64f p in points)
          {
