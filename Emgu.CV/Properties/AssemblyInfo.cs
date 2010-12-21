@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Emgu.CV")]
-[assembly: AssemblyDescription("A wrapper for the OpenCV library (cxcore, cv, cvaux and highGUI)")]
+[assembly: AssemblyDescription("A wrapper for the OpenCV library (opencv_core, opencv_calib3d, opencv_contrib, opencv_features2d, opencv_highgui, opencv_imgproc, opencv_objdetect and opencv_video)")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
