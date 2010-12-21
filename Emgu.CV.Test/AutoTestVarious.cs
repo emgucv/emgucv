@@ -1790,7 +1790,7 @@ namespace Emgu.CV.Test
          if (IntPtr.Size == 4) //Only perform the test in 32bit mode
          {
             using (Image<Gray, Byte> img = new Image<Gray,byte>(480, 320))
-            using (VideoWriter writer = new VideoWriter("tmp.avi", CvInvoke.CV_FOURCC('M', 'P', '4', '2') /*-1*/, 10, 480, 320, false))
+            using (VideoWriter writer = new VideoWriter("tmp.avi", CvInvoke.CV_FOURCC('M', 'P', '4', '2'), 10, 480, 320, false))
             {
                writer.WriteFrame(img);
             }
