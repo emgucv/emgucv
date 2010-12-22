@@ -4,7 +4,6 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
-#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/core/include/opencv2/core")
 #INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/core/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/imgproc/include")
@@ -47,6 +46,43 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
 endif()
 ############################### TBB END ################################
 
+############################### GPU START ##############################
+IF(WIN32 AND WITH_CUDA)
+
+if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
+
+    string( REGEX REPLACE "#define NPP_VERSION_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
+    string( REGEX REPLACE "#define NPP_VERSION_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
+    string( REGEX REPLACE "#define NPP_VERSION_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
+
+    string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
+    string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
+    string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
+endif()
+
+IF(CMAKE_CL_64) 
+  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/x64/npp64_${npp_major}${npp_minor}_${npp_build}.dll")
+  LIST(APPEND NPP_BINARY_FILE "${CUDA_SDK_ROOT_DIR}/bin/cudart64_${npp_major}${npp_minor}_${npp_build}.dll")
+ELSE()
+  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/win32/npp32_${npp_major}${npp_minor}_${npp_build}.dll")
+  LIST(APPEND NPP_BINARY_FILE "${CUDA_SDK_ROOT_DIR}/bin/cudart32_${npp_major}${npp_minor}_${npp_build}.dll")
+ENDIF()
+
+MESSAGE(STATUS "NPP_BINARY_FILE: ${NPP_BINARY_FILE}")
+
+INSTALL(
+  FILES 
+  ${NPP_BINARY_FILE}
+  DESTINATION bin
+  COMPONENT main)
+
+
+ENDIF()
+############################### GPU END ################################
+
 file(GLOB extern_srcs "./*.cpp")
 source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
@@ -54,6 +90,20 @@ source_group("Include" FILES ${extern_hdrs})
 
 set(the_target ${PROJECT_NAME})
 add_library(${the_target} ${extern_srcs} ${extern_hdrs})
+
+############################### GPU START ##############################
+IF(WIN32 AND WITH_CUDA)
+  FOREACH(NPP_FILE ${NPP_BINARY_FILE})
+    LIST(APPEND NPP_FILE_DEPLOY_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${NPP_FILE} ${LIBRARY_OUTPUT_PATH})
+  ENDFOREACH()
+  
+  ADD_CUSTOM_COMMAND(
+    TARGET ${the_target}
+    POST_BUILD
+    ${NPP_FILE_DEPLOY_COMMAND}
+    COMMENT "Copying ${NPP_BINARY_FILE} to ${LIBRARY_OUTPUT_PATH}")
+ENDIF()  
+############################### GPU END ##############################
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
@@ -128,4 +178,9 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
+      
+
+
+
+
 
