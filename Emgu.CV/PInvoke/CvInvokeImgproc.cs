@@ -1617,65 +1617,6 @@ namespace Emgu.CV
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments huMoments);
 
-      #region Kalman Filter
-      /// <summary>
-      /// Allocates CvKalman and all its matrices and initializes them somehow. 
-      /// </summary>
-      /// <param name="dynamParams">dimensionality of the state vector</param>
-      /// <param name="measureParams">dimensionality of the measurement vector </param>
-      /// <param name="controlParams">dimensionality of the control vector </param>
-      /// <returns>Pointer to the created Kalman filter</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
-
-      /// <summary>
-      /// Adjusts stochastic model state on the basis of the given measurement of the model state.
-      /// The function stores adjusted state at kalman->state_post and returns it on output
-      /// </summary>
-      /// <param name="kalman">Pointer to the structure to be updated</param>
-      /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
-      /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanCorrect(IntPtr kalman, IntPtr measurement);
-
-      /// <summary>
-      /// Adjusts stochastic model state on the basis of the given measurement of the model state.
-      /// The function stores adjusted state at kalman->state_post and returns it on output
-      /// </summary>
-      /// <param name="kalman">Pointer to the structure to be updated</param>
-      /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
-      /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanCorrect(ref MCvKalman kalman, IntPtr measurement);
-
-      /// <summary>
-      /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
-      /// The function returns the estimated state
-      /// </summary>
-      /// <param name="kalman">Kalman filter state</param>
-      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
-      /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanPredict(IntPtr kalman, IntPtr control);
-
-      /// <summary>
-      /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
-      /// The function returns the estimated state
-      /// </summary>
-      /// <param name="kalman">Kalman filter state</param>
-      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
-      /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanPredict(ref MCvKalman kalman, IntPtr control);
-
-      /// <summary>
-      /// Releases the structure CvKalman and all underlying matrices
-      /// </summary>
-      /// <param name="kalman">reference of the pointer to the Kalman filter structure.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvReleaseKalman(ref IntPtr kalman);
-      #endregion
-
       /// <summary>
       /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
       /// det(M) - k*trace(M)^2
