@@ -18,10 +18,21 @@ namespace Emgu.CV.GPU.Test
          return GpuInvoke.GetCudaEnabledDeviceCount();
       }
 
+      /*
+      public int MemTest()
+      {
+         while (true)
+         {
+            using (GpuMat<Byte> m = new GpuMat<Byte>(320, 240, 1))
+            {
+            }
+         }
+      }*/
+
       public void TestGpuMatAdd()
       {
-         int repeat = 10000;
-         Image<Gray, Byte> img1 = new Image<Gray, byte>(480, 320);
+         int repeat = 1000;
+         Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
          Image<Gray, Byte> img2 = new Image<Gray, byte>(img1.Size);
          img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
          img2.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
@@ -45,7 +56,7 @@ namespace Emgu.CV.GPU.Test
          Trace.WriteLine(String.Format("Core GPU processing time: {0}ms", (double)watch2.ElapsedMilliseconds/repeat));
          //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
 
-         Assert.AreEqual(cpuImgSum, cpuImgSumFromGpu);
+         Assert.IsTrue(cpuImgSum.Equals( cpuImgSumFromGpu ));
       }
    }
 }

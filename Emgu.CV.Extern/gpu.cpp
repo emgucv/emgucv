@@ -12,7 +12,8 @@ CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type)
 
 CVAPI(void) gpuMatRelease(cv::gpu::GpuMat** mat)
 {
-   delete *mat;
+   //TODO: Double check and make sure there is no memory leak here.
+   (*mat)->release();
 }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr)
@@ -21,7 +22,7 @@ CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr)
    return new cv::gpu::GpuMat(mat);
 }
 
-CVAPI(cv::Size) gpuMatGetSize(cv::gpu::GpuMat* gpuMat)
+CVAPI(CvSize) gpuMatGetSize(cv::gpu::GpuMat* gpuMat, cv::Size* size)
 {
    return gpuMat->size();
 }
