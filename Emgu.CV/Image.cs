@@ -126,7 +126,7 @@ namespace Emgu.CV
                    size,
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
-               CvInvoke.cvCvtColor(ptr, tmp, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
+               CvInvoke.cvCvtColor(ptr, tmp, Util.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
 
                CvInvoke.cvReleaseImage(ref ptr);
                ptr = tmp;
@@ -2545,7 +2545,7 @@ namespace Emgu.CV
          try
          {
             // if the direct conversion exist, apply the conversion
-            CvInvoke.cvCvtColor(src, dest, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, destColor));
+            CvInvoke.cvCvtColor(src, dest, Util.GetColorCvtCode(srcColor, destColor));
          }
          catch
          {
@@ -2554,8 +2554,8 @@ namespace Emgu.CV
                //if a direct conversion doesn't exist, apply a two step conversion
                using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
                {
-                  CvInvoke.cvCvtColor(src, tmp.Ptr, ColorConversionCodeLookupTable.GetColorCvtCode(srcColor, typeof(Bgr)));
-                  CvInvoke.cvCvtColor(tmp.Ptr, dest, ColorConversionCodeLookupTable.GetColorCvtCode(typeof(Bgr), destColor));
+                  CvInvoke.cvCvtColor(src, tmp.Ptr, Util.GetColorCvtCode(srcColor, typeof(Bgr)));
+                  CvInvoke.cvCvtColor(tmp.Ptr, dest, Util.GetColorCvtCode(typeof(Bgr), destColor));
                }
             }
             catch
@@ -4296,33 +4296,6 @@ namespace Emgu.CV
       }
 
       #endregion
-   }
-
-   /// <summary>
-   /// A cached color conversion code lookup table
-   /// </summary>
-   internal static class ColorConversionCodeLookupTable
-   {
-      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
-         = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
-
-      private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
-      {
-         ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-         ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-
-         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
-         return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
-      }
-
-      public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcType, Type destType)
-      {
-         Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcType) ?
-            _lookupTable[srcType] : (_lookupTable[srcType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
-
-         return table.ContainsKey(destType) ?
-            table[destType] : (table[destType] = GetCode(srcType, destType));
-      }
    }
 
    /// <summary>

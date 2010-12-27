@@ -14,6 +14,7 @@ namespace Emgu.CV
    /// </summary>
    public static class Util
    {
+      #region Color Pallette
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
       /// </summary>
@@ -61,6 +62,7 @@ namespace Emgu.CV
             aData[i, 0] = c.A;
          }
       }
+      #endregion
 
       /// <summary>
       /// Returns information about one of or all of the registered modules
@@ -159,6 +161,7 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
 
+      #region FFMPEG
       private static bool _hasFFMPEG;
       private static bool _ffmpegChecked = false;
 
@@ -196,5 +199,35 @@ namespace Emgu.CV
             return _hasFFMPEG;
          }
       }
+      #endregion
+
+      #region color conversion
+      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
+         = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
+
+      private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
+      {
+         ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+         ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+
+         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
+         return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
+      }
+
+      /// <summary>
+      /// Given the source and destination color type, compute the color conversion code for CvInvoke.cvCvtColor function
+      /// </summary>
+      /// <param name="srcColorType">The source color type. Must be a type inherited from IColor</param>
+      /// <param name="destColorType">The dest color type. Must be a type inherited from IColor</param>
+      /// <returns>The color conversion code for CvInvoke.cvCvtColor function</returns>
+      public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcColorType, Type destColorType)
+      {
+         Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcColorType) ?
+            _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
+
+         return table.ContainsKey(destColorType) ?
+            table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType));
+      }
+      #endregion
    }
 }
