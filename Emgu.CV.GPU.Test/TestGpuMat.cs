@@ -6,6 +6,8 @@ using NUnit.Framework;
 using Emgu.CV.GPU;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.UI;
+
 using System.Diagnostics;
 
 namespace Emgu.CV.GPU.Test
@@ -120,6 +122,66 @@ namespace Emgu.CV.GPU.Test
             GpuImage<Gray, Single> gpuConv = gpuImg1.Convolution(kernel);
 
             Assert.IsTrue(gpuLaplace.Equals(gpuConv));
+         }
+      }
+
+      [Test]
+      public void TestResizeGray()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Gray, Byte> img = new Image<Gray, byte>(300, 400);
+            img.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
+
+            //Image<Gray, Byte> img = new Image<Gray, byte>("airplane.jpg");
+
+            Image<Gray, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            GpuImage<Gray, Byte> gpuImg = new GpuImage<Gray, byte>(img);
+            GpuImage<Gray, byte> smallGpuImg = new GpuImage<Gray, byte>(small.Size);
+            GpuInvoke.gpuMatResize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
+            //ImageViewer.Show(smallGpuImg.ToImage());
+            //ImageViewer.Show(small);
+            //Assert.IsTrue(smallGpuImg.ToImage().Equals(small));
+         }
+      }
+
+      [Test]
+      public void TestColorConvert()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
+            img.SetRandUniform(new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(255.0, 255.0, 255.0));
+            Image<Gray, Byte> imgGray = img.Convert<Gray, Byte>();
+            Image<Hsv, Byte> imgHsv = img.Convert<Hsv, Byte>();
+
+            GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, Byte>(img);
+            GpuImage<Gray, Byte> gpuImgGray = gpuImg.Convert<Gray, Byte>();
+            GpuImage<Hsv, Byte> gpuImgHsv = gpuImg.Convert<Hsv, Byte>();
+
+            Assert.IsTrue(gpuImgGray.Equals(new GpuImage<Gray, Byte>(imgGray)));
+            Assert.IsTrue(gpuImgHsv.ToImage().Equals(imgHsv));
+            Assert.IsTrue(gpuImgHsv.Equals(new GpuImage<Hsv, Byte>(imgHsv)));
+         }
+      }
+
+      [Test]
+      public void TestResizeBgr()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
+            img.SetRandUniform(new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(255.0, 255.0, 255.0));
+            //Image<Bgr, Byte> img = new Image<Bgr, byte>("airplane.jpg");
+
+            Image<Bgr, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(img);
+            GpuImage<Bgr, byte> smallGpuImg = new GpuImage<Bgr, byte>(small.Size);
+            GpuInvoke.gpuMatResize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
+            //ImageViewer.Show(smallGpuImg.ToImage());
+            //ImageViewer.Show(small);
          }
       }
    }

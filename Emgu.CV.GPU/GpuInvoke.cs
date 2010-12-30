@@ -248,12 +248,11 @@ namespace Emgu.CV.GPU
 
       /// <summary>
       /// Resizes the image.
-      /// Supports INTER_NEAREST, INTER_LINEAR.
       /// supports CV_8UC1, CV_8UC4 types.
       /// </summary>
       /// <param name="src">The source image</param>
       /// <param name="dst">The destination image</param>
-      /// <param name="interpolation">The interpolation type</param>
+      /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
 

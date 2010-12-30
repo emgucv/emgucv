@@ -11,8 +11,6 @@ namespace Emgu.CV.GPU
    /// <summary>
    /// An GpuImage is very similar to the Emgu.CV.Image except that it is being used for GPU processing
    /// </summary>
-   /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz or Ycc)</typeparam>
-   /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    public class GpuImage<TColor, TDepth>
       : GpuMat<TDepth>, IImage
       where TColor : struct, IColor
@@ -244,7 +242,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       public Bitmap Bitmap
       {
-         get 
+         get
          {
             using (Image<TColor, TDepth> tmp = ToImage())
             {

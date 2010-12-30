@@ -24,7 +24,7 @@ namespace Emgu.CV.GPU
       /// <param name="channels">The number of channels</param>
       public GpuMat(int rows, int cols, int channels)
       {
-         _ptr = GpuInvoke.gpuMatCreate( rows, cols, CvInvoke.CV_MAKETYPE((int)Util.GetMatrixDepth(typeof(TDepth)), channels));
+         _ptr = GpuInvoke.gpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)Util.GetMatrixDepth(typeof(TDepth)), channels));
       }
 
       /// <summary>
@@ -34,7 +34,7 @@ namespace Emgu.CV.GPU
       /// <param name="channels">The number of channels</param>
       public GpuMat(Size size, int channels)
          : this(size.Height, size.Width, channels)
-      { 
+      {
       }
 
       /// <summary>
@@ -183,7 +183,6 @@ namespace Emgu.CV.GPU
          }
          else
          {
-
             GpuMat<TDepth>[] channels = Split();
             try
             {
@@ -194,10 +193,7 @@ namespace Emgu.CV.GPU
             }
             finally
             {
-               for (int i = 0; i < channels.Length; i++)
-               {
-                  channels[i].Dispose();
-               }
+               foreach (GpuMat<TDepth> mat in channels) mat.Dispose();
             }
          }
       }
@@ -214,7 +210,21 @@ namespace Emgu.CV.GPU
          using (GpuMat<TDepth> xor = new GpuMat<TDepth>(Size, NumberOfChannels))
          {
             GpuInvoke.gpuMatBitwiseXor(_ptr, other, xor, IntPtr.Zero);
-            return GpuInvoke.gpuMatCountNonZero(xor) == 0;
+
+            if (xor.NumberOfChannels == 1)
+               return GpuInvoke.gpuMatCountNonZero(xor) == 0;
+            else
+            {
+               GpuMat<TDepth>[] channels = xor.Split();
+               try
+               {
+                  return Array.TrueForAll(channels, delegate(GpuMat<TDepth> gi) { return GpuInvoke.gpuMatCountNonZero(gi) == 0; });
+               }
+               finally
+               {
+                  foreach (GpuMat<TDepth> gi in channels) gi.Dispose();
+               }
+            }
          }
       }
    }
