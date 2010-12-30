@@ -673,7 +673,7 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
-      /// <param name="mask">mask, 8-bit single channel array; specifies elements of destination array to be changed.</param>
+      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
@@ -1970,7 +1970,7 @@ namespace Emgu.CV
       /// <param name="maxVal">Pointer to returned maximum value</param>
       /// <param name="minLoc">Pointer to returned minimum location</param>
       /// <param name="maxLoc">Pointer to returned maximum location</param>
-      /// <param name="mask">The optional mask that is used to select a subarray</param>
+      /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvMinMaxLoc(
          IntPtr arr,
