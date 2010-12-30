@@ -103,10 +103,10 @@ namespace Emgu.CV.GPU
       public static extern void GetComputeCapability(int deviceId, ref int major, ref int minor);
 
       /// <summary>
-      /// Get the number of single multiprocessors (CUDA cores)
+      /// Get the number of multiprocessors on device
       /// </summary>
       /// <param name="device">The device Id</param>
-      /// <returns>The number of single multiprocessors (CUDA cores)</returns>
+      /// <returns>The number of multiprocessors on device</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetNumberOfSMs")]
       public static extern int GetNumberOfSMs(int device);
 

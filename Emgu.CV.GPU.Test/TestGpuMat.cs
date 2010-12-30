@@ -14,9 +14,14 @@ namespace Emgu.CV.GPU.Test
    public class TestGpuMat
    {
       [Test]
-      public int TestGetCudaEnabledDeviceCount()
+      public void TestGetCudaEnabledDeviceCount()
       {
-         return GpuInvoke.GetCudaEnabledDeviceCount();
+         int deviceCount = GpuInvoke.GetCudaEnabledDeviceCount();
+         Trace.WriteLine(String.Format("Device count: {0}", deviceCount));
+         if (deviceCount > 0)
+         {
+            GpuDevice d0 = new GpuDevice(0);
+         }
       }
 
       /*
