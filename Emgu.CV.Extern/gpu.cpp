@@ -1,8 +1,34 @@
 #include "opencv2/gpu/gpu.hpp"
+#include <string.h>
+
 
 CVAPI(int) gpuGetCudaEnabledDeviceCount()
 {
    return cv::gpu::getCudaEnabledDeviceCount();
+}
+
+CVAPI(int) gpuGetDevice()
+{
+   return cv::gpu::getDevice();
+}
+
+CVAPI(void) gpuGetDeviceName(int device, char* name, int maxSizeInBytes)
+{
+   std::string dName = cv::gpu::getDeviceName(device);
+   strcpy_s(name, maxSizeInBytes, dName.c_str());
+}
+
+CVAPI(void) gpuGetComputeCapability(int device, int* major, int* minor)
+{
+   int maj, min;
+   cv::gpu::getComputeCapability(device, maj, min);
+   *major = maj;
+   *minor = min;
+}
+
+CVAPI(int) gpuGetNumberOfSMs(int device)
+{
+   return cv::gpu::getNumberOfSMs(device);
 }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type)
@@ -73,4 +99,71 @@ CVAPI(void) gpuMatCopy(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const c
    {
       src->copyTo(*dst, *mask);
    }
+}
+
+CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int interpolation)
+{
+   if (src->channels() == 1 || src->channels() == 4)
+   {
+      cv::gpu::resize(*src, *dst, dst->size(), 0, 0, interpolation);
+   } else
+   {  //added support for gpuMat with number of channels other than 1 or 4.
+      std::vector<cv::gpu::GpuMat> channels(src->channels());
+      std::vector<cv::gpu::GpuMat> resizedChannels(src->channels());
+      cv::gpu::split(*src, channels);
+      for (unsigned int i = 0; i < channels.size(); ++i)
+      {
+         cv::gpu::resize(channels[i], resizedChannels[i], dst->size(), 0, 0, interpolation);
+      }
+      cv::gpu::merge(resizedChannels, *dst);
+   }
+}
+
+CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst)
+{
+   cv::gpu::split(*src, dst);
+}
+
+CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst)
+{
+   cv::gpu::merge(src, (size_t) dst->channels(), *dst);
+}
+
+//only support single channel gpuMat
+CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src, 
+                            double* minVal, double* maxVal, 
+                            CvPoint* minLoc, CvPoint* maxLoc, 
+                            const cv::gpu::GpuMat* mask)
+{
+   cv::Point minimunLoc, maximunLoc;
+   cv::gpu::minMaxLoc(*src, minVal, maxVal, &minimunLoc, &maximunLoc, *mask);
+   maxLoc->x = maximunLoc.x; maxLoc->y = maximunLoc.y;
+   minLoc->x = minimunLoc.x; maxLoc->y = minimunLoc.y;
+}
+
+CVAPI(int) gpuMatCountNonZero(const cv::gpu::GpuMat* src)
+{
+   return cv::gpu::countNonZero(*src);
+}
+
+CVAPI(void) gpuMatLUT(const cv::gpu::GpuMat* src, const CvArr* lut, cv::gpu::GpuMat* dst)
+{
+   cv::Mat lutMat = cv::cvarrToMat(lut);
+   cv::gpu::LUT(*src, lutMat, *dst);
+}
+
+CVAPI(void) gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor)
+{
+   cv::Mat kMat = cv::cvarrToMat(kernel);
+   cv::gpu::filter2D(*src, *dst, src->depth(), kMat, anchor);
+}
+
+CVAPI(void) gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
+{
+   cv::gpu::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
+}
+
+CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale)
+{
+   cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale);
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.GPU
 {
@@ -56,12 +57,15 @@ namespace Emgu.CV.GPU
          return img;
       }
 
-      /*
-      public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
+      ///<summary> Convert the current GpuImage to the specific color and depth </summary>
+      ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
+      ///<typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
+      ///<returns>GpuImage of the specific color and depth </returns>
+      public GpuImage<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
          where TOtherDepth : new()
       {
-         Image<TOtherColor, TOtherDepth> res = new Image<TOtherColor, TOtherDepth>(Size);
+         GpuImage<TOtherColor, TOtherDepth> res = new GpuImage<TOtherColor, TOtherDepth>(Size);
          res.ConvertFrom(this);
          return res;
       }
@@ -78,7 +82,7 @@ namespace Emgu.CV.GPU
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (GpuImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Width, Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR))
+            using (GpuImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR))
             {
                ConvertFrom(tmp);
                return;
@@ -90,7 +94,7 @@ namespace Emgu.CV.GPU
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-               CvInvoke.cvCopy(srcImage.Ptr, Ptr, IntPtr.Zero);
+               GpuInvoke.gpuMatCopy(srcImage.Ptr, Ptr, IntPtr.Zero);
             }
             else
             {
@@ -116,11 +120,15 @@ namespace Emgu.CV.GPU
                         shift = (scale == 0) ? min : -min * scale;
                      }
 
-                     CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
+                     //TODO: implement this
+                     throw new NotImplementedException();
+                     //CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
                   }
                   else
                   {
-                     CvInvoke.cvConvertScale(srcImage.Ptr, Ptr, 1.0, 0.0);
+                     //TODO: implement this
+                     throw new NotImplementedException();
+                     //CvInvoke.cvConvertScale(srcImage.Ptr, Ptr, 1.0, 0.0);
                   }
                }
             }
@@ -135,12 +143,12 @@ namespace Emgu.CV.GPU
             }
             else
             {   //different depth
-               using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
+               using (GpuImage<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
                   ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
             }
             #endregion
          }
-      }*/
+      }
 
       private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)
       {
@@ -183,6 +191,53 @@ namespace Emgu.CV.GPU
          return result;
       }
 
+      ///<summary> 
+      ///Split current Image into an array of gray scale images where each element 
+      ///in the array represent a single color channel of the original image
+      ///</summary>
+      ///<returns> 
+      ///An array of gray scale images where each element  
+      ///in the array represent a single color channel of the original image 
+      ///</returns>
+      public new GpuImage<Gray, TDepth>[] Split()
+      {
+         GpuImage<Gray, TDepth>[] result = new GpuImage<Gray, TDepth>[NumberOfChannels];
+         Size size = Size;
+         for (int i = 0; i < result.Length; i++)
+         {
+            result[i] = new GpuImage<Gray, TDepth>(size);
+         }
+
+         SplitInto(result);
+         return result;
+      }
+
+      /// <summary>
+      /// Resize the GpuImage. 
+      /// Only TDepth of Byte is supported.
+      /// </summary>
+      /// <param name="size">The new size</param>
+      /// <param name="interpolationType">The interpolation type</param>
+      /// <returns>A GpuImage of the new size</returns>
+      public GpuImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType)
+      {
+         GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(size);
+         GpuInvoke.gpuMatResize(_ptr, result, interpolationType);
+         return result;
+      }
+
+      ///<summary> 
+      ///Performs a convolution using the specific <paramref name="kernel"/> 
+      ///</summary>
+      ///<param name="kernel">The convolution kernel</param>
+      ///<returns>The result of the convolution</returns>
+      public GpuImage<TColor, Single> Convolution(ConvolutionKernelF kernel)
+      {
+         GpuImage<TColor, Single> result = new GpuImage<TColor, float>(Size);
+         GpuInvoke.gpuMatFilter2D(_ptr, result, kernel, kernel.Center);
+         return result;
+      }
+
       #region IImage Members
       /// <summary>
       /// convert the current GpuImage to its equavalent Bitmap representation
@@ -198,14 +253,9 @@ namespace Emgu.CV.GPU
          }
       }
 
-      public void MinMax(out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
+      IImage[] IImage.Split()
       {
-         throw new NotImplementedException();
-      }
-
-      public IImage[] Split()
-      {
-         throw new NotImplementedException();
+         return Split();
       }
 
       /// <summary>
