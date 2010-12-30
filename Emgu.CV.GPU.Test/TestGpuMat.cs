@@ -72,12 +72,26 @@ namespace Emgu.CV.GPU.Test
             Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640);
             img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
 
-            GpuImage<Bgr, Byte> gpuImg1 = new GpuImage<Bgr, byte>(img1);
-            GpuImage<Gray, Byte>[] channels = gpuImg1.Split();
-            GpuImage<Bgr, Byte> gpuImg2 = new GpuImage<Bgr, byte>(channels[0].Size);
-            gpuImg2.MergeFrom(channels);
+            using (GpuImage<Bgr, Byte> gpuImg1 = new GpuImage<Bgr, byte>(img1))
+            {
+               GpuImage<Gray, Byte>[] channels = gpuImg1.Split();
+               
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  Assert.IsTrue(channels[i].ToImage().Equals(img1[i]), "failed split GpuMat");
+               }
 
-            Assert.IsTrue(gpuImg2.ToImage().Equals(img1), "failed split and merge test");
+               using (GpuImage<Bgr, Byte> gpuImg2 = new GpuImage<Bgr, byte>(channels[0].Size))
+               {
+                  gpuImg2.MergeFrom(channels);
+                  Assert.IsTrue(gpuImg2.ToImage().Equals(img1), "failed split and merge test");
+               }
+
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  channels[i].Dispose();
+               }
+            }
          }
       }
 

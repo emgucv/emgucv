@@ -119,14 +119,20 @@ CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int i
    }
 }
 
-CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst)
+CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst)
 {
-   cv::gpu::split(*src, dst);
+   std::vector<cv::gpu::GpuMat> dstMat;
+   for(int i = 0; i < src->channels(); i++)
+      dstMat.push_back(  *(dst[i]) );
+   cv::gpu::split(*src, dstMat);
 }
 
-CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst)
+CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst)
 {
-   cv::gpu::merge(src, (size_t) dst->channels(), *dst);
+   std::vector<cv::gpu::GpuMat> srcMat;
+   for(int i = 0; i < dst->channels(); i++)
+      srcMat.push_back(  *(src[i]) );
+   cv::gpu::merge(srcMat, *dst);
 }
 
 //only support single channel gpuMat
