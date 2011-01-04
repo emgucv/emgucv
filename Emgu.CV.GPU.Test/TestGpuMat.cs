@@ -7,7 +7,7 @@ using Emgu.CV.GPU;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-
+using System.Drawing;
 using System.Diagnostics;
 
 namespace Emgu.CV.GPU.Test
@@ -182,6 +182,32 @@ namespace Emgu.CV.GPU.Test
             Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
+         }
+      }
+
+      [Test]
+      public void TestHOG()
+      {
+         using (GpuHOGDescriptor hog = new GpuHOGDescriptor())
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         
+         {
+            float[] pedestrianDescriptor = GpuHOGDescriptor.GetDefaultPeopleDetector();
+            hog.SetSVMDetector(pedestrianDescriptor);
+
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] rects;
+            using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr,byte>(image))
+               rects = hog.DetectMultiScale(gpuImage);
+            watch.Stop();
+
+            Assert.AreEqual(1, rects.Length);
+
+            foreach (Rectangle rect in rects)
+               image.Draw(rect, new Bgr(Color.Red), 1);
+            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+
+            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
    }
