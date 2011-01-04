@@ -101,6 +101,11 @@ CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int
    cv::gpu::cvtColor(*src, *dst, code);
 }
 
+CVAPI(void) gpuMatConvertTo(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double alpha, double beta)
+{
+   src->convertTo(*dst, dst->type(), alpha, beta);
+}
+
 CVAPI(void) gpuMatCopy(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
 {
    if (mask)

@@ -90,45 +90,38 @@ namespace Emgu.CV.GPU
          if (typeof(TColor) == typeof(TSrcColor))
          {
             #region same color
-            if (typeof(TDepth) == typeof(TSrcDepth))
-            {   //same depth
+            if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
+            {   
                GpuInvoke.gpuMatCopy(srcImage.Ptr, Ptr, IntPtr.Zero);
             }
-            else
+            else //different depth
             {
-               //different depth
-               //int channelCount = NumberOfChannels;
+               if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
                {
-                  if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
+                  double[] minVal, maxVal;
+                  Point[] minLoc, maxLoc;
+                  srcImage.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+                  double min = minVal[0];
+                  double max = maxVal[0];
+                  for (int i = 1; i < minVal.Length; i++)
                   {
-                     double[] minVal, maxVal;
-                     Point[] minLoc, maxLoc;
-                     srcImage.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
-                     double min = minVal[0];
-                     double max = maxVal[0];
-                     for (int i = 1; i < minVal.Length; i++)
-                     {
-                        min = Math.Min(min, minVal[i]);
-                        max = Math.Max(max, maxVal[i]);
-                     }
-                     double scale = 1.0, shift = 0.0;
-                     if (max > 255.0 || min < 0)
-                     {
-                        scale = (max == min) ? 0.0 : 255.0 / (max - min);
-                        shift = (scale == 0) ? min : -min * scale;
-                     }
+                     min = Math.Min(min, minVal[i]);
+                     max = Math.Max(max, maxVal[i]);
+                  }
+                  double scale = 1.0, shift = 0.0;
+                  if (max > 255.0 || min < 0)
+                  {
+                     scale = (max == min) ? 0.0 : 255.0 / (max - min);
+                     shift = (scale == 0) ? min : -min * scale;
+                  }
 
-                     //TODO: implement this
-                     throw new NotImplementedException();
-                     //CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
-                  }
-                  else
-                  {
-                     //TODO: implement this
-                     throw new NotImplementedException();
-                     //CvInvoke.cvConvertScale(srcImage.Ptr, Ptr, 1.0, 0.0);
-                  }
+                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, scale, shift);
                }
+               else
+               {
+                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0);
+               }
+
             }
             #endregion
          }

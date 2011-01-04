@@ -319,6 +319,21 @@ namespace Emgu.CV.GPU
       public static extern void gpuMatMerge(IntPtr srcArr, IntPtr dst);
 
       /// <summary>
+      /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
+      /// dst(I)=src(I)*scale + (shift,shift,...)
+      /// All the channels of multi-channel arrays are processed independently.
+      /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination array element type, it is set to the nearest representable value on the real axis.
+      /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate convertTo synonym.
+      /// </summary>
+      /// <param name="src">Source GpuMat</param>
+      /// <param name="dst">Destination GpuMat</param>
+      /// <param name="scale">Scale factor</param>
+      /// <param name="shift">Value added to the scaled source array elements</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatConvertTo(IntPtr src, IntPtr dst, double scale, double shift);
+
+
+      /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array or, if mask is not IntPtr.Zero, in the specified array region.
       /// </summary>
       /// <param name="gpuMat">The source GpuMat, single-channel</param>

@@ -239,6 +239,19 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
+      /// Convert this GpuMat to different depth
+      /// </summary>
+      /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
+      /// <returns>GpuMat of different depth</returns>
+      public GpuMat<TOtherDepth> Convert<TOtherDepth>()
+         where TOtherDepth : new()
+      {
+         GpuMat<TOtherDepth> res = new GpuMat<TOtherDepth>(Size, NumberOfChannels);
+         GpuInvoke.gpuMatConvertTo(Ptr, res.Ptr, 1.0, 0.0);
+         return res;
+      }
+
+      /// <summary>
       /// Changes shape of GpuMat without copying data.
       /// </summary>
       /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
