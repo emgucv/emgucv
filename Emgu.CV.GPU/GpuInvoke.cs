@@ -112,6 +112,12 @@ namespace Emgu.CV.GPU
 
       #endregion
 
+      /// <summary>
+      /// Create an empty GpuMat 
+      /// </summary>
+      /// <returns>Pointer to an empty GpuMat</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr gpuMatCreateDefault();
 
       /// <summary>
       /// Create a GpuMat of the specified size
@@ -122,6 +128,16 @@ namespace Emgu.CV.GPU
       /// <returns>Pointer to the GpuMat</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr gpuMatCreate(int rows, int cols, int type);
+
+      /// <summary>
+      /// Copies scalar value to every selected element of the destination GpuMat:
+      /// arr(I)=value if mask(I)!=0
+      /// </summary>
+      /// <param name="mat">The destination GpuMat</param>
+      /// <param name="value">Fill value</param>
+      /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be IntPtr.Zero if not used</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask);
 
       /// <summary>
       /// Release the GpuMat
@@ -275,6 +291,16 @@ namespace Emgu.CV.GPU
       /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
+
+      /// <summary>
+      /// Changes shape of GpuMat without copying data.
+      /// </summary>
+      /// <param name="src">The GpuMat to be reshaped</param>
+      /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
+      /// <param name="newRows">New number of rows. newRows = 0 means that the number of rows remains unchanged unless it needs to be changed according to newCn value.</param>
+      /// <returns>A GpuMat of different shape</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr gpuMatReshape(IntPtr src, int newCn, int newRows);
 
       /// <summary>
       /// Copies each plane of a multi-channel array to a dedicated array

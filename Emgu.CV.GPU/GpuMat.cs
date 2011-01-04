@@ -16,6 +16,11 @@ namespace Emgu.CV.GPU
    public class GpuMat<TDepth> : UnmanagedObject, IEquatable<GpuMat<TDepth>>
       where TDepth : new()
    {
+      private GpuMat(IntPtr ptr)
+      {
+         _ptr = ptr;
+      }
+
       /// <summary>
       /// Create a GpuMat of the specified size
       /// </summary>
@@ -215,6 +220,11 @@ namespace Emgu.CV.GPU
                return GpuInvoke.gpuMatCountNonZero(xor) == 0;
             else
             {
+               using (GpuMat<TDepth> singleChannel = xor.Reshape(1, 0))
+               {
+                  return GpuInvoke.gpuMatCountNonZero(singleChannel) == 0;
+               }
+               /*
                GpuMat<TDepth>[] channels = xor.Split();
                try
                {
@@ -223,9 +233,31 @@ namespace Emgu.CV.GPU
                finally
                {
                   foreach (GpuMat<TDepth> gi in channels) gi.Dispose();
-               }
+               }*/
             }
          }
+      }
+
+      /// <summary>
+      /// Changes shape of GpuMat without copying data.
+      /// </summary>
+      /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
+      /// <param name="newRows">New number of rows. newRows = 0 means that the number of rows remains unchanged unless it needs to be changed according to newCn value.</param>
+      /// <returns>A GpuMat of different shape</returns>
+      public GpuMat<TDepth> Reshape(int newCn, int newRows)
+      {
+         return new GpuMat<TDepth>(GpuInvoke.gpuMatReshape(_ptr, newCn, newRows));
+      }
+
+      /// <summary>
+      /// Copies scalar value to every selected element of the destination GpuMat:
+      /// GpuMat(I)=value if mask(I)!=0
+      /// </summary>
+      /// <param name="value">Fill value</param>
+      /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be null if not used.</param>
+      public void SetTo(MCvScalar value, GpuMat<Byte> mask)
+      {
+         GpuInvoke.gpuMatSetTo(_ptr, value, mask);
       }
    }
 }

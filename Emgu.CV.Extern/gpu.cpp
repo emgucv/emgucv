@@ -30,6 +30,8 @@ CVAPI(int) gpuGetNumberOfSMs(int device)
    return cv::gpu::getNumberOfSMs(device);
 }
 
+CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
+
 CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type)
 {
    return new cv::gpu::GpuMat(rows, cols, type);
@@ -110,6 +112,11 @@ CVAPI(void) gpuMatCopy(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const c
    }
 }
 
+CVAPI(void) gpuMatSetTo(cv::gpu::GpuMat* mat, const CvScalar s, const cv::gpu::GpuMat* mask)
+{
+   (*mat).setTo(s, mask ? *mask : cv::gpu::GpuMat());
+}
+
 CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int interpolation)
 {
    if (src->channels() == 1 || src->channels() == 4)
@@ -126,6 +133,14 @@ CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int i
       }
       cv::gpu::merge(resizedChannels, *dst);
    }
+}
+
+CVAPI(cv::gpu::GpuMat*) gpuMatReshape(const cv::gpu::GpuMat* src, int cn, int rows)
+{
+   cv::gpu::GpuMat* result = new cv::gpu::GpuMat();
+   cv::gpu::GpuMat tmp = src->reshape(cn, rows);
+   tmp.swap(*result);
+   return result;
 }
 
 CVAPI(void) gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode)
