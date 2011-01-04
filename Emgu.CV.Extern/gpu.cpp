@@ -111,11 +111,6 @@ CVAPI(void) gpuMatDivideS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::G
    cv::gpu::divide(*a, s, *c);
 }
 
-CVAPI(void) gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
-{
-   cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale); 
-}
-
 CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code)
 {
    cv::gpu::cvtColor(*src, *dst, code);
@@ -251,7 +246,20 @@ CVAPI(void) gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat*
    cv::gpu::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
+CVAPI(void) gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
+{
+   cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale); 
+}
+
+CVAPI(void) gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvSize ksize, double sigma1, double sigma2)
+{
+   cv::gpu::GaussianBlur(*src, *dst, ksize, sigma1, sigma2);
+}
+
 CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale)
 {
    cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale);
 }
+
+
+

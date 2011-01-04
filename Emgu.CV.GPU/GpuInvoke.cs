@@ -287,30 +287,6 @@ namespace Emgu.CV.GPU
       public static extern void gpuMatDivide(IntPtr a, MCvScalar scalar, IntPtr c);
       #endregion
 
-      #region filters
-      /// <summary>
-      /// Applies generalized Sobel operator to the image
-      /// </summary>
-      /// <param name="src">Source GpuMat</param>
-      /// <param name="dst">Destination GpuMat</param>
-      /// <param name="dx">Order of the derivative x</param>
-      /// <param name="dy">Order of the derivative y</param>
-      /// <param name="ksize">Size of the extended Sobel kernel. </param>
-      /// <param name="scale">The scale</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale);
-      #endregion
-
-      /// <summary>
-      /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The destination GpuMmage</param>
-      /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
-      /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
-
       /// <summary>
       /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
       /// Destination array will have the depth type as lut and the same channels number as source.
@@ -479,6 +455,29 @@ namespace Emgu.CV.GPU
       public static extern void gpuMatBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask);
       #endregion
 
+      #region filters
+      /// <summary>
+      /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMmage</param>
+      /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
+      /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
+
+      /// <summary>
+      /// Applies generalized Sobel operator to the image
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="dx">Order of the derivative x</param>
+      /// <param name="dy">Order of the derivative y</param>
+      /// <param name="ksize">Size of the extended Sobel kernel</param>
+      /// <param name="scale">Optional scale, use 1 for default.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatSobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale);
+
       /// <summary>
       /// Applies Laplacian operator to the GpuMat
       /// </summary>
@@ -488,5 +487,17 @@ namespace Emgu.CV.GPU
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatLaplacian(IntPtr src, IntPtr dst, int ksize, double scale);
+
+      /// <summary>
+      /// Smooths the GpuMat using Gaussian filter.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The smoothed GpuMat</param>
+      /// <param name="ksize">The size of the kernel</param>
+      /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
+      /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatGaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2);
+      #endregion
    }
 }
