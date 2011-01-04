@@ -1920,9 +1920,21 @@ namespace Emgu.CV
          using (Image<TColor, TDepth> neqMask = new Image<TColor, TDepth>(Size))
          {
             CvInvoke.cvXor(_ptr, img2.Ptr, neqMask.Ptr, IntPtr.Zero);
-            foreach (int c in neqMask.CountNonzero())
-               if (c != 0) return false;
-            return true;
+            if (NumberOfChannels == 1)
+               return CvInvoke.cvCountNonZero(neqMask) == 0;
+            else
+            {
+               IntPtr singleChannel = Marshal.AllocHGlobal(StructSize.MCvMat);
+               try
+               {
+                  CvInvoke.cvReshape(neqMask, singleChannel, 1, 0);
+                  return CvInvoke.cvCountNonZero(singleChannel) == 0;
+               }
+               finally
+               {
+                  Marshal.FreeHGlobal(singleChannel);
+               }
+            }
          }
       }
       #endregion
