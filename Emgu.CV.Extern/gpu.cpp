@@ -119,6 +119,24 @@ CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int i
    }
 }
 
+CVAPI(void) gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode)
+{
+   if (src->channels() == 1 || src->channels() == 4)
+   {
+      cv::gpu::flip(*src, *dst, flipcode);
+   } else
+   {  //added support for gpuMat with number of channels other than 1 or 4.
+      std::vector<cv::gpu::GpuMat> channels(src->channels());
+      std::vector<cv::gpu::GpuMat> resizedChannels(src->channels());
+      cv::gpu::split(*src, channels);
+      for (unsigned int i = 0; i < channels.size(); ++i)
+      {
+         cv::gpu::flip(channels[i], resizedChannels[i], flipcode);
+      }
+      cv::gpu::merge(resizedChannels, *dst);
+   }
+}
+
 CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst)
 {
    std::vector<cv::gpu::GpuMat> dstMat;
@@ -162,6 +180,21 @@ CVAPI(void) gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, con
 {
    cv::Mat kMat = cv::cvarrToMat(kernel);
    cv::gpu::filter2D(*src, *dst, src->depth(), kMat, anchor);
+}
+
+CVAPI(void) gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
+{
+   cv::gpu::bitwise_not(*src, *dst, mask ? *mask : cv::gpu::GpuMat());
+}
+
+CVAPI(void) gpuMatBitwiseAnd(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
+{
+   cv::gpu::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
+}
+
+CVAPI(void) gpuMatBitwiseOr(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
+{
+   cv::gpu::bitwise_or(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
 CVAPI(void) gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)

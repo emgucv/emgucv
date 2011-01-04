@@ -296,6 +296,42 @@ namespace Emgu.CV.GPU
       public static extern int gpuMatCountNonZero(IntPtr src);
 
       /// <summary>
+      /// Flips the array in one of different 3 ways (row and column indices are 0-based):
+      /// dst(i,j)=src(rows(src)-i-1,j) if flip_mode = 0
+      /// dst(i,j)=src(i,cols(src1)-j-1) if flip_mode &gt; 0
+      /// dst(i,j)=src(rows(src)-i-1,cols(src)-j-1) if flip_mode &lt; 0
+      /// </summary>
+      /// <param name="src">Source array.</param>
+      /// <param name="dst">Destination array.</param>
+      /// <param name="flipMode">
+      /// Specifies how to flip the array.
+      /// flip_mode = 0 means flipping around x-axis, 
+      /// flip_mode &gt; 0 (e.g. 1) means flipping around y-axis and 
+      /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
+      ///</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatFlip(IntPtr src, IntPtr dst, int flipMode);
+
+      /// <summary>
+      /// Flips the GpuMat&lt;Byte&gt; in one of different 3 ways (row and column indices are 0-based). 
+      /// </summary>
+      /// <param name="src">Source array.</param>
+      /// <param name="dst">Destination array.</param>
+      /// <param name="flipType">Specifies how to flip the array.</param>
+      public static void gpuMatFlip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
+      {
+         int flipMode =
+            //-1 indicates vertical and horizontal flip
+            flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+            //1 indicates horizontal flip only
+            flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+            //0 indicates vertical flip only
+            0;
+         gpuMatFlip(src, dst, flipMode);
+      }
+
+      #region Logical operators
+      /// <summary>
       /// Calculates per-element bit-wise logical conjunction of two arrays:
       /// dst(I)=src1(I)^src2(I) if mask(I)!=0
       /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
@@ -306,6 +342,42 @@ namespace Emgu.CV.GPU
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+
+      /// <summary>
+      /// Calculates per-element bit-wise logical or of two arrays:
+      /// dst(I)=src1(I) | src2(I) if mask(I)!=0
+      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// </summary>
+      /// <param name="src1">The first source array</param>
+      /// <param name="src2">The second source array</param>
+      /// <param name="dst">The destination array</param>
+      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+
+      /// <summary>
+      /// Calculates per-element bit-wise logical and of two arrays:
+      /// dst(I)=src1(I) &amp; src2(I) if mask(I)!=0
+      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// </summary>
+      /// <param name="src1">The first source array</param>
+      /// <param name="src2">The second source array</param>
+      /// <param name="dst">The destination array</param>
+      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+
+      /// <summary>
+      /// Calculates per-element bit-wise logical not
+      /// dst(I)=~src(I) if mask(I)!=0
+      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// </summary>
+      /// <param name="src">The source array</param>
+      /// <param name="dst">The destination array</param>
+      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask);
+      #endregion
 
       /// <summary>
       /// Applies Laplacian operator to the GpuMat
