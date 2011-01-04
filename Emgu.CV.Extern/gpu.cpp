@@ -1,7 +1,6 @@
 #include "opencv2/gpu/gpu.hpp"
 #include <string.h>
 
-
 CVAPI(int) gpuGetCudaEnabledDeviceCount()
 {
    return cv::gpu::getCudaEnabledDeviceCount();
@@ -75,9 +74,19 @@ CVAPI(void) gpuMatAdd(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gp
    cv::gpu::add(*a, *b, *c);
 }
 
+CVAPI(void) gpuMatAddS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c)
+{
+   cv::gpu::add(*a, scale, *c);
+}
+
 CVAPI(void) gpuMatSubtract(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c)
 {
    cv::gpu::subtract(*a, *b, *c);
+}
+
+CVAPI(void) gpuMatSubtractS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c)
+{
+   cv::gpu::subtract(*a, scale, *c);
 }
 
 CVAPI(void) gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
