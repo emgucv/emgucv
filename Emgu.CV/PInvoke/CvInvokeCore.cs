@@ -1452,6 +1452,24 @@ namespace Emgu.CV
       public static extern void cvFlip(IntPtr src, IntPtr dst, int flipMode);
 
       /// <summary>
+      /// Flips the array in one of different 3 ways (row and column indices are 0-based)
+      /// </summary>
+      /// <param name="src">Source array.</param>
+      /// <param name="dst">Destination array.</param>
+      /// <param name="flipType">Specifies how to flip the array.</param>
+      public static void cvFlip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
+      {
+         int flipMode =
+            //-1 indicates vertical and horizontal flip
+            flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+            //1 indicates horizontal flip only
+            flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+            //0 indicates vertical flip only
+            0;
+         cvFlip(src, dst, flipMode);
+      }
+
+      /// <summary>
       /// Draws the line segment between pt1 and pt2 points in the image. The line is clipped by the image or ROI rectangle. For non-antialiased lines with integer coordinates the 8-connected or 4-connected Bresenham algorithm is used. Thick lines are drawn with rounding endings. Antialiased lines are drawn using Gaussian filtering.
       /// </summary>
       /// <param name="img">The image</param>

@@ -4044,16 +4044,6 @@ namespace Emgu.CV
       #endregion
 
       #region Image Flipping
-      private static int GetCodeFromFlipType(CvEnum.FLIP flipType)
-      {
-         return
-            //-1 indicates vertical and horizontal flip
-            flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
-            //1 indicates horizontal flip only
-            flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
-            //0 indicates vertical flip only
-            0;
-      }
 
       ///<summary> Return a flipped copy of the current image</summary>
       ///<param name="flipType">The type of the flipping</param>
@@ -4063,7 +4053,7 @@ namespace Emgu.CV
          if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Copy();
 
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvFlip(Ptr, res.Ptr, GetCodeFromFlipType(flipType));
+         CvInvoke.cvFlip(Ptr, res.Ptr, flipType);
          return res;
       }
 
@@ -4078,7 +4068,7 @@ namespace Emgu.CV
             CvInvoke.cvFlip(
                Ptr,
                IntPtr.Zero,
-               GetCodeFromFlipType(flipType));
+               flipType);
          }
       }
       #endregion
