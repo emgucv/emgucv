@@ -130,7 +130,7 @@ namespace Emgu.CV.GPU
       /// <param name="groupThreshold"></param>
       /// <returns></returns>
       public Rectangle[] DetectMultiScale(
-         GpuImage<Bgr, Byte> image,
+         GpuImage<Bgra, Byte> image,
          double hitThreshold,
          Size winStride,
          Size padding,
@@ -146,9 +146,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="image"></param>
       /// <returns></returns>
-      public Rectangle[] DetectMultiScale(GpuImage<Bgr, Byte> image)
+      public Rectangle[] DetectMultiScale(GpuImage<Bgra, Byte> image)
       {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2);
+         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
       }
 
       /// <summary>

@@ -190,7 +190,6 @@ namespace Emgu.CV.GPU.Test
       {
          using (GpuHOGDescriptor hog = new GpuHOGDescriptor())
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
-         
          {
             float[] pedestrianDescriptor = GpuHOGDescriptor.GetDefaultPeopleDetector();
             hog.SetSVMDetector(pedestrianDescriptor);
@@ -198,7 +197,8 @@ namespace Emgu.CV.GPU.Test
             Stopwatch watch = Stopwatch.StartNew();
             Rectangle[] rects;
             using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr,byte>(image))
-               rects = hog.DetectMultiScale(gpuImage);
+            using (GpuImage<Bgra, Byte> gpuBgra = gpuImage.Convert<Bgra, Byte>())
+               rects = hog.DetectMultiScale(gpuBgra);
             watch.Stop();
 
             Assert.AreEqual(1, rects.Length);
