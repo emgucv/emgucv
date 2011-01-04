@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
-   internal class VectorOfFloat : Emgu.Util.UnmanagedObject
+   public class VectorOfFloat : Emgu.Util.UnmanagedObject
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
