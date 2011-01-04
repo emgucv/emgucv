@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// Wraped class of the C++ standard vector of float.
+   /// </summary>
    public class VectorOfFloat : Emgu.Util.UnmanagedObject
    {
       #region PInvoke
@@ -33,16 +36,27 @@ namespace Emgu.CV
       private static extern void VectorOfFloatClear(IntPtr v);
       #endregion
 
+      /// <summary>
+      /// Create an empty standard vector of float
+      /// </summary>
       public VectorOfFloat()
       {
          _ptr = VectorOfFloatCreate();
       }
 
+      /// <summary>
+      /// Create an standard vector of float of the specific size
+      /// </summary>
+      /// <param name="size">The size of the vector</param>
       public VectorOfFloat(int size)
       {
          _ptr = VectorOfFloatCreateSize(size);
       }
 
+      /// <summary>
+      /// Push an array of value into the standard vector
+      /// </summary>
+      /// <param name="value">The value to be pushed to the vector</param>
       public void Push(float[] value)
       {
          GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
@@ -50,6 +64,9 @@ namespace Emgu.CV
          handle.Free();
       }
 
+      /// <summary>
+      /// Get the size of the vector
+      /// </summary>
       public int Size
       {
          get
@@ -58,11 +75,17 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Clear the vector
+      /// </summary>
       public void Clear()
       {
          VectorOfFloatClear(_ptr);
       }
 
+      /// <summary>
+      /// The pointer to the first element on the vector
+      /// </summary>
       public IntPtr StartAddress
       {
          get
@@ -71,6 +94,10 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Convert the standard vector to an array of float
+      /// </summary>
+      /// <returns>An array of float</returns>
       public float[] ToArray()
       {
          float[] res = new float[Size];
@@ -80,6 +107,9 @@ namespace Emgu.CV
          return res;
       }
 
+      /// <summary>
+      /// Release the standard vector
+      /// </summary>
       protected override void DisposeObject()
       {
          VectorOfFloatRelease(_ptr);
