@@ -167,6 +167,18 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestInplaceNot()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
+            GpuImage<Bgr, Byte> gpuMat = new GpuImage<Bgr, byte>(img);
+            GpuInvoke.gpuMatBitwiseNot(gpuMat, gpuMat, IntPtr.Zero);
+            Assert.IsTrue(gpuMat.Equals(new GpuImage<Bgr, Byte>(img.Not())));
+         }
+      }
+
+      [Test]
       public void TestResizeBgr()
       {
          if (GpuInvoke.HasCuda)
