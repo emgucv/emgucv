@@ -217,7 +217,7 @@ namespace Emgu.CV.GPU
       public static extern void gpuMatAdd(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
-      /// Adds scalar to a matrix (c = a + s)
+      /// Adds scalar to a matrix (c = a + scalar)
       /// Supports CV_32FC1 and CV_32FC2 type
       /// </summary>
       /// <param name="a">The matrix to be added.</param>
@@ -237,14 +237,54 @@ namespace Emgu.CV.GPU
       public static extern void gpuMatSubtract(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
-      /// Subtracts one matrix from another (c = a - b).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types
+      /// Subtracts one matrix from another (c = a - scalar).
+      /// Supports CV_32FC1 and CV_32FC2 type.
       /// </summary>
       /// <param name="a">The matrix to be substraced from</param>
       /// <param name="scalar">The scalar to be substracted</param>
       /// <param name="c">The matrix substraced by the scalar</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatSubtractS")]
       public static extern void gpuMatSubtract(IntPtr a, MCvScalar scalar, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise product of the two GpuMat (c = a * b).
+      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
+      /// </summary>
+      /// <param name="a">The first GpuMat to be element-wise multiplied.</param>
+      /// <param name="b">The second GpuMat to be element-wise multiplied.</param>
+      /// <param name="c">The element-wise multiplication of the two GpuMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatMultiply(IntPtr a, IntPtr b, IntPtr c);
+
+      /// <summary>
+      /// Multiplies GpuMat to a scalar (c = a * scalar).
+      /// Supports CV_32FC1 and CV_32FC2 type.
+      /// </summary>
+      /// <param name="a">The first GpuMat to be element-wise multiplied.</param>
+      /// <param name="scalar">The scalar to be multiplied</param>
+      /// <param name="c">The result of the GpuMat mutiplied by the scalar</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMultiplyS")]
+      public static extern void gpuMatMultiply(IntPtr a, MCvScalar scalar, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise quotient of the two GpuMat (c = a / b).
+      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
+      /// </summary>
+      /// <param name="a">The first GpuMat</param>
+      /// <param name="b">The second GpuMat</param>
+      /// <param name="c">The element-wise quotient of the two GpuMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatDivide(IntPtr a, IntPtr b, IntPtr c);
+
+      /// <summary>
+      /// computes element-wise quotient of a GpuMat and scalar (c = a / scalar).
+      /// Supports CV_32FC1 and CV_32FC2 type.
+      /// </summary>
+      /// <param name="a">The first GpuMat to be element-wise divided.</param>
+      /// <param name="scalar">The scalar to be divided</param>
+      /// <param name="c">The result of the GpuMat divided by the scalar</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideS")]
+      public static extern void gpuMatDivide(IntPtr a, MCvScalar scalar, IntPtr c);
       #endregion
 
       #region filters
@@ -331,7 +371,6 @@ namespace Emgu.CV.GPU
       /// <param name="shift">Value added to the scaled source array elements</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatConvertTo(IntPtr src, IntPtr dst, double scale, double shift);
-
 
       /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array or, if mask is not IntPtr.Zero, in the specified array region.

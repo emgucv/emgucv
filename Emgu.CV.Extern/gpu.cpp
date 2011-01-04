@@ -91,6 +91,26 @@ CVAPI(void) gpuMatSubtractS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::
    cv::gpu::subtract(*a, scale, *c);
 }
 
+CVAPI(void) gpuMatMultiply(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c)
+{
+   cv::gpu::multiply(*a, *b, *c);
+}
+
+CVAPI(void) gpuMatMultiplyS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c)
+{
+   cv::gpu::multiply(*a, s, *c);
+}
+
+CVAPI(void) gpuMatDivide(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c)
+{
+   cv::gpu::divide(*a, *b, *c);
+}
+
+CVAPI(void) gpuMatDivideS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c)
+{
+   cv::gpu::divide(*a, s, *c);
+}
+
 CVAPI(void) gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
 {
    cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale); 
