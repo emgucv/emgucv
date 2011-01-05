@@ -207,6 +207,14 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
    minLoc->x = minimunLoc.x; maxLoc->y = minimunLoc.y;
 }
 
+CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev)
+{
+   cv::Scalar meanVal, stdDevVal;
+   cv::gpu::meanStdDev(*mtx, meanVal, stdDevVal);
+   memcpy(mean->val, meanVal.val, sizeof(double)*4);
+   memcpy(stddev->val, stdDevVal.val, sizeof(double) * 4);
+}
+
 CVAPI(int) gpuMatCountNonZero(const cv::gpu::GpuMat* src)
 {
    return cv::gpu::countNonZero(*src);
@@ -281,4 +289,9 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 {
    cv::Mat Mat = cv::cvarrToMat(M);
    cv::gpu::warpPerspective(*src, *dst, Mat, dst->size(), flags);
+}
+
+CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap)
+{
+   cv::gpu::remap(*src, *dst, *xmap, *ymap);
 }

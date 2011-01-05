@@ -364,6 +364,15 @@ namespace Emgu.CV.GPU
          IntPtr mask);
 
       /// <summary>
+      /// Computes mean value and standard deviation
+      /// </summary>
+      /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>
+      /// <param name="mean">The mean value</param>
+      /// <param name="stddev">The standard deviation</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
+
+      /// <summary>
       /// Counts non-zero array elements
       /// </summary>
       /// <param name="src">The GpuMat</param>
@@ -545,5 +554,15 @@ namespace Emgu.CV.GPU
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+
+      /// <summary>
+      /// DST[x,y] = SRC[xmap[x,y],ymap[x,y]] with bilinear interpolation.
+      /// </summary>
+      /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_8UC3 source types. </param>
+      /// <param name="dst">The dstination GpuMat. Supports CV_8UC1, CV_8UC3 source types. </param>
+      /// <param name="xmap">The xmap. Supports CV_32FC1 map type.</param>
+      /// <param name="ymap">The ymap. Supports CV_32FC1 map type.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatRemap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
    }
 }
