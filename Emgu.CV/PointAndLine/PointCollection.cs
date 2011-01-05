@@ -317,6 +317,25 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Reproject pixels on a 1-channel disparity map to array of 3D points.
+      /// </summary>
+      /// <param name="disparity">Disparity map</param>
+      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      /// <returns>The reprojected 3D points</returns>
+      public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Byte> disparity, Matrix<double> Q)
+      {
+         Size size = disparity.Size;
+         MCvPoint3D32f[] points3D = new MCvPoint3D32f[size.Width * size.Height];
+         GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
+
+         using (Matrix<float> pts = new Matrix<float>(size.Height, size.Width, 3, handle.AddrOfPinnedObject(), 0))
+            CvInvoke.cvReprojectImageTo3D(disparity.Ptr, pts.Ptr, Q);
+
+         handle.Free();
+         return points3D;
+      }
+
+      /// <summary>
       /// Generate a random point cloud around the ellipse. 
       /// </summary>
       /// <param name="e">The region where the point cloud will be generated. The axes of e corresponds to std of the random point cloud.</param>
