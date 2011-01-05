@@ -9,14 +9,12 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Tao.OpenGl;
 using OsgViewer;
+using System.Diagnostics;
 
 namespace Simlpe3DReconstruction
 {
    public partial class Simple3DReconstruction : Form
    {
-      private MCvPoint3D32f[] _points;
-      private Image<Bgr, Byte> _left;
-
       /// <summary>
       /// Convert an Emgu CV image to Osg Image
       /// </summary>
@@ -51,47 +49,47 @@ namespace Simlpe3DReconstruction
       public Simple3DReconstruction()
       {
          InitializeComponent();
-
-         _left = new Image<Bgr, byte>("left.jpg");
+         Image<Bgr, Byte> left = new Image<Bgr, byte>("left.jpg");
          Image<Bgr, Byte> right = new Image<Bgr, byte>("right.jpg");
-         Image<Gray, Int16> leftDisparityMap;
-         Computer3DPointsFromImages(_left.Convert<Gray, Byte>(), right.Convert<Gray, Byte>(), out leftDisparityMap, out _points);
+         Image<Gray, short> disparityMap;
+         MCvPoint3D32f[] _points;
 
-         //remove some depth outliers
-         for (int i = 0; i < _points.Length; i++)
-         {
-            if (Math.Abs(_points[i].z) >= 1000) _points[i].z = 0;
-         }
+         Stopwatch watch = Stopwatch.StartNew();
+         Computer3DPointsFromStereoPair(left.Convert<Gray, Byte>(), right.Convert<Gray, Byte>(), out disparityMap, out _points);
+         watch.Stop();
+         long disparityComputationTime = watch.ElapsedMilliseconds;
 
          //Display the disparity map
-         imageBox1.Image = leftDisparityMap;
+         imageBox1.Image = disparityMap;
 
+         watch.Reset(); watch.Start();
+        
          Osg.Geode geode = new Osg.Geode();
          Osg.Geometry geometry = new Osg.Geometry();
 
          int textureSize = 256;
          //create and setup the texture
-         SetTexture(_left.Resize(textureSize, textureSize, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC), geode);
+         SetTexture(left.Resize(textureSize, textureSize, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC), geode);
 
-         #region setup the vertices
+         #region setup the vertices, the primitive and the texture
          Osg.Vec3Array vertices = new Osg.Vec3Array();
-         foreach (MCvPoint3D32f p in _points)
-            vertices.Add(new Osg.Vec3(-p.x, p.y, p.z));
-         geometry.setVertexArray(vertices);
-         #endregion
-
-         #region setup the primitive as point cloud
          Osg.DrawElementsUInt draw = new Osg.DrawElementsUInt(
             (uint)Osg.PrimitiveSet.Mode.POINTS, 0);
-         for (uint i = 0; i < _points.Length; i++)
-            draw.Add(i);
-         geometry.addPrimitiveSet(draw);
-         #endregion
-
-         #region setup the texture coordinates for the pixels
          Osg.Vec2Array textureCoor = new Osg.Vec2Array();
+         uint verticesCount = 0;
          foreach (MCvPoint3D32f p in _points)
-            textureCoor.Add(new Osg.Vec2(p.x / _left.Width + 0.5f, p.y / _left.Height + 0.5f));
+         {
+            //skip the depth outliers
+            if (Math.Abs(p.z) < 1000)
+            {
+               vertices.Add(new Osg.Vec3(-p.x, p.y, p.z));
+               draw.Add(verticesCount);
+               textureCoor.Add(new Osg.Vec2(p.x / left.Width + 0.5f, p.y / left.Height + 0.5f));
+               verticesCount++;
+            }
+         }
+         geometry.setVertexArray(vertices);
+         geometry.addPrimitiveSet(draw);
          geometry.setTexCoordArray(0, textureCoor);
          #endregion
 
@@ -104,6 +102,11 @@ namespace Simlpe3DReconstruction
          transform.addChild(geode);
          #endregion         
 
+         watch.Stop();
+
+         Text = String.Format("Disparity and 3D points computed in {0} millseconds. 3D model created in {1} milliseconds", 
+            disparityComputationTime, watch.ElapsedMilliseconds);
+
          viewer3D.Viewer.setSceneData(transform);
          viewer3D.Viewer.realize();
       }
@@ -113,31 +116,26 @@ namespace Simlpe3DReconstruction
       /// </summary>
       /// <param name="left">The left image</param>
       /// <param name="right">The right image</param>
-      /// <param name="leftDisparityMap">The left disparity map</param>
+      /// <param name="disparityMap">The left disparity map</param>
       /// <param name="points">The 3D point cloud within a [-0.5, 0.5] cube</param>
-      private static void Computer3DPointsFromImages(Image<Gray, Byte> left, Image<Gray, Byte> right, out Image<Gray, Int16> leftDisparityMap, out MCvPoint3D32f[] points)
+      private static void Computer3DPointsFromStereoPair(Image<Gray, Byte> left, Image<Gray, Byte> right, out Image<Gray, short> disparityMap, out MCvPoint3D32f[] points)
       {
          Size size = left.Size;
 
-         using (Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(size))
-         using (Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(size))
+         disparityMap = new Image<Gray, short>(size);
          //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0, 0, 0, 0, 0, 0, 0, 0, false))
-         using (StereoGC stereoSolver = new StereoGC(16, 2))
+         using (StereoBM stereoSolver = new StereoBM(Emgu.CV.CvEnum.STEREO_BM_TYPE.BASIC, 0))
          {
-            stereoSolver.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
-            //stereoSolver.FindStereoCorrespondence(left, right, leftDisparity);
-
-            leftDisparityMap = leftDisparity * (-16);
-            //leftDisparityMap = leftDisparity.Clone();
+            stereoSolver.FindStereoCorrespondence(left, right, disparityMap);
 
             //Construct a simple Q matrix, if you have a matrix from cvStereoRectify, you should use that instead
             using (Matrix<double> q = new Matrix<double>(
                new double[,] {
                   {1.0, 0.0, 0.0, -size.Width/2}, //shift the x origin to image center
                   {0.0, 1.0, 0.0, -size.Height/2}, //shift the y origin to image center
-                  {0.0, 0.0, -16.0, 0.0}, //Multiply the z value by -16, 
+                  {0.0, 0.0, 1.0, 0.0}, //Multiply the z value by 1.0, 
                   {0.0, 0.0, 0.0, 1.0}}))
-               points = PointCollection.ReprojectImageTo3D(leftDisparity, q);
+               points = PointCollection.ReprojectImageTo3D(disparityMap, q);
          }
       }
 
