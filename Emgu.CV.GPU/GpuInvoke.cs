@@ -285,6 +285,26 @@ namespace Emgu.CV.GPU
       /// <param name="c">The result of the GpuMat divided by the scalar</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideS")]
       public static extern void gpuMatDivide(IntPtr a, MCvScalar scalar, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise absolute difference of two arrays (c = abs(a - b)).
+      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
+      /// </summary>
+      /// <param name="a">The first GpuMat</param>
+      /// <param name="b">The second GpuMat</param>
+      /// <param name="c">The result of the element-wise absolute difference.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatAbsdiff(IntPtr a, IntPtr b, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise absolute difference of array and scalar (c = abs(a - s)).
+      /// Supports only CV_32FC1 type.
+      /// </summary>
+      /// <param name="a">A GpuMat</param>
+      /// <param name="scalar">A scalar</param>
+      /// <param name="c">The result of the element-wise absolute difference.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAbsdiffS")]
+      public static extern void gpuMatAbsdiff(IntPtr a, MCvScalar scalar, IntPtr c);
       #endregion
 
       /// <summary>

@@ -109,6 +109,16 @@ CVAPI(void) gpuMatDivideS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::G
    cv::gpu::divide(*a, s, *c);
 }
 
+CVAPI(void) gpuMatAbsdiff(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c)
+{
+   cv::gpu::absdiff(*a, *b, *c);
+}
+
+CVAPI(void) gpuMatAbsdiffS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c)
+{
+   cv::gpu::absdiff(*a, s, *c);
+}
+
 CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code)
 {
    cv::gpu::cvtColor(*src, *dst, code);
