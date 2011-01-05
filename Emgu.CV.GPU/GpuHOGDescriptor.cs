@@ -145,8 +145,40 @@ namespace Emgu.CV.GPU
       /// 
       /// </summary>
       /// <param name="image"></param>
+      /// <param name="hitThreshold"></param>
+      /// <param name="winStride"></param>
+      /// <param name="padding"></param>
+      /// <param name="scale"></param>
+      /// <param name="groupThreshold"></param>
+      /// <returns></returns>
+      public Rectangle[] DetectMultiScale(
+         GpuImage<Gray, Byte> image,
+         double hitThreshold,
+         Size winStride,
+         Size padding,
+         double scale,
+         int groupThreshold)
+      {
+         gpuHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+         return _rectSeq.ToArray();
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
       /// <returns></returns>
       public Rectangle[] DetectMultiScale(GpuImage<Bgra, Byte> image)
+      {
+         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <returns></returns>
+      public Rectangle[] DetectMultiScale(GpuImage<Gray, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
       }
