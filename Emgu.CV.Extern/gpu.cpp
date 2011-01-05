@@ -271,3 +271,14 @@ CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvAr
    cv::gpu::dilate(*src, *dst, kernelMat, anchor, iterations);
 }
 
+CVAPI(void) gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags)
+{
+   cv::Mat Mat = cv::cvarrToMat(M);
+   cv::gpu::warpAffine(*src, *dst, Mat, dst->size(), flags);
+}
+
+CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags)
+{
+   cv::Mat Mat = cv::cvarrToMat(M);
+   cv::gpu::warpPerspective(*src, *dst, Mat, dst->size(), flags);
+}

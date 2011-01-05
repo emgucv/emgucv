@@ -525,5 +525,25 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatGaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2);
       #endregion
+
+      /// <summary>
+      /// Warps the image using affine transformation
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
+      /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatWarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+
+      /// <summary>
+      /// Warps the image using perspective transformation
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
+      /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
    }
 }
