@@ -406,6 +406,32 @@ namespace Emgu.CV.GPU
          gpuMatFlip(src, dst, flipMode);
       }
 
+      #region morphology operation
+      /// <summary>
+      /// Erodes the image (applies the local minimum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
+      /// <param name="anchor">The center of the kernel</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatErode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+
+      /// <summary>
+      /// Dilate the image (applies the local maximum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
+      /// <param name="anchor">The center of the kernel</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatDilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+      #endregion
+
       #region Logical operators
       /// <summary>
       /// Calculates per-element bit-wise logical conjunction of two arrays:

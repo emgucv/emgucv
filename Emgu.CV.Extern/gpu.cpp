@@ -1,5 +1,4 @@
 #include "opencv2/gpu/gpu.hpp"
-#include <string.h>
 
 CVAPI(int) gpuGetCudaEnabledDeviceCount()
 {
@@ -260,5 +259,15 @@ CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, in
    cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale);
 }
 
+CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvArr* kernel, CvPoint anchor, int iterations)
+{
+   cv::Mat kernelMat = cv::cvarrToMat(kernel);
+   cv::gpu::erode(*src, *dst, kernelMat, anchor, iterations);
+}
 
+CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvArr* kernel, CvPoint anchor, int iterations)
+{
+   cv::Mat kernelMat = cv::cvarrToMat(kernel);
+   cv::gpu::dilate(*src, *dst, kernelMat, anchor, iterations);
+}
 
