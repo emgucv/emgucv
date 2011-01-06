@@ -117,7 +117,7 @@ namespace Emgu.CV.GPU
             ptrs[i] = gpuMats[i].Ptr;
          }
          GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GpuInvoke.gpuMatSplit(_ptr, handle.AddrOfPinnedObject());
+         GpuInvoke.gpuMatSplit(_ptr, handle.AddrOfPinnedObject(), IntPtr.Zero);
          handle.Free();
       }
 
@@ -143,7 +143,7 @@ namespace Emgu.CV.GPU
             ptrs[i] = gpuMats[i].Ptr;
          }
          GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GpuInvoke.gpuMatMerge(handle.AddrOfPinnedObject(), _ptr);
+         GpuInvoke.gpuMatMerge(handle.AddrOfPinnedObject(), _ptr, IntPtr.Zero);
          handle.Free();
       }
 
@@ -214,7 +214,7 @@ namespace Emgu.CV.GPU
 
          using (GpuMat<TDepth> xor = new GpuMat<TDepth>(Size, NumberOfChannels))
          {
-            GpuInvoke.gpuMatBitwiseXor(_ptr, other, xor, IntPtr.Zero);
+            GpuInvoke.gpuMatBitwiseXor(_ptr, other, xor, IntPtr.Zero, IntPtr.Zero);
 
             if (xor.NumberOfChannels == 1)
                return GpuInvoke.gpuMatCountNonZero(xor) == 0;
@@ -224,16 +224,6 @@ namespace Emgu.CV.GPU
                {
                   return GpuInvoke.gpuMatCountNonZero(singleChannel) == 0;
                }
-               /*
-               GpuMat<TDepth>[] channels = xor.Split();
-               try
-               {
-                  return Array.TrueForAll(channels, delegate(GpuMat<TDepth> gi) { return GpuInvoke.gpuMatCountNonZero(gi) == 0; });
-               }
-               finally
-               {
-                  foreach (GpuMat<TDepth> gi in channels) gi.Dispose();
-               }*/
             }
          }
       }
@@ -242,12 +232,13 @@ namespace Emgu.CV.GPU
       /// Convert this GpuMat to different depth
       /// </summary>
       /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       /// <returns>GpuMat of different depth</returns>
-      public GpuMat<TOtherDepth> Convert<TOtherDepth>()
+      public GpuMat<TOtherDepth> Convert<TOtherDepth>(Stream stream)
          where TOtherDepth : new()
       {
          GpuMat<TOtherDepth> res = new GpuMat<TOtherDepth>(Size, NumberOfChannels);
-         GpuInvoke.gpuMatConvertTo(Ptr, res.Ptr, 1.0, 0.0);
+         GpuInvoke.gpuMatConvertTo(Ptr, res.Ptr, 1.0, 0.0, stream);
          return res;
       }
 
@@ -268,9 +259,10 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be null if not used.</param>
-      public void SetTo(MCvScalar value, GpuMat<Byte> mask)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public void SetTo(MCvScalar value, GpuMat<Byte> mask, Stream stream)
       {
-         GpuInvoke.gpuMatSetTo(_ptr, value, mask);
+         GpuInvoke.gpuMatSetTo(_ptr, value, mask, stream);
       }
    }
 }

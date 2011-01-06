@@ -15,7 +15,7 @@ namespace Emgu.CV.GPU
       private static extern IntPtr GpuStereoBMCreate(PresetType preset, int ndisparities, int winSize);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void GpuStereoBMFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity);
+      private static extern void GpuStereoBMFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void GpuStereoBMRelease(ref IntPtr stereoBM);
@@ -53,9 +53,10 @@ namespace Emgu.CV.GPU
       /// <param name="left">The left single-channel, 8-bit image</param>
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The disparity map</param>
-      public void FindStereoCorrespondence(GpuImage<Gray, Byte> left, GpuImage<Gray, Byte> right, GpuImage<Gray, Byte> disparity)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public void FindStereoCorrespondence(GpuImage<Gray, Byte> left, GpuImage<Gray, Byte> right, GpuImage<Gray, Byte> disparity, Stream stream)
       {
-         GpuStereoBMFindStereoCorrespondence(_ptr, left, right, disparity);
+         GpuStereoBMFindStereoCorrespondence(_ptr, left, right, disparity, stream);
       }
 
       /// <summary>

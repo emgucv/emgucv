@@ -115,11 +115,11 @@ namespace Emgu.CV.GPU
                      shift = (scale == 0) ? min : -min * scale;
                   }
 
-                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, scale, shift);
+                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, scale, shift, IntPtr.Zero);
                }
                else
                {
-                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0);
+                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
                }
 
             }
@@ -130,23 +130,23 @@ namespace Emgu.CV.GPU
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
+               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
             }
             else
             {   //different depth
                using (GpuImage<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
+                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
             }
             #endregion
          }
       }
 
-      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)
+      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size, Stream stream)
       {
          try
          {
             // if the direct conversion exist, apply the conversion
-            GpuInvoke.gpuMatCvtColor(src, dest, Util.GetColorCvtCode(srcColor, destColor));
+            GpuInvoke.gpuMatCvtColor(src, dest, Util.GetColorCvtCode(srcColor, destColor), stream);
          }
          catch
          {
@@ -155,8 +155,8 @@ namespace Emgu.CV.GPU
                //if a direct conversion doesn't exist, apply a two step conversion
                using (GpuImage<Bgr, TDepth> tmp = new GpuImage<Bgr, TDepth>(size))
                {
-                  GpuInvoke.gpuMatCvtColor(src, tmp.Ptr, Util.GetColorCvtCode(srcColor, typeof(Bgr)));
-                  GpuInvoke.gpuMatCvtColor(tmp.Ptr, dest, Util.GetColorCvtCode(typeof(Bgr), destColor));
+                  GpuInvoke.gpuMatCvtColor(src, tmp.Ptr, Util.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
+                  GpuInvoke.gpuMatCvtColor(tmp.Ptr, dest, Util.GetColorCvtCode(typeof(Bgr), destColor), stream);
                }
             }
             catch

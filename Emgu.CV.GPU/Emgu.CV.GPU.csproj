@@ -59,6 +59,7 @@
     <Compile Include="GpuMat.cs" />
     <Compile Include="GpuStereoBM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stream.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">

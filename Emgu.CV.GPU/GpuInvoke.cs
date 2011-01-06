@@ -136,8 +136,9 @@ namespace Emgu.CV.GPU
       /// <param name="mat">The destination GpuMat</param>
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be IntPtr.Zero if not used</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask);
+      public static extern void gpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Release the GpuMat
@@ -193,8 +194,9 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="code">The color conversion code</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatCvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code);
+      public static extern void gpuMatCvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code, IntPtr stream);
 
       /// <summary>
       /// Copy the source GpuMat to destination GpuMat, using an optional mask.
@@ -343,16 +345,18 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The multi-channel gpuMat</param>
       /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSplit(IntPtr src, IntPtr dstArray);
+      public static extern void gpuMatSplit(IntPtr src, IntPtr dstArray, IntPtr stream);
 
       /// <summary>
       /// Makes multi-channel array out of several single-channel arrays
       /// </summary>
       /// <param name="srcArr">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="dst">The multi-channel gpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatMerge(IntPtr srcArr, IntPtr dst);
+      public static extern void gpuMatMerge(IntPtr srcArr, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
@@ -365,8 +369,9 @@ namespace Emgu.CV.GPU
       /// <param name="dst">Destination GpuMat</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source array elements</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatConvertTo(IntPtr src, IntPtr dst, double scale, double shift);
+      public static extern void gpuMatConvertTo(IntPtr src, IntPtr dst, double scale, double shift, IntPtr stream);
 
       /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array or, if mask is not IntPtr.Zero, in the specified array region.
@@ -471,8 +476,9 @@ namespace Emgu.CV.GPU
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+      public static extern void gpuMatBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical or of two arrays:
@@ -483,8 +489,9 @@ namespace Emgu.CV.GPU
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+      public static extern void gpuMatBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical and of two arrays:
@@ -495,8 +502,9 @@ namespace Emgu.CV.GPU
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
+      public static extern void gpuMatBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical not
@@ -506,8 +514,9 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask);
+      public static extern void gpuMatBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
       #endregion
 
       #region filters
