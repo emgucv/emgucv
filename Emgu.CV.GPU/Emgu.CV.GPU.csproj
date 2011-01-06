@@ -58,6 +58,7 @@
     <Compile Include="GpuInvoke.cs" />
     <Compile Include="GpuMat.cs" />
     <Compile Include="GpuStereoBM.cs" />
+    <Compile Include="GpuStereoConstantSpaceBP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stream.cs" />
   </ItemGroup>
