@@ -18,7 +18,7 @@ namespace Emgu.CV.GPU
       {
          ID = deviceId;
          Name = GpuInvoke.GetDeviceName(deviceId);
-         GpuInvoke.GetComputeCapability(deviceId, ref ComputeCapability.Major, ref ComputeCapability.Minor);
+         GpuInvoke.GetComputeCapability(deviceId, ref CudaComputeCapability.Major, ref CudaComputeCapability.Minor);
          NumberOfSMs = GpuInvoke.GetNumberOfSMs(deviceId);
       }
 
@@ -33,26 +33,26 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// The compute capability
       /// </summary>
-      public ComputeCapability ComputeCapability;
+      public ComputeCapability CudaComputeCapability;
 
       /// <summary>
       /// The number of single multi processors
       /// </summary>
       public int NumberOfSMs;
-   }
 
-   /// <summary>
-   /// The compute capability
-   /// </summary>
-   public struct ComputeCapability
-   {
       /// <summary>
-      /// The major version
+      /// The compute capability
       /// </summary>
-      public int Major;
-      /// <summary>
-      /// The minor version
-      /// </summary>
-      public int Minor;
+      public struct ComputeCapability
+      {
+         /// <summary>
+         /// The major version
+         /// </summary>
+         public int Major;
+         /// <summary>
+         /// The minor version
+         /// </summary>
+         public int Minor;
+      }
    }
 }
