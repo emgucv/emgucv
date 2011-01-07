@@ -282,7 +282,7 @@ namespace Emgu.CV.Test
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>) o;
+               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)o;
                Assert.IsTrue(img.Equals(img2));
             }
          }
@@ -365,12 +365,12 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
 
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-         
+
          Image<Bgr, Byte> imgRotated = img.Rotate(90, new Bgr(), false);
          Assert.AreEqual(img.Width, imgRotated.Height);
          Assert.AreEqual(img.Height, imgRotated.Width);
          imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
-         
+
       }
 
       [Test]
@@ -486,7 +486,7 @@ namespace Emgu.CV.Test
          string filename = Path.GetTempFileName();
 
          File.Delete(filename);
-      
+
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
 
@@ -562,7 +562,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestBitmapConstructor()
       {
-         using(Bitmap bmp0 = new Bitmap(1200, 1080, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+         using (Bitmap bmp0 = new Bitmap(1200, 1080, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
          using (Graphics g = Graphics.FromImage(bmp0))
          {
             g.Clear(Color.Blue);
@@ -812,7 +812,7 @@ namespace Emgu.CV.Test
          Rectangle roi = new Rectangle(10, 20, 30, 40);
          Image<Bgr, Single> roi1 = image.Copy(roi);
          Image<Bgr, Single> roi2 = image.GetSubRect(roi);
-         Assert.IsTrue(roi1.Equals( roi2 ));
+         Assert.IsTrue(roi1.Equals(roi2));
       }
 
       [Test]
@@ -985,7 +985,7 @@ namespace Emgu.CV.Test
          }
          watch.Stop();
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
-         
+
       }
 
       [Test]
@@ -1131,13 +1131,11 @@ namespace Emgu.CV.Test
          Assert.Fail("NotSupportedException should be thrown");
       }
 
-
-      //TODO:Find out why this is not working well
       [Test]
       public void TestPlanarObjectDetector()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         Image<Gray, byte> scene = new Image<Gray,byte>("box_in_scene.png");
+         Image<Gray, byte> scene = new Image<Gray, byte>("box_in_scene.png");
          //Image<Gray, Byte> scene = box.Rotate(1, new Gray(), false);
 
          using (PlanarObjectDetector detector = new PlanarObjectDetector())
@@ -1167,10 +1165,12 @@ namespace Emgu.CV.Test
                scene.Draw(new CircleF(c, 2), new Gray(255), 1);
             }
             scene.DrawPolyline(Array.ConvertAll<PointF, Point>(corners, Point.Round), true, new Gray(255), 2);
-         }  
+
+            //ImageViewer.Show(scene);
+         }
       }
 
-      
+
       [Test]
       public void T()
       {
@@ -1208,7 +1208,7 @@ namespace Emgu.CV.Test
          int cols = img1.Cols;
          for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
-               dataSum[i, j, 0] = (Byte) (data1[i, j, 0] + data2[i, j, 0]);
+               dataSum[i, j, 0] = (Byte)(data1[i, j, 0] + data2[i, j, 0]);
          w.Stop();
          Trace.WriteLine(String.Format(".NET array manipulation Time:\t\t{0} ms", w.ElapsedMilliseconds));
 
@@ -1227,49 +1227,49 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMultiThreadWithBMP()
       {
-		 //TODO: find out why this test fails on unix
+         //TODO: find out why this test fails on unix
          if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
-	     {
-         int threadCount = 32;
-
-         //Create some random images and save to hard disk
-         String[] imageNames = new String[threadCount];
-         for (int i = 0; i < threadCount; i++)
          {
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(2048, 1024))
+            int threadCount = 32;
+
+            //Create some random images and save to hard disk
+            String[] imageNames = new String[threadCount];
+            for (int i = 0; i < threadCount; i++)
             {
-               img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
-               imageNames[i] = String.Format("tmp{0}.bmp", i);
-               img.Save(imageNames[i]);
-            }
-         }
-
-         Thread[] threads = new Thread[threadCount];
-
-         for (int i = 0; i < threadCount; i++)
-         {
-            int index = i;
-            threads[i] = new Thread(delegate()
+               using (Image<Bgr, Byte> img = new Image<Bgr, byte>(2048, 1024))
                {
-                  lock (typeof(Bitmap))
+                  img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                  imageNames[i] = String.Format("tmp{0}.bmp", i);
+                  img.Save(imageNames[i]);
+               }
+            }
+
+            Thread[] threads = new Thread[threadCount];
+
+            for (int i = 0; i < threadCount; i++)
+            {
+               int index = i;
+               threads[i] = new Thread(delegate()
                   {
-                     Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
-                     Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
-                  }
-               });
+                     lock (typeof(Bitmap))
+                     {
+                        Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
+                        Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
+                     }
+                  });
 
-            threads[i].Priority = ThreadPriority.Highest;
-            threads[i].Start();
+               threads[i].Priority = ThreadPriority.Highest;
+               threads[i].Start();
+            }
+
+            for (int i = 0; i < threadCount; i++)
+            {
+               threads[i].Join();
+            }
+
+            //delete random images;
+            foreach (string s in imageNames) File.Delete(s);
          }
-
-         for (int i = 0; i < threadCount; i++)
-         {
-            threads[i].Join();
-         }
-
-         //delete random images;
-         foreach (string s in imageNames) File.Delete(s);
-	     }
       }
    }
 }

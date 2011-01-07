@@ -255,8 +255,7 @@ namespace Emgu.CV.Test
          foreach (float f in descriptors)
             absSum += Math.Abs(f);
 
-         //TODO: Find out why selfsimilarity always return descriptors of all zeros. Probaboly a bug in the opencv C++ code
-         //Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
+         Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
 
          Assert.AreEqual(descriptors.Length / descriptor.DescriptorSize, pts.Length);
 
