@@ -258,7 +258,7 @@ typedef struct Quaternions
       double cosHalfTheta =  dotProduct(qb);
 
       // if qa=qb or qa=-qb then theta = 0 and we can return qa
-      if (abs(cosHalfTheta) >= 1.0){
+      if (fabs(cosHalfTheta) >= 1.0){
          memcpy(qm, &w, sizeof(Quaternions));// qm->w = qa->w;qm->x = qa->x;qm->y = qa->y;qm->z = qa->z;
          return;
       }
