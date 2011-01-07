@@ -31,8 +31,7 @@
    inline __m128d _dot_product(__m128d v0, __m128d v1)
    {
    #if EMGU_SSE4_1
-      //if(simdSSE4_1)
-      return _mm_dp_pd(v0, v1, 0x33); 
+      if(simdSSE4_1) return _mm_dp_pd(v0, v1, 0x33); 
    #endif 
       __m128d v = _mm_mul_pd(v0, v1);
       return _mm_add_pd(v, _mm_shuffle_pd(v, v, 1));

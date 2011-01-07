@@ -38,11 +38,16 @@ typedef struct Quaternions
       __m128d _xw = _mm_loadu_pd(&w);
       __m128d _zy = _mm_loadu_pd(&y);
 #if EMGU_SSE4_1
-      __m128d _denorm = _mm_sqrt_pd( _mm_add_pd( _mm_dp_pd(_xw, _xw, 0x33), _mm_dp_pd(_zy, _zy, 0x33) ));
-#else
+      if(simdSSE4_1)
+      {
+         __m128d _denorm = _mm_sqrt_pd( _mm_add_pd( _mm_dp_pd(_xw, _xw, 0x33), _mm_dp_pd(_zy, _zy, 0x33) ));
+         _mm_storeu_pd(&w, _mm_div_pd(_xw, _denorm));
+         _mm_storeu_pd(&y, _mm_div_pd(_zy, _denorm));
+         return;
+      }
+#endif
       __m128d _tmp = _mm_add_pd( _mm_mul_pd(_xw, _xw),  _mm_mul_pd(_zy, _zy)); //x*x + z*z, w*w + y*y
       __m128d _denorm = _mm_sqrt_pd(_mm_add_pd(_tmp, _mm_shuffle_pd(_tmp, _tmp, 1))); 
-#endif
       _mm_storeu_pd(&w, _mm_div_pd(_xw, _denorm));
       _mm_storeu_pd(&y, _mm_div_pd(_zy, _denorm));
 #else
@@ -59,16 +64,20 @@ typedef struct Quaternions
 #if EMGU_SSE2
       double result;
 #if EMGU_SSE4_1
-      _mm_store_sd(&result, _mm_add_pd(
-         _mm_dp_pd(_mm_loadu_pd(&w), _mm_loadu_pd(&q1->w), 0x33),
-         _mm_dp_pd(_mm_loadu_pd(&y), _mm_loadu_pd(&q1->y), 0x33)));
-#else
+      if(simdSSE4_1)
+      {
+         _mm_store_sd(&result, _mm_add_pd(
+            _mm_dp_pd(_mm_loadu_pd(&w), _mm_loadu_pd(&q1->w), 0x33),
+            _mm_dp_pd(_mm_loadu_pd(&y), _mm_loadu_pd(&q1->y), 0x33)));
+         return result;
+      }
+#endif
       __m128d _sum = _mm_add_pd(
          _mm_mul_pd(_mm_loadu_pd(&w), _mm_loadu_pd(&q1->w)), //x0 * x1, w0 * w1
          _mm_mul_pd(_mm_loadu_pd(&y), _mm_loadu_pd(&q1->y)) //z0 * z1, y0 * y1 
          ); //x0x1 + z0z1, w0w1 + y0y1
       _mm_store_sd(&result, _mm_add_pd(_sum, _mm_shuffle_pd(_sum, _sum, 1)));
-#endif
+
       return result;
 #else
       return w * q1->w + x * q1->x + y * q1->y + z * q1->z;

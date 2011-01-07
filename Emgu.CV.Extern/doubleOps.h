@@ -11,8 +11,19 @@ namespace doubleOps
       double* end = r + elementCount;
 #if EMGU_SSE2
       __m128d f = _mm_set_pd(w1, w2);
-      while(r < end)
-         _mm_store_sd(r++, _dot_product(_mm_set_pd(*d1++, *d2++), f));
+
+#if EMGU_SSE4_1
+      if(simdSSE4_1) 
+      {
+         while(r < end) _mm_store_sd(r++, _mm_dp_pd(_mm_set_pd(*d1++, *d2++), f, 0x33));
+         return;
+      }
+#endif 
+      while (r < end)
+      {
+         __m128d v = _mm_mul_pd(_mm_set_pd(*d1++, *d2++), f);
+         _mm_store_sd(r++, _mm_add_pd(v, _mm_shuffle_pd(v, v, 1)));
+      }
 #else
       while( r < end) 
          *r++ = *d1++ * w1 + *d2++ * w2;
