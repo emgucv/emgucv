@@ -1,6 +1,6 @@
 Index: 3rdparty/libjpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/libjpeg/CMakeLists.txt	(revision 4374)
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4460)
 +++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
 @@ -42,6 +42,11 @@
      set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
@@ -16,9 +16,33 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
  	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4374)
+--- CMakeLists.txt	(revision 4460)
 +++ CMakeLists.txt	(working copy)
-@@ -648,6 +648,8 @@
+@@ -622,21 +622,11 @@
+                    link_directories("${TBB_LIB_DIR}")
+                    set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
+                else()
+-                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*)
++                   if(CMAKE_CL_64)
+                        set(X86_64 1)
+-                   endif()
+-                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86_64*)
+-                       set(X86_64 1)
+-                   endif()
+-                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES i686*)
++                   else()
+                        set(X86 1)
+                    endif()
+-                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES i386*)
+-                       set(X86 1)
+-                   endif()
+-                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*)
+-                       set(X86 1)
+-                   endif()
+ 
+                    set(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib")
+                    if (X86_64)
+@@ -648,6 +638,8 @@
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
                     elseif(MSVC90)
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc9")
@@ -27,7 +51,7 @@ Index: CMakeLists.txt
                     endif()
                     set(TBB_LIB_DIR "${_TBB_LIB_PATH}" CACHE PATH "Full path of TBB library directory")
                     link_directories("${TBB_LIB_DIR}")
-@@ -731,17 +733,29 @@
+@@ -731,17 +723,29 @@
  endif()
  endif()
  
@@ -59,7 +83,7 @@ Index: CMakeLists.txt
          endif()
          if(UNIX)
              find_path(IPP_PATH "libippi${CMAKE_SHARED_LIBRARY_SUFFIX}.${v}"
-@@ -754,7 +768,7 @@
+@@ -754,7 +758,7 @@
              endif()
          endif()
          if(IPP_PATH)
@@ -68,7 +92,7 @@ Index: CMakeLists.txt
              if(IPP_HDRS)
                  set(IPP_FOUND TRUE)
              endif()
-@@ -772,28 +786,59 @@
+@@ -772,28 +776,59 @@
  
  if(IPP_FOUND AND USE_IPP)
      add_definitions(-DHAVE_IPP)
@@ -145,7 +169,7 @@ Index: CMakeLists.txt
  ################## Extra HighGUI libs on Windows ###################
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4374)
+--- modules/legacy/src/3dtracker.cpp	(revision 4460)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
