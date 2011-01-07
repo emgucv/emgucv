@@ -1,10 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
-using System.Drawing;
 
 namespace Emgu.CV
 {
@@ -26,7 +27,7 @@ namespace Emgu.CV
          _dimension = new int[dimension.Length];
          Array.Copy(dimension, _dimension, dimension.Length);
          GCHandle handle =  GCHandle.Alloc(_dimension, GCHandleType.Pinned);
-         _ptr = CvInvoke.cvCreateSparseMat(_dimension.Length, handle.AddrOfPinnedObject(), Util.GetMatrixDepth(typeof(TDepth)));
+         _ptr = CvInvoke.cvCreateSparseMat(_dimension.Length, handle.AddrOfPinnedObject(), CvToolbox.GetMatrixDepth(typeof(TDepth)));
          handle.Free();
       }
 

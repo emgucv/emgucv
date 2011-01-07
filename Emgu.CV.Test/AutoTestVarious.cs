@@ -13,11 +13,12 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Tiff;
 using Emgu.CV.UI;
+using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
 using Emgu.Util;
-using Emgu.CV.Tiff;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test
@@ -731,7 +732,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 100);
          img.Sobel(1, 0, 3);
          String plugin, module;
-         Util.GetModuleInfo(out plugin, out module);
+         CvToolbox.GetModuleInfo(out plugin, out module);
       }
 
       [Test]
@@ -936,14 +937,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float)i };
 
-         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features));
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features));
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
          Assert.AreEqual(indices[0, 0], 5);
          Assert.AreEqual(distances[0, 0], 0.0);
@@ -956,14 +957,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float)i };
 
-         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features), 4);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
          Assert.AreEqual(indices[0, 0], 5);
          Assert.AreEqual(distances[0, 0], 0.0);
@@ -976,14 +977,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float)i };
 
-         Flann.Index index = new Flann.Index(Util.GetMatrixFromDescriptors(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(Util.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
          Assert.AreEqual(indices[0, 0], 5);
          Assert.AreEqual(distances[0, 0], 0.0);

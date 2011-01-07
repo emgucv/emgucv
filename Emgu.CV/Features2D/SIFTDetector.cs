@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
-using Emgu.Util;
+using System.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV.Features2D
 {

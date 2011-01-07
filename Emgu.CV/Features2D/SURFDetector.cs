@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
-using Emgu.CV.Structure;
 using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {

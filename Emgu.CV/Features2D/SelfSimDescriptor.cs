@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
 using Emgu.Util;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {

@@ -1,5 +1,6 @@
 using System;
 using Emgu.Util;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -40,7 +41,7 @@ namespace Emgu.CV
       /// <param name="isColor">true if this is a color video, false otherwise</param>
       public VideoWriter(String fileName, int compressionCode, int fps, int width, int height, bool isColor)
       {
-         _ptr = Util.HasFFMPEG?
+         _ptr = CvToolbox.HasFFMPEG?
             CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor):
             CvInvoke.cvCreateVideoWriter(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor);
 
@@ -58,7 +59,7 @@ namespace Emgu.CV
          where TColor : struct, IColor
          where TDepth : new()
       {
-         int result = Util.HasFFMPEG ?
+         int result = CvToolbox.HasFFMPEG ?
             CvInvoke.cvWriteFrame_FFMPEG(_ptr, frame.Ptr) :
             CvInvoke.cvWriteFrame(_ptr, frame.Ptr);
          if (result == 0) throw new InvalidOperationException("Unable to write frame to the video writer");
@@ -69,7 +70,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         if (Util.HasFFMPEG)
+         if (CvToolbox.HasFFMPEG)
             CvInvoke.cvReleaseVideoWriter_FFMPEG(ref _ptr);
          else 
          CvInvoke.cvReleaseVideoWriter(ref _ptr);

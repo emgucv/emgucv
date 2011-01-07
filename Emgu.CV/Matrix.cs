@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -59,7 +60,7 @@ namespace Emgu.CV
       public Matrix(int rows, int cols, int channels, IntPtr data, int step)
       {
          AllocateHeader();
-         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int)Util.GetMatrixDepth(typeof(TDepth)), channels), data, step);
+         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels), data, step);
       }
 
       /// <summary>
@@ -180,7 +181,7 @@ namespace Emgu.CV
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
 
-            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), Util.GetMatrixDepth(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
+            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvToolbox.GetMatrixDepth(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
          }
       }
 

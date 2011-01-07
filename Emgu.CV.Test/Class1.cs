@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.VideoSurveillance;
@@ -197,7 +198,7 @@ namespace Emgu.CV.Test
       {
          string pluginName;
          string versionName;
-         Emgu.CV.Util.GetModuleInfo(out pluginName, out versionName);
+         CvToolbox.GetModuleInfo(out pluginName, out versionName);
          Trace.WriteLine(String.Format("Plugin: {0}\r\nVersion: {1}", pluginName, versionName ));
       }
 

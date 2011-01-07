@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using Emgu.CV.Structure;
-using Emgu.Util;
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -29,7 +30,7 @@ namespace Emgu.CV.GPU
       /// <param name="channels">The number of channels</param>
       public GpuMat(int rows, int cols, int channels)
       {
-         _ptr = GpuInvoke.gpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)Util.GetMatrixDepth(typeof(TDepth)), channels));
+         _ptr = GpuInvoke.gpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels));
       }
 
       /// <summary>

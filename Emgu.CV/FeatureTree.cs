@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -29,7 +30,7 @@ namespace Emgu.CV
       /// <param name="descriptors">The array of feature descriptors</param>
       public FeatureTree(float[][] descriptors)
       {
-         _descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors);
+         _descriptorMatrix = CvToolbox.GetMatrixFromDescriptors(descriptors);
          _ptr = CvInvoke.cvCreateKDTree(_descriptorMatrix.Ptr);
       }
 
@@ -52,7 +53,7 @@ namespace Emgu.CV
       /// <param name="tau">A good value is .1</param>
       public FeatureTree(float[][] descriptors, int naive, double rho, double tau)
       {
-         _descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors);
+         _descriptorMatrix = CvToolbox.GetMatrixFromDescriptors(descriptors);
          _ptr = CvInvoke.cvCreateSpillTree(_descriptorMatrix.Ptr, naive, rho, tau);
       }
 
@@ -105,7 +106,7 @@ namespace Emgu.CV
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit. Use 20 if not sure</param>
       private void FindFeatures(float[][] descriptors, Matrix<Int32> results, Matrix<double> dist, int k, int emax)
       {
-         using (Matrix<float> descriptorMatrix = Util.GetMatrixFromDescriptors(descriptors))
+         using (Matrix<float> descriptorMatrix = CvToolbox.GetMatrixFromDescriptors(descriptors))
             CvInvoke.cvFindFeatures(Ptr, descriptorMatrix.Ptr, results.Ptr, dist.Ptr, k, emax);
       }
 

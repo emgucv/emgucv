@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -108,7 +109,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Util.GetMatrixDepth(typeof(TDepth));
+            return CvToolbox.GetMatrixDepth(typeof(TDepth));
          }
       }
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System.Runtime.InteropServices;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -146,7 +147,7 @@ namespace Emgu.CV.GPU
          try
          {
             // if the direct conversion exist, apply the conversion
-            GpuInvoke.gpuMatCvtColor(src, dest, Util.GetColorCvtCode(srcColor, destColor), stream);
+            GpuInvoke.gpuMatCvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), stream);
          }
          catch
          {
@@ -155,8 +156,8 @@ namespace Emgu.CV.GPU
                //if a direct conversion doesn't exist, apply a two step conversion
                using (GpuImage<Bgr, TDepth> tmp = new GpuImage<Bgr, TDepth>(size))
                {
-                  GpuInvoke.gpuMatCvtColor(src, tmp.Ptr, Util.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
-                  GpuInvoke.gpuMatCvtColor(tmp.Ptr, dest, Util.GetColorCvtCode(typeof(Bgr), destColor), stream);
+                  GpuInvoke.gpuMatCvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
+                  GpuInvoke.gpuMatCvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
                }
             }
             catch

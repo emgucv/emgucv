@@ -9,6 +9,7 @@ using System.Security.Permissions;
 using Emgu.CV.Features2D;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -126,7 +127,7 @@ namespace Emgu.CV
                    size,
                    (CvEnum.IPL_DEPTH)mptr.depth,
                    3);
-               CvInvoke.cvCvtColor(ptr, tmp, Util.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
+               CvInvoke.cvCvtColor(ptr, tmp, CvToolbox.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
 
                CvInvoke.cvReleaseImage(ref ptr);
                ptr = tmp;
@@ -581,7 +582,7 @@ namespace Emgu.CV
 
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
 
-         subRect._ptr = Util.cvGetImageSubRect(_ptr, ref rect);
+         subRect._ptr = CvToolbox.cvGetImageSubRect(_ptr, ref rect);
          return subRect;
       }
 
@@ -2557,7 +2558,7 @@ namespace Emgu.CV
          try
          {
             // if the direct conversion exist, apply the conversion
-            CvInvoke.cvCvtColor(src, dest, Util.GetColorCvtCode(srcColor, destColor));
+            CvInvoke.cvCvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor));
          }
          catch
          {
@@ -2566,8 +2567,8 @@ namespace Emgu.CV
                //if a direct conversion doesn't exist, apply a two step conversion
                using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
                {
-                  CvInvoke.cvCvtColor(src, tmp.Ptr, Util.GetColorCvtCode(srcColor, typeof(Bgr)));
-                  CvInvoke.cvCvtColor(tmp.Ptr, dest, Util.GetColorCvtCode(typeof(Bgr), destColor));
+                  CvInvoke.cvCvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)));
+                  CvInvoke.cvCvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor));
                }
             }
             catch
@@ -2628,7 +2629,7 @@ namespace Emgu.CV
                    System.Drawing.Imaging.PixelFormat.Format8bppIndexed,
                    scan0
                    );
-               bmp.Palette = Util.GrayscalePalette;
+               bmp.Palette = CvToolbox.GrayscalePalette;
                return bmp;
             }
             // Mono in Linux doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
@@ -2725,7 +2726,7 @@ namespace Emgu.CV
                      {
                         indexValue.CopyFromBitmap(value);
                         Matrix<Byte> bTable, gTable, rTable, aTable;
-                        Util.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
+                        CvToolbox.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
 
                         using (Image<Gray, Byte> b = indexValue.CopyBlank())
                         using (Image<Gray, Byte> g = indexValue.CopyBlank())
@@ -2869,7 +2870,7 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
                bmp.UnlockBits(data);
-               bmp.Palette = Util.GrayscalePalette;
+               bmp.Palette = CvToolbox.GrayscalePalette;
 
                return bmp;
             }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using Emgu.CV.Structure;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Features2D
@@ -423,7 +424,7 @@ namespace Emgu.CV.Features2D
             Debug.Assert(modelFeatures.Length > 0, "Model Features should have size > 0");
 
             _modelIndex = new Flann.Index(
-               Util.GetMatrixFromDescriptors(
+               CvToolbox.GetMatrixFromDescriptors(
                   Array.ConvertAll<ImageFeature, float[]>(
                      modelFeatures,
                      delegate(ImageFeature f) { return f.Descriptor; })),
@@ -459,7 +460,7 @@ namespace Emgu.CV.Features2D
             using (Matrix<int> result1 = new Matrix<int>(descriptors.Length, k))
             using (Matrix<float> dist1 = new Matrix<float>(descriptors.Length, k))
             {
-               _modelIndex.KnnSearch(Util.GetMatrixFromDescriptors(descriptors), result1, dist1, k, emax);
+               _modelIndex.KnnSearch(CvToolbox.GetMatrixFromDescriptors(descriptors), result1, dist1, k, emax);
 
                int[,] indexes = result1.Data;
                float[,] distances = dist1.Data;
