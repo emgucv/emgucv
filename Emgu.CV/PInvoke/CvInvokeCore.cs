@@ -1,7 +1,9 @@
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using System.Drawing;
+using Emgu.CV.Util;
+
 namespace Emgu.CV
 {
    public partial class CvInvoke

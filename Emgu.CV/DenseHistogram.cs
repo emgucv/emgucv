@@ -1,10 +1,11 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using Emgu.Util;
-using Emgu.CV.Structure;
-using System.Runtime.Serialization;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV
 {

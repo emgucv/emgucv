@@ -8,8 +8,8 @@ using System.Security.Permissions;
 using System.Xml.Serialization;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
-//using zlib;
 
 namespace Emgu.CV
 {

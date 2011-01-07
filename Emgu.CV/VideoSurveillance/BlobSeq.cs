@@ -1,6 +1,7 @@
 using System;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.VideoSurveillance
 {

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Emgu.CV.Structure;
-using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {

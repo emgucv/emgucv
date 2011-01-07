@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV
+namespace Emgu.CV.Util
 {
    /// <summary>
    /// Cache the size of various header in bytes

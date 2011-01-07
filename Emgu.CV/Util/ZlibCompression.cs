@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Util
 {
    /// <summary>
    /// Use zlib included in OpenCV to perform in-memory binary compression and decompression
