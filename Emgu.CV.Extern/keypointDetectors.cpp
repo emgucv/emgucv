@@ -1,7 +1,6 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/contrib/contrib.hpp"
-#include "vectorOfFloat.h"
 
 //FernClassifier
 CVAPI(cv::FernClassifier*) CvFernClassifierCreate() { return new cv::FernClassifier; }
@@ -51,13 +50,13 @@ CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image,
 CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
 CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, VectorOfFloat* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
 {
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
    //CV_Assert(numberOfLocation == locationVec.size());
    cv::Mat imageMat = cv::cvarrToMat(image);
-   descriptor->compute(imageMat, descriptors->data, *winStride, locationVec);
+   descriptor->compute(imageMat, *descriptors, *winStride, locationVec);
 
    //float sumAbs = 0.0f;
    //for (int i = 0; i < descriptors->data.size(); i++)
@@ -134,7 +133,7 @@ CVAPI(void) CvSIFTDetectorDetectKeyPoints(cv::SIFT* detector, IplImage* image, I
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
-CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, VectorOfFloat* descriptors)
+CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -147,12 +146,12 @@ CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, Ipl
    if (count > 0)
    {
       cvSeqPushMulti(keypoints, &pts[0], count);
-      descriptors->data.resize(count);
-      memcpy(&descriptors->data[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
+      descriptors->resize(count);
+      memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
    }
 }
 
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, VectorOfFloat* descriptors)
+CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, std::vector<float>* descriptors)
 {
    if (numberOfKeyPoints <= 0) return;
    
@@ -163,8 +162,8 @@ CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image
    memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
    cv::Mat descriptorsMat;
    (*detector)(mat, maskMat, pts, descriptorsMat, true);
-   descriptors->data.resize(detector->descriptorSize() * numberOfKeyPoints);
-   memcpy(&descriptors->data[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptors->data.size());
+   descriptors->resize(detector->descriptorSize() * numberOfKeyPoints);
+   memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptors->size());
 }
 
 //SURFDetector
@@ -185,13 +184,13 @@ CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, I
       cvSeqPushMulti(keypoints, &pts[0], count);
 }
 
-CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, VectorOfFloat* descriptors)
+CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
    std::vector<cv::KeyPoint> pts;
-   (*detector)(mat, maskMat, pts, descriptors->data, false);
+   (*detector)(mat, maskMat, pts, *descriptors, false);
 
    int count = pts.size();
    if (count > 0)
@@ -200,14 +199,14 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
    }
 }
 
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, VectorOfFloat* descriptors)
+CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
    std::vector<cv::KeyPoint> pts = std::vector<cv::KeyPoint>(numberOfKeyPoints);
    memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
-   (*detector)(mat, maskMat, pts, descriptors->data, true);
+   (*detector)(mat, maskMat, pts, *descriptors, true);
 }
 
 // detect corners using FAST algorithm

@@ -1,5 +1,4 @@
 #include "opencv2/core/core_c.h"
-#include "vectorOfFloat.h"
 #include "opencv2/objdetect/objdetect.hpp"
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
@@ -24,9 +23,9 @@ CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
    return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
 
-CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, VectorOfFloat* vector) 
+CVAPI(void) CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector) 
 { 
-   descriptor->setSVMDetector(vector->data); 
+   descriptor->setSVMDetector(*vector); 
 }
 
 CVAPI(void) CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
@@ -53,7 +52,7 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
 CVAPI(void) CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
     CvArr *img, 
-    VectorOfFloat *descriptors,
+    std::vector<float> *descriptors,
     CvSize winStride,
     CvSize padding,
     CvSeq* locationSeq) 
@@ -68,7 +67,7 @@ CVAPI(void) CvHOGDescriptorCompute(
     
     descriptor->compute(
        mat, 
-       descriptors->data,
+       *descriptors,
        winStride,
        padding,
        location); 

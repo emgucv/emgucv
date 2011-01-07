@@ -1783,6 +1783,19 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void Test_VectorOfFloat()
+      {
+         VectorOfFloat vf = new VectorOfFloat();
+         float[] values = new float[20];
+         for (int i = 0; i < values.Length; i++)
+            values[i] = i;
+         vf.Push(values);
+         float[] valuesCopy = vf.ToArray();
+         for (int i = 0; i < values.Length; i++)
+            Assert.AreEqual(values[i], valuesCopy[i]);
+      }
+
       /*
       //TODO: make this work for Bug 22 on bugzilla
       [Test]

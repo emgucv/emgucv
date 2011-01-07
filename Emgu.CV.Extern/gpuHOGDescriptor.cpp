@@ -1,5 +1,4 @@
 #include "opencv2/gpu/gpu.hpp"
-#include "vectorOfFloat.h"
 
 CVAPI(void) gpuHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
@@ -23,9 +22,9 @@ CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreate(
    return new cv::gpu::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _winSigma, _L2HysThreshold, _gammaCorrection, _nlevels);
 }
 
-CVAPI(void) gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, VectorOfFloat* vector) 
+CVAPI(void) gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, std::vector<float>* vector) 
 { 
-   descriptor->setSVMDetector(vector->data); 
+   descriptor->setSVMDetector(*vector); 
 }
 
 CVAPI(void) gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor* descriptor) { delete descriptor; }

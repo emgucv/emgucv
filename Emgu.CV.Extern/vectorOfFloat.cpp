@@ -1,41 +1,42 @@
-#include "vectorOfFloat.h"
+#include <vector>
+#include "opencv2/core/core_c.h"
 
-CVAPI(VectorOfFloat*) VectorOfFloatCreate() 
+CVAPI(std::vector<float>*) VectorOfFloatCreate() 
 { 
-   return new VectorOfFloat(); 
+   return new std::vector<float>(); 
 }
 
-CVAPI(VectorOfFloat*) VectorOfFloatCreateSize(int size) 
+CVAPI(std::vector<float>*) VectorOfFloatCreateSize(int size) 
 { 
-   return new VectorOfFloat(size); 
+   return new std::vector<float>(size); 
 }
 
-CVAPI(int) VectorOfFloatGetSize(VectorOfFloat* v)
+CVAPI(int) VectorOfFloatGetSize(std::vector<float>* v)
 {
-   return v->data.size();
+   return v->size();
 }
 
-CVAPI(void) VectorOfFloatPushMulti(VectorOfFloat* v, float* values, int count)
+CVAPI(void) VectorOfFloatPushMulti(std::vector<float>* v, float* values, int count)
 {
-   for(int i=0; i < count; i++) v->data.push_back(*values++);
+   for(int i=0; i < count; i++) v->push_back(*values++);
 }
 
-CVAPI(void) VectorOfFloatClear(VectorOfFloat* v)
+CVAPI(void) VectorOfFloatClear(std::vector<float>* v)
 {
-   v->data.clear();
+   v->clear();
 }
 
-CVAPI(void) VectorOfFloatRelease(VectorOfFloat* v)
+CVAPI(void) VectorOfFloatRelease(std::vector<float>* v)
 {
    delete v;
 }
 
-CVAPI(void) VectorOfFloatCopyData(VectorOfFloat* v, float* data)
+CVAPI(void) VectorOfFloatCopyData(std::vector<float>* v, float* data)
 {
-   memcpy(data, &v->data[0], v->data.size());
+   memcpy(data, &(*v)[0], v->size() * sizeof(float));
 }
 
-CVAPI(float*) VectorOfFloatGetStartAddress(VectorOfFloat* v)
+CVAPI(float*) VectorOfFloatGetStartAddress(std::vector<float>* v)
 {
-   return &v->data[0];
+   return &(*v)[0];
 }
