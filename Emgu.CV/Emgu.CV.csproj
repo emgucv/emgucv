@@ -135,7 +135,8 @@
     <Compile Include="Features2D\SURFTracker.cs" />
     <Compile Include="Tiff\TiffWriter.cs" />
     <Compile Include="Tiff\TileTiffWriter.cs" />
-    <Compile Include="VectorOfFloat.cs" />
+    <Compile Include="Util\Util.cs" />
+    <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
@@ -246,7 +247,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="TimedImage.cs" />
-    <Compile Include="Util.cs" />
     <Compile Include="VideoSurveillance\IBGFGDetector.cs" />
     <Compile Include="VideoWriter.cs" />
     <Compile Include="ZlibCompression.cs" />
