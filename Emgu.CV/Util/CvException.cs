@@ -1,6 +1,6 @@
 using System;
 
-namespace Emgu.CV
+namespace Emgu.CV.Util
 {
    /// <summary>
    /// The default exception to be thrown when error encounter in Open CV 
