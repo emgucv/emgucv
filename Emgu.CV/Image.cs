@@ -1420,12 +1420,8 @@ namespace Emgu.CV
       [Obsolete("Use Features2D.FastDetector instead, will be removed in the next version.")]
       public MKeyPoint[] GetFASTKeypoints(int threshold, bool nonmaxSupression)
       {
-         using (MemStorage stor = new MemStorage())
-         {
-            Seq<MKeyPoint> keypoints = new Seq<MKeyPoint>(stor);
-            CvInvoke.CvFASTKeyPoints(Ptr, keypoints, threshold, nonmaxSupression);
-            return keypoints.ToArray();
-         }
+         FastDetector fd = new FastDetector(threshold, nonmaxSupression);
+         return fd.DetectKeyPoints(this as Image<Gray, Byte>);
       }
 
       /// <summary>

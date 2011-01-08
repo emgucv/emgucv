@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -12,6 +13,23 @@ namespace Emgu.CV.Features2D
    [StructLayout(LayoutKind.Sequential)]
    public struct FastDetector : IKeyPointDetector
    {
+      #region PInvoke
+      /// <summary>
+      /// Extract FAST keypoints
+      /// </summary>
+      /// <param name="image">The image to extract keypoint from</param>
+      /// <param name="KeyPointSeq">The pre-allocated sequence of MKeyPoints where the result will be stored</param>
+      /// <param name="threshold"></param>
+      /// <param name="nonmaxSupression">Indicates if nonmaximum supression should be used</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvFASTKeyPoints(
+         IntPtr image,
+         IntPtr KeyPointSeq,
+         int threshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool nonmaxSupression);
+      #endregion
+
       /// <summary>
       /// FAST threshold
       /// </summary>
@@ -40,10 +58,9 @@ namespace Emgu.CV.Features2D
       /// <returns>The array of fast keypoints</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> keypoints = new Seq<MKeyPoint>(stor);
-            CvInvoke.CvFASTKeyPoints(image, keypoints, Threshold, NonmaxSupression);
+            CvFASTKeyPoints(image, keypoints, Threshold, NonmaxSupression);
             return keypoints.ToArray();
          }
       }

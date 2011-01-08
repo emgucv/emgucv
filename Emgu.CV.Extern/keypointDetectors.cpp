@@ -210,15 +210,10 @@ CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image
 }
 
 // detect corners using FAST algorithm
-CVAPI(void) CvFASTKeyPoints( IplImage* image, CvSeq* keypoints, int threshold, bool nonmax_supression)
+CVAPI(void) CvFASTKeyPoints( IplImage* image, std::vector<cv::KeyPoint>* keypoints, int threshold, bool nonmax_supression)
 {
    cv::Mat mat = cv::cvarrToMat(image);
-   std::vector<cv::KeyPoint> pts;
-   cv::FAST(mat, pts, threshold, nonmax_supression);
-   
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   cv::FAST(mat, *keypoints, threshold, nonmax_supression);
 }
 
 // MSER detector

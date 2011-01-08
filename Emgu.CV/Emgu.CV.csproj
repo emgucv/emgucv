@@ -139,6 +139,7 @@
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
+    <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
