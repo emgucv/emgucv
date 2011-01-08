@@ -187,11 +187,12 @@ namespace Emgu.CV.GPU
       ///Split current Image into an array of gray scale images where each element 
       ///in the array represent a single color channel of the original image
       ///</summary>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       ///<returns> 
       ///An array of gray scale images where each element  
       ///in the array represent a single color channel of the original image 
       ///</returns>
-      public new GpuImage<Gray, TDepth>[] Split()
+      public new GpuImage<Gray, TDepth>[] Split(Stream stream)
       {
          GpuImage<Gray, TDepth>[] result = new GpuImage<Gray, TDepth>[NumberOfChannels];
          Size size = Size;
@@ -200,7 +201,7 @@ namespace Emgu.CV.GPU
             result[i] = new GpuImage<Gray, TDepth>(size);
          }
 
-         SplitInto(result);
+         SplitInto(result, stream);
          return result;
       }
 
@@ -247,7 +248,7 @@ namespace Emgu.CV.GPU
 
       IImage[] IImage.Split()
       {
-         return Split();
+         return Split(null);
       }
 
       /// <summary>

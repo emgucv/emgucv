@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Drawing;
 using System.Text;
-using NUnit.Framework;
-using Emgu.CV.GPU;
 using Emgu.CV;
+using Emgu.CV.GPU;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using System.Drawing;
-using System.Diagnostics;
+using Emgu.CV.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.GPU.Test
 {
@@ -18,11 +18,14 @@ namespace Emgu.CV.GPU.Test
       [Test]
       public void TestGetCudaEnabledDeviceCount()
       {
-         int deviceCount = GpuInvoke.GetCudaEnabledDeviceCount();
-         Trace.WriteLine(String.Format("Device count: {0}", deviceCount));
-         if (deviceCount > 0)
+         if (GpuInvoke.HasCuda)
          {
-            GpuDevice d0 = new GpuDevice(0);
+            int deviceCount = GpuInvoke.GetCudaEnabledDeviceCount();
+            Trace.WriteLine(String.Format("Device count: {0}", deviceCount));
+            if (deviceCount > 0)
+            {
+               GpuDevice d0 = new GpuDevice(0);
+            }
          }
       }
 
@@ -36,6 +39,38 @@ namespace Emgu.CV.GPU.Test
             }
          }
       }*/
+
+      [Test]
+      public void TestGpuImageAsyncOps()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            int counter = 0;
+            Stopwatch watch = Stopwatch.StartNew();
+            using (GpuImage<Bgr, byte> img1 = new GpuImage<Bgr, byte>(3000, 2000))
+            using (GpuImage<Bgr, Byte> img2 = new GpuImage<Bgr, Byte>(img1.Size))
+            using (GpuImage<Gray, Byte> img3 = new GpuImage<Gray, byte>(img2.Size))
+            using (Stream stream = new Stream())
+            using (GpuMat<float> mat1 = img1.Convert<float>(stream))
+            {
+               while (!stream.Completed)
+               {
+                  if (counter <= int.MaxValue) counter++;
+               }
+               Trace.WriteLine(String.Format("Counter has been incremented {0} times", counter));
+
+               counter = 0;
+               GpuInvoke.gpuMatCvtColor(img2, img3, CvToolbox.GetColorCvtCode(typeof(Bgr), typeof(Gray)), stream);
+               while (!stream.Completed)
+               {
+                  if (counter <= int.MaxValue) counter++;
+               }
+               Trace.WriteLine(String.Format("Counter has been incremented {0} times", counter));
+            }
+            watch.Stop();
+            Trace.WriteLine(String.Format("Total time: {0} milliseconds", watch.ElapsedMilliseconds));
+         }
+      }
 
       [Test]
       public void TestGpuMatAdd()
@@ -81,8 +116,8 @@ namespace Emgu.CV.GPU.Test
 
             using (GpuImage<Bgr, Byte> gpuImg1 = new GpuImage<Bgr, byte>(img1))
             {
-               GpuImage<Gray, Byte>[] channels = gpuImg1.Split();
-               
+               GpuImage<Gray, Byte>[] channels = gpuImg1.Split(null);
+
                for (int i = 0; i < channels.Length; i++)
                {
                   Assert.IsTrue(channels[i].ToImage().Equals(img1[i]), "failed split GpuMat");
@@ -90,7 +125,7 @@ namespace Emgu.CV.GPU.Test
 
                using (GpuImage<Bgr, Byte> gpuImg2 = new GpuImage<Bgr, byte>(channels[0].Size))
                {
-                  gpuImg2.MergeFrom(channels);
+                  gpuImg2.MergeFrom(channels, null);
                   Assert.IsTrue(gpuImg2.ToImage().Equals(img1), "failed split and merge test");
                }
 
@@ -102,7 +137,7 @@ namespace Emgu.CV.GPU.Test
          }
       }
 
-      
+
       [Test]
       public void TestConvolutionAndLaplace()
       {
@@ -200,26 +235,29 @@ namespace Emgu.CV.GPU.Test
       [Test]
       public void TestHOG()
       {
-         using (GpuHOGDescriptor hog = new GpuHOGDescriptor())
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         if (GpuInvoke.HasCuda)
          {
-            float[] pedestrianDescriptor = GpuHOGDescriptor.GetDefaultPeopleDetector();
-            hog.SetSVMDetector(pedestrianDescriptor);
+            using (GpuHOGDescriptor hog = new GpuHOGDescriptor())
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+            {
+               float[] pedestrianDescriptor = GpuHOGDescriptor.GetDefaultPeopleDetector();
+               hog.SetSVMDetector(pedestrianDescriptor);
 
-            Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] rects;
-            using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr,byte>(image))
-            using (GpuImage<Bgra, Byte> gpuBgra = gpuImage.Convert<Bgra, Byte>())
-               rects = hog.DetectMultiScale(gpuBgra);
-            watch.Stop();
+               Stopwatch watch = Stopwatch.StartNew();
+               Rectangle[] rects;
+               using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
+               using (GpuImage<Bgra, Byte> gpuBgra = gpuImage.Convert<Bgra, Byte>())
+                  rects = hog.DetectMultiScale(gpuBgra);
+               watch.Stop();
 
-            Assert.AreEqual(1, rects.Length);
+               Assert.AreEqual(1, rects.Length);
 
-            foreach (Rectangle rect in rects)
-               image.Draw(rect, new Bgr(Color.Red), 1);
-            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+               foreach (Rectangle rect in rects)
+                  image.Draw(rect, new Bgr(Color.Red), 1);
+               Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
-            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+               //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            }
          }
       }
    }
