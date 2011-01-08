@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -114,13 +115,12 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image where mser will be extracted from</param>
       /// <param name="mask">Can be null if not needed. Optional parameter for the region of interest</param>
-      /// <param name="param">MSER parameter</param>
       /// <param name="storage">The storage where the contour will be saved</param>
       /// <returns>The MSER regions</returns>
-      public Seq<Point>[] ExtractContours(IImage image, Image<Gray, Byte> mask, ref MSERDetector param, MemStorage storage)
+      public Seq<Point>[] ExtractContours(IImage image, Image<Gray, Byte> mask, MemStorage storage)
       {
          IntPtr mserPtr = new IntPtr();
-         CvInvoke.cvExtractMSER(image.Ptr, mask, ref mserPtr, storage, param);
+         CvInvoke.cvExtractMSER(image.Ptr, mask, ref mserPtr, storage, this);
          IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }
@@ -133,11 +133,10 @@ namespace Emgu.CV.Features2D
       /// <returns>An array of MSER key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
-            CvMSERKeyPoints(image, mask, seq.Ptr, ref this);
-            return seq.ToArray();
+            CvMSERKeyPoints(image, mask, kpts, ref this);
+            return kpts.ToArray();
          }
       }
 

@@ -199,18 +199,13 @@ CVAPI(void) CvFASTKeyPoints( IplImage* image, std::vector<cv::KeyPoint>* keypoin
 }
 
 // MSER detector
-CVAPI(void) CvMSERKeyPoints(IplImage* image, IplImage* mask, CvSeq* keypoints, CvMSERParams* param)
+CVAPI(void) CvMSERKeyPoints(IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMSERParams* param)
 {
    cv::MserFeatureDetector mser = cv::MserFeatureDetector(param->delta, param->minArea, param->maxArea, param->maxVariation, param->minDiversity, param->maxEvolution, param->areaThreshold, param->minMargin, param->edgeBlurSize);
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   //if (mask) maskMat = cv::cvarrToMat(mask);
-   std::vector<cv::KeyPoint> pts;
-   mser.detect(mat, pts, maskMat);
 
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   mser.detect(mat, *keypoints, maskMat);
 }
 
 //Plannar Object Detector
