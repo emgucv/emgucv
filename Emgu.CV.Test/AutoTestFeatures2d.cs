@@ -80,7 +80,7 @@ namespace Emgu.CV.Test
 
          using (MemStorage storage = new MemStorage())
          {
-            Seq<Point>[] mser = param.ExtractContours(image, null, ref param, storage);
+            Seq<Point>[] mser = param.ExtractContours(image, null, storage);
             {
                foreach (Seq<Point> region in mser)
                   image.Draw(region, new Gray(255.0), 2);

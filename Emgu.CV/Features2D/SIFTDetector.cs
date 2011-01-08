@@ -38,7 +38,6 @@ namespace Emgu.CV.Features2D
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         int numberOfKeyPoints,
          IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -102,11 +101,10 @@ namespace Emgu.CV.Features2D
       /// <returns>An array of SURF key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
-            CvSIFTDetectorDetectKeyPoints(_ptr, image, mask, seq.Ptr);
-            return seq.ToArray();
+            CvSIFTDetectorDetectKeyPoints(_ptr, image, mask, kpts);
+            return kpts.ToArray();
          }
       }
 
@@ -118,23 +116,22 @@ namespace Emgu.CV.Features2D
       /// <returns>The Image features detected from the given image</returns>
       public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
-         using (VectorOfFloat descs = new VectorOfFloat())
+         using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
+         using (VectorOfFloat descVec = new VectorOfFloat())
          {
-            Seq<MKeyPoint> pts = new Seq<MKeyPoint>(stor);
-            CvSIFTDetectorDetectFeature(_ptr, image, mask, pts, descs);
+            CvSIFTDetectorDetectFeature(_ptr, image, mask, pts, descVec);
             MKeyPoint[] kpts = pts.ToArray();
+            float[] desc = descVec.ToArray();
             int n = kpts.Length;
-            long add = descs.StartAddress.ToInt64();
+            int sizeOfdescriptor = DescriptorSize;
 
             ImageFeature[] features = new ImageFeature[n];
-            int sizeOfdescriptor = DescriptorSize;
-            for (int i = 0; i < n; i++, add += sizeOfdescriptor * sizeof(float))
+            for (int i = 0; i < n; i++)
             {
                features[i].KeyPoint = kpts[i];
-               float[] desc = new float[sizeOfdescriptor];
-               Marshal.Copy(new IntPtr(add), desc, 0, sizeOfdescriptor);
-               features[i].Descriptor = desc;
+               float[] d = new float[sizeOfdescriptor];
+               Array.Copy(desc, i * sizeOfdescriptor, d, 0, sizeOfdescriptor);
+               features[i].Descriptor = d;
             }
             return features;
          }
@@ -161,23 +158,24 @@ namespace Emgu.CV.Features2D
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
          if (keyPoints.Length == 0) return new ImageFeature[0];
-         using (VectorOfFloat descs = new VectorOfFloat())
+         using (VectorOfFloat descVec = new VectorOfFloat())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            GCHandle handle = GCHandle.Alloc(keyPoints, GCHandleType.Pinned);
-            CvSIFTDetectorComputeDescriptors(_ptr, image, mask, handle.AddrOfPinnedObject(), keyPoints.Length, descs);
-            handle.Free();
+            kpts.Push(keyPoints);
+            CvSIFTDetectorComputeDescriptors(_ptr, image, mask, kpts, descVec);
 
             int n = keyPoints.Length;
-            long address = descs.StartAddress.ToInt64();
+            float[] descs = descVec.ToArray();
+            //long address = descVec.StartAddress.ToInt64();
 
             ImageFeature[] features = new ImageFeature[n];
             int sizeOfdescriptor = DescriptorSize;
-            for (int i = 0; i < n; i++, address += sizeOfdescriptor * sizeof(float))
+            for (int i = 0; i < n; i++)
             {
                features[i].KeyPoint = keyPoints[i];
-               float[] desc = new float[sizeOfdescriptor];
-               Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
-               features[i].Descriptor = desc;
+               float[] d = new float[sizeOfdescriptor];
+               Array.Copy(descs, i * sizeOfdescriptor, d, 0, sizeOfdescriptor);
+               features[i].Descriptor = d;
             }
             return features;
          }

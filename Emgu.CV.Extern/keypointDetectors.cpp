@@ -116,53 +116,39 @@ CVAPI(int) CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
    return detector->descriptorSize();
 }
 
-CVAPI(void) CvSIFTDetectorDetectKeyPoints(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints)
+CVAPI(void) CvSIFTDetectorDetectKeyPoints(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
-   cvClearSeq(keypoints);
-
-   std::vector<cv::KeyPoint> pts;
-
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-
-   (*detector)(mat, maskMat, pts);
-
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   (*detector)(mat, maskMat, *keypoints);
 }
 
-CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, std::vector<float>* descriptors)
+CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-   std::vector<cv::KeyPoint> pts;
    cv::Mat descriptorsMat;
-   (*detector)(mat, maskMat, pts, descriptorsMat, false);
+   (*detector)(mat, maskMat, *keypoints, descriptorsMat, false);
 
-   int count = pts.size();
-   if (count > 0)
-   {
-      cvSeqPushMulti(keypoints, &pts[0], count);
-      descriptors->resize(count);
+   descriptors->resize(keypoints->size()*detector->descriptorSize());
+
+   if (keypoints->size() > 0)
       memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
-   }
 }
 
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, std::vector<float>* descriptors)
+CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
-   if (numberOfKeyPoints <= 0) return;
+   if (keypoints->size() <= 0) return;
    
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-   std::vector<cv::KeyPoint> pts = std::vector<cv::KeyPoint>(numberOfKeyPoints);
-   memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
+
    cv::Mat descriptorsMat;
-   (*detector)(mat, maskMat, pts, descriptorsMat, true);
-   descriptors->resize(detector->descriptorSize() * numberOfKeyPoints);
+   (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
+   descriptors->resize(detector->descriptorSize() * keypoints->size());
    memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptors->size());
 }
 
