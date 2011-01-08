@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Emgu.Util;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV.GPU
@@ -12,7 +13,7 @@ namespace Emgu.CV.GPU
    /// Passed to each function that supports async kernel execution.
    /// Reference counting is enabled
    /// </summary>
-   public class Stream :UnmanagedObject
+   public class Stream : UnmanagedObject
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -27,6 +28,9 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool streamQueryIfComplete(IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void streamEnqueueCopy(IntPtr stream, IntPtr src, IntPtr dst);
       #endregion
 
       /// <summary>
@@ -51,6 +55,17 @@ namespace Emgu.CV.GPU
       public bool Completed
       {
          get { return streamQueryIfComplete(_ptr); }
+      }
+
+      /// <summary>
+      /// Copy the src GpuMat to dst GpuMat asyncronously
+      /// </summary>
+      /// <typeparam name="TDepth">The type of depth for the GpuMat</typeparam>
+      /// <param name="src">The source matrix</param>
+      /// <param name="dst">The destination matrix. Must be the same size and same number of channels</param>
+      public void Copy<TDepth>(GpuMat<TDepth> src, GpuMat<TDepth> dst) where TDepth : new()
+      {
+         streamEnqueueCopy(_ptr, src, dst);
       }
 
       /// <summary>

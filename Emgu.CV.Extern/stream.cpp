@@ -8,3 +8,5 @@ CVAPI(void) streamWaitForCompletion(cv::gpu::Stream* stream) { stream->waitForCo
 
 CVAPI(bool) streamQueryIfComplete(cv::gpu::Stream* stream) { return stream->queryIfComplete(); }
 
+CVAPI(void) streamEnqueueCopy(cv::gpu::Stream* stream, cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst) { return stream->enqueueCopy(*src, *dst); }
+
