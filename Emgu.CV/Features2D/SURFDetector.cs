@@ -34,7 +34,6 @@ namespace Emgu.CV.Features2D
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         int numberOfKeyPoints,
          IntPtr descriptors);
       #endregion
 
@@ -91,11 +90,10 @@ namespace Emgu.CV.Features2D
       /// <returns>An array of SURF key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
-            CvSURFDetectorDetectKeyPoints(ref this, image, mask, seq.Ptr);
-            return seq.ToArray();
+            CvSURFDetectorDetectKeyPoints(ref this, image, mask, keypoints);
+            return keypoints.ToArray();
          }
       }
 
@@ -107,10 +105,9 @@ namespace Emgu.CV.Features2D
       /// <returns>The Image features detected from the given image</returns>
       public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          using (VectorOfFloat descs = new VectorOfFloat())
          {
-            Seq<MKeyPoint> pts = new Seq<MKeyPoint>(stor);
             CvSURFDetectorDetectFeature(ref this, image, mask, pts, descs);
             MKeyPoint[] kpts = pts.ToArray();
             int n = kpts.Length;
@@ -139,10 +136,10 @@ namespace Emgu.CV.Features2D
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
          using (VectorOfFloat descs = new VectorOfFloat())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            GCHandle handle = GCHandle.Alloc(keyPoints, GCHandleType.Pinned);
-            CvSURFDetectorComputeDescriptors(ref this, image, mask, handle.AddrOfPinnedObject(), keyPoints.Length, descs);
-            handle.Free();
+            kpts.Push(keyPoints);
+            CvSURFDetectorComputeDescriptors(ref this, image, mask, kpts, descs);
 
             int n = keyPoints.Length;
             long address = descs.StartAddress.ToInt64();

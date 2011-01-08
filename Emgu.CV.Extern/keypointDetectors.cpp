@@ -167,46 +167,28 @@ CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image
 }
 
 //SURFDetector
-CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints)
+CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
-   cvClearSeq(keypoints);
-
-   std::vector<cv::KeyPoint> pts;
-
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-
-   (*detector)(mat, maskMat, pts);
-
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   (*detector)(mat, maskMat, *keypoints);
 }
 
-CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, CvSeq* keypoints, std::vector<float>* descriptors)
+CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-   std::vector<cv::KeyPoint> pts;
-   (*detector)(mat, maskMat, pts, *descriptors, false);
-
-   int count = pts.size();
-   if (count > 0)
-   {
-      cvSeqPushMulti(keypoints, &pts[0], count);
-   }
+   (*detector)(mat, maskMat, *keypoints, *descriptors, false);
 }
 
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, cv::KeyPoint* keypoints, int numberOfKeyPoints, std::vector<float>* descriptors)
+CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
-   std::vector<cv::KeyPoint> pts = std::vector<cv::KeyPoint>(numberOfKeyPoints);
-   memcpy(&pts[0], keypoints, sizeof(cv::KeyPoint) * numberOfKeyPoints);
-   (*detector)(mat, maskMat, pts, *descriptors, true);
+   (*detector)(mat, maskMat, *keypoints, *descriptors, true);
 }
 
 // detect corners using FAST algorithm
