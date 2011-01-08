@@ -68,17 +68,10 @@ CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplIma
 CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
 
 //StarDetector
-CVAPI(void) CvStarDetectorDetectKeyPoints(cv::StarDetector* detector, IplImage* image, CvSeq* keypoints)
+CVAPI(void) CvStarDetectorDetectKeyPoints(cv::StarDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints)
 {
-   cvClearSeq(keypoints);
    cv::Mat mat = cv::cvarrToMat(image);
-   std::vector<cv::KeyPoint> pts;
-
-   (*detector)(mat, pts);
-
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   (*detector)(mat, *keypoints);
 }
 
 //SIFTDetector

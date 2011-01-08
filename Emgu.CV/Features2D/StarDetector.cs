@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -97,11 +98,10 @@ namespace Emgu.CV.Features2D
       /// <returns>The key pionts in the image</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
-            CvStarDetectorDetectKeyPoints(ref this, image, seq.Ptr);
-            return seq.ToArray();
+            CvStarDetectorDetectKeyPoints(ref this, image, kpts);
+            return kpts.ToArray();
          }
       }
    }
