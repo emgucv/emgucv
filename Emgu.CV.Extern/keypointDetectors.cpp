@@ -33,17 +33,10 @@ CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg)
 }
 
 //LDetector
-CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, CvSeq* keypoints, int maxCount, bool scaleCoords)
+CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords)
 {
-   cvClearSeq(keypoints);
    cv::Mat mat = cv::cvarrToMat(image);
-   std::vector<cv::KeyPoint> pts;
-
-   (*detector)(mat, pts, maxCount, scaleCoords);
-
-   int count = pts.size();
-   if (count > 0)
-      cvSeqPushMulti(keypoints, &pts[0], count);
+   (*detector)(mat, *keypoints, maxCount, scaleCoords);
 }
 
 //SelfSimDescriptor

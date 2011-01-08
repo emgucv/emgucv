@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Emgu.Util;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -77,11 +78,10 @@ namespace Emgu.CV.Features2D
       /// <returns>The array of Lepetit keypoints</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, int maxCount, bool scaleCoords)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            Seq<MKeyPoint> seq = new Seq<MKeyPoint>(stor);
-            CvLDetectorDetectKeyPoints(ref this, image, seq.Ptr, maxCount, scaleCoords);
-            return seq.ToArray();
+            CvLDetectorDetectKeyPoints(ref this, image, kpts, maxCount, scaleCoords);
+            return kpts.ToArray();
          }
       }
 
