@@ -323,7 +323,7 @@ IF (WIN32)
     IF(CMAKE_CL_64)
       SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_intel64_2011.1.127.msi")
     ENDIF()
-	
+	MESSAGE(STATUS "${CV_ICC_REDIST_NAME} will be included in deployment package")
 	INSTALL(
 	  FILES 
 	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/intel_ccompxe_redist/${CV_ICC_REDIST_NAME}"
