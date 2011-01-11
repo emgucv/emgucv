@@ -439,6 +439,8 @@ INSTALL(
   PATTERN "CMake*" EXCLUDE
   PATTERN "Release" EXCLUDE
   PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+  PATTERN "3rdParty/x86" EXCLUDE #exclude 32bit osg binary
+  PATTERN "3rdParty/x86_64" EXCLUDE #exclude 64bit osg binary
   )
 
 INSTALL(
