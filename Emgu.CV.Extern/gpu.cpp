@@ -29,7 +29,7 @@ CVAPI(int) gpuGetNumberOfSMs(int device)
    return cv::gpu::getNumberOfSMs(device);
 }
 
-CVAPI(void) getGpuMemInfo(size_t* free, size_t* total);
+CVAPI(void) getGpuMemInfo(size_t* free, size_t* total)
 {
    cv::gpu::getGpuMemInfo(*free, *total); 
 }
