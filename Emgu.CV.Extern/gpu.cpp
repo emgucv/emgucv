@@ -29,6 +29,11 @@ CVAPI(int) gpuGetNumberOfSMs(int device)
    return cv::gpu::getNumberOfSMs(device);
 }
 
+CVAPI(void) getGpuMemInfo(size_t* free, size_t* total);
+{
+   cv::gpu::getGpuMemInfo(*free, *total); 
+}
+
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type)

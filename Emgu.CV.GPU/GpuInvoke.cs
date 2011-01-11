@@ -93,6 +93,22 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetDevice")]
       public static extern int getDevice();
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void getGpuMemInfo(ref UIntPtr free, ref UIntPtr total);
+
+      /// <summary>
+      /// Get the free and total amount of GPU memory on the current devide
+      /// </summary>
+      /// <param name="free">The free amount of GPU memory</param>
+      /// <param name="total">The total amount of GPU memory</param>
+      public static void getGpuMemInfo(out ulong free, out ulong total)
+      {
+         UIntPtr f = new UIntPtr(), t = new UIntPtr();
+         getGpuMemInfo(ref f, ref t);
+         free = f.ToUInt64();
+         total = t.ToUInt64();
+      }
+
       /// <summary>
       /// Get the compute capability of the device
       /// </summary>
