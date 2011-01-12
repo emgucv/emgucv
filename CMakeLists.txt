@@ -328,7 +328,7 @@ IF (WIN32)
 	  FILES 
 	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/intel_ccompxe_redist/${CV_ICC_REDIST_NAME}"
 	  DESTINATION .
-	  COMPONENT mgucv_binary
+	  COMPONENT emgucv_binary
 	  )
 	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${CV_ICC_REDIST_NAME} /passive'")
   ENDIF()    
