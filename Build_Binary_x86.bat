@@ -1,4 +1,4 @@
-REM @echo off
+@echo off
 IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
 IF NOT "%1%"=="64" ECHO "BUILDING 32bit solution"
 
