@@ -76,7 +76,7 @@ public:
    {
       coor->longitude = atan2(ecef->y, ecef->x);
 
-#if EMGU_SSE2 && !(_MSC_VER == 1500 && _M_X64)
+#if EMGU_SSE2 && !(_MSC_VER == 1500 && _WIN64)
       //The following SSE2 code simply doesn't compile in MSVC 2008 - 64bit for some strange reason.
       //Compiler crashes.
       double buffer[2];
