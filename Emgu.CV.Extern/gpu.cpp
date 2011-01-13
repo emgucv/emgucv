@@ -13,7 +13,7 @@ CVAPI(int) gpuGetDevice()
 CVAPI(void) gpuGetDeviceName(int device, char* name, int maxSizeInBytes)
 {
    std::string dName = cv::gpu::getDeviceName(device);
-   strcpy_s(name, maxSizeInBytes, dName.c_str());
+   strncpy(name, dName.c_str(), maxSizeInBytes);
 }
 
 CVAPI(void) gpuGetComputeCapability(int device, int* major, int* minor)
