@@ -66,6 +66,7 @@ namespace Emgu.CV
       private MemStorage _rectStorage;
       private Seq<Rectangle> _rectSeq;
       private VectorOfFloat _vector;
+
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
@@ -133,15 +134,15 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="hitThreshold"></param>
-      /// <param name="winStride"></param>
+      /// <param name="image">The image to search in</param>
+      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
       /// <param name="padding"></param>
-      /// <param name="scale"></param>
-      /// <param name="groupThreshold"></param>
-      /// <returns></returns>
+      /// <param name="scale">Coefficient of the detection window increase.</param>
+      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(
          Image<Bgr, Byte> image,
          double hitThreshold,
@@ -155,10 +156,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <returns></returns>
+      /// <param name="image">The image to search in</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2);
@@ -167,8 +168,8 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="winStride"></param>
+      /// <param name="image">The image</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
       /// <param name="padding"></param>
       /// <param name="locations">Locations for the computation. Can be null if not needed</param>
       /// <returns>The descriptor vector</returns>

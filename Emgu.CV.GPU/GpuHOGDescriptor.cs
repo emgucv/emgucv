@@ -55,6 +55,7 @@ namespace Emgu.CV.GPU
       private MemStorage _rectStorage;
       private Seq<Rectangle> _rectSeq;
       private VectorOfFloat _vector;
+
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
@@ -69,6 +70,15 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Create a new HOGDescriptor using the specific parameters
       /// </summary>
+      /// <param name="blockSize">Block size in cells. Only (2,2) is supported for now.</param>
+      /// <param name="cellSize">Cell size. Only (8, 8) is supported for now.</param>
+      /// <param name="blockStride">Block stride. Must be a multiple of cell size.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
+      /// <param name="nbins">Number of bins. Only 9 bins per cell is supported for now.</param>
+      /// <param name="nLevels">Maximum number of detection window increases.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
+      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride.</param>
       public GpuHOGDescriptor(
          Size winSize,
          Size blockSize,
@@ -77,7 +87,7 @@ namespace Emgu.CV.GPU
          int nbins,
          double winSigma,
          double L2HysThreshold,
-         bool gammaCorrection, 
+         bool gammaCorrection,
          int nLevels)
       {
          _ptr = gpuHOGDescriptorCreate(
@@ -88,7 +98,7 @@ namespace Emgu.CV.GPU
             nbins,
             winSigma,
             L2HysThreshold,
-            gammaCorrection, 
+            gammaCorrection,
             nLevels);
 
          _rectStorage = new MemStorage();
@@ -96,7 +106,7 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Return the default people detector
+      /// Returns coefficients of the classifier trained for people detection (for default window size).
       /// </summary>
       /// <returns>The default people detector</returns>
       public static float[] GetDefaultPeopleDetector()
@@ -121,15 +131,15 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="hitThreshold"></param>
-      /// <param name="winStride"></param>
-      /// <param name="padding"></param>
-      /// <param name="scale"></param>
-      /// <param name="groupThreshold"></param>
-      /// <returns></returns>
+      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
+      /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
+      /// <param name="scale">Coefficient of the detection window increase.</param>
+      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(
          GpuImage<Bgra, Byte> image,
          double hitThreshold,
@@ -143,15 +153,15 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <param name="hitThreshold"></param>
-      /// <param name="winStride"></param>
-      /// <param name="padding"></param>
-      /// <param name="scale"></param>
-      /// <param name="groupThreshold"></param>
-      /// <returns></returns>
+      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
+      /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
+      /// <param name="scale">Coefficient of the detection window increase.</param>
+      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(
          GpuImage<Gray, Byte> image,
          double hitThreshold,
@@ -165,20 +175,20 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <returns></returns>
+      /// <param name="image">The GpuImage to search in</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(GpuImage<Bgra, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
       }
 
       /// <summary>
-      /// 
+      /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image"></param>
-      /// <returns></returns>
+      /// <param name="image">The GpuImage to search in</param>
+      /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(GpuImage<Gray, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
