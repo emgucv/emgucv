@@ -326,6 +326,17 @@ namespace Emgu.CV.GPU
       #endregion
 
       /// <summary>
+      /// Compares elements of two arrays (c = a &lt;cmpop&gt; b).
+      /// Supports CV_8UC4, CV_32FC1 types
+      /// </summary>
+      /// <param name="a">The first GpuMat</param>
+      /// <param name="b">The second GpuMat</param>
+      /// <param name="c">The result of the comparison.</param>
+      /// <param name="cmpop">The type of comparison</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void gpuMatCompare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
+
+      /// <summary>
       /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
       /// Destination array will have the depth type as lut and the same channels number as source.
       /// Supports CV_8UC1, CV_8UC3 types.
@@ -412,6 +423,16 @@ namespace Emgu.CV.GPU
       /// <param name="stddev">The standard deviation</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
+
+      /// <summary>
+      /// Computes norm of the difference between two arrays
+      /// </summary>
+      /// <param name="src1">The GpuMat. Supports only CV_8UC1 type</param>
+      /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the GpuMat of type CV_8UC1</param>
+      /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
+      /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two arrays.</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern double gpuMatNorm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
 
       /// <summary>
       /// Counts non-zero array elements

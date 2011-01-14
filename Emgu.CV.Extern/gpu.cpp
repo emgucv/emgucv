@@ -124,6 +124,11 @@ CVAPI(void) gpuMatAbsdiffS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::
    cv::gpu::absdiff(*a, s, *c);
 }
 
+CVAPI(void) gpuMatCompare(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, int cmpop)
+{
+   cv::gpu::compare(*a, *b, *c, cmpop);
+}
+
 CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, const cv::gpu::Stream* stream)
 {
    if (stream)
@@ -248,6 +253,14 @@ CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScala
    cv::gpu::meanStdDev(*mtx, meanVal, stdDevVal);
    memcpy(mean->val, meanVal.val, sizeof(double)*4);
    memcpy(stddev->val, stdDevVal.val, sizeof(double) * 4);
+}
+
+CVAPI(double) gpuMatNorm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, int normType)
+{
+   if (src2)
+      return cv::gpu::norm(*src1, *src2, normType);
+   else
+      return cv::gpu::norm(*src1, normType);
 }
 
 CVAPI(int) gpuMatCountNonZero(const cv::gpu::GpuMat* src)
