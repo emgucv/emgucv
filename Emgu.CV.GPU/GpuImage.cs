@@ -93,7 +93,7 @@ namespace Emgu.CV.GPU
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
             {   
-               GpuInvoke.gpuMatCopy(srcImage.Ptr, Ptr, IntPtr.Zero);
+               GpuInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero);
             }
             else //different depth
             {
@@ -116,11 +116,11 @@ namespace Emgu.CV.GPU
                      shift = (scale == 0) ? min : -min * scale;
                   }
 
-                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, scale, shift, IntPtr.Zero);
+                  GpuInvoke.ConvertTo(srcImage.Ptr, Ptr, scale, shift, IntPtr.Zero);
                }
                else
                {
-                  GpuInvoke.gpuMatConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
+                  GpuInvoke.ConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
                }
 
             }
@@ -147,7 +147,7 @@ namespace Emgu.CV.GPU
          try
          {
             // if the direct conversion exist, apply the conversion
-            GpuInvoke.gpuMatCvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), stream);
+            GpuInvoke.CvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), stream);
          }
          catch
          {
@@ -156,8 +156,8 @@ namespace Emgu.CV.GPU
                //if a direct conversion doesn't exist, apply a two step conversion
                using (GpuImage<Bgr, TDepth> tmp = new GpuImage<Bgr, TDepth>(size))
                {
-                  GpuInvoke.gpuMatCvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
-                  GpuInvoke.gpuMatCvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
+                  GpuInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
+                  GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
                }
             }
             catch
@@ -179,7 +179,7 @@ namespace Emgu.CV.GPU
       public GpuImage<TColor, TDepth> Clone()
       {
          GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(Size);
-         GpuInvoke.gpuMatCopy(_ptr, result, IntPtr.Zero);
+         GpuInvoke.Copy(_ptr, result, IntPtr.Zero);
          return result;
       }
 
@@ -215,7 +215,7 @@ namespace Emgu.CV.GPU
       public GpuImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType)
       {
          GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(size);
-         GpuInvoke.gpuMatResize(_ptr, result, interpolationType);
+         GpuInvoke.Resize(_ptr, result, interpolationType);
          return result;
       }
 
@@ -227,7 +227,7 @@ namespace Emgu.CV.GPU
       public GpuImage<TColor, Single> Convolution(ConvolutionKernelF kernel)
       {
          GpuImage<TColor, Single> result = new GpuImage<TColor, float>(Size);
-         GpuInvoke.gpuMatFilter2D(_ptr, result, kernel, kernel.Center);
+         GpuInvoke.Filter2D(_ptr, result, kernel, kernel.Center);
          return result;
       }
 

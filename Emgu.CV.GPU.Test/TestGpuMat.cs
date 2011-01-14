@@ -60,7 +60,7 @@ namespace Emgu.CV.GPU.Test
                Trace.WriteLine(String.Format("Counter has been incremented {0} times", counter));
 
                counter = 0;
-               GpuInvoke.gpuMatCvtColor(img2, img3, CvToolbox.GetColorCvtCode(typeof(Bgr), typeof(Gray)), stream);
+               GpuInvoke.CvtColor(img2, img3, CvToolbox.GetColorCvtCode(typeof(Bgr), typeof(Gray)), stream);
                while (!stream.Completed)
                {
                   if (counter <= int.MaxValue) counter++;
@@ -95,7 +95,7 @@ namespace Emgu.CV.GPU.Test
             GpuImage<Gray, Byte> gpuImgSum = new GpuImage<Gray, byte>(gpuImg1.Size);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               GpuInvoke.gpuMatAdd(gpuImg1, gpuImg2, gpuImgSum);
+               GpuInvoke.Add(gpuImg1, gpuImg2, gpuImgSum);
             watch2.Stop();
             Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
             watch.Stop();
@@ -148,7 +148,7 @@ namespace Emgu.CV.GPU.Test
 
             GpuImage<Gray, Byte> gpuImg1 = new GpuImage<Gray, byte>(image);
             GpuImage<Gray, Single> gpuLaplace = new GpuImage<Gray, Single>(image.Size);
-            GpuInvoke.gpuMatLaplacian(gpuImg1, gpuLaplace, 1, 1.0);
+            GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0);
 
             float[,] k = { {0, 1, 0},
                         {1, -4, 1},
@@ -173,7 +173,7 @@ namespace Emgu.CV.GPU.Test
             Image<Gray, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             GpuImage<Gray, Byte> gpuImg = new GpuImage<Gray, byte>(img);
             GpuImage<Gray, byte> smallGpuImg = new GpuImage<Gray, byte>(small.Size);
-            GpuInvoke.gpuMatResize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
@@ -208,7 +208,7 @@ namespace Emgu.CV.GPU.Test
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
             GpuImage<Bgr, Byte> gpuMat = new GpuImage<Bgr, byte>(img);
-            GpuInvoke.gpuMatBitwiseNot(gpuMat, gpuMat, IntPtr.Zero, IntPtr.Zero);
+            GpuInvoke.BitwiseNot(gpuMat, gpuMat, IntPtr.Zero, IntPtr.Zero);
             Assert.IsTrue(gpuMat.Equals(new GpuImage<Bgr, Byte>(img.Not())));
          }
       }
@@ -225,7 +225,7 @@ namespace Emgu.CV.GPU.Test
             Image<Bgr, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(img);
             GpuImage<Bgr, byte> smallGpuImg = new GpuImage<Bgr, byte>(small.Size);
-            GpuInvoke.gpuMatResize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);

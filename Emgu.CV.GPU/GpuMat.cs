@@ -30,7 +30,7 @@ namespace Emgu.CV.GPU
       /// <param name="channels">The number of channels</param>
       public GpuMat(int rows, int cols, int channels)
       {
-         _ptr = GpuInvoke.gpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels));
+         _ptr = GpuInvoke.GpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels));
       }
 
       /// <summary>
@@ -49,7 +49,7 @@ namespace Emgu.CV.GPU
       /// <param name="arr">The CvArry to be converted to GpuMat</param>
       public GpuMat(CvArray<TDepth> arr)
       {
-         _ptr = GpuInvoke.gpuMatCreateFromArr(arr);
+         _ptr = GpuInvoke.GpuMatCreateFromArr(arr);
       }
 
       /// <summary>
@@ -57,7 +57,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuMatRelease(ref _ptr);
+         GpuInvoke.GpuMatRelease(ref _ptr);
       }
 
       /// <summary>
@@ -66,7 +66,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       public Size Size
       {
-         get { return GpuInvoke.gpuMatGetSize(_ptr); }
+         get { return GpuInvoke.GpuMatGetSize(_ptr); }
       }
 
       /// <summary>
@@ -74,7 +74,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       public int NumberOfChannels
       {
-         get { return GpuInvoke.gpuMatGetChannels(_ptr); }
+         get { return GpuInvoke.GpuMatGetChannels(_ptr); }
       }
 
       /// <summary>
@@ -83,7 +83,7 @@ namespace Emgu.CV.GPU
       /// <param name="arr">The CvArray to be uploaded to GpuMat</param>
       public void Upload(CvArray<TDepth> arr)
       {
-         GpuInvoke.gpuMatUpload(_ptr, arr);
+         GpuInvoke.GpuMatUpload(_ptr, arr);
       }
 
       /// <summary>
@@ -92,7 +92,7 @@ namespace Emgu.CV.GPU
       /// <param name="arr">The destination CvArray where the GpuMat data will be downloaded to.</param>
       public void Download(CvArray<TDepth> arr)
       {
-         GpuInvoke.gpuMatDownload(_ptr, arr);
+         GpuInvoke.GpuMatDownload(_ptr, arr);
       }
 
       ///<summary> 
@@ -111,7 +111,7 @@ namespace Emgu.CV.GPU
          if (NumberOfChannels == 1)
          {
             if (stream == null)
-               GpuInvoke.gpuMatCopy(_ptr, gpuMats[0], IntPtr.Zero);
+               GpuInvoke.Copy(_ptr, gpuMats[0], IntPtr.Zero);
             else
                stream.Copy<TDepth>(this, gpuMats[0]);
          }
@@ -125,7 +125,7 @@ namespace Emgu.CV.GPU
             ptrs[i] = gpuMats[i].Ptr;
          }
          GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GpuInvoke.gpuMatSplit(_ptr, handle.AddrOfPinnedObject(), stream);
+         GpuInvoke.Split(_ptr, handle.AddrOfPinnedObject(), stream);
          handle.Free();
       }
 
@@ -144,7 +144,7 @@ namespace Emgu.CV.GPU
          if (NumberOfChannels == 1)
          {
             if (stream == null)
-               GpuInvoke.gpuMatCopy(gpuMats[0].Ptr, _ptr, IntPtr.Zero);
+               GpuInvoke.Copy(gpuMats[0].Ptr, _ptr, IntPtr.Zero);
             else
                stream.Copy<TDepth>(gpuMats[0], this);
          }
@@ -158,7 +158,7 @@ namespace Emgu.CV.GPU
             ptrs[i] = gpuMats[i].Ptr;
          }
          GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GpuInvoke.gpuMatMerge(handle.AddrOfPinnedObject(), _ptr, stream);
+         GpuInvoke.Merge(handle.AddrOfPinnedObject(), _ptr, stream);
          handle.Free();
       }
 
@@ -200,7 +200,7 @@ namespace Emgu.CV.GPU
 
          if (NumberOfChannels == 1)
          {
-            GpuInvoke.gpuMatMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
+            GpuInvoke.MinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
          }
          else
          {
@@ -209,7 +209,7 @@ namespace Emgu.CV.GPU
             {
                for (int i = 0; i < NumberOfChannels; i++)
                {
-                  GpuInvoke.gpuMatMinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
+                  GpuInvoke.MinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
                }
             }
             finally
@@ -230,15 +230,15 @@ namespace Emgu.CV.GPU
 
          using (GpuMat<TDepth> xor = new GpuMat<TDepth>(Size, NumberOfChannels))
          {
-            GpuInvoke.gpuMatBitwiseXor(_ptr, other, xor, IntPtr.Zero, IntPtr.Zero);
+            GpuInvoke.BitwiseXor(_ptr, other, xor, IntPtr.Zero, IntPtr.Zero);
 
             if (xor.NumberOfChannels == 1)
-               return GpuInvoke.gpuMatCountNonZero(xor) == 0;
+               return GpuInvoke.CountNonZero(xor) == 0;
             else
             {
                using (GpuMat<TDepth> singleChannel = xor.Reshape(1, 0))
                {
-                  return GpuInvoke.gpuMatCountNonZero(singleChannel) == 0;
+                  return GpuInvoke.CountNonZero(singleChannel) == 0;
                }
             }
          }
@@ -254,7 +254,7 @@ namespace Emgu.CV.GPU
          where TOtherDepth : new()
       {
          GpuMat<TOtherDepth> res = new GpuMat<TOtherDepth>(Size, NumberOfChannels);
-         GpuInvoke.gpuMatConvertTo(Ptr, res.Ptr, 1.0, 0.0, stream);
+         GpuInvoke.ConvertTo(Ptr, res.Ptr, 1.0, 0.0, stream);
          return res;
       }
 
@@ -266,7 +266,7 @@ namespace Emgu.CV.GPU
       /// <returns>A GpuMat of different shape</returns>
       public GpuMat<TDepth> Reshape(int newCn, int newRows)
       {
-         return new GpuMat<TDepth>(GpuInvoke.gpuMatReshape(_ptr, newCn, newRows));
+         return new GpuMat<TDepth>(GpuInvoke.Reshape(_ptr, newCn, newRows));
       }
 
       /// <summary>
@@ -278,7 +278,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void SetTo(MCvScalar value, GpuMat<Byte> mask, Stream stream)
       {
-         GpuInvoke.gpuMatSetTo(_ptr, value, mask, stream);
+         GpuInvoke.GpuMatSetTo(_ptr, value, mask, stream);
       }
    }
 }

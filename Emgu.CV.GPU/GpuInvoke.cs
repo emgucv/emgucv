@@ -69,9 +69,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuGetDeviceName(
-         int device, 
+         int device,
          [MarshalAs(CvInvoke.StringMarshalType)]
-         StringBuilder buffer, 
+         StringBuilder buffer,
          int maxSizeInBytes);
 
       /// <summary>
@@ -91,7 +91,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <returns>The current Cuda device</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetDevice")]
-      public static extern int getDevice();
+      public static extern int GetDevice();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void getGpuMemInfo(ref UIntPtr free, ref UIntPtr total);
@@ -101,7 +101,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="free">The free amount of GPU memory</param>
       /// <param name="total">The total amount of GPU memory</param>
-      public static void getGpuMemInfo(out ulong free, out ulong total)
+      public static void GetGpuMemInfo(out ulong free, out ulong total)
       {
          UIntPtr f = new UIntPtr(), t = new UIntPtr();
          getGpuMemInfo(ref f, ref t);
@@ -132,8 +132,8 @@ namespace Emgu.CV.GPU
       /// Create an empty GpuMat 
       /// </summary>
       /// <returns>Pointer to an empty GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr gpuMatCreateDefault();
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateDefault")]
+      internal static extern IntPtr GpuMatCreateDefault();
 
       /// <summary>
       /// Create a GpuMat of the specified size
@@ -142,8 +142,8 @@ namespace Emgu.CV.GPU
       /// <param name="cols">The number of columns (width)</param>
       /// <param name="type">The type of GpuMat</param>
       /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr gpuMatCreate(int rows, int cols, int type);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreate")]
+      public static extern IntPtr GpuMatCreate(int rows, int cols, int type);
 
       /// <summary>
       /// Copies scalar value to every selected element of the destination GpuMat:
@@ -153,23 +153,23 @@ namespace Emgu.CV.GPU
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be IntPtr.Zero if not used</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSetTo")]
+      public static extern void GpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Release the GpuMat
       /// </summary>
       /// <param name="mat">Pointer to the GpuMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatRelease(ref IntPtr mat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRelease")]
+      public static extern void GpuMatRelease(ref IntPtr mat);
 
       /// <summary>
       /// Convert a CvArr to a GpuMat
       /// </summary>
       /// <param name="arr">Pointer to a CvArr</param>
       /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr gpuMatCreateFromArr(IntPtr arr);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatCreateFromArr")]
+      public static extern IntPtr GpuMatCreateFromArr(IntPtr arr);
 
       /// <summary>
       /// Get the GpuMat size:
@@ -177,32 +177,32 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="gpuMat">The GpuMat</param>
       /// <returns>The size of the matrix</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern Size gpuMatGetSize(IntPtr gpuMat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetSize")]
+      public static extern Size GpuMatGetSize(IntPtr gpuMat);
 
       /// <summary>
       /// Get the number of channels in the GpuMat
       /// </summary>
       /// <param name="gpuMat">The GpuMat</param>
       /// <returns>The number of channels in the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int gpuMatGetChannels(IntPtr gpuMat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetChannels")]
+      public static extern int GpuMatGetChannels(IntPtr gpuMat);
 
       /// <summary>
       /// Pefroms blocking upload data to GpuMat.
       /// </summary>
       /// <param name="gpuMat">The destination gpuMat</param>
       /// <param name="arr">The CvArray to be uploaded to GPU</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatUpload(IntPtr gpuMat, IntPtr arr);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatUpload")]
+      public static extern void GpuMatUpload(IntPtr gpuMat, IntPtr arr);
 
       /// <summary>
       /// Downloads data from device to host memory. Blocking calls.
       /// </summary>
       /// <param name="gpuMat">The source GpuMat</param>
       /// <param name="arr">The CvArray where data will be downloaded to</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatDownload(IntPtr gpuMat, IntPtr arr);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDownload")]
+      public static extern void GpuMatDownload(IntPtr gpuMat, IntPtr arr);
 
       /// <summary>
       /// Converts image from one color space to another
@@ -211,8 +211,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="code">The color conversion code</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatCvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCvtColor")]
+      public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code, IntPtr stream);
 
       /// <summary>
       /// Copy the source GpuMat to destination GpuMat, using an optional mask.
@@ -220,8 +220,8 @@ namespace Emgu.CV.GPU
       /// <param name="src">The GpuMat to be copied from</param>
       /// <param name="dst">The GpuMat to be copied to</param>
       /// <param name="mask">The optional mask, use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatCopy(IntPtr src, IntPtr dst, IntPtr mask);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatCopy")]
+      public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask);
 
       #region arithmatic
       /// <summary>
@@ -231,8 +231,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The first matrix to be added.</param>
       /// <param name="b">The second matrix to be added.</param>
       /// <param name="c">The sum of the two matrix</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatAdd(IntPtr a, IntPtr b, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAdd")]
+      public static extern void Add(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
       /// Adds scalar to a matrix (c = a + scalar)
@@ -242,7 +242,7 @@ namespace Emgu.CV.GPU
       /// <param name="scalar">The scalar to be added.</param>
       /// <param name="c">The sum of the matrix and the scalar</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAddS")]
-      public static extern void gpuMatAdd(IntPtr a, MCvScalar scalar, IntPtr c);
+      public static extern void Add(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Subtracts one matrix from another (c = a - b).
@@ -251,8 +251,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The matrix where subtraction take place</param>
       /// <param name="b">The matrix to be substracted</param>
       /// <param name="c">The result of a - b</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSubtract(IntPtr a, IntPtr b, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSubtract")]
+      public static extern void Subtract(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
       /// Subtracts one matrix from another (c = a - scalar).
@@ -261,8 +261,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The matrix to be substraced from</param>
       /// <param name="scalar">The scalar to be substracted</param>
       /// <param name="c">The matrix substraced by the scalar</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatSubtractS")]
-      public static extern void gpuMatSubtract(IntPtr a, MCvScalar scalar, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSubtractS")]
+      public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Computes element-wise product of the two GpuMat (c = a * b).
@@ -271,8 +271,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The first GpuMat to be element-wise multiplied.</param>
       /// <param name="b">The second GpuMat to be element-wise multiplied.</param>
       /// <param name="c">The element-wise multiplication of the two GpuMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatMultiply(IntPtr a, IntPtr b, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMultiply")]
+      public static extern void Multiply(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
       /// Multiplies GpuMat to a scalar (c = a * scalar).
@@ -282,7 +282,7 @@ namespace Emgu.CV.GPU
       /// <param name="scalar">The scalar to be multiplied</param>
       /// <param name="c">The result of the GpuMat mutiplied by the scalar</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMultiplyS")]
-      public static extern void gpuMatMultiply(IntPtr a, MCvScalar scalar, IntPtr c);
+      public static extern void Multiply(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Computes element-wise quotient of the two GpuMat (c = a / b).
@@ -291,8 +291,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The first GpuMat</param>
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The element-wise quotient of the two GpuMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatDivide(IntPtr a, IntPtr b, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivide")]
+      public static extern void Divide(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
       /// computes element-wise quotient of a GpuMat and scalar (c = a / scalar).
@@ -302,7 +302,7 @@ namespace Emgu.CV.GPU
       /// <param name="scalar">The scalar to be divided</param>
       /// <param name="c">The result of the GpuMat divided by the scalar</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideS")]
-      public static extern void gpuMatDivide(IntPtr a, MCvScalar scalar, IntPtr c);
+      public static extern void Divide(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Computes element-wise absolute difference of two arrays (c = abs(a - b)).
@@ -311,8 +311,8 @@ namespace Emgu.CV.GPU
       /// <param name="a">The first GpuMat</param>
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatAbsdiff(IntPtr a, IntPtr b, IntPtr c);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAbsdiff")]
+      public static extern void Absdiff(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
       /// Computes element-wise absolute difference of array and scalar (c = abs(a - s)).
@@ -322,7 +322,7 @@ namespace Emgu.CV.GPU
       /// <param name="scalar">A scalar</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAbsdiffS")]
-      public static extern void gpuMatAbsdiff(IntPtr a, MCvScalar scalar, IntPtr c);
+      public static extern void Absdiff(IntPtr a, MCvScalar scalar, IntPtr c);
       #endregion
 
       /// <summary>
@@ -333,8 +333,8 @@ namespace Emgu.CV.GPU
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatCompare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCompare")]
+      public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
 
       /// <summary>
       /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
@@ -344,8 +344,8 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source GpuMat</param>
       /// <param name="lut">Pointer to a CvArr (e.g. Emgu.CV.Matrix).</param>
       /// <param name="dst">The destination GpuMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatLUT(IntPtr src, IntPtr lut, IntPtr dst);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLUT")]
+      public static extern void LUT(IntPtr src, IntPtr lut, IntPtr dst);
 
       /// <summary>
       /// Resizes the image.
@@ -354,8 +354,8 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source image</param>
       /// <param name="dst">The destination image</param>
       /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatResize")]
+      public static extern void Resize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation);
 
       /// <summary>
       /// Changes shape of GpuMat without copying data.
@@ -364,8 +364,8 @@ namespace Emgu.CV.GPU
       /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
       /// <param name="newRows">New number of rows. newRows = 0 means that the number of rows remains unchanged unless it needs to be changed according to newCn value.</param>
       /// <returns>A GpuMat of different shape</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr gpuMatReshape(IntPtr src, int newCn, int newRows);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatReshape")]
+      public static extern IntPtr Reshape(IntPtr src, int newCn, int newRows);
 
       /// <summary>
       /// Copies each plane of a multi-channel array to a dedicated array
@@ -373,8 +373,8 @@ namespace Emgu.CV.GPU
       /// <param name="src">The multi-channel gpuMat</param>
       /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSplit(IntPtr src, IntPtr dstArray, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSplit")]
+      public static extern void Split(IntPtr src, IntPtr dstArray, IntPtr stream);
 
       /// <summary>
       /// Makes multi-channel array out of several single-channel arrays
@@ -382,8 +382,8 @@ namespace Emgu.CV.GPU
       /// <param name="srcArr">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="dst">The multi-channel gpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatMerge(IntPtr srcArr, IntPtr dst, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMerge")]
+      public static extern void Merge(IntPtr srcArr, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
@@ -397,8 +397,8 @@ namespace Emgu.CV.GPU
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source array elements</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatConvertTo(IntPtr src, IntPtr dst, double scale, double shift, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatConvertTo")]
+      public static extern void ConvertTo(IntPtr src, IntPtr dst, double scale, double shift, IntPtr stream);
 
       /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array or, if mask is not IntPtr.Zero, in the specified array region.
@@ -409,8 +409,8 @@ namespace Emgu.CV.GPU
       /// <param name="minLoc">Pointer to returned minimum location</param>
       /// <param name="maxLoc">Pointer to returned maximum location</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatMinMaxLoc(IntPtr gpuMat,
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMinMaxLoc")]
+      public static extern void MinMaxLoc(IntPtr gpuMat,
          ref double minVal, ref double maxVal,
          ref Point minLoc, ref Point maxLoc,
          IntPtr mask);
@@ -421,8 +421,8 @@ namespace Emgu.CV.GPU
       /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>
       /// <param name="mean">The mean value</param>
       /// <param name="stddev">The standard deviation</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanStdDev")]
+      public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
 
       /// <summary>
       /// Computes norm of the difference between two arrays
@@ -431,16 +431,16 @@ namespace Emgu.CV.GPU
       /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the GpuMat of type CV_8UC1</param>
       /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
       /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two arrays.</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double gpuMatNorm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatNorm")]
+      public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
 
       /// <summary>
       /// Counts non-zero array elements
       /// </summary>
       /// <param name="src">The GpuMat</param>
       /// <returns>The number of non-zero array elements</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int gpuMatCountNonZero(IntPtr src);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCountNonZero")]
+      public static extern int CountNonZero(IntPtr src);
 
       /// <summary>
       /// Flips the array in one of different 3 ways (row and column indices are 0-based):
@@ -457,7 +457,7 @@ namespace Emgu.CV.GPU
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
       ///</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatFlip(IntPtr src, IntPtr dst, int flipMode);
+      private static extern void gpuMatFlip(IntPtr src, IntPtr dst, int flipMode);
 
       /// <summary>
       /// Flips the GpuMat&lt;Byte&gt; in one of different 3 ways (row and column indices are 0-based). 
@@ -465,7 +465,7 @@ namespace Emgu.CV.GPU
       /// <param name="src">Source array.</param>
       /// <param name="dst">Destination array.</param>
       /// <param name="flipType">Specifies how to flip the array.</param>
-      public static void gpuMatFlip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
+      public static void Flip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
       {
          int flipMode =
             //-1 indicates vertical and horizontal flip
@@ -487,8 +487,8 @@ namespace Emgu.CV.GPU
       /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
       /// <param name="anchor">The center of the kernel</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatErode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatErode")]
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -499,8 +499,8 @@ namespace Emgu.CV.GPU
       /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
       /// <param name="anchor">The center of the kernel</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatDilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDilate")]
+      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
       #endregion
 
       #region Logical operators
@@ -514,8 +514,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseXor")]
+      public static extern void BitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical or of two arrays:
@@ -527,8 +527,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatBitwiseOr")]
+      public static extern void BitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical and of two arrays:
@@ -540,8 +540,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseAnd")]
+      public static extern void BitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical not
@@ -552,8 +552,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseNot")]
+      public static extern void BitwiseNot(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
       #endregion
 
       #region filters
@@ -564,8 +564,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMmage</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatFilter2D")]
+      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
 
       /// <summary>
       /// Applies generalized Sobel operator to the image
@@ -576,8 +576,8 @@ namespace Emgu.CV.GPU
       /// <param name="dy">Order of the derivative y</param>
       /// <param name="ksize">Size of the extended Sobel kernel</param>
       /// <param name="scale">Optional scale, use 1 for default.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatSobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSobel")]
+      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale);
 
       /// <summary>
       /// Applies Laplacian operator to the GpuMat
@@ -586,8 +586,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="ksize">Either 1 or 3</param>
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatLaplacian(IntPtr src, IntPtr dst, int ksize, double scale);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLaplacian")]
+      public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale);
 
       /// <summary>
       /// Smooths the GpuMat using Gaussian filter.
@@ -597,8 +597,8 @@ namespace Emgu.CV.GPU
       /// <param name="ksize">The size of the kernel</param>
       /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatGaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGaussianBlur")]
+      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2);
       #endregion
 
       /// <summary>
@@ -608,8 +608,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatWarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatWarpAffine")]
+      public static extern void WarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
 
       /// <summary>
       /// Warps the image using perspective transformation
@@ -618,8 +618,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatWarpPerspective")]
+      public static extern void WarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
 
       /// <summary>
       /// DST[x,y] = SRC[xmap[x,y],ymap[x,y]] with bilinear interpolation.
@@ -628,8 +628,8 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The dstination GpuMat. Supports CV_8UC1, CV_8UC3 source types. </param>
       /// <param name="xmap">The xmap. Supports CV_32FC1 map type.</param>
       /// <param name="ymap">The ymap. Supports CV_32FC1 map type.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void gpuMatRemap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRemap")]
+      public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);
