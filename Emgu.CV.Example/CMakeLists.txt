@@ -10,7 +10,7 @@ SET(EMGU_CV_REFERENCE
 -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
 
 SET (EMGU_CV_GPU_REFERENCE
-${EMGU_CV_REFERENCE} -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.GPU.dll"
+${EMGU_CV_REFERENCE} -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.GPU.dll")
 
 add_subdirectory(HelloWorld)
 add_subdirectory(CameraCapture)
