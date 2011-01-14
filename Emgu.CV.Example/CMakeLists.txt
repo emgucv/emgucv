@@ -9,6 +9,9 @@ SET(EMGU_CV_REFERENCE
 -r:"${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll" 
 -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
 
+SET (EMGU_CV_GPU_REFERENCE
+${EMGU_CV_REFERENCE} -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.GPU.dll"
+
 add_subdirectory(HelloWorld)
 add_subdirectory(CameraCapture)
 add_subdirectory(PlanarSubdivision)
@@ -20,6 +23,7 @@ add_subdirectory(VideoSurveilance)
 add_subdirectory(FaceDetection)
 add_subdirectory(Webservice_Host)
 add_subdirectory(Webservice_Client)
+add_subdirectory(PedestrianDetection)
 IF(WIN32)
 add_subdirectory(WebDynamicImage)
 add_subdirectory(Simple3DReconstruction)
