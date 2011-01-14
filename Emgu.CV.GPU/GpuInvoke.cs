@@ -630,5 +630,21 @@ namespace Emgu.CV.GPU
       /// <param name="ymap">The ymap. Supports CV_32FC1 map type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void gpuMatRemap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);
+
+      /// <summary>
+      /// Calculates histogram with evenly distributed bins for signle channel source.
+      /// </summary>
+      /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_16UC1 and CV_16SC1 types.</param>
+      /// <param name="histSize">The size of histogram (number of levels)</param>
+      /// <param name="lowerLevel">The lower level</param>
+      /// <param name="upperLevel">The upper level</param>
+      /// <returns>Histogram with evenly distributed bins</returns>
+      public static GpuMat<Int32> HistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel)
+      {
+         return new GpuMat<int>(gpuMatHistEven(src, histSize, lowerLevel, upperLevel));
+      }
    }
 }

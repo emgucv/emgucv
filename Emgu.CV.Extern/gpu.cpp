@@ -13,7 +13,7 @@ CVAPI(int) gpuGetDevice()
 CVAPI(void) gpuGetDeviceName(int device, char* name, int maxSizeInBytes)
 {
    std::string dName = cv::gpu::getDeviceName(device);
-   strncpy(name, dName.c_str(), maxSizeInBytes);
+   strcpy_s(name, maxSizeInBytes, dName.c_str());
 }
 
 CVAPI(void) gpuGetComputeCapability(int device, int* major, int* minor)
@@ -354,4 +354,11 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap)
 {
    cv::gpu::remap(*src, *dst, *xmap, *ymap);
+}
+
+CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize, int lowerLevel, int upperLevel)
+{
+   cv::gpu::GpuMat* hist = new cv::gpu::GpuMat();
+   cv::gpu::histEven(*src, *hist, histSize, lowerLevel, upperLevel);
+   return hist;
 }

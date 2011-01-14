@@ -17,7 +17,7 @@ namespace Emgu.CV.GPU
    public class GpuMat<TDepth> : UnmanagedObject, IEquatable<GpuMat<TDepth>>
       where TDepth : new()
    {
-      private GpuMat(IntPtr ptr)
+      internal GpuMat(IntPtr ptr)
       {
          _ptr = ptr;
       }
