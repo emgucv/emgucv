@@ -16,10 +16,8 @@ namespace Emgu.CV.GPU
       static GpuInvoke()
       {
          //Dummy code to make sure the static constructore of CvInvoke has been called and the error handler has been registered.
-         using (Image<Gray, Byte> img = new Image<Gray, byte>(12, 8))
-         {
-            img.Not();
-         }
+         String pluginName, versionName;
+         Emgu.CV.Util.CvToolbox.GetModuleInfo(out pluginName, out versionName);
       }
 
       #region device info
@@ -37,20 +35,16 @@ namespace Emgu.CV.GPU
                return _hasCuda;
             else
             {
+               _testedCuda = true;
                try
                {
-                  int cudaCount = GetCudaEnabledDeviceCount();
-                  _hasCuda = cudaCount > 0;
-                  return _hasCuda;
+                  _hasCuda = GetCudaEnabledDeviceCount() > 0;
                }
                catch (Exception)
                {
-                  return _hasCuda;
                }
-               finally
-               {
-                  _testedCuda = true;
-               }
+
+               return _hasCuda;
             }
          }
       }
