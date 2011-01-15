@@ -38,7 +38,7 @@ namespace Emgu.CV.Tiff
    {
 
       /// <summary>
-      /// 
+      /// Create a TitleTiffWriter.
       /// </summary>
       /// <param name="fileName">The name of the file to be written to</param>
       /// <param name="imageSize">The size of the image</param>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Tiff
       }
 
       /// <summary>
-      /// Returns the equivalent size for a tile of data as it would be returned in a call to TIFFReadTile or as it would be expected in a call to TIFFWriteTile. 
+      /// Get the equivalent size for a tile of data as it would be returned in a call to TIFFReadTile or as it would be expected in a call to TIFFWriteTile. 
       /// </summary>
       public int TileSizeInBytes
       {
@@ -73,7 +73,7 @@ namespace Emgu.CV.Tiff
       }
 
       /// <summary>
-      /// Returns the number of bytes of a row of data in a tile. 
+      /// Get the number of bytes of a row of data in a tile. 
       /// </summary>
       public int TileRowSizeInBytes
       {
@@ -84,7 +84,7 @@ namespace Emgu.CV.Tiff
       }
 
       /// <summary>
-      /// The tile size in pixels.
+      /// Get tile size in pixels.
       /// </summary>
       public Size TileSize
       {
@@ -93,7 +93,6 @@ namespace Emgu.CV.Tiff
             int width = TileRowSizeInBytes / (Image<TColor, TDepth>.SizeOfElement * (new TColor().Dimension));
             return new Size(width, TileSizeInBytes / TileRowSizeInBytes);
          }
-
       }
 
       /// <summary>

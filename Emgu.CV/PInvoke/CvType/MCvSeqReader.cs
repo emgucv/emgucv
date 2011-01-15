@@ -8,7 +8,7 @@ namespace Emgu.CV.Structure
    public struct MCvSeqReader
    {
       /// <summary>
-      /// 
+      /// The size of the header
       /// </summary>
       public int header_size;
 

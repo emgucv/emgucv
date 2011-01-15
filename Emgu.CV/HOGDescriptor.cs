@@ -81,6 +81,15 @@ namespace Emgu.CV
       /// <summary>
       /// Create a new HOGDescriptor using the specific parameters
       /// </summary>
+      /// <param name="blockSize">Block size in cells.</param>
+      /// <param name="cellSize">Cell size.</param>
+      /// <param name="blockStride">Block stride. Must be a multiple of cell size.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
+      /// <param name="nbins">Number of bins.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
+      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride.</param>
+      /// <param name="derivAperture"></param>
       public HOGDescriptor(
          Size winSize,
          Size blockSize,

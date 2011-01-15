@@ -30,6 +30,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The scalar values as a vector (of size 4)
       /// </summary>
+      /// <returns>The scalar values as an array</returns>
       public double[] ToArray()
       {
          return new double[4] { v0, v1, v2, v3 };
