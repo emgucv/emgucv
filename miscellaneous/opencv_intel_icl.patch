@@ -7,8 +7,8 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
  endif()
  
 +IF(WIN32)
-+set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
-+set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O0")
++set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O0")
 +ENDIF()
 +
  set_target_properties(${the_target}
