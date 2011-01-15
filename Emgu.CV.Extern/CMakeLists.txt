@@ -34,6 +34,18 @@ IF (USE_IPP AND IPP_PATH)
 	"${IPP_PATH}/../../../ipp/lib/intel64"
 	"${IPP_PATH}/../../../compiler/lib/intel64")
   ENDIF()
+
+  SET(IPP_BINARY_FILE 
+    "${IPP_PATH}/ippcore-7.0.dll" 
+    "${IPP_PATH}/ippcv-7.0.dll"
+    "${IPP_PATH}/ipps-7.0.dll"
+    "${IPP_PATH}/ippvm-7.0.dll")
+
+  INSTALL(
+  FILES 
+  ${IPP_BINARY_FILE}
+  DESTINATION bin
+  COMPONENT main)
 ENDIF()
 ############################### IPP END ################################
 
@@ -43,6 +55,28 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
   add_definitions(-DHAVE_TBB)
   include_directories(${TBB_INCLUDE_DIR})
   link_directories(${TBB_LIB_DIR})
+  SET(TBB_BINARY_FILE "${TBB_INCLUDE_DIR}/../../redist")
+  IF(CMAKE_CL_64)
+    SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/intel64/tbb")
+  ELSE()
+    SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/ia32/tbb")
+  ENDIF()
+  if (MSVC80)
+	SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/vc8")
+  elseif(MSVC90)
+	SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/vc9")
+  elseif(MSVC10)
+	SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/vc10")
+  endif()
+  SET(TBB_BINARY_FILE "${TBB_BINARY_FILE}/tbb.dll")
+
+  MESSAGE(STATUS "TBB_BINARY_FILE: ${TBB_BINARY_FILE}")
+
+  INSTALL(
+    FILES 
+    ${TBB_BINARY_FILE}
+    DESTINATION bin
+    COMPONENT main)
 endif()
 ############################### TBB END ################################
 
@@ -79,7 +113,6 @@ INSTALL(
   DESTINATION bin
   COMPONENT main)
 
-
 ENDIF()
 ############################### GPU END ################################
 
@@ -103,7 +136,31 @@ IF(WIN32 AND WITH_CUDA)
     ${NPP_FILE_DEPLOY_COMMAND}
     COMMENT "Copying ${NPP_BINARY_FILE} to ${LIBRARY_OUTPUT_PATH}")
 ENDIF()  
-############################### GPU END ##############################
+############################### GPU END ################################
+
+############################### TBB START ##############################
+IF (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
+  ADD_CUSTOM_COMMAND(
+    TARGET ${the_target}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${TBB_BINARY_FILE} ${LIBRARY_OUTPUT_PATH}
+    COMMENT "Copying ${TBB_BINARY_FILE} to ${LIBRARY_OUTPUT_PATH}")
+ENDIF()
+############################### TBB END ################################
+
+############################### IPP START ##############################
+IF (USE_IPP AND IPP_PATH)
+  FOREACH(IPP_FILE ${IPP_BINARY_FILE})
+    LIST(APPEND IPP_FILE_DEPLOY_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${IPP_FILE} ${LIBRARY_OUTPUT_PATH})
+  ENDFOREACH()
+  
+  ADD_CUSTOM_COMMAND(
+    TARGET ${the_target}
+    POST_BUILD
+    ${IPP_FILE_DEPLOY_COMMAND}
+    COMMENT "Copying ${IPP_BINARY_FILE} to ${LIBRARY_OUTPUT_PATH}")
+ENDIF()
+############################### IPP END ################################
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
@@ -178,9 +235,3 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
-      
-
-
-
-
-
