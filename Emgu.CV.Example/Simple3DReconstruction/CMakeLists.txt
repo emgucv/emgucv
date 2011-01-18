@@ -6,6 +6,11 @@ FILE(GLOB_RECURSE SRC_Example_Simple3DReconstruction RELATIVE ${CMAKE_CURRENT_SO
 LIST(APPEND SRC_Example_Simple3DReconstruction ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 #Add emgucv references
+IF(CMAKE_CL_64)
+  LIST(APPEND CS_FLAGS -platform:x64)
+ELSE()
+  LIST(APPEND CS_FLAGS -platform:x86)
+ENDIF()
 LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 STRING(REGEX MATCH "Win64" X86_64 "${CMAKE_GENERATOR}")
