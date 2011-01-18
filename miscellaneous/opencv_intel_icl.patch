@@ -6,9 +6,9 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
      set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
  endif()
  
-+IF(WIN32)
-+set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O0")
-+set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O0")
++IF(WIN32 AND CV_ICC)
++set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
++set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
 +ENDIF()
 +
  set_target_properties(${the_target}
