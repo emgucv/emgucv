@@ -1661,7 +1661,8 @@ namespace Emgu.CV.Test
             images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          }
 
-         using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 5, width, height, true))
+         //using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 5, width, height, true))
+         using (VideoWriter writer = new VideoWriter(fileName, 5, width, height, true))
          {
             for (int i = 0; i < numberOfFrames; i++)
             {

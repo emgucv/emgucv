@@ -22,7 +22,7 @@ namespace Emgu.CV
       /// <param name="isColor">true if this is a color video, false otherwise</param>
       public VideoWriter(String fileName, int fps, int width, int height, bool isColor)
          : this(fileName, 
-         Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows ? -1 : CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 
+         /*Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows ? -1 :*/ CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 
          fps, width, height, isColor)
       {
       }
