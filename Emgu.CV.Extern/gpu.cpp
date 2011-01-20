@@ -34,6 +34,16 @@ CVAPI(void) getGpuMemInfo(size_t* free, size_t* total)
    cv::gpu::getGpuMemInfo(*free, *total); 
 }
 
+CVAPI(bool) gpuHasNativeDoubleSupport(int device)
+{
+   return cv::gpu::hasNativeDoubleSupport(device);
+}
+
+CVAPI(bool) gpuHasAtomicsSupport(int device)
+{
+   return cv::gpu::hasAtomicsSupport(device);
+}
+
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type)
@@ -222,6 +232,16 @@ CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, const
       cv::gpu::split(*src, dstMat, *stream);
    else
       cv::gpu::split(*src, dstMat);
+}
+
+CVAPI(void) gpuMatExp(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b)
+{
+	cv::gpu::exp(*a, *b);
+}
+
+CVAPI(void) gpuMatLog(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b)
+{
+	cv::gpu::log(*a, *b);
 }
 
 CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)

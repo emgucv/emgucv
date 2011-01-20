@@ -120,6 +120,24 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetNumberOfSMs")]
       public static extern int GetNumberOfSMs(int device);
 
+      /// <summary>
+      /// Check if the device has native double support
+      /// </summary>
+      /// <param name="device">The device Id</param>
+      /// <returns>True if the device has native double support</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuHasNativeDoubleSupport")]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool HasNativeDoubleSupport(int device);
+
+      /// <summary>
+      /// Check if the device has atomic support
+      /// </summary>
+      /// <param name="device">The device Id</param>
+      /// <returns>True if the device has atomic support</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuHasAtomicsSupport")]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool HasAtomicsSupport(int device);
+
       #endregion
 
       /// <summary>
@@ -378,6 +396,22 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMerge")]
       public static extern void Merge(IntPtr srcArr, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes exponent of each matrix element (b = exp(a))
+      /// </summary>
+      /// <param name="src">The source GpuMat. Supports only CV_32FC1 type</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatExp")]
+      public static extern void Exp(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// Computes natural logarithm of absolute value of each matrix element: b = log(abs(a))
+      /// </summary>
+      /// <param name="src">The source GpuMat. Supports only CV_32FC1 type</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLog")]
+      public static extern void Log(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:

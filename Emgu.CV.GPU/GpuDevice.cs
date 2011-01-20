@@ -20,6 +20,8 @@ namespace Emgu.CV.GPU
          Name = GpuInvoke.GetDeviceName(deviceId);
          GpuInvoke.GetComputeCapability(deviceId, ref CudaComputeCapability.Major, ref CudaComputeCapability.Minor);
          NumberOfSMs = GpuInvoke.GetNumberOfSMs(deviceId);
+         HasNativeDoubleSupport = GpuInvoke.HasNativeDoubleSupport(deviceId);
+         HasAtomicSupport = GpuInvoke.HasAtomicsSupport(deviceId);
       }
 
       /// <summary>
@@ -41,6 +43,16 @@ namespace Emgu.CV.GPU
       public int NumberOfSMs;
 
       /// <summary>
+      /// Indicates if the decive has native double support
+      /// </summary>
+      public bool HasNativeDoubleSupport;
+
+      /// <summary>
+      /// Indicates if the device has atomic support
+      /// </summary>
+      public bool HasAtomicSupport;
+
+      /// <summary>
       /// The compute capability
       /// </summary>
       public struct ComputeCapability
@@ -54,5 +66,6 @@ namespace Emgu.CV.GPU
          /// </summary>
          public int Minor;
       }
+
    }
 }
