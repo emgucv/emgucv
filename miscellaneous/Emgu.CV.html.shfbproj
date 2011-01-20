@@ -23,7 +23,7 @@
     </HtmlHelp1xCompilerPath>
     <HtmlHelp2xCompilerPath>
     </HtmlHelp2xCompilerPath>
-    <SandcastlePath>%ProgramFiles(x86)%\Sandcastle\</SandcastlePath>
+    <SandcastlePath>%DXROOT%</SandcastlePath>
     <WorkingPath>
     </WorkingPath>
     <KeepLogFile>False</KeepLogFile>
