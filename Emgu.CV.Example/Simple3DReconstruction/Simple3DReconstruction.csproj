@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Simlpe3DReconstruction</RootNamespace>
-    <AssemblyName>Simlpe3DReconstruction</AssemblyName>
+    <AssemblyName>Example.Simlpe3DReconstruction</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

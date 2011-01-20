@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ShapeDetection</RootNamespace>
-    <AssemblyName>ShapeDetection</AssemblyName>
+    <AssemblyName>Example.ShapeDetection</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

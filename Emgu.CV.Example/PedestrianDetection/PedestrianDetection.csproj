@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PedestrianDetection</RootNamespace>
-    <AssemblyName>PedestrianDetection</AssemblyName>
+    <AssemblyName>Example.PedestrianDetection</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

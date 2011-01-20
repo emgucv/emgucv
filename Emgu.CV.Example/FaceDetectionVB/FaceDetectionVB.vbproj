@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>FaceDetectionVB.Module1</StartupObject>
     <RootNamespace>FaceDetectionVB</RootNamespace>
-    <AssemblyName>FaceDetectionVB</AssemblyName>
+    <AssemblyName>Example.FaceDetectionVB</AssemblyName>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -39,7 +39,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\bin\</OutputPath>
-    <DocumentationFile>FaceDetectionVB.xml</DocumentationFile>
+    <DocumentationFile>Example.FaceDetectionVB.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -49,7 +49,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
-    <DocumentationFile>FaceDetectionVB.xml</DocumentationFile>
+    <DocumentationFile>Example.FaceDetectionVB.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>

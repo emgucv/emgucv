@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PlanarSubdivision</RootNamespace>
-    <AssemblyName>PlanarSubdivision</AssemblyName>
+    <AssemblyName>Example.PlanarSubdivision</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

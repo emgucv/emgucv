@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VideoSurveilance</RootNamespace>
-    <AssemblyName>VideoSurveilance</AssemblyName>
+    <AssemblyName>Example.VideoSurveilance</AssemblyName>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>

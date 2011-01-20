@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LicensePlateRecognition</RootNamespace>
-    <AssemblyName>LicensePlateRecognition</AssemblyName>
+    <AssemblyName>Example.LicensePlateRecognition</AssemblyName>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>

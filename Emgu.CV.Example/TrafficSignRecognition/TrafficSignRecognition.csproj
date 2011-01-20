@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TrafficSignRecognition</RootNamespace>
-    <AssemblyName>TrafficSignRecognition</AssemblyName>
+    <AssemblyName>Example.TrafficSignRecognition</AssemblyName>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>

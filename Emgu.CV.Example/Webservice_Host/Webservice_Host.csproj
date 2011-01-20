@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Webservice_Host</RootNamespace>
-    <AssemblyName>Webservice_Host</AssemblyName>
+    <AssemblyName>Example.Webservice_Host</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

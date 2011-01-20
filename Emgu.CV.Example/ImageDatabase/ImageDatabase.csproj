@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ImageDatabase</RootNamespace>
-    <AssemblyName>ImageDatabase</AssemblyName>
+    <AssemblyName>Example.ImageDatabase</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
