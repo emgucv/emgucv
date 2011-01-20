@@ -541,6 +541,27 @@ set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=
 
 SET(CPACK_NSIS_CONTACT "support@emgu.com")
 
+# ----------------------------------------------------------------------------
+#  Add menu link for documentations
+# ----------------------------------------------------------------------------
+LIST(APPEND CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
+IF(EMGU_CV_DOCUMENTATION_BUILD)
+  LIST(APPEND CPACK_COMPONENTS_ALL emgucv_document)
+  set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DISPLAY_NAME "Emgu CV Documentation")
+  set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DEPENDS emgucv_binary)
+  LIST(APPEND CPACK_NSIS_MENU_LINKS "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+ENDIF()
+
+# ----------------------------------------------------------------------------
+#  Add menu link for web sites
+# ----------------------------------------------------------------------------
+LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com" "Emgu CV wiki")
+LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/forum" "Emgu CV Discussion Forums")
+LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/bugs/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&product=Emgu+CV&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&deadlinefrom=&deadlineto=&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=" "Emgu CV Bug Tracking")
+
+# ----------------------------------------------------------------------------
+#  Add menu link for Visual Studio solutions 
+# ----------------------------------------------------------------------------
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\" ")
 
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2005 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2005_MonoDevelop\\\\Emgu.CV.Example.sln\\\" ")	
@@ -553,13 +574,20 @@ SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\
 
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\" ")
 
-LIST(APPEND CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
-IF(EMGU_CV_DOCUMENTATION_BUILD)
-  LIST(APPEND CPACK_COMPONENTS_ALL emgucv_document)
-  set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DISPLAY_NAME "Emgu CV Documentation")
-  set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DEPENDS emgucv_binary)
-  LIST(APPEND CPACK_NSIS_MENU_LINKS "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
-ENDIF()
+# ----------------------------------------------------------------------------
+#  Add menu link for Licenses 
+# ----------------------------------------------------------------------------
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\" ")
+
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Emgu CV License.lnk\\\"  \\\"$INSTDIR\\\\Emgu.CV.License.txt\\\" ")	
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Open CV License.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\license.txt\\\" ")
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\ZedGraph License.lnk\\\"  \\\"$INSTDIR\\\\bin\\\\ZedGraph.license.txt\\\" ")	
+
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\Emgu CV License.lnk\\\" ")
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\Open CV License.lnk\\\" ")
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\ZedGraph License.lnk\\\" ")
+
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\" ")
 
 IF(EMGU_CV_EXAMPLE_BUILD)
   LIST(APPEND CPACK_COMPONENTS_ALL emgucv_example_binary)
