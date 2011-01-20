@@ -119,6 +119,9 @@ if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
 endif()
 
+#replace any potential backslash in the path with slash
+STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
+
 IF(CMAKE_CL_64) 
   SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/x64/npp64_${npp_major}${npp_minor}_${npp_build}.dll")
   LIST(APPEND NPP_BINARY_FILE "${CUDA_SDK_ROOT_DIR}/bin/cudart64_${npp_major}${npp_minor}_${npp_build}.dll")
