@@ -16,9 +16,9 @@ IF EXIST "%PROGRAMFILES_DIR_X86%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFIL
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
 
 REM Find Visual Studio or Msbuild
-SET VS2005="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
-SET VS2008="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
-REM SET VS2010="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"
+SET VS2005="%VS80COMNTOOLS%\..\IDE\devenv.exe"
+SET VS2008="%VS90COMNTOOLS%\..\IDE\devenv.exe"
+REM SET VS2010="%VS100COMNTOOLS%\..\IDE\devenv.exe"
 SET MSBUILD35="%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe"
 
 IF EXIST %MSBUILD35% SET DEVENV=%MSBUILD35%
@@ -47,8 +47,8 @@ IF NOT "%2%"=="gpu" GOTO END_OF_GPU
 
 :WITH_GPU
 REM Find cuda
-SET CUDA_SDK_DIR=%PROGRAMFILES_DIR_X86%\NVIDIA GPU Computing Toolkit\CUDA\v3.2
-IF "%OS_MODE%"==" Win64" SET CUDA_SDK_DIR=%PROGRAMFILES_DIR%\NVIDIA GPU Computing Toolkit\CUDA\v3.2
+SET CUDA_SDK_DIR=%CUDA_PATH%.
+IF "%OS_MODE%"==" Win64" SET CUDA_SDK_DIR=%CUDA_PATH_V3_2%.
 SET NPP_SDK_DIR=%CUDA_SDK_DIR%\npp_3.2.16_win_32\SDK
 IF "%OS_MODE%"==" Win64" SET NPP_SDK_DIR=%CUDA_SDK_DIR%\npp_3.2.16_win_64\SDK
 echo %NPP_SDK_DIR%
@@ -61,13 +61,13 @@ IF NOT "%3%"=="intel" GOTO VISUAL_STUDIO
 
 :INTEL_COMPILER
 REM Find Intel Compiler 
-SET INTEL_DIR=%PROGRAMFILES_DIR_X86%\Intel\ComposerXE-2011\bin
-SET INTEL_ENV=%INTEL_DIR%\iclvars.bat
-SET INTEL_ICL=%INTEL_DIR%\ia32\icl.exe
-IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%INTEL_DIR%\intel64\icl.exe
-SET INTEL_TBB=%INTEL_DIR%\..\tbb\include
-SET INTEL_IPP=%INTEL_DIR%\..\redist\ia32\ipp
-IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%INTEL_DIR%\..\redist\intel64\ipp
+SET INTEL_DIR=%ICPP_COMPILER12%\bin
+SET INTEL_ENV=%ICPP_COMPILER12%\bin\iclvars.bat
+SET INTEL_ICL=%ICPP_COMPILER12%\bin\ia32\icl.exe
+IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%ICPP_COMPILER12%\bin\intel64\icl.exe
+SET INTEL_TBB=%TBB30_INSTALL_DIR%\include
+SET INTEL_IPP=%ICPP_COMPILER12%\redist\ia32\ipp
+IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER12%\redist\intel64\ipp
 SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert120.exe
 
 REM initiate the compiler enviroment
