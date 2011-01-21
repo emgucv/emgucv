@@ -353,7 +353,9 @@ IF (WIN32)
     "Emgu.CV"
     "Emgu.CV.UI"
     #    "Emgu.CV.DebuggerVisualizers"
-    ${OPENCV_LIBRARY_OUTPUT_NAMES})
+    ${OPENCV_LIBRARY_OUTPUT_NAMES}
+	${CVEXTERN_DEPENDENCY_DLL_NAMES})
+  MESSAGE(STATUS "DEBUGGER VISUALIZER FILES: ${DEBUGER_VISUALIZER_FILES}")
   MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
     SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
 ClearErrors
