@@ -672,8 +672,10 @@ ELSE (WIN32)
   LIST(FIND CPACK_GENERATOR "RPM" TEMP)
   IF(NOT (${TEMP} EQUAL -1))  
     SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
-    SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.4, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
-    
+    SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.6, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
+    IF (WITH_TBB)
+      SET(CPACK_RPM_PACKAGE_REQUIRES ", tbb")
+    ENDIF()    
     SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT})
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
