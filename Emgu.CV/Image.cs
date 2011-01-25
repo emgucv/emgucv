@@ -17,7 +17,7 @@ namespace Emgu.CV
    /// <summary>
    /// An Image is a wrapper to IplImage of OpenCV. 
    /// </summary>
-   /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz or Ycc)</typeparam>
+   /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    [Serializable]
    public class Image<TColor, TDepth>
