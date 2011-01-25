@@ -95,24 +95,36 @@ SET(PACKAGE_NAME "${PROJECT_NAME}")
 SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
+IF (WIN32)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
+ENDIF()
+
+IF(CMAKE_CL_64)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x64") 
+ELSE()
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x86")
+ENDIF()
+
+IF(WITH_CUDA) 
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-gpu")
+ENDIF()
+IF(WITH_TBB)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-tbb")
+ENDIF()
+IF(USE_IPP)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-ipp")
+ENDIF()
+IF(CV_ICC)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-icc")
+ENDIF()
+
 SET(CPACK_PACKAGE_VENDOR "Emgu")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2")
 SET(CPACK_PACKAGE_VERSION_MINOR "2")
 SET(CPACK_PACKAGE_VERSION_PATCH "1")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
-SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${EMGUCV_ARCH}")
-IF(WITH_CUDA) 
-  SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-gpu")
-ENDIF()
-IF(WITH_TBB)
-  SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-tbb")
-ENDIF()
-IF(USE_IPP)
-  SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-ipp")
-ENDIF()
-IF(CV_ICC)
-  SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-icc")
-ENDIF()
+SET(CPACK_PACKAGE_FILE_NAME "lib${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+
 
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Emgu.CV.License.txt")
 
@@ -156,7 +168,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration(\"\")]
 [assembly: AssemblyCompany(\"${CPACK_PACKAGE_VENDOR}\")]
 [assembly: AssemblyProduct(\"Emgu.CV\")]
-[assembly: AssemblyCopyright(\"Copyright ?${CPACK_PACKAGE_VENDOR} 2010\")]
+[assembly: AssemblyCopyright(\"Copyright ${CPACK_PACKAGE_VENDOR} 2011\")]
 [assembly: AssemblyTrademark(\"\")]
 [assembly: AssemblyCulture(\"\")]
 ")
@@ -225,6 +237,11 @@ ELSE()
   SET(OPENCV_FFMPEG_OUTPUT_NAME "unknown")
 ENDIF()
 
+IF(CMAKE_CL_64)
+  SET(UNMANAGED_CODE_BITNESS "64")
+ELSE()
+  SET(UNMANAGED_CODE_BITNESS "32")
+ENDIF()
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
 using System;
@@ -279,6 +296,10 @@ namespace Emgu.CV
       /// </summary>
       public const string OPENCV_FFMPEG_LIBRARY = \"${OPENCV_FFMPEG_OUTPUT_NAME}\";
 
+      /// <summary>
+      /// The bit-ness of the unmanaged code (either 32 or 64) 
+      /// </summary>
+	  public const uint UnmanagedCodeBitness = ${UNMANAGED_CODE_BITNESS};
    }
 }")
 
@@ -303,7 +324,7 @@ IF (WIN32)
   ENDIF()
   
   SET(CPACK_NSIS_MODIFY_PATH OFF)
-  
+  SET(CPACK_NSIS_INSTALL_ROOT "C:\\Emgu")
   ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
   
   # ----------------------------------------------------------------------------
@@ -546,13 +567,20 @@ SET(CPACK_NSIS_CONTACT "support@emgu.com")
 # ----------------------------------------------------------------------------
 #  Add menu link for documentations
 # ----------------------------------------------------------------------------
-LIST(APPEND CPACK_NSIS_MENU_LINKS "doc/opencv.pdf" "Open CV Documentation")
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\" ")
+
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\\Open CV Documentation.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\opencv.pdf\\\" ")	
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Documentation\\\\Open CV Documentation.lnk\\\" ")
+
 IF(EMGU_CV_DOCUMENTATION_BUILD)
   LIST(APPEND CPACK_COMPONENTS_ALL emgucv_document)
   set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DISPLAY_NAME "Emgu CV Documentation")
   set(CPACK_COMPONENT_EMGUCV_DOCUMENT_DEPENDS emgucv_binary)
-  LIST(APPEND CPACK_NSIS_MENU_LINKS "Emgu.CV.Documentation.chm" "Emgu CV Documentation")
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\\Emgu CV Documentation.lnk\\\"  \\\"$INSTDIR\\\\Emgu.CV.Documentation.chm\\\" ")	
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Documentation\\\\Emgu CV Documentation.lnk\\\" ")
 ENDIF()
+
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Documentation\\\" ")
 
 # ----------------------------------------------------------------------------
 #  Add menu link for web sites
