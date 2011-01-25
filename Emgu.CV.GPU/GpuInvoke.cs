@@ -414,6 +414,70 @@ namespace Emgu.CV.GPU
       public static extern void Log(IntPtr src, IntPtr dst);
 
       /// <summary>
+      /// Computes magnitude of each (x(i), y(i)) vector
+      /// </summary>
+      /// <param name="x">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="y">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMagnitude")]
+      public static extern void Magnitude(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
+
+      /// <summary>
+      /// Computes squared magnitude of each (x(i), y(i)) vector
+      /// </summary>
+      /// <param name="x">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="y">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMagnitudeSqr")]
+      public static extern void MagnitudeSqr(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
+
+      /// <summary>
+      /// Computes angle (angle(i)) of each (x(i), y(i)) vector
+      /// </summary>
+      /// <param name="x">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="y">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="angle">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="angleInDegrees">If true, the output angle is in degrees, otherwise in radian</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPhase")]
+      public static extern void Phase(
+         IntPtr x, IntPtr y, IntPtr angle, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool angleInDegrees, IntPtr stream);
+
+      /// <summary>
+      /// Converts Cartesian coordinates to polar
+      /// </summary>
+      /// <param name="x">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="y">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="angle">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="angleInDegrees">If true, the output angle is in degrees, otherwise in radian</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCartToPolar")]
+      public static extern void CartToPolar(
+         IntPtr x, IntPtr y, IntPtr magnitude, IntPtr angle,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool angleInDegrees, IntPtr stream);
+
+      /// <summary>
+      /// Converts polar coordinates to Cartesian
+      /// </summary>
+      /// <param name="magnitude">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="angle">The source GpuMat. Supports only floating-point type</param>
+      /// <param name="x">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="y">The destination GpuMat. Supports only floating-point type</param>
+      /// <param name="angleInDegrees">If true, the input angle is in degrees, otherwise in radian</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPolarToCart")]
+      public static extern void PolarToCart(
+         IntPtr magnitude, IntPtr angle, IntPtr x, IntPtr y,
+         [MarshalAs(CvInvoke.BoolMarshalType)] 
+         bool angleInDegrees, IntPtr stream);
+
+      /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
       /// dst(I)=src(I)*scale + (shift,shift,...)
       /// All the channels of multi-channel arrays are processed independently.

@@ -245,6 +245,46 @@ CVAPI(void) gpuMatLog(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b)
 	cv::gpu::log(*a, *b);
 }
 
+CVAPI(void) gpuMatMagnitude(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::magnitude(*x, *y, *magnitude, *stream);
+   else 
+      cv::gpu::magnitude(*x, *y, *magnitude);
+}
+
+CVAPI(void) gpuMatMagnitudeSqr(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::magnitudeSqr(*x, *y, *magnitude, *stream);
+   else 
+      cv::gpu::magnitudeSqr(*x, *y, *magnitude);
+}
+
+CVAPI(void) gpuMatPhase(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* angle, bool angleInDegrees, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::phase(*x, *y, *angle, angleInDegrees, *stream);
+   else
+      cv::gpu::phase(*x, *y, *angle, angleInDegrees);
+}
+
+CVAPI(void) gpuMatCartToPolar(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::GpuMat* angle, bool angleInDegrees, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees, *stream);
+   else
+      cv::gpu::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees);
+}
+
+CVAPI(void) gpuMatPolarToCart(const cv::gpu::GpuMat* magnitude, const cv::gpu::GpuMat* angle, cv::gpu::GpuMat* x, cv::gpu::GpuMat* y, bool angleInDegrees, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees, *stream);
+   else
+      cv::gpu::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees);
+}
+
 CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
 {
    std::vector<cv::gpu::GpuMat> srcMat;
