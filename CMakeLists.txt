@@ -564,6 +564,9 @@ set(CPACK_PACKAGE_EXECUTABLES "" "") #http://public.kitware.com/Bug/view.php?id=
 
 SET(CPACK_NSIS_CONTACT "support@emgu.com")
 
+# Define MUI_TEMP that will be used for uninstalling menulinks
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP")
+
 # ----------------------------------------------------------------------------
 #  Add menu link for documentations
 # ----------------------------------------------------------------------------
