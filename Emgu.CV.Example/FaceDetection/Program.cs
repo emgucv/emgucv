@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using Emgu.CV;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace FaceDetection
 {
@@ -17,6 +18,7 @@ namespace FaceDetection
       [STAThread]
       static void Main()
       {
+         if (!IsPlaformCompatable()) return;
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
          Run();
@@ -71,6 +73,23 @@ namespace FaceDetection
          watch.Stop();
          //display the image 
          ImageViewer.Show(image, String.Format("Perform face and eye detection in {0} milliseconds", watch.ElapsedMilliseconds));
+      }
+
+      /// <summary>
+      /// Check if both the managed and unmanaged code are compiled for the same architecture
+      /// </summary>
+      /// <returns>Returns true if both the managed and unmanaged code are compiled for the same architecture</returns>
+      static bool IsPlaformCompatable()
+      {
+         int clrBitness = Marshal.SizeOf(typeof(IntPtr)) * 8;
+         if (clrBitness != CvInvoke.UnmanagedCodeBitness)
+         {
+            MessageBox.Show(String.Format("Platform mismatched: CLR is {0} bit, C++ code is {1} bit."
+               + " Please consider recompiling the executable with the same platform target as C++ code.",
+               clrBitness, CvInvoke.UnmanagedCodeBitness));
+            return false;
+         }
+         return true;
       }
    }
 }

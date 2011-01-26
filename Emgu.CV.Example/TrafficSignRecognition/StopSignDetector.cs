@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.Features2D;
-using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
+using System.Text;
+using Emgu.CV;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace TrafficSignRecognition
 {
