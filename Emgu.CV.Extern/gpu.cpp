@@ -159,12 +159,9 @@ CVAPI(void) gpuMatConvertTo(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, do
 CVAPI(void) gpuMatCopy(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask)
 {
    if (mask)
-   {
-      src->copyTo(*dst);
-   } else
-   {
       src->copyTo(*dst, *mask);
-   }
+   else
+      src->copyTo(*dst);
 }
 
 CVAPI(void) gpuMatSetTo(cv::gpu::GpuMat* mat, const CvScalar s, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
