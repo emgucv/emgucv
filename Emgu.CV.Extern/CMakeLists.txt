@@ -125,7 +125,7 @@ IF(CMAKE_CL_64)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
     npp64_${npp_major}${npp_minor}_${npp_build} 
 	cudart64_${npp_major}${npp_minor}_${npp_build} 
-	cufft64_${npp_major}${npp_minor}_${npp_build)
+	cufft64_${npp_major}${npp_minor}_${npp_build})
 ELSE()
   SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/win32/npp32_${npp_major}${npp_minor}_${npp_build}.dll")
   LIST(APPEND NPP_BINARY_FILE 
