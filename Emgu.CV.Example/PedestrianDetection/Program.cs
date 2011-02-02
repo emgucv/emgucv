@@ -29,18 +29,22 @@ namespace PedestrianDetection
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png");
 
-         Stopwatch watch = Stopwatch.StartNew();
+         Stopwatch watch;  
          Rectangle[] regions;
 
          //check if there is a compatible GPU to run pedestrian detection
          if (GpuInvoke.HasCuda) 
          {  //this is the GPU version
             using (GpuHOGDescriptor des = new GpuHOGDescriptor())
-            using (GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr,byte>(image))
-            using (GpuImage<Bgra, Byte> gpuBgra = gpuImg.Convert<Bgra, Byte>())
             {
                des.SetSVMDetector(GpuHOGDescriptor.GetDefaultPeopleDetector());
-               regions = des.DetectMultiScale(gpuBgra);
+
+               watch = Stopwatch.StartNew();
+               using (GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(image))
+               using (GpuImage<Bgra, Byte> gpuBgra = gpuImg.Convert<Bgra, Byte>())
+               {
+                  regions = des.DetectMultiScale(gpuBgra);
+               }
             }
          }
          else
@@ -48,6 +52,8 @@ namespace PedestrianDetection
             using (HOGDescriptor des = new HOGDescriptor())
             {
                des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
+
+               watch = Stopwatch.StartNew();
                regions = des.DetectMultiScale(image);
             }
          }
