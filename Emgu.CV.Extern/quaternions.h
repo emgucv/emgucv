@@ -203,11 +203,13 @@ typedef struct Quaternions
       _mm_storeu_pd(buffer+2, _mm_sub_pd(_mm_set1_pd(1.0), _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd( _mm_mul_pd(_yx, _yx), _mm_mul_pd(_zy, _zy)))));
       _mm_storeu_pd(buffer, _mm_mul_pd(_mm_set1_pd(2.0), _mm_add_pd(_mm_mul_pd(_mm_load1_pd(&w), _mm_shuffle_pd( _zy,_yx, _MM_SHUFFLE2(0,1)) ), _mm_mul_pd(_yx, _zy))));
       *xDst = atan2(buffer[1], buffer[2]);
-      *yDst = asin(2.0 * (w * y - z * x));
+      double v = 2.0 * (w * y - z * x);
+      *yDst = asin(v > 1.0 ? 1.0 : (v < -1.0? -1.0 : v)); //extra step to enhance the numerical stability.
       *zDst = atan2(buffer[0], buffer[3]);
 #else
       *xDst = atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x*x + y*y));
-      *yDst = asin(2.0 * (w * y - z * x));
+      double v = 2.0 * (w * y - z * x);
+      *yDst = asin(v > 1.0 ? 1.0 : (v < -1.0? -1.0 : v)); //extra step to enhance the numerical stability.
       *zDst = atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y*y + z*z));
 #endif
    }

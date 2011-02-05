@@ -74,6 +74,21 @@ void Test_double_MulS()
    cout <<"Test mulS: " << (success ? "Passed" : "Failed") << std::endl;
 }
 
+void Test_quaternions()
+{ 
+   Quaternions q1, q2, q;
+   CvPoint3D64f a1, a2;
+   a1.x = 0.0; a1.y = 175.0 / 180.0 * CV_PI; a1.z = 0.0;
+   a2.x = 0.0; a2.y = 5.0 / 180.0 * CV_PI; a2.z = 0.0;
+   q1.setAxisAngle(&a1);
+   q2.setAxisAngle(&a2);
+   
+   q1.slerp(&q2, 0.5, &q);
+   double x=0, y=0, z=0;
+   q.getEuler(&x, &y, &z);
+
+}
+
 #ifdef _MSC_VER
 void Test_quaternions_performance()
 {
@@ -120,7 +135,7 @@ int main()
    Test_2D_cross_product();
    Test_3D_cross_product();
    Test_double_MulS();
- 
+   Test_quaternions();
 #ifdef _MSC_VER
    Test_quaternions_performance();
    cin >>tmp; //wait for input only if compiling with visual C++ 

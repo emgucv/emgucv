@@ -257,5 +257,55 @@ namespace Emgu.CV.Test
          deltaDegree = Math.Abs(y / Math.PI * 180.0 - 31.5);
          Assert.LessOrEqual(deltaDegree, epsilon);
       }
+
+      [Test]
+      public void TestQuaternionsSlerp4()
+      {
+         Random r = new Random();
+         Quaternions q1 = new Quaternions();
+         q1.AxisAngle = new MCvPoint3D64f(0.0, 175.0 / 180 * Math.PI, 0.0);
+         Quaternions q2 = new Quaternions();
+         q2.AxisAngle = new MCvPoint3D64f(0.0, 5.0 / 180 * Math.PI, 0.0);
+
+         double epsilon = 1.0e-12;
+         double x = 0, y = 0, z = 0;
+
+         Quaternions q = q1.Slerp(q2, 0.5);
+         q.GetEuler(ref x, ref y, ref z);
+         Assert.IsFalse(double.IsNaN(x));
+         Assert.IsFalse(double.IsNaN(y));
+         Assert.IsFalse(double.IsNaN(z));
+         double deltaDegree = Math.Abs(y / Math.PI * 180.0 - 90.0);
+         Assert.LessOrEqual(deltaDegree, epsilon);
+      }
+
+      [Test]
+      public void TestQuaternionsSlerp5()
+      {
+         Random r = new Random();
+         Quaternions q1 = new Quaternions();
+         q1.AxisAngle = new MCvPoint3D64f(0.0, 355.0 / 180 * Math.PI, 0.0);
+         Quaternions q2 = new Quaternions();
+         q2.AxisAngle = new MCvPoint3D64f(0.0, 5.0 / 180 * Math.PI, 0.0);
+
+         double epsilon = 1.0e-12;
+         double x = 0, y = 0, z = 0;
+
+         Quaternions q = q1.Slerp(q2, 0.5);
+         q.GetEuler(ref x, ref y, ref z);
+         Assert.IsFalse(double.IsNaN(x));
+         Assert.IsFalse(double.IsNaN(y));
+         Assert.IsFalse(double.IsNaN(z));
+         double deltaDegree = Math.Abs(y / Math.PI * 180.0 - 0.0);
+         Assert.LessOrEqual(deltaDegree, epsilon);
+
+         q = q2.Slerp(q1, 0.5);
+         q.GetEuler(ref x, ref y, ref z);
+         Assert.IsFalse(double.IsNaN(x));
+         Assert.IsFalse(double.IsNaN(y));
+         Assert.IsFalse(double.IsNaN(z));
+         deltaDegree = Math.Abs(y / Math.PI * 180.0 - 0.0);
+         Assert.LessOrEqual(deltaDegree, epsilon);
+      }
    }
 }
