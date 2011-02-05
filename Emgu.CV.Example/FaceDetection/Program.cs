@@ -37,15 +37,33 @@ namespace FaceDetection
          {
             using (GpuCascadeClassifier face = new GpuCascadeClassifier(faceFileName))
             using (GpuCascadeClassifier eye = new GpuCascadeClassifier(eyeFileName))
-            using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr,byte>(image))
-            using (GpuImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
             {
                watch = Stopwatch.StartNew();
-               Rectangle[] faceRegion = face.DetectMultiScale(gpuGray, 1.1, 10, Size.Empty);
-               foreach(Rectangle region in faceRegion)
+               using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
+               using (GpuImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
                {
-                  //draw the face detected in the 0th (gray) channel with blue color
-                  image.Draw(region, new Bgr(Color.Blue), 2);
+                  Rectangle[] faceRegion = face.DetectMultiScale(gpuGray, 1.1, 10, Size.Empty);
+                  foreach (Rectangle f in faceRegion)
+                  {
+                     //draw the face detected in the 0th (gray) channel with blue color
+                     image.Draw(f, new Bgr(Color.Blue), 2);
+                     using (GpuImage<Gray, Byte> faceImg = gpuGray.GetSubRect(f))
+                     {
+                        //For some reason a clone is required.
+                        //Might be a bug of GpuCascadeClassifier in opencv
+                        using (GpuImage<Gray, Byte> clone = faceImg.Clone()) 
+                        {
+                           Rectangle[] eyeRegion = eye.DetectMultiScale(clone, 1.1, 10, Size.Empty);
+
+                           foreach (Rectangle e in eyeRegion)
+                           {
+                              Rectangle eyeRect = e;
+                              eyeRect.Offset(f.X, f.Y);
+                              image.Draw(eyeRect, new Bgr(Color.Red), 2);
+                           }
+                        }
+                     }
+                  }
                }
                watch.Stop();
             }
@@ -55,43 +73,44 @@ namespace FaceDetection
             //Read the HaarCascade objects
             using(HaarCascade face = new HaarCascade(faceFileName))
             using(HaarCascade eye = new HaarCascade(eyeFileName))
-            using (Image<Gray, Byte> gray = image.Convert<Gray, Byte>()) //Convert it to Grayscale
             {
                watch = Stopwatch.StartNew();
-
-               //normalizes brightness and increases contrast of the image
-               gray._EqualizeHist();          
-
-               //Detect the faces  from the gray scale image and store the locations as rectangle
-               //The first dimensional is the channel
-               //The second dimension is the index of the rectangle in the specific channel
-               MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(
-                  face,
-                  1.1,
-                  10,
-                  Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                  new Size(20, 20));
-
-               foreach (MCvAvgComp f in facesDetected[0])
+               using (Image<Gray, Byte> gray = image.Convert<Gray, Byte>()) //Convert it to Grayscale
                {
-                  //draw the face detected in the 0th (gray) channel with blue color
-                  image.Draw(f.rect, new Bgr(Color.Blue), 2);
+                  //normalizes brightness and increases contrast of the image
+                  gray._EqualizeHist();
 
-                  //Set the region of interest on the faces
-                  gray.ROI = f.rect;
-                  MCvAvgComp[][] eyesDetected = gray.DetectHaarCascade(
-                     eye,
+                  //Detect the faces  from the gray scale image and store the locations as rectangle
+                  //The first dimensional is the channel
+                  //The second dimension is the index of the rectangle in the specific channel
+                  MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(
+                     face,
                      1.1,
                      10,
                      Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
                      new Size(20, 20));
-                  gray.ROI = Rectangle.Empty;
 
-                  foreach (MCvAvgComp e in eyesDetected[0])
+                  foreach (MCvAvgComp f in facesDetected[0])
                   {
-                     Rectangle eyeRect = e.rect;
-                     eyeRect.Offset(f.rect.X, f.rect.Y);
-                     image.Draw(eyeRect, new Bgr(Color.Red), 2);
+                     //draw the face detected in the 0th (gray) channel with blue color
+                     image.Draw(f.rect, new Bgr(Color.Blue), 2);
+
+                     //Set the region of interest on the faces
+                     gray.ROI = f.rect;
+                     MCvAvgComp[][] eyesDetected = gray.DetectHaarCascade(
+                        eye,
+                        1.1,
+                        10,
+                        Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
+                        new Size(20, 20));
+                     gray.ROI = Rectangle.Empty;
+
+                     foreach (MCvAvgComp e in eyesDetected[0])
+                     {
+                        Rectangle eyeRect = e.rect;
+                        eyeRect.Offset(f.rect.X, f.rect.Y);
+                        image.Draw(eyeRect, new Bgr(Color.Red), 2);
+                     }
                   }
                }
                watch.Stop();
