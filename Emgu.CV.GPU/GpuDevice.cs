@@ -21,7 +21,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Get the compute capability of the device
       /// </summary>
-      /// <param name="deviceId">The device</param>
+      /// <param name="device">The device</param>
       /// <param name="major">The major version of the compute capability</param>
       /// <param name="minor">The minor version of the compute capability</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
