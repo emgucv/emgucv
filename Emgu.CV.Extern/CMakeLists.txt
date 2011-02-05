@@ -152,10 +152,21 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
 ENDIF()
 
 file(GLOB extern_srcs "./*.cpp")
-source_group("Src" FILES ${extern_srcs})
 file(GLOB extern_hdrs "./*.h*")
-source_group("Include" FILES ${extern_hdrs})
 
+############################### TESSERACT START ########################
+IF(WIN32 AND NOT CMAKE_CL_64)
+  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/tesseract/include")
+  LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
+  LINK_DIRECTORIES("${PROJECT_SOURCE_DIR}/tesseract/lib/x86")
+  SET(TESSERACT_LIBRARY ccmain ccstruct ccutil classify cube cutil dict image neural_networks tesseract textord viewer wordrec leptonlib Ws2_32)
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES leptonlib)
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${PROJECT_SOURCE_DIR}/tesseract/lib/x86/leptonlib.dll")
+ENDIF()
+############################### TESSERACT END ##########################
+
+source_group("Src" FILES ${extern_srcs})
+source_group("Include" FILES ${extern_hdrs})
 set(the_target ${PROJECT_NAME})
 add_library(${the_target} ${extern_srcs} ${extern_hdrs})
 
@@ -240,7 +251,7 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main

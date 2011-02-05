@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using Emgu.Util;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using tessnet2;
 using System.Diagnostics;
+using System.Drawing;
+using System.Text;
+using Emgu.CV;
+using Emgu.CV.OCR;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace LicensePlateRecognition
 {
@@ -26,13 +26,7 @@ namespace LicensePlateRecognition
       public LicensePlateDetector()
       {
          //create OCR engine
-         _ocr = new Tesseract();
-
-         //You can download more language definition data from
-         //http://code.google.com/p/tesseract-ocr/downloads/list
-         //Languages supported includes:
-         //Dutch, Spanish, German, Italian, French and English
-         _ocr.Init(null, "eng", false);
+         _ocr = new Tesseract("tessdata", "eng");
       }
 
       /// <summary>
@@ -43,13 +37,13 @@ namespace LicensePlateRecognition
       /// <param name="filteredLicensePlateImagesList">A list of images where the detected license plate regions (with noise removed) are stored</param>
       /// <param name="detectedLicensePlateRegionList">A list where the regions of license plate (defined by an MCvBox2D) are stored</param>
       /// <returns>The list of words for each license plate</returns>
-      public List<List<Word>> DetectLicensePlate(
+      public List<String> DetectLicensePlate(
          Image<Bgr, byte> img, 
          List<Image<Gray, Byte>> licensePlateImagesList, 
          List<Image<Gray, Byte>> filteredLicensePlateImagesList, 
          List<MCvBox2D> detectedLicensePlateRegionList)
       {
-         List<List<Word>> licenses = new List<List<Word>>();
+         List<String> licenses = new List<String>();
          using (Image<Gray, byte> gray = img.Convert<Gray, Byte>())
          using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
          using (MemStorage stor = new MemStorage())
@@ -81,7 +75,7 @@ namespace LicensePlateRecognition
       private void FindLicensePlate(
          Contour<Point> contours, Image<Gray, Byte> gray, Image<Gray, Byte> canny,
          List<Image<Gray, Byte>> licensePlateImagesList, List<Image<Gray, Byte>> filteredLicensePlateImagesList, List<MCvBox2D> detectedLicensePlateRegionList,
-         List<List<Word>> licenses)
+         List<String> licenses)
       {
          for (; contours != null; contours = contours.HNext)
          {
@@ -129,9 +123,12 @@ namespace LicensePlateRecognition
                Image<Gray, Byte> plate = gray.Copy(box);
                Image<Gray, Byte> filteredPlate = FilterPlate(plate);
 
-               List<Word> words;
-               using (Bitmap bmp = filteredPlate.Bitmap)
-                  words = _ocr.DoOCR(bmp, filteredPlate.ROI);
+               String words;
+               using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+               {
+                  _ocr.SetImage(tmp);
+                  words = _ocr.GetText();
+               }
 
                licenses.Add(words);
                licensePlateImagesList.Add(plate);
