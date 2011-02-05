@@ -78,6 +78,7 @@ void Test_double_MulS()
 
 void Test_quaternions()
 { 
+   const double eps = 1.0e-10;
    Quaternions q1, q2, q;
    CvPoint3D64f a1, a2;
    a1.x = 0.0; a1.y = 175.0 / 180.0 * CV_PI; a1.z = 0.0;
@@ -88,7 +89,18 @@ void Test_quaternions()
    q1.slerp(&q2, 0.5, &q);
    double x=0, y=0, z=0;
    q.getEuler(&x, &y, &z);
+      cout << "Test quaternions slerp: " << (( 
+         (fabs(x) < eps || fabs(x - CV_PI) < eps) 
+         && (fabs(y-CV_PI / 2.0) < eps )
+         && (fabs(z) < eps || fabs(x - CV_PI) < eps))
+         ? "Passed" : "Failed" ) << std::endl;
 
+   q2 = q1;
+   q1.conjugate();
+   q1.multiply(&q2, &q);
+   cout << "Test quaternions inverse: " << 
+      ( ( fabs(q.w - 1.0) < eps && fabs(q.x) < eps && fabs(q.y) < eps && fabs(q.z) < eps)  
+      ? "Passed" : "Failed") << std::endl;
 }
 
 void Test_GpuMatCopy()

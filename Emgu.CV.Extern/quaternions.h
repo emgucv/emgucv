@@ -284,6 +284,13 @@ typedef struct Quaternions
       qm->renorm();
    }
 
+   void conjugate()
+   {
+      x = -x;
+      y = -y; 
+      z = -z;
+   }
+
 } Quaternions;
 
 
