@@ -145,6 +145,14 @@ CVAPI(void) gpuMatCompare(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv
    cv::gpu::compare(*a, *b, *c, cmpop);
 }
 
+CVAPI(double) gpuMatThreshold(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double thresh, double maxval, int type, const cv::gpu::Stream* stream)
+{
+   if(stream)
+      return cv::gpu::threshold(*src, *dst, thresh, maxval, type, *stream);
+   else
+      return cv::gpu::threshold(*src, *dst, thresh, maxval, type);
+}
+
 CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, const cv::gpu::Stream* stream)
 {
    if (stream)

@@ -697,6 +697,18 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMaxS")]
       public static extern void Max(IntPtr src1, double src2, IntPtr dst, IntPtr stream);
 
+      /// <summary>
+      /// Applies fixed-level thresholding to single-channel array. The function is typically used to get bi-level (binary) image out of grayscale image or for removing a noise, i.e. filtering out pixels with too small or too large values. There are several types of thresholding the function supports that are determined by thresholdType
+      /// </summary>
+      /// <param name="src">Source array (single-channel, 8-bit of 32-bit floating point). </param>
+      /// <param name="dst">Destination array; must be either the same type as src or 8-bit. </param>
+      /// <param name="threshold">Threshold value</param>
+      /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+      /// <param name="thresholdType">Thresholding type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatThreshold")]
+      public static extern double Threshold(IntPtr src, IntPtr dst, double threshold, double maxValue, CvEnum.THRESH thresholdType, IntPtr stream);
+
       #region filters
       /// <summary>
       /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
