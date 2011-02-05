@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="GpuCascadeClassifier.cs" />
     <Compile Include="GpuDevice.cs" />
+    <Compile Include="GpuDisparityBilateralFilter.cs" />
     <Compile Include="GpuHOGDescriptor.cs" />
     <Compile Include="GpuImage.cs" />
     <Compile Include="GpuInvoke.cs" />
