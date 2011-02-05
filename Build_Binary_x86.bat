@@ -16,8 +16,8 @@ IF EXIST "%PROGRAMFILES_DIR_X86%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFIL
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
 
 REM Find Visual Studio or Msbuild
-SET VS2005="%VS80COMNTOOLS%\..\IDE\devenv.exe"
-SET VS2008="%VS90COMNTOOLS%\..\IDE\devenv.exe"
+SET VS2005="%VS80COMNTOOLS%..\IDE\devenv.exe"
+SET VS2008="%VS90COMNTOOLS%..\IDE\devenv.exe"
 REM SET VS2010="%VS100COMNTOOLS%\..\IDE\devenv.exe"
 SET MSBUILD35="%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe"
 
