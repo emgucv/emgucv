@@ -28,6 +28,7 @@ IF (IPP_FOUND)
   include_directories(${IPP_INCLUDE_DIRS})
   LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
   
+  IF(WIN32)
   IF(CMAKE_CL_64)
     SET(IPP_ARCH "intel64")
   ELSE()
@@ -65,6 +66,7 @@ IF (IPP_FOUND)
   FOREACH(IPP_FILE ${IPP_BINARY_FILE})
 	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${IPP_ROOT_DIR}/../redist/${IPP_ARCH}/ipp/${IPP_FILE}.dll")
   ENDFOREACH()
+  ENDIF()
 ENDIF()
 ENDIF()
 ############################### IPP END ################################
@@ -75,6 +77,8 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
   add_definitions(-DHAVE_TBB)
   include_directories(${TBB_INCLUDE_DIR})
   link_directories(${TBB_LIB_DIR})
+  
+  IF(WIN32)
   SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIR}/../../redist")
   IF(CMAKE_CL_64)
     SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/intel64/tbb")
@@ -91,7 +95,7 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
 
   LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${TBB_BINARY_FILE_DIR}/tbb.dll")
-  
+  ENDIF()
 endif()
 ############################### TBB END ################################
 
@@ -112,6 +116,7 @@ if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
 endif()
 
+IF(WIN32)
 #replace any potential backslash in the path with slash
 STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
 
@@ -139,6 +144,7 @@ ELSE()
 ENDIF()
 
 LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${NPP_BINARY_FILE})
+ENDIF()
 ENDIF()
 ############################### GPU END ################################
 
