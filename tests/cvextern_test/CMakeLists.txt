@@ -52,7 +52,7 @@ file(GLOB cvextern_test_hdrs "./*.h*")
 source_group("Include" FILES ${cvextern_test_hdrs})
 
 ############################### TESSERACT START ########################
-IF(WIN32 AND NOT CMAKE_CL_64)
+IF(WIN32 AND NOT TARGET_ARCH_64)
   LINK_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/tesseract/lib/x86")
   #SET(TESSERACT_LIBRARY ccmain ccstruct ccutil classify cube cutil dict image neural_networks tesseract textord viewer wordrec leptonlib Ws2_32)
 ENDIF()

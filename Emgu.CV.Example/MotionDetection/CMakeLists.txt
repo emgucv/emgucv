@@ -3,7 +3,7 @@ PROJECT(Example.MotionDetection)
 FILE(GLOB_RECURSE SRC_Example_MotionDetection RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_Example_MotionDetection ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
-IF(CMAKE_CL_64)
+IF(TARGET_ARCH_64)
   LIST(APPEND CS_FLAGS -platform:x64)
 ELSE()
   LIST(APPEND CS_FLAGS -platform:x86)

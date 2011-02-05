@@ -14,6 +14,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 SET(CSC_PREFERRED_VERSION "3.5")
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE (CSharpMacros)
+INCLUDE (CheckTargetArch)
 
 #MESSAGE(STATUS "Detected library output path of '${LIBRARY_OUTPUT_PATH}'")
 IF (NOT GLOBAL_LIBRARY_OUTPUT_PATH)
@@ -52,12 +53,11 @@ ENDIF()
 # ----------------------------------------------------------------------------
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
-IF(MSVC AND CMAKE_CL_64)
-  SET(TARGET_ARCH_64 TRUE)
+CHECK_TARGET_ARCH()
+IF (TARGET_ARCH_64)
+  MESSAGE(STATUS "Building 64bit library")
 ELSE()
-  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    SET(TARGET_ARCH_64 TRUE)
-  ENDIF() 
+  MESSAGE(STATUS "Building 32bit library")
 ENDIF()
 
 IF (WIN32)
@@ -69,30 +69,6 @@ IF (WIN32)
 ELSE(WIN32)
   SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 ENDIF(WIN32)
-
-IF (TARGET_ARCH_64)
-  MESSAGE(STATUS "Building 64bit library")
-ELSE()
-  MESSAGE(STATUS "Building 32bit library")
-ENDIF()
-
-# ----------------------------------------------------------------------------
-#  Check if using INTEL Compiler on windows 
-# ----------------------------------------------------------------------------
-if(WIN32)
-  IF(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    SET (CV_ICC ${CMAKE_CXX_COMPILER})
-    MESSAGE(STATUS "Building with Intel Compiler: ${CV_ICC}")
-  ENDIF()
-  IF(WIN32 AND CV_ICC)
-    get_filename_component(CV_ICL_PATH "${CMAKE_CXX_COMPILER}" PATH)
-    IF (TARGET_ARCH_64)
-      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/intel64")
-    ELSE()
-      SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/ia32")
-    ENDIF()
-  ENDIF()
-endif()
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -135,7 +111,6 @@ SET(CPACK_PACKAGE_VERSION_PATCH "0")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
 SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
-
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Emgu.CV.License.txt")
 
 IF (WIN32)
@@ -156,15 +131,16 @@ SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 #ENDIF()
 
 ADD_SUBDIRECTORY(opencv)
-ADD_SUBDIRECTORY(Emgu.CV.Extern)
 
-SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
-SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
 IF (TARGET_ARCH_64)
   SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
 ELSE()
   SET(EMGU_ENABLE_SSE ON CACHE BOOL "ENABLE SSE for Emgu CV")
 ENDIF()
+ADD_SUBDIRECTORY(Emgu.CV.Extern)
+
+SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
+SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
 
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
@@ -342,7 +318,10 @@ IF (WIN32)
   # ----------------------------------------------------------------------------
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
-  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
+  IF(MSVC)
+  IF(MSVC100)
+    SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
+  ENDIF()
   IF(MSVC90)
     SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
   ENDIF()
@@ -352,14 +331,16 @@ IF (WIN32)
       SET(VCRT_REDIST_NAME "vcredist_x64.exe")
   ENDIF()
   
+  IF(MSVC_REDIST_FOLDER)
   INSTALL(
     FILES
     "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
     DESTINATION .
     COMPONENT emgucv_binary 
     )
-	
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
+  ENDIF()
+  ENDIF()
 
   # ----------------------------------------------------------------------------
   #  Bundle intel c++ compiler xe 11 redistributable into deployment package

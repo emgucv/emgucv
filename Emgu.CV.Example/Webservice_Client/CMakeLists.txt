@@ -4,7 +4,7 @@ PROJECT(Example.Webservice_Client)
 FILE(GLOB_RECURSE SRC_Example_Webservice_Client RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_Example_Webservice_Client ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
-IF(CMAKE_CL_64)
+IF(TARGET_ARCH_64)
   LIST(APPEND CS_FLAGS -platform:x64)
 ELSE()
   LIST(APPEND CS_FLAGS -platform:x86)

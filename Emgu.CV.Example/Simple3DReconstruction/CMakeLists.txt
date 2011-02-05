@@ -6,7 +6,7 @@ FILE(GLOB_RECURSE SRC_Example_Simple3DReconstruction RELATIVE ${CMAKE_CURRENT_SO
 LIST(APPEND SRC_Example_Simple3DReconstruction ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 #Add emgucv references
-IF(CMAKE_CL_64)
+IF(TARGET_ARCH_64)
   LIST(APPEND CS_FLAGS -platform:x64)
 ELSE()
   LIST(APPEND CS_FLAGS -platform:x86)
