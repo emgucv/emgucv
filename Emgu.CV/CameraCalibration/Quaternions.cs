@@ -250,6 +250,14 @@ namespace Emgu.CV
       /// </summary>
       public static readonly Quaternions Empty = new Quaternions(1.0, 0.0, 0.0, 0.0);
 
+      /// <summary>
+      /// Compute the conjugate of the quaternions
+      /// </summary>
+      public void Conjugate()
+      {
+         X = -X; Y = -Y; Z = -Z;
+      }
+
       #region IEquatable<Quaternions> Members
       /// <summary>
       /// Check if this quaternions equals to <paramref name="other"/>
