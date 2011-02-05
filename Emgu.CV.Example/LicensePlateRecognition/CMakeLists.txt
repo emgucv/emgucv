@@ -1,4 +1,4 @@
-IF(WIN32 AND NOT CMAKE_CL_64)
+IF(EMGUCV_WITH_TESSERACT)
 PROJECT(Example.LicensePlateRecognition)
 
 FILE(GLOB_RECURSE SRC_Example_LicensePlateRecognition RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

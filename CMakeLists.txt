@@ -52,8 +52,16 @@ ENDIF()
 # ----------------------------------------------------------------------------
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
+IF(MSVC AND CMAKE_CL_64)
+  SET(TARGET_ARCH_64 TRUE)
+ELSE()
+  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    SET(TARGET_ARCH_64 TRUE)
+  ENDIF() 
+ENDIF()
+
 IF (WIN32)
-  IF(CMAKE_CL_64)
+  IF(TARGET_ARCH_64)
     SET(EMGUCV_ARCH win64)
   ELSE()
     SET(EMGUCV_ARCH win32)
@@ -62,8 +70,10 @@ ELSE(WIN32)
   SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 ENDIF(WIN32)
 
-IF (CMAKE_CL_64)
+IF (TARGET_ARCH_64)
   MESSAGE(STATUS "Building 64bit library")
+ELSE()
+  MESSAGE(STATUS "Building 32bit library")
 ENDIF()
 
 # ----------------------------------------------------------------------------
@@ -76,7 +86,7 @@ if(WIN32)
   ENDIF()
   IF(WIN32 AND CV_ICC)
     get_filename_component(CV_ICL_PATH "${CMAKE_CXX_COMPILER}" PATH)
-    IF (CMAKE_CL_64)
+    IF (TARGET_ARCH_64)
       SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/intel64")
     ELSE()
       SET(IPP_REDIST_PATH "${CV_ICL_PATH}/../../redist/ia32")
@@ -99,7 +109,7 @@ IF (WIN32)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
 ENDIF()
 
-IF(CMAKE_CL_64)
+IF(TARGET_ARCH_64)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x64") 
 ELSE()
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x86")
@@ -150,7 +160,7 @@ ADD_SUBDIRECTORY(Emgu.CV.Extern)
 
 SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
 SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
-IF (CMAKE_CL_64)
+IF (TARGET_ARCH_64)
   SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
 ELSE()
   SET(EMGU_ENABLE_SSE ON CACHE BOOL "ENABLE SSE for Emgu CV")
@@ -237,11 +247,12 @@ ELSE()
   SET(OPENCV_FFMPEG_OUTPUT_NAME "unknown")
 ENDIF()
 
-IF(CMAKE_CL_64)
+IF(TARGET_ARCH_64)
   SET(UNMANAGED_CODE_BITNESS "64")
 ELSE()
   SET(UNMANAGED_CODE_BITNESS "32")
 ENDIF()
+
 FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
 using System;
@@ -299,7 +310,7 @@ namespace Emgu.CV
       /// <summary>
       /// The bit-ness of the unmanaged code (either 32 or 64) 
       /// </summary>
-	  public const uint UnmanagedCodeBitness = ${UNMANAGED_CODE_BITNESS};
+      public const uint UnmanagedCodeBitness = ${UNMANAGED_CODE_BITNESS};
    }
 }")
 
@@ -318,7 +329,7 @@ ADD_SUBDIRECTORY(Emgu.CV.GPU.Test)
 ADD_SUBDIRECTORY(Emgu.CV.OCR)
 
 IF (WIN32)
-  IF(CMAKE_CL_64)
+  IF(TARGET_ARCH_64)
     SET(CPACK_GENERATOR ZIP)
   ELSE()
     SET(CPACK_GENERATOR NSIS;ZIP)
@@ -337,7 +348,7 @@ IF (WIN32)
   ENDIF()
   
   SET(VCRT_REDIST_NAME "vcredist_x86.exe")
-  IF(CMAKE_CL_64)
+  IF(TARGET_ARCH_64)
       SET(VCRT_REDIST_NAME "vcredist_x64.exe")
   ENDIF()
   
@@ -355,7 +366,7 @@ IF (WIN32)
   # ----------------------------------------------------------------------------
   IF(WIN32 AND CV_ICC)
     SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_ia32_2011.1.127.msi")
-    IF(CMAKE_CL_64)
+    IF(TARGET_ARCH_64)
       SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_intel64_2011.1.127.msi")
     ENDIF()
 	MESSAGE(STATUS "${CV_ICC_REDIST_NAME} will be included in deployment package")

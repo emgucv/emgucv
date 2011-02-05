@@ -160,13 +160,28 @@ file(GLOB extern_srcs "./*.cpp")
 file(GLOB extern_hdrs "./*.h*")
 
 ############################### TESSERACT START ########################
-IF(WIN32 AND NOT CMAKE_CL_64)
-  INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/tesseract/include")
-  LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
+IF(WIN32)
+  IF(NOT CMAKE_CL_64)
+  SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/include")
   LINK_DIRECTORIES("${PROJECT_SOURCE_DIR}/tesseract/lib/x86")
+
+  SET(EMGUCV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
+
   SET(TESSERACT_LIBRARY ccmain ccstruct ccutil classify cube cutil dict image neural_networks tesseract textord viewer wordrec leptonlib Ws2_32)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES leptonlib)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${PROJECT_SOURCE_DIR}/tesseract/lib/x86/leptonlib.dll")
+  ENDIF()
+ELSE()
+  SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
+  FIND_PACKAGE(TESSERACT)
+  IF(TESSERACT_FOUND)
+    SET(EMGUCV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
+  ENDIF()
+ENDIF()
+
+IF(EMGUCV_WITH_TESSERACT)
+  INCLUDE_DIRECTORIES("${TESSERACT_INCLUDE_DIRS}")
+  LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
 ENDIF()
 ############################### TESSERACT END ##########################
 
