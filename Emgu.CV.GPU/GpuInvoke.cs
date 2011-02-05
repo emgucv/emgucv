@@ -784,6 +784,15 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRemap")]
       public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
 
+      /// <summary>
+      /// Computes the integral image and integral for the squared image
+      /// </summary>
+      /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
+      /// <param name="sum">The sum GpuMat, supports only CV_32S source type</param>
+      /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type. Use IntPtr.Zero if not needed</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIntegral")]
+      private static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);
 

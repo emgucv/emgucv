@@ -471,7 +471,16 @@ CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect
    return new cv::gpu::GpuMat(*arr, rect);
 }
 
+CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum)
+{
+   if (sqsum)
+      cv::gpu::integral(*src, *sum, *sqsum);
+   else
+      cv::gpu::integral(*src, *sum);
+}
+
+/*
 CVAPI(void) gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)
 {
    cv::gpu::Canny(*image, *edges, threshold1, threshold2, apertureSize);
-}
+}*/
