@@ -1198,24 +1198,6 @@ namespace Emgu.CV
       public static extern IntPtr cvCreateMat(int rows, int cols, CvEnum.MAT_DEPTH type);
 
       /// <summary>
-      /// A fast inline substitution for cvInitMatHeader. Namely, it is equivalent to:
-      ///     CvMat mat;
-      ///     cvInitMatHeader( &amp;mat, rows, cols, type, data, CV_AUTOSTEP );
-      /// </summary>
-      /// <param name="rows">Number of rows in the matrix.</param>
-      /// <param name="cols">Number of columns in the matrix.</param>
-      /// <param name="type">Type of the matrix elements (see CreateMat).</param>
-      /// <param name="data">Optional data pointer assigned to the matrix header.</param>
-      /// <returns></returns>
-      [Obsolete("The generated header should only be released with Marshal.AllocHGlobal, this is DANGEROUS! Will be removed in the next version. Use CvInvoke.cvInitMatHeader instead")]
-      public static IntPtr cvMat(int rows, int cols, CV.CvEnum.MAT_DEPTH type, IntPtr data)
-      {
-         IntPtr mat = Marshal.AllocHGlobal(StructSize.MCvMat);
-         CvInvoke.cvInitMatHeader(mat, rows, cols, type, data, 0);
-         return mat;
-      }
-
-      /// <summary>
       /// Initializes CvMatND structure allocated by the user
       /// </summary>
       /// <param name="mat">Pointer to the array header to be initialized</param>

@@ -132,7 +132,6 @@
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
     <Compile Include="StereoSGBM.cs" />
-    <Compile Include="Features2D\SURFTracker.cs" />
     <Compile Include="Tiff\TiffWriter.cs" />
     <Compile Include="Tiff\TileTiffWriter.cs" />
     <Compile Include="Util\CvException.cs" />

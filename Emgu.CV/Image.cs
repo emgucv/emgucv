@@ -1412,35 +1412,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the FAST keypoints from this image
-      /// </summary>
-      /// <param name="threshold">FAST threshold</param>
-      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used</param>
-      /// <returns>The FAST keypoints in this image</returns>
-      [Obsolete("Use Features2D.FastDetector instead, will be removed in the next version.")]
-      public MKeyPoint[] GetFASTKeypoints(int threshold, bool nonmaxSupression)
-      {
-         FastDetector fd = new FastDetector(threshold, nonmaxSupression);
-         return fd.DetectKeyPoints(this as Image<Gray, Byte>);
-      }
-
-      /// <summary>
-      /// Extracts the contours of Maximally Stable Extremal Regions
-      /// </summary>
-      /// <param name="mask">Can be null if not needed. Optional parameter for the region of interest</param>
-      /// <param name="param">MSER parameter</param>
-      /// <param name="storage">The storage where the contour will be saved</param>
-      /// <returns>The MSER regions</returns>
-      [Obsolete("Use MSERDetector.ExtractContours function instead, will be removed in the next version")]
-      public Seq<Point>[] ExtractMSER(Image<Gray, Byte> mask, ref MSERDetector param, MemStorage storage)
-      {
-         IntPtr mserPtr = new IntPtr();
-         CvInvoke.cvExtractMSER(Ptr, mask, ref mserPtr, storage, param);
-         IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
-         return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
-      }
-
-      /// <summary>
       /// Finds corners with big eigenvalues in the image. 
       /// </summary>
       /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
