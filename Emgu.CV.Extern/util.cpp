@@ -57,3 +57,38 @@ CVAPI(bool) cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, 
    index->y = p.y;
    return result;
 }
+
+CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst)
+{
+   cv::Mat srcMat = cv::cvarrToMat(src);
+   cv::Mat dstMat = cv::cvarrToMat(dst);
+   cv::sqrt(srcMat, dstMat);
+}
+
+CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, CvMat* homography)
+{
+   cv::Mat indMat = cv::cvarrToMat(indices);
+   cv::Mat maskMat = cv::cvarrToMat(mask);
+   int nonZero = cv::countNonZero(maskMat);
+   if (nonZero < 4) return false;
+
+   cv::Mat_<float> srcPtMat(nonZero, 2);
+   cv::Mat_<float> dstPtMat(nonZero, 2);
+
+   int idx = 0;
+   for(int i = 0; i < maskMat.rows; i++)
+   {
+      if ( *maskMat.ptr(i) != 0)
+      {
+         int* tmp = (int*) indMat.ptr(i);
+         memcpy(srcPtMat.ptr(idx), &(*model)[*tmp], sizeof(float) * 2);
+         memcpy(dstPtMat.ptr(idx), &(*observed)[i], sizeof(float) *2);
+         idx++;
+      }
+   }
+   cv::Mat result = cv::findHomography(srcPtMat, dstPtMat, CV_RANSAC, 3);
+   cv::Mat hMat = cv::cvarrToMat(homography);
+   result.copyTo(hMat);
+   return true;
+
+}

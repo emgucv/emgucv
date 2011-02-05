@@ -336,6 +336,15 @@ namespace Emgu.CV
          int iterCount,
          CvEnum.GRABCUT_INIT_TYPE type);
 
+      /// <summary>
+      /// Calculate square root of each source array element. in the case of multichannel
+      /// arrays each channel is processed independently. The function accuracy is approximately
+      /// the same as of the built-in std::sqrt.
+      /// </summary>
+      /// <param name="src">The source floating-point array</param>
+      /// <param name="dst">The destination array; will have the same size and the same type as src</param>
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cvArrSqrt")]
+      public extern static void cvSqrt(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
