@@ -58,86 +58,13 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetCudaEnabledDeviceCount")]
       public static extern int GetCudaEnabledDeviceCount();
 
-      /// <summary>
-      /// Get the device name
-      /// </summary>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void gpuGetDeviceName(
-         int device,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         StringBuilder buffer,
-         int maxSizeInBytes);
 
       /// <summary>
-      /// Get the name of the device associated with the specific ID
+      /// Get the current Cuda device id
       /// </summary>
-      /// <param name="deviceId">The id of the cuda device</param>
-      /// <returns>The name of the device associated with the specific ID</returns>
-      public static String GetDeviceName(int deviceId)
-      {
-         StringBuilder buffer = new StringBuilder(1024);
-         gpuGetDeviceName(deviceId, buffer, 1024);
-         return buffer.ToString();
-      }
-
-      /// <summary>
-      /// Get the current Cuda device
-      /// </summary>
-      /// <returns>The current Cuda device</returns>
+      /// <returns>The current Cuda device id</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetDevice")]
       public static extern int GetDevice();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void getGpuMemInfo(ref UIntPtr free, ref UIntPtr total);
-
-      /// <summary>
-      /// Get the free and total amount of GPU memory on the current devide
-      /// </summary>
-      /// <param name="free">The free amount of GPU memory</param>
-      /// <param name="total">The total amount of GPU memory</param>
-      public static void GetGpuMemInfo(out ulong free, out ulong total)
-      {
-         UIntPtr f = new UIntPtr(), t = new UIntPtr();
-         getGpuMemInfo(ref f, ref t);
-         free = f.ToUInt64();
-         total = t.ToUInt64();
-      }
-
-      /// <summary>
-      /// Get the compute capability of the device
-      /// </summary>
-      /// <param name="deviceId">The ID of the device</param>
-      /// <param name="major">The major version of the compute capability</param>
-      /// <param name="minor">The minor version of the compute capability</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetComputeCapability")]
-      public static extern void GetComputeCapability(int deviceId, ref int major, ref int minor);
-
-      /// <summary>
-      /// Get the number of multiprocessors on device
-      /// </summary>
-      /// <param name="device">The device Id</param>
-      /// <returns>The number of multiprocessors on device</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetNumberOfSMs")]
-      public static extern int GetNumberOfSMs(int device);
-
-      /// <summary>
-      /// Check if the device has native double support
-      /// </summary>
-      /// <param name="device">The device Id</param>
-      /// <returns>True if the device has native double support</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuHasNativeDoubleSupport")]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool HasNativeDoubleSupport(int device);
-
-      /// <summary>
-      /// Check if the device has atomic support
-      /// </summary>
-      /// <param name="device">The device Id</param>
-      /// <returns>True if the device has atomic support</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuHasAtomicsSupport")]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool HasAtomicsSupport(int device);
-
       #endregion
 
       /// <summary>

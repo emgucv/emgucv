@@ -10,44 +10,49 @@ CVAPI(int) gpuGetDevice()
    return cv::gpu::getDevice();
 }
 
-CVAPI(void) gpuGetDeviceName(int device, char* name, int maxSizeInBytes)
+CVAPI(cv::gpu::DeviceInfo*) gpuDeviceInfoCreate(int* deviceId)
 {
-   cv::gpu::DeviceInfo info(device);
-   std::string dName = info.name();
+   if (deviceId < 0)
+      *deviceId = cv::gpu::getDevice();
+
+   return new cv::gpu::DeviceInfo(*deviceId);
+}
+
+CVAPI(void) gpuDeviceInfoRelease(cv::gpu::DeviceInfo** di)
+{
+   delete *di;
+}
+
+CVAPI(void) gpuDeviceInfoDeviceName(cv::gpu::DeviceInfo* device, char* name, int maxSizeInBytes)
+{
+   std::string dName = device->name();
    strncpy(name, dName.c_str(), maxSizeInBytes);
 }
 
-CVAPI(void) gpuGetComputeCapability(int device, int* major, int* minor)
+CVAPI(void) gpuDeviceInfoComputeCapability(cv::gpu::DeviceInfo* device, int* major, int* minor)
 {
-   int maj, min;
-   cv::gpu::DeviceInfo info(device);
-   *major = info.major();
-   *minor = info.minor();
+   *major = device->major();
+   *minor = device->minor();
 }
 
-CVAPI(int) gpuGetNumberOfSMs(int device)
+CVAPI(int) gpuDeviceInfoMultiProcessorCount(cv::gpu::DeviceInfo* device)
 {
-   cv::gpu::DeviceInfo info(device);
-   return info.multiProcessorCount();
+   return device->multiProcessorCount();
 }
 
-CVAPI(void) getGpuMemInfo(size_t* free, size_t* total)
+CVAPI(void) gpuDeviceInfoFreeMemInfo(cv::gpu::DeviceInfo* info, size_t* free)
 {
-   cv::gpu::DeviceInfo info;
-   *free = info.freeMemory();
-   *total = info.totalMemory();
+   *free = info->freeMemory();
 }
 
-CVAPI(bool) gpuHasNativeDoubleSupport(int device)
+CVAPI(void) gpuDeviceInfoTotalMemInfo(cv::gpu::DeviceInfo* info, size_t* total)
 {
-   cv::gpu::DeviceInfo info(device);
-   return info.has(cv::gpu::GpuFeature::NATIVE_DOUBLE);
+   *total = info->totalMemory();
 }
 
-CVAPI(bool) gpuHasAtomicsSupport(int device)
+CVAPI(bool) gpuDeviceInfoHasSupport(cv::gpu::DeviceInfo* device, cv::gpu::GpuFeature feature)
 {
-   cv::gpu::DeviceInfo info(device);
-   return info.has(cv::gpu::GpuFeature::ATOMICS);
+   return device->has(feature);
 }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
