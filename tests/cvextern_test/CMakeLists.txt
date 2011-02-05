@@ -21,19 +21,13 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 #INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ############################### IPP START ##############################
-IF (USE_IPP AND IPP_PATH)
-  add_definitions(-DHAVE_IPP)
-  include_directories("${IPP_PATH}/../include")
-  LINK_DIRECTORIES("${IPP_PATH}/../lib")
-
-  IF(WIN32 AND NOT CMAKE_CL_64)
-	link_directories(
-	"${IPP_PATH}/../../../ipp/lib/ia32"
-	"${IPP_PATH}/../../../compiler/lib/ia32")
-  ELSEIF(WIN32 AND CMAKE_CL_64)
-	link_directories(
-	"${IPP_PATH}/../../../ipp/lib/intel64"
-	"${IPP_PATH}/../../../compiler/lib/intel64")
+IF(WITH_IPP)
+include(${PROJECT_SOURCE_DIR}/../../opencv/OpenCVFindIPP.cmake)
+  IF (IPP_FOUND)
+    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
+    add_definitions(-DHAVE_IPP)
+    include_directories(${IPP_INCLUDE_DIRS})
+    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
   ENDIF()
 ENDIF()
 ############################### IPP END ################################
