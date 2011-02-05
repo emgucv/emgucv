@@ -122,9 +122,12 @@ namespace TrafficSignRecognition
       {
          Image<Bgr, Byte> smoothImg = img.SmoothGaussian(5, 5, 1.5, 1.5);
          Image<Gray, Byte> smoothedRedMask = GetRedPixelMask(smoothImg);
+
+         //Use Dilate followed by Erode to eliminate small gaps in some countour.
          smoothedRedMask._Dilate(1);
          smoothedRedMask._Erode(1);
-         using (Image<Gray, Byte> canny = smoothedRedMask.Erode(3).Dilate(3).Canny(new Gray(100), new Gray(50)))
+
+         using (Image<Gray, Byte> canny = smoothedRedMask.Canny(new Gray(100), new Gray(50)))
          using (MemStorage stor = new MemStorage())
          {
             Contour<Point> contours = canny.FindContours(
