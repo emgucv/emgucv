@@ -84,6 +84,7 @@
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
+    <Compile Include="Features2D\ImageFeatures.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
     <Compile Include="Features2D\IKeyPointDetector.cs" />
     <Compile Include="Features2D\SIFTDetector.cs" />
