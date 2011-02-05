@@ -19,6 +19,11 @@ namespace Emgu.CV.GPU
       where TColor : struct, IColor
       where TDepth : new()
    {
+      private GpuImage(IntPtr ptr)
+         : base(ptr)
+      {
+      }
+
       /// <summary>
       /// Create a GPU image from a regular image
       /// </summary>
@@ -94,7 +99,7 @@ namespace Emgu.CV.GPU
          {
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
-            {   
+            {
                GpuInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero);
             }
             else //different depth
@@ -231,6 +236,17 @@ namespace Emgu.CV.GPU
          GpuImage<TColor, Single> result = new GpuImage<TColor, float>(Size);
          GpuInvoke.Filter2D(_ptr, result, kernel, kernel.Center);
          return result;
+      }
+
+      /// <summary>
+      /// Returns a GpuImage corresponding to a specified rectangle of the current GpuImage. The data is shared with the current matrix. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="region">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>A GpuImage that represent the region of the current GpuImage.</returns>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage the represent the subregion</remarks>
+      public new GpuImage<TColor, TDepth> GetSubRect(Rectangle region)
+      {
+         return new GpuImage<TColor, TDepth>(GpuInvoke.GetSubRect(this, region));
       }
 
       #region IImage Members

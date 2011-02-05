@@ -457,3 +457,8 @@ CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize,
    cv::gpu::histEven(*src, *hist, histSize, lowerLevel, upperLevel);
    return hist;
 }
+
+CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect) 
+{ 
+   return new cv::gpu::GpuMat(*arr, rect);
+}

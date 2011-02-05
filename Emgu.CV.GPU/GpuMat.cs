@@ -292,5 +292,16 @@ namespace Emgu.CV.GPU
       {
          GpuInvoke.GpuMatSetTo(_ptr, value, mask, stream);
       }
+
+      /// <summary>
+      /// Returns a GpuMat corresponding to a specified rectangle of the current GpuMat. The data is shared with the current matrix. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="region">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>A GpuMat that represent the region of the current matrix.</returns>
+      /// <remarks>The parent GpuMat should never be released before the returned GpuMat the represent the subregion</remarks>
+      public GpuMat<TDepth> GetSubRect(Rectangle region)
+      {
+         return new GpuMat<TDepth>(GpuInvoke.GetSubRect(this, region));
+      }
    }
 }

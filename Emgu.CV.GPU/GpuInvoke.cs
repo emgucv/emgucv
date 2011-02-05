@@ -235,6 +235,15 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatCopy")]
       public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask);
 
+      /// <summary>
+      /// Returns header, corresponding to a specified rectangle of the input GpuMat. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="mat">Input GpuMat</param>
+      /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>Pointer to the resultant sub-array header.</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetSubRect")]
+      public static extern IntPtr GetSubRect(IntPtr mat, Rectangle rect);
+
       #region arithmatic
       /// <summary>
       /// Adds one matrix to another (c = a + b).
