@@ -27,6 +27,7 @@ add_subdirectory(PedestrianDetection)
 IF(WIN32)
 add_subdirectory(WebDynamicImage)
 add_subdirectory(Simple3DReconstruction)
+add_subdirectory(LicensePlateRecognition)
 ENDIF()
 
 ENDIF()
