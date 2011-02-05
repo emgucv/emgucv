@@ -52,6 +52,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="GpuCascadeClassifier.cs" />
     <Compile Include="GpuDevice.cs" />
     <Compile Include="GpuHOGDescriptor.cs" />
     <Compile Include="GpuImage.cs" />

@@ -95,6 +95,18 @@ namespace Emgu.CV.GPU
          GpuInvoke.GpuMatDownload(_ptr, arr);
       }
 
+      /// <summary>
+      /// Convert this GpuMat to a Matrix
+      /// </summary>
+      /// <returns>The matrix that contains the same values as this GpuMat</returns>
+      public Matrix<TDepth> ToMatrix()
+      {
+         Size size = Size;
+         Matrix<TDepth> result = new Matrix<TDepth>(size.Height, size.Width, NumberOfChannels);
+         Download(result);
+         return result;
+      }
+
       ///<summary> 
       ///Split current Image into an array of gray scale images where each element 
       ///in the array represent a single color channel of the original image

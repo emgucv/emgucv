@@ -70,7 +70,7 @@
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt_tree.xml">
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="lena.jpg">
@@ -78,6 +78,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
+      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
+      <Name>Emgu.CV.GPU</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>
