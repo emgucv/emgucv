@@ -249,6 +249,23 @@ namespace Emgu.CV.GPU.Test
          }
       }
 
+      /*
+      [Test]
+      public void TestCanny()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+            using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
+            using (GpuImage<Gray, Byte> gray = gpuImage.Convert<Gray, Byte>())
+            using (GpuImage<Gray, Byte> canny = new GpuImage<Gray,byte>(gray.Size))
+            {
+               GpuInvoke.Canny(gray, canny, 20, 100, 3);
+               ImageViewer.Show(canny);
+            }
+         }
+      }*/
+
       [Test]
       public void TestHOG()
       {

@@ -470,3 +470,8 @@ CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect
 { 
    return new cv::gpu::GpuMat(*arr, rect);
 }
+
+CVAPI(void) gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)
+{
+   cv::gpu::Canny(*image, *edges, threshold1, threshold2, apertureSize);
+}
