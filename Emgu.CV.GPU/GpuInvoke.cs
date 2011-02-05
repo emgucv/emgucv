@@ -163,7 +163,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="mat">The destination GpuMat</param>
       /// <param name="value">Fill value</param>
-      /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination array to be changed. Can be IntPtr.Zero if not used</param>
+      /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Can be IntPtr.Zero if not used</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSetTo")]
       public static extern void GpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask, IntPtr stream);
@@ -317,7 +317,7 @@ namespace Emgu.CV.GPU
       public static extern void Divide(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
-      /// Computes element-wise absolute difference of two arrays (c = abs(a - b)).
+      /// Computes element-wise absolute difference of two GpuMats (c = abs(a - b)).
       /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
       /// </summary>
       /// <param name="a">The first GpuMat</param>
@@ -327,7 +327,7 @@ namespace Emgu.CV.GPU
       public static extern void Absdiff(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
-      /// Computes element-wise absolute difference of array and scalar (c = abs(a - s)).
+      /// Computes element-wise absolute difference of GpuMat and scalar (c = abs(a - s)).
       /// Supports only CV_32FC1 type.
       /// </summary>
       /// <param name="a">A GpuMat</param>
@@ -338,7 +338,7 @@ namespace Emgu.CV.GPU
       #endregion
 
       /// <summary>
-      /// Compares elements of two arrays (c = a &lt;cmpop&gt; b).
+      /// Compares elements of two GpuMats (c = a &lt;cmpop&gt; b).
       /// Supports CV_8UC4, CV_32FC1 types
       /// </summary>
       /// <param name="a">The first GpuMat</param>
@@ -350,7 +350,7 @@ namespace Emgu.CV.GPU
 
       /// <summary>
       /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
-      /// Destination array will have the depth type as lut and the same channels number as source.
+      /// Destination GpuMat will have the depth type as lut and the same channels number as source.
       /// Supports CV_8UC1, CV_8UC3 types.
       /// </summary>
       /// <param name="src">The source GpuMat</param>
@@ -380,7 +380,7 @@ namespace Emgu.CV.GPU
       public static extern IntPtr Reshape(IntPtr src, int newCn, int newRows);
 
       /// <summary>
-      /// Copies each plane of a multi-channel array to a dedicated array
+      /// Copies each plane of a multi-channel GpuMat to a dedicated GpuMat
       /// </summary>
       /// <param name="src">The multi-channel gpuMat</param>
       /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
@@ -389,7 +389,7 @@ namespace Emgu.CV.GPU
       public static extern void Split(IntPtr src, IntPtr dstArray, IntPtr stream);
 
       /// <summary>
-      /// Makes multi-channel array out of several single-channel arrays
+      /// Makes multi-channel GpuMat out of several single-channel GpuMats
       /// </summary>
       /// <param name="srcArr">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="dst">The multi-channel gpuMat</param>
@@ -478,22 +478,22 @@ namespace Emgu.CV.GPU
          bool angleInDegrees, IntPtr stream);
 
       /// <summary>
-      /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
+      /// This function has several different purposes and thus has several synonyms. It copies one GpuMat to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
       /// dst(I)=src(I)*scale + (shift,shift,...)
-      /// All the channels of multi-channel arrays are processed independently.
-      /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination array element type, it is set to the nearest representable value on the real axis.
+      /// All the channels of multi-channel GpuMats are processed independently.
+      /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination GpuMat element type, it is set to the nearest representable value on the real axis.
       /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate convertTo synonym.
       /// </summary>
       /// <param name="src">Source GpuMat</param>
       /// <param name="dst">Destination GpuMat</param>
       /// <param name="scale">Scale factor</param>
-      /// <param name="shift">Value added to the scaled source array elements</param>
+      /// <param name="shift">Value added to the scaled source GpuMat elements</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatConvertTo")]
       public static extern void ConvertTo(IntPtr src, IntPtr dst, double scale, double shift, IntPtr stream);
 
       /// <summary>
-      /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array or, if mask is not IntPtr.Zero, in the specified array region.
+      /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole GpuMat or, if mask is not IntPtr.Zero, in the specified GpuMat region.
       /// </summary>
       /// <param name="gpuMat">The source GpuMat, single-channel</param>
       /// <param name="minVal">Pointer to returned minimum value</param>
@@ -517,12 +517,12 @@ namespace Emgu.CV.GPU
       public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
 
       /// <summary>
-      /// Computes norm of the difference between two arrays
+      /// Computes norm of the difference between two GpuMats
       /// </summary>
       /// <param name="src1">The GpuMat. Supports only CV_8UC1 type</param>
       /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the GpuMat of type CV_8UC1</param>
       /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
-      /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two arrays.</returns>
+      /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two GpuMats.</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatNorm")]
       public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
 
@@ -530,20 +530,20 @@ namespace Emgu.CV.GPU
       /// Counts non-zero array elements
       /// </summary>
       /// <param name="src">The GpuMat</param>
-      /// <returns>The number of non-zero array elements</returns>
+      /// <returns>The number of non-zero GpuMat elements</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCountNonZero")]
       public static extern int CountNonZero(IntPtr src);
 
       /// <summary>
-      /// Flips the array in one of different 3 ways (row and column indices are 0-based):
+      /// Flips the GpuMat in one of different 3 ways (row and column indices are 0-based):
       /// dst(i,j)=src(rows(src)-i-1,j) if flip_mode = 0
       /// dst(i,j)=src(i,cols(src1)-j-1) if flip_mode &gt; 0
       /// dst(i,j)=src(rows(src)-i-1,cols(src)-j-1) if flip_mode &lt; 0
       /// </summary>
-      /// <param name="src">Source array.</param>
-      /// <param name="dst">Destination array.</param>
+      /// <param name="src">Source GpuMat.</param>
+      /// <param name="dst">Destination GpuMat.</param>
       /// <param name="flipMode">
-      /// Specifies how to flip the array.
+      /// Specifies how to flip the GpuMat.
       /// flip_mode = 0 means flipping around x-axis, 
       /// flip_mode &gt; 0 (e.g. 1) means flipping around y-axis and 
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
@@ -554,9 +554,9 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Flips the GpuMat&lt;Byte&gt; in one of different 3 ways (row and column indices are 0-based). 
       /// </summary>
-      /// <param name="src">Source array.</param>
-      /// <param name="dst">Destination array.</param>
-      /// <param name="flipType">Specifies how to flip the array.</param>
+      /// <param name="src">Source GpuMat.</param>
+      /// <param name="dst">Destination GpuMat.</param>
+      /// <param name="flipType">Specifies how to flip the GpuMat.</param>
       public static void Flip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
       {
          int flipMode =
@@ -597,40 +597,40 @@ namespace Emgu.CV.GPU
 
       #region Logical operators
       /// <summary>
-      /// Calculates per-element bit-wise logical conjunction of two arrays:
+      /// Calculates per-element bit-wise logical conjunction of two GpuMats:
       /// dst(I)=src1(I)^src2(I) if mask(I)!=0
-      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
       /// </summary>
-      /// <param name="src1">The first source array</param>
-      /// <param name="src2">The second source array</param>
-      /// <param name="dst">The destination array</param>
-      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="src2">The second source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseXor")]
       public static extern void BitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
-      /// Calculates per-element bit-wise logical or of two arrays:
+      /// Calculates per-element bit-wise logical or of two GpuMats:
       /// dst(I)=src1(I) | src2(I) if mask(I)!=0
-      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
       /// </summary>
-      /// <param name="src1">The first source array</param>
-      /// <param name="src2">The second source array</param>
-      /// <param name="dst">The destination array</param>
-      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="src2">The second source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatBitwiseOr")]
       public static extern void BitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
-      /// Calculates per-element bit-wise logical and of two arrays:
+      /// Calculates per-element bit-wise logical and of two GpuMats:
       /// dst(I)=src1(I) &amp; src2(I) if mask(I)!=0
-      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
       /// </summary>
-      /// <param name="src1">The first source array</param>
-      /// <param name="src2">The second source array</param>
-      /// <param name="dst">The destination array</param>
-      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="src2">The second source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseAnd")]
       public static extern void BitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -638,15 +638,55 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Calculates per-element bit-wise logical not
       /// dst(I)=~src(I) if mask(I)!=0
-      /// In the case of floating-point arrays their bit representations are used for the operation. All the arrays must have the same type, except the mask, and the same size
+      /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
       /// </summary>
-      /// <param name="src">The source array</param>
-      /// <param name="dst">The destination array</param>
-      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseNot")]
       public static extern void BitwiseNot(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
       #endregion
+
+      /// <summary>
+      /// Computes per-element minimum of two GpuMats (dst = min(src1, src2))
+      /// </summary>
+      /// <param name="src1">The first GpuMat</param>
+      /// <param name="src2">The second GpuMat</param>
+      /// <param name="dst">The result GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMin")]
+      public static extern void Min(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes per-element minimum of GpuMat and scalar (dst = min(src1, src2))
+      /// </summary>
+      /// <param name="src1">The first GpuMat</param>
+      /// <param name="src2">The scalar</param>
+      /// <param name="dst">The result GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMinS")]
+      public static extern void Min(IntPtr src1, double src2, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes per-element maximum of two GpuMats (dst = max(src1, src2))
+      /// </summary>
+      /// <param name="src1">The first GpuMat</param>
+      /// <param name="src2">The second GpuMat</param>
+      /// <param name="dst">The result GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMax")]
+      public static extern void Max(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes per-element maximum of GpuMat and scalar (dst = max(src1, src2))
+      /// </summary>
+      /// <param name="src1">The first GpuMat</param>
+      /// <param name="src2">The scalar</param>
+      /// <param name="dst">The result GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMaxS")]
+      public static extern void Max(IntPtr src1, double src2, IntPtr dst, IntPtr stream);
 
       #region filters
       /// <summary>

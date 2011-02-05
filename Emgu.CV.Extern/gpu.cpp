@@ -370,6 +370,38 @@ CVAPI(void) gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat*
       cv::gpu::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
+CVAPI(void) gpuMatMin(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::min(*src1, *src2, *dst, *stream);
+   else
+      cv::gpu::min(*src1, *src2, *dst);
+}
+
+CVAPI(void) gpuMatMinS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::min(*src1, src2, *dst, *stream);
+   else
+      cv::gpu::min(*src1, src2, *dst);
+}
+
+CVAPI(void) gpuMatMax(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::max(*src1, *src2, *dst, *stream);
+   else
+      cv::gpu::max(*src1, *src2, *dst);
+}
+
+CVAPI(void) gpuMatMaxS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+{
+   if (stream)
+      cv::gpu::max(*src1, src2, *dst, *stream);
+   else
+      cv::gpu::max(*src1, src2, *dst);
+}
+
 CVAPI(void) gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
 {
    cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale); 
