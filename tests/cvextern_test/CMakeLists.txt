@@ -13,6 +13,8 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/objdetect/includ
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/features2d/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/legacy/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/contrib/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/gpu/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 

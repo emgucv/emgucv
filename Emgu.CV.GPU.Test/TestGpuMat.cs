@@ -182,6 +182,23 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestClone()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Gray, Byte> img = new Image<Gray, byte>(300, 400);
+            img.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
+
+            using (GpuImage<Gray, Byte> gImg1 = new GpuImage<Gray,byte>(img))
+            using (GpuImage<Gray, Byte> gImg2 = gImg1.Clone())
+            using (Image<Gray, Byte> img2 = gImg2.ToImage())
+            {
+               Assert.IsTrue(img.Equals(img2));
+            }
+         }
+      }
+
+      [Test]
       public void TestColorConvert()
       {
          if (GpuInvoke.HasCuda)
