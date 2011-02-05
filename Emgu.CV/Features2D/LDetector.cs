@@ -76,11 +76,24 @@ namespace Emgu.CV.Features2D
       /// <param name="maxCount">The maximum number of keypoints to be extracted, use 0 to ignore the max count</param>
       /// <param name="scaleCoords">Indicates if the coordinates should be scaled</param>
       /// <returns>The array of Lepetit keypoints</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, int maxCount, bool scaleCoords)
+      {
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         CvLDetectorDetectKeyPoints(ref this, image, kpts, maxCount, scaleCoords);
+         return kpts;
+      }
+
+      /// <summary>
+      /// Detect the Lepetit keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract Lepetit keypoints</param>
+      /// <param name="maxCount">The maximum number of keypoints to be extracted, use 0 to ignore the max count</param>
+      /// <param name="scaleCoords">Indicates if the coordinates should be scaled</param>
+      /// <returns>The array of Lepetit keypoints</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, int maxCount, bool scaleCoords)
       {
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, maxCount, scaleCoords))
          {
-            CvLDetectorDetectKeyPoints(ref this, image, kpts, maxCount, scaleCoords);
             return kpts.ToArray();
          }
       }

@@ -131,11 +131,23 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image to extract MSER keypoints from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>An array of MSER key points</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      {
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         CvMSERKeyPoints(image, mask, kpts, ref this);
+         return kpts;
+      }
+
+      /// <summary>
+      /// Detect the MSER keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract MSER keypoints from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>An array of MSER key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
          {
-            CvMSERKeyPoints(image, mask, kpts, ref this);
             return kpts.ToArray();
          }
       }
@@ -146,7 +158,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image to extract keypoints from</param>
       /// <returns>The array of fast keypoints</returns>
-      public Emgu.CV.Structure.MKeyPoint[] DetectKeyPoints(Image<Emgu.CV.Structure.Gray, byte> image)
+      public MKeyPoint[] DetectKeyPoints(Image<Emgu.CV.Structure.Gray, byte> image)
       {
          return DetectKeyPoints(image, null);
       }

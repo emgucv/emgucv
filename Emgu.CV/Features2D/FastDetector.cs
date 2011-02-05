@@ -50,6 +50,18 @@ namespace Emgu.CV.Features2D
          NonmaxSupression = nonmaxSupression;
       }
 
+      /// <summary>
+      /// Detect the Fast keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract keypoints from</param>
+      /// <returns>The array of fast keypoints</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, byte> image)
+      {
+         VectorOfKeyPoint keypoints = new VectorOfKeyPoint();
+            CvFASTKeyPoints(image, keypoints, Threshold, NonmaxSupression);
+            return keypoints;
+      }
+
       #region IKeyPointDetector Members
       /// <summary>
       /// Detect the Fast keypoints from the image
@@ -58,9 +70,8 @@ namespace Emgu.CV.Features2D
       /// <returns>The array of fast keypoints</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
       {
-         using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
+         using (VectorOfKeyPoint keypoints = DetectKeyPointsRaw(image))
          {
-            CvFASTKeyPoints(image, keypoints, Threshold, NonmaxSupression);
             return keypoints.ToArray();
          }
       }

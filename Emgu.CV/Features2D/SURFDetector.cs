@@ -20,13 +20,14 @@ namespace Emgu.CV.Features2D
          IntPtr mask,
          IntPtr keypoints);
 
+      /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorDetectFeature(
          ref SURFDetector detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         IntPtr descriptors);
+         IntPtr descriptors);*/
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorComputeDescriptors(
@@ -90,11 +91,23 @@ namespace Emgu.CV.Features2D
       /// <returns>An array of SURF key points</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
+         using (VectorOfKeyPoint keypoints = DetectKeyPointsRaw(image, mask))
          {
-            CvSURFDetectorDetectKeyPoints(ref this, image, mask, keypoints);
             return keypoints.ToArray();
          }
+      }
+
+      /// <summary>
+      /// Detect the SURF keypoints from the image
+      /// </summary>
+      /// <param name="image">The image to extract SURF features from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>An array of SURF key points</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      {
+         VectorOfKeyPoint keypoints = new VectorOfKeyPoint();
+         CvSURFDetectorDetectKeyPoints(ref this, image, mask, keypoints);
+         return keypoints;
       }
 
       /// <summary>
@@ -105,25 +118,26 @@ namespace Emgu.CV.Features2D
       /// <returns>The Image features detected from the given image</returns>
       public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
-         using (VectorOfFloat descs = new VectorOfFloat())
+         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
+         using (Matrix<float> desc = ComputeDescriptorsRaw(image, mask, kpts))
          {
-            CvSURFDetectorDetectFeature(ref this, image, mask, pts, descs);
-            MKeyPoint[] kpts = pts.ToArray();
-            int n = kpts.Length;
-            long add = descs.StartAddress.ToInt64();
-
-            ImageFeature[] features = new ImageFeature[n];
-            int sizeOfdescriptor = extended == 0 ? 64 : 128;
-            for (int i = 0; i < n; i++, add += sizeOfdescriptor * sizeof(float))
-            {
-               features[i].KeyPoint = kpts[i];
-               float[] desc = new float[sizeOfdescriptor];
-               Marshal.Copy(new IntPtr(add), desc, 0, sizeOfdescriptor);
-               features[i].Descriptor = desc;
-            }
-            return features;
+            return CvToolbox.ConvertToImageFeature(kpts, desc);
          }
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the image and the point location
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <returns>The image features founded on the keypoint location</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
+      {
+         int sizeOfdescriptor = extended == 0 ? 64 : 128;
+         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
+         CvSURFDetectorComputeDescriptors(ref this, image, mask, keyPoints, descriptors);
+         return descriptors;
       }
 
       /// <summary>
@@ -135,25 +149,14 @@ namespace Emgu.CV.Features2D
       /// <returns>The image features founded on the keypoint location</returns>
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
-         using (VectorOfFloat descs = new VectorOfFloat())
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         int sizeOfdescriptor = extended == 0 ? 64 : 128;
+         using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          {
-            kpts.Push(keyPoints);
-            CvSURFDetectorComputeDescriptors(ref this, image, mask, kpts, descs);
-
-            int n = keyPoints.Length;
-            long address = descs.StartAddress.ToInt64();
-
-            ImageFeature[] features = new ImageFeature[n];
-            int sizeOfdescriptor = extended == 0 ? 64 : 128;
-            for (int i = 0; i < n; i++, address += sizeOfdescriptor * sizeof(float))
+            pts.Push(keyPoints);
+            using (Matrix<float> descriptors = ComputeDescriptorsRaw(image, mask, pts))
             {
-               features[i].KeyPoint = keyPoints[i];
-               float[] desc = new float[sizeOfdescriptor];
-               Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
-               features[i].Descriptor = desc;
+               return CvToolbox.ConvertToImageFeature(pts, descriptors);
             }
-            return features;
          }
       }
 

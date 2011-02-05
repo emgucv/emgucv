@@ -88,7 +88,18 @@ namespace Emgu.CV.Features2D
          LineThresholdProjected = lineThresholdProjected;
          LineThresholdBinarized = lineThresholdBinarized;
          SuppressNonmaxSize = suppressNonmaxSize;
+      }
 
+      /// <summary>
+      /// Detect the keypoints in the image
+      /// </summary>
+      /// <param name="image">The image from which the key point will be detected from</param>
+      /// <returns>The key pionts in the image</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image)
+      {
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         CvStarDetectorDetectKeyPoints(ref this, image, kpts);
+         return kpts;
       }
 
       /// <summary>
@@ -98,9 +109,8 @@ namespace Emgu.CV.Features2D
       /// <returns>The key pionts in the image</returns>
       public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image)
       {
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image))
          {
-            CvStarDetectorDetectKeyPoints(ref this, image, kpts);
             return kpts.ToArray();
          }
       }
