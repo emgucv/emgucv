@@ -5,7 +5,7 @@ FILE(GLOB_RECURSE SRC_Example_LicensePlateRecognition RELATIVE ${CMAKE_CURRENT_S
 LIST(APPEND SRC_Example_LicensePlateRecognition ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 LIST(APPEND CS_FLAGS -platform:x86)
 LIST(APPEND CS_FLAGS -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.OCR.dll")
-LIST(APPEND CS_FLAGS ${EMGU_CV_GPU_REFERENCE})
+LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 #copy the test image for this example
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/license-plate.jpg)
