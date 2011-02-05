@@ -12,37 +12,42 @@ CVAPI(int) gpuGetDevice()
 
 CVAPI(void) gpuGetDeviceName(int device, char* name, int maxSizeInBytes)
 {
-   std::string dName = cv::gpu::getDeviceName(device);
-   //strcpy_s(name, maxSizeInBytes, dName.c_str());
+   cv::gpu::DeviceInfo info(device);
+   std::string dName = info.name();
    strncpy(name, dName.c_str(), maxSizeInBytes);
 }
 
 CVAPI(void) gpuGetComputeCapability(int device, int* major, int* minor)
 {
    int maj, min;
-   cv::gpu::getComputeCapability(device, maj, min);
-   *major = maj;
-   *minor = min;
+   cv::gpu::DeviceInfo info(device);
+   *major = info.major();
+   *minor = info.minor();
 }
 
 CVAPI(int) gpuGetNumberOfSMs(int device)
 {
-   return cv::gpu::getNumberOfSMs(device);
+   cv::gpu::DeviceInfo info(device);
+   return info.multiProcessorCount();
 }
 
 CVAPI(void) getGpuMemInfo(size_t* free, size_t* total)
 {
-   cv::gpu::getGpuMemInfo(*free, *total); 
+   cv::gpu::DeviceInfo info;
+   *free = info.freeMemory();
+   *total = info.totalMemory();
 }
 
 CVAPI(bool) gpuHasNativeDoubleSupport(int device)
 {
-   return cv::gpu::hasNativeDoubleSupport(device);
+   cv::gpu::DeviceInfo info(device);
+   return info.has(cv::gpu::GpuFeature::NATIVE_DOUBLE);
 }
 
 CVAPI(bool) gpuHasAtomicsSupport(int device)
 {
-   return cv::gpu::hasAtomicsSupport(device);
+   cv::gpu::DeviceInfo info(device);
+   return info.has(cv::gpu::GpuFeature::ATOMICS);
 }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
