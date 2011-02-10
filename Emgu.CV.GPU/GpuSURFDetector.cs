@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.Structure;
 using Emgu.Util;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -106,7 +107,7 @@ namespace Emgu.CV.GPU
       /// </returns>
       public GpuMat<float> DetectKeyPointsRaw(GpuImage<Gray, Byte> img, GpuImage<Gray, Byte> mask)
       {
-         GpuMat<float> result = new GpuMat<float>(GpuInvoke.GpuMatCreateDefault());
+         GpuMat<float> result = new GpuMat<float>();
          gpuSURFDetectorDetectKeyPoints(_ptr, img, mask, result);
          return result;
       }
@@ -120,39 +121,46 @@ namespace Emgu.CV.GPU
       public MKeyPoint[] DetectKeyPoints(GpuImage<Gray, Byte> img, GpuImage<Gray, Byte> mask)
       {
          using (GpuMat<float> tmp = DetectKeyPointsRaw(img, mask))
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
-            return DownloadKeypoints(tmp);
+            DownloadKeypoints(tmp, kpts);
+            return kpts.ToArray();
          }
       }
 
       /// <summary>
       /// Obtain the keypoints array from GpuMat
       /// </summary>
-      /// <param name="keypoints">The keypoints obtained from DetectKeyPointsRaw</param>
-      /// <returns>An array of keypoints</returns>
-      public static MKeyPoint[] DownloadKeypoints(GpuMat<float> keypoints)
+      /// <param name="src">The keypoints obtained from DetectKeyPointsRaw</param>
+      /// <param name="dst">The vector of keypoints</param>
+      public static void DownloadKeypoints(GpuMat<float> src, VectorOfKeyPoint dst)
       {
-         using (Util.VectorOfKeyPoint vec = new Util.VectorOfKeyPoint())
-         {
-            gpuDownloadKeypoints(keypoints, vec);
-            return vec.ToArray();
-         }
+            gpuDownloadKeypoints(src, dst);
       }
 
       /// <summary>
       /// Ontain a GpuMat from the keypoints array
       /// </summary>
-      /// <param name="keypoints">The keypoints array</param>
-      /// <returns>A GpuMat that represent the keypoints</returns>
-      public static GpuMat<float> UploadKeypoints(MKeyPoint[] keypoints)
+      /// <param name="src">The keypoints array</param>
+      /// <param name="dst">A GpuMat that represent the keypoints</param>
+      public static void UploadKeypoints(VectorOfKeyPoint src, GpuMat<float> dst)
       {
-         using (Util.VectorOfKeyPoint vec = new Util.VectorOfKeyPoint())
-         {
-            vec.Push(keypoints);
-            GpuMat<float> result = new GpuMat<float>(GpuInvoke.GpuMatCreateDefault());
-            gpuUploadKeypoints(vec, result);
-            return result;
-         }
+            gpuUploadKeypoints(src, dst);
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the image and the point location
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <param name="caculateOrientation">If true, orientation will be calculated.</param>
+      /// <returns>The image features founded on the keypoint location</returns>
+      public GpuMat<float> ComputeDescriptorsRaw(GpuImage<Gray, Byte> image, GpuImage<Gray, byte> mask, GpuMat<float> keyPoints, bool caculateOrientation)
+      {
+         GpuMat<float> descriptors = new GpuMat<float>();
+         gpuSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true, caculateOrientation);
+         return descriptors;
       }
 
       /// <summary>

@@ -22,6 +22,11 @@ namespace Emgu.CV.GPU
          _ptr = ptr;
       }
 
+      internal GpuMat()
+      {
+         _ptr = GpuInvoke.GpuMatCreateDefault();
+      }
+
       /// <summary>
       /// Create a GpuMat of the specified size
       /// </summary>
