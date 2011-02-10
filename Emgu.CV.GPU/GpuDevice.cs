@@ -53,7 +53,7 @@ namespace Emgu.CV.GPU
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private static extern bool gpuDeviceInfoHasSupport(IntPtr device, GpuFeature feature);
+      private static extern bool gpuDeviceInfoSupports(IntPtr device, GpuFeature feature);
       #endregion
 
       private int _deviceID;
@@ -150,9 +150,9 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Indicates if the decive has the specific feature
       /// </summary>
-      public bool HasSupport(GpuFeature feature)
+      public bool Supports(GpuFeature feature)
       {
-         return gpuDeviceInfoHasSupport(_ptr, feature);
+         return gpuDeviceInfoSupports(_ptr, feature);
       }
 
       /// <summary>

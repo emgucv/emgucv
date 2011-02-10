@@ -31,8 +31,8 @@ CVAPI(void) gpuDeviceInfoDeviceName(cv::gpu::DeviceInfo* device, char* name, int
 
 CVAPI(void) gpuDeviceInfoComputeCapability(cv::gpu::DeviceInfo* device, int* major, int* minor)
 {
-   *major = device->major();
-   *minor = device->minor();
+   *major = device->majorVersion();
+   *minor = device->minorVersion();
 }
 
 CVAPI(int) gpuDeviceInfoMultiProcessorCount(cv::gpu::DeviceInfo* device)
@@ -50,9 +50,9 @@ CVAPI(void) gpuDeviceInfoTotalMemInfo(cv::gpu::DeviceInfo* info, size_t* total)
    *total = info->totalMemory();
 }
 
-CVAPI(bool) gpuDeviceInfoHasSupport(cv::gpu::DeviceInfo* device, cv::gpu::GpuFeature feature)
+CVAPI(bool) gpuDeviceInfoSupports(cv::gpu::DeviceInfo* device, cv::gpu::GpuFeature feature)
 {
-   return device->has(feature);
+   return device->supports(feature);
 }
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault() { return new cv::gpu::GpuMat() ; }
