@@ -92,3 +92,84 @@ CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* mo
    return true;
 
 }
+
+CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
+{
+   cv::Mat_<int> indiciesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+   cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
+   std::vector<float> scale;
+   std::vector<float> rotations;
+   float s, maxS, minS, r;
+   maxS = -1.0e-10f; minS = 1.0e10f;
+
+   for (int i = 0; i < maskMat.rows; i++)
+   {
+      if ( maskMat(i, 0)) 
+      {
+         cv::KeyPoint observedKeyPoint = observedKeyPoints->at(i);
+         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indiciesMat(i, 0));
+         s = log10( observedKeyPoint.size / modelKeyPoint.size );
+         scale.push_back(s);
+         maxS = s > maxS ? s : maxS;
+         minS = s < minS ? s : minS;
+
+         r = observedKeyPoint.angle - modelKeyPoint.angle;
+         r = r < 0.0f? r + 360.0f : r;
+         rotations.push_back(r);
+      }    
+   }
+
+   int scaleBinSize = (int)((maxS - minS) / log10(scaleIncrement));
+   scaleBinSize = scaleBinSize < 1? 1 : scaleBinSize;
+
+   cv::Mat_<float> scalesMat(scale);
+   cv::Mat_<float> rotationsMat(rotations);
+   std::vector<float> flags(scale.size());
+   cv::Mat flagsMat(flags);
+   if (scaleBinSize == 1)
+   {
+      int histSize[] = {rotationBins};
+      float rotationRanges[] = {0, 360};
+      int channels[] = {0};
+      const float* ranges[] = {rotationRanges};
+      double minVal, maxVal;
+      const cv::Mat_<float> arrs[] = {rotationsMat}; 
+
+      cv::MatND hist; //CV_32S
+      cv::calcHist(arrs, 1, channels, cv::Mat(), hist, 1, histSize, ranges);
+      cv::minMaxLoc(hist, &minVal, &maxVal);
+      cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
+      cv::calcBackProject(arrs, 1, channels, hist, flagsMat, ranges);
+   } else
+   {
+      int histSize[] = {scaleBinSize, rotationBins};
+      float scaleRanges[] = {minS, maxS};
+      float rotationRanges[] = {0, 360};
+      int channels[] = {0, 1};
+      const float* ranges[] = {scaleRanges, rotationRanges};
+      double minVal, maxVal;
+
+      const cv::Mat_<float> arrs[] = {scalesMat, rotationsMat}; 
+
+      cv::MatND hist; //CV_32S
+      cv::calcHist(arrs, 2, channels, cv::Mat(), hist, 2, histSize, ranges, true);
+      cv::minMaxLoc(hist, &minVal, &maxVal);
+
+      cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
+      cv::calcBackProject(arrs, 2, channels, hist, flagsMat, ranges);
+   }
+
+   int idx =0;
+   int nonZeroCount = 0;
+   for (int i = 0; i < maskMat.rows; i++)
+   {
+      if (maskMat(i, 0))
+      {
+         if (flags[idx++] != 0.0f)
+            nonZeroCount++;
+         else 
+            maskMat(i, 0) = 0;
+      }
+   }
+   return nonZeroCount;
+}

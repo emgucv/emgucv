@@ -35,15 +35,16 @@ namespace Emgu.CV.Features2D
             VoteForUniqueness(dist, uniquenessThreshold, mask);
             //Trace.WriteLine(w1.ElapsedMilliseconds);
 
-            if (CvInvoke.cvCountNonZero(mask) < 4)
+            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount < 4)
                return null;
 
             //Stopwatch w2 = Stopwatch.StartNew();
-            //matchedGoodFeatures = VoteForSizeAndOrientation(matchedGoodFeatures, 1.5, 20);
+            VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
             //Trace.WriteLine(w2.ElapsedMilliseconds);
-
-            //if (matchedGoodFeatures.Length < 4)
-            //   return null;
+            nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount < 4)
+               return null;
 
             return GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
          }
@@ -52,6 +53,9 @@ namespace Emgu.CV.Features2D
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool getHomographyMatrixFromMatchedFeatures(IntPtr model, IntPtr observed, IntPtr indices, IntPtr mask, IntPtr homography);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
 
       /// <summary>
       /// Recover the homography matrix using RANDSAC. If the matrix cannot be recovered, null is returned.
@@ -91,110 +95,16 @@ namespace Emgu.CV.Features2D
          }
       }
 
-      /*
       /// <summary>
       /// Eliminate the matched features whose scale and rotation do not aggree with the majority's scale and rotation.
       /// </summary>
       /// <param name="rotationBins">The numbers of bins for rotation, a good value might be 20 (which means each bin covers 18 degree)</param>
       /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
       /// <param name="matchedFeatures">The matched feature that will be participated in the voting. For each matchedFeatures, only the zero indexed ModelFeature will be considered.</param>
-      public static MatchedImageFeature[] VoteForSizeAndOrientation(MatchedImageFeature[] matchedFeatures, double scaleIncrement, int rotationBins)
+      public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints, Matrix<int> indices, Matrix<Byte> mask, double scaleIncrement, int rotationBins)
       {
-         int elementsCount = matchedFeatures.Length;
-         if (elementsCount < 1) return matchedFeatures;
-
-         float[] scales = new float[elementsCount];
-         float[] rotations = new float[elementsCount];
-         float[] flags = new float[elementsCount];
-         float minScale = float.MaxValue;
-         float maxScale = float.MinValue;
-
-         for (int i = 0; i < matchedFeatures.Length; i++)
-         {
-            float scale = (float)matchedFeatures[i].ObservedFeature.KeyPoint.Size / (float)matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Size;
-            scale = (float)Math.Log10(scale);
-            scales[i] = scale;
-            if (scale < minScale) minScale = scale;
-            if (scale > maxScale) maxScale = scale;
-
-            float rotation = matchedFeatures[i].ObservedFeature.KeyPoint.Angle - matchedFeatures[i].SimilarFeatures[0].Feature.KeyPoint.Angle;
-            rotations[i] = rotation < 0.0 ? rotation + 360 : rotation;
-         }
-
-         int scaleBinSize = (int)Math.Max(((maxScale - minScale) / Math.Log10(scaleIncrement)), 1);
-
-         if (scaleBinSize == 1)
-         {
-            //handle the case where there is only one scale bin
-            using (DenseHistogram h = new DenseHistogram(new int[] { rotationBins }, new RangeF[] { new RangeF(0, 360) }))
-            {
-               int count;
-               GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
-               GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
-
-               using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
-               using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
-               {
-                  h.Calculate(new Matrix<float>[] { rotationsMat }, true, null);
-
-                  float minVal, maxVal;
-                  int[] minLoc, maxLoc;
-                  h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
-
-                  h.Threshold(maxVal * 0.5);
-
-                  CvInvoke.cvCalcBackProject(new IntPtr[] { rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
-                  count = CvInvoke.cvCountNonZero(flagsMat);
-               }
-               rotationHandle.Free();
-               flagsHandle.Free();
-
-               MatchedImageFeature[] matchedGoodFeatures = new MatchedImageFeature[count];
-               int index = 0;
-               for (int i = 0; i < matchedFeatures.Length; i++)
-                  if (flags[i] != 0)
-                     matchedGoodFeatures[index++] = matchedFeatures[i];
-
-               return matchedGoodFeatures;
-            }
-         } else
-         {
-            using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
-            {
-               int count;
-               GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
-               GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
-               GCHandle flagsHandle = GCHandle.Alloc(flags, GCHandleType.Pinned);
-
-               using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
-               using (Matrix<float> scalesMat = new Matrix<float>(1, elementsCount, scaleHandle.AddrOfPinnedObject()))
-               using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
-               {
-                  h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
-
-                  float minVal, maxVal;
-                  int[] minLoc, maxLoc;
-                  h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
-
-                  h.Threshold(maxVal * 0.5);
-
-                  CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
-                  count = CvInvoke.cvCountNonZero(flagsMat);
-               }
-               scaleHandle.Free();
-               rotationHandle.Free();
-               flagsHandle.Free();
-
-               MatchedImageFeature[] matchedGoodFeatures = new MatchedImageFeature[count];
-               int index = 0;
-               for (int i = 0; i < matchedFeatures.Length; i++)
-                  if (flags[i] != 0)
-                     matchedGoodFeatures[index++] = matchedFeatures[i];
-
-               return matchedGoodFeatures;
-            }
-         }
-      }*/
+         return voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, scaleIncrement, rotationBins);
+      }
 
       /// <summary>
       /// Match the Image feature from the observed image to the features from the model image
