@@ -1141,21 +1141,6 @@ namespace Emgu.CV
       */
 
       /// <summary>
-      /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
-      /// </summary>
-      /// <param name="probImage">Back projection of object histogram</param>
-      /// <param name="window">Initial search window</param>
-      /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
-      /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
-      /// <returns>the number of iterations made</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvMeanShift(
-         IntPtr probImage,
-         Rectangle window,
-         MCvTermCriteria criteria,
-         out MCvConnectedComp comp);
-
-      /// <summary>
       /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
       /// </summary>
       /// <param name="image">Image where the search is running. It should be 8-bit or 32-bit floating-point</param>

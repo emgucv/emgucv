@@ -27,6 +27,21 @@ namespace Emgu.CV
          out MCvConnectedComp comp,
          out MCvBox2D box);
 
+      /// <summary>
+      /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
+      /// </summary>
+      /// <param name="probImage">Back projection of object histogram</param>
+      /// <param name="window">Initial search window</param>
+      /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
+      /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
+      /// <returns>the number of iterations made</returns>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern int cvMeanShift(
+         IntPtr probImage,
+         Rectangle window,
+         MCvTermCriteria criteria,
+         out MCvConnectedComp comp);
+
       #region Optical flow
       /// <summary>
       /// Computes flow for every pixel of the first input image using Lucas &amp; Kanade algorithm
