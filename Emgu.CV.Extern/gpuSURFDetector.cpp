@@ -79,3 +79,8 @@ CVAPI(void) gpuSURFDetectorCompute(
       useProvidedKeypoints,
       calcOrientation);
 }
+
+CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector)
+{
+   return detector->descriptorSize();
+}

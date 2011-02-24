@@ -75,6 +75,15 @@ namespace Emgu.CV.GPU
       internal static extern IntPtr GpuMatCreateDefault();
 
       /// <summary>
+      /// Check if the GpuMat is empty
+      /// </summary>
+      /// <param name="gpuMat">The GpuMat</param>
+      /// <returns>True if the GpuMat is empty</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIsEmpty")]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool GpuMatIsEmpty(IntPtr gpuMat);
+
+      /// <summary>
       /// Create a GpuMat of the specified size
       /// </summary>
       /// <param name="rows">The number of rows (height)</param>

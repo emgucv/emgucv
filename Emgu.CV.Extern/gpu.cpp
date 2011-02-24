@@ -50,7 +50,7 @@ CVAPI(void) gpuDeviceInfoTotalMemInfo(cv::gpu::DeviceInfo* info, size_t* total)
    *total = info->totalMemory();
 }
 
-CVAPI(bool) gpuDeviceInfoSupports(cv::gpu::DeviceInfo* device, cv::gpu::GpuFeature feature)
+CVAPI(bool) gpuDeviceInfoSupports(cv::gpu::DeviceInfo* device, cv::gpu::FeatureSet feature)
 {
    return device->supports(feature);
 }
@@ -76,6 +76,11 @@ CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr)
 CVAPI(CvSize) gpuMatGetSize(cv::gpu::GpuMat* gpuMat, cv::Size* size)
 {
    return gpuMat->size();
+}
+
+CVAPI(bool) gpuMatIsEmpty(cv::gpu::GpuMat* gpuMat)
+{
+   return gpuMat->empty();
 }
 
 CVAPI(int) gpuMatGetChannels(cv::gpu::GpuMat* gpuMat)

@@ -826,6 +826,19 @@ namespace Emgu.CV.Test
             foreach (PointF p in pts[0])
                img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
          }
+
+         //using(Util.TbbTaskScheduler scheduler = new Util.TbbTaskScheduler())
+         using (Image<Bgr, Byte> img = new Image<Bgr, Byte>("stuff.jpg"))
+         {
+            Stopwatch watch = Stopwatch.StartNew();
+            int runs = 10;
+            for (int i = 0; i < runs; i++)
+            {
+               PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
+            }
+            watch.Stop();
+            Trace.WriteLine(String.Format("Avg time to extract good features from image of {0}: {1}", img.Size, watch.ElapsedMilliseconds / runs));
+         }
       }
 
       [Test]

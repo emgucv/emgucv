@@ -308,5 +308,16 @@ namespace Emgu.CV.GPU
       {
          return new GpuMat<TDepth>(GpuInvoke.GetSubRect(this, region));
       }
+
+      /// <summary>
+      /// Check if the GpuMat is Empty
+      /// </summary>
+      public bool IsEmpty
+      {
+         get
+         {
+            return GpuInvoke.GpuMatIsEmpty(_ptr);
+         }
+      }
    }
 }

@@ -84,7 +84,6 @@
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
-    <Compile Include="Features2D\ImageFeatures.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
     <Compile Include="Features2D\IKeyPointDetector.cs" />
     <Compile Include="Features2D\SIFTDetector.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\StructSize.cs" />
+    <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />

@@ -53,13 +53,16 @@ namespace Emgu.CV.GPU
          bool useProvidedKeypoints,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool calcOrientation);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int gpuSURFDetectorGetDescriptorSize(IntPtr detector);
       #endregion
 
       /// <summary>
       /// Create a GPU SURF detector using the default parameters
       /// </summary>
       public GpuSURFDetector()
-         : this(0.1f, 4, 5, 2.0f, 3.0f/1.5f, 5.0f/1.5f, 3.0f/ 1.5f, 1.0f/1.5f, 0.81f, 1, true, 0.01f)
+         : this(0.1f, 4, 4, 2.0f, 3.0f/1.5f, 5.0f/1.5f, 3.0f/ 1.5f, 1.0f/1.5f, 0.81f, 1, true, 0.01f)
       {
       }
 
@@ -158,9 +161,20 @@ namespace Emgu.CV.GPU
       /// <returns>The image features founded on the keypoint location</returns>
       public GpuMat<float> ComputeDescriptorsRaw(GpuImage<Gray, Byte> image, GpuImage<Gray, byte> mask, GpuMat<float> keyPoints, bool caculateOrientation)
       {
-         GpuMat<float> descriptors = new GpuMat<float>();
+         GpuMat<float> descriptors = new GpuMat<float>(keyPoints.Size.Height, DescriptorSize, 1);
          gpuSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true, caculateOrientation);
          return descriptors;
+      }
+
+      /// <summary>
+      /// Return the size of the descriptor (64/128)
+      /// </summary>
+      public int DescriptorSize
+      {
+         get
+         {
+            return gpuSURFDetectorGetDescriptorSize(_ptr);
+         }
       }
 
       /// <summary>

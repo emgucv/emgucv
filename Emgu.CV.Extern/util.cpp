@@ -67,9 +67,10 @@ CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst)
 
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, CvMat* homography)
 {
-   cv::Mat indMat = cv::cvarrToMat(indices);
-   cv::Mat maskMat = cv::cvarrToMat(mask);
-   int nonZero = cv::countNonZero(maskMat);
+   cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+
+   cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) cv::cvarrToMat(mask) : cv::Mat_<uchar>(indMat.rows, 1, 255);
+   int nonZero = mask? cv::countNonZero(maskMat): indMat.rows;
    if (nonZero < 4) return false;
 
    cv::Mat_<float> srcPtMat(nonZero, 2);
@@ -80,9 +81,8 @@ CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* mo
    {
       if ( *maskMat.ptr(i) != 0)
       {
-         int* tmp = (int*) indMat.ptr(i);
-         memcpy(srcPtMat.ptr(idx), &(*model)[*tmp], sizeof(float) * 2);
-         memcpy(dstPtMat.ptr(idx), &(*observed)[i], sizeof(float) *2);
+         memcpy(srcPtMat.ptr(idx), &(*model)[*indMat.ptr(i)].pt, sizeof(float) * 2);
+         memcpy(dstPtMat.ptr(idx), &(*observed)[i].pt, sizeof(float) * 2);
          idx++;
       }
    }
