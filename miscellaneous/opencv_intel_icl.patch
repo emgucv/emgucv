@@ -1,22 +1,22 @@
 Index: 3rdparty/libjpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/libjpeg/CMakeLists.txt	(revision 4726)
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4732)
 +++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
-@@ -42,6 +42,11 @@
-     set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
- endif()
+@@ -24,6 +24,11 @@
+ # 				Define the library target:
+ # ----------------------------------------------------------------------------------
  
 +IF(WIN32 AND CV_ICC)
-+set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-Od")
-+set_source_files_properties(jddctmgr.c PROPERTIES COMPILE_FLAGS "-Od")
++  STRING(REGEX REPLACE "/O3" "/O1" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
++  STRING(REGEX REPLACE "/O3" "/O1" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 +ENDIF()
 +
- set_target_properties(${the_target}
- 	PROPERTIES OUTPUT_NAME "${the_target}"
- 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+ set(the_target "libjpeg")
+ 
+ add_library(${the_target} STATIC ${lib_srcs} ${lib_hdrs} ${lib_ext_hdrs})
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4726)
+--- CMakeLists.txt	(revision 4732)
 +++ CMakeLists.txt	(working copy)
 @@ -640,21 +640,12 @@
                     link_directories("${TBB_LIB_DIR}")
@@ -53,7 +53,7 @@ Index: CMakeLists.txt
      #    set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} /openmp")
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4726)
+--- modules/legacy/src/3dtracker.cpp	(revision 4732)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -79,7 +79,7 @@ Index: modules/legacy/src/3dtracker.cpp
      for (y = 0, i = 0; y < etalon_size.height; y++)
 Index: OpenCVModule.cmake
 ===================================================================
---- OpenCVModule.cmake	(revision 4726)
+--- OpenCVModule.cmake	(revision 4732)
 +++ OpenCVModule.cmake	(working copy)
 @@ -6,6 +6,7 @@
  

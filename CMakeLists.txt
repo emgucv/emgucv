@@ -65,6 +65,14 @@ ELSE(WIN32)
   SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 ENDIF(WIN32)
 
+IF(WIN32 AND CV_ICC)
+  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxSSE4.1,SSE3 /Qparallel /Qvec-report1 /Qpar-report1")
+  STRING(REGEX REPLACE "/O2" ${CV_ICC_ADDITIONAL_FLAGS_RELEASE} CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+  STRING(REGEX REPLACE "/O2" ${CV_ICC_ADDITIONAL_FLAGS_RELEASE} CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+  SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:\"libcmt\"")
+  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:\"libcmt\"")
+ENDIF()
+
 # ----------------------------------------------------------------------------
 #  Setup Package information
 # ----------------------------------------------------------------------------
