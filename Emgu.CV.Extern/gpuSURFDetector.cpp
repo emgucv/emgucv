@@ -52,12 +52,12 @@ CVAPI(void) gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv
    (*detector)(*img, mask ? *mask : cv::gpu::GpuMat() , *keypoints);
 }
 
-CVAPI(void) gpuDownloadKeypoints(const cv::gpu::GpuMat* keypointsGPU, vector<cv::KeyPoint>* keypoints)
+CVAPI(void) gpuDownloadKeypoints(const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints)
 {
    cv::gpu::SURF_GPU::downloadKeypoints(*keypointsGPU, *keypoints);
 }
 
-CVAPI(void) gpuUploadKeypoints(const vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU)
+CVAPI(void) gpuUploadKeypoints(const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU)
 {
    cv::gpu::SURF_GPU::uploadKeypoints(*keypoints, *keypointsGPU);
 }
