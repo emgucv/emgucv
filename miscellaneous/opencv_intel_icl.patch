@@ -1,6 +1,6 @@
 Index: 3rdparty/libjpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/libjpeg/CMakeLists.txt	(revision 4591)
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 4726)
 +++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
 @@ -42,6 +42,11 @@
      set_source_files_properties(jcdctmgr.c PROPERTIES COMPILE_FLAGS "-O1")
@@ -16,21 +16,21 @@ Index: 3rdparty/libjpeg/CMakeLists.txt
  	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4591)
+--- CMakeLists.txt	(revision 4726)
 +++ CMakeLists.txt	(working copy)
 @@ -640,21 +640,12 @@
                     link_directories("${TBB_LIB_DIR}")
                     set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
                 else()
 -                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*)
-+                   if(CMAKE_CL_64)
++                   if(TARGET_ARCH_64)
                         set(X86_64 1)
                     endif()
 -                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86_64*)
 -                       set(X86_64 1)
 -                   endif()
 -                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES i686*)
-+                   if(NOT CMAKE_CL_64)
++                   if(NOT TARGET_ARCH_64)
                         set(X86 1)
                     endif()
 -                   if(${CMAKE_SYSTEM_PROCESSOR} MATCHES i386*)
@@ -42,9 +42,18 @@ Index: CMakeLists.txt
  
                     set(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib")
                     if (X86_64)
+@@ -885,7 +876,7 @@
+     #    set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} /D _BIND_TO_CURRENT_CRT_VERSION=1 /D _BIND_TO_CURRENT_VCLIBS_VERSION=1")
+     #endif()
+ 
+-    set(EXTRA_EXE_LINKER_FLAGS_RELEASE "${EXTRA_EXE_LINKER_FLAGS_RELEASE} /debug")
++    #set(EXTRA_EXE_LINKER_FLAGS_RELEASE "${EXTRA_EXE_LINKER_FLAGS_RELEASE} /debug")
+ 
+     #if(ENABLE_OPENMP)
+     #    set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} /openmp")
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4591)
+--- modules/legacy/src/3dtracker.cpp	(revision 4726)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -70,7 +79,7 @@ Index: modules/legacy/src/3dtracker.cpp
      for (y = 0, i = 0; y < etalon_size.height; y++)
 Index: OpenCVModule.cmake
 ===================================================================
---- OpenCVModule.cmake	(revision 4591)
+--- OpenCVModule.cmake	(revision 4726)
 +++ OpenCVModule.cmake	(working copy)
 @@ -6,6 +6,7 @@
  
