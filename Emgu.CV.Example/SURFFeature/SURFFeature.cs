@@ -38,14 +38,28 @@ namespace SURFFeatureExample
 
          Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
          Stopwatch watch = Stopwatch.StartNew();
+         
          // extract features from the observed image
          VectorOfKeyPoint observedKeyPoints = surfParam.DetectKeyPointsRaw(observedImage, null);
          Matrix<float> observedDescriptors = surfParam.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
-         
-         HomographyMatrix homography =  ImageFeatures.Detect(
-            modelKeyPoints, modelDescriptors, 
-            observedKeyPoints, observedDescriptors, 0.8);
+         HomographyMatrix homography = null;
+         Matrix<int> indices;
+         Matrix<float> dist;
+         Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, 20, out indices, out dist);
+         using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
+         {
+            mask.SetValue(255);
+            
+            Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
 
+            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount >= 4)
+            {
+               nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
+               if (nonZeroCount >= 4)
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
+            }
+         }
          watch.Stop();
 
          //Merge the object image and the observed image into one image for display
