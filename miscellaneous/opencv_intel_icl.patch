@@ -51,6 +51,15 @@ Index: CMakeLists.txt
  
      #if(ENABLE_OPENMP)
      #    set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} /openmp")
+@@ -893,7 +884,7 @@
+ 
+     # Remove unreferenced functions: function level linking
+     set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} /Gy")
+-    set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} /Zi")
++    #set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} /Zi")
+ endif()
+ 
+ if(CMAKE_COMPILER_IS_GNUCXX)
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
 --- modules/legacy/src/3dtracker.cpp	(revision 4732)
