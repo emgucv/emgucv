@@ -1632,7 +1632,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindCornerSubPix(
          IntPtr image,
-         float[,] corners,
+         IntPtr corners,
          int count,
          Size win,
          Size zeroZone,

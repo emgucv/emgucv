@@ -462,7 +462,7 @@ namespace Emgu.CV
       public static extern void cvDrawChessboardCorners(
          IntPtr image,
          Size patternSize,
-         float[,] corners,
+         IntPtr corners,
          int count,
          int patternWasFound);
 
