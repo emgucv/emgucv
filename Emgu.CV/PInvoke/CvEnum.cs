@@ -1921,17 +1921,33 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CALIB_FIX_FOCAL_LENGTH = 16,
       /// <summary>
-      /// The 0-th distortion coefficient (k1) is fixed (to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed)
+      /// The 1st distortion coefficient (k1) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
       CV_CALIB_FIX_K1 = 32,
       /// <summary>
-      /// The 1-st distortion coefficient (k2) is fixed (see above)
+      /// The 2nd distortion coefficient (k2) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
       CV_CALIB_FIX_K2 = 64,
       /// <summary>
-      /// The 4-th distortion coefficient (k3) is fixed (see above)
+      /// The 3rd distortion coefficient (k3) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K3 = 128
+      CV_CALIB_FIX_K3 = 128,
+            /// <summary>
+      /// The 4th distortion coefficient (k4) is fixed (see above)
+      /// </summary>
+      CV_CALIB_FIX_K4 = 2048,
+            /// <summary>
+      /// The 5th distortion coefficient (k5) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
+      /// </summary>
+      CV_CALIB_FIX_K5 = 4096,
+            /// <summary>
+      /// The 6th distortion coefficient (k6) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
+      /// </summary>
+      CV_CALIB_FIX_K6 = 8192,
+      /// <summary>
+      /// Rational model
+      /// </summary>
+      CV_CALIB_RATIONAL_MODEL = 16384
    }
 
    /// <summary>
