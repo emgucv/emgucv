@@ -1798,8 +1798,6 @@ namespace Emgu.CV.Test
             Assert.AreEqual(values[i], valuesCopy[i]);
       }
 
-      /*
-      //TODO: make this work for Bug 22 on bugzilla
       [Test]
       public void Test_MPEG_4_2_Codec()
       {
@@ -1811,7 +1809,6 @@ namespace Emgu.CV.Test
                writer.WriteFrame(img);
             }
          }
-      }*/
-
+      }
    }
 }
