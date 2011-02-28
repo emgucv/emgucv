@@ -236,6 +236,45 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSURFDetectorRepeatedRun()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         SURFDetector detector = new SURFDetector(400, false);
+         Image<Gray, Byte> boxInScene = new Image<Gray, byte>("box_in_scene.png");
+         
+         ImageFeature[] features1 = detector.DetectFeatures(box, null);
+         Features2DTracker tracker = new Features2DTracker(features1);
+
+         ImageFeature[] imageFeatures = detector.DetectFeatures(boxInScene, null);
+         Features2DTracker.MatchedImageFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
+         int length1 = matchedFeatures.Length;
+         matchedFeatures = Features2DTracker.VoteForUniqueness(matchedFeatures, 0.8);
+         int length2 = matchedFeatures.Length;
+         matchedFeatures = Features2DTracker.VoteForSizeAndOrientation(matchedFeatures, 1.5, 20);
+         int length3 = matchedFeatures.Length;
+
+         for (int i = 0; i < 100; i++)
+         {
+            Features2DTracker.MatchedImageFeature[] matchedFeaturesNew = tracker.MatchFeature(imageFeatures, 2, 20);
+            Assert.AreEqual(length1, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+            /*
+            for (int j = 0; j < length1; j++)
+            {
+               Features2DTracker.MatchedImageFeature oldMF = matchedFeatures[j];
+               Features2DTracker.MatchedImageFeature newMF = matchedFeaturesNew[j];
+               for (int k = 0; k < oldMF.SimilarFeatures.Length; k++)
+               {
+                  Assert.AreEqual(oldMF.SimilarFeatures[k].Distance, newMF.SimilarFeatures[k].Distance, String.Format("Failed in iteration {0}", i)); 
+               }
+            }*/
+            matchedFeaturesNew = Features2DTracker.VoteForUniqueness(matchedFeaturesNew, 0.8);
+            Assert.AreEqual(length2, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+            matchedFeaturesNew = Features2DTracker.VoteForSizeAndOrientation(matchedFeaturesNew, 1.5, 20);
+            Assert.AreEqual(length3, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+         }
+      }
+
+      [Test]
       public void TestLDetectorAndSelfSimDescriptor()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");

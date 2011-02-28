@@ -163,30 +163,6 @@ namespace Emgu.CV.Util
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
 
-      /// <summary>
-      /// Convert the raw keypoints and descriptors to ImageFeature
-      /// </summary>
-      /// <param name="keyPointsVec">The raw keypoints vector</param>
-      /// <param name="descriptors">The raw descriptor matrix</param>
-      /// <returns>An array of image features</returns>
-      public static ImageFeature[] ConvertToImageFeature(VectorOfKeyPoint keyPointsVec, Matrix<float> descriptors)
-      {
-         Debug.Assert(keyPointsVec.Size == descriptors.Rows, "Size of keypoints vector do not match the rows of the descriptors matrix.");
-         int sizeOfdescriptor = descriptors.Cols;
-         MKeyPoint[] keyPoints = keyPointsVec.ToArray();
-         ImageFeature[] features = new ImageFeature[keyPoints.Length];
-         MCvMat header = descriptors.MCvMat;
-         long address = header.data.ToInt64();
-         for (int i = 0; i < keyPoints.Length; i++, address += header.step)
-         {
-            features[i].KeyPoint = keyPoints[i];
-            float[] desc = new float[sizeOfdescriptor];
-            Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
-            features[i].Descriptor = desc;
-         }
-         return features;
-      }
-
       #region FFMPEG
       private static bool _hasFFMPEG;
       private static bool _ffmpegChecked = false;

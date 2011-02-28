@@ -26,6 +26,48 @@ namespace Emgu.CV.Features2D
 
       #region static functions
       /// <summary>
+      /// Convert the raw keypoints and descriptors to ImageFeature
+      /// </summary>
+      /// <param name="keyPointsVec">The raw keypoints vector</param>
+      /// <param name="descriptors">The raw descriptor matrix</param>
+      /// <returns>An array of image features</returns>
+      public static ImageFeature[] ConvertToImageFeature(VectorOfKeyPoint keyPointsVec, Matrix<float> descriptors)
+      {
+         Debug.Assert(keyPointsVec.Size == descriptors.Rows, "Size of keypoints vector do not match the rows of the descriptors matrix.");
+         int sizeOfdescriptor = descriptors.Cols;
+         MKeyPoint[] keyPoints = keyPointsVec.ToArray();
+         ImageFeature[] features = new ImageFeature[keyPoints.Length];
+         MCvMat header = descriptors.MCvMat;
+         long address = header.data.ToInt64();
+         for (int i = 0; i < keyPoints.Length; i++, address += header.step)
+         {
+            features[i].KeyPoint = keyPoints[i];
+            float[] desc = new float[sizeOfdescriptor];
+            Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
+            features[i].Descriptor = desc;
+         }
+         return features;
+      }
+
+      /// <summary>
+      /// Convert the image features to keypoint vector and descriptor matrix
+      /// </summary>
+      private static void ConvertFromImageFeature(ImageFeature[] features, out VectorOfKeyPoint keyPoints, out Matrix<float> descriptors)
+      {
+         keyPoints = new VectorOfKeyPoint();
+         keyPoints.Push( Array.ConvertAll(features, delegate(ImageFeature feature) { return feature.KeyPoint; }));
+         descriptors = new Matrix<float>(features.Length, features[0].Descriptor.Length);
+
+         int descriptorLength = features[0].Descriptor.Length;
+         float[,] data = descriptors.Data;
+         for (int i = 0; i < features.Length; i++)
+         {
+            for (int j = 0; j < descriptorLength; j++)
+               data[i, j] = features[i].Descriptor[j];
+         }
+      }
+
+      /// <summary>
       /// Detect the if the model features exist in the observed features. If true, an homography matrix is returned, otherwise, null is returned.
       /// </summary>
       /// <param name="modelDescriptors">The descriptors from the model image</param>
@@ -128,17 +170,19 @@ namespace Emgu.CV.Features2D
       {
          indices = new Matrix<int>(observedDescriptors.Rows, k);
          dist = new Matrix<float>(observedDescriptors.Rows, k);
-         Flann.Index index = new Flann.Index(
-            modelDescriptors,
-            1);
-         index.KnnSearch(observedDescriptors, indices, dist, k, emax);
-         CvInvoke.cvSqrt(dist, dist);
+         using (Flann.Index index = new Flann.Index(modelDescriptors))
+         {
+            index.KnnSearch(observedDescriptors, indices, dist, k, emax);
+            CvInvoke.cvSqrt(dist, dist);
+         }
       }
       #endregion
 
-
-      private ImageFeatureMatcher _matcher;
+      private ImageFeature[] _modelFeatures;
+      //private ImageFeatureMatcher _matcher;
       private const int _randsacRequiredMatch = 10;
+      private VectorOfKeyPoint _modelKeyPoints;
+      private Matrix<float> _modelDescriptors;
 
       /// <summary>
       /// Create a Image tracker, where Image is matched with flann
@@ -146,7 +190,9 @@ namespace Emgu.CV.Features2D
       /// <param name="modelFeatures">The Image feature from the model image</param>
       public Features2DTracker(ImageFeature[] modelFeatures)
       {
-         _matcher = new ImageFeatureMatcher(modelFeatures);
+         //_matcher = new ImageFeatureMatcher(modelFeatures);
+         ConvertFromImageFeature(modelFeatures, out _modelKeyPoints, out _modelDescriptors);
+         _modelFeatures = modelFeatures;
       }
 
       /// <summary>
@@ -164,7 +210,7 @@ namespace Emgu.CV.Features2D
             Single[, ,] matchMaskData = matchMask.Data;
 
             //Compute the matched features
-            MatchedImageFeature[] matchedFeature = _matcher.MatchFeature(observedFeatures, 2, 20);
+            MatchedImageFeature[] matchedFeature = MatchFeature(observedFeatures, 2, 20);
             matchedFeature = VoteForUniqueness(matchedFeature, 0.8);
 
             foreach (MatchedImageFeature f in matchedFeature)
@@ -471,7 +517,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void ReleaseManagedResources()
       {
-         _matcher.Dispose();
+         _modelDescriptors.Dispose();
+         _modelKeyPoints.Dispose();
       }
 
       /// <summary>
@@ -483,7 +530,30 @@ namespace Emgu.CV.Features2D
       /// <returns>The matched features</returns>
       public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k, int emax)
       {
-         return _matcher.MatchFeature(observedFeatures, k, emax);
+         VectorOfKeyPoint obsKpts;
+         Matrix<float> obsDscpts;
+         ConvertFromImageFeature(observedFeatures, out obsKpts, out obsDscpts);
+         Matrix<int> indicies;
+         Matrix<float> dists;
+         DescriptorMatchKnn(_modelDescriptors, obsDscpts, k, emax, out indicies, out dists);
+
+         MatchedImageFeature[] result = new MatchedImageFeature[observedFeatures.Length];
+         for (int i = 0; i < observedFeatures.Length; i++)
+         {
+            result[i].SimilarFeatures = new SimilarFeature[k];
+            for (int j = 0; j < k; j++)
+            {
+               result[i].SimilarFeatures[j].Distance = dists.Data[i, j];
+               result[i].SimilarFeatures[j].Feature = _modelFeatures[indicies.Data[i, j]];
+            }
+            result[i].ObservedFeature = observedFeatures[i];
+         }
+         obsKpts.Dispose();
+         obsDscpts.Dispose();
+         indicies.Dispose();
+         dists.Dispose();
+         return result;
+
       }
 
       /// <summary>
@@ -525,90 +595,6 @@ namespace Emgu.CV.Features2D
             _similarFeatures = new SimilarFeature[modelFeatures.Length];
             for (int i = 0; i < modelFeatures.Length; i++)
                _similarFeatures[i] = new SimilarFeature(dist[i], modelFeatures[i]);
-         }
-      }
-
-      /// <summary>
-      /// A simple class that use flann to match Image features. 
-      /// </summary>
-      private class ImageFeatureMatcher : DisposableObject
-      {
-         private ImageFeature[] _modelFeatures;
-
-         private Flann.Index _modelIndex;
-
-         /// <summary>
-         /// Create k-d feature trees using the Image feature extracted from the model image.
-         /// </summary>
-         /// <param name="modelFeatures">The Image feature extracted from the model image</param>
-         public ImageFeatureMatcher(ImageFeature[] modelFeatures)
-         {
-            Debug.Assert(modelFeatures.Length > 0, "Model Features should have size > 0");
-
-            _modelIndex = new Flann.Index(
-               CvToolbox.GetMatrixFromDescriptors(
-                  Array.ConvertAll<ImageFeature, float[]>(
-                     modelFeatures,
-                     delegate(ImageFeature f) { return f.Descriptor; })),
-               1);
-            _modelFeatures = modelFeatures;
-         }
-
-         /// <summary>
-         /// Match the Image feature from the observed image to the features from the model image
-         /// </summary>
-         /// <param name="observedFeatures">The Image feature from the observed image</param>
-         /// <param name="k">The number of neighbors to find</param>
-         /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
-         /// <returns>The matched features</returns>
-         public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k, int emax)
-         {
-            if (observedFeatures.Length == 0) return new MatchedImageFeature[0];
-
-            float[][] descriptors = new float[observedFeatures.Length][];
-            for (int i = 0; i < observedFeatures.Length; i++)
-               descriptors[i] = observedFeatures[i].Descriptor;
-            using (Matrix<int> result1 = new Matrix<int>(descriptors.Length, k))
-            using (Matrix<float> dist1 = new Matrix<float>(descriptors.Length, k))
-            {
-               _modelIndex.KnnSearch(CvToolbox.GetMatrixFromDescriptors(descriptors), result1, dist1, k, emax);
-
-               int[,] indexes = result1.Data;
-               float[,] distances = dist1.Data;
-
-               MatchedImageFeature[] res = new MatchedImageFeature[observedFeatures.Length];
-               List<SimilarFeature> matchedFeatures = new List<SimilarFeature>();
-
-               for (int i = 0; i < res.Length; i++)
-               {
-                  matchedFeatures.Clear();
-
-                  for (int j = 0; j < k; j++)
-                  {
-                     int index = indexes[i, j];
-                     if (index >= 0)
-                     {
-                        matchedFeatures.Add(new SimilarFeature(distances[i, j], _modelFeatures[index]));
-                     }
-                  }
-
-                  res[i].ObservedFeature = observedFeatures[i];
-                  res[i].SimilarFeatures = matchedFeatures.ToArray();
-               }
-               return res;
-            }
-         }
-
-         /// <summary>
-         /// Release the unmanaged memory associate with this matcher
-         /// </summary>
-         protected override void DisposeObject()
-         {
-         }
-
-         protected override void ReleaseManagedResources()
-         {
-            _modelIndex.Dispose();
          }
       }
    }

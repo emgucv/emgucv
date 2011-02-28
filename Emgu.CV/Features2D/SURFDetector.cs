@@ -121,7 +121,7 @@ namespace Emgu.CV.Features2D
          using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
          using (Matrix<float> desc = ComputeDescriptorsRaw(image, mask, kpts))
          {
-            return CvToolbox.ConvertToImageFeature(kpts, desc);
+            return Features2DTracker.ConvertToImageFeature(kpts, desc);
          }
       }
 
@@ -155,7 +155,7 @@ namespace Emgu.CV.Features2D
             pts.Push(keyPoints);
             using (Matrix<float> descriptors = ComputeDescriptorsRaw(image, mask, pts))
             {
-               return CvToolbox.ConvertToImageFeature(pts, descriptors);
+               return Features2DTracker.ConvertToImageFeature(pts, descriptors);
             }
          }
       }
