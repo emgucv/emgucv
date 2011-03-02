@@ -20,10 +20,10 @@ namespace Emgu.CV.Test
       {
          using (Image<Gray, Byte> gray = img.Convert<Gray, Byte>())
          {
-            MCvAvgComp[][] objects = gray.DetectHaarCascade(_faceCascade);
+            MCvAvgComp[] objects = _faceCascade.Detect(gray);
             List<Face> res = new List<Face>();
 
-            foreach (MCvAvgComp o in objects[0])
+            foreach (MCvAvgComp o in objects)
             {
                img.ROI = o.rect;
                res.Add(new Face(img.Copy(), o.rect));
@@ -78,10 +78,10 @@ namespace Emgu.CV.Test
 
       public List<Eye> DetectEye()
       {
-         MCvAvgComp[][] objects = Gray.DetectHaarCascade(_eyeCascade);
+         MCvAvgComp[] objects = _eyeCascade.Detect(Gray);
          List<Eye> res = new List<Eye>();
 
-         foreach (MCvAvgComp o in objects[0])
+         foreach (MCvAvgComp o in objects)
          {
             _image.ROI = o.rect;
             res.Add(new Eye(_image.Copy(), o.rect));

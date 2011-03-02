@@ -381,9 +381,8 @@ namespace Emgu.CV.Test
          using (HaarCascade cascade = new HaarCascade("haarcascade_eye.xml"))
          //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
          {
-            MCvAvgComp[][] objects = image.DetectHaarCascade(cascade, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10));
-
-            foreach (MCvAvgComp obj in objects[0])
+            MCvAvgComp[] objects = cascade.Detect(image, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10));
+            foreach (MCvAvgComp obj in objects)
                image.Draw(obj.rect, new Gray(0.0), 1);
 
             using (MemStorage stor = new MemStorage())

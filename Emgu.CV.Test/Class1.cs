@@ -243,7 +243,7 @@ namespace Emgu.CV.Test
          HaarCascade face = new HaarCascade("haarcascade_frontalface_alt2.xml");
          Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
          Stopwatch watch = Stopwatch.StartNew();
-         img.DetectHaarCascade(face);
+         face.Detect(img);
          watch.Stop();
          Trace.WriteLine(String.Format("Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, watch.ElapsedMilliseconds));
       }
