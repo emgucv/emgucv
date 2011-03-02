@@ -13,11 +13,11 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Bounding box for a detected object
       /// </summary>
-      Rectangle Rect;
+      public Rectangle Rect;
 
       /// <summary>
       /// Confidence level 
       /// </summary>
-      float score;
+      public float score;
    }
 }

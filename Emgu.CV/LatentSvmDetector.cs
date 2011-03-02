@@ -26,7 +26,7 @@ namespace Emgu.CV
       /// <param name="image">The image to detect objects in</param>
       /// <param name="overlapThreshold">Threshold for the non-maximum suppression algorithm, Use default value of 0.5</param>
       /// <returns>Array of detected objects</returns>
-      public MCvObjectDetection[] Detect(Image<Gray, Byte> image, float overlapThreshold)
+      public MCvObjectDetection[] Detect(Image<Bgr, Byte> image, float overlapThreshold)
       {
          using (MemStorage stor = new MemStorage())
          {

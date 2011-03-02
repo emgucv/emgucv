@@ -144,6 +144,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\.
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatentSvmDetector", "..\..\Emgu.CV.Example\LatentSvmDetector\LatentSvmDetector.csproj", "{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.csproj", "{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -516,6 +528,38 @@ Global
 		{7F6AA856-B9EF-4F86-BDD4-1D9DB596C8FF}.Release|x64.ActiveCfg = Release|x86
 		{7F6AA856-B9EF-4F86-BDD4-1D9DB596C8FF}.Release|x86.ActiveCfg = Release|x86
 		{7F6AA856-B9EF-4F86-BDD4-1D9DB596C8FF}.Release|x86.Build.0 = Release|x86
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|.NET.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Win32.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|x64.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|.NET.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Win32.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

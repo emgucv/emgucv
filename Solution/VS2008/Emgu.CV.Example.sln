@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
 	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = ""
+		SccAuxPath = ""
+		SccLocalPath = ""
+		SccProvider = ""
 		TargetFramework = "3.5"
 		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;{7C2C5325-8235-4A24-9C67-6BD79A4679E2}|Emgu.Utils.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
@@ -66,6 +70,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\..\Emgu.CV.Example\PedestrianDetection\PedestrianDetection.csproj", "{7F6AA856-B9EF-4F86-BDD4-1D9DB596C8FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.csproj", "{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatentSvmDetector", "..\..\Emgu.CV.Example\LatentSvmDetector\LatentSvmDetector.csproj", "{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -419,6 +425,20 @@ Global
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|.NET.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Win32.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
