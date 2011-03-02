@@ -94,6 +94,7 @@
     <Compile Include="Geodetic\Datum.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
+    <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="Features2D\RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
+    <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
     <Compile Include="PInvoke\DataLogger.cs" />
     <Compile Include="SparseMatrix.cs" />
