@@ -12,13 +12,13 @@ namespace Emgu.CV.Util
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int zlibCompressBound(int length);
+      private static extern int zlib_compress_bound(int length);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void zlibCompress2(IntPtr dataCompressed, ref int sizeDataCompressed, IntPtr dataOriginal, int sizeDataOriginal, int compressionLevel);
+      private static extern void zlib_compress2(IntPtr dataCompressed, ref int sizeDataCompressed, IntPtr dataOriginal, int sizeDataOriginal, int compressionLevel);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void zlibUncompress(IntPtr dataUncompressed, ref int sizeDataUncompressed, IntPtr compressedData, int sizeDataCompressed);
+      private static extern void zlib_uncompress(IntPtr dataUncompressed, ref int sizeDataUncompressed, IntPtr compressedData, int sizeDataCompressed);
       #endregion
 
       /// <summary>
@@ -29,11 +29,11 @@ namespace Emgu.CV.Util
       /// <returns>The compressed bytes</returns>
       public static Byte[] Compress(Byte[] original, int compressionLevel)
       {
-         Byte[] result = new Byte[zlibCompressBound(original.Length)];
+         Byte[] result = new Byte[zlib_compress_bound(original.Length)];
          GCHandle originalHandle = GCHandle.Alloc(original, GCHandleType.Pinned);
          GCHandle resultHandle = GCHandle.Alloc(result, GCHandleType.Pinned);
          int compressDataSize = result.Length;
-         zlibCompress2(resultHandle.AddrOfPinnedObject(), ref compressDataSize, originalHandle.AddrOfPinnedObject(), original.Length, compressionLevel);
+         zlib_compress2(resultHandle.AddrOfPinnedObject(), ref compressDataSize, originalHandle.AddrOfPinnedObject(), original.Length, compressionLevel);
 
          originalHandle.Free();
          resultHandle.Free();
@@ -54,7 +54,7 @@ namespace Emgu.CV.Util
          GCHandle originalHandle = GCHandle.Alloc(compressedData, GCHandleType.Pinned);
          GCHandle resultHandle = GCHandle.Alloc(result, GCHandleType.Pinned);
          int uncompressDataSize = estimatedUncompressedSize;
-         zlibUncompress(resultHandle.AddrOfPinnedObject(), ref uncompressDataSize, originalHandle.AddrOfPinnedObject(), compressedData.Length);
+         zlib_uncompress(resultHandle.AddrOfPinnedObject(), ref uncompressDataSize, originalHandle.AddrOfPinnedObject(), compressedData.Length);
 
          originalHandle.Free();
          resultHandle.Free();

@@ -963,7 +963,7 @@ LEPT_DLL extern l_int32 pixSetMaskedCmap ( PIX *pixs, PIX *pixm, l_int32 x, l_in
 LEPT_DLL extern char * parseForProtos ( const char *filein, const char *prestring );
 LEPT_DLL extern BOXA * boxaGetWhiteblocks ( BOXA *boxas, BOX *box, l_int32 sortflag, l_int32 maxboxes, l_float32 maxoverlap, l_int32 maxperim, l_float32 fract, l_int32 maxpops );
 LEPT_DLL extern BOXA * boxaPruneSortedOnOverlap ( BOXA *boxas, l_float32 maxoverlap );
-LEPT_DLL extern void setPixMemoryManager ( void * ( allocator ( size_t ) ), void  ( deallocator ( void * ) ) );
+//LEPT_DLL extern void setPixMemoryManager ( void * ( allocator ( size_t ) ), void  ( deallocator ( void * ) ) );
 LEPT_DLL extern PIX * pixCreate ( l_int32 width, l_int32 height, l_int32 depth );
 LEPT_DLL extern PIX * pixCreateNoInit ( l_int32 width, l_int32 height, l_int32 depth );
 LEPT_DLL extern PIX * pixCreateTemplate ( PIX *pixs );

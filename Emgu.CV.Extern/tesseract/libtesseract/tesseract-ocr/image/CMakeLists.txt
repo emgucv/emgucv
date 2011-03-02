@@ -1,0 +1,11 @@
+PROJECT(tesseract_image)
+file(GLOB tesseract_image_srcs "*.cpp")
+file(GLOB tesseract_image_hdrs "*.h")
+source_group("Src" FILES ${tesseract_image_srcs})
+source_group("Include" FILES ${tesseract_image_hdrs})
+#add_definitions(-D__MSW32__ -DHAVE_LIBLEPT -DLEPTONLIB_IMPORTS -DCRT_SECURE_NO_WARNINGS)
+add_definitions(-D__MSW32__ -DHAVE_LIBLEPT -W0)
+include_directories("../vs2008/include" "../ccutil" "../viewer" "../../leptonica/leptonlib-1.67/src")
+
+add_library(${PROJECT_NAME} STATIC ${tesseract_image_srcs} ${tesseract_image_hdrs})
+ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer libleptonica)

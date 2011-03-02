@@ -161,15 +161,11 @@ file(GLOB extern_hdrs "./*.h*")
 
 ############################### TESSERACT START ########################
 IF(WIN32)
-  IF(NOT TARGET_ARCH_64)
-  SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/include")
-  LINK_DIRECTORIES("${PROJECT_SOURCE_DIR}/tesseract/lib/x86")
-
   SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
-
-  SET(TESSERACT_LIBRARY ccmain ccstruct ccutil classify cube cutil dict image neural_networks tesseract textord viewer wordrec leptonlib Ws2_32)
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES leptonlib)
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${PROJECT_SOURCE_DIR}/tesseract/lib/x86/leptonlib.dll")
+  IF(EMGU_CV_WITH_TESSERACT)
+    ADD_SUBDIRECTORY(tesseract/libtesseract)
+    SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccutil" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/api" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccmain" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccstruct")
+    SET(TESSERACT_LIBRARY tesseract_ccstruct tesseract_ccutil tesseract_classify tesseract_cube tesseract_cutil tesseract_dict tesseract_image tesseract_neural_networks tesseract_api tesseract_textord tesseract_viewer tesseract_wordrec libleptonica Ws2_32 tesseract_ccmain)
   ENDIF()
 ELSE()
   SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
@@ -180,7 +176,7 @@ ELSE()
 ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
-  INCLUDE_DIRECTORIES("${TESSERACT_INCLUDE_DIRS}")
+  INCLUDE_DIRECTORIES(${TESSERACT_INCLUDE_DIRS})
   LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
 ENDIF()
 ############################### TESSERACT END ##########################
@@ -257,13 +253,18 @@ ADD_DEPENDENCIES(${the_target}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
   IF(MSVC AND (NOT CV_ICC) AND (NOT TARGET_ARCH_64)) 
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
   ENDIF()
+ENDIF()
+
+#disable warnings
+IF(MSVC)
+  ADD_DEFINITIONS(-wd4251 -D_CRT_SECURE_NO_WARNINGS)
 ENDIF()
 
 # Add the required libraries for linking:
