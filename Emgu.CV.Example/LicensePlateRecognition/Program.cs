@@ -15,12 +15,6 @@ namespace LicensePlateRecognition
       [STAThread]
       static void Main()
       {
-         if (64 == CvInvoke.UnmanagedCodeBitness && Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
-         {
-            MessageBox.Show("This program is only designed to be run with the 32-bit Emgu CV package on windows.");
-            return;
-         }
-
          if (!IsPlaformCompatable()) return;
 
          Application.EnableVisualStyles();
