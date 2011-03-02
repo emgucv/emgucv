@@ -299,7 +299,7 @@ namespace Emgu.CV
       public override void GetObjectData(SerializationInfo info, StreamingContext context)
       {
          if (IsROISet)
-         {  
+         {
             Rectangle roi = ROI;
             ROI = Rectangle.Empty;
             base.GetObjectData(info, context);
@@ -839,6 +839,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="haarObj">The object to be detected</param>
       /// <returns>The objects detected, one array per channel</returns>
+      [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
       public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj)
       {
          return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(0, 0));
@@ -853,6 +854,7 @@ namespace Emgu.CV
       /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <returns>The objects detected, one array per channel</returns>
+      [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
       public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize)
       {
          using (MemStorage stor = new MemStorage())
@@ -1957,7 +1959,7 @@ namespace Emgu.CV
       public Image<Gray, Byte> GrabCut(Rectangle rect, int iteration)
       {
          Image<Gray, Byte> mask = new Image<Gray, byte>(Size);
-         using(Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5))
+         using (Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5))
          using (Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5))
          {
             CvInvoke.CvGrabCut(Ptr, mask.Ptr, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
@@ -2658,7 +2660,7 @@ namespace Emgu.CV
                         System.Drawing.Imaging.ImageLockMode.ReadOnly,
                         value.PixelFormat);
 
-                     using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height,  data.Stride, data.Scan0))
+                     using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height, data.Stride, data.Scan0))
                      {
                         for (int i = 0; i < 3; i++)
                         {
@@ -2990,7 +2992,7 @@ namespace Emgu.CV
          CvInvoke.cvMorphologyEx(
             Ptr, res.Ptr,
             buffer == null ? IntPtr.Zero : buffer.Ptr,
-            element == null? IntPtr.Zero : element.Ptr,
+            element == null ? IntPtr.Zero : element.Ptr,
             operation,
             iterations);
 
