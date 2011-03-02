@@ -897,6 +897,21 @@ namespace Emgu.CV
          IntPtr roots,
          int maxiter,
          int fig);
+
+      /// <summary>
+      /// Solves linear system (src1)*(dst) = (src2)
+      /// </summary>
+      /// <param name="src1">The source matrix in the LHS</param>
+      /// <param name="src2">The source matrix in the RHS</param>
+      /// <param name="dst">The result</param>
+      /// <param name="method">The method for solving the equation</param>
+      /// <returns>0 if src1 is a singular and CV_LU method is used</returns>
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern int  cvSolve(
+         IntPtr src1, 
+         IntPtr src2, 
+         IntPtr dst,
+         CvEnum.SOLVE_METHOD method);
       #endregion
 
       #region Discrete Transforms
@@ -2267,7 +2282,7 @@ namespace Emgu.CV
       /// <param name="method">Inversion method</param>
       /// <returns></returns>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double cvInvert(IntPtr src, IntPtr dst, CvEnum.INVERT_METHOD method);
+      public static extern double cvInvert(IntPtr src, IntPtr dst, CvEnum.SOLVE_METHOD method);
 
       /// <summary>
       /// Decomposes matrix A into a product of a diagonal matrix and two orthogonal matrices:

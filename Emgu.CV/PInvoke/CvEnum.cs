@@ -1784,7 +1784,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// cvInvert method
    /// </summary>
-   public enum INVERT_METHOD
+   public enum SOLVE_METHOD
    {
       /// <summary>
       /// Gaussian elimination with optimal pivot element chose

@@ -28,9 +28,23 @@ namespace Emgu.CV.Test
 
          m.SetIdentity();
 
-         CvInvoke.cvInvert(m, mInvert, Emgu.CV.CvEnum.INVERT_METHOD.CV_LU);
+         CvInvoke.cvInvert(m, mInvert, Emgu.CV.CvEnum.SOLVE_METHOD.CV_LU);
 
          Assert.IsTrue(m.Equals(mInvert));
+      }
+
+      [Test]
+      public void TestSolve()
+      {
+         Matrix<Single> lhs = new Matrix<Single>(3, 3);
+         lhs.SetIdentity();
+         Matrix<Single> rhs = new Matrix<Single>(new float[,] { { 0.1f }, { 0.2f }, { 0.5f } });
+         Matrix<Single> result = new Matrix<float>(3, 1);
+         CvInvoke.cvSolve(lhs, rhs, result, CvEnum.SOLVE_METHOD.CV_LU);
+
+         Assert.AreEqual(rhs[0, 0], result[0, 0]);
+         Assert.AreEqual(rhs[1, 0], result[1, 0]);
+         Assert.AreEqual(rhs[2, 0], result[2, 0]);
       }
 
       [Test]
