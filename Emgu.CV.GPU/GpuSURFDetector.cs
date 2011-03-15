@@ -5,6 +5,7 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Util;
+using Emgu.CV.Features2D;
 
 namespace Emgu.CV.GPU
 {
@@ -16,19 +17,12 @@ namespace Emgu.CV.GPU
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuSURFDetectorCreate(
-         float threshold,
+         double hessianThreshold,
          int nOctaves,
-         int nIntervals,
-         float initialScale,
-         float l1,
-         float l2,
-         float l3,
-         float l4,
-         float edgeScale,
-         int initialStep,
+         int nOctaveLayers,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool extended,
-         float featuresRatio);
+         float keypointsRatio);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorRelease(ref IntPtr detector);
@@ -37,10 +31,10 @@ namespace Emgu.CV.GPU
       private static extern void gpuSURFDetectorDetectKeyPoints(IntPtr detector, IntPtr img, IntPtr mask, IntPtr keypoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void gpuDownloadKeypoints(IntPtr keypointsGPU, IntPtr keypoints);
+      private static extern void gpuDownloadKeypoints(IntPtr detector, IntPtr keypointsGPU, IntPtr keypoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void gpuUploadKeypoints(IntPtr keypoints, IntPtr keypointsGPU);
+      private static extern void gpuUploadKeypoints(IntPtr detector, IntPtr keypoints, IntPtr keypointsGPU);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorCompute(
@@ -62,40 +56,36 @@ namespace Emgu.CV.GPU
       /// Create a GPU SURF detector using the default parameters
       /// </summary>
       public GpuSURFDetector()
-         : this(0.1f, 4, 4, 2.0f, 3.0f/1.5f, 5.0f/1.5f, 3.0f/ 1.5f, 1.0f/1.5f, 0.81f, 1, true, 0.01f)
+         : this(100.0f, 4, 2, true, 0.01f)
+      {
+      }
+
+      /// <summary>
+      /// Create a GPU SURF detector using the default parameters
+      /// </summary>
+      /// <param name="detector">The surf detector where the parameters will be borrow from</param>
+      /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
+      public GpuSURFDetector(SURFDetector detector, float FeaturesRatio)
+         : this((float)detector.hessianThreshold, detector.nOctaves, detector.nOctaveLayers, detector.extended != 0, 0.01f)
       {
       }
 
       /// <summary>
       /// Create a GPU SURF detector
       /// </summary>
-      /// <param name="Threshold">The interest operator threshold. Use 0.1 for default</param>
+      /// <param name="hessianThreshold">The interest operator threshold. Use 100 for default</param>
       /// <param name="NOctaves">The number of octaves to process. Use 4 for default</param>
       /// <param name="NIntervals">The number of intervals in each octave. Use 4 for default</param>
-      /// <param name="InitialScale">The scale associated with the first interval of the first octave. Use 2.0 for default</param>
-      /// <param name="L1">Mask parameter l_1. Use 3.0 / 1.5 for default</param>
-      /// <param name="L2">Mask parameter l_2. Use 5.0 / 1.5 for default</param>
-      /// <param name="L3">Mask parameter l_3. Use 3.0 / 1.5 for default</param>
-      /// <param name="L4">Mask parameter l_4. Use 1.0 / 1.5 for default</param>
-      /// <param name="EdgeScale">The amount to scale the edge rejection mask. Use 0.81 for default</param>
-      /// <param name="InitialStep">The initial sampling step in pixels. Use 1 for default</param>
       /// <param name="Extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       public GpuSURFDetector(
-            float Threshold,
+            float hessianThreshold,
             int NOctaves,
             int NIntervals,
-            float InitialScale,
-            float L1,
-            float L2,
-            float L3,
-            float L4,
-            float EdgeScale,
-            int InitialStep,
             bool Extended,
             float FeaturesRatio)
       {
-         _ptr = gpuSURFDetectorCreate(Threshold, NOctaves, NIntervals, InitialScale, L1, L2, L3, L4, EdgeScale, InitialStep, Extended, FeaturesRatio);
+         _ptr = gpuSURFDetectorCreate(hessianThreshold, NOctaves, NIntervals, Extended, FeaturesRatio);
       }
 
       /// <summary>
@@ -136,9 +126,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The keypoints obtained from DetectKeyPointsRaw</param>
       /// <param name="dst">The vector of keypoints</param>
-      public static void DownloadKeypoints(GpuMat<float> src, VectorOfKeyPoint dst)
+      public void DownloadKeypoints(GpuMat<float> src, VectorOfKeyPoint dst)
       {
-            gpuDownloadKeypoints(src, dst);
+            gpuDownloadKeypoints(_ptr, src, dst);
       }
 
       /// <summary>
@@ -146,9 +136,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The keypoints array</param>
       /// <param name="dst">A GpuMat that represent the keypoints</param>
-      public static void UploadKeypoints(VectorOfKeyPoint src, GpuMat<float> dst)
+      public void UploadKeypoints(VectorOfKeyPoint src, GpuMat<float> dst)
       {
-            gpuUploadKeypoints(src, dst);
+            gpuUploadKeypoints(_ptr, src, dst);
       }
 
       /// <summary>

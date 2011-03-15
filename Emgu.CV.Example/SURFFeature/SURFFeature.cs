@@ -35,9 +35,11 @@ namespace SURFFeatureExample
          Stopwatch watch;
          HomographyMatrix homography = null;
 
+         SURFDetector surfParam = new SURFDetector(500, false);
+
          if (GpuInvoke.HasCuda)
          {
-            GpuSURFDetector surf = new GpuSURFDetector(0.1f, 4, 4, 2.0f, 3.0f/1.5f, 5.0f/1.5f, 3.0f/1.5f, 1.0f/1.5f, 0.81f, 1, false, 0.01f);
+            GpuSURFDetector surf = new GpuSURFDetector(surfParam, 0.01f);
             using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surf.DetectKeyPointsRaw(gpuModelImage, null))
@@ -45,7 +47,7 @@ namespace SURFFeatureExample
             using (VectorOfKeyPoint modelKeyPoints = new VectorOfKeyPoint())
             using (GpuBruteForceMatcher matcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.L2))
             {
-               GpuSURFDetector.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
+               surf.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
@@ -56,7 +58,7 @@ namespace SURFFeatureExample
                using (GpuMat<float> gpuMatchDist = new GpuMat<float>(gpuMatchIndices.Size, 1))
                using (VectorOfKeyPoint observedKeyPoints = new VectorOfKeyPoint())
                {
-                  GpuSURFDetector.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
+                  surf.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
 
                   matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, 2, null);
 
@@ -85,8 +87,6 @@ namespace SURFFeatureExample
          }
          else
          {
-            SURFDetector surfParam = new SURFDetector(500, false);
-
             //extract features from the object image
             VectorOfKeyPoint modelKeyPoints = surfParam.DetectKeyPointsRaw(modelImage, null);
             Matrix<float> modelDescriptors = surfParam.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
