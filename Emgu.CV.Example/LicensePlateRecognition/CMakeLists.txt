@@ -22,7 +22,7 @@ LIST(APPEND
   CS_PREBUILD_COMMAND  
   COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}/tessdata"
   )
-ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/tessdata/eng.traineddata tessdata)
+ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/tessdata/eng.traineddata tessdata/eng.traineddata)
 
 COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_LicensePlateRecognition}" ALL)
 
