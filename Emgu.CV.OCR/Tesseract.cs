@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.Util;
+using System.Drawing;
 
 namespace Emgu.CV.OCR
 {
@@ -32,6 +34,9 @@ namespace Emgu.CV.OCR
          IntPtr ocr,
          IntPtr text,
          int maxSizeInBytes);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
       #endregion
 
       private Byte[] _utf8Buffer;
@@ -80,6 +85,53 @@ namespace Emgu.CV.OCR
          handle.Free();
 
          return _utf8.GetString(_utf8Buffer);
+         /*Word[] words = ExtractResults();
+         return String.Concat(Array.ConvertAll(words, delegate(Word w) { return w.Text; }));*/
+      }
+
+      public Word[] ExtractResults()
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<byte> textSeq = new Seq<byte>(stor);
+            Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
+            TessBaseAPIExtractResult(_ptr, textSeq, results);
+            
+            byte[] bytes = textSeq.ToArray();
+            TesseractResult[] trs = results.ToArray();
+
+            Word[] res = new Word[trs.Length];
+            int idx = 0;
+            for (int i = 0; i < trs.Length; i++)
+            {
+               TesseractResult tr = trs[i];
+               res[i].Text = _utf8.GetString(bytes, idx, tr.length);
+               idx += tr.length;
+               res[i].Cost = tr.cost;
+               if (tr.cost == 0)
+                  res[i].Region = Rectangle.Empty;
+               else
+                  res[i].Region = new Rectangle(tr.x0, tr.y0, tr.x1 - tr.x0 + 1, tr.y1 - tr.y0 + 1);
+            }
+            return res;
+         }
+      }
+
+      public struct Word
+      {
+         public String Text;
+         public float Cost;
+         public Rectangle Region;
+      }
+
+      private struct TesseractResult
+      {
+         public int length;
+         public float cost;
+         public int x0;
+         public int x1;
+         public int y0;
+         public int y1;
       }
    }
 }
