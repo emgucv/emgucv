@@ -43,24 +43,28 @@ namespace SURFFeatureExample
             using (GpuMat<float> gpuModelKeyPoints = surf.DetectKeyPointsRaw(gpuModelImage, null))
             using (GpuMat<float> gpuModelDescriptors = surf.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints, true))
             using (VectorOfKeyPoint modelKeyPoints = new VectorOfKeyPoint())
-            using (Matrix<float> modelDescriptors = new Matrix<float>(gpuModelDescriptors.Size))
+            using (GpuBruteForceMatcher matcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.L2))
             {
                GpuSURFDetector.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
-               gpuModelDescriptors.Download(modelDescriptors);
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
                using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray,byte>(observedImage))
                using (GpuMat<float> gpuObservedKeyPoints = surf.DetectKeyPointsRaw(gpuObservedImage, null))
                using (GpuMat<float> gpuObservedDescriptors = surf.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints, true))
+               using (GpuMat<int> gpuMatchIndices = new GpuMat<int>(gpuObservedDescriptors.Size.Height, 2, 1))
+               using (GpuMat<float> gpuMatchDist = new GpuMat<float>(gpuMatchIndices.Size, 1))
                using (VectorOfKeyPoint observedKeyPoints = new VectorOfKeyPoint())
-               using (Matrix<float> observedDescriptors = new Matrix<float>(gpuObservedDescriptors.Size))
                {
                   GpuSURFDetector.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
-                  gpuObservedDescriptors.Download(observedDescriptors);
-                  Matrix<int> indices;
-                  Matrix<float> dist;
-                  Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, 20, out indices, out dist);
+
+                  matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, 2, null);
+
+                  Matrix<int> indices = new Matrix<int>(gpuMatchIndices.Size);
+                  Matrix<float> dist = new Matrix<float>(indices.Size);
+                  gpuMatchIndices.Download(indices);
+                  gpuMatchDist.Download(dist);
+
                   using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
                   {
                      mask.SetValue(255);
