@@ -96,8 +96,16 @@ SET CMAKE_CONF_FLAGS=^
 REM create visual studio project
 %CMAKE% %CMAKE_CONF_FLAGS%
 
-REM convert the project to intel 
+REM convert the project to use intel compiler 
 "%ICPROJCONVERT%" emgucv.sln /IC
+REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
+REM these projects create problems for intel compiler
+"%ICPROJCONVERT%" emgucv.sln ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccmain\tesseract_ccmain.icproj ^
+opencv\3rdparty\libjpeg\libjpeg.icproj ^
+/VC
 
 GOTO BUILD
 
