@@ -176,13 +176,38 @@ namespace Emgu.CV.GPU
       public enum GpuFeature
       {
          /// <summary>
+         /// Cuda compute 1.0
+         /// </summary>
+         Compute10 = 10,
+         /// <summary>
+         /// Cuda compute 1.1
+         /// </summary>
+         Compute11 = 11,
+         /// <summary>
+         /// Cuda compute 1.2
+         /// </summary>
+         Compute12 = 12,
+         /// <summary>
+         /// Cuda compute 1.3
+         /// </summary>
+         Compute13 = 13,
+         /// <summary>
+         /// Cuda compute 2.0
+         /// </summary>
+         Compute20 = 20,
+         /// <summary>
+         /// Cuda compute 2.1
+         /// </summary>
+         Compute21 = 21,
+
+         /// <summary>
          /// Native double
          /// </summary>
-         NativeDouble,
+         NativeDouble = Compute11,
          /// <summary>
          /// Atomic
          /// </summary>
-         Atomics
+         Atomics = Compute13
       }
 
       /// <summary>
