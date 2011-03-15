@@ -453,6 +453,16 @@ namespace Emgu.CV.GPU
          IntPtr mask);
 
       /// <summary>
+      /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
+      /// </summary>
+      /// <param name="image">Image where the search is running. It should be 8-bit or 32-bit floating-point</param>
+      /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
+      /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
+      /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMatchTemplate")]
+      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method);
+
+      /// <summary>
       /// Computes mean value and standard deviation
       /// </summary>
       /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>

@@ -328,6 +328,11 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
    minLoc->x = minimunLoc.x; maxLoc->y = minimunLoc.y;
 }
 
+CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method)
+{
+   cv::gpu::matchTemplate(*image, *templ, *result, method);
+}
+
 CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev)
 {
    cv::Scalar meanVal, stdDevVal;
