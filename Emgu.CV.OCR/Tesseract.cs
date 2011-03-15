@@ -7,6 +7,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.OCR
 {
+   /// <summary>
+   /// The tesseract OCR engine
+   /// </summary>
    public class Tesseract : UnmanagedObject
    {
       #region PInvoke
@@ -34,6 +37,11 @@ namespace Emgu.CV.OCR
       private Byte[] _utf8Buffer;
       private UTF8Encoding _utf8 = new UTF8Encoding();
 
+      /// <summary>
+      /// Create the tesseract OCR engine using the specific dataPath and language name.
+      /// </summary>
+      /// <param name="dataPath">The path where the language file is located</param>
+      /// <param name="language">The 3 letter language code </param>
       public Tesseract(String dataPath, String language)
       {
          _utf8Buffer = new Byte[2048];
@@ -51,11 +59,20 @@ namespace Emgu.CV.OCR
          TessBaseAPIRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Set the image for optical charater recognition
+      /// </summary>
+      /// <typeparam name="TColor"></typeparam>
+      /// <param name="image"></param>
       public void SetImage<TColor>(Image<TColor, Byte> image) where TColor : struct, IColor
       {
          TessBaseAPISetImage(_ptr, image);
       }
 
+      /// <summary>
+      /// Get all the text in the image
+      /// </summary>
+      /// <returns>All the text in the image</returns>
       public string GetText()
       {
          GCHandle handle = GCHandle.Alloc(_utf8Buffer, GCHandleType.Pinned);
