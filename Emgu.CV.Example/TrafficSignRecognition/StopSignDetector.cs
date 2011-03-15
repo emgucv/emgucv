@@ -51,17 +51,22 @@ namespace TrafficSignRecognition
          {
             Image<Gray, Byte>[] channels = hsv.Split();
 
-            //channels[0] is the mask for hue less than 20 or larger than 160
-            CvInvoke.cvInRangeS(channels[0], new MCvScalar(20), new MCvScalar(160), channels[0]);
-            channels[0]._Not();
+            try
+            {
+               //channels[0] is the mask for hue less than 20 or larger than 160
+               CvInvoke.cvInRangeS(channels[0], new MCvScalar(20), new MCvScalar(160), channels[0]);
+               channels[0]._Not();
 
-            //channels[1] is the mask for satuation of at least 10, this is mainly used to filter out white pixels
-            channels[1]._ThresholdBinary(new Gray(10), new Gray(255.0));
+               //channels[1] is the mask for satuation of at least 10, this is mainly used to filter out white pixels
+               channels[1]._ThresholdBinary(new Gray(10), new Gray(255.0));
 
-            CvInvoke.cvAnd(channels[0], channels[1], channels[0], IntPtr.Zero);
-
-            channels[1].Dispose();
-            channels[2].Dispose();
+               CvInvoke.cvAnd(channels[0], channels[1], channels[0], IntPtr.Zero);
+            }
+            finally
+            {
+               channels[1].Dispose();
+               channels[2].Dispose();
+            }
             return channels[0];
          }
       }
