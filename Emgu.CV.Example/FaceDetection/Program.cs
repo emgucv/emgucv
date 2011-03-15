@@ -83,29 +83,29 @@ namespace FaceDetection
                   //Detect the faces  from the gray scale image and store the locations as rectangle
                   //The first dimensional is the channel
                   //The second dimension is the index of the rectangle in the specific channel
-                  MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(
-                     face,
+                  MCvAvgComp[] facesDetected = face.Detect(
+                     gray,
                      1.1,
                      10,
                      Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
                      new Size(20, 20));
 
-                  foreach (MCvAvgComp f in facesDetected[0])
+                  foreach (MCvAvgComp f in facesDetected)
                   {
                      //draw the face detected in the 0th (gray) channel with blue color
                      image.Draw(f.rect, new Bgr(Color.Blue), 2);
 
                      //Set the region of interest on the faces
                      gray.ROI = f.rect;
-                     MCvAvgComp[][] eyesDetected = gray.DetectHaarCascade(
-                        eye,
+                     MCvAvgComp[] eyesDetected = eye.Detect(
+                        gray,
                         1.1,
                         10,
                         Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
                         new Size(20, 20));
                      gray.ROI = Rectangle.Empty;
 
-                     foreach (MCvAvgComp e in eyesDetected[0])
+                     foreach (MCvAvgComp e in eyesDetected)
                      {
                         Rectangle eyeRect = e.rect;
                         eyeRect.Offset(f.rect.X, f.rect.Y);
