@@ -128,44 +128,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
-      <Link>tessdata\eng.cube.bigrams</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
-      <Link>tessdata\eng.cube.fold</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
-      <Link>tessdata\eng.cube.lm</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
-      <Link>tessdata\eng.cube.nn</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
-      <Link>tessdata\eng.cube.params</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
-      <Link>tessdata\eng.cube.size</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
-      <Link>tessdata\eng.cube.word-freq</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
-      <Link>tessdata\eng.tesseract_cube.nn</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
-      <Link>tessdata\eng.traineddata</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
