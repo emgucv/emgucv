@@ -1,3 +1,7 @@
+'
+'  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+'
+
 Imports Emgu.CV
 Imports Emgu.CV.Structure
 Imports Emgu.Util
