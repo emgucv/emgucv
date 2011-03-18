@@ -4,7 +4,7 @@
 
 PROJECT(libleptonica)
 
-SET(LEPTON_DIR "leptonlib-1.67")
+SET(LEPTON_DIR "leptonlib-1.68")
 
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
 file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c")
