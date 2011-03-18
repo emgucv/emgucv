@@ -1,9 +1,14 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+#
 # - Try to find tesseract
 # Once done, this will define
 #
 # TESSERACT_FOUND - system has tesseract
 # TESSERACT_INCLUDE_DIRS - the tesseract include directories
 # TESSERACT_LIBRARIES - link these to use tessereact
+#
+# --------------------------------------------------------
 
 FIND_PATH(TESSERACT_INCLUDE_DIRS 
   baseapi.h
