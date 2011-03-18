@@ -16,12 +16,16 @@ namespace Emgu.CV.OCR
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr TessBaseAPICreate(
+      private static extern IntPtr TessBaseAPICreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int TessBaseAPIInit(
+         IntPtr ocr,
          [MarshalAs(CvInvoke.StringMarshalType)]
          String dataPath,
          [MarshalAs(CvInvoke.StringMarshalType)]
          String language,
-         ref int initResult);
+         OcrEngineMode mode);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void TessBaseAPIRelease(ref IntPtr ocr);
@@ -37,22 +41,43 @@ namespace Emgu.CV.OCR
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool TessBaseAPISetVariable(
+         IntPtr ocr,
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String varName,
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String value);
       #endregion
 
       private Byte[] _utf8Buffer;
       private UTF8Encoding _utf8 = new UTF8Encoding();
 
       /// <summary>
-      /// Create the tesseract OCR engine using the specific dataPath and language name.
+      /// Create an tesseract OCR engine.
       /// </summary>
       /// <param name="dataPath">The path where the language file is located</param>
       /// <param name="language">The 3 letter language code </param>
-      public Tesseract(String dataPath, String language)
+      /// <param name="mode">OCR engine mode</param>
+      public Tesseract(String dataPath, String language, OcrEngineMode mode)
       {
          _utf8Buffer = new Byte[2048];
+         _ptr = TessBaseAPICreate();
+         //Init(dataPath, language, OcrEngineMode.OEM_DEFAULT);
+         Init(dataPath, language, mode);
+      }
 
-         int initResult = 0;
-         _ptr = TessBaseAPICreate(dataPath, language, ref initResult);
+      /// <summary>
+      /// Initialize the OCR engine using the specific dataPath and language name.
+      /// </summary>
+      /// <param name="dataPath">The path where the language file is located</param>
+      /// <param name="language">The 3 letter language code </param>
+      /// <param name="mode">OCR engine mode</param>
+      private void Init(String dataPath, String language, OcrEngineMode mode)
+      {
+         int initResult= TessBaseAPIInit(_ptr, dataPath, language, mode);
          if (initResult != 0) throw new ArgumentException(String.Format("Unable to create ocr model using Path {0} and language {1}.", dataPath, language));
       }
 
@@ -67,11 +92,24 @@ namespace Emgu.CV.OCR
       /// <summary>
       /// Set the image for optical charater recognition
       /// </summary>
-      /// <typeparam name="TColor"></typeparam>
-      /// <param name="image"></param>
+      /// <typeparam name="TColor">The color type of the image</typeparam>
+      /// <param name="image">The image where detection took place</param>
       public void SetImage<TColor>(Image<TColor, Byte> image) where TColor : struct, IColor
       {
          TessBaseAPISetImage(_ptr, image);
+      }
+
+      /// <summary>
+      /// Set the variable to the specific value.
+      /// </summary>
+      /// <param name="variableName">The name of the tesseract variable. e.g. use "tessedit_char_blacklist" to black list characters and ""tessedit_char_whitelist" to white list characters</param>
+      /// <param name="value">The value to be set</param>
+      public void SetVariable(String variableName, String value)
+      {
+         if (!TessBaseAPISetVariable(_ptr, variableName, value))
+         {
+            throw new System.ArgumentException(String.Format("Unable to set {0} to {1}", variableName, value));
+         }
       }
 
       /// <summary>
@@ -84,7 +122,7 @@ namespace Emgu.CV.OCR
          TessBaseAPIGetUTF8Text(_ptr, handle.AddrOfPinnedObject(), _utf8Buffer.Length);
          handle.Free();
 
-         return _utf8.GetString(_utf8Buffer);
+         return _utf8.GetString(_utf8Buffer).TrimEnd('\0');
          /*Word[] words = ExtractResults();
          return String.Concat(Array.ConvertAll(words, delegate(Word w) { return w.Text; }));*/
       }
@@ -105,13 +143,13 @@ namespace Emgu.CV.OCR
             for (int i = 0; i < trs.Length; i++)
             {
                TesseractResult tr = trs[i];
-               res[i].Text = _utf8.GetString(bytes, idx, tr.length);
-               idx += tr.length;
-               res[i].Cost = tr.cost;
-               if (tr.cost == 0)
+               res[i].Text = _utf8.GetString(bytes, idx, tr.Length);
+               idx += tr.Length;
+               res[i].Cost = tr.Cost;
+               if (tr.Cost == 0)
                   res[i].Region = Rectangle.Empty;
                else
-                  res[i].Region = new Rectangle(tr.x0, tr.y0, tr.x1 - tr.x0 + 1, tr.y1 - tr.y0 + 1);
+                  res[i].Region = new Rectangle(tr.X0, tr.Y0, tr.X1 - tr.X0 + 1, tr.Y1 - tr.Y0 + 1);
             }
             return res;
          }
@@ -126,12 +164,41 @@ namespace Emgu.CV.OCR
 
       private struct TesseractResult
       {
-         public int length;
-         public float cost;
-         public int x0;
-         public int x1;
-         public int y0;
-         public int y1;
+         public int Length;
+         public float Cost;
+         public int X0;
+         public int X1;
+         public int Y0;
+         public int Y1;
       }
+
+
+      /// <summary>
+      /// When Tesseract/Cube is initialized we can choose to instantiate/load/run
+      /// only the Tesseract part, only the Cube part or both along with the combiner.
+      /// The preference of which engine to use is stored in tessedit_ocr_engine_mode.
+      /// </summary>
+      public enum OcrEngineMode
+      {
+         /// <summary>
+         /// Run Tesseract only - fastest
+         /// </summary>
+         OEM_TESSERACT_ONLY,          
+         /// <summary>
+         /// Run Cube only - better accuracy, but slower
+         /// </summary>
+         OEM_CUBE_ONLY,               
+         /// <summary>
+         /// Run both and combine results - best accuracy
+         /// </summary>
+         OEM_TESSERACT_CUBE_COMBINED, 
+         /// <summary>
+         /// Specify this mode to indicate that any of the above modes
+         /// should be automatically inferred from the variables in the 
+         /// language-specific config, or if not specified in any of 
+         /// the above should be set to the default OEM_TESSERACT_ONLY.
+         /// </summary>
+         OEM_DEFAULT                   
+      };
    }
 }

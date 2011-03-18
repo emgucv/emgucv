@@ -26,7 +26,39 @@ namespace LicensePlateRecognition
       public LicensePlateDetector()
       {
          //create OCR engine
-         _ocr = new Tesseract("tessdata", "eng");
+         _ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
+      }
+
+      /// <summary>
+      /// Compute the white pixel mask for the given image. 
+      /// A white pixel is a pixel where:  satuation &lt; 40 AND value &gt; 200
+      /// </summary>
+      /// <param name="image">The color image to find white mask from</param>
+      /// <returns>The white pixel mask</returns>
+      private static Image<Gray, Byte> GetWhitePixelMask(Image<Bgr, byte> image)
+      {
+         using (Image<Hsv, Byte> hsv = image.Convert<Hsv, Byte>())
+         {
+            Image<Gray, Byte>[] channels = hsv.Split();
+
+            try
+            {
+               //channels[1] is the mask for satuation less than 40, this is the mask for either white or black pixels
+               channels[1]._ThresholdBinaryInv(new Gray(40), new Gray(255));
+
+               //channels[2] is the mask for bright pixels
+               channels[2]._ThresholdBinary(new Gray(200), new Gray(255));
+
+               CvInvoke.cvAnd(channels[1], channels[2], channels[0], IntPtr.Zero);
+            }
+            finally
+            {
+               channels[1].Dispose();
+               channels[2].Dispose();
+            }
+            return channels[0];
+         }
       }
 
       /// <summary>
@@ -45,6 +77,7 @@ namespace LicensePlateRecognition
       {
          List<String> licenses = new List<String>();
          using (Image<Gray, byte> gray = img.Convert<Gray, Byte>())
+         //using (Image<Gray, byte> gray = GetWhitePixelMask(img))
          using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
          using (MemStorage stor = new MemStorage())
          {
@@ -111,6 +144,7 @@ namespace LicensePlateRecognition
 
                double whRatio = (double)box.size.Width / box.size.Height;
                if (!(3.0 < whRatio && whRatio < 10.0))
+               //if (!(1.0 < whRatio && whRatio < 2.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 
                   //However we should search the children of this contour to see if any of them is a license plate
                   Contour<Point> child = contours.VNext;
@@ -123,14 +157,19 @@ namespace LicensePlateRecognition
                Image<Gray, Byte> plate = gray.Copy(box);
                Image<Gray, Byte> filteredPlate = FilterPlate(plate);
 
-               String words;
+               Tesseract.Word[] words;
+               StringBuilder strBuilder = new StringBuilder();
                using (Image<Gray, Byte> tmp = filteredPlate.Clone())
                {
                   _ocr.SetImage(tmp);
-                  words = _ocr.GetText();
+                  words = _ocr.ExtractResults();
+                  for (int i = 0; i < words.Length; i++)
+                  {
+                     strBuilder.Append(words[i].Text);
+                  }
                }
 
-               licenses.Add(words);
+               licenses.Add(strBuilder.ToString());
                licensePlateImagesList.Add(plate);
                filteredLicensePlateImagesList.Add(filteredPlate);
                detectedLicensePlateRegionList.Add(box);
