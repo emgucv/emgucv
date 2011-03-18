@@ -47,7 +47,7 @@ CVAPI(EmguTesseract*) TessBaseAPICreate()
 CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode)
 { 
 #ifdef _WIN32
-   return ocr->Init(dataPath, language, mode);
+   return ocr->Init(dataPath, language, (tesseract::OcrEngineMode) mode);
 #else
    return ocr->Init(dataPath, language);
 #endif
