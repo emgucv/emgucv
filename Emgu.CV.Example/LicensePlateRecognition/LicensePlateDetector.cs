@@ -147,8 +147,8 @@ namespace LicensePlateRecognition
                }
 
                double whRatio = (double)box.size.Width / box.size.Height;
-               if (!(3.0 < whRatio && whRatio < 10.0))
-               //if (!(1.0 < whRatio && whRatio < 2.0))
+               //if (!(3.0 < whRatio && whRatio < 10.0))
+               if (!(1.0 < whRatio && whRatio < 2.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 
                   //However we should search the children of this contour to see if any of them is a license plate
                   Contour<Point> child = contours.VNext;
@@ -156,27 +156,39 @@ namespace LicensePlateRecognition
                      FindLicensePlate(child, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
                   continue;
                }
-               box.size.Width -= 2;
-               box.size.Height -= 2;
-               Image<Gray, Byte> plate = gray.Copy(box);
-               Image<Gray, Byte> filteredPlate = FilterPlate(plate);
 
-               Tesseract.Charactor[] words;
-               StringBuilder strBuilder = new StringBuilder();
-               using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+               using (Image<Gray, Byte> tmp1 = gray.Copy(box))
+               //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
+               using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
                {
-                  _ocr.SetImage(tmp);
-                  words = _ocr.FindCharactors();
-                  for (int i = 0; i < words.Length; i++)
-                  {
-                     strBuilder.Append(words[i].Text);
-                  }
-               }
+                  //removes some pixels from the edge
+                  int edgePixelSize = 2;
+                  tmp2.ROI = new Rectangle(new Point(edgePixelSize, edgePixelSize), tmp2.Size - new Size(2 * edgePixelSize, 2 * edgePixelSize));
+                  Image<Gray, Byte> plate = tmp2.Copy();
 
-               licenses.Add(strBuilder.ToString());
-               licensePlateImagesList.Add(plate);
-               filteredLicensePlateImagesList.Add(filteredPlate);
-               detectedLicensePlateRegionList.Add(box);
+                  Image<Gray, Byte> filteredPlate = FilterPlate(plate);
+
+                  Tesseract.Charactor[] words;
+                  StringBuilder strBuilder = new StringBuilder();
+                  using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+                  {
+                     _ocr.Recognize(tmp);
+                     words = _ocr.GetCharactors();
+                     
+                     if (words.Length == 0) continue;
+
+                     for (int i = 0; i < words.Length; i++)
+                     {
+                        strBuilder.Append(words[i].Text);
+                     }
+                  }
+
+                  licenses.Add(strBuilder.ToString());
+                  licensePlateImagesList.Add(plate);
+                  filteredLicensePlateImagesList.Add(filteredPlate);
+                  detectedLicensePlateRegionList.Add(box);
+
+               }
             }
          }
       }

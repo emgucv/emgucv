@@ -12,11 +12,6 @@
 class EmguTesseract: public tesseract::TessBaseAPI
 {
 public:
-   bool RecognitionDone() const
-   {
-      return recognition_done_;
-   }
-
    int GetTextLength(int* blob_count)
    {
       return TextLength(blob_count);
@@ -59,9 +54,11 @@ CVAPI(void) TessBaseAPIRelease(EmguTesseract** ocr)
    delete *ocr;
 }
 
-CVAPI(void) TessBaseAPISetImage(EmguTesseract* ocr, IplImage* image)
+CVAPI(void) TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image)
 {
-   ocr->SetImage( (const unsigned char*)image->imageData, image->width, image->height, 1, image->widthStep);
+   ocr->SetImage( (const unsigned char*)image->imageData, image->width, image->height, image->nChannels, image->widthStep);
+   if (ocr->Recognize(NULL) != 0)
+      CV_Error(CV_StsError, "Tesseract engine: Recognize Failed");
 }
 
 CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
@@ -73,29 +70,16 @@ CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char
    delete[] result;
 }
 
-CVAPI(void) TessBaseAPIRecognize(EmguTesseract* ocr)
-{
-   if (!ocr->RecognitionDone())
-   {
-      if (ocr->Recognize(NULL) != 0)
-         CV_Error(CV_StsError, "Tesseract engine: Recognize Failed");
-   }
-}
-
 struct TesseractResult
 {
    int length;
    float cost;
-   int x0;
-   int x1;
-   int y0;
-   int y1;
+   CvRect region;
 };
 
 CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* resultSeq)
 {
-   if (ocr == NULL ||
-      (!ocr->RecognitionDone() && ocr->Recognize(NULL) < 0))
+   if (ocr == NULL)
       return;
 
    char* text;
@@ -119,10 +103,11 @@ CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* 
       TesseractResult tr;
       tr.length = lengths[i];
       tr.cost = costs[i];
-      tr.x0 = x0[i];
-      tr.x1 = x1[i];
-      tr.y0 = height - y1[i];
-      tr.y1 = height - y0[i];
+
+      tr.region.x = x0[i];
+      tr.region.y = height - y1[i];
+      tr.region.width = x1[i] - x0[i];
+      tr.region.height = y1[i] - y0[i];
       cvSeqPush(resultSeq, &tr);
    }
    if (n > 0)

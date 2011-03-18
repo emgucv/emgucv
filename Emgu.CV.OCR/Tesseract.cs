@@ -35,7 +35,7 @@ namespace Emgu.CV.OCR
       private static extern void TessBaseAPIRelease(ref IntPtr ocr);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void TessBaseAPISetImage(IntPtr ocr, IntPtr image);
+      private static extern void TessBaseAPIRecognizeImage(IntPtr ocr, IntPtr image);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void TessBaseAPIGetUTF8Text(
@@ -94,9 +94,9 @@ namespace Emgu.CV.OCR
       /// </summary>
       /// <typeparam name="TColor">The color type of the image</typeparam>
       /// <param name="image">The image where detection took place</param>
-      public void SetImage<TColor>(Image<TColor, Byte> image) where TColor : struct, IColor
+      public void Recognize<TColor>(Image<TColor, Byte> image) where TColor : struct, IColor
       {
-         TessBaseAPISetImage(_ptr, image);
+         TessBaseAPIRecognizeImage(_ptr, image);
       }
 
       /// <summary>
@@ -125,7 +125,11 @@ namespace Emgu.CV.OCR
          }
       }
 
-      public Charactor[] FindCharactors()
+      /// <summary>
+      /// Detect all the charactors in the image.
+      /// </summary>
+      /// <returns>All the charactors in the image</returns>
+      public Charactor[] GetCharactors()
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -148,29 +152,40 @@ namespace Emgu.CV.OCR
                if (tr.Cost == 0)
                   res[i].Region = Rectangle.Empty;
                else
-                  res[i].Region = new Rectangle(tr.X0, tr.Y0, tr.X1 - tr.X0, tr.Y1 - tr.Y0);
+                  res[i].Region = tr.Region;
             }
             return res;
          }
       }
 
+      /// <summary>
+      /// This represent a charactor that is detected by the OCR engine
+      /// </summary>
       public struct Charactor
       {
+         /// <summary>
+         /// The text
+         /// </summary>
          public String Text;
+         /// <summary>
+         /// The cost. The lower it is, the more confident is the result
+         /// </summary>
          public float Cost;
+         /// <summary>
+         /// The region where the charactor is detected.
+         /// </summary>
          public Rectangle Region;
       }
 
+      /// <summary>
+      /// This structure is primary used for PInvoke
+      /// </summary>
       private struct TesseractResult
       {
          public int Length;
          public float Cost;
-         public int X0;
-         public int X1;
-         public int Y0;
-         public int Y1;
+         public Rectangle Region;
       }
-
 
       /// <summary>
       /// When Tesseract/Cube is initialized we can choose to instantiate/load/run

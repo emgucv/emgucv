@@ -28,27 +28,28 @@
       /// </summary>
       private void InitializeComponent()
       {
+         this.components = new System.ComponentModel.Container();
          this.fileNameTextBox = new System.Windows.Forms.TextBox();
          this.loadImageButton = new System.Windows.Forms.Button();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+         this.languageNameLabel = new System.Windows.Forms.Label();
+         this.label1 = new System.Windows.Forms.Label();
+         this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+         this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.ocrTextBox = new System.Windows.Forms.TextBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
-         this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-         this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.label1 = new System.Windows.Forms.Label();
-         this.languageNameLabel = new System.Windows.Forms.Label();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
+         this.menuStrip1.SuspendLayout();
          this.splitContainer2.Panel1.SuspendLayout();
          this.splitContainer2.Panel2.SuspendLayout();
          this.splitContainer2.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
-         this.menuStrip1.SuspendLayout();
          this.SuspendLayout();
          // 
          // fileNameTextBox
@@ -90,6 +91,49 @@
          this.splitContainer1.Size = new System.Drawing.Size(929, 609);
          this.splitContainer1.SplitterDistance = 101;
          this.splitContainer1.TabIndex = 3;
+         // 
+         // languageNameLabel
+         // 
+         this.languageNameLabel.AutoSize = true;
+         this.languageNameLabel.Location = new System.Drawing.Point(98, 70);
+         this.languageNameLabel.Name = "languageNameLabel";
+         this.languageNameLabel.Size = new System.Drawing.Size(88, 13);
+         this.languageNameLabel.TabIndex = 5;
+         this.languageNameLabel.Text = "{language name}";
+         // 
+         // label1
+         // 
+         this.label1.AutoSize = true;
+         this.label1.Location = new System.Drawing.Point(33, 70);
+         this.label1.Name = "label1";
+         this.label1.Size = new System.Drawing.Size(58, 13);
+         this.label1.TabIndex = 4;
+         this.label1.Text = "Language:";
+         // 
+         // menuStrip1
+         // 
+         this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+         this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+         this.menuStrip1.Name = "menuStrip1";
+         this.menuStrip1.Size = new System.Drawing.Size(929, 24);
+         this.menuStrip1.TabIndex = 3;
+         this.menuStrip1.Text = "menuStrip1";
+         // 
+         // fileToolStripMenuItem
+         // 
+         this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadLanguageToolStripMenuItem});
+         this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+         this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+         this.fileToolStripMenuItem.Text = "File";
+         // 
+         // loadLanguageToolStripMenuItem
+         // 
+         this.loadLanguageToolStripMenuItem.Name = "loadLanguageToolStripMenuItem";
+         this.loadLanguageToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+         this.loadLanguageToolStripMenuItem.Text = "Load Language";
+         this.loadLanguageToolStripMenuItem.Click += new System.EventHandler(this.loadLanguageToolStripMenuItem_Click);
          // 
          // splitContainer2
          // 
@@ -133,52 +177,10 @@
          // 
          this.openImageFileDialog.FileName = "openFileDialog1";
          // 
-         // menuStrip1
-         // 
-         this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
-         this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-         this.menuStrip1.Name = "menuStrip1";
-         this.menuStrip1.Size = new System.Drawing.Size(929, 24);
-         this.menuStrip1.TabIndex = 3;
-         this.menuStrip1.Text = "menuStrip1";
-         // 
-         // fileToolStripMenuItem
-         // 
-         this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadLanguageToolStripMenuItem});
-         this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-         this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-         this.fileToolStripMenuItem.Text = "File";
-         // 
-         // loadLanguageToolStripMenuItem
-         // 
-         this.loadLanguageToolStripMenuItem.Name = "loadLanguageToolStripMenuItem";
-         this.loadLanguageToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-         this.loadLanguageToolStripMenuItem.Text = "Load Language";
-         this.loadLanguageToolStripMenuItem.Click += new System.EventHandler(this.loadLanguageToolStripMenuItem_Click);
-         // 
-         // label1
-         // 
-         this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(33, 70);
-         this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(58, 13);
-         this.label1.TabIndex = 4;
-         this.label1.Text = "Language:";
-         // 
-         // languageNameLabel
-         // 
-         this.languageNameLabel.AutoSize = true;
-         this.languageNameLabel.Location = new System.Drawing.Point(98, 70);
-         this.languageNameLabel.Name = "languageNameLabel";
-         this.languageNameLabel.Size = new System.Drawing.Size(88, 13);
-         this.languageNameLabel.TabIndex = 5;
-         this.languageNameLabel.Text = "{language name}";
-         // 
          // openLanguageFileDialog
          // 
-         this.openLanguageFileDialog.FileName = "openLanguageFileDialog";
+         this.openLanguageFileDialog.DefaultExt = "traineddata";
+         this.openLanguageFileDialog.Filter = "\"tesseract language file|*.traineddata|All files|*.*\"";
          // 
          // OCRForm
          // 
@@ -193,13 +195,13 @@
          this.splitContainer1.Panel1.PerformLayout();
          this.splitContainer1.Panel2.ResumeLayout(false);
          this.splitContainer1.ResumeLayout(false);
+         this.menuStrip1.ResumeLayout(false);
+         this.menuStrip1.PerformLayout();
          this.splitContainer2.Panel1.ResumeLayout(false);
          this.splitContainer2.Panel2.ResumeLayout(false);
          this.splitContainer2.Panel2.PerformLayout();
          this.splitContainer2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
-         this.menuStrip1.ResumeLayout(false);
-         this.menuStrip1.PerformLayout();
          this.ResumeLayout(false);
 
       }

@@ -36,8 +36,8 @@ namespace OCR
 
                using (Image<Gray, byte> gray = image.Convert<Gray, Byte>())
                {
-                  _ocr.SetImage(gray);
-                  Tesseract.Charactor[] charactors = _ocr.FindCharactors();
+                  _ocr.Recognize(gray);
+                  Tesseract.Charactor[] charactors = _ocr.GetCharactors();
                   foreach (Tesseract.Charactor c in charactors)
                   {
                      image.Draw(c.Region, drawColor, 1);
