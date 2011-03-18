@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

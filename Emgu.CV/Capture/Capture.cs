@@ -1,3 +1,7 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
 //#define TEST_CAPTURE
 using System;
 using System.ServiceModel;
