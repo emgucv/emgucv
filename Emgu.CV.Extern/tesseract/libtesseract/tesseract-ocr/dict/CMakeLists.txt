@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(tesseract_dict)
 file(GLOB tesseract_dict_srcs "*.cpp")
 #file(GLOB tesseract_ccutil_srcs_excludes "scanutils.cpp")

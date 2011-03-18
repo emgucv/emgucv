@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(Example.HelloWorld)
 
 FILE(GLOB_RECURSE SRC_Example_HelloWorld RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

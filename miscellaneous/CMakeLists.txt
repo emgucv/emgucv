@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 IF(${MSBUILD_PROGRAM} MATCHES "MSBuild") 
 MESSAGE(STATUS "MSBUILD_PROGRAM: ${MSBUILD_PROGRAM}")
 PROJECT(Emgu.CV.Document.Html)

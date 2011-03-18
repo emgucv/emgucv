@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 IF(EMGU_CV_EXAMPLE_BUILD)
 
 SET(EMGU_CV_REFERENCE 

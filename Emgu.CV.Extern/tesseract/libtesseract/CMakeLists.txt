@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 cmake_minimum_required(VERSION 2.8)
 SET(TESSERACT_DIR "tesseract-ocr")
 

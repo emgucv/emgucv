@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND WIN32)
 
 FILE(GLOB_RECURSE SRC_CV_DEBUGGER_VISUALIZER ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

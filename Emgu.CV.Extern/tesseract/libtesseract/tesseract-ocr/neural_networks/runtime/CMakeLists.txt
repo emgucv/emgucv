@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(tesseract_neural_networks)
 file(GLOB tesseract_neural_networks_srcs "*.cpp")
 

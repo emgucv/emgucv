@@ -1,5 +1,7 @@
 ###############################################################################
 #
+# Copyright (C) 2004-2011 by EMGU. All rights reserved.
+#
 # CMake configuration file to build libxtiff library
 #
 # Author: Canming

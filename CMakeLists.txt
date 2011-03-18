@@ -1,4 +1,6 @@
 # --------------------------------------------------------
+# Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# 
 # Root CMake file for Emgu CV
 #
 # From the off-tree build directory, invoke:

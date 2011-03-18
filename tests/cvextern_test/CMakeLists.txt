@@ -1,7 +1,9 @@
-# ----------------------------------------------------------------------------
-#  CMake file for cvextern. See root CMakeLists.txt
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
 #
-# ----------------------------------------------------------------------------
+#  CMake file for cvextern_test. See root CMakeLists.txt
+# --------------------------------------------------------
+
 project(cvextern_test)
 
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/core/include")

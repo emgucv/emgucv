@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(tesseract_image)
 file(GLOB tesseract_image_srcs "*.cpp")
 file(GLOB tesseract_image_hdrs "*.h")

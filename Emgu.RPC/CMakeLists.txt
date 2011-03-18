@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(Emgu.RPC)
 
 FILE(GLOB_RECURSE SRC_RPC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

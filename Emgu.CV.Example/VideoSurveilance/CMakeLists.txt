@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(Example.VideoSurveilance)
 
 FILE(GLOB_RECURSE SRC_Example_VideoSurveilance RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

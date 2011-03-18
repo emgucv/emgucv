@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(Example.FaceDetection)
 
 FILE(GLOB_RECURSE SRC_Example_FaceDetection RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")

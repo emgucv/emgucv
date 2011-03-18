@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(tesseract_cutil)
 file(GLOB tesseract_cutil_srcs "*.cpp")
 file(GLOB tesseract_cutil_hdrs "*.h")

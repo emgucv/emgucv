@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
 PROJECT(Example.WebDynamicImage)
 
 SET(WEB_DYNAMIC_IMAGE_BIN_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Bin")
