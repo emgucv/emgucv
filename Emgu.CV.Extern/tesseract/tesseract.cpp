@@ -1,4 +1,9 @@
-//#define TESSDLL_IMPORTS
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #include "opencv2/core/core.hpp"
 #include "opencv2/core/core_c.h"
 #include "stdio.h"

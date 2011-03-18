@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #include "planarSubdivision.h"
 
 void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, int count)

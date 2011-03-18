@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #pragma once
 #ifndef PLANAR_SUBDIVISION_H
 #define PLANAR_SUBDIVISION_H

@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #include "opencv2/gpu/gpu.hpp"
 
 CVAPI(cv::gpu::StereoBM_GPU*) GpuStereoBMCreate(int preset, int ndisparities, int winSize)

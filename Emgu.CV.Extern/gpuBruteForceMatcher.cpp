@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #include "opencv2/gpu/gpu.hpp"
 
 CVAPI(cv::gpu::BruteForceMatcher_GPU_base*) gpuBruteForceMatcherCreate(cv::gpu::BruteForceMatcher_GPU_base::DistType distType) 

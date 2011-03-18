@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
 #include "opencv2/gpu/gpu.hpp"
 
 CVAPI(cv::gpu::SURF_GPU*) gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio)
