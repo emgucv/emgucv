@@ -156,6 +156,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR", "..\..\Emgu.C
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "..\..\Emgu.CV.Example\OCR\OCR.csproj", "{32BFC19B-AE74-413F-90FC-345CBCE13B69}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -560,6 +566,22 @@ Global
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x64.ActiveCfg = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|.NET.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|Win32.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|x64.ActiveCfg = Release|Any CPU
+		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

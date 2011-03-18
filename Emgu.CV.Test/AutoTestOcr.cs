@@ -34,7 +34,7 @@ namespace Emgu.CV.OCR.UnitTest
             String messageOcr = ocr.GetText().TrimEnd('\n'); // remove end of line from ocr-ed text
             Assert.AreEqual(message, messageOcr);
 
-            Tesseract.Word[] results = ocr.ExtractResults();
+            Tesseract.Charactor[] results = ocr.FindCharactors();
          }
       }
 
@@ -45,7 +45,7 @@ namespace Emgu.CV.OCR.UnitTest
          using (Image<Gray, Byte> img = new Image<Gray, byte>(1024, 960))
          {
             ocr.SetImage(img);
-            Tesseract.Word[] results = ocr.ExtractResults();
+            Tesseract.Charactor[] results = ocr.FindCharactors();
             Assert.AreEqual(results.Length, 0);
          }
       }

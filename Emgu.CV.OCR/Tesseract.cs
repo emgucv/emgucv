@@ -4,12 +4,12 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
-using System.Drawing;
 
 namespace Emgu.CV.OCR
 {
@@ -40,8 +40,7 @@ namespace Emgu.CV.OCR
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void TessBaseAPIGetUTF8Text(
          IntPtr ocr,
-         IntPtr text,
-         int maxSizeInBytes);
+         IntPtr text);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
@@ -56,7 +55,6 @@ namespace Emgu.CV.OCR
          String value);
       #endregion
 
-      private Byte[] _utf8Buffer;
       private UTF8Encoding _utf8 = new UTF8Encoding();
 
       /// <summary>
@@ -67,9 +65,7 @@ namespace Emgu.CV.OCR
       /// <param name="mode">OCR engine mode</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode)
       {
-         _utf8Buffer = new Byte[2048];
          _ptr = TessBaseAPICreate();
-         //Init(dataPath, language, OcrEngineMode.OEM_DEFAULT);
          Init(dataPath, language, mode);
       }
 
@@ -122,16 +118,14 @@ namespace Emgu.CV.OCR
       /// <returns>All the text in the image</returns>
       public string GetText()
       {
-         GCHandle handle = GCHandle.Alloc(_utf8Buffer, GCHandleType.Pinned);
-         TessBaseAPIGetUTF8Text(_ptr, handle.AddrOfPinnedObject(), _utf8Buffer.Length);
-         handle.Free();
-
-         return _utf8.GetString(_utf8Buffer).TrimEnd('\0');
-         /*Word[] words = ExtractResults();
-         return String.Concat(Array.ConvertAll(words, delegate(Word w) { return w.Text; }));*/
+         using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+         {
+            TessBaseAPIGetUTF8Text(_ptr, bytes);
+            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
+         }
       }
 
-      public Word[] ExtractResults()
+      public Charactor[] FindCharactors()
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -142,24 +136,25 @@ namespace Emgu.CV.OCR
             byte[] bytes = textSeq.ToArray();
             TesseractResult[] trs = results.ToArray();
 
-            Word[] res = new Word[trs.Length];
+            Charactor[] res = new Charactor[trs.Length];
             int idx = 0;
             for (int i = 0; i < trs.Length; i++)
             {
                TesseractResult tr = trs[i];
-               res[i].Text = _utf8.GetString(bytes, idx, tr.Length);
+               res[i].Text = _utf8.GetString(bytes, idx, tr.Length).Replace("\n", Environment.NewLine);
+
                idx += tr.Length;
                res[i].Cost = tr.Cost;
                if (tr.Cost == 0)
                   res[i].Region = Rectangle.Empty;
                else
-                  res[i].Region = new Rectangle(tr.X0, tr.Y0, tr.X1 - tr.X0 + 1, tr.Y1 - tr.Y0 + 1);
+                  res[i].Region = new Rectangle(tr.X0, tr.Y0, tr.X1 - tr.X0, tr.Y1 - tr.Y0);
             }
             return res;
          }
       }
 
-      public struct Word
+      public struct Charactor
       {
          public String Text;
          public float Cost;

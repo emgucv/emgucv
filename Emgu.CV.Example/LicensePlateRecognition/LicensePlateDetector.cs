@@ -161,12 +161,12 @@ namespace LicensePlateRecognition
                Image<Gray, Byte> plate = gray.Copy(box);
                Image<Gray, Byte> filteredPlate = FilterPlate(plate);
 
-               Tesseract.Word[] words;
+               Tesseract.Charactor[] words;
                StringBuilder strBuilder = new StringBuilder();
                using (Image<Gray, Byte> tmp = filteredPlate.Clone())
                {
                   _ocr.SetImage(tmp);
-                  words = _ocr.ExtractResults();
+                  words = _ocr.FindCharactors();
                   for (int i = 0; i < words.Length; i++)
                   {
                      strBuilder.Append(words[i].Text);

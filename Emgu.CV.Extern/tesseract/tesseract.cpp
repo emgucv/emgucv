@@ -22,6 +22,14 @@ public:
       return TextLength(blob_count);
    }
 
+   int GetImageHeight()
+   {
+      int left, top, width, height, imageWidth, imageHeight;
+      thresholder_->GetImageSizes(&left, &top, &width, &height,
+                             &imageWidth, &imageHeight);
+      return imageHeight;
+   }
+
    int TesseractExtractResult(char** text,
       int** lengths,
       float** costs,
@@ -56,10 +64,12 @@ CVAPI(void) TessBaseAPISetImage(EmguTesseract* ocr, IplImage* image)
    ocr->SetImage( (const unsigned char*)image->imageData, image->width, image->height, 1, image->widthStep);
 }
 
-CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, char* text, int maxSizeInBytes)
+CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
 {
    char* result = ocr->GetUTF8Text();
-   strncpy(text, result, maxSizeInBytes);
+   size_t length = strlen(result);
+   vectorOfByte->resize(length);
+   memcpy(&(*vectorOfByte)[0], result, length);
    delete[] result;
 }
 
@@ -100,6 +110,9 @@ CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* 
       &x1,
       &y1);
    int totalTextLength = 0;
+   
+   int height = ocr->GetImageHeight();
+
    for (int i = 0; i < n; i++)
    {  
       totalTextLength += lengths[i];
@@ -108,8 +121,8 @@ CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* 
       tr.cost = costs[i];
       tr.x0 = x0[i];
       tr.x1 = x1[i];
-      tr.y0 = y0[i];
-      tr.y1 = y1[i];
+      tr.y0 = height - y1[i];
+      tr.y1 = height - y0[i];
       cvSeqPush(resultSeq, &tr);
    }
    if (n > 0)
