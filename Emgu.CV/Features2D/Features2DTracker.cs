@@ -26,9 +26,52 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void drawMatchedFeatures(
+                                IntPtr img1, IntPtr keypoints1,
+                                IntPtr img2, IntPtr keypoints2,
+                                IntPtr matchIndicies,
+                                IntPtr outImg,
+                                MCvScalar matchColor, MCvScalar singlePointColor,
+                                IntPtr matchesMask,
+                                int flags);
       #endregion
 
       #region static functions
+      public static Image<Bgr, Byte> DrawMatches(
+         Image<Gray, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
+         Image<Gray, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
+         Matrix<int> matchIndicies, Bgr matchColor, Bgr singlePointColor,
+         Matrix<Byte> matchesMask, KeypointDrawType flags)
+      {
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
+         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndicies, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, ((int) flags));
+         return result;
+      }
+
+      /// <summary>
+      /// Define the Keypoint draw type
+      /// </summary>
+      public enum KeypointDrawType 
+      {
+         /// <summary>
+         /// Two source image, matches and single keypoints will be drawn.
+         /// For each keypoint only the center point will be drawn (without
+         /// the circle around keypoint with keypoint size and orientation).
+         /// </summary>
+         DEFAULT = 0,
+         /// <summary>
+         /// Single keypoints will not be drawn.
+         /// </summary>
+         NOT_DRAW_SINGLE_POINTS = 2,
+         /// <summary>
+         /// For each keypoint the circle around keypoint with keypoint size and
+         /// orientation will be drawn.
+         /// </summary>
+         DRAW_RICH_KEYPOINTS = 4
+      };
+
       /// <summary>
       /// Convert the raw keypoints and descriptors to ImageFeature
       /// </summary>

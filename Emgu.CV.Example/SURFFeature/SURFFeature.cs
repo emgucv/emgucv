@@ -41,6 +41,12 @@ namespace SURFFeatureExample
 
          SURFDetector surfParam = new SURFDetector(500, false);
 
+         VectorOfKeyPoint modelKeyPoints;
+         VectorOfKeyPoint observedKeyPoints;
+         Matrix<int> indices;
+         Matrix<float> dist;
+         Matrix<byte> mask;
+
          if (GpuInvoke.HasCuda)
          {
             GpuSURFDetector surf = new GpuSURFDetector(surfParam, 0.01f);
@@ -48,43 +54,43 @@ namespace SURFFeatureExample
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surf.DetectKeyPointsRaw(gpuModelImage, null))
             using (GpuMat<float> gpuModelDescriptors = surf.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints, true))
-            using (VectorOfKeyPoint modelKeyPoints = new VectorOfKeyPoint())
             using (GpuBruteForceMatcher matcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.L2))
             {
+               modelKeyPoints = new VectorOfKeyPoint();
                surf.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
-               using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray,byte>(observedImage))
+               using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray, byte>(observedImage))
                using (GpuMat<float> gpuObservedKeyPoints = surf.DetectKeyPointsRaw(gpuObservedImage, null))
                using (GpuMat<float> gpuObservedDescriptors = surf.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints, true))
                using (GpuMat<int> gpuMatchIndices = new GpuMat<int>(gpuObservedDescriptors.Size.Height, 2, 1))
                using (GpuMat<float> gpuMatchDist = new GpuMat<float>(gpuMatchIndices.Size, 1))
-               using (VectorOfKeyPoint observedKeyPoints = new VectorOfKeyPoint())
                {
+                  observedKeyPoints = new VectorOfKeyPoint();
                   surf.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
 
                   matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, 2, null);
 
-                  Matrix<int> indices = new Matrix<int>(gpuMatchIndices.Size);
-                  Matrix<float> dist = new Matrix<float>(indices.Size);
+                  indices = new Matrix<int>(gpuMatchIndices.Size);
+                  dist = new Matrix<float>(indices.Size);
                   gpuMatchIndices.Download(indices);
                   gpuMatchDist.Download(dist);
 
-                  using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
+                  mask = new Matrix<byte>(dist.Rows, 1);
+
+                  mask.SetValue(255);
+
+                  Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
+
+                  int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+                  if (nonZeroCount >= 4)
                   {
-                     mask.SetValue(255);
-
-                     Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
-
-                     int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+                     nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                      if (nonZeroCount >= 4)
-                     {
-                        nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
-                        if (nonZeroCount >= 4)
-                           homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
-                     }
+                        homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
                   }
+
                   watch.Stop();
                }
             }
@@ -92,37 +98,38 @@ namespace SURFFeatureExample
          else
          {
             //extract features from the object image
-            VectorOfKeyPoint modelKeyPoints = surfParam.DetectKeyPointsRaw(modelImage, null);
+            modelKeyPoints = surfParam.DetectKeyPointsRaw(modelImage, null);
             Matrix<float> modelDescriptors = surfParam.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
 
             watch = Stopwatch.StartNew();
 
             // extract features from the observed image
-            VectorOfKeyPoint observedKeyPoints = surfParam.DetectKeyPointsRaw(observedImage, null);
+            observedKeyPoints = surfParam.DetectKeyPointsRaw(observedImage, null);
             Matrix<float> observedDescriptors = surfParam.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
-            Matrix<int> indices;
-            Matrix<float> dist;
+
             Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, 20, out indices, out dist);
-            using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
+            mask = new Matrix<byte>(dist.Rows, 1);
+
+            mask.SetValue(255);
+
+            Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
+
+            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount >= 4)
             {
-               mask.SetValue(255);
-
-               Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
-
-               int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                if (nonZeroCount >= 4)
-               {
-                  nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
-                  if (nonZeroCount >= 4)
-                     homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
-               }
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
             }
+
             watch.Stop();
          }
-         //Merge the object image and the observed image into one image for display
-         Image<Gray, Byte> res = modelImage.ConcateVertical(observedImage);
 
-         #region draw the project region on the image
+         //Draw the matched keypoints
+         Image<Bgr, Byte> result = Features2DTracker.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
+            indices, new MCvScalar(255), new MCvScalar(255), mask, Features2DTracker.KeypointDrawType.NOT_DRAW_SINGLE_POINTS);
+
+         #region draw the projected region on the image
          if (homography != null)
          {  //draw a rectangle along the projected model
             Rectangle rect = modelImage.ROI;
@@ -133,14 +140,11 @@ namespace SURFFeatureExample
                new PointF(rect.Left, rect.Top)};
             homography.ProjectPoints(pts);
 
-            for (int i = 0; i < pts.Length; i++)
-               pts[i].Y += modelImage.Height;
-
-            res.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Gray(255.0), 5);
+            result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
          }
          #endregion
 
-         ImageViewer.Show(res, String.Format("Matched in {0} milliseconds", watch.ElapsedMilliseconds));
+         ImageViewer.Show(result, String.Format("Matched in {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       /// <summary>
@@ -152,8 +156,8 @@ namespace SURFFeatureExample
          int clrBitness = Marshal.SizeOf(typeof(IntPtr)) * 8;
          if (clrBitness != CvInvoke.UnmanagedCodeBitness)
          {
-            MessageBox.Show(String.Format("Platform mismatched: CLR is {0} bit, C++ code is {1} bit." 
-               + " Please consider recompiling the executable with the same platform target as C++ code.", 
+            MessageBox.Show(String.Format("Platform mismatched: CLR is {0} bit, C++ code is {1} bit."
+               + " Please consider recompiling the executable with the same platform target as C++ code.",
                clrBitness, CvInvoke.UnmanagedCodeBitness));
             return false;
          }

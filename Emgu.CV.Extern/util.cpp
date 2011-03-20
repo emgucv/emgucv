@@ -79,20 +79,19 @@ CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* mo
    int nonZero = mask? cv::countNonZero(maskMat): indMat.rows;
    if (nonZero < 4) return false;
 
-   cv::Mat_<float> srcPtMat(nonZero, 2);
-   cv::Mat_<float> dstPtMat(nonZero, 2);
+   std::vector<cv::Point2f> srcPtVec;
+   std::vector<cv::Point2f> dstPtVec;
 
-   int idx = 0;
    for(int i = 0; i < maskMat.rows; i++)
    {
-      if ( *maskMat.ptr(i) != 0)
+      if ( maskMat.at<uchar>(i) )
       {
-         memcpy(srcPtMat.ptr(idx), &(*model)[*indMat.ptr(i)].pt, sizeof(float) * 2);
-         memcpy(dstPtMat.ptr(idx), &(*observed)[i].pt, sizeof(float) * 2);
-         idx++;
+         srcPtVec.push_back((*model)[indMat.at<int>(i)].pt);
+         dstPtVec.push_back((*observed)[i].pt);
       }
    }
-   cv::Mat result = cv::findHomography(srcPtMat, dstPtMat, CV_RANSAC, 3);
+   
+   cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, 3);
    cv::Mat hMat = cv::cvarrToMat(homography);
    result.copyTo(hMat);
    return true;

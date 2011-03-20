@@ -223,3 +223,31 @@ CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detec
    if (modelPtVec.size() > 0)
       cvSeqPushMulti(modelPoints, &modelPtVec[0], modelPtVec.size());
 }
+
+// Draws matches of keypints from two images on output image.
+CVAPI(void) drawMatchedFeatures(
+                                const IplImage* img1, const std::vector<cv::KeyPoint>* keypoints1,
+                                const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
+                                const CvMat* matchIndicies, 
+                                IplImage* outImg,
+                                const CvScalar matchColor, const CvScalar singlePointColor,
+                                const CvMat* matchesMask, 
+                                int flags)
+{
+   cv::Mat mat1 = cv::cvarrToMat(img1);
+   cv::Mat mat2 = cv::cvarrToMat(img2);
+   cv::Mat_<int> matchesMat = (cv::Mat_<int>) cv::cvarrToMat(matchIndicies);
+   cv::Mat_<unsigned char> matchesMaskMat = 
+      matchesMask ? (cv::Mat_<unsigned char>) cv::cvarrToMat(matchesMask) : cv::Mat();
+   
+   std::vector<cv::DMatch> matches;
+   for (int i = 0; i < matchesMat.rows; ++i)
+   {
+      cv::DMatch m(i, matchesMat.at<int>(i, 0), 0.0f);
+      matches.push_back(m);
+   }
+
+   cv::Mat outMat = cv::cvarrToMat(outImg);
+   cv::drawMatches(mat1, *keypoints1, mat2, *keypoints2, matches, outMat, 
+      matchColor, singlePointColor, matchesMaskMat, flags);
+}
