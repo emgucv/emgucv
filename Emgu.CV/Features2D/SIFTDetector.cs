@@ -164,7 +164,7 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The image features founded on the keypoint location</returns>
+      /// <returns>The descriptors founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
          int count = keyPoints.Size;
@@ -180,7 +180,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
-      /// <returns>The image features founded on the keypoint location</returns>
+      /// <returns>The descriptors founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, VectorOfKeyPoint keyPoints)
       {
          int count = keyPoints.Size;
@@ -196,7 +196,7 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
-      /// <returns>The image features founded on the keypoint location</returns>
+      /// <returns>The descriptors founded on the keypoint location</returns>
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
          if (keyPoints.Length == 0) return new ImageFeature[0];
