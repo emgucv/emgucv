@@ -1803,6 +1803,28 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestRotationMatrix2D()
+      {
+         double angle = 32;
+         Size size = new Size(960, 480);
+         PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
+         using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
+         {
+            PointF[] corners = new PointF[] {
+                  new PointF(0, 0),
+                  new PointF(size.Width - 1 , 0),
+                  new PointF(size.Width - 1, size.Height -1),
+                  new PointF(0, size.Height -1)};
+            PointF[] oldCorners = new PointF[corners.Length];
+            corners.CopyTo(oldCorners, 0);
+
+            rotationMatrix.RotatePoints(corners);
+
+            RotationMatrix2D<double> transformation = CvInvoke.cvEstimateRigidTransform(oldCorners, corners, true);
+         }
+      }
+
+      [Test]
       public void Test_MPEG_4_2_Codec()
       {
          if (IntPtr.Size == 4) //Only perform the test in 32bit mode

@@ -178,3 +178,12 @@ CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, 
    }
    return nonZeroCount;
 }
+
+CVAPI(void) CvEstimateRigidTransform( const CvMat* A, const CvMat* B, bool fullAffine, CvMat* result)
+{
+   cv::Mat aMat = cv::cvarrToMat(A);
+   cv::Mat bMat = cv::cvarrToMat(B);
+   cv::Mat res = cv::estimateRigidTransform(aMat, bMat, fullAffine);
+   cv::Mat resMat = cv::cvarrToMat(result);
+   res.copyTo(resMat);
+}
