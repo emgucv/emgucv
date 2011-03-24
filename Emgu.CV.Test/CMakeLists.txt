@@ -20,10 +20,10 @@ FOREACH(FILE ${SRC_CV_TEST_DATA})
 	ADD_CS_FILE_TO_DEPLOY(${FILE})
 ENDFOREACH()
 
-ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll;System.Drawing.dll;${LIBRARY_OUTPUT_PATH}/Emgu.UI.dll;System.Windows.Forms.dll;System.Core.dll;${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll")
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll;${LIBRARY_OUTPUT_PATH}/Emgu.OCR.dll;System.Drawing.dll;${LIBRARY_OUTPUT_PATH}/Emgu.UI.dll;System.Windows.Forms.dll;System.Core.dll;${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll")
 
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV_TEST}")
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.CV.ML Emgu.UI)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.CV.ML Emgu.UI Emgu.CV.OCR)
 
 ENDIF()
