@@ -127,7 +127,7 @@ namespace SURFFeatureExample
 
          //Draw the matched keypoints
          Image<Bgr, Byte> result = Features2DTracker.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
-            indices, new MCvScalar(255), new MCvScalar(255), mask, Features2DTracker.KeypointDrawType.NOT_DRAW_SINGLE_POINTS);
+            indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask, Features2DTracker.KeypointDrawType.NOT_DRAW_SINGLE_POINTS);
 
          #region draw the projected region on the image
          if (homography != null)
