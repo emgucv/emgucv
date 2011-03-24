@@ -112,7 +112,7 @@ namespace TrafficSignRecognition
 
                ImageFeature[] features = _detector.DetectFeatures(candidate, null);
 
-               Features2DTracker.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2, 20);
+               Features2DTracker.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
 
                int goodMatchCount = 0;
                foreach (Features2DTracker.MatchedImageFeature ms in matchedFeatures)

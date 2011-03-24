@@ -4,22 +4,23 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Emgu.CV;
-using Emgu.UI;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using Emgu.CV.Features2D;
-using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Runtime.InteropServices;
+using Emgu.CV;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.CV.UI;
+using Emgu.CV.Util;
+using Emgu.UI;
+using Emgu.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
@@ -65,15 +66,16 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
-      /*
+      
       [Test]
       public void TestMSER()
       {
-         MSERDetector keyPointDetector = new MSERDetector(5, 60, 14400, .25f, .2f, 200, 1.01, 0.003, 5);
+         MSERDetector keyPointDetector = new MSERDetector();
+         keyPointDetector.Init();
          SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
-      }*/
+      }
 
       [Test]
       public void TestMSERContour()
@@ -114,10 +116,8 @@ namespace Emgu.CV.Test
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
-            ImageFeature[] modelFeatures = descriptorGenerator.ComputeDescriptors(modelImage, keyPointDetector.DetectKeyPoints(modelImage));
-
-            //SURFFeature[] modelFeatures = modelImage.ExtractSURF(ref param1);
-            Features2DTracker tracker = new Features2DTracker(modelFeatures);
+            VectorOfKeyPoint modelKeypoints = keyPointDetector.DetectKeyPointsRaw(modelImage);
+            Matrix<float> modelDescriptors = descriptorGenerator.ComputeDescriptorsRaw(modelImage, modelKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -131,10 +131,8 @@ namespace Emgu.CV.Test
             //observedImage._EqualizeHist();
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
-            //SURFDetector param2 = new SURFDetector(500, false);
-            //SURFFeature[] observedFeatures = observedImage.ExtractSURF(ref param2);
-            //ImageFeature[] observedFeatures = param2.DetectFeatures(observedImage, null);
-            ImageFeature[] observedFeatures = descriptorGenerator.ComputeDescriptors(observedImage, keyPointDetector.DetectKeyPoints(observedImage));
+            VectorOfKeyPoint observedKeypoints = keyPointDetector.DetectKeyPointsRaw(observedImage);
+            Matrix<float> observedDescriptors = descriptorGenerator.ComputeDescriptorsRaw(observedImage, observedKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -149,35 +147,29 @@ namespace Emgu.CV.Test
                new PointF(rect.Right, rect.Top),
                new PointF(rect.Left, rect.Top)};
 
-            HomographyMatrix homography;
+            HomographyMatrix homography = null;
 
             stopwatch.Reset(); stopwatch.Start();
-            homography = tracker.Detect(observedFeatures, 0.8);
+            
+            Matrix<int> indices;
+            Matrix<float> dist;
+            Matrix<byte> mask;
+            Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
+            mask = new Matrix<byte>(dist.Rows, 1);
+            mask.SetValue(255);
+            Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
+
+            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount >= 4)
+            {
+               nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, indices, mask, 1.5, 20);
+               if (nonZeroCount >= 4)
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, indices, mask);
+            }
+
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             if (homography != null)
-            {
-               PointF[] points = pts.Clone() as PointF[];
-               homography.ProjectPoints(points);
-
-               for (int i = 0; i < points.Length; i++)
-                  points[i].Y += modelImage.Height;
-               res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
-            }
-
-            stopwatch.Reset(); stopwatch.Start();
-            //set the initial region to be the whole image
-            using (Image<Gray, Single> priorMask = new Image<Gray, float>(observedImage.Size))
-            {
-               priorMask.SetValue(1.0);
-               homography = tracker.CamShiftTrack(
-                  observedFeatures,
-                  (RectangleF)observedImage.ROI,
-                  priorMask);
-            }
-            Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-
-            if (homography != null) //set the initial tracking window to be the whole image
             {
                PointF[] points = pts.Clone() as PointF[];
                homography.ProjectPoints(points);
@@ -191,6 +183,34 @@ namespace Emgu.CV.Test
             {
                return false;
             }
+            
+            /*
+            stopwatch.Reset(); stopwatch.Start();
+            //set the initial region to be the whole image
+            using (Image<Gray, Single> priorMask = new Image<Gray, float>(observedImage.Size))
+            {
+               priorMask.SetValue(1.0);
+               homography = tracker.CamShiftTrack(
+                  observedFeatures,
+                  (RectangleF)observedImage.ROI,
+                  priorMask);
+            }
+            Trace.WriteLine(String.Format("Time for feature tracking: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            
+            if (homography != null) //set the initial tracking window to be the whole image
+            {
+               PointF[] points = pts.Clone() as PointF[];
+               homography.ProjectPoints(points);
+
+               for (int i = 0; i < points.Length; i++)
+                  points[i].Y += modelImage.Height;
+               res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
+               return true;
+            }
+            else
+            {
+               return false;
+            }*/
 
          }
       }
@@ -275,7 +295,7 @@ namespace Emgu.CV.Test
          Features2DTracker tracker = new Features2DTracker(features1);
 
          ImageFeature[] imageFeatures = detector.DetectFeatures(boxInScene, null);
-         Features2DTracker.MatchedImageFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2, 20);
+         Features2DTracker.MatchedImageFeature[] matchedFeatures = tracker.MatchFeature(imageFeatures, 2);
          int length1 = matchedFeatures.Length;
          matchedFeatures = Features2DTracker.VoteForUniqueness(matchedFeatures, 0.8);
          int length2 = matchedFeatures.Length;
@@ -284,7 +304,7 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < 100; i++)
          {
-            Features2DTracker.MatchedImageFeature[] matchedFeaturesNew = tracker.MatchFeature(imageFeatures, 2, 20);
+            Features2DTracker.MatchedImageFeature[] matchedFeaturesNew = tracker.MatchFeature(imageFeatures, 2);
             Assert.AreEqual(length1, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
             /*
             for (int j = 0; j < length1; j++)

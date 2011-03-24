@@ -129,7 +129,7 @@ namespace Emgu.CV.Features2D
       {
          Matrix<int> indices;
          Matrix<float> dist;
-         DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, 20, out indices, out dist);
+         DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
          using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
          {
             mask.SetValue(255);
@@ -205,21 +205,20 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Match the Image feature from the observed image to the features from the model image
+      /// Match the Image feature from the observed image to the features from the model image using brute force matching
       /// </summary>
       /// <param name="modelDescriptors">The descriptors from the model image</param>
       /// <param name="observedDescriptors">The descriptors from the observed image</param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
       /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
       /// <param name="dist">The distance matrix. <paramref name="dist"/>[i,k] = d, indicates the distance bewtween the corresponding match is d</param>
-      public static void DescriptorMatchKnn(Matrix<float> modelDescriptors, Matrix<float> observedDescriptors, int k, int emax, out Matrix<int> indices, out Matrix<float> dist)
+      public static void DescriptorMatchKnn(Matrix<float> modelDescriptors, Matrix<float> observedDescriptors, int k, out Matrix<int> indices, out Matrix<float> dist)
       {
          indices = new Matrix<int>(observedDescriptors.Rows, k);
          dist = new Matrix<float>(observedDescriptors.Rows, k);
          using (Flann.Index index = new Flann.Index(modelDescriptors))
          {
-            index.KnnSearch(observedDescriptors, indices, dist, k, emax);
+            index.KnnSearch(observedDescriptors, indices, dist, k, 0);
             CvInvoke.cvSqrt(dist, dist);
          }
       }
@@ -257,7 +256,7 @@ namespace Emgu.CV.Features2D
             Single[, ,] matchMaskData = matchMask.Data;
 
             //Compute the matched features
-            MatchedImageFeature[] matchedFeature = MatchFeature(observedFeatures, 2, 20);
+            MatchedImageFeature[] matchedFeature = MatchFeature(observedFeatures, 2);
             matchedFeature = VoteForUniqueness(matchedFeature, 0.8);
 
             foreach (MatchedImageFeature f in matchedFeature)
@@ -311,7 +310,7 @@ namespace Emgu.CV.Features2D
       /// <returns>If the model features exist in the observed features, an homography matrix is returned, otherwise, null is returned.</returns>
       public HomographyMatrix Detect(ImageFeature[] observedFeatures, double uniquenessThreshold)
       {
-         MatchedImageFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2, 20);
+         MatchedImageFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2);
 
          //Stopwatch w1 = Stopwatch.StartNew();
          matchedGoodFeatures = VoteForUniqueness(matchedGoodFeatures, uniquenessThreshold);
@@ -573,16 +572,15 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="observedFeatures">The Image feature from the observed image</param>
       /// <param name="k">The number of neighbors to find</param>
-      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
       /// <returns>The matched features</returns>
-      public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k, int emax)
+      public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k)
       {
          VectorOfKeyPoint obsKpts;
          Matrix<float> obsDscpts;
          ConvertFromImageFeature(observedFeatures, out obsKpts, out obsDscpts);
          Matrix<int> indicies;
          Matrix<float> dists;
-         DescriptorMatchKnn(_modelDescriptors, obsDscpts, k, emax, out indicies, out dists);
+         DescriptorMatchKnn(_modelDescriptors, obsDscpts, k, out indicies, out dists);
 
          MatchedImageFeature[] result = new MatchedImageFeature[observedFeatures.Length];
          for (int i = 0; i < observedFeatures.Length; i++)

@@ -234,7 +234,7 @@ CVAPI(void) CvFASTKeyPoints( IplImage* image, std::vector<cv::KeyPoint>* keypoin
 // MSER detector
 CVAPI(void) CvMSERKeyPoints(IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMSERParams* param)
 {
-   cv::MserFeatureDetector mser = cv::MserFeatureDetector(param->delta, param->minArea, param->maxArea, param->maxVariation, param->minDiversity, param->maxEvolution, param->areaThreshold, param->minMargin, param->edgeBlurSize);
+   cv::MserFeatureDetector mser(*param);
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
 
