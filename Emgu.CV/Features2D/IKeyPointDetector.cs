@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -19,6 +20,6 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image from which the key point will be detected from</param>
       /// <returns>The key pionts in the image</returns>
-      MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image);
+      VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image);
    }
 }

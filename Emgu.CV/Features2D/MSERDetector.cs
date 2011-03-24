@@ -161,10 +161,10 @@ namespace Emgu.CV.Features2D
       /// Detect the MSER keypoints from the image
       /// </summary>
       /// <param name="image">The image to extract keypoints from</param>
-      /// <returns>The array of fast keypoints</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Emgu.CV.Structure.Gray, byte> image)
+      /// <returns>The vector of fast keypoints</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Emgu.CV.Structure.Gray, byte> image)
       {
-         return DetectKeyPoints(image, null);
+         return DetectKeyPointsRaw(image, null);
       }
 
       #endregion

@@ -141,7 +141,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
       /// <returns>The image features founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
@@ -157,7 +157,7 @@ namespace Emgu.CV.Features2D
       /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
       /// <returns>The image features founded on the keypoint location.</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, VectorOfKeyPoint keyPoints)
       {
@@ -195,23 +195,23 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image from which the key point will be detected from</param>
       /// <returns>The key pionts in the image</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, byte> image)
       {
-         return DetectKeyPoints(image, null);
+         return DetectKeyPointsRaw(image, null);
       }
 
       #endregion
 
       #region IDescriptorGenerator Members
       /// <summary>
-      /// Compute the ImageFeature on the image from the given keypoint locations.
+      /// Compute the descriptors on the image from the given keypoint locations.
       /// </summary>
       /// <param name="image">The image to compute descriptors from</param>
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
-      /// <returns>The ImageFeature from the given keypoints</returns>
-      public ImageFeature[] ComputeDescriptors(Image<Gray, byte> image, MKeyPoint[] keyPoints)
+      /// <returns>The descriptors from the given keypoints</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, byte> image, VectorOfKeyPoint keyPoints)
       {
-         return ComputeDescriptors(image, null, keyPoints);
+         return ComputeDescriptorsRaw(image, null, keyPoints);
       }
 
       #endregion

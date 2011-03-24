@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Features2D
 {
@@ -15,11 +16,11 @@ namespace Emgu.CV.Features2D
    public interface IDescriptorExtractor
    {
       /// <summary>
-      /// Compute the ImageFeature on the image from the given keypoint locations.
+      /// Compute the descriptors on the image from the given keypoint locations.
       /// </summary>
       /// <param name="image">The image to compute descriptors from</param>
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
-      /// <returns>The ImageFeature from the given keypoints</returns>
-      ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, MKeyPoint[] keyPoints);
+      /// <returns>The descriptors from the given keypoints</returns>
+      Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, VectorOfKeyPoint keyPoints);
    }
 }

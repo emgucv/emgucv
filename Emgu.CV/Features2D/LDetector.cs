@@ -108,9 +108,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image from which the key point will be detected from</param>
       /// <returns>The key pionts in the image</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Gray, byte> image)
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, byte> image)
       {
-         return DetectKeyPoints(image, 0, false);
+         return DetectKeyPointsRaw(image, 0, false);
       }
 
       #endregion
