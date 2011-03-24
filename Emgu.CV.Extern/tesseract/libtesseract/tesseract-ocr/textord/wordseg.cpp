@@ -286,7 +286,7 @@ inT32 row_words(                  //compute space size
       lower = gaps[1];
       if (testing_on && textord_show_initial_words) {
         tprintf ("Had to switch most common from lower to upper!!\n");
-        gap_stats.print (stdout, TRUE);
+        gap_stats.print();
       }
     }
     else {
@@ -299,7 +299,7 @@ inT32 row_words(                  //compute space size
     if (gaps[1] < gaps[0]) {
       if (testing_on && textord_show_initial_words) {
         tprintf ("Had to switch most common from lower to upper!!\n");
-        gap_stats.print (stdout, TRUE);
+        gap_stats.print();
       }
       lower = gaps[1];
       upper = gaps[0];
@@ -320,7 +320,7 @@ inT32 row_words(                  //compute space size
       tprintf ("Disagreement between block and row at %g!!\n",
         row->intercept ());
       tprintf ("Lower=%g, upper=%g, Stats:\n", lower, upper);
-      gap_stats.print (stdout, TRUE);
+      gap_stats.print();
     }
   }
   row->min_space =
@@ -333,11 +333,11 @@ inT32 row_words(                  //compute space size
   if (testing_on && textord_show_initial_words) {
     if (testing_row) {
       tprintf ("GAP STATS\n");
-      gap_stats.print (stdout, TRUE);
+      gap_stats.print();
       tprintf ("SPACE stats\n");
-      cluster_stats[2].print (stdout, FALSE);
+      cluster_stats[2].print_summary();
       tprintf ("NONSPACE stats\n");
-      cluster_stats[1].print (stdout, FALSE);
+      cluster_stats[1].print_summary();
     }
     tprintf ("Row at %g has minspace=%d(%g), max_non=%d(%g)\n",
       row->intercept (), row->min_space, upper,
@@ -489,11 +489,11 @@ inT32 row_words2(                  //compute space size
   if (testing_on) {
     if (testing_row) {
       tprintf ("GAP STATS\n");
-      gap_stats.print (stdout, TRUE);
+      gap_stats.print();
       tprintf ("SPACE stats\n");
-      cluster_stats[2].print (stdout, FALSE);
+      cluster_stats[2].print_summary();
       tprintf ("NONSPACE stats\n");
-      cluster_stats[1].print (stdout, FALSE);
+      cluster_stats[1].print_summary();
     }
     tprintf ("Row at %g has minspace=%d(%g), max_non=%d(%g)\n",
       row->intercept (), row->min_space, upper,
@@ -607,11 +607,8 @@ WERD *make_real_word(BLOBNBOX_IT *box_it,  //iterator
                      BOOL8 bol,            //start of line
                      uinT8 blanks          //no of blanks
                     ) {
-  OUTLINE_IT out_it;             // outlines
   C_OUTLINE_IT cout_it;
-  PBLOB_LIST blobs;              // blobs in word
   C_BLOB_LIST cblobs;
-  PBLOB_IT blob_it = &blobs;     // iterator
   C_BLOB_IT cblob_it = &cblobs;
   WERD *word;                    // new word
   BLOBNBOX *bblob;               // current blob
@@ -620,13 +617,7 @@ WERD *make_real_word(BLOBNBOX_IT *box_it,  //iterator
   for (blobindex = 0; blobindex < blobcount; blobindex++) {
     bblob = box_it->extract();
     if (bblob->joined_to_prev()) {
-      if (bblob->blob() != NULL) {
-        out_it.set_to_list(blob_it.data()->out_list());
-        out_it.move_to_last();
-        out_it.add_list_after(bblob->blob()->out_list());
-        delete bblob->blob();
-      }
-      else if (bblob->cblob() != NULL) {
+      if (bblob->cblob() != NULL) {
         cout_it.set_to_list(cblob_it.data()->out_list());
         cout_it.move_to_last();
         cout_it.add_list_after(bblob->cblob()->out_list());
@@ -634,9 +625,7 @@ WERD *make_real_word(BLOBNBOX_IT *box_it,  //iterator
       }
     }
     else {
-      if (bblob->blob() != NULL)
-        blob_it.add_after_then_move(bblob->blob());
-      else if (bblob->cblob() != NULL)
+      if (bblob->cblob() != NULL)
         cblob_it.add_after_then_move(bblob->cblob());
     }
     delete bblob;
@@ -646,10 +635,7 @@ WERD *make_real_word(BLOBNBOX_IT *box_it,  //iterator
   if (blanks < 1)
     blanks = 1;
 
-  if (blob_it.empty())
-    word = new WERD(&cblobs, blanks, NULL);
-  else
-    word = new WERD(&blobs, blanks, NULL);
+  word = new WERD(&cblobs, blanks, NULL);
 
   if (bol)
     word->set_flag(W_BOL, TRUE);
