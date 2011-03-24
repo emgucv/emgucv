@@ -40,6 +40,13 @@ namespace Emgu.CV.Features2D
          IntPtr mask,
          IntPtr keypoints,
          IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSURFDetectorComputeDescriptorsBGR(
+         ref SURFDetector detector,
+         IntPtr image,
+         IntPtr keypoints,
+         IntPtr descriptors);
       #endregion
 
       /// <summary>
@@ -138,9 +145,27 @@ namespace Emgu.CV.Features2D
       /// <returns>The image features founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
+         int count = keyPoints.Size;
+         if (count == 0) return null;
          int sizeOfdescriptor = extended == 0 ? 64 : 128;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
          CvSURFDetectorComputeDescriptors(ref this, image, mask, keyPoints, descriptors);
+         return descriptors;
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <returns>The image features founded on the keypoint location.</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, VectorOfKeyPoint keyPoints)
+      {
+         int count = keyPoints.Size;
+         if (count == 0) return null;
+         int sizeOfdescriptor = extended == 0 ? 64 : 128;
+         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * 3, 1);
+         CvSURFDetectorComputeDescriptorsBGR(ref this, image, keyPoints, descriptors);
          return descriptors;
       }
 

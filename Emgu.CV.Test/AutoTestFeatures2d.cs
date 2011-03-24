@@ -195,6 +195,31 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestDetectorColor()
+      {
+         Image<Bgr, byte> box = new Image<Bgr, byte>("box.png");
+         Image<Gray, byte> gray = box.Convert<Gray, Byte>();
+
+         SURFDetector surf = new SURFDetector(400, false);
+         SIFTDetector sift = new SIFTDetector();
+         //using (Util.VectorOfKeyPoint kpts = surf.DetectKeyPointsRaw(gray, null))
+         using (Util.VectorOfKeyPoint kpts = sift.DetectKeyPointsRaw(gray, null))
+         {
+            for (int i = 1; i < 100; i++)
+            {
+               using (Matrix<float> surfDescriptors = surf.ComputeDescriptorsRaw(box, kpts))
+                  Assert.AreEqual(surfDescriptors.Width, (surf.extended != 0 ? 128 : 64) * 3);
+
+               //TODO: Find out why the following test fails
+               //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(box, kpts))
+               //   Assert.AreEqual(siftDescriptors.Width, sift.DescriptorSize * 3);
+               
+               //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(gray, null, kpts))
+               //   Assert.AreEqual(siftDescriptors.Width, sift.DescriptorSize);
+            }
+         }
+      }
 
       [Test]
       public void TestSURFDetector2()

@@ -15,8 +15,7 @@ CVAPI(void) CvFernClassifierRelease(cv::FernClassifier* classifier) { delete cla
 CVAPI(void) CvFernClassifierTrainFromSingleView(
                                   cv::FernClassifier* classifier,
                                   IplImage* image,
-                                  cv::KeyPoint* keypoints,
-                                  int numberOfKeyPoints,
+                                  std::vector<cv::KeyPoint>* keypoints,
                                   int _patchSize,
                                   int _signatureSize,
                                   int _nstructs,
@@ -26,9 +25,7 @@ CVAPI(void) CvFernClassifierTrainFromSingleView(
                                   cv::PatchGenerator* patchGenerator)
 {
    cv::Mat mat = cv::cvarrToMat(image);
-   std::vector<cv::KeyPoint> keypointVector = std::vector<cv::KeyPoint>(numberOfKeyPoints); 
-   memcpy(&keypointVector[0], keypoints, numberOfKeyPoints * sizeof(cv::KeyPoint));
-   classifier->trainFromSingleView(mat, keypointVector, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, *patchGenerator);
+   classifier->trainFromSingleView(mat, *keypoints, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, *patchGenerator);
 }
 
 //Patch Genetator
@@ -142,6 +139,27 @@ CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image
    (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
 }
 
+//SIFT with OpponentColorDescriptorExtractor
+CVAPI(void) CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+{
+   /*
+   if (keypoints->size() <= 0) return;
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
+
+   cv::Ptr<cv::DescriptorExtractor> siftExtractor = new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
+   cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
+   colorDetector.compute(mat, *keypoints, descriptorsMat);
+*/
+
+   if (keypoints->size() <= 0) return;
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
+   cv::Ptr<cv::DescriptorExtractor> siftExtractor = new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
+   cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
+   colorDetector.compute(mat, *keypoints, descriptorsMat);
+}
+
 //SURFDetector
 CVAPI(void) CvSURFDetectorDetectKeyPoints(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
@@ -170,6 +188,17 @@ CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image
    if (mask) maskMat = cv::cvarrToMat(mask);
    cv::Mat result = cv::cvarrToMat(descriptors);
    extractor.compute(img, *keypoints, result);
+}
+
+//SURF with OpponentColorDescriptorExtractor
+CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+{
+   if (keypoints->size() <= 0) return;
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
+   cv::Ptr<cv::DescriptorExtractor> surfExtractor = new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
+   cv::OpponentColorDescriptorExtractor colorDetector(surfExtractor);
+   colorDetector.compute(mat, *keypoints, descriptorsMat);
 }
 
 // detect corners using FAST algorithm

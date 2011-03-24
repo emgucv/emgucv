@@ -46,6 +46,13 @@ namespace Emgu.CV.Features2D
          IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSIFTDetectorComputeDescriptorsBGR(
+         IntPtr detector,
+         IntPtr image,
+         IntPtr keypoints,
+         IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvSIFTDetectorCreate(
          int nOctaves, int nOctaveLayers, int firstOctave, AngleMode angleMode, //common parameters
          double threshold, double edgeThreshold, //detector parameters
@@ -166,6 +173,22 @@ namespace Emgu.CV.Features2D
          CvSIFTDetectorComputeDescriptors(_ptr, image, mask, keyPoints, descriptors);
          return descriptors;
       }
+
+      /*
+      /// <summary>
+      /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
+      /// <returns>The image features founded on the keypoint location</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, VectorOfKeyPoint keyPoints)
+      {
+         int count = keyPoints.Size;
+         if (count == 0) return null;
+         Matrix<float> descriptors = new Matrix<float>(count, DescriptorSize * 3, 1);
+         CvSIFTDetectorComputeDescriptorsBGR(_ptr, image, keyPoints, descriptors);
+         return descriptors;
+      }*/
 
       /// <summary>
       /// Compute the descriptor given the image and the point location
