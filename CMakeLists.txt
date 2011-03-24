@@ -540,13 +540,11 @@ INSTALL(
   )
 
 INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades
-  DESTINATION ./opencv/data
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_frontalface_alt.xml"
+  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_eye.xml"
+  DESTINATION ./opencv/data/haarcascades
   COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "*.xml"
-  PATTERN ".svn" EXCLUDE
   )
 
 # ----------------------------------------------------------------------------
@@ -641,9 +639,12 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 ELSE (WIN32)
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  
-  FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
-    "/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.Util.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.ML.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.GPU.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/Emgu.CV.UI.dll\n/usr/${CPACK_PACKAGE_CLI_FOLDER}/ZedGraph.dll")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.Util.dll" "Emgu.CV.dll" "Emgu.CV.ML.dll" "Emgu.CV.GPU.dll" "Emgu.CV.OCR" "Emgu.CV.UI.dll" "ZedGraph.dll")
+  SET(CLIFILELIST_CONTENT "")
+  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS)
+    SET(CLIFILELIST_CONTENT "${CLIFILELIST_CONTENT}/usr/${CPACK_PACKAGE_CLI_FOLDER}/${MANAGED_DLL}\n")
+  ENDFOREACH()
+  FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt ${CLIFILELIST_CONTENT})
   INSTALL(
     FILES
     ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
@@ -651,14 +652,25 @@ ELSE (WIN32)
     COMPONENT emgucv_binary)
   
   #creating the pkg-config file
+  SET(PACKAGE_CFG_REF_CONTENT "")
+  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS)
+    SET(PACKAGE_CFG_REF_CONTENT "${PACKAGE_CFG_REF_CONTENT} -r:\${libdir}/${MANAGED_DLL}")
+  ENDFOREACH()
+  
   FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
-    "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: -r:\${libdir}/Emgu.CV.dll -r:\${libdir}/Emgu.Util.dll -r:\${libdir}/Emgu.CV.ML.dll -r:\${libdir}/Emgu.CV.GPU.dll -r:\${libdir}/Emgu.CV.UI.dll -r:\${libdir}/ZedGraph.dll\n")
+    "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: ${PACKAGE_CFG_REF_CONTENT}\n")
   INSTALL(
     FILES
     ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
     DESTINATION /usr/lib/pkgconfig
     COMPONENT emgucv_binary)
   
+  SET(REMOVE_EMGU_FROM_GAC_SCRIPT "")
+  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS)
+    SET(REMOVE_EMGU_FROM_GAC_SCRIPT "${REMOVE_EMGU_FROM_GAC_SCRIPT} ${MANAGED_DLL}")
+  ENDFOREACH()
+  SET(REMOVE_EMGU_FROM_GAC_SCRIPT "for dll in${REMOVE_EMGU_FROM_GAC_SCRIPT}; do ${MONO_GACUTIL_EXEC} -u $dll; done")
+
   SET(CPACK_STRIP_FILES "")
   
   IF(NOT CPACK_GENERATOR)
@@ -690,7 +702,7 @@ ELSE (WIN32)
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
       "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
     FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\nfor dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util Emgu.CV.GPU ZedGraph; do ${MONO_GACUTIL_EXEC} -u $dll; done\nfi\n")
+      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\n${REMOVE_EMGU_FROM_GAC_SCRIPT}\nfi\n")
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
@@ -712,7 +724,7 @@ ELSE (WIN32)
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
       "ldconfig\n${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\n")
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/prerm
-      "for dll in Emgu.CV.UI Emgu.CV.ML Emgu.CV Emgu.Util Emgu.CV.GPU ZedGraph; do ${MONO_GACUTIL_EXEC} -u $dll; done\n")
+      "${REMOVE_EMGU_FROM_GAC_SCRIPT}\n")
     SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/preinst")
     SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postinst")
     SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/prerm")
