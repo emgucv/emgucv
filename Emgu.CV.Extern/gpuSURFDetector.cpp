@@ -6,9 +6,9 @@
 
 #include "opencv2/gpu/gpu.hpp"
 
-CVAPI(cv::gpu::SURF_GPU*) gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio)
+CVAPI(cv::gpu::SURF_GPU*) gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
 {
-   return new cv::gpu::SURF_GPU(_hessianThreshold, _nOctaves, _nOctaveLayers, _extended, _keypointsRatio);
+   return new cv::gpu::SURF_GPU(_hessianThreshold, _nOctaves, _nOctaveLayers, _extended, _keypointsRatio, _upright);
 }
 
 CVAPI(void) gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector)

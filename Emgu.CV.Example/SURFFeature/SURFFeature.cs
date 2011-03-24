@@ -49,7 +49,7 @@ namespace SURFFeatureExample
 
          if (GpuInvoke.HasCuda)
          {
-            GpuSURFDetector surf = new GpuSURFDetector(surfParam, 0.01f);
+            GpuSURFDetector surf = new GpuSURFDetector(surfParam, 0.01f, false);
             using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surf.DetectKeyPointsRaw(gpuModelImage, null))
@@ -107,7 +107,7 @@ namespace SURFFeatureExample
             observedKeyPoints = surfParam.DetectKeyPointsRaw(observedImage, null);
             Matrix<float> observedDescriptors = surfParam.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
 
-            Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, 20, out indices, out dist);
+            Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
             mask = new Matrix<byte>(dist.Rows, 1);
 
             mask.SetValue(255);
@@ -144,7 +144,7 @@ namespace SURFFeatureExample
          }
          #endregion
 
-         ImageViewer.Show(result, String.Format("Matched in {0} milliseconds", watch.ElapsedMilliseconds));
+         ImageViewer.Show(result, String.Format("Matched using {0} in {1} milliseconds", GpuInvoke.HasCuda ? "GPU" : "CPU", watch.ElapsedMilliseconds));
       }
 
       /// <summary>

@@ -26,7 +26,9 @@ namespace Emgu.CV.GPU
          int nOctaveLayers,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool extended,
-         float keypointsRatio);
+         float keypointsRatio, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool upright);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorRelease(ref IntPtr detector);
@@ -60,7 +62,7 @@ namespace Emgu.CV.GPU
       /// Create a GPU SURF detector using the default parameters
       /// </summary>
       public GpuSURFDetector()
-         : this(100.0f, 4, 2, true, 0.01f)
+         : this(100.0f, 4, 2, true, 0.01f, false)
       {
       }
 
@@ -69,8 +71,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
-      public GpuSURFDetector(SURFDetector detector, float FeaturesRatio)
-         : this((float)detector.hessianThreshold, detector.nOctaves, detector.nOctaveLayers, detector.extended != 0, 0.01f)
+      /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
+      public GpuSURFDetector(SURFDetector detector, float FeaturesRatio, bool upright)
+         : this((float)detector.hessianThreshold, detector.nOctaves, detector.nOctaveLayers, detector.extended != 0, 0.01f, upright)
       {
       }
 
@@ -82,14 +85,16 @@ namespace Emgu.CV.GPU
       /// <param name="NIntervals">The number of intervals in each octave. Use 4 for default</param>
       /// <param name="Extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
+      /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
       public GpuSURFDetector(
-            float hessianThreshold,
-            int NOctaves,
-            int NIntervals,
-            bool Extended,
-            float FeaturesRatio)
+         float hessianThreshold,
+         int NOctaves,
+         int NIntervals,
+         bool Extended,
+         float FeaturesRatio, 
+         bool upright)
       {
-         _ptr = gpuSURFDetectorCreate(hessianThreshold, NOctaves, NIntervals, Extended, FeaturesRatio);
+         _ptr = gpuSURFDetectorCreate(hessianThreshold, NOctaves, NIntervals, Extended, FeaturesRatio, upright);
       }
 
       /// <summary>
