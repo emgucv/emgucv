@@ -181,13 +181,13 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
 CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    if (keypoints->size() <= 0) return;
-   cv::SurfDescriptorExtractor extractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
 
    cv::Mat img = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   cv::Mat result = cv::cvarrToMat(descriptors);
-   extractor.compute(img, *keypoints, result);
+   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
+   std::vector<float> desc;
+   (*detector)(img, maskMat, *keypoints, desc, true);
+   CV_Assert(desc.size() == descriptors->width * descriptors->height);
+   memcpy(descriptors->data.ptr, &desc[0], desc.size());
 }
 
 //SURF with OpponentColorDescriptorExtractor
@@ -199,6 +199,29 @@ CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* im
    cv::Ptr<cv::DescriptorExtractor> surfExtractor = new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
    cv::OpponentColorDescriptorExtractor colorDetector(surfExtractor);
    colorDetector.compute(mat, *keypoints, descriptorsMat);
+}
+
+CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize)
+{
+   return new cv::BriefDescriptorExtractor(descriptorSize);
+}
+
+CVAPI(int) CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
+{
+   return extractor->descriptorSize();
+}
+
+CVAPI(void) CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+{
+   if (keypoints->size() <= 0) return;
+   cv::Mat img = cv::cvarrToMat(image);
+   cv::Mat result = cv::cvarrToMat(descriptors);
+   extractor->compute(img, *keypoints, result);
+}
+
+CVAPI(void) CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
+{
+   delete *extractor;
 }
 
 // detect corners using FAST algorithm
