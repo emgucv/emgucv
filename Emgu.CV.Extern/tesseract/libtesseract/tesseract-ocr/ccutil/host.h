@@ -120,8 +120,8 @@ typedef unsigned short uinT16;
 typedef int inT32;
 typedef unsigned int uinT32;
 #if (_MSC_VER >= 1200)            //%%% vkr for VC 6.0
-typedef INT64 inT64;
-typedef UINT64 uinT64;
+typedef __int64 inT64;
+typedef unsigned __int64 uinT64;
 #else
 typedef long long int inT64;
 typedef unsigned long long int uinT64;
