@@ -8,7 +8,7 @@ using System.Text;
 using Emgu.Util;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Util
 {
    /// <summary>
    /// A DataLogger for unmanaged code to log data back to managed code, using callback.

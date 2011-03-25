@@ -120,7 +120,6 @@
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
     <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
-    <Compile Include="PInvoke\DataLogger.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="Features2D\StarDetector.cs" />
     <Compile Include="Features2D\MSERDetector.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="Tiff\TileTiffWriter.cs" />
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
+    <Compile Include="Util\DataLogger.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
