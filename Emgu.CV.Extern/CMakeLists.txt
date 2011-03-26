@@ -167,7 +167,7 @@ IF(WIN32)
   IF(EMGU_CV_WITH_TESSERACT)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
     SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccutil" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/api" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccmain" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccstruct")
-    SET(TESSERACT_LIBRARY tesseract_ccstruct tesseract_ccutil tesseract_classify tesseract_cube tesseract_cutil tesseract_dict tesseract_image tesseract_neural_networks tesseract_api tesseract_textord tesseract_viewer tesseract_wordrec libleptonica Ws2_32 tesseract_ccmain)
+    SET(TESSERACT_LIBRARY tesseract_ccstruct tesseract_ccutil tesseract_classify tesseract_cube tesseract_cutil tesseract_dict tesseract_image tesseract_neural_networks tesseract_api tesseract_textord tesseract_viewer tesseract_wordrec libleptonica tesseract_ccmain)
   ENDIF()
 ELSE()
   SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
@@ -274,7 +274,7 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} Ws2_32)
 
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main
