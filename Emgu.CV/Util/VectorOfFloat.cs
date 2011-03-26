@@ -63,9 +63,12 @@ namespace Emgu.CV.Util
       /// <param name="value">The value to be pushed to the vector</param>
       public void Push(float[] value)
       {
-         GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-         VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
-         handle.Free();
+         if (value.Length > 0)
+         {
+            GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+            VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            handle.Free();
+         }
       }
 
       /// <summary>
@@ -105,9 +108,12 @@ namespace Emgu.CV.Util
       public float[] ToArray()
       {
          float[] res = new float[Size];
-         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-         VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
-         handle.Free();
+         if (res.Length > 0)
+         {
+            GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
+            VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
+            handle.Free();
+         }
          return res;
       }
 

@@ -64,9 +64,12 @@ namespace Emgu.CV.Util
       /// <param name="value">The value to be pushed to the vector</param>
       public void Push(MKeyPoint[] value)
       {
-         GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-         VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
-         handle.Free();
+         if (value.Length > 0)
+         {
+            GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+            VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            handle.Free();
+         }
       }
 
       /// <summary>
@@ -106,9 +109,12 @@ namespace Emgu.CV.Util
       public MKeyPoint[] ToArray()
       {
          MKeyPoint[] res = new MKeyPoint[Size];
-         GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-         VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
-         handle.Free();
+         if (res.Length > 0)
+         {
+            GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
+            VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
+            handle.Free();
+         }
          return res;
       }
 
