@@ -44,5 +44,5 @@ CVAPI(void) VectorOfFloatCopyData(std::vector<float>* v, float* data)
 
 CVAPI(float*) VectorOfFloatGetStartAddress(std::vector<float>* v)
 {
-   return &(*v)[0];
+   return v->empty() ? NULL : &(*v)[0];
 }

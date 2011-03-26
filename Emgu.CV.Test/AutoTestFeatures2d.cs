@@ -43,6 +43,14 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSURFBlankImage()
+      {
+         SURFDetector detector = new SURFDetector(500, false);
+         Image<Gray, Byte> img = new Image<Gray, byte>(1024, 900);
+         ImageFeature[] features = detector.DetectFeatures(img, null);
+      }
+
+      [Test]
       public void TestStar()
       {
          StarDetector keyPointDetector = new StarDetector();

@@ -80,6 +80,7 @@ namespace Emgu.CV.Features2D
       /// <returns>An array of image features</returns>
       public static ImageFeature[] ConvertToImageFeature(VectorOfKeyPoint keyPointsVec, Matrix<float> descriptors)
       {
+         if (keyPointsVec.Size == 0) return new ImageFeature[0];
          Debug.Assert(keyPointsVec.Size == descriptors.Rows, "Size of keypoints vector do not match the rows of the descriptors matrix.");
          int sizeOfdescriptor = descriptors.Cols;
          MKeyPoint[] keyPoints = keyPointsVec.ToArray();

@@ -45,5 +45,5 @@ CVAPI(void) VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint*
 
 CVAPI(cv::KeyPoint*) VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v)
 {
-   return &(*v)[0];
+   return v->empty() ? NULL : &(*v)[0];
 }

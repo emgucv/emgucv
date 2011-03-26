@@ -44,5 +44,5 @@ CVAPI(void) VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* d
 
 CVAPI(unsigned char*) VectorOfByteGetStartAddress(std::vector<unsigned char>* v)
 {
-   return &(*v)[0];
+   return v->empty() ? NULL : &(*v)[0];
 }
