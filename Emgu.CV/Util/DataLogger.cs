@@ -130,13 +130,16 @@ namespace Emgu.CV.Util
          if (typeof(T) == typeof(String))
          {
             String d = data as String;
-            _logger.Log(Marshal.StringToHGlobalAnsi(d), logLevel);
+            IntPtr unmanagedData = Marshal.StringToHGlobalAnsi(d);
+            _logger.Log(unmanagedData, logLevel);
+            Marshal.FreeHGlobal(unmanagedData);
          }
          else
          {
-            IntPtr ptr = new IntPtr();
-            Marshal.StructureToPtr(data, ptr, false);
-            _logger.Log(ptr, logLevel);
+            IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+            Marshal.StructureToPtr(data, unmanagedData, false);
+            _logger.Log(unmanagedData, logLevel);
+            Marshal.FreeHGlobal(unmanagedData);
          }
       }
 
