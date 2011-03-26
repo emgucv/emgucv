@@ -147,8 +147,8 @@ namespace LicensePlateRecognition
                }
 
                double whRatio = (double)box.size.Width / box.size.Height;
-               //if (!(3.0 < whRatio && whRatio < 10.0))
-               if (!(1.0 < whRatio && whRatio < 2.0))
+               if (!(3.0 < whRatio && whRatio < 10.0))
+               //if (!(1.0 < whRatio && whRatio < 2.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 
                   //However we should search the children of this contour to see if any of them is a license plate
                   Contour<Point> child = contours.VNext;
