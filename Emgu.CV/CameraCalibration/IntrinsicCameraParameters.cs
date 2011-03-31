@@ -52,9 +52,18 @@ namespace Emgu.CV
       /// Create the intrinsic camera parameters
       /// </summary>
       public IntrinsicCameraParameters()
+         : this(8)
+      {
+      }
+
+      /// <summary>
+      /// Create the intrinsic camera parameters 
+      /// </summary>
+      /// <param name="distortionCoeffsCount">The number of distortion coefficients. Should be either 4, 5 or 8.</param>
+      public IntrinsicCameraParameters(int distortionCoeffsCount)
       {
          IntrinsicMatrix = new Matrix<double>(3, 3);
-         DistortionCoeffs = new Matrix<double>(5, 1);
+         DistortionCoeffs = new Matrix<double>(distortionCoeffsCount, 1);
       }
 
       /// <summary>

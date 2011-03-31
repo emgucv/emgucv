@@ -34,6 +34,15 @@ namespace Emgu.CV.Test
          PointF[] corners = CameraCalibration.FindChessboardCorners(left01, patternSize, CvEnum.CALIB_CB_TYPE.DEFAULT);
       }
 
+      public static MCvPoint3D32f[] CalcChessboardCorners(Size boardSize, float squareSize)
+      {
+         List<MCvPoint3D32f> points = new List<MCvPoint3D32f>();
+         for (int i = 0; i < boardSize.Height; ++i)
+            for (int j = 0; j < boardSize.Width; ++j)
+               points.Add(new MCvPoint3D32f(j * squareSize, i * squareSize, 0.0f));
+         return points.ToArray();
+      }
+
       [Test]
       public void TestChessboardCalibration()
       {
@@ -52,8 +61,8 @@ namespace Emgu.CV.Test
             new Size(-1, -1),
             new MCvTermCriteria(0.05));
 
-         MCvPoint3D32f[] objectPts = CameraCalibration.CalcChessboardCorners(patternSize, 1.0f);
-         IntrinsicCameraParameters intrisic = new IntrinsicCameraParameters();
+         MCvPoint3D32f[] objectPts = CalcChessboardCorners(patternSize, 1.0f);
+         IntrinsicCameraParameters intrisic = new IntrinsicCameraParameters(8);
          ExtrinsicCameraParameters[] extrinsic;
          double error = CameraCalibration.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners },
             chessboardImage.Size, intrisic, CvEnum.CALIB_TYPE.DEFAULT, out extrinsic);

@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -95,9 +96,9 @@ namespace Emgu.CV
       /// <param name="extrinsicParams">The extrinsic parameters which contains:
       /// R - The rotation matrix between the 1st and the 2nd cameras' coordinate systems; 
       /// T - The translation vector between the cameras' coordinate systems. </param>
-      /// <param name="essentialMatrix">essential matrix</param>
-      /// <param name="termCrit"> Termination criteria for the iterative optimiziation algorithm </param>
-      /// <param name="foundamentalMatrix">fundamental matrix</param>
+      /// <param name="essentialMatrix">The essential matrix</param>
+      /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm </param>
+      /// <param name="foundamentalMatrix">The fundamental matrix</param>
       public static void StereoCalibrate(
          MCvPoint3D32f[][] objectPoints,
          PointF[][] imagePoints1,
@@ -272,22 +273,20 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
+      /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
       /// </summary>
       /// <param name="image">Source chessboard view</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The corners detected</param>
       /// <param name="flags">Various operation flags</param>
-      /// <returns>If the chess board pattern is found</returns>
-      public static bool FindChessboardCorners(
+      /// <returns>The corners detected if the chess board pattern is found, otherwise null is returned</returns>
+      public static PointF[] FindChessboardCorners(
          Image<Gray, Byte> image,
          Size patternSize,
-         CvEnum.CALIB_CB_TYPE flags,
-         out PointF[] corners)
+         CvEnum.CALIB_CB_TYPE flags)
       {
          int cornerCount = 0;
 
-         corners = new PointF[patternSize.Width * patternSize.Height];
+         PointF[] corners = new PointF[patternSize.Width * patternSize.Height];
          GCHandle handle = GCHandle.Alloc(corners, GCHandleType.Pinned);
 
          bool patternFound =
@@ -303,7 +302,7 @@ namespace Emgu.CV
          if (cornerCount != corners.Length)
             Array.Resize(ref corners, cornerCount);
 
-         return patternFound;
+         return patternFound ? corners : null;
       }
 
       /// <summary>
@@ -311,20 +310,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The destination image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The array of corners detected</param>
-      /// <param name="patternWasFound">Result of FindChessboardCorners</param>
+      /// <param name="corners">The array of corners detected. Can be null if no corners were found</param>
       public static void DrawChessboardCorners(
          Image<Gray, Byte> image,
          Size patternSize,
-         PointF[] corners,
-         bool patternWasFound)
+         PointF[] corners)
       {
          CvInvoke.cvDrawChessboardCorners(
             image.Ptr,
             patternSize,
             corners,
             corners.Length,
-            patternWasFound ? 1 : 0);
+            corners != null ? 1 : 0);
       }
 
       /// <summary>
