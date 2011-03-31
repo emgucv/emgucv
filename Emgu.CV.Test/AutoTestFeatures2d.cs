@@ -133,7 +133,6 @@ namespace Emgu.CV.Test
             //Image<Gray, Byte> observedImage = new Image<Gray, byte>("traffic.jpg");
             Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
             //Image<Gray, Byte> observedImage = modelImage.Rotate(45, new Gray(0.0));
-            //Image<Gray, Byte> observedImage = new Image<Gray, byte>("left.jpg");
             //image = image.Resize(400, 400, true);
 
             //observedImage._EqualizeHist();
@@ -329,6 +328,16 @@ namespace Emgu.CV.Test
             matchedFeaturesNew = Features2DTracker.VoteForSizeAndOrientation(matchedFeaturesNew, 1.5, 20);
             Assert.AreEqual(length3, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
          }
+      }
+
+      [Test]
+      public void TestSelfMatch()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         SURFDetector surfDetector = new SURFDetector(300, false);
+         ImageFeature[] features1 = surfDetector.DetectFeatures(box, null);
+         Features2DTracker tracker = new Features2DTracker(features1);
+         HomographyMatrix m = tracker.Detect(features1, 0.8);
       }
 
       [Test]

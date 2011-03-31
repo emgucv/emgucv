@@ -15,7 +15,18 @@ LIST(APPEND
 	SRC_CV_TEST_DATA 
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_eye.xml
-	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll)
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/cpp/left01.jpg
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/airplane.jpg
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/box.png
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/box_in_scene.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/lena.jpg
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/stuff.jpg
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/scene_l.bmp
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/scene_r.bmp
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/tree.avi
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/agaricus-lepiota.data
+	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll
+	)
 FOREACH(FILE ${SRC_CV_TEST_DATA})
 	ADD_CS_FILE_TO_DEPLOY(${FILE})
 ENDFOREACH()

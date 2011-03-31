@@ -865,29 +865,6 @@ namespace Emgu.CV.Test
 
       }
 
-      [Test]
-      public void TestChessboardCalibration()
-      {
-         Size patternSize = new Size(6, 6);
-
-         Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("chessBoard.jpg");
-         PointF[] corners;
-         bool patternFound =
-            CameraCalibration.FindChessboardCorners(
-            chessboardImage,
-            patternSize,
-            Emgu.CV.CvEnum.CALIB_CB_TYPE.ADAPTIVE_THRESH | Emgu.CV.CvEnum.CALIB_CB_TYPE.NORMALIZE_IMAGE | Emgu.CV.CvEnum.CALIB_CB_TYPE.FILTER_QUADS,
-            out corners);
-
-         chessboardImage.FindCornerSubPix(
-            new PointF[][] { corners },
-            new Size(10, 10),
-            new Size(-1, -1),
-            new MCvTermCriteria(0.05));
-
-         CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners, patternFound);
-      }
-
       /*
       [Test]
       public void TestFillConvexPolygon()
@@ -1120,8 +1097,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoGCCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
-         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = new Image<Gray, byte>("scsne_r.bmp");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 
@@ -1149,8 +1126,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoBMCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
-         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 
@@ -1178,8 +1155,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoSGBMCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("left.jpg");
-         Image<Gray, Byte> right = new Image<Gray, byte>("right.jpg");
+         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
          Size size = left.Size;
 
          Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
