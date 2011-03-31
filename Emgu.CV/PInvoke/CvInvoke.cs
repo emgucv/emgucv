@@ -23,6 +23,11 @@ namespace Emgu.CV
       public const UnmanagedType BoolMarshalType = UnmanagedType.U1;
 
       /// <summary>
+      /// int marshaling type
+      /// </summary>
+      public const UnmanagedType BoolToIntMarshalType = UnmanagedType.Bool;
+
+      /// <summary>
       /// Opencv's calling convention
       /// </summary>
       public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;

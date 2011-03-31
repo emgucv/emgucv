@@ -428,5 +428,21 @@ namespace Emgu.CV
       public static extern void cvReleaseKalman(ref IntPtr kalman);
       #endregion
 
+      /// <summary>
+      /// Estimate rigid transformation between 2 images or 2 point sets.
+      /// </summary>
+      /// <param name="A">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
+      /// <param name="B">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
+      /// <param name="M">The resulting Matrix&lt;double&gt; that represent the affine transformation</param>
+      /// <param name="fullAffine">Indicates if full affine should be performed</param>
+      /// <returns>True if eatimated sucessfully, false otherwise</returns>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvEstimateRigidTransform(
+         IntPtr A, 
+         IntPtr B, 
+         IntPtr M, 
+         [MarshalAs(CvInvoke.BoolToIntMarshalType)]
+         bool fullAffine);
    }
 }

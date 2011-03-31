@@ -1785,7 +1785,7 @@ namespace Emgu.CV.Test
          double angle = 32;
          Size size = new Size(960, 480);
          PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-         using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
+         using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
          {
             PointF[] corners = new PointF[] {
                   new PointF(0, 0),
@@ -1797,7 +1797,14 @@ namespace Emgu.CV.Test
 
             rotationMatrix.RotatePoints(corners);
 
-            RotationMatrix2D<double> transformation = CvInvoke.cvEstimateRigidTransform(oldCorners, corners, true);
+            RotationMatrix2D<double> transformation = CameraCalibration.EstimateRigidTransform(oldCorners, corners, true);
+
+            Matrix<double> delta = new Matrix<double>(transformation.Size);
+            CvInvoke.cvAbsDiff(rotationMatrix, transformation, delta);
+            double min =0, max = 0;
+            Point minLoc = new Point(), maxLoc = new Point();
+            CvInvoke.cvMinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, IntPtr.Zero);
+            Assert.Less(max, 1.0e-4, "Error is too large");
          }
       }
 

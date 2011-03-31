@@ -334,12 +334,44 @@ namespace Emgu.CV
       /// <returns>The 2x3 rotation matrix that defines the Affine transform</returns>
       public static RotationMatrix2D<double> GetAffineTransform(PointF[] src, PointF[] dest)
       {
-         Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
-         Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
+         Debug.Assert(src.Length == 3, "The source should contain at least 3 points");
+         Debug.Assert(dest.Length == 3, "The destination should contain at least 3 points");
 
          RotationMatrix2D<double> rot = new RotationMatrix2D<double>();
          CvInvoke.cvGetAffineTransform(src, dest, rot);
          return rot;
+      }
+
+      /// <summary>
+      /// Estimate rigid transformation between 2 point sets.
+      /// </summary>
+      /// <param name="src">The points from the source image</param>
+      /// <param name="dest">The corresponding points from the destination image</param>
+      /// <param name="fullAffine">Indicates if full affine should be performed</param>
+      /// <returns>If success, the 2x3 rotation matrix that defines the Affine transform. Otherwise null is returned.</returns>
+      public static RotationMatrix2D<double> EstimateRigidTransform(PointF[] src, PointF[] dest, bool fullAffine)
+      {
+         RotationMatrix2D<double> result = new RotationMatrix2D<double>();
+         GCHandle handleA = GCHandle.Alloc(src, GCHandleType.Pinned);
+         GCHandle handleB = GCHandle.Alloc(dest, GCHandleType.Pinned);
+         bool success;
+         using (Matrix<float> a = new Matrix<float>(src.Length, 1, 2, handleA.AddrOfPinnedObject(), 2 * sizeof(float)))
+         using (Matrix<float> b = new Matrix<float>(dest.Length, 1, 2, handleB.AddrOfPinnedObject(), 2 * sizeof(float)))
+         {
+            success = CvInvoke.cvEstimateRigidTransform(a, b, result, fullAffine);
+         }
+         handleA.Free();
+         handleB.Free();
+
+         if (success)
+         {
+            return result;
+         }
+         else
+         {
+            result.Dispose();
+            return null;
+         }
       }
 
       /// <summary>

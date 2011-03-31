@@ -372,30 +372,5 @@ namespace Emgu.CV
          ref Point pos,
          double minVal,
          double maxVal);
-
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void CvEstimateRigidTransform(
-         IntPtr a,
-         IntPtr b,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool fullAffine,
-         IntPtr result);
-
-      public static RotationMatrix2D<double> cvEstimateRigidTransform(PointF[] pointsInA, PointF[] pointsInB, bool fullAffine)
-      {
-         RotationMatrix2D<double> result = new RotationMatrix2D<double>();
-         GCHandle handleA = GCHandle.Alloc(pointsInA, GCHandleType.Pinned);
-         GCHandle handleB = GCHandle.Alloc(pointsInB, GCHandleType.Pinned);
-         using (Matrix<float> a = new Matrix<float>(pointsInA.Length, 1, 2, handleA.AddrOfPinnedObject(), 2 * sizeof(float)))
-         using (Matrix<float> b = new Matrix<float>(pointsInB.Length, 1, 2, handleB.AddrOfPinnedObject(), 2 * sizeof(float)))
-         {
-            CvEstimateRigidTransform(a, b, fullAffine, result);
-         }
-         handleA.Free();
-         handleB.Free();
-         return result;
-      }
-      #endregion
    }
 }
