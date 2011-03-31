@@ -52,13 +52,18 @@ namespace Emgu.CV
          get
          {
             Matrix<double> mat = new Matrix<double>(3, 3);
-            CvInvoke.cvRodrigues2(Ptr, mat.Ptr, IntPtr.Zero);
+            if (!CvInvoke.cvRodrigues2(Ptr, mat.Ptr, IntPtr.Zero))
+            {
+               mat.Dispose();
+               return null;
+            }
             return mat;
          }
          set
          {
             Debug.Assert(value.Rows == 3 && value.Cols == 3, "The rotation matrix should be a 3x3 matrix");
-            CvInvoke.cvRodrigues2(value.Ptr, Ptr, IntPtr.Zero);
+            if (!CvInvoke.cvRodrigues2(value.Ptr, Ptr, IntPtr.Zero))
+               throw new ArgumentException("The specific RotationMatrix cannot be converted to RotationVector"); 
          }
       }
    }

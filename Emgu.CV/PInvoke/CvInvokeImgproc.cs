@@ -661,7 +661,7 @@ namespace Emgu.CV
       /// Tests whether the input contour is convex or not. The contour must be simple, i.e. without self-intersections. 
       /// </summary>
       /// <param name="contour">Tested contour (sequence or array of points). </param>
-      /// <returns>true if convex</returns>
+      /// <returns>-1 if input is not valid, 1 if convex, 0 otherwise</returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvCheckContourConvexity(IntPtr contour);
 
@@ -727,9 +727,10 @@ namespace Emgu.CV
       /// <param name="points">Sequence or array of 2D points</param>
       /// <param name="center">Output parameter. The center of the enclosing circle</param>
       /// <param name="radius">Output parameter. The radius of the enclosing circle.</param>
-      /// <returns>Nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)</returns>
+      /// <returns>True if the resultant circle contains all the input points and false otherwise (i.e. algorithm failed)</returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvMinEnclosingCircle(IntPtr points, out PointF center, out float radius);
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvMinEnclosingCircle(IntPtr points, out PointF center, out float radius);
 
       #region Contour Processing Functions
       /// <summary>
@@ -939,7 +940,7 @@ namespace Emgu.CV
       /// <param name="mode">Retrieval mode</param>
       /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
       /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
-      /// <returns></returns>
+      /// <returns>The number of countours</returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindContours(
          IntPtr image,

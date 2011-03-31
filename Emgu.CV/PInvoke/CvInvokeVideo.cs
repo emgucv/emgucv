@@ -22,7 +22,7 @@ namespace Emgu.CV
       /// <param name="criteria">Criteria applied to determine when the window search should be finished</param>
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field).</param>
       /// <param name="box">Circumscribed box for the object. If not IntPtr.Zero, contains object size and orientation</param>
-      /// <returns>number of iterations made within cvMeanShift</returns>
+      /// <returns>The number of iterations made within cvMeanShift</returns>
       [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvCamShift(
          IntPtr probImage,
@@ -38,7 +38,7 @@ namespace Emgu.CV
       /// <param name="window">Initial search window</param>
       /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
-      /// <returns>the number of iterations made</returns>
+      /// <returns>The number of iterations made</returns>
       [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvMeanShift(
          IntPtr probImage,

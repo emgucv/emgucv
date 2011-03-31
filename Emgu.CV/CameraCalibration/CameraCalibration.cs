@@ -234,7 +234,7 @@ namespace Emgu.CV
          double ransacReprojThreshold)
       {
          HomographyMatrix homography = new HomographyMatrix();
-         if (0 == CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero))
+         if (!CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero))
          {
             homography.Dispose();
             return null;

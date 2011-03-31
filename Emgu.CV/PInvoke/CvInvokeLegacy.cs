@@ -314,7 +314,9 @@ namespace Emgu.CV
       /// Checks planar subdivision for correctness. It is not an absolute check, but it verifies some relations between quad-edges
       /// </summary>
       /// <param name="subdiv">Pointer to the MCvSubdiv2D</param>
+      /// <returns>True if valid, false otherwise</returns>
       [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int icvSubdiv2DCheck(IntPtr subdiv);
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool icvSubdiv2DCheck(IntPtr subdiv);
    }
 }

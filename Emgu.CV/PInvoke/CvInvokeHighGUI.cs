@@ -170,9 +170,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="writer">video writer structure.</param>
       /// <param name="image">the written frame</param>
-      /// <returns></returns>
+      /// <returns>True on success, false otherwise</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvWriteFrame(IntPtr writer, IntPtr image);
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvWriteFrame(IntPtr writer, IntPtr image);
 
    }
 }

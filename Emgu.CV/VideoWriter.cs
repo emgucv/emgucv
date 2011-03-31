@@ -63,10 +63,10 @@ namespace Emgu.CV
          where TColor : struct, IColor
          where TDepth : new()
       {
-         int result = CvToolbox.HasFFMPEG ?
+         bool success = CvToolbox.HasFFMPEG ?
             CvInvoke.cvWriteFrame_FFMPEG(_ptr, frame.Ptr) :
             CvInvoke.cvWriteFrame(_ptr, frame.Ptr);
-         if (result == 0) throw new InvalidOperationException("Unable to write frame to the video writer");
+         if (!success) throw new InvalidOperationException("Unable to write frame to the video writer");
       }
 
       /// <summary>

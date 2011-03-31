@@ -23,9 +23,10 @@ namespace Emgu.CV
       /// <param name="method">The type of the method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
-      /// <returns>1 if the homography matrix is found, 0 otherwise.</returns>
+      /// <returns>True if the homography matrix is found, false otherwise.</returns>
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvFindHomography(
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvFindHomography(
          IntPtr srcPoints,
          IntPtr dstPoints,
          IntPtr homography,
@@ -39,9 +40,10 @@ namespace Emgu.CV
       /// <param name="src">The input rotation vector (3x1 or 1x3) or rotation matrix (3x3). </param>
       /// <param name="dst">The output rotation matrix (3x3) or rotation vector (3x1 or 1x3), respectively</param>
       /// <param name="jacobian">Optional output Jacobian matrix, 3x9 or 9x3 - partial derivatives of the output array components w.r.t the input array components</param>
-      /// <returns></returns>
+      /// <returns>True if the conversion is sucessful, false otherwise</returns>
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvRodrigues2(IntPtr src, IntPtr dst, IntPtr jacobian);
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvRodrigues2(IntPtr src, IntPtr dst, IntPtr jacobian);
 
 
       #region Epipolar Geometry, Stereo Correspondence
