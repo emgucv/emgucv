@@ -94,12 +94,12 @@ FIND_PROGRAM(MSBUILD_PROGRAM
   NAMES MSBuild
   HINTS
 #  comment out MSBUILD 4.0 for SHFB 
-#  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework64/v4.0.30319"
-#  "C:/WINDOWS/Microsoft.NET/Framework64/v4.0.30319"
-#  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v4.0.30319"
-#  "C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319"
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
-  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework64/v4.0.30319"
+  "C:/WINDOWS/Microsoft.NET/Framework64/v4.0.30319"
+  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v4.0.30319"
+  "C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319"
+#  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
+#  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
   )
   
 SET (CSharp_FOUND FALSE)
