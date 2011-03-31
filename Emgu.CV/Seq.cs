@@ -322,6 +322,8 @@ namespace Emgu.CV
       public T[] ToArray()
       {
          T[] res = new T[Total];
+         if (res.Length == 0) 
+            return res;
          GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
          CvInvoke.cvCvtSeqToArray(Ptr, handle.AddrOfPinnedObject(), MCvSlice.WholeSeq);
          handle.Free();

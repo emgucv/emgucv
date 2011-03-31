@@ -6,6 +6,45 @@
 
 #include "planarSubdivision.h"
 
+
+//#if _MSC_VER >= 1500
+//#define use_unordered_map 1
+//#include <unordered_map>
+//#else
+#include <set>
+//#endif
+
+union PointKey
+{
+   CvPoint2D32f pt;
+   double key;
+};
+
+#if use_unordered_map
+class UniquePointSet 
+   : public std::tr1::unordered_map<double, char>
+{
+public:
+   std::pair<std::tr1::unordered_map<double, char>::iterator, bool> insert(const CvPoint2D32f &pt)
+   {
+      PointKey pk;
+      pk.pt = pt;
+      return std::tr1::unordered_map<double, char>::insert(std::tr1::unordered_map<double, char>::value_type(pk.key, 0) );
+   }
+};
+#else
+class UniquePointSet : public std::set<double>
+{
+public:
+   std::pair<std::set<double>::iterator, bool> insert(const CvPoint2D32f& pt )
+   {
+      PointKey pk;
+      pk.pt = pt;
+      return std::set<double>::insert(pk.key);
+   }
+};
+#endif
+
 void PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, int count)
 {
    CvPoint2D32f* point = (CvPoint2D32f*) points;
@@ -34,16 +73,6 @@ inline bool TriangleInRegion(const Triangle2DF tri, const CvSubdiv2D* subdiv)
       && PointInRegion(tri.V2, subdiv);
 }
 
-struct ltpt
-{
-   bool operator()(CvPoint2D32f p1, CvPoint2D32f p2) const
-   {
-      return p1.x == p2.x? 
-         p1.y < p2.y :
-      p1.x < p2.x;
-   }
-};
-
 inline CvPoint2D32f TriangleVertexSum(const Triangle2DF* t)
 {
    return cvPoint2D32f(t->V0.x + t->V1.x + t->V2.x, t->V0.y + t->V1.y + t->V2.y);
@@ -51,7 +80,7 @@ inline CvPoint2D32f TriangleVertexSum(const Triangle2DF* t)
 
 void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, int* triangleCount,  int includeVirtualPoint)
 {
-   set<CvPoint2D32f, ltpt> pointSet;
+   UniquePointSet pointSet;
 
    CvSet* subdivEdges = subdiv->edges;
    CvSeqReader reader;
@@ -99,29 +128,29 @@ void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, i
    *triangleCount = (currentTriangle - triangles) ;
 }
 
-void PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvPoint2D32f* buffer, int* count)
+void PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvSeq* buffer)
 {
-   CvSubdiv2DPoint* v0 = cvSubdiv2DEdgeOrg(edge);
-   if (v0->flags == -1) { *count = 0; return; }
+   cvClearSeq(buffer);
+   if(!edge) return;
 
-   CvPoint2D32f* currentBuffer = buffer;
+   CvSubdiv2DPoint* v0 = cvSubdiv2DEdgeOrg(edge);
+   if (!v0 || v0->flags < 0) { return; }
 
    for (; ; edge = cvSubdiv2DGetEdge(edge, CV_NEXT_AROUND_LEFT))
    {
       CvSubdiv2DPoint* v = cvSubdiv2DEdgeDst(edge);
-      if (v->flags == -1) { *count = 0; return; }
-      *currentBuffer++ = v->pt;
+      if (!v || v->flags < 0) { cvClearSeq(buffer); return; }
+      cvSeqPush(buffer, &v->pt);
 
       if (0 == memcmp(&v->pt, &v0->pt, sizeof(CvPoint2D32f)))
          break;
    }
-   *count = currentBuffer - buffer;
-   if (*count <= 2) *count = 0;
+   if (buffer->total <= 2) cvClearSeq(buffer);
 }
 
 void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, CvSubdiv2DEdge* edges, int* pointCount)
 {
-   set<CvPoint2D32f, ltpt> pointSet;
+   UniquePointSet pointSet;
 
    CvSet* subdivEdges = subdiv->edges;
 

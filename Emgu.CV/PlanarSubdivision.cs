@@ -33,7 +33,7 @@ namespace Emgu.CV
       private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer, ref int count);
+      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer);
       #endregion
 
       #region constructor
@@ -166,6 +166,16 @@ namespace Emgu.CV
       /// <returns>The list of Voronoi Facets</returns>
       public VoronoiFacet[] GetVoronoiFacets()
       {
+         List<VoronoiFacet> res = new List<VoronoiFacet>(GetVoronoiFacetsHelper());
+         return res.ToArray();
+      }
+
+      /// <summary>
+      /// Obtains the list of Voronoi Facets 
+      /// </summary>
+      /// <returns>The list of Voronoi Facets</returns>
+      private IEnumerable<VoronoiFacet> GetVoronoiFacetsHelper()
+      {
          if (_isVoronoiDirty)
          {
             CvInvoke.cvCalcSubdivVoronoi2D(Ptr);
@@ -177,30 +187,22 @@ namespace Emgu.CV
          MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
          GCHandle pointHandle = GCHandle.Alloc(points, GCHandleType.Pinned);
          GCHandle edgeHandle = GCHandle.Alloc(edges, GCHandleType.Pinned);
-
          PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject(), edgeHandle.AddrOfPinnedObject(), ref size);
          pointHandle.Free();
          edgeHandle.Free();
-
-         List<VoronoiFacet> facets = new List<VoronoiFacet>();
-
-         PointF[] buffer = new PointF[256];
-         GCHandle bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-         IntPtr bufferPtr = bufferHandle.AddrOfPinnedObject();
-
-         int count = 0;
-         for (int i = 0; i < size; i++)
+         using (MemStorage stor = new MemStorage())
          {
-            PlanarSubdivisionEdgeToPoly(edges[i], bufferPtr, ref count);
-            if (count > 0)
+            Seq<PointF> ptSeq = new Seq<PointF>(stor);
+            for (int i = 0; i < size; i++)
             {
-               PointF[] polygon = new PointF[count];
-               Array.Copy(buffer, polygon, count);
-               facets.Add(new VoronoiFacet(points[i], polygon));
+               PlanarSubdivisionEdgeToPoly(edges[i], ptSeq);
+               PointF[] polygon = ptSeq.ToArray();
+               if (polygon.Length > 0)
+               {
+                  yield return new VoronoiFacet(points[i], polygon);
+               }
             }
          }
-         bufferHandle.Free();
-         return facets.ToArray();
       }
 
       /// <summary>

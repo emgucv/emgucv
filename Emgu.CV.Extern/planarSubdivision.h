@@ -9,9 +9,6 @@
 #define PLANAR_SUBDIVISION_H
 #include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc_c.h"
-#include <set>
-
-using namespace std;
 
 typedef struct
 {
@@ -24,5 +21,5 @@ CVAPI(void) PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f*
 
 CVAPI(void) PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* storage, int* triangleCount, int includeVirtualPoint);
 CVAPI(void) PlanarSubdivisionInsertPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points, int count);
-CVAPI(void) PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvPoint2D32f* buffer, int* count);
+CVAPI(void) PlanarSubdivisionEdgeToPoly(CvSubdiv2DEdge edge, CvSeq* buffer);
 #endif
