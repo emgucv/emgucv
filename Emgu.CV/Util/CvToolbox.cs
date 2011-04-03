@@ -22,24 +22,6 @@ namespace Emgu.CV.Util
    {
       #region Color Pallette
       /// <summary>
-      /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
-      /// </summary>
-      public static readonly ColorPalette GrayscalePalette = GenerateGrayscalePalette();
-
-      private static ColorPalette GenerateGrayscalePalette()
-      {
-         using (Bitmap image = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
-         {
-            ColorPalette palette = image.Palette;
-            for (int i = 0; i < 256; i++)
-            {
-               palette.Entries[i] = Color.FromArgb(i, i, i);
-            }
-            return palette;
-         }
-      }
-
-      /// <summary>
       /// Convert the color pallette to four lookup tables
       /// </summary>
       /// <param name="pallette">The color pallette to transform</param>
@@ -47,7 +29,7 @@ namespace Emgu.CV.Util
       /// <param name="gTable">Lookup table for the G channel</param>
       /// <param name="rTable">Lookup table for the R channel</param>
       /// <param name="aTable">Lookup table for the A channel</param>
-      public static void ColorPaletteToLookupTable(ColorPalette pallette, out Matrix<Byte> bTable, out Matrix<byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
+      public static void ColorPaletteToLookupTable(ColorPalette pallette, out Matrix<Byte> bTable, out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
       {
          bTable = new Matrix<byte>(256, 1);
          gTable = new Matrix<byte>(256, 1);
@@ -228,11 +210,15 @@ namespace Emgu.CV.Util
       /// <returns>The color conversion code for CvInvoke.cvCvtColor function</returns>
       public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcColorType, Type destColorType)
       {
-         Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcColorType) ?
-            _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
-
-         return table.ContainsKey(destColorType) ?
-            table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType));
+         CvEnum.COLOR_CONVERSION conversion;
+         lock (_lookupTable)
+         {
+            Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcColorType) ?
+               _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
+            conversion = table.ContainsKey(destColorType) ?
+                          table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType)); ;
+         }
+         return conversion;
       }
       #endregion
    }
