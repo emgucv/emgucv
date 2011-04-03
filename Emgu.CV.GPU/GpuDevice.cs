@@ -104,13 +104,13 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// The compute capability
       /// </summary>
-      public ComputeCapability CudaComputeCapability
+      public Version CudaComputeCapability
       {
          get
          {
-            ComputeCapability result = new ComputeCapability();
-            gpuDeviceInfoComputeCapability(_ptr, ref result.Major, ref result.Minor);
-            return result;
+            int major = 0, minor = 0;
+            gpuDeviceInfoComputeCapability(_ptr, ref major, ref minor);
+            return new Version(major, minor);
          }
       }
 
@@ -157,21 +157,6 @@ namespace Emgu.CV.GPU
       public bool Supports(GpuFeature feature)
       {
          return gpuDeviceInfoSupports(_ptr, feature);
-      }
-
-      /// <summary>
-      /// The compute capability
-      /// </summary>
-      public struct ComputeCapability
-      {
-         /// <summary>
-         /// The major version
-         /// </summary>
-         public int Major;
-         /// <summary>
-         /// The minor version
-         /// </summary>
-         public int Minor;
       }
 
       /// <summary>
