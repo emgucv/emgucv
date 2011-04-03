@@ -53,9 +53,20 @@ namespace Emgu.CV.OCR
          String varName,
          [MarshalAs(CvInvoke.StringMarshalType)]
          String value);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr TesseractGetVersion();
       #endregion
 
       private UTF8Encoding _utf8 = new UTF8Encoding();
+
+      public static Version Version
+      {
+         get
+         {
+            return new Version(Marshal.PtrToStringAnsi(TesseractGetVersion()));
+         }
+      }
 
       /// <summary>
       /// Create an tesseract OCR engine.
@@ -65,8 +76,26 @@ namespace Emgu.CV.OCR
       /// <param name="mode">OCR engine mode</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode)
       {
+         if (!IsEngineModeSupported(mode))
+            throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));
          _ptr = TessBaseAPICreate();
          Init(dataPath, language, mode);
+      }
+
+      /// <summary>
+      /// Check of the specific Ocr Engine is supported for the current tesseract release
+      /// </summary>
+      /// <param name="mode">The Engine mode</param>
+      /// <returns>True if supported, false otherwise</returns>
+      public bool IsEngineModeSupported(OcrEngineMode mode)
+      {
+         Version v = Version;
+         if ((mode == OcrEngineMode.OEM_CUBE_ONLY || mode == OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED)
+            && (v.Major < 3 || (v.Major == 3 && v.Minor < 1)))
+         {
+            return false;
+         }
+         return true;
       }
 
       /// <summary>

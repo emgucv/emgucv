@@ -38,6 +38,11 @@ public:
 
 };
 
+CVAPI(const char*) TesseractGetVersion()
+{
+   return tesseract::TessBaseAPI::Version();
+}
+
 CVAPI(EmguTesseract*) TessBaseAPICreate() 
 { 
    EmguTesseract* ocr = new EmguTesseract(); 

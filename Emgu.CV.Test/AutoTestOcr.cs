@@ -61,6 +61,8 @@ namespace Emgu.CV.OCR.UnitTest
       [Test]
       public void TestOCREngBlankPage()
       {
+         Version version = Tesseract.Version;
+         int i = version.Major;
          using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
          using (Image<Gray, Byte> img = new Image<Gray, byte>(1024, 960))
          {
