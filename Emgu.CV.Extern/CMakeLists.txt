@@ -274,8 +274,13 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} Ws2_32)
-
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
+  
+IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
+#additional linkage required for tesseract built on windows
+  target_link_libraries(${the_target}  Ws2_32)
+ENDIF()
+  
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
