@@ -655,7 +655,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length));
          watch.Reset();
 
-         Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division) == 1);
+         Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
          
          watch.Start();
          division = new PlanarSubdivision(points);
