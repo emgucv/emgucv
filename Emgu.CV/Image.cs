@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -2599,10 +2600,15 @@ namespace Emgu.CV
                    size.Width,
                    size.Height,
                    step,
-                   System.Drawing.Imaging.PixelFormat.Format8bppIndexed,
+                   PixelFormat.Format8bppIndexed,
                    scan0
                    );
-               bmp.Palette = CvToolbox.GrayscalePalette;
+               Color[] pColors = bmp.Palette.Entries;
+               for (int i = 0; i < 256; i++)
+               {
+                  pColors[i] = Color.FromArgb(i, i, i);
+               }
+               //bmp.Palette = CvToolbox.GrayscalePalette;
                return bmp;
             }
             // Mono in Linux doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
@@ -2617,7 +2623,7 @@ namespace Emgu.CV
                    size.Width,
                    size.Height,
                    step,
-                   System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                   PixelFormat.Format24bppRgb,
                    scan0);
             }
             else if (this is Image<Bgra, Byte>)
@@ -2626,7 +2632,7 @@ namespace Emgu.CV
                    size.Width,
                    size.Height,
                    step,
-                   System.Drawing.Imaging.PixelFormat.Format32bppArgb,
+                   PixelFormat.Format32bppArgb,
                    scan0);
             }
             /*
@@ -2637,7 +2643,7 @@ namespace Emgu.CV
                   size.width,
                   size.height,
                   step,
-                  System.Drawing.Imaging.PixelFormat.Format16bppGrayScale;
+                  PixelFormat.Format16bppGrayScale;
                   scan0);
             }*/
             else
@@ -2656,12 +2662,12 @@ namespace Emgu.CV
 
             switch (value.PixelFormat)
             {
-               case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
+               case PixelFormat.Format32bppRgb:
                   if (this is Image<Bgr, Byte>)
                   {
-                     System.Drawing.Imaging.BitmapData data = value.LockBits(
+                     BitmapData data = value.LockBits(
                         new Rectangle(Point.Empty, value.Size),
-                        System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                        ImageLockMode.ReadOnly,
                         value.PixelFormat);
 
                      using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height, data.Stride, data.Scan0))
@@ -2683,24 +2689,31 @@ namespace Emgu.CV
                         ConvertFrom(tmp);
                   }
                   break;
-               case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
+               case PixelFormat.Format32bppArgb:
                   if (this is Image<Bgra, Byte>)
                      CopyFromBitmap(value);
                   else
                   {
-                     using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
+                     BitmapData data = value.LockBits(
+                        new Rectangle(Point.Empty, value.Size),
+                        ImageLockMode.ReadOnly,
+                        value.PixelFormat);
+                     using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value.Width, value.Height, data.Stride, data.Scan0))
                         ConvertFrom(tmp);
+                     value.UnlockBits(data);
                   }
                   break;
-               case System.Drawing.Imaging.PixelFormat.Format8bppIndexed:
+               case PixelFormat.Format8bppIndexed:
                   if (this is Image<Bgra, Byte>)
                   {
-                     using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Size))
+                     Matrix<Byte> bTable, gTable, rTable, aTable;
+                     CvToolbox.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
+                     BitmapData data = value.LockBits(
+                        new Rectangle(Point.Empty, value.Size),
+                        ImageLockMode.ReadOnly,
+                        value.PixelFormat);
+                     using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height, data.Stride, data.Scan0))
                      {
-                        indexValue.CopyFromBitmap(value);
-                        Matrix<Byte> bTable, gTable, rTable, aTable;
-                        CvToolbox.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
-
                         using (Image<Gray, Byte> b = indexValue.CopyBlank())
                         using (Image<Gray, Byte> g = indexValue.CopyBlank())
                         using (Image<Gray, Byte> r = indexValue.CopyBlank())
@@ -2712,8 +2725,9 @@ namespace Emgu.CV
                            CvInvoke.cvLUT(indexValue.Ptr, a.Ptr, aTable.Ptr);
                            CvInvoke.cvMerge(b.Ptr, g.Ptr, r.Ptr, a.Ptr, Ptr);
                         }
-                        bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
                      }
+                     value.UnlockBits(data);
+                     bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
                   }
                   else
                   {
@@ -2721,24 +2735,29 @@ namespace Emgu.CV
                         ConvertFrom(tmp);
                   }
                   break;
-               case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+               case PixelFormat.Format24bppRgb:
                   if (this is Image<Bgr, Byte>)
                      CopyFromBitmap(value);
                   else
                   {
-                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
+                     BitmapData data = value.LockBits(
+                        new Rectangle(Point.Empty, value.Size),
+                        ImageLockMode.ReadOnly,
+                        value.PixelFormat);
+                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value.Width, value.Height, data.Stride, data.Scan0))
                         ConvertFrom(tmp);
+                     value.UnlockBits(data);
                   }
                   break;
-               case System.Drawing.Imaging.PixelFormat.Format1bppIndexed:
+               case PixelFormat.Format1bppIndexed:
                   if (this is Image<Gray, Byte>)
                   {
                      Size size = value.Size;
                      int rows = size.Height;
                      int cols = size.Width;
-                     System.Drawing.Imaging.BitmapData data = value.LockBits(
+                     BitmapData data = value.LockBits(
                          new Rectangle(Point.Empty, size),
-                         System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                         ImageLockMode.ReadOnly,
                          value.PixelFormat);
 
                      int fullByteCount = cols >> 3;
@@ -2775,7 +2794,7 @@ namespace Emgu.CV
                default:
                   #region Handle other image type
                   /*
-				               Bitmap bgraImage = new Bitmap(value.Width, value.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+				               Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
 				               using (Graphics g = Graphics.FromImage(bgraImage))
 				               {
 				                  g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
@@ -2808,9 +2827,9 @@ namespace Emgu.CV
       /// <param name="bmp"></param>
       private void CopyFromBitmap(Bitmap bmp)
       {
-         System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+         BitmapData data = bmp.LockBits(
              new Rectangle(Point.Empty, bmp.Size),
-             System.Drawing.Imaging.ImageLockMode.ReadOnly,
+             ImageLockMode.ReadOnly,
              bmp.PixelFormat);
 
          using (Matrix<TDepth> mat = new Matrix<TDepth>(bmp.Height, bmp.Width, NumberOfChannels, data.Scan0, data.Stride))
@@ -2834,17 +2853,20 @@ namespace Emgu.CV
             if (typeofDepth == typeof(Byte))
             {
                Size size = Size;
-               Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+               Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format8bppIndexed);
+               BitmapData data = bmp.LockBits(
                    new Rectangle(Point.Empty, size),
-                   System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                   System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+                   ImageLockMode.WriteOnly,
+                   PixelFormat.Format8bppIndexed);
                using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
                   CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
                bmp.UnlockBits(data);
-               bmp.Palette = CvToolbox.GrayscalePalette;
-
+               Color[] pColors = bmp.Palette.Entries;
+               for (int i = 0; i < 256; i++)
+               {
+                  pColors[i] = Color.FromArgb(i, i, i);
+               }
                return bmp;
             }
             else
@@ -2859,11 +2881,11 @@ namespace Emgu.CV
             {
                Size size = Size;
 
-               Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-               System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+               Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+               BitmapData data = bmp.LockBits(
                     new Rectangle(Point.Empty, size),
-                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    ImageLockMode.WriteOnly,
+                    PixelFormat.Format32bppArgb);
 
                using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 4, data.Scan0, data.Stride))
                   CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
@@ -2882,12 +2904,12 @@ namespace Emgu.CV
             Size size = Size;
 
             //create the bitmap and get the pointer to the data
-            Bitmap bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format24bppRgb);
 
-            System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+            BitmapData data = bmp.LockBits(
                 new Rectangle(Point.Empty, size),
-                System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format24bppRgb);
 
             using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 3, data.Scan0, data.Stride))
                CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
@@ -4197,20 +4219,20 @@ namespace Emgu.CV
                {
                   case ".jpg":
                   case ".jpeg":
-                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                     bmp.Save(fileName, ImageFormat.Jpeg);
                      break;
                   case ".bmp":
-                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                     bmp.Save(fileName, ImageFormat.Bmp);
                      break;
                   case ".png":
-                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
+                     bmp.Save(fileName, ImageFormat.Png);
                      break;
                   case ".tiff":
                   case ".tif":
-                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Tiff);
+                     bmp.Save(fileName, ImageFormat.Tiff);
                      break;
                   case ".gif":
-                     bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Gif);
+                     bmp.Save(fileName, ImageFormat.Gif);
                      break;
                   default:
                      throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
