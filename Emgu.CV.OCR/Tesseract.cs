@@ -64,7 +64,8 @@ namespace Emgu.CV.OCR
       {
          get
          {
-            return new Version(Marshal.PtrToStringAnsi(TesseractGetVersion()));
+            IntPtr ptr = TesseractGetVersion();
+            return new Version(ptr == IntPtr.Zero ? "0.0" : Marshal.PtrToStringAnsi(ptr));
          }
       }
 

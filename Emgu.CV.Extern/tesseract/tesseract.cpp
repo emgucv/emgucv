@@ -40,7 +40,11 @@ public:
 
 CVAPI(const char*) TesseractGetVersion()
 {
+#ifdef _WIN32
    return tesseract::TessBaseAPI::Version();
+#else
+   return 0;
+#endif
 }
 
 CVAPI(EmguTesseract*) TessBaseAPICreate() 
