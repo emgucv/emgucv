@@ -2569,12 +2569,9 @@ namespace Emgu.CV
                    PixelFormat.Format8bppIndexed,
                    scan0
                    );
-               Color[] pColors = bmp.Palette.Entries;
-               for (int i = 0; i < 256; i++)
-               {
-                  pColors[i] = Color.FromArgb(i, i, i);
-               }
-               //bmp.Palette = CvToolbox.GrayscalePalette;
+
+               bmp.Palette = CvToolbox.GrayscalePalette;
+
                return bmp;
             }
             // Mono in Linux doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
@@ -2828,11 +2825,7 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
                bmp.UnlockBits(data);
-               Color[] pColors = bmp.Palette.Entries;
-               for (int i = 0; i < 256; i++)
-               {
-                  pColors[i] = Color.FromArgb(i, i, i);
-               }
+               bmp.Palette = CvToolbox.GrayscalePalette;
                return bmp;
             }
             else
