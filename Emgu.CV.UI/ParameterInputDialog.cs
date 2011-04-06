@@ -272,6 +272,31 @@ namespace Emgu.CV.UI
                       return new MCvScalar(values[0], values[1], values[2], values[3]);
                    };
             }
+            else if (paramType == typeof(PointF))
+            {
+               TextBox[] inputBoxes = new TextBox[2];
+               int boxWidth = 40;
+
+               //Create input boxes for the scalar value
+               for (int i = 0; i < 2; i++)
+               {
+                  inputBoxes[i] = new TextBox();
+                  panel.Controls.Add(inputBoxes[i]);
+                  inputBoxes[i].Location = new Point(textBoxStart.X + i * (boxWidth + 5), textBoxStart.Y);
+                  inputBoxes[i].Width = boxWidth;
+                  inputBoxes[i].Text = "0.0";
+               }
+               panel.GetParamFunction =
+                   delegate()
+                   {
+                      float[] values = new float[inputBoxes.Length];
+                      for (int i = 0; i < inputBoxes.Length; i++)
+                      {
+                         values[i] = Convert.ToSingle(inputBoxes[i].Text);
+                      }
+                      return new PointF(values[0], values[1]);
+                   };
+            }
             else if (paramType.GetInterface("IColor") == typeof(IColor))
             {
                IColor t = Activator.CreateInstance(paramType) as IColor;
