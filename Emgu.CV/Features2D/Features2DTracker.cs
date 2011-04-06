@@ -35,10 +35,23 @@ namespace Emgu.CV.Features2D
                                 IntPtr outImg,
                                 MCvScalar matchColor, MCvScalar singlePointColor,
                                 IntPtr matchesMask,
-                                int flags);
+                                KeypointDrawType flags);
       #endregion
 
       #region static functions
+      /// <summary>
+      /// Draw the matched keypoints between the model image and the observered image.
+      /// </summary>
+      /// <param name="modelImage">The model image</param>
+      /// <param name="modelKeypoints">The keypoints in the model image</param>
+      /// <param name="observerdImage">The observed image</param>
+      /// <param name="observedKeyPoints">The keypoints in the observed image</param>
+      /// <param name="matchIndicies">The match indicies</param>
+      /// <param name="matchColor">The color for the match correspondence lines</param>
+      /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+      /// <param name="matchesMask">The mask for the matches. Use null for all matches.</param>
+      /// <param name="flags">The drawing type</param>
+      /// <returns>The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</returns>
       public static Image<Bgr, Byte> DrawMatches(
          Image<Gray, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
          Image<Gray, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
@@ -46,7 +59,7 @@ namespace Emgu.CV.Features2D
          Matrix<Byte> matchesMask, KeypointDrawType flags)
       {
          Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
-         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndicies, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, ((int) flags));
+         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndicies, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
          return result;
       }
 
