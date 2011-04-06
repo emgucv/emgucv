@@ -85,9 +85,30 @@ namespace Emgu.CV.UI
          typeOfDepthTextBox.Text = colorDepth.Name;
          #endregion
 
+         #region check if image is a subclass of CvArr type
+         Type imageType = image.GetType();
+         isCvArray = true;
+         Type cvArrayType = typeof(CvArray<>);
+         while (cvArrayType != imageType)
+         {
+            if (imageType.IsGenericType && imageType.GetGenericTypeDefinition() == cvArrayType)
+            {
+               break;
+            }
+            imageType = imageType.BaseType;
+            if (imageType == null)
+            {
+               isCvArray = false;
+               break;
+            }
+         }
+         #endregion
+
          UpdateHistogram();
          UpdateZoomScale();
       }
+
+      private bool isCvArray = true;
 
       /// <summary>
       /// A buffer used by SetMousePositionOnImage function
@@ -108,15 +129,22 @@ namespace Emgu.CV.UI
          location.X = Math.Min(location.X, size.Width - 1);
          location.Y = Math.Min(location.Y, size.Height - 1);
 
-         MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
-         _buffer[0] = scalar.v0; _buffer[1] = scalar.v1; _buffer[2] = scalar.v2; _buffer[3] = scalar.v3;
+         if (isCvArray)
+         {
+            MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
+            _buffer[0] = scalar.v0; _buffer[1] = scalar.v1; _buffer[2] = scalar.v2; _buffer[3] = scalar.v3;
 
-         StringBuilder sb = new StringBuilder(String.Format("[{0}", _buffer[0]));
-         for (int i = 1; i < img.NumberOfChannels; i++)
-            sb.AppendFormat(",{0}", _buffer[i]);
-         sb.Append("]");
+            StringBuilder sb = new StringBuilder(String.Format("[{0}", _buffer[0]));
+            for (int i = 1; i < img.NumberOfChannels; i++)
+               sb.AppendFormat(",{0}", _buffer[i]);
+            sb.Append("]");
 
-         colorIntensityTextbox.Text = sb.ToString();
+            colorIntensityTextbox.Text = sb.ToString();
+         }
+         else
+         {
+            colorIntensityTextbox.Text = String.Empty;
+         }
       }
 
       /// <summary>

@@ -45,10 +45,11 @@ namespace Emgu.CV.Reflection
       /// <returns>The color type of the image</returns>
       public static Type GetTypeOfColor(IImage image)
       {
-         return 
-            Toolbox
-            .GetBaseType(image.GetType(), "Image`2")
-            .GetGenericArguments()[0];
+         Type baseType =  Toolbox.GetBaseType(image.GetType(), "Image`2");
+         if (baseType == null)
+            baseType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2");
+
+         return baseType == null ? null : baseType.GetGenericArguments()[0];
       }
 
       /// <summary>
@@ -58,10 +59,11 @@ namespace Emgu.CV.Reflection
       /// <returns>The depth type of the image</returns>
       public static Type GetTypeOfDepth(IImage image)
       {
-         return 
-            Toolbox
-            .GetBaseType(image.GetType(), "Image`2")
-            .GetGenericArguments()[1];
+         Type baseType = Toolbox.GetBaseType(image.GetType(), "Image`2");
+         if (baseType == null)
+            baseType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2");
+
+         return baseType == null ? null : baseType.GetGenericArguments()[1];
       }
 
       /// <summary>

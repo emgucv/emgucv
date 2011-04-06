@@ -119,8 +119,22 @@ namespace Emgu.CV.UI
       /// <param name="numberOfBins">The number of bins for each histogram</param>
       public void GenerateHistograms(IImage image, int numberOfBins)
       {
-         IImage[] channels = image.Split();
-         Type imageType = Toolbox.GetBaseType(image.GetType(), "Image`2");
+         IImage[] channels;
+         Type imageType; 
+         if ((imageType = Toolbox.GetBaseType(image.GetType(), "Image`2")) != null)
+         {
+            channels = image.Split();
+         }
+         else if ((imageType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2")) != null)
+         {
+            IImage img = imageType.GetMethod("ToImage").Invoke(image, null) as IImage;
+            channels = img.Split();
+         }
+         else
+         {
+            throw new ArgumentException("The input image type of {0} is not supported", image.GetType().ToString());
+         }
+
          IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
          String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
          Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
