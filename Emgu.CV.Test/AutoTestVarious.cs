@@ -865,16 +865,6 @@ namespace Emgu.CV.Test
 
       }
 
-      /*
-      [Test]
-      public void TestFillConvexPolygon()
-      {
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(200, 200);
-         Rectangle<double> rect = new Rectangle<double>(new Point2D<double>(100, 100), 50, 50);
-         img.Draw((IConvexPolygon<double>)rect, new Bgr(Color.Blue), 0);
-         //Application.Run(new ImageViewer(img));
-      }*/
-
       [Test]
       public void TestKDTree()
       {
@@ -1730,6 +1720,14 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestPOSIT()
+      {
+         float[,] points = new float[4, 3] { {0, 0, 0}, {1,1,0}, {1, 0, 1}, {0, 1, 1}};
+         IntPtr ptr = CvInvoke.cvCreatePOSITObject(points, 4);
+         CvInvoke.cvReleasePOSITObject(ref ptr);
+      }
+
+      [Test]
       public void TestTiffWriter()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(320, 240);
@@ -1741,7 +1739,6 @@ namespace Emgu.CV.Test
             writer.WriteImage(image);
          }
       }
-
 
       [Test]
       public void TestDataLogger()
