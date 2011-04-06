@@ -36,7 +36,7 @@ namespace Emgu.CV
       /// <summary>
       /// Check if the homography matrix is valid.
       /// </summary>
-      /// <param name="thresholdForDeterminant">A number &gt; 1. A good number will be 10, if if the deteminate of the homography matrix is in the range of [1/threshold, threshold], true is returned</param>
+      /// <param name="thresholdForDeterminant">A number &gt; 1. A good number will be 10. If the deteminate of the homography matrix is in the range of [1/threshold, threshold], true is returned</param>
       /// <returns>True, if the deteminate of the homography matrix is in the range of [1/threshold, threshold]</returns>
       public bool IsValid(double thresholdForDeterminant)
       {
@@ -67,6 +67,17 @@ namespace Emgu.CV
          }
 
          handle.Free();
+      }
+
+      /// <summary>
+      /// Return a clone of the Matrix
+      /// </summary>
+      /// <returns>A clone of the Matrix</returns>
+      public new HomographyMatrix Clone()
+      {
+         HomographyMatrix m = new HomographyMatrix();
+         CvInvoke.cvCopy(Ptr, m, IntPtr.Zero);
+         return m;
       }
    }
 }

@@ -97,7 +97,7 @@ namespace Emgu.CV
       /// <summary>
       /// Rotate the single channel Nx2 matrix where N is the number of 2D points. The value of the matrix is changed after rotation.
       /// </summary>
-      /// <typeparam name="TDepth">The depth of the points, must be fouble or float</typeparam>
+      /// <typeparam name="TDepth">The depth of the points, must be double or float</typeparam>
       /// <param name="points">The N 2D-points to be rotated</param>
       public void RotatePoints<TDepth>(Matrix<TDepth> points) where TDepth : new()
       {
@@ -121,6 +121,17 @@ namespace Emgu.CV
             
             if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }
+      }
+
+      /// <summary>
+      /// Return a clone of the Matrix
+      /// </summary>
+      /// <returns>A clone of the Matrix</returns>
+      public new RotationMatrix2D<T> Clone()
+      {
+         RotationMatrix2D<T> clone = new RotationMatrix2D<T>();
+         CvInvoke.cvCopy(_ptr, clone, IntPtr.Zero);
+         return clone;
       }
    }
 }
