@@ -54,7 +54,10 @@ namespace Emgu.CV
       {
          get
          {
-            return _rotationVector.RotationMatrix.ConcateHorizontal(_translationVector);
+            using (Matrix<double> rMat = _rotationVector.RotationMatrix)
+            {
+               return rMat.ConcateHorizontal(_translationVector);
+            }
          }
       }
 
