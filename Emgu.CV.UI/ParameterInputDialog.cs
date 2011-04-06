@@ -212,6 +212,7 @@ namespace Emgu.CV.UI
                combo.Location = textBoxStart;
                combo.Items.AddRange(Enum.GetNames(paramType));
                combo.SelectedIndex = 0;
+               combo.Width = 240;
 
                panel.GetParamFunction =
                    delegate

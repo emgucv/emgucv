@@ -1174,6 +1174,7 @@ namespace Emgu.CV
          return res;
       }
 
+
       /// <summary>
       /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
       /// </summary>
@@ -1185,6 +1186,7 @@ namespace Emgu.CV
             action(this, 0);
          else
          {
+            int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
             using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
@@ -1192,7 +1194,7 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
                   action(tmp, i);
                }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
+            CvInvoke.cvSetImageCOI(Ptr, oldCOI);
          }
       }
 
@@ -1209,6 +1211,7 @@ namespace Emgu.CV
             res[0] = conv(this, 0);
          else
          {
+            int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
             using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
                for (int i = 0; i < NumberOfChannels; i++)
                {
@@ -1217,7 +1220,7 @@ namespace Emgu.CV
                   res[i] = conv(tmp, i);
                }
 
-            CvInvoke.cvSetImageCOI(Ptr, 0);
+            CvInvoke.cvSetImageCOI(Ptr, oldCOI);
          }
          return res;
       }
@@ -1236,6 +1239,8 @@ namespace Emgu.CV
             act(Ptr, dest.Ptr, 0);
          else
          {
+            int sourceCOI = CvInvoke.cvGetImageCOI(Ptr);
+            int destCOI = CvInvoke.cvGetImageCOI(dest);
             using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Size))
             using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Size))
             {
@@ -1248,8 +1253,8 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(tmp2.Ptr, dest.Ptr, IntPtr.Zero);
                }
             }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
-            CvInvoke.cvSetImageCOI(dest.Ptr, 0);
+            CvInvoke.cvSetImageCOI(Ptr, sourceCOI);
+            CvInvoke.cvSetImageCOI(dest.Ptr, destCOI);
          }
       }
       #endregion
@@ -1358,48 +1363,6 @@ namespace Emgu.CV
             return res;
          }
       }
-
-      /*
-      /// <summary>
-      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="points">The locations where SURF features will be extracted from</param>
-      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="param">The SURF parameters</param>
-      public SURFFeature[] ExtractSURF(PointF[] points, Image<Gray, Byte> mask, ref MCvSURFParams param)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr descriptorPtr = new IntPtr();
-
-            MCvSURFPoint[] locations = Array.ConvertAll<PointF, MCvSURFPoint>(points, delegate(PointF p) { MCvSURFPoint sp = new MCvSURFPoint(); sp.pt = p; return sp;  });
-            Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(stor);
-            keypoints.PushMulti(locations, Emgu.CV.CvEnum.BACK_OR_FRONT.BACK);
-            IntPtr keypointsPtr = keypoints.Ptr;
-            CvInvoke.cvExtractSURF(
-               Ptr, mask,
-               ref keypointsPtr,
-               ref descriptorPtr,
-               stor.Ptr,
-               param,
-               1);
-
-            MCvSURFPoint[] surfPoints = keypoints.ToArray();
-
-            SURFFeature[] res = new SURFFeature[surfPoints.Length];
-
-            int elementsInDescriptor = param.extended == 0 ? 64 : 128;
-
-            for (int i = 0; i < res.Length; i++)
-            {
-               float[] descriptor = new float[elementsInDescriptor];
-               Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
-               res[i] = new SURFFeature(ref surfPoints[i], descriptor);
-            }
-
-            return res;
-         }
-      }*/
 
       #endregion
 
@@ -3866,6 +3829,39 @@ namespace Emgu.CV
       #endregion
 
       #region Threshold methods
+      /// <summary>
+      /// Transforms grayscale image to binary image. 
+      /// Threshold calculated individually for each pixel. 
+      /// For the method CV_ADAPTIVE_THRESH_MEAN_C it is a mean of <paramref name="blockSize"/> x <paramref name="blockSize"/> pixel
+      /// neighborhood, subtracted by param1. 
+      /// For the method CV_ADAPTIVE_THRESH_GAUSSIAN_C it is a weighted sum (gaussian) of <paramref name="blockSize"/> x <paramref name="blockSize"/> pixel neighborhood, subtracted by param1.
+      /// </summary>
+      /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+      /// <param name="adaptiveType">Adaptive_method </param>
+      /// <param name="thresholdType">Thresholding type. must be one of CV_THRESH_BINARY, CV_THRESH_BINARY_INV  </param>
+      /// <param name="blockSize">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
+      /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
+      /// <returns>The result of the adaptive threshold</returns>
+      [ExposableMethod(Exposable = true, Category = "Threshold")]
+      public Image<TColor, TDepth> ThresholdAdaptive(
+         TColor maxValue,
+         CvEnum.ADAPTIVE_THRESHOLD_TYPE adaptiveType,
+         CvEnum.THRESH thresholdType,
+         int blockSize,
+         TColor param1)
+      {
+         double[] max = maxValue.MCvScalar.ToArray();
+         double[] p1 = param1.MCvScalar.ToArray();
+         Image<TColor, TDepth> result = CopyBlank();
+         ForEachDuplicateChannel<TDepth>(
+            delegate(IntPtr src, IntPtr dst, int channel)
+            {
+               CvInvoke.cvAdaptiveThreshold(src, dst, max[channel], adaptiveType, thresholdType, blockSize, p1[channel]);
+            },
+            result);
+         return result;
+      }
+
       ///<summary> 
       ///the base threshold method shared by public threshold functions 
       ///</summary>
