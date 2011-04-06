@@ -165,10 +165,11 @@ namespace Emgu.CV.GPU
             try
             {
                //if a direct conversion doesn't exist, apply a two step conversion
+               //in this case, do not use stream because a temporary local image buffer is used 
                using (GpuImage<Bgr, TDepth> tmp = new GpuImage<Bgr, TDepth>(size))
                {
-                  GpuInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
-                  GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
+                  GpuInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), IntPtr.Zero);
+                  GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), IntPtr.Zero);
                }
             }
             catch
