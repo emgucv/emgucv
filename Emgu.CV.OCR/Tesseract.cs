@@ -60,6 +60,9 @@ namespace Emgu.CV.OCR
 
       private UTF8Encoding _utf8 = new UTF8Encoding();
 
+      /// <summary>
+      /// Get the tesseract version
+      /// </summary>
       public static Version Version
       {
          get
