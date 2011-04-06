@@ -419,56 +419,6 @@ namespace Emgu.CV
       /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcSubdivVoronoi2D(IntPtr subdiv);
-
-      #endregion
-
-      #region Pose Estimation
-      /// <summary>
-      /// Allocates memory for the object structure and computes the object inverse matrix. 
-      /// </summary>
-      /// <remarks>The preprocessed object data is stored in the structure CvPOSITObject, internal for OpenCV, which means that the user cannot directly access the structure data. The user may only create this structure and pass its pointer to the function. 
-      /// Object is defined as a set of points given in a coordinate system. The function cvPOSIT computes a vector that begins at a camera-related coordinate system center and ends at the points[0] of the object. 
-      /// Once the work with a given object is finished, the function cvReleasePOSITObject must be called to free memory</remarks>
-      /// <param name="points3D">A two dimensional array contains the points of the 3D object model, the second dimension must be 3. </param>
-      /// <param name="pointCount">Number of object points</param>
-      /// <returns>A pointer to the CvPOSITObject</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvCreatePOSITObject(float[,] points3D, int pointCount);
-
-      /// <summary>
-      /// Implements POSIT algorithm. Image coordinates are given in a camera-related coordinate system. The focal length may be retrieved using camera calibration functions. At every iteration of the algorithm new perspective projection of estimated pose is computed. 
-      /// </summary>
-      /// <remarks>Difference norm between two projections is the maximal distance between corresponding points. </remarks>
-      /// <param name="positObject">Pointer to the object structure</param>
-      /// <param name="imagePoints">2D array to the object points projections on the 2D image plane, the second dimension must be 2.</param>
-      /// <param name="focalLength">Focal length of the camera used</param>
-      /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
-      /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
-      /// <param name="translationVector">Translation vector (3x1)</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPOSIT(IntPtr positObject, float[,] imagePoints, double focalLength,
-              MCvTermCriteria criteria, float[] rotationMatrix, float[] translationVector);
-
-      /// <summary>
-      /// Implements POSIT algorithm. Image coordinates are given in a camera-related coordinate system. The focal length may be retrieved using camera calibration functions. At every iteration of the algorithm new perspective projection of estimated pose is computed. 
-      /// </summary>
-      /// <remarks>Difference norm between two projections is the maximal distance between corresponding points. </remarks>
-      /// <param name="positObject">Pointer to the object structure</param>
-      /// <param name="imagePoints">2D array to the object points projections on the 2D image plane, the second dimension must be 2.</param>
-      /// <param name="focalLength">Focal length of the camera used</param>
-      /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
-      /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
-      /// <param name="translationVector">Translation vector (3x1)</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPOSIT(IntPtr positObject, IntPtr imagePoints, double focalLength,
-              MCvTermCriteria criteria, IntPtr rotationMatrix, IntPtr translationVector);
-
-      /// <summary>
-      /// The function cvReleasePOSITObject releases memory previously allocated by the function cvCreatePOSITObject. 
-      /// </summary>
-      /// <param name="positObject">pointer to CvPOSIT structure</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
 
       #region Feature Matching
