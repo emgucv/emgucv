@@ -2241,7 +2241,7 @@ namespace Emgu.CV
       /// <param name="height">The height of the returned image.</param>
       /// <param name="interpolationType">The type of interpolation</param>
       /// <param name="preserveScale">if true, the scale is preservered and the resulting image has maximum width(height) possible that is &lt;= <paramref name="width"/> (<paramref name="height"/>), if false, this function is equaivalent to Resize(int width, int height)</param>
-      /// <returns></returns>
+      /// <returns>The resized image</returns>
       public Image<TColor, TDepth> Resize(int width, int height, CvEnum.INTER interpolationType, bool preserveScale)
       {
          return preserveScale ?
@@ -2381,13 +2381,16 @@ namespace Emgu.CV
       /// Convert the image to log polar, simulating the human foveal vision
       /// </summary>
       /// <param name="center">The transformation center, where the output precision is maximal</param>
-      /// <param name="M">Magnitude scale parameter</param>
-      /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+      /// <param name="magnitude">Magnitude scale parameter</param>
+      /// <param name="interpolationType">interpolation type</param>
+      /// <param name="warpType">Warp type</param>
       /// <returns>The converted image</returns>
-      public Image<TColor, TDepth> LogPolar(PointF center, double M, int flags)
+      [ExposableMethod(Exposable = true, Category = "Transform")]
+      public Image<TColor, TDepth> LogPolar(PointF center, double magnitude, CvEnum.INTER interpolationType, CvEnum.WARP warpType)
       {
          Image<TColor, TDepth> imgPolar = CopyBlank();
-         CvInvoke.cvLogPolar(Ptr, imgPolar.Ptr, center, M, flags);
+         int flags = (int)interpolationType | (int)warpType;
+         CvInvoke.cvLogPolar(Ptr, imgPolar.Ptr, center, magnitude, flags);
          return imgPolar;
       }
       #endregion
@@ -2401,9 +2404,9 @@ namespace Emgu.CV
          Exposable = true,
          Category = "Conversion",
          GenericParametersOptions = new Type[] {
-            typeof(Bgr), typeof(Gray), typeof(Hsv), typeof(Hls), typeof(Lab), typeof(Luv), typeof(Xyz), typeof(Ycc),
+            typeof(Bgr), typeof(Bgra), typeof(Gray), typeof(Hsv), typeof(Hls), typeof(Lab), typeof(Luv), typeof(Xyz), typeof(Ycc),
             typeof(Single), typeof(Byte), typeof(Double)},
-         GenericParametersOptionSizes = new int[] { 8, 3 }
+         GenericParametersOptionSizes = new int[] { 9, 3 }
          )]
       public Image<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
