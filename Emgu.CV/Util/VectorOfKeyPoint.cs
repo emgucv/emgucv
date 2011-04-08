@@ -92,7 +92,7 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// The pointer to the first element on the vector
+      /// The pointer to the first element on the vector. In case of an empty vector, IntPtr.Zero will be returned.
       /// </summary>
       public IntPtr StartAddress
       {

@@ -83,7 +83,7 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// The size of IplImage
+      /// The size of CvSeqBlock
       /// </summary>
       public static int MCvSeqBlock
       {
