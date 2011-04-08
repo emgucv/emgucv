@@ -55,7 +55,7 @@ namespace VideoSurveilance
          Image<Bgr, Byte> frame = _cameraCapture.QueryFrame();
          frame._SmoothGaussian(3); //filter out noises
 
-         #region use the background code book model to find the forground mask
+         #region use the BG/FG detector to find the forground mask
          _detector.Update(frame);
          Image<Gray, Byte> forgroundMask = _detector.ForgroundMask;
          #endregion
@@ -64,13 +64,12 @@ namespace VideoSurveilance
 
          foreach (MCvBlob blob in _tracker)
          {
-            frame.Draw(Rectangle.Round(blob), new Bgr(255.0, 255.0, 255.0), 2);
+            frame.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
             frame.Draw(blob.ID.ToString(), ref _font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
          }
 
          imageBox1.Image = frame;
          imageBox2.Image = forgroundMask;
-
       }
    }
 }
