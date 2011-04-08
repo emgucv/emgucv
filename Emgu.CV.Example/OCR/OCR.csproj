@@ -103,11 +103,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="OCRForm.resx">
-      <DependentUpon>OCRForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.csproj">
       <Project>{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}</Project>
       <Name>Emgu.CV.OCR</Name>
