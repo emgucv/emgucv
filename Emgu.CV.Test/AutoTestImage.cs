@@ -604,6 +604,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestBitmapSharedDataWithImage()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr,byte>(480, 320);
+         Bitmap bmp = img.Bitmap;
+         bmp.SetPixel(0, 0, Color.Red);
+         Image<Bgr, Byte> img2 = new Image<Bgr,byte>(bmp);
+         Assert.IsTrue(img.Equals(img2));
+      }
+
+      [Test]
       public void TestSplitMerge()
       {
          Image<Bgr, Byte> img1 = new Image<Bgr, byte>(301, 234);
