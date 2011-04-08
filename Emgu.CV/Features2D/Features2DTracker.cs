@@ -116,7 +116,7 @@ namespace Emgu.CV.Features2D
       private static void ConvertFromImageFeature(ImageFeature[] features, out VectorOfKeyPoint keyPoints, out Matrix<float> descriptors)
       {
          keyPoints = new VectorOfKeyPoint();
-         keyPoints.Push( Array.ConvertAll(features, delegate(ImageFeature feature) { return feature.KeyPoint; }));
+         keyPoints.Push( Array.ConvertAll<ImageFeature, MKeyPoint>(features, delegate(ImageFeature feature) { return feature.KeyPoint; }));
          descriptors = new Matrix<float>(features.Length, features[0].Descriptor.Length);
 
          int descriptorLength = features[0].Descriptor.Length;
