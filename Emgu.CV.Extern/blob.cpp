@@ -8,14 +8,15 @@
 #include "opencv2/legacy/blobtrack.hpp"
 
 //Blob
-CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize = sizeof(CvBlob)) { return new CvBlobSeq(BlobSize); }
-CVAPI(void) CvBlobSeqRelease(CvBlobSeq* blobSeq) { blobSeq->~CvBlobSeq(); }
+CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize) { return new CvBlobSeq(BlobSize); }
+CVAPI(void) CvBlobSeqRelease(CvBlobSeq** blobSeq) { delete *blobSeq; }
 CVAPI(CvBlob*) CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
 CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
 CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
+CVAPI(void) CvBlobSeqClear(CvBlobSeq* blobSeq) { blobSeq->Clear(); }
 
 //Blob Detector
-CVAPI(void) CvBlobDetectorRelease(CvBlobDetector* detector) { detector->~CvBlobDetector(); }
+CVAPI(void) CvBlobDetectorRelease(CvBlobDetector** detector) { delete *detector; }
 CVAPI(int) CvBlobDetectorDetectNewBlob(CvBlobDetector* detector, IplImage* pImg, IplImage* pImgFG, CvBlobSeq* pNewBlobList, CvBlobSeq* pOldBlobList)
    { return detector->DetectNewBlob(pImg, pImgFG, pNewBlobList, pOldBlobList); }
 CVAPI(CvBlobDetector*) CvCreateBlobDetectorSimple() { return cvCreateBlobDetectorSimple(); }
@@ -37,24 +38,24 @@ CVAPI( CvBlobTracker*) CvCreateBlobTrackerMS() { return  cvCreateBlobTrackerMS()
 /*      Comanicius, Ramesh, Meer, 2000, 8p                       */
 /*      http://citeseer.ist.psu.edu/321441.html                  */
 CVAPI( CvBlobTracker*) CvCreateBlobTrackerMSPF() { return  cvCreateBlobTrackerMSPF(); }
-CVAPI(void) CvBlobTrackerRealease(CvBlobTracker* tracker) { tracker->Release(); }
+CVAPI(void) CvBlobTrackerRealease(CvBlobTracker** tracker) { delete *tracker; }
 CVAPI(int) CvBlobTrackerGetBlobNum(CvBlobTracker* tracker) { return tracker->GetBlobNum(); }
 CVAPI(CvBlob*) CvBlobTrackerGetBlob(CvBlobTracker* tracker, int BlobIndex) { return tracker->GetBlob(BlobIndex); }
 CVAPI(CvBlob*) CvBlobTrackerGetBlobByID(CvBlobTracker* tracker, int BlobId) { return tracker->GetBlobByID(BlobId); }
 CVAPI(void) CvBlobTrackerDelBlob(CvBlobTracker* tracker, int BlobIndex) { tracker->DelBlob(BlobIndex); }
-CVAPI(CvBlob*) CvBlobTrackerAddBlob(CvBlobTracker* tracker, CvBlob* pBlob, IplImage* pImg, IplImage* pImgFG = NULL ) { return tracker->AddBlob(pBlob, pImg, pImgFG); }
+CVAPI(CvBlob*) CvBlobTrackerAddBlob(CvBlobTracker* tracker, CvBlob* pBlob, IplImage* pImg, IplImage* pImgFG) { return tracker->AddBlob(pBlob, pImg, pImgFG); }
 
 //blob tracker auto
-CVAPI(CvBlobTrackerAuto*) CvCreateBlobTrackerAuto1(CvBlobTrackerAutoParam1* param =NULL) { return cvCreateBlobTrackerAuto1(param); }
-CVAPI(void) CvBlobTrackerAutoRelease(CvBlobTrackerAuto* tracker) { tracker->Release(); }
+CVAPI(CvBlobTrackerAuto*) CvCreateBlobTrackerAuto1(CvBlobTrackerAutoParam1* param) { return cvCreateBlobTrackerAuto1(param); }
+CVAPI(void) CvBlobTrackerAutoRelease(CvBlobTrackerAuto** tracker) { delete *tracker; }
 CVAPI(CvBlob*) CvBlobTrackerAutoGetBlob(CvBlobTrackerAuto* tracker, int index) { return tracker->GetBlob(index); }
 CVAPI(CvBlob*) CvBlobTrackerAutoGetBlobByID(CvBlobTrackerAuto* tracker, int blobID) { return tracker->GetBlobByID(blobID); }
 CVAPI(int) CvBlobTrackerAutoGetBlobNum(CvBlobTrackerAuto* tracker) { return tracker->GetBlobNum(); }
-CVAPI(void) CvBlobTrackerAutoProcess(CvBlobTrackerAuto* tracker, IplImage* pImg, IplImage* pMask = NULL) { return tracker->Process(pImg, pMask); }
+CVAPI(void) CvBlobTrackerAutoProcess(CvBlobTrackerAuto* tracker, IplImage* pImg, IplImage* pMask) { return tracker->Process(pImg, pMask); }
 CVAPI(IplImage*) CvBlobTrackerAutoGetFGMask(CvBlobTrackerAuto* tracker) { return tracker->GetFGMask(); }
 
 //blob tracker post process
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcKalman() { return cvCreateModuleBlobTrackPostProcKalman(); }
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverRect() { return cvCreateModuleBlobTrackPostProcTimeAverRect(); }
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverExp() { return cvCreateModuleBlobTrackPostProcTimeAverExp(); }
-CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc* postProc) { postProc->Release(); };
+CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc** postProc) { delete *postProc; };

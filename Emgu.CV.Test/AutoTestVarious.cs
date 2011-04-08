@@ -49,6 +49,12 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestRectangleSize()
+      {
+         Assert.AreEqual(4 * sizeof(int), Marshal.SizeOf(typeof(Rectangle)));
+      }
+
+      [Test]
       public void TestDenseHistogramRuntimeSerialization()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
@@ -263,6 +269,33 @@ namespace Emgu.CV.Test
          MCvPoint3D32f point = new MCvPoint3D32f();
 
          PointF[] points = CameraCalibration.ProjectPoints(new MCvPoint3D32f[] { point }, extrin, intrin);
+      }
+
+      [Test]
+      public void TestBlobDetector()
+      {
+         int width = 300;
+         int height = 400;
+         Image<Gray, Byte> img = new Image<Gray, byte>(width, height);
+         //bg.SetRandNormal(new MCvScalar(), new MCvScalar(100, 100, 100));
+         Size size = new Size(width / 5, height / 5);
+         Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
+         Rectangle rect = new Rectangle(topLeft, size);
+
+         BlobDetector detector = new BlobDetector(CvEnum.BLOB_DETECTOR_TYPE.Simple);
+         //Image<Gray, Byte> forground = new Image<Gray,byte>(bg.Size);
+         //forground.SetValue(255);
+         BlobSeq newSeq = new BlobSeq();
+         BlobSeq oldSeq = new BlobSeq();
+         using (Image<Gray, Byte> forgroundMask = img.Copy())
+         {
+            rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
+            forgroundMask.Draw(rect, new Gray(255), -1);
+			//TODO: Find out why BlobDetector cannot detect new Blob.
+            bool detected = detector.DetectNewBlob(forgroundMask, newSeq, oldSeq);
+            //ImageViewer.Show(forgroundMask);
+            //Assert.IsTrue(detected);
+         }
       }
 
       [Test]

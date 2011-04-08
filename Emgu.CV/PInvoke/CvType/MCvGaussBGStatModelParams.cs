@@ -18,15 +18,15 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int win_size;
       /// <summary>
-      /// = K = number of Gaussians in mixture. (default = 5, Max = 500)
+      /// Number of Gaussians in mixture. (default = 5, Max = 500)
       /// </summary>
       public int n_gauss;
       /// <summary>
-      /// threshold sum of weights for background test. (default = 0.7)
+      /// Threshold sum of weights for background test. (default = 0.7)
       /// </summary>
       public double bg_threshold;
       /// <summary>
-      /// lambda=2.5 is 99% (default = 2.5)
+      /// Lambda=2.5 is 99% (default = 2.5)
       /// </summary>
       public double std_threshold;
       /// <summary>
@@ -34,13 +34,12 @@ namespace Emgu.CV.Structure
       /// </summary>
       public double minArea;
       /// <summary>
-      /// (default = 0.05)
+      /// Default = 0.05
       /// </summary>
       public double weight_init;
       /// <summary>
-      /// (default = 30*30 -&gt; CV_BGFG_MOG_SIGMA_INIT*CV_BGFG_MOG_SIGMA_INIT)
+      /// Default = 30*30
       /// </summary>
-      /// <remarks></remarks>
       public double variance_init;
    }
 }

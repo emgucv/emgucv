@@ -342,18 +342,21 @@ namespace Emgu.CV.Test
 
       public static void TestCodeBook()
       {
+
          int learningFrames = 40;
+         using (BlobDetector detector = new BlobDetector(CvEnum.BLOB_DETECTOR_TYPE.Simple))
+         using (BlobSeq blobs = new BlobSeq())
          using (Capture capture = new Capture("tree.avi"))
          using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
          {
+            /*
             #region Set color thresholds values
-            MCvBGCodeBookModel param = bgmodel.MCvBGCodeBookModel;
-            param.modMin[0] = param.modMin[1] = param.modMin[2] = 3;
-            param.modMax[0] = param.modMax[1] = param.modMax[2] = 10;
-            param.cbBounds[0] = param.cbBounds[1] = param.cbBounds[2] = 10;
-            bgmodel.MCvBGCodeBookModel = param;
+            bgmodel.MCvBGCodeBookModel.ModMin0 = bgmodel.MCvBGCodeBookModel.ModMin1 = bgmodel.MCvBGCodeBookModel.ModMin2 = 3;
+            bgmodel.MCvBGCodeBookModel.ModMax0 = bgmodel.MCvBGCodeBookModel.ModMax1 = bgmodel.MCvBGCodeBookModel.ModMax2 = 10;
+            bgmodel.MCvBGCodeBookModel.CbBounds0 = bgmodel.MCvBGCodeBookModel.CbBounds1 = bgmodel.MCvBGCodeBookModel.CbBounds2 = 10;
             #endregion
-            
+            */
+
             ImageViewer viewer = new ImageViewer();
             int count = 0;
             EventHandler processFrame = delegate(Object sender, EventArgs e)
@@ -363,27 +366,29 @@ namespace Emgu.CV.Test
                {
                   return;
                }
-               Image<Gray, byte> mask = new Image<Gray, Byte>(img.Size);
-               mask.SetValue(255);
 
                viewer.Text = String.Format("Processing {0}th image. {1}", count++, learningFrames > 0 ? "(Learning)" : String.Empty);
 
                using (Image<Ycc, Byte> ycc = img.Convert<Ycc, Byte>()) //using YCC color space for BGCodeBook
                {
-                  bgmodel.Update(ycc, ycc.ROI, mask);
-
                   if (learningFrames == 0) //training is completed
-                     bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.t / 2, ycc.ROI, mask);
-                  
-                  learningFrames--;
-                  Image<Gray, Byte> m = bgmodel.ForgroundMask.Clone();
-                  if (count == 56)
+                     bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.T / 2, Rectangle.Empty, null);
+
+                  if (learningFrames > 0)
+                     bgmodel.Update(ycc); 
+                  else if (learningFrames <= 0)
                   {
-                     m = bgmodel.ForgroundMask.Clone();
+                     bgmodel.Diff(ycc, Rectangle.Empty);
+                     Image<Gray, Byte> m = bgmodel.ForgroundMask.Clone();
+                     blobs.Clear();
+                     if (detector.DetectNewBlob(m, blobs, null))
+                     {
+                        foreach (MCvBlob b in blobs)
+                           m.Draw((Rectangle) b, new Gray(100), 2);
+                     }
+                     viewer.Image = m;
                   }
-                  //m._EqualizeHist();
-                  viewer.Image = m;
-                  //viewer.Image = img;
+                  learningFrames--;
                   System.Threading.Thread.Sleep(100);
                }
 
@@ -634,7 +639,7 @@ namespace Emgu.CV.Test
             //viewer.Image = tracker.GetForgroundMask();
             foreach (MCvBlob blob in tracker)
             {
-               img.Draw(Rectangle.Round(blob), new Gray(255.0), 2);
+               img.Draw( (Rectangle)blob, new Gray(255.0), 2);
                img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
             }
             viewer.Image = img;

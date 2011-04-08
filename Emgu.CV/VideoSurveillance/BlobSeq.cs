@@ -10,10 +10,60 @@ using Emgu.CV.Util;
 namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
-   /// a Blob Seq
+   /// A Blob Seq
    /// </summary>
    public class BlobSeq : BlobSeqBase
    {
+      #region Pinvoke
+      /// <summary>
+      /// Create a BlobSeq
+      /// </summary>
+      /// <param name="blobSize">The size of the blob in bytes</param>
+      /// <returns>Pointer to the BlobSeq</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr CvBlobSeqCreate(int blobSize);
+
+      /// <summary>
+      /// Release the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">The BlobSeq to be released</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void CvBlobSeqRelease(ref IntPtr blobSeq);
+
+      /// <summary>
+      /// Get the specific blob from the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">the blob sequence</param>
+      /// <param name="blobIndex">the index of the blob to be retrieved</param>
+      /// <returns>Pointer to the specific blob</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr CvBlobSeqGetBlob(IntPtr blobSeq, int blobIndex);
+
+      /// <summary>
+      /// Get the specific blob from the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">the blob sequence</param>
+      /// <param name="blobIndex">the index of the blob to be retrieved</param>
+      /// <returns>Pointer to the specific blob</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr CvBlobSeqGetBlobByID(IntPtr blobSeq, int blobIndex);
+
+      /// <summary>
+      /// Get the number of blob in the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">The blob sequence</param>
+      /// <returns>The number of blob in the blob sequence</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int CvBlobSeqGetBlobNum(IntPtr blobSeq);
+
+      /// <summary>
+      /// Clear the blob sequence
+      /// </summary>
+      /// <param name="blobSeq">The blob sequence to be cleared</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void CvBlobSeqClear(IntPtr blobSeq);
+      #endregion
+
       /// <summary>
       /// Create a BlobSeq from the given pointer
       /// </summary>
@@ -28,7 +78,15 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       public BlobSeq()
       {
-         _ptr = CvInvoke.CvBlobSeqCreate(StructSize.MCvBlob);
+         _ptr = CvBlobSeqCreate(StructSize.MCvBlob);
+      }
+
+      /// <summary>
+      /// Clear the BlobSeq
+      /// </summary>
+      public void Clear()
+      {
+         CvBlobSeqClear(_ptr);
       }
 
       #region BolbSeqBase Members
@@ -39,7 +97,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return CvInvoke.CvBlobSeqGetBlobNum(_ptr);
+            return CvBlobSeqGetBlobNum(_ptr);
          }
       }
 
@@ -52,7 +110,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return (MCvBlob)Marshal.PtrToStructure(CvInvoke.CvBlobSeqGetBlob(_ptr, i), typeof(MCvBlob));
+            return (MCvBlob)Marshal.PtrToStructure(CvBlobSeqGetBlob(_ptr, i), typeof(MCvBlob));
          }
       }
 
@@ -61,11 +119,11 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blobID">The id of the blob</param>
       /// <returns>The blob of the specific id, if it doesn't exist, null is returned</returns>
-      public override MCvBlob? GetBlobByID(int blobID)
+      public override MCvBlob GetBlobByID(int blobID)
       {
-         IntPtr blobPtr = CvInvoke.CvBlobSeqGetBlobByID(_ptr, blobID);
-         if (blobPtr == IntPtr.Zero) return null;
-         return (MCvBlob?)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
+         IntPtr blobPtr = CvBlobSeqGetBlobByID(_ptr, blobID);
+         if (blobPtr == IntPtr.Zero) return MCvBlob.Empty;
+         return (MCvBlob)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
       }
 
       /// <summary>
@@ -73,7 +131,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBlobSeqRelease(_ptr);
+         CvBlobSeqRelease(ref _ptr);
       }
       #endregion
    }

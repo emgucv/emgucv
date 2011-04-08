@@ -15,9 +15,16 @@ namespace Emgu.CV.VideoSurveillance
    /// Background code book model
    /// </summary>
    /// <typeparam name="TColor"> The type of color for the image</typeparam>
-   public class BGCodeBookModel<TColor> : UnmanagedObject, IBGFGDetector<TColor>
+   public class BGCodeBookModel<TColor> : DisposableObject
       where TColor : struct, IColor
    {
+      /// <summary>
+      /// The CvBGCodeBookModel structure
+      /// </summary>
+      public MCvBGCodeBookModel MCvBGCodeBookModel;
+
+      private MemStorage _storage;
+
       private Image<Gray, Byte> _foregroundMask;
       private Image<Gray, Byte> _backgroundMask;
 
@@ -26,7 +33,13 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       public BGCodeBookModel()
       {
-         _ptr = CvInvoke.cvCreateBGCodeBookModel();
+         _storage = new MemStorage();
+         MCvBGCodeBookModel.Storage = _storage.Ptr;
+         MCvBGCodeBookModel.CbBounds0 = MCvBGCodeBookModel.CbBounds1 = MCvBGCodeBookModel.CbBounds2 = 10;
+         MCvBGCodeBookModel.ModMin0 = 3;
+         MCvBGCodeBookModel.ModMax0 = 10;
+         MCvBGCodeBookModel.ModMin1 = MCvBGCodeBookModel.ModMin2 = 1;
+         MCvBGCodeBookModel.ModMax1 = MCvBGCodeBookModel.ModMax2 = 1;
       }
 
       /// <summary>
@@ -37,9 +50,18 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="mask">Can be null if not needed. The update mask</param>
       public void Update(Image<TColor, Byte> image, Rectangle roi, Image<Gray, Byte> mask)
       {
-         CvInvoke.cvBGCodeBookUpdate(_ptr, image.Ptr, roi, mask);
+         CvInvoke.cvBGCodeBookUpdate(ref MCvBGCodeBookModel, image.Ptr, roi, mask);
+      }
+
+      /// <summary>
+      /// Find the forground by codebook method. The result will be stored in the ForgroundMask property
+      /// </summary>
+      /// <param name="image">The image to run diff against</param>
+      /// <param name="roi">The region of interest. Use Rectangle.Empty for the whole region</param>
+      public void Diff(Image<TColor, Byte> image, Rectangle roi)
+      {
          if (_foregroundMask == null) _foregroundMask = new Image<Gray, byte>(image.Size);
-         CvInvoke.cvBGCodeBookDiff(_ptr, image, _foregroundMask, roi);
+         CvInvoke.cvBGCodeBookDiff(ref MCvBGCodeBookModel, image, _foregroundMask, roi);
       }
 
       /// <summary>
@@ -84,7 +106,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="mask">Mask for Clear Stale. Can be null if not needed.</param>
       public void ClearStale(int staleThresh, Rectangle roi, Image<Gray, Byte> mask)
       {
-         CvInvoke.cvBGCodeBookClearStale(_ptr, staleThresh, roi, mask);
+         CvInvoke.cvBGCodeBookClearStale(ref MCvBGCodeBookModel, staleThresh, roi, mask);
       }
 
       /// <summary>
@@ -92,7 +114,6 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvReleaseBGCodeBookModel(ref _ptr);
       }
 
       /// <summary>
@@ -102,21 +123,8 @@ namespace Emgu.CV.VideoSurveillance
       {
          if (_backgroundMask != null) _backgroundMask.Dispose();
          if (_foregroundMask != null) _foregroundMask.Dispose();
+         _storage.Dispose();
       }
 
-      /// <summary>
-      /// Get or Set the equivalent CVBGCodeBookModel structure
-      /// </summary>
-      public MCvBGCodeBookModel MCvBGCodeBookModel
-      {
-         get
-         {
-            return (MCvBGCodeBookModel)Marshal.PtrToStructure(Ptr, typeof(MCvBGCodeBookModel));
-         }
-         set
-         {
-            Marshal.StructureToPtr(value, _ptr, false);
-         }
-      }
    }
 }

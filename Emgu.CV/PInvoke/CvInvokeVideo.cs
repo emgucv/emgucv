@@ -333,6 +333,20 @@ namespace Emgu.CV
          IntPtr mask);
 
       /// <summary>
+      /// Update the BG code book model
+      /// </summary>
+      /// <param name="model">The BGCodeBookModel</param>
+      /// <param name="image">The image for update</param>
+      /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
+      /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookUpdate(
+         ref MCvBGCodeBookModel model,
+         IntPtr image,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
       /// 
       /// </summary>
       /// <param name="model">Pointer to the BGCodeBookModel</param>
@@ -350,6 +364,21 @@ namespace Emgu.CV
       /// <summary>
       /// 
       /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image to find diff</param>
+      /// <param name="fgmask">The returned foreground mask</param>
+      /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
+      /// <returns></returns>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int cvBGCodeBookDiff(
+         ref MCvBGCodeBookModel model,
+         IntPtr image,
+         IntPtr fgmask,
+         Rectangle roi);
+
+      /// <summary>
+      /// 
+      /// </summary>
       /// <param name="model"></param>
       /// <param name="staleThresh"></param>
       /// <param name="roi"></param>
@@ -360,6 +389,21 @@ namespace Emgu.CV
          int staleThresh,
          Rectangle roi,
          IntPtr mask);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model"></param>
+      /// <param name="staleThresh"></param>
+      /// <param name="roi"></param>
+      /// <param name="mask"></param>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookClearStale(
+         ref MCvBGCodeBookModel model,
+         int staleThresh,
+         Rectangle roi,
+         IntPtr mask);
+
 
       /// <summary>
       /// Release the BG code book model

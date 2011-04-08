@@ -18,13 +18,13 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int Lc;			
       /// <summary>
-      /// Number of color vectors used to model normal background color variation at a given pixel.
+      /// Number of color vectors used to model normal background color variation at a given pixel. Try 15 for default.
       /// </summary>
       public int N1c;		
       /// <summary>
       /// Number of color vectors retained at given pixel.  Must be > N1c, typically ~ 5/3 of N1c.
       /// </summary>
-      /// <remarks>Used to allow the first N1c vectors to adapt over time to changing background.	</remarks>
+      /// <remarks>Used to allow the first N1c vectors to adapt over time to changing background.</remarks>
       public int N2c;		
 
       /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int Lcc;		
       /// <summary>
-      /// Number of color co-occurrence vectors used to model normal background color variation at a given pixel.
+      /// Number of color co-occurrence vectors used to model normal background color variation at a given pixel. Try 25 for default.
       /// </summary>
       public int N1cc;		
       /// <summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV.Structure
       public int N2cc;		
 
       /// <summary>
-      /// If TRUE we ignore holes within foreground blobs. Defaults to TRUE.
+      /// If 1 we ignore holes within foreground blobs. Defaults to 1.
       /// </summary>
       public int is_obj_without_holes;
       /// <summary>
@@ -56,7 +56,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       public float alpha1;		
       /// <summary>
-      /// "Controls speed of feature learning". Depends on T. Typical value circa 0.005.
+      /// Controls speed of feature learning. Depends on T. Typical value circa 0.005.
       /// </summary>
       public float alpha2;
       /// <summary>
@@ -69,15 +69,13 @@ namespace Emgu.CV.Structure
       /// </summary>
       public float delta;		
       /// <summary>
-      /// "A percentage value which determines when new features can be recognized as new background." (Typically 0.9).
+      /// A percentage value which determines when new features can be recognized as new background. (Typically 0.9).
       /// </summary>
       public float T;			
 
       /// <summary>
-      /// Discard foreground blobs whose bounding box is smaller than this threshold.
+      /// Discard foreground blobs whose bounding box is smaller than this threshold. Try 15 for default
       /// </summary>
       public float minArea;
-
-
    }
 }

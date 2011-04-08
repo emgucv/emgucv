@@ -35,8 +35,8 @@ namespace Emgu.CV.VideoSurveillance
       /// Get the blob with the specific id
       /// </summary>
       /// <param name="blobID">The id of the blob</param>
-      /// <returns>The blob of the specific id, if do not exist, null is returned</returns>
-      public abstract MCvBlob? GetBlobByID(int blobID);
+      /// <returns>The blob of the specific id, if do not exist, MCvBlob.Empty is returned</returns>
+      public abstract MCvBlob GetBlobByID(int blobID);
 
       #region IEnumerable<MCvBlob> Members
       /// <summary>
