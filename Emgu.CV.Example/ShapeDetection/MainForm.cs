@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Diagnostics;
 
 namespace ShapeDetection
 {
@@ -27,6 +28,8 @@ namespace ShapeDetection
       {
          if (fileNameTextBox.Text != String.Empty)
          {
+            StringBuilder msgBuilder = new StringBuilder("Performance: ");
+
             //Load the image from file and resize it for display
             Image<Bgr, Byte> img = 
                new Image<Bgr, byte>(fileNameTextBox.Text)
@@ -35,10 +38,11 @@ namespace ShapeDetection
             //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
+            #region circle detection
+            Stopwatch watch = Stopwatch.StartNew();
             Gray cannyThreshold = new Gray(180);
             Gray cannyThresholdLinking = new Gray(120);
             Gray circleAccumulatorThreshold = new Gray(500);
-
             CircleF[] circles = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
@@ -47,7 +51,12 @@ namespace ShapeDetection
                 5, //min radius
                 0 //max radius
                 )[0]; //Get the circles from the first channel
+            watch.Stop();
+            msgBuilder.Append(String.Format("Hough circles - {0} ms; ", watch.ElapsedMilliseconds));
+            #endregion
 
+            #region Canny and edge detection
+            watch.Reset(); watch.Start();
             Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
             LineSegment2D[] lines = cannyEdges.HoughLinesBinary(
                 1, //Distance resolution in pixel-related units
@@ -56,11 +65,14 @@ namespace ShapeDetection
                 30, //min Line width
                 10 //gap between lines
                 )[0]; //Get the lines from the first channel
+            watch.Stop();
+            msgBuilder.Append(String.Format("Canny & Hough lines - {0} ms; ", watch.ElapsedMilliseconds));
+            #endregion
 
             #region Find triangles and rectangles
+            watch.Reset(); watch.Start();
             List<Triangle2DF> triangleList = new List<Triangle2DF>();
             List<MCvBox2D> boxList = new List<MCvBox2D>(); //a box is a rotated rectangle
-
             using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
                for (
                   Contour<Point> contours = cannyEdges.FindContours(
@@ -106,9 +118,12 @@ namespace ShapeDetection
                      }
                   }
                }
+            watch.Stop();
+            msgBuilder.Append(String.Format("Triangles & Rectangles - {0} ms; ", watch.ElapsedMilliseconds));
             #endregion
 
             originalImageBox.Image = img;
+            this.Text = msgBuilder.ToString();
 
             #region draw triangles and rectangles
             Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
