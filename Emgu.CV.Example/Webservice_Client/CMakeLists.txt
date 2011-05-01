@@ -6,7 +6,9 @@ IF(WIN32)
 PROJECT(Example.Webservice_Client)
 
 FILE(GLOB_RECURSE SRC_Example_Webservice_Client RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-LIST(APPEND SRC_Example_Webservice_Client ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+LIST(APPEND SRC_Example_Webservice_Client 
+  ${CMAKE_CURRENT_SOURCE_DIR}/../Webservice_Host/IImageService.cs
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 IF(TARGET_ARCH_64)
   LIST(APPEND CS_FLAGS -platform:x64)
@@ -22,7 +24,7 @@ ADD_CS_REFERENCES(${LIBRARY_OUTPUT_PATH}/Example.Webservice_Host.${CS_EXECUTABLE
 
 COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_Webservice_Client}" ALL)
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI Example.Webservice_Host)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 
 INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.${CS_EXECUTABLE_EXTENSION} DESTINATION bin COMPONENT binary)
 ENDIF()
