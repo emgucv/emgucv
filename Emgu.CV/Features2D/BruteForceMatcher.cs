@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Emgu.CV;
 using Emgu.Util;
@@ -48,16 +49,33 @@ namespace Emgu.CV.Features2D
          /// bit count of A exclusive XOR'ed with B
          /// </summary>
          Hamming = 3
-
       }
 
+      /// <summary>
+      /// Find the k-nearest match for DistanceType of L1F32 or L2F32
+      /// </summary>
+      /// <param name="queryDescriptor">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
+      /// <param name="trainIdx">The resulting n x <paramref name="k"/> matrix of descriptor index from the training descriptors</param>
+      /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
+      /// <param name="k">Number of nearest neighbors to search for</param>
+      /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       public void KnnMatch(Matrix<float> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
       {
+         Debug.Assert(_distanceType == DistanceType.L1F32 || _distanceType == DistanceType.L2F32);
          DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
       }
 
+      /// <summary>
+      /// Find the k-nearest match for DistanceType of Hamming or HammingLUT
+      /// </summary>
+      /// <param name="queryDescriptor">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
+      /// <param name="trainIdx">The resulting n x <paramref name="k"/> matrix of descriptor index from the training descriptors</param>
+      /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
+      /// <param name="k">Number of nearest neighbors to search for</param>
+      /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       public void KnnMatch(Matrix<Byte> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
       {
+         Debug.Assert(_distanceType == DistanceType.Hamming || _distanceType == DistanceType.HammingLUT);
          DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
       }
 
@@ -97,6 +115,9 @@ namespace Emgu.CV.Features2D
          Init(distanceType, modelDescriptors);
       }
 
+      /// <summary>
+      /// Release the unmanaged resource associated with the BruteForceMatcher
+      /// </summary>
       protected override void DisposeObject()
       {
          CvBruteForceMatcherRelease(ref _ptr, _distanceType);
