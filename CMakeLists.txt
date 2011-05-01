@@ -490,6 +490,17 @@ INSTALL(
   PATTERN ".svn" EXCLUDE
   PATTERN "bin" EXCLUDE
   )
+  
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WPF
+  DESTINATION .
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN ".svn" EXCLUDE
+  )
+  
 # ----------------------------------------------------------------------------
 #  The example files
 # ----------------------------------------------------------------------------
