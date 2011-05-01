@@ -3,8 +3,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
@@ -13,6 +11,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// OpenCV's PatchGenerator
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct PatchGenerator
    {
       #region PInvoke

@@ -54,7 +54,6 @@ namespace Emgu.CV.Test
       public void TestStar()
       {
          StarDetector keyPointDetector = new StarDetector();
-         keyPointDetector.Init();
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
          SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
@@ -62,6 +61,7 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
+      /*
       [Test]
       public void TestLDetector()
       {
@@ -72,14 +72,13 @@ namespace Emgu.CV.Test
          SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
-      }
+      }*/
 
       
       [Test]
       public void TestMSER()
       {
          MSERDetector keyPointDetector = new MSERDetector();
-         keyPointDetector.Init();
          SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
@@ -90,7 +89,6 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>("stuff.jpg");
          MSERDetector param = new MSERDetector();
-         param.Init();
 
          using (MemStorage storage = new MemStorage())
          {
@@ -124,8 +122,8 @@ namespace Emgu.CV.Test
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
-            VectorOfKeyPoint modelKeypoints = keyPointDetector.DetectKeyPointsRaw(modelImage);
-            Matrix<float> modelDescriptors = descriptorGenerator.ComputeDescriptorsRaw(modelImage, modelKeypoints);
+            VectorOfKeyPoint modelKeypoints = keyPointDetector.DetectKeyPointsRaw(modelImage, null);
+            Matrix<float> modelDescriptors = descriptorGenerator.ComputeDescriptorsRaw(modelImage, null, modelKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -138,8 +136,8 @@ namespace Emgu.CV.Test
             //observedImage._EqualizeHist();
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
-            VectorOfKeyPoint observedKeypoints = keyPointDetector.DetectKeyPointsRaw(observedImage);
-            Matrix<float> observedDescriptors = descriptorGenerator.ComputeDescriptorsRaw(observedImage, observedKeypoints);
+            VectorOfKeyPoint observedKeypoints = keyPointDetector.DetectKeyPointsRaw(observedImage, null);
+            Matrix<float> observedDescriptors = descriptorGenerator.ComputeDescriptorsRaw(observedImage, null, observedKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -236,7 +234,7 @@ namespace Emgu.CV.Test
             for (int i = 1; i < 100; i++)
             {
                using (Matrix<float> surfDescriptors = surf.ComputeDescriptorsRaw(box, kpts))
-                  Assert.AreEqual(surfDescriptors.Width, (surf.extended != 0 ? 128 : 64) * 3);
+                  Assert.AreEqual(surfDescriptors.Width, (surf.Extended ? 128 : 64) * 3);
 
                //TODO: Find out why the following test fails
                //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(box, kpts))
@@ -266,15 +264,19 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
          watch.Reset(); watch.Start();
-         SURFFeature[] features3 = box.ExtractSURF(ref detector);
+         MCvSURFParams p = detector.GetSURFParams();
+         SURFFeature[] features3 = box.ExtractSURF(ref p);
          watch.Stop();
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
+         Assert.AreEqual(features1.Length, features2.Length);
+         Assert.AreEqual(features2.Length, features3.Length);
 
          PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) { return mkp.Point; });
          //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
          //int count = features.Length;
 
+         /*
          for (int i = 0; i < features1.Length; i++)
          {
             Assert.AreEqual(features1[i].KeyPoint.Point, features2[i].KeyPoint.Point);
@@ -283,12 +285,24 @@ namespace Emgu.CV.Test
 
             for (int j = 0; j < d1.Length; j++)
                Assert.AreEqual(d1[j], d2[j]);
-         }
+         }*/
 
          foreach (MKeyPoint kp in keypoints)
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
          }
+      }
+
+      [Test]
+      public void TestGridAdaptedFeatureDetectorRepeatedRun()
+      {
+         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         SURFDetector surfdetector = new SURFDetector(400, false);
+
+         GridAdaptedFeatureDetector detector = new GridAdaptedFeatureDetector(surfdetector, 1000, 2, 2);
+         VectorOfKeyPoint kpts1 = detector.DetectKeyPointsRaw(box, null);
+         VectorOfKeyPoint kpts2 = detector.DetectKeyPointsRaw(box, null);
+         Assert.AreEqual(kpts1.Size, kpts2.Size);
       }
 
       [Test]

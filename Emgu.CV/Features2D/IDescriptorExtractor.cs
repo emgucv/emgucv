@@ -20,7 +20,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">The image to compute descriptors from</param>
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The descriptors from the given keypoints</returns>
-      Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, VectorOfKeyPoint keyPoints);
+      Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints);
    }
 }

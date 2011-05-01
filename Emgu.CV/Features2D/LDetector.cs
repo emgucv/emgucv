@@ -16,8 +16,19 @@ namespace Emgu.CV.Features2D
    /// V. Lepetit keypoint detector
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct LDetector : IKeyPointDetector
+   public struct LDetector 
    {
+      #region PInvoke
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvLDetectorDetectKeyPoints(
+         ref LDetector detector,
+         IntPtr image,
+         IntPtr keypoints,
+         int maxCount,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool scaleCoords);
+
+      #endregion
       /// <summary>
       /// Radius
       /// </summary>
@@ -49,15 +60,6 @@ namespace Emgu.CV.Features2D
       /// Clustering Distance
       /// </summary>
       public double ClusteringDistance;
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvLDetectorDetectKeyPoints(
-         ref LDetector detector,
-         IntPtr image,
-         IntPtr keypoints,
-         int maxCount,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool scaleCoords);
 
       /// <summary>
       /// Set the parameters to default value
@@ -102,7 +104,6 @@ namespace Emgu.CV.Features2D
          }
       }
 
-      #region IKeyPointDetector Members
       /// <summary>
       /// Detect the keypoints in the image
       /// </summary>
@@ -112,7 +113,5 @@ namespace Emgu.CV.Features2D
       {
          return DetectKeyPointsRaw(image, 0, false);
       }
-
-      #endregion
    }
 }

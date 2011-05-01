@@ -9,7 +9,7 @@ using System.Drawing;
 namespace Emgu.CV.Structure
 {
    /// <summary>
-   /// CvStarKeypoiny
+   /// CvStarKeypoint
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvStarKeypoint

@@ -1320,7 +1320,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="param">The SURF parameters</param>
       /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(ref SURFDetector param)
+      public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
       {
          return ExtractSURF(null, ref param);
       }
@@ -1331,7 +1331,7 @@ namespace Emgu.CV
       /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
       /// <param name="param">The SURF parameters</param>
       /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref SURFDetector param)
+      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -1351,7 +1351,7 @@ namespace Emgu.CV
 
             SURFFeature[] res = new SURFFeature[surfPoints.Length];
 
-            int elementsInDescriptor = param.extended == 0 ? 64 : 128;
+            int elementsInDescriptor = param.Extended == 0 ? 64 : 128;
 
             for (int i = 0; i < res.Length; i++)
             {
@@ -1371,7 +1371,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="param">The Star Detector parameters</param>
       /// <returns>The Star keypoints in this image</returns>
-      public MCvStarKeypoint[] GetStarKeypoints(ref StarDetector param)
+      public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
       {
          using (MemStorage stor = new MemStorage())
          {

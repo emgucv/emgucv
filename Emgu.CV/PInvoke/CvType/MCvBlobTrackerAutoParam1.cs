@@ -3,12 +3,14 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Structure
 {
    /// <summary>
    /// Parameters of blobtracker auto ver1
    /// </summary>
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvBlobTrackerAutoParam1
    {
       /// <summary>

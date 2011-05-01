@@ -65,5 +65,12 @@ namespace Emgu.CV
          ref Point pos,
          double minVal,
          double maxVal);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFeatureDetectorDetectKeyPoints(
+         IntPtr detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints);
    }
 }

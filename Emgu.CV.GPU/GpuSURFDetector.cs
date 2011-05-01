@@ -72,8 +72,8 @@ namespace Emgu.CV.GPU
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
-      public GpuSURFDetector(SURFDetector detector, float FeaturesRatio, bool upright)
-         : this((float)detector.hessianThreshold, detector.nOctaves, detector.nOctaveLayers, detector.extended != 0, 0.01f, upright)
+      public GpuSURFDetector(MCvSURFParams detector, float FeaturesRatio, bool upright)
+         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, detector.Extended != 0, 0.01f, upright)
       {
       }
 
@@ -81,20 +81,20 @@ namespace Emgu.CV.GPU
       /// Create a GPU SURF detector
       /// </summary>
       /// <param name="hessianThreshold">The interest operator threshold. Use 100 for default</param>
-      /// <param name="NOctaves">The number of octaves to process. Use 4 for default</param>
-      /// <param name="NIntervals">The number of intervals in each octave. Use 4 for default</param>
-      /// <param name="Extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
-      /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
+      /// <param name="nOctaves">The number of octaves to process. Use 4 for default</param>
+      /// <param name="nIntervals">The number of intervals in each octave. Use 4 for default</param>
+      /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
+      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
       public GpuSURFDetector(
          float hessianThreshold,
-         int NOctaves,
-         int NIntervals,
-         bool Extended,
-         float FeaturesRatio, 
+         int nOctaves,
+         int nIntervals,
+         bool extended,
+         float featuresRatio, 
          bool upright)
       {
-         _ptr = gpuSURFDetectorCreate(hessianThreshold, NOctaves, NIntervals, Extended, FeaturesRatio, upright);
+         _ptr = gpuSURFDetectorCreate(hessianThreshold, nOctaves, nIntervals, extended, featuresRatio, upright);
       }
 
       /// <summary>

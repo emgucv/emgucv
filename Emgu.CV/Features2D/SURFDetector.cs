@@ -7,23 +7,19 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
-   [StructLayout(LayoutKind.Sequential)]
-   public struct SURFDetector : IKeyPointDetector, IDescriptorExtractor
+   public class SURFDetector : DisposableObject, IKeyPointDetector, IDescriptorExtractor
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFDetectorDetectKeyPoints(
-         ref SURFDetector detector,
-         IntPtr image,
-         IntPtr mask,
-         IntPtr keypoints);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static IntPtr CvSURFGetFeatureDetector(ref MCvSURFParams detector);
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorDetectFeature(
@@ -35,7 +31,7 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorComputeDescriptors(
-         ref SURFDetector detector,
+         ref MCvSURFParams detector,
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
@@ -43,11 +39,29 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorComputeDescriptorsBGR(
-         ref SURFDetector detector,
+         ref MCvSURFParams detector,
          IntPtr image,
          IntPtr keypoints,
          IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSURFFeatureDetectorRelease(ref IntPtr detector);
       #endregion
+
+      /// <summary>
+      /// Get the SURF parameters
+      /// </summary>
+      /// <returns>The SURF parameters</returns>
+      public MCvSURFParams GetSURFParams()
+      {
+         MCvSURFParams p = new MCvSURFParams();
+         p.Extended = _extended;
+         p.HessianThreshold = HessianThreshold;
+         p.NOctaves = NOctaves;
+         p.NOctaveLayers = NOctaveLayers;
+         return p;
+      }
+
 
       /// <summary>
       /// Create a MCvSURFParams using the specific values
@@ -62,37 +76,70 @@ namespace Emgu.CV.Features2D
       /// true means extended descriptors (128 elements each)
       /// </param>
       public SURFDetector(double hessianThresh, bool extendedFlag)
+         : this(hessianThresh, extendedFlag, 3, 4)
       {
-         SURFDetector p = CvInvoke.cvSURFParams(hessianThresh, extendedFlag ? 1 : 0);
-         extended = p.extended;
-         hessianThreshold = p.hessianThreshold;
-         nOctaves = p.nOctaves;
-         nOctaveLayers = p.nOctaveLayers;
       }
 
       /// <summary>
-      /// 0 means basic descriptors (64 elements each),
-      /// 1 means extended descriptors (128 elements each)
+      /// Create a MCvSURFParams using the specific values
       /// </summary>
-      public int extended;
+      /// <param name="hessianThresh">      
+      /// Only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="extendedFlag">      
+      /// false means basic descriptors (64 elements each),
+      /// true means extended descriptors (128 elements each)
+      /// </param>
+      /// <param name="nOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled (3 by default)
+      /// </param>
+      /// <param name="nOctaveLayers">
+      /// The number of layers within each octave (4 by default)
+      /// </param>
+      public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves, int nOctaveLayers)
+      {
+         _extended = extendedFlag ? 1 : 0;
+         _hessianThreshold = hessianThresh;
+         _nOctaves = nOctaves;
+         _nOctaveLayers = nOctaveLayers;
+
+         MCvSURFParams tmp = GetSURFParams();
+         _featureDetectorPtr = CvSURFGetFeatureDetector(ref tmp);
+      }
+
+      private int _extended;
+      private double _hessianThreshold;
+      private int _nOctaves;
+      private int _nOctaveLayers;
+
+      /// <summary>
+      /// true means basic descriptors (64 elements each),
+      /// false means extended descriptors (128 elements each)
+      /// </summary>
+      public bool Extended { get { return _extended == 1; } }
 
       /// <summary>
       /// Only features with keypoint.hessian larger than that are extracted.
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </summary>
-      public double hessianThreshold;
+      public double HessianThreshold { get { return _hessianThreshold; } }
 
       /// <summary>
       /// The number of octaves to be used for extraction.
       /// With each next octave the feature size is doubled (3 by default)
       /// </summary>
-      public int nOctaves;
+      public int NOctaves { get { return _nOctaves; } }
 
       /// <summary>
       /// The number of layers within each octave (4 by default)
       /// </summary>
-      public int nOctaveLayers;
+      public int NOctaveLayers { get { return _nOctaveLayers; } }
+
+      private IntPtr _featureDetectorPtr;
 
       /// <summary>
       /// Detect the SURF keypoints from the image
@@ -106,19 +153,6 @@ namespace Emgu.CV.Features2D
          {
             return keypoints.ToArray();
          }
-      }
-
-      /// <summary>
-      /// Detect the SURF keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract SURF features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of SURF key points</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         VectorOfKeyPoint keypoints = new VectorOfKeyPoint();
-         CvSURFDetectorDetectKeyPoints(ref this, image, mask, keypoints);
-         return keypoints;
       }
 
       /// <summary>
@@ -137,23 +171,6 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         int count = keyPoints.Size;
-         if (count == 0) return null;
-         int sizeOfdescriptor = extended == 0 ? 64 : 128;
-         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
-         CvSURFDetectorComputeDescriptors(ref this, image, mask, keyPoints, descriptors);
-         return descriptors;
-      }
-
-      /// <summary>
       /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
@@ -163,9 +180,10 @@ namespace Emgu.CV.Features2D
       {
          int count = keyPoints.Size;
          if (count == 0) return null;
-         int sizeOfdescriptor = extended == 0 ? 64 : 128;
+         int sizeOfdescriptor = Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * 3, 1);
-         CvSURFDetectorComputeDescriptorsBGR(ref this, image, keyPoints, descriptors);
+         MCvSURFParams p = GetSURFParams();
+         CvSURFDetectorComputeDescriptorsBGR(ref p, image, keyPoints, descriptors);
          return descriptors;
       }
 
@@ -178,42 +196,68 @@ namespace Emgu.CV.Features2D
       /// <returns>The image features founded on the keypoint location</returns>
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
-         int sizeOfdescriptor = extended == 0 ? 64 : 128;
+         int sizeOfdescriptor = Extended ? 128 : 64;
          using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          {
             pts.Push(keyPoints);
             using (Matrix<float> descriptors = ComputeDescriptorsRaw(image, mask, pts))
-            {
                return Features2DTracker.ConvertToImageFeature(pts, descriptors);
-            }
          }
       }
 
       #region IKeyPointDetector Members
       /// <summary>
-      /// Detect the keypoints in the image
+      /// Detect the SURF keypoints from the image
       /// </summary>
-      /// <param name="image">The image from which the key point will be detected from</param>
-      /// <returns>The key pionts in the image</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, byte> image)
+      /// <param name="image">The image to extract SURF features from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <returns>An array of SURF key points</returns>
+      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         return DetectKeyPointsRaw(image, null);
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
+         return kpts;
       }
 
+      /// <summary>
+      /// Get the feature detector. 
+      /// </summary>
+      /// <returns>The feature detector</returns>
+      public IntPtr FeatureDetectorPtr
+      {
+         get
+         {
+            return _featureDetectorPtr;
+         }
+      }
       #endregion
 
       #region IDescriptorGenerator Members
       /// <summary>
-      /// Compute the descriptors on the image from the given keypoint locations.
+      /// Compute the descriptor given the image and the point location
       /// </summary>
-      /// <param name="image">The image to compute descriptors from</param>
-      /// <param name="keyPoints">The keypoints where the descriptor computation is performed</param>
-      /// <returns>The descriptors from the given keypoints</returns>
-      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, byte> image, VectorOfKeyPoint keyPoints)
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
+      /// <returns>The descriptors founded on the keypoint location</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
-         return ComputeDescriptorsRaw(image, null, keyPoints);
+         int count = keyPoints.Size;
+         if (count == 0) return null;
+         int sizeOfdescriptor = Extended ? 128 : 64;
+         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
+         MCvSURFParams p = GetSURFParams();
+         CvSURFDetectorComputeDescriptors(ref p, image, mask, keyPoints, descriptors);
+         return descriptors;
       }
-
       #endregion
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this detector.
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
+      }
    }
 }
