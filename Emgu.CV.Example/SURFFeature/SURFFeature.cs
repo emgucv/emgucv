@@ -39,7 +39,7 @@ namespace SURFFeatureExample
          Stopwatch watch;
          HomographyMatrix homography = null;
 
-         SURFDetector surfParam = new SURFDetector(500, false);
+         SURFDetector surfCPU = new SURFDetector(500, false);
 
          VectorOfKeyPoint modelKeyPoints;
          VectorOfKeyPoint observedKeyPoints;
@@ -49,26 +49,26 @@ namespace SURFFeatureExample
 
          if (GpuInvoke.HasCuda)
          {
-            GpuSURFDetector surf = new GpuSURFDetector(surfParam, 0.01f, false);
+            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.GetSURFParams(), 0.01f, false);
             using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
             //extract features from the object image
-            using (GpuMat<float> gpuModelKeyPoints = surf.DetectKeyPointsRaw(gpuModelImage, null))
-            using (GpuMat<float> gpuModelDescriptors = surf.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints, true))
+            using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
+            using (GpuMat<float> gpuModelDescriptors = surfGPU.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints, true))
             using (GpuBruteForceMatcher matcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.L2))
             {
                modelKeyPoints = new VectorOfKeyPoint();
-               surf.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
+               surfGPU.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
                using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray, byte>(observedImage))
-               using (GpuMat<float> gpuObservedKeyPoints = surf.DetectKeyPointsRaw(gpuObservedImage, null))
-               using (GpuMat<float> gpuObservedDescriptors = surf.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints, true))
+               using (GpuMat<float> gpuObservedKeyPoints = surfGPU.DetectKeyPointsRaw(gpuObservedImage, null))
+               using (GpuMat<float> gpuObservedDescriptors = surfGPU.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints, true))
                using (GpuMat<int> gpuMatchIndices = new GpuMat<int>(gpuObservedDescriptors.Size.Height, 2, 1))
                using (GpuMat<float> gpuMatchDist = new GpuMat<float>(gpuMatchIndices.Size, 1))
                {
                   observedKeyPoints = new VectorOfKeyPoint();
-                  surf.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
+                  surfGPU.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
 
                   matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, 2, null);
 
@@ -98,14 +98,14 @@ namespace SURFFeatureExample
          else
          {
             //extract features from the object image
-            modelKeyPoints = surfParam.DetectKeyPointsRaw(modelImage, null);
-            Matrix<float> modelDescriptors = surfParam.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
+            modelKeyPoints = surfCPU.DetectKeyPointsRaw(modelImage, null);
+            Matrix<float> modelDescriptors = surfCPU.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
 
             watch = Stopwatch.StartNew();
 
             // extract features from the observed image
-            observedKeyPoints = surfParam.DetectKeyPointsRaw(observedImage, null);
-            Matrix<float> observedDescriptors = surfParam.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
+            observedKeyPoints = surfCPU.DetectKeyPointsRaw(observedImage, null);
+            Matrix<float> observedDescriptors = surfCPU.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
 
             Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
             mask = new Matrix<byte>(dist.Rows, 1);
