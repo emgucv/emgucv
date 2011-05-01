@@ -3,9 +3,8 @@
 //----------------------------------------------------------------------------
 
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.Util
@@ -42,7 +41,7 @@ namespace Emgu.CV.Util
       #endregion
 
       /// <summary>
-      /// Create an empty standard vector of float
+      /// Create an empty standard vector of KeyPoint
       /// </summary>
       public VectorOfKeyPoint()
       {
@@ -50,7 +49,7 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Create an standard vector of float of the specific size
+      /// Create an standard vector of KeyPoint of the specific size
       /// </summary>
       /// <param name="size">The size of the vector</param>
       public VectorOfKeyPoint(int size)
@@ -103,9 +102,9 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Convert the standard vector to an array of float
+      /// Convert the standard vector to an array of KeyPoint
       /// </summary>
-      /// <returns>An array of float</returns>
+      /// <returns>An array of KeyPoint</returns>
       public MKeyPoint[] ToArray()
       {
          MKeyPoint[] res = new MKeyPoint[Size];

@@ -83,6 +83,7 @@
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
+    <Compile Include="Features2D\BruteForceMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
+    <Compile Include="Util\VectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />

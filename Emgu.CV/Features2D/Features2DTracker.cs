@@ -230,11 +230,17 @@ namespace Emgu.CV.Features2D
       {
          indices = new Matrix<int>(observedDescriptors.Rows, k);
          dist = new Matrix<float>(observedDescriptors.Rows, k);
+
+         using (BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32, modelDescriptors))
+         {
+            matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
+         }
+         /*
          using (Flann.Index index = new Flann.Index(modelDescriptors))
          {
             index.KnnSearch(observedDescriptors, indices, dist, k, 0);
             CvInvoke.cvSqrt(dist, dist);
-         }
+         }*/
       }
       #endregion
 

@@ -5,7 +5,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Emgu.CV.PInvoke.CvType
+namespace Emgu.CV.Structure
 {
    /// <summary>
    /// OpenCV's DMatch structure

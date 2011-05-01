@@ -7,6 +7,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/contrib/contrib.hpp"
+#include "vectorOfDMatch.h"
 
 //FernClassifier
 CVAPI(cv::FernClassifier*) CvFernClassifierCreate() { return new cv::FernClassifier; }
@@ -344,18 +345,90 @@ CVAPI(void) drawMatchedFeatures(
 {
    cv::Mat mat1 = cv::cvarrToMat(img1);
    cv::Mat mat2 = cv::cvarrToMat(img2);
-   cv::Mat_<int> matchesMat = (cv::Mat_<int>) cv::cvarrToMat(matchIndicies);
-   cv::Mat_<unsigned char> matchesMaskMat = 
-      matchesMask ? (cv::Mat_<unsigned char>) cv::cvarrToMat(matchesMask) : cv::Mat();
-   
+
    std::vector<cv::DMatch> matches;
-   for (int i = 0; i < matchesMat.rows; ++i)
-   {
-      cv::DMatch m(i, matchesMat.at<int>(i, 0), 0.0f);
-      matches.push_back(m);
-   }
+   VectorOfDMatchPushMatrix(&matches, matchIndicies, 0, matchesMask);
 
    cv::Mat outMat = cv::cvarrToMat(outImg);
    cv::drawMatches(mat1, *keypoints1, mat2, *keypoints2, matches, outMat, 
-      matchColor, singlePointColor, matchesMaskMat, flags);
+      matchColor, singlePointColor, std::vector<char>(), flags);
+}
+
+//DescriptorMatcher
+CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, CvMat* trainDescriptor)
+{
+   cv::Mat trainMat = cv::cvarrToMat(trainDescriptor);
+   std::vector<cv::Mat> trainVector;
+   trainVector.push_back(trainMat);
+   matcher->add(trainVector);   
+}
+
+CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
+                   CvMat* trainIdx, CvMat* distance, int k,
+                   const CvMat* mask) 
+{
+   //only implemented for a single trained image for now
+   CV_Assert( matcher->getTrainDescriptors().size() == 1);
+
+   cv::Mat queryMat = cv::cvarrToMat(queryDescriptors);
+   cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
+   cv::Mat distanceMat = cv::cvarrToMat(distance);
+   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
+   std::vector<std::vector<cv::DMatch>> matches; //The first index is the index of the image.
+   std::vector<cv::Mat> masks;
+   matcher->knnMatch(queryMat, matches, k, masks, false);
+   
+   float* distance_ptr = distanceMat.ptr<float>();
+   int* trainIdx_ptr = trainIdxMat.ptr<int>();
+   for(std::vector<cv::DMatch>::iterator m = matches[0].begin(); m != matches[0].end(); ++m, ++trainIdx_ptr, ++distance_ptr)
+   {
+      cv::DMatch match = *m;
+      *distance_ptr = match.distance;
+      *trainIdx_ptr = match.trainIdx;
+   }
+}
+CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType)
+{
+   switch(distanceType)
+   {
+   case(0): //L1 float
+      return new cv::BruteForceMatcher<cv::L1<float>>();
+   case(1): //L2 float
+      return new cv::BruteForceMatcher<cv::L2<float>>();
+   case(2): //HammingLUT
+      return new cv::BruteForceMatcher<cv::HammingLUT>();
+   case(3):
+      return new cv::BruteForceMatcher<cv::Hamming>();
+   default:
+      return 0;
+   }
+}
+
+CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType)
+{
+   cv::BruteForceMatcher<cv::L1<float>>* m0;
+   cv::BruteForceMatcher<cv::L2<float>>* m1;
+   cv::BruteForceMatcher<cv::HammingLUT>* m2;
+   cv::BruteForceMatcher<cv::Hamming>* m3;
+   switch(distanceType)
+   {
+   case(0): //L1 float
+      m0 = (cv::BruteForceMatcher<cv::L1<float>>*) *matcher;
+      delete m0;
+      break;
+   case(1): //L2 float
+      m1 = (cv::BruteForceMatcher<cv::L2<float>>*) *matcher;
+      delete m1;
+      break;
+   case(2):
+      m2 = (cv::BruteForceMatcher<cv::HammingLUT>*) *matcher;
+      delete m2;
+      break;
+   case(3):
+      m3 = (cv::BruteForceMatcher<cv::Hamming>*) *matcher;
+      delete m3;
+   default:
+      CV_Error(-1, "Invalid Distance type");
+   }
+   *matcher = 0;
 }
