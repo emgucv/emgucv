@@ -374,7 +374,7 @@ CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const Cv
    cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
    cv::Mat distanceMat = cv::cvarrToMat(distance);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   std::vector<std::vector<cv::DMatch>> matches; //The first index is the index of the image.
+   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the image.
    std::vector<cv::Mat> masks;
    matcher->knnMatch(queryMat, matches, k, masks, false);
    
@@ -392,13 +392,13 @@ CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType)
    switch(distanceType)
    {
    case(0): //L1 float
-      return new cv::BruteForceMatcher<cv::L1<float>>();
+      return new cv::BruteForceMatcher< cv::L1<float> >();
    case(1): //L2 float
-      return new cv::BruteForceMatcher<cv::L2<float>>();
+      return new cv::BruteForceMatcher< cv::L2<float> >();
    case(2): //HammingLUT
-      return new cv::BruteForceMatcher<cv::HammingLUT>();
+      return new cv::BruteForceMatcher< cv::HammingLUT >();
    case(3):
-      return new cv::BruteForceMatcher<cv::Hamming>();
+      return new cv::BruteForceMatcher< cv::Hamming >();
    default:
       return 0;
    }
@@ -406,26 +406,26 @@ CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType)
 
 CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType)
 {
-   cv::BruteForceMatcher<cv::L1<float>>* m0;
-   cv::BruteForceMatcher<cv::L2<float>>* m1;
-   cv::BruteForceMatcher<cv::HammingLUT>* m2;
-   cv::BruteForceMatcher<cv::Hamming>* m3;
+   cv::BruteForceMatcher< cv::L1<float> >* m0;
+   cv::BruteForceMatcher< cv::L2<float> >* m1;
+   cv::BruteForceMatcher< cv::HammingLUT >* m2;
+   cv::BruteForceMatcher< cv::Hamming >* m3;
    switch(distanceType)
    {
    case(0): //L1 float
-      m0 = (cv::BruteForceMatcher<cv::L1<float>>*) *matcher;
+      m0 = (cv::BruteForceMatcher< cv::L1<float> >*) *matcher;
       delete m0;
       break;
    case(1): //L2 float
-      m1 = (cv::BruteForceMatcher<cv::L2<float>>*) *matcher;
+      m1 = (cv::BruteForceMatcher< cv::L2<float> >*) *matcher;
       delete m1;
       break;
    case(2):
-      m2 = (cv::BruteForceMatcher<cv::HammingLUT>*) *matcher;
+      m2 = (cv::BruteForceMatcher< cv::HammingLUT >*) *matcher;
       delete m2;
       break;
    case(3):
-      m3 = (cv::BruteForceMatcher<cv::Hamming>*) *matcher;
+      m3 = (cv::BruteForceMatcher< cv::Hamming >*) *matcher;
       delete m3;
    default:
       CV_Error(-1, "Invalid Distance type");
