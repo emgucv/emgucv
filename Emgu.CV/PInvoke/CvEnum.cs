@@ -2179,13 +2179,33 @@ namespace Emgu.CV.CvEnum
    public enum BORDER_TYPE
    {
       /// <summary>
-      /// border is filled with the fixed value, passed as last parameter of the function
+      /// Border is filled with the fixed value, passed as last parameter of the function
       /// </summary>
       CONSTANT = 0,
       /// <summary>
-      ///  the pixels from the top and bottom rows, the left-most and right-most columns are replicated to fill the border
+      /// The pixels from the top and bottom rows, the left-most and right-most columns are replicated to fill the border
       /// </summary>
       REPLICATE = 1,
+      /// <summary>
+      /// Reflect
+      /// </summary>
+      REFLECT = 2,
+      /// <summary>
+      /// Wrap
+      /// </summary>
+      WRAP = 3,
+      /// <summary>
+      /// Reflect 101
+      /// </summary>
+      REFLECT101 = 4,
+      /// <summary>
+      /// Transparent
+      /// </summary>
+      TRANSPARENT = 5, 
+      /// <summary>
+      /// Isolated
+      /// </summary>
+      ISOLATED = 6
    }
 
    /// <summary>

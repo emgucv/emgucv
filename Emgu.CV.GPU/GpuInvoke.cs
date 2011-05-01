@@ -741,7 +741,21 @@ namespace Emgu.CV.GPU
       /// <param name="sum">The sum GpuMat, supports only CV_32S source type</param>
       /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type. Use IntPtr.Zero if not needed</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIntegral")]
-      private static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum);
+      public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum);
+
+      /// <summary>
+      /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
+      /// det(M) - k*trace(M)^2
+      /// to the destination image. Corners in the image can be found as local maxima of the destination image.
+      /// </summary>
+      /// <param name="image">Input GpuMat</param>
+      /// <param name="harrisResponce">GpuMat to store the Harris detector responces. Should have the same size as <paramref name="image"/>. </param>
+      /// <param name="blockSize">Neighborhood size </param>
+      /// <param name="kSize"></param>
+      /// <param name="k">Harris detector free parameter.</param>
+      /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCornerHarris")]
+      public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);

@@ -500,6 +500,12 @@ CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv:
       cv::gpu::integral(*src, *sum);
 }
 
+CVAPI(void) gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType)
+{
+   cv::gpu::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
+}
+
+
 /*
 CVAPI(void) gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)
 {
