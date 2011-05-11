@@ -21,12 +21,19 @@ namespace Emgu.CV.GPU
    public class GpuMat<TDepth> : UnmanagedObject, IEquatable<GpuMat<TDepth>>
       where TDepth : new()
    {
-      internal GpuMat(IntPtr ptr)
+      /// <summary>
+      /// Create a GpuMat from the unmanaged pointer
+      /// </summary>
+      /// <param name="ptr">The unmanaged pointer to the GpuMat</param>
+      public GpuMat(IntPtr ptr)
       {
          _ptr = ptr;
       }
 
-      internal GpuMat()
+      /// <summary>
+      /// Create an empty GpuMat
+      /// </summary>
+      public GpuMat()
       {
          _ptr = GpuInvoke.GpuMatCreateDefault();
       }
@@ -53,14 +60,14 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Create a GpuMat from the specific region of <paramref name="mat"/>. The gpu data is shared between the two GpuMat
+      /// Create a GpuMat from the specific region of <paramref name="mat"/>. The data is shared between the two GpuMat
       /// </summary>
       /// <param name="mat">The matrix where the region is extracted from</param>
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuMat(GpuMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
       {
-         _ptr = GpuInvoke.GpuMatCreateFromRange(mat, rowRange, colRange);
+         _ptr = GpuInvoke.GpuMatGetRegion(mat, rowRange, colRange);
       }
 
       /// <summary>

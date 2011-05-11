@@ -23,7 +23,11 @@ namespace Emgu.CV.GPU
       where TColor : struct, IColor
       where TDepth : new()
    {
-      private GpuImage(IntPtr ptr)
+      /// <summary>
+      /// Create the GpuImage from the unmanaged pointer.
+      /// </summary>
+      /// <param name="ptr">The unmanaged pointer to the GpuMat. It is the user's responsibility that the Color type and depth matches between the managed class and unmanaged pointer.</param>
+      public GpuImage(IntPtr ptr)
          : base(ptr)
       {
       }
@@ -54,6 +58,17 @@ namespace Emgu.CV.GPU
       public GpuImage(Size size)
          : this(size.Height, size.Width)
       {
+      }
+
+      /// <summary>
+      /// Create a GpuImage from the specific region of <paramref name="image"/>. The data is shared between the two GpuImage
+      /// </summary>
+      /// <param name="image">The GpuImage where the region is extracted from</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
+      public GpuImage(GpuImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
+      {
+         _ptr = GpuInvoke.GpuMatGetRegion(image, rowRange, colRange);
       }
 
       /// <summary>

@@ -79,11 +79,14 @@ namespace Emgu.CV.GPU
       internal static extern IntPtr GpuMatCreateDefault();
 
       /// <summary>
-      /// Create an GpuMat from the specific region 
+      /// Create a GpuMat from the specific region of <paramref name="gpuMat"/>. The data is shared between the two GpuMat.
       /// </summary>
+      /// <param name="gpuMat">The gpuMat to extract regions from.</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateFromRange")]
-      internal static extern IntPtr GpuMatCreateFromRange(IntPtr other, MCvSlice rowRange, MCvSlice colRange);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetRegion")]
+      public static extern IntPtr GpuMatGetRegion(IntPtr gpuMat, MCvSlice rowRange, MCvSlice colRange);
 
       /// <summary>
       /// Check if the GpuMat is empty
