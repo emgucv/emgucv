@@ -510,6 +510,10 @@ void gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int bl
    cv::gpu::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
 }
 
+void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags)
+{
+   cv::gpu::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0));
+}
 
 /*
 void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)

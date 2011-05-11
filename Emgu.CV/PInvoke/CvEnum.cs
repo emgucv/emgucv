@@ -1384,19 +1384,19 @@ namespace Emgu.CV.CvEnum
    public enum CV_DXT
    {
       /// <summary>
-      ///  do forward 1D or 2D transform. The result is not scaled
+      /// Do forward 1D or 2D transform. The result is not scaled
       /// </summary>
       CV_DXT_FORWARD = 0,
       /// <summary>
-      /// do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
+      /// Do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
       /// </summary>
       CV_DXT_INVERSE = 1,
       /// <summary>
-      /// scale the result: divide it by the number of array elements. Usually, it is combined with CV_DXT_INVERSE, and one may use a shortcut 
+      /// Scale the result: divide it by the number of array elements. Usually, it is combined with CV_DXT_INVERSE, and one may use a shortcut 
       /// </summary>
       CV_DXT_SCALE = 2,
       /// <summary>
-      /// do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
+      /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
       /// </summary>
       CV_DXT_ROWS = 4,
       /// <summary>
@@ -1411,15 +1411,15 @@ namespace Emgu.CV.CvEnum
    public enum CV_DCT_TYPE
    {
       /// <summary>
-      ///  do forward 1D or 2D transform. The result is not scaled
+      /// Do forward 1D or 2D transform. The result is not scaled
       /// </summary>
       CV_DXT_FORWARD = 0,
       /// <summary>
-      /// do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
+      /// Do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
       /// </summary>
       CV_DXT_INVERSE = 1,
       /// <summary>
-      /// do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
+      /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
       /// </summary>
       CV_DXT_ROWS = 4
    }

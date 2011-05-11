@@ -767,6 +767,25 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCornerHarris")]
       public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
 
+      /// <summary>
+      /// Performs a forward or inverse discrete Fourier transform (1D or 2D) of floating point matrix.
+      /// Param dft_size is the size of DFT transform.
+      /// 
+      /// If the source matrix is not continous, then additional copy will be done,
+      /// so to avoid copying ensure the source matrix is continous one. If you want to use
+      /// preallocated output ensure it is continuous too, otherwise it will be reallocated.
+      ///
+      /// Being implemented via CUFFT real-to-complex transform result contains only non-redundant values
+      /// in CUFFT's format. Result as full complex matrix for such kind of transform cannot be retrieved.
+      ///
+      /// For complex-to-real transform it is assumed that the source matrix is packed in CUFFT's format.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The resulting GpuMat of the DST, must be pre-allocated and continious. If single channel, the result is real. If double channel, the result is complex</param>
+      /// <param name="flags">DFT flags</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDft")]
+      public static extern void Dft(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);
 
