@@ -4,19 +4,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/gpu/gpu.hpp"
+#include "gpu_c.h"
 
-CVAPI(cv::gpu::BruteForceMatcher_GPU_base*) gpuBruteForceMatcherCreate(cv::gpu::BruteForceMatcher_GPU_base::DistType distType) 
+cv::gpu::BruteForceMatcher_GPU_base* gpuBruteForceMatcherCreate(cv::gpu::BruteForceMatcher_GPU_base::DistType distType) 
 {
    return new cv::gpu::BruteForceMatcher_GPU_base(distType);
 }
 
-CVAPI(void) gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher) 
+void gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher) 
 {
    delete *matcher;
 }
 
-CVAPI(void) gpuBruteForceMatcherKnnMatch(
+void gpuBruteForceMatcherKnnMatch(
    cv::gpu::BruteForceMatcher_GPU_base* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
    cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 

@@ -4,15 +4,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/gpu/gpu.hpp"
+#include "gpu_c.h"
 
-CVAPI(cv::gpu::Stream*) streamCreate() { return new cv::gpu::Stream(); }
+cv::gpu::Stream* streamCreate() { return new cv::gpu::Stream(); }
 
-CVAPI(void) streamRelease(cv::gpu::Stream** stream) { delete stream; }
+void streamRelease(cv::gpu::Stream** stream) { delete stream; }
 
-CVAPI(void) streamWaitForCompletion(cv::gpu::Stream* stream) { stream->waitForCompletion(); }
+void streamWaitForCompletion(cv::gpu::Stream* stream) { stream->waitForCompletion(); }
 
-CVAPI(bool) streamQueryIfComplete(cv::gpu::Stream* stream) { return stream->queryIfComplete(); }
+bool streamQueryIfComplete(cv::gpu::Stream* stream) { return stream->queryIfComplete(); }
 
-CVAPI(void) streamEnqueueCopy(cv::gpu::Stream* stream, cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst) { return stream->enqueueCopy(*src, *dst); }
+void streamEnqueueCopy(cv::gpu::Stream* stream, cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst) { return stream->enqueueCopy(*src, *dst); }
 

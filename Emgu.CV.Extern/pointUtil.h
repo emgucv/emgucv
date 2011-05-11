@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef POINT_UTIL_H
-#define POINT_UTIL_H
+#ifndef EMGU_POINT_UTIL_H
+#define EMGU_POINT_UTIL_H
 
 #include "opencv2/core/core.hpp"
 #include "sse.h"

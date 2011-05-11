@@ -274,5 +274,14 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      /// <summary>
+      /// Get the string representation of the Quaternions
+      /// </summary>
+      /// <returns>The string representation</returns>
+      public override string ToString()
+      {
+         return String.Format("[{0}, {1}, {2}, {3}]", W, X, Y, Z);
+      }
    }
 }

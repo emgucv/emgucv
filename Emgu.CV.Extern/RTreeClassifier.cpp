@@ -4,13 +4,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/features2d/features2d.hpp"
-#include <vector>
+#include "features2d_c.h"
 
-CVAPI(cv::RTreeClassifier*) CvRTreeClassifierCreate() { return new cv::RTreeClassifier(); }
-CVAPI(void) CvRTreeClassifierRelease(cv::RTreeClassifier* classifier) { delete classifier; }
-CVAPI(void) CvRTreeClassifierTrain(
+cv::RTreeClassifier* CvRTreeClassifierCreate() { return new cv::RTreeClassifier(); }
+void CvRTreeClassifierRelease(cv::RTreeClassifier* classifier) { delete classifier; }
+void CvRTreeClassifierTrain(
       cv::RTreeClassifier* classifier, 
       IplImage* train_image,
       CvPoint* train_points,
@@ -29,10 +27,10 @@ CVAPI(void) CvRTreeClassifierTrain(
    classifier->train(base_set, *rng, num_trees, depth, views, reduced_num_dim, num_quant_bits);
 }
 
-CVAPI(int) CvRTreeClassifierGetOriginalNumClasses(cv::RTreeClassifier* classifier) { return classifier->original_num_classes(); }
-CVAPI(int) CvRTreeClassifierGetNumClasses(cv::RTreeClassifier* classifier) { return classifier->classes(); }
+int CvRTreeClassifierGetOriginalNumClasses(cv::RTreeClassifier* classifier) { return classifier->original_num_classes(); }
+int CvRTreeClassifierGetNumClasses(cv::RTreeClassifier* classifier) { return classifier->classes(); }
 
-CVAPI(int) CvRTreeClassifierGetSigniture(
+int CvRTreeClassifierGetSigniture(
    cv::RTreeClassifier* classifier, 
    IplImage* image, 
    CvPoint* point,

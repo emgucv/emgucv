@@ -6,8 +6,8 @@
 
 #pragma once
 
-#ifndef WEIGHTED_SUM_H
-#define WEIGHTED_SUM_H
+#ifndef EMGU_DOUBLE_OPS_H
+#define EMGU_DOUBLE_OPS_H
 
 #include "sse.h"
 namespace doubleOps

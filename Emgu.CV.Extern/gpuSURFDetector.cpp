@@ -4,34 +4,34 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/gpu/gpu.hpp"
+#include "gpu_c.h"
 
-CVAPI(cv::gpu::SURF_GPU*) gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
+cv::gpu::SURF_GPU* gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
 {
    return new cv::gpu::SURF_GPU(_hessianThreshold, _nOctaves, _nOctaveLayers, _extended, _keypointsRatio, _upright);
 }
 
-CVAPI(void) gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector)
+void gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector)
 {
    delete *detector;
 }
 
-CVAPI(void) gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints)
+void gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints)
 {
    (*detector)(*img, mask ? *mask : cv::gpu::GpuMat() , *keypoints);
 }
 
-CVAPI(void) gpuDownloadKeypoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints)
+void gpuDownloadKeypoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints)
 {
    detector->downloadKeypoints(*keypointsGPU, *keypoints);
 }
 
-CVAPI(void) gpuUploadKeypoints(cv::gpu::SURF_GPU* detector, const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU)
+void gpuUploadKeypoints(cv::gpu::SURF_GPU* detector, const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU)
 {
    detector->uploadKeypoints(*keypoints, *keypointsGPU);
 }
 
-CVAPI(void) gpuSURFDetectorCompute(
+void gpuSURFDetectorCompute(
    cv::gpu::SURF_GPU* detector, 
    const cv::gpu::GpuMat* img, 
    const cv::gpu::GpuMat* mask, 
@@ -47,7 +47,7 @@ CVAPI(void) gpuSURFDetectorCompute(
       useProvidedKeypoints);
 }
 
-CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector)
+int gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector)
 {
    return detector->descriptorSize();
 }

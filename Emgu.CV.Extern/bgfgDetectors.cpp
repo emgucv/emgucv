@@ -4,11 +4,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/legacy/blobtrack.hpp"
+#include "legacy_c.h"
 
 //Forground detector
-CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
-CVAPI(IplImage*) CvFGDetectorGetMask(CvFGDetector* detector) { return detector->GetMask(); } 
-CVAPI(void) CvFGDetectorProcess(CvFGDetector* detector, IplImage* image) { detector->Process(image); }
-CVAPI(void) CvFGDetectorRelease(CvFGDetector* detector) { detector->Release(); }
+CvFGDetector* CvCreateFGDetectorBase(int type, void* param) { return cvCreateFGDetectorBase(type, param); }
+IplImage* CvFGDetectorGetMask(CvFGDetector* detector) { return detector->GetMask(); } 
+void CvFGDetectorProcess(CvFGDetector* detector, IplImage* image) { detector->Process(image); }
+void CvFGDetectorRelease(CvFGDetector* detector) { detector->Release(); }

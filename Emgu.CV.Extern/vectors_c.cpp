@@ -4,10 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "vectorOfByte.h"
-#include "vectorOfFloat.h"
-#include "vectorOfDMatch.h"
-#include "vectorOfKeyPoint.h"
+#include "vectors_c.h"
 
 //----------------------------------------------------------------------------
 //
@@ -57,7 +54,7 @@ unsigned char* VectorOfByteGetStartAddress(std::vector<unsigned char>* v)
 
 //----------------------------------------------------------------------------
 //
-//  Vector of Byte
+//  Vector of Float
 //
 //----------------------------------------------------------------------------
 std::vector<float>* VectorOfFloatCreate() 
@@ -110,7 +107,6 @@ std::vector<cv::DMatch>* VectorOfDMatchCreate()
    return new std::vector<cv::DMatch>(); 
 }
 
-//implementation
 void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* trainIdx, const CvMat* distances, const CvMat* mask)
 {
    cv::Mat trainIdxCPU = cv::cvarrToMat(trainIdx);
@@ -213,6 +209,22 @@ void VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data)
 cv::DMatch* VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v)
 {
    return v->empty() ? NULL : &(*v)[0];
+}
+
+void VectorOfDMatchToMat(std::vector<cv::DMatch>* matches, CvMat* trainIdx, CvMat* distance)
+{
+   CV_Assert(trainIdx->rows * trainIdx->cols > (int) matches->size());
+   CV_Assert(distance->rows * distance->cols > (int) matches->size());
+   cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
+   cv::Mat distanceMat = cv::cvarrToMat(distance);
+   float* distance_ptr = distanceMat.ptr<float>();
+   int* trainIdx_ptr = trainIdxMat.ptr<int>();
+   for(std::vector<cv::DMatch>::iterator m = matches->begin(); m != matches->end(); ++m, ++trainIdx_ptr, ++distance_ptr)
+   {
+      cv::DMatch match = *m;
+      *distance_ptr = match.distance;
+      *trainIdx_ptr = match.trainIdx;
+   }
 }
 
 //----------------------------------------------------------------------------

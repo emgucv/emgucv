@@ -4,58 +4,57 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/legacy/blobtrack.hpp"
+#include "legacy_c.h"
 
 //Blob
-CVAPI(CvBlobSeq*) CvBlobSeqCreate(int BlobSize) { return new CvBlobSeq(BlobSize); }
-CVAPI(void) CvBlobSeqRelease(CvBlobSeq** blobSeq) { delete *blobSeq; }
-CVAPI(CvBlob*) CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
-CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
-CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
-CVAPI(void) CvBlobSeqClear(CvBlobSeq* blobSeq) { blobSeq->Clear(); }
+CvBlobSeq* CvBlobSeqCreate(int BlobSize) { return new CvBlobSeq(BlobSize); }
+void CvBlobSeqRelease(CvBlobSeq** blobSeq) { delete *blobSeq; }
+CvBlob* CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
+CvBlob* CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
+int CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
+void CvBlobSeqClear(CvBlobSeq* blobSeq) { blobSeq->Clear(); }
 
 //Blob Detector
-CVAPI(void) CvBlobDetectorRelease(CvBlobDetector** detector) { delete *detector; }
-CVAPI(int) CvBlobDetectorDetectNewBlob(CvBlobDetector* detector, IplImage* pImg, IplImage* pImgFG, CvBlobSeq* pNewBlobList, CvBlobSeq* pOldBlobList)
+void CvBlobDetectorRelease(CvBlobDetector** detector) { delete *detector; }
+int CvBlobDetectorDetectNewBlob(CvBlobDetector* detector, IplImage* pImg, IplImage* pImgFG, CvBlobSeq* pNewBlobList, CvBlobSeq* pOldBlobList)
    { return detector->DetectNewBlob(pImg, pImgFG, pNewBlobList, pOldBlobList); }
-CVAPI(CvBlobDetector*) CvCreateBlobDetectorSimple() { return cvCreateBlobDetectorSimple(); }
-CVAPI(CvBlobDetector*) CvCreateBlobDetectorCC() { return cvCreateBlobDetectorCC(); }
+CvBlobDetector* CvCreateBlobDetectorSimple() { return cvCreateBlobDetectorSimple(); }
+CvBlobDetector* CvCreateBlobDetectorCC() { return cvCreateBlobDetectorCC(); }
 
 //blob Tracker
 /* Simple blob tracker based on connected component tracking: */
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerCC() { return  cvCreateBlobTrackerCC(); }
+ CvBlobTracker* CvCreateBlobTrackerCC() { return  cvCreateBlobTrackerCC(); }
 /* Connected component tracking and mean-shift particle filter collion-resolver: */
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerCCMSPF() { return  cvCreateBlobTrackerCCMSPF(); }
+ CvBlobTracker* CvCreateBlobTrackerCCMSPF() { return  cvCreateBlobTrackerCCMSPF(); }
 /* Blob tracker that integrates meanshift and connected components: */
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerMSFG() { return  cvCreateBlobTrackerMSFG(); }
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerMSFGS() { return  cvCreateBlobTrackerMSFGS(); }
+ CvBlobTracker* CvCreateBlobTrackerMSFG() { return  cvCreateBlobTrackerMSFG(); }
+ CvBlobTracker* CvCreateBlobTrackerMSFGS() { return  cvCreateBlobTrackerMSFGS(); }
 /* Meanshift without connected-components */
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerMS() { return  cvCreateBlobTrackerMS(); }
+ CvBlobTracker* CvCreateBlobTrackerMS() { return  cvCreateBlobTrackerMS(); }
 /* Particle filtering via Bhattacharya coefficient, which        */
 /* is roughly the dot-product of two probability densities.      */
 /* See: Real-Time Tracking of Non-Rigid Objects using Mean Shift */
 /*      Comanicius, Ramesh, Meer, 2000, 8p                       */
 /*      http://citeseer.ist.psu.edu/321441.html                  */
-CVAPI( CvBlobTracker*) CvCreateBlobTrackerMSPF() { return  cvCreateBlobTrackerMSPF(); }
-CVAPI(void) CvBlobTrackerRealease(CvBlobTracker** tracker) { delete *tracker; }
-CVAPI(int) CvBlobTrackerGetBlobNum(CvBlobTracker* tracker) { return tracker->GetBlobNum(); }
-CVAPI(CvBlob*) CvBlobTrackerGetBlob(CvBlobTracker* tracker, int BlobIndex) { return tracker->GetBlob(BlobIndex); }
-CVAPI(CvBlob*) CvBlobTrackerGetBlobByID(CvBlobTracker* tracker, int BlobId) { return tracker->GetBlobByID(BlobId); }
-CVAPI(void) CvBlobTrackerDelBlob(CvBlobTracker* tracker, int BlobIndex) { tracker->DelBlob(BlobIndex); }
-CVAPI(CvBlob*) CvBlobTrackerAddBlob(CvBlobTracker* tracker, CvBlob* pBlob, IplImage* pImg, IplImage* pImgFG) { return tracker->AddBlob(pBlob, pImg, pImgFG); }
+ CvBlobTracker* CvCreateBlobTrackerMSPF() { return  cvCreateBlobTrackerMSPF(); }
+void CvBlobTrackerRealease(CvBlobTracker** tracker) { delete *tracker; }
+int CvBlobTrackerGetBlobNum(CvBlobTracker* tracker) { return tracker->GetBlobNum(); }
+CvBlob* CvBlobTrackerGetBlob(CvBlobTracker* tracker, int BlobIndex) { return tracker->GetBlob(BlobIndex); }
+CvBlob* CvBlobTrackerGetBlobByID(CvBlobTracker* tracker, int BlobId) { return tracker->GetBlobByID(BlobId); }
+void CvBlobTrackerDelBlob(CvBlobTracker* tracker, int BlobIndex) { tracker->DelBlob(BlobIndex); }
+CvBlob* CvBlobTrackerAddBlob(CvBlobTracker* tracker, CvBlob* pBlob, IplImage* pImg, IplImage* pImgFG) { return tracker->AddBlob(pBlob, pImg, pImgFG); }
 
 //blob tracker auto
-CVAPI(CvBlobTrackerAuto*) CvCreateBlobTrackerAuto1(CvBlobTrackerAutoParam1* param) { return cvCreateBlobTrackerAuto1(param); }
-CVAPI(void) CvBlobTrackerAutoRelease(CvBlobTrackerAuto** tracker) { delete *tracker; }
-CVAPI(CvBlob*) CvBlobTrackerAutoGetBlob(CvBlobTrackerAuto* tracker, int index) { return tracker->GetBlob(index); }
-CVAPI(CvBlob*) CvBlobTrackerAutoGetBlobByID(CvBlobTrackerAuto* tracker, int blobID) { return tracker->GetBlobByID(blobID); }
-CVAPI(int) CvBlobTrackerAutoGetBlobNum(CvBlobTrackerAuto* tracker) { return tracker->GetBlobNum(); }
-CVAPI(void) CvBlobTrackerAutoProcess(CvBlobTrackerAuto* tracker, IplImage* pImg, IplImage* pMask) { return tracker->Process(pImg, pMask); }
-CVAPI(IplImage*) CvBlobTrackerAutoGetFGMask(CvBlobTrackerAuto* tracker) { return tracker->GetFGMask(); }
+CvBlobTrackerAuto* CvCreateBlobTrackerAuto1(CvBlobTrackerAutoParam1* param) { return cvCreateBlobTrackerAuto1(param); }
+void CvBlobTrackerAutoRelease(CvBlobTrackerAuto** tracker) { delete *tracker; }
+CvBlob* CvBlobTrackerAutoGetBlob(CvBlobTrackerAuto* tracker, int index) { return tracker->GetBlob(index); }
+CvBlob* CvBlobTrackerAutoGetBlobByID(CvBlobTrackerAuto* tracker, int blobID) { return tracker->GetBlobByID(blobID); }
+int CvBlobTrackerAutoGetBlobNum(CvBlobTrackerAuto* tracker) { return tracker->GetBlobNum(); }
+void CvBlobTrackerAutoProcess(CvBlobTrackerAuto* tracker, IplImage* pImg, IplImage* pMask) { return tracker->Process(pImg, pMask); }
+IplImage* CvBlobTrackerAutoGetFGMask(CvBlobTrackerAuto* tracker) { return tracker->GetFGMask(); }
 
 //blob tracker post process
-CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcKalman() { return cvCreateModuleBlobTrackPostProcKalman(); }
-CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverRect() { return cvCreateModuleBlobTrackPostProcTimeAverRect(); }
-CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverExp() { return cvCreateModuleBlobTrackPostProcTimeAverExp(); }
-CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc** postProc) { delete *postProc; };
+CvBlobTrackPostProc* CvCreateModuleBlobTrackPostProcKalman() { return cvCreateModuleBlobTrackPostProcKalman(); }
+CvBlobTrackPostProc* CvCreateModuleBlobTrackPostProcTimeAverRect() { return cvCreateModuleBlobTrackPostProcTimeAverRect(); }
+CvBlobTrackPostProc* CvCreateModuleBlobTrackPostProcTimeAverExp() { return cvCreateModuleBlobTrackPostProcTimeAverExp(); }
+void CvBlobTrackPostProcRelease(CvBlobTrackPostProc** postProc) { delete *postProc; };

@@ -4,41 +4,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/core/core_c.h"
-#include "stdio.h"
-#include "baseapi.h"
+#include "tesseract_c.h"
 
-class EmguTesseract: public tesseract::TessBaseAPI
-{
-public:
-   int GetTextLength(int* blob_count)
-   {
-      return TextLength(blob_count);
-   }
-
-   int GetImageHeight()
-   {
-      int left, top, width, height, imageWidth, imageHeight;
-      thresholder_->GetImageSizes(&left, &top, &width, &height,
-                             &imageWidth, &imageHeight);
-      return imageHeight;
-   }
-
-   int TesseractExtractResult(char** text,
-      int** lengths,
-      float** costs,
-      int** x0,
-      int** y0,
-      int** x1,
-      int** y1)
-   {
-      return tesseract::TessBaseAPI::TesseractExtractResult(text, lengths, costs, x0, y0, x1, y1, page_res_);
-   }
-
-};
-
-CVAPI(const char*) TesseractGetVersion()
+const char* TesseractGetVersion()
 {
 #ifdef _WIN32
    return tesseract::TessBaseAPI::Version();
@@ -47,13 +15,13 @@ CVAPI(const char*) TesseractGetVersion()
 #endif
 }
 
-CVAPI(EmguTesseract*) TessBaseAPICreate() 
+EmguTesseract* TessBaseAPICreate() 
 { 
    EmguTesseract* ocr = new EmguTesseract(); 
    return ocr;
 }
 
-CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode)
+int TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode)
 { 
 #ifdef _WIN32
    return ocr->Init(dataPath, language, (tesseract::OcrEngineMode) mode);
@@ -62,19 +30,19 @@ CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char*
 #endif
 }
 
-CVAPI(void) TessBaseAPIRelease(EmguTesseract** ocr)
+void TessBaseAPIRelease(EmguTesseract** ocr)
 {
    delete *ocr;
 }
 
-CVAPI(void) TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image)
+void TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image)
 {
    ocr->SetImage( (const unsigned char*)image->imageData, image->width, image->height, image->nChannels, image->widthStep);
    if (ocr->Recognize(NULL) != 0)
       CV_Error(CV_StsError, "Tesseract engine: Recognize Failed");
 }
 
-CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
+void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
 {
    char* result = ocr->GetUTF8Text();
    size_t length = strlen(result);
@@ -83,14 +51,7 @@ CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char
    delete[] result;
 }
 
-struct TesseractResult
-{
-   int length;
-   float cost;
-   CvRect region;
-};
-
-CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* resultSeq)
+void TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* resultSeq)
 {
    if (ocr == NULL)
       return;
@@ -133,7 +94,7 @@ CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* 
    delete[] y1;
 }
 
-CVAPI(bool) TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value)
+bool TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value)
 {
    return ocr->SetVariable(varName, value);
 }

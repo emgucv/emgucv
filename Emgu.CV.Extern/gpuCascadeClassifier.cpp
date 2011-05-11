@@ -4,19 +4,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/gpu/gpu.hpp"
+#include "gpu_c.h"
 
-CVAPI(cv::gpu::CascadeClassifier_GPU*) gpuCascadeClassifierCreate(const char* filename)
+cv::gpu::CascadeClassifier_GPU* gpuCascadeClassifierCreate(const char* filename)
 {
    return new cv::gpu::CascadeClassifier_GPU(filename);
 }
 
-CVAPI(void) gpuCascadeClassifierRelease(cv::gpu::CascadeClassifier_GPU** classifier)
+void gpuCascadeClassifierRelease(cv::gpu::CascadeClassifier_GPU** classifier)
 {
    delete *classifier;
 }
 
-CVAPI(int) gpuCascadeClassifierDetectMultiScale(cv::gpu::CascadeClassifier_GPU* classifier, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* objectsBuf, double scaleFactor, int minNeighbors, CvSize minSize, CvSeq* results)
+int gpuCascadeClassifierDetectMultiScale(cv::gpu::CascadeClassifier_GPU* classifier, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* objectsBuf, double scaleFactor, int minNeighbors, CvSize minSize, CvSeq* results)
 {
    cvClearSeq(results);
    int count = classifier->detectMultiScale(*image, *objectsBuf, scaleFactor, minNeighbors, minSize);

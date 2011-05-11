@@ -1121,7 +1121,7 @@ namespace Emgu.CV.Test
       public void TestStereoGCCorrespondence()
       {
          Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
-         Image<Gray, Byte> right = new Image<Gray, byte>("scsne_r.bmp");
+         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 

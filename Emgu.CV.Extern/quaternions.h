@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef QUATERNIONS_H
-#define QUATERNIONS_H
+#ifndef EMGU_QUATERNIONS_H
+#define EMGU_QUATERNIONS_H
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
@@ -299,7 +299,25 @@ typedef struct Quaternions
 
 } Quaternions;
 
+/**
+* @fn   void eulerToQuaternions(double x, double y, double z, Quaternions* quaternions)
+*
+* @brief   Convert eluer angle (in radian) to quaternions. 
+*
+* @author  Canming
+* @date 8/31/2010
+**/
+CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions);
 
+/**
+* @fn   void quaternionsToEuler(Quaternions* quaternions, double* x, double* y, double* z)
+* 
+* @brief   Convert quaternions to eluer angle (in radian) 
+*
+* @author  Canming
+* @date 8/31/2010
+**/
+CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z);
 
 /**
 * @fn   void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
@@ -312,6 +330,18 @@ typedef struct Quaternions
 CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation);
 
 /**
+* @fn   void quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point,
+* CvPoint3D64f* pointDst)
+*
+* @brief   Rotate a single point using the quaternions. 
+*
+* @author  Canming Huang
+* @date 8/31/2010
+**/
+CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint3D64f* point, CvPoint3D64f* pointDst);
+
+
+/**
 * @fn   void quaternionsRotatePoints(Quaternions* quaternions, CvMat* pointSrc,
 * CvMat* pointDst)
 *
@@ -322,5 +352,59 @@ CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* r
 **/
 CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointSrc, CvMat* pointDst);
 
+/**
+ * @fn   void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2,
+ * Quaternions* quaternionsDst)
+ *
+ * @brief   Multiply two quaternions. The result is a rotation by quaternions2 follows by
+ * quaternions1. 
+ *
+ * @author  Canming Huang
+ * @date 8/31/2010
+**/
+CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst);
 
+/**
+* @fn   void axisAngleToQuaternions(CvPoint3D64f* axisAngle, Quaternions* quaternions)
+*
+* @brief   Convert axis angle vector to quaternions. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
+*
+* @author  Canming Huang
+* @date 8/31/2010
+**/
+CVAPI(void) axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions);
+
+/**
+* @fn   void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
+*
+* @brief   Convert quaternions to axis angle vector. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
+*
+* @author  Canming Huang
+* @date 8/31/2010
+**/
+CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAngle);
+
+/**
+ * @fn   void quaternionsRenorm(Quaternions* quaternions)
+ *
+ * @brief   Renormalize the given quaternions such that the norm becomes 1
+ *
+ * @author  Canming Huang
+ * @date 8/31/2010
+**/
+CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
+
+/**
+* @fn   void quaternionsSlerp(Quaternions* qa, Quaternions* qb, double t, Quaternions* qm)
+*
+* @brief   Use Slerp to interpolate the quaternions. 
+*
+* @param qa The first Quaternions
+* @param qb The second Quaternions
+* @param t This is the weight for qb. 0<=t<=1; if t=0, qm=qa; if t=1, qm - qb;
+* @param qm The result of slerp
+* @author  Canming Huang
+* @date 8/31/2010
+**/
+CVAPI(void) quaternionsSlerp(const Quaternions* qa, const Quaternions* qb, double t, Quaternions* qm);
 #endif

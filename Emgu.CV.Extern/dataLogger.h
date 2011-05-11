@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef DATA_LOGGER_H
-#define DATA_LOGGER_H
+#ifndef EMGU_DATA_LOGGER_H
+#define EMGU_DATA_LOGGER_H
 
 #include "opencv2/core/core.hpp"
 #include <stdarg.h>

@@ -4,16 +4,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/contrib/contrib.hpp"
-#include "vectorOfDMatch.h"
+#include "features2d_c.h"
 
 //FernClassifier
-CVAPI(cv::FernClassifier*) CvFernClassifierCreate() { return new cv::FernClassifier; }
-CVAPI(void) CvFernClassifierRelease(cv::FernClassifier* classifier) { delete classifier;}
+cv::FernClassifier* CvFernClassifierCreate() { return new cv::FernClassifier; }
+void CvFernClassifierRelease(cv::FernClassifier* classifier) { delete classifier;}
 
-CVAPI(void) CvFernClassifierTrainFromSingleView(
+void CvFernClassifierTrainFromSingleView(
                                   cv::FernClassifier* classifier,
                                   IplImage* image,
                                   std::vector<cv::KeyPoint>* keypoints,
@@ -30,24 +27,24 @@ CVAPI(void) CvFernClassifierTrainFromSingleView(
 }
 
 //Patch Genetator
-CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg) 
+void CvPatchGeneratorInit(cv::PatchGenerator* pg) 
 { 
    cv::PatchGenerator defaultPG;
    memcpy(pg, &defaultPG, sizeof(cv::PatchGenerator));
 }
 
 //LDetector
-CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords)
+void CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    (*detector)(mat, *keypoints, maxCount, scaleCoords);
 }
 
 //SelfSimDescriptor
-CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
+cv::SelfSimDescriptor* CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
-CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+void CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
+void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
 {
    std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
    memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
@@ -62,22 +59,22 @@ CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplIma
    //CV_Assert(sumAbs != 0.0f);
    
 }
-CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
+int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
 
 //StarDetector
-CVAPI(cv::StarFeatureDetector*) CvStarGetFeatureDetector(cv::StarDetector* detector)
+cv::StarFeatureDetector* CvStarGetFeatureDetector(cv::StarDetector* detector)
 {
    return new cv::StarFeatureDetector(*detector);
 }
 
-CVAPI(void) CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector)
+void CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 //SIFTDetector
-CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
+cv::SIFT* CvSIFTDetectorCreate(
    int nOctaves, int nOctaveLayers, int firstOctave, int angleMode,//common parameters
    double threshold, double edgeThreshold, //detector parameters
    double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
@@ -100,30 +97,30 @@ CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
    return new cv::SIFT(p, detectorP, descriptorP);
 }
 
-CVAPI(cv::SiftFeatureDetector*) CvSiftGetFeatureDetector(cv::SIFT* detector)
+cv::SiftFeatureDetector* CvSiftGetFeatureDetector(cv::SIFT* detector)
 {
    return new cv::SiftFeatureDetector(detector->getDetectorParams(), detector->getCommonParams());
 }
 
-CVAPI(void) CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector)
+void CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
-CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector)
+void CvSIFTDetectorRelease(cv::SIFT** detector)
 {
    delete *detector;
    detector = 0;
 }
 
-CVAPI(int) CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
+int CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
 {
    return detector->descriptorSize();
 }
 
 /*
-CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
+void CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -137,7 +134,7 @@ CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, Ipl
       memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
 }*/
 
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    if (keypoints->size() <= 0) return;
    cv::Mat mat = cv::cvarrToMat(image);
@@ -149,7 +146,7 @@ CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image
 }
 
 //SIFT with OpponentColorDescriptorExtractor
-CVAPI(void) CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    /*
    if (keypoints->size() <= 0) return;
@@ -170,7 +167,7 @@ CVAPI(void) CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* im
 }
 
 //FeatureDetector
-CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
+void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -178,13 +175,13 @@ CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplI
    detector->detect(mat, *keypoints, maskMat);
 }
 
-CVAPI(void) CvFeatureDetectorRelease(cv::FeatureDetector** detector)
+void CvFeatureDetectorRelease(cv::FeatureDetector** detector)
 {
    delete *detector;
 }
 
 //GridAdaptedFeatureDetector
-CVAPI(cv::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(   
+cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(   
    cv::FeatureDetector* detector,
    int maxTotalKeypoints,
    int gridRows, int gridCols)
@@ -192,7 +189,7 @@ CVAPI(cv::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(
    return new cv::GridAdaptedFeatureDetector(detector, maxTotalKeypoints, gridRows, gridCols);
 }
 /*
-CVAPI(void) GridAdaptedFeatureDetectorDetect(
+void GridAdaptedFeatureDetectorDetect(
    cv::GridAdaptedFeatureDetector* detector, 
    const cv::Mat* image, std::vector<cv::KeyPoint>* keypoints, const cv::Mat* mask)
 {
@@ -201,26 +198,26 @@ CVAPI(void) GridAdaptedFeatureDetectorDetect(
    detector->detect(mat, *keypoints, maskMat);
 }*/
 
-CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector)
+void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 //SURFDetector
-CVAPI(cv::SurfFeatureDetector*) CvSURFGetFeatureDetector(cv::SURF* detector)
+cv::SurfFeatureDetector* CvSURFGetFeatureDetector(cv::SURF* detector)
 {
    return new cv::SurfFeatureDetector(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers);
 }
 
-CVAPI(void) CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector)
+void CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 /*
-CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
+void CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat maskMat;
@@ -228,7 +225,7 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
    (*detector)(mat, maskMat, *keypoints, *descriptors, false);
 }*/
 
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    if (keypoints->size() <= 0) return;
 
@@ -241,7 +238,7 @@ CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image
 }
 
 //SURF with OpponentColorDescriptorExtractor
-CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    if (keypoints->size() <= 0) return;
    cv::Mat mat = cv::cvarrToMat(image);
@@ -251,17 +248,17 @@ CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* im
    colorDetector.compute(mat, *keypoints, descriptorsMat);
 }
 
-CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize)
+cv::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize)
 {
    return new cv::BriefDescriptorExtractor(descriptorSize);
 }
 
-CVAPI(int) CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
+int CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
 {
    return extractor->descriptorSize();
 }
 
-CVAPI(void) CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
    if (keypoints->size() <= 0) return;
    cv::Mat img = cv::cvarrToMat(image);
@@ -269,39 +266,39 @@ CVAPI(void) CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* ex
    extractor->compute(img, *keypoints, result);
 }
 
-CVAPI(void) CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
+void CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
 {
    delete *extractor;
 }
 
 // detect corners using FAST algorithm
-CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression)
+cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_supression)
 {
    return new cv::FastFeatureDetector(threshold, nonmax_supression);
 }
 
-CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
+void CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 // MSER detector
-CVAPI(cv::MserFeatureDetector*) CvMserGetFeatureDetector(CvMSERParams* detector)
+cv::MserFeatureDetector* CvMserGetFeatureDetector(CvMSERParams* detector)
 {  
    return new cv::MserFeatureDetector(*detector);
 }
 
-CVAPI(void) CvMserFeatureDetectorRelease(cv::MserFeatureDetector** detector)
+void CvMserFeatureDetectorRelease(cv::MserFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 //Plannar Object Detector
-CVAPI(cv::PlanarObjectDetector*) CvPlanarObjectDetectorDefaultCreate() { return new cv::PlanarObjectDetector; }
-CVAPI(void) CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector) { delete detector; }
-CVAPI(void) CvPlanarObjectDetectorTrain(
+cv::PlanarObjectDetector* CvPlanarObjectDetectorDefaultCreate() { return new cv::PlanarObjectDetector; }
+void CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector) { delete detector; }
+void CvPlanarObjectDetectorTrain(
    cv::PlanarObjectDetector* objectDetector, 
    IplImage* image, 
    int _npoints,
@@ -317,7 +314,7 @@ CVAPI(void) CvPlanarObjectDetectorTrain(
    pyr.push_back(imageMat);
    objectDetector->train(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, *detector, *patchGenerator);
 }
-CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners)
+void CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners)
 {
    std::vector<cv::Point2f> cornerVec;
    cv::Mat imageMat = cv::cvarrToMat(image);
@@ -326,7 +323,7 @@ CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, Ipl
    if (cornerVec.size() > 0)
       cvSeqPushMulti(corners, &cornerVec[0], cornerVec.size());
 }
-CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
+void CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
 {
    std::vector<cv::KeyPoint> modelPtVec = detector->getModelPoints();
    if (modelPtVec.size() > 0)
@@ -334,7 +331,7 @@ CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detec
 }
 
 // Draws matches of keypints from two images on output image.
-CVAPI(void) drawMatchedFeatures(
+void drawMatchedFeatures(
                                 const IplImage* img1, const std::vector<cv::KeyPoint>* keypoints1,
                                 const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
                                 const CvMat* matchIndicies, 
@@ -355,7 +352,7 @@ CVAPI(void) drawMatchedFeatures(
 }
 
 //DescriptorMatcher
-CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, CvMat* trainDescriptor)
+void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, CvMat* trainDescriptor)
 {
    cv::Mat trainMat = cv::cvarrToMat(trainDescriptor);
    std::vector<cv::Mat> trainVector;
@@ -363,7 +360,7 @@ CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, CvMat* trainD
    matcher->add(trainVector);   
 }
 
-CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
+void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
                    CvMat* trainIdx, CvMat* distance, int k,
                    const CvMat* mask) 
 {
@@ -371,23 +368,15 @@ CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const Cv
    CV_Assert( matcher->getTrainDescriptors().size() == 1);
 
    cv::Mat queryMat = cv::cvarrToMat(queryDescriptors);
-   cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
-   cv::Mat distanceMat = cv::cvarrToMat(distance);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
    std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the image.
    std::vector<cv::Mat> masks;
    matcher->knnMatch(queryMat, matches, k, masks, false);
    
-   float* distance_ptr = distanceMat.ptr<float>();
-   int* trainIdx_ptr = trainIdxMat.ptr<int>();
-   for(std::vector<cv::DMatch>::iterator m = matches[0].begin(); m != matches[0].end(); ++m, ++trainIdx_ptr, ++distance_ptr)
-   {
-      cv::DMatch match = *m;
-      *distance_ptr = match.distance;
-      *trainIdx_ptr = match.trainIdx;
-   }
+   VectorOfDMatchToMat(&matches[0], trainIdx, distance);
 }
-CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType)
+
+cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType)
 {
    switch(distanceType)
    {
@@ -404,7 +393,7 @@ CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType)
    }
 }
 
-CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType)
+void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType)
 {
    cv::BruteForceMatcher< cv::L1<float> >* m0;
    cv::BruteForceMatcher< cv::L2<float> >* m1;
@@ -431,4 +420,113 @@ CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int dist
       CV_Error(-1, "Invalid Distance type");
    }
    *matcher = 0;
+}
+
+//2D tracker
+bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, CvMat* homography)
+{
+   cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+
+   cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) cv::cvarrToMat(mask) : cv::Mat_<uchar>(indMat.rows, 1, 255);
+   int nonZero = mask? cv::countNonZero(maskMat): indMat.rows;
+   if (nonZero < 4) return false;
+
+   std::vector<cv::Point2f> srcPtVec;
+   std::vector<cv::Point2f> dstPtVec;
+
+   for(int i = 0; i < maskMat.rows; i++)
+   {
+      if ( maskMat.at<uchar>(i) )
+      {
+         srcPtVec.push_back((*model)[indMat.at<int>(i)].pt);
+         dstPtVec.push_back((*observed)[i].pt);
+      }
+   }
+   
+   cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, 3);
+   cv::Mat hMat = cv::cvarrToMat(homography);
+   result.copyTo(hMat);
+   return true;
+
+}
+
+int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
+{
+   cv::Mat_<int> indiciesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+   cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
+   std::vector<float> scale;
+   std::vector<float> rotations;
+   float s, maxS, minS, r;
+   maxS = -1.0e-10f; minS = 1.0e10f;
+
+   for (int i = 0; i < maskMat.rows; i++)
+   {
+      if ( maskMat(i, 0)) 
+      {
+         cv::KeyPoint observedKeyPoint = observedKeyPoints->at(i);
+         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indiciesMat(i, 0));
+         s = log10( observedKeyPoint.size / modelKeyPoint.size );
+         scale.push_back(s);
+         maxS = s > maxS ? s : maxS;
+         minS = s < minS ? s : minS;
+
+         r = observedKeyPoint.angle - modelKeyPoint.angle;
+         r = r < 0.0f? r + 360.0f : r;
+         rotations.push_back(r);
+      }    
+   }
+
+   int scaleBinSize = (int)((maxS - minS) / log10(scaleIncrement));
+   scaleBinSize = scaleBinSize < 1? 1 : scaleBinSize;
+
+   cv::Mat_<float> scalesMat(scale);
+   cv::Mat_<float> rotationsMat(rotations);
+   std::vector<float> flags(scale.size());
+   cv::Mat flagsMat(flags);
+   if (scaleBinSize == 1)
+   {
+      int histSize[] = {rotationBins};
+      float rotationRanges[] = {0, 360};
+      int channels[] = {0};
+      const float* ranges[] = {rotationRanges};
+      double minVal, maxVal;
+      const cv::Mat_<float> arrs[] = {rotationsMat}; 
+
+      cv::MatND hist; //CV_32S
+      cv::calcHist(arrs, 1, channels, cv::Mat(), hist, 1, histSize, ranges);
+      cv::minMaxLoc(hist, &minVal, &maxVal);
+      cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
+      cv::calcBackProject(arrs, 1, channels, hist, flagsMat, ranges);
+   } else
+   {
+      int histSize[] = {scaleBinSize, rotationBins};
+      float scaleRanges[] = {minS, maxS};
+      float rotationRanges[] = {0, 360};
+      int channels[] = {0, 1};
+      const float* ranges[] = {scaleRanges, rotationRanges};
+      double minVal, maxVal;
+
+      const cv::Mat_<float> arrs[] = {scalesMat, rotationsMat}; 
+
+      cv::MatND hist; //CV_32S
+      cv::calcHist(arrs, 2, channels, cv::Mat(), hist, 2, histSize, ranges, true);
+      cv::minMaxLoc(hist, &minVal, &maxVal);
+
+      cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
+      cv::calcBackProject(arrs, 2, channels, hist, flagsMat, ranges);
+   }
+
+   int idx =0;
+   int nonZeroCount = 0;
+   for (int i = 0; i < maskMat.rows; i++)
+   {
+      if (maskMat(i, 0))
+      {
+         if (flags[idx++] != 0.0f)
+            nonZeroCount++;
+         else 
+            maskMat(i, 0) = 0;
+      }
+   }
+   return nonZeroCount;
 }

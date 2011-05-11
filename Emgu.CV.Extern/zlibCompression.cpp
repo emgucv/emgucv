@@ -4,11 +4,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "zlib.h"
-#include "opencv2/core/core.hpp"
+#include "zlibCompression.h"
 
-CVAPI(int) zlib_compress_bound(int length) { return (int) compressBound(length); };
-CVAPI(void) zlib_compress2(Byte* dataCompressed, int* sizeDataCompressed, Byte* dataOriginal, int sizeDataOriginal, int compressionLevel)
+int zlib_compress_bound(int length) { return (int) compressBound(length); };
+void zlib_compress2(Byte* dataCompressed, int* sizeDataCompressed, Byte* dataOriginal, int sizeDataOriginal, int compressionLevel)
 {
    uLongf sizeCompressed = *sizeDataCompressed;
    int z_result = compress2(dataCompressed, &sizeCompressed, dataOriginal, sizeDataOriginal, compressionLevel);
@@ -25,7 +24,7 @@ CVAPI(void) zlib_compress2(Byte* dataCompressed, int* sizeDataCompressed, Byte* 
    }
 }
 
-CVAPI(void) zlib_uncompress(Byte* dataUncompressed, int* sizeDataUncompressed, Byte* compressedData, int sizeDataCompressed)
+void zlib_uncompress(Byte* dataUncompressed, int* sizeDataUncompressed, Byte* compressedData, int sizeDataCompressed)
 {
    uLongf sizeUncompressed = *sizeDataUncompressed;
    int z_result = uncompress(dataUncompressed, &sizeUncompressed, compressedData, sizeDataCompressed);

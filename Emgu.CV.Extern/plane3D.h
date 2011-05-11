@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef PLANE3D_H
-#define PLANE3D__H
+#ifndef EMGU_PLANE3D_H
+#define EMGU_PLANE3D_H
 
 #include "opencv2/core/core.hpp"
 #include "pointUtil.h"

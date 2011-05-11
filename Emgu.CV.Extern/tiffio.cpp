@@ -4,39 +4,31 @@
 //
 //----------------------------------------------------------------------------
 
-#pragma warning( disable: 4251 )
+#include "tiffio_c.h"
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/core/core.hpp"
-#include "geotiff.h"
-#include "geo_tiffp.h"
-#include "geotiffio.h" //writing geotiff
-#include "xtiffio.h"
-#include "datum.h"
-
-CVAPI(TIFF*) tiffWriterOpen(char* fileName)
+TIFF* tiffWriterOpen(char* fileName)
 {
    return XTIFFOpen(fileName, "w");
 }
 
-CVAPI(int) tiffTileRowSize(TIFF* pTiff)
+int tiffTileRowSize(TIFF* pTiff)
 {
    return TIFFTileRowSize(pTiff);
 }
 
-CVAPI(int) tiffTileSize(TIFF* pTiff)
+int tiffTileSize(TIFF* pTiff)
 {
    return TIFFTileSize(pTiff);
 }
 
-CVAPI(void) tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize)
+void tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize)
 {
    TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
    TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, imageSize->height);
 
 }
 
-CVAPI(void) tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
+void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
 {
    TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
    TIFFSetField(pTiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
@@ -58,7 +50,7 @@ CVAPI(void) tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPix
    }
 }
 
-CVAPI(void) tiffWriteImage(TIFF* pTiff, IplImage* image)
+void tiffWriteImage(TIFF* pTiff, IplImage* image)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    CvSize imageSize = cvSize(image->width, image->height);
@@ -72,7 +64,7 @@ CVAPI(void) tiffWriteImage(TIFF* pTiff, IplImage* image)
    //end writing image data
 }
 
-CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
+void tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
 {
    cv::Mat tile = cv::cvarrToMat(tileImage);
    
@@ -87,13 +79,13 @@ CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
    free(buffer);
 }
 
-CVAPI(void) tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize)
+void tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize)
 {
    TIFFSetField(pTiff, TIFFTAG_TILEWIDTH, tileSize->width);
    TIFFSetField(pTiff, TIFFTAG_TILELENGTH, tileSize->height);
 }
 
-CVAPI(void) tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale)
+void tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale)
 {
    TIFFSetField(pTiff, GTIFF_TIEPOINTS,  6, ModelTiepoint);
    TIFFSetField(pTiff, GTIFF_PIXELSCALE, 3, ModelPixelScale);
@@ -107,7 +99,7 @@ CVAPI(void) tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPix
    GTIFFree(gTiff);
 }
 
-CVAPI(void) tiffWriterClose(TIFF** pTiff)
+void tiffWriterClose(TIFF** pTiff)
 {
    TIFFWriteDirectory(*pTiff);
    XTIFFClose(*pTiff);

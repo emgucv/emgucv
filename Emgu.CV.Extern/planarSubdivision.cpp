@@ -6,7 +6,6 @@
 
 #include "planarSubdivision.h"
 
-
 //#if _MSC_VER >= 1500
 //#define use_unordered_map 1
 //#include <unordered_map>

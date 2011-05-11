@@ -4,17 +4,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/gpu/gpu.hpp"
+#include "gpu_c.h"
 
-CVAPI(void) gpuHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
+void gpuHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
    std::vector<float> v = cv::gpu::HOGDescriptor::getDefaultPeopleDetector();  
    cvSeqPushMulti(seq, &v.front(), v.size()); 
 }
 
-CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreateDefault() { return new cv::gpu::HOGDescriptor; }
+cv::gpu::HOGDescriptor* gpuHOGDescriptorCreateDefault() { return new cv::gpu::HOGDescriptor; }
 
-CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreate(
+cv::gpu::HOGDescriptor* gpuHOGDescriptorCreate(
    cv::Size* _winSize, 
    cv::Size* _blockSize, 
    cv::Size* _blockStride,
@@ -28,14 +28,14 @@ CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreate(
    return new cv::gpu::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _winSigma, _L2HysThreshold, _gammaCorrection, _nlevels);
 }
 
-CVAPI(void) gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, std::vector<float>* vector) 
+void gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, std::vector<float>* vector) 
 { 
    descriptor->setSVMDetector(*vector); 
 }
 
-CVAPI(void) gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor* descriptor) { delete descriptor; }
+void gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor* descriptor) { delete descriptor; }
 
-CVAPI(void) gpuHOGDescriptorDetectMultiScale(
+void gpuHOGDescriptorDetectMultiScale(
    cv::gpu::HOGDescriptor* descriptor, 
    cv::gpu::GpuMat* img, 
    CvSeq* foundLocations,
