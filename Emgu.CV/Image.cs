@@ -585,7 +585,7 @@ namespace Emgu.CV
          Image<TColor, TDepth> subRect = new Image<TColor, TDepth>();
          subRect._array = _array;
 
-         GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the return image is disposed. 
+         GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the result image is disposed. 
 
          subRect._ptr = CvToolbox.cvGetImageSubRect(_ptr, ref rect);
          return subRect;
