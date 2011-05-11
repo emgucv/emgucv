@@ -53,6 +53,17 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
+      /// Create a GpuMat from the specific region of <paramref name="mat"/>. The gpu data is shared between the two GpuMat
+      /// </summary>
+      /// <param name="mat">The matrix where the region is extracted from</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
+      public GpuMat(GpuMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
+      {
+         _ptr = GpuInvoke.GpuMatCreateFromRange(mat, rowRange, colRange);
+      }
+
+      /// <summary>
       /// Create a GpuMat from an CvArray of the same depth type
       /// </summary>
       /// <param name="arr">The CvArry to be converted to GpuMat</param>

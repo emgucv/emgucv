@@ -68,6 +68,11 @@ cv::gpu::GpuMat* gpuMatCreate(int rows, int cols, int type)
    return new cv::gpu::GpuMat(rows, cols, type);
 }
 
+cv::gpu::GpuMat* gpuMatCreateFromRange(cv::gpu::GpuMat* other, CvSlice rowRange, CvSlice colRange)
+{
+   return new cv::gpu::GpuMat(*other, cv::Range(rowRange), cv::Range(colRange));
+}
+
 void gpuMatRelease(cv::gpu::GpuMat** mat)
 {
    delete *mat;

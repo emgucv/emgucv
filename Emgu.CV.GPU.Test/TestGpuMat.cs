@@ -77,6 +77,21 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuMatRange()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
+            img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+            using (GpuImage<Gray, Byte> gpuImg1 = new GpuImage<Gray, byte>(img1))
+            using (GpuMat<byte> mat = new GpuMat<byte>(gpuImg1, new MCvSlice(0, 1), MCvSlice.WholeSeq))
+            {
+               Size s = mat.Size;
+            }
+         }
+      }
+
+      [Test]
       public void TestGpuMatAdd()
       {
          if (GpuInvoke.HasCuda)

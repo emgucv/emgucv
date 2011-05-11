@@ -39,6 +39,8 @@ CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault();
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreate(int rows, int cols, int type);
 
+CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromRange(cv::gpu::GpuMat* other, CvSlice rowRange, CvSlice colRange);
+
 CVAPI(void) gpuMatRelease(cv::gpu::GpuMat** mat);
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr);
