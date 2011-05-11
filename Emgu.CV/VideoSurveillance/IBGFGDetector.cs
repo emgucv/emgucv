@@ -16,7 +16,7 @@ namespace Emgu.CV.VideoSurveillance
       where TColor : struct, IColor
    {
       /// <summary>
-      /// Update the FGBG 
+      /// Update the FG / BG detector 
       /// </summary>
       /// <param name="image">The image which will be used to update the BGFG detector</param>
       void Update(Image<TColor, Byte> image);

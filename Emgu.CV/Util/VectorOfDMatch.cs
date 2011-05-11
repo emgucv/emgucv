@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 namespace Emgu.CV.Util
 {
    /// <summary>
-   /// Wraped class of the C++ standard vector of MDMatch.
+   /// Wraped class of the C++ standard vector of DMatch.
    /// </summary>
    public class VectorOfDMatch : Emgu.Util.UnmanagedObject
    {
