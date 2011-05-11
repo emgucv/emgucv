@@ -332,6 +332,52 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
+      /// Returns a GpuMat corresponding to the ith row of the GpuMat. The data is shared with the current GpuMat. 
+      /// </summary>
+      /// <param name="i">The row to be extracted</param>
+      /// <returns>The ith row of the GpuMat</returns>
+      /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
+      public GpuMat<TDepth> Row(int i)
+      {
+         return RowRange(i, i + 1);
+      }
+
+      /// <summary>
+      /// Returns a GpuMat corresponding to the [<paramref name="start"/> <paramref name="end"/>) rows of the GpuMat. The data is shared with the current GpuMat. 
+      /// </summary>
+      /// <param name="start">The inclusive stating row to be extracted</param>
+      /// <param name="end">The exclusive ending row to be extracted</param>
+      /// <returns>The [<paramref name="start"/> <paramref name="end"/>) rows of the GpuMat</returns>
+      /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
+      public GpuMat<TDepth> RowRange(int start, int end)
+      {
+         return new GpuMat<TDepth>(this, new MCvSlice(start, end), MCvSlice.WholeSeq);
+      }
+
+      /// <summary>
+      /// Returns a GpuMat corresponding to the ith column of the GpuMat. The data is shared with the current GpuMat. 
+      /// </summary>
+      /// <param name="i">The column to be extracted</param>
+      /// <returns>The ith column of the GpuMat</returns>
+      /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
+      public GpuMat<TDepth> Col(int i)
+      {
+         return ColRange(i, i + 1);
+      }
+
+      /// <summary>
+      /// Returns a GpuMat corresponding to the [<paramref name="start"/> <paramref name="end"/>) columns of the GpuMat. The data is shared with the current GpuMat. 
+      /// </summary>
+      /// <param name="start">The inclusive stating column to be extracted</param>
+      /// <param name="end">The exclusive ending column to be extracted</param>
+      /// <returns>The [<paramref name="start"/> <paramref name="end"/>) columns of the GpuMat</returns>
+      /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
+      public GpuMat<TDepth> ColRange(int start, int end)
+      {
+         return new GpuMat<TDepth>(this, MCvSlice.WholeSeq, new MCvSlice(start, end));
+      }
+
+      /// <summary>
       /// Check if the GpuMat is Empty
       /// </summary>
       public bool IsEmpty

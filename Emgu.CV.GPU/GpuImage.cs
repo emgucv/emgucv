@@ -263,10 +263,56 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="region">Zero-based coordinates of the rectangle of interest.</param>
       /// <returns>A GpuImage that represent the region of the current GpuImage.</returns>
-      /// <remarks>The parent GpuImage should never be released before the returned GpuImage the represent the subregion</remarks>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
       public new GpuImage<TColor, TDepth> GetSubRect(Rectangle region)
       {
          return new GpuImage<TColor, TDepth>(GpuInvoke.GetSubRect(this, region));
+      }
+
+      /// <summary>
+      /// Returns a GpuImage corresponding to the ith row of the GpuImage. The data is shared with the current Image. 
+      /// </summary>
+      /// <param name="i">The row to be extracted</param>
+      /// <returns>The ith row of the GpuImage</returns>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
+      public new GpuImage<TColor, TDepth> Row(int i)
+      {
+         return RowRange(i, i+1);
+      }
+
+      /// <summary>
+      /// Returns a GpuImage corresponding to the [<paramref name="start"/> <paramref name="end"/>) rows of the GpuImage. The data is shared with the current Image. 
+      /// </summary>
+      /// <param name="start">The inclusive stating row to be extracted</param>
+      /// <param name="end">The exclusive ending row to be extracted</param>
+      /// <returns>The [<paramref name="start"/> <paramref name="end"/>) rows of the GpuImage</returns>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
+      public new GpuImage<TColor, TDepth> RowRange(int start, int end)
+      {
+         return new GpuImage<TColor, TDepth>(this, new MCvSlice(start, end), MCvSlice.WholeSeq);
+      }
+
+      /// <summary>
+      /// Returns a GpuImage corresponding to the ith column of the GpuImage. The data is shared with the current Image. 
+      /// </summary>
+      /// <param name="i">The column to be extracted</param>
+      /// <returns>The ith column of the GpuImage</returns>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
+      public new GpuImage<TColor, TDepth> Col(int i)
+      {
+         return ColRange(i, i + 1);
+      }
+
+      /// <summary>
+      /// Returns a GpuImage corresponding to the [<paramref name="start"/> <paramref name="end"/>) columns of the GpuImage. The data is shared with the current Image. 
+      /// </summary>
+      /// <param name="start">The inclusive stating column to be extracted</param>
+      /// <param name="end">The exclusive ending column to be extracted</param>
+      /// <returns>The [<paramref name="start"/> <paramref name="end"/>) columns of the GpuImage</returns>
+      /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
+      public new GpuImage<TColor, TDepth> ColRange(int start, int end)
+      {
+         return new GpuImage<TColor, TDepth>(this, MCvSlice.WholeSeq, new MCvSlice(start, end));
       }
 
       #region IImage Members
