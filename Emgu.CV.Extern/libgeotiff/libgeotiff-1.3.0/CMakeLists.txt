@@ -112,11 +112,12 @@ MESSAGE(STATUS "Enable in-code GeoTIFF EPSG tables: ${GEOTIFF_ENABLE_INCODE_EPSG
 
 ###############################################################################
 # Search for dependencies
-FIND_PACKAGE(TIFF)
-IF(NOT TIFF_FOUND)
-  SET(TIFF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/3rdparty/include")
-ENDIF()
+#FIND_PACKAGE(TIFF)
+#IF(NOT TIFF_FOUND)
+#  SET(TIFF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../opencv/3rdparty/libtiff")
+#ENDIF()
 INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+#MESSAGE("TIFF FOUND: ${TIFF_FOUND}; TIFF include: ${TIFF_INCLUDE_DIR}")
 ADD_DEFINITIONS(-DHAVE_TIFF=1)
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/libxtiff")

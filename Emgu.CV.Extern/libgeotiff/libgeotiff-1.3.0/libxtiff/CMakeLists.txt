@@ -10,6 +10,7 @@
 PROJECT(xtiff)
 
 SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
+include_directories( ${TIFF_INCLUDE_DIR})
 ADD_LIBRARY(${PROJECT_NAME} STATIC "${LIBGEOTIFF_DIR}/libxtiff/xtiff.c")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rdparty")
-include_directories("${LIBGEOTIFF_DIR}")
+

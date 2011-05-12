@@ -222,7 +222,7 @@ set_target_properties(${the_target} PROPERTIES
 FIND_PACKAGE(TIFF)
 IF(NOT TIFF_FOUND)
   ADD_DEPENDENCIES(${the_target} libtiff)
-  SET(TIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
+  SET(TIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff")
   SET(TIFF_LIBRARY "libtiff")
 ENDIF()
 INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
