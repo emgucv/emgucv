@@ -46,6 +46,17 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="rows">The number of rows (height)</param>
       /// <param name="cols">The number of columns (width)</param>
+      /// <param name="continuous">Indicates if the data should be continuous</param>
+      public GpuImage(int rows, int cols, bool continuous)
+         : base(rows, cols, new TColor().Dimension, continuous)
+      {
+      }
+
+      /// <summary>
+      /// Create a GpuImage of the specific size
+      /// </summary>
+      /// <param name="rows">The number of rows (height)</param>
+      /// <param name="cols">The number of columns (width)</param>
       public GpuImage(int rows, int cols)
          : base(rows, cols, new TColor().Dimension)
       {

@@ -68,6 +68,18 @@ cv::gpu::GpuMat* gpuMatCreate(int rows, int cols, int type)
    return new cv::gpu::GpuMat(rows, cols, type);
 }
 
+cv::gpu::GpuMat* gpuMatCreateContinuous(int rows, int cols, int type)
+{
+   cv::gpu::GpuMat* result = new cv::gpu::GpuMat();
+   cv::gpu::createContinuous(rows, cols, type, *result);
+   return result;
+}
+
+bool gpuMatIsContinuous(cv::gpu::GpuMat* gpuMat)
+{
+   return gpuMat->isContinuous();
+}
+
 cv::gpu::GpuMat* gpuMatGetRegion(cv::gpu::GpuMat* other, CvSlice rowRange, CvSlice colRange)
 {
    return new cv::gpu::GpuMat(*other, cv::Range(rowRange), cv::Range(colRange));

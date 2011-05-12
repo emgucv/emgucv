@@ -44,9 +44,25 @@ namespace Emgu.CV.GPU
       /// <param name="rows">The number of rows (height)</param>
       /// <param name="cols">The number of columns (width)</param>
       /// <param name="channels">The number of channels</param>
-      public GpuMat(int rows, int cols, int channels)
+      /// <param name="continuous">Indicates if the data should be continuous</param>
+      public GpuMat(int rows, int cols, int channels, bool continuous)
       {
-         _ptr = GpuInvoke.GpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels));
+         int matType = CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels);
+         if (continuous)
+            _ptr = GpuInvoke.GpuMatCreateContinuous(rows, cols, matType);
+         else
+            _ptr = GpuInvoke.GpuMatCreate(rows, cols, matType);
+      }
+
+      /// <summary>
+      /// Create a GpuMat of the specified size
+      /// </summary>
+      /// <param name="rows">The number of rows (height)</param>
+      /// <param name="cols">The number of columns (width)</param>
+      /// <param name="channels">The number of channels</param>
+      public GpuMat(int rows, int cols, int channels)
+         :this(rows, cols, channels, false)
+      {
       }
 
       /// <summary>
@@ -385,6 +401,17 @@ namespace Emgu.CV.GPU
          get
          {
             return GpuInvoke.GpuMatIsEmpty(_ptr);
+         }
+      }
+
+      /// <summary>
+      /// Check if the GpuMat is Continuous
+      /// </summary>
+      public bool IsContinuous
+      {
+         get
+         {
+            return GpuInvoke.GpuMatIsContinuous(_ptr);
          }
       }
    }

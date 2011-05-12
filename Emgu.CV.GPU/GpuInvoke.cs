@@ -79,6 +79,36 @@ namespace Emgu.CV.GPU
       internal static extern IntPtr GpuMatCreateDefault();
 
       /// <summary>
+      /// Create a GpuMat of the specified size
+      /// </summary>
+      /// <param name="rows">The number of rows (height)</param>
+      /// <param name="cols">The number of columns (width)</param>
+      /// <param name="type">The type of GpuMat</param>
+      /// <returns>Pointer to the GpuMat</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreate")]
+      public static extern IntPtr GpuMatCreate(int rows, int cols, int type);
+
+      /// <summary>
+      /// Create a GpuMat of the specified size. The allocated data is continuous within this GpuMat.
+      /// </summary>
+      /// <param name="rows">The number of rows (height)</param>
+      /// <param name="cols">The number of columns (width)</param>
+      /// <param name="type">The type of GpuMat</param>
+      /// <returns>Pointer to the GpuMat</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateContinuous")]
+      internal static extern IntPtr GpuMatCreateContinuous(int rows, int cols, int type);
+
+      /// <summary>
+      /// Returns true iff the GpuMatrix data is continuous
+      /// (i.e. when there are no gaps between successive rows).
+      /// </summary>
+      /// <param name="gpuMat">The GpuMat to be checked</param>
+      /// <returns>True if the GpuMat is continuous</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIsContinuous")]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool GpuMatIsContinuous(IntPtr gpuMat);
+
+      /// <summary>
       /// Create a GpuMat from the specific region of <paramref name="gpuMat"/>. The data is shared between the two GpuMat.
       /// </summary>
       /// <param name="gpuMat">The gpuMat to extract regions from.</param>
@@ -96,16 +126,6 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIsEmpty")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool GpuMatIsEmpty(IntPtr gpuMat);
-
-      /// <summary>
-      /// Create a GpuMat of the specified size
-      /// </summary>
-      /// <param name="rows">The number of rows (height)</param>
-      /// <param name="cols">The number of columns (width)</param>
-      /// <param name="type">The type of GpuMat</param>
-      /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreate")]
-      public static extern IntPtr GpuMatCreate(int rows, int cols, int type);
 
       /// <summary>
       /// Copies scalar value to every selected element of the destination GpuMat:

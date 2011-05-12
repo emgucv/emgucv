@@ -77,6 +77,13 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuMatContinuous()
+      {
+         GpuMat<Byte> mat = new GpuMat<byte>(1200, 640, 1, true);
+         Assert.IsTrue(mat.IsContinuous);
+      }
+
+      [Test]
       public void TestGpuMatRange()
       {
          if (GpuInvoke.HasCuda)
