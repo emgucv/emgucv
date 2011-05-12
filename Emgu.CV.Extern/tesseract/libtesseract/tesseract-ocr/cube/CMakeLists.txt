@@ -12,5 +12,6 @@ source_group("Include" FILES ${tesseract_cube_hdrs})
 add_definitions(-D__MSW32__ -DUSE_STD_NAMESPACE -DHAVE_LIBLEPT -W0)
 include_directories("../vs2008/include" "../vs2008/port" "../cutil" "../ccstruct" "../ccutil" "../viewer" "../image" "../dict" "../classify" "../../leptonica/leptonlib-1.68/src" "../neural_networks/runtime" "../ccmain" "../wordrec" "../textord")
 add_library(${PROJECT_NAME} STATIC ${tesseract_cube_srcs} ${tesseract_cube_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_image tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord)
 

@@ -10,4 +10,5 @@ source_group("Src" FILES ${tesseract_neural_networks_srcs})
 source_group("Include" FILES ${tesseract_neural_networks_hdrs})
 add_definitions(-DUSE_STD_NAMESPACE -W0)
 add_library(${PROJECT_NAME} STATIC ${tesseract_neural_networks_srcs} ${tesseract_neural_networks_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 

@@ -19,7 +19,7 @@ ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/stop-sign.jpg)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/stop-sign-model.png)
 
 COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_TrafficSignRecognition}" ALL)
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI)
 
 INSTALL(FILES 

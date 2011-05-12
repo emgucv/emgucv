@@ -12,5 +12,6 @@ source_group("Include" FILES ${tesseract_wordrec_hdrs})
 add_definitions(-D__MSW32__ -W0)
 include_directories("../vs2008/include" "../cutil" "../ccstruct" "../ccutil" "../viewer" "../image" "../dict" "../classify")
 add_library(${PROJECT_NAME} STATIC ${tesseract_wordrec_srcs} ${tesseract_wordrec_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_image tesseract_dict tesseract_classify)
 

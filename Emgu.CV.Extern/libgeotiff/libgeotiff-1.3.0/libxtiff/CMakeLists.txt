@@ -7,6 +7,9 @@
 # Author: Canming
 #
 ###############################################################################
+PROJECT(xtiff)
+
 SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
-ADD_LIBRARY(xtiff STATIC "${LIBGEOTIFF_DIR}/libxtiff/xtiff.c")
+ADD_LIBRARY(${PROJECT_NAME} STATIC "${LIBGEOTIFF_DIR}/libxtiff/xtiff.c")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rdparty")
 include_directories("${LIBGEOTIFF_DIR}")

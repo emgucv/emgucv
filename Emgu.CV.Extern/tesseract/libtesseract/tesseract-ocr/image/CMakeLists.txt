@@ -12,4 +12,5 @@ add_definitions(-D__MSW32__ -DHAVE_LIBLEPT -W0)
 include_directories("../vs2008/include" "../ccutil" "../viewer" "../../leptonica/leptonlib-1.68/src")
 
 add_library(${PROJECT_NAME} STATIC ${tesseract_image_srcs} ${tesseract_image_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer libleptonica)

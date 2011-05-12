@@ -11,4 +11,5 @@ add_definitions(-D__MSW32__ -W0)
 include_directories("../vs2008/include" "../ccutil" "../viewer")
 
 add_library(${PROJECT_NAME} STATIC ${tesseract_cutil_srcs} ${tesseract_cutil_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer)

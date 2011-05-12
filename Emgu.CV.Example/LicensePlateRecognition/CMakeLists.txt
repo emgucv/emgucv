@@ -21,7 +21,7 @@ LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/license-plate.jpg)
 
 COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_LicensePlateRecognition}" ALL)
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.UI Emgu.CV.OCR)
 
 INSTALL(FILES 

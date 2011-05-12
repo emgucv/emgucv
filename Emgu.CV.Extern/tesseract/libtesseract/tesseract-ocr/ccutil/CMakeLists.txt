@@ -12,4 +12,5 @@ source_group("Include" FILES ${tesseract_ccutil_hdrs})
 add_definitions(-D__MSW32__ -W0)
 include_directories("../vs2008/include")
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccutil_srcs} ${tesseract_ccutil_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 

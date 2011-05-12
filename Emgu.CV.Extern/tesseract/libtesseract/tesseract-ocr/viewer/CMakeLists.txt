@@ -13,5 +13,6 @@ source_group("Include" FILES ${tesseract_viewer_hdrs})
 add_definitions(-D__MSW32__ -DHAVE_LIBLEPT -W0)
 include_directories("../vs2008/include" "../../leptonica/leptonlib-1.68/src")
 add_library(${PROJECT_NAME} STATIC ${tesseract_viewer_srcs} ${tesseract_viewer_hdrs})
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 ADD_DEPENDENCIES(${PROJECT_NAME} libleptonica)
 

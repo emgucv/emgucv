@@ -17,3 +17,5 @@ set(the_target ${PROJECT_NAME})
 #add_definitions(-DLEPTONLIB_EXPORTS -DL_LITTLE_ENDIAN -DNO_CONSOLE_IO -D_CRT_SECURE_NO_WARNINGS)
 add_definitions(-DL_LITTLE_ENDIAN -DXMD_H -DNO_CONSOLE_IO -W0)
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
