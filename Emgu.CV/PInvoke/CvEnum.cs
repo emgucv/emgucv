@@ -219,9 +219,111 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CAP_PROP_GAIN = 14,
       /// <summary>
-      /// 
+      /// Exposure
       /// </summary>
-      CV_CAP_PROP_CONVERT_RGB = 15
+      CV_CAP_PROP_EXPOSURE = 15,
+      /// <summary>
+      /// Convert RGB
+      /// </summary>
+      CV_CAP_PROP_CONVERT_RGB = 16,
+      /// <summary>
+      /// White balance blue u
+      /// </summary>
+      CV_CAP_PROP_WHITE_BALANCE_BLUE_U = 17,
+      /// <summary>
+      /// Rectification
+      /// </summary>
+      CV_CAP_PROP_RECTIFICATION = 18,
+      /// <summary>
+      /// Monocrome
+      /// </summary>
+      CV_CAP_PROP_MONOCROME = 19,
+      /// <summary>
+      /// Sharpness
+      /// </summary>
+      CV_CAP_PROP_SHARPNESS = 20,
+      /// <summary>
+      /// Exposure control done by camera, user can adjust refernce level using this feature
+      /// </summary>
+      CV_CAP_PROP_AUTO_EXPOSURE = 21,
+      /// <summary>
+      /// Gamma
+      /// </summary>
+      CV_CAP_PROP_GAMMA = 22,
+      /// <summary>
+      /// Temperature
+      /// </summary>
+      CV_CAP_PROP_TEMPERATURE = 23,
+      /// <summary>
+      /// Trigger
+      /// </summary>
+      CV_CAP_PROP_TRIGGER = 24,
+      /// <summary>
+      /// Trigger delay
+      /// </summary>
+      CV_CAP_PROP_TRIGGER_DELAY = 25,
+      /// <summary>
+      /// White balance red v
+      /// </summary>
+      CV_CAP_PROP_WHITE_BALANCE_RED_V = 26,
+      /// <summary>
+      /// Max DC1394
+      /// </summary>
+      CV_CAP_PROP_MAX_DC1394 = 27,
+      /// <summary>
+      /// property for highgui class CvCapture_Android only
+      /// </summary>
+      CV_CAP_PROP_AUTOGRAB = 1024,
+      /// <summary>
+      /// tricky property, returns cpnst char* indeed
+      /// </summary>
+      CV_CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING = 1025,
+      /// <summary>
+      /// OpenNI map generators
+      /// </summary>
+      CV_CAP_OPENNI_DEPTH_GENERATOR = 0,
+      /// <summary>
+      /// OpenNI map generators
+      /// </summary>
+      CV_CAP_OPENNI_IMAGE_GENERATOR = 1 << 31,
+      /// <summary>
+      /// OpenNI map generators
+      /// </summary>
+      CV_CAP_OPENNI_GENERATORS_MASK = 1 << 31,
+
+      /// <summary>
+      /// Properties of cameras available through OpenNI interfaces
+      /// </summary>
+      CV_CAP_PROP_OPENNI_OUTPUT_MODE = 100,
+      /// <summary>
+      /// Properties of cameras available through OpenNI interfaces, in mm.
+      /// </summary>
+      CV_CAP_PROP_OPENNI_FRAME_MAX_DEPTH = 101,
+      /// <summary>
+      /// Properties of cameras available through OpenNI interfaces, in mm.
+      /// </summary>
+      CV_CAP_PROP_OPENNI_BASELINE = 102,
+      /// <summary>
+      /// Properties of cameras available through OpenNI interfaces, in pixels.
+      /// </summary>
+      CV_CAP_PROP_OPENNI_FOCAL_LENGTH = 103,
+      /// <summary>
+      /// Image generator output mode
+      /// </summary>
+      CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_OUTPUT_MODE,
+      /// <summary>
+      /// Depth generator baseline, in mm.
+      /// </summary>
+      CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_BASELINE,
+      /// <summary>
+      /// Depth generator focal lenght, in pixels.
+      /// </summary>
+      CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_FOCAL_LENGTH,
+
+      /// <summary>
+      /// Properties of cameras available through GStreamer interface. Default is 1
+      /// </summary>
+      CV_CAP_GSTREAMER_QUEUE_LENGTH = 200
    }
 
    /// <summary>
@@ -1936,15 +2038,15 @@ namespace Emgu.CV.CvEnum
       /// The 3rd distortion coefficient (k3) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
       CV_CALIB_FIX_K3 = 128,
-            /// <summary>
+      /// <summary>
       /// The 4th distortion coefficient (k4) is fixed (see above)
       /// </summary>
       CV_CALIB_FIX_K4 = 2048,
-            /// <summary>
+      /// <summary>
       /// The 5th distortion coefficient (k5) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
       CV_CALIB_FIX_K5 = 4096,
-            /// <summary>
+      /// <summary>
       /// The 6th distortion coefficient (k6) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
       CV_CALIB_FIX_K6 = 8192,
@@ -2201,7 +2303,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Transparent
       /// </summary>
-      TRANSPARENT = 5, 
+      TRANSPARENT = 5,
       /// <summary>
       /// Isolated
       /// </summary>
@@ -2482,5 +2584,110 @@ namespace Emgu.CV.CvEnum
       /// Eval
       /// </summary>
       EVAL = 2
+   }
+
+   /// <summary>
+   /// CvCapture type. This is the equivalent to CV_CAP_ macros.
+   /// </summary>
+   public enum CaptureType
+   {
+      /// <summary>
+      /// Autodetect
+      /// </summary>
+      ANY = 0,
+
+      /// <summary>
+      /// MIL proprietary drivers
+      /// </summary>
+      MIL = 100,
+
+      /// <summary>
+      /// Platform native
+      /// </summary>
+      VFW = 200,
+      /// <summary>
+      /// Platform native
+      /// </summary>
+      V4L = 200,
+      /// <summary>
+      /// Platform native
+      /// </summary>
+      V4L2 = 200,
+
+      /// <summary>
+      /// IEEE 1394 drivers
+      /// </summary>
+      FIREWARE = 300,
+      /// <summary>
+      /// IEEE 1394 drivers
+      /// </summary>
+      FIREWIRE = 300,
+      /// <summary>
+      /// IEEE 1394 drivers
+      /// </summary>
+      IEEE1394 = 300,
+      /// <summary>
+      /// IEEE 1394 drivers
+      /// </summary>
+      DC1394 = 300,
+      /// <summary>
+      /// IEEE 1394 drivers
+      /// </summary>
+      CMU1394 = 300,
+
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      STEREO = 400,
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      TYZX = 400,
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      LEFT = 400,
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      RIGHT = 401,
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      COLOR = 402,
+      /// <summary>
+      /// TYZX proprietary drivers
+      /// </summary>
+      TYZX_Z = 403,
+
+      /// <summary>
+      /// QuickTime
+      /// </summary>
+      QT = 500,
+
+      /// <summary>
+      /// Unicap drivers
+      /// </summary>
+      UNICAP = 600,
+
+      /// <summary>
+      /// DirectShow (via videoInput)
+      /// </summary>
+      DSHOW = 700,
+
+      /// <summary>
+      /// PvAPI, Prosilica GigE SDK
+      /// </summary>
+      PVAPI = 800,
+
+      /// <summary>
+      /// OpenNI (for Kinect)
+      /// </summary>
+      OPENNI = 900,
+
+      /// <summary>
+      /// Android
+      /// </summary>
+      ANDROID = 1000
    }
 }

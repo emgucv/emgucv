@@ -4,25 +4,25 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Emgu.CV;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using Emgu.CV.Util;
-using Emgu.UI;
-using Emgu.Util;
-using Emgu.CV.VideoSurveillance;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using System.Globalization;
-using System.Threading;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.UI;
+using Emgu.CV.Util;
+using Emgu.CV.VideoSurveillance;
+using Emgu.UI;
+using Emgu.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
@@ -39,6 +39,22 @@ namespace Emgu.CV.Test
       {
          Capture capture = new Capture("abc.efg");
          Image<Bgr, Byte> image = capture.QueryFrame();
+      }
+
+      public void TestKinect()
+      {
+         using (KinectCapture capture = new KinectCapture(KinectCapture.ImageGeneratorOutputMode.VGA_30HZ))
+         {
+            ImageViewer viewer = new ImageViewer();
+            Application.Idle += delegate(Object sender, EventArgs e)
+            {
+               //Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
+               Image<Gray, Byte> img = capture.RetrieveDisparityMap();
+               viewer.Image = img;
+            };
+
+            viewer.ShowDialog();
+         }
       }
 
       public void GenerateLogo()

@@ -34,19 +34,40 @@ namespace Emgu.CV
       public static extern void cvReleaseCapture(ref IntPtr capture);
 
       /// <summary>
-      /// Grabs a frame from camera or video file, decompresses and returns it. This function is just a combination of cvGrabFrame and cvRetrieveFrame in one call. The returned image should not be released or modified by user. 
+      /// Grabs a frame from camera or video file, decompresses and returns it. This function is just a combination of cvGrabFrame and cvRetrieveFrame in one call. 
       /// </summary>
-      /// <param name="capture">video capturing structure</param>
+      /// <param name="capture">Video capturing structure</param>
       /// <returns>Pointer to the queryed frame</returns>
+      /// <remarks>The returned image should not be released or modified by user. </remarks>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvQueryFrame(IntPtr capture);
 
       /// <summary>
+      /// Grab a frame
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <returns>True on success</returns>
+      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      public static extern bool cvGrabFrame(IntPtr capture);
+
+      /// <summary>
+      /// Get the frame grabbed with cvGrabFrame(..)
+      /// This function may apply some frame processing like frame decompression, flipping etc.
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="streamIdx">Stream index</param>
+      /// <returns>Pointer to the queryed frame</returns>
+      /// <remarks>The returned image should not be released or modified by user. </remarks>
+      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvRetrieveFrame(IntPtr capture, int streamIdx);
+
+      /// <summary>
       /// Retrieves the specified property of camera or video file
       /// </summary>
-      /// <param name="capture">video capturing structure</param>
-      /// <param name="prop">property identifier</param>
-      /// <returns> the specified property of camera or video file</returns>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="prop">Property identifier</param>
+      /// <returns>The specified property of camera or video file</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP prop);
 

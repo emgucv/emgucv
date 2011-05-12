@@ -100,6 +100,15 @@ namespace Emgu.CV
       }
 
       #region constructors
+      /// <summary>
+      /// Create a capture using the specific camera
+      /// </summary>
+      /// <param name="captureType">The capture type</param>
+      public Capture(CvEnum.CaptureType captureType)
+         : this((int)captureType)
+      {
+      }
+
       ///<summary> Create a capture using the specific camera</summary>
       ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
       public Capture(int camIndex)
@@ -109,7 +118,7 @@ namespace Emgu.CV
          _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
          if (_ptr == IntPtr.Zero)
          {
-            throw new NullReferenceException(String.Format("Error: Unable to create capture from camera{0}", camIndex));
+            throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
          }
 #endif
       }
@@ -159,13 +168,23 @@ namespace Emgu.CV
          CvInvoke.cvSetCaptureProperty(Ptr, property, value);
       }
 
-      /// <summary> 
-      /// Capture a Gray image frame
+      /// <summary>
+      /// Grab a frame
       /// </summary>
-      /// <returns> A Gray image frame</returns>
-      public virtual Image<Gray, Byte> QueryGrayFrame()
+      /// <returns>True on success</returns>
+      public bool Grab()
       {
-         IntPtr img = CvInvoke.cvQueryFrame(Ptr);
+         return CvInvoke.cvGrabFrame(_ptr);
+      }
+
+      /// <summary> 
+      /// Retrieve a Gray image frame after Grab()
+      /// </summary>
+      /// <param name="streamIdx">Stream index. Use 0 for default.</param>
+      /// <returns> A Gray image frame</returns>
+      public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIdx)
+      {
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
@@ -186,30 +205,20 @@ namespace Emgu.CV
          return res;
       }
 
-      #region implement ICapture
       /// <summary> 
-      /// Capture a Bgr image frame
+      /// Retrieve a Bgr image frame after Grab()
       /// </summary>
+      /// <param name="streamIdx">Stream index</param>
       /// <returns> A Bgr image frame</returns>
-      public virtual Image<Bgr, Byte> QueryFrame()
+      public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIdx)
       {
-#if TEST_CAPTURE
-            Image<Bgr, Byte> tmp = new Image<Bgr, Byte>(320, 240, new Bgr());
-            MCvFont font = new MCvFont( CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
-            tmp.Draw(System.DateTime.Now.Ticks.ToString(),
-                ref font,
-                new Point(10, 50),
-                new Bgr(255.0, 255.0, 255.0));
-            IntPtr img = tmp;
-#else
-         IntPtr img = CvInvoke.cvQueryFrame(Ptr);
-#endif
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
          if (img == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         Image<Bgr, Byte> res; 
+         Image<Bgr, Byte> res;
          if (iplImage.nChannels == 1)
          {  //if the image captured is Grayscale, convert it to BGR
             res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
@@ -224,6 +233,25 @@ namespace Emgu.CV
          res._Flip(FlipType);
 
          return res;
+      }
+
+      /// <summary> 
+      /// Capture a Gray image frame
+      /// </summary>
+      /// <returns> A Gray image frame</returns>
+      public virtual Image<Gray, Byte> QueryGrayFrame()
+      {
+         return Grab() ? RetrieveGrayFrame(0) : null;
+      }
+
+      #region implement ICapture
+      /// <summary> 
+      /// Capture a Bgr image frame
+      /// </summary>
+      /// <returns> A Bgr image frame</returns>
+      public virtual Image<Bgr, Byte> QueryFrame()
+      {
+         return Grab() ? RetrieveBgrFrame(0) : null;
       }
 
       ///<summary> 
