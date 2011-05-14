@@ -211,19 +211,33 @@ cv::DMatch* VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v)
    return v->empty() ? NULL : &(*v)[0];
 }
 
-void VectorOfDMatchToMat(std::vector<cv::DMatch>* matches, CvMat* trainIdx, CvMat* distance)
+void VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat* trainIdx, CvMat* distance)
 {
    CV_Assert(trainIdx->rows * trainIdx->cols > (int) matches->size());
    CV_Assert(distance->rows * distance->cols > (int) matches->size());
+
    cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
    cv::Mat distanceMat = cv::cvarrToMat(distance);
+
+   int k = trainIdxMat.cols;
+
    float* distance_ptr = distanceMat.ptr<float>();
    int* trainIdx_ptr = trainIdxMat.ptr<int>();
-   for(std::vector<cv::DMatch>::iterator m = matches->begin(); m != matches->end(); ++m, ++trainIdx_ptr, ++distance_ptr)
+   for(std::vector< std::vector<cv::DMatch> >::iterator v = matches->begin(); v != matches->end(); ++v)
    {
-      cv::DMatch match = *m;
-      *distance_ptr = match.distance;
-      *trainIdx_ptr = match.trainIdx;
+      if (v->empty())
+      {
+         trainIdx_ptr += k;
+         distance_ptr += k;
+      } else
+      {
+         for (std::vector< cv::DMatch >::iterator m = v->begin(); m != v->end(); ++m,  ++trainIdx_ptr, ++distance_ptr)
+         {
+            cv::DMatch match = *m;
+            *distance_ptr = match.distance;
+            *trainIdx_ptr = match.trainIdx;
+         }
+      }
    }
 }
 

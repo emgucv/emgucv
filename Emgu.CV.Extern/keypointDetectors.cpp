@@ -369,11 +369,13 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* qu
 
    cv::Mat queryMat = cv::cvarrToMat(queryDescriptors);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the image.
+   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
    std::vector<cv::Mat> masks;
+   if (!maskMat.empty()) 
+      masks.push_back(maskMat);
    matcher->knnMatch(queryMat, matches, k, masks, false);
    
-   VectorOfDMatchToMat(&matches[0], trainIdx, distance);
+   VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
 
 cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType)

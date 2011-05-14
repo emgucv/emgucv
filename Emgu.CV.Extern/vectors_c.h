@@ -77,7 +77,7 @@ CVAPI(void) VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data)
 
 CVAPI(cv::DMatch*) VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v);
 
-CVAPI(void) VectorOfDMatchToMat(std::vector<cv::DMatch>* matches, CvMat* trainIdx, CvMat* distance);
+CVAPI(void) VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat* trainIdx, CvMat* distance);
 
 //----------------------------------------------------------------------------
 //
