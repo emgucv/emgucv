@@ -18,6 +18,7 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/legacy/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/gpu/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/highgui/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 
 ############################### IPP START ##############################

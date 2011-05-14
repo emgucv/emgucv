@@ -185,7 +185,8 @@ namespace Emgu.CV
       public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIdx)
       {
          IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
-
+         if (img == IntPtr.Zero)
+            return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
          Image<Gray, Byte> res;

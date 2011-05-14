@@ -49,6 +49,7 @@ namespace Emgu.CV.Test
             Application.Idle += delegate(Object sender, EventArgs e)
             {
                //Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
+               capture.Grab();
                Image<Gray, Byte> img = capture.RetrieveDisparityMap();
                viewer.Image = img;
             };
