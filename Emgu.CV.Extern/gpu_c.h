@@ -165,6 +165,15 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap);
 
+CVAPI(void) gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
+            CvTermCriteria criteria);
+
+CVAPI(void) gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
+            CvTermCriteria criteria);
+
+CVAPI(void) gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
+            CvTermCriteria criteria);
+
 CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize, int lowerLevel, int upperLevel);
 
 CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect);

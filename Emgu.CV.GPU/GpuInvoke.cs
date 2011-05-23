@@ -765,6 +765,43 @@ namespace Emgu.CV.GPU
       public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
 
       /// <summary>
+      /// Performs mean-shift filtering for each point of the source image. It maps each point of the source
+      /// image into another point, and as the result we have new color and new position of each point.
+      /// </summary>
+      /// <param name="src">Source GpuImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dst">Destination GpuImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftFiltering")]
+      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
+      /// and positions) into two images.
+      /// </summary>
+      /// <param name="src">Source GpuImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dstr">Destination GpuImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="dstsp">Destination GpuImage, containing position of mapped points. Will have the same size as src and CV 16SC2 type.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftProc")]
+      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Performs mean-shift segmentation of the source image and eleminates small segments.
+      /// </summary>
+      /// <param name="src">Source GpuImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dst">Segmented Image. Will have the same size and type as src. Note that this is an Image type and not GpuImage type</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftSegmentation")]
+      public static extern void MeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, MCvTermCriteria criteria);
+
+      /// <summary>
       /// Computes the integral image and integral for the squared image
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>

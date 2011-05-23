@@ -497,6 +497,24 @@ void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu
    cv::gpu::remap(*src, *dst, *xmap, *ymap);
 }
 
+void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
+            CvTermCriteria criteria)
+{
+   cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, criteria);
+}
+
+void gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
+            CvTermCriteria criteria)
+{
+   cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria);
+}
+
+void gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
+            CvTermCriteria criteria)
+{
+   cv::gpu::meanShiftSegmentation(*src, *dst, sp, sr, minsize, criteria);
+}
+
 cv::gpu::GpuMat* gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize, int lowerLevel, int upperLevel)
 {
    cv::gpu::GpuMat* hist = new cv::gpu::GpuMat();
