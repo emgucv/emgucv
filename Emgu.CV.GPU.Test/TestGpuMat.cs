@@ -349,42 +349,45 @@ namespace Emgu.CV.GPU.Test
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
-            stopwatch.Reset(); stopwatch.Start();
-            GpuBruteForceMatcher hammingMatcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.HammingDist);
-
-            //BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
-            int k = 2;
-            Matrix<int> trainIdx = new Matrix<int>(observedKeypoints.Size, k);
-            Matrix<float> distance = new Matrix<float>(trainIdx.Size);
-
-
-            using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors))
-            using (GpuMat<Byte> gpuObservedDescriptors = new GpuMat<byte>(observedDescriptors))
-            using (GpuMat<int> gpuTrainIdx = new GpuMat<int>(trainIdx))
-            using (GpuMat<float> gpuDistance = new GpuMat<float>(distance))
-            {
-               Stopwatch w2 = Stopwatch.StartNew();
-               hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null);
-               w2.Stop();
-               Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec", w2.ElapsedMilliseconds));
-               gpuTrainIdx.Download(trainIdx);
-               gpuDistance.Download(distance);
-            }
-            Matrix<Byte> mask = new Matrix<byte>(distance.Rows, 1);
-            mask.SetValue(255);
-            Features2DTracker.VoteForUniqueness(distance, 0.8, mask);
-
             HomographyMatrix homography = null;
-            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
-            if (nonZeroCount >= 4)
+            using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
             {
-               nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
-               if (nonZeroCount >= 4)
-                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask);
-            }
+               stopwatch.Reset(); stopwatch.Start();
+               GpuBruteForceMatcher hammingMatcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.HammingDist);
 
-            stopwatch.Stop();
-            Trace.WriteLine(String.Format("Time for feature matching (including data transfer): {0} milli-sec", stopwatch.ElapsedMilliseconds));
+               //BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
+               int k = 2;
+               Matrix<int> trainIdx = new Matrix<int>(observedKeypoints.Size, k);
+               Matrix<float> distance = new Matrix<float>(trainIdx.Size);
+
+               using (GpuMat<Byte> gpuObservedDescriptors = new GpuMat<byte>(observedDescriptors))
+               using (GpuMat<int> gpuTrainIdx = new GpuMat<int>(trainIdx))
+               using (GpuMat<float> gpuDistance = new GpuMat<float>(distance))
+               {
+                  Stopwatch w2 = Stopwatch.StartNew();
+                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null);
+                  w2.Stop();
+                  Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec", w2.ElapsedMilliseconds));
+                  gpuTrainIdx.Download(trainIdx);
+                  gpuDistance.Download(distance);
+               }
+
+               Matrix<Byte> mask = new Matrix<byte>(distance.Rows, 1);
+               mask.SetValue(255);
+               Features2DTracker.VoteForUniqueness(distance, 0.8, mask);
+
+               int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               if (nonZeroCount >= 4)
+               {
+                  nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
+                  if (nonZeroCount >= 4)
+                     homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask);
+                  nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               }
+
+               stopwatch.Stop();
+               Trace.WriteLine(String.Format("Time for feature matching (including data transfer): {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            }
 
             if (homography != null)
             {

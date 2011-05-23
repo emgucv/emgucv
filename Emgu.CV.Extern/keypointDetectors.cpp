@@ -334,7 +334,7 @@ void CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, Cv
 void drawMatchedFeatures(
                                 const IplImage* img1, const std::vector<cv::KeyPoint>* keypoints1,
                                 const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
-                                const CvMat* matchIndicies, 
+                                const CvMat* matchIndices, 
                                 IplImage* outImg,
                                 const CvScalar matchColor, const CvScalar singlePointColor,
                                 const CvMat* matchesMask, 
@@ -344,7 +344,7 @@ void drawMatchedFeatures(
    cv::Mat mat2 = cv::cvarrToMat(img2);
 
    std::vector<cv::DMatch> matches;
-   VectorOfDMatchPushMatrix(&matches, matchIndicies, 0, matchesMask);
+   VectorOfDMatchPushMatrix(&matches, matchIndices, 0, matchesMask);
 
    cv::Mat outMat = cv::cvarrToMat(outImg);
    cv::drawMatches(mat1, *keypoints1, mat2, *keypoints2, matches, outMat, 
@@ -425,7 +425,7 @@ void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceTyp
 }
 
 //2D tracker
-bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, CvMat* homography)
+bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography)
 {
    cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
 
@@ -445,16 +445,26 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
       }
    }
    
-   cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, 3);
+   //cv::Mat_<uchar> ransacMask(srcPtVec.size(), 1);
+   std::vector<uchar> ransacMask;
+   cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, randsacThreshold, ransacMask);
    cv::Mat hMat = cv::cvarrToMat(homography);
    result.copyTo(hMat);
+
+   int idx = 0;
+   for (int i = 0; i < maskMat.rows; i++)
+   {
+      uchar* val = maskMat.ptr<uchar>(i);
+      if (*val)
+         *val = ransacMask[idx++];
+   }
    return true;
 
 }
 
 int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
 {
-   cv::Mat_<int> indiciesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+   cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
    cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
    std::vector<float> scale;
    std::vector<float> rotations;
@@ -466,7 +476,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
       if ( maskMat(i, 0)) 
       {
          cv::KeyPoint observedKeyPoint = observedKeyPoints->at(i);
-         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indiciesMat(i, 0));
+         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indicesMat(i, 0));
          s = log10( observedKeyPoint.size / modelKeyPoint.size );
          scale.push_back(s);
          maxS = s > maxS ? s : maxS;

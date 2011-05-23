@@ -189,6 +189,8 @@ CVAPI(cv::gpu::BruteForceMatcher_GPU_base*) gpuBruteForceMatcherCreate(cv::gpu::
 
 CVAPI(void) gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher);
 
+CVAPI(void) gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const cv::gpu::GpuMat* trainDescs);
+
 CVAPI(void) gpuBruteForceMatcherKnnMatch(
    cv::gpu::BruteForceMatcher_GPU_base* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,

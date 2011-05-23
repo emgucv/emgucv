@@ -16,6 +16,13 @@ void gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher)
    delete *matcher;
 }
 
+void gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const cv::gpu::GpuMat* trainDescs)
+{
+   std::vector< cv::gpu::GpuMat > mats;
+   mats.push_back( *trainDescs );
+   matcher->add(mats);
+}
+
 void gpuBruteForceMatcherKnnMatch(
    cv::gpu::BruteForceMatcher_GPU_base* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,

@@ -22,6 +22,9 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
 
+      //[DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuBruteForceMatcherKnnMatch(
          IntPtr matcher,
@@ -49,14 +52,40 @@ namespace Emgu.CV.GPU
          HammingDist
       }
 
+      private DistanceType _distanceType;
+
       /// <summary>
       /// Create a GPUBruteForce Matcher using the specific distance type
       /// </summary>
       /// <param name="distType">The distance type</param>
       public GpuBruteForceMatcher(DistanceType distType)
       {
+         _distanceType = distType;
          _ptr = gpuBruteForceMatcherCreate(distType);
       }
+
+      /*
+      /// <summary>
+      /// Add the model descriptors
+      /// </summary>
+      /// <param name="modelDescriptors">The model discriptors</param>
+      public void Add(Matrix<Byte> modelDescriptors)
+      {
+         if (!(_distanceType == DistanceType.HammingDist))
+            throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
+         gpuBruteForceMatcherAdd(_ptr, modelDescriptors);
+      }
+
+      /// <summary>
+      /// Add the model descriptors
+      /// </summary>
+      /// <param name="modelDescriptors">The model discriptors</param>
+      public void Add(Matrix<float> modelDescriptors)
+      {
+         if (!(_distanceType == DistanceType.L2 || _distanceType == DistanceType.L1))
+            throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
+         gpuBruteForceMatcherAdd(_ptr, modelDescriptors);
+      }*/
 
       /// <summary>
       /// For L1 and L2 distance type, find the k nearest neighbour using the brute force matcher. 

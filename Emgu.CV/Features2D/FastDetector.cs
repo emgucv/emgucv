@@ -13,7 +13,9 @@ using Emgu.Util;
 namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// FAST(Features from Accelerated Segment Test) keypoint detector
+   /// FAST(Features from Accelerated Segment Test) keypoint detector. 
+   /// See Detects corners using FAST algorithm by E. Rosten (”Machine learning for high-speed corner
+   /// detection”, 2006).
    /// </summary>
    public class FastDetector : DisposableObject, IKeyPointDetector
    {
@@ -33,18 +35,21 @@ namespace Emgu.CV.Features2D
       private IntPtr _featureDetectorPtr;
 
       /// <summary>
-      /// FAST threshold
+      /// Threshold on difference between intensity of center pixel and pixels on circle around
+      /// this pixel. See description of the algorithm.
       /// </summary>
       public int Threshold { get { return _threshold; } }
       /// <summary>
-      /// Specifiy if non-maximum supression should be used
+      /// If it is true then non-maximum supression will be applied to detected corners
+      /// (keypoints)
       /// </summary>
       public bool NonmaxSupression { get { return _nonmaxSupression; } }
 
       /// <summary>
       /// Create a fast detector with the specific parameters
       /// </summary>
-      /// <param name="threshold">FAST threshold</param>
+      /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
+      /// this pixel.</param>
       /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used</param>
       public FastDetector(int threshold, bool nonmaxSupression)
       {

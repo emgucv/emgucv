@@ -23,7 +23,7 @@ namespace Emgu.CV.Features2D
       private extern static void CvBruteForceMatcherRelease(ref IntPtr matcher, DistanceType distanceType);
       #endregion
 
-      private UnmanagedObject _modelDescriptors;
+      //private UnmanagedObject _modelDescriptors;
 
       /// <summary>
       /// The match distance type
@@ -81,38 +81,36 @@ namespace Emgu.CV.Features2D
 
       private DistanceType _distanceType;
 
-      private void Init(DistanceType distanceType, UnmanagedObject modelDescriptors)
+      /// <summary>
+      /// Create a BruteForceMatcher of the specific distance type
+      /// </summary>
+      /// <param name="distanceType">The distance type</param>
+      public BruteForceMatcher(DistanceType distanceType)      
       {
          _distanceType = distanceType;
          _ptr = CvBruteForceMatcherCreate(_distanceType);
-         _modelDescriptors = modelDescriptors; //keep a reference to the model descriptors
-         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(Ptr, modelDescriptors);
       }
 
       /// <summary>
-      /// Create a BruteForceMatcher with the specific distance type and model descriptors
+      /// Add the model descriptors
       /// </summary>
-      /// <param name="distanceType">The distance type</param>
-      /// <param name="modelDescriptors">The model discriptor</param>
-      public BruteForceMatcher(DistanceType distanceType, Matrix<float> modelDescriptors)
+      /// <param name="modelDescriptors">The model discriptors</param>
+      public void Add(Matrix<Byte> modelDescriptors)
       {
-         if (!(distanceType == DistanceType.L2F32 || distanceType == DistanceType.L1F32))
-            throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
-
-         Init(distanceType, modelDescriptors);
-      }
-
-      /// <summary>
-      /// Create a BruteForceMatcher with the specific distance type and model descriptors
-      /// </summary>
-      /// <param name="distanceType">The distance type</param>
-      /// <param name="modelDescriptors">The model discriptor</param>
-      public BruteForceMatcher(DistanceType distanceType, Matrix<Byte> modelDescriptors)
-      {
-         if (!(distanceType == DistanceType.Hamming || distanceType == DistanceType.HammingLUT))
+         if (!(_distanceType == DistanceType.Hamming || _distanceType == DistanceType.HammingLUT))
             throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
+         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
+      }
 
-         Init(distanceType, modelDescriptors);
+      /// <summary>
+      /// Add the model descriptors
+      /// </summary>
+      /// <param name="modelDescriptors">The model discriptors</param>
+      public void Add(Matrix<float> modelDescriptors)
+      {
+         if (!(_distanceType == DistanceType.L2F32 || _distanceType == DistanceType.L1F32))
+            throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
+         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
       }
 
       /// <summary>

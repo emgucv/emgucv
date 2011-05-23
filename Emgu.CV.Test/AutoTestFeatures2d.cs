@@ -104,12 +104,13 @@ namespace Emgu.CV.Test
       public void TestFAST()
       {
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-         FastDetector fast = new FastDetector(100, true);
+         FastDetector fast = new FastDetector(10, true);
+         GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
          BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
 
          #region extract features from the object image
          Stopwatch stopwatch = Stopwatch.StartNew();
-         VectorOfKeyPoint modelKeypoints = fast.DetectKeyPointsRaw(box, null);
+         VectorOfKeyPoint modelKeypoints = fastGrid.DetectKeyPointsRaw(box, null);
          Matrix<Byte> modelDescriptors = brief.ComputeDescriptorsRaw(box, modelKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
@@ -119,14 +120,15 @@ namespace Emgu.CV.Test
 
          #region extract features from the observed image
          stopwatch.Reset(); stopwatch.Start();
-         VectorOfKeyPoint observedKeypoints = fast.DetectKeyPointsRaw(observedImage, null);
+         VectorOfKeyPoint observedKeypoints = fastGrid.DetectKeyPointsRaw(observedImage, null);
          Matrix<Byte> observedDescriptors = brief.ComputeDescriptorsRaw(observedImage, observedKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion
 
          stopwatch.Reset(); stopwatch.Start();
-         BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
+         BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming);
+         hammingMatcher.Add(modelDescriptors);
          int k = 2;
          Matrix<int> trainIdx = new Matrix<int>(observedKeypoints.Size, k);
          Matrix<float> distance = new Matrix<float>(trainIdx.Size);
@@ -213,13 +215,16 @@ namespace Emgu.CV.Test
 
             HomographyMatrix homography = null;
 
+            BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32);
+            matcher.Add(modelDescriptors);
+
             stopwatch.Reset(); stopwatch.Start();
-            
-            Matrix<int> indices;
-            Matrix<float> dist;
-            Matrix<byte> mask;
-            Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
-            mask = new Matrix<byte>(dist.Rows, 1);
+
+            Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, 2);
+            Matrix<float> dist = new Matrix<float>(indices.Size);
+            matcher.KnnMatch(observedDescriptors, indices, dist, 2, null);
+
+            Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1);
             mask.SetValue(255);
             Features2DTracker.VoteForUniqueness(dist, 0.8, mask);
 
