@@ -950,7 +950,7 @@ namespace Emgu.CV
       /// <param name="scanner">Reference to the contour scanner</param>
       /// <returns>pointer to the first contour on the highest level</returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvEndFindContour(ref IntPtr scanner);
+      public static extern IntPtr cvEndFindContours(ref IntPtr scanner);
 
       /// <summary>
       /// Finds circles in grayscale image using some modification of Hough transform
