@@ -1,8 +1,8 @@
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 4863)
+--- CMakeLists.txt	(revision 5126)
 +++ CMakeLists.txt	(working copy)
-@@ -653,14 +653,21 @@
+@@ -648,12 +648,19 @@
  					set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
  				else()
  				    get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                         	
@@ -24,13 +24,11 @@ Index: CMakeLists.txt
  						set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
 +					  endif()
  					endif()
-
+ 
  					if (MSVC80)
- 					   set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
- 					elseif(MSVC90)
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 4863)
+--- modules/legacy/src/3dtracker.cpp	(revision 5126)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -54,3 +52,26 @@ Index: modules/legacy/src/3dtracker.cpp
  
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
+Index: OpenCVFindOpenNI.cmake
+===================================================================
+--- OpenCVFindOpenNI.cmake	(revision 5126)
++++ OpenCVFindOpenNI.cmake	(working copy)
+@@ -42,7 +42,7 @@
+     endif()
+ endif()
+ 
+-find_library(OPENNI_LIBRARY "OpenNI" PATHS ${OPENNI_LIB_DIR} DOC "OpenNI library" NO_DEFAULT_PATH)
++find_library(OPENNI_LIBRARY "OpenNI" "openNI64" PATHS ${OPENNI_LIB_DIR} DOC "OpenNI library" NO_DEFAULT_PATH)
+ find_path(OPENNI_INCLUDES "XnCppWrapper.h" PATHS ${OPENNI_INCLUDE_DIR} DOC "OpenNI c++ interface header" NO_DEFAULT_PATH)
+ 
+ if(OPENNI_LIBRARY AND OPENNI_INCLUDES)
+@@ -50,6 +50,9 @@
+     # the check: are PrimeSensor Modules for OpenNI installed?
+     if(WIN32)
+         find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore.dll" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
++		if(NOT OPENNI_PRIME_SENSOR_MODULE)
++		    find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore64.dll" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
++		endif()
+     elseif(UNIX OR APPLE)
+         find_library(OPENNI_PRIME_SENSOR_MODULE "XnCore" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
+     endif()
