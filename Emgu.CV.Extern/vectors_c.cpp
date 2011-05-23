@@ -213,8 +213,8 @@ cv::DMatch* VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v)
 
 void VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat* trainIdx, CvMat* distance)
 {
-   CV_Assert(trainIdx->rows * trainIdx->cols > (int) matches->size());
-   CV_Assert(distance->rows * distance->cols > (int) matches->size());
+   CV_Assert(trainIdx->rows >= (int) matches->size());
+   CV_Assert(distance->rows >= (int) matches->size());
 
    cv::Mat trainIdxMat = cv::cvarrToMat(trainIdx);
    cv::Mat distanceMat = cv::cvarrToMat(distance);
@@ -284,4 +284,20 @@ void VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data)
 cv::KeyPoint* VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v)
 {
    return v->empty() ? NULL : &(*v)[0];
+}
+
+void VectorOfKeyPointFilterByImageBorder( std::vector<cv::KeyPoint>* keypoints, CvSize imageSize, int borderSize )
+{
+   cv::KeyPointsFilter::runByImageBorder(*keypoints, imageSize, borderSize);
+}
+
+void VectorOfKeyPointFilterByKeypointSize( std::vector<cv::KeyPoint>* keypoints, float minSize, float maxSize)
+{
+   cv::KeyPointsFilter::runByKeypointSize(*keypoints, minSize, maxSize);
+}
+
+void VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, CvMat* mask )
+{
+   cv::Mat m = cv::cvarrToMat(mask);
+   cv::KeyPointsFilter::runByPixelsMask(*keypoints, m);
 }

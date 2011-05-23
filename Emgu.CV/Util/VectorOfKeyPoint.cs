@@ -5,6 +5,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Drawing;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.Util
@@ -38,6 +39,15 @@ namespace Emgu.CV.Util
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void VectorOfKeyPointClear(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void VectorOfKeyPointFilterByImageBorder(IntPtr keypoints, Size imageSize, int borderSize);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void VectorOfKeyPointFilterByKeypointSize(IntPtr keypoints, float minSize, float maxSize);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void VectorOfKeyPointFilterByPixelsMask(IntPtr keypoints, IntPtr mask);
       #endregion
 
       /// <summary>
@@ -115,6 +125,34 @@ namespace Emgu.CV.Util
             handle.Free();
          }
          return res;
+      }
+      /// <summary>
+      /// Remove keypoints within borderPixels of an image edge.
+      /// </summary>
+      /// <param name="imageSize">Image size</param>
+      /// <param name="borderSize">Border size in pixel</param>
+      public void FilterByImageBorder(Size imageSize, int borderSize)
+      {
+         VectorOfKeyPointFilterByImageBorder(Ptr, imageSize, borderSize);
+      }
+
+      /// <summary>
+      /// Remove keypoints of sizes out of range.
+      /// </summary>
+      /// <param name="minSize">Minimum size</param>
+      /// <param name="maxSize">Maximum size</param>
+      public void FilterByKeypointSize(float minSize, float maxSize)
+      {
+         VectorOfKeyPointFilterByKeypointSize(Ptr, minSize, maxSize);
+      }
+
+      /// <summary>
+      /// Remove keypoints from some image by mask for pixels of this image.
+      /// </summary>
+      /// <param name="mask">The mask</param>
+      public void FilterByPixelsMask(Image<Gray, Byte> mask)
+      {
+         VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
       }
 
       /// <summary>
