@@ -12,6 +12,7 @@ using Emgu.CV.GPU;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
+using Emgu.CV.Features2D;
 using NUnit.Framework;
 
 namespace Emgu.CV.GPU.Test
@@ -215,7 +216,7 @@ namespace Emgu.CV.GPU.Test
             Image<Gray, Byte> img = new Image<Gray, byte>(300, 400);
             img.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
-            using (GpuImage<Gray, Byte> gImg1 = new GpuImage<Gray,byte>(img))
+            using (GpuImage<Gray, Byte> gImg1 = new GpuImage<Gray, byte>(img))
             using (GpuImage<Gray, Byte> gImg2 = gImg1.Clone())
             using (Image<Gray, Byte> img2 = gImg2.ToImage())
             {
@@ -317,6 +318,93 @@ namespace Emgu.CV.GPU.Test
                Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
                //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            }
+         }
+      }
+
+      [Test]
+      public void TestBruteForceHammingDistance()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+            FastDetector fast = new FastDetector(100, true);
+            BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
+
+            #region extract features from the object image
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            VectorOfKeyPoint modelKeypoints = fast.DetectKeyPointsRaw(box, null);
+            Matrix<Byte> modelDescriptors = brief.ComputeDescriptorsRaw(box, modelKeypoints);
+            stopwatch.Stop();
+            Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            #endregion
+
+            Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
+
+            #region extract features from the observed image
+            stopwatch.Reset(); stopwatch.Start();
+            VectorOfKeyPoint observedKeypoints = fast.DetectKeyPointsRaw(observedImage, null);
+            Matrix<Byte> observedDescriptors = brief.ComputeDescriptorsRaw(observedImage, observedKeypoints);
+            stopwatch.Stop();
+            Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            #endregion
+
+            stopwatch.Reset(); stopwatch.Start();
+            GpuBruteForceMatcher hammingMatcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.HammingDist);
+
+            //BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
+            int k = 2;
+            Matrix<int> trainIdx = new Matrix<int>(observedKeypoints.Size, k);
+            Matrix<float> distance = new Matrix<float>(trainIdx.Size);
+
+
+            using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors))
+            using (GpuMat<Byte> gpuObservedDescriptors = new GpuMat<byte>(observedDescriptors))
+            using (GpuMat<int> gpuTrainIdx = new GpuMat<int>(trainIdx))
+            using (GpuMat<float> gpuDistance = new GpuMat<float>(distance))
+            {
+               Stopwatch w2 = Stopwatch.StartNew();
+               hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null);
+               w2.Stop();
+               Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec", w2.ElapsedMilliseconds));
+               gpuTrainIdx.Download(trainIdx);
+               gpuDistance.Download(distance);
+            }
+            Matrix<Byte> mask = new Matrix<byte>(distance.Rows, 1);
+            mask.SetValue(255);
+            Features2DTracker.VoteForUniqueness(distance, 0.8, mask);
+
+            HomographyMatrix homography = null;
+            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            if (nonZeroCount >= 4)
+            {
+               nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
+               if (nonZeroCount >= 4)
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask);
+            }
+
+            stopwatch.Stop();
+            Trace.WriteLine(String.Format("Time for feature matching (including data transfer): {0} milli-sec", stopwatch.ElapsedMilliseconds));
+
+            if (homography != null)
+            {
+               Rectangle rect = box.ROI;
+               PointF[] pts = new PointF[] { 
+               new PointF(rect.Left, rect.Bottom),
+               new PointF(rect.Right, rect.Bottom),
+               new PointF(rect.Right, rect.Top),
+               new PointF(rect.Left, rect.Top)};
+
+               PointF[] points = pts.Clone() as PointF[];
+               homography.ProjectPoints(points);
+
+               //Merge the object image and the observed image into one big image for display
+               Image<Gray, Byte> res = box.ConcateVertical(observedImage);
+
+               for (int i = 0; i < points.Length; i++)
+                  points[i].Y += box.Height;
+               res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
+               //ImageViewer.Show(res);
             }
          }
       }

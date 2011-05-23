@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{04AE7FDF-DCAB-4A32-936C-5AC38C34FB37}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -67,6 +67,14 @@
       <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
       <Name>Emgu.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\opencv\samples\c\box.png">
+      <Link>box.png</Link>
+    </Content>
+    <Content Include="..\opencv\samples\c\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

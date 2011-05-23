@@ -42,7 +42,11 @@ namespace Emgu.CV.GPU
          /// <summary>
          /// Euclidean distance
          /// </summary>
-         L2
+         L2,
+         /// <summary>
+         /// Hamming distance
+         /// </summary>
+         HammingDist
       }
 
       /// <summary>
@@ -55,7 +59,7 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Find the k nearest neighbour using the brute force matcher
+      /// For L1 and L2 distance type, find the k nearest neighbour using the brute force matcher. 
       /// </summary>
       /// <param name="queryDescriptors">The query descriptors</param>
       /// <param name="modelDescriptors">The model descriptors</param>
@@ -64,6 +68,20 @@ namespace Emgu.CV.GPU
       /// <param name="k">The number of nearest neighbours to be searched</param>
       /// <param name="mask">The mask</param>
       public void KnnMatch(GpuMat<float> queryDescriptors, GpuMat<float> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask)
+      {
+         gpuBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask);
+      }
+
+      /// <summary>
+      /// For Hamming distance type, find the k nearest neighbour using the brute force matcher. 
+      /// </summary>
+      /// <param name="queryDescriptors">The query descriptors</param>
+      /// <param name="modelDescriptors">The model descriptors</param>
+      /// <param name="modelIdx">The model index. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Cols</param>
+      /// <param name="distance">The matrix where the distance valus is stored. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Size.Height</param>
+      /// <param name="k">The number of nearest neighbours to be searched</param>
+      /// <param name="mask">The mask</param>
+      public void KnnMatch(GpuMat<Byte> queryDescriptors, GpuMat<Byte> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask)
       {
          gpuBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask);
       }
