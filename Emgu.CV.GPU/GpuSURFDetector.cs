@@ -50,9 +50,7 @@ namespace Emgu.CV.GPU
          IntPtr keypoints,
          IntPtr descriptors,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useProvidedKeypoints,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool calcOrientation);
+         bool useProvidedKeypoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int gpuSURFDetectorGetDescriptorSize(IntPtr detector);
@@ -155,13 +153,12 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. The order of the keypoints might be changed if <paramref name="caculateOrientation"/> is true.</param>
-      /// <param name="caculateOrientation">If true, orientation will be calculated. The order of the keypoints might also be changed by this function call.</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. The order of the keypoints might be changed unless the GPU_SURF detector is UP-RIGHT.</param>
       /// <returns>The image features founded on the keypoint location</returns>
-      public GpuMat<float> ComputeDescriptorsRaw(GpuImage<Gray, Byte> image, GpuImage<Gray, byte> mask, GpuMat<float> keyPoints, bool caculateOrientation)
+      public GpuMat<float> ComputeDescriptorsRaw(GpuImage<Gray, Byte> image, GpuImage<Gray, byte> mask, GpuMat<float> keyPoints)
       {
          GpuMat<float> descriptors = new GpuMat<float>(keyPoints.Size.Height, DescriptorSize, 1);
-         gpuSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true, caculateOrientation);
+         gpuSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true);
          return descriptors;
       }
 
