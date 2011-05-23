@@ -20,6 +20,9 @@ namespace Emgu.CV.Features2D
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvSiftGetFeatureDetector(IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static IntPtr CvSiftGetDescriptorExtractor(IntPtr detector);
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorDetectFeature(
@@ -58,9 +61,13 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSiftFeatureDetectorRelease(ref IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSiftDescriptorExtractorRelease(ref IntPtr extractor);
       #endregion
 
       private IntPtr _featureDetectorPtr;
+      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// The angle mode for the key point detector
@@ -96,6 +103,7 @@ namespace Emgu.CV.Features2D
       {
          _ptr = CvSIFTDetectorCreate(nOctaves, nOctaveLayers, firstOctave, angleMode, threshold, edgeThreshold, magnification, isNormalize, recalculateAngles);
          _featureDetectorPtr = CvSiftGetFeatureDetector(Ptr);
+         _descriptorExtractorPtr = CvSiftGetDescriptorExtractor(Ptr);
       }
 
       /// <summary>
@@ -218,7 +226,7 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      #region IDescriptorGenerator Members
+      #region IDescriptorExtractor Members
       /// <summary>
       /// Compute the descriptor given the image and the point location
       /// </summary>
@@ -234,6 +242,12 @@ namespace Emgu.CV.Features2D
          CvSIFTDetectorComputeDescriptors(_ptr, image, mask, keyPoints, descriptors);
          return descriptors;
       }
+
+      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
+      {
+         get { return _descriptorExtractorPtr; }
+      }
+
       #endregion
    }
 }

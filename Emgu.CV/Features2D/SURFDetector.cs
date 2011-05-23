@@ -20,6 +20,10 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr CvSURFGetFeatureDetector(ref MCvSURFParams detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static IntPtr CvSURFGetDescriptorExtractor(ref MCvSURFParams detector);
+
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorDetectFeature(
@@ -46,20 +50,25 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFFeatureDetectorRelease(ref IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSURFDescriptorExtractorRelease(ref IntPtr extractor);
       #endregion
 
       /// <summary>
       /// Get the SURF parameters
       /// </summary>
-      /// <returns>The SURF parameters</returns>
-      public MCvSURFParams GetSURFParams()
+      public MCvSURFParams SURFParams
       {
-         MCvSURFParams p = new MCvSURFParams();
-         p.Extended = _extended;
-         p.HessianThreshold = HessianThreshold;
-         p.NOctaves = NOctaves;
-         p.NOctaveLayers = NOctaveLayers;
-         return p;
+         get
+         {
+            MCvSURFParams p = new MCvSURFParams();
+            p.Extended = _extended;
+            p.HessianThreshold = HessianThreshold;
+            p.NOctaves = NOctaves;
+            p.NOctaveLayers = NOctaveLayers;
+            return p;
+         }
       }
 
 
@@ -106,8 +115,9 @@ namespace Emgu.CV.Features2D
          _nOctaves = nOctaves;
          _nOctaveLayers = nOctaveLayers;
 
-         MCvSURFParams tmp = GetSURFParams();
+         MCvSURFParams tmp = SURFParams;
          _featureDetectorPtr = CvSURFGetFeatureDetector(ref tmp);
+         _featureDetectorPtr = CvSURFGetDescriptorExtractor(ref tmp);
       }
 
       private int _extended;
@@ -140,6 +150,7 @@ namespace Emgu.CV.Features2D
       public int NOctaveLayers { get { return _nOctaveLayers; } }
 
       private IntPtr _featureDetectorPtr;
+      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// Detect the SURF keypoints from the image
@@ -182,7 +193,7 @@ namespace Emgu.CV.Features2D
          if (count == 0) return null;
          int sizeOfdescriptor = Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * 3, 1);
-         MCvSURFParams p = GetSURFParams();
+         MCvSURFParams p = SURFParams;
          CvSURFDetectorComputeDescriptorsBGR(ref p, image, keyPoints, descriptors);
          return descriptors;
       }
@@ -232,7 +243,16 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      #region IDescriptorGenerator Members
+      /// <summary>
+      /// Release the unmanaged memory associated with this detector.
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvSURFDescriptorExtractorRelease(ref _descriptorExtractorPtr);
+      }
+
+      #region IDescriptorExtractor Members
       /// <summary>
       /// Compute the descriptor given the image and the point location
       /// </summary>
@@ -246,18 +266,16 @@ namespace Emgu.CV.Features2D
          if (count == 0) return null;
          int sizeOfdescriptor = Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
-         MCvSURFParams p = GetSURFParams();
+         MCvSURFParams p = SURFParams;
          CvSURFDetectorComputeDescriptors(ref p, image, mask, keyPoints, descriptors);
          return descriptors;
       }
-      #endregion
 
-      /// <summary>
-      /// Release the unmanaged memory associated with this detector.
-      /// </summary>
-      protected override void DisposeObject()
+      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
       {
-         CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
+         get { return _descriptorExtractorPtr; }
       }
+
+      #endregion
    }
 }

@@ -328,7 +328,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
          watch.Reset(); watch.Start();
-         MCvSURFParams p = detector.GetSURFParams();
+         MCvSURFParams p = detector.SURFParams;
          SURFFeature[] features3 = box.ExtractSURF(ref p);
          watch.Stop();
          Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));

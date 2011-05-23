@@ -102,10 +102,21 @@ cv::SiftFeatureDetector* CvSiftGetFeatureDetector(cv::SIFT* detector)
    return new cv::SiftFeatureDetector(detector->getDetectorParams(), detector->getCommonParams());
 }
 
+cv::SiftDescriptorExtractor* CvSiftGetDescriptorExtractor(cv::SIFT* detector)
+{
+   return new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
+}
+
 void CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
+}
+
+void CvSiftDescriptorExtractorRelease(cv::SiftDescriptorExtractor** extractor)
+{
+   delete *extractor;
+   extractor=0;
 }
 
 void CvSIFTDetectorRelease(cv::SIFT** detector)
@@ -210,10 +221,21 @@ cv::SurfFeatureDetector* CvSURFGetFeatureDetector(cv::SURF* detector)
    return new cv::SurfFeatureDetector(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers);
 }
 
+cv::SurfDescriptorExtractor* CvSURFGetDescriptorExtractor(cv::SURF* detector)
+{
+   return new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended);
+}
+
 void CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
+}
+
+void CvSURFDescriptorExtractorRelease(cv::SurfDescriptorExtractor** extractor)
+{
+   delete *extractor;
+   *extractor = 0;
 }
 
 /*

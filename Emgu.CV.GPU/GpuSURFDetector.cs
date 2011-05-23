@@ -155,8 +155,8 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
-      /// <param name="caculateOrientation">If true, orientation will be calculated.</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. The order of the keypoints might be changed if <paramref name="caculateOrientation"/> is true.</param>
+      /// <param name="caculateOrientation">If true, orientation will be calculated. The order of the keypoints might also be changed by this function call.</param>
       /// <returns>The image features founded on the keypoint location</returns>
       public GpuMat<float> ComputeDescriptorsRaw(GpuImage<Gray, Byte> image, GpuImage<Gray, byte> mask, GpuMat<float> keyPoints, bool caculateOrientation)
       {

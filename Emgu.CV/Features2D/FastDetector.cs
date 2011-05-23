@@ -17,7 +17,7 @@ namespace Emgu.CV.Features2D
    /// See Detects corners using FAST algorithm by E. Rosten (”Machine learning for high-speed corner
    /// detection”, 2006).
    /// </summary>
-   public class FastDetector : DisposableObject, IKeyPointDetector
+   public class FastDetector : UnmanagedObject, IKeyPointDetector
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -32,7 +32,6 @@ namespace Emgu.CV.Features2D
 
       private int _threshold;
       private bool _nonmaxSupression;
-      private IntPtr _featureDetectorPtr;
 
       /// <summary>
       /// Threshold on difference between intensity of center pixel and pixels on circle around
@@ -55,7 +54,7 @@ namespace Emgu.CV.Features2D
       {
          _threshold = threshold;
          _nonmaxSupression = nonmaxSupression;
-         _featureDetectorPtr = CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
+         _ptr = CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
       }
 
       #region IKeyPointDetector Members
@@ -68,7 +67,7 @@ namespace Emgu.CV.Features2D
       public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
+         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
          return kpts;
       }
 
@@ -80,7 +79,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _featureDetectorPtr;
+            return Ptr;
          }
       }
       #endregion
@@ -90,7 +89,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvFASTFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvFASTFeatureDetectorRelease(ref _ptr);
       }
    }
 }

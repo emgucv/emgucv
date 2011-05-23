@@ -55,7 +55,11 @@ CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
 
 CVAPI(cv::SiftFeatureDetector*) CvSiftGetFeatureDetector(cv::SIFT* detector);
 
+CVAPI(cv::SiftDescriptorExtractor*) CvSiftGetDescriptorExtractor(cv::SIFT* detector);
+
 CVAPI(void) CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector);
+
+CVAPI(void) CvSiftDescriptorExtractorRelease(cv::SiftDescriptorExtractor** extractor);
 
 CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 
@@ -107,7 +111,11 @@ CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** d
 //SURFDetector
 CVAPI(cv::SurfFeatureDetector*) CvSURFGetFeatureDetector(cv::SURF* detector);
 
+CVAPI(cv::SurfDescriptorExtractor*) CvSURFGetDescriptorExtractor(cv::SURF* detector);
+
 CVAPI(void) CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector);
+
+CVAPI(void) CvSURFDescriptorExtractorRelease(cv::SurfDescriptorExtractor** extractor);
 
 /*
 CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
@@ -123,6 +131,7 @@ CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image
 //SURF with OpponentColorDescriptorExtractor
 CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
+//Brief descriptor extractor
 CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
 
 CVAPI(int) CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor);
