@@ -78,6 +78,7 @@
     <Compile Include="AutoTestCalibration.cs" />
     <Compile Include="AutoTestFeatures2d.cs" />
     <Compile Include="AutoTestGeodetic.cs" />
+    <Compile Include="AutoTestGpu.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />
     <Compile Include="AutoTestQuaternions.cs" />
@@ -144,6 +145,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
+      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
+      <Name>Emgu.CV.GPU</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.ML\Emgu.CV.ML.csproj">
       <Project>{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}</Project>
       <Name>Emgu.CV.ML</Name>

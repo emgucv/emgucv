@@ -381,7 +381,7 @@ namespace Emgu.CV.GPU.Test
                {
                   nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
                   if (nonZeroCount >= 4)
-                     homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask);
+                     homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
                   nonZeroCount = CvInvoke.cvCountNonZero(mask);
                }
 

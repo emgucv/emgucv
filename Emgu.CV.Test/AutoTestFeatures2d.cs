@@ -143,7 +143,7 @@ namespace Emgu.CV.Test
          {
             nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
             if (nonZeroCount >= 4)
-               homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask);
+               homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
          }
 
          stopwatch.Stop();
@@ -233,7 +233,7 @@ namespace Emgu.CV.Test
             {
                nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, indices, mask, 1.5, 20);
                if (nonZeroCount >= 4)
-                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, indices, mask);
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, indices, mask, 2);
             }
 
             stopwatch.Stop();
