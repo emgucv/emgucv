@@ -10,9 +10,6 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV
 {
-   /// <summary>
-   /// Library to invoke OpenCV functions
-   /// </summary>
    public static partial class CvInvoke
    {
       /// <summary>

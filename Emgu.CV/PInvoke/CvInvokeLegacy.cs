@@ -9,9 +9,6 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-   /// <summary>
-   /// Library to invoke OpenCV functions
-   /// </summary>
    public static partial class CvInvoke
    {
       /// <summary>
