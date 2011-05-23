@@ -49,7 +49,7 @@ namespace SURFFeatureExample
 
          if (GpuInvoke.HasCuda)
          {
-            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.GetSURFParams(), 0.01f, false);
+            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f, false);
             using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
@@ -88,7 +88,7 @@ namespace SURFFeatureExample
                   {
                      nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                      if (nonZeroCount >= 4)
-                        homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
+                        homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 3);
                   }
 
                   watch.Stop();
@@ -119,7 +119,7 @@ namespace SURFFeatureExample
             {
                nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                if (nonZeroCount >= 4)
-                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask);
+                  homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 3);
             }
 
             watch.Stop();
