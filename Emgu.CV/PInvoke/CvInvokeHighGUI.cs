@@ -81,6 +81,14 @@ namespace Emgu.CV
       public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP propertyId, double value);
 
       /// <summary>
+      /// Return the type of the capture (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
+      /// </summary>
+      /// <param name="capture">The pointer to CvCapture</param>
+      /// <returns>The type of the capture</returns>
+      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern int cvGetCaptureDomain(IntPtr capture);  
+
+      /// <summary>
       /// Loads an image from the specified file and returns the pointer to the loaded image. Currently the following file formats are supported: 
       /// Windows bitmaps - BMP, DIB; 
       /// JPEG files - JPEG, JPG, JPE; 
