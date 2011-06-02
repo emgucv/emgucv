@@ -6,19 +6,16 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
-#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/3rdparty/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/core/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/imgproc/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/video/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/ml/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/calib3d/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/objdetect/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/features2d/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/legacy/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/highgui/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 
 ############################### IPP START ##############################
@@ -101,54 +98,6 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
   ENDIF()
 endif()
 ############################### TBB END ################################
-
-############################### GPU START ##############################
-IF(WIN32 AND WITH_CUDA)
-
-if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
-
-    string( REGEX REPLACE "#define NPP_VERSION_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
-    string( REGEX REPLACE "#define NPP_VERSION_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
-    string( REGEX REPLACE "#define NPP_VERSION_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
-
-    string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
-    string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
-    string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
-endif()
-
-#replace any potential backslash in the path with slash
-STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
-
-IF(TARGET_ARCH_64) 
-  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/x64/npp64_${npp_major}${npp_minor}_${npp_build}.dll")
-  LIST(APPEND NPP_BINARY_FILE 
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart64_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cufft64_${npp_major}${npp_minor}_${npp_build}.dll"
-    )
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
-    npp64_${npp_major}${npp_minor}_${npp_build} 
-    cudart64_${npp_major}${npp_minor}_${npp_build} 
-    cufft64_${npp_major}${npp_minor}_${npp_build})
-ELSE()
-  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/win32/npp32_${npp_major}${npp_minor}_${npp_build}.dll")
-  LIST(APPEND NPP_BINARY_FILE 
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart32_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cufft32_${npp_major}${npp_minor}_${npp_build}.dll"
-    )
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
-    npp32_${npp_major}${npp_minor}_${npp_build} 
-	 cudart32_${npp_major}${npp_minor}_${npp_build} 
-	 cufft32_${npp_major}${npp_minor}_${npp_build}
-	 )
-ENDIF()
-
-LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${NPP_BINARY_FILE})
-
-ENDIF()
-############################### GPU END ################################
 
 ############################### OPENNI START ##############################
 IF(WIN32 AND WITH_OPENNI)
@@ -289,7 +238,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
@@ -303,3 +252,5 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin COMPONENT main
     LIBRARY DESTINATION lib COMPONENT main
     ARCHIVE DESTINATION lib COMPONENT main)
+
+add_subdirectory(gpu)

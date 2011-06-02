@@ -19,13 +19,13 @@ namespace Emgu.CV.GPU
    public class GpuHOGDescriptor : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuHOGDescriptorPeopleDetectorCreate(IntPtr seq);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr gpuHOGDescriptorCreateDefault();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr gpuHOGDescriptorCreate(
          ref Size winSize,
          ref Size blockSize,
@@ -38,13 +38,13 @@ namespace Emgu.CV.GPU
          bool gammaCorrection,
          int nLevels);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuHOGDescriptorRelease(IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,

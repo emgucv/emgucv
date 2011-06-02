@@ -202,6 +202,7 @@ GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_FLANN_OUTPUT_NAME opencv_flann OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_GPU_OUTPUT_NAME opencv_gpu OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
+GET_TARGET_PROPERTY(CVEXTERN_GPU_OUTPUT_NAME cvextern_gpu OUTPUT_NAME)
 
 IF(TARGET opencv_ffmpeg)
   GET_TARGET_PROPERTY(OPENCV_FFMPEG_OUTPUT_NAME opencv_ffmpeg OUTPUT_NAME)
@@ -223,7 +224,8 @@ SET(OPENCV_LIBRARY_OUTPUT_NAMES
   ${OPENCV_FFMPEG_OUTPUT_NAME}
   ${OPENCV_FLANN_OUTPUT_NAME}
   ${OPENCV_GPU_OUTPUT_NAME}
-  ${CVEXTERN_OUTPUT_NAME})
+  ${CVEXTERN_OUTPUT_NAME}
+  ${CVEXTERN_GPU_OUTPUT_NAME})
 
 IF(TARGET opencv_ffmpeg)
 ELSE()
@@ -284,7 +286,10 @@ namespace Emgu.CV
       /// The file name of the cvextern library
       /// </summary>
       public const string EXTERN_LIBRARY = \"${CVEXTERN_OUTPUT_NAME}\";
-	  
+      /// <summary>
+      /// The file name of the cvextern_gpu library
+      /// </summary>
+      public const string EXTERN_GPU_LIBRARY = \"${CVEXTERN_GPU_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the opencv_ffmpeg library
       /// </summary>

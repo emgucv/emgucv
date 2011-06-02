@@ -19,7 +19,7 @@ namespace Emgu.CV.GPU
    public class GpuSURFDetector : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuSURFDetectorCreate(
          double hessianThreshold,
          int nOctaves,
@@ -30,19 +30,19 @@ namespace Emgu.CV.GPU
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool upright);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorRelease(ref IntPtr detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorDetectKeyPoints(IntPtr detector, IntPtr img, IntPtr mask, IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuDownloadKeypoints(IntPtr detector, IntPtr keypointsGPU, IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuUploadKeypoints(IntPtr detector, IntPtr keypoints, IntPtr keypointsGPU);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuSURFDetectorCompute(
          IntPtr detector,
          IntPtr img,
@@ -52,7 +52,7 @@ namespace Emgu.CV.GPU
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useProvidedKeypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int gpuSURFDetectorGetDescriptorSize(IntPtr detector);
       #endregion
 

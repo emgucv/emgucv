@@ -4,7 +4,7 @@
 #include <iostream>
 #include "quaternions.h"
 
-#include "opencv2/gpu/gpu.hpp"
+//#include "opencv2/gpu/gpu.hpp"
 
 #ifdef _MSC_VER
 #include "windows.h"
@@ -103,12 +103,13 @@ void Test_quaternions()
       ? "Passed" : "Failed") << std::endl;
 }
 
+/*
 void Test_GpuMatCopy()
 {
    cv::gpu::GpuMat m1(480, 320, CV_8UC1);
    cv::gpu::GpuMat m2(480, 320, CV_8UC1);
    m1.copyTo(m2);
-}
+}*/
 
 #ifdef _MSC_VER
 void Test_quaternions_performance()
@@ -157,7 +158,7 @@ int main()
    Test_3D_cross_product();
    Test_double_MulS();
    Test_quaternions();
-   Test_GpuMatCopy();
+   //Test_GpuMatCopy();
 #ifdef _MSC_VER
    Test_quaternions_performance();
    cin >>tmp; //wait for input only if compiling with visual C++ 

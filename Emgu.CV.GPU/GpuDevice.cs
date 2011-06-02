@@ -16,10 +16,10 @@ namespace Emgu.CV.GPU
    public class GpuDevice : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr gpuDeviceInfoCreate(ref int deviceId);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuDeviceInfoRelease(ref IntPtr di);
 
       /// <summary>
@@ -28,7 +28,7 @@ namespace Emgu.CV.GPU
       /// <param name="device">The device</param>
       /// <param name="major">The major version of the compute capability</param>
       /// <param name="minor">The minor version of the compute capability</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuDeviceInfoComputeCapability(IntPtr device, ref int major, ref int minor);
 
       /// <summary>
@@ -36,26 +36,26 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="device">The device</param>
       /// <returns>The number of multiprocessors on device</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int gpuDeviceInfoMultiProcessorCount(IntPtr device);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuDeviceInfoFreeMemInfo(IntPtr device, ref UIntPtr free);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuDeviceInfoTotalMemInfo(IntPtr device, ref UIntPtr total);
 
       /// <summary>
       /// Get the device name
       /// </summary>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void gpuDeviceInfoDeviceName(
          IntPtr device,
          [MarshalAs(CvInvoke.StringMarshalType)]
          StringBuilder buffer,
          int maxSizeInBytes);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool gpuDeviceInfoSupports(IntPtr device, GpuFeature feature);
       #endregion

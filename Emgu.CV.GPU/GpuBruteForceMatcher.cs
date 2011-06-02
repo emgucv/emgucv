@@ -16,16 +16,16 @@ namespace Emgu.CV.GPU
    public class GpuBruteForceMatcher : UnmanagedObject
    {
       #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr gpuBruteForceMatcherCreate(DistanceType distType);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
 
-      //[DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      //[DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuBruteForceMatcherKnnMatch(
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
