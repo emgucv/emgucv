@@ -182,6 +182,10 @@ set_target_properties(${the_target} PROPERTIES
 	DEFINE_SYMBOL "CVAPI_EXPORTS"
 	)
 
+if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
+endif() 
+
 FIND_PACKAGE(TIFF)
 IF(NOT TIFF_FOUND)
   ADD_DEPENDENCIES(${the_target} libtiff)

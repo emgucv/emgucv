@@ -93,6 +93,10 @@ set_target_properties(${the_target} PROPERTIES
     OUTPUT_NAME "${the_target}"
     )
 
+if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
+endif()
+
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
 	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"

@@ -13,5 +13,9 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
   ADD_CS_REFERENCES("System.Drawing.dll;System.Windows.Forms.dll")
   COMPILE_CS(${PROJECT_NAME} "library" "${SRC_EMGU_UI}")
+  
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+  endif()
 
 ENDIF()
