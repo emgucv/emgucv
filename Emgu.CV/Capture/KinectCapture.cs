@@ -20,6 +20,9 @@ namespace Emgu.CV
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
+
+      [DllImport(CvInvoke.OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
       #endregion
 
       /// <summary>
@@ -238,6 +241,16 @@ namespace Emgu.CV
          double f = GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH);
 
          return baseline / f * minDistance;
+      }
+
+      /// <summary>
+      /// Get the unmanaged OpenNI Context from the capture.
+      /// </summary>
+      /// <returns>Pointer to the OpenNI context</returns>
+      /// <remarks>This function required the opencv_highgui module patched by EMGU CV, otherwise it will throw entry point not found exception.</remarks>
+      public IntPtr GetOpenNIContext()
+      {
+         return cvGetOpenniCaptureContext(Ptr);
       }
 
       /// <summary>

@@ -172,7 +172,7 @@ namespace Emgu.CV
       /// Grab a frame
       /// </summary>
       /// <returns>True on success</returns>
-      public bool Grab()
+      public virtual bool Grab()
       {
          return CvInvoke.cvGrabFrame(_ptr);
       }
