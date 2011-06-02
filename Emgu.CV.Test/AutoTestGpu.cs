@@ -122,7 +122,7 @@ namespace Emgu.CV.GPU.Test
             GpuImage<Gray, Byte> gpuImgSum = new GpuImage<Gray, byte>(gpuImg1.Size);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               GpuInvoke.Add(gpuImg1, gpuImg2, gpuImgSum);
+               GpuInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
             watch2.Stop();
             Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
             watch.Stop();
@@ -200,7 +200,7 @@ namespace Emgu.CV.GPU.Test
             Image<Gray, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             GpuImage<Gray, Byte> gpuImg = new GpuImage<Gray, byte>(img);
             GpuImage<Gray, byte> smallGpuImg = new GpuImage<Gray, byte>(small.Size);
-            GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, IntPtr.Zero);
             Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
@@ -264,13 +264,26 @@ namespace Emgu.CV.GPU.Test
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
             img.SetRandUniform(new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(255.0, 255.0, 255.0));
-            //Image<Bgr, Byte> img = new Image<Bgr, byte>("airplane.jpg");
 
-            Image<Bgr, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            Size size = new Size(100, 200);
+
             GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(img);
-            GpuImage<Bgr, byte> smallGpuImg = new GpuImage<Bgr, byte>(small.Size);
-            GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
-            Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
+            GpuImage<Bgr, byte> smallGpuImg = new GpuImage<Bgr, byte>(size);
+            Image<Bgr, Byte> smallCpuImg;
+
+            using (Stream stream = new Stream())
+            {
+               //Calling GPU resize asynchronously
+               GpuInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, stream);
+
+               //The CPU processing will be running in parallel
+               smallCpuImg = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+
+               //Stream will wait for all GPU function call to complete before it is disposed.
+            }  //GpuInvoke.Resize function completes here.
+
+            Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(smallCpuImg);
+            Assert.IsTrue(diff.CountNonzero()[0] == 0);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
          }

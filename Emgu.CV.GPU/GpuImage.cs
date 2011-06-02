@@ -118,7 +118,7 @@ namespace Emgu.CV.GPU
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (GpuImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR))
+            using (GpuImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, null))
             {
                ConvertFrom(tmp);
                return;
@@ -244,16 +244,16 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Resize the GpuImage. 
-      /// Only TDepth of Byte is supported.
+      /// Resize the GpuImage. The calling GpuMat be GpuMat%lt;Byte&gt;. If steam is specified, it has to be either 1 or 4 channels.
       /// </summary>
       /// <param name="size">The new size</param>
       /// <param name="interpolationType">The interpolation type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       /// <returns>A GpuImage of the new size</returns>
-      public GpuImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType)
+      public GpuImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType, Stream stream)
       {
          GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(size);
-         GpuInvoke.Resize(_ptr, result, interpolationType);
+         GpuInvoke.Resize(_ptr, result, interpolationType, stream);
          return result;
       }
 
