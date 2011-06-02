@@ -1251,6 +1251,46 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestMultiThreadInMemoryWithBMP()
+      {
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         {
+            int threadCount = 32;
+
+            //Create some random images and save to hard disk
+            Bitmap[] imageNames = new Bitmap[threadCount];
+            for (int i = 0; i < threadCount; i++)
+            {
+               using (Image<Bgr, Byte> img = new Image<Bgr, byte>(2048, 1024))
+               {
+                  img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+                  imageNames[i] = img.ToBitmap();
+               }
+            }
+
+            Thread[] threads = new Thread[threadCount];
+
+            for (int i = 0; i < threadCount; i++)
+            {
+               int index = i;
+               threads[i] = new Thread(delegate()
+               {
+                  Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
+                  Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
+               });
+
+               threads[i].Priority = ThreadPriority.Highest;
+               threads[i].Start();
+            }
+
+            for (int i = 0; i < threadCount; i++)
+            {
+               threads[i].Join();
+            }
+         }
+      }
+
+      [Test]
       public void TestMultiThreadWithBMP()
       {
          //TODO: find out why this test fails on unix
@@ -1277,7 +1317,6 @@ namespace Emgu.CV.Test
                int index = i;
                threads[i] = new Thread(delegate()
                   {
-                     lock (typeof(Bitmap))
                      {
                         Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
                         Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
