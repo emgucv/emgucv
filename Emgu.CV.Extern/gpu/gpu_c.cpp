@@ -178,7 +178,7 @@ void gpuMatCompare(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::
    cv::gpu::compare(*a, *b, *c, cmpop);
 }
 
-double gpuMatThreshold(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double thresh, double maxval, int type, const cv::gpu::Stream* stream)
+double gpuMatThreshold(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double thresh, double maxval, int type, cv::gpu::Stream* stream)
 {
    if(stream)
       return cv::gpu::threshold(*src, *dst, thresh, maxval, type, *stream);
@@ -186,7 +186,7 @@ double gpuMatThreshold(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double 
       return cv::gpu::threshold(*src, *dst, thresh, maxval, type);
 }
 
-void gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, const cv::gpu::Stream* stream)
+void gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::cvtColor(*src, *dst, code, dst->channels(), *stream);
@@ -249,25 +249,32 @@ cv::gpu::GpuMat* gpuMatReshape(const cv::gpu::GpuMat* src, int cn, int rows)
    return result;
 }
 
-void gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode)
+void gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode, cv::gpu::Stream* stream)
 {
-   if (src->channels() == 1 || src->channels() == 4)
-   {
-      cv::gpu::flip(*src, *dst, flipcode);
+   cv::gpu::Stream s = stream ? *stream : cv::gpu::Stream::Null();
+   /*if (src->channels() == 1 || src->channels() == 4)
+   {*/
+      cv::gpu::flip(*src, *dst, flipcode, s);
+   /*
    } else
-   {  //added support for gpuMat with number of channels other than 1 or 4.
+   {  //it will be s sync call if the gpuMat is neither 1 channels, nor 4 channels.
+
+      //TODO: check if flip can be done inplace (such that we do not need flippedChannels vector)
+      //added support for gpuMat with number of channels other than 1 or 4.
       std::vector<cv::gpu::GpuMat> channels(src->channels());
-      std::vector<cv::gpu::GpuMat> resizedChannels(src->channels());
-      cv::gpu::split(*src, channels);
+      std::vector<cv::gpu::GpuMat> flippedChannels(src->channels());
+      cv::gpu::split(*src, channels, s);
       for (unsigned int i = 0; i < channels.size(); ++i)
       {
-         cv::gpu::flip(channels[i], resizedChannels[i], flipcode);
+         cv::gpu::flip(channels[i], flippedChannels[i], flipcode, s);
       }
-      cv::gpu::merge(resizedChannels, *dst);
-   }
+      cv::gpu::merge(flippedChannels, *dst, s);
+
+      if (stream) s.waitForCompletion(); //wait for completion before the GpuMat vector went out of scope
+   }*/
 }
 
-void gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, const cv::gpu::Stream* stream)
+void gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, cv::gpu::Stream* stream)
 {
    std::vector<cv::gpu::GpuMat> dstMat;
    for(int i = 0; i < src->channels(); i++)
@@ -288,7 +295,7 @@ void gpuMatLog(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b)
 	cv::gpu::log(*a, *b);
 }
 
-void gpuMatMagnitude(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, const cv::gpu::Stream* stream)
+void gpuMatMagnitude(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::magnitude(*x, *y, *magnitude, *stream);
@@ -296,7 +303,7 @@ void gpuMatMagnitude(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu
       cv::gpu::magnitude(*x, *y, *magnitude);
 }
 
-void gpuMatMagnitudeSqr(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, const cv::gpu::Stream* stream)
+void gpuMatMagnitudeSqr(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::magnitudeSqr(*x, *y, *magnitude, *stream);
@@ -304,7 +311,7 @@ void gpuMatMagnitudeSqr(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::
       cv::gpu::magnitudeSqr(*x, *y, *magnitude);
 }
 
-void gpuMatPhase(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* angle, bool angleInDegrees, const cv::gpu::Stream* stream)
+void gpuMatPhase(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* angle, bool angleInDegrees, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::phase(*x, *y, *angle, angleInDegrees, *stream);
@@ -312,7 +319,7 @@ void gpuMatPhase(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::Gp
       cv::gpu::phase(*x, *y, *angle, angleInDegrees);
 }
 
-void gpuMatCartToPolar(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::GpuMat* angle, bool angleInDegrees, const cv::gpu::Stream* stream)
+void gpuMatCartToPolar(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::GpuMat* angle, bool angleInDegrees, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees, *stream);
@@ -320,7 +327,7 @@ void gpuMatCartToPolar(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::g
       cv::gpu::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees);
 }
 
-void gpuMatPolarToCart(const cv::gpu::GpuMat* magnitude, const cv::gpu::GpuMat* angle, cv::gpu::GpuMat* x, cv::gpu::GpuMat* y, bool angleInDegrees, const cv::gpu::Stream* stream)
+void gpuMatPolarToCart(const cv::gpu::GpuMat* magnitude, const cv::gpu::GpuMat* angle, cv::gpu::GpuMat* x, cv::gpu::GpuMat* y, bool angleInDegrees, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees, *stream);
@@ -328,7 +335,7 @@ void gpuMatPolarToCart(const cv::gpu::GpuMat* magnitude, const cv::gpu::GpuMat* 
       cv::gpu::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees);
 }
 
-void gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+void gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    std::vector<cv::gpu::GpuMat> srcMat;
    for(int i = 0; i < dst->channels(); i++)
@@ -389,7 +396,7 @@ void gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvAr
    cv::gpu::filter2D(*src, *dst, src->depth(), kMat, anchor);
 }
 
-void gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, const cv::gpu::Stream* stream)
+void gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::bitwise_not(*src, *dst, mask ? *mask : cv::gpu::GpuMat(), *stream);
@@ -397,7 +404,7 @@ void gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv
       cv::gpu::bitwise_not(*src, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
-void gpuMatBitwiseAnd(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, const cv::gpu::Stream* stream)
+void gpuMatBitwiseAnd(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat(), *stream);
@@ -405,7 +412,7 @@ void gpuMatBitwiseAnd(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, 
       cv::gpu::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
-void gpuMatBitwiseOr(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, const cv::gpu::Stream* stream)
+void gpuMatBitwiseOr(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::bitwise_or(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat(), *stream);
@@ -413,7 +420,7 @@ void gpuMatBitwiseOr(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, c
       cv::gpu::bitwise_or(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
-void gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, const cv::gpu::Stream* stream)
+void gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat(), *stream);
@@ -421,7 +428,7 @@ void gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, 
       cv::gpu::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::gpu::GpuMat());
 }
 
-void gpuMatMin(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+void gpuMatMin(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::min(*src1, *src2, *dst, *stream);
@@ -429,7 +436,7 @@ void gpuMatMin(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu
       cv::gpu::min(*src1, *src2, *dst);
 }
 
-void gpuMatMinS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+void gpuMatMinS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::min(*src1, src2, *dst, *stream);
@@ -437,7 +444,7 @@ void gpuMatMinS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, 
       cv::gpu::min(*src1, src2, *dst);
 }
 
-void gpuMatMax(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+void gpuMatMax(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::max(*src1, *src2, *dst, *stream);
@@ -445,7 +452,7 @@ void gpuMatMax(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu
       cv::gpu::max(*src1, *src2, *dst);
 }
 
-void gpuMatMaxS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, const cv::gpu::Stream* stream)
+void gpuMatMaxS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    if (stream)
       cv::gpu::max(*src1, src2, *dst, *stream);

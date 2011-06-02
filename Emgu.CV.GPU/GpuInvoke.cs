@@ -537,16 +537,18 @@ namespace Emgu.CV.GPU
       /// flip_mode &gt; 0 (e.g. 1) means flipping around y-axis and 
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
       ///</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void gpuMatFlip(IntPtr src, IntPtr dst, int flipMode);
+      private static extern void gpuMatFlip(IntPtr src, IntPtr dst, int flipMode, IntPtr stream);
 
       /// <summary>
       /// Flips the GpuMat&lt;Byte&gt; in one of different 3 ways (row and column indices are 0-based). 
       /// </summary>
-      /// <param name="src">Source GpuMat.</param>
-      /// <param name="dst">Destination GpuMat.</param>
+      /// <param name="src">Source GpuMat. Has to be GpuMat&lt;Byte&gt; and either single channel or 4 channels.</param>
+      /// <param name="dst">Destination GpuMat. The same source and type as <paramref name="src"/></param>
       /// <param name="flipType">Specifies how to flip the GpuMat.</param>
-      public static void Flip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
+      public static void Flip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType, Stream stream)
       {
          int flipMode =
             //-1 indicates vertical and horizontal flip
@@ -555,7 +557,7 @@ namespace Emgu.CV.GPU
             flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
             //0 indicates vertical flip only
             0;
-         gpuMatFlip(src, dst, flipMode);
+         gpuMatFlip(src, dst, flipMode, stream);
       }
 
       #region morphology operation

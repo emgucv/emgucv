@@ -19,7 +19,7 @@ ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJE
 
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV}" ALL)
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util cvextern)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util cvextern cvextern_gpu)
 
 INSTALL(
   FILES 

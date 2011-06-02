@@ -219,7 +219,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_gpu
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
