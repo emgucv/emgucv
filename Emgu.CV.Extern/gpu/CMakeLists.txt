@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
+SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
 
 if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
@@ -31,31 +32,26 @@ if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
 endif()
 
+SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
 #replace any potential backslash in the path with slash
-STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
+#STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
 
 IF(TARGET_ARCH_64) 
-  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/x64/npp64_${npp_major}${npp_minor}_${npp_build}.dll")
-  LIST(APPEND NPP_BINARY_FILE 
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart64_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cufft64_${npp_major}${npp_minor}_${npp_build}.dll"
-    )
-  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES 
-    npp64_${npp_major}${npp_minor}_${npp_build} 
-    cudart64_${npp_major}${npp_minor}_${npp_build} 
-    cufft64_${npp_major}${npp_minor}_${npp_build})
-ELSE()
-  SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/win32/npp32_${npp_major}${npp_minor}_${npp_build}.dll")
-  LIST(APPEND NPP_BINARY_FILE 
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart32_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cufft32_${npp_major}${npp_minor}_${npp_build}.dll"
-    )
-  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES 
-    npp32_${npp_major}${npp_minor}_${npp_build} 
-	 cudart32_${npp_major}${npp_minor}_${npp_build} 
-	 cufft32_${npp_major}${npp_minor}_${npp_build}
-	 )
+  SET(CUDA_POSTFIX 64)
+else()
+  SET(CUDA_POSTFIX 32)
 ENDIF()
+
+SET(NPP_BINARY_FILE "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+LIST(APPEND NPP_BINARY_FILE 
+  "${CUDA_SDK_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+  "${CUDA_SDK_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+  )
+LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES 
+  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+  cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+
 
 LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLLS ${NPP_BINARY_FILE})
 
