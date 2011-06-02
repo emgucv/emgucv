@@ -223,7 +223,7 @@ cv::SurfFeatureDetector* CvSURFGetFeatureDetector(cv::SURF* detector)
 
 cv::SurfDescriptorExtractor* CvSURFGetDescriptorExtractor(cv::SURF* detector)
 {
-   return new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended);
+   return new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
 }
 
 void CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector)

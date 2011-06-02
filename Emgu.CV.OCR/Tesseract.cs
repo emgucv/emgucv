@@ -215,9 +215,11 @@ namespace Emgu.CV.OCR
       /// </summary>
       private struct TesseractResult
       {
+#pragma warning disable 0649
          public int Length;
          public float Cost;
          public Rectangle Region;
+#pragma warning restore 0649
       }
 
       /// <summary>
