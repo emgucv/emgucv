@@ -21,8 +21,6 @@ const double QUATERNIONS_THETA_EPS = 1.0e-30;
 *
 * @brief   An unit quaternions that defines rotation in 3D
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 typedef struct Quaternions
 {
@@ -304,8 +302,6 @@ typedef struct Quaternions
 *
 * @brief   Convert eluer angle (in radian) to quaternions. 
 *
-* @author  Canming
-* @date 8/31/2010
 **/
 CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quaternions);
 
@@ -314,8 +310,6 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
 * 
 * @brief   Convert quaternions to eluer angle (in radian) 
 *
-* @author  Canming
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z);
 
@@ -324,8 +318,6 @@ CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double
 *
 * @brief   Convert quaternions to (3x3) rotation matrix 
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation);
 
@@ -335,8 +327,6 @@ CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* r
 *
 * @brief   Rotate a single point using the quaternions. 
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint3D64f* point, CvPoint3D64f* pointDst);
 
@@ -347,8 +337,6 @@ CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint
 *
 * @brief   Rotate the (3x1 or nx3) matrix of points using the quaternions
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointSrc, CvMat* pointDst);
 
@@ -359,8 +347,6 @@ CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat*
  * @brief   Multiply two quaternions. The result is a rotation by quaternions2 follows by
  * quaternions1. 
  *
- * @author  Canming Huang
- * @date 8/31/2010
 **/
 CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternions* quaternions2, Quaternions* quaternionsDst);
 
@@ -369,8 +355,6 @@ CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternio
 *
 * @brief   Convert axis angle vector to quaternions. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions);
 
@@ -379,8 +363,6 @@ CVAPI(void) axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* q
 *
 * @brief   Convert quaternions to axis angle vector. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
 *
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAngle);
 
@@ -389,8 +371,6 @@ CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f*
  *
  * @brief   Renormalize the given quaternions such that the norm becomes 1
  *
- * @author  Canming Huang
- * @date 8/31/2010
 **/
 CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
 
@@ -403,8 +383,6 @@ CVAPI(void) quaternionsRenorm(Quaternions* quaternions);
 * @param qb The second Quaternions
 * @param t This is the weight for qb. 0<=t<=1; if t=0, qm=qa; if t=1, qm - qb;
 * @param qm The result of slerp
-* @author  Canming Huang
-* @date 8/31/2010
 **/
 CVAPI(void) quaternionsSlerp(const Quaternions* qa, const Quaternions* qb, double t, Quaternions* qm);
 #endif
