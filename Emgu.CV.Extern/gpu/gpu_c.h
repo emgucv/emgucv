@@ -178,7 +178,7 @@ CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize,
 
 CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect);
 
-CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum);
+CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType);
 

@@ -480,12 +480,14 @@ cv::gpu::GpuMat* gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect)
    return new cv::gpu::GpuMat(*arr, rect);
 }
 
-void gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum)
+void gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum, cv::gpu::Stream* stream)
 {
-   if (sqsum)
-      cv::gpu::integral(*src, *sum, *sqsum);
-   else
-      cv::gpu::integral(*src, *sum);
+   if (sum && sqsum)
+      cv::gpu::integral(*src, *sum, *sqsum, stream ? *stream : cv::gpu::Stream::Null());
+   else if (sum)
+      cv::gpu::integral(*src, *sum, stream ? *stream : cv::gpu::Stream::Null());
+   else if (sqsum)
+      cv::gpu::sqrIntegral(*src, *sqsum, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType)

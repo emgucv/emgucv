@@ -150,7 +150,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="arr">Pointer to a CvArr</param>
       /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatCreateFromArr")]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateFromArr")]
       public static extern IntPtr GpuMatCreateFromArr(IntPtr arr);
 
       /// <summary>
@@ -202,7 +202,7 @@ namespace Emgu.CV.GPU
       /// <param name="src">The GpuMat to be copied from</param>
       /// <param name="dst">The GpuMat to be copied to</param>
       /// <param name="mask">The optional mask, use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatCopy")]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCopy")]
       public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -436,7 +436,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPhase")]
       public static extern void Phase(
-         IntPtr x, IntPtr y, IntPtr angle, 
+         IntPtr x, IntPtr y, IntPtr angle,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool angleInDegrees, IntPtr stream);
 
@@ -624,7 +624,7 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="gpuMatBitwiseOr")]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseOr")]
       public static extern void BitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
@@ -823,10 +823,33 @@ namespace Emgu.CV.GPU
       /// Computes the integral image and integral for the squared image
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
-      /// <param name="sum">The sum GpuMat, supports only CV_32S source type</param>
-      /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type. Use IntPtr.Zero if not needed</param>
+      /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
+      /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIntegral")]
-      public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum);
+      public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum, IntPtr stream);
+
+      /// <summary>
+      /// Computes the integral image
+      /// </summary>
+      /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
+      /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      public static void Integral(IntPtr src, IntPtr sum, IntPtr stream)
+      {
+         Integral(src, sum, IntPtr.Zero, stream);
+      }
+
+      /// <summary>
+      /// Computes squared integral image 
+      /// </summary>
+      /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
+      /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      public static void SqrIntegral(IntPtr src, IntPtr sqsum, IntPtr stream)
+      {
+         Integral(src, IntPtr.Zero, sqsum, stream);
+      }
 
       /// <summary>
       /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
