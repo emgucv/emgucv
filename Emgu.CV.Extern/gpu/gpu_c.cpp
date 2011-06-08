@@ -278,12 +278,12 @@ void gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, cv::gpu::Str
 
 void gpuMatExp(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b, cv::gpu::Stream* stream)
 {
-	cv::gpu::exp(*a, *b, stream? *stream : cv::gpu::Stream::Null());
+   cv::gpu::exp(*a, *b, stream? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatLog(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b, cv::gpu::Stream* stream)
 {
-	cv::gpu::log(*a, *b, stream? *stream : cv::gpu::Stream::Null());
+   cv::gpu::log(*a, *b, stream? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMagnitude(const cv::gpu::GpuMat* x, const cv::gpu::GpuMat* y, cv::gpu::GpuMat* magnitude, cv::gpu::Stream* stream)
@@ -318,9 +318,9 @@ void gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, cv::gpu::Str
 
 //only support single channel gpuMat
 void gpuMatMinMaxLoc(const cv::gpu::GpuMat* src, 
-                            double* minVal, double* maxVal, 
-                            CvPoint* minLoc, CvPoint* maxLoc, 
-                            const cv::gpu::GpuMat* mask)
+                     double* minVal, double* maxVal, 
+                     CvPoint* minLoc, CvPoint* maxLoc, 
+                     const cv::gpu::GpuMat* mask)
 {
    cv::Point minimunLoc, maximunLoc;
    cv::gpu::minMaxLoc(*src, minVal, maxVal, &minimunLoc, &maximunLoc, *mask);
@@ -360,10 +360,10 @@ void gpuMatLUT(const cv::gpu::GpuMat* src, const CvArr* lut, cv::gpu::GpuMat* ds
    cv::gpu::LUT(*src, lutMat, *dst, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor)
+void gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, cv::gpu::Stream* stream)
 {
    cv::Mat kMat = cv::cvarrToMat(kernel);
-   cv::gpu::filter2D(*src, *dst, src->depth(), kMat, anchor);
+   cv::gpu::filter2D(*src, *dst, src->depth(), kMat, anchor, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
@@ -406,19 +406,19 @@ void gpuMatMaxS(const cv::gpu::GpuMat* src1, double src2, cv::gpu::GpuMat* dst, 
    cv::gpu::max(*src1, src2, *dst, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale)
+void gpuMatSobel(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int dx, int dy, int ksize, double scale, cv::gpu::Stream* stream)
 {
-   cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale); 
+   cv::gpu::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale, stream ? *stream : cv::gpu::Stream::Null()); 
 }
 
-void gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvSize ksize, double sigma1, double sigma2)
+void gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvSize ksize, double sigma1, double sigma2, cv::gpu::Stream* stream)
 {
-   cv::gpu::GaussianBlur(*src, *dst, ksize, sigma1, sigma2);
+   cv::gpu::GaussianBlur(*src, *dst, ksize, sigma1, sigma2, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale)
+void gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale, cv::gpu::Stream* stream)
 {
-   cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale);
+   cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
@@ -451,19 +451,19 @@ void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu
 }
 
 void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-            CvTermCriteria criteria)
+                              CvTermCriteria criteria)
 {
    cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, criteria);
 }
 
 void gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-            CvTermCriteria criteria)
+                         CvTermCriteria criteria)
 {
    cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria);
 }
 
 void gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
-            CvTermCriteria criteria)
+                                 CvTermCriteria criteria)
 {
    cv::gpu::meanShiftSegmentation(*src, *dst, sp, sr, minsize, criteria);
 }
@@ -503,5 +503,5 @@ void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags)
 /*
 void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)
 {
-   cv::gpu::Canny(*image, *edges, threshold1, threshold2, apertureSize);
+cv::gpu::Canny(*image, *edges, threshold1, threshold2, apertureSize);
 }*/

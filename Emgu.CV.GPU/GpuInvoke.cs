@@ -715,8 +715,9 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMmage</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatFilter2D")]
-      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
+      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, IntPtr stream);
 
       /// <summary>
       /// Applies generalized Sobel operator to the image
@@ -727,8 +728,9 @@ namespace Emgu.CV.GPU
       /// <param name="dy">Order of the derivative y</param>
       /// <param name="ksize">Size of the extended Sobel kernel</param>
       /// <param name="scale">Optional scale, use 1 for default.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSobel")]
-      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale);
+      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, int ksize, double scale, IntPtr stream);
 
       /// <summary>
       /// Applies Laplacian operator to the GpuMat
@@ -737,8 +739,9 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="ksize">Either 1 or 3</param>
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLaplacian")]
-      public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale);
+      public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale, IntPtr stream);
 
       /// <summary>
       /// Smooths the GpuMat using Gaussian filter.
@@ -748,8 +751,9 @@ namespace Emgu.CV.GPU
       /// <param name="ksize">The size of the kernel</param>
       /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGaussianBlur")]
-      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2);
+      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2, IntPtr stream);
       #endregion
 
       /// <summary>

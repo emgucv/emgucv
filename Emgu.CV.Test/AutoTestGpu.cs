@@ -173,17 +173,20 @@ namespace Emgu.CV.GPU.Test
             Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
             image.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
-            GpuImage<Gray, Byte> gpuImg1 = new GpuImage<Gray, byte>(image);
-            GpuImage<Gray, Single> gpuLaplace = new GpuImage<Gray, Single>(image.Size);
-            GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0);
-
             float[,] k = { {0, 1, 0},
                         {1, -4, 1},
                         {0, 1, 0}};
-            ConvolutionKernelF kernel = new ConvolutionKernelF(k);
-            GpuImage<Gray, Single> gpuConv = gpuImg1.Convolution(kernel);
-
-            Assert.IsTrue(gpuLaplace.Equals(gpuConv));
+            using (ConvolutionKernelF kernel = new ConvolutionKernelF(k))
+            using (Stream s = new Stream())
+            using (GpuImage<Gray, Byte> gpuImg1 = new GpuImage<Gray, byte>(image))
+            using (GpuImage<Gray, Single> gpuLaplace = new GpuImage<Gray, Single>(image.Size))
+            using (GpuImage<Gray, Single> gpuConv = gpuImg1.Convolution(kernel, s))
+            {
+               GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0, s);
+               s.WaitForCompletion();
+               Assert.IsTrue(gpuLaplace.Equals(gpuConv));
+            }
+           
          }
       }
 
