@@ -336,6 +336,32 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestErodeDilate()
+      {
+         Image<Gray, Byte> image = new Image<Gray, byte>(640, 320);
+         image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 2);
+
+         using (GpuImage<Gray, Byte> gpuImage = new GpuImage<Gray, byte>(image))
+         using (GpuImage<Gray, Byte> gpuTemp = new GpuImage<Gray,byte>(gpuImage.Size))
+         using (Stream stream = new Stream())
+         {
+            GpuInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), 1, stream);
+            GpuInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, new Point(-1, -1), 1, stream);
+
+            using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
+            {
+               CvInvoke.cvErode(image, temp, IntPtr.Zero, 1);
+               CvInvoke.cvDilate(temp, image, IntPtr.Zero, 1);
+            }
+            stream.WaitForCompletion();
+
+            Assert.IsTrue(gpuImage.ToImage().Equals(image));
+         }
+         
+
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)

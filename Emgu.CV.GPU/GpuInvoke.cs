@@ -581,11 +581,12 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
-      /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
-      /// <param name="anchor">The center of the kernel</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatErode")]
-      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -593,11 +594,12 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
-      /// <param name="kernel">The morphology kernel, pointer to an CvArr</param>
-      /// <param name="anchor">The center of the kernel</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDilate")]
-      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations);
+      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
       #endregion
 
       #region Logical operators
