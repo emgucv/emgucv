@@ -37,7 +37,7 @@ IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008%OS_MODE%"
 REM IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10%OS_MODE%"
 
 SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
--DBUILD_DOXYGEN_DOCS:BOOL=FALSE ^
+-DBUILD_DOCS:BOOL=FALSE ^
 -DBUILD_TESTS:BOOL=FALSE ^
 -DBUILD_NEW_PYTHON_SUPPORT:BOOL=FALSE ^
 -DEMGU_ENABLE_SSE:BOOL=TRUE ^
@@ -109,12 +109,10 @@ REM convert the project to use intel compiler
 "%ICPROJCONVERT%" emgucv.sln /IC
 REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
 REM these projects create problems for intel compiler
-"%ICPROJCONVERT%" emgucv.sln ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccmain\tesseract_ccmain.icproj ^
-opencv\3rdparty\libjpeg\libjpeg.icproj ^
-/VC
+REM "%ICPROJCONVERT%" emgucv.sln ^
+REM Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
+REM Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
+REM /VC
 
 GOTO BUILD
 
