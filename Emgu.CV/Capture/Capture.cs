@@ -26,6 +26,24 @@ namespace Emgu.CV
       /// </summary>
       private CvEnum.FLIP _flipType = Emgu.CV.CvEnum.FLIP.NONE;
 
+      private enum CaptureModuleType
+      {
+         /// <summary>
+         /// Capture from camera
+         /// </summary>
+         Camera,
+         /// <summary>
+         /// Capture from file using HighGUI
+         /// </summary>
+         Highgui,
+         /// <summary>
+         /// Capture from file using FFMPEG
+         /// </summary>
+         FFMPEG,
+      }
+
+      private CaptureModuleType _captureModuleType;
+
       #region Properties
       /// <summary>
       /// Get and set the flip type
@@ -113,6 +131,8 @@ namespace Emgu.CV
       ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
       public Capture(int camIndex)
       {
+         _captureModuleType = CaptureModuleType.Camera;
+
 #if TEST_CAPTURE
 #else
          _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
@@ -129,7 +149,17 @@ namespace Emgu.CV
       /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
       public Capture(String fileName)
       {
-         _ptr = CvInvoke.cvCreateFileCapture(fileName);
+         if (Util.CvToolbox.HasFFMPEG)
+         {
+            _captureModuleType = CaptureModuleType.FFMPEG;
+            _ptr = CvInvoke.cvCreateFileCapture_FFMPEG(fileName);
+         }
+         else
+         {
+            _captureModuleType = CaptureModuleType.Highgui;
+            _ptr = CvInvoke.cvCreateFileCapture(fileName);
+         }
+
          if (_ptr == IntPtr.Zero)
             throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
       }
@@ -143,7 +173,14 @@ namespace Emgu.CV
       {
 #if TEST_CAPTURE
 #else
-         CvInvoke.cvReleaseCapture(ref _ptr);
+         if (_captureModuleType == CaptureModuleType.FFMPEG)
+         {
+            CvInvoke.cvReleaseCapture_FFMPEG(ref _ptr);
+         }
+         else
+         {
+            CvInvoke.cvReleaseCapture(ref _ptr);
+         }
 #endif
       }
       #endregion
@@ -155,7 +192,7 @@ namespace Emgu.CV
       /// <returns>The value of the specific property</returns>
       public double GetCaptureProperty(CvEnum.CAP_PROP index)
       {
-         return CvInvoke.cvGetCaptureProperty(_ptr, index);
+         return _captureModuleType == CaptureModuleType.FFMPEG ? CvInvoke.cvGetCaptureProperty_FFMPEG(Ptr, index) : CvInvoke.cvGetCaptureProperty(_ptr, index);
       }
 
       /// <summary>
@@ -165,7 +202,10 @@ namespace Emgu.CV
       /// <param name="value">Value of the property</param>
       public void SetCaptureProperty(CvEnum.CAP_PROP property, double value)
       {
-         CvInvoke.cvSetCaptureProperty(Ptr, property, value);
+         if (_captureModuleType == CaptureModuleType.FFMPEG)
+            CvInvoke.cvSetCaptureProperty_FFMPEG(Ptr, property, value);
+         else
+            CvInvoke.cvSetCaptureProperty(Ptr, property, value);
       }
 
       /// <summary>
@@ -174,7 +214,7 @@ namespace Emgu.CV
       /// <returns>True on success</returns>
       public virtual bool Grab()
       {
-         return CvInvoke.cvGrabFrame(_ptr);
+         return _captureModuleType == CaptureModuleType.FFMPEG ? CvInvoke.cvGrabFrame_FFMPEG(_ptr) : CvInvoke.cvGrabFrame(_ptr);
       }
 
       /// <summary> 
@@ -184,7 +224,7 @@ namespace Emgu.CV
       /// <returns> A Gray image frame</returns>
       public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIdx)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = (_captureModuleType == CaptureModuleType.FFMPEG) ? CvInvoke.cvRetrieveFrame_FFMPEG(Ptr, streamIdx) : CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
          if (img == IntPtr.Zero)
             return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
@@ -213,7 +253,7 @@ namespace Emgu.CV
       /// <returns> A Bgr image frame</returns>
       public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIdx)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = (_captureModuleType == CaptureModuleType.FFMPEG) ? CvInvoke.cvRetrieveFrame_FFMPEG(Ptr, streamIdx) : CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
          if (img == IntPtr.Zero)
             return null;
 
