@@ -216,12 +216,12 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }
 
 //SURFDetector
-cv::SurfFeatureDetector* CvSURFGetFeatureDetector(cv::SURF* detector)
+cv::SurfFeatureDetector* CvSURFGetFeatureDetector(CvSURFParams* detector)
 {
-   return new cv::SurfFeatureDetector(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers);
+   return new cv::SurfFeatureDetector(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->upright != 0);
 }
 
-cv::SurfDescriptorExtractor* CvSURFGetDescriptorExtractor(cv::SURF* detector)
+cv::SurfDescriptorExtractor* CvSURFGetDescriptorExtractor(CvSURFParams* detector)
 {
    return new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
 }
@@ -256,7 +256,7 @@ void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplIm
    std::vector<float> desc;
    (*detector)(img, maskMat, *keypoints, desc, true);
    CV_Assert(desc.size() == descriptors->width * descriptors->height);
-   memcpy(descriptors->data.ptr, &desc[0], desc.size());
+   memcpy(descriptors->data.ptr, &desc[0], desc.size() * sizeof(float));
 }
 
 //SURF with OpponentColorDescriptorExtractor
@@ -386,15 +386,17 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* qu
                    CvMat* trainIdx, CvMat* distance, int k,
                    const CvMat* mask) 
 {
+   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
+
    //only implemented for a single trained image for now
    CV_Assert( matcher->getTrainDescriptors().size() == 1);
 
    cv::Mat queryMat = cv::cvarrToMat(queryDescriptors);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
    std::vector<cv::Mat> masks;
    if (!maskMat.empty()) 
       masks.push_back(maskMat);
+
    matcher->knnMatch(queryMat, matches, k, masks, false);
    
    VectorOfDMatchToMat(&matches, trainIdx, distance);
@@ -461,8 +463,9 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
    for(int i = 0; i < maskMat.rows; i++)
    {
       if ( maskMat.at<uchar>(i) )
-      {
-         srcPtVec.push_back((*model)[indMat.at<int>(i)].pt);
+      {  
+         int modelIdx = indMat(i, 0); 
+         srcPtVec.push_back((*model)[modelIdx].pt);
          dstPtVec.push_back((*observed)[i].pt);
       }
    }
@@ -518,7 +521,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
    std::vector<float> flags(scale.size());
    cv::Mat flagsMat(flags);
    if (scaleBinSize == 1)
-   {
+   {  //The same scale, perform voting for dominant orientation only
       int histSize[] = {rotationBins};
       float rotationRanges[] = {0, 360};
       int channels[] = {0};
@@ -532,7 +535,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
       cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
       cv::calcBackProject(arrs, 1, channels, hist, flagsMat, ranges);
    } else
-   {
+   {  //Perform voting for both scale and orientation
       int histSize[] = {scaleBinSize, rotationBins};
       float scaleRanges[] = {minS, maxS};
       float rotationRanges[] = {0, 360};
