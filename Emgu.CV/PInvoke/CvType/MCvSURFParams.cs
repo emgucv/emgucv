@@ -14,10 +14,52 @@ namespace Emgu.CV.Structure
    public struct MCvSURFParams
    {
       /// <summary>
-      /// 0 means basic descriptors (64 elements each),
-      /// 1 means extended descriptors (128 elements each)
+      /// Create CvSURFParams with the specific value
       /// </summary>
-      public int Extended;
+      /// <param name="hessianThreshold">Only features with keypoint.hessian larger than this are extracted.</param>
+      /// <param name="extended">
+      /// False means basic descriptors (64 elements each),
+      /// True means extended descriptors (128 elements each)
+      ///</param>
+      ///<param name="nOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled
+      ///</param>
+      ///<param name="nOctaveLayers">
+      /// The number of layers within each octave
+      /// </param>
+      public MCvSURFParams(double hessianThreshold, bool extended, int nOctaves, int nOctaveLayers)
+      {
+         HessianThreshold = hessianThreshold;
+         Extended = extended;
+         Upright = false;
+         NOctaves = nOctaves;
+         NOctaveLayers = nOctaveLayers;
+      }
+
+      /// <summary>
+      /// Creage CvSURFParams with the specific value
+      /// </summary>
+      /// <param name="hessianThreshold">Only features with keypoint.hessian larger than this are extracted.</param>
+      /// <param name="extended">
+      /// False means basic descriptors (64 elements each),
+      /// True means extended descriptors (128 elements each)
+      ///</param>
+      public MCvSURFParams(double hessianThreshold, bool extended)
+         : this(hessianThreshold, extended, 4, 2)
+      {
+      }
+
+      /// <summary>
+      /// False means basic descriptors (64 elements each),
+      /// True means extended descriptors (128 elements each)
+      /// </summary>
+      public bool Extended;
+
+      /// <summary>
+      /// Upright SURF
+      /// </summary>
+      public bool Upright;
 
       /// <summary>
       /// Only features with keypoint.hessian larger than that are extracted.
@@ -28,12 +70,12 @@ namespace Emgu.CV.Structure
 
       /// <summary>
       /// The number of octaves to be used for extraction.
-      /// With each next octave the feature size is doubled (3 by default)
+      /// With each next octave the feature size is doubled
       /// </summary>
       public int NOctaves;
 
       /// <summary>
-      /// The number of layers within each octave (4 by default)
+      /// The number of layers within each octave
       /// </summary>
       public int NOctaveLayers;
    }

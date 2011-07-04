@@ -298,7 +298,7 @@ namespace Emgu.CV.Test
             for (int i = 1; i < 100; i++)
             {
                using (Matrix<float> surfDescriptors = surf.ComputeDescriptorsRaw(box, kpts))
-                  Assert.AreEqual(surfDescriptors.Width, (surf.Extended ? 128 : 64) * 3);
+                  Assert.AreEqual(surfDescriptors.Width, (surf.SURFParams.Extended ? 128 : 64) * 3);
 
                //TODO: Find out why the following test fails
                //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(box, kpts))
@@ -313,6 +313,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSURFDetector2()
       {
+         //Trace.WriteLine("Size of MCvSURFParams: " + Marshal.SizeOf(typeof(MCvSURFParams)));
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");
          SURFDetector detector = new SURFDetector(400, false);
 

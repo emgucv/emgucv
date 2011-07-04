@@ -71,7 +71,7 @@ namespace Emgu.CV.GPU
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
       public GpuSURFDetector(MCvSURFParams detector, float FeaturesRatio, bool upright)
-         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, detector.Extended != 0, 0.01f, upright)
+         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, detector.Extended, 0.01f, upright)
       {
       }
 

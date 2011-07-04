@@ -62,15 +62,9 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            MCvSURFParams p = new MCvSURFParams();
-            p.Extended = _extended;
-            p.HessianThreshold = HessianThreshold;
-            p.NOctaves = NOctaves;
-            p.NOctaveLayers = NOctaveLayers;
-            return p;
+            return _surfParams;
          }
       }
-
 
       /// <summary>
       /// Create a MCvSURFParams using the specific values
@@ -85,8 +79,19 @@ namespace Emgu.CV.Features2D
       /// true means extended descriptors (128 elements each)
       /// </param>
       public SURFDetector(double hessianThresh, bool extendedFlag)
-         : this(hessianThresh, extendedFlag, 3, 4)
+         : this(new MCvSURFParams(hessianThresh, extendedFlag))
       {
+      }
+
+      /// <summary>
+      /// Create a SURF detector with the specific surfParameters
+      /// </summary>
+      /// <param name="surfParams">The surf parameters</param>
+      public SURFDetector(MCvSURFParams surfParams)
+      {
+         _surfParams = surfParams;
+         _featureDetectorPtr = CvSURFGetFeatureDetector(ref _surfParams);
+         _descriptorExtractorPtr = CvSURFGetDescriptorExtractor(ref _surfParams);
       }
 
       /// <summary>
@@ -109,45 +114,11 @@ namespace Emgu.CV.Features2D
       /// The number of layers within each octave (4 by default)
       /// </param>
       public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves, int nOctaveLayers)
+         : this (new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
       {
-         _extended = extendedFlag ? 1 : 0;
-         _hessianThreshold = hessianThresh;
-         _nOctaves = nOctaves;
-         _nOctaveLayers = nOctaveLayers;
-
-         MCvSURFParams tmp = SURFParams;
-         _featureDetectorPtr = CvSURFGetFeatureDetector(ref tmp);
-         _featureDetectorPtr = CvSURFGetDescriptorExtractor(ref tmp);
       }
 
-      private int _extended;
-      private double _hessianThreshold;
-      private int _nOctaves;
-      private int _nOctaveLayers;
-
-      /// <summary>
-      /// true means basic descriptors (64 elements each),
-      /// false means extended descriptors (128 elements each)
-      /// </summary>
-      public bool Extended { get { return _extended == 1; } }
-
-      /// <summary>
-      /// Only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </summary>
-      public double HessianThreshold { get { return _hessianThreshold; } }
-
-      /// <summary>
-      /// The number of octaves to be used for extraction.
-      /// With each next octave the feature size is doubled (3 by default)
-      /// </summary>
-      public int NOctaves { get { return _nOctaves; } }
-
-      /// <summary>
-      /// The number of layers within each octave (4 by default)
-      /// </summary>
-      public int NOctaveLayers { get { return _nOctaveLayers; } }
+      private MCvSURFParams _surfParams;
 
       private IntPtr _featureDetectorPtr;
       private IntPtr _descriptorExtractorPtr;
@@ -191,10 +162,10 @@ namespace Emgu.CV.Features2D
       {
          int count = keyPoints.Size;
          if (count == 0) return null;
-         int sizeOfdescriptor = Extended ? 128 : 64;
+         int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * 3, 1);
-         MCvSURFParams p = SURFParams;
-         CvSURFDetectorComputeDescriptorsBGR(ref p, image, keyPoints, descriptors);
+         //MCvSURFParams p = SURFParams;
+         CvSURFDetectorComputeDescriptorsBGR(ref _surfParams, image, keyPoints, descriptors);
          return descriptors;
       }
 
@@ -207,7 +178,7 @@ namespace Emgu.CV.Features2D
       /// <returns>The image features founded on the keypoint location</returns>
       public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
-         int sizeOfdescriptor = Extended ? 128 : 64;
+         int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          {
             pts.Push(keyPoints);
@@ -264,10 +235,9 @@ namespace Emgu.CV.Features2D
       {
          int count = keyPoints.Size;
          if (count == 0) return null;
-         int sizeOfdescriptor = Extended ? 128 : 64;
+         int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
-         MCvSURFParams p = SURFParams;
-         CvSURFDetectorComputeDescriptors(ref p, image, mask, keyPoints, descriptors);
+         CvSURFDetectorComputeDescriptors(ref _surfParams, image, mask, keyPoints, descriptors);
          return descriptors;
       }
 
