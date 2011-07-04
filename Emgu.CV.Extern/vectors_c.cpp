@@ -29,7 +29,12 @@ int VectorOfByteGetSize(std::vector<unsigned char>* v)
 
 void VectorOfBytePushMulti(std::vector<unsigned char>* v, unsigned char* values, int count)
 {
-   for(int i=0; i < count; i++) v->push_back(*values++);
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(unsigned char));
+   }
 }
 
 void VectorOfByteClear(std::vector<unsigned char>* v)
@@ -44,7 +49,8 @@ void VectorOfByteRelease(std::vector<unsigned char>* v)
 
 void VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* data)
 {
-   memcpy(data, &(*v)[0], v->size() * sizeof(unsigned char));
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(unsigned char));
 }
 
 unsigned char* VectorOfByteGetStartAddress(std::vector<unsigned char>* v)
@@ -74,7 +80,12 @@ int VectorOfFloatGetSize(std::vector<float>* v)
 
 void VectorOfFloatPushMulti(std::vector<float>* v, float* values, int count)
 {
-   for(int i=0; i < count; i++) v->push_back(*values++);
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(float));
+   }
 }
 
 void VectorOfFloatClear(std::vector<float>* v)
@@ -89,7 +100,8 @@ void VectorOfFloatRelease(std::vector<float>* v)
 
 void VectorOfFloatCopyData(std::vector<float>* v, float* data)
 {
-   memcpy(data, &(*v)[0], v->size() * sizeof(float));
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(float));
 }
 
 float* VectorOfFloatGetStartAddress(std::vector<float>* v)
@@ -123,13 +135,9 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
          const unsigned char* mask_ptr = maskMat.ptr<unsigned char>();
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr, ++distance_ptr, ++mask_ptr)
          {
-            if (*mask_ptr)
+            if (*mask_ptr && *trainIdx_ptr != -1)
             {
-               int trainIdx = *trainIdx_ptr;
-               if (trainIdx == -1)
-                  continue;
-               float distance = *distance_ptr;
-               cv::DMatch m(queryIdx, trainIdx, 0, distance);
+               cv::DMatch m(queryIdx, *trainIdx_ptr, 0, *distance_ptr);
                matches->push_back(m);
             }
          }
@@ -137,12 +145,11 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
       {
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr, ++distance_ptr)
          {
-            int trainIdx = *trainIdx_ptr;
-            if (trainIdx == -1)
-               continue;
-            float distance = *distance_ptr;
-            cv::DMatch m(queryIdx, trainIdx, 0, distance);
-            matches->push_back(m);
+            if (*trainIdx_ptr != -1)
+            {
+               cv::DMatch m(queryIdx, *trainIdx_ptr, 0, *distance_ptr);
+               matches->push_back(m);
+            }
          }
       }
    } else
@@ -153,12 +160,9 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
          const unsigned char* mask_ptr = maskMat.ptr<unsigned char>();
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr, ++mask_ptr)
          {
-            if (*mask_ptr)
+            if (*mask_ptr && *trainIdx_ptr != -1)
             {
-               int trainIdx = *trainIdx_ptr;
-               if (trainIdx == -1)
-                  continue;
-               cv::DMatch m(queryIdx, trainIdx, 0, 0);
+               cv::DMatch m(queryIdx,  *trainIdx_ptr, 0, 0);
                matches->push_back(m);
             }
          }
@@ -166,11 +170,11 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
       {
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr)
          {
-            int trainIdx = *trainIdx_ptr;
-            if (trainIdx == -1)
-               continue;
-            cv::DMatch m(queryIdx, trainIdx, 0, 0);
-            matches->push_back(m);
+            if (*trainIdx_ptr != -1)
+            {
+               cv::DMatch m(queryIdx, *trainIdx_ptr, 0, 0);
+               matches->push_back(m);
+            }
          }
       }
    }
@@ -188,7 +192,12 @@ int VectorOfDMatchGetSize(std::vector<cv::DMatch>* v)
 
 void VectorOfDMatchPushMulti(std::vector<cv::DMatch>* v, cv::DMatch* values, int count)
 {
-   for(int i=0; i < count; i++) v->push_back(*values++);
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(cv::DMatch));
+   }
 }
 
 void VectorOfDMatchClear(std::vector<cv::DMatch>* v)
@@ -203,7 +212,8 @@ void VectorOfDMatchRelease(std::vector<cv::DMatch>* v)
 
 void VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data)
 {
-   memcpy(data, &(*v)[0], v->size() * sizeof(cv::DMatch));
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(cv::DMatch));
 }
 
 cv::DMatch* VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v)
@@ -231,7 +241,7 @@ void VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat*
          distance_ptr += k;
       } else
       {
-         for (std::vector< cv::DMatch >::iterator m = v->begin(); m != v->end(); ++m,  ++trainIdx_ptr, ++distance_ptr)
+         for (std::vector< cv::DMatch >::iterator m = v->begin(); m != v->end(); ++m, ++trainIdx_ptr, ++distance_ptr)
          {
             cv::DMatch match = *m;
             *distance_ptr = match.distance;
@@ -263,7 +273,12 @@ int VectorOfKeyPointGetSize(std::vector<cv::KeyPoint>* v)
 
 void VectorOfKeyPointPushMulti(std::vector<cv::KeyPoint>* v, cv::KeyPoint* values, int count)
 {
-   for(int i=0; i < count; i++) v->push_back(*values++);
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(cv::KeyPoint));
+   }
 }
 
 void VectorOfKeyPointClear(std::vector<cv::KeyPoint>* v)
@@ -278,7 +293,8 @@ void VectorOfKeyPointRelease(std::vector<cv::KeyPoint>* v)
 
 void VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data)
 {
-   memcpy(data, &(*v)[0], v->size() * sizeof(cv::KeyPoint));
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(cv::KeyPoint));
 }
 
 cv::KeyPoint* VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v)
