@@ -229,8 +229,11 @@ void gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int interpol
       cv::gpu::split(*src, channels, ts);
       for (unsigned int i = 0; i < channels.size(); ++i)
       {
+         //CV_Assert(channels[i].size() == src->size());
          cv::gpu::resize(channels[i], resizedChannels[i], dst->size(), 0, 0, interpolation, ts);
+         //CV_Assert(resizedChannels[i].size() == dst->size());
       }
+
       cv::gpu::merge(resizedChannels, *dst, ts);
       ts.waitForCompletion();
    } else
@@ -253,7 +256,8 @@ void gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode, 
    {
       //TODO: check if flip can be done inplace (such that we do not need flippedChannels vector)
       //in synchronous version
-      //added support for gpuMat with number of channels other than 1 or 4.
+
+      //Added support for gpuMat with number of channels other than 1 or 4.
       cv::gpu::Stream ts;
       std::vector<cv::gpu::GpuMat> channels(src->channels());
       std::vector<cv::gpu::GpuMat> flippedChannels(src->channels());

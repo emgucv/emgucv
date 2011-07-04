@@ -21,15 +21,15 @@ namespace Emgu.CV
       /// Allocates and initialized the CvCapture structure for reading the video stream from the specified file. 
       ///After the allocated structure is not used any more it should be released by cvReleaseCapture function. 
       /// </summary>
-      /// <param name="filename">Name of the video file</param>
-      /// <returns>Pointer to the capture structure</returns>
+      /// <param name="filename">Name of the video file.</param>
+      /// <returns>Pointer to the capture structure.</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateFileCapture([MarshalAs(StringMarshalType)] String filename);
 
       /// <summary>
       /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture
       /// </summary>
-      /// <param name="capture">pointer to video capturing structure. </param>
+      /// <param name="capture">pointer to video capturing structure.</param>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseCapture(ref IntPtr capture);
 
