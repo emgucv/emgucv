@@ -46,10 +46,10 @@ namespace SURFFeatureExample
          Matrix<int> indices;
          Matrix<float> dist;
          Matrix<byte> mask;
-
+         
          if (GpuInvoke.HasCuda)
          {
-            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f, false);
+            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f);
             using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
@@ -99,6 +99,7 @@ namespace SURFFeatureExample
          {
             //extract features from the object image
             modelKeyPoints = surfCPU.DetectKeyPointsRaw(modelImage, null);
+            //MKeyPoint[] kpts = modelKeyPoints.ToArray();
             Matrix<float> modelDescriptors = surfCPU.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
 
             watch = Stopwatch.StartNew();
@@ -107,7 +108,13 @@ namespace SURFFeatureExample
             observedKeyPoints = surfCPU.DetectKeyPointsRaw(observedImage, null);
             Matrix<float> observedDescriptors = surfCPU.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
 
-            Features2DTracker.DescriptorMatchKnn(modelDescriptors, observedDescriptors, 2, out indices, out dist);
+            BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32);
+            matcher.Add(modelDescriptors);
+            int k = 2;
+            indices = new Matrix<int>(observedDescriptors.Rows, k);
+            dist = new Matrix<float>(observedDescriptors.Rows, k);
+            matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
+
             mask = new Matrix<byte>(dist.Rows, 1);
 
             mask.SetValue(255);
