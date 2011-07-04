@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Structure
 {
@@ -14,6 +15,7 @@ namespace Emgu.CV.Structure
    /// OpenCV's KeyPoint class
    /// </summary>
    [Serializable]
+   [StructLayout(LayoutKind.Sequential)]
    public struct MKeyPoint
    {
       /// <summary>
