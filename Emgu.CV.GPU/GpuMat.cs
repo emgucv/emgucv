@@ -162,26 +162,29 @@ namespace Emgu.CV.GPU
       public void SplitInto(GpuMat<TDepth>[] gpuMats, Stream stream)
       {
          Debug.Assert(NumberOfChannels == gpuMats.Length, "Number of channels does not agrees with the length of gpuMats");
-         //If single channel, return a copy
+         
          if (NumberOfChannels == 1)
          {
+            //If single channel, return a copy
             if (stream == null)
                GpuInvoke.Copy(_ptr, gpuMats[0], IntPtr.Zero);
             else
                stream.Copy<TDepth>(this, gpuMats[0]);
          }
-
-         //handle multiple channels
-         Size size = Size;
-         IntPtr[] ptrs = new IntPtr[gpuMats.Length];
-         for (int i = 0; i < gpuMats.Length; i++)
+         else
          {
-            Debug.Assert(gpuMats[i].Size == size, "Size mismatch");
-            ptrs[i] = gpuMats[i].Ptr;
+            //handle multiple channels
+            Size size = Size;
+            IntPtr[] ptrs = new IntPtr[gpuMats.Length];
+            for (int i = 0; i < ptrs.Length; i++)
+            {
+               Debug.Assert(gpuMats[i].Size == size, "Size mismatch");
+               ptrs[i] = gpuMats[i].Ptr;
+            }
+            GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
+            GpuInvoke.Split(_ptr, handle.AddrOfPinnedObject(), stream);
+            handle.Free();
          }
-         GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GpuInvoke.Split(_ptr, handle.AddrOfPinnedObject(), stream);
-         handle.Free();
       }
 
       /// <summary>
