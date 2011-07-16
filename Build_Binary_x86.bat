@@ -82,12 +82,12 @@ IF NOT "%3%"=="intel" GOTO VISUAL_STUDIO
 
 :INTEL_COMPILER
 REM Find Intel Compiler 
-SET INTEL_DIR=%ICPP_COMPILER12%\bin
-SET INTEL_ENV=%ICPP_COMPILER12%\bin\iclvars.bat
-SET INTEL_ICL=%ICPP_COMPILER12%\bin\ia32\icl.exe
-IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%ICPP_COMPILER12%\bin\intel64\icl.exe
+SET INTEL_DIR=%ICPP_COMPILER12%bin
+SET INTEL_ENV=%ICPP_COMPILER12%bin\iclvars.bat
+SET INTEL_ICL=%ICPP_COMPILER12%bin\ia32\icl.exe
+IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%ICPP_COMPILER12%bin\intel64\icl.exe
 SET INTEL_TBB=%TBB30_INSTALL_DIR%\include
-IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER12%\redist\intel64\ipp
+IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER12%redist\intel64\ipp
 SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert120.exe
 
 REM initiate the compiler enviroment
