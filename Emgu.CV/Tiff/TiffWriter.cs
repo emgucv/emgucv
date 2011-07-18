@@ -93,31 +93,6 @@ namespace Emgu.CV.Tiff
       /// <summary>
       /// Write the geo information into the tiff file
       /// </summary>
-      /// <param name="originCoordinate">The coordinate of the origin. To be specific, this is the coordinate of the upper left corner of the pixel in the origin</param>
-      /// <param name="pixelResolution">The resolution of the pixel in meters</param>
-      /// <param name="imageSize">The size of the image</param>
-      public void WriteGeoTag(GeodeticCoordinate originCoordinate, Size imageSize, MCvPoint2D64f pixelResolution)
-      {
-         GeodeticCoordinate lowerRight = Datum.WGS84.NED2Geodetic(
-            new MCvPoint3D64f(pixelResolution.x * imageSize.Height, pixelResolution.y * imageSize.Width, 0.0),
-            originCoordinate);
-         MCvPoint3D64f res = new MCvPoint3D64f(
-            (lowerRight.Longitude - originCoordinate.Longitude) * (180.0 / Math.PI) / imageSize.Width,
-            (lowerRight.Latitude - originCoordinate.Latitude) * (180.0 / Math.PI) / imageSize.Height,
-            0.0);
-
-         double latitude = lowerRight.Latitude * (180.0 / Math.PI);
-         double longitude = lowerRight.Longitude * (180.0 / Math.PI);
-         double[] modelTiepoint = { 
-            0, 0, 0, 
-            longitude, latitude, 0 };
-         double[] modelPixelScale = { res.x, res.y, 0.0 };
-         WriteGeoTag(modelTiepoint, modelPixelScale);
-      }
-
-      /// <summary>
-      /// Write the geo information into the tiff file
-      /// </summary>
       /// <param name="modelTiepoint">Model Tie Point, an array of size 6</param>
       /// <param name="modelPixelScale">Model pixel scale, an array of size 3</param>
       public void WriteGeoTag(double[] modelTiepoint, double[] modelPixelScale)

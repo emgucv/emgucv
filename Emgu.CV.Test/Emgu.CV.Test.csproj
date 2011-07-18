@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="AutoTestCalibration.cs" />
     <Compile Include="AutoTestFeatures2d.cs" />
-    <Compile Include="AutoTestGeodetic.cs" />
     <Compile Include="AutoTestGpu.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />
