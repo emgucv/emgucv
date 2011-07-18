@@ -149,8 +149,7 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplIm
 {
    if (keypoints->size() <= 0) return;
    cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
+   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
 
    cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
    (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
@@ -159,19 +158,10 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplIm
 //SIFT with OpponentColorDescriptorExtractor
 void CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
-   /*
    if (keypoints->size() <= 0) return;
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
 
-   cv::Ptr<cv::DescriptorExtractor> siftExtractor = new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
-   cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
-   colorDetector.compute(mat, *keypoints, descriptorsMat);
-*/
-
-   if (keypoints->size() <= 0) return;
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
    cv::Ptr<cv::DescriptorExtractor> siftExtractor = new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
    cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
    colorDetector.compute(mat, *keypoints, descriptorsMat);
@@ -514,27 +504,13 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
    }
 
    int scaleBinSize = (int)((maxS - minS) / log10(scaleIncrement));
-   scaleBinSize = scaleBinSize < 1? 1 : scaleBinSize;
+   scaleBinSize = scaleBinSize < 2 ? 2 : scaleBinSize; //At least two bins
 
    cv::Mat_<float> scalesMat(scale);
    cv::Mat_<float> rotationsMat(rotations);
    std::vector<float> flags(scale.size());
    cv::Mat flagsMat(flags);
-   if (scaleBinSize == 1)
-   {  //The same scale, perform voting for dominant orientation only
-      int histSize[] = {rotationBins};
-      float rotationRanges[] = {0, 360};
-      int channels[] = {0};
-      const float* ranges[] = {rotationRanges};
-      double minVal, maxVal;
-      const cv::Mat_<float> arrs[] = {rotationsMat}; 
 
-      cv::MatND hist; //CV_32S
-      cv::calcHist(arrs, 1, channels, cv::Mat(), hist, 1, histSize, ranges);
-      cv::minMaxLoc(hist, &minVal, &maxVal);
-      cv::threshold(hist, hist, maxVal * 0.5, 0, cv::THRESH_TOZERO);
-      cv::calcBackProject(arrs, 1, channels, hist, flagsMat, ranges);
-   } else
    {  //Perform voting for both scale and orientation
       int histSize[] = {scaleBinSize, rotationBins};
       float scaleRanges[] = {minS, maxS};
