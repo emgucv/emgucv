@@ -100,13 +100,18 @@ namespace Emgu.CV.UI
       {
          if (e.Button == MouseButtons.Left && _mouseDownButton == MouseButtons.Left)
          {
-            ReverseRectangle();
+            if (!_bufferPoint.IsEmpty)
+            {
+               DrawReversibleRectangle(GetRectanglePreserveAspect(_bufferPoint, _mouseDownPosition));
+               _bufferPoint = Point.Empty;
+            }
+
             Size size = Min(GetViewSize(), GetImageSize());
             Rectangle imageRegion = new Rectangle(Point.Empty, size);
             if (!imageRegion.Contains(_mouseDownPosition))
                return;
 
-            Rectangle selectedRectangle = GetSelectedRectangle(e.Location, _mouseDownPosition);
+            Rectangle selectedRectangle = GetRectanglePreserveAspect(e.Location, _mouseDownPosition);
 
             if ((selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
             {
@@ -319,29 +324,15 @@ namespace Emgu.CV.UI
          else if (_mouseDownButton == MouseButtons.Left)
          {
             //reverse the previous highlighted rectangle, if there is any
-            ReverseRectangle();
+            if (!_bufferPoint.IsEmpty)
+            {
+               DrawReversibleRectangle(GetRectanglePreserveAspect(_bufferPoint, _mouseDownPosition));
+            }
 
-            Rectangle rect = GetSelectedRectangle(e.Location, _mouseDownPosition);
-            rect.Location = PointToScreen(rect.Location);
-            ControlPaint.DrawReversibleFrame(
-               rect,
-               Color.White,
-               FrameStyle.Dashed);
+            //draw the newly selected area
+            DrawReversibleRectangle(GetRectanglePreserveAspect(e.Location, _mouseDownPosition));
+
             _bufferPoint = e.Location;
-         }
-      }
-
-      private void ReverseRectangle()
-      {
-         if (!_bufferPoint.IsEmpty)
-         {
-            Rectangle rect = GetSelectedRectangle(_bufferPoint, _mouseDownPosition);
-            rect.Location = PointToScreen(rect.Location);
-            ControlPaint.DrawReversibleFrame(
-               rect,
-               Color.White,
-               FrameStyle.Dashed);
-            _bufferPoint = Point.Empty;
          }
       }
 
@@ -383,22 +374,22 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Get the rectangle defined by the two points
+      /// Draw a reversible rectangle on the control.
       /// </summary>
-      /// <param name="p1">The first point</param>
-      /// <param name="p2">The second point</param>
-      /// <returns>the rectangle defined by the two points</returns>
-      private Rectangle GetSelectedRectangle(Point p1, Point p2)
+      /// <param name="rect">The rectangle using the control's coordinate system</param>
+      public void DrawReversibleRectangle(Rectangle rect)
       {
-         int top = Math.Min(p1.Y, p2.Y);
-         int bottom = Math.Max(p1.Y, p2.Y);
-         int left = Math.Min(p1.X, p2.X);
-         int right = Math.Max(p1.X, p2.X);
+         rect.Location = PointToScreen(rect.Location);
+         ControlPaint.DrawReversibleFrame(
+            rect,
+            Color.White,
+            FrameStyle.Dashed);
+      }
 
+      private Rectangle GetRectanglePreserveAspect(Point p1, Point p2)
+      {
+         Rectangle rect = GetRectangle(p1, p2);
          Size size = Min(GetViewSize(), GetImageSize());
-
-         Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
-         rect.Intersect(new Rectangle(Point.Empty, size));
 
          if ((double)rect.Width / rect.Height > (double)size.Width / size.Height)
             rect.Width = (int)((double)size.Width / size.Height * rect.Height);
@@ -410,7 +401,27 @@ namespace Emgu.CV.UI
 
          if (rect.X != p2.X)
             rect.X = p2.X - rect.Width;
+         return rect;
+      }
 
+      
+      /// <summary>
+      /// Get the rectangle defined by the two points on the control
+      /// </summary>
+      /// <param name="p1">The first point on the control</param>
+      /// <param name="p2">The second point on the control</param>
+      /// <returns>the rectangle defined by the two points</returns>
+      public Rectangle GetRectangle(Point p1, Point p2)
+      {
+         int top = Math.Min(p1.Y, p2.Y);
+         int bottom = Math.Max(p1.Y, p2.Y);
+         int left = Math.Min(p1.X, p2.X);
+         int right = Math.Max(p1.X, p2.X);
+
+         Size size = Min(GetViewSize(), GetImageSize());
+
+         Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
+         rect.Intersect(new Rectangle(Point.Empty, size));
          return rect;
       }
 
