@@ -45,8 +45,8 @@ namespace Emgu.CV
       /// <param name="isColor">true if this is a color video, false otherwise</param>
       public VideoWriter(String fileName, int compressionCode, int fps, int width, int height, bool isColor)
       {
-         _ptr = CvToolbox.HasFFMPEG?
-            CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor):
+         _ptr = /*CvToolbox.HasFFMPEG?
+            CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor):*/
             CvInvoke.cvCreateVideoWriter(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor);
 
          if (_ptr == IntPtr.Zero)
@@ -63,8 +63,8 @@ namespace Emgu.CV
          where TColor : struct, IColor
          where TDepth : new()
       {
-         bool success = CvToolbox.HasFFMPEG ?
-            CvInvoke.cvWriteFrame_FFMPEG(_ptr, frame.Ptr) :
+         bool success = /*CvToolbox.HasFFMPEG ?
+            CvInvoke.cvWriteFrame_FFMPEG(_ptr, frame.Ptr) :*/
             CvInvoke.cvWriteFrame(_ptr, frame.Ptr);
          if (!success) throw new InvalidOperationException("Unable to write frame to the video writer");
       }
@@ -74,9 +74,10 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
+         /*
          if (CvToolbox.HasFFMPEG)
             CvInvoke.cvReleaseVideoWriter_FFMPEG(ref _ptr);
-         else 
+         else*/ 
          CvInvoke.cvReleaseVideoWriter(ref _ptr);
       }
    }

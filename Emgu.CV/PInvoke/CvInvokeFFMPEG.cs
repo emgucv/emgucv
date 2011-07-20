@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2011 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
+
+/*
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -101,3 +103,4 @@ namespace Emgu.CV
 
    }
 }
+*/

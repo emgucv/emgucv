@@ -167,6 +167,7 @@ namespace Emgu.CV.Util
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
 
+      /*
       #region FFMPEG
       private static bool _hasFFMPEG;
       private static bool _ffmpegChecked = false;
@@ -206,7 +207,7 @@ namespace Emgu.CV.Util
          }
       }
       #endregion
-
+      */
       #region color conversion
       private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
          = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
