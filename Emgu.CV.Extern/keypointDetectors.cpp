@@ -481,7 +481,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
 {
    cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
    cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
-   std::vector<float> scale;
+   std::vector<float> logScale;
    std::vector<float> rotations;
    float s, maxS, minS, r;
    maxS = -1.0e-10f; minS = 1.0e10f;
@@ -493,7 +493,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
          cv::KeyPoint observedKeyPoint = observedKeyPoints->at(i);
          cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indicesMat(i, 0));
          s = log10( observedKeyPoint.size / modelKeyPoint.size );
-         scale.push_back(s);
+         logScale.push_back(s);
          maxS = s > maxS ? s : maxS;
          minS = s < minS ? s : minS;
 
@@ -503,17 +503,17 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
       }    
    }
 
-   int scaleBinSize = (int)((maxS - minS) / log10(scaleIncrement));
-   scaleBinSize = scaleBinSize < 2 ? 2 : scaleBinSize; //At least two bins
+   int scaleBinSize = cvCeil((maxS - minS) / log10(scaleIncrement));
+   if (scaleBinSize < 2) scaleBinSize = 2;
+   float scaleRanges[] = {minS, (float) (minS + scaleBinSize * log10(scaleIncrement))};
 
-   cv::Mat_<float> scalesMat(scale);
+   cv::Mat_<float> scalesMat(logScale);
    cv::Mat_<float> rotationsMat(rotations);
-   std::vector<float> flags(scale.size());
+   std::vector<float> flags(logScale.size());
    cv::Mat flagsMat(flags);
 
    {  //Perform voting for both scale and orientation
       int histSize[] = {scaleBinSize, rotationBins};
-      float scaleRanges[] = {minS, maxS};
       float rotationRanges[] = {0, 360};
       int channels[] = {0, 1};
       const float* ranges[] = {scaleRanges, rotationRanges};
