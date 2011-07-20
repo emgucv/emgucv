@@ -359,7 +359,24 @@ namespace Emgu.CV.GPU.Test
             Assert.IsTrue(gpuImage.ToImage().Equals(image));
          }
          
+      }
 
+      [Test]
+      public void TestGPU_SURFKeypointDetection()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Gray, byte> image = new Image<Gray, byte>(200, 100);
+            image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+            GpuImage<Gray, Byte> gpuMat = new GpuImage<Gray, byte>(image);
+
+            Assert.IsTrue(gpuMat.ToImage().Equals(image));
+
+            GpuSURFDetector gpuSurf = new GpuSURFDetector(100.0f, 2, 4, false, 0.01f, false);
+            GpuMat<float> gpuKpts = gpuSurf.DetectKeyPointsRaw(gpuMat, null);
+            VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+            gpuSurf.DownloadKeypoints(gpuKpts, kpts);
+         }
       }
 
       [Test]

@@ -1810,6 +1810,23 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestCaptureFromFile()
+      {
+         using (Capture capture = new Capture("tree.avi"))
+         using (VideoWriter writer = new VideoWriter("tree_invert.avi", 10, capture.Width, capture.Height, true))
+         {
+            while (capture.Grab())
+            {
+               using (Image<Bgr, Byte> img = capture.RetrieveBgrFrame(0))
+               {
+                  img._Not();
+                  writer.WriteFrame(img);
+               }
+            }
+         }
+      }
+
+      [Test]
       public void TestRotationMatrix2D()
       {
          double angle = 32;
