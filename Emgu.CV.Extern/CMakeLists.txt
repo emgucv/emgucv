@@ -99,6 +99,19 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
 endif()
 ############################### TBB END ################################
 
+############################### INTEL ICL START ##############################
+IF(WIN32 AND CV_ICC)
+  IF(TARGET_ARCH_64)
+    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER12}redist/intel64/compiler/")
+  ELSE()
+    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER12}redist/ia32/compiler/")
+  ENDIF()
+  STRING(REGEX REPLACE "\\\\" "/" INTEL_ICC_REDIST_PATH ${INTEL_ICC_REDIST_PATH})
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES libomp5md libmmd)
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${INTEL_ICC_REDIST_PATH}libiomp5md.dll ${INTEL_ICC_REDIST_PATH}libmmd.dll)
+ENDIF()
+############################### INTEL ICL START ##############################
+
 ############################### OPENNI START ##############################
 IF(WIN32 AND WITH_OPENNI)
   IF(TARGET_ARCH_64)

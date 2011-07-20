@@ -1,3 +1,17 @@
+Index: 3rdparty/ffmpeg/CMakeLists.txt
+===================================================================
+--- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6075)
++++ 3rdparty/ffmpeg/CMakeLists.txt	(working copy)
+@@ -7,8 +7,7 @@
+ set(module_bare_name "opencv_ffmpeg${FFMPEG_SUFFIX}.dll")
+ set(module_name "${CMAKE_CURRENT_SOURCE_DIR}/${module_bare_name}")
+ 
+-get_target_property(bin_dir opencv_traincascade LOCATION)
+-get_filename_component(bin_dir ${bin_dir} PATH) 
++set (bin_dir ${LIBRARY_OUTPUT_PATH})
+ 
+ message(STATUS "ffmpeg output dir: ${bin_dir}")
+ 
 Index: CMakeLists.txt
 ===================================================================
 --- CMakeLists.txt	(revision 6075)

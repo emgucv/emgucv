@@ -112,10 +112,9 @@ REM convert the project to use intel compiler
 "%ICPROJCONVERT%" emgucv.sln /IC
 REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
 REM these projects create problems for intel compiler
-REM "%ICPROJCONVERT%" emgucv.sln ^
-REM Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
-REM Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
-REM /VC
+"%ICPROJCONVERT%" emgucv.sln ^
+Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
+/VC
 
 GOTO BUILD
 

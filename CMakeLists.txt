@@ -208,7 +208,14 @@ GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_GPU_OUTPUT_NAME cvextern_gpu OUTPUT_NAME)
 
 IF(TARGET opencv_ffmpeg)
-  GET_TARGET_PROPERTY(OPENCV_FFMPEG_OUTPUT_NAME opencv_ffmpeg OUTPUT_NAME)
+  IF(WIN32)
+    if(MSVC64 OR MINGW64)
+	set(FFMPEG_SUFFIX _64)
+	endif()
+	set(OPENCV_FFMPEG_OUTPUT_NAME "opencv_ffmpeg${FFMPEG_SUFFIX}")
+  ELSE()
+    GET_TARGET_PROPERTY(OPENCV_FFMPEG_OUTPUT_NAME opencv_ffmpeg OUTPUT_NAME)
+  ENDIF()
 ELSE()
   SET(OPENCV_FFMPEG_OUTPUT_NAME "")
 ENDIF()
@@ -357,23 +364,6 @@ IF (WIN32)
   ENDIF()
   ENDIF()
 
-  # ----------------------------------------------------------------------------
-  #  Bundle intel c++ compiler xe 11 redistributable into deployment package
-  # ----------------------------------------------------------------------------
-  IF(WIN32 AND CV_ICC)
-    SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_ia32_2011.1.127.msi")
-    IF(TARGET_ARCH_64)
-      SET(CV_ICC_REDIST_NAME "w_ccompxe_redist_intel64_2011.1.127.msi")
-    ENDIF()
-	MESSAGE(STATUS "${CV_ICC_REDIST_NAME} will be included in deployment package")
-	INSTALL(
-	  FILES 
-	  "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/intel_ccompxe_redist/${CV_ICC_REDIST_NAME}"
-	  DESTINATION .
-	  COMPONENT emgucv_binary
-	  )
-	SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${CV_ICC_REDIST_NAME} /passive'")
-  ENDIF()    
   # ----------------------------------------------------------------------------
   #  Install Debugger Visualizer
   # ----------------------------------------------------------------------------
