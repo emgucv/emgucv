@@ -1,6 +1,6 @@
 Index: 3rdparty/ffmpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6075)
+--- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6135)
 +++ 3rdparty/ffmpeg/CMakeLists.txt	(working copy)
 @@ -7,8 +7,7 @@
  set(module_bare_name "opencv_ffmpeg${FFMPEG_SUFFIX}.dll")
@@ -14,7 +14,7 @@ Index: 3rdparty/ffmpeg/CMakeLists.txt
  
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 6075)
+--- CMakeLists.txt	(revision 6135)
 +++ CMakeLists.txt	(working copy)
 @@ -728,18 +728,26 @@
              elseif (UNIX)
@@ -55,9 +55,26 @@ Index: CMakeLists.txt
  
                      if (MSVC80)
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
+@@ -1397,11 +1405,11 @@
+         install(DIRECTORY 3rdparty android modules doc DESTINATION "." COMPONENT src PATTERN ".svn" EXCLUDE)
+ 
+         # install TBB dlls
+-        if(WIN32 AND HAVE_TBB)
+-            string(REGEX REPLACE "/lib" "/bin" TBB_DLL_DIR "${TBB_LIB_DIR}")
+-            install(PROGRAMS "${TBB_DLL_DIR}/tbb.dll" DESTINATION bin COMPONENT main)
+-            install(PROGRAMS "${TBB_DLL_DIR}/tbb_debug.dll" DESTINATION bin COMPONENT main)
+-        endif()
++        #if(WIN32 AND HAVE_TBB)
++        #    string(REGEX REPLACE "/lib" "/bin" TBB_DLL_DIR "${TBB_LIB_DIR}")
++        #    install(PROGRAMS "${TBB_DLL_DIR}/tbb.dll" DESTINATION bin COMPONENT main)
++        #    install(PROGRAMS "${TBB_DLL_DIR}/tbb_debug.dll" DESTINATION bin COMPONENT main)
++        #endif()
+     endif()
+ endif()
+ 
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 6075)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 6135)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
 @@ -410,6 +410,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
@@ -71,7 +88,7 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 6075)
+--- modules/highgui/src/cap_openni.cpp	(revision 6135)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
 @@ -98,6 +98,8 @@
  
@@ -95,7 +112,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 6075)
+--- modules/legacy/src/3dtracker.cpp	(revision 6135)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -121,7 +138,7 @@ Index: modules/legacy/src/3dtracker.cpp
      for (y = 0, i = 0; y < etalon_size.height; y++)
 Index: OpenCVFindOpenNI.cmake
 ===================================================================
---- OpenCVFindOpenNI.cmake	(revision 6075)
+--- OpenCVFindOpenNI.cmake	(revision 6135)
 +++ OpenCVFindOpenNI.cmake	(working copy)
 @@ -42,7 +42,7 @@
      endif()
