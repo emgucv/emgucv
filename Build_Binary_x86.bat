@@ -54,11 +54,11 @@ IF "%OS_MODE%"==" Win64" SET OPENNI_LIB_DIR=%OPEN_NI_LIB64%
 SET OPENNI_PS_BIN_DIR=%OPENNI_LIB_DIR%\..\PrimeSense\Sensor\Bin
 IF "%OS_MODE%"==" Win64" SET OPENNI_PS_BIN_DIR=%OPENNI_LIB_DIR%\..\PrimeSense\Sensor\Bin64
 
-SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
+IF EXIST "%OPENNI_LIB_DIR%" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DWITH_OPENNI:BOOL=TRUE ^
--DOPENNI_INCLUDE_DIR="%OPEN_NI_INCLUDE%" ^
--DOPENNI_LIB_DIR="%OPENNI_LIB_DIR%" ^
--DOPENNI_PRIME_SENSOR_MODULE_BIN_DIR="%OPENNI_PS_BIN_DIR%"
+-DOPENNI_INCLUDE_DIR="%OPEN_NI_INCLUDE:\=/%" ^
+-DOPENNI_LIB_DIR="%OPENNI_LIB_DIR:\=/%" ^
+-DOPENNI_PRIME_SENSOR_MODULE_BIN_DIR="%OPENNI_PS_BIN_DIR:\=/%"
 :END_OF_OPENNI
 
 
@@ -73,8 +73,8 @@ SET CUDA_SDK_DIR=%CUDA_PATH%.
 IF EXIST "%CUDA_PATH%" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DWITH_CUDA:BOOL=TRUE ^
 -DCUDA_VERBOSE_BUILD:BOOL=TRUE ^
--DCUDA_TOOLKIT_ROOT_DIR="%CUDA_SDK_DIR%" ^
--DCUDA_SDK_ROOT_DIR="%CUDA_SDK_DIR%"
+-DCUDA_TOOLKIT_ROOT_DIR="%CUDA_SDK_DIR:\=/%" ^
+-DCUDA_SDK_ROOT_DIR="%CUDA_SDK_DIR:\=/%"
 :END_OF_GPU
 
 IF "%3%"=="intel" GOTO INTEL_COMPILER
@@ -96,11 +96,10 @@ REM IF "%OS_MODE%"=="" CALL "%INTEL_ENV%" ia32
 REM IF "%OS_MODE%"==" WIN64" CALL "%INTEL_ENV%" intel64
 
 REM SET INTEL_ICL_CMAKE=%INTEL_ICL:\=/%
-SET INTEL_TBB_CMAKE=%INTEL_TBB:\=/%
 
-SET CMAKE_CONF_FLAGS=^
+IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 -DWITH_TBB:BOOL=TRUE ^
--DTBB_INCLUDE_DIR="%INTEL_TBB_CMAKE%" ^
+-DTBB_INCLUDE_DIR="%INTEL_TBB:\=/%" ^
 -DWITH_IPP:BOOL=TRUE ^
 -DCV_ICC:BOOL=TRUE ^
 %CMAKE_CONF_FLAGS%
@@ -109,11 +108,14 @@ REM create visual studio project
 %CMAKE% %CMAKE_CONF_FLAGS%
 
 REM convert the project to use intel compiler 
-"%ICPROJCONVERT%" emgucv.sln /IC
+IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln /IC
 REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
 REM these projects create problems for intel compiler
-"%ICPROJCONVERT%" emgucv.sln ^
+IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln ^
 Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
+Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
 /VC
 
 GOTO BUILD

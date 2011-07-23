@@ -22,7 +22,7 @@ ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/Help/Emgu.CV.Documentation.chm"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Documentation.chm"
   DESTINATION ./
   COMPONENT emgucv_document
   )
