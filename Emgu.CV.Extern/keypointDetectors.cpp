@@ -116,13 +116,13 @@ void CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector)
 void CvSiftDescriptorExtractorRelease(cv::SiftDescriptorExtractor** extractor)
 {
    delete *extractor;
-   extractor=0;
+   *extractor=0;
 }
 
 void CvSIFTDetectorRelease(cv::SIFT** detector)
 {
    delete *detector;
-   detector = 0;
+   *detector = 0;
 }
 
 int CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
@@ -179,6 +179,7 @@ void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* i
 void CvFeatureDetectorRelease(cv::FeatureDetector** detector)
 {
    delete *detector;
+   *detector = 0;
 }
 
 //GridAdaptedFeatureDetector
@@ -281,6 +282,7 @@ void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor
 void CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
 {
    delete *extractor;
+   *extractor = 0;
 }
 
 // detect corners using FAST algorithm
