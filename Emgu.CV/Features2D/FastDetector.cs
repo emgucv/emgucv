@@ -48,8 +48,8 @@ namespace Emgu.CV.Features2D
       /// Create a fast detector with the specific parameters
       /// </summary>
       /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
-      /// this pixel.</param>
-      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used</param>
+      /// this pixel. Use 10 for default.</param>
+      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used. Use true for default.</param>
       public FastDetector(int threshold, bool nonmaxSupression)
       {
          _threshold = threshold;
