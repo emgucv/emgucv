@@ -35,6 +35,8 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             IntPtr seqPtr = CvInvoke.cvLatentSvmDetectObjects(image, Ptr, stor, overlapThreshold, -1);
+            if (seqPtr == IntPtr.Zero) 
+               return new MCvObjectDetection[0];
             Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(seqPtr, stor);
             return seq.ToArray();
          }
