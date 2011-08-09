@@ -188,7 +188,9 @@ cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(
    int maxTotalKeypoints,
    int gridRows, int gridCols)
 {
-   return new cv::GridAdaptedFeatureDetector(detector, maxTotalKeypoints, gridRows, gridCols);
+   cv::Ptr<cv::FeatureDetector> detectorPtr = detector;
+   detectorPtr.addref(); //increment the counter such that it should never be release by the grid adapeted feature detector
+   return new cv::GridAdaptedFeatureDetector(detectorPtr, maxTotalKeypoints, gridRows, gridCols);
 }
 /*
 void GridAdaptedFeatureDetectorDetect(
@@ -434,6 +436,7 @@ void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceTyp
    case(3):
       m3 = (cv::BruteForceMatcher< cv::Hamming >*) *matcher;
       delete m3;
+      break;
    default:
       CV_Error(-1, "Invalid Distance type");
    }
