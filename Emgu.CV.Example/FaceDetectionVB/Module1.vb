@@ -29,7 +29,7 @@ Module Module1
       For Each face As MCvAvgComp In faceDetector.Detect( _
                          imgGray, _
                          1.1, _
-                         50, _
+                         10, _
                          CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, _
                          New Size(20, 20))
          img.Draw(face.rect, New Bgr(Color.White), 1)
