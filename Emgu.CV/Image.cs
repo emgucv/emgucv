@@ -106,58 +106,76 @@ namespace Emgu.CV
       /// <param name="file"></param>
       private void LoadImageUsingOpenCV(FileInfo file)
       {
-         IntPtr ptr;
-         Size size;
+         IntPtr ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYCOLOR | CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYDEPTH);
+         if (ptr == IntPtr.Zero)
+            throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
 
-         #region read the image into ptr ( of TColor, Byte )
-         if (typeof(TColor) == typeof(Gray)) //TColor type is gray, load the image as grayscale
+         try
          {
-            ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_GRAYSCALE);
-            size = CvInvoke.cvGetSize(ptr);
-         }
-         else //color type is not gray
-         {
-            //load the image as Bgr color
-            ptr = CvInvoke.cvLoadImage(file.FullName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
-
-            if (ptr == IntPtr.Zero)
-               throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
-
             MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-            size = new Size(mptr.width, mptr.height);
+            Size size = new Size(mptr.width, mptr.height);
 
-            if (typeof(TColor) != typeof(Bgr)) //TColor type is not Bgr, a conversion is required
+            //Allocate data in mamanged memory
+            AllocateData(size.Height, size.Width, NumberOfChannels);
+
+            if (mptr.nChannels == 1)
+            {  //Grayscale image;
+               switch (mptr.depth)
+               {
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                     using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                     using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                     using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                     using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  default:
+                     throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+               }
+            }
+            else if (mptr.nChannels == 3)
+            {  //BGR image
+               switch (mptr.depth)
+               {
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                     using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                     using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                     using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                        ConvertFrom(tmp);
+                     break;
+                  default:
+                     throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+               }
+            }
+            else
             {
-               IntPtr tmp = CvInvoke.cvCreateImage(
-                   size,
-                   (CvEnum.IPL_DEPTH)mptr.depth,
-                   3);
-               CvInvoke.cvCvtColor(ptr, tmp, CvToolbox.GetColorCvtCode(typeof(Bgr), typeof(TColor)));
-
-               CvInvoke.cvReleaseImage(ref ptr);
-               ptr = tmp;
+               throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
             }
          }
-         #endregion
-
-         if (typeof(TDepth) != typeof(Byte)) //depth is not Byte, a conversion of depth is required
+         finally
          {
-            IntPtr tmp = CvInvoke.cvCreateImage(
-                size,
-                CvDepth,
-                NumberOfChannels);
-            CvInvoke.cvConvertScale(ptr, tmp, 1.0, 0.0);
             CvInvoke.cvReleaseImage(ref ptr);
-            ptr = tmp;
          }
 
-         #region use managed memory instead of unmanaged
-         AllocateData(size.Height, size.Width, NumberOfChannels);
-
-         CvInvoke.cvCopy(ptr, Ptr, IntPtr.Zero);
-
-         CvInvoke.cvReleaseImage(ref ptr);
-         #endregion
       }
 
       /// <summary>
@@ -4191,9 +4209,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Save this image to the specific file
+      /// Save this image to the specific file. 
       /// </summary>
       /// <param name="fileName">The name of the file to be saved to</param>
+      /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
       public override void Save(String fileName)
       {
          try
