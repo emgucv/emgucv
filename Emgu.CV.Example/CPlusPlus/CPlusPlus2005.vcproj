@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib opencv_contrib220.lib opencv_calib3d220.lib opencv_legacy220.lib opencv_features2d220.lib opencv_ml220.lib opencv_flann220.lib"
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib opencv_contrib230.lib opencv_calib3d230.lib opencv_legacy230.lib opencv_features2d230.lib opencv_ml230.lib opencv_flann230.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib opencv_contrib220.lib opencv_calib3d220.lib opencv_legacy220.lib opencv_features2d220.lib opencv_ml220.lib opencv_flann220.lib"
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib opencv_contrib230.lib opencv_calib3d230.lib opencv_legacy230.lib opencv_features2d230.lib opencv_ml230.lib opencv_flann230.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
@@ -218,7 +218,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib opencv_contrib220.lib opencv_calib3d220.lib opencv_legacy220.lib opencv_features2d220.lib opencv_ml220.lib opencv_flann220.lib"
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib opencv_contrib230.lib opencv_calib3d230.lib opencv_legacy230.lib opencv_features2d230.lib opencv_ml230.lib opencv_flann230.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"
@@ -297,7 +297,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib opencv_contrib220.lib opencv_calib3d220.lib opencv_legacy220.lib opencv_features2d220.lib opencv_ml220.lib opencv_flann220.lib"
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib opencv_contrib230.lib opencv_calib3d230.lib opencv_legacy230.lib opencv_features2d230.lib opencv_ml230.lib opencv_flann230.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
 				GenerateDebugInformation="true"

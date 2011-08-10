@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib "
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib "
 				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib opencv_objdetect220.lib "
+				AdditionalDependencies="opencv_core230.lib opencv_highgui230.lib opencv_imgproc230.lib opencv_objdetect230.lib "
 				OutputFile="$(ProjectDir)..\..\bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\lib\Release&quot;;&quot;$(ProjectDir)..\..\lib&quot;"
