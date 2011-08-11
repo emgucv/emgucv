@@ -334,8 +334,8 @@ namespace Emgu.CV
       /// <returns>The 2x3 rotation matrix that defines the Affine transform</returns>
       public static RotationMatrix2D<double> GetAffineTransform(PointF[] src, PointF[] dest)
       {
-         Debug.Assert(src.Length == 3, "The source should contain at least 3 points");
-         Debug.Assert(dest.Length == 3, "The destination should contain at least 3 points");
+         Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
+         Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
 
          RotationMatrix2D<double> rot = new RotationMatrix2D<double>();
          CvInvoke.cvGetAffineTransform(src, dest, rot);
