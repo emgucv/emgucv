@@ -33,8 +33,8 @@ namespace FaceDetection
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"); //Read the files as an 8-bit Bgr image  
 
-         Stopwatch watch; 
-         String faceFileName = "haarcascade_frontalface_alt.xml";
+         Stopwatch watch;
+         String faceFileName = "haarcascade_frontalface_default.xml";
          String eyeFileName = "haarcascade_eye.xml";
 
          if (GpuInvoke.HasCuda) 

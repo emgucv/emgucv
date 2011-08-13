@@ -111,7 +111,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt.xml">
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="lena.jpg">
