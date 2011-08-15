@@ -64,7 +64,7 @@ int CvFlannIndexRadiusSearch(cv::flann::Index* index, CvMat* queries, CvMat* ind
    cv::Mat queriesMat = cv::cvarrToMat(queries); 
    cv::Mat indicesMat = cv::cvarrToMat(indices);
    cv::Mat distsMat = cv::cvarrToMat(dists);
-   return index->radiusSearch(queriesMat, indicesMat, distsMat, radius, p);
+   return index->radiusSearch(queriesMat, indicesMat, distsMat, radius, indicesMat.cols, p);
 }
 
 void CvFlannIndexRelease(cv::flann::Index* index) { delete index; }
