@@ -202,26 +202,34 @@ namespace Emgu.CV.UI
       /// <param name="pe">The paint event</param>
       protected override void OnPaint(PaintEventArgs pe)
       {
+         if (IsDisposed) return;
          if (Image != null          //image is set
             &&          //either pan or zoom
-            (_zoomScale != 1.0f ||
+            (_zoomScale != 1.0 ||
             (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) ||
             (verticalScrollBar.Visible && verticalScrollBar.Value != 0)))
          {
-            using (Matrix transform = pe.Graphics.Transform)
-            {
-               transform.Scale((float)_zoomScale, (float)_zoomScale, MatrixOrder.Append);
-               transform.Translate(
-                  horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0,
-                  verticalScrollBar.Visible ? -verticalScrollBar.Value : 0);
-               pe.Graphics.Transform = transform;
-            }
-
             if (pe.Graphics.InterpolationMode != _interpolationMode)
                pe.Graphics.InterpolationMode = _interpolationMode;
-         }
 
-         base.OnPaint(pe);
+            using (Matrix transform = pe.Graphics.Transform)
+            {
+               if (_zoomScale != 1.0)
+                  transform.Scale((float)_zoomScale, (float)_zoomScale, MatrixOrder.Append);
+
+               int horizontalTranslation =  horizontalScrollBar.Visible ? -horizontalScrollBar.Value : 0;
+               int verticleTranslation = verticalScrollBar.Visible ? -verticalScrollBar.Value : 0;
+               if (horizontalTranslation != 0 || verticleTranslation != 0)
+                  transform.Translate(horizontalTranslation,verticleTranslation);
+               
+               pe.Graphics.Transform = transform;
+               base.OnPaint(pe);
+            }
+         }
+         else
+         {
+            base.OnPaint(pe);
+         }
       }
 
       private void SetScrollBarVisibilityAndMaxMin()
