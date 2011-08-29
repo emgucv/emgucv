@@ -16,7 +16,7 @@ namespace TrafficSignRecognition
 {
    public class StopSignDetector : DisposableObject
    {
-      private Features2DTracker _tracker;
+      private Features2DTracker<float> _tracker;
       private SURFDetector _detector;
       private MemStorage _octagonStorage;
       private Contour<Point> _octagon;
@@ -27,7 +27,7 @@ namespace TrafficSignRecognition
          using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
-            _tracker = new Features2DTracker(_detector.DetectFeatures(redMask, null));  
+            _tracker = new Features2DTracker<float>(_detector.DetectFeatures(redMask, null));  
          }
          _octagonStorage = new MemStorage();
          _octagon = new Contour<Point>(_octagonStorage);
@@ -110,12 +110,12 @@ namespace TrafficSignRecognition
                   candidate.SetValue(0, mask);
                }
 
-               ImageFeature[] features = _detector.DetectFeatures(candidate, null);
+               ImageFeature<float>[] features = _detector.DetectFeatures(candidate, null);
 
-               Features2DTracker.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
+               Features2DTracker<float>.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
 
                int goodMatchCount = 0;
-               foreach (Features2DTracker.MatchedImageFeature ms in matchedFeatures)
+               foreach (Features2DTracker<float>.MatchedImageFeature ms in matchedFeatures)
                   if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
 
                if (goodMatchCount >= 10)

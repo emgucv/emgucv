@@ -290,7 +290,6 @@ namespace Emgu.CV.GPU.Test
          }
       }
 
-      /*
       [Test]
       public void TestCanny()
       {
@@ -301,11 +300,11 @@ namespace Emgu.CV.GPU.Test
             using (GpuImage<Gray, Byte> gray = gpuImage.Convert<Gray, Byte>())
             using (GpuImage<Gray, Byte> canny = new GpuImage<Gray,byte>(gray.Size))
             {
-               GpuInvoke.Canny(gray, canny, 20, 100, 3);
-               ImageViewer.Show(canny);
+               GpuInvoke.Canny(gray, canny, 20, 100, 3, false);
+               //ImageViewer.Show(canny);
             }
          }
-      }*/
+      }
 
       [Test]
       public void TestHOG()
@@ -391,7 +390,7 @@ namespace Emgu.CV.GPU.Test
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
             VectorOfKeyPoint modelKeypoints = fast.DetectKeyPointsRaw(box, null);
-            Matrix<Byte> modelDescriptors = brief.ComputeDescriptorsRaw(box, modelKeypoints);
+            Matrix<Byte> modelDescriptors = brief.ComputeDescriptorsRaw(box, null, modelKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -401,7 +400,7 @@ namespace Emgu.CV.GPU.Test
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
             VectorOfKeyPoint observedKeypoints = fast.DetectKeyPointsRaw(observedImage, null);
-            Matrix<Byte> observedDescriptors = brief.ComputeDescriptorsRaw(observedImage, observedKeypoints);
+            Matrix<Byte> observedDescriptors = brief.ComputeDescriptorsRaw(observedImage, null, observedKeypoints);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -410,7 +409,7 @@ namespace Emgu.CV.GPU.Test
             using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
             {
                stopwatch.Reset(); stopwatch.Start();
-               GpuBruteForceMatcher hammingMatcher = new GpuBruteForceMatcher(GpuBruteForceMatcher.DistanceType.HammingDist);
+               GpuBruteForceMatcher<byte> hammingMatcher = new GpuBruteForceMatcher<Byte>(DistanceType.Hamming);
 
                //BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
                int k = 2;
@@ -431,14 +430,14 @@ namespace Emgu.CV.GPU.Test
 
                Matrix<Byte> mask = new Matrix<byte>(distance.Rows, 1);
                mask.SetValue(255);
-               Features2DTracker.VoteForUniqueness(distance, 0.8, mask);
+               Features2DToolbox.VoteForUniqueness(distance, 0.8, mask);
 
                int nonZeroCount = CvInvoke.cvCountNonZero(mask);
                if (nonZeroCount >= 4)
                {
-                  nonZeroCount = Features2DTracker.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
+                  nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
                   if (nonZeroCount >= 4)
-                     homography = Features2DTracker.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
+                     homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
                   nonZeroCount = CvInvoke.cvCountNonZero(mask);
                }
 

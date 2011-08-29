@@ -13,7 +13,9 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// An interface for a descriptor generator
    /// </summary>
-   public interface IDescriptorExtractor
+   /// <typeparam name="TDescriptor">The type of data in the descriptor. Can be either float or byte</typeparam>
+   public interface IDescriptorExtractor<TDescriptor>
+      where TDescriptor : struct
    {
       /// <summary>
       /// Compute the descriptors on the image from the given keypoint locations.
@@ -22,7 +24,7 @@ namespace Emgu.CV.Features2D
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The descriptors from the given keypoints</returns>
-      Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints);
+      Matrix<TDescriptor> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints);
 
       /// <summary>
       /// Get the pointer to the descriptor extractor. 

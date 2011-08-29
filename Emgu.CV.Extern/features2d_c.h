@@ -80,10 +80,7 @@ CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, Ipl
       memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
 }*/
 
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
-
-//SIFT with OpponentColorDescriptorExtractor
-CVAPI(void) CvSIFTDetectorComputeDescriptorsBGR(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
+CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
 //FeatureDetector
 CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints);
@@ -126,10 +123,24 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
    (*detector)(mat, maskMat, *keypoints, *descriptors, false);
 }*/
 
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
+CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
-//SURF with OpponentColorDescriptorExtractor
-CVAPI(void) CvSURFDetectorComputeDescriptorsBGR(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
+//ORB
+CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel);
+
+CVAPI(cv::OrbFeatureDetector*) CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel);
+
+CVAPI(cv::OrbDescriptorExtractor*) CvOrbGetDescriptorExtractor(float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel);
+
+CVAPI(void) CvOrbFeatureDetectorRelease(cv::OrbFeatureDetector** detector);
+
+CVAPI(void) CvOrbDescriptorExtractorRelease(cv::OrbDescriptorExtractor** extractor);
+
+CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
+
+CVAPI(int) CvOrbDetectorGetDescriptorSize(cv::ORB* detector);
+
+CVAPI(void) CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
 //Brief descriptor extractor
 CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
@@ -167,6 +178,13 @@ CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, Ipl
 
 CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints);
 
+// Draw keypoints.
+CVAPI(void) drawKeypoints(
+                          const IplImage* image, 
+                          const std::vector<cv::KeyPoint>* keypoints, 
+                          IplImage* outImage,
+                          const CvScalar color, 
+                          int flags);
 
 // Draws matches of keypints from two images on output image.
 CVAPI(void) drawMatchedFeatures(

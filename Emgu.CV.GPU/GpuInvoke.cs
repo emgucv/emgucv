@@ -906,17 +906,23 @@ namespace Emgu.CV.GPU
          return new GpuMat<int>(gpuMatHistEven(src, histSize, lowerLevel, upperLevel));
       }
 
-      /*
       /// <summary>
       /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
       /// </summary>
       /// <param name="image">Input image</param>
       /// <param name="edges">Image to store the edges found by the function</param>
-      /// <param name="threshold1">The first threshold</param>
-      /// <param name="threshold2">The second threshold.</param>
-      /// <param name="apertureSize">Aperture parameter for Sobel operator </param>
+      /// <param name="lowThreshold">The first threshold</param>
+      /// <param name="highThreshold">The second threshold</param>
+      /// <param name="apertureSize">Aperture parameter for Sobel operator, use 3 for default</param>
+      /// <param name="L2gradient">Use false for default</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCanny")]
-      public static extern void Canny(IntPtr image, IntPtr edges, double threshold1, double threshold2, int apertureSize);
-      */
+      public static extern void Canny(
+         IntPtr image, 
+         IntPtr edges, 
+         double lowThreshold, 
+         double highThreshold, 
+         int apertureSize, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool L2gradient);
    }
 }

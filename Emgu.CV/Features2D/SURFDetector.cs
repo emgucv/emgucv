@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
-   public class SURFDetector : DisposableObject, IKeyPointDetector, IDescriptorExtractor
+   public class SURFDetector : DisposableObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
       #region PInvoke
 
@@ -35,14 +35,6 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSURFDetectorComputeDescriptors(
-         ref MCvSURFParams detector,
-         IntPtr image,
-         IntPtr mask,
-         IntPtr keypoints,
-         IntPtr descriptors);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFDetectorComputeDescriptorsBGR(
          ref MCvSURFParams detector,
          IntPtr image,
          IntPtr keypoints,
@@ -143,12 +135,12 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image to detect features from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      public ImageFeature<float>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
          using (Matrix<float> desc = ComputeDescriptorsRaw(image, mask, kpts))
          {
-            return Features2DTracker.ConvertToImageFeature(kpts, desc);
+            return ImageFeature<float>.ConvertFromRaw(kpts, desc);
          }
       }
 
@@ -156,17 +148,31 @@ namespace Emgu.CV.Features2D
       /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
       /// <returns>The descriptors founded on the keypoint location.</returns>
-      public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, VectorOfKeyPoint keyPoints)
+      private Matrix<float> ComputeDescriptorsRawHelper(CvArray<Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
+         if (mask != null)
+            keyPoints.FilterByPixelsMask(mask);
          int count = keyPoints.Size;
          if (count == 0) return null;
          int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
-         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * 3, 1);
-         //MCvSURFParams p = SURFParams;
-         CvSURFDetectorComputeDescriptorsBGR(ref _surfParams, image, keyPoints, descriptors);
+         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * image.NumberOfChannels, 1);
+         CvSURFDetectorComputeDescriptors(ref _surfParams, image, keyPoints, descriptors);
          return descriptors;
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
+      /// <returns>The descriptors founded on the keypoint location.</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
+      {
+         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
       }
 
       /// <summary>
@@ -176,14 +182,14 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
       /// <returns>The image features founded on the keypoint location</returns>
-      public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
+      public ImageFeature<float>[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
          int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          {
             pts.Push(keyPoints);
             using (Matrix<float> descriptors = ComputeDescriptorsRaw(image, mask, pts))
-               return Features2DTracker.ConvertToImageFeature(pts, descriptors);
+               return ImageFeature<float>.ConvertFromRaw(pts, descriptors);
          }
       }
 
@@ -223,7 +229,7 @@ namespace Emgu.CV.Features2D
          CvSURFDescriptorExtractorRelease(ref _descriptorExtractorPtr);
       }
 
-      #region IDescriptorExtractor Members
+      #region IDescriptorExtractor<float> Members
       /// <summary>
       /// Compute the descriptor given the image and the point location
       /// </summary>
@@ -233,15 +239,10 @@ namespace Emgu.CV.Features2D
       /// <returns>The descriptors founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
-         int count = keyPoints.Size;
-         if (count == 0) return null;
-         int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
-         Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor, 1);
-         CvSURFDetectorComputeDescriptors(ref _surfParams, image, mask, keyPoints, descriptors);
-         return descriptors;
+         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
       }
 
-      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
          get { return _descriptorExtractorPtr; }
       }

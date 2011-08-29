@@ -17,117 +17,11 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// This class use ImageFeature to match or track object
    /// </summary>
-   public class Features2DTracker : DisposableObject
+   /// <typeparam name="TDescriptor">The type of descriptor, either float or Byte</typeparam>
+   public class Features2DTracker<TDescriptor> : DisposableObject
+      where TDescriptor : struct
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private static extern bool getHomographyMatrixFromMatchedFeatures(IntPtr model, IntPtr observed, IntPtr indices, IntPtr mask, double ransacReprojThreshold, IntPtr homography);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void drawMatchedFeatures(
-                                IntPtr img1, IntPtr keypoints1,
-                                IntPtr img2, IntPtr keypoints2,
-                                IntPtr matchIndices,
-                                IntPtr outImg,
-                                MCvScalar matchColor, MCvScalar singlePointColor,
-                                IntPtr matchesMask,
-                                KeypointDrawType flags);
-      #endregion
-
       #region static functions
-      /// <summary>
-      /// Draw the matched keypoints between the model image and the observered image.
-      /// </summary>
-      /// <param name="modelImage">The model image</param>
-      /// <param name="modelKeypoints">The keypoints in the model image</param>
-      /// <param name="observerdImage">The observed image</param>
-      /// <param name="observedKeyPoints">The keypoints in the observed image</param>
-      /// <param name="matchIndices">The match indices</param>
-      /// <param name="matchColor">The color for the match correspondence lines</param>
-      /// <param name="singlePointColor">The color for highlighting the keypoints</param>
-      /// <param name="matchesMask">The mask for the matches. Use null for all matches.</param>
-      /// <param name="flags">The drawing type</param>
-      /// <returns>The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</returns>
-      public static Image<Bgr, Byte> DrawMatches(
-         Image<Gray, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
-         Image<Gray, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
-         Matrix<int> matchIndices, Bgr matchColor, Bgr singlePointColor,
-         Matrix<Byte> matchesMask, KeypointDrawType flags)
-      {
-         Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
-         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
-         return result;
-      }
-
-      /// <summary>
-      /// Define the Keypoint draw type
-      /// </summary>
-      public enum KeypointDrawType 
-      {
-         /// <summary>
-         /// Two source image, matches and single keypoints will be drawn.
-         /// For each keypoint only the center point will be drawn (without
-         /// the circle around keypoint with keypoint size and orientation).
-         /// </summary>
-         DEFAULT = 0,
-         /// <summary>
-         /// Single keypoints will not be drawn.
-         /// </summary>
-         NOT_DRAW_SINGLE_POINTS = 2,
-         /// <summary>
-         /// For each keypoint the circle around keypoint with keypoint size and
-         /// orientation will be drawn.
-         /// </summary>
-         DRAW_RICH_KEYPOINTS = 4
-      };
-
-      /// <summary>
-      /// Convert the raw keypoints and descriptors to ImageFeature
-      /// </summary>
-      /// <param name="keyPointsVec">The raw keypoints vector</param>
-      /// <param name="descriptors">The raw descriptor matrix</param>
-      /// <returns>An array of image features</returns>
-      public static ImageFeature[] ConvertToImageFeature(VectorOfKeyPoint keyPointsVec, Matrix<float> descriptors)
-      {
-         if (keyPointsVec.Size == 0) return new ImageFeature[0];
-         Debug.Assert(keyPointsVec.Size == descriptors.Rows, "Size of keypoints vector do not match the rows of the descriptors matrix.");
-         int sizeOfdescriptor = descriptors.Cols;
-         MKeyPoint[] keyPoints = keyPointsVec.ToArray();
-         ImageFeature[] features = new ImageFeature[keyPoints.Length];
-         MCvMat header = descriptors.MCvMat;
-         long address = header.data.ToInt64();
-         for (int i = 0; i < keyPoints.Length; i++, address += header.step)
-         {
-            features[i].KeyPoint = keyPoints[i];
-            float[] desc = new float[sizeOfdescriptor];
-            Marshal.Copy(new IntPtr(address), desc, 0, sizeOfdescriptor);
-            features[i].Descriptor = desc;
-         }
-         return features;
-      }
-
-      /// <summary>
-      /// Convert the image features to keypoint vector and descriptor matrix
-      /// </summary>
-      private static void ConvertFromImageFeature(ImageFeature[] features, out VectorOfKeyPoint keyPoints, out Matrix<float> descriptors)
-      {
-         keyPoints = new VectorOfKeyPoint();
-         keyPoints.Push( Array.ConvertAll<ImageFeature, MKeyPoint>(features, delegate(ImageFeature feature) { return feature.KeyPoint; }));
-         descriptors = new Matrix<float>(features.Length, features[0].Descriptor.Length);
-
-         int descriptorLength = features[0].Descriptor.Length;
-         float[,] data = descriptors.Data;
-         for (int i = 0; i < features.Length; i++)
-         {
-            for (int j = 0; j < descriptorLength; j++)
-               data[i, j] = features[i].Descriptor[j];
-         }
-      }
-
       /// <summary>
       /// Detect the if the model features exist in the observed features. If true, an homography matrix is returned, otherwise, null is returned.
       /// </summary>
@@ -138,21 +32,23 @@ namespace Emgu.CV.Features2D
       /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
       /// <returns>If the model features exist in the observed features, an homography matrix is returned, otherwise, null is returned.</returns>
       public static HomographyMatrix Detect(
-         VectorOfKeyPoint modelKeyPoints, Matrix<float> modelDescriptors,
-         VectorOfKeyPoint observedKeyPoints, Matrix<float> observedDescriptors, double uniquenessThreshold)
+         VectorOfKeyPoint modelKeyPoints, Matrix<TDescriptor> modelDescriptors,
+         VectorOfKeyPoint observedKeyPoints, Matrix<TDescriptor> observedDescriptors, double uniquenessThreshold)
       {
-         using (BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32))
-         using (Matrix<int> indices = new Matrix<int>(observedKeyPoints.Size, 2))
+         int k = 2;
+         DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2F32;
+         using (Matrix<int> indices = new Matrix<int>(observedKeyPoints.Size, k))
          using (Matrix<float> dist = new Matrix<float>(indices.Size))
+         using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
          using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
          {
             matcher.Add(modelDescriptors);
-            matcher.KnnMatch(observedDescriptors, indices, dist, 2, null);
+            matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
 
             mask.SetValue(255);
 
             //Stopwatch w1 = Stopwatch.StartNew();
-            VoteForUniqueness(dist, uniquenessThreshold, mask);
+            Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
             //Trace.WriteLine(w1.ElapsedMilliseconds);
 
             int nonZeroCount = CvInvoke.cvCountNonZero(mask);
@@ -160,122 +56,28 @@ namespace Emgu.CV.Features2D
                return null;
 
             //Stopwatch w2 = Stopwatch.StartNew();
-            nonZeroCount = VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
+            nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
             if (nonZeroCount < 4)
                return null;
 
-            return GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 3);
-         }
-      }
+            return Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 3);
 
-      /// <summary>
-      /// Recover the homography matrix using RANDSAC. If the matrix cannot be recovered, null is returned.
-      /// </summary>
-      /// <param name="model">The model keypoints</param>
-      /// <param name="observed">The observed keypoints</param>
-      /// <param name="matchIndices">The match indices</param>
-      /// <param name="ransacReprojThreshold">
-      /// The maximum allowed reprojection error to treat a point pair as an inlier. 
-      /// If srcPoints and dstPoints are measured in pixels, it usually makes sense to set this parameter somewhere in the range 1 to 10.
-      /// </param>
-      /// <param name="mask">
-      /// The mask matrix of which the value might be modified by the function. 
-      /// As input, if the value is 0, the corresponding match will be ignored when computing the homography matrix. 
-      /// If the value is 1 and RANSAC determine the match is an outlier, the value will be set to 0.
-      /// </param>
-      /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
-      public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(VectorOfKeyPoint model, VectorOfKeyPoint observed, Matrix<int> matchIndices, Matrix<Byte> mask, double ransacReprojThreshold)
-      {
-         HomographyMatrix homography = new HomographyMatrix();
-         bool found = getHomographyMatrixFromMatchedFeatures(model, observed, matchIndices, mask, ransacReprojThreshold, homography);
-         if (found)
-         {
-            return homography;
          }
-         else
-         {
-            homography.Dispose();
-            return null;
-         }
-      }
-
-      /// <summary>
-      /// Filter the matched Features, such that if a match is not unique, it is rejected.
-      /// </summary>
-      /// <param name="distance">The matched distances, should have at lease 2 col</param>
-      /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
-      /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
-      public static void VoteForUniqueness(Matrix<float> distance, double uniquenessThreshold, Matrix<Byte> mask)
-      {
-         using (Matrix<float> firstCol = distance.GetCol(0))
-         using (Matrix<float> secCol = distance.GetCol(1))
-         using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
-         using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
-         {
-            CvInvoke.cvDiv(firstCol, secCol, tmp, 1.0);
-            CvInvoke.cvCmpS(tmp, uniquenessThreshold, maskBuffer, CvEnum.CMP_TYPE.CV_CMP_LE);
-            CvInvoke.cvAnd(maskBuffer, mask, mask, IntPtr.Zero);
-         }
-      }
-
-      /// <summary>
-      /// Eliminate the matched features whose scale and rotation do not aggree with the majority's scale and rotation.
-      /// </summary>
-      /// <param name="rotationBins">The numbers of bins for rotation, a good value might be 20 (which means each bin covers 18 degree)</param>
-      /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
-      /// <param name="modelKeyPoints">The keypoints from the model image</param>
-      /// <param name="observedKeyPoints">The keypoints from the observed image</param>
-      /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
-      /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
-      /// <returns> The number of non-zero elements in the resulting mask</returns>
-      public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints, Matrix<int> indices, Matrix<Byte> mask, double scaleIncrement, int rotationBins)
-      {
-         return voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, scaleIncrement, rotationBins);
-      }
-
-      /// <summary>
-      /// Match the Image feature from the observed image to the features from the model image using brute force matching
-      /// </summary>
-      /// <param name="modelDescriptors">The descriptors from the model image</param>
-      /// <param name="observedDescriptors">The descriptors from the observed image</param>
-      /// <param name="k">The number of neighbors to find</param>
-      /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
-      /// <param name="dist">The distance matrix. <paramref name="dist"/>[i,k] = d, indicates the distance bewtween the corresponding match is d</param>
-      [Obsolete("Please use either the BruteForceMatcher or Flann.Index to match descriptors. This function will be removed in the next release.")]
-      public static void DescriptorMatchKnn(Matrix<float> modelDescriptors, Matrix<float> observedDescriptors, int k, out Matrix<int> indices, out Matrix<float> dist)
-      {
-         indices = new Matrix<int>(observedDescriptors.Rows, k);
-         dist = new Matrix<float>(observedDescriptors.Rows, k);
-
-         using (BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32))
-         {
-            matcher.Add(modelDescriptors);
-            matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
-         }
-         /*
-         using (Flann.Index index = new Flann.Index(modelDescriptors))
-         {
-            index.KnnSearch(observedDescriptors, indices, dist, k, 0);
-            CvInvoke.cvSqrt(dist, dist);
-         }*/
       }
       #endregion
 
-      private ImageFeature[] _modelFeatures;
-      //private ImageFeatureMatcher _matcher;
+      //private ImageFeature<TDescriptor>[] _modelFeatures;
       private const int _randsacRequiredMatch = 10;
       private VectorOfKeyPoint _modelKeyPoints;
-      private Matrix<float> _modelDescriptors;
+      private Matrix<TDescriptor> _modelDescriptors;
 
       /// <summary>
       /// Create a Image tracker, where Image is matched with flann
       /// </summary>
       /// <param name="modelFeatures">The Image feature from the model image</param>
-      public Features2DTracker(ImageFeature[] modelFeatures)
+      public Features2DTracker(ImageFeature<TDescriptor>[] modelFeatures)
       {
-         //_matcher = new ImageFeatureMatcher(modelFeatures);
-         ConvertFromImageFeature(modelFeatures, out _modelKeyPoints, out _modelDescriptors);
-         _modelFeatures = modelFeatures;
+         ImageFeature<TDescriptor>.ConvertToRaw(modelFeatures, out _modelKeyPoints, out _modelDescriptors);
       }
 
       /// <summary>
@@ -285,7 +87,7 @@ namespace Emgu.CV.Features2D
       /// <param name="initRegion">The predicted location of the model in the observed image. If not known, use MCvBox2D.Empty as default</param>
       /// <param name="priorMask">The mask that should be the same size as the observed image. Contains a priori value of the probability a match can be found. If you are not sure, pass an image fills with 1.0s</param>
       /// <returns>If a match is found, the homography projection matrix is returned. Otherwise null is returned</returns>
-      public HomographyMatrix CamShiftTrack(ImageFeature[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
+      public HomographyMatrix CamShiftTrack(ImageFeature<TDescriptor>[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
       {
          using (Image<Gray, Single> matchMask = new Image<Gray, Single>(priorMask.Size))
          {
@@ -298,7 +100,7 @@ namespace Emgu.CV.Features2D
 
             foreach (MatchedImageFeature f in matchedFeature)
             {
-               PointF p = f.ObservedFeature.KeyPoint.Point; 
+               PointF p = f.ObservedFeature.KeyPoint.Point;
                matchMaskData[(int)p.Y, (int)p.X, 0] = 1.0f / (float)f.SimilarFeatures[0].Distance;
             }
             #endregion
@@ -345,7 +147,7 @@ namespace Emgu.CV.Features2D
       /// <param name="observedFeatures">The observed features</param>
       /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
       /// <returns>If the model features exist in the observed features, an homography matrix is returned, otherwise, null is returned.</returns>
-      public HomographyMatrix Detect(ImageFeature[] observedFeatures, double uniquenessThreshold)
+      public HomographyMatrix Detect(ImageFeature<TDescriptor>[] observedFeatures, double uniquenessThreshold)
       {
          MatchedImageFeature[] matchedGoodFeatures = MatchFeature(observedFeatures, 2);
 
@@ -423,7 +225,7 @@ namespace Emgu.CV.Features2D
       public struct SimilarFeature
       {
          private double _distance;
-         private ImageFeature _feature;
+         private ImageFeature<TDescriptor> _feature;
 
          /// <summary>
          /// The distance to the comparing Image feature
@@ -443,7 +245,7 @@ namespace Emgu.CV.Features2D
          /// <summary>
          /// A similar Image feature
          /// </summary>
-         public ImageFeature Feature
+         public ImageFeature<TDescriptor> Feature
          {
             get
             {
@@ -460,7 +262,7 @@ namespace Emgu.CV.Features2D
          /// </summary>
          /// <param name="distance">The distance to the comparing Image feature</param>
          /// <param name="feature">A similar Image feature</param>
-         public SimilarFeature(double distance, ImageFeature feature)
+         public SimilarFeature(double distance, ImageFeature<TDescriptor> feature)
          {
             _distance = distance;
             _feature = feature;
@@ -549,7 +351,8 @@ namespace Emgu.CV.Features2D
 
                return matchedGoodFeatures;
             }
-         } else
+         }
+         else
          {
             using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
             {
@@ -605,39 +408,93 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Match the Image feature from the observed image to the features from the model image
+      /// Match the Image feature from the observed image to the features from the model image, using brute force matcher
       /// </summary>
       /// <param name="observedFeatures">The Image feature from the observed image</param>
       /// <param name="k">The number of neighbors to find</param>
       /// <returns>The matched features</returns>
-      public MatchedImageFeature[] MatchFeature(ImageFeature[] observedFeatures, int k)
+      public MatchedImageFeature[] MatchFeature(ImageFeature<TDescriptor>[] observedFeatures, int k)
       {
          VectorOfKeyPoint obsKpts;
-         Matrix<float> obsDscpts;
-         ConvertFromImageFeature(observedFeatures, out obsKpts, out obsDscpts);
+         Matrix<TDescriptor> observedDescriptors;
+         ImageFeature<TDescriptor>.ConvertToRaw(observedFeatures, out obsKpts, out observedDescriptors);
 
-         using (BruteForceMatcher matcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.L2F32))
-         using (Matrix<int> indices = new Matrix<int>(obsKpts.Size, k))
-         using (Matrix<float> dists = new Matrix<float>(indices.Size))
+         try
          {
-            matcher.Add(_modelDescriptors);
-            matcher.KnnMatch(obsDscpts, indices, dists, k, null);
-
-            MatchedImageFeature[] result = new MatchedImageFeature[observedFeatures.Length];
-            for (int i = 0; i < observedFeatures.Length; i++)
+            DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2F32;
+            using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
+            using (Matrix<float> dists = new Matrix<float>(observedDescriptors.Rows, k))
+            using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
             {
-               result[i].SimilarFeatures = new SimilarFeature[k];
-               for (int j = 0; j < k; j++)
-               {
-                  result[i].SimilarFeatures[j].Distance = dists.Data[i, j];
-                  result[i].SimilarFeatures[j].Feature = _modelFeatures[indices.Data[i, j]];
-               }
-               result[i].ObservedFeature = observedFeatures[i];
+               matcher.Add(_modelDescriptors);
+               matcher.KnnMatch(observedDescriptors, indices, dists, k, null);
+               return ConvertToMatchedImageFeature(_modelKeyPoints, _modelDescriptors, obsKpts, observedDescriptors, indices, dists, null);
             }
-            obsKpts.Dispose();
-            obsDscpts.Dispose();
-            return result;
          }
+         finally
+         {
+            obsKpts.Dispose();
+            observedDescriptors.Dispose();
+         }
+      }
+
+      public static MatchedImageFeature[] ConvertToMatchedImageFeature(
+         VectorOfKeyPoint modelKeyPointVec, Matrix<TDescriptor> modelDescriptorMat,
+         VectorOfKeyPoint observedKeyPointVec, Matrix<TDescriptor> observedDescriptorMat,
+         Matrix<int> indices, Matrix<float> dists, Matrix<Byte> mask)
+      {
+         MKeyPoint[] modelKeyPoints = modelKeyPointVec.ToArray();
+         MKeyPoint[] observedKeyPoints = observedKeyPointVec.ToArray();
+
+         int resultLength = (mask == null) ? observedKeyPoints.Length : CvInvoke.cvCountNonZero(mask);
+
+         MatchedImageFeature[] result = new MatchedImageFeature[resultLength];
+
+         MCvMat modelMat = (MCvMat)Marshal.PtrToStructure(modelDescriptorMat.Ptr, typeof(MCvMat));
+         long modelPtr = modelMat.data.ToInt64();
+         int modelStep = modelMat.step;
+
+         MCvMat observedMat = (MCvMat)Marshal.PtrToStructure(observedDescriptorMat.Ptr, typeof(MCvMat));
+         long observedPtr = observedMat.data.ToInt64();
+         int observedStep = observedMat.step;
+
+         int descriptorLength = modelMat.cols;
+         int descriptorSizeInByte = descriptorLength * Marshal.SizeOf(typeof(TDescriptor));
+
+         int k = dists.Cols;
+         TDescriptor[] tmp = new TDescriptor[descriptorLength];
+         GCHandle handle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
+         IntPtr address = handle.AddrOfPinnedObject();
+         int resultIdx = 0;
+
+         for (int i = 0; i < observedKeyPoints.Length; i++)
+         {
+            if (mask != null && mask.Data[i, 0] == 0)
+               continue;
+
+            result[resultIdx].SimilarFeatures = new SimilarFeature[k];
+            for (int j = 0; j < k; j++)
+            {
+               result[resultIdx].SimilarFeatures[j].Distance = dists.Data[i, j];
+               ImageFeature<TDescriptor> imgFeature = new ImageFeature<TDescriptor>();
+               int idx = indices.Data[i, j];
+               imgFeature.KeyPoint = modelKeyPoints[idx];
+               imgFeature.Descriptor = new TDescriptor[descriptorLength];
+               Emgu.Util.Toolbox.memcpy(address, new IntPtr(modelPtr + modelStep * idx), descriptorSizeInByte);
+               tmp.CopyTo(imgFeature.Descriptor, 0);
+               result[resultIdx].SimilarFeatures[j].Feature = imgFeature;
+            }
+
+            ImageFeature<TDescriptor> observedFeature = new ImageFeature<TDescriptor>();
+            observedFeature.KeyPoint = observedKeyPoints[i];
+            observedFeature.Descriptor = new TDescriptor[descriptorLength];
+            Emgu.Util.Toolbox.memcpy(address, new IntPtr(observedPtr + observedStep * i), descriptorSizeInByte);
+            tmp.CopyTo(observedFeature.Descriptor, 0);
+            result[resultIdx].ObservedFeature = observedFeature;
+            resultIdx++;
+         }
+         handle.Free();
+         return result;
       }
 
       /// <summary>
@@ -648,7 +505,7 @@ namespace Emgu.CV.Features2D
          /// <summary>
          /// The observed feature
          /// </summary>
-         public ImageFeature ObservedFeature;
+         public ImageFeature<TDescriptor> ObservedFeature;
 
          private SimilarFeature[] _similarFeatures;
 
@@ -673,7 +530,7 @@ namespace Emgu.CV.Features2D
          /// <param name="observedFeature">The feature from the observed image</param>
          /// <param name="modelFeatures">The matched feature from the model</param>
          /// <param name="dist">The distances between the feature from the observerd image and the matched feature from the model image</param>
-         public MatchedImageFeature(ImageFeature observedFeature, ImageFeature[] modelFeatures, double[] dist)
+         public MatchedImageFeature(ImageFeature<TDescriptor> observedFeature, ImageFeature<TDescriptor>[] modelFeatures, double[] dist)
          {
             ObservedFeature = observedFeature;
             _similarFeatures = new SimilarFeature[modelFeatures.Length];
@@ -681,5 +538,195 @@ namespace Emgu.CV.Features2D
                _similarFeatures[i] = new SimilarFeature(dist[i], modelFeatures[i]);
          }
       }
+   }
+
+   /// <summary>
+   /// Tools for features 2D
+   /// </summary>
+   public static class Features2DToolbox
+   {
+      #region PInvoke
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool getHomographyMatrixFromMatchedFeatures(IntPtr model, IntPtr observed, IntPtr indices, IntPtr mask, double ransacReprojThreshold, IntPtr homography);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void drawMatchedFeatures(
+         IntPtr img1, IntPtr keypoints1,
+         IntPtr img2, IntPtr keypoints2,
+         IntPtr matchIndices,
+         IntPtr outImg,
+         MCvScalar matchColor, MCvScalar singlePointColor,
+         IntPtr matchesMask,
+         Features2DToolbox.KeypointDrawType flags);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void drawKeypoints(
+                          IntPtr image,
+                          IntPtr vectorOfKeypoints,
+                          IntPtr outImage,
+                          MCvScalar color,
+                          Features2DToolbox.KeypointDrawType flags);
+      #endregion
+
+      /// <summary>
+      /// Draw the keypoints found on the image.
+      /// </summary>
+      /// <param name="image">The image</param>
+      /// <param name="keypoints">The keypoints to be drawn</param>
+      /// <param name="color">The color used to draw the keypoints</param>
+      /// <param name="type">The drawing type</param>
+      /// <returns>The image with the keypoints drawn</returns>
+      /// <typeparam name="TColor">The type of color for the source image. Should be either Gray or Bgr</typeparam>
+      public static Image<Bgr, Byte> DrawKeypoints<TColor>(
+         Image<TColor, Byte> image,
+         VectorOfKeyPoint keypoints,
+         Bgr color,
+         Features2DToolbox.KeypointDrawType type)
+         where TColor : struct, IColor
+      {
+         Image<Bgr, Byte> result = new Image<Bgr, Byte>(image.Size);
+         drawKeypoints(image, keypoints, result, color.MCvScalar, type);
+         return result;
+      }
+
+      /// <summary>
+      /// Draw the matched keypoints between the model image and the observered image.
+      /// </summary>
+      /// <param name="modelImage">The model image</param>
+      /// <param name="modelKeypoints">The keypoints in the model image</param>
+      /// <param name="observerdImage">The observed image</param>
+      /// <param name="observedKeyPoints">The keypoints in the observed image</param>
+      /// <param name="matchIndices">The match indices</param>
+      /// <param name="matchColor">The color for the match correspondence lines</param>
+      /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+      /// <param name="matchesMask">The mask for the matches. Use null for all matches.</param>
+      /// <param name="flags">The drawing type</param>
+      /// <returns>The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</returns>
+      /// <typeparam name="TColor">The type of color for the source images. Should be either Gray or Bgr</typeparam>
+      public static Image<Bgr, Byte> DrawMatches<TColor>(
+         Image<TColor, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
+         Image<TColor, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
+         Matrix<int> matchIndices, Bgr matchColor, Bgr singlePointColor,
+         Matrix<Byte> matchesMask, KeypointDrawType flags)
+         where TColor: struct, IColor
+      {
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
+         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
+         return result;
+      }
+
+      /// <summary>
+      /// Define the Keypoint draw type
+      /// </summary>
+      public enum KeypointDrawType
+      {
+         /// <summary>
+         /// Two source image, matches and single keypoints will be drawn.
+         /// For each keypoint only the center point will be drawn (without
+         /// the circle around keypoint with keypoint size and orientation).
+         /// </summary>
+         DEFAULT = 0,
+         /// <summary>
+         /// Single keypoints will not be drawn.
+         /// </summary>
+         NOT_DRAW_SINGLE_POINTS = 2,
+         /// <summary>
+         /// For each keypoint the circle around keypoint with keypoint size and
+         /// orientation will be drawn.
+         /// </summary>
+         DRAW_RICH_KEYPOINTS = 4
+      };
+
+      /// <summary>
+      /// Eliminate the matched features whose scale and rotation do not aggree with the majority's scale and rotation.
+      /// </summary>
+      /// <param name="rotationBins">The numbers of bins for rotation, a good value might be 20 (which means each bin covers 18 degree)</param>
+      /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
+      /// <param name="modelKeyPoints">The keypoints from the model image</param>
+      /// <param name="observedKeyPoints">The keypoints from the observed image</param>
+      /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
+      /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
+      /// <returns> The number of non-zero elements in the resulting mask</returns>
+      public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints, Matrix<int> indices, Matrix<Byte> mask, double scaleIncrement, int rotationBins)
+      {
+         return voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, scaleIncrement, rotationBins);
+      }
+
+      /// <summary>
+      /// Recover the homography matrix using RANDSAC. If the matrix cannot be recovered, null is returned.
+      /// </summary>
+      /// <param name="model">The model keypoints</param>
+      /// <param name="observed">The observed keypoints</param>
+      /// <param name="matchIndices">The match indices</param>
+      /// <param name="ransacReprojThreshold">
+      /// The maximum allowed reprojection error to treat a point pair as an inlier. 
+      /// If srcPoints and dstPoints are measured in pixels, it usually makes sense to set this parameter somewhere in the range 1 to 10.
+      /// </param>
+      /// <param name="mask">
+      /// The mask matrix of which the value might be modified by the function. 
+      /// As input, if the value is 0, the corresponding match will be ignored when computing the homography matrix. 
+      /// If the value is 1 and RANSAC determine the match is an outlier, the value will be set to 0.
+      /// </param>
+      /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
+      public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(VectorOfKeyPoint model, VectorOfKeyPoint observed, Matrix<int> matchIndices, Matrix<Byte> mask, double ransacReprojThreshold)
+      {
+         HomographyMatrix homography = new HomographyMatrix();
+         bool found = getHomographyMatrixFromMatchedFeatures(model, observed, matchIndices, mask, ransacReprojThreshold, homography);
+         if (found)
+         {
+            return homography;
+         }
+         else
+         {
+            homography.Dispose();
+            return null;
+         }
+      }
+
+      /// <summary>
+      /// Filter the matched Features, such that if a match is not unique, it is rejected.
+      /// </summary>
+      /// <param name="distance">The matched distances, should have at lease 2 col</param>
+      /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
+      /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
+      public static void VoteForUniqueness(Matrix<float> distance, double uniquenessThreshold, Matrix<Byte> mask)
+      {
+         using (Matrix<float> firstCol = distance.GetCol(0))
+         using (Matrix<float> secCol = distance.GetCol(1))
+         using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
+         using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
+         {
+            CvInvoke.cvDiv(firstCol, secCol, tmp, 1.0);
+            CvInvoke.cvCmpS(tmp, uniquenessThreshold, maskBuffer, CvEnum.CMP_TYPE.CV_CMP_LE);
+            CvInvoke.cvAnd(maskBuffer, mask, mask, IntPtr.Zero);
+         }
+      }
+
+      /*
+      /// <summary>
+      /// Match the Image feature from the observed image to the features from the model image using brute force matching
+      /// </summary>
+      /// <param name="modelDescriptors">The descriptors from the model image</param>
+      /// <param name="observedDescriptors">The descriptors from the observed image</param>
+      /// <param name="k">The number of neighbors to find</param>
+      /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
+      /// <param name="dist">The distance matrix. <paramref name="dist"/>[i,k] = d, indicates the distance bewtween the corresponding match is d</param>
+      public static void DescriptorMatchKnn<TDescriptor>(Matrix<TDescriptor> modelDescriptors, Matrix<TDescriptor> observedDescriptors, int k,  Matrix<int> indices,  Matrix<float> dist)
+         where TDescriptor : struct 
+      {
+         indices = new Matrix<int>(observedDescriptors.Rows, k);
+         dist = new Matrix<float>(observedDescriptors.Rows, k);
+
+         BruteForceMatcher<TDescriptor>.DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? BruteForceMatcher<TDescriptor>.DistanceType.Hamming : BruteForceMatcher<TDescriptor>.DistanceType.L2F32;
+         using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
+         {
+            matcher.Add(modelDescriptors);
+            matcher.KnnMatch(observedDescriptors, indices, dist, 2, null);
+         }
+      }*/
    }
 }

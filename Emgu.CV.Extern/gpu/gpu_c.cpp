@@ -504,8 +504,7 @@ void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags)
    cv::gpu::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0));
 }
 
-/*
-void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double threshold1, double threshold2, int apertureSize)
+void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
 {
-cv::gpu::Canny(*image, *edges, threshold1, threshold2, apertureSize);
-}*/
+   cv::gpu::Canny(*image, *edges, lowThreshold, highThreshold, apertureSize, L2gradient);
+}

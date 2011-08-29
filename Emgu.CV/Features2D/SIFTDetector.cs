@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped SIFT detector
    /// </summary>
-   public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor
+   public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -40,13 +40,6 @@ namespace Emgu.CV.Features2D
          IntPtr detector,
          IntPtr image,
          IntPtr mask,
-         IntPtr keypoints,
-         IntPtr descriptors);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSIFTDetectorComputeDescriptorsBGR(
-         IntPtr detector,
-         IntPtr image,
          IntPtr keypoints,
          IntPtr descriptors);
 
@@ -134,12 +127,12 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image to detect features from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      public ImageFeature<float>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          using (VectorOfKeyPoint pts = DetectKeyPointsRaw(image, mask))
          using (Matrix<float> descVec = ComputeDescriptorsRaw(image, mask, pts))
          {
-            return Features2DTracker.ConvertToImageFeature(pts, descVec);
+            return ImageFeature<float>.ConvertFromRaw(pts, descVec);
          }
       }
 
@@ -177,15 +170,15 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
       /// <returns>The descriptors founded on the keypoint location</returns>
-      public ImageFeature[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
+      public ImageFeature<float>[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
       {
-         if (keyPoints.Length == 0) return new ImageFeature[0];
+         if (keyPoints.Length == 0) return new ImageFeature<float>[0];
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
             kpts.Push(keyPoints);
             using (Matrix<float> descriptor = ComputeDescriptorsRaw(image, mask, kpts))
             {
-               return Features2DTracker.ConvertToImageFeature(kpts, descriptor);
+               return ImageFeature<float>.ConvertFromRaw(kpts, descriptor);
             }
          }
       }
@@ -197,6 +190,7 @@ namespace Emgu.CV.Features2D
       {
          CvSIFTDetectorRelease(ref _ptr);
          CvSiftFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvSiftDescriptorExtractorRelease(ref _descriptorExtractorPtr);
       }
 
       #region IKeyPointDetector Members
@@ -226,8 +220,38 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      #region IDescriptorExtractor Members
       /// <summary>
+      /// Compute the descriptor given the image and the point location
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
+      /// <returns>The descriptors founded on the keypoint location</returns>
+      private Matrix<float> ComputeDescriptorsRawHelper(CvArray<Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
+      {
+         if (mask != null)
+            keyPoints.FilterByPixelsMask(mask);  
+
+         int count = keyPoints.Size;
+         if (count == 0) return null;
+         Matrix<float> descriptors = new Matrix<float>(count, image.NumberOfChannels * DescriptorSize, 1);
+         CvSIFTDetectorComputeDescriptors(_ptr, image, mask, keyPoints, descriptors);
+         return descriptors;
+      }
+
+      /// <summary>
+      /// Compute the descriptor given the image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
+      /// </summary>
+      /// <param name="image">The image where the descriptor will be computed from</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
+      /// <returns>The descriptors founded on the keypoint location</returns>
+      public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
+      {
+         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
+      }
+
+      #region IDescriptorExtractor<float>
       /// Compute the descriptor given the image and the point location
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
@@ -236,14 +260,10 @@ namespace Emgu.CV.Features2D
       /// <returns>The descriptors founded on the keypoint location</returns>
       public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
-         int count = keyPoints.Size;
-         if (count == 0) return null;
-         Matrix<float> descriptors = new Matrix<float>(count, DescriptorSize, 1);
-         CvSIFTDetectorComputeDescriptors(_ptr, image, mask, keyPoints, descriptors);
-         return descriptors;
+         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
       }
 
-      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
          get { return _descriptorExtractorPtr; }
       }
