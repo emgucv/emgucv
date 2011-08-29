@@ -665,6 +665,38 @@ namespace Emgu.CV.Test
          
       }
 
+      public void TestPyrLK()
+      {
+         const int MAX_CORNERS = 500;
+         Capture c = new Capture();
+         ImageViewer viewer = new ImageViewer();
+         Image<Gray, Byte> oldImage = null;
+         Image<Gray, Byte> currentImage = null;
+         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         {
+            if (oldImage == null)
+            {
+               oldImage = c.QueryGrayFrame();
+            }
+
+            currentImage = c.QueryGrayFrame();
+            PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
+            PointF[] shiftedFeatures;
+            Byte[] status;
+            float[] trackErrors;
+            OpticalFlow.PyrLK(oldImage, currentImage, features, new Size(9, 9), 3, new MCvTermCriteria(20, 0.05),
+               out shiftedFeatures, out status, out trackErrors);
+
+            Image<Gray, Byte> displayImage = currentImage.Clone();
+            for (int i = 0; i < features.Length; i++)
+               displayImage.Draw(new LineSegment2DF(features[i], shiftedFeatures[i]), new Gray(), 2);
+
+            oldImage = currentImage;
+            viewer.Image = displayImage;
+         });
+         viewer.ShowDialog();
+      }
+
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 400);
