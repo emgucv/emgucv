@@ -64,6 +64,7 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image to extract SURF features from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>An array of FAST key points</returns>
+      /// <remarks>FAST keypoint do not contains orientation (angle = -1). Size are fixed to 6.0</remarks>
       public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
