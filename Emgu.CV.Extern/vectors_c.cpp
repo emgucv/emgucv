@@ -317,3 +317,8 @@ void VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, C
    cv::Mat m = cv::cvarrToMat(mask);
    cv::KeyPointsFilter::runByPixelsMask(*keypoints, m);
 }
+
+void VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv::KeyPoint* keypoint)
+{
+   *keypoint = keypoints->at(index);
+}

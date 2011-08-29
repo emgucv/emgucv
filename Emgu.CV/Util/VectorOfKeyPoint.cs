@@ -48,6 +48,9 @@ namespace Emgu.CV.Util
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void VectorOfKeyPointFilterByPixelsMask(IntPtr keypoints, IntPtr mask);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void VectorOfKeyPointGetItem(IntPtr keypoints, int index, ref MKeyPoint keypoint);
       #endregion
 
       /// <summary>
@@ -153,6 +156,21 @@ namespace Emgu.CV.Util
       public void FilterByPixelsMask(Image<Gray, Byte> mask)
       {
          VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
+      }
+
+      /// <summary>
+      /// Get the item in the specific index
+      /// </summary>
+      /// <param name="index">The index</param>
+      /// <returns>The item in the specific index</returns>
+      public MKeyPoint this[int index]
+      {
+         get
+         {
+            MKeyPoint result = new MKeyPoint();
+            VectorOfKeyPointGetItem(_ptr, index, ref result);
+            return result;
+         }
       }
 
       /// <summary>
