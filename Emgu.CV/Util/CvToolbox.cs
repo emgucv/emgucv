@@ -123,20 +123,21 @@ namespace Emgu.CV.Util
       /// </summary>
       /// <param name="descriptors">An array of descriptors</param>
       /// <returns>A matrix where each row is a descriptor</returns>
-      public static Matrix<float> GetMatrixFromDescriptors(float[][] descriptors)
+      public static Matrix<T> GetMatrixFromDescriptors<T>(T[][] descriptors)
+         where T: struct
       {
          int rows = descriptors.Length;
          int cols = descriptors[0].Length;
-         Matrix<float> res = new Matrix<float>(rows, cols);
+         Matrix<T> res = new Matrix<T>(rows, cols);
          MCvMat mat = res.MCvMat;
          long dataPos = mat.data.ToInt64();
-
-         for (int i = 0; i < rows; i++)
+         int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
+         for (int i = 0; i < rows; i++, dataPos += mat.step)
          {
-            Marshal.Copy(descriptors[i], 0, new IntPtr(dataPos), cols);
-            dataPos += mat.step;
+            GCHandle handle = GCHandle.Alloc(descriptors[i], GCHandleType.Pinned);
+            Emgu.Util.Toolbox.memcpy(new IntPtr(dataPos), handle.AddrOfPinnedObject(), rowSizeInBytes);
+            handle.Free();
          }
-
          return res;
       }
 
