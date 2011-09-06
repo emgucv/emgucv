@@ -123,7 +123,7 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
 {
    cv::Mat trainIdxCPU = cv::cvarrToMat(trainIdx);
    const int* trainIdx_ptr = trainIdxCPU.ptr<int>();
-   int nQuery = trainIdxCPU.cols;
+   int nQuery = trainIdxCPU.rows;
 
    if (distances)
    {   
@@ -131,8 +131,8 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
       const float* distance_ptr = distanceCPU.ptr<float>();
       if (mask)
       {
-         cv::Mat maskMat =  cv::cvarrToMat(mask);
-         const unsigned char* mask_ptr = maskMat.ptr<unsigned char>();
+         cv::Mat_<unsigned char> maskMat = (cv::Mat_<unsigned char>) cv::cvarrToMat(mask);
+         const unsigned char* mask_ptr = maskMat.ptr();
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr, ++distance_ptr, ++mask_ptr)
          {
             if (*mask_ptr && *trainIdx_ptr != -1)
@@ -156,8 +156,8 @@ void VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* tra
    {
       if (mask)
       {
-         cv::Mat maskMat =  cv::cvarrToMat(mask);
-         const unsigned char* mask_ptr = maskMat.ptr<unsigned char>();
+         cv::Mat_<unsigned char> maskMat = (cv::Mat_<unsigned char>) cv::cvarrToMat(mask);
+         const unsigned char* mask_ptr = maskMat.ptr();
          for (int queryIdx = 0; queryIdx < nQuery; ++queryIdx, ++trainIdx_ptr, ++mask_ptr)
          {
             if (*mask_ptr && *trainIdx_ptr != -1)
