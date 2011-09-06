@@ -324,7 +324,9 @@ namespace Emgu.CV.GPU
       /// <returns>A GpuMat of different shape</returns>
       public GpuMat<TDepth> Reshape(int newCn, int newRows)
       {
-         return new GpuMat<TDepth>(GpuInvoke.Reshape(_ptr, newCn, newRows));
+         GpuMat<TDepth> result = new GpuMat<TDepth>();
+         GpuInvoke.GpuMatReshape(this, result, newCn, newRows);
+         return result;
       }
 
       /// <summary>

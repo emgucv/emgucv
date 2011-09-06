@@ -80,9 +80,14 @@ namespace Emgu.CV.GPU
       /// <param name="distance">The matrix where the distance valus is stored. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Size.Height</param>
       /// <param name="k">The number of nearest neighbours to be searched</param>
       /// <param name="mask">The mask</param>
-      public void KnnMatch(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public void KnnMatch(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask, Stream stream)
       {
-         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask);
+         if (k == 2 && ! (modelIdx.IsContinuous && distance.IsContinuous) )
+         {
+            throw new ArgumentException("For k == 2, the allocated index matrix and distance matrix must be continuous");
+         }
+         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
       }
 
       /// <summary>
@@ -110,6 +115,7 @@ namespace Emgu.CV.GPU
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
          IntPtr trainIdx, IntPtr distance,
-         int k, IntPtr mask);
+         int k, IntPtr mask, 
+         IntPtr stream);
    }
 }

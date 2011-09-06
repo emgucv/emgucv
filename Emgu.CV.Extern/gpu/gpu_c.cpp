@@ -242,12 +242,10 @@ void gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int interpol
    }
 }
 
-cv::gpu::GpuMat* gpuMatReshape(const cv::gpu::GpuMat* src, int cn, int rows)
+CVAPI(void) gpuMatReshape(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int cn, int rows)
 {
-   cv::gpu::GpuMat* result = new cv::gpu::GpuMat();
    cv::gpu::GpuMat tmp = src->reshape(cn, rows);
-   tmp.swap(*result);
-   return result;
+   dst->swap(tmp);
 }
 
 void gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode, cv::gpu::Stream* stream)
@@ -335,6 +333,24 @@ void gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
 void gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method)
 {
    cv::gpu::matchTemplate(*image, *templ, *result, method);
+}
+
+void gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream)
+{
+   cv::gpu::pyrDown(*src, *dst, borderType, stream ? *stream : cv::gpu::Stream::Null());
+}
+
+void gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream)
+{
+   cv::gpu::pyrUp(*src, *dst, borderType, stream ? *stream : cv::gpu::Stream::Null());
+}
+
+void gpuMatBlendLinear(
+            const cv::gpu::GpuMat* img1, const cv::gpu::GpuMat* img2, 
+            const cv::gpu::GpuMat* weights1, const cv::gpu::GpuMat* weights2, 
+            cv::gpu::GpuMat* result, cv::gpu::Stream* stream)
+{
+   cv::gpu::blendLinear(*img1, *img2, *weights1, *weights2, *result, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev)
@@ -449,9 +465,9 @@ void gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  c
    cv::gpu::warpPerspective(*src, *dst, Mat, dst->size(), flags, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap)
+void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue)
 {
-   cv::gpu::remap(*src, *dst, *xmap, *ymap);
+   cv::gpu::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, borderValue);
 }
 
 void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,

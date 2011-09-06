@@ -93,7 +93,7 @@ CVAPI(void) gpuMatSetTo(cv::gpu::GpuMat* mat, const CvScalar s, const cv::gpu::G
 
 CVAPI(void) gpuMatResize(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int interpolation, cv::gpu::Stream* stream);
 
-CVAPI(cv::gpu::GpuMat*) gpuMatReshape(const cv::gpu::GpuMat* src, int cn, int rows);
+CVAPI(void) gpuMatReshape(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int cn, int rows);
 
 CVAPI(void) gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode, cv::gpu::Stream* stream);
 
@@ -122,6 +122,15 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
                             const cv::gpu::GpuMat* mask);
 
 CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method);
+
+CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatBlendLinear(
+            const cv::gpu::GpuMat* img1, const cv::gpu::GpuMat* img2, 
+            const cv::gpu::GpuMat* weights1, const cv::gpu::GpuMat* weights2, 
+            cv::gpu::GpuMat* result, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev);
 
@@ -201,7 +210,7 @@ CVAPI(void) gpuBruteForceMatcherKnnMatch(
    cv::gpu::BruteForceMatcher_GPU_base* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
    cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 
-   int k, const cv::gpu::GpuMat* mask);
+   int k, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
 //----------------------------------------------------------------------------
 //

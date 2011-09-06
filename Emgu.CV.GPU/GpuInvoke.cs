@@ -139,6 +139,26 @@ namespace Emgu.CV.GPU
       public static extern void GpuMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask, IntPtr stream);
 
       /// <summary>
+      /// Resize the GpuMat
+      /// </summary>
+      /// <param name="src">The input GpuMat</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="interpolation">The interpolation type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatResize")]
+      public static extern void GpuMatResize(IntPtr src, IntPtr dst, CvEnum.INTER interpolation, IntPtr stream);
+
+      /// <summary>
+      /// Reshape the src GpuMat  
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The resulting GpuMat, as input it should be an empty GpuMat.</param>
+      /// <param name="cn">The new number of channels</param>
+      /// <param name="rows">The new number of rows</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatReshape")]
+      public static extern void GpuMatReshape(IntPtr src, IntPtr dst, int cn, int rows);
+
+      /// <summary>
       /// Release the GpuMat
       /// </summary>
       /// <param name="mat">Pointer to the GpuMat</param>
@@ -785,8 +805,11 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The dstination GpuMat. Supports CV_8UC1, CV_8UC3 source types. </param>
       /// <param name="xmap">The xmap. Supports CV_32FC1 map type.</param>
       /// <param name="ymap">The ymap. Supports CV_32FC1 map type.</param>
+      /// <param name="interpolation">Interpolation type.</param>
+      /// <param name="borderMode">Border mode. Use BORDER_CONSTANT for default.</param>
+      /// <param name="borderValue">The value of the border.</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRemap")]
-      public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap);
+      public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap, CvEnum.INTER interpolation, CvEnum.BORDER_TYPE borderMode, MCvScalar borderValue);
 
       /// <summary>
       /// Performs mean-shift filtering for each point of the source image. It maps each point of the source
