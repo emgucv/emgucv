@@ -252,6 +252,7 @@ namespace Emgu.CV.Features2D
       }
 
       #region IDescriptorExtractor<float>
+      /// <summary>
       /// Compute the descriptor given the image and the point location
       /// </summary>
       /// <param name="image">The image where the descriptor will be computed from</param>
