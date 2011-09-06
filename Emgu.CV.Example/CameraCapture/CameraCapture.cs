@@ -17,17 +17,26 @@ namespace CameraCapture
 {
    public partial class CameraCapture : Form
    {
-      private Capture _capture;
+      private Capture _capture = null;
       private bool _captureInProgress;
 
       public CameraCapture()
       {
          InitializeComponent();
+         try
+         {
+            _capture = new Capture();
+            _capture.ImageGrabbed += ProcessFrame;
+         }
+         catch (NullReferenceException excpt)
+         {
+            MessageBox.Show(excpt.Message);
+         }
       }
 
       private void ProcessFrame(object sender, EventArgs arg)
       {
-         Image<Bgr, Byte> frame = _capture.QueryFrame();
+         Image<Bgr, Byte> frame = _capture.RetrieveBgrFrame();
 
          Image<Gray, Byte> grayFrame = frame.Convert<Gray, Byte>();
          Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
@@ -42,34 +51,20 @@ namespace CameraCapture
 
       private void captureButtonClick(object sender, EventArgs e)
       {
-         #region if capture is not created, create it now
-         if (_capture == null)
-         {
-            try
-            {
-               _capture = new Capture();
-            }
-            catch (NullReferenceException excpt)
-            {
-               MessageBox.Show(excpt.Message);
-            }
-         }
-         #endregion
-
          if (_capture != null)
          {
             if (_captureInProgress)
             {  //stop the capture
                captureButton.Text = "Start Capture";
-               Application.Idle -= ProcessFrame;
+               _capture.Pause();
             }
             else
             {
                //start the capture
                captureButton.Text = "Stop";
-               Application.Idle += ProcessFrame;
+               _capture.Start();
             }
-            
+
             _captureInProgress = !_captureInProgress;
          }
       }

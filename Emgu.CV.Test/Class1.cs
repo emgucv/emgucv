@@ -234,29 +234,34 @@ namespace Emgu.CV.Test
 
       public void CameraTest()
       {
-         ImageViewer viewer = new ImageViewer(); //create an image viewer
-         Capture capture = new Capture(); //create a camera captue
-         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
-         {  //run this until application closed (close button click on image viewer)
-            viewer.Image = capture.QueryFrame(); //draw the image obtained from camera
-         });
-         viewer.ShowDialog(); //show the image viewer
+         using (ImageViewer viewer = new ImageViewer()) //create an image viewer
+         using (Capture capture = new Capture()) //create a camera captue
+         {
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
+            {  //run this until application closed (close button click on image viewer)
+               viewer.Image = capture.RetrieveBgrFrame(0); //draw the image obtained from camera
+            };
+            capture.Start();
+            viewer.ShowDialog(); //show the image viewer
+         }
       }
 
       public void CameraTest2()
       {
-         ImageViewer viewer = new ImageViewer();
-         Capture capture = new Capture();
-         Application.Idle += delegate(object sender, EventArgs e)
+         using (ImageViewer viewer = new ImageViewer())
+         using (Capture capture = new Capture())
          {
-            Image<Bgr, Byte> img = capture.QueryFrame();
-            img = img.Resize(0.8, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
-            Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
-            gray._EqualizeHist();
-
-            viewer.Image = gray;
-         };
-         viewer.ShowDialog();
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
+            {
+               Image<Bgr, Byte> img = capture.RetrieveBgrFrame(0);
+               img = img.Resize(0.8, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+               Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
+               gray._EqualizeHist();
+               viewer.Image = gray;
+            };
+            capture.Start();
+            viewer.ShowDialog();
+         }
       }
 
       public void TestHaarPerformance()
@@ -635,10 +640,6 @@ namespace Emgu.CV.Test
 
       public void TestBlobTracking()
       {
-         Capture capture = new Capture();
-        
-         ImageViewer viewer = new ImageViewer();
-
          BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
          //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
          param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
@@ -648,21 +649,25 @@ namespace Emgu.CV.Test
 
          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
 
-         Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+         using(ImageViewer viewer = new ImageViewer())
+         using (Capture capture = new Capture())
          {
-            tracker.Process(capture.QuerySmallFrame().PyrUp().Convert<Gray, Byte>());
-            
-            Image<Gray, Byte> img = tracker.ForgroundMask;
-            //viewer.Image = tracker.GetForgroundMask();
-            foreach (MCvBlob blob in tracker)
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
-               img.Draw( (Rectangle)blob, new Gray(255.0), 2);
-               img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
-            }
-            viewer.Image = img;
-         });
-         viewer.ShowDialog();
-         
+               tracker.Process(capture.QuerySmallFrame().PyrUp().Convert<Gray, Byte>());
+
+               Image<Gray, Byte> img = tracker.ForgroundMask;
+               //viewer.Image = tracker.GetForgroundMask();
+               foreach (MCvBlob blob in tracker)
+               {
+                  img.Draw((Rectangle)blob, new Gray(255.0), 2);
+                  img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
+               }
+               viewer.Image = img;
+            };
+            capture.Start();
+            viewer.ShowDialog();
+         }
       }
 
       public void TestPyrLK()

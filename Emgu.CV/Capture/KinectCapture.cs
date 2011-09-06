@@ -94,7 +94,7 @@ namespace Emgu.CV
       /// Retrieve Gray frame from Kinect
       /// </summary>
       /// <returns>A Gray frame from Kinect</returns>
-      public Image<Gray, Byte> RetrieveGrayFrame()
+      public override Image<Gray, Byte> RetrieveGrayFrame()
       {
          return RetrieveGrayFrame((int)OpenNIDataType.GrayImage);
       }
@@ -103,7 +103,7 @@ namespace Emgu.CV
       /// Retrieve Bgr frame from Kinect
       /// </summary>
       /// <returns>A Bgr frame from Kinect</returns>
-      public Image<Bgr, Byte> RetrieveBgrFrame()
+      public override Image<Bgr, Byte> RetrieveBgrFrame()
       {
          return RetrieveBgrFrame((int)OpenNIDataType.BgrImage);
       }

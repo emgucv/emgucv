@@ -7,6 +7,7 @@ using System;
 using System.ServiceModel;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Threading;
 using Emgu.Util;
 using Emgu.CV.Structure;
 
@@ -21,6 +22,8 @@ namespace Emgu.CV
        IDuplexCapture,
        ICapture
    {
+      private Thread _captureThread = null;
+
       /// <summary>
       /// the type of flipping
       /// </summary>
@@ -48,6 +51,7 @@ namespace Emgu.CV
 
       private CaptureModuleType _captureModuleType;
 
+      #region Properties
       /// <summary>
       /// Get the type of the capture module
       /// </summary>
@@ -59,7 +63,6 @@ namespace Emgu.CV
          }
       }
 
-      #region Properties
       /// <summary>
       /// Get and set the flip type
       /// </summary>
@@ -126,12 +129,6 @@ namespace Emgu.CV
       }
       #endregion
 
-      ///<summary> Create a capture using the default camera </summary>
-      public Capture()
-         : this(0)
-      {
-      }
-
       #region constructors
       /// <summary>
       /// Create a capture using the specific camera
@@ -139,6 +136,12 @@ namespace Emgu.CV
       /// <param name="captureType">The capture type</param>
       public Capture(CvEnum.CaptureType captureType)
          : this((int)captureType)
+      {
+      }
+
+      ///<summary> Create a capture using the default camera </summary>
+      public Capture()
+         : this(0)
       {
       }
 
@@ -189,14 +192,10 @@ namespace Emgu.CV
       {
 #if TEST_CAPTURE
 #else
-         /*
-         if (_captureModuleType == CaptureModuleType.FFMPEG)
+         CvInvoke.cvReleaseCapture(ref _ptr);
+         if (_captureThread != null && _captureThread.IsAlive)
          {
-            CvInvoke.cvReleaseCapture_FFMPEG(ref _ptr);
-         }
-         else*/
-         {
-            CvInvoke.cvReleaseCapture(ref _ptr);
+            _captureThread.Abort();
          }
 #endif
       }
@@ -209,7 +208,7 @@ namespace Emgu.CV
       /// <returns>The value of the specific property</returns>
       public double GetCaptureProperty(CvEnum.CAP_PROP index)
       {
-         return /*_captureModuleType == CaptureModuleType.FFMPEG ? CvInvoke.cvGetCaptureProperty_FFMPEG(Ptr, index) :*/ CvInvoke.cvGetCaptureProperty(_ptr, index);
+         return CvInvoke.cvGetCaptureProperty(_ptr, index);
       }
 
       /// <summary>
@@ -219,11 +218,7 @@ namespace Emgu.CV
       /// <param name="value">Value of the property</param>
       public void SetCaptureProperty(CvEnum.CAP_PROP property, double value)
       {
-         /*
-         if (_captureModuleType == CaptureModuleType.FFMPEG)
-            CvInvoke.cvSetCaptureProperty_FFMPEG(Ptr, property, value);
-         else*/
-            CvInvoke.cvSetCaptureProperty(Ptr, property, value);
+         CvInvoke.cvSetCaptureProperty(Ptr, property, value);
       }
 
       /// <summary>
@@ -232,7 +227,124 @@ namespace Emgu.CV
       /// <returns>True on success</returns>
       public virtual bool Grab()
       {
-         return /*_captureModuleType == CaptureModuleType.FFMPEG ? CvInvoke.cvGrabFrame_FFMPEG(_ptr) :*/ CvInvoke.cvGrabFrame(_ptr);
+         bool grabbed = CvInvoke.cvGrabFrame(_ptr);
+         if (grabbed) ImageGrabbed(this, new EventArgs());
+         return grabbed;
+      }
+
+      #region Grab process
+      /// <summary>
+      /// The event handler when an image is grabbed
+      /// </summary>
+      /// <param name="sender">The capture</param>
+      /// <param name="e">The event args</param>
+      public delegate void GrabEventHandler(object sender, EventArgs e);
+
+      /// <summary>
+      /// The event to be called when an image is grabbed
+      /// </summary>
+      public event GrabEventHandler ImageGrabbed;
+
+      private volatile bool _pauseGrabProcess;
+      private void Run()
+      {
+         while (this.Grab())
+         {
+            if (_pauseGrabProcess)
+               try
+               {
+                  Thread.Sleep(Timeout.Infinite);
+               }
+               catch (ThreadInterruptedException)
+               {
+               }
+               catch (ThreadAbortException)
+               {
+                  break;
+               }
+         }
+      }
+
+      /// <summary>
+      /// Start the grab process in a sperate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
+      /// </summary>
+      public void Start()
+      {
+         _pauseGrabProcess = false;
+
+         if (_captureThread == null || !_captureThread.IsAlive)
+         {
+            //create a new thread
+            ThreadStart ts = new ThreadStart(Run);
+            _captureThread = new Thread(ts);
+            _captureThread.Start();
+         }
+         else if (_captureThread.ThreadState == ThreadState.WaitSleepJoin)
+         {
+            _captureThread.Interrupt();
+         }
+         else if (_captureThread.ThreadState != ThreadState.Running)
+         {
+            _captureThread.Start();
+         }
+      }
+
+      /// <summary>
+      /// Pause the grab process if it is running.
+      /// </summary>
+      public void Pause()
+      {
+         if (_captureThread != null && _captureThread.IsAlive)
+         {
+            _pauseGrabProcess = true;
+         }
+      }
+
+      /// <summary>
+      /// Wait for the grabbing thread to complete
+      /// </summary>
+      public void Wait()
+      {
+         if (_captureThread != null)
+         {
+            _captureThread.Join();
+         }
+      }
+
+      /// <summary>
+      /// Stop the grabbing thread
+      /// </summary>
+      public void Stop()
+      {
+         if (_captureThread != null)
+         {
+            _pauseGrabProcess = false;
+            _captureThread.Abort();
+         }
+      }
+
+      /// <summary>
+      /// The current state of the grab process
+      /// </summary>
+      public ThreadState GrabProcessState
+      {
+         get
+         {
+            if (_captureThread == null)
+               return ThreadState.Unstarted;
+            else
+               return _captureThread.ThreadState;
+         }
+      }
+      #endregion
+
+      /// <summary> 
+      /// Retrieve a Gray image frame after Grab()
+      /// </summary>
+      /// <returns> A Gray image frame</returns>
+      public virtual Image<Gray, Byte> RetrieveGrayFrame()
+      {
+         return RetrieveGrayFrame(0);
       }
 
       /// <summary> 
@@ -242,7 +354,7 @@ namespace Emgu.CV
       /// <returns> A Gray image frame</returns>
       public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIdx)
       {
-         IntPtr img = /*(_captureModuleType == CaptureModuleType.FFMPEG) ? CvInvoke.cvRetrieveFrame_FFMPEG(Ptr, streamIdx) :*/ CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
          if (img == IntPtr.Zero)
             return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
@@ -267,11 +379,20 @@ namespace Emgu.CV
       /// <summary> 
       /// Retrieve a Bgr image frame after Grab()
       /// </summary>
+      /// <returns> A Bgr image frame</returns>
+      public virtual Image<Bgr, Byte> RetrieveBgrFrame()
+      {
+         return RetrieveBgrFrame(0);
+      }
+
+      /// <summary> 
+      /// Retrieve a Bgr image frame after Grab()
+      /// </summary>
       /// <param name="streamIdx">Stream index</param>
       /// <returns> A Bgr image frame</returns>
       public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIdx)
       {
-         IntPtr img = /*(_captureModuleType == CaptureModuleType.FFMPEG) ? CvInvoke.cvRetrieveFrame_FFMPEG(Ptr, streamIdx) :*/ CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
          if (img == IntPtr.Zero)
             return null;
 
@@ -322,7 +443,7 @@ namespace Emgu.CV
       public virtual Image<Bgr, Byte> QuerySmallFrame()
       {
          using (Image<Bgr, Byte> frame = QueryFrame())
-            return frame.PyrDown();
+            return frame == null? null : frame.PyrDown();
       }
       #endregion
 

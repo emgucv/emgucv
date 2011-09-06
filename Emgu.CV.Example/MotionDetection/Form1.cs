@@ -46,13 +46,14 @@ namespace MotionDetection
                 0.05, //in second, parameter for cvCalcMotionGradient
                 0.5); //in second, parameter for cvCalcMotionGradient
 
-            Application.Idle += ProcessFrame;
+            _capture.ImageGrabbed += ProcessFrame;
+            _capture.Start();
          }
       }
 
       private void ProcessFrame(object sender, EventArgs e)
       {
-         using (Image<Bgr, Byte> image = _capture.QueryFrame())
+         using (Image<Bgr, Byte> image = _capture.RetrieveBgrFrame())
          using (MemStorage storage = new MemStorage()) //create storage for motion components
          {
             if (_forgroundDetector == null)
@@ -119,7 +120,14 @@ namespace MotionDetection
 
       private void UpdateText(String text)
       {
-         label3.Text = text;
+         if (InvokeRequired && !IsDisposed)
+         {
+            Invoke((Action<String>)UpdateText, text);
+         }
+         else
+         {
+            label3.Text = text;
+         }
       }
 
       private static void DrawMotion(Image<Bgr, Byte> image, Rectangle motionRegion, double angle, Bgr color)
@@ -155,6 +163,11 @@ namespace MotionDetection
          }
 
          base.Dispose(disposing);
+      }
+
+      private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+      {
+         _capture.Stop();
       }
    }
 }
