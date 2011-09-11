@@ -20,8 +20,11 @@ namespace MotionDetection
            this.label3 = new System.Windows.Forms.Label();
            this.motionImageBox = new Emgu.CV.UI.ImageBox();
            this.capturedImageBox = new Emgu.CV.UI.ImageBox();
+           this.forgroundImageBox = new Emgu.CV.UI.ImageBox();
+           this.label4 = new System.Windows.Forms.Label();
            ((System.ComponentModel.ISupportInitialize)(this.motionImageBox)).BeginInit();
            ((System.ComponentModel.ISupportInitialize)(this.capturedImageBox)).BeginInit();
+           ((System.ComponentModel.ISupportInitialize)(this.forgroundImageBox)).BeginInit();
            this.SuspendLayout();
            // 
            // label1
@@ -36,7 +39,7 @@ namespace MotionDetection
            // label2
            // 
            this.label2.AutoSize = true;
-           this.label2.Location = new System.Drawing.Point(424, 18);
+           this.label2.Location = new System.Drawing.Point(835, 18);
            this.label2.Name = "label2";
            this.label2.Size = new System.Drawing.Size(39, 13);
            this.label2.TabIndex = 3;
@@ -53,7 +56,7 @@ namespace MotionDetection
            // 
            // motionImageBox
            // 
-           this.motionImageBox.Location = new System.Drawing.Point(419, 53);
+           this.motionImageBox.Location = new System.Drawing.Point(838, 53);
            this.motionImageBox.Name = "motionImageBox";
            this.motionImageBox.Size = new System.Drawing.Size(397, 353);
            this.motionImageBox.TabIndex = 2;
@@ -67,11 +70,30 @@ namespace MotionDetection
            this.capturedImageBox.TabIndex = 0;
            this.capturedImageBox.TabStop = false;
            // 
+           // forgroundImageBox
+           // 
+           this.forgroundImageBox.Location = new System.Drawing.Point(427, 53);
+           this.forgroundImageBox.Name = "forgroundImageBox";
+           this.forgroundImageBox.Size = new System.Drawing.Size(397, 353);
+           this.forgroundImageBox.TabIndex = 5;
+           this.forgroundImageBox.TabStop = false;
+           // 
+           // label4
+           // 
+           this.label4.AutoSize = true;
+           this.label4.Location = new System.Drawing.Point(424, 18);
+           this.label4.Name = "label4";
+           this.label4.Size = new System.Drawing.Size(84, 13);
+           this.label4.TabIndex = 6;
+           this.label4.Text = "Forground Mask";
+           // 
            // Form1
            // 
            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-           this.ClientSize = new System.Drawing.Size(841, 474);
+           this.ClientSize = new System.Drawing.Size(1258, 482);
+           this.Controls.Add(this.label4);
+           this.Controls.Add(this.forgroundImageBox);
            this.Controls.Add(this.label3);
            this.Controls.Add(this.label2);
            this.Controls.Add(this.motionImageBox);
@@ -82,6 +104,7 @@ namespace MotionDetection
            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
            ((System.ComponentModel.ISupportInitialize)(this.motionImageBox)).EndInit();
            ((System.ComponentModel.ISupportInitialize)(this.capturedImageBox)).EndInit();
+           ((System.ComponentModel.ISupportInitialize)(this.forgroundImageBox)).EndInit();
            this.ResumeLayout(false);
            this.PerformLayout();
 
@@ -94,6 +117,8 @@ namespace MotionDetection
         private Emgu.CV.UI.ImageBox motionImageBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private Emgu.CV.UI.ImageBox forgroundImageBox;
+        private System.Windows.Forms.Label label4;
     }
 }
 

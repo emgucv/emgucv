@@ -43,8 +43,8 @@ namespace MotionDetection
          {
             _motionHistory = new MotionHistory(
                 1.0, //in second, the duration of motion history you wants to keep
-                0.05, //in second, parameter for cvCalcMotionGradient
-                0.5); //in second, parameter for cvCalcMotionGradient
+                0.05, //in second, maxDelta for cvCalcMotionGradient
+                0.5); //in second, minDelta for cvCalcMotionGradient
 
             _capture.ImageGrabbed += ProcessFrame;
             _capture.Start();
@@ -69,6 +69,8 @@ namespace MotionDetection
 
             //update the motion history
             _motionHistory.Update(_forgroundDetector.ForgroundMask);
+
+            forgroundImageBox.Image = _forgroundDetector.ForgroundMask;
 
             #region get a copy of the motion mask and enhance its color
             double[] minValues, maxValues;
