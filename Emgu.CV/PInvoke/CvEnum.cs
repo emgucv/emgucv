@@ -770,6 +770,54 @@ namespace Emgu.CV.CvEnum
       CV_YUV2RGB = 85,
 
       /// <summary>
+      /// Convert BayerBG to GRAY
+      /// </summary>
+      CV_BayerBG2GRAY = 86,
+      /// <summary>
+      /// Convert BayerGB to GRAY
+      /// </summary>
+      CV_BayerGB2GRAY = 87,
+      /// <summary>
+      /// Convert BayerRG to GRAY
+      /// </summary>
+      CV_BayerRG2GRAY = 88,
+      /// <summary>
+      /// Convert BayerGR to GRAY
+      /// </summary>
+      CV_BayerGR2GRAY = 89,
+      /// <summary>
+      /// Convert YUV420i to RGB
+      /// </summary>
+      CV_YUV420i2RGB = 90,
+      /// <summary>
+      /// Convert YUV420i to BGR
+      /// </summary>
+      CV_YUV420i2BGR = 91,
+      /// <summary>
+      /// Convert YUV420sp to RGB
+      /// </summary>
+      CV_YUV420sp2RGB = 92,
+      /// <summary>
+      /// Convert YUV320sp to BGR
+      /// </summary>
+      CV_YUV420sp2BGR = 93,
+      /// <summary>
+      /// Convert YUV320i to RGBA
+      /// </summary>
+      CV_YUV420i2RGBA = 94,
+      /// <summary>
+      /// Convert YUV420i to BGRA
+      /// </summary>
+      CV_YUV420i2BGRA = 95,
+      /// <summary>
+      /// Convert YUV420sp to RGBA
+      /// </summary>
+      CV_YUV420sp2RGBA = 96,
+      /// <summary>
+      /// Convert YUV420sp to BGRA
+      /// </summary>
+      CV_YUV420sp2BGRA = 97,
+      /// <summary>
       /// The max number, do not use
       /// </summary>
       CV_COLORCVT_MAX = 100
@@ -888,7 +936,7 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// Types for CvResize
+   /// Interpolation types
    /// </summary>
    public enum INTER
    {
@@ -901,13 +949,17 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_INTER_LINEAR = 1,
       /// <summary>
-      /// resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
+      /// Resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
       /// </summary>
       CV_INTER_CUBIC = 2,
       /// <summary>
       /// Bicubic interpolation
       /// </summary>
-      CV_INTER_AREA = 3
+      CV_INTER_AREA = 3,
+      /// <summary>
+      /// LANCZOS 4
+      /// </summary>
+      CV_INTER_LANCZOS4 = 4
    }
 
    /// <summary>
