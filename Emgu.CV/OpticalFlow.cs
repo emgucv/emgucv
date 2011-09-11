@@ -134,7 +134,7 @@ namespace Emgu.CV
          double lambda,
          MCvTermCriteria criteria)
       {
-         CvInvoke.cvCalcOpticalFlowHS(prev.Ptr, curr.Ptr, usePrevious ? 1 : 0, velx.Ptr, vely.Ptr, lambda, criteria);
+         CvInvoke.cvCalcOpticalFlowHS(prev.Ptr, curr.Ptr, usePrevious, velx.Ptr, vely.Ptr, lambda, criteria);
       }
 
       /// <summary>
@@ -159,7 +159,7 @@ namespace Emgu.CV
          Image<Gray, Single> velx,
          Image<Gray, Single> vely)
       {
-         CvInvoke.cvCalcOpticalFlowBM(prev, curr, blockSize, shiftSize, maxRange, usePrevious ? 1 : 0, velx, vely);
+         CvInvoke.cvCalcOpticalFlowBM(prev, curr, blockSize, shiftSize, maxRange, usePrevious, velx, vely);
       }
 
       /// <summary>

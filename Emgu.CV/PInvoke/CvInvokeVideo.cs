@@ -74,7 +74,7 @@ namespace Emgu.CV
       public static extern void cvCalcOpticalFlowHS(
               IntPtr prev,
               IntPtr curr,
-              int usePrevious,
+              bool usePrevious,
               IntPtr velx,
               IntPtr vely,
               double lambda,
@@ -98,7 +98,7 @@ namespace Emgu.CV
               Size blockSize,
               Size shiftSize,
               Size maxRange,
-              int usePrevious,
+              bool usePrevious,
               IntPtr velx,
               IntPtr vely);
 
