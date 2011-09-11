@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapVisualizer.cs" />
     <Compile Include="DenseHistogramVisualizer.cs" />
     <Compile Include="ImageVisualizer.cs" />
     <Compile Include="MatNDVisualizer.cs" />
