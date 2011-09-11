@@ -1,6 +1,6 @@
 Index: 3rdparty/ffmpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6135)
+--- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6688)
 +++ 3rdparty/ffmpeg/CMakeLists.txt	(working copy)
 @@ -7,8 +7,7 @@
  set(module_bare_name "opencv_ffmpeg${FFMPEG_SUFFIX}.dll")
@@ -14,69 +14,83 @@ Index: 3rdparty/ffmpeg/CMakeLists.txt
  
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 6135)
+--- CMakeLists.txt	(revision 6688)
 +++ CMakeLists.txt	(working copy)
-@@ -728,18 +728,26 @@
-             elseif (UNIX)
-                 set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
-             elseif (WIN32)
--                if (CMAKE_COMPILER_IS_GNUCXX)
--                    set(TBB_LIB_DIR "${TBB_INCLUDE_DIR}/../lib" CACHE PATH "Full path of TBB library directory")
--                    link_directories("${TBB_LIB_DIR}")
--                    set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
--                else()
--                    get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                          
+@@ -924,12 +924,19 @@
+                     set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
+                 else()
+                     get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                          
 -                   
--                    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64* OR MSVC64)
--                        set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
--                    elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
--                        set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
--                    endif()
-+				if (CMAKE_COMPILER_IS_GNUCXX)
-+					set(TBB_LIB_DIR "${TBB_INCLUDE_DIR}/../lib" CACHE PATH "Full path of TBB library directory")
-+					link_directories("${TBB_LIB_DIR}")
-+					set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
-+				else()
-+				    get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                         	
 +				    if (MSVC)
 +                       if(CMAKE_CL_64)
 +                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
 +                       else()
 +                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
 +                       endif()
-+                    else()
-+					  if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64*)
-+						set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
-+                      endif()                   
-+                      if(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
-+						set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
-+					  endif()
-+					endif()
++                    else(MSVC)
+                     if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64* OR MSVC64)
+                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
+                     elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
+                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
+                     endif()
++					endif(MSVC)
  
                      if (MSVC80)
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
-@@ -1397,11 +1405,11 @@
-         install(DIRECTORY 3rdparty android modules doc DESTINATION "." COMPONENT src PATTERN ".svn" EXCLUDE)
+Index: modules/gpu/CMakeLists.txt
+===================================================================
+--- modules/gpu/CMakeLists.txt	(revision 6688)
++++ modules/gpu/CMakeLists.txt	(working copy)
+@@ -111,9 +111,9 @@
+ # Additional target properties
+ set_target_properties(${the_target} PROPERTIES
+     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-    INSTALL_NAME_DIR lib
++    ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
++    RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
++    INSTALL_NAME_DIR "lib"
+     )
  
-         # install TBB dlls
--        if(WIN32 AND HAVE_TBB)
--            string(REGEX REPLACE "/lib" "/bin" TBB_DLL_DIR "${TBB_LIB_DIR}")
--            install(PROGRAMS "${TBB_DLL_DIR}/tbb.dll" DESTINATION bin COMPONENT main)
--            install(PROGRAMS "${TBB_DLL_DIR}/tbb_debug.dll" DESTINATION bin COMPONENT main)
--        endif()
-+        #if(WIN32 AND HAVE_TBB)
-+        #    string(REGEX REPLACE "/lib" "/bin" TBB_DLL_DIR "${TBB_LIB_DIR}")
-+        #    install(PROGRAMS "${TBB_DLL_DIR}/tbb.dll" DESTINATION bin COMPONENT main)
-+        #    install(PROGRAMS "${TBB_DLL_DIR}/tbb_debug.dll" DESTINATION bin COMPONENT main)
-+        #endif()
-     endif()
- endif()
+ # Add the required libraries for linking:
+Index: modules/haartraining/CMakeLists.txt
+===================================================================
+--- modules/haartraining/CMakeLists.txt	(revision 6688)
++++ modules/haartraining/CMakeLists.txt	(working copy)
+@@ -40,9 +40,9 @@
+ add_library(opencv_haartraining_engine STATIC ${cvhaartraining_lib_src})
+ set_target_properties(opencv_haartraining_engine PROPERTIES
+     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-    INSTALL_NAME_DIR lib
++    ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
++    RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
++    INSTALL_NAME_DIR "lib"
+     )
  
+ if(NOT ANDROID)
+Index: modules/highgui/CMakeLists.txt
+===================================================================
+--- modules/highgui/CMakeLists.txt	(revision 6688)
++++ modules/highgui/CMakeLists.txt	(working copy)
+@@ -300,8 +300,8 @@
+ # Additional target properties
+ set_target_properties(${the_target} PROPERTIES
+     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
++    ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
++    RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
+     INSTALL_NAME_DIR lib
+     LINK_INTERFACE_LIBRARIES ""
+     )
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 6135)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 6688)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
-@@ -410,6 +410,9 @@
+@@ -448,6 +448,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);  
  
@@ -88,7 +102,7 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 6135)
+--- modules/highgui/src/cap_openni.cpp	(revision 6688)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
 @@ -98,6 +98,8 @@
  
@@ -99,7 +113,7 @@ Index: modules/highgui/src/cap_openni.cpp
  protected:
      struct OutputMap
      {
-@@ -685,4 +687,10 @@
+@@ -763,4 +765,10 @@
      return 0;
  }
  
@@ -112,7 +126,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 6135)
+--- modules/legacy/src/3dtracker.cpp	(revision 6688)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -136,26 +150,59 @@ Index: modules/legacy/src/3dtracker.cpp
  
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
+Index: modules/traincascade/CMakeLists.txt
+===================================================================
+--- modules/traincascade/CMakeLists.txt	(revision 6688)
++++ modules/traincascade/CMakeLists.txt	(working copy)
+@@ -30,9 +30,9 @@
+ add_dependencies(${the_target} ${traincascade_libs})
+ set_target_properties(${the_target} PROPERTIES
+                       DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-                      ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-                      RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-                      INSTALL_NAME_DIR lib
++                      ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
++                      RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
++                      INSTALL_NAME_DIR "lib"
+                       OUTPUT_NAME "opencv_traincascade")
+ 					  
+ if(ENABLE_SOLUTION_FOLDERS)
 Index: OpenCVFindOpenNI.cmake
 ===================================================================
---- OpenCVFindOpenNI.cmake	(revision 6135)
+--- OpenCVFindOpenNI.cmake	(revision 6688)
 +++ OpenCVFindOpenNI.cmake	(working copy)
-@@ -42,7 +42,7 @@
-     endif()
+@@ -18,13 +18,16 @@
  endif()
  
--find_library(OPENNI_LIBRARY "OpenNI" PATHS ${OPENNI_LIB_DIR} DOC "OpenNI library" NO_DEFAULT_PATH)
+ find_file(OPENNI_INCLUDES "XnCppWrapper.h" PATHS $ENV{OPEN_NI_INCLUDE} "/usr/include/ni" "/usr/include/openni" "c:/Program Files/OpenNI/Include" DOC "OpenNI c++ interface header")
+-find_library(OPENNI_LIBRARY "OpenNI" PATHS $ENV{OPEN_NI_LIB} "/usr/lib" "c:/Program Files/OpenNI/Lib" DOC "OpenNI library")
 +find_library(OPENNI_LIBRARY "OpenNI" "openNI64" PATHS ${OPENNI_LIB_DIR} DOC "OpenNI library" NO_DEFAULT_PATH)
- find_path(OPENNI_INCLUDES "XnCppWrapper.h" PATHS ${OPENNI_INCLUDE_DIR} DOC "OpenNI c++ interface header" NO_DEFAULT_PATH)
  
  if(OPENNI_LIBRARY AND OPENNI_INCLUDES)
-@@ -50,6 +50,9 @@
-     # the check: are PrimeSensor Modules for OpenNI installed?
+     set(HAVE_OPENNI TRUE)
+     # the check: are PrimeSensor Modules for OpenNI installed
      if(WIN32)
-         find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore.dll" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
+         find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore.dll" PATHS "c:/Program Files/Prime Sense/Sensor/Bin" DOC "Core library of PrimeSensor Modules for OpenNI")
 +		if(NOT OPENNI_PRIME_SENSOR_MODULE)
 +		    find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore64.dll" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
 +		endif()
      elseif(UNIX OR APPLE)
-         find_library(OPENNI_PRIME_SENSOR_MODULE "XnCore" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
+         find_library(OPENNI_PRIME_SENSOR_MODULE "XnCore" PATHS "/usr/lib" DOC "Core library of PrimeSensor Modules for OpenNI")
      endif()
+Index: OpenCVModule.cmake
+===================================================================
+--- OpenCVModule.cmake	(revision 6688)
++++ OpenCVModule.cmake	(working copy)
+@@ -187,9 +187,9 @@
+     # Additional target properties
+     set_target_properties(${the_target} PROPERTIES
+         DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-        RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-        INSTALL_NAME_DIR lib
++        ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
++        RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
++        INSTALL_NAME_DIR "lib"
+         )
+ 
+     # Add the required libraries for linking:
