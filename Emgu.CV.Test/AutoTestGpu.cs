@@ -421,7 +421,7 @@ namespace Emgu.CV.GPU.Test
                using (GpuMat<float> gpuDistance = new GpuMat<float>(distance))
                {
                   Stopwatch w2 = Stopwatch.StartNew();
-                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null);
+                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null, null);
                   w2.Stop();
                   Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec", w2.ElapsedMilliseconds));
                   gpuTrainIdx.Download(trainIdx);
