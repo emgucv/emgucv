@@ -62,6 +62,12 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuGetCudaEnabledDeviceCount")]
       public static extern int GetCudaEnabledDeviceCount();
 
+      /// <summary>
+      /// Set the current Gpu Device
+      /// </summary>
+      /// <param name="deviceId">The id of the device to be setted as current</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuSetDevice")]
+      public static extern void SetDevice(int deviceId);
 
       /// <summary>
       /// Get the current Cuda device id
@@ -620,6 +626,21 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDilate")]
       public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
+
+      /// <summary>
+      /// Applies an advanced morphological operation to the image
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="op">The type of morphological operation</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMorphologyEx")]
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
+
       #endregion
 
       #region Logical operators
@@ -808,8 +829,9 @@ namespace Emgu.CV.GPU
       /// <param name="interpolation">Interpolation type.</param>
       /// <param name="borderMode">Border mode. Use BORDER_CONSTANT for default.</param>
       /// <param name="borderValue">The value of the border.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRemap")]
-      public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap, CvEnum.INTER interpolation, CvEnum.BORDER_TYPE borderMode, MCvScalar borderValue);
+      public static extern void Remap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap, CvEnum.INTER interpolation, CvEnum.BORDER_TYPE borderMode, MCvScalar borderValue, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift filtering for each point of the source image. It maps each point of the source

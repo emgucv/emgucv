@@ -12,10 +12,13 @@
 
 //----------------------------------------------------------------------------
 //
-//  GpuMat
+//  Gpu Device Info
 //
 //----------------------------------------------------------------------------
+
 CVAPI(int) gpuGetCudaEnabledDeviceCount();
+
+CVAPI(void) gpuSetDevice(int deviceId);
 
 CVAPI(int) gpuGetDevice();
 
@@ -34,6 +37,36 @@ CVAPI(void) gpuDeviceInfoFreeMemInfo(cv::gpu::DeviceInfo* info, size_t* free);
 CVAPI(void) gpuDeviceInfoTotalMemInfo(cv::gpu::DeviceInfo* info, size_t* total);
 
 CVAPI(bool) gpuDeviceInfoSupports(cv::gpu::DeviceInfo* device, cv::gpu::FeatureSet feature);
+
+CVAPI(bool) gpuDeviceInfoIsCompatible(cv::gpu::DeviceInfo* device);
+
+//----------------------------------------------------------------------------
+//
+//  Gpu Module Info
+//
+//----------------------------------------------------------------------------
+
+CVAPI(bool) targetArchsBuildWith(cv::gpu::FeatureSet featureSet);
+
+CVAPI(bool) targetArchsHas(int major, int minor);
+
+CVAPI(bool) targetArchsHasPtx(int major, int minor);
+
+CVAPI(bool) targetArchsHasBin(int major, int minor);
+
+CVAPI(bool) targetArchsHasEqualOrLessPtx(int major, int minor);
+
+CVAPI(bool) targetArchsHasEqualOrGreater(int major, int minor);
+
+CVAPI(bool) targetArchsHasEqualOrGreaterPtx(int major, int minor);
+
+CVAPI(bool) targetArchsHasEqualOrGreaterBin(int major, int minor);
+
+//----------------------------------------------------------------------------
+//
+//  GpuMat
+//
+//----------------------------------------------------------------------------
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateDefault();
 
@@ -164,15 +197,17 @@ CVAPI(void) gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,
 
 CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatMorphologyEx( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap);
+CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
             CvTermCriteria criteria);
