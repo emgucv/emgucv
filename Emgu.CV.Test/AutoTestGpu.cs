@@ -29,7 +29,7 @@ namespace Emgu.CV.GPU.Test
             Trace.WriteLine(String.Format("Device count: {0}", deviceCount));
             if (deviceCount > 0)
             {
-               GpuDevice d0 = new GpuDevice(0);
+               GpuDeviceInfo d0 = new GpuDeviceInfo(0);
             }
          }
       }
