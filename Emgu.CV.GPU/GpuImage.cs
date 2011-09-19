@@ -191,11 +191,13 @@ namespace Emgu.CV.GPU
             try
             {
                //if a direct conversion doesn't exist, apply a two step conversion
-               //in this case, do not use stream because a temporary local image buffer is used 
+               //in this case, needs to wait for the completion of the stream because a temporary local image buffer is used
+               //we don't want the tmp image to be released before the operation is completed.
                using (GpuImage<Bgr, TDepth> tmp = new GpuImage<Bgr, TDepth>(size))
                {
-                  GpuInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), IntPtr.Zero);
-                  GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), IntPtr.Zero);
+                  GpuInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
+                  GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
+                  stream.WaitForCompletion();
                }
             }
             catch
@@ -335,6 +337,18 @@ namespace Emgu.CV.GPU
       {
          get
          {
+            if (this is Image<Bgr, Byte>)
+            {  
+               Size s = Size;
+               Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+               System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
+               using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0))
+               {
+                  Download(tmp);
+               }
+               result.UnlockBits(data);
+               return result;
+            } else
             using (Image<TColor, TDepth> tmp = ToImage())
             {
                return tmp.ToBitmap();
