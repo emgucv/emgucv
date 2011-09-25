@@ -23,6 +23,7 @@ CVAPI(void) CvBlobSeqRelease(CvBlobSeq** blobSeq);
 CVAPI(CvBlob*) CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID);
 CVAPI(CvBlob*) CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex);
 CVAPI(int) CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq);
+CVAPI(void) CvBlobSeqAddBlob(CvBlobSeq* blobSeq, CvBlob* blob);
 CVAPI(void) CvBlobSeqClear(CvBlobSeq* blobSeq);
 
 //Blob Detector
