@@ -35,6 +35,7 @@ void CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vect
 
 void CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
 
+
 void CvHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
    CvArr* img, 
@@ -80,7 +81,7 @@ void CvHOGDescriptorCompute(
 
 
 /*
-CVAPI(void) cvHOGDescriptorDetect(
+void CvHOGDescriptorDetect(
    cv::HOGDescriptor* descriptor, 
    CvArr* img, 
    CvSeq* foundLocations,
@@ -90,8 +91,14 @@ CVAPI(void) cvHOGDescriptorDetect(
 {
    cvClearSeq(foundLocations);
 
-   std::vector<cv::Point> hits;
+   std::vector<cv::Rect> rects;
    cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detect(mat, hits, hitThreshold, winStride, padding);
-   cvSeqPushMulti(foundLocations, &hits.front(), hits.size());
+   descriptor->detect(mat, rects, hitThreshold, winStride, padding);
+   if (rects.size() > 0)
+      cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }*/
+
+unsigned int CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
+{
+   return (unsigned int) descriptor->getDescriptorSize();
+}

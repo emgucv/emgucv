@@ -65,10 +65,11 @@ namespace Emgu.CV
          Size padding,
          IntPtr locations);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
+
       #endregion
 
-      private MemStorage _rectStorage;
-      private Seq<Rectangle> _rectSeq;
       private VectorOfFloat _vector;
 
       /// <summary>
@@ -77,23 +78,21 @@ namespace Emgu.CV
       public HOGDescriptor()
       {
          _ptr = CvHOGDescriptorCreateDefault();
-         _rectStorage = new MemStorage();
-         _rectSeq = new Seq<Rectangle>(_rectStorage);
          _vector = new VectorOfFloat();
       }
 
       /// <summary>
-      /// Create a new HOGDescriptor using the specific parameters
+      /// Create a new HOGDescriptor using the specific parameters.
       /// </summary>
-      /// <param name="blockSize">Block size in cells.</param>
-      /// <param name="cellSize">Cell size.</param>
-      /// <param name="blockStride">Block stride. Must be a multiple of cell size.</param>
-      /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
-      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
-      /// <param name="nbins">Number of bins.</param>
-      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
-      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride.</param>
-      /// <param name="derivAperture"></param>
+      /// <param name="blockSize">Block size in cells. Use (16, 16) for default.</param>
+      /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
+      /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage. Use 0.2 for default.</param>
+      /// <param name="nbins">Number of bins. Use 9 for default.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default. </param>
+      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
+      /// <param name="derivAperture">Use 1 for default.</param>
       public HOGDescriptor(
          Size winSize,
          Size blockSize,
@@ -116,9 +115,7 @@ namespace Emgu.CV
             0,
             L2HysThreshold,
             gammaCorrection);
-
-         _rectStorage = new MemStorage();
-         _rectSeq = new Seq<Rectangle>(_rectStorage);
+         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -164,8 +161,12 @@ namespace Emgu.CV
          double scale,
          int groupThreshold)
       {
-         CvHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
-         return _rectSeq.ToArray();
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<Rectangle> seq = new Seq<Rectangle>(stor);
+            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, groupThreshold);
+            return seq.ToArray();
+         }
       }
 
       /// <summary>
@@ -182,8 +183,8 @@ namespace Emgu.CV
       /// 
       /// </summary>
       /// <param name="image">The image</param>
-      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
-      /// <param name="padding"></param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride. Use Size.Empty for default</param>
+      /// <param name="padding">Padding. Use Size.Empty for default</param>
       /// <param name="locations">Locations for the computation. Can be null if not needed</param>
       /// <returns>The descriptor vector</returns>
       public float[] Compute(Image<Bgr, Byte> image, Size winStride, Size padding, Point[] locations)
@@ -209,7 +210,6 @@ namespace Emgu.CV
       /// </summary>
       protected override void ReleaseManagedResources()
       {
-         _rectStorage.Dispose();
          _vector.Dispose();
          base.ReleaseManagedResources();
       }
@@ -220,6 +220,17 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          CvHOGDescriptorRelease(_ptr);
+      }
+
+      /// <summary>
+      /// Get the size of the descriptor
+      /// </summary>
+      public uint DescriptorSize
+      {
+         get
+         {
+            return CvHOGDescriptorGetDescriptorSize(_ptr);
+         }
       }
    }
 }
