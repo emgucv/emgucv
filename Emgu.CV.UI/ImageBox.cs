@@ -177,7 +177,9 @@ namespace Emgu.CV.UI
          }
          set
          {
-            if (InvokeRequired)
+            if (Disposing || IsDisposed)
+               return;
+            else if (InvokeRequired)
             {
                Invoke(new MethodInvoker(delegate { Image = value; }));
             }
