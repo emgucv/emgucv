@@ -16,6 +16,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Emgu.CV;
+using Emgu.CV.Cvb;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -381,9 +382,9 @@ namespace Emgu.CV.Test
 
             ImageViewer viewer = new ImageViewer();
             int count = 0;
-            EventHandler processFrame = delegate(Object sender, EventArgs e)
+            Capture.GrabEventHandler processFrame = delegate(Object sender, EventArgs e)
             {
-               Image<Bgr, Byte> img = capture.QueryFrame();
+               Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
                if (img == null)
                {
                   return;
@@ -416,8 +417,8 @@ namespace Emgu.CV.Test
 
                img.Dispose();
             };
-
-            Application.Idle += processFrame;
+            capture.ImageGrabbed += processFrame;
+            capture.Start();
 
             viewer.ShowDialog();
          }
@@ -640,12 +641,12 @@ namespace Emgu.CV.Test
 
       public void TestBlobTracking()
       {
-         BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
+         BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          //param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF);
          param.FGTrainFrames = 10;
-         BlobTrackerAuto<Gray> tracker = new BlobTrackerAuto<Gray>(param);
+         BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
 
@@ -654,16 +655,74 @@ namespace Emgu.CV.Test
          {
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
-               tracker.Process(capture.QuerySmallFrame().PyrUp().Convert<Gray, Byte>());
+               tracker.Process(capture.RetrieveBgrFrame());
 
                Image<Gray, Byte> img = tracker.ForgroundMask;
-               //viewer.Image = tracker.GetForgroundMask();
                foreach (MCvBlob blob in tracker)
                {
                   img.Draw((Rectangle)blob, new Gray(255.0), 2);
                   img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
                }
                viewer.Image = img;
+            };
+            capture.Start();
+            viewer.ShowDialog();
+         }
+      }
+
+      public void TestCvBlob()
+      {
+         MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5);
+         using (CvTracks tracks = new CvTracks())
+         using (ImageViewer viewer = new ImageViewer())
+         using (Capture capture = new Capture())
+         {
+            BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
+            {
+               Image<Bgr, Byte> frame = capture.RetrieveBgrFrame();
+               bgModel.Update(frame);
+
+               Image<Gray, Byte> gray = bgModel.ForgroundMask;
+               using (CvBlobDetector detector = new CvBlobDetector())
+               using (CvBlobs blobs = new CvBlobs())
+               {
+                  detector.Detect(gray, blobs);
+                  blobs.FilterByArea(100, int.MaxValue);
+
+                  tracks.Update(blobs, 20.0, 10, 0);
+
+                  Image<Bgr, Byte> result = new Image<Bgr, byte>(frame.Size);
+
+                  using (Image<Gray, Byte> blobMask = detector.DrawBlobsMask(blobs))
+                     CvInvoke.cvCopy(frame, result, blobMask);
+
+                  /*
+                  foreach (KeyValuePair<uint, CvBlob> pair in blobs)
+                  {
+                     Bgr color = mask.MeanColor(pair.Value, frame);
+                     result.Draw(pair.Key.ToString(), ref font, pair.Value.BoundingBox.Location, color);
+                     result.Draw(pair.Value.BoundingBox, color, 2);
+                  }*/
+                  
+                  foreach(KeyValuePair<uint, CvTrack> pair in tracks)
+                  {
+                     if (pair.Value.Inactive == 0) //only draw the active tracks.
+                     {
+                        CvBlob b = blobs[pair.Value.BlobLabel];
+                        Bgr color = detector.MeanColor(b, frame);
+                        result.Draw(pair.Key.ToString(), ref font, pair.Value.BoundingBox.Location, color);
+                        result.Draw(pair.Value.BoundingBox, color, 2);
+                        using (MemStorage stor = new MemStorage())
+                        {
+                           Contour<Point> contour = b.GetContour(stor);
+                           result.Draw(contour, new Bgr(0, 0, 255), 1);
+                        }
+                     }
+                  }
+                  viewer.Image = result;
+               }
             };
             capture.Start();
             viewer.ShowDialog();

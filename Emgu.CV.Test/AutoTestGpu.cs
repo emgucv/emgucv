@@ -307,7 +307,7 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
-      public void TestHOG()
+      public void TestHOG1()
       {
          if (GpuInvoke.HasCuda)
          {
@@ -325,6 +325,45 @@ namespace Emgu.CV.GPU.Test
                watch.Stop();
 
                Assert.AreEqual(1, rects.Length);
+
+               foreach (Rectangle rect in rects)
+                  image.Draw(rect, new Bgr(Color.Red), 1);
+               Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+
+               //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            }
+         }
+      }
+
+      [Test]
+      public void TestHOG2()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            using (GpuHOGDescriptor hog = new GpuHOGDescriptor(
+               new Size (48, 96), //winSize
+               new Size(16, 16), //blockSize
+               new Size(8,8), //blockStride
+               new Size(8, 8), //cellSize
+               9, //nbins
+               -1, //winSigma
+               0.2, //L2HysThreshold
+               true, //gammaCorrection
+               64 //nLevels
+               ))
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+            {
+               float[] pedestrianDescriptor = GpuHOGDescriptor.GetPeopleDetector48x96();
+               hog.SetSVMDetector(pedestrianDescriptor);
+
+               Stopwatch watch = Stopwatch.StartNew();
+               Rectangle[] rects;
+               using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
+               using (GpuImage<Bgra, Byte> gpuBgra = gpuImage.Convert<Bgra, Byte>())
+                  rects = hog.DetectMultiScale(gpuBgra);
+               watch.Stop();
+
+               //Assert.AreEqual(1, rects.Length);
 
                foreach (Rectangle rect in rects)
                   image.Draw(rect, new Bgr(Color.Red), 1);

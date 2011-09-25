@@ -1494,6 +1494,64 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestHOGTrain64x128()
+      {
+         using (HOGDescriptor hog = new HOGDescriptor())
+         using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (Image<Bgr, Byte> resize = image.Resize(64, 128, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC))
+         {
+            float[] descriptor = hog.Compute(
+               resize,
+               Size.Empty, //new Size(8, 8), //winStride
+               Size.Empty, //new Size(16, 16), //padding
+               null);
+            hog.SetSVMDetector(descriptor);
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] rects = hog.DetectMultiScale(image);
+            watch.Stop();
+            foreach (Rectangle rect in rects)
+               image.Draw(rect, new Bgr(Color.Red), 1);
+
+            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+         }
+      }
+
+      [Test]
+      public void TestHOGTrainAnySize()
+      {
+         using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
+         {
+            using (HOGDescriptor hog = new HOGDescriptor(
+               image.Size, //winSize 
+               new Size(16, 16), //blockSize 
+               new Size(8, 8), //blockStride
+               new Size(8, 8), //cellSize
+               9, //nbins  
+               1, //derivAperture
+               -1, //winSigma
+               0.2, //L2HysThreshold
+               true))
+            {
+
+               float[] descriptor = hog.Compute(
+                  image,
+                  Size.Empty, //new Size(8, 8), //winStride
+                  Size.Empty, //new Size(16, 16), //padding
+                  null);
+               hog.SetSVMDetector(descriptor);
+               Stopwatch watch = Stopwatch.StartNew();
+               Rectangle[] rects = hog.DetectMultiScale(image);
+               watch.Stop();
+               foreach (Rectangle rect in rects)
+                  image.Draw(rect, new Bgr(Color.Red), 1);
+
+               Trace.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+               //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            }
+         }
+      }
+
+      [Test]
       public void TestOctTree()
       {
          MCvPoint3D32f[] pts = new MCvPoint3D32f[] 
