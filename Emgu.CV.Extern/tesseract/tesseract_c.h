@@ -8,6 +8,11 @@
 #ifndef EMGU_TESSERACT_C_H
 #define EMGU_TESSERACT_C_H
 
+#if (_MSC_VER >= 1200)          
+typedef __int64 INT64;
+typedef unsigned __int64 UINT64;
+#endif
+
 #include "opencv2/core/core.hpp"
 #include "opencv2/core/core_c.h"
 #include "stdio.h"
