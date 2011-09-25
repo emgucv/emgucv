@@ -228,7 +228,7 @@ namespace Emgu.CV
       public virtual bool Grab()
       {
          bool grabbed = CvInvoke.cvGrabFrame(_ptr);
-         if (grabbed) ImageGrabbed(this, new EventArgs());
+         if (grabbed && ImageGrabbed != null) ImageGrabbed(this, new EventArgs());
          return grabbed;
       }
 
