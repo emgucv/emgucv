@@ -67,5 +67,7 @@ CVAPI(void) cvHOGDescriptorDetect(
    cvSeqPushMulti(foundLocations, &hits.front(), hits.size());
 }*/
 
+CVAPI(unsigned int) CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor);
+
 
 #endif
