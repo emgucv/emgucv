@@ -12,6 +12,7 @@ void CvBlobSeqRelease(CvBlobSeq** blobSeq) { delete *blobSeq; }
 CvBlob* CvBlobSeqGetBlobByID(CvBlobSeq* blobSeq, int blobID) { return blobSeq->GetBlobByID(blobID); }
 CvBlob* CvBlobSeqGetBlob(CvBlobSeq* blobSeq, int blobIndex) { return blobSeq->GetBlob(blobIndex); }
 int CvBlobSeqGetBlobNum(CvBlobSeq* blobSeq) { return blobSeq->GetBlobNum(); }
+void CvBlobSeqAddBlob(CvBlobSeq* blobSeq, CvBlob* blob) { blobSeq->AddBlob(blob); }
 void CvBlobSeqClear(CvBlobSeq* blobSeq) { blobSeq->Clear(); }
 
 //Blob Detector
