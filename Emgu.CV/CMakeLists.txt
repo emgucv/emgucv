@@ -15,8 +15,6 @@ ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.Serv
 
 ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources)
 
-#ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../lib/3rdParty/zlib.net.dll)
-
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV}" ALL)
 
 if(ENABLE_SOLUTION_FOLDERS)
