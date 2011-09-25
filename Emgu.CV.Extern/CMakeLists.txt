@@ -6,17 +6,19 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/core/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/imgproc/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/ml/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/calib3d/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/objdetect/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/features2d/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/legacy/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/contrib/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/highgui/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
+SET(OPENCV_MODULES_DIR "${PROJECT_SOURCE_DIR}/../opencv/modules")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/legacy/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
 
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
@@ -25,54 +27,13 @@ ENDIF()
 
 ############################### IPP START ##############################
 IF(WITH_IPP)
-include(${PROJECT_SOURCE_DIR}/../opencv/OpenCVFindIPP.cmake)
-
-IF (IPP_FOUND)
-  message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
-  add_definitions(-DHAVE_IPP)
-  include_directories(${IPP_INCLUDE_DIRS})
-  LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
-  
-  IF(WIN32)
-  IF(TARGET_ARCH_64)
-    SET(IPP_ARCH "intel64")
-  ELSE()
-    SET(IPP_ARCH "ia32")
+  include(${PROJECT_SOURCE_DIR}/../opencv/OpenCVFindIPP.cmake)
+  IF (IPP_FOUND)
+    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
+    add_definitions(-DHAVE_IPP)
+    include_directories(${IPP_INCLUDE_DIRS})
+    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
   ENDIF()
-
-  SET(IPP_BINARY_FILE_COMPONENT_NAMES 
-	"ippcv" 
-	"ipps" 
-	"ippvm" 
-	"ippi"
-	"ippcc")
-  LIST(APPEND IPP_BINARY_FILE "ippcore-7.0")
-  IF(TARGET_ARCH_64)
-    FOREACH(IPP_BINARY_FILE_COMPONENT_NAME ${IPP_BINARY_FILE_COMPONENT_NAMES})
-     LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}-7.0")
-  	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}e9-7.0")
-  	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}m7-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}n8-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}u8-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}y8-7.0")
-	ENDFOREACH()
-  ELSE()
-    FOREACH(IPP_BINARY_FILE_COMPONENT_NAME ${IPP_BINARY_FILE_COMPONENT_NAMES})
-     LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}-7.0")
-  	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}g9-7.0")
-  	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}p8-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}s8-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}v8-7.0")
-	  LIST(APPEND IPP_BINARY_FILE "${IPP_BINARY_FILE_COMPONENT_NAME}w7-7.0")
-	ENDFOREACH()
-  ENDIF()
-  
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES ${IPP_BINARY_FILE})
-  FOREACH(IPP_FILE ${IPP_BINARY_FILE})
-	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${IPP_ROOT_DIR}/../redist/${IPP_ARCH}/ipp/${IPP_FILE}.dll")
-  ENDFOREACH()
-  ENDIF()
-ENDIF()
 ENDIF()
 ############################### IPP END ################################
 
@@ -167,6 +128,14 @@ IF(EMGU_CV_WITH_TESSERACT)
   LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
 ENDIF()
 ############################### TESSERACT END ##########################
+
+############################### CVBLOB START ########################
+file(GLOB CVBLOB_SRCS "./cvblob/*.cpp")
+file(GLOB CVBLOB_HDRS "./cvblob/*.h*")
+
+LIST(APPEND extern_srcs ${CVBLOB_SRCS})
+LIST(APPEND extern_hdrs ${CVBLOB_HDRS})
+############################### CVBLOB END ##########################
 
 source_group("Src" FILES ${extern_srcs})
 source_group("Include" FILES ${extern_hdrs})
