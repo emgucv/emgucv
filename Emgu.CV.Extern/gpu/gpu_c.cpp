@@ -541,7 +541,7 @@ void gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  c
 
 void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream)
 {
-   cv::gpu::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, borderValue, stream ? *stream : cv::gpu::Stream());
+	cv::gpu::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, borderValue, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
@@ -572,6 +572,16 @@ cv::gpu::GpuMat* gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize, int lo
 cv::gpu::GpuMat* gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect) 
 { 
    return new cv::gpu::GpuMat(*arr, rect);
+}
+
+void gpuMatRotate(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double angle, double xShift, double yShift, int interpolation, cv::gpu::Stream* s)
+{
+	cv::gpu::rotate(*src, *dst, dst->size(), angle, xShift, yShift, interpolation, s ? *s : cv::gpu::Stream::Null());
+}
+
+void gpuMatCopyMakeBorder(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar value, cv::gpu::Stream* stream)
+{
+   cv::gpu::copyMakeBorder(*src, *dst, top, bottom, left, right, gpuBorderType, value, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum, cv::gpu::Stream* stream)

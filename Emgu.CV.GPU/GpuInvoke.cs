@@ -871,6 +871,35 @@ namespace Emgu.CV.GPU
       public static extern void MeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, MCvTermCriteria criteria);
 
       /// <summary>
+      /// Rotates an image around the origin (0,0) and then shifts it.
+      /// </summary>
+      /// <param name="src">Source image. CV_8UC1 and CV_8UC4 types are supported.</param>
+      /// <param name="dst">Destination image with the same type as src. Must be pre-allocated</param>
+      /// <param name="angle">Angle of rotation in degrees</param>
+      /// <param name="xShift">Shift along the horizontal axis</param>
+      /// <param name="yShift">Shift along the verticle axis</param>
+      /// <param name="interpolation">Interpolation method. Only INTER_NEAREST, INTER_LINEAR, and INTER_CUBIC are supported.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRotate")]
+      public static extern void Rotate(IntPtr src, IntPtr dst, double angle, double xShift, double yShift, CvEnum.INPAINT_TYPE interpolation, IntPtr stream);
+
+
+      /// <summary>
+      /// Copies a 2D array to a larger destination array and pads borders with the given constant.
+      /// </summary>
+      /// <param name="src">Source image.</param>
+      /// <param name="dst">Destination image with the same type as src. The size is Size(src.cols+left+right, src.rows+top+bottom).</param>
+      /// <param name="top">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="bottom">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="left">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="right">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="borderType">Border Type</param>
+      /// <param name="value">Border value.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCopyMakeBorder")]
+      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, MCvScalar value, IntPtr stream);
+
+      /// <summary>
       /// Computes the integral image and integral for the squared image
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>

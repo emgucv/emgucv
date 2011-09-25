@@ -222,6 +222,10 @@ CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize,
 
 CVAPI(cv::gpu::GpuMat*) gpuMatGetSubRect(const cv::gpu::GpuMat* arr, CvRect rect);
 
+CVAPI(void) gpuMatRotate(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double angle, double xShift, double yShift, int interpolation, cv::gpu::Stream* s);
+
+CVAPI(void) gpuMatCopyMakeBorder(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar value, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType);
@@ -263,7 +267,9 @@ CVAPI(int) gpuCascadeClassifierDetectMultiScale(cv::gpu::CascadeClassifier_GPU* 
 //  GpuHOGDescriptor
 //
 //----------------------------------------------------------------------------
-CVAPI(void) gpuHOGDescriptorPeopleDetectorCreate(CvSeq* seq);
+CVAPI(void) gpuHOGDescriptorGetPeopleDetector64x128(std::vector<float>* vector);
+
+CVAPI(void) gpuHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector);
 
 CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreateDefault();
 

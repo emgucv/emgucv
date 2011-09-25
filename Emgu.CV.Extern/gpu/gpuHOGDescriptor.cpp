@@ -6,10 +6,16 @@
 
 #include "gpu_c.h"
 
-void gpuHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
-{   
-   std::vector<float> v = cv::gpu::HOGDescriptor::getDefaultPeopleDetector();  
-   cvSeqPushMulti(seq, &v.front(), v.size()); 
+void gpuHOGDescriptorGetPeopleDetector64x128(std::vector<float>* vector)
+{
+   std::vector<float> v = cv::gpu::HOGDescriptor::getPeopleDetector64x128();
+   v.swap(*vector);
+}
+
+void gpuHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector)
+{
+   std::vector<float> v = cv::gpu::HOGDescriptor::getPeopleDetector48x96();
+   v.swap(*vector);
 }
 
 cv::gpu::HOGDescriptor* gpuHOGDescriptorCreateDefault() { return new cv::gpu::HOGDescriptor; }

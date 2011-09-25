@@ -20,7 +20,10 @@ namespace Emgu.CV.GPU
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorPeopleDetectorCreate(IntPtr seq);
+      private extern static void gpuHOGDescriptorGetPeopleDetector64x128(IntPtr vector);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void gpuHOGDescriptorGetPeopleDetector48x96(IntPtr vector);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static IntPtr gpuHOGDescriptorCreateDefault();
@@ -56,8 +59,6 @@ namespace Emgu.CV.GPU
          int groupThreshold);
       #endregion
 
-      private MemStorage _rectStorage;
-      private Seq<Rectangle> _rectSeq;
       private VectorOfFloat _vector;
 
       /// <summary>
@@ -66,23 +67,21 @@ namespace Emgu.CV.GPU
       public GpuHOGDescriptor()
       {
          _ptr = gpuHOGDescriptorCreateDefault();
-         _rectStorage = new MemStorage();
-         _rectSeq = new Seq<Rectangle>(_rectStorage);
          _vector = new VectorOfFloat();
       }
 
       /// <summary>
       /// Create a new HOGDescriptor using the specific parameters
       /// </summary>
-      /// <param name="blockSize">Block size in cells. Only (2,2) is supported for now.</param>
-      /// <param name="cellSize">Cell size. Only (8, 8) is supported for now.</param>
-      /// <param name="blockStride">Block stride. Must be a multiple of cell size.</param>
-      /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
-      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
-      /// <param name="nbins">Number of bins. Only 9 bins per cell is supported for now.</param>
-      /// <param name="nLevels">Maximum number of detection window increases.</param>
-      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
-      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride.</param>
+      /// <param name="blockSize">Block size in cells. Use (16, 16) for default.</param>
+      /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
+      /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage. Use 0.2 for default.</param>
+      /// <param name="nbins">Number of bins. Use 9 bins per cell for deafault.</param>
+      /// <param name="nLevels">Maximum number of detection window increases. Use 64 for default</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default.</param>
+      /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
       public GpuHOGDescriptor(
          Size winSize,
          Size blockSize,
@@ -105,8 +104,7 @@ namespace Emgu.CV.GPU
             gammaCorrection,
             nLevels);
 
-         _rectStorage = new MemStorage();
-         _rectSeq = new Seq<Rectangle>(_rectStorage);
+         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -115,11 +113,32 @@ namespace Emgu.CV.GPU
       /// <returns>The default people detector</returns>
       public static float[] GetDefaultPeopleDetector()
       {
-         using (MemStorage stor = new MemStorage())
+         return GetPeopleDetector64x128();
+      }
+
+      /// <summary>
+      /// Returns coefficients of the classifier trained for people detection (for size 64x128). Only compatible with HOG detector with the same windows size.
+      /// </summary>
+      /// <returns>The people detector of 48x96 resolution</returns>
+      public static float[] GetPeopleDetector48x96()
+      {
+         using (VectorOfFloat f = new VectorOfFloat())
          {
-            Seq<float> desc = new Seq<float>(stor);
-            gpuHOGDescriptorPeopleDetectorCreate(desc);
-            return desc.ToArray();
+            gpuHOGDescriptorGetPeopleDetector48x96(f);
+            return f.ToArray();
+         }
+      }
+
+      /// <summary>
+      /// Returns coefficients of the classifier trained for people detection (for size 64x128).
+      /// </summary>
+      /// <returns>The people detector of 64x128 resolution.</returns>
+      public static float[] GetPeopleDetector64x128()
+      {
+         using (VectorOfFloat f = new VectorOfFloat())
+         {
+            gpuHOGDescriptorGetPeopleDetector64x128(f);
+            return f.ToArray();
          }
       }
 
@@ -132,6 +151,22 @@ namespace Emgu.CV.GPU
          _vector.Clear();
          _vector.Push(detector);
          gpuHOGSetSVMDetector(_ptr, _vector);
+      }
+
+      private Rectangle[] DetectMultiScale(
+         IntPtr image,
+         double hitThreshold,
+         Size winStride,
+         Size padding,
+         double scale,
+         int groupThreshold)
+      {
+         using (MemStorage storage = new MemStorage())
+         {
+            Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
+            gpuHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+            return rectSeq.ToArray();
+         }
       }
 
       /// <summary>
@@ -152,8 +187,7 @@ namespace Emgu.CV.GPU
          double scale,
          int groupThreshold)
       {
-         gpuHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
-         return _rectSeq.ToArray();
+         return DetectMultiScale(image.Ptr, hitThreshold, winStride, padding, scale, groupThreshold);
       }
 
       /// <summary>
@@ -174,8 +208,7 @@ namespace Emgu.CV.GPU
          double scale,
          int groupThreshold)
       {
-         gpuHOGDescriptorDetectMultiScale(_ptr, image, _rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
-         return _rectSeq.ToArray();
+         return DetectMultiScale(image.Ptr, hitThreshold, winStride, padding, scale, groupThreshold);
       }
 
       /// <summary>
@@ -203,7 +236,6 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void ReleaseManagedResources()
       {
-         _rectStorage.Dispose();
          _vector.Dispose();
          base.ReleaseManagedResources();
       }
