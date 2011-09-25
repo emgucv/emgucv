@@ -39,8 +39,10 @@ IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005%OS_MODE%"
 IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008%OS_MODE%"
 IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10%OS_MODE%"
 
+REM Setup common flags
 SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_DOCS:BOOL=FALSE ^
+-DBUILD_PERF_TESTS:BOOL=FALSE ^
 -DBUILD_TESTS:BOOL=FALSE ^
 -DBUILD_NEW_PYTHON_SUPPORT:BOOL=FALSE ^
 -DEMGU_ENABLE_SSE:BOOL=TRUE ^
@@ -89,7 +91,7 @@ SET INTEL_ICL=%ICPP_COMPILER12%bin\ia32\icl.exe
 IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%ICPP_COMPILER12%bin\intel64\icl.exe
 SET INTEL_TBB=%TBB30_INSTALL_DIR%\include
 IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER12%redist\intel64\ipp
-SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert120.exe
+SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert121.exe
 
 REM initiate the compiler enviroment
 @echo on
@@ -115,8 +117,8 @@ REM these projects create problems for intel compiler
 IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln ^
 Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
 Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\ccstruct\tesseract_ccstruct.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\wordrec\tesseract_wordrec.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
+Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
 /VC
 
 GOTO BUILD
