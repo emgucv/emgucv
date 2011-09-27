@@ -29,18 +29,21 @@ void gpuBruteForceMatcherKnnMatch(
                                   cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 
                                   int k, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
+   cv::gpu::GpuMat emptyMat;
+   mask = mask ? mask : &emptyMat;
+
    if (k == 2)
    {  //special case for k == 2;
       cv::gpu::GpuMat idxMat = trainIdx->reshape(2, 1);
       cv::gpu::GpuMat distMat = distance->reshape(2, 1);
       matcher->knnMatch(*queryDescs, *trainDescs, 
          idxMat, distMat, 
-         cv::gpu::GpuMat(), k, mask ? *mask : cv::gpu::GpuMat(),
-         stream ? *stream : cv::gpu::Stream());
+         emptyMat, k, *mask,
+         stream ? *stream : cv::gpu::Stream::Null());
       CV_Assert(idxMat.channels() == 2);
       CV_Assert(distMat.channels() == 2);
       CV_Assert(idxMat.data == trainIdx->data);
       CV_Assert(distMat.data == distance->data);
    } else
-      matcher->knnMatch(*queryDescs, *trainDescs, *trainIdx, *distance, cv::gpu::GpuMat(), k, mask ? *mask : cv::gpu::GpuMat(), stream ? *stream : cv::gpu::Stream());
+      matcher->knnMatch(*queryDescs, *trainDescs, *trainIdx, *distance, emptyMat, k, *mask, stream ? *stream : cv::gpu::Stream::Null());
 }

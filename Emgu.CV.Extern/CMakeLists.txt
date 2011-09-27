@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include")
 SET(OPENCV_MODULES_DIR "${PROJECT_SOURCE_DIR}/../opencv/modules")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
