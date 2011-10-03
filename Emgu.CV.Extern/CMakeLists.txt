@@ -6,7 +6,9 @@
 # ----------------------------------------------------------------------------
 project(cvextern)
 
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include")
+
 SET(OPENCV_MODULES_DIR "${PROJECT_SOURCE_DIR}/../opencv/modules")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
@@ -130,11 +132,8 @@ ENDIF()
 ############################### TESSERACT END ##########################
 
 ############################### CVBLOB START ########################
-file(GLOB CVBLOB_SRCS "./cvblob/*.cpp")
-file(GLOB CVBLOB_HDRS "./cvblob/*.h*")
-
-LIST(APPEND extern_srcs ${CVBLOB_SRCS})
-LIST(APPEND extern_hdrs ${CVBLOB_HDRS})
+ADD_SUBDIRECTORY(cvblob)
+SET(CVBLOB_LIBRARY cvblob)
 ############################### CVBLOB END ##########################
 
 source_group("Src" FILES ${extern_srcs})
@@ -213,7 +212,7 @@ ADD_DEPENDENCIES(${the_target}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
   ${ZLIB_LIBRARY} 
 #  xtiff
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -232,7 +231,7 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
   
 IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
 #additional linkage required for tesseract built on windows
