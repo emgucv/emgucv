@@ -171,6 +171,8 @@ CVAPI(double) gpuMatNorm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src
 
 CVAPI(int) gpuMatCountNonZero(const cv::gpu::GpuMat* src);
 
+CVAPI(void) gpuMatReduce(const cv::gpu::GpuMat* mtx, cv::gpu::GpuMat* vec, int dim, int reduceOp, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatLUT(const cv::gpu::GpuMat* src, const CvArr* lut, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatFilter2D(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, cv::gpu::Stream* stream);
@@ -197,11 +199,11 @@ CVAPI(void) gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,
 
 CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatMorphologyEx( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatMorphologyEx( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int op, const CvArr* kernel, cv::gpu::GpuMat* buffer1, cv::gpu::GpuMat* buffer2, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, cv::gpu::Stream* stream);
 

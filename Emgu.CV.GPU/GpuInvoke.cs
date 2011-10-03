@@ -564,6 +564,17 @@ namespace Emgu.CV.GPU
       public static extern int CountNonZero(IntPtr src);
 
       /// <summary>
+      /// Reduces GpuMat to a vector by treating the GpuMat rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 
+      /// </summary>
+      /// <param name="mtx">The input GpuMat</param>
+      /// <param name="vec">The destination GpuMat. Must be preallocated 1 x n matrix and have the same number of channels as the input GpuMat</param>
+      /// <param name="dim">The dimension index along which the matrix is reduce.</param>
+      /// <param name="reduceOp">The reduction operation type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatReduce")]
+      public static extern void Reduce(IntPtr mtx, IntPtr vec, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE reduceOp, IntPtr stream);
+
+      /// <summary>
       /// Flips the GpuMat in one of different 3 ways (row and column indices are 0-based):
       /// dst(i,j)=src(rows(src)-i-1,j) if flip_mode = 0
       /// dst(i,j)=src(i,cols(src1)-j-1) if flip_mode &gt; 0
@@ -608,11 +619,12 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="buffer">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. </param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatErode")]
-      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, IntPtr buffer, Point anchor, int iterations, IntPtr stream);
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -621,11 +633,12 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="buffer">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. </param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDilate")]
-      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
+      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, IntPtr buffer, Point anchor, int iterations, IntPtr stream);
 
       /// <summary>
       /// Applies an advanced morphological operation to the image
@@ -635,11 +648,13 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="op">The type of morphological operation</param>
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
+      /// <param name="buffer1">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. </param>
+      /// <param name="buffer2">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. Required for morphology operations other than erode or dilate. For erode and dilate operation, you can use IntPtr.Zero here.</param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMorphologyEx")]
-      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, IntPtr stream);
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, IntPtr buffer1, IntPtr buffer2, Point anchor, int iterations, IntPtr stream);
 
       #endregion
 

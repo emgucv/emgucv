@@ -442,6 +442,11 @@ int gpuMatCountNonZero(const cv::gpu::GpuMat* src)
    return cv::gpu::countNonZero(*src);
 }
 
+void gpuMatReduce(const cv::gpu::GpuMat* mtx, cv::gpu::GpuMat* vec, int dim, int reduceOp, cv::gpu::Stream* stream)
+{
+   cv::gpu::reduce(*mtx, *vec, dim, reduceOp, vec->depth(), stream ? *stream : cv::gpu::Stream::Null());
+}
+
 void gpuMatLUT(const cv::gpu::GpuMat* src, const CvArr* lut, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
    cv::Mat lutMat = cv::cvarrToMat(lut);
@@ -509,22 +514,22 @@ void gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize
    cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
+void gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::gpu::erode(*src, *dst, kernelMat, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::erode(*src, *dst, kernelMat, *buffer, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
+void gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::gpu::dilate(*src, *dst, kernelMat, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::dilate(*src, *dst, kernelMat, *buffer, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatMorphologyEx( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
+void gpuMatMorphologyEx( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int op, const CvArr* kernel, cv::gpu::GpuMat* buffer1, cv::gpu::GpuMat* buffer2, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::gpu::morphologyEx(*src, *dst, op, kernelMat, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::morphologyEx(*src, *dst, op, kernelMat, *buffer1, *buffer2, anchor, iterations, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, cv::gpu::Stream* stream)

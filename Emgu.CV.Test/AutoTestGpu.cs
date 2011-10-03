@@ -375,23 +375,43 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuReduce()
+      {
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 320))
+         {
+            img.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+            using (GpuImage<Bgr, byte> gpuImage = new GpuImage<Bgr, byte>(img))
+            using (GpuMat<byte> reduced = new GpuMat<byte>(1, gpuImage.Size.Width, gpuImage.NumberOfChannels, true))
+            {
+               GpuInvoke.Reduce(gpuImage, reduced, CvEnum.REDUCE_DIMENSION.SINGLE_ROW, CvEnum.REDUCE_TYPE.CV_REDUCE_AVG, IntPtr.Zero);
+            }
+         }
+      }
+
+      [Test]
       public void TestErodeDilate()
       {
+         int morphIter = 2;
          Image<Gray, Byte> image = new Image<Gray, byte>(640, 320);
-         image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 2);
+         image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 4);
 
          using (GpuImage<Gray, Byte> gpuImage = new GpuImage<Gray, byte>(image))
          using (GpuImage<Gray, Byte> gpuTemp = new GpuImage<Gray,byte>(gpuImage.Size))
+         using (GpuImage<Gray, Byte> buffer = new GpuImage<Gray,byte>(gpuImage.Size))
          using (Stream stream = new Stream())
          {
-            GpuInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), 1, stream);
-            GpuInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, new Point(-1, -1), 1, stream);
+            //run the GPU version asyncrhonously with stream
+            GpuInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, buffer, new Point(-1, -1), morphIter, stream);
+            GpuInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, buffer, new Point(-1, -1), morphIter, stream);
 
+            //run the CPU version in parallel to the gpu version.
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {
-               CvInvoke.cvErode(image, temp, IntPtr.Zero, 1);
-               CvInvoke.cvDilate(temp, image, IntPtr.Zero, 1);
+               CvInvoke.cvErode(image, temp, IntPtr.Zero, morphIter);
+               CvInvoke.cvDilate(temp, image, IntPtr.Zero, morphIter);
             }
+
+            //syncrhonize with the GPU version
             stream.WaitForCompletion();
 
             Assert.IsTrue(gpuImage.ToImage().Equals(image));
