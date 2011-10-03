@@ -16,6 +16,8 @@ namespace Emgu.Util
    /// <typeparam name="T">The type of elments in the storage</typeparam>
    public class BinaryFileStorage<T> : IEnumerable<T> where T : struct
    {
+      private static int _elementSize = Marshal.SizeOf(typeof(T));
+
       private int _trunkSize;
 
       /// <summary>
@@ -54,9 +56,7 @@ namespace Emgu.Util
          if (_fileInfo.Exists)
             _fileInfo.Delete();
 
-         int size = Marshal.SizeOf(typeof(T));
-
-         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(size))
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
          using (FileStream stream = _fileInfo.OpenWrite())
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
          {
@@ -64,7 +64,7 @@ namespace Emgu.Util
             foreach (T s in samples)
             {
                Marshal.StructureToPtr(s, ptr, false);
-               bufferStream.Write(buffer.Array, 0, size);
+               bufferStream.Write(buffer.Array, 0, _elementSize);
             }
          }
       }
@@ -75,11 +75,10 @@ namespace Emgu.Util
       /// <returns>A copy of the first element in the storage. If the storage is empty, a default value will be returned</returns>
       public T Peek()
       {
-         int elementSize = Marshal.SizeOf(typeof(T));
          using (FileStream stream = _fileInfo.OpenRead())
-         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
          {
-            return (stream.Read(buffer.Array, 0, elementSize) > 0) ?
+            return (stream.Read(buffer.Array, 0, _elementSize) > 0) ?
                (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
                new T();
          }
@@ -112,8 +111,7 @@ namespace Emgu.Util
       /// <returns>The subsampled data in this storage</returns>
       public IEnumerable<T> GetSubsamples(int subsampleRate)
       {
-         int elementSize = Marshal.SizeOf(typeof(T));
-         int bufferSize = elementSize * subsampleRate;
+         int bufferSize = _elementSize * subsampleRate;
 
          using (FileStream stream = _fileInfo.OpenRead())
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
