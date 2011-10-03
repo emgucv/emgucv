@@ -2565,7 +2565,7 @@ namespace Emgu.CV
          MCvTermCriteria termcrit,
          int attempts,
          IntPtr rng,
-         int flags,
+         CvEnum.KMeansInitType flags,
          IntPtr centers,
          IntPtr compactness);
       #endregion
