@@ -70,7 +70,7 @@ namespace SURFFeatureExample
                using (GpuMat<Byte> gpuMask = new GpuMat<byte>(gpuMatchIndices.Size.Height, 1, 1))
                using (Stream stream = new Stream())
                {
-                  matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, k, null, stream);
+                  matcher.KnnMatchSingle(gpuObservedDescriptors, gpuModelDescriptors, gpuMatchIndices, gpuMatchDist, k, null, stream);
                   indices = new Matrix<int>(gpuMatchIndices.Size);
                   mask = new Matrix<byte>(gpuMask.Size);
 

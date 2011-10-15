@@ -81,13 +81,13 @@ namespace Emgu.CV.GPU
       /// <param name="k">The number of nearest neighbours to be searched</param>
       /// <param name="mask">The mask</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void KnnMatch(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask, Stream stream)
+      public void KnnMatchSingle(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask, Stream stream)
       {
          if (k == 2 && ! (modelIdx.IsContinuous && distance.IsContinuous) )
          {
             throw new ArgumentException("For k == 2, the allocated index matrix and distance matrix must be continuous");
          }
-         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
+         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherKnnMatchSingle(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
       }
 
       /// <summary>
@@ -111,7 +111,7 @@ namespace Emgu.CV.GPU
       //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void gpuBruteForceMatcherKnnMatch(
+      public extern static void gpuBruteForceMatcherKnnMatchSingle(
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
          IntPtr trainIdx, IntPtr distance,

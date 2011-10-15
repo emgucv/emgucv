@@ -92,21 +92,25 @@ CVAPI(void) gpuMatUpload(cv::gpu::GpuMat* gpuMat, CvArr* arr);
 
 CVAPI(void) gpuMatDownload(cv::gpu::GpuMat* gpuMat, CvArr* arr);
 
-CVAPI(void) gpuMatAdd(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatAdd(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatAddS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatAddS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatSubtract(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatSubtract(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatSubtractS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatSubtractS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatMultiply(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatMultiply(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, double scale, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMultiplyS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatDivide(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatDivide(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, double scale, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatDivideS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatDivideSR(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatDivideSL(const double s, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatAddWeighted(const cv::gpu::GpuMat* src1, double alpha, const cv::gpu::GpuMat* src2, double beta, double gamma, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatAbsdiff(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
 
@@ -133,6 +137,8 @@ CVAPI(void) gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int fli
 CVAPI(void) gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatExp(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatPow(const cv::gpu::GpuMat* src, double power, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatLog(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b, cv::gpu::Stream* stream);
 
@@ -247,7 +253,7 @@ CVAPI(void) gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** ma
 
 CVAPI(void) gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const cv::gpu::GpuMat* trainDescs);
 
-CVAPI(void) gpuBruteForceMatcherKnnMatch(
+CVAPI(void) gpuBruteForceMatcherKnnMatchSingle(
    cv::gpu::BruteForceMatcher_GPU_base* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
    cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 

@@ -122,7 +122,7 @@ namespace Emgu.CV.GPU.Test
             GpuImage<Gray, Byte> gpuImgSum = new GpuImage<Gray, byte>(gpuImg1.Size);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               GpuInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
+               GpuInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero, IntPtr.Zero);
             watch2.Stop();
             Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
             watch.Stop();
@@ -476,11 +476,11 @@ namespace Emgu.CV.GPU.Test
                Matrix<float> distance = new Matrix<float>(trainIdx.Size);
 
                using (GpuMat<Byte> gpuObservedDescriptors = new GpuMat<byte>(observedDescriptors))
-               using (GpuMat<int> gpuTrainIdx = new GpuMat<int>(trainIdx))
-               using (GpuMat<float> gpuDistance = new GpuMat<float>(distance))
+               using (GpuMat<int> gpuTrainIdx = new GpuMat<int>(trainIdx.Rows, trainIdx.Cols, 1, true))
+               using (GpuMat<float> gpuDistance = new GpuMat<float>(distance.Rows, distance.Cols, 1, true))
                {
                   Stopwatch w2 = Stopwatch.StartNew();
-                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null, null);
+                  hammingMatcher.KnnMatchSingle(gpuObservedDescriptors, gpuModelDescriptors, gpuTrainIdx, gpuDistance, k, null, null);
                   w2.Stop();
                   Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec", w2.ElapsedMilliseconds));
                   gpuTrainIdx.Download(trainIdx);

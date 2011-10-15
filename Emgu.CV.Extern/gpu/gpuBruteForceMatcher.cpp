@@ -23,7 +23,7 @@ void gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const
    matcher->add(mats);
 }
 
-void gpuBruteForceMatcherKnnMatch(
+void gpuBruteForceMatcherKnnMatchSingle(
                                   cv::gpu::BruteForceMatcher_GPU_base* matcher,
                                   const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
                                   cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 
@@ -36,7 +36,7 @@ void gpuBruteForceMatcherKnnMatch(
    {  //special case for k == 2;
       cv::gpu::GpuMat idxMat = trainIdx->reshape(2, 1);
       cv::gpu::GpuMat distMat = distance->reshape(2, 1);
-      matcher->knnMatch(*queryDescs, *trainDescs, 
+      matcher->knnMatchSingle(*queryDescs, *trainDescs, 
          idxMat, distMat, 
          emptyMat, k, *mask,
          stream ? *stream : cv::gpu::Stream::Null());
@@ -45,5 +45,5 @@ void gpuBruteForceMatcherKnnMatch(
       CV_Assert(idxMat.data == trainIdx->data);
       CV_Assert(distMat.data == distance->data);
    } else
-      matcher->knnMatch(*queryDescs, *trainDescs, *trainIdx, *distance, emptyMat, k, *mask, stream ? *stream : cv::gpu::Stream::Null());
+      matcher->knnMatchSingle(*queryDescs, *trainDescs, *trainIdx, *distance, emptyMat, k, *mask, stream ? *stream : cv::gpu::Stream::Null());
 }

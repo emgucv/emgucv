@@ -243,62 +243,62 @@ namespace Emgu.CV.GPU
       #region arithmatic
       /// <summary>
       /// Adds one matrix to another (c = a + b).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
       /// </summary>
       /// <param name="a">The first matrix to be added.</param>
       /// <param name="b">The second matrix to be added.</param>
       /// <param name="c">The sum of the two matrix</param>
+      /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAdd")]
-      public static extern void Add(IntPtr a, IntPtr b, IntPtr c, IntPtr stream);
+      public static extern void Add(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Adds scalar to a matrix (c = a + scalar)
-      /// Supports CV_32FC1 and CV_32FC2 type
       /// </summary>
       /// <param name="a">The matrix to be added.</param>
       /// <param name="scalar">The scalar to be added.</param>
       /// <param name="c">The sum of the matrix and the scalar</param>
+      /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAddS")]
-      public static extern void Add(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
+      public static extern void Add(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Subtracts one matrix from another (c = a - b).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types
       /// </summary>
       /// <param name="a">The matrix where subtraction take place</param>
       /// <param name="b">The matrix to be substracted</param>
       /// <param name="c">The result of a - b</param>
+      /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSubtract")]
-      public static extern void Subtract(IntPtr a, IntPtr b, IntPtr c, IntPtr stream);
+      public static extern void Subtract(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, IntPtr stream);
 
       /// <summary>
-      /// Subtracts one matrix from another (c = a - scalar).
+      /// Computes element-wise weighted product of the two arrays (c = scale * a * b) 
       /// Supports CV_32FC1 and CV_32FC2 type.
       /// </summary>
       /// <param name="a">The matrix to be substraced from</param>
       /// <param name="scalar">The scalar to be substracted</param>
       /// <param name="c">The matrix substraced by the scalar</param>
+      /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSubtractS")]
-      public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
+      public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask, IntPtr stream);
 
       /// <summary>
-      /// Computes element-wise product of the two GpuMat (c = a * b).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
+      /// Computes element-wise product of the two GpuMat: c = scale * a * b.
       /// </summary>
       /// <param name="a">The first GpuMat to be element-wise multiplied.</param>
       /// <param name="b">The second GpuMat to be element-wise multiplied.</param>
       /// <param name="c">The element-wise multiplication of the two GpuMat</param>
+      /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMultiply")]
-      public static extern void Multiply(IntPtr a, IntPtr b, IntPtr c, IntPtr stream);
+      public static extern void Multiply(IntPtr a, IntPtr b, IntPtr c, double scale, IntPtr stream);
 
       /// <summary>
       /// Multiplies GpuMat to a scalar (c = a * scalar).
-      /// Supports CV_32FC1 and CV_32FC2 type.
       /// </summary>
       /// <param name="a">The first GpuMat to be element-wise multiplied.</param>
       /// <param name="scalar">The scalar to be multiplied</param>
@@ -308,30 +308,51 @@ namespace Emgu.CV.GPU
       public static extern void Multiply(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
 
       /// <summary>
-      /// Computes element-wise quotient of the two GpuMat (c = a / b).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
+      /// Computes element-wise quotient of the two GpuMat (c = scale *  a / b).
       /// </summary>
       /// <param name="a">The first GpuMat</param>
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The element-wise quotient of the two GpuMat</param>
+      /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivide")]
-      public static extern void Divide(IntPtr a, IntPtr b, IntPtr c, IntPtr stream);
+      public static extern void Divide(IntPtr a, IntPtr b, IntPtr c, double scale, IntPtr stream);
 
       /// <summary>
-      /// computes element-wise quotient of a GpuMat and scalar (c = a / scalar).
-      /// Supports CV_32FC1 and CV_32FC2 type.
+      /// Computes element-wise quotient of a GpuMat and scalar (c = a / scalar).
       /// </summary>
       /// <param name="a">The first GpuMat to be element-wise divided.</param>
       /// <param name="scalar">The scalar to be divided</param>
       /// <param name="c">The result of the GpuMat divided by the scalar</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideS")]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideSR")]
       public static extern void Divide(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
 
       /// <summary>
+      /// Computes element-wise weighted reciprocal of an array (c = scale/ b).
+      /// </summary>
+      /// <param name="b">The second GpuMat to be element-wise divided.</param>
+      /// <param name="scalar">The dirst scalar to be divided</param>
+      /// <param name="c">The result of the scalar dividing the GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideSL")]
+      public static extern void Divide(double scalar, IntPtr b, IntPtr c, IntPtr stream);
+
+      /// <summary>
+      /// Computes the weighted sum of two arrays (dst = alpha*src1 + beta*src2 + gamma)
+      /// </summary>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="alpha">The weight for <paramref name="src1"/></param>
+      /// <param name="src2">The second source GpuMat</param>
+      /// <param name="beta">The weight for <paramref name="src2"/></param>
+      /// <param name="gamma">The constant to be added</param>
+      /// <param name="dst">The result</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAddWeighted")]
+      public static extern void AddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, IntPtr stream);
+
+      /// <summary>
       /// Computes element-wise absolute difference of two GpuMats (c = abs(a - b)).
-      /// Supports CV_8UC1, CV_8UC4, CV_32SC1, CV_32FC1 types.
       /// </summary>
       /// <param name="a">The first GpuMat</param>
       /// <param name="b">The second GpuMat</param>
@@ -342,7 +363,6 @@ namespace Emgu.CV.GPU
 
       /// <summary>
       /// Computes element-wise absolute difference of GpuMat and scalar (c = abs(a - s)).
-      /// Supports only CV_32FC1 type.
       /// </summary>
       /// <param name="a">A GpuMat</param>
       /// <param name="scalar">A scalar</param>
@@ -422,6 +442,19 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatExp")]
       public static extern void Exp(IntPtr src, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes power of each matrix element:
+      ///   (dst(i,j) = pow(     src(i,j) , power), if src.type() is integer;
+      ///   (dst(i,j) = pow(fabs(src(i,j)), power), otherwise.
+      /// supports all, except depth == CV_64F
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="power">The power</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPow")]
+      public static extern void Pow(IntPtr src, double power, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Computes natural logarithm of absolute value of each matrix element: b = log(abs(a))
