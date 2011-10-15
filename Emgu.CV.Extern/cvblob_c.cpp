@@ -4,7 +4,6 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "cvblob_c.h"
 
 unsigned int cvbCvLabel(const IplImage *img, IplImage *imgOut, cvb::CvBlobs* blobs)
@@ -55,7 +54,7 @@ bool cvbCvBlobsAdd(cvb::CvBlobs* blobs, unsigned int label, cvb::CvBlob* blob)
    cvb::CvBlob* newBlob = new cvb::CvBlob();
    memcpy(newBlob, blob, sizeof(cvb::CvBlob));
 
-   std::pair< cvb::CvBlobs::iterator, bool > result = blobs->insert(cvb::CvLabelBlob(label, blob));
+   std::pair< cvb::CvBlobs::iterator, bool > result = blobs->insert(cvb::CvLabelBlob(label, newBlob));
 
    if (!result.second)
    {  //key already exist
@@ -187,11 +186,11 @@ bool cvbCvTracksAdd(cvb::CvTracks* tracks, unsigned int id, cvb::CvTrack* track)
 
    cvb::CvTrack* newTrack = new cvb::CvTrack();
    memcpy(newTrack, track, sizeof(cvb::CvTrack));
-   std::pair< cvb::CvTracks::iterator, bool > result = tracks->insert(cvb::CvIDTrack(id, track));
+   std::pair< cvb::CvTracks::iterator, bool > result = tracks->insert(cvb::CvIDTrack(id, newTrack));
 
    if (!result.second)
    {  //key already exist
-      //blob is not added
+      //track is not added
       //we should delete the newBlob to avoid memory leak
       delete newTrack;
    }
