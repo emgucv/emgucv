@@ -7,7 +7,7 @@
 #ifndef CVBLOB_C_H
 #define CVBLOB_C_H
 
-#include "cvblob/cvblob.h"
+#include "cvblob/libcvblob/cvblob.h"
 
 CVAPI(unsigned int) cvbCvLabel(const IplImage *img, IplImage *imgOut, cvb::CvBlobs* blobs);
 CVAPI(void) cvbCvRenderBlobs(const IplImage *imgLabel, cvb::CvBlobs* blobs, IplImage *imgSource, IplImage *imgDest, unsigned short mode, double alpha);
