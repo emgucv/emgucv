@@ -1622,6 +1622,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGraySingleImage()
+      {
+         Image<Gray, Single> img = new Image<Gray, float>(320, 480);
+         img.SetRandUniform(new MCvScalar(), new MCvScalar(255));
+         Image<Gray, Byte> mask = img.Cmp(100, CvEnum.CMP_TYPE.CV_CMP_GE);
+         int[] count = mask.CountNonzero();
+         int c = count[0];
+      }
+
+      [Test]
       public void TestDiatanceTransform()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(480, 320);
@@ -1649,22 +1659,33 @@ namespace Emgu.CV.Test
       [Test]
       public void TestBinaryStorage()
       {
-         Point[] pts = new Point[10000000];
+         //generate some randome points
+         PointF[] pts = new PointF[10000000];
+         GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
+         using (Matrix<float> ptsMat = new Matrix<float>(pts.Length, 2, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
+         {
+            ptsMat.SetRandNormal(new MCvScalar(), new MCvScalar(100));
+         }
+         handle.Free();
+
          String fileName = GetTempFileName();
          Stopwatch watch = Stopwatch.StartNew();
-         BinaryFileStorage<Point> stor = new BinaryFileStorage<Point>(fileName, pts);
+         //BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>(fileName, pts);
+         BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>("abc.data", pts);
          watch.Stop();
          Trace.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
          watch.Reset(); watch.Start();
-         int counter = 0;
-         foreach (Point p in stor)
-         {
-            counter++;
-         }
+         PointF[] pts2 = stor.ToArray();
          watch.Stop();
-         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", counter, watch.ElapsedMilliseconds));
+         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
          File.Delete(fileName);
+
+         //Check for equality
+         for (int i = 0; i < pts.Length; i++)
+         {
+            Assert.AreEqual(pts[i], pts2[i]);
+         }
       }
 
       [Test]

@@ -760,7 +760,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, float> matA = new Image<Gray, float>("stuff.jpg");
 
-         //The matrix to be convoled with matA, a bluring filter
+         //The matrix to be convolved with matA, a bluring filter
          Matrix<float> matB = new Matrix<float>(
             new float[,] { 
             {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 

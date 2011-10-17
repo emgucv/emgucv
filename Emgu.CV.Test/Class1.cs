@@ -641,10 +641,26 @@ namespace Emgu.CV.Test
 
       public void TestBlobTracking()
       {
+         MCvFGDStatModelParams fgparam = new MCvFGDStatModelParams();
+         fgparam.alpha1 = 0.1f;
+         fgparam.alpha2 = 0.005f;
+         fgparam.alpha3 = 0.1f;
+         fgparam.delta = 2;
+         fgparam.is_obj_without_holes = 1;
+         fgparam.Lc = 32;
+         fgparam.Lcc = 16;
+         fgparam.minArea = 15;
+         fgparam.N1c = 15;
+         fgparam.N1cc = 25;
+         fgparam.N2c = 25;
+         fgparam.N2cc = 35;
+         fgparam.perform_morphing = 0;
+         fgparam.T = 0.9f;
+
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
-         //param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
-         //param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF);
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD, fgparam);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG);
          param.FGTrainFrames = 10;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
@@ -656,12 +672,14 @@ namespace Emgu.CV.Test
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
                tracker.Process(capture.RetrieveBgrFrame());
+               
+               //Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
 
-               Image<Gray, Byte> img = tracker.ForgroundMask;
+               Image<Bgr, Byte> img = tracker.ForgroundMask.Convert<Bgr, Byte>();
                foreach (MCvBlob blob in tracker)
                {
-                  img.Draw((Rectangle)blob, new Gray(255.0), 2);
-                  img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Gray(255.0));
+                  img.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
+                  img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
                }
                viewer.Image = img;
             };
