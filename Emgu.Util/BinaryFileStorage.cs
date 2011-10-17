@@ -20,6 +20,8 @@ namespace Emgu.Util
 
       private int _trunkSize;
 
+      private const int _defaultTrunkSize = 4096;
+
       /// <summary>
       /// The file info
       /// </summary>
@@ -30,8 +32,8 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="fileName">The file name of the storage</param>
       public BinaryFileStorage(String fileName)
+         : this(fileName, _defaultTrunkSize)
       {
-         _fileInfo = new FileInfo(fileName);
       }
 
       /// <summary>
@@ -42,29 +44,65 @@ namespace Emgu.Util
       public BinaryFileStorage(String fileName, int trunkSize)
       {
          _fileInfo = new FileInfo(fileName);
-         _trunkSize = trunkSize;
+         _trunkSize = trunkSize <= 0 ? _defaultTrunkSize : trunkSize;
       }
 
       /// <summary>
       /// Create a binary File Storage with the specific data
       /// </summary>
-      /// <param name="fileName">The file name of the storage</param>
+      /// <param name="fileName">The file name of the storage, all data in the existing file will be replaced</param>
       /// <param name="samples">The data which will be stored in the storage</param>
       public BinaryFileStorage(String fileName, IEnumerable<T> samples)
+         : this(fileName)
       {
-         _fileInfo = new FileInfo(fileName);
+         Clear();
+         Append(samples);
+      }
+
+      /// <summary>
+      /// Delete all data in the existing storage, if there is any.
+      /// </summary>
+      public void Clear()
+      {
          if (_fileInfo.Exists)
             _fileInfo.Delete();
+      }
 
-         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
-         using (FileStream stream = _fileInfo.OpenWrite())
-         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
+      /// <summary>
+      /// Append the samples to the end of the storage
+      /// </summary>
+      /// <param name="samples">The samples to be appended to the storage</param>
+      public void Append(IEnumerable<T> samples)
+      {
+         int elementsInTrunk = _trunkSize / _elementSize;
+         if (elementsInTrunk <= 0)
+            elementsInTrunk = 1;
+
+         byte[] byteBuffer = new byte[elementsInTrunk * _elementSize];
+         int index = 0;
+         using (PinnedArray<T> buffer = new PinnedArray<T>(elementsInTrunk))
+         using (FileStream stream = _fileInfo.Open(FileMode.Append, FileAccess.Write))
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
          {
             IntPtr ptr = buffer.AddrOfPinnedObject();
             foreach (T s in samples)
             {
-               Marshal.StructureToPtr(s, ptr, false);
-               bufferStream.Write(buffer.Array, 0, _elementSize);
+               buffer.Array[index++] = s;
+
+               if (index == buffer.Array.Length)
+               {
+                  int writeCount = index * _elementSize;
+                  Marshal.Copy(ptr, byteBuffer, 0, writeCount);
+                  bufferStream.Write(byteBuffer, 0, writeCount);
+                  index = 0;
+               }
+            }
+            if (index != 0)
+            {
+               int writeCount = index * _elementSize;
+               Marshal.Copy(ptr, byteBuffer, 0, writeCount);
+               bufferStream.Write(byteBuffer, 0, writeCount);
+               index = 0;
             }
          }
       }
@@ -101,7 +139,10 @@ namespace Emgu.Util
       /// <returns>An estimation of the number of elements in this storage</returns>
       public int EstimateSize()
       {
-         return (int)(_fileInfo.Length / (Marshal.SizeOf(typeof(T))));
+         return
+            _fileInfo.Exists ?
+            (int)(_fileInfo.Length / (_elementSize)) :
+            0;
       }
 
       /// <summary>
@@ -111,10 +152,12 @@ namespace Emgu.Util
       /// <returns>The subsampled data in this storage</returns>
       public IEnumerable<T> GetSubsamples(int subsampleRate)
       {
-         int bufferSize = _elementSize * subsampleRate;
+         if (!_fileInfo.Exists)
+            yield break;
 
+         int bufferSize = _elementSize * subsampleRate;
          using (FileStream stream = _fileInfo.OpenRead())
-         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
          using (PinnedArray<T> structure = new PinnedArray<T>(subsampleRate))
          {
@@ -135,20 +178,29 @@ namespace Emgu.Util
       /// <returns>The data in this storage</returns>
       public IEnumerator<T> GetEnumerator()
       {
-         
-         int elementSize = Marshal.SizeOf(typeof(T));
-         using (FileStream stream = _fileInfo.OpenRead())
-         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize <= 0 ? 4096 : _trunkSize))
-         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(elementSize))
-         using (PinnedArray<T> structure = new PinnedArray<T>(1))
-         {
-            IntPtr structAddr = structure.AddrOfPinnedObject();
-            IntPtr addr = buffer.AddrOfPinnedObject();
+         if (!_fileInfo.Exists)
+            yield break;
 
-            while (bufferStream.Read(buffer.Array, 0, elementSize) > 0)
+         int elementsInTrunk = _trunkSize / _elementSize;
+         if (elementsInTrunk <= 0)
+            elementsInTrunk = 1;
+
+         Byte[] buffer = new byte[_elementSize * elementsInTrunk];
+
+         using (FileStream stream = _fileInfo.OpenRead())
+         using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
+         using (PinnedArray<T> structures = new PinnedArray<T>(elementsInTrunk))
+         {
+            IntPtr structAddr = structures.AddrOfPinnedObject();
+            int bytesRead;
+            while ((bytesRead = bufferStream.Read(buffer, 0, buffer.Length)) > 0)
             {
-               Toolbox.memcpy(structAddr, addr, elementSize);
-               yield return structure.Array[0];
+               Marshal.Copy(buffer, 0, structAddr, bytesRead);
+               int elementsRead = bytesRead / _elementSize;
+               for (int i = 0; i < elementsRead; i++)
+               {
+                  yield return structures.Array[i];
+               }
             }
          }
       }
