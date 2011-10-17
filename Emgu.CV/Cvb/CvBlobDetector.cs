@@ -31,6 +31,10 @@ namespace Emgu.CV.Cvb
       private extern static void cvbCvFilterLabels(IntPtr imgIn, IntPtr imgOut, IntPtr blobs);
       #endregion
 
+      private uint[,] _data;
+      private GCHandle _dataHandle;
+
+      private static int _sizeOfUInt32 = Marshal.SizeOf(typeof(UInt32));
       /// <summary>
       /// Detect blobs from input image.
       /// </summary>
@@ -39,18 +43,16 @@ namespace Emgu.CV.Cvb
       /// <returns>Number of pixels that has been labeled.</returns>
       public uint Detect(Image<Gray, Byte> img, CvBlobs blobs)
       {
-         if (IntPtr.Zero == _ptr)
+         Size size = img.Size;
+
+         if (_data == null || _data.GetLength(0) != size.Height || _data.GetLength(1) != size.Width)
          {
-            _ptr = CvInvoke.cvCreateImage(img.Size, (CvEnum.IPL_DEPTH)(Marshal.SizeOf(typeof(uint)) * 8), 1);
-         }
-         else
-         {
-            MIplImage iplimage = (MIplImage)Marshal.PtrToStructure(_ptr, typeof(MIplImage));
-            if (iplimage.width != img.Width || iplimage.height != img.Height)
-            {
-               CvInvoke.cvReleaseImage(ref _ptr);
-               _ptr = CvInvoke.cvCreateImage(img.Size, (CvEnum.IPL_DEPTH)(Marshal.SizeOf(typeof(uint)) * 8), 1);
-            }
+            DisposeObject();
+
+            _data = new UInt32[size.Height, size.Width];
+            _dataHandle = GCHandle.Alloc(_data, GCHandleType.Pinned);
+            _ptr = CvInvoke.cvCreateImageHeader(size, (CvEnum.IPL_DEPTH)(_sizeOfUInt32 * 8), 1);
+            CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _sizeOfUInt32 * size.Width);
          }
 
          return cvbCvLabel(img, _ptr, blobs);
@@ -138,8 +140,32 @@ namespace Emgu.CV.Cvb
       /// </summary>
       protected override void DisposeObject()
       {
-         if (IntPtr.Zero != _ptr)
-            CvInvoke.cvReleaseImage(ref _ptr);
+         if (_data != null)
+         {
+            _dataHandle.Free();
+            CvInvoke.cvReleaseImageHeader(ref _ptr);
+            _data = null;
+         }
+      }
+
+      internal struct BlobColor : IColor
+      {
+         public MCvScalar MCvScalar
+         {
+            get
+            {
+               throw new NotImplementedException();
+            }
+            set
+            {
+               throw new NotImplementedException();
+            }
+         }
+
+         public int Dimension
+         {
+            get { return 8; }
+         }
       }
    }
 }
