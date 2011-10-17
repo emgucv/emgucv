@@ -114,8 +114,8 @@ namespace Emgu.CV.UI
          // 
          // loadImageFromFileDialog
          // 
-         this.loadImageFromFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif*.bmp" +
-             ";*.png;*.tiff;*.tif|All Files(*.*)|*.*";
+         this.loadImageFromFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif;*.bm" +
+             "p;*.png;*.tiff;*.tif|All Files(*.*)|*.*";
          this.loadImageFromFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
          // 
          // saveImageToFileDialog
