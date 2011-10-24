@@ -140,7 +140,7 @@ CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
 CVAPI(int) CvOrbDetectorGetDescriptorSize(cv::ORB* detector);
 
-CVAPI(void) CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
+CVAPI(void) CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
 //Brief descriptor extractor
 CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
