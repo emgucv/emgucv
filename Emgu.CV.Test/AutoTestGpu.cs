@@ -168,6 +168,25 @@ namespace Emgu.CV.GPU.Test
          }
       }
 
+      [Test]
+      public void TestGpuFlip()
+      {
+         if (GpuInvoke.HasCuda)
+         {
+            using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
+            {
+               img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+               using (Image<Bgr, Byte> img1Flip = img1.Flip(CvEnum.FLIP.HORIZONTAL | CvEnum.FLIP.VERTICAL))
+               using (GpuImage<Bgr, Byte> gpuImg1 = new GpuImage<Bgr, byte>(img1))
+               using (GpuImage<Bgr, Byte> gpuFlip = new GpuImage<Bgr,byte>(img1.Size))
+               {
+                  GpuInvoke.Flip(gpuImg1, gpuFlip, CvEnum.FLIP.HORIZONTAL | CvEnum.FLIP.VERTICAL, null);
+                  gpuFlip.Download(img1);
+                  Assert.IsTrue(img1.Equals(img1Flip));
+               }
+            }
+         }
+      }
 
       [Test]
       public void TestConvolutionAndLaplace()

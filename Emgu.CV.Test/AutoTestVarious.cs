@@ -184,8 +184,8 @@ namespace Emgu.CV.Test
                //rect2.Center.X -= 0.5;
                //rect2.Center.Y -= 0.5;
                Assert.IsTrue(rect2.Equals(rect));
-               Assert.AreEqual(cs.InContour(pIn), 100);
-               Assert.AreEqual(cs.InContour(pOut), -100);
+               Assert.IsTrue(cs.InContour(pIn) > 0);
+               Assert.IsTrue(cs.InContour(pOut) < 0);
                Assert.AreEqual(cs.Distance(pIn), 10);
                Assert.AreEqual(cs.Distance(pOut), -50);
                img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
@@ -1496,16 +1496,10 @@ namespace Emgu.CV.Test
       [Test]
       public void TestHOGTrain64x128()
       {
-         using (HOGDescriptor hog = new HOGDescriptor())
          using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
          using (Image<Bgr, Byte> resize = image.Resize(64, 128, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC))
+         using (HOGDescriptor hog = new HOGDescriptor(resize))
          {
-            float[] descriptor = hog.Compute(
-               resize,
-               Size.Empty, //new Size(8, 8), //winStride
-               Size.Empty, //new Size(16, 16), //padding
-               null);
-            hog.SetSVMDetector(descriptor);
             Stopwatch watch = Stopwatch.StartNew();
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
@@ -1520,34 +1514,17 @@ namespace Emgu.CV.Test
       public void TestHOGTrainAnySize()
       {
          using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (HOGDescriptor hog = new HOGDescriptor(image))
          {
-            using (HOGDescriptor hog = new HOGDescriptor(
-               image.Size, //winSize 
-               new Size(16, 16), //blockSize 
-               new Size(8, 8), //blockStride
-               new Size(8, 8), //cellSize
-               9, //nbins  
-               1, //derivAperture
-               -1, //winSigma
-               0.2, //L2HysThreshold
-               true))
-            {
 
-               float[] descriptor = hog.Compute(
-                  image,
-                  Size.Empty, //new Size(8, 8), //winStride
-                  Size.Empty, //new Size(16, 16), //padding
-                  null);
-               hog.SetSVMDetector(descriptor);
                Stopwatch watch = Stopwatch.StartNew();
                Rectangle[] rects = hog.DetectMultiScale(image);
                watch.Stop();
                foreach (Rectangle rect in rects)
                   image.Draw(rect, new Bgr(Color.Red), 1);
 
-               Trace.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
-               //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
-            }
+            Trace.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 
@@ -1595,7 +1572,8 @@ namespace Emgu.CV.Test
 
          CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
          CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
-
+         CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_EQ);
+         //ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
       }
 
       [Test]
