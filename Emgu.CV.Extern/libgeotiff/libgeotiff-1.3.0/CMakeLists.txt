@@ -10,8 +10,17 @@
 # Dec 9, 2010   Not to include source or header file for emgucv installation
 #
 ###############################################################################
-PROJECT(GeoTIFF)
 
+SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
+###############################################################################
+# Build libxtiff library
+PROJECT(xtiff)
+include_directories( ${TIFF_INCLUDE_DIR})
+ADD_LIBRARY(${PROJECT_NAME} STATIC "${LIBGEOTIFF_DIR}/libxtiff/xtiff.c")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rdparty")
+
+PROJECT(GeoTIFF)
 SET(GEOTIFF_LIB_NAME geotiff)
 #SET(GEOTIFF_LIBRARY_TARGET geotiff_library)
 SET(GEOTIFF_ARCHIVE_TARGET geotiff_archive)
@@ -26,9 +35,9 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 MARK_AS_ADVANCED(CMAKE_VERBOSE_MAKEFILE)
 
 # Path to additional CMake modules
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake ${CMAKE_MODULE_PATH})
+SET(CMAKE_MODULE_PATH ${LIBGEOTIFF_DIR}/../cmake ${CMAKE_MODULE_PATH})
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
+INCLUDE_DIRECTORIES("${LIBGEOTIFF_DIR}")
 
 ###############################################################################
 # General build settings
@@ -93,7 +102,7 @@ CHECK_INCLUDE_FILES(string.h HAVE_STRING_H)
 
 SET(GEOTIFF_CSV_NAMES area.csv codes.csv datum.csv gcs.csv pcs.csv)
 FIND_PATH(GEOTIFF_CSV_DATA_DIR NAMES ${GEOTIFF_CSV_NAMES}
-    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/csv"
+    PATHS "${LIBGEOTIFF_DIR}/csv"
     DOC "Default location of GeoTIFF CSV files"
     NO_DEFAULT_PATH)
 
@@ -112,15 +121,10 @@ MESSAGE(STATUS "Enable in-code GeoTIFF EPSG tables: ${GEOTIFF_ENABLE_INCODE_EPSG
 
 ###############################################################################
 # Search for dependencies
-#FIND_PACKAGE(TIFF)
-#IF(NOT TIFF_FOUND)
-#  SET(TIFF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../opencv/3rdparty/libtiff")
-#ENDIF()
 INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-#MESSAGE("TIFF FOUND: ${TIFF_FOUND}; TIFF include: ${TIFF_INCLUDE_DIR}")
 ADD_DEFINITIONS(-DHAVE_TIFF=1)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/libxtiff")
+INCLUDE_DIRECTORIES("${LIBGEOTIFF_DIR}/libxtiff")
 
 # PROJ.4 support - optional, default=ON
 SET(WITH_PROJ4 TRUE CACHE BOOL "Choose if PROJ.4 support should be built")
@@ -145,7 +149,7 @@ ENDIF()
 # Zlib support - optional, default=OFF
 FIND_PACKAGE(ZLIB)
 IF(NOT ZLIB_FOUND)
-SET(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/3rdparty/include")
+SET(ZLIB_INCLUDE_DIR "${LIBGEOTIFF_DIR}/../../opencv/3rdparty/include")
 ENDIF()
 SET(HAVE_ZIP 1)
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
@@ -154,7 +158,7 @@ ADD_DEFINITIONS(-DHAVE_ZIP=${HAVE_ZIP})
 # JPEG support - optional, default=OFF
 FIND_PACKAGE(JPEG)
 IF(NOT JPEG_FOUND)
-  SET(JPEG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/3rdparty/include")
+  SET(JPEG_INCLUDE_DIR "${LIBGEOTIFF_DIR}/../../opencv/3rdparty/include")
 ENDIF()
 SET(HAVE_JPEG 1)
 INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
@@ -166,8 +170,8 @@ ADD_DEFINITIONS(-DHAVE_JPEG=${HAVE_JPEG})
 
 MESSAGE(STATUS "Generating geo_config.h header")
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/geo_config.h.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/geo_config.h)
+CONFIGURE_FILE(${LIBGEOTIFF_DIR}/../cmake/geo_config.h.in
+    ${LIBGEOTIFF_DIR}/geo_config.h)
 
 MESSAGE(STATUS "Generating geo_config.h header - done")
 
@@ -274,11 +278,6 @@ SET(GEOTIFF_DATA_DIR ${GEOTIFF_DATA_SUBDIR})
 
 # Install header files for development distribution
 #INSTALL(FILES ${GEOTIFF_LIB_HEADERS} DESTINATION ${GEOTIFF_INCLUDE_DIR})
-
-###############################################################################
-# Build libxtiff library
-
-ADD_SUBDIRECTORY("libxtiff")
 
 ###############################################################################
 # Build libgeotiff library
