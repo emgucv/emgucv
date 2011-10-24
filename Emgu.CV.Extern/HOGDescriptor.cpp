@@ -5,7 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "objdetect_c.h"
-
+//#include "stdio.h"
 void CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   
    std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
@@ -44,15 +44,30 @@ void CvHOGDescriptorDetectMultiScale(
    CvSize winStride,
    CvSize padding, 
    double scale,
-   int groupThreshold)
+   double finalThreshold, 
+   bool useMeanshiftGrouping)
 {
    cvClearSeq(foundLocations);
 
    std::vector<cv::Rect> rects;
+   std::vector<double> weights;
    cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detectMultiScale(mat, rects, hitThreshold, winStride, padding, scale, groupThreshold);
-   if (rects.size() > 0)
-      cvSeqPushMulti(foundLocations, &rects[0], rects.size());
+   descriptor->detectMultiScale(mat, rects, weights, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping );
+   //CV_Assert(rects.size() == weights.size());
+
+   //char message[2000];
+   //sprintf(message, "rect.size() = %d; weights.size() = %d", rects.size(), weights.size());
+   //CV_Error(rects.size() == weights.size(), message);
+
+   for (unsigned int i = 0; i < rects.size(); ++i)
+   {
+      CvObjectDetection d;
+      d.rect = rects[i];
+      //The implementation without meanshift is not producing the right weight.
+      //This is due to the group_rectangle function call do not pass the weights for recalculation.
+      d.score = useMeanshiftGrouping ? (float) weights[i] : 0;  
+      cvSeqPush(foundLocations, &d);
+   }
 }
 
 void CvHOGDescriptorCompute(

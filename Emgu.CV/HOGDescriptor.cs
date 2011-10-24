@@ -54,7 +54,9 @@ namespace Emgu.CV
          Size winStride,
          Size padding,
          double scale,
-         int groupThreshold);
+         double finalThreshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useMeanshiftGrouping);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvHOGDescriptorCompute(
@@ -67,10 +69,7 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
-
       #endregion
-
-      private VectorOfFloat _vector;
 
       /// <summary>
       /// Create a new HOGDescriptor
@@ -78,7 +77,6 @@ namespace Emgu.CV
       public HOGDescriptor()
       {
          _ptr = CvHOGDescriptorCreateDefault();
-         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -115,7 +113,48 @@ namespace Emgu.CV
             0,
             L2HysThreshold,
             gammaCorrection);
-         _vector = new VectorOfFloat();
+      }
+
+      /// <summary>
+      /// Create a new HOGDescriptor using the specific parameters.
+      /// </summary>
+      /// <param name="template">The template image to be detected.</param>
+      /// <param name="blockSize">Block size in cells. Use (16, 16) for default.</param>
+      /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
+      /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage. Use 0.2 for default.</param>
+      /// <param name="nbins">Number of bins. Use 9 for default.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default. </param>
+      /// <param name="derivAperture">Use 1 for default.</param>
+      public HOGDescriptor(
+         Image<Bgr, Byte> template,
+         Size blockSize,
+         Size blockStride,
+         Size cellSize,
+         int nbins,
+         int derivAperture,
+         double winSigma,
+         double L2HysThreshold,
+         bool gammaCorrection)
+         : this(template.Size, blockSize, blockStride, cellSize, nbins, derivAperture, winSigma, L2HysThreshold, gammaCorrection)
+      {
+
+         float[] descriptor = Compute(
+            template,
+            Size.Empty, //new Size(8, 8), //winStride
+            Size.Empty, //new Size(16, 16), //padding
+            null);
+         SetSVMDetector(descriptor);
+      }
+
+      /// <summary>
+      /// Create a new HogDescriptor using the specific template and default parameters.
+      /// </summary>
+      /// <param name="template">The template image to be detected.</param>
+      public HOGDescriptor(Image<Bgr, Byte> template)
+         : this(template, new Size(16, 16), new Size(8, 8), new Size(8, 8), 9, 1, -1, 0.2, true)
+      {
       }
 
       /// <summary>
@@ -138,34 +177,10 @@ namespace Emgu.CV
       /// <param name="detector">The SVM detector</param>
       public void SetSVMDetector(float[] detector)
       {
-         _vector.Clear();
-         _vector.Push(detector);
-         CvHOGSetSVMDetector(_ptr, _vector);
-      }
-
-      /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The image to search in</param>
-      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
-      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
-      /// <param name="padding"></param>
-      /// <param name="scale">Coefficient of the detection window increase.</param>
-      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
-      /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(
-         Image<Bgr, Byte> image,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int groupThreshold)
-      {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfFloat vec = new VectorOfFloat())
          {
-            Seq<Rectangle> seq = new Seq<Rectangle>(stor);
-            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, groupThreshold);
-            return seq.ToArray();
+            vec.Push(detector);
+            CvHOGSetSVMDetector(_ptr, vec);
          }
       }
 
@@ -173,10 +188,42 @@ namespace Emgu.CV
       /// Perfroms object detection with increasing detection window.
       /// </summary>
       /// <param name="image">The image to search in</param>
+      /// <param name="hitThreshold">
+      /// Threshold for the distance between features and SVM classifying plane.
+      /// Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+      /// But if the free coefficient is omitted (which is allowed), you can specify it manually here.
+      ///</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
+      /// <param name="padding"></param>
+      /// <param name="scale">Coefficient of the detection window increase.</param>
+      /// <param name="finalThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping. Should be an integer if not using meanshift grouping. Use 2.0 for default</param>
+      /// <param name="useMeanshiftGrouping">If true, it will use meanshift grouping.</param>
       /// <returns>The regions where positives are found</returns>
+      public Rectangle[] DetectMultiScale(
+         Image<Bgr, Byte> image,
+         double hitThreshold,
+         Size winStride,
+         Size padding,
+         double scale,
+         int finalThreshold,
+         bool useMeanshiftGrouping)
+      {
+         using (MemStorage stor = new MemStorage())
+         {
+            Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
+            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
+            return Array.ConvertAll(seq.ToArray(), delegate(MCvObjectDetection obj) { return obj.Rect; });
+         }
+      }
+
+      /// <summary>
+      /// Perfroms object detection with increasing detection window.
+      /// </summary>
+      /// <param name="image">The image to search in</param>
+      /// <returns>The regions where positives are found.</returns>
       public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
       {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2);
+         return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2, false);
       }
 
       /// <summary>
@@ -203,15 +250,6 @@ namespace Emgu.CV
             }
             return desc.ToArray();
          }
-      }
-
-      /// <summary>
-      /// Release the managed resources associated with this object
-      /// </summary>
-      protected override void ReleaseManagedResources()
-      {
-         _vector.Dispose();
-         base.ReleaseManagedResources();
       }
 
       /// <summary>
