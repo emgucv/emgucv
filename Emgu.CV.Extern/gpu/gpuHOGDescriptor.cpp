@@ -39,7 +39,11 @@ void gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, std::vector<float>
    descriptor->setSVMDetector(*vector); 
 }
 
-void gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor* descriptor) { delete descriptor; }
+void gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor** descriptor) 
+{ 
+   delete *descriptor;
+   *descriptor = 0;
+}
 
 void gpuHOGDescriptorDetectMultiScale(
    cv::gpu::HOGDescriptor* descriptor, 

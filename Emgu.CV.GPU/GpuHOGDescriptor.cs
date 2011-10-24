@@ -42,7 +42,7 @@ namespace Emgu.CV.GPU
          int nLevels);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorRelease(IntPtr descriptor);
+      private extern static void gpuHOGDescriptorRelease(ref IntPtr descriptor);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void gpuHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
@@ -59,15 +59,12 @@ namespace Emgu.CV.GPU
          int groupThreshold);
       #endregion
 
-      private VectorOfFloat _vector;
-
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
       public GpuHOGDescriptor()
       {
          _ptr = gpuHOGDescriptorCreateDefault();
-         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -103,8 +100,6 @@ namespace Emgu.CV.GPU
             L2HysThreshold,
             gammaCorrection,
             nLevels);
-
-         _vector = new VectorOfFloat();
       }
 
       /// <summary>
@@ -148,9 +143,11 @@ namespace Emgu.CV.GPU
       /// <param name="detector">The SVM detector</param>
       public void SetSVMDetector(float[] detector)
       {
-         _vector.Clear();
-         _vector.Push(detector);
-         gpuHOGSetSVMDetector(_ptr, _vector);
+         using (VectorOfFloat vec = new VectorOfFloat())
+         {
+            vec.Push(detector);
+            gpuHOGSetSVMDetector(_ptr, vec);
+         }
       }
 
       private Rectangle[] DetectMultiScale(
@@ -232,20 +229,11 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Release the managed resources associated with this object
-      /// </summary>
-      protected override void ReleaseManagedResources()
-      {
-         _vector.Dispose();
-         base.ReleaseManagedResources();
-      }
-
-      /// <summary>
       /// Release the unmanaged memory associated with this HOGDescriptor
       /// </summary>
       protected override void DisposeObject()
       {
-         gpuHOGDescriptorRelease(_ptr);
+         gpuHOGDescriptorRelease(ref _ptr);
       }
    }
 }
