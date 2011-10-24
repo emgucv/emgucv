@@ -566,8 +566,9 @@ namespace Emgu.CV.GPU
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMatchTemplate")]
-      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method);
+      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr stream);
 
       /// <summary>
       /// Computes mean value and standard deviation
@@ -846,6 +847,29 @@ namespace Emgu.CV.GPU
       #endregion
 
       /// <summary>
+      /// Performs generalized matrix multiplication:
+      /// dst = alpha*op(src1)*op(src2) + beta*op(src3), where op(X) is X or XT
+      /// </summary>
+      /// <param name="src1">The first source array. </param>
+      /// <param name="src2">The second source array. </param>
+      /// <param name="alpha">The scalar</param>
+      /// <param name="src3">The third source array (shift). Can be IntPtr.Zero, if there is no shift.</param>
+      /// <param name="beta">The scalar</param>
+      /// <param name="dst">The destination array.</param>
+      /// <param name="tABC">The gemm operation type</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGemm")]
+      public static extern void Gemm(
+         IntPtr src1,
+         IntPtr src2,
+         double alpha,
+         IntPtr src3,
+         double beta,
+         IntPtr dst,
+         CvEnum.GEMM_TYPE tABC,
+         IntPtr stream);
+
+      /// <summary>
       /// Warps the image using affine transformation
       /// </summary>
       /// <param name="src">The source GpuMat</param>
@@ -890,8 +914,9 @@ namespace Emgu.CV.GPU
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftFiltering")]
-      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, MCvTermCriteria criteria);
+      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
@@ -903,8 +928,9 @@ namespace Emgu.CV.GPU
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftProc")]
-      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, MCvTermCriteria criteria);
+      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift segmentation of the source image and eleminates small segments.
@@ -930,7 +956,6 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRotate")]
       public static extern void Rotate(IntPtr src, IntPtr dst, double angle, double xShift, double yShift, CvEnum.INPAINT_TYPE interpolation, IntPtr stream);
-
 
       /// <summary>
       /// Copies a 2D array to a larger destination array and pads borders with the given constant.
@@ -1009,8 +1034,9 @@ namespace Emgu.CV.GPU
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The resulting GpuMat of the DST, must be pre-allocated and continious. If single channel, the result is real. If double channel, the result is complex</param>
       /// <param name="flags">DFT flags</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDft")]
-      public static extern void Dft(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags);
+      public static extern void Dft(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags, IntPtr stream);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr gpuMatHistEven(IntPtr src, int histSize, int lowerLevel, int upperLevel);

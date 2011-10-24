@@ -353,7 +353,12 @@ void gpuMatFlip(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flipcode, 
 
 void gpuMatSplit(const cv::gpu::GpuMat* src, cv::gpu::GpuMat** dst, cv::gpu::Stream* stream)
 {
-   cv::gpu::split(*src, *dst, stream? *stream : cv::gpu::Stream::Null());
+   int channels = src->channels();
+   cv::gpu::GpuMat* dstArr = new cv::gpu::GpuMat[channels];
+   for (int i = 0; i < channels; i++)
+      dstArr[i] = *(dst[i]);
+   cv::gpu::split(*src, dstArr, stream? *stream : cv::gpu::Stream::Null());
+   delete[] dstArr;
 }
 
 void gpuMatExp(const cv::gpu::GpuMat* a, cv::gpu::GpuMat* b, cv::gpu::Stream* stream)
@@ -398,7 +403,12 @@ void gpuMatPolarToCart(const cv::gpu::GpuMat* magnitude, const cv::gpu::GpuMat* 
 
 void gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
-   cv::gpu::merge(*src, dst->channels(), *dst, stream ? *stream : cv::gpu::Stream::Null());
+   int channels = dst->channels();
+   cv::gpu::GpuMat* srcArr = new cv::gpu::GpuMat[channels];
+   for (int i = 0; i < channels; ++i)
+      srcArr[i] = *(src[i]);
+   cv::gpu::merge(srcArr, dst->channels(), *dst, stream ? *stream : cv::gpu::Stream::Null());
+   delete[] srcArr;
 }
 
 //only support single channel gpuMat
@@ -529,6 +539,12 @@ void gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize
    cv::gpu::Laplacian(*src, *dst, src->depth(), ksize, scale, stream ? *stream : cv::gpu::Stream::Null());
 }
 
+void gpuMatGemm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, double alpha, 
+                const cv::gpu::GpuMat* src3, double beta, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream)
+{
+   cv::gpu::gemm(*src1, *src2, alpha, src3 ? *src3 : cv::gpu::GpuMat(), beta, *dst, flags, stream ? *stream : cv::gpu::Stream::Null());
+}
+
 void gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
@@ -565,15 +581,15 @@ void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu
 }
 
 void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-                              CvTermCriteria criteria)
+                              CvTermCriteria criteria, cv::gpu::Stream* stream)
 {
-   cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, criteria);
+   cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, criteria, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-                         CvTermCriteria criteria)
+                         CvTermCriteria criteria, cv::gpu::Stream* stream)
 {
-   cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria);
+   cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
@@ -619,12 +635,28 @@ void gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int bl
    cv::gpu::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
 }
 
-void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags)
+void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream)
 {
-   cv::gpu::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0));
+   cv::gpu::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
 {
    cv::gpu::Canny(*image, *edges, lowThreshold, highThreshold, apertureSize, L2gradient);
+}
+
+cv::gpu::BroxOpticalFlow* gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations)
+{
+   return new cv::gpu::BroxOpticalFlow(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
+}
+
+void gpuBroxOpticalFlowCompute(cv::gpu::BroxOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream)
+{
+   (*flow)(*frame0, *frame1, *u, *v, stream ? *stream : cv::gpu::Stream::Null());
+}
+
+void gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow)
+{
+   delete *flow;
+   *flow = 0;
 }

@@ -160,7 +160,7 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
                             CvPoint* minLoc, CvPoint* maxLoc, 
                             const cv::gpu::GpuMat* mask);
 
-CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method);
+CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
 
@@ -205,6 +205,9 @@ CVAPI(void) gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,
 
 CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatGemm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, double alpha, 
+                       const cv::gpu::GpuMat* src3, double beta, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatDilate( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
@@ -218,10 +221,10 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-            CvTermCriteria criteria);
+            CvTermCriteria criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-            CvTermCriteria criteria);
+            CvTermCriteria criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
             CvTermCriteria criteria);
@@ -238,7 +241,7 @@ CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv:
 
 CVAPI(void) gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType);
 
-CVAPI(void) gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags);
+CVAPI(void) gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient);
 
@@ -294,7 +297,7 @@ CVAPI(cv::gpu::HOGDescriptor*) gpuHOGDescriptorCreate(
 
 CVAPI(void) gpuHOGSetSVMDetector(cv::gpu::HOGDescriptor* descriptor, std::vector<float>* vector);
 
-CVAPI(void) gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor* descriptor);
+CVAPI(void) gpuHOGDescriptorRelease(cv::gpu::HOGDescriptor** descriptor);
 
 CVAPI(void) gpuHOGDescriptorDetectMultiScale(
    cv::gpu::HOGDescriptor* descriptor, 
@@ -369,5 +372,11 @@ CVAPI(void) gpuSURFDetectorCompute(
    bool useProvidedKeypoints);
 
 CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector);
+
+CVAPI(cv::gpu::BroxOpticalFlow*) gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
+
+CVAPI(void) gpuBroxOpticalFlowCompute(cv::gpu::BroxOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
 
 #endif
