@@ -39,7 +39,6 @@ namespace Emgu.CV.Features2D
       private extern static void CvSIFTDetectorComputeDescriptors(
          IntPtr detector,
          IntPtr image,
-         IntPtr mask,
          IntPtr keypoints,
          IntPtr descriptors);
 
@@ -235,7 +234,7 @@ namespace Emgu.CV.Features2D
          int count = keyPoints.Size;
          if (count == 0) return null;
          Matrix<float> descriptors = new Matrix<float>(count, image.NumberOfChannels * DescriptorSize, 1);
-         CvSIFTDetectorComputeDescriptors(_ptr, image, mask, keyPoints, descriptors);
+         CvSIFTDetectorComputeDescriptors(_ptr, image, keyPoints, descriptors);
          return descriptors;
       }
 
