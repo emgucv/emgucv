@@ -13,15 +13,13 @@ cv::gpu::StereoBM_GPU* GpuStereoBMCreate(int preset, int ndisparities, int winSi
 
 void GpuStereoBMFindStereoCorrespondence(cv::gpu::StereoBM_GPU* stereo, const cv::gpu::GpuMat* left, const cv::gpu::GpuMat* right, cv::gpu::GpuMat* disparity, cv::gpu::Stream* stream)
 {
-   if (stream)
-      (*stereo)(*left, *right, *disparity, *stream);
-   else
-      (*stereo)(*left, *right, *disparity);
+   (*stereo)(*left, *right, *disparity, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void GpuStereoBMRelease(cv::gpu::StereoBM_GPU** stereoBM)
 {
    delete *stereoBM;
+   *stereoBM = 0;
 }
 
 cv::gpu::StereoConstantSpaceBP* GpuStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane)
@@ -31,15 +29,13 @@ cv::gpu::StereoConstantSpaceBP* GpuStereoConstantSpaceBPCreate(int ndisp, int it
 
 void GpuStereoConstantSpaceBPFindStereoCorrespondence(cv::gpu::StereoConstantSpaceBP* stereo, const cv::gpu::GpuMat* left, const cv::gpu::GpuMat* right, cv::gpu::GpuMat* disparity, cv::gpu::Stream* stream)
 {
-   if (stream)
-      (*stereo)(*left, *right, *disparity, *stream);
-   else
-      (*stereo)(*left, *right, *disparity);
+   (*stereo)(*left, *right, *disparity, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void GpuStereoConstantSpaceBPRelease(cv::gpu::StereoConstantSpaceBP** stereoBM)
+void GpuStereoConstantSpaceBPRelease(cv::gpu::StereoConstantSpaceBP** stereo)
 {
-   delete *stereoBM;
+   delete *stereo;
+   *stereo = 0;
 }
 
 cv::gpu::DisparityBilateralFilter* GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters, float edge_threshold, float max_disc_threshold, float sigma_range)
@@ -49,13 +45,12 @@ cv::gpu::DisparityBilateralFilter* GpuDisparityBilateralFilterCreate(int ndisp, 
 
 void GpuDisparityBilateralFilterApply(cv::gpu::DisparityBilateralFilter* filter, const cv::gpu::GpuMat* disparity, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
-   if (stream)
-      (*filter)(*disparity, *image, *dst, *stream);
-   else
-      (*filter)(*disparity, *image, *dst);
+   (*filter)(*disparity, *image, *dst, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void GpuDisparityBilateralFilterRelease(cv::gpu::DisparityBilateralFilter** filter)
 {
    delete *filter;
+   *filter = 0;
 }
+
