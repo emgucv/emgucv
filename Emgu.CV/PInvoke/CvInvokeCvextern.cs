@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using System.Drawing;
@@ -16,11 +15,23 @@ namespace Emgu.CV
       /// <summary>
       /// The grab cut algorithm for segmentation
       /// </summary>
-      /// <param name="img">The image to be segmented</param>
-      /// <param name="mask">The mask to initialize segmentation</param>
+      /// <param name="img">The 8-bit 3-channel image to be segmented</param>
+      /// <param name="mask">Input/output 8-bit single-channel mask. The mask is initialized by the function
+      /// when mode is set to GC_INIT_WITH_RECT. Its elements may have one of following values:
+      /// 0 (GC_BGD) defines an obvious background pixels.
+      /// 1 (GC_FGD) defines an obvious foreground (object) pixel.
+      /// 2 (GC_PR_BGR) defines a possible background pixel.
+      /// 3 (GC_PR_FGD) defines a possible foreground pixel.
+      ///</param>
       /// <param name="rect">The rectangle to initialize the segmentation</param>
-      /// <param name="bgdModel">The background model</param>
-      /// <param name="fgdModel">The foreground model</param>
+      /// <param name="bgdModel">
+      /// Temporary array for the background model. Do not modify it while you are
+      /// processing the same image.
+      /// </param>
+      /// <param name="fgdModel">
+      /// Temporary arrays for the foreground model. Do not modify it while you are
+      /// processing the same image.
+      /// </param>
       /// <param name="iterCount">The number of iternations</param>
       /// <param name="type">The initilization type</param>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
