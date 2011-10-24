@@ -2193,11 +2193,11 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src1">The first source array. </param>
       /// <param name="src2">The second source array. </param>
-      /// <param name="alpha"></param>
+      /// <param name="alpha">The scalar</param>
       /// <param name="src3">The third source array (shift). Can be IntPtr.Zero, if there is no shift.</param>
-      /// <param name="beta"></param>
+      /// <param name="beta">The scalar</param>
       /// <param name="dst">The destination array.</param>
-      /// <param name="tABC"></param>
+      /// <param name="tABC">The gemm operation type</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGEMM(
           IntPtr src1,
