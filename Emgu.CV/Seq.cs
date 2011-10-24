@@ -41,7 +41,7 @@ namespace Emgu.CV
       protected readonly MemStorage _stor;
 
       /// <summary>
-      /// The size of the elements in theis sequence
+      /// The size of the elements in this sequence
       /// </summary>
       protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(T));
 
