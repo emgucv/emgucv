@@ -39,7 +39,8 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
    CvSize winStride,
    CvSize padding, 
    double scale,
-   int groupThreshold);
+   double finalThreshold, 
+   bool useMeanshiftGrouping);
 
 CVAPI(void) CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,

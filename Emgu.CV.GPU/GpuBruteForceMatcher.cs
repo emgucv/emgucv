@@ -4,10 +4,9 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Features2D;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {

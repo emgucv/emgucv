@@ -14,6 +14,7 @@ cv::gpu::SURF_GPU* gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves
 void gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector)
 {
    delete *detector;
+   *detector = 0;
 }
 
 void gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints)
