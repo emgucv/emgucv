@@ -204,8 +204,9 @@ IF (NOT GEOTIFF_FOUND)
   # ----------------------------------------------------------------------------
   #  Build libgeotiff 
   # ----------------------------------------------------------------------------
-  ADD_SUBDIRECTORY(libgeotiff/libgeotiff-1.3.0)
-  SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff" "${PROJECT_SOURCE_DIR}/libgeotiff/libgeotiff-1.3.0" "${PROJECT_SOURCE_DIR}/libgeotiff/libgeotiff-1.3.0/libxtiff")
+  SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
+  ADD_SUBDIRECTORY(libgeotiff)
+  SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff" ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
   SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
 ENDIF()
 INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})

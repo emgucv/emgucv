@@ -11,7 +11,7 @@
 #
 ###############################################################################
 
-SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 
 ###############################################################################
 # Build libxtiff library
@@ -283,21 +283,21 @@ SET(GEOTIFF_DATA_DIR ${GEOTIFF_DATA_SUBDIR})
 # Build libgeotiff library
 
 SET(GEOTIFF_LIB_SOURCES
-    cpl_serv.c
-    cpl_csv.c
-    geo_extra.c
-    geo_free.c
-    geo_get.c
-    geo_names.c
-    geo_new.c
-    geo_normalize.c
-    geo_print.c
-    geo_set.c
-    geo_simpletags.c
-    geo_tiffp.c
-    geo_trans.c
-    geo_write.c
-    geotiff_proj4.c)
+    "${LIBGEOTIFF_DIR}/cpl_serv.c"
+    "${LIBGEOTIFF_DIR}/cpl_csv.c"
+    "${LIBGEOTIFF_DIR}/geo_extra.c"
+    "${LIBGEOTIFF_DIR}/geo_free.c"
+    "${LIBGEOTIFF_DIR}/geo_get.c"
+    "${LIBGEOTIFF_DIR}/geo_names.c"
+    "${LIBGEOTIFF_DIR}/geo_new.c"
+    "${LIBGEOTIFF_DIR}/geo_normalize.c"
+    "${LIBGEOTIFF_DIR}/geo_print.c"
+    "${LIBGEOTIFF_DIR}/geo_set.c"
+    "${LIBGEOTIFF_DIR}/geo_simpletags.c"
+    "${LIBGEOTIFF_DIR}/geo_tiffp.c"
+    "${LIBGEOTIFF_DIR}/geo_trans.c"
+    "${LIBGEOTIFF_DIR}/geo_write.c"
+    "${LIBGEOTIFF_DIR}/geotiff_proj4.c")
 
 IF (GEOTIFF_ENABLE_INCODE_EPSG)
     SET(GEOTIFF_LIB_CSV_SOURCES
