@@ -126,6 +126,7 @@
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
+    <Compile Include="Retina.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="Features2D\StarDetector.cs" />
     <Compile Include="Features2D\MSERDetector.cs" />
