@@ -240,15 +240,12 @@ namespace Emgu.CV.UI
                   }
                   #endregion
                }
-               else
+               else //empty new image
                {
-                  if (emptyNewImage)
-                  {
-                     filtersToolStripMenuItem.Enabled = false;
-                     zoomToolStripMenuItem.Enabled = false;
-                     saveImageToolStripMenuItem.Enabled = false;
-                     propertyToolStripMenuItem.Enabled = false;
-                  }
+                  filtersToolStripMenuItem.Enabled = false;
+                  zoomToolStripMenuItem.Enabled = false;
+                  saveImageToolStripMenuItem.Enabled = false;
+                  propertyToolStripMenuItem.Enabled = false;
                }
 
                DisplayedImage = imageToBeDisplayed;
@@ -356,13 +353,13 @@ namespace Emgu.CV.UI
          }
       }
 
-      private ToolStripMenuItem[] BuildOperationTree(IEnumerable<KeyValuePair<string, MethodInfo>> catelogMiPairList)
+      private ToolStripMenuItem[] BuildOperationTree(IEnumerable<KeyValuePair<string, MethodInfo>> catalogMiPairList)
       {
          List<ToolStripMenuItem> res = new List<ToolStripMenuItem>();
-         SortedDictionary<String, List<KeyValuePair<String, MethodInfo>>> catelogDic = new SortedDictionary<string, List<KeyValuePair<String, MethodInfo>>>();
+         SortedDictionary<String, List<KeyValuePair<String, MethodInfo>>> catalogDic = new SortedDictionary<string, List<KeyValuePair<String, MethodInfo>>>();
          SortedDictionary<String, MethodInfo> operationItem = new SortedDictionary<string, MethodInfo>();
 
-         foreach (KeyValuePair<string, MethodInfo> pair in catelogMiPairList)
+         foreach (KeyValuePair<string, MethodInfo> pair in catalogMiPairList)
          {
             if (String.IsNullOrEmpty(pair.Key))
             {  //this is an operation
@@ -384,19 +381,19 @@ namespace Emgu.CV.UI
                   subcategory = pair.Key.Substring(index + 1, pair.Key.Length - index - 1);
                }
 
-               if (!catelogDic.ContainsKey(category))
-                  catelogDic.Add(category, new List<KeyValuePair<String, MethodInfo>>());
-               catelogDic[category].Add(new KeyValuePair<String, MethodInfo>(subcategory, pair.Value));
+               if (!catalogDic.ContainsKey(category))
+                  catalogDic.Add(category, new List<KeyValuePair<String, MethodInfo>>());
+               catalogDic[category].Add(new KeyValuePair<String, MethodInfo>(subcategory, pair.Value));
             }
          }
 
-         #region Add catelogs to the menu
-         foreach (String catelog in catelogDic.Keys)
+         #region Add catalogs to the menu
+         foreach (String catalog in catalogDic.Keys)
          {
-            ToolStripMenuItem catelogMenuItem = new ToolStripMenuItem();
-            catelogMenuItem.Text = catelog;
-            catelogMenuItem.DropDownItems.AddRange(BuildOperationTree(catelogDic[catelog]));
-            res.Add(catelogMenuItem);
+            ToolStripMenuItem catalogMenuItem = new ToolStripMenuItem();
+            catalogMenuItem.Text = catalog;
+            catalogMenuItem.DropDownItems.AddRange(BuildOperationTree(catalogDic[catalog]));
+            res.Add(catalogMenuItem);
          }
          #endregion
 
