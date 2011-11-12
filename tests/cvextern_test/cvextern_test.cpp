@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include <iostream>
 #include "quaternions.h"
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 //#include "opencv2/gpu/gpu.hpp"
 
@@ -145,11 +147,29 @@ void Test_quaternions_performance()
          //perform tasks
          q1.renorm();
       }
-      QueryPerformanceCounter(&end); 
+      QueryPerformanceCounter(&end);  
       cout <<"Quaternions renorm total CPU Cycle: " << (end.QuadPart - begin.QuadPart) << std::endl;
    }
 }
 #endif
+
+void Test_MatchTemplate()
+{  
+   cv::Point offset(39, 123);
+   cv::Mat templ(54, 71, CV_8UC3, cv::Scalar_<double>(255, 255, 255));
+   cv::Mat img(300, 200, CV_8UC3, cv::Scalar_<double>(0,0,0));
+
+   cv::Mat submat = img(cv::Range(offset.y, offset.y+templ.rows), cv::Range(offset.x, offset.x + templ.cols));
+   templ.copyTo(submat);
+
+   cv::Mat result;
+
+   cv::matchTemplate(img, templ, result, CV_TM_SQDIFF_NORMED);
+   double minVal, maxVal;
+   cv::Point minLoc, maxLoc;
+   cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
+   cout << "Template matched expected: " << offset.x << "," << offset.y << "; computed: " << minLoc.x << "," << minLoc.y << /*"; maxLoc: " << maxLoc.x << "," <<maxLoc.y <<*/ std::endl;
+}
 
 int main()
 {
@@ -159,6 +179,7 @@ int main()
    Test_double_MulS();
    Test_quaternions();
    //Test_GpuMatCopy();
+   Test_MatchTemplate();
 #ifdef _MSC_VER
    Test_quaternions_performance();
    cin >>tmp; //wait for input only if compiling with visual C++ 
