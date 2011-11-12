@@ -155,21 +155,21 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }
 
 //ORB
-cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel)
+cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
 {
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel);
+   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
    return new cv::ORB(numberOfFeatures, orbParams);
 }
 
-cv::OrbFeatureDetector* CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel)
+cv::OrbFeatureDetector* CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
 {
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel);
+   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
    return new cv::OrbFeatureDetector(numberOfFeatures, orbParams);
 }
 
-cv::OrbDescriptorExtractor* CvOrbGetDescriptorExtractor(float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel)
+cv::OrbDescriptorExtractor* CvOrbGetDescriptorExtractor(float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
 {
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel);
+   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
    return new cv::OrbDescriptorExtractor(orbParams);
 }
 

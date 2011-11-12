@@ -19,10 +19,10 @@ namespace Emgu.CV.Features2D
    {
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel);
+      private extern static IntPtr CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbGetDescriptorExtractor(float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel);
+      private extern static IntPtr CvOrbGetDescriptorExtractor(float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static int CvOrbDetectorGetDescriptorSize(IntPtr detector);
@@ -35,7 +35,7 @@ namespace Emgu.CV.Features2D
          IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel);
+      private extern static IntPtr CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvOrbDetectorRelease(ref IntPtr detector);
@@ -51,6 +51,21 @@ namespace Emgu.CV.Features2D
       private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
+      /// The score type
+      /// </summary>
+      public enum ScoreType
+      {
+         /// <summary>
+         /// Harris
+         /// </summary>
+         Harris, 
+         /// <summary>
+         /// Fast
+         /// </summary>
+         Fast
+      }
+
+      /// <summary>
       /// Create a ORBDetector using the specific values
       /// </summary>
       /// <param name="numberOfFeatures">The number of desired features. Use 500 for default.</param>
@@ -58,11 +73,13 @@ namespace Emgu.CV.Features2D
       /// <param name="nLevels">The number of levels in the scale pyramid. Use 3 for default value.</param>
       /// <param name="firstLevel">The level at which the image is given. If 1, that means we will also look at the image.<paramref name="scaleFactor"/> times bigger</param>
       /// <param name="edgeThreshold">How far from the boundary the points should be. Use 0 for default.</param>
-      public ORBDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel)
+      /// <param name="WTK_A">How many random points are used to produce each cell of the descriptor (2, 3, 4 ...). Use 2 for default.</param>
+      /// <param name="scoreType">Type of the score to use. Use Harris for default.</param>
+      public ORBDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType)
       {
-         _ptr = CvOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel);
-         _featureDetectorPtr = CvOrbGetFeatureDetector(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel);
-         _descriptorExtractorPtr = CvOrbGetDescriptorExtractor(scaleFactor, nLevels, edgeThreshold, firstLevel);
+         _ptr = CvOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _featureDetectorPtr = CvOrbGetFeatureDetector(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _descriptorExtractorPtr = CvOrbGetDescriptorExtractor(scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
       }
 
       /// <summary>
@@ -70,7 +87,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="numberOfFeatures">The number of desired features. Use 500 for default.</param>
       public ORBDetector(int numberOfFeatures)
-         : this(numberOfFeatures, 1.2f, 3, 31, 0)
+         : this(numberOfFeatures, 1.2f, 3, 31, 0, 2, ScoreType.Harris)
       {
       }
 
