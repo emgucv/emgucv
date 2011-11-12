@@ -57,14 +57,14 @@ namespace Emgu.CV.UI
          // loadImageToolStripMenuItem
          // 
          this.loadImageToolStripMenuItem.Name = "loadImageToolStripMenuItem";
-         this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+         this.loadImageToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
          this.loadImageToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
          this.loadImageToolStripMenuItem.Click += new System.EventHandler(this.loadImageToolStripMenuItem_Click);
          // 
          // saveImageToolStripMenuItem
          // 
          this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
-         this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+         this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
          this.saveImageToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.SaveAs;
          this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
          // 
@@ -87,21 +87,21 @@ namespace Emgu.CV.UI
          // zoomInToolStripMenuItem
          // 
          this.zoomInToolStripMenuItem.Name = "zoomInToolStripMenuItem";
-         this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+         this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
          this.zoomInToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.ZoomIn;
          this.zoomInToolStripMenuItem.Click += new System.EventHandler(this.zoomInToolStripMenuItem_Click);
          // 
          // zoomOutToolStripMenuItem
          // 
          this.zoomOutToolStripMenuItem.Name = "zoomOutToolStripMenuItem";
-         this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+         this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
          this.zoomOutToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.ZoomOut;
          this.zoomOutToolStripMenuItem.Click += new System.EventHandler(this.zoomOutToolStripMenuItem_Click);
          // 
          // unZoomToolStripMenuItem
          // 
          this.unZoomToolStripMenuItem.Name = "unZoomToolStripMenuItem";
-         this.unZoomToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+         this.unZoomToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
          this.unZoomToolStripMenuItem.Text = global::Emgu.CV.UI.Properties.StringTable.UnZoom;
          this.unZoomToolStripMenuItem.Click += new System.EventHandler(this.unZoomToolStripMenuItem_Click);
          // 
@@ -115,13 +115,13 @@ namespace Emgu.CV.UI
          // loadImageFromFileDialog
          // 
          this.loadImageFromFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif;*.bm" +
-             "p;*.png;*.tiff;*.tif|All Files(*.*)|*.*";
+    "p;*.png;*.tiff;*.tif|All Files(*.*)|*.*";
          this.loadImageFromFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.LoadImage;
          // 
          // saveImageToFileDialog
          // 
-         this.saveImageToFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif*.bmp" +
-             ";*.png;*.tiff;*.tif|All Files(*.*)|*.*";
+         this.saveImageToFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.tiff;*.tif)|*.jpg;*.jpeg;*.gif;*.bm" +
+    "p;*.png;*.tiff;*.tif|All Files(*.*)|*.*";
          this.saveImageToFileDialog.Title = global::Emgu.CV.UI.Properties.StringTable.SaveImageDialogText;
          // 
          // ImageBox
