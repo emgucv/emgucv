@@ -45,7 +45,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="preset">Preset type</param>
       /// <param name="numberOfDisparities">The number of disparities. Must be multiple of 8. Use 64 for default </param>
-      /// <param name="winSize">The SAD window size</param>
+      /// <param name="winSize">The SAD window size. Use 19 for default</param>
       public GpuStereoBM(PresetType preset, int numberOfDisparities, int winSize)
       {
          _ptr = GpuStereoBMCreate(preset, numberOfDisparities, winSize);
