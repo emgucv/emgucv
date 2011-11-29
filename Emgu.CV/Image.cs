@@ -2372,10 +2372,26 @@ namespace Emgu.CV
       {
          Size size = Size;
          PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
+         return Rotate(angle, center, CvEnum.INTER.CV_INTER_CUBIC, background, crop);
+      }
+
+      /// <summary>
+      /// Rotate this image the specified <paramref name="angle"/>
+      /// </summary>
+      /// <param name="angle">The angle of rotation in degrees.</param>
+      /// <param name="background">The color with wich to fill the background</param>
+      /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
+      /// <param name="center">The center of rotation</param>
+      /// <param name="interpolationMethod">The intepolation method</param>
+      /// <returns>The rotated image</returns>
+      public Image<TColor, TDepth> Rotate(double angle, PointF center, CvEnum.INTER interpolationMethod, TColor background, bool crop)
+      {
+         Size size = Size;
+         //PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
          using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
          {
             if (crop)
-               return WarpAffine(rotationMatrix, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
+               return WarpAffine(rotationMatrix, interpolationMethod, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
 
             PointF[] corners = new PointF[] {
                   new PointF(0, 0),
@@ -2391,7 +2407,7 @@ namespace Emgu.CV
             rotationMatrix[0, 2] -= minX;
             rotationMatrix[1, 2] -= minY;
 
-            return WarpAffine(rotationMatrix, maxX - minX + 1, maxY - minY + 1, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
+            return WarpAffine(rotationMatrix, maxX - minX + 1, maxY - minY + 1, interpolationMethod, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
          }
       }
 
@@ -4045,16 +4061,22 @@ namespace Emgu.CV
          minLocations = new Point[NumberOfChannels];
          maxLocations = new Point[NumberOfChannels];
 
+         double minVal = 0, maxVal = 0;
+         Point minLoc = new Point(), maxLoc = new Point();
          if (NumberOfChannels == 1)
          {
-            CvInvoke.cvMinMaxLoc(Ptr, ref minValues[0], ref maxValues[0], ref minLocations[0], ref maxLocations[0], IntPtr.Zero);
+            CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+            minValues[0] = minVal; maxValues[0] = maxVal;
+            minLocations[0] = minLoc; maxLocations[0] = maxLoc;
          }
          else
          {
             for (int i = 0; i < NumberOfChannels; i++)
             {
                CvInvoke.cvSetImageCOI(Ptr, i + 1);
-               CvInvoke.cvMinMaxLoc(Ptr, ref minValues[i], ref maxValues[i], ref minLocations[i], ref maxLocations[i], IntPtr.Zero);
+               CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+               minValues[i] = minVal; maxValues[i] = maxVal;
+               minLocations[i] = minLoc; maxLocations[i] = maxLoc;
             }
             CvInvoke.cvSetImageCOI(Ptr, 0);
          }
