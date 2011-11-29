@@ -534,7 +534,7 @@ namespace Emgu.CV
       public virtual void Save(String fileName)
       {
          //FileInfo fi = new FileInfo(fileName);
-         CvInvoke.cvSaveImage(fileName, Ptr);
+         CvInvoke.cvSaveImage(fileName, Ptr, IntPtr.Zero);
       }
       #endregion
 

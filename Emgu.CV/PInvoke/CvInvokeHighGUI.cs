@@ -112,9 +112,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="filename">The name of the file to be saved to</param>
       /// <param name="image">The image to be saved</param>
+      /// <param name="parameters">The parameters</param>
       /// <returns></returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvSaveImage([MarshalAs(StringMarshalType)] String filename, IntPtr image);
+      public static extern bool cvSaveImage([MarshalAs(StringMarshalType)] String filename, IntPtr image, IntPtr parameters);
 
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
       private static extern int _cvNamedWindow([MarshalAs(StringMarshalType)] String name, int flags);
