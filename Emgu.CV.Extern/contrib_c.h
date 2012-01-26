@@ -33,4 +33,6 @@ CVAPI(void) CvRetinaRun(cv::Retina* retina, IplImage* image);
 CVAPI(void) CvRetinaGetParvo(cv::Retina* retina, IplImage* parvo);
 CVAPI(void) CvRetinaGetMagno(cv::Retina* retina, IplImage* magno);
 CVAPI(void) CvRetinaClearBuffers(cv::Retina* retina);
+CVAPI(void) CvRetinaGetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p);
+CVAPI(void) CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p);
 #endif

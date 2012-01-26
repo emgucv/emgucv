@@ -58,14 +58,52 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void CvRetinaClearBuffers(IntPtr retina);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void CvRetinaGetParameters(IntPtr retina, ref RetinaParameters parameters);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void CvRetinaSetParameters(IntPtr retina, ref RetinaParameters parameters);
       #endregion
 
       private Size _inputSize;
 
+      /// <summary>
+      /// Create a retina model
+      /// </summary>
+      /// <param name="inputSize">The input frame size</param>
+      public Retina(Size inputSize)
+         : this(inputSize, true, ColorSamplingMethod.ColorBayer, false, 1.0, 10.0) 
+      {
+      }
+
+      /// <summary>
+      /// Create a retina model
+      /// </summary>
+      /// <param name="inputSize">The input frame size</param>
+      /// <param name="colorMode">Specifies if (true) color is processed of not (false) to then processing gray level image</param>
+      /// <param name="colorSamplingMethod">Specifies which kind of color sampling will be used</param>
+      /// <param name="useRetinaLogSampling">Activate retina log sampling, if true, the 2 following parameters can be used</param>
+      /// <param name="reductionFactor">Only usefull if param useRetinaLogSampling=true, specifies the reduction factor of the output frame (as the center (fovea) is high resolution and corners can be underscaled, then a reduction of the output is allowed without precision leak</param>
+      /// <param name="samplingStrength">Only usefull if param useRetinaLogSampling=true, specifies the strenght of the log scale that is applied</param>
       public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
       {
          _inputSize = inputSize;
          _ptr = CvRetinaCreate(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+      }
+
+      public RetinaParameters Parameters
+      {
+         get
+         {
+            RetinaParameters p = new RetinaParameters();
+            CvRetinaGetParameters(_ptr, ref p);
+            return p;
+         }
+         set
+         {
+            CvRetinaSetParameters(_ptr, ref value);
+         }
       }
 
       /// <summary>
@@ -138,6 +176,115 @@ namespace Emgu.CV
          /// Standard bayer sampling
          /// </summary>
          ColorBayer
+      }
+
+      /// <summary>
+      /// Outer Plexiform Layer (OPL) and Inner Plexiform Layer Parvocellular (IplParvo) parameters 
+      /// </summary>
+      public struct OPLandIplParvoParameters
+      {
+         /// <summary>
+         /// Specifies if (true) color is processed of not (false) to then processing gray level image
+         /// </summary>
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         public bool ColorMode;
+
+         /// <summary>
+         /// Normalise output. Use true for default
+         /// </summary>
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         public bool NormaliseOutput;
+
+         /// <summary>
+         /// Photoreceptors local adaptation sensitivity. Use 0.7 for default
+         /// </summary>
+         public float PhotoreceptorsLocalAdaptationSensitivity;
+
+         /// <summary>
+         /// Photoreceptors temporal constant. Use 0.5 for default
+         /// </summary>
+         public float PhotoreceptorsTemporalConstant;
+
+         /// <summary>
+         /// Photoreceptors spatial constant. Use 0.53 for default
+         /// </summary>
+         public float PhotoreceptorsSpatialConstant;
+
+         /// <summary>
+         /// Horizontal cells gain. Use 0.0 for default
+         /// </summary>
+         public float HorizontalCellsGain;
+
+         /// <summary>
+         /// Hcells temporal constant. Use 1.0 for default
+         /// </summary>
+         public float HcellsTemporalConstant;
+
+         /// <summary>
+         /// Hcells spatial constant. Use 7.0 for default
+         /// </summary>
+         public float HcellsSpatialConstant;
+
+         /// <summary>
+         /// Ganglion cells sensitivity. Use 0.7 for default
+         /// </summary>
+         public float GanglionCellsSensitivity;
+      }
+
+      /// <summary>
+      /// Inner Plexiform Layer Magnocellular channel (IplMagno)
+      /// </summary>
+      public struct IplMagnoParameters
+      {
+         /// <summary>
+         /// Normalise output
+         /// </summary>
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         public bool NormaliseOutput;
+
+         /// <summary>
+         /// ParasolCells_beta. Use 0.0 for default
+         /// </summary>
+         public float ParasolCells_beta; 
+         /// <summary>
+         /// ParasolCells_tau. Use 0.0 for default
+         /// </summary>
+         public float ParasolCells_tau; 
+         /// <summary>
+         /// ParasolCells_k. Use 7.0 for default
+         /// </summary>
+         public float ParasolCells_k; 
+         /// <summary>
+         /// Amacrin cells temporal cut frequency. Use 1.2 for default
+         /// </summary>
+         public float AmacrinCellsTemporalCutFrequency; 
+         /// <summary>
+         /// V0 compression parameter. Use 0.95 for default
+         /// </summary>
+         public float V0CompressionParameter; 
+         /// <summary>
+         /// LocalAdaptintegration_tau. Use 0.0 for default
+         /// </summary>
+         public float LocalAdaptintegration_tau; 
+         /// <summary>
+         /// LocalAdaptintegration_k. Use 7.0 for default
+         /// </summary>
+         public float LocalAdaptintegration_k;
+      }
+
+      /// <summary>
+      /// Retina parameters
+      /// </summary>
+      public struct RetinaParameters
+      {
+         /// <summary>
+         /// Outer Plexiform Layer (OPL) and Inner Plexiform Layer Parvocellular (IplParvo) parameters 
+         /// </summary>
+         public OPLandIplParvoParameters OPLandIplParvo;
+         /// <summary>
+         /// Inner Plexiform Layer Magnocellular channel (IplMagno)
+         /// </summary>
+         public IplMagnoParameters IplMagno;
       }
    }
 }

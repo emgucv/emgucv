@@ -20,7 +20,7 @@ void CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float 
    tree->getPointsWithinSphere(*center, radius, points);
    cvClearSeq(pointSeq);
    if (points.size() > 0)
-      cvSeqPushMulti(pointSeq, &points.front(), points.size());
+      cvSeqPushMulti(pointSeq, &points.front(), (int)points.size());
 }
 void CvOctreeRelease(cv::Octree* tree) { delete tree; } 
 
@@ -57,4 +57,13 @@ void CvRetinaGetMagno(cv::Retina* retina, IplImage* magno)
 void CvRetinaClearBuffers(cv::Retina* retina)
 {
    retina->clearBuffers();
+}
+void CvRetinaGetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
+{
+   cv::Retina::RetinaParameters result = retina->getParameters();
+   memcpy(p, &result, sizeof(cv::Retina::RetinaParameters));
+}
+void CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
+{
+   retina->setup(*p);
 }
