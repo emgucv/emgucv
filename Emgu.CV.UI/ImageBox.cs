@@ -239,6 +239,13 @@ namespace Emgu.CV.UI
                      }
                   }
                   #endregion
+
+                  if (_propertyDlg != null)
+                  {
+                     _propertyDlg.ImagePropertyControl.SetImage(imageToBeDisplayed);
+                     Point pos = PointToClient(Cursor.Position);
+                     this.ImageBox_MouseMove(this, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, pos.X, pos.Y, 0));
+                  }
                }
                else //empty new image
                {
@@ -500,7 +507,18 @@ namespace Emgu.CV.UI
          if (saveImageToFileDialog.ShowDialog() == DialogResult.OK)
             try
             {
-               DisplayedImage.Save(saveImageToFileDialog.FileName);
+               if (this.InvokeRequired)
+               {
+                  this.Invoke((Action)
+                     delegate()
+                     {
+                        DisplayedImage.Save(saveImageToFileDialog.FileName);
+                     });
+               }
+               else
+               {
+                  DisplayedImage.Save(saveImageToFileDialog.FileName);
+               }
             }
             catch (Exception excpt)
             {
