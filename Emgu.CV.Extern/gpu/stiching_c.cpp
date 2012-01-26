@@ -25,7 +25,7 @@ IplImage* CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, IplImage** imag
    {
       imgs[i] = cv::cvarrToMat(images[i]);
    }
-   if ( stitcherWrapper->stitcher.stitch(imgs, pano) != cv::Stitcher::Status::OK)
+   if ( stitcherWrapper->stitcher.stitch(imgs, pano) != cv::Stitcher::OK)
       return 0;
 
    IplImage* result = cvCreateImage(pano.size(), IPL_DEPTH_8U, 3);
