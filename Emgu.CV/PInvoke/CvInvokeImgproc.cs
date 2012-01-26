@@ -1731,10 +1731,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source image</param>
       /// <param name="dst">Result image</param>
-      /// <param name="sp"></param>
-      /// <param name="sr"></param>
-      /// <param name="max_level">Use 1 as default value</param>
-      /// <param name="termcrit">Use new MCvTermCriteria(5, 1) as default value</param>
+      /// <param name="sp">The spatial window radius.</param>
+      /// <param name="sr">The color window radius.</param>
+      /// <param name="max_level">Maximum level of the pyramid for the segmentation. Use 1 as default value</param>
+      /// <param name="termcrit">Termination criteria: when to stop meanshift iterations. Use new MCvTermCriteria(5, 1) as default value</param>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrMeanShiftFiltering(
          IntPtr src, IntPtr dst,

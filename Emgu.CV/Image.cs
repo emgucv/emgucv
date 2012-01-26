@@ -1769,9 +1769,9 @@ namespace Emgu.CV
       }
 
       ///<summary>Checks that image elements lie between two scalars</summary>
-      ///<param name="lower"> The lower limit of color value</param>
-      ///<param name="higher"> The upper limit of color value</param>
-      ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
+      ///<param name="lower"> The inclusive lower limit of color value</param>
+      ///<param name="higher"> The inclusive upper limit of color value</param>
+      ///<returns> res[i,j] = 255 if <paramref name="lower"/> &lt;= this[i,j] &lt;= <paramref name="higher"/>, 0 otherwise</returns>
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<Gray, Byte> InRange(TColor lower, TColor higher)
       {
@@ -1781,9 +1781,9 @@ namespace Emgu.CV
       }
 
       ///<summary>Checks that image elements lie between values defined by two images of same size and type</summary>
-      ///<param name="lower"> The lower limit of color value</param>
-      ///<param name="higher"> The upper limit of color value</param>
-      ///<returns> res[i,j] = 255 if inrange, 0 otherwise</returns>
+      ///<param name="lower"> The inclusive lower limit of color value</param>
+      ///<param name="higher"> The inclusive upper limit of color value</param>
+      ///<returns> res[i,j] = 255 if <paramref name="lower"/>[i,j] &lt;= this[i,j] &lt;= <paramref name="higher"/>[i,j], 0 otherwise</returns>
       public Image<Gray, Byte> InRange(Image<TColor, TDepth> lower, Image<TColor, TDepth> higher)
       {
          Image<Gray, Byte> res = new Image<Gray, Byte>(Size);

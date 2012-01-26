@@ -1008,16 +1008,16 @@ namespace Emgu.CV
 
       /// <summary>
       /// Does the range check for every element of the input array:
-      /// dst(I)=lower0 &lt;= src(I)0 &lt; upper0
+      /// dst(I)=lower0 &lt;= src(I)0 &lt;= upper0
       /// for a single-channel array,
-      /// dst(I)=lower0 &lt;= src(I)0 &lt; upper0 &amp;&amp;
-      ///     lower1 &lt;= src(I)1 &lt; upper1
+      /// dst(I)=lower0 &lt;= src(I)0 &lt;= upper0 &amp;&amp;
+      ///     lower1 &lt;= src(I)1 &lt;= upper1
       /// for a two-channel array etc.
       /// dst(I) is set to 0xff (all '1'-bits) if src(I) is within the range and 0 otherwise. All the arrays must have the same size (or ROI size)
       /// </summary>
       /// <param name="src">The first source array</param>
       /// <param name="lower">The inclusive lower boundary</param>
-      /// <param name="upper">The exclusive upper boundary</param>
+      /// <param name="upper">The inclusive upper boundary</param>
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInRangeS(
@@ -1028,10 +1028,10 @@ namespace Emgu.CV
 
       /// <summary>
       /// Performs range check for every element of the input array:
-      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt; upper(I)_0
+      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt;= upper(I)_0
       /// For single-channel arrays,
-      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt; upper(I)_0 &amp;&amp;
-      /// lower(I)_1 &lt;= src(I)_1 &lt; upper(I)_1
+      /// dst(I)=lower(I)_0 &lt;= src(I)_0 &lt;= upper(I)_0 &amp;&amp;
+      /// lower(I)_1 &lt;= src(I)_1 &lt;= upper(I)_1
       /// For two-channel arrays etc.
       /// dst(I) is set to 0xff (all '1'-bits) if src(I) is within the range and 0 otherwise. All the arrays must have the same type, except the destination, and the same size (or ROI size)
       /// </summary>

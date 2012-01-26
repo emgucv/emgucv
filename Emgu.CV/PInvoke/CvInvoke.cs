@@ -18,12 +18,12 @@ namespace Emgu.CV
       public const UnmanagedType StringMarshalType = UnmanagedType.LPStr;
 
       /// <summary>
-      /// bool marshaling type
+      /// Represent a bool value in C++
       /// </summary>
       public const UnmanagedType BoolMarshalType = UnmanagedType.U1;
 
       /// <summary>
-      /// int marshaling type
+      /// Represent a int value in C++
       /// </summary>
       public const UnmanagedType BoolToIntMarshalType = UnmanagedType.Bool;
 
