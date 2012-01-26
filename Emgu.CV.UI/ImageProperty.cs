@@ -62,45 +62,69 @@ namespace Emgu.CV.UI
 
       public void SetImage(IImage image)
       {
-         #region display the size of the image
-         Size size = image.Size;
-         widthTextbox.Text = size.Width.ToString();
-         heightTextBox.Text = size.Height.ToString();
-         #endregion
 
-         #region display the color type of the image
-         Type colorType = Reflection.ReflectIImage.GetTypeOfColor(image);
-         Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true);
-         if (colorAttributes.Length > 0)
+         #region display the size of the image
+         if (image != null)
          {
-            ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
-            typeOfColorTexbox.Text = info.ConversionCodename;
+            Size size = image.Size;
+            widthTextbox.Text = size.Width.ToString();
+            heightTextBox.Text = size.Height.ToString();
          }
          else
          {
-            typeOfColorTexbox.Text = Properties.StringTable.Unknown;
+            widthTextbox.Text = String.Empty;
+            heightTextBox.Text = string.Empty;
          }
+         #endregion
 
-         Type colorDepth = Reflection.ReflectIImage.GetTypeOfDepth(image);
-         typeOfDepthTextBox.Text = colorDepth.Name;
+         #region display the color type of the image
+         if (image != null)
+         {
+            Type colorType = Reflection.ReflectIImage.GetTypeOfColor(image);
+            Object[] colorAttributes = colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true);
+            if (colorAttributes.Length > 0)
+            {
+               ColorInfoAttribute info = (ColorInfoAttribute)colorAttributes[0];
+               typeOfColorTexbox.Text = info.ConversionCodename;
+            }
+            else
+            {
+               typeOfColorTexbox.Text = Properties.StringTable.Unknown;
+            }
+
+            Type colorDepth = Reflection.ReflectIImage.GetTypeOfDepth(image);
+            typeOfDepthTextBox.Text = colorDepth.Name;
+         }
+         else
+         {
+            typeOfColorTexbox.Text = string.Empty;
+            typeOfDepthTextBox.Text = string.Empty;
+         }
          #endregion
 
          #region check if image is a subclass of CvArr type
-         Type imageType = image.GetType();
-         isCvArray = true;
-         Type cvArrayType = typeof(CvArray<>);
-         while (cvArrayType != imageType)
+         if (image != null)
          {
-            if (imageType.IsGenericType && imageType.GetGenericTypeDefinition() == cvArrayType)
+            Type imageType = image.GetType();
+            isCvArray = true;
+            Type cvArrayType = typeof(CvArray<>);
+            while (cvArrayType != imageType)
             {
-               break;
+               if (imageType.IsGenericType && imageType.GetGenericTypeDefinition() == cvArrayType)
+               {
+                  break;
+               }
+               imageType = imageType.BaseType;
+               if (imageType == null)
+               {
+                  isCvArray = false;
+                  break;
+               }
             }
-            imageType = imageType.BaseType;
-            if (imageType == null)
-            {
-               isCvArray = false;
-               break;
-            }
+         }
+         else
+         {
+            isCvArray = false;
          }
          #endregion
 
@@ -122,12 +146,12 @@ namespace Emgu.CV.UI
       /// <param name="location">The location of the mouse on the image</param>
       public void SetMousePositionOnImage(Point location)
       {
-         mousePositionTextbox.Text = location.ToString();
-
          IImage img = _imageBox.DisplayedImage;
          Size size = img.Size;
-         location.X = Math.Min(location.X, size.Width - 1);
-         location.Y = Math.Min(location.Y, size.Height - 1);
+         location.X = Math.Max( Math.Min(location.X, size.Width - 1), 0);
+         location.Y = Math.Max( Math.Min(location.Y, size.Height - 1), 0);
+
+         mousePositionTextbox.Text = location.ToString();
 
          if (isCvArray)
          {
