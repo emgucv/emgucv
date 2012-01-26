@@ -1,17 +1,20 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
 #include "features2d_c.h"
 
 /*
-CVAPI(int) CvHierarchicalClustering(CvMat* features, CvMat* centers, cv::flann::KMeansIndexParams* params)
+#include "opencv2/flann/flann.hpp"
+
+CVAPI(int) CvHierarchicalClustering(CvMat* features, CvMat* centers, cv::flann::IndexParams* params)
 {
    cv::Mat f = cv::cvarrToMat(features);
    cv::Mat c = cv::cvarrToMat(centers);
-   return cv::flann::hierarchicalClustering(f, c, *params);
+   
+   return cv::flann::hierarchicalClustering< cv::flann::L2< float> >(f, c, *params);
 }*/
 
 cv::flann::Index* CvFlannIndexCreateKDTree(CvMat* features, int trees)

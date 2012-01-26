@@ -11,7 +11,7 @@
 # Redistribution and use is allowed according to the terms of the GPL license.
 #
 # Modified by canming to find .NET on Windows
-# copyright (c) 2009, 2010 Canming Huang support@emgu.com
+# copyright (c) 2009 - 2012 Canming Huang support@emgu.com
 
 IF(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE_20 csc

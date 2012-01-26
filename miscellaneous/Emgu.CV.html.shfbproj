@@ -34,7 +34,7 @@
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>.NET 3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2011 Emgu, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2012 Emgu, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>

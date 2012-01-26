@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+#  Copyright (C) 2004-2012 by EMGU. All rights reserved.
 # --------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8)

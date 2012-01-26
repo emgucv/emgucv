@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2011 by EMGU. All rights reserved.       
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -13,7 +13,6 @@ namespace Emgu.CV
    /// </summary>
    public class VideoWriter : UnmanagedObject
    {
-
       /// <summary>
       /// Create a video writer using the specific information.
       /// On windows, it will open a codec selection dialog.

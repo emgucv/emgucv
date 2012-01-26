@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2011 by EMGU. All rights reserved.
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ void tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize)
 {
    TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
    TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, imageSize->height);
-
 }
 
 void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
