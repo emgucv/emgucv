@@ -1,6 +1,6 @@
 Index: 3rdparty/ffmpeg/CMakeLists.txt
 ===================================================================
---- 3rdparty/ffmpeg/CMakeLists.txt	(revision 6688)
+--- 3rdparty/ffmpeg/CMakeLists.txt	(revision 7198)
 +++ 3rdparty/ffmpeg/CMakeLists.txt	(working copy)
 @@ -7,8 +7,7 @@
  set(module_bare_name "opencv_ffmpeg${FFMPEG_SUFFIX}.dll")
@@ -14,13 +14,15 @@ Index: 3rdparty/ffmpeg/CMakeLists.txt
  
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 6688)
+--- CMakeLists.txt	(revision 7198)
 +++ CMakeLists.txt	(working copy)
-@@ -924,12 +924,19 @@
+@@ -828,13 +828,20 @@
+                     link_directories("${TBB_LIB_DIR}")
                      set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} tbb)
                  else()
-                     get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                          
--                   
+-                    get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)
+-
++                    get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)                          
 +				    if (MSVC)
 +                       if(CMAKE_CL_64)
 +                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
@@ -39,24 +41,47 @@ Index: CMakeLists.txt
                         set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
 Index: modules/gpu/CMakeLists.txt
 ===================================================================
---- modules/gpu/CMakeLists.txt	(revision 6688)
+--- modules/gpu/CMakeLists.txt	(revision 7198)
 +++ modules/gpu/CMakeLists.txt	(working copy)
-@@ -111,9 +111,9 @@
- # Additional target properties
- set_target_properties(${the_target} PROPERTIES
-     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
--    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
--    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
--    INSTALL_NAME_DIR lib
+@@ -91,6 +91,35 @@
+ 
+ add_library(${the_target} ${lib_srcs} ${lib_hdrs} ${lib_int_hdrs} ${lib_cuda} ${lib_cuda_hdrs} ${lib_device_hdrs} ${lib_device_hdrs_detail} ${ncv_srcs} ${ncv_hdrs} ${ncv_cuda} ${cuda_objs})
+ 
++# For dynamic link numbering convenions
++set_target_properties(${the_target} PROPERTIES
++	VERSION ${OPENCV_VERSION}
++	SOVERSION ${OPENCV_SOVERSION}
++	OUTPUT_NAME "${the_target}${OPENCV_DLLVERSION}"
++	)
++
++if(ENABLE_SOLUTION_FOLDERS)
++	set_target_properties(${the_target} PROPERTIES FOLDER "modules")
++endif()	
++	
++if (BUILD_SHARED_LIBS)
++	if (MSVC)
++		set_target_properties(${the_target} PROPERTIES DEFINE_SYMBOL CVAPI_EXPORTS)
++	else()
++		add_definitions(-DCVAPI_EXPORTS)
++	endif()
++endif()
++
++add_opencv_precompiled_headers(${the_target})
++
++# Additional target properties
++set_target_properties(${the_target} PROPERTIES
++    DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 +    ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
 +    RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
 +    INSTALL_NAME_DIR "lib"
-     )
- 
++    )
++
  # Add the required libraries for linking:
+ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} ${IPP_LIBS} ${DEPS} )
+ 
 Index: modules/haartraining/CMakeLists.txt
 ===================================================================
---- modules/haartraining/CMakeLists.txt	(revision 6688)
+--- modules/haartraining/CMakeLists.txt	(revision 7198)
 +++ modules/haartraining/CMakeLists.txt	(working copy)
 @@ -40,9 +40,9 @@
  add_library(opencv_haartraining_engine STATIC ${cvhaartraining_lib_src})
@@ -73,24 +98,47 @@ Index: modules/haartraining/CMakeLists.txt
  if(NOT ANDROID)
 Index: modules/highgui/CMakeLists.txt
 ===================================================================
---- modules/highgui/CMakeLists.txt	(revision 6688)
+--- modules/highgui/CMakeLists.txt	(revision 7198)
 +++ modules/highgui/CMakeLists.txt	(working copy)
-@@ -300,8 +300,8 @@
- # Additional target properties
- set_target_properties(${the_target} PROPERTIES
-     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
--    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
--    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+@@ -279,6 +279,33 @@
+     add_definitions(-DHIGHGUI_EXPORTS)
+ endif()
+ 
++add_opencv_precompiled_headers(${the_target})
++
++# For dynamic link numbering convenions
++if(NOT ANDROID)
++    # Android SDK build scripts can include only .so files into final .apk
++    set_target_properties(${the_target} PROPERTIES
++        VERSION ${OPENCV_VERSION}
++        SOVERSION ${OPENCV_SOVERSION}
++        )
++endif()
++
++set_target_properties(${the_target} PROPERTIES OUTPUT_NAME "${the_target}${OPENCV_DLLVERSION}" )
++
++# Additional target properties
++set_target_properties(${the_target} PROPERTIES
++    DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
 +    ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
 +    RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
-     INSTALL_NAME_DIR lib
-     LINK_INTERFACE_LIBRARIES ""
-     )
++    INSTALL_NAME_DIR lib
++    LINK_INTERFACE_LIBRARIES ""
++    )
++
++if(ENABLE_SOLUTION_FOLDERS)
++    set_target_properties(${the_target} PROPERTIES FOLDER "modules")
++endif() 
++
++
+ if(MSVC)
+     set_target_properties(${the_target} PROPERTIES LINK_FLAGS "/NODEFAULTLIB:atlthunk.lib /NODEFAULTLIB:atlsd.lib /NODEFAULTLIB:libcmt.lib /DEBUG")
+ endif()
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 6688)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7198)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
-@@ -448,6 +448,9 @@
+@@ -462,6 +462,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);  
  
@@ -102,7 +150,7 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 6688)
+--- modules/highgui/src/cap_openni.cpp	(revision 7198)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
 @@ -98,6 +98,8 @@
  
@@ -126,7 +174,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 6688)
+--- modules/legacy/src/3dtracker.cpp	(revision 7198)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -150,11 +198,37 @@ Index: modules/legacy/src/3dtracker.cpp
  
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
+Index: modules/stitching/include/opencv2/stitching/detail/util.hpp
+===================================================================
+--- modules/stitching/include/opencv2/stitching/detail/util.hpp	(revision 7198)
++++ modules/stitching/include/opencv2/stitching/detail/util.hpp	(working copy)
+@@ -148,7 +148,7 @@
+ // Returns random 'count' element subset of the {0,1,...,size-1} set
+ void CV_EXPORTS selectRandomSubset(int count, int size, std::vector<int> &subset);
+ 
+-int& CV_EXPORTS stitchingLogLevel();
++int CV_EXPORTS stitchingLogLevel();
+ 
+ } // namespace detail
+ } // namespace cv
+Index: modules/stitching/src/util.cpp
+===================================================================
+--- modules/stitching/src/util.cpp	(revision 7198)
++++ modules/stitching/src/util.cpp	(working copy)
+@@ -165,7 +165,7 @@
+     }
+ }
+ 
+-int& stitchingLogLevel()
++int stitchingLogLevel()
+ {
+     static int _log_level=1;
+     return _log_level;
 Index: modules/traincascade/CMakeLists.txt
 ===================================================================
---- modules/traincascade/CMakeLists.txt	(revision 6688)
+--- modules/traincascade/CMakeLists.txt	(revision 7198)
 +++ modules/traincascade/CMakeLists.txt	(working copy)
-@@ -30,9 +30,9 @@
+@@ -31,9 +31,9 @@
  add_dependencies(${the_target} ${traincascade_libs})
  set_target_properties(${the_target} PROPERTIES
                        DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
@@ -167,42 +241,3 @@ Index: modules/traincascade/CMakeLists.txt
                        OUTPUT_NAME "opencv_traincascade")
  					  
  if(ENABLE_SOLUTION_FOLDERS)
-Index: OpenCVFindOpenNI.cmake
-===================================================================
---- OpenCVFindOpenNI.cmake	(revision 6688)
-+++ OpenCVFindOpenNI.cmake	(working copy)
-@@ -18,13 +18,16 @@
- endif()
- 
- find_file(OPENNI_INCLUDES "XnCppWrapper.h" PATHS $ENV{OPEN_NI_INCLUDE} "/usr/include/ni" "/usr/include/openni" "c:/Program Files/OpenNI/Include" DOC "OpenNI c++ interface header")
--find_library(OPENNI_LIBRARY "OpenNI" PATHS $ENV{OPEN_NI_LIB} "/usr/lib" "c:/Program Files/OpenNI/Lib" DOC "OpenNI library")
-+find_library(OPENNI_LIBRARY "OpenNI" "openNI64" PATHS ${OPENNI_LIB_DIR} DOC "OpenNI library" NO_DEFAULT_PATH)
- 
- if(OPENNI_LIBRARY AND OPENNI_INCLUDES)
-     set(HAVE_OPENNI TRUE)
-     # the check: are PrimeSensor Modules for OpenNI installed
-     if(WIN32)
-         find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore.dll" PATHS "c:/Program Files/Prime Sense/Sensor/Bin" DOC "Core library of PrimeSensor Modules for OpenNI")
-+		if(NOT OPENNI_PRIME_SENSOR_MODULE)
-+		    find_file(OPENNI_PRIME_SENSOR_MODULE "XnCore64.dll" PATHS ${OPENNI_PRIME_SENSOR_MODULE_BIN_DIR} DOC "Core library of PrimeSensor Modules for OpenNI" NO_DEFAULT_PATH)
-+		endif()
-     elseif(UNIX OR APPLE)
-         find_library(OPENNI_PRIME_SENSOR_MODULE "XnCore" PATHS "/usr/lib" DOC "Core library of PrimeSensor Modules for OpenNI")
-     endif()
-Index: OpenCVModule.cmake
-===================================================================
---- OpenCVModule.cmake	(revision 6688)
-+++ OpenCVModule.cmake	(working copy)
-@@ -187,9 +187,9 @@
-     # Additional target properties
-     set_target_properties(${the_target} PROPERTIES
-         DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
--        ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
--        RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
--        INSTALL_NAME_DIR lib
-+        ARCHIVE_OUTPUT_DIRECTORY "${LIBRARY_OUTPUT_PATH}"
-+        RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
-+        INSTALL_NAME_DIR "lib"
-         )
- 
-     # Add the required libraries for linking:
