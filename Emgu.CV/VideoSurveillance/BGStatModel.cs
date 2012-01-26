@@ -132,12 +132,14 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="statModel">The stat model to update</param>
       /// <param name="learningRate">Use -1 for default</param>
       /// <returns></returns>
+      [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel, double learningRate);
 
       /// <summary>
       /// Define the Release function
       /// </summary>
       /// <param name="ptr">The background mode to be released</param>
+      [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate void ReleaseFunction(ref IntPtr ptr);
    }
 }
