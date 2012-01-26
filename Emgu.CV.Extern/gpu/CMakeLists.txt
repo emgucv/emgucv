@@ -13,6 +13,7 @@ project(cvextern_gpu)
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/stitching/include")
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
@@ -111,7 +112,7 @@ set_target_properties(${the_target} PROPERTIES
 	)
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu opencv_stitching)
 
 #disable warnings
 IF(MSVC)
@@ -120,7 +121,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu opencv_stitching)
   
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin COMPONENT main
