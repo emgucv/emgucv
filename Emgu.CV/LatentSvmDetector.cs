@@ -22,6 +22,8 @@ namespace Emgu.CV
       public LatentSvmDetector(String fileName)
       {
          _ptr = CvInvoke.cvLoadLatentSvmDetector(fileName);
+         if (_ptr == IntPtr.Zero)
+            throw new ArgumentException(String.Format("Unable to create latent svm model from the file {0}.", fileName));
       }
 
       /// <summary>
