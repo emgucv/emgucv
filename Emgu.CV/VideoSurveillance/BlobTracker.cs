@@ -19,35 +19,35 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerCC();
+      private extern static IntPtr CvCreateBlobTrackerCC();
 
       /// <summary>
       /// Connected component tracking and mean-shift particle filter collion-resolver
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerCCMSPF();
+      private extern static IntPtr CvCreateBlobTrackerCCMSPF();
 
       /// <summary>
       /// Blob tracker that integrates meanshift and connected components
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerMSFG();
+      private extern static IntPtr CvCreateBlobTrackerMSFG();
 
       /// <summary>
       /// Blob tracker that integrates meanshift and connected components:
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerMSFGS();
+      private extern static IntPtr CvCreateBlobTrackerMSFGS();
 
       /// <summary>
       /// Meanshift without connected-components
       /// </summary>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerMS();
+      private extern static IntPtr CvCreateBlobTrackerMS();
 
       /// <summary>
       /// Particle filtering via Bhattacharya coefficient, which
@@ -56,14 +56,14 @@ namespace Emgu.CV.VideoSurveillance
       /// <remarks>See: Real-Time Tracking of Non-Rigid Objects using Mean Shift Comanicius, Ramesh, Meer, 2000, 8p</remarks>
       /// <returns>Pointer to the blob tracker</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvCreateBlobTrackerMSPF();
+      private extern static IntPtr CvCreateBlobTrackerMSPF();
 
       /// <summary>
       /// Release the blob tracker
       /// </summary>
       /// <param name="tracker">The tracker to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void CvBlobTrackerRealease(ref IntPtr tracker);
+      private extern static void CvBlobTrackerRealease(ref IntPtr tracker);
 
       /// <summary>
       /// Return number of currently tracked blobs
@@ -71,7 +71,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="tracker">The tracker</param>
       /// <returns>Number of currently tracked blobs</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static int CvBlobTrackerGetBlobNum(IntPtr tracker);
+      private extern static int CvBlobTrackerGetBlobNum(IntPtr tracker);
 
       /// <summary>
       /// Return pointer to specified by index blob
@@ -80,7 +80,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="blobIndex">The index of the blob</param>
       /// <returns>Pointer to the blob with the specific index</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvBlobTrackerGetBlob(IntPtr tracker, int blobIndex);
+      private extern static IntPtr CvBlobTrackerGetBlob(IntPtr tracker, int blobIndex);
 
       /// <summary>
       /// Return pointer to specified by index blob
@@ -89,7 +89,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="blobId">The id of the blob</param>
       /// <returns>Pointer to the blob with specific id</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvBlobTrackerGetBlobByID(IntPtr tracker, int blobId);
+      private extern static IntPtr CvBlobTrackerGetBlobByID(IntPtr tracker, int blobId);
 
       /// <summary>
       /// Delete blob by its index
@@ -97,7 +97,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="tracker">The tracker</param>
       /// <param name="blobIndex">The index of the blob</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void CvBlobTrackerDelBlob(IntPtr tracker, int blobIndex);
+      private extern static void CvBlobTrackerDelBlob(IntPtr tracker, int blobIndex);
 
       /// <summary>
       /// Add new blob to track it and assign to this blob personal ID
@@ -108,7 +108,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="currentForegroundMask">current foreground mask</param>
       /// <returns>Pointer to new added blob</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForegroundMask);
+      private extern static IntPtr CvBlobTrackerAddBlob(IntPtr tracker, ref MCvBlob blob, IntPtr currentImage, IntPtr currentForegroundMask);
 
       #endregion
 
