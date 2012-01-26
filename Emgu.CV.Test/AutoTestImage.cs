@@ -721,10 +721,15 @@ namespace Emgu.CV.Test
          marker.Draw(
             new CircleF(
                new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f),
-               (float)(Math.Min(image.Width, image.Height) / 4.0f)),
+               /*(float)(Math.Min(image.Width, image.Height) / 20.0f)*/ 5.0f),
             new Gray(255),
             0);
+         Image<Bgr, Byte> result = image.ConcateHorizontal(marker.Convert<Bgr, byte>());
+         Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
          CvInvoke.cvWatershed(image, marker);
+         CvInvoke.cvCmpS(marker, 0.5, mask, CvEnum.CMP_TYPE.CV_CMP_GT);
+
+         //ImageViewer.Show(result.ConcateHorizontal(mask.Convert<Bgr, Byte>()));
       }
 
       [Test]
@@ -1334,6 +1339,44 @@ namespace Emgu.CV.Test
 
             //delete random images;
             foreach (string s in imageNames) File.Delete(s);
+         }
+      }
+
+      [Test]
+      public void TestMorphologyClosing()
+      {
+         //draw some blobs
+         Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
+         MCvBox2D box1 = new MCvBox2D(new PointF(100, 200), new SizeF(60, 80), 30.0f);
+         MCvBox2D box2 = new MCvBox2D(new PointF(180, 250), new SizeF(70, 100), 0.0f);
+         img.Draw(box1, new Gray(255.0), -1);
+         img.Draw(box2, new Gray(255.0), -1);
+
+         Image<Gray, Byte> result = img.ConcateHorizontal(MorphologyClosing(img, 10));
+         //ImageViewer.Show(result, "Left: original, Right: merged");
+      }
+
+      public static Image<Gray, Byte> MorphologyClosing(Image<Gray, Byte> img, int radius)
+      {
+         int kernelSize = radius * 2 + 1;
+         int[,] kernelMat = new int[kernelSize, kernelSize];
+         for (int i = 0; i < kernelSize; i++)
+            for (int j = 0; j < kernelSize; j++)
+            {
+               double dx = i - (radius);
+               double dy = j - (radius);
+               double dist = Math.Sqrt(dx * dx + dy * dy);
+               if (dist <= radius)
+               {
+                  kernelMat[i, j] = 1;
+               }
+            }
+
+         //for definition on the close operation, see.
+         //http://en.wikipedia.org/wiki/Mathematical_morphology
+         using (StructuringElementEx e = new StructuringElementEx(kernelMat, radius, radius))
+         {
+            return img.MorphologyEx(e, CvEnum.CV_MORPH_OP.CV_MOP_CLOSE, 1);
          }
       }
    }

@@ -80,6 +80,8 @@ namespace Emgu.CV.GPU.Test
       [Test]
       public void TestGpuMatContinuous()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
          GpuMat<Byte> mat = new GpuMat<byte>(1200, 640, 1, true);
          Assert.IsTrue(mat.IsContinuous);
       }
@@ -396,6 +398,8 @@ namespace Emgu.CV.GPU.Test
       [Test]
       public void TestGpuReduce()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 320))
          {
             img.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
@@ -410,6 +414,9 @@ namespace Emgu.CV.GPU.Test
       [Test]
       public void TestErodeDilate()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
+         
          int morphIter = 2;
          Image<Gray, Byte> image = new Image<Gray, byte>(640, 320);
          image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 4);
@@ -453,6 +460,22 @@ namespace Emgu.CV.GPU.Test
             GpuMat<float> gpuKpts = gpuSurf.DetectKeyPointsRaw(gpuMat, null);
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             gpuSurf.DownloadKeypoints(gpuKpts, kpts);
+         }
+      }
+
+      [Test]
+      public void TestStitching()
+      {
+         Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
+         images[0] = new Image<Bgr, byte>("stitch1.jpg");
+         images[1] = new Image<Bgr, byte>("stitch2.jpg");
+         images[2] = new Image<Bgr, byte>("stitch3.jpg");
+         images[3] = new Image<Bgr, byte>("stitch4.jpg");
+
+         using (Stitcher stitcher = new Stitcher(false))
+         {
+            Image<Bgr, Byte> result = stitcher.Stitch(images);
+            //ImageViewer.Show(result);
          }
       }
 

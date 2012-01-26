@@ -22,6 +22,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
+using Emgu.CV.GPU;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -1722,8 +1723,8 @@ namespace Emgu.CV.Test
             images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          }
 
-         //using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V'), 5, width, height, true))
-         using (VideoWriter writer = new VideoWriter(fileName, 5, width, height, true))
+         using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 5, width, height, true))
+         //using (VideoWriter writer = new VideoWriter(fileName, -1, 5, width, height, true))
          {
             for (int i = 0; i < numberOfFrames; i++)
             {
@@ -1923,6 +1924,18 @@ namespace Emgu.CV.Test
                writer.WriteFrame(img);
             }
          }
+      }
+
+      [Test]
+      public void TestPyrMeanshiftSegmentation()
+      {
+         Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png");
+         Image<Bgr, Byte> result = new Image<Bgr,byte>(image.Size);
+         CvInvoke.cvPyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
+         //Image<Gray, Byte> hue = result.Convert<Hsv, Byte>()[0];
+         Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(new Gray(30), new Gray(20));
+
+         //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
       }
    }
 }

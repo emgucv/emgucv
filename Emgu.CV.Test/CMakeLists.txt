@@ -25,6 +25,7 @@ LIST(APPEND
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/scene_r.bmp
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/tree.avi
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/c/agaricus-lepiota.data
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/cpp/letter-recognition.data
 	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll
 	)
 FOREACH(FILE ${SRC_CV_TEST_DATA})

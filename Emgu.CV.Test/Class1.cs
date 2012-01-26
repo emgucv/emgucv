@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.Cvb;
+using Emgu.CV.GPU;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -845,6 +846,76 @@ namespace Emgu.CV.Test
          viewer.Disposed += delegate(Object sender, EventArgs e) { timer.Stop(); };
          viewer.Text = "Actual State: White; Measurement: Red; Prediction: Green";
          viewer.ShowDialog();
+      }
+
+      public void VideoRetina()
+      {
+         ImageViewer v = new ImageViewer();
+
+         using (Capture capture = new Capture(0))
+         using (Retina retina = new Retina(new Size(capture.Width, capture.Height), true, Retina.ColorSamplingMethod.ColorBayer, false, 1.0, 10.0))
+         {
+            Retina.RetinaParameters p = retina.Parameters;
+            Retina.IplMagnoParameters iplP = p.IplMagno;
+            float oldval = iplP.ParasolCells_k;
+            iplP.ParasolCells_k += 0.01f;
+            iplP.NormaliseOutput = false;
+            p.IplMagno = iplP;
+            retina.Parameters = p;
+            float newval = retina.Parameters.IplMagno.ParasolCells_k;
+            
+            Assert.AreEqual(newval, oldval + 0.01f);
+
+            Application.Idle += delegate(Object sender, EventArgs e)
+            {
+               Image<Bgr, byte> img = capture.QueryFrame();
+               retina.Run(img);
+               
+               v.Image = img.ConcateVertical(retina.GetParvo().ConcateHorizontal(retina.GetMagno().Convert<Bgr, byte>()));
+
+            };
+            v.ShowDialog();
+
+         }
+      }
+
+      public void TestStereo()
+      {
+         using (ImageViewer v = new ImageViewer())
+         using (Capture cl = new Capture(0))
+         using (Capture cr = new Capture(1))
+         //using (GpuStereoConstantSpaceBP stereo = new GpuStereoConstantSpaceBP(128, 8, 4, 4))
+         using (GpuStereoBM stereo = new GpuStereoBM(GpuStereoBM.PresetType.BasicPreset, 64, 19))
+         using (GpuImage<Bgr, byte> leftGpu = new GpuImage<Bgr, byte>(new Size(cl.Width, cl.Height)))
+         using (GpuImage<Bgr, byte> rightGpu = new GpuImage<Bgr, byte>(new Size(cr.Width, cr.Height)))
+         using (GpuImage<Gray, byte> gpuDisparity = new GpuImage<Gray, byte>(leftGpu.Size))
+         using (Image<Gray, Byte> disparity = new Image<Gray, byte>(gpuDisparity.Size))
+         {
+            Application.Idle +=
+            ((Object sender, EventArgs e) =>
+            {
+               cl.Grab();
+               cr.Grab();
+               using (Image<Bgr, Byte> left = cl.RetrieveBgrFrame())
+               using (Image<Bgr, Byte> right = cr.RetrieveBgrFrame())
+               {
+                  leftGpu.Upload(left);
+                  rightGpu.Upload(right);
+                  using (GpuImage<Gray, byte> leftGray = leftGpu.Convert<Gray, byte>())
+                  using (GpuImage<Gray, byte> rightGray = rightGpu.Convert<Gray, byte>())
+                  {
+                     stereo.FindStereoCorrespondence(leftGray, rightGray, gpuDisparity, null);
+                     gpuDisparity.Download(disparity);
+                     Image<Bgr, Byte> img = left.ConcateHorizontal(right);
+                     img = img.ConcateVertical(disparity.Convert<Bgr, byte>());
+                     //Image<Bgr, Byte> img = c0.RetrieveBgrFrame();
+                     v.Image = img;
+                  }
+               }
+            });
+
+            v.ShowDialog();
+         }
       }
    }
 }
