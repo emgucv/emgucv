@@ -430,8 +430,27 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="dllname">The name of the dll</param>
       /// <returns>The handle to the library</returns>
-      [DllImport("kernel32.dll")]
-      public static extern IntPtr LoadLibrary(String dllname);
+      public static IntPtr LoadLibrary(String dllname)
+      {
+         if (Platform.OperationSystem == TypeEnum.OS.Windows)
+         {
+            return WinAPILoadLibrary(dllname);
+         }
+         else
+         {
+            return Dlopen(dllname, 0);
+         }
+      }
+
+      [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]
+      private static extern IntPtr WinAPILoadLibrary(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String dllname);
+
+      [DllImport("libdl.so", EntryPoint = "dlopen")]
+      private static extern IntPtr Dlopen(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String dllname, int mode);
 
       /// <summary>
       /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
