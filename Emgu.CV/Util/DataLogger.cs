@@ -4,9 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.Util;
-using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Util
 {
@@ -15,25 +15,6 @@ namespace Emgu.CV.Util
    /// </summary>
    public class DataLogger : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention=CvInvoke.CvCallingConvention)]
-      private static extern IntPtr DataLoggerCreate(int logLevel);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void DataLoggerRelease(ref IntPtr logger);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void DataLoggerRegisterCallback(
-         IntPtr logger,
-         DataCallback messageCallback);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void DataLoggerLog(
-         IntPtr logger, 
-         IntPtr data,
-         int logLevel);
-      #endregion
-
       /// <summary>
       /// The event that will be raised when the unmanaged code send over data
       /// </summary>
@@ -54,9 +35,9 @@ namespace Emgu.CV.Util
       /// <param name="logLevel">The log level.</param>
       public DataLogger(int logLevel)
       {
-         _ptr = DataLoggerCreate(logLevel);
+         _ptr = CvInvoke.DataLoggerCreate(logLevel);
          _handler = DataHandler;
-         DataLoggerRegisterCallback(_ptr, _handler);
+         CvInvoke.DataLoggerRegisterCallback(_ptr, _handler);
       }
 
       /// <summary>
@@ -66,11 +47,11 @@ namespace Emgu.CV.Util
       /// <param name="logLevel">The logLevel. The Log function only logs when the <paramref name="logLevel"/> is greater or equals to the DataLogger's logLevel</param>
       public void Log(IntPtr data, int logLevel)
       {
-         DataLoggerLog(_ptr, data, logLevel);
+         CvInvoke.DataLoggerLog(_ptr, data, logLevel);
       }
 
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
-      private delegate void DataCallback(IntPtr data);
+      internal delegate void DataCallback(IntPtr data);
 
       private void DataHandler(IntPtr data)
       {
@@ -83,7 +64,7 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         DataLoggerRelease(ref _ptr);
+         CvInvoke.DataLoggerRelease(ref _ptr);
       }
    }
 
@@ -93,7 +74,7 @@ namespace Emgu.CV.Util
    /// <typeparam name="T">The supported type includes System.String and System.ValueType</typeparam>
    public class DataLogger<T> : DisposableObject
    {
-      private DataLogger _logger; 
+      private DataLogger _logger;
 
       /// <summary>
       /// Define the type of callback when data is received
@@ -188,5 +169,28 @@ namespace Emgu.CV.Util
       {
          _logger.Dispose();
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr DataLoggerCreate(int logLevel);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void DataLoggerRelease(ref IntPtr logger);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void DataLoggerRegisterCallback(
+         IntPtr logger,
+         Util.DataLogger.DataCallback messageCallback);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void DataLoggerLog(
+         IntPtr logger,
+         IntPtr data,
+         int logLevel);
    }
 }

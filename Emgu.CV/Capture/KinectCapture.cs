@@ -17,14 +17,6 @@ namespace Emgu.CV
    public class KinectCapture
       : Capture
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
-
-      [DllImport(CvInvoke.OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
-      #endregion
-
       /// <summary>
       /// Camera output mode
       /// </summary>
@@ -200,7 +192,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<ColorPoint> seq = new Seq<ColorPoint>(stor);
-            OpenniGetColorPoints(Ptr, seq, mask);
+            CvInvoke.OpenniGetColorPoints(Ptr, seq, mask);
             return seq.ToArray();
          }
          /*
@@ -250,7 +242,7 @@ namespace Emgu.CV
       /// <remarks>This function required the opencv_highgui module patched by EMGU CV, otherwise it will throw entry point not found exception.</remarks>
       public IntPtr GetOpenNIContext()
       {
-         return cvGetOpenniCaptureContext(Ptr);
+         return CvInvoke.cvGetOpenniCaptureContext(Ptr);
       }
 
       /// <summary>
@@ -278,5 +270,14 @@ namespace Emgu.CV
          /// </summary>
          public Byte Red;
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
+
+      [DllImport(CvInvoke.OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
    }
 }

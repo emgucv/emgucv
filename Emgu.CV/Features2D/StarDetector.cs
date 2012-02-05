@@ -15,14 +15,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class StarDetector : DisposableObject, IKeyPointDetector
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvStarGetFeatureDetector(ref MCvStarDetectorParams detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvStarFeatureDetectorRelease(ref IntPtr detector);
-      #endregion
-
       #region IKeyPointDetector Members
       /// <summary>
       /// Get the feature detector. 
@@ -128,7 +120,7 @@ namespace Emgu.CV.Features2D
          _suppressNonmaxSize = suppressNonmaxSize;
 
          MCvStarDetectorParams p = GetStarDetectorParameters();
-         _featureDetectorPtr = CvStarGetFeatureDetector(ref p);
+         _featureDetectorPtr = CvInvoke.CvStarGetFeatureDetector(ref p);
       }
 
       /// <summary>
@@ -162,7 +154,19 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvStarFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvStarFeatureDetectorRelease(ref _featureDetectorPtr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvStarGetFeatureDetector(ref MCvStarDetectorParams detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvStarFeatureDetectorRelease(ref IntPtr detector);
    }
 }

@@ -3,9 +3,9 @@
 //----------------------------------------------------------------------------
 
 ﻿using System;
-using Emgu.Util;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -18,23 +18,6 @@ namespace Emgu.CV
    /// </summary>
    public class StereoSGBM : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvStereoSGBMCreate(
-         int minDisparity, int numDisparities, int SADWindowSize,
-         int P1, int P2, int disp12MaxDiff,
-         int preFilterCap, int uniquenessRatio,
-         int speckleWindowSize, int speckleRange,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool fullDP);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvStereoSGBMRelease(IntPtr obj);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvStereoSGBMFindCorrespondence(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
-      #endregion
-
       /// <summary>
       /// Create a stereo disparity solver using StereoSGBM algorithm (combination of H. Hirschmuller + K. Konolige approaches) 
       /// </summary>
@@ -55,7 +38,7 @@ namespace Emgu.CV
          int speckleWindowSize, int speckleRange,
          bool fullDP)
       {
-         _ptr = CvStereoSGBMCreate(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, fullDP);
+         _ptr = CvInvoke.CvStereoSGBMCreate(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, fullDP);
       }
 
       /// <summary>
@@ -67,7 +50,7 @@ namespace Emgu.CV
       /// <remarks>Invalid pixels (for which disparity can not be computed) are set to (state-&gt;minDisparity-1)*16</remarks>
       public void FindStereoCorrespondence(Image<Gray, Byte> left, Image<Gray, Byte> right, Image<Gray, Int16> disparity)
       {
-         CvStereoSGBMFindCorrespondence(_ptr, left, right, disparity);
+         CvInvoke.CvStereoSGBMFindCorrespondence(_ptr, left, right, disparity);
       }
 
       /// <summary>
@@ -75,7 +58,25 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvStereoSGBMRelease(_ptr);
+         CvInvoke.CvStereoSGBMRelease(_ptr);
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvStereoSGBMCreate(
+         int minDisparity, int numDisparities, int SADWindowSize,
+         int P1, int P2, int disp12MaxDiff,
+         int preFilterCap, int uniquenessRatio,
+         int speckleWindowSize, int speckleRange,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool fullDP);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvStereoSGBMRelease(IntPtr obj);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvStereoSGBMFindCorrespondence(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
    }
 }

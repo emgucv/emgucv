@@ -545,33 +545,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public static class Features2DToolbox
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private static extern bool getHomographyMatrixFromMatchedFeatures(IntPtr model, IntPtr observed, IntPtr indices, IntPtr mask, double ransacReprojThreshold, IntPtr homography);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void drawMatchedFeatures(
-         IntPtr img1, IntPtr keypoints1,
-         IntPtr img2, IntPtr keypoints2,
-         IntPtr matchIndices,
-         IntPtr outImg,
-         MCvScalar matchColor, MCvScalar singlePointColor,
-         IntPtr matchesMask,
-         Features2DToolbox.KeypointDrawType flags);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void drawKeypoints(
-                          IntPtr image,
-                          IntPtr vectorOfKeypoints,
-                          IntPtr outImage,
-                          MCvScalar color,
-                          Features2DToolbox.KeypointDrawType flags);
-      #endregion
-
       /// <summary>
       /// Draw the keypoints found on the image.
       /// </summary>
@@ -589,7 +562,7 @@ namespace Emgu.CV.Features2D
          where TColor : struct, IColor
       {
          Image<Bgr, Byte> result = new Image<Bgr, Byte>(image.Size);
-         drawKeypoints(image, keypoints, result, color.MCvScalar, type);
+         CvInvoke.drawKeypoints(image, keypoints, result, color.MCvScalar, type);
          return result;
       }
 
@@ -612,10 +585,10 @@ namespace Emgu.CV.Features2D
          Image<TColor, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
          Matrix<int> matchIndices, Bgr matchColor, Bgr singlePointColor,
          Matrix<Byte> matchesMask, KeypointDrawType flags)
-         where TColor: struct, IColor
+         where TColor : struct, IColor
       {
          Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
-         drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
+         CvInvoke.drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
          return result;
       }
 
@@ -653,7 +626,7 @@ namespace Emgu.CV.Features2D
       /// <returns> The number of non-zero elements in the resulting mask</returns>
       public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints, Matrix<int> indices, Matrix<Byte> mask, double scaleIncrement, int rotationBins)
       {
-         return voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, scaleIncrement, rotationBins);
+         return CvInvoke.voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, scaleIncrement, rotationBins);
       }
 
       /// <summary>
@@ -675,7 +648,7 @@ namespace Emgu.CV.Features2D
       public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(VectorOfKeyPoint model, VectorOfKeyPoint observed, Matrix<int> matchIndices, Matrix<Byte> mask, double ransacReprojThreshold)
       {
          HomographyMatrix homography = new HomographyMatrix();
-         bool found = getHomographyMatrixFromMatchedFeatures(model, observed, matchIndices, mask, ransacReprojThreshold, homography);
+         bool found = CvInvoke.getHomographyMatrixFromMatchedFeatures(model, observed, matchIndices, mask, ransacReprojThreshold, homography);
          if (found)
          {
             return homography;
@@ -728,5 +701,36 @@ namespace Emgu.CV.Features2D
             matcher.KnnMatch(observedDescriptors, indices, dist, 2, null);
          }
       }*/
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool getHomographyMatrixFromMatchedFeatures(IntPtr model, IntPtr observed, IntPtr indices, IntPtr mask, double ransacReprojThreshold, IntPtr homography);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void drawMatchedFeatures(
+         IntPtr img1, IntPtr keypoints1,
+         IntPtr img2, IntPtr keypoints2,
+         IntPtr matchIndices,
+         IntPtr outImg,
+         MCvScalar matchColor, MCvScalar singlePointColor,
+         IntPtr matchesMask,
+         Features2D.Features2DToolbox.KeypointDrawType flags);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void drawKeypoints(
+                          IntPtr image,
+                          IntPtr vectorOfKeypoints,
+                          IntPtr outImage,
+                          MCvScalar color,
+                          Features2D.Features2DToolbox.KeypointDrawType flags);
    }
 }

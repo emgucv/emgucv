@@ -21,51 +21,12 @@ namespace Emgu.CV.Cvb
    ///</remarks>
    public class CvTracks : UnmanagedObject, IDictionary<uint, CvTrack>
    {
-      #region PInvoke
-      /// <summary>
-      /// Returns a pointer to CvBlobs
-      /// </summary>
-      /// <returns>Pointer to CvBlobs</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr cvbCvTracksCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvTracksRelease(ref IntPtr tracks);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static int cvbCvTracksGetSize(IntPtr tracks);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvTracksClear(IntPtr tracks);
-
-      //return true if this is a new label. False if the label already exist and the value in the map will NOT be modified.
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cvbCvTracksAdd(IntPtr tracks, uint id, ref CvTrack track);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr cvbCvTracksFind(IntPtr tracks, uint id);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvTracksGetTracks(IntPtr Tracks, IntPtr idsArray, IntPtr tracksArray);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvTracksSetTrack(IntPtr tracks, uint id, ref CvTrack track);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvUpdateTracks(IntPtr blobs, IntPtr tracks, double thDistance, uint thInactive, uint thActive);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cvbCvTracksRemove(IntPtr tracks, uint id);
-      #endregion
-
       /// <summary>
       /// Create a new CvTracks
       /// </summary>
       public CvTracks()
       {
-         _ptr = cvbCvTracksCreate();
+         _ptr = CvInvoke.cvbCvTracksCreate();
       }
 
       /// <summary>
@@ -73,7 +34,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       protected override void DisposeObject()
       {
-         cvbCvTracksRelease(ref _ptr);
+         CvInvoke.cvbCvTracksRelease(ref _ptr);
       }
 
       /// <summary>
@@ -85,7 +46,7 @@ namespace Emgu.CV.Cvb
       /// <param name="thActive">Active If a track becomes inactive but it has been active less than thActive frames, the track will be deleted.</param>
       public void Update(CvBlobs blobs, double thDistance, uint thInactive, uint thActive)
       {
-         cvbCvUpdateTracks(blobs, _ptr, thDistance, thInactive, thActive);
+         CvInvoke.cvbCvUpdateTracks(blobs, _ptr, thDistance, thInactive, thActive);
       }
 
       #region IDictionary<uint,CvBlob> Members
@@ -96,7 +57,7 @@ namespace Emgu.CV.Cvb
       /// <param name="track">The track</param>
       public void Add(uint id, CvTrack track)
       {
-         bool success = cvbCvTracksAdd(_ptr, id, ref track);
+         bool success = CvInvoke.cvbCvTracksAdd(_ptr, id, ref track);
          if (!success) throw new ArgumentException(String.Format("The item with id {0} already exist in the Tracks.", id));
       }
 
@@ -107,7 +68,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the CvTracks contains an element with the specific id</returns>
       public bool ContainsKey(uint id)
       {
-         return IntPtr.Zero != cvbCvTracksFind(_ptr, id);
+         return IntPtr.Zero != CvInvoke.cvbCvTracksFind(_ptr, id);
       }
 
       /// <summary>
@@ -131,7 +92,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the element is successfully found and removed; otherwise, false.</returns>
       public bool Remove(uint id)
       {
-         return cvbCvTracksRemove(_ptr, id);
+         return CvInvoke.cvbCvTracksRemove(_ptr, id);
       }
 
       /// <summary>
@@ -142,7 +103,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the tracks contains a track with the specific id; otherwise, false</returns>
       public bool TryGetValue(uint id, out CvTrack track)
       {
-         IntPtr trackPtr = cvbCvTracksFind(_ptr, id);
+         IntPtr trackPtr = CvInvoke.cvbCvTracksFind(_ptr, id);
          if (IntPtr.Zero == trackPtr)
          {
             track = new CvTrack();
@@ -163,7 +124,7 @@ namespace Emgu.CV.Cvb
 
          GCHandle idsHandle = GCHandle.Alloc(ids, GCHandleType.Pinned);
          GCHandle tracksHandle = GCHandle.Alloc(tracks, GCHandleType.Pinned);
-         cvbCvTracksGetTracks(_ptr, idsHandle.AddrOfPinnedObject(), tracksHandle.AddrOfPinnedObject());
+         CvInvoke.cvbCvTracksGetTracks(_ptr, idsHandle.AddrOfPinnedObject(), tracksHandle.AddrOfPinnedObject());
          idsHandle.Free();
          tracksHandle.Free();
       }
@@ -198,7 +159,7 @@ namespace Emgu.CV.Cvb
          }
          set
          {
-            cvbCvTracksSetTrack(Ptr, id, ref value);
+            CvInvoke.cvbCvTracksSetTrack(Ptr, id, ref value);
          }
       }
 
@@ -219,7 +180,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public void Clear()
       {
-         cvbCvTracksClear(_ptr);
+         CvInvoke.cvbCvTracksClear(_ptr);
       }
 
       /// <summary>
@@ -251,7 +212,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public int Count
       {
-         get { return cvbCvTracksGetSize(_ptr); }
+         get { return CvInvoke.cvbCvTracksGetSize(_ptr); }
       }
 
       /// <summary>
@@ -305,5 +266,48 @@ namespace Emgu.CV.Cvb
       }
 
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      /// <summary>
+      /// Returns a pointer to CvBlobs
+      /// </summary>
+      /// <returns>Pointer to CvBlobs</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvbCvTracksCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvTracksRelease(ref IntPtr tracks);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cvbCvTracksGetSize(IntPtr tracks);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvTracksClear(IntPtr tracks);
+
+      //return true if this is a new label. False if the label already exist and the value in the map will NOT be modified.
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvbCvTracksAdd(IntPtr tracks, uint id, ref Cvb.CvTrack track);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvbCvTracksFind(IntPtr tracks, uint id);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvTracksGetTracks(IntPtr Tracks, IntPtr idsArray, IntPtr tracksArray);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvTracksSetTrack(IntPtr tracks, uint id, ref Cvb.CvTrack track);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvUpdateTracks(IntPtr blobs, IntPtr tracks, double thDistance, uint thInactive, uint thActive);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvbCvTracksRemove(IntPtr tracks, uint id);
    }
 }

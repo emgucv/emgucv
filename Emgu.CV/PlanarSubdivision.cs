@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
@@ -21,20 +20,6 @@ namespace Emgu.CV
       private readonly MemStorage _storage;
       private readonly Rectangle _roi;
       private bool _isVoronoiDirty;
-
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer);
-      #endregion
 
       #region constructor
       /// <summary>
@@ -89,13 +74,13 @@ namespace Emgu.CV
             //ignore all errors
             IntPtr oldErrorCallback = CvInvoke.cvRedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
 
-            PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
+            CvInvoke.PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
 
             //reset the error handler 
             CvInvoke.cvRedirectError(oldErrorCallback, IntPtr.Zero, IntPtr.Zero);
          }
          else
-            PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
+            CvInvoke.PlanarSubdivisionInsertPoints(_ptr, handle.AddrOfPinnedObject(), points.Length);
 
          handle.Free();
 
@@ -187,7 +172,7 @@ namespace Emgu.CV
          MCvSubdiv2DEdge[] edges = new MCvSubdiv2DEdge[size];
          GCHandle pointHandle = GCHandle.Alloc(points, GCHandleType.Pinned);
          GCHandle edgeHandle = GCHandle.Alloc(edges, GCHandleType.Pinned);
-         PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject(), edgeHandle.AddrOfPinnedObject(), ref size);
+         CvInvoke.PlanarSubdivisionGetSubdiv2DPoints(_ptr, pointHandle.AddrOfPinnedObject(), edgeHandle.AddrOfPinnedObject(), ref size);
          pointHandle.Free();
          edgeHandle.Free();
          using (MemStorage stor = new MemStorage())
@@ -195,7 +180,7 @@ namespace Emgu.CV
             Seq<PointF> ptSeq = new Seq<PointF>(stor);
             for (int i = 0; i < size; i++)
             {
-               PlanarSubdivisionEdgeToPoly(edges[i], ptSeq);
+               CvInvoke.PlanarSubdivisionEdgeToPoly(edges[i], ptSeq);
                PointF[] polygon = ptSeq.ToArray();
                if (polygon.Length > 0)
                {
@@ -216,7 +201,7 @@ namespace Emgu.CV
          int size = ((MCvSet)Marshal.PtrToStructure(MCvSubdiv2D.edges, typeof(MCvSet))).total * 2;
          Triangle2DF[] triangles = new Triangle2DF[size];
          GCHandle handle = GCHandle.Alloc(triangles, GCHandleType.Pinned);
-         PlanarSubdivisionGetTriangles(_ptr, handle.AddrOfPinnedObject(), ref size, includeVirtualPoints ? 1 : 0);
+         CvInvoke.PlanarSubdivisionGetTriangles(_ptr, handle.AddrOfPinnedObject(), ref size, includeVirtualPoints ? 1 : 0);
          handle.Free();
          Array.Resize(ref triangles, size);
          return triangles;
@@ -305,5 +290,20 @@ namespace Emgu.CV
          get { return _vertices; }
          set { _vertices = value; }
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void PlanarSubdivisionGetTriangles(IntPtr subdiv, IntPtr triangles, ref int triangleCount, int includeVirtualPoints);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void PlanarSubdivisionInsertPoints(IntPtr subdiv, IntPtr points, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int PlanarSubdivisionGetSubdiv2DPoints(IntPtr subdiv, IntPtr points, IntPtr edges, ref int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void PlanarSubdivisionEdgeToPoly(MCvSubdiv2DEdge edge, IntPtr buffer);
    }
 }

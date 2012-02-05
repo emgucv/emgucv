@@ -18,33 +18,6 @@ namespace Emgu.CV.Features2D
    {
       #region PInvoke
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvSURFGetFeatureDetector(ref MCvSURFParams detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvSURFGetDescriptorExtractor(ref MCvSURFParams detector);
-
-      /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFDetectorDetectFeature(
-         ref SURFDetector detector,
-         IntPtr image,
-         IntPtr mask,
-         IntPtr keypoints,
-         IntPtr descriptors);*/
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFDetectorComputeDescriptors(
-         ref MCvSURFParams detector,
-         IntPtr image,
-         IntPtr keypoints,
-         IntPtr descriptors);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFFeatureDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvSURFDescriptorExtractorRelease(ref IntPtr extractor);
       #endregion
 
       /// <summary>
@@ -82,8 +55,8 @@ namespace Emgu.CV.Features2D
       public SURFDetector(MCvSURFParams surfParams)
       {
          _surfParams = surfParams;
-         _featureDetectorPtr = CvSURFGetFeatureDetector(ref _surfParams);
-         _descriptorExtractorPtr = CvSURFGetDescriptorExtractor(ref _surfParams);
+         _featureDetectorPtr = CvInvoke.CvSURFGetFeatureDetector(ref _surfParams);
+         _descriptorExtractorPtr = CvInvoke.CvSURFGetDescriptorExtractor(ref _surfParams);
       }
 
       /// <summary>
@@ -106,7 +79,7 @@ namespace Emgu.CV.Features2D
       /// The number of layers within each octave (4 by default)
       /// </param>
       public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves, int nOctaveLayers)
-         : this (new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
+         : this(new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
       {
       }
 
@@ -159,7 +132,7 @@ namespace Emgu.CV.Features2D
          if (count == 0) return null;
          int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * image.NumberOfChannels, 1);
-         CvSURFDetectorComputeDescriptors(ref _surfParams, image, keyPoints, descriptors);
+         CvInvoke.CvSURFDetectorComputeDescriptors(ref _surfParams, image, keyPoints, descriptors);
          return descriptors;
       }
 
@@ -225,8 +198,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
-         CvSURFDescriptorExtractorRelease(ref _descriptorExtractorPtr);
+         CvInvoke.CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvSURFDescriptorExtractorRelease(ref _descriptorExtractorPtr);
       }
 
       #region IDescriptorExtractor<float> Members
@@ -248,5 +221,39 @@ namespace Emgu.CV.Features2D
       }
 
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvSURFGetFeatureDetector(ref MCvSURFParams detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvSURFGetDescriptorExtractor(ref MCvSURFParams detector);
+
+      /*
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void CvSURFDetectorDetectFeature(
+         ref SURFDetector detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints,
+         IntPtr descriptors);*/
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvSURFDetectorComputeDescriptors(
+         ref MCvSURFParams detector,
+         IntPtr image,
+         IntPtr keypoints,
+         IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvSURFFeatureDetectorRelease(ref IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvSURFDescriptorExtractorRelease(ref IntPtr extractor);
    }
 }

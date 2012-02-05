@@ -18,23 +18,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class GridAdaptedFeatureDetector : UnmanagedObject, IKeyPointDetector
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr GridAdaptedFeatureDetectorCreate(
-         IntPtr detector,
-         int maxTotalKeypoints, int gridRows, int gridCols);
-
-      /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void GridAdaptedFeatureDetectorDetect(
-         IntPtr detector,
-         IntPtr image, IntPtr keypoints, IntPtr mask);
-      */
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void GridAdaptedFeatureDetectorRelease(ref IntPtr detector);
-      #endregion
-
       /// <summary>
       /// Maximum count of keypoints detected on the image. Only the strongest keypoints
       /// </summary>
@@ -62,7 +45,7 @@ namespace Emgu.CV.Features2D
          MaxTotalKeyPoints = maxTotalKeyPoints;
          GridRows = gridRows;
          GridCols = gridCols;
-         _ptr = GridAdaptedFeatureDetectorCreate(detector.FeatureDetectorPtr, maxTotalKeyPoints, gridRows, gridCols);
+         _ptr = CvInvoke.GridAdaptedFeatureDetectorCreate(detector.FeatureDetectorPtr, maxTotalKeyPoints, gridRows, gridCols);
       }
 
       /// <summary>
@@ -70,7 +53,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         GridAdaptedFeatureDetectorRelease(ref _ptr);
+         CvInvoke.GridAdaptedFeatureDetectorRelease(ref _ptr);
       }
 
       #region IKeyPointDetector Members
@@ -78,7 +61,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return  _ptr;
+            return _ptr;
          }
       }
 
@@ -96,5 +79,26 @@ namespace Emgu.CV.Features2D
       }
 
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr GridAdaptedFeatureDetectorCreate(
+         IntPtr detector,
+         int maxTotalKeypoints, int gridRows, int gridCols);
+
+      /*
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void GridAdaptedFeatureDetectorDetect(
+         IntPtr detector,
+         IntPtr image, IntPtr keypoints, IntPtr mask);
+      */
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void GridAdaptedFeatureDetectorRelease(ref IntPtr detector);
    }
 }

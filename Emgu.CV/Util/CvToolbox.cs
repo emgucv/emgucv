@@ -165,9 +165,6 @@ namespace Emgu.CV.Util
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
-
       /*
       #region FFMPEG
       private static bool _hasFFMPEG;
@@ -241,5 +238,14 @@ namespace Emgu.CV.Util
          return conversion;
       }
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
    }
 }

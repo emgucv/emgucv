@@ -17,35 +17,6 @@ namespace Emgu.CV
    [Serializable]
    public struct Quaternions : IEquatable<Quaternions>
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void eulerToQuaternions(double x, double y, double z, ref Quaternions q);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsToEuler(ref Quaternions q, ref double x, ref double y, ref double z);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void axisAngleToQuaternions(ref MCvPoint3D64f axisAngle, ref Quaternions q);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsToAxisAngle(ref Quaternions q, ref MCvPoint3D64f axisAngle);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsToRotationMatrix(ref Quaternions quaternions, IntPtr rotation);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsRotatePoint(ref Quaternions quaternions, ref MCvPoint3D64f point, ref MCvPoint3D64f pointDst);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsRotatePoints(ref Quaternions quaternions, IntPtr pointSrc, IntPtr pointDst);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void quaternionsSlerp(ref Quaternions qa, ref Quaternions qb, double t, ref Quaternions qm);
-      #endregion
-
       /// <summary>
       /// Create a quaternion with the specific values
       /// </summary>
@@ -111,7 +82,7 @@ namespace Emgu.CV
       /// <param name="z">rotation around z-axis (yaw) in radian</param>
       public void SetEuler(double x, double y, double z)
       {
-         eulerToQuaternions(x, y, z, ref this);
+         CvInvoke.eulerToQuaternions(x, y, z, ref this);
       }
 
       /// <summary>
@@ -122,7 +93,7 @@ namespace Emgu.CV
       /// <param name="z">rotation around z-axis (yaw) in radian</param>
       public void GetEuler(ref double x, ref double y, ref double z)
       {
-         quaternionsToEuler(ref this, ref x, ref y, ref z);
+         CvInvoke.quaternionsToEuler(ref this, ref x, ref y, ref z);
       }
 
       /// <summary>
@@ -133,12 +104,12 @@ namespace Emgu.CV
          get
          {
             MCvPoint3D64f axisAngle = new MCvPoint3D64f();
-            quaternionsToAxisAngle(ref this, ref axisAngle);
+            CvInvoke.quaternionsToAxisAngle(ref this, ref axisAngle);
             return axisAngle;
          }
          set
          {
-            axisAngleToQuaternions(ref value, ref this);
+            CvInvoke.axisAngleToQuaternions(ref value, ref this);
          }
       }
 
@@ -148,7 +119,7 @@ namespace Emgu.CV
       /// <param name="rotation">The (3x3) rotation matrix which values will be set to represent this quaternions</param>
       public void GetRotationMatrix(Matrix<double> rotation)
       {
-         quaternionsToRotationMatrix(ref this, rotation);
+         CvInvoke.quaternionsToRotationMatrix(ref this, rotation);
       }
 
       /// <summary>
@@ -158,7 +129,7 @@ namespace Emgu.CV
       /// <param name="pointsDst">The result of the rotation, should be the same size as <paramref name="pointsSrc"/>, can be <paramref name="pointsSrc"/> as well for inplace rotation</param>
       public void RotatePoints(Matrix<double> pointsSrc, Matrix<double> pointsDst)
       {
-         quaternionsRotatePoints(ref this, pointsSrc, pointsDst);
+         CvInvoke.quaternionsRotatePoints(ref this, pointsSrc, pointsDst);
       }
 
       /// <summary>
@@ -169,7 +140,7 @@ namespace Emgu.CV
       public MCvPoint3D64f RotatePoint(MCvPoint3D64f point)
       {
          MCvPoint3D64f result = new MCvPoint3D64f();
-         quaternionsRotatePoint(ref this, ref point, ref result);
+         CvInvoke.quaternionsRotatePoint(ref this, ref point, ref result);
          return result;
       }
 
@@ -180,12 +151,12 @@ namespace Emgu.CV
       {
          get
          {
-            if (this.Equals(Empty)) 
+            if (this.Equals(Empty))
                return new MCvPoint3D64f(0, 0, 1); //For empty quaternion, return a random axis
             else
             {
                double norm = Math.Sqrt(X * X + Y * Y + Z * Z);
-               return new MCvPoint3D64f(X/norm, Y/norm, Z/norm);
+               return new MCvPoint3D64f(X / norm, Y / norm, Z / norm);
             }
          }
          /*
@@ -221,7 +192,7 @@ namespace Emgu.CV
       public Quaternions Multiply(Quaternions quaternionsOther)
       {
          Quaternions result = new Quaternions();
-         quaternionsMultiply(ref this, ref quaternionsOther, ref result);
+         CvInvoke.quaternionsMultiply(ref this, ref quaternionsOther, ref result);
          return result;
       }
 
@@ -234,7 +205,7 @@ namespace Emgu.CV
       public Quaternions Slerp(Quaternions quaternionsOther, double weightForOther)
       {
          Quaternions result = new Quaternions();
-         quaternionsSlerp(ref this, ref quaternionsOther, weightForOther, ref result);
+         CvInvoke.quaternionsSlerp(ref this, ref quaternionsOther, weightForOther, ref result);
          return result;
       }
 
@@ -283,5 +254,35 @@ namespace Emgu.CV
       {
          return String.Format("[{0}, {1}, {2}, {3}]", W, X, Y, Z);
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void eulerToQuaternions(double x, double y, double z, ref Quaternions q);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsToEuler(ref Quaternions q, ref double x, ref double y, ref double z);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void axisAngleToQuaternions(ref MCvPoint3D64f axisAngle, ref Quaternions q);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsToAxisAngle(ref Quaternions q, ref MCvPoint3D64f axisAngle);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsToRotationMatrix(ref Quaternions quaternions, IntPtr rotation);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsRotatePoint(ref Quaternions quaternions, ref MCvPoint3D64f point, ref MCvPoint3D64f pointDst);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsRotatePoints(ref Quaternions quaternions, IntPtr pointSrc, IntPtr pointDst);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void quaternionsSlerp(ref Quaternions qa, ref Quaternions qb, double t, ref Quaternions qm);
    }
 }

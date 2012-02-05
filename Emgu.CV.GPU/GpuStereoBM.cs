@@ -3,9 +3,9 @@
 //----------------------------------------------------------------------------
 
 ﻿using System;
-using Emgu.Util;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -14,30 +14,19 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuStereoBM : UnmanagedObject
    {
-      #region
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr GpuStereoBMCreate(PresetType preset, int ndisparities, int winSize);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void GpuStereoBMFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void GpuStereoBMRelease(ref IntPtr stereoBM);
-      #endregion
-
       /// <summary>
       /// Preset type
       /// </summary>
-      public enum PresetType 
-      { 
+      public enum PresetType
+      {
          /// <summary>
          /// Basic
          /// </summary>
-         BasicPreset = 0, 
+         BasicPreset = 0,
          /// <summary>
          /// prefilter xsobel
          /// </summary>
-         PrefilterXSobel = 1 
+         PrefilterXSobel = 1
       };
 
       /// <summary>
@@ -48,7 +37,7 @@ namespace Emgu.CV.GPU
       /// <param name="winSize">The SAD window size. Use 19 for default</param>
       public GpuStereoBM(PresetType preset, int numberOfDisparities, int winSize)
       {
-         _ptr = GpuStereoBMCreate(preset, numberOfDisparities, winSize);
+         _ptr = GpuInvoke.GpuStereoBMCreate(preset, numberOfDisparities, winSize);
       }
 
       /// <summary>
@@ -60,7 +49,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void FindStereoCorrespondence(GpuImage<Gray, Byte> left, GpuImage<Gray, Byte> right, GpuImage<Gray, Byte> disparity, Stream stream)
       {
-         GpuStereoBMFindStereoCorrespondence(_ptr, left, right, disparity, stream);
+         GpuInvoke.GpuStereoBMFindStereoCorrespondence(_ptr, left, right, disparity, stream);
       }
 
       /// <summary>
@@ -68,7 +57,19 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuStereoBMRelease(ref _ptr);
+         GpuInvoke.GpuStereoBMRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr GpuStereoBMCreate(GpuStereoBM.PresetType preset, int ndisparities, int winSize);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void GpuStereoBMFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void GpuStereoBMRelease(ref IntPtr stereoBM);
    }
 }

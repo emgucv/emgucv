@@ -17,36 +17,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class ORBDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<Byte>
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbGetDescriptorExtractor(float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static int CvOrbDetectorGetDescriptorSize(IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvOrbDetectorComputeDescriptors(
-         IntPtr detector,
-         IntPtr image,
-         IntPtr keypoints,
-         IntPtr descriptors);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvOrbDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvOrbFeatureDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvOrbDescriptorExtractorRelease(ref IntPtr extractor);
-      #endregion
-
       private IntPtr _featureDetectorPtr;
       private IntPtr _descriptorExtractorPtr;
 
@@ -58,7 +28,7 @@ namespace Emgu.CV.Features2D
          /// <summary>
          /// Harris
          /// </summary>
-         Harris, 
+         Harris,
          /// <summary>
          /// Fast
          /// </summary>
@@ -77,9 +47,9 @@ namespace Emgu.CV.Features2D
       /// <param name="scoreType">Type of the score to use. Use Harris for default.</param>
       public ORBDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ScoreType scoreType)
       {
-         _ptr = CvOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
-         _featureDetectorPtr = CvOrbGetFeatureDetector(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
-         _descriptorExtractorPtr = CvOrbGetDescriptorExtractor(scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _ptr = CvInvoke.CvOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _featureDetectorPtr = CvInvoke.CvOrbGetFeatureDetector(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _descriptorExtractorPtr = CvInvoke.CvOrbGetDescriptorExtractor(scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
       }
 
       /// <summary>
@@ -127,7 +97,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return CvOrbDetectorGetDescriptorSize(_ptr);
+            return CvInvoke.CvOrbDetectorGetDescriptorSize(_ptr);
          }
       }
 
@@ -156,9 +126,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvOrbDetectorRelease(ref _ptr);
-         CvOrbFeatureDetectorRelease(ref _featureDetectorPtr);
-         CvOrbDescriptorExtractorRelease(ref _descriptorExtractorPtr);
+         CvInvoke.CvOrbDetectorRelease(ref _ptr);
+         CvInvoke.CvOrbFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvOrbDescriptorExtractorRelease(ref _descriptorExtractorPtr);
       }
 
       #region IKeyPointDetector Members
@@ -203,7 +173,7 @@ namespace Emgu.CV.Features2D
          int count = keyPoints.Size;
          if (count == 0) return null;
          Matrix<byte> descriptors = new Matrix<byte>(count, DescriptorSize * image.NumberOfChannels, 1);
-         CvOrbDetectorComputeDescriptors(_ptr, image, keyPoints, descriptors);
+         CvInvoke.CvOrbDetectorComputeDescriptors(_ptr, image, keyPoints, descriptors);
          return descriptors;
       }
 
@@ -238,5 +208,39 @@ namespace Emgu.CV.Features2D
       }
 
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvOrbGetDescriptorExtractor(float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int CvOrbDetectorGetDescriptorSize(IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvOrbDetectorComputeDescriptors(
+         IntPtr detector,
+         IntPtr image,
+         IntPtr keypoints,
+         IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvOrbDetectorRelease(ref IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvOrbFeatureDetectorRelease(ref IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvOrbDescriptorExtractorRelease(ref IntPtr extractor);
    }
 }

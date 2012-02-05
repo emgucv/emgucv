@@ -14,48 +14,12 @@ namespace Emgu.CV.Cvb
    /// </summary>
    public class CvBlobs : UnmanagedObject, IDictionary<uint, CvBlob>
    {
-      #region PInvoke
-      /// <summary>
-      /// Returns a pointer to CvBlobs
-      /// </summary>
-      /// <returns>Pointer to CvBlobs</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr cvbCvBlobsCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobsRelease(ref IntPtr blobs);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static int cvbCvBlobsGetSize(IntPtr blobs);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobsClear(IntPtr blobs);
-
-      //return true if this is a new label. False if the label already exist and the value in the map will NOT be modified.
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cvbCvBlobsAdd(IntPtr blobs, uint label, IntPtr blob);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr cvbCvBlobsFind(IntPtr blobs, uint label);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobsGetBlobs(IntPtr blobs, IntPtr labelsArray, IntPtr blobsArray);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvFilterByArea(IntPtr blobs, uint minArea, uint maxArea);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cvbCvBlobsRemove(IntPtr blobs, uint label);
-      #endregion
-
       /// <summary>
       /// Create a new CvBlobs
       /// </summary>
       public CvBlobs()
       {
-         _ptr = cvbCvBlobsCreate();
+         _ptr = CvInvoke.cvbCvBlobsCreate();
       }
 
       /// <summary>
@@ -63,7 +27,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       protected override void DisposeObject()
       {
-         cvbCvBlobsRelease(ref _ptr);
+         CvInvoke.cvbCvBlobsRelease(ref _ptr);
       }
 
       /// <summary>
@@ -73,7 +37,7 @@ namespace Emgu.CV.Cvb
       /// <param name="maxArea">Maximun area</param>
       public void FilterByArea(int minArea, int maxArea)
       {
-         cvbCvFilterByArea(_ptr, (uint)minArea, (uint)maxArea);
+         CvInvoke.cvbCvFilterByArea(_ptr, (uint)minArea, (uint)maxArea);
       }
 
       #region IDictionary<uint,CvBlob> Members
@@ -84,7 +48,7 @@ namespace Emgu.CV.Cvb
       /// <param name="blob">The blob</param>
       public void Add(uint label, CvBlob blob)
       {
-         bool success = cvbCvBlobsAdd(_ptr, label, blob);
+         bool success = CvInvoke.cvbCvBlobsAdd(_ptr, label, blob);
          if (!success) throw new ArgumentException(String.Format("The item with label {0} already exist in the Blobs.", label));
       }
 
@@ -95,7 +59,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the CvBlobs contains an element with the specific label</returns>
       public bool ContainsKey(uint label)
       {
-         return IntPtr.Zero != cvbCvBlobsFind(_ptr, label);
+         return IntPtr.Zero != CvInvoke.cvbCvBlobsFind(_ptr, label);
       }
 
       /// <summary>
@@ -119,7 +83,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the element is successfully found and removed; otherwise, false.</returns>
       public bool Remove(uint label)
       {
-         return cvbCvBlobsRemove(_ptr, label);
+         return CvInvoke.cvbCvBlobsRemove(_ptr, label);
       }
 
       /// <summary>
@@ -130,7 +94,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the blobs contains a blob with the specific label; otherwise, false</returns>
       public bool TryGetValue(uint label, out CvBlob blob)
       {
-         IntPtr blobPtr = cvbCvBlobsFind(_ptr, label);
+         IntPtr blobPtr = CvInvoke.cvbCvBlobsFind(_ptr, label);
          if (IntPtr.Zero == blobPtr)
          {
             blob = null;
@@ -152,7 +116,7 @@ namespace Emgu.CV.Cvb
          IntPtr[] ptrs = new IntPtr[count];
          GCHandle labelsHandle = GCHandle.Alloc(labels, GCHandleType.Pinned);
          GCHandle ptrsHandle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         cvbCvBlobsGetBlobs(_ptr, labelsHandle.AddrOfPinnedObject(), ptrsHandle.AddrOfPinnedObject());
+         CvInvoke.cvbCvBlobsGetBlobs(_ptr, labelsHandle.AddrOfPinnedObject(), ptrsHandle.AddrOfPinnedObject());
          labelsHandle.Free();
          ptrsHandle.Free();
          for (int i = 0; i < blobs.Length; i++)
@@ -212,7 +176,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public void Clear()
       {
-         cvbCvBlobsClear(_ptr);
+         CvInvoke.cvbCvBlobsClear(_ptr);
       }
 
       /// <summary>
@@ -244,7 +208,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public int Count
       {
-         get { return cvbCvBlobsGetSize(_ptr); }
+         get { return CvInvoke.cvbCvBlobsGetSize(_ptr); }
       }
 
       /// <summary>
@@ -296,5 +260,45 @@ namespace Emgu.CV.Cvb
       }
 
       #endregion
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      /// <summary>
+      /// Returns a pointer to CvBlobs
+      /// </summary>
+      /// <returns>Pointer to CvBlobs</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvbCvBlobsCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobsRelease(ref IntPtr blobs);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cvbCvBlobsGetSize(IntPtr blobs);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobsClear(IntPtr blobs);
+
+      //return true if this is a new label. False if the label already exist and the value in the map will NOT be modified.
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvbCvBlobsAdd(IntPtr blobs, uint label, IntPtr blob);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvbCvBlobsFind(IntPtr blobs, uint label);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobsGetBlobs(IntPtr blobs, IntPtr labelsArray, IntPtr blobsArray);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvFilterByArea(IntPtr blobs, uint minArea, uint maxArea);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvbCvBlobsRemove(IntPtr blobs, uint label);
    }
 }

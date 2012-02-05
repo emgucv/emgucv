@@ -13,7 +13,7 @@ namespace Emgu.CV.Cvb
    /// <summary>
    /// CvBlob
    /// </summary>
-   public class CvBlob 
+   public class CvBlob
    {
       /// <summary>
       /// Blob Moments
@@ -23,7 +23,7 @@ namespace Emgu.CV.Cvb
          /// <summary>
          /// Mement 00
          /// </summary>
-         public double M00; 
+         public double M00;
          /// <summary>
          /// Moment 10
          /// </summary>
@@ -35,7 +35,7 @@ namespace Emgu.CV.Cvb
          /// <summary>
          /// Moment 11
          /// </summary>
-         public double M11; 
+         public double M11;
          /// <summary>
          /// Moment 20
          /// </summary>
@@ -43,16 +43,16 @@ namespace Emgu.CV.Cvb
          /// <summary>
          ///  Moment 02
          /// </summary>
-         public double M02; 
+         public double M02;
 
          /// <summary>
          /// Central moment 11
          /// </summary>
-         public double U11; 
+         public double U11;
          /// <summary>
          /// Central moment 20
          /// </summary>
-         public double U20; 
+         public double U20;
          /// <summary>
          /// Central moment 02
          /// </summary>
@@ -61,39 +61,25 @@ namespace Emgu.CV.Cvb
          /// <summary>
          /// Normalized central moment 11
          /// </summary>
-         public double N11; 
+         public double N11;
          /// <summary>
          /// Normalized central moment 20
          /// </summary>
-         public double N20; 
+         public double N20;
          /// <summary>
          /// Normalized central moment 02
          /// </summary>
-         public double N02; 
+         public double N02;
 
          /// <summary>
          /// Hu moment 1
          /// </summary>
-         public double P1; 
+         public double P1;
          /// <summary>
          /// Hu moment 2
          /// </summary>
          public double P2;
       }
-
-      #region PInboke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static uint cvbCvBlobGetLabel(IntPtr blob);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobGetRect(IntPtr blob, ref Rectangle rect);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobGetMoment(IntPtr blob, ref Moments moments);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvBlobGetContour(IntPtr blob, IntPtr contour);
-      #endregion
 
       private IntPtr _ptr;
 
@@ -110,7 +96,7 @@ namespace Emgu.CV.Cvb
       public Contour<Point> GetContour(MemStorage stor)
       {
          Contour<Point> contour = new Contour<Point>(stor);
-         cvbCvBlobGetContour(_ptr, contour);
+         CvInvoke.cvbCvBlobGetContour(_ptr, contour);
          return contour;
       }
 
@@ -121,7 +107,7 @@ namespace Emgu.CV.Cvb
       {
          get
          {
-            return cvbCvBlobGetLabel(_ptr);
+            return CvInvoke.cvbCvBlobGetLabel(_ptr);
          }
       }
 
@@ -133,7 +119,7 @@ namespace Emgu.CV.Cvb
          get
          {
             Rectangle rect = new Rectangle();
-            cvbCvBlobGetRect(_ptr, ref rect);
+            CvInvoke.cvbCvBlobGetRect(_ptr, ref rect);
             return rect;
          }
       }
@@ -146,7 +132,7 @@ namespace Emgu.CV.Cvb
          get
          {
             Moments m = new Moments();
-            cvbCvBlobGetMoment(_ptr, ref m);
+            CvInvoke.cvbCvBlobGetMoment(_ptr, ref m);
             return m;
          }
       }
@@ -159,7 +145,7 @@ namespace Emgu.CV.Cvb
          get
          {
             Moments m = BlobMoments;
-            return new PointF((float) (m.M10 / m.M00), (float) (m.M01 / m.M00)); 
+            return new PointF((float)(m.M10 / m.M00), (float)(m.M01 / m.M00));
          }
       }
 
@@ -170,7 +156,7 @@ namespace Emgu.CV.Cvb
       {
          get
          {
-            return (int) BlobMoments.M00;
+            return (int)BlobMoments.M00;
          }
       }
 
@@ -194,5 +180,23 @@ namespace Emgu.CV.Cvb
       {
          return obj == null ? IntPtr.Zero : obj._ptr;
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static uint cvbCvBlobGetLabel(IntPtr blob);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobGetRect(IntPtr blob, ref Rectangle rect);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobGetMoment(IntPtr blob, ref Emgu.CV.Cvb.CvBlob.Moments moments);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvBlobGetContour(IntPtr blob, IntPtr contour);
    }
 }

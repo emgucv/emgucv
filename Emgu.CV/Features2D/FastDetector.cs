@@ -4,8 +4,8 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -19,17 +19,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class FastDetector : UnmanagedObject, IKeyPointDetector
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvFASTGetFeatureDetector(
-         int threshold,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonmax_supression);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);
-      #endregion
-
       private int _threshold;
       private bool _nonmaxSupression;
 
@@ -54,7 +43,7 @@ namespace Emgu.CV.Features2D
       {
          _threshold = threshold;
          _nonmaxSupression = nonmaxSupression;
-         _ptr = CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
+         _ptr = CvInvoke.CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
       }
 
       #region IKeyPointDetector Members
@@ -90,7 +79,22 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvFASTFeatureDetectorRelease(ref _ptr);
+         CvInvoke.CvFASTFeatureDetectorRelease(ref _ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvFASTGetFeatureDetector(
+         int threshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool nonmax_supression);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);
    }
 }

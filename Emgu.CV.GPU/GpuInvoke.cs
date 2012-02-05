@@ -9,19 +9,25 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.IO;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
    /// <summary>
    /// This class wraps the functional calls to the opencv_gpu module
    /// </summary>
-   public static class GpuInvoke
+   public static partial class GpuInvoke
    {
       static GpuInvoke()
       {
          //Dummy code to make sure the static constructore of CvInvoke has been called and the error handler has been registered.
-         String pluginName, versionName;
-         Emgu.CV.Util.CvToolbox.GetModuleInfo(out pluginName, out versionName);
+         CvInvoke.CV_MAKETYPE(0, 0);
+
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         {
+            CvInvoke.LoadUnmanagedModules(null, CvInvoke.EXTERN_GPU_LIBRARY);
+         }
       }
 
       #region device info

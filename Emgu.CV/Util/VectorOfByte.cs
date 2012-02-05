@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Util
@@ -14,38 +13,12 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfByte : Emgu.Util.UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfByteCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfByteCreateSize(int size);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfByteRelease(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int VectorOfByteGetSize(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfByteCopyData(IntPtr v, IntPtr data);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfByteGetStartAddress(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfBytePushMulti(IntPtr v, IntPtr values, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfByteClear(IntPtr v);
-      #endregion
-
       /// <summary>
       /// Create an empty standard vector of Byte
       /// </summary>
       public VectorOfByte()
       {
-         _ptr = VectorOfByteCreate();
+         _ptr = CvInvoke.VectorOfByteCreate();
       }
 
       /// <summary>
@@ -54,7 +27,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfByte(int size)
       {
-         _ptr = VectorOfByteCreateSize(size);
+         _ptr = CvInvoke.VectorOfByteCreateSize(size);
       }
 
       /// <summary>
@@ -66,7 +39,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            VectorOfBytePushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            CvInvoke.VectorOfBytePushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -78,7 +51,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfByteGetSize(_ptr);
+            return CvInvoke.VectorOfByteGetSize(_ptr);
          }
       }
 
@@ -87,7 +60,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         VectorOfByteClear(_ptr);
+         CvInvoke.VectorOfByteClear(_ptr);
       }
 
       /// <summary>
@@ -97,7 +70,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfByteGetStartAddress(_ptr);
+            return CvInvoke.VectorOfByteGetStartAddress(_ptr);
          }
       }
 
@@ -111,7 +84,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            VectorOfByteCopyData(_ptr, handle.AddrOfPinnedObject());
+            CvInvoke.VectorOfByteCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -122,7 +95,37 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         VectorOfByteRelease(_ptr);
+         CvInvoke.VectorOfByteRelease(_ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfByteCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfByteCreateSize(int size);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfByteRelease(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int VectorOfByteGetSize(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfByteCopyData(IntPtr v, IntPtr data);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfByteGetStartAddress(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfBytePushMulti(IntPtr v, IntPtr values, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfByteClear(IntPtr v);
    }
 }

@@ -15,6 +15,12 @@ namespace Emgu.CV.GPU
    /// </summary>
    public static class TargetArchs
    {
+      static TargetArchs()
+      {
+         //dummy code to make sure that the static constructor of GpuInvoke is called.
+         bool hasCuda = GpuInvoke.HasCuda;
+      }
+
       #region PInvoke
       /// <summary>
       /// Check if the GPU module is build with the specific feature set.

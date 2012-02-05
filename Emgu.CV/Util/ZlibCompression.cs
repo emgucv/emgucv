@@ -14,17 +14,6 @@ namespace Emgu.CV.Util
    /// </summary>
    internal static class ZlibCompression
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int zlib_compress_bound(int length);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void zlib_compress2(IntPtr dataCompressed, ref int sizeDataCompressed, IntPtr dataOriginal, int sizeDataOriginal, int compressionLevel);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void zlib_uncompress(IntPtr dataUncompressed, ref int sizeDataUncompressed, IntPtr compressedData, int sizeDataCompressed);
-      #endregion
-
       /// <summary>
       /// Compress the data using the specific compression level
       /// </summary>
@@ -33,11 +22,11 @@ namespace Emgu.CV.Util
       /// <returns>The compressed bytes</returns>
       public static Byte[] Compress(Byte[] original, int compressionLevel)
       {
-         Byte[] result = new Byte[zlib_compress_bound(original.Length)];
+         Byte[] result = new Byte[CvInvoke.zlib_compress_bound(original.Length)];
          GCHandle originalHandle = GCHandle.Alloc(original, GCHandleType.Pinned);
          GCHandle resultHandle = GCHandle.Alloc(result, GCHandleType.Pinned);
          int compressDataSize = result.Length;
-         zlib_compress2(resultHandle.AddrOfPinnedObject(), ref compressDataSize, originalHandle.AddrOfPinnedObject(), original.Length, compressionLevel);
+         CvInvoke.zlib_compress2(resultHandle.AddrOfPinnedObject(), ref compressDataSize, originalHandle.AddrOfPinnedObject(), original.Length, compressionLevel);
 
          originalHandle.Free();
          resultHandle.Free();
@@ -58,7 +47,7 @@ namespace Emgu.CV.Util
          GCHandle originalHandle = GCHandle.Alloc(compressedData, GCHandleType.Pinned);
          GCHandle resultHandle = GCHandle.Alloc(result, GCHandleType.Pinned);
          int uncompressDataSize = estimatedUncompressedSize;
-         zlib_uncompress(resultHandle.AddrOfPinnedObject(), ref uncompressDataSize, originalHandle.AddrOfPinnedObject(), compressedData.Length);
+         CvInvoke.zlib_uncompress(resultHandle.AddrOfPinnedObject(), ref uncompressDataSize, originalHandle.AddrOfPinnedObject(), compressedData.Length);
 
          originalHandle.Free();
          resultHandle.Free();
@@ -68,5 +57,20 @@ namespace Emgu.CV.Util
 
          return result;
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int zlib_compress_bound(int length);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void zlib_compress2(IntPtr dataCompressed, ref int sizeDataCompressed, IntPtr dataOriginal, int sizeDataOriginal, int compressionLevel);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void zlib_uncompress(IntPtr dataUncompressed, ref int sizeDataUncompressed, IntPtr compressedData, int sizeDataCompressed);
    }
 }

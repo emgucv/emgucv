@@ -14,8 +14,8 @@ namespace Emgu.CV.GPU
    /// A Brute force matcher using GPU
    /// </summary>
    /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
-   public class GpuBruteForceMatcher <T> : UnmanagedObject
-      where T: struct
+   public class GpuBruteForceMatcher<T> : UnmanagedObject
+      where T : struct
    {
       private DistanceType _distanceType;
 
@@ -25,9 +25,9 @@ namespace Emgu.CV.GPU
       /// <param name="distType">The distance type</param>
       public GpuBruteForceMatcher(DistanceType distType)
       {
-         if (distType == DistanceType.Hamming) 
+         if (distType == DistanceType.Hamming)
             distType = DistanceType.HammingLUT;
-         
+
          if (typeof(T) == typeof(byte))
          {
             if (distType != DistanceType.HammingLUT)
@@ -44,7 +44,7 @@ namespace Emgu.CV.GPU
          }
 
          _distanceType = distType;
-         _ptr = GpuBruteForceMatcherInvoke.gpuBruteForceMatcherCreate(distType);
+         _ptr = GpuInvoke.gpuBruteForceMatcherCreate(distType);
       }
 
       /*
@@ -82,11 +82,11 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void KnnMatchSingle(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask, Stream stream)
       {
-         if (k == 2 && ! (modelIdx.IsContinuous && distance.IsContinuous) )
+         if (k == 2 && !(modelIdx.IsContinuous && distance.IsContinuous))
          {
             throw new ArgumentException("For k == 2, the allocated index matrix and distance matrix must be continuous");
          }
-         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherKnnMatchSingle(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
+         GpuInvoke.gpuBruteForceMatcherKnnMatchSingle(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
       }
 
       /// <summary>
@@ -94,27 +94,27 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuBruteForceMatcherInvoke.gpuBruteForceMatcherRelease(ref _ptr);
+         GpuInvoke.gpuBruteForceMatcherRelease(ref _ptr);
       }
    }
 
-   internal static class GpuBruteForceMatcherInvoke
+   public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr gpuBruteForceMatcherCreate( DistanceType distType);
+      internal extern static IntPtr gpuBruteForceMatcherCreate(DistanceType distType);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
+      internal extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
 
       //[DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void gpuBruteForceMatcherKnnMatchSingle(
+      internal extern static void gpuBruteForceMatcherKnnMatchSingle(
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
          IntPtr trainIdx, IntPtr distance,
-         int k, IntPtr mask, 
+         int k, IntPtr mask,
          IntPtr stream);
    }
 }

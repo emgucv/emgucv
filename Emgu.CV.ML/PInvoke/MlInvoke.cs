@@ -14,6 +14,12 @@ namespace Emgu.CV.ML
    /// </summary>
    public class MlInvoke
    {
+      static MlInvoke()
+      {
+         //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
+         CvInvoke.CV_MAKETYPE(0, 0);
+      }
+
       #region CvStatModel
       /// <summary>
       /// Save the statistic model to the specific file
@@ -69,7 +75,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="classifier">The classifier to release</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvNormalBayesClassifierRelease(IntPtr classifier);
+      public static extern void CvNormalBayesClassifierRelease(ref IntPtr classifier);
 
       /// <summary>
       /// Train the classifier using the specific data
@@ -116,7 +122,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="knearest">The classifier to release</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvKNearestRelease(IntPtr knearest);
+      public static extern void CvKNearestRelease(ref IntPtr knearest);
 
       /// <summary>
       /// Create the KNearest classifier using the specific traing data.
@@ -200,7 +206,7 @@ namespace Emgu.CV.ML
       /// Release the EM model
       /// </summary>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvEMRelease(IntPtr emModel);
+      public static extern void CvEMRelease(ref IntPtr emModel);
 
       /// <summary>
       /// Train the EM model using the specific training data
@@ -287,7 +293,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The SVM model to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvSVMRelease(IntPtr model);
+      public static extern void CvSVMRelease(ref IntPtr model);
 
       /// <summary>
       /// Train the SVM model with the specific paramters
@@ -413,7 +419,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The ANN_MLP model to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvANN_MLPRelease(IntPtr model);
+      public static extern void CvANN_MLPRelease(ref IntPtr model);
 
       /// <summary>
       /// Train the ANN_MLP model with the specific paramters
@@ -470,7 +476,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="dTreeParam">Pointer to the decision tree parameters to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvDTreeParamsRelease(IntPtr dTreeParam);
+      public static extern void CvDTreeParamsRelease(ref IntPtr dTreeParam);
 
       /// <summary>
       /// Create a default decision tree
@@ -484,7 +490,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The decision tree model to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvDTreeRelease(IntPtr model);
+      public static extern void CvDTreeRelease(ref IntPtr model);
 
       /// <summary>
       /// Train the decision tree using the specific training data
@@ -542,7 +548,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="rTreesParam">Pointer to the random tree parameters to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTParamsRelease(IntPtr rTreesParam);
+      public static extern void CvRTParamsRelease(ref IntPtr rTreesParam);
 
       /// <summary>
       /// Create a default random tree
@@ -556,7 +562,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The random tree model to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTreesRelease(IntPtr model);
+      public static extern void CvRTreesRelease(ref IntPtr model);
 
       /// <summary>
       /// Get the number of Trees in the Random tree
@@ -627,7 +633,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The extreme random tree model to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvERTreesRelease(IntPtr model);
+      public static extern void CvERTreesRelease(ref IntPtr model);
       #endregion
 
       #region Boost
@@ -706,7 +712,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The boost classicfier to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvBoostRelease(IntPtr model);
+      public static extern void CvBoostRelease(ref IntPtr model);
       #endregion
    }
 }

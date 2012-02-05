@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Util
@@ -14,38 +13,12 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfFloat : Emgu.Util.UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfFloatCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfFloatCreateSize(int size);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfFloatRelease(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int VectorOfFloatGetSize(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfFloatCopyData(IntPtr v, IntPtr data);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfFloatGetStartAddress(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfFloatPushMulti(IntPtr v, IntPtr values, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfFloatClear(IntPtr v);
-      #endregion
-
       /// <summary>
       /// Create an empty standard vector of float
       /// </summary>
       public VectorOfFloat()
       {
-         _ptr = VectorOfFloatCreate();
+         _ptr = CvInvoke.VectorOfFloatCreate();
       }
 
       /// <summary>
@@ -54,7 +27,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfFloat(int size)
       {
-         _ptr = VectorOfFloatCreateSize(size);
+         _ptr = CvInvoke.VectorOfFloatCreateSize(size);
       }
 
       /// <summary>
@@ -66,7 +39,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            CvInvoke.VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -78,7 +51,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfFloatGetSize(_ptr);
+            return CvInvoke.VectorOfFloatGetSize(_ptr);
          }
       }
 
@@ -87,7 +60,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         VectorOfFloatClear(_ptr);
+         CvInvoke.VectorOfFloatClear(_ptr);
       }
 
       /// <summary>
@@ -97,7 +70,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfFloatGetStartAddress(_ptr);
+            return CvInvoke.VectorOfFloatGetStartAddress(_ptr);
          }
       }
 
@@ -111,7 +84,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
+            CvInvoke.VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -122,7 +95,37 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         VectorOfFloatRelease(_ptr);
+         CvInvoke.VectorOfFloatRelease(_ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfFloatCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfFloatCreateSize(int size);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfFloatRelease(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int VectorOfFloatGetSize(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfFloatCopyData(IntPtr v, IntPtr data);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfFloatGetStartAddress(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfFloatPushMulti(IntPtr v, IntPtr values, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfFloatClear(IntPtr v);
    }
 }

@@ -4,14 +4,14 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.IO;
-using System.Diagnostics;
 
 namespace Emgu.CV.GPU
 {
@@ -20,19 +20,6 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuCascadeClassifier : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr gpuCascadeClassifierCreate(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String filename);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuCascadeClassifierRelease(ref IntPtr classified);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static int gpuCascadeClassifierDetectMultiScale(IntPtr classifier, IntPtr image, IntPtr objectsBuf, double scaleFactor, int minNeighbors, Size minSize, IntPtr resultSeq);
-      #endregion
-
       private GpuMat<int> _buffer;
       private MemStorage _stor;
 
@@ -43,7 +30,7 @@ namespace Emgu.CV.GPU
       public GpuCascadeClassifier(String fileName)
       {
          Debug.Assert(File.Exists(fileName), String.Format("The Cascade file {0} does not exist.", fileName));
-         _ptr = gpuCascadeClassifierCreate(fileName);
+         _ptr = GpuInvoke.gpuCascadeClassifierCreate(fileName);
          _buffer = new GpuMat<int>(1, 100, 4);
          _stor = new MemStorage();
       }
@@ -61,7 +48,7 @@ namespace Emgu.CV.GPU
          try
          {
             Seq<Rectangle> regions = new Seq<Rectangle>(_stor);
-            int count = gpuCascadeClassifierDetectMultiScale(_ptr, image, _buffer, scaleFactor, minNeighbors, minSize, regions);
+            int count = GpuInvoke.gpuCascadeClassifierDetectMultiScale(_ptr, image, _buffer, scaleFactor, minNeighbors, minSize, regions);
             if (count == 0) return new Rectangle[0];
             Rectangle[] result = regions.ToArray();
             return result;
@@ -77,7 +64,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         gpuCascadeClassifierRelease(ref _ptr);
+         GpuInvoke.gpuCascadeClassifierRelease(ref _ptr);
          _buffer.Dispose();
          _stor.Dispose();
       }
@@ -87,5 +74,19 @@ namespace Emgu.CV.GPU
       {
          Trace.WriteLine(Marshal.SizeOf(typeof(Rectangle)) == 4 * sizeof(int));
       }*/
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr gpuCascadeClassifierCreate(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String filename);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuCascadeClassifierRelease(ref IntPtr classified);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int gpuCascadeClassifierDetectMultiScale(IntPtr classifier, IntPtr image, IntPtr objectsBuf, double scaleFactor, int minNeighbors, Size minSize, IntPtr resultSeq);
    }
 }

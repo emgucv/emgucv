@@ -8,8 +8,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.Structure;
-using Emgu.Util;
 using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -18,65 +18,12 @@ namespace Emgu.CV
    /// </summary>
    public class HOGDescriptor : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvHOGDescriptorCreateDefault();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvHOGDescriptorCreate(
-         ref Size winSize,
-         ref Size blockSize,
-         ref Size blockStride,
-         ref Size cellSize,
-         int nbins,
-         int derivAperture,
-         double winSigma,
-         int histogramNormType,
-         double L2HysThreshold,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool gammaCorrection);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvHOGDescriptorRelease(IntPtr descriptor);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvHOGDescriptorDetectMultiScale(
-         IntPtr descriptor,
-         IntPtr img,
-         IntPtr foundLocations,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         double finalThreshold,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useMeanshiftGrouping);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvHOGDescriptorCompute(
-         IntPtr descriptor,
-         IntPtr img,
-         IntPtr descriptors,
-         Size winStride,
-         Size padding,
-         IntPtr locations);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
-      #endregion
-
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
       public HOGDescriptor()
       {
-         _ptr = CvHOGDescriptorCreateDefault();
+         _ptr = CvInvoke.CvHOGDescriptorCreateDefault();
       }
 
       /// <summary>
@@ -102,7 +49,7 @@ namespace Emgu.CV
          double L2HysThreshold,
          bool gammaCorrection)
       {
-         _ptr = CvHOGDescriptorCreate(
+         _ptr = CvInvoke.CvHOGDescriptorCreate(
             ref winSize,
             ref blockSize,
             ref blockStride,
@@ -166,7 +113,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<float> desc = new Seq<float>(stor);
-            CvHOGDescriptorPeopleDetectorCreate(desc);
+            CvInvoke.CvHOGDescriptorPeopleDetectorCreate(desc);
             return desc.ToArray();
          }
       }
@@ -180,7 +127,7 @@ namespace Emgu.CV
          using (VectorOfFloat vec = new VectorOfFloat())
          {
             vec.Push(detector);
-            CvHOGSetSVMDetector(_ptr, vec);
+            CvInvoke.CvHOGSetSVMDetector(_ptr, vec);
          }
       }
 
@@ -211,7 +158,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
-            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
+            CvInvoke.CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
             return Array.ConvertAll(seq.ToArray(), delegate(MCvObjectDetection obj) { return obj.Rect; });
          }
       }
@@ -239,13 +186,13 @@ namespace Emgu.CV
          using (VectorOfFloat desc = new VectorOfFloat())
          {
             if (locations == null)
-               CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
+               CvInvoke.CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
             else
             {
                using (MemStorage stor = new MemStorage())
                {
                   Seq<Point> locationSeq = new Seq<Point>(stor);
-                  CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
+                  CvInvoke.CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
                }
             }
             return desc.ToArray();
@@ -257,7 +204,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvHOGDescriptorRelease(_ptr);
+         CvInvoke.CvHOGDescriptorRelease(_ptr);
       }
 
       /// <summary>
@@ -267,8 +214,62 @@ namespace Emgu.CV
       {
          get
          {
-            return CvHOGDescriptorGetDescriptorSize(_ptr);
+            return CvInvoke.CvHOGDescriptorGetDescriptorSize(_ptr);
          }
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvHOGDescriptorCreateDefault();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvHOGDescriptorCreate(
+         ref Size winSize,
+         ref Size blockSize,
+         ref Size blockStride,
+         ref Size cellSize,
+         int nbins,
+         int derivAperture,
+         double winSigma,
+         int histogramNormType,
+         double L2HysThreshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool gammaCorrection);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvHOGDescriptorRelease(IntPtr descriptor);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvHOGDescriptorDetectMultiScale(
+         IntPtr descriptor,
+         IntPtr img,
+         IntPtr foundLocations,
+         double hitThreshold,
+         Size winStride,
+         Size padding,
+         double scale,
+         double finalThreshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useMeanshiftGrouping);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvHOGDescriptorCompute(
+         IntPtr descriptor,
+         IntPtr img,
+         IntPtr descriptors,
+         Size winStride,
+         Size padding,
+         IntPtr locations);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
    }
 }

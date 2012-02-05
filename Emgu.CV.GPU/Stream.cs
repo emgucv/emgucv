@@ -4,11 +4,11 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.Util;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Emgu.CV.GPU
 {
@@ -19,30 +19,12 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class Stream : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr streamCreate();
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void streamRelease(ref IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void streamWaitForCompletion(IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private static extern bool streamQueryIfComplete(IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void streamEnqueueCopy(IntPtr stream, IntPtr src, IntPtr dst);
-      #endregion
-
       /// <summary>
       /// Create a new Cuda Stream
       /// </summary>
       public Stream()
       {
-         _ptr = streamCreate();
+         _ptr = GpuInvoke.streamCreate();
       }
 
       /// <summary>
@@ -50,7 +32,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       public void WaitForCompletion()
       {
-         streamWaitForCompletion(_ptr);
+         GpuInvoke.streamWaitForCompletion(_ptr);
       }
 
       /// <summary>
@@ -58,7 +40,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       public bool Completed
       {
-         get { return streamQueryIfComplete(_ptr); }
+         get { return GpuInvoke.streamQueryIfComplete(_ptr); }
       }
 
       /// <summary>
@@ -69,7 +51,7 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination matrix. Must be the same size and same number of channels</param>
       public void Copy<TDepth>(GpuMat<TDepth> src, GpuMat<TDepth> dst) where TDepth : new()
       {
-         streamEnqueueCopy(_ptr, src, dst);
+         GpuInvoke.streamEnqueueCopy(_ptr, src, dst);
       }
 
       /// <summary>
@@ -77,7 +59,26 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         streamRelease(ref _ptr);
+         GpuInvoke.streamRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr streamCreate();
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void streamRelease(ref IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void streamWaitForCompletion(IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool streamQueryIfComplete(IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void streamEnqueueCopy(IntPtr stream, IntPtr src, IntPtr dst);
    }
 }

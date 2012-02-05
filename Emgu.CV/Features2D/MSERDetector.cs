@@ -16,14 +16,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class MSERDetector : DisposableObject, IKeyPointDetector
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvMserGetFeatureDetector(ref MCvMSERParams detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);
-      #endregion
-
       /// <summary>
       /// Create a MSER detector using the specific parameters
       /// </summary>
@@ -51,7 +43,7 @@ namespace Emgu.CV.Features2D
          _edgeBlurSize = edgeBlurSize;
 
          MCvMSERParams p = GetMSERParameters();
-         _featureDetectorPtr = CvMserGetFeatureDetector(ref p);
+         _featureDetectorPtr = CvInvoke.CvMserGetFeatureDetector(ref p);
       }
 
       /// <summary>
@@ -200,7 +192,19 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvMserFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvMserFeatureDetectorRelease(ref _featureDetectorPtr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvMserGetFeatureDetector(ref MCvMSERParams detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);
    }
 }

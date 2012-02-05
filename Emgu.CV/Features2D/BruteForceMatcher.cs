@@ -40,8 +40,8 @@ namespace Emgu.CV.Features2D
    /// Wrapped BruteForceMatcher
    /// </summary>
    /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
-   public class BruteForceMatcher <T> : UnmanagedObject
-      where T: struct
+   public class BruteForceMatcher<T> : UnmanagedObject
+      where T : struct
    {
       /// <summary>
       /// Find the k-nearest match
@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       public void KnnMatch(Matrix<T> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
       {
-         MatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
+         CvInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
       }
 
       private DistanceType _distanceType;
@@ -62,7 +62,7 @@ namespace Emgu.CV.Features2D
       /// Create a BruteForceMatcher of the specific distance type
       /// </summary>
       /// <param name="distanceType">The distance type</param>
-      public BruteForceMatcher(DistanceType distanceType)      
+      public BruteForceMatcher(DistanceType distanceType)
       {
          if (typeof(T) == typeof(byte))
          {
@@ -79,7 +79,7 @@ namespace Emgu.CV.Features2D
             throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
          }
          _distanceType = distanceType;
-         _ptr = MatcherInvoke.CvBruteForceMatcherCreate(_distanceType);
+         _ptr = CvInvoke.CvBruteForceMatcherCreate(_distanceType);
       }
 
       /// <summary>
@@ -88,7 +88,7 @@ namespace Emgu.CV.Features2D
       /// <param name="modelDescriptors">The model discriptors</param>
       public void Add(Matrix<T> modelDescriptors)
       {
-         MatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
+         CvInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
       }
 
       /// <summary>
@@ -96,23 +96,26 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         MatcherInvoke.CvBruteForceMatcherRelease(ref _ptr, _distanceType);
+         CvInvoke.CvBruteForceMatcherRelease(ref _ptr, _distanceType);
       }
    }
+}
 
-   internal static class MatcherInvoke
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr CvBruteForceMatcherCreate(DistanceType distanceType);
+      internal extern static IntPtr CvBruteForceMatcherCreate(Features2D.DistanceType distanceType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void CvBruteForceMatcherRelease(ref IntPtr matcher, DistanceType distanceType);
+      internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher, Features2D.DistanceType distanceType);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
+      internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
+      internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
                    IntPtr trainIdx, IntPtr distance, int k,
                    IntPtr mask);
    }

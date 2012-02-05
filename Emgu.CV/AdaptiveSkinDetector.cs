@@ -16,17 +16,6 @@ namespace Emgu.CV
    /// </summary>
    public class AdaptiveSkinDetector : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr CvAdaptiveSkinDetectorCreate(int samplingDivider, MorphingMethod morphingMethod);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvAdaptiveSkinDetectorRelease(IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvAdaptiveSkinDetectorProcess(IntPtr detector, IntPtr inputBGRImage, IntPtr outputHueMask);
-      #endregion
-
       /// <summary>
       /// Morphing method
       /// </summary>
@@ -57,7 +46,7 @@ namespace Emgu.CV
       /// <param name="morphingMethod">The morphine method for the skin detector</param>
       public AdaptiveSkinDetector(int samplingDivider, MorphingMethod morphingMethod)
       {
-         _ptr = CvAdaptiveSkinDetectorCreate(samplingDivider, morphingMethod);
+         _ptr = CvInvoke.CvAdaptiveSkinDetectorCreate(samplingDivider, morphingMethod);
       }
 
       /// <summary>
@@ -67,7 +56,7 @@ namespace Emgu.CV
       /// <param name="hueMask">The resulting mask</param>
       public void Process(Image<Bgr, Byte> image, Image<Gray, Byte> hueMask)
       {
-         CvAdaptiveSkinDetectorProcess(_ptr, image.Ptr, hueMask.Ptr);
+         CvInvoke.CvAdaptiveSkinDetectorProcess(_ptr, image.Ptr, hueMask.Ptr);
       }
 
       /// <summary>
@@ -75,7 +64,19 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvAdaptiveSkinDetectorRelease(_ptr);
+         CvInvoke.CvAdaptiveSkinDetectorRelease(_ptr);
       }
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvAdaptiveSkinDetectorCreate(int samplingDivider, AdaptiveSkinDetector.MorphingMethod morphingMethod);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvAdaptiveSkinDetectorRelease(IntPtr detector);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvAdaptiveSkinDetectorProcess(IntPtr detector, IntPtr inputBGRImage, IntPtr outputHueMask);
    }
 }

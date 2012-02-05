@@ -17,20 +17,6 @@ namespace Emgu.CV.Cvb
    /// <remarks>Algorithm based on paper "A linear-time component-labeling algorithm using contour tracing technique" of Fu Chang, Chun-Jen Chen and Chi-Jen Lu.</remarks>
    public class CvBlobDetector : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static uint cvbCvLabel(IntPtr img, IntPtr imgOut, IntPtr blobs);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvRenderBlobs(IntPtr labelMask, IntPtr blobs, IntPtr imgSource, IntPtr imgDest, BlobRenderType mode, double alpha);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static MCvScalar cvbCvBlobMeanColor(IntPtr blob, IntPtr imgLabel, IntPtr img);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cvbCvFilterLabels(IntPtr imgIn, IntPtr imgOut, IntPtr blobs);
-      #endregion
-
       private uint[,] _data;
       private GCHandle _dataHandle;
 
@@ -55,7 +41,7 @@ namespace Emgu.CV.Cvb
             CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _sizeOfUInt32 * size.Width);
          }
 
-         return cvbCvLabel(img, _ptr, blobs);
+         return CvInvoke.cvbCvLabel(img, _ptr, blobs);
       }
 
       /// <summary>
@@ -67,7 +53,7 @@ namespace Emgu.CV.Cvb
       public Bgr MeanColor(CvBlob blob, Image<Bgr, Byte> originalImage)
       {
          Bgr color = new Bgr();
-         color.MCvScalar = cvbCvBlobMeanColor(blob, _ptr, originalImage);
+         color.MCvScalar = CvInvoke.cvbCvBlobMeanColor(blob, _ptr, originalImage);
          return color;
       }
 
@@ -118,7 +104,7 @@ namespace Emgu.CV.Cvb
       public Image<Bgr, Byte> DrawBlobs(Image<Gray, Byte> image, CvBlobs blobs, BlobRenderType type, double alpha)
       {
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
-         cvbCvRenderBlobs(Ptr, blobs, image, result, type, alpha);
+         CvInvoke.cvbCvRenderBlobs(Ptr, blobs, image, result, type, alpha);
          return result;
       }
 
@@ -131,7 +117,7 @@ namespace Emgu.CV.Cvb
       {
          MIplImage img = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
          Image<Gray, Byte> mask = new Image<Gray, byte>(img.width, img.height);
-         cvbCvFilterLabels(Ptr, mask, blobs);
+         CvInvoke.cvbCvFilterLabels(Ptr, mask, blobs);
          return mask;
       }
 
@@ -167,5 +153,23 @@ namespace Emgu.CV.Cvb
             get { return 8; }
          }
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static uint cvbCvLabel(IntPtr img, IntPtr imgOut, IntPtr blobs);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvRenderBlobs(IntPtr labelMask, IntPtr blobs, IntPtr imgSource, IntPtr imgDest, Cvb.CvBlobDetector.BlobRenderType mode, double alpha);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static MCvScalar cvbCvBlobMeanColor(IntPtr blob, IntPtr imgLabel, IntPtr img);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvbCvFilterLabels(IntPtr imgIn, IntPtr imgOut, IntPtr blobs);
    }
 }

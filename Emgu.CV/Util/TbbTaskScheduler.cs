@@ -14,20 +14,12 @@ namespace Emgu.CV.Util
    /// </summary>
    public class TbbTaskScheduler : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr tbbTaskSchedulerInit();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void tbbTaskSchedulerRelease(ref IntPtr scheduler);
-      #endregion
-
       /// <summary>
       /// Initialize the TBB task scheduler
       /// </summary>
       public TbbTaskScheduler()
       {
-         _ptr = tbbTaskSchedulerInit();
+         _ptr = CvInvoke.tbbTaskSchedulerInit();
       }
 
       /// <summary>
@@ -35,7 +27,19 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         tbbTaskSchedulerRelease(ref _ptr);
+         CvInvoke.tbbTaskSchedulerRelease(ref _ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr tbbTaskSchedulerInit();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void tbbTaskSchedulerRelease(ref IntPtr scheduler);
    }
 }

@@ -18,6 +18,12 @@ namespace Emgu.CV.OCR
    /// </summary>
    public class Tesseract : UnmanagedObject
    {
+      static Tesseract()
+      {
+         //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
+         CvInvoke.CV_MAKETYPE(0, 0);
+      }
+
       #region PInvoke
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr TessBaseAPICreate();

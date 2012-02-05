@@ -14,11 +14,6 @@ namespace Emgu.CV.Features2D
    [StructLayout(LayoutKind.Sequential)]
    public struct PatchGenerator
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvPatchGeneratorInit(ref PatchGenerator pg);
-      #endregion
-
       /// <summary>
       /// 
       /// </summary>
@@ -66,7 +61,16 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public void SetDefaultParameters()
       {
-         CvPatchGeneratorInit(ref this);
+         CvInvoke.CvPatchGeneratorInit(ref this);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvPatchGeneratorInit(ref Features2D.PatchGenerator pg);
    }
 }

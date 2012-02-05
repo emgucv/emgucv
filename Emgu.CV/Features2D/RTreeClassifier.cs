@@ -13,40 +13,6 @@ using Emgu.Util;
 
 namespace Emgu.CV.Features2D
 {
-   internal class RTreeClassifierExtern
-   {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvRTreeClassifierCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTreeClassifierRelease(IntPtr classifier);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTreeClassifierTrain(
-         IntPtr classifier,
-         IntPtr trainImage,
-         IntPtr trainPoints,
-         int numberOfPoints,
-         ref UInt64 rng,
-         int numTrees, int depth,
-         int views, IntPtr reducedNumDim,
-         int numQuantBits);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int CvRTreeClassifierGetSigniture(
-         IntPtr classifier,
-         IntPtr image,
-         ref Point point,
-         int patchSize,
-         IntPtr signiture);
-
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int CvRTreeClassifierGetNumClasses(IntPtr classifier);
-      #endregion
-   }
-
    /// <summary>
    /// The Calonder classifier
    /// </summary>
@@ -57,7 +23,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public RTreeClassifier()
       {
-         _ptr = RTreeClassifierExtern.CvRTreeClassifierCreate();
+         _ptr = CvInvoke.CvRTreeClassifierCreate();
       }
 
       /// <summary>
@@ -82,7 +48,7 @@ namespace Emgu.CV.Features2D
          Random r = new Random();
          UInt64 rng = (UInt64)r.Next();
          GCHandle handle = GCHandle.Alloc(keypoints, GCHandleType.Pinned);
-         RTreeClassifierExtern.CvRTreeClassifierTrain(
+         CvInvoke.CvRTreeClassifierTrain(
             _ptr,
             trainImage,
             handle.AddrOfPinnedObject(),
@@ -102,7 +68,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         RTreeClassifierExtern.CvRTreeClassifierRelease(_ptr);
+         CvInvoke.CvRTreeClassifierRelease(_ptr);
       }
 
       /// <summary>
@@ -112,7 +78,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return RTreeClassifierExtern.CvRTreeClassifierGetNumClasses(_ptr);
+            return CvInvoke.CvRTreeClassifierGetNumClasses(_ptr);
          }
       }
 
@@ -127,9 +93,43 @@ namespace Emgu.CV.Features2D
       {
          float[] result = new float[NumberOfClasses];
          GCHandle handle = GCHandle.Alloc(result, GCHandleType.Pinned);
-         int count = RTreeClassifierExtern.CvRTreeClassifierGetSigniture(_ptr, image, ref keypoint, patchSize, handle.AddrOfPinnedObject());
+         int count = CvInvoke.CvRTreeClassifierGetSigniture(_ptr, image, ref keypoint, patchSize, handle.AddrOfPinnedObject());
          handle.Free();
          return count == 0 ? null : result;
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr CvRTreeClassifierCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvRTreeClassifierRelease(IntPtr classifier);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvRTreeClassifierTrain(
+         IntPtr classifier,
+         IntPtr trainImage,
+         IntPtr trainPoints,
+         int numberOfPoints,
+         ref UInt64 rng,
+         int numTrees, int depth,
+         int views, IntPtr reducedNumDim,
+         int numQuantBits);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int CvRTreeClassifierGetSigniture(
+         IntPtr classifier,
+         IntPtr image,
+         ref Point point,
+         int patchSize,
+         IntPtr signiture);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int CvRTreeClassifierGetNumClasses(IntPtr classifier);
    }
 }

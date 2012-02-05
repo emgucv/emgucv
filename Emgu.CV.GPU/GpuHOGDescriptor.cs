@@ -18,53 +18,12 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuHOGDescriptor : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorGetPeopleDetector64x128(IntPtr vector);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorGetPeopleDetector48x96(IntPtr vector);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr gpuHOGDescriptorCreateDefault();
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr gpuHOGDescriptorCreate(
-         ref Size winSize,
-         ref Size blockSize,
-         ref Size blockStride,
-         ref Size cellSize,
-         int nbins,
-         double winSigma,
-         double L2HysThreshold,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool gammaCorrection,
-         int nLevels);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorRelease(ref IntPtr descriptor);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuHOGDescriptorDetectMultiScale(
-         IntPtr descriptor,
-         IntPtr img,
-         IntPtr foundLocations,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int groupThreshold);
-      #endregion
-
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
       public GpuHOGDescriptor()
       {
-         _ptr = gpuHOGDescriptorCreateDefault();
+         _ptr = GpuInvoke.gpuHOGDescriptorCreateDefault();
       }
 
       /// <summary>
@@ -90,7 +49,7 @@ namespace Emgu.CV.GPU
          bool gammaCorrection,
          int nLevels)
       {
-         _ptr = gpuHOGDescriptorCreate(
+         _ptr = GpuInvoke.gpuHOGDescriptorCreate(
             ref winSize,
             ref blockSize,
             ref blockStride,
@@ -119,7 +78,7 @@ namespace Emgu.CV.GPU
       {
          using (VectorOfFloat f = new VectorOfFloat())
          {
-            gpuHOGDescriptorGetPeopleDetector48x96(f);
+            GpuInvoke.gpuHOGDescriptorGetPeopleDetector48x96(f);
             return f.ToArray();
          }
       }
@@ -132,7 +91,7 @@ namespace Emgu.CV.GPU
       {
          using (VectorOfFloat f = new VectorOfFloat())
          {
-            gpuHOGDescriptorGetPeopleDetector64x128(f);
+            GpuInvoke.gpuHOGDescriptorGetPeopleDetector64x128(f);
             return f.ToArray();
          }
       }
@@ -146,7 +105,7 @@ namespace Emgu.CV.GPU
          using (VectorOfFloat vec = new VectorOfFloat())
          {
             vec.Push(detector);
-            gpuHOGSetSVMDetector(_ptr, vec);
+            GpuInvoke.gpuHOGSetSVMDetector(_ptr, vec);
          }
       }
 
@@ -161,7 +120,7 @@ namespace Emgu.CV.GPU
          using (MemStorage storage = new MemStorage())
          {
             Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
-            gpuHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+            GpuInvoke.gpuHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
             return rectSeq.ToArray();
          }
       }
@@ -233,7 +192,49 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         gpuHOGDescriptorRelease(ref _ptr);
+         GpuInvoke.gpuHOGDescriptorRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuHOGDescriptorGetPeopleDetector64x128(IntPtr vector);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuHOGDescriptorGetPeopleDetector48x96(IntPtr vector);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr gpuHOGDescriptorCreateDefault();
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr gpuHOGDescriptorCreate(
+         ref Size winSize,
+         ref Size blockSize,
+         ref Size blockStride,
+         ref Size cellSize,
+         int nbins,
+         double winSigma,
+         double L2HysThreshold,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool gammaCorrection,
+         int nLevels);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuHOGDescriptorRelease(ref IntPtr descriptor);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuHOGDescriptorDetectMultiScale(
+         IntPtr descriptor,
+         IntPtr img,
+         IntPtr foundLocations,
+         double hitThreshold,
+         Size winStride,
+         Size padding,
+         double scale,
+         int groupThreshold);
    }
 }

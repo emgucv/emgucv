@@ -18,17 +18,6 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuDisparityBilateralFilter : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters, float edgeThreshold, float maxDiscThreshold, float sigmaRange);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void GpuDisparityBilateralFilterApply(IntPtr filter, IntPtr disparity, IntPtr image, IntPtr dst, IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void GpuDisparityBilateralFilterRelease(ref IntPtr filter);
-      #endregion
-
       /// <summary>
       /// Create a GpuDisparityBilateralFilter
       /// </summary>
@@ -40,7 +29,7 @@ namespace Emgu.CV.GPU
       /// <param name="sigmaRange">Filter range sigma, use 10.0 as default</param>
       public GpuDisparityBilateralFilter(int ndisp, int radius, int iters, float edgeThreshold, float maxDiscThreshold, float sigmaRange)
       {
-         _ptr = GpuDisparityBilateralFilterCreate(ndisp, radius, iters, edgeThreshold, maxDiscThreshold, sigmaRange);
+         _ptr = GpuInvoke.GpuDisparityBilateralFilterCreate(ndisp, radius, iters, edgeThreshold, maxDiscThreshold, sigmaRange);
       }
 
       /// <summary>
@@ -52,7 +41,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Apply(GpuImage<Gray, Byte> disparity, GpuImage<Gray, Byte> image, GpuImage<Gray, byte> dst, Stream stream)
       {
-         GpuDisparityBilateralFilterApply(_ptr, disparity, image, dst, stream);
+         GpuInvoke.GpuDisparityBilateralFilterApply(_ptr, disparity, image, dst, stream);
       }
 
       /// <summary>
@@ -60,7 +49,19 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuDisparityBilateralFilterRelease(ref _ptr);
+         GpuInvoke.GpuDisparityBilateralFilterRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters, float edgeThreshold, float maxDiscThreshold, float sigmaRange);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void GpuDisparityBilateralFilterApply(IntPtr filter, IntPtr disparity, IntPtr image, IntPtr dst, IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void GpuDisparityBilateralFilterRelease(ref IntPtr filter);
    }
 }

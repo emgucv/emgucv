@@ -14,12 +14,6 @@ namespace Emgu.CV.Cvb
    /// </summary>
    public struct CvTrack : IEquatable<CvTrack>
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cvbCvTrackEquals(ref CvTrack track1, ref CvTrack track2);
-      #endregion
-
       /// <summary>
       /// Track identification number
       /// </summary>
@@ -85,7 +79,17 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the two CvTrack are equal; otherwise false.</returns>
       public bool Equals(CvTrack other)
       {
-         return cvbCvTrackEquals(ref this, ref other);
+         return CvInvoke.cvbCvTrackEquals(ref this, ref other);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvbCvTrackEquals(ref Cvb.CvTrack track1, ref Cvb.CvTrack track2);
    }
 }

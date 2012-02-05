@@ -14,38 +14,12 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfDMatch : Emgu.Util.UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfDMatchCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfDMatchCreateSize(int size);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfDMatchRelease(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int VectorOfDMatchGetSize(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfDMatchCopyData(IntPtr v, IntPtr data);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfDMatchGetStartAddress(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfDMatchPushMulti(IntPtr v, IntPtr values, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfDMatchClear(IntPtr v);
-      #endregion
-
       /// <summary>
       /// Create an empty standard vector of DMatch
       /// </summary>
       public VectorOfDMatch()
       {
-         _ptr = VectorOfDMatchCreate();
+         _ptr = CvInvoke.VectorOfDMatchCreate();
       }
 
       /// <summary>
@@ -54,7 +28,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfDMatch(int size)
       {
-         _ptr = VectorOfDMatchCreateSize(size);
+         _ptr = CvInvoke.VectorOfDMatchCreateSize(size);
       }
 
       /// <summary>
@@ -66,7 +40,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            VectorOfDMatchPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            CvInvoke.VectorOfDMatchPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -78,7 +52,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfDMatchGetSize(_ptr);
+            return CvInvoke.VectorOfDMatchGetSize(_ptr);
          }
       }
 
@@ -87,7 +61,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         VectorOfDMatchClear(_ptr);
+         CvInvoke.VectorOfDMatchClear(_ptr);
       }
 
       /// <summary>
@@ -97,7 +71,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfDMatchGetStartAddress(_ptr);
+            return CvInvoke.VectorOfDMatchGetStartAddress(_ptr);
          }
       }
 
@@ -111,7 +85,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            VectorOfDMatchCopyData(_ptr, handle.AddrOfPinnedObject());
+            CvInvoke.VectorOfDMatchCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -122,7 +96,37 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         VectorOfDMatchRelease(_ptr);
+         CvInvoke.VectorOfDMatchRelease(_ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfDMatchCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfDMatchCreateSize(int size);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfDMatchRelease(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int VectorOfDMatchGetSize(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfDMatchCopyData(IntPtr v, IntPtr data);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfDMatchGetStartAddress(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfDMatchPushMulti(IntPtr v, IntPtr values, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfDMatchClear(IntPtr v);
    }
 }

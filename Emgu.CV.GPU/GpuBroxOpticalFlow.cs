@@ -5,8 +5,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Emgu.Util;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -15,17 +15,6 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuBroxOpticalFlow : UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static IntPtr gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuBroxOpticalFlowRelease(ref IntPtr flow);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void gpuBroxOpticalFlowCompute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v, IntPtr stream);
-      #endregion
-
       /// <summary>
       /// Create the Brox optical flow solver
       /// </summary>
@@ -37,7 +26,7 @@ namespace Emgu.CV.GPU
       /// <param name="solverIterations">Number of linear system solver iterations</param>
       public GpuBroxOpticalFlow(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations)
       {
-         _ptr = gpuBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
+         _ptr = GpuInvoke.gpuBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
       }
 
       /// <summary>
@@ -50,7 +39,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Compute(GpuImage<Gray, float> frame0, GpuImage<Gray, float> frame1, GpuImage<Gray, Byte> u, GpuImage<Gray, Byte> v, Stream stream)
       {
-         gpuBroxOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
+         GpuInvoke.gpuBroxOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
       }
 
       /// <summary>
@@ -58,7 +47,19 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         gpuBroxOpticalFlowRelease(ref _ptr);
+         GpuInvoke.gpuBroxOpticalFlowRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuBroxOpticalFlowRelease(ref IntPtr flow);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void gpuBroxOpticalFlowCompute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v, IntPtr stream);
    }
 }

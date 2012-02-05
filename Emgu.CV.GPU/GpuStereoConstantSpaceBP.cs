@@ -3,9 +3,9 @@
 //----------------------------------------------------------------------------
 
 ﻿using System;
-using Emgu.Util;
-using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
@@ -16,17 +16,6 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuStereoConstantSpaceBP : UnmanagedObject
    {
-      #region
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr GpuStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void GpuStereoConstantSpaceBPFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void GpuStereoConstantSpaceBPRelease(ref IntPtr stereoBM);
-      #endregion
-
       /// <summary>
       /// A Constant-Space Belief Propagation Algorithm for Stereo Matching
       /// </summary>
@@ -36,7 +25,7 @@ namespace Emgu.CV.GPU
       /// <param name="nrPlane">The number of active disparity on the first level. Use 4 as default.</param>
       public GpuStereoConstantSpaceBP(int ndisp, int iters, int levels, int nrPlane)
       {
-         _ptr = GpuStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane);
+         _ptr = GpuInvoke.GpuStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane);
       }
 
       /// <summary>
@@ -48,7 +37,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void FindStereoCorrespondence(GpuImage<Gray, Byte> left, GpuImage<Gray, Byte> right, GpuImage<Gray, Byte> disparity, Stream stream)
       {
-         GpuStereoConstantSpaceBPFindStereoCorrespondence(_ptr, left, right, disparity, stream);
+         GpuInvoke.GpuStereoConstantSpaceBPFindStereoCorrespondence(_ptr, left, right, disparity, stream);
       }
 
       /// <summary>
@@ -56,7 +45,19 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuStereoConstantSpaceBPRelease(ref _ptr);
+         GpuInvoke.GpuStereoConstantSpaceBPRelease(ref _ptr);
       }
+   }
+
+   public static partial class GpuInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr GpuStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void GpuStereoConstantSpaceBPFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void GpuStereoConstantSpaceBPRelease(ref IntPtr stereoBM);
    }
 }

@@ -16,19 +16,8 @@ namespace Emgu.CV.Features2D
    /// V. Lepetit keypoint detector
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct LDetector 
+   public struct LDetector
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void CvLDetectorDetectKeyPoints(
-         ref LDetector detector,
-         IntPtr image,
-         IntPtr keypoints,
-         int maxCount,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool scaleCoords);
-
-      #endregion
       /// <summary>
       /// Radius
       /// </summary>
@@ -85,7 +74,7 @@ namespace Emgu.CV.Features2D
       public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, int maxCount, bool scaleCoords)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvLDetectorDetectKeyPoints(ref this, image, kpts, maxCount, scaleCoords);
+         CvInvoke.CvLDetectorDetectKeyPoints(ref this, image, kpts, maxCount, scaleCoords);
          return kpts;
       }
 
@@ -113,5 +102,20 @@ namespace Emgu.CV.Features2D
       {
          return DetectKeyPointsRaw(image, 0, false);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvLDetectorDetectKeyPoints(
+         ref Features2D.LDetector detector,
+         IntPtr image,
+         IntPtr keypoints,
+         int maxCount,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool scaleCoords);
    }
 }

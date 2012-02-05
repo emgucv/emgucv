@@ -2,10 +2,10 @@
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Drawing;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.Util
@@ -15,50 +15,12 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfKeyPoint : Emgu.Util.UnmanagedObject
    {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfKeyPointCreate();
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfKeyPointCreateSize(int size);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointRelease(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int VectorOfKeyPointGetSize(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointCopyData(IntPtr v, IntPtr data);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr VectorOfKeyPointGetStartAddress(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointPushMulti(IntPtr v, IntPtr values, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointClear(IntPtr v);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointFilterByImageBorder(IntPtr keypoints, Size imageSize, int borderSize);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointFilterByKeypointSize(IntPtr keypoints, float minSize, float maxSize);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointFilterByPixelsMask(IntPtr keypoints, IntPtr mask);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void VectorOfKeyPointGetItem(IntPtr keypoints, int index, ref MKeyPoint keypoint);
-      #endregion
-
       /// <summary>
       /// Create an empty standard vector of KeyPoint
       /// </summary>
       public VectorOfKeyPoint()
       {
-         _ptr = VectorOfKeyPointCreate();
+         _ptr = CvInvoke.VectorOfKeyPointCreate();
       }
 
       /// <summary>
@@ -67,7 +29,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfKeyPoint(int size)
       {
-         _ptr = VectorOfKeyPointCreateSize(size);
+         _ptr = CvInvoke.VectorOfKeyPointCreateSize(size);
       }
 
       /// <summary>
@@ -79,7 +41,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            CvInvoke.VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -91,7 +53,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfKeyPointGetSize(_ptr);
+            return CvInvoke.VectorOfKeyPointGetSize(_ptr);
          }
       }
 
@@ -100,7 +62,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         VectorOfKeyPointClear(_ptr);
+         CvInvoke.VectorOfKeyPointClear(_ptr);
       }
 
       /// <summary>
@@ -110,7 +72,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return VectorOfKeyPointGetStartAddress(_ptr);
+            return CvInvoke.VectorOfKeyPointGetStartAddress(_ptr);
          }
       }
 
@@ -124,7 +86,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
+            CvInvoke.VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -136,7 +98,7 @@ namespace Emgu.CV.Util
       /// <param name="borderSize">Border size in pixel</param>
       public void FilterByImageBorder(Size imageSize, int borderSize)
       {
-         VectorOfKeyPointFilterByImageBorder(Ptr, imageSize, borderSize);
+         CvInvoke.VectorOfKeyPointFilterByImageBorder(Ptr, imageSize, borderSize);
       }
 
       /// <summary>
@@ -146,7 +108,7 @@ namespace Emgu.CV.Util
       /// <param name="maxSize">Maximum size</param>
       public void FilterByKeypointSize(float minSize, float maxSize)
       {
-         VectorOfKeyPointFilterByKeypointSize(Ptr, minSize, maxSize);
+         CvInvoke.VectorOfKeyPointFilterByKeypointSize(Ptr, minSize, maxSize);
       }
 
       /// <summary>
@@ -155,7 +117,7 @@ namespace Emgu.CV.Util
       /// <param name="mask">The mask</param>
       public void FilterByPixelsMask(Image<Gray, Byte> mask)
       {
-         VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
+         CvInvoke.VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
       }
 
       /// <summary>
@@ -168,7 +130,7 @@ namespace Emgu.CV.Util
          get
          {
             MKeyPoint result = new MKeyPoint();
-            VectorOfKeyPointGetItem(_ptr, index, ref result);
+            CvInvoke.VectorOfKeyPointGetItem(_ptr, index, ref result);
             return result;
          }
       }
@@ -178,7 +140,49 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         VectorOfKeyPointRelease(_ptr);
+         CvInvoke.VectorOfKeyPointRelease(_ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfKeyPointCreate();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfKeyPointCreateSize(int size);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointRelease(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int VectorOfKeyPointGetSize(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointCopyData(IntPtr v, IntPtr data);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOfKeyPointGetStartAddress(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointPushMulti(IntPtr v, IntPtr values, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointClear(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointFilterByImageBorder(IntPtr keypoints, Size imageSize, int borderSize);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointFilterByKeypointSize(IntPtr keypoints, float minSize, float maxSize);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointFilterByPixelsMask(IntPtr keypoints, IntPtr mask);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOfKeyPointGetItem(IntPtr keypoints, int index, ref MKeyPoint keypoint);
    }
 }

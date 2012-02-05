@@ -4,40 +4,17 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV;
 using Emgu.CV.Geodetic;
 using Emgu.CV.Structure;
-using Emgu.CV;
 using Emgu.Util;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace Emgu.CV.Tiff
 {
-
-   internal static partial class TIFFInvoke
-   {
-      #region PInvoke
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr tiffWriterOpen(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         string fileSpec);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriterClose(ref IntPtr pTiff);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteGeoTag(IntPtr pTiff, IntPtr modelTiepoint, IntPtr ModelPixelScale);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteImage(IntPtr pTiff, IntPtr image);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteImageInfo(IntPtr pTiff, int bitsPerSample, int samplesPerPixel);
-      #endregion
-   }
-
    /// <summary>
    /// A class that can be used for writing geotiff
    /// </summary>
@@ -54,8 +31,8 @@ namespace Emgu.CV.Tiff
       /// <param name="fileName">The file name to be saved</param>
       public TiffWriter(String fileName)
       {
-         _ptr = TIFFInvoke.tiffWriterOpen(fileName);
-         TIFFInvoke.tiffWriteImageInfo(_ptr, Image<TColor, TDepth>.SizeOfElement * 8, new TColor().Dimension);
+         _ptr = CvInvoke.tiffWriterOpen(fileName);
+         CvInvoke.tiffWriteImageInfo(_ptr, Image<TColor, TDepth>.SizeOfElement * 8, new TColor().Dimension);
       }
 
       /// <summary>
@@ -66,14 +43,14 @@ namespace Emgu.CV.Tiff
       {
          if (image is Image<Gray, Byte> || image is Image<Rgb, Byte> || image is Image<Rgba, Byte>)
          {
-            TIFFInvoke.tiffWriteImage(_ptr, image);
+            CvInvoke.tiffWriteImage(_ptr, image);
          }
          else if (image is Image<Bgra, Byte>)
          {
             //swap the B and R channel since geotiff assume RGBA for 4 channels image of depth Byte
             using (Image<Rgba, Byte> rgba = (image as Image<Bgra, Byte>).Convert<Rgba, Byte>())
             {
-               TIFFInvoke.tiffWriteImage(_ptr, rgba);
+               CvInvoke.tiffWriteImage(_ptr, rgba);
             }
          }
          else if (image is Image<Bgr, Byte>)
@@ -81,7 +58,7 @@ namespace Emgu.CV.Tiff
             //swap the B and R channel since geotiff assume RGB for 3 channels image of depth Byte
             using (Image<Rgb, Byte> rgb = (image as Image<Bgr, Byte>).Convert<Rgb, Byte>())
             {
-               TIFFInvoke.tiffWriteImage(_ptr, rgb);
+               CvInvoke.tiffWriteImage(_ptr, rgb);
             }
          }
          else
@@ -103,7 +80,7 @@ namespace Emgu.CV.Tiff
          GCHandle tiepointHandle = GCHandle.Alloc(modelTiepoint, GCHandleType.Pinned);
          GCHandle pixelScaleHandle = GCHandle.Alloc(modelPixelScale, GCHandleType.Pinned);
 
-         TIFFInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
+         CvInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
 
          tiepointHandle.Free();
          pixelScaleHandle.Free();
@@ -114,7 +91,30 @@ namespace Emgu.CV.Tiff
       /// </summary>
       protected override void DisposeObject()
       {
-         TIFFInvoke.tiffWriterClose(ref _ptr);
+         CvInvoke.tiffWriterClose(ref _ptr);
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr tiffWriterOpen(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         string fileSpec);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void tiffWriterClose(ref IntPtr pTiff);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void tiffWriteGeoTag(IntPtr pTiff, IntPtr modelTiepoint, IntPtr ModelPixelScale);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void tiffWriteImage(IntPtr pTiff, IntPtr image);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void tiffWriteImageInfo(IntPtr pTiff, int bitsPerSample, int samplesPerPixel);
    }
 }
