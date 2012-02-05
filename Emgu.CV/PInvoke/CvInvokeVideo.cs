@@ -274,6 +274,24 @@ namespace Emgu.CV
 
       #region background / foreground  statistic
       /// <summary>
+      /// Releases memory used by BGStatMode
+      /// </summary>
+      /// <param name="bgModel">The bgModel to be released</param>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvReleaseBGStatModel(ref IntPtr bgModel);
+
+      /// <summary>
+      /// Updates statistical model and returns number of found foreground regions
+      /// </summary>
+      /// <param name="currentFrame">The current frame</param>
+      /// <param name="bgModel">The bg model</param>
+      /// <param name="learningRate">The leaning rate, use -1 for default value</param>
+      /// <returns>The number of found foreground regions</returns>
+      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int cvUpdateBGStatModel( IntPtr currentFrame, IntPtr bgModel,
+                                double learningRate);
+
+      /// <summary>
       /// Create a Gaussian background model
       /// </summary>
       /// <param name="image">Background image</param>

@@ -3,9 +3,9 @@
 //----------------------------------------------------------------------------
 
 using System;
-using Emgu.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.VideoSurveillance
 {
@@ -47,24 +47,28 @@ namespace Emgu.CV.VideoSurveillance
          _ptr = CvInvoke.cvCreateGaussianBGModel(image, ref parameters);
       }
 
+      /*
       /// <summary>
       /// A cache of the update function
       /// </summary>
       private BGStatModelDelegates.UpdateFunctionDelagate updateFunction;
+      */
 
       /// <summary>
       /// Update the statistic model
       /// </summary>
-      /// <param name="image"></param>
+      /// <param name="image">The image that is used to update the background model</param>
       /// <param name="learningRate">Use -1 for default</param>
       /// <returns>The number of found foreground regions</returns>
       public virtual int Update(Image<TColor, Byte> image, double learningRate)
       {
+         return CvInvoke.cvUpdateBGStatModel(image, _ptr, learningRate);
+         /*
          if (updateFunction == null)
          {
             updateFunction = (BGStatModelDelegates.UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(BGStatModelDelegates.UpdateFunctionDelagate));
          }
-         return updateFunction(image.Ptr, _ptr, learningRate);
+         return updateFunction(image.Ptr, _ptr, learningRate);*/
       }
 
       /// <summary>
@@ -118,11 +122,13 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
+         /*
          BGStatModelDelegates.ReleaseFunction releaseFunction = (BGStatModelDelegates.ReleaseFunction)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvReleaseBGStatModel, typeof(BGStatModelDelegates.ReleaseFunction));
-         releaseFunction(ref _ptr);
+         releaseFunction(ref _ptr);*/
+         CvInvoke.cvReleaseBGStatModel(ref _ptr);
       }
    }
-
+   /*
    internal static class BGStatModelDelegates
    {
       /// <summary>
@@ -141,5 +147,5 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="ptr">The background mode to be released</param>
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate void ReleaseFunction(ref IntPtr ptr);
-   }
+   }*/
 }
