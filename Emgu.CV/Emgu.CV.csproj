@@ -150,10 +150,14 @@
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
+    <Compile Include="Util\VectorOfDataMatrixCode.cs" />
     <Compile Include="Util\VectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubstractor.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubstractorMOG.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubstractorMOG2.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />

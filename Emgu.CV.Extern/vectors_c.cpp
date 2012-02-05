@@ -284,3 +284,56 @@ void VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv
 {
    *keypoint = keypoints->at(index);
 }
+
+
+//----------------------------------------------------------------------------
+//
+//  Vector of DataMatrixCode
+//
+//----------------------------------------------------------------------------
+std::vector<cv::DataMatrixCode>* VectorOfDataMatrixCodeCreate()
+{
+   return new std::vector<cv::DataMatrixCode>();
+}
+
+std::vector<cv::DataMatrixCode>* VectorOfDataMatrixCodeCreateSize(int size)
+{
+   return new std::vector<cv::DataMatrixCode>();
+}
+
+int VectorOfDataMatrixCodeGetSize(std::vector<cv::DataMatrixCode>* v)
+{
+   return v->size();
+}
+
+void VectorOfDataMatrixCodeClear(std::vector<cv::DataMatrixCode>* v)
+{
+   v->clear();
+}
+
+void VectorOfDataMatrixCodeRelease(std::vector<cv::DataMatrixCode>* v)
+{
+   delete v;
+}
+
+cv::DataMatrixCode* VectorOfDataMatrixCodeGetStartAddress(std::vector<cv::DataMatrixCode>* v)
+{
+   return v->empty()? NULL : &(*v)[0];
+}
+
+cv::DataMatrixCode* VectorOfDataMatrixCodeGetItem(std::vector<cv::DataMatrixCode>* v, int index)
+{
+   return &(*v)[index];
+}
+
+void VectorOfDataMatrixCodeFind(std::vector<cv::DataMatrixCode>* v, IplImage* image)
+{
+   cv::Mat m = cv::cvarrToMat(image);
+   cv::findDataMatrix(m, *v);
+}
+
+void VectorOfDataMatrixCodeDraw(std::vector<cv::DataMatrixCode>* v, IplImage* image)
+{
+   cv::Mat m = cv::cvarrToMat(image);
+   cv::drawDataMatrixCodes(*v, m);
+}

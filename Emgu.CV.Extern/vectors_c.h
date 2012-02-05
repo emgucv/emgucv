@@ -11,6 +11,7 @@
 #include <vector>
 #include "opencv2/core/core_c.h"
 #include "opencv2/features2d/features2d.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
 
 //----------------------------------------------------------------------------
 //
@@ -108,4 +109,28 @@ CVAPI(cv::KeyPoint*) VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* 
 
 CVAPI(void) VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv::KeyPoint* keypoint);
 
+//----------------------------------------------------------------------------
+//
+//  Vector of DataMatrixCode
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::DataMatrixCode>*) VectorOfDataMatrixCodeCreate();
+
+CVAPI(std::vector<cv::DataMatrixCode>*) VectorOfDataMatrixCodeCreateSize(int size);
+
+CVAPI(int) VectorOfDataMatrixCodeGetSize(std::vector<cv::DataMatrixCode>* v);
+
+CVAPI(void) VectorOfDataMatrixCodePushMulti(std::vector<cv::DataMatrixCode>* v, cv::DataMatrixCode* values, int count);
+
+CVAPI(void) VectorOfDataMatrixCodeClear(std::vector<cv::DataMatrixCode>* v);
+
+CVAPI(void) VectorOfDataMatrixCodeRelease(std::vector<cv::DataMatrixCode>* v);
+
+CVAPI(cv::DataMatrixCode*) VectorOfDataMatrixCodeGetStartAddress(std::vector<cv::DataMatrixCode>* v);
+
+CVAPI(cv::DataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<cv::DataMatrixCode>* v, int index);
+
+CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<cv::DataMatrixCode>* v, IplImage* image);
+
+CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<cv::DataMatrixCode>* v, IplImage* image);
 #endif
