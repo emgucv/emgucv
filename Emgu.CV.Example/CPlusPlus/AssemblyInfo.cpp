@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("")];
 [assembly:AssemblyProductAttribute("CPlusPlus")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) Emgu 2010")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) Emgu 2012")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -31,7 +31,7 @@ using namespace System::Security::Permissions;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("2.2.*")];
+[assembly:AssemblyVersionAttribute("2.3.*")];
 
 [assembly:ComVisible(false)];
 
