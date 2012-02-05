@@ -10,6 +10,14 @@ IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/O3" "/O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 ENDIF()
 
+INSTALL(
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/tesseract-ocr/COPYING"
+  DESTINATION "lib/3rdParty"
+  COMPONENT emgucv_source
+  RENAME "tesseract-ocr.license.txt"
+  )
+
 #leptionica
 ADD_SUBDIRECTORY(leptonica)
 

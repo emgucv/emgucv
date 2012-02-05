@@ -3,7 +3,10 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -33,27 +36,58 @@ namespace Emgu.CV
       public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;
 
       /// <summary>
+      /// Attemps to load opencv modules from the specific location
+      /// </summary>
+      /// <param name="loadDirectory">The directory where the opencv modules will be loaded. If it is null, the default location will be used.</param>
+      /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcorexxx"</param>
+      /// <returns>True if all the modules has been loaded sucessfully</returns>
+      /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
+      public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
+      {
+         if (loadDirectory == null)
+         {
+            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            FileInfo file = new FileInfo(asm.Location);
+            DirectoryInfo directory = file.Directory;
+            loadDirectory = directory.FullName;
+            if (IntPtr.Size == 8)
+            {  //64bit process
+               loadDirectory = Path.Combine(loadDirectory, "x64");
+            }
+            else
+            {
+               loadDirectory = Path.Combine(loadDirectory, "x86");
+            }
+         }
+
+         String oldDir = Environment.CurrentDirectory;
+         Environment.CurrentDirectory = loadDirectory;
+         bool success = true;
+
+         foreach (String module in unmanagedModules)
+         {
+            String fullPath = Path.Combine(loadDirectory, module);
+            if (fullPath.Length <= 4 || !fullPath.Substring(fullPath.Length - 5, 4).Equals(".dll"))
+            {
+               fullPath += ".dll";
+            }
+            if (File.Exists(fullPath))
+               success &= !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
+         }
+         Environment.CurrentDirectory = oldDir;
+
+         return success;
+      }
+
+      /// <summary>
       /// Static Constructor to setup opencv environment
       /// </summary>
       static CvInvoke()
       {
-         /*
          if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
          {
-            
-            //System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-            //System.IO.FileInfo file = new System.IO.FileInfo(asm.Location);
-            //System.IO.DirectoryInfo directory = file.Directory;
-            //System.Security.AccessControl.DirectorySecurity security = directory.GetAccessControl();
-            //Emgu.Util.Toolbox.SetDllDirectory(directory.FullName);
-           
-            String loadLibraryErrorMessage =
-               "Unable to load {0}. Please check the following: 1. {0} is located in the same folder as Emgu.CV.dll; 2. MSVCRT 8.0 SP1 is installed.";
-            LoadLibrary(CXCORE_LIBRARY, loadLibraryErrorMessage);
-            LoadLibrary(CV_LIBRARY, loadLibraryErrorMessage);
-            LoadLibrary(HIGHGUI_LIBRARY, loadLibraryErrorMessage);
-            LoadLibrary(CVAUX_LIBRARY, loadLibraryErrorMessage);
-         }*/
+            LoadUnmanagedModules(null, CvInvoke.EXTERN_LIBRARY, CvInvoke.OPENCV_FFMPEG_LIBRARY);
+         }
 
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
