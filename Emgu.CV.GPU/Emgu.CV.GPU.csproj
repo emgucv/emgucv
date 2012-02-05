@@ -57,10 +57,12 @@
     <Compile Include="GpuCascadeClassifier.cs" />
     <Compile Include="GpuDeviceInfo.cs" />
     <Compile Include="GpuDisparityBilateralFilter.cs" />
+    <Compile Include="GpuFASTDetector.cs" />
     <Compile Include="GpuHOGDescriptor.cs" />
     <Compile Include="GpuImage.cs" />
     <Compile Include="GpuInvoke.cs" />
     <Compile Include="GpuMat.cs" />
+    <Compile Include="GpuORBDetector.cs" />
     <Compile Include="GpuStereoBM.cs" />
     <Compile Include="GpuStereoConstantSpaceBP.cs" />
     <Compile Include="GpuSURFDetector.cs" />
