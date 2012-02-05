@@ -71,5 +71,13 @@ namespace Emgu.CV.OCR.UnitTest
             Assert.AreEqual(results.Length, 0);
          }
       }
+
+      [Test]
+      public void TestOCREngConstructor()
+      {
+         using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
+         {
+         }
+      }
    }
 }

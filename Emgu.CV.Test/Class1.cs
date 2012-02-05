@@ -696,7 +696,9 @@ namespace Emgu.CV.Test
          using (ImageViewer viewer = new ImageViewer())
          using (Capture capture = new Capture())
          {
-            BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+            //BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+            BackgroundSubstractorMOG2 bgModel = new BackgroundSubstractorMOG2(0, 0, true);
+            //BackgroundSubstractorMOG bgModel = new BackgroundSubstractorMOG(0, 0, 0, 0);
 
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
@@ -740,7 +742,7 @@ namespace Emgu.CV.Test
                         }
                      }
                   }
-                  viewer.Image = result;
+                  viewer.Image = frame.ConcateVertical(gray.Convert<Bgr, Byte>().ConcateHorizontal(result));
                }
             };
             capture.Start();

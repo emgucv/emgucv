@@ -1937,5 +1937,21 @@ namespace Emgu.CV.Test
 
          //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
       }
+
+/*
+      [Test]
+      public void TestDataMatrix()
+      {
+         //using (Image<Gray, Byte> img = new Image<Gray,byte>("dataMatrix.bmp"))
+         using (Image<Gray, Byte> img = new Image<Gray, byte>("dataMatrix.jpg"))
+         using (Emgu.CV.Util.VectorOfDataMatrixCode v = new VectorOfDataMatrixCode())
+         {
+            //ImageViewer.Show(img);
+            v.Find(img);
+            v.Draw(img);
+            //ImageViewer.Show(img);
+         }
+*/
+      }
    }
 }

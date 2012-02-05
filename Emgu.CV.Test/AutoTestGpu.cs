@@ -480,6 +480,54 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuFASTDetector()
+      {
+         if (!GpuInvoke.HasCuda)
+            return;
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
+         using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(img))
+         using (GpuImage<Gray, Byte> grayGpuImage = gpuImage.Convert<Gray, Byte>())
+         using (GpuFASTDetector detector = new GpuFASTDetector(10, true, 0.05))
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         {
+            GpuMat<float> keyPointsMat = detector.DetectKeyPointsRaw(grayGpuImage, null);
+                        detector.DownloadKeypoints(keyPointsMat, kpts);
+
+            foreach (MKeyPoint kpt in kpts.ToArray())
+            {
+               img.Draw(new CircleF(kpt.Point, 3.0f), new Bgr(0, 255, 0), 1);
+            }
+
+            //ImageViewer.Show(img);
+         }
+      }
+
+      [Test]
+      public void TestGpuOrbDetector()
+      {
+         if (!GpuInvoke.HasCuda)
+            return;
+         using(Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
+         using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr,byte>(img))
+         using (GpuImage<Gray, Byte> grayGpuImage = gpuImage.Convert<Gray, Byte>()) 
+         using (GpuORBDetector detector = new GpuORBDetector(500))
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         {
+            GpuMat<float> keyPointsMat;
+            GpuMat<Byte> descriptorsMat;
+            detector.ComputeRaw(grayGpuImage, null, out keyPointsMat, out descriptorsMat);
+            detector.DownloadKeypoints(keyPointsMat, kpts);
+
+            foreach (MKeyPoint kpt in kpts.ToArray())
+            {
+               img.Draw(new CircleF(kpt.Point, 3.0f), new Bgr(0, 255, 0), 1);
+            }
+
+            //ImageViewer.Show(img);
+         }
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)
