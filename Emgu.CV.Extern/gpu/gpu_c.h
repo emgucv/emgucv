@@ -359,9 +359,9 @@ CVAPI(void) gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector);
 
 CVAPI(void) gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints);
 
-CVAPI(void) gpuDownloadKeypoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
+CVAPI(void) gpuSURFDownloadKeypoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
 
-CVAPI(void) gpuUploadKeypoints(cv::gpu::SURF_GPU* detector, const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU);
+CVAPI(void) gpuSURFUploadKeypoints(cv::gpu::SURF_GPU* detector, const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU);
 
 CVAPI(void) gpuSURFDetectorCompute(
    cv::gpu::SURF_GPU* detector, 
@@ -373,10 +373,53 @@ CVAPI(void) gpuSURFDetectorCompute(
 
 CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector);
 
+//----------------------------------------------------------------------------
+//
+//  GpuBroxOpticalFlow 
+//
+//----------------------------------------------------------------------------
+
 CVAPI(cv::gpu::BroxOpticalFlow*) gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
 
 CVAPI(void) gpuBroxOpticalFlowCompute(cv::gpu::BroxOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
+
+//----------------------------------------------------------------------------
+//
+//  GpuFASTDetector
+//
+//----------------------------------------------------------------------------
+
+CVAPI(cv::gpu::FAST_GPU*) gpuFASTDetectorCreate(int threshold, bool nonmaxSupression, double keypointsRatio);
+
+CVAPI(void) gpuFASTDetectorRelease(cv::gpu::FAST_GPU** detector);
+
+CVAPI(void) gpuFASTDetectorDetectKeyPoints(cv::gpu::FAST_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints);
+
+CVAPI(void) gpuFASTDownloadKeypoints(cv::gpu::FAST_GPU* detector, cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
+
+//----------------------------------------------------------------------------
+//
+//  GpuORBDetector
+//
+//----------------------------------------------------------------------------
+
+CVAPI(cv::gpu::ORB_GPU*) gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType);
+
+CVAPI(void) gpuORBDetectorRelease(cv::gpu::ORB_GPU** detector);
+
+CVAPI(void) gpuORBDetectorDetectKeyPoints(cv::gpu::ORB_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints);
+
+CVAPI(void) gpuORBDownloadKeypoints(cv::gpu::ORB_GPU* detector, cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
+
+CVAPI(void) gpuORBDetectorCompute(
+   cv::gpu::ORB_GPU* detector, 
+   const cv::gpu::GpuMat* img, 
+   const cv::gpu::GpuMat* mask, 
+   cv::gpu::GpuMat* keypoints, 
+   cv::gpu::GpuMat* descriptors);
+
+CVAPI(int) gpuORBDetectorGetDescriptorSize(cv::gpu::ORB_GPU* detector);
 
 #endif
