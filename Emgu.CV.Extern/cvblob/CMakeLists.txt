@@ -35,6 +35,14 @@ source_group("Include" FILES ${cvblob_hdrs})
 set(the_target ${PROJECT_NAME})
 add_library(${the_target} STATIC ${cvblob_srcs} ${cvblob_hdrs})
 
+INSTALL(
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/lgpl-3.0.txt"
+  DESTINATION "lib/3rdParty"
+  COMPONENT emgucv_source
+  RENAME "cvblob.license.txt"
+  )
+
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
     OUTPUT_NAME "${the_target}"
