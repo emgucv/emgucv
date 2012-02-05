@@ -41,7 +41,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvNormalBayesClassifierRelease(_ptr);
+         MlInvoke.CvNormalBayesClassifierRelease(ref _ptr);
       }
 
       /// <summary>

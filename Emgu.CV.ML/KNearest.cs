@@ -39,7 +39,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvKNearestRelease(_ptr);
+         MlInvoke.CvKNearestRelease(ref _ptr);
       }
 
       /// <summary>

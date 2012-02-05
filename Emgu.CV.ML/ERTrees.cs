@@ -24,7 +24,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvERTreesRelease(_ptr);
+         MlInvoke.CvERTreesRelease(ref _ptr);
       }
    }
 }

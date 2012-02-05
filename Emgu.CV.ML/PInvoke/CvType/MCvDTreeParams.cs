@@ -21,7 +21,7 @@ namespace Emgu.CV.ML.Structure
       {
          IntPtr ptr = MlInvoke.CvDTreeParamsCreate();
          MCvDTreeParams p = (MCvDTreeParams) Marshal.PtrToStructure(ptr, typeof(MCvDTreeParams));
-         MlInvoke.CvDTreeParamsRelease(ptr);
+         MlInvoke.CvDTreeParamsRelease(ref ptr);
          return p;
       }
 

@@ -12,20 +12,20 @@
 #include "opencv2/ml/ml.hpp"
 
 //StatModel
-CVAPI(void) StatModelSave(CvStatModel* model, char* filename, char* name = 0);
-CVAPI(void) StatModelLoad(CvStatModel* model, char* filename, char* name = 0);
+CVAPI(void) StatModelSave(CvStatModel* model, char* filename, char* name);
+CVAPI(void) StatModelLoad(CvStatModel* model, char* filename, char* name);
 CVAPI(void) StatModelClear(CvStatModel* model);
 
 //CvNormalBayesClassifier
 CVAPI(CvNormalBayesClassifier*) CvNormalBayesClassifierDefaultCreate();
 CVAPI(CvNormalBayesClassifier*) CvNormalBayesClassifierCreate( CvMat* _train_data, CvMat* _responses, CvMat* _var_idx, CvMat* _sample_idx );
-CVAPI(void) CvNormalBayesClassifierRelease(CvNormalBayesClassifier* classifier);
+CVAPI(void) CvNormalBayesClassifierRelease(CvNormalBayesClassifier** classifier);
 CVAPI(bool) CvNormalBayesClassifierTrain(CvNormalBayesClassifier* classifier, CvMat* _train_data, CvMat* _responses,
                                          CvMat* _var_idx, CvMat* _sample_idx, bool update );
 CVAPI(float) CvNormalBayesClassifierPredict(CvNormalBayesClassifier* classifier, CvMat* _samples, CvMat* results );
 //KNearest
 CVAPI(CvKNearest*) CvKNearestDefaultCreate();
-CVAPI(void) CvKNearestRelease(CvKNearest* classifier);
+CVAPI(void) CvKNearestRelease(CvKNearest** classifier);
 CVAPI(bool) CvKNearestTrain(CvKNearest* classifier, CvMat* _train_data, CvMat* _responses,
                             CvMat* _sample_idx, bool is_regression,
                             int _max_k, bool _update_base);
@@ -36,7 +36,7 @@ CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int 
 
 //EM
 CVAPI(CvEM*) CvEMDefaultCreate();
-CVAPI(void) CvEMRelease(CvEM* model);
+CVAPI(void) CvEMRelease(CvEM** model);
 CVAPI(bool) CvEMTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
                       CvEMParams params, CvMat* labels );
 CVAPI(float) CvEMPredict(CvEM* model, CvMat* sample, CvMat* probs );
@@ -61,7 +61,7 @@ CVAPI(bool) CvSVMTrainAuto(CvSVM* model, CvMat* _train_data, CvMat* _responses,
                            CvParamGrid coef_grid,
                            CvParamGrid degree_grid);
 CVAPI(void) CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid);
-CVAPI(void) CvSVMRelease(CvSVM* model);
+CVAPI(void) CvSVMRelease(CvSVM** model);
 CVAPI(float) CvSVMPredict(CvSVM* model,  CvMat* _sample );
 CVAPI(float*) CvSVMGetSupportVector(CvSVM* model, int i);
 CVAPI(int) CvSVMGetSupportVectorCount(CvSVM* model);
@@ -72,7 +72,7 @@ CVAPI(void) CvSVMGetParameters(CvSVM* model, CvSVMParams* param);
 CVAPI(CvANN_MLP*) CvANN_MLPCreate(CvMat* _layer_sizes,
                                   int _activ_func,
                                   double _f_param1, double _f_param2 );
-CVAPI(void) CvANN_MLPRelease(CvANN_MLP* model);
+CVAPI(void) CvANN_MLPRelease(CvANN_MLP** model);
 CVAPI(int) CvANN_MLPTrain(CvANN_MLP* model, CvMat* _inputs, CvMat* _outputs,
                           CvMat* _sample_weights, CvMat* _sample_idx,
                           CvANN_MLP_TrainParams* _params,
@@ -83,9 +83,9 @@ CVAPI(int) CvANN_MLPGetLayerCount(CvANN_MLP* model);
 
 //Decision Tree
 CVAPI(CvDTreeParams*) CvDTreeParamsCreate();
-CVAPI(void) CvDTreeParamsRelease(CvDTreeParams* params);
+CVAPI(void) CvDTreeParamsRelease(CvDTreeParams** params);
 CVAPI(CvDTree*) CvDTreeCreate();
-CVAPI(void) CvDTreeRelease(CvDTree* model);
+CVAPI(void) CvDTreeRelease(CvDTree** model);
 CVAPI(bool) CvDTreeTrain(CvDTree* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
@@ -95,10 +95,10 @@ CVAPI(CvDTreeNode*) CvDTreePredict(CvDTree* model, CvMat* _sample, CvMat* _missi
 
 //Random Tree
 CVAPI(CvRTParams*) CvRTParamsCreate();
-CVAPI(void) CvRTParamsRelease(CvRTParams* params);
+CVAPI(void) CvRTParamsRelease(CvRTParams** params);
 
 CVAPI(CvRTrees*) CvRTreesCreate();
-CVAPI(void) CvRTreesRelease(CvRTrees* model);
+CVAPI(void) CvRTreesRelease(CvRTrees** model);
 CVAPI(bool) CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
                           CvMat* _responses, CvMat* _var_idx,
                           CvMat* _sample_idx, CvMat* _var_type,
@@ -118,11 +118,11 @@ CVAPI(CvMat*) CvRTreesGetVarImportance(CvRTrees* model);
 
 //Extreme Random Tree
 CVAPI(CvERTrees*) CvERTreesCreate();
-CVAPI(void) CvERTreesRelease(CvERTrees* model);
+CVAPI(void) CvERTreesRelease(CvERTrees** model);
 
 //CvBoost
 CVAPI(CvBoostParams*) CvBoostParamsCreate();
-CVAPI(void) CvBoostParamsRelease(CvBoostParams* params);
+CVAPI(void) CvBoostParamsRelease(CvBoostParams** params);
 
 CVAPI(CvBoost*) CvBoostCreate();
 CVAPI(void) CvBoostRelease(CvBoost* model);
@@ -133,8 +133,17 @@ CVAPI(bool) CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
                          CvBoostParams params,
                          bool update );
 
-CVAPI(float) CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing=0,
-                            CvMat* weak_responses=0, CvSlice slice=CV_WHOLE_SEQ,
-                            bool raw_mode=false );
+CVAPI(float) CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
+                            CvMat* weak_responses, CvSlice slice,
+                            bool raw_mode);
 
+//CvGBTrees
+CVAPI(CvGBTrees*) CvGBTreesCreate();
+CVAPI(void) CvGBTreesRelease(CvGBTrees** model);
+CVAPI(bool) CvGBTreeTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
+             const CvMat* responses, const CvMat* varIdx,
+             const CvMat* sampleIdx, const CvMat* varType,
+             const CvMat* missingDataMask,
+             CvGBTreesParams params,
+             bool update);
 #endif

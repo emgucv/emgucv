@@ -91,7 +91,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvBoostRelease(_ptr);
+         MlInvoke.CvBoostRelease(ref _ptr);
       }
    }
 }

@@ -22,7 +22,7 @@ namespace Emgu.CV.ML.Structure
       {
          IntPtr ptr = MlInvoke.CvRTParamsCreate();
          MCvRTParams p = (MCvRTParams)Marshal.PtrToStructure(ptr, typeof(MCvRTParams));
-         MlInvoke.CvRTParamsRelease(ptr);
+         MlInvoke.CvRTParamsRelease(ref ptr);
          return p;
       }
 

@@ -15,7 +15,7 @@ void StatModelClear(CvStatModel* model) { model->clear(); }
 CvNormalBayesClassifier* CvNormalBayesClassifierDefaultCreate() { return new CvNormalBayesClassifier; }
 CvNormalBayesClassifier* CvNormalBayesClassifierCreate( CvMat* _train_data, CvMat* _responses, CvMat* _var_idx, CvMat* _sample_idx )
 { return new CvNormalBayesClassifier(_train_data, _responses, _var_idx, _sample_idx); }
-void CvNormalBayesClassifierRelease(CvNormalBayesClassifier* classifier) { delete classifier; }
+void CvNormalBayesClassifierRelease(CvNormalBayesClassifier** classifier) { delete *classifier; *classifier = 0; }
 bool CvNormalBayesClassifierTrain(CvNormalBayesClassifier* classifier, CvMat* _train_data, CvMat* _responses,
                                          CvMat* _var_idx, CvMat* _sample_idx, bool update )
 { return classifier->train(_train_data, _responses, _var_idx, _sample_idx, update); }
@@ -24,7 +24,7 @@ float CvNormalBayesClassifierPredict(CvNormalBayesClassifier* classifier, CvMat*
 
 //KNearest
 CvKNearest* CvKNearestDefaultCreate() { return new CvKNearest; }
-void CvKNearestRelease(CvKNearest* classifier) { delete classifier; }
+void CvKNearestRelease(CvKNearest** classifier) { delete *classifier; *classifier = 0; }
 bool CvKNearestTrain(CvKNearest* classifier, CvMat* _train_data, CvMat* _responses,
                             CvMat* _sample_idx, bool is_regression,
                             int _max_k, bool _update_base)
@@ -38,7 +38,7 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 
 //EM
 CvEM* CvEMDefaultCreate() { return new CvEM; }
-void CvEMRelease(CvEM* model) { delete model; }
+void CvEMRelease(CvEM** model) { delete *model; *model = 0;}
 bool CvEMTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
                       CvEMParams params, CvMat* labels )
 { return model->train(samples, sample_idx, params, labels); }
@@ -73,7 +73,7 @@ grid->max_val = defaultGrid.max_val;
 grid->min_val = defaultGrid.min_val;
 grid->step = defaultGrid.step;
 }
-void CvSVMRelease(CvSVM* model) { delete model; }
+void CvSVMRelease(CvSVM** model) { delete *model; *model = 0; }
 float CvSVMPredict(CvSVM* model,  CvMat* _sample )
 { return model->predict(_sample); }
 float* CvSVMGetSupportVector(CvSVM* model, int i)
@@ -89,7 +89,7 @@ CvANN_MLP* CvANN_MLPCreate(CvMat* _layer_sizes,
                                   int _activ_func,
                                   double _f_param1, double _f_param2 )
 { return new CvANN_MLP(_layer_sizes, _activ_func, _f_param1, _f_param2); }
-void CvANN_MLPRelease(CvANN_MLP* model) { delete model; }
+void CvANN_MLPRelease(CvANN_MLP** model) { delete *model; *model = 0; }
 int CvANN_MLPTrain(CvANN_MLP* model, CvMat* _inputs, CvMat* _outputs,
                           CvMat* _sample_weights, CvMat* _sample_idx,
                           CvANN_MLP_TrainParams* _params,
@@ -102,10 +102,10 @@ int CvANN_MLPGetLayerCount(CvANN_MLP* model) { return model->get_layer_count(); 
 
 //Decision Tree
 CvDTreeParams* CvDTreeParamsCreate() { return new CvDTreeParams; }
-void CvDTreeParamsRelease(CvDTreeParams* params) { delete params; }
+void CvDTreeParamsRelease(CvDTreeParams** params) { delete *params; *params = 0;}
 
 CvDTree* CvDTreeCreate() { return new CvDTree; }
-void CvDTreeRelease(CvDTree* model) { delete model; }
+void CvDTreeRelease(CvDTree** model) { delete *model; *model = 0;}
 bool CvDTreeTrain(CvDTree* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
@@ -117,10 +117,10 @@ CvDTreeNode* CvDTreePredict(CvDTree* model, CvMat* _sample, CvMat* _missing_data
 
 //Random Tree
 CvRTParams* CvRTParamsCreate() { return new CvRTParams(); }
-void CvRTParamsRelease(CvRTParams* params) { delete params; }
+void CvRTParamsRelease(CvRTParams** params) { delete *params; *params = 0; }
 
 CvRTrees* CvRTreesCreate() { return new CvRTrees(); }
-void CvRTreesRelease(CvRTrees* model) { delete model; }
+void CvRTreesRelease(CvRTrees** model) { delete *model; *model = 0; }
 bool CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
                           CvMat* _responses, CvMat* _var_idx,
                           CvMat* _sample_idx, CvMat* _var_type,
@@ -142,11 +142,11 @@ CvMat* CvRTreesGetVarImportance(CvRTrees* model) { return (CvMat*) model->get_va
 
 //Extreme Random Tree
 CvERTrees* CvERTreesCreate() { return new CvERTrees(); }
-void CvERTreesRelease(CvERTrees* model) { delete model; }
+void CvERTreesRelease(CvERTrees** model) { delete *model; *model = 0; }
 
 //CvBoost
 CvBoostParams* CvBoostParamsCreate() { return new CvBoostParams(); }
-void CvBoostParamsRelease(CvBoostParams* params) { delete params; }
+void CvBoostParamsRelease(CvBoostParams** params) { delete *params; *params = 0; }
 
 CvBoost* CvBoostCreate() { return new CvBoost(); }
 void CvBoostRelease(CvBoost* model) { delete model; }
@@ -164,3 +164,14 @@ float CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
                             bool raw_mode)
 { return model->predict(_sample, _missing, weak_responses, slice, raw_mode); }
 
+/*
+//CvGBTrees
+CVAPI(CvGBTrees*) CvGBTreesCreate();
+CVAPI(void) CvGBTreesRelease(CvGBTrees** model);
+CVAPI(bool) CvGBTreeTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
+             const CvMat* responses, const CvMat* varIdx,
+             const CvMat* sampleIdx, const CvMat* varType,
+             const CvMat* missingDataMask,
+             CvGBTreesParams params,
+             bool update);
+*/

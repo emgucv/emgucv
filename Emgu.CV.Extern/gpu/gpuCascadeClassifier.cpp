@@ -14,6 +14,7 @@ cv::gpu::CascadeClassifier_GPU* gpuCascadeClassifierCreate(const char* filename)
 void gpuCascadeClassifierRelease(cv::gpu::CascadeClassifier_GPU** classifier)
 {
    delete *classifier;
+   *classifier = 0;
 }
 
 int gpuCascadeClassifierDetectMultiScale(cv::gpu::CascadeClassifier_GPU* classifier, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* objectsBuf, double scaleFactor, int minNeighbors, CvSize minSize, CvSeq* results)
