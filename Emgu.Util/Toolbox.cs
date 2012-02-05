@@ -456,7 +456,7 @@ namespace Emgu.Util
       /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
       /// </summary>
       /// <param name="handle">The handle to the library</param>
-      /// <returns>If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.</returns>
+      /// <returns>If the function succeeds, the return value is true. If the function fails, the return value is false.</returns>
       [DllImport("kernel32.dll")]
       public static extern bool FreeLibrary(IntPtr handle);
 
