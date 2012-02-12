@@ -5,6 +5,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 using Emgu.CV.Structure;
 
@@ -13,8 +14,20 @@ namespace Emgu.CV.Util
    /// <summary>
    /// Wraped class of the C++ standard vector of MKeyPoint.
    /// </summary>
-   public class VectorOfKeyPoint : Emgu.Util.UnmanagedObject
+   [Serializable]
+   public class VectorOfKeyPoint : Emgu.Util.UnmanagedObject, ISerializable
    {
+      /// <summary>
+      /// Constructor used to deserialize runtime serialized object
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public VectorOfKeyPoint(SerializationInfo info, StreamingContext context)
+         : this()
+      {
+         Push((MKeyPoint[])info.GetValue("KeyPoints", typeof(MKeyPoint[])));
+      }
+
       /// <summary>
       /// Create an empty standard vector of KeyPoint
       /// </summary>
@@ -141,6 +154,16 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          CvInvoke.VectorOfKeyPointRelease(_ptr);
+      }
+
+      /// <summary>
+      /// A function used for runtime serialization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">Streaming context</param>
+      public void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+         info.AddValue("KeyPoints", ToArray());
       }
    }
 }
