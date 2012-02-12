@@ -84,7 +84,7 @@ namespace Emgu.CV.Test
       {
          double[] b = new double[4] { 0, 1, 2, 3 };
          double[] a = new double[4] { 1, 3, 2, 0 };
-         MCvPoint2D64f [] pts = new MCvPoint2D64f[b.Length];
+         MCvPoint2D64f[] pts = new MCvPoint2D64f[b.Length];
          for (int i = 0; i < pts.Length; i++)
             pts[i] = new MCvPoint2D64f(b[i], a[i]);
 
@@ -292,7 +292,7 @@ namespace Emgu.CV.Test
          {
             rect.Offset(5, 0); //shift the rectangle 5 pixels horizontally
             forgroundMask.Draw(rect, new Gray(255), -1);
-			//TODO: Find out why BlobDetector cannot detect new Blob.
+            //TODO: Find out why BlobDetector cannot detect new Blob.
             bool detected = detector.DetectNewBlob(forgroundMask, newSeq, oldSeq);
             //ImageViewer.Show(forgroundMask);
             //Assert.IsTrue(detected);
@@ -690,7 +690,7 @@ namespace Emgu.CV.Test
          watch.Reset();
 
          Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
-         
+
          watch.Start();
          division = new PlanarSubdivision(points);
          VoronoiFacet[] facets = division.GetVoronoiFacets();
@@ -1411,6 +1411,29 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestVectorOfKeyPointSerialization()
+      {
+         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         {
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+               kpts.Push(new MKeyPoint[] { new MKeyPoint() });
+               System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                   formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+               formatter.Serialize(ms, kpts);
+               Byte[] bytes = ms.GetBuffer();
+
+               using (MemoryStream ms2 = new MemoryStream(bytes))
+               {
+                  Object o = formatter.Deserialize(ms2);
+                  VectorOfKeyPoint kpts2 = (VectorOfKeyPoint)o;
+               }
+            }
+         }
+      }
+
+      [Test]
       public void TestPyrSegmentation()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
@@ -1436,8 +1459,8 @@ namespace Emgu.CV.Test
                   Size sz = bpj.Size;
                }
                using (Image<Gray, Single> patchBpj = h.BackProjectPatch(
-                  new Image<Gray, Byte>[1] { HSVs[0] }, 
-                  new Size(5, 5), 
+                  new Image<Gray, Byte>[1] { HSVs[0] },
+                  new Size(5, 5),
                   Emgu.CV.CvEnum.HISTOGRAM_COMP_METHOD.CV_COMP_CHISQR,
                   1.0))
                {
@@ -1518,11 +1541,11 @@ namespace Emgu.CV.Test
          using (HOGDescriptor hog = new HOGDescriptor(image))
          {
 
-               Stopwatch watch = Stopwatch.StartNew();
-               Rectangle[] rects = hog.DetectMultiScale(image);
-               watch.Stop();
-               foreach (Rectangle rect in rects)
-                  image.Draw(rect, new Bgr(Color.Red), 1);
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] rects = hog.DetectMultiScale(image);
+            watch.Stop();
+            foreach (Rectangle rect in rects)
+               image.Draw(rect, new Bgr(Color.Red), 1);
 
             Trace.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1671,7 +1694,7 @@ namespace Emgu.CV.Test
       public void TestSeqPerformance()
       {
          Point[] pts = new Point[1000000];
-         
+
          using (MemStorage stor = new MemStorage())
          {
             Stopwatch watch = Stopwatch.StartNew();
@@ -1688,7 +1711,7 @@ namespace Emgu.CV.Test
             }
             watch.Stop();
             Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
-            
+
          }
       }
 
@@ -1755,8 +1778,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestRTreeClassifier()
       {
-         using(Image<Bgr, Byte> image = new Image<Bgr, byte>("box_in_scene.png"))
-         using(Image<Gray, Byte> gray = image.Convert<Gray, byte>())
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("box_in_scene.png"))
+         using (Image<Gray, Byte> gray = image.Convert<Gray, byte>())
          using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
          {
             SURFDetector surf = new SURFDetector(300, false);
@@ -1770,18 +1793,18 @@ namespace Emgu.CV.Test
             Assert.AreEqual(signiture.Length, classifier.NumberOfClasses);
          }
       }
-      
+
       [Test]
       public void TestIndex3D()
       {
          Random r = new Random();
-         MCvPoint3D32f[] points =  new MCvPoint3D32f[1000];
+         MCvPoint3D32f[] points = new MCvPoint3D32f[1000];
 
          for (int i = 0; i < points.Length; i++)
          {
-            points[i].x = (float) r.NextDouble();
-            points[i].y = (float) r.NextDouble();
-            points[i].z = (float) r.NextDouble();
+            points[i].x = (float)r.NextDouble();
+            points[i].y = (float)r.NextDouble();
+            points[i].z = (float)r.NextDouble();
          }
 
          MCvPoint3D32f searchPoint = new MCvPoint3D32f();
@@ -1807,13 +1830,13 @@ namespace Emgu.CV.Test
          shortestDistance2 = Math.Sqrt(shortestDistance2);
 
          Assert.AreEqual(indexOfClosest1, indexOfClosest2);
-         Assert.LessOrEqual( Math.Sqrt(shortestDistance1 - shortestDistance2), 1.0e-3 * shortestDistance1);
+         Assert.LessOrEqual(Math.Sqrt(shortestDistance1 - shortestDistance2), 1.0e-3 * shortestDistance1);
       }
 
       [Test]
       public void TestPOSIT()
       {
-         float[,] points = new float[4, 3] { {0, 0, 0}, {1,1,0}, {1, 0, 1}, {0, 1, 1}};
+         float[,] points = new float[4, 3] { { 0, 0, 0 }, { 1, 1, 0 }, { 1, 0, 1 }, { 0, 1, 1 } };
          IntPtr ptr = CvInvoke.cvCreatePOSITObject(points, 4);
          CvInvoke.cvReleasePOSITObject(ref ptr);
       }
@@ -1906,7 +1929,7 @@ namespace Emgu.CV.Test
 
             Matrix<double> delta = new Matrix<double>(transformation.Size);
             CvInvoke.cvAbsDiff(rotationMatrix, transformation, delta);
-            double min =0, max = 0;
+            double min = 0, max = 0;
             Point minLoc = new Point(), maxLoc = new Point();
             CvInvoke.cvMinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, IntPtr.Zero);
             Assert.Less(max, 1.0e-4, "Error is too large");
@@ -1918,7 +1941,7 @@ namespace Emgu.CV.Test
       {
          if (IntPtr.Size == 4) //Only perform the test in 32bit mode
          {
-            using (Image<Gray, Byte> img = new Image<Gray,byte>(480, 320))
+            using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 320))
             using (VideoWriter writer = new VideoWriter("tmp.avi", CvInvoke.CV_FOURCC('M', 'P', '4', '2'), 10, 480, 320, false))
             {
                writer.WriteFrame(img);
@@ -1930,7 +1953,7 @@ namespace Emgu.CV.Test
       public void TestPyrMeanshiftSegmentation()
       {
          Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png");
-         Image<Bgr, Byte> result = new Image<Bgr,byte>(image.Size);
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.cvPyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
          //Image<Gray, Byte> hue = result.Convert<Hsv, Byte>()[0];
          Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(new Gray(30), new Gray(20));
@@ -1938,20 +1961,20 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
       }
 
-/*
-      [Test]
-      public void TestDataMatrix()
-      {
-         //using (Image<Gray, Byte> img = new Image<Gray,byte>("dataMatrix.bmp"))
-         using (Image<Gray, Byte> img = new Image<Gray, byte>("dataMatrix.jpg"))
-         using (Emgu.CV.Util.VectorOfDataMatrixCode v = new VectorOfDataMatrixCode())
-         {
-            //ImageViewer.Show(img);
-            v.Find(img);
-            v.Draw(img);
-            //ImageViewer.Show(img);
-         }
-*/
-      }
+      /*
+            [Test]
+            public void TestDataMatrix()
+            {
+               //using (Image<Gray, Byte> img = new Image<Gray,byte>("dataMatrix.bmp"))
+               using (Image<Gray, Byte> img = new Image<Gray, byte>("dataMatrix.jpg"))
+               using (Emgu.CV.Util.VectorOfDataMatrixCode v = new VectorOfDataMatrixCode())
+               {
+                  //ImageViewer.Show(img);
+                  v.Find(img);
+                  v.Draw(img);
+                  //ImageViewer.Show(img);
+               }
+
+            }*/
    }
 }

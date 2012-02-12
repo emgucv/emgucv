@@ -344,6 +344,8 @@ namespace Emgu.CV.ML.UnitTest
             PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
             img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
          }
+
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       [Test]
@@ -353,6 +355,77 @@ namespace Emgu.CV.ML.UnitTest
          {
             MCvBoostParams param = MCvBoostParams.GetDefaultParameter();
          }
+      }
+
+      [Test]
+      public void TestGBTrees()
+      {
+         Bgr[] colors = new Bgr[] { 
+            new Bgr(0, 0, 255), 
+            new Bgr(0, 255, 0),
+            new Bgr(255, 0, 0)};
+         int trainSampleCount = 150;
+
+         #region Generate the training data and classes
+         Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
+         Matrix<int> trainClasses = new Matrix<int>(trainSampleCount, 1);
+
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+
+         Matrix<float> sample = new Matrix<float>(1, 2);
+
+         Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount / 3, 1);
+         trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+         trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+
+         Matrix<float> trainData2 = trainData.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
+         trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(50));
+
+         Matrix<float> trainData3 = trainData.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
+         trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+         trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+
+         Matrix<int> trainClasses1 = trainClasses.GetRows(0, trainSampleCount / 3, 1);
+         trainClasses1.SetValue(1);
+         Matrix<int> trainClasses2 = trainClasses.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
+         trainClasses2.SetValue(2);
+         Matrix<int> trainClasses3 = trainClasses.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
+         trainClasses3.SetValue(3);
+         #endregion
+
+         using (GBTrees classifier = new GBTrees())
+         {
+            classifier.Train(trainData, MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, trainClasses.Convert<float>(), null, null, null, null, MCvGBTreesParams.GetDefaultParameter(), false);
+
+            classifier.Save("GBTrees.xml");
+
+            #region Classify every image pixel
+            for (int i = 0; i < img.Height; i++)
+               for (int j = 0; j < img.Width; j++)
+               {
+                  sample.Data[0, 0] = i;
+                  sample.Data[0, 1] = j;
+                  int response = (int) Math.Round( classifier.Predict(sample, null, null, MCvSlice.WholeSeq, false ) );
+
+                  Bgr color = colors[response - 1];
+
+                  img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
+               }
+            #endregion
+         }
+
+         // display the original training samples
+         for (int i = 0; i < (trainSampleCount / 3); i++)
+         {
+            PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
+            img.Draw(new CircleF(p1, 2.0f), colors[0], -1);
+            PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
+            img.Draw(new CircleF(p2, 2.0f), colors[1], -1);
+            PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
+            img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
+         }
+
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
@@ -720,6 +793,8 @@ namespace Emgu.CV.ML.UnitTest
             PointF p = new PointF(points.Data[i, 0], points.Data[i, 1]);
             image.Draw(new CircleF(p, 1.0f), colors[clusters[i, 0]], 1);
          }
+
+         //Emgu.CV.UI.ImageViewer.Show(image);
       }
    }
 }
