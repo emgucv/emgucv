@@ -149,7 +149,7 @@ CvBoostParams* CvBoostParamsCreate() { return new CvBoostParams(); }
 void CvBoostParamsRelease(CvBoostParams** params) { delete *params; *params = 0; }
 
 CvBoost* CvBoostCreate() { return new CvBoost(); }
-void CvBoostRelease(CvBoost* model) { delete model; }
+void CvBoostRelease(CvBoost** model) { delete *model; *model = 0; }
 bool CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
@@ -164,14 +164,34 @@ float CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
                             bool raw_mode)
 { return model->predict(_sample, _missing, weak_responses, slice, raw_mode); }
 
-/*
+
 //CvGBTrees
-CVAPI(CvGBTrees*) CvGBTreesCreate();
-CVAPI(void) CvGBTreesRelease(CvGBTrees** model);
-CVAPI(bool) CvGBTreeTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
+void CvGBTreesParamsGetDefault(CvGBTreesParams* params)
+{
+   CvGBTreesParams p;
+   memcpy(params, &p, sizeof(CvGBTreesParams));
+}
+CvGBTrees* CvGBTreesCreate()
+{
+   return new CvGBTrees();
+}
+void CvGBTreesRelease(CvGBTrees** model)
+{
+   delete * model;
+   *model = 0;
+}
+bool CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
              const CvMat* responses, const CvMat* varIdx,
              const CvMat* sampleIdx, const CvMat* varType,
              const CvMat* missingDataMask,
              CvGBTreesParams params,
-             bool update);
-*/
+             bool update)
+{
+   return model->train(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params, update);
+}
+float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
+                            CvMat* weak_responses, CvSlice slice,
+                            bool raw_mode)
+{
+   return model->predict(_sample, _missing, weak_responses, slice, raw_mode);
+}

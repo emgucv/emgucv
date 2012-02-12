@@ -125,7 +125,7 @@ CVAPI(CvBoostParams*) CvBoostParamsCreate();
 CVAPI(void) CvBoostParamsRelease(CvBoostParams** params);
 
 CVAPI(CvBoost*) CvBoostCreate();
-CVAPI(void) CvBoostRelease(CvBoost* model);
+CVAPI(void) CvBoostRelease(CvBoost** model);
 CVAPI(bool) CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
@@ -138,12 +138,16 @@ CVAPI(float) CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
                             bool raw_mode);
 
 //CvGBTrees
+CVAPI(void) CvGBTreesParamsGetDefault(CvGBTreesParams* params); 
 CVAPI(CvGBTrees*) CvGBTreesCreate();
 CVAPI(void) CvGBTreesRelease(CvGBTrees** model);
-CVAPI(bool) CvGBTreeTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
+CVAPI(bool) CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
              const CvMat* responses, const CvMat* varIdx,
              const CvMat* sampleIdx, const CvMat* varType,
              const CvMat* missingDataMask,
              CvGBTreesParams params,
              bool update);
+CVAPI(float) CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
+                            CvMat* weak_responses, CvSlice slice,
+                            bool raw_mode);
 #endif

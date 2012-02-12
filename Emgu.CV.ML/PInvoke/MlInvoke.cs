@@ -12,7 +12,7 @@ namespace Emgu.CV.ML
    /// <summary>
    /// This class contains functions to call into machine learning library
    /// </summary>
-   public class MlInvoke
+   public partial class MlInvoke
    {
       static MlInvoke()
       {
@@ -713,6 +713,71 @@ namespace Emgu.CV.ML
       /// <param name="model">The boost classicfier to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvBoostRelease(ref IntPtr model);
+      #endregion
+
+      #region GBTree
+      /// <summary>
+      /// Train the boost tree using the specific traning data
+      /// </summary>
+      /// <param name="model">The Boost Tree model</param>
+      /// <param name="tFlag">The data layout type of the train data</param>
+      /// <param name="missingMask">Can be IntPtr.Zero if not needed. When specified, it is an 8-bit matrix of the same size as <paramref name="trainData"/>, is used to mark the missed values (non-zero elements of the mask)</param>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="param">The parameters for training the random tree</param>
+      /// <param name="varIdx">Can be IntPtr.Zero if not needed. When specified, identifies variables (features) of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="varType">The types of input variables</param>
+      /// <param name="update">specifies whether the classifier needs to be updated (i.e. the new weak tree classifiers added to the existing ensemble), or the classifier needs to be rebuilt from scratch</param>
+      /// <returns></returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool CvGBTreesTrain(
+         IntPtr model,
+         IntPtr trainData,
+         MlEnum.DATA_LAYOUT_TYPE tFlag,
+         IntPtr responses,
+         IntPtr varIdx,
+         IntPtr sampleIdx,
+         IntPtr varType,
+         IntPtr missingMask,
+         MCvGBTreesParams param,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool update);
+
+      /// <summary>
+      /// Runs the sample through the trees in the ensemble and returns the output class label based on the weighted voting
+      /// </summary>
+      /// <param name="model">The Boost Tree model</param>
+      /// <param name="sample">The input sample</param>
+      /// <param name="missing">Can be IntPtr.Zero if not needed. The optional mask of missing measurements. To handle missing measurements, the weak classifiers must include surrogate splits</param>
+      /// <param name="weakResponses">Can be IntPtr.Zero if not needed. a floating-point vector, of responses from each individual weak classifier. The number of elements in the vector must be equal to the slice length.</param>
+      /// <param name="slice">The continuous subset of the sequence of weak classifiers to be used for prediction</param>
+      /// <param name="rawMode">Normally set to false that implies a regular input. If it is true, the method assumes that all the values of the discrete input variables have been already normalized to 0..num_of_categoriesi-1 ranges. (as the decision tree uses such normalized representation internally). It is useful for faster prediction with tree ensembles. For ordered input variables the flag is not used. </param>      
+      /// <returns>The output class label based on the weighted voting</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern float CvGBTreesPredict(
+         IntPtr model,
+         IntPtr sample,
+         IntPtr missing,
+         IntPtr weakResponses,
+         Emgu.CV.Structure.MCvSlice slice,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool rawMode);
+
+      /// <summary>
+      /// Create a default Gradient Boosting Trees (GBT)
+      /// </summary>
+      /// <returns>Pointer to the Gradient Boosting Trees (GBT)</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr CvGBTreesCreate();
+
+      /// <summary>
+      /// Release the Gradient Boosting Trees (GBT)
+      /// </summary>
+      /// <param name="model">The Gradient Boosting Trees (GBT) to be released</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void CvGBTreesRelease(ref IntPtr model);
       #endregion
    }
 }
