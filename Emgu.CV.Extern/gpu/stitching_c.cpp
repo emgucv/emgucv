@@ -31,7 +31,6 @@ IplImage* CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, IplImage** imag
    IplImage* result = cvCreateImage(pano.size(), IPL_DEPTH_8U, 3);
    IplImage tmp = (IplImage) pano;
    cvCopy(&tmp, result);
-   //cv::Mat resultMat = cv::cvarrToMat(result);
-   //pano.copyTo(resultMat);
+
    return result;
 }
