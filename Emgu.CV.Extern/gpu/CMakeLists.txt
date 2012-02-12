@@ -14,6 +14,7 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/stitching/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../..")
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
