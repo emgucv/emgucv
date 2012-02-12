@@ -83,8 +83,14 @@ namespace Emgu.CV
          {
             LoadImageUsingOpenCV(fi);
          }
-         catch
-         {  //give Bitmap a try
+         catch (TypeInitializationException e)
+         {
+            //possibly Exception in CvInvoke's static constructor.
+            throw e;
+         }
+         catch 
+         {
+            //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
             LoadFileUsingBitmap(fi);
          }
@@ -605,7 +611,7 @@ namespace Emgu.CV
 
          GC.AddMemoryPressure(StructSize.MIplImage); //This pressure will be released once the result image is disposed. 
 
-         subRect._ptr = CvToolbox.cvGetImageSubRect(_ptr, ref rect);
+         subRect._ptr = CvInvoke.cvGetImageSubRect(_ptr, ref rect);
          return subRect;
       }
 
