@@ -553,6 +553,8 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
 
 int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
 {
+   CV_Assert(modelKeyPoints->size() > 0);
+   CV_Assert(observedKeyPoints->size() > 0);
    cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
    cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
    std::vector<float> logScale;
