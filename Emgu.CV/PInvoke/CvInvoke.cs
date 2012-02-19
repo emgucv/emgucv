@@ -38,8 +38,8 @@ namespace Emgu.CV
       /// <summary>
       /// Attemps to load opencv modules from the specific location
       /// </summary>
-      /// <param name="loadDirectory">The directory where the opencv modules will be loaded. If it is null, the default location will be used.</param>
-      /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcorexxx"</param>
+      /// <param name="loadDirectory">The directory where the unmanaged modules will be loaded. If it is null, the default location will be used.</param>
+      /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
       /// <returns>True if all the modules has been loaded sucessfully</returns>
       /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
       public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
@@ -67,10 +67,6 @@ namespace Emgu.CV
          foreach (String module in unmanagedModules)
          {
             String fullPath = Path.Combine(loadDirectory, module);
-            if (fullPath.Length <= 4 || !fullPath.Substring(fullPath.Length - 5, 4).Equals(".dll"))
-            {
-               fullPath += ".dll";
-            }
             if (File.Exists(fullPath))
                success &= !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
          }
@@ -84,10 +80,24 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
-         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         String[] modules = new String[] 
          {
-            LoadUnmanagedModules(null, CvInvoke.EXTERN_LIBRARY, CvInvoke.OPENCV_FFMPEG_LIBRARY);
+            CvInvoke.OPENCV_CORE_LIBRARY,
+            CvInvoke.EXTERN_LIBRARY,
+            CvInvoke.OPENCV_FFMPEG_LIBRARY
+         };
+
+         String formatString = "{0}";
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            formatString = "{0}.dll";
+         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
+            formatString = "lib{0}.so";
+         
+         for (int i = 0; i < modules.Length; ++i)
+         {
+            modules[i] = String.Format(formatString, modules[i]);
          }
+         LoadUnmanagedModules(null, CvInvoke.EXTERN_LIBRARY, CvInvoke.OPENCV_FFMPEG_LIBRARY);
 
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
