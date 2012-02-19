@@ -423,7 +423,7 @@ CVAPI(cv::gpu::FarnebackOpticalFlow*) gpuFarnebackOpticalFlowCreate(
    double polySigma,
    int flags);
 
-CVAPI(void) gpuFarnebackOpticalFlowCompute(cv::gpu::FarnebackOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream);
+CVAPI(void) gpuFarnebackOpticalFlowCompute(cv::gpu::FarnebackOpticalFlow* flow, const cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow);
 

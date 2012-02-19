@@ -55,9 +55,9 @@ cv::gpu::FarnebackOpticalFlow* gpuFarnebackOpticalFlowCreate(
    return flow;
 }
 
-void gpuFarnebackOpticalFlowCompute(cv::gpu::FarnebackOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream)
+void gpuFarnebackOpticalFlowCompute(cv::gpu::FarnebackOpticalFlow* flow, const cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream)
 {
-   (*flow)(*frame0, *frame1, *u, *v, stream? *stream : cv::gpu::Stream());
+   (*flow)(*frame0, *frame1, *u, *v, stream? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow)
