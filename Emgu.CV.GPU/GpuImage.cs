@@ -24,6 +24,14 @@ namespace Emgu.CV.GPU
       where TDepth : new()
    {
       /// <summary>
+      /// Create an empty GpuImage
+      /// </summary>
+      public GpuImage()
+         : base()
+      {
+      }
+
+      /// <summary>
       /// Create the GpuImage from the unmanaged pointer.
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat. It is the user's responsibility that the Color type and depth matches between the managed class and unmanaged pointer.</param>
@@ -246,7 +254,7 @@ namespace Emgu.CV.GPU
       }
 
       /// <summary>
-      /// Resize the GpuImage. The calling GpuMat be GpuMat%lt;Byte&gt;. If steam is specified, it has to be either 1 or 4 channels.
+      /// Resize the GpuImage. The calling GpuMat be GpuMat%lt;Byte&gt;. If stream is specified, it has to be either 1 or 4 channels.
       /// </summary>
       /// <param name="size">The new size</param>
       /// <param name="interpolationType">The interpolation type</param>

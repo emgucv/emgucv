@@ -156,9 +156,9 @@ CVAPI(void) gpuMatMerge(const cv::gpu::GpuMat** src, cv::gpu::GpuMat* dst, cv::g
 
 //only support single channel gpuMat
 CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src, 
-                            double* minVal, double* maxVal, 
-                            CvPoint* minLoc, CvPoint* maxLoc, 
-                            const cv::gpu::GpuMat* mask);
+   double* minVal, double* maxVal, 
+   CvPoint* minLoc, CvPoint* maxLoc, 
+   const cv::gpu::GpuMat* mask);
 
 CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::Stream* stream);
 
@@ -167,9 +167,9 @@ CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int 
 CVAPI(void) gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatBlendLinear(
-            const cv::gpu::GpuMat* img1, const cv::gpu::GpuMat* img2, 
-            const cv::gpu::GpuMat* weights1, const cv::gpu::GpuMat* weights2, 
-            cv::gpu::GpuMat* result, cv::gpu::Stream* stream);
+   const cv::gpu::GpuMat* img1, const cv::gpu::GpuMat* img2, 
+   const cv::gpu::GpuMat* weights1, const cv::gpu::GpuMat* weights2, 
+   cv::gpu::GpuMat* result, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev);
 
@@ -206,7 +206,7 @@ CVAPI(void) gpuMatGaussianBlur(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,
 CVAPI(void) gpuMatLaplacian(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int ksize, double scale, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatGemm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, double alpha, 
-                       const cv::gpu::GpuMat* src3, double beta, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream);
+   const cv::gpu::GpuMat* src3, double beta, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatErode( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* kernel, cv::gpu::GpuMat* buffer, CvPoint anchor, int iterations, cv::gpu::Stream* stream);
 
@@ -221,13 +221,13 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-            CvTermCriteria criteria, cv::gpu::Stream* stream);
+   CvTermCriteria criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-            CvTermCriteria criteria, cv::gpu::Stream* stream);
+   CvTermCriteria criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
-            CvTermCriteria criteria);
+   CvTermCriteria criteria);
 
 CVAPI(cv::gpu::GpuMat*) gpuMatHistEven(const cv::gpu::GpuMat* src, int histSize, int lowerLevel, int upperLevel);
 
@@ -387,6 +387,57 @@ CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //
+//  GpuPyrLKOpticalFlow
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, double derivLambda, bool useInitialFlow, float minEigThreshold);
+CVAPI(void) gpuPryLKOpticalFlowSparse(
+   cv::gpu::PyrLKOpticalFlow* flow, 
+   const cv::gpu::GpuMat* prevImg, 
+   const cv::gpu::GpuMat* nextImg, 
+   const cv::gpu::GpuMat* prevPts, 
+   cv::gpu::GpuMat* nextPts,
+   cv::gpu::GpuMat* status, 
+   cv::gpu::GpuMat* err);
+CVAPI(void) gpuPryLKOpticalFlowDense(
+   cv::gpu::PyrLKOpticalFlow* flow, 
+   const cv::gpu::GpuMat* prevImg, 
+   const cv::gpu::GpuMat* nextImg,
+   cv::gpu::GpuMat* u, 
+   cv::gpu::GpuMat* v, 
+   cv::gpu::GpuMat* err);
+CVAPI(void) gpuPryLKOpticalFlowRelease(cv::gpu::PyrLKOpticalFlow** flow);
+
+//----------------------------------------------------------------------------
+//
+//  GpuFarnebackOpticalFlow
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::FarnebackOpticalFlow*) gpuFarnebackOpticalFlowCreate(    
+   int numLevels,
+   double pyrScale,
+   bool fastPyramids,
+   int winSize,
+   int numIters,
+   int polyN,
+   double polySigma,
+   int flags);
+
+CVAPI(void) gpuFarnebackOpticalFlowCompute(cv::gpu::FarnebackOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow);
+
+//----------------------------------------------------------------------------
+//
+//  GpuGoodFeaturesToTrackDetector
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::GoodFeaturesToTrackDetector_GPU*) gpuGoodFeaturesToTrackDetectorCreate(int maxCorners, double qualityLevel, double minDistance);
+CVAPI(void) gpuGoodFeaturesToTrackDetectorDetect(cv::gpu::GoodFeaturesToTrackDetector_GPU* detector, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* corners, const cv::gpu::GpuMat* mask);
+CVAPI(void) gpuGoodFeaturesToTrackDetectorRelease(cv::gpu::GoodFeaturesToTrackDetector_GPU** detector);
+
+//----------------------------------------------------------------------------
+//
 //  GpuFASTDetector
 //
 //----------------------------------------------------------------------------
@@ -421,5 +472,13 @@ CVAPI(void) gpuORBDetectorCompute(
    cv::gpu::GpuMat* descriptors);
 
 CVAPI(int) gpuORBDetectorGetDescriptorSize(cv::gpu::ORB_GPU* detector);
+
+//----------------------------------------------------------------------------
+//
+//  Utilities
+//
+//----------------------------------------------------------------------------
+CVAPI(void) gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gpu::GpuMat* v, cv::gpu::GpuMat* vertex, cv::gpu::GpuMat* colors);
+
 
 #endif

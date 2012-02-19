@@ -645,18 +645,31 @@ void gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, double lo
    cv::gpu::Canny(*image, *edges, lowThreshold, highThreshold, apertureSize, L2gradient);
 }
 
-cv::gpu::BroxOpticalFlow* gpuBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations)
+//----------------------------------------------------------------------------
+//
+//  GpuGoodFeaturesToTrackDetector
+//
+//----------------------------------------------------------------------------
+cv::gpu::GoodFeaturesToTrackDetector_GPU* gpuGoodFeaturesToTrackDetectorCreate(int maxCorners, double qualityLevel, double minDistance)
 {
-   return new cv::gpu::BroxOpticalFlow(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
+   return new cv::gpu::GoodFeaturesToTrackDetector_GPU(maxCorners, qualityLevel, minDistance);
+}
+void gpuGoodFeaturesToTrackDetectorDetect(cv::gpu::GoodFeaturesToTrackDetector_GPU* detector, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* corners, const cv::gpu::GpuMat* mask)
+{
+   (*detector)(*image, *corners, mask ? *mask : cv::gpu::GpuMat());
+}
+void gpuGoodFeaturesToTrackDetectorRelease(cv::gpu::GoodFeaturesToTrackDetector_GPU** detector)
+{
+   delete *detector;
+   *detector=0;
 }
 
-void gpuBroxOpticalFlowCompute(cv::gpu::BroxOpticalFlow* flow, cv::gpu::GpuMat* frame0, const cv::gpu::GpuMat* frame1, cv::gpu::GpuMat* u, cv::gpu::GpuMat* v, cv::gpu::Stream* stream)
+//----------------------------------------------------------------------------
+//
+//  Utilities
+//
+//----------------------------------------------------------------------------
+void gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gpu::GpuMat* v, cv::gpu::GpuMat* vertex, cv::gpu::GpuMat* colors)
 {
-   (*flow)(*frame0, *frame1, *u, *v, stream ? *stream : cv::gpu::Stream::Null());
-}
-
-void gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow)
-{
-   delete *flow;
-   *flow = 0;
+   cv::gpu::createOpticalFlowNeedleMap(*u, *v, *vertex, *colors);
 }

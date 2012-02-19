@@ -1071,12 +1071,21 @@ namespace Emgu.CV.GPU
       /// <param name="L2gradient">Use false for default</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCanny")]
       public static extern void Canny(
-         IntPtr image, 
-         IntPtr edges, 
-         double lowThreshold, 
-         double highThreshold, 
-         int apertureSize, 
+         IntPtr image,
+         IntPtr edges,
+         double lowThreshold,
+         double highThreshold,
+         int apertureSize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool L2gradient);
+
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuCreateOpticalFlowNeedleMap")]
+      private static extern void CreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
+
+      public static void CreateOpticalFlowNeedleMap(GpuImage<Gray, float> u, GpuImage<Gray, float> v, GpuMat<float> vertex, GpuMat<float> colors)
+      {
+         CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+      }
+
    }
 }
