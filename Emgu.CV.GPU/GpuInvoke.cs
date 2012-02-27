@@ -376,6 +376,33 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAbsdiffS")]
       public static extern void Absdiff(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
+
+      /// <summary>
+      /// Computes absolute value of each pixel in an image
+      /// </summary>
+      /// <param name="src">The source GpuMat, support depth of Int16 and float.</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatAbs")]
+      public static extern void Abs(IntPtr src, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes square of each pixel in an image
+      /// </summary>
+      /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSqr")]
+      public static extern void Sqr(IntPtr src, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Computes square root of each pixel in an image
+      /// </summary>
+      /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
+      /// <param name="dst">The resulting GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSqrt")]
+      public static extern void Sqrt(IntPtr src, IntPtr dst, IntPtr stream);
       #endregion
 
       /// <summary>
@@ -443,7 +470,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
       /// </summary>
-      /// <param name="src">The source GpuMat. Supports only CV_32FC1 type</param>
+      /// <param name="src">The source GpuMat. Supports Byte, UInt16, Int16 and float type.</param>
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatExp")]
@@ -465,7 +492,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Computes natural logarithm of absolute value of each matrix element: b = log(abs(a))
       /// </summary>
-      /// <param name="src">The source GpuMat. Supports only CV_32FC1 type</param>
+      /// <param name="src">The source GpuMat. Supports Byte, UInt16, Int16 and float type.</param>
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLog")]
@@ -582,8 +609,9 @@ namespace Emgu.CV.GPU
       /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>
       /// <param name="mean">The mean value</param>
       /// <param name="stddev">The standard deviation</param>
+      /// <param name="buffer">The buffer for the processing. Can be IntPtr.Zero if you do not wants to specify such.</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanStdDev")]
-      public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
+      public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev, IntPtr buffer);
 
       /// <summary>
       /// Computes norm of the difference between two GpuMats
@@ -635,7 +663,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Flips the GpuMat&lt;Byte&gt; in one of different 3 ways (row and column indices are 0-based). 
       /// </summary>
-      /// <param name="src">The source GpuMat&lt;Byte&gt;. If stream is used, the GpuMat has to be either single channel or 4 channels.</param>
+      /// <param name="src">The source GpuMat. supports 1, 3 and 4 channels GpuMat with Byte, UInt16, int or float depth</param>
       /// <param name="dst">Destination GpuMat. The same source and type as <paramref name="src"/></param>
       /// <param name="flipType">Specifies how to flip the GpuMat.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
@@ -953,7 +981,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Rotates an image around the origin (0,0) and then shifts it.
       /// </summary>
-      /// <param name="src">Source image. CV_8UC1 and CV_8UC4 types are supported.</param>
+      /// <param name="src">Source image. Supports 1, 3 or 4 channels images with Byte, UInt16 or float depth</param>
       /// <param name="dst">Destination image with the same type as src. Must be pre-allocated</param>
       /// <param name="angle">Angle of rotation in degrees</param>
       /// <param name="xShift">Shift along the horizontal axis</param>
@@ -983,20 +1011,19 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
       /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
-      /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type.</param>
+      /// <param name="buffer">The buffer GpuMat, supports only CV32F source type.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIntegral")]
-      public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqsum, IntPtr stream);
+      public static extern void IntegralBuffered(IntPtr src, IntPtr sum, IntPtr buffer, IntPtr stream);
 
       /// <summary>
       /// Computes the integral image
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
       /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Integral(IntPtr src, IntPtr sum, IntPtr stream)
+      public static void Integral(IntPtr src, IntPtr sum)
       {
-         Integral(src, sum, IntPtr.Zero, stream);
+         IntegralBuffered(src, sum, IntPtr.Zero, IntPtr.Zero);
       }
 
       /// <summary>
@@ -1007,7 +1034,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       public static void SqrIntegral(IntPtr src, IntPtr sqsum, IntPtr stream)
       {
-         Integral(src, IntPtr.Zero, sqsum, stream);
+         IntegralBuffered(src, IntPtr.Zero, sqsum, stream);
       }
 
       /// <summary>

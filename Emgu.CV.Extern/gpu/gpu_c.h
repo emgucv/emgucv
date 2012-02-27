@@ -114,6 +114,12 @@ CVAPI(void) gpuMatAddWeighted(const cv::gpu::GpuMat* src1, double alpha, const c
 
 CVAPI(void) gpuMatAbsdiff(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatAbs(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatSqr(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatSqrt(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatAbsdiffS(const cv::gpu::GpuMat* a, const CvScalar s, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCompare(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, int cmpop, cv::gpu::Stream* stream);
@@ -171,7 +177,7 @@ CVAPI(void) gpuMatBlendLinear(
    const cv::gpu::GpuMat* weights1, const cv::gpu::GpuMat* weights2, 
    cv::gpu::GpuMat* result, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev);
+CVAPI(void) gpuMatMeanStdDev(const cv::gpu::GpuMat* mtx, CvScalar* mean, CvScalar* stddev, cv::gpu::GpuMat* buffer);
 
 CVAPI(double) gpuMatNorm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, int normType);
 
@@ -187,9 +193,15 @@ CVAPI(void) gpuMatBitwiseNot(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, c
 
 CVAPI(void) gpuMatBitwiseAnd(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatBitwiseAndS(const cv::gpu::GpuMat* src1, const cv::Scalar sc, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatBitwiseOr(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatBitwiseOrS(const cv::gpu::GpuMat* src1, const cv::Scalar sc, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatBitwiseXor(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatBitwiseXorS(const cv::gpu::GpuMat* src1, const cv::Scalar sc, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMin(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
@@ -237,7 +249,7 @@ CVAPI(void) gpuMatRotate(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, doubl
 
 CVAPI(void) gpuMatCopyMakeBorder(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar value, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* sqsum, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatIntegral(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* sum, cv::gpu::GpuMat* buffer, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCornerHarris(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int blockSize, int ksize, double k, int borderType);
 
