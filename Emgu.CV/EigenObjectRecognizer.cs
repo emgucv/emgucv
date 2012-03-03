@@ -5,6 +5,18 @@
 using System;
 using System.Diagnostics;
 using Emgu.CV.Structure;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+
+using System.IO;
+#if ANDROID
+#else
+using System.Drawing.Imaging;
+#endif
+using System.Drawing;
+using System.Xml;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace Emgu.CV
 {
@@ -20,6 +32,7 @@ namespace Emgu.CV
       private string[] _labels;
       private double _eigenDistanceThreshold;
 
+      #region Class Interface
       /// <summary>
       /// Get the eigen vectors that form the eigen space
       /// </summary>
@@ -73,8 +86,9 @@ namespace Emgu.CV
       private EigenObjectRecognizer()
       {
       }
+      #endregion
 
-
+      #region Constructors
       /// <summary>
       /// Create an object recognizer using the specific tranning data and parameters, it will always return the most similar object
       /// </summary>
@@ -141,7 +155,9 @@ namespace Emgu.CV
          _eigenDistanceThreshold = eigenDistanceThreshold;
       }
 
-      #region static methods
+      #endregion
+
+      #region Static methods
       /// <summary>
       /// Caculate the eigen images for the specific traning image
       /// </summary>
@@ -194,6 +210,7 @@ namespace Emgu.CV
       }
       #endregion
 
+      #region Public methods
       /// <summary>
       /// Given the eigen value, reconstruct the projected image
       /// </summary>
@@ -226,18 +243,18 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Given the <paramref name="image"/> to be examined, find in the database the most similar object, return the index and the eigen distance
+      /// Try to recognize the image and return its label
       /// </summary>
-      /// <param name="image">The image to be searched from the database</param>
-      /// <param name="index">The index of the most similar object</param>
-      /// <param name="eigenDistance">The eigen distance of the most similar object</param>
-      /// <param name="label">The label of the specific image</param>
-      public void FindMostSimilarObject(Image<Gray, Byte> image, out int index, out float eigenDistance, out String label)
+      /// <param name="image">The image to be recognized</param>
+      /// <returns>
+      /// Recognition result.
+      /// </returns>
+      public RecognitionResult Recognize(Image<Gray, Byte> image)
       {
          float[] dist = GetEigenDistances(image);
 
-         index = 0;
-         eigenDistance = dist[0];
+         int index = 0;
+         float eigenDistance = dist[0];
          for (int i = 1; i < dist.Length; i++)
          {
             if (dist[i] < eigenDistance)
@@ -246,25 +263,35 @@ namespace Emgu.CV
                eigenDistance = dist[i];
             }
          }
-         label = Labels[index];
+
+         RecognitionResult result = new RecognitionResult();
+         result.Distance = dist[index];
+         result.Index = index;
+         result.Label = Labels[index];
+
+         return result;
       }
+      #endregion
 
       /// <summary>
-      /// Try to recognize the image and return its label
+      /// The result returned the Recognized function is called. Contains the label, index and the eigen distance.
       /// </summary>
-      /// <param name="image">The image to be recognized</param>
-      /// <returns>
-      /// String.Empty, if not recognized;
-      /// Label of the corresponding image, otherwise
-      /// </returns>
-      public String Recognize(Image<Gray, Byte> image)
+      public struct RecognitionResult
       {
-         int index;
-         float eigenDistance;
-         String label;
-         FindMostSimilarObject(image, out index, out eigenDistance, out label);
+         /// <summary>
+         /// Label of the corresponding image if recognized, otherwise String.Empty will be returned
+         /// </summary>
+         public String Label;
 
-         return (_eigenDistanceThreshold <= 0 || eigenDistance < _eigenDistanceThreshold )  ? _labels[index] : String.Empty;
+         /// <summary>
+         /// The index of the most similar object
+         /// </summary>
+         public int Index; 
+
+         /// <summary>
+         /// The eigen distance of the match.
+         /// </summary>
+         public float Distance;
       }
    }
 }

@@ -390,7 +390,7 @@ namespace Emgu.CV
       public void GetObjectData(SerializationInfo info, StreamingContext context)
       {
          //info.AddValue("MatND", MatND);
-		 _matND.GetObjectData(info, context);
+         _matND.GetObjectData(info, context);
          info.AddValue("Ranges", Ranges);
       }
 

@@ -16,10 +16,16 @@ namespace Emgu.CV
    /// <summary> 
    /// Capture images from either camera or video file. 
    /// </summary>
+#if ANDROID
+#else
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+#endif
    public class Capture :
        UnmanagedObject,
+#if ANDROID
+#else
        IDuplexCapture,
+#endif
        ICapture
    {
       private Thread _captureThread = null;
@@ -475,6 +481,8 @@ namespace Emgu.CV
             }
         }*/
 
+#if ANDROID
+#else
       /// <summary>
       /// Query a frame duplexly over WCF
       /// </summary>
@@ -496,5 +504,6 @@ namespace Emgu.CV
          Image<Bgr, Byte> img = QuerySmallFrame();
          callback.ReceiveFrame(img);
       }
+#endif
    }
 }

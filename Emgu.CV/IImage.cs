@@ -12,6 +12,8 @@ namespace Emgu.CV
    /// </summary>
    public interface IImage : IDisposable, ICloneable
    {
+#if ANDROID
+#else
       /// <summary>
       /// Convert this image into Bitmap, when avaialbe, data is shared with this image.
       /// </summary>
@@ -20,6 +22,7 @@ namespace Emgu.CV
       {
          get;
       }
+#endif
 
       /// <summary>
       /// The size of this image

@@ -6,7 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+#if ANDROID
+#else
 using System.Drawing.Imaging;
+#endif
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -20,6 +23,8 @@ namespace Emgu.CV.Util
    /// </summary>
    public static class CvToolbox
    {
+#if ANDROID
+#else
       #region Color Pallette
       /// <summary>
       /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
@@ -69,6 +74,7 @@ namespace Emgu.CV.Util
          }
       }
       #endregion
+#endif
 
       /// <summary>
       /// Returns information about one of or all of the registered modules

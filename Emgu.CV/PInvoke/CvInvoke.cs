@@ -76,10 +76,26 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Get the module format string.
+      /// </summary>
+      /// <returns>On Windows, "{0}".dll will be returned; On Linux, "lib{0}.so" will be returned; Otherwise {0} is returned.</returns>
+      public static String GetModuleFormatString()
+      {
+         String formatString = "{0}";
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            formatString = "{0}.dll";
+         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
+            formatString = "lib{0}.so";
+         return formatString;
+      }
+
+      /// <summary>
       /// Static Constructor to setup opencv environment
       /// </summary>
       static CvInvoke()
       {
+#if ANDROID
+#else
          String[] modules = new String[] 
          {
             CvInvoke.OPENCV_CORE_LIBRARY,
@@ -87,18 +103,13 @@ namespace Emgu.CV
             CvInvoke.OPENCV_FFMPEG_LIBRARY
          };
 
-         String formatString = "{0}";
-         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
-            formatString = "{0}.dll";
-         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
-            formatString = "lib{0}.so";
-         
+         String formatString = GetModuleFormatString();
          for (int i = 0; i < modules.Length; ++i)
          {
             modules[i] = String.Format(formatString, modules[i]);
          }
-         LoadUnmanagedModules(null, CvInvoke.EXTERN_LIBRARY, CvInvoke.OPENCV_FFMPEG_LIBRARY);
-
+         LoadUnmanagedModules(null, modules);
+#endif
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
       }

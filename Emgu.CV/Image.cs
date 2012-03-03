@@ -6,7 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+#if ANDROID
+#else
 using System.Drawing.Imaging;
+#endif
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -88,14 +91,19 @@ namespace Emgu.CV
             //possibly Exception in CvInvoke's static constructor.
             throw e;
          }
+#if ANDROID
+#else
          catch 
          {
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
             LoadFileUsingBitmap(fi);
          }
+#endif
       }
 
+#if ANDROID
+#else
       /// <summary>
       /// Load the specific file using Bitmap
       /// </summary>
@@ -105,6 +113,7 @@ namespace Emgu.CV
          using (Bitmap bmp = new Bitmap(file.FullName))
             Bitmap = bmp;
       }
+#endif
 
       /// <summary>
       /// Load the specific file using OpenCV
@@ -184,6 +193,8 @@ namespace Emgu.CV
 
       }
 
+#if ANDROID
+#else
       /// <summary>
       /// Obtain the image from the specific Bitmap
       /// </summary>
@@ -192,6 +203,7 @@ namespace Emgu.CV
       {
          Bitmap = bmp;
       }
+#endif
 
       ///<summary>
       ///Create a blank Image of the specified width, height and color.
@@ -2582,6 +2594,8 @@ namespace Emgu.CV
       }
       #endregion
 
+#if ANDROID
+#else
       #region Conversion with Bitmap
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
@@ -2934,6 +2948,7 @@ namespace Emgu.CV
             return scaledImage.ToBitmap();
       }
       #endregion
+#endif
 
       #region Pyramids
       ///<summary>
@@ -4247,6 +4262,12 @@ namespace Emgu.CV
          {
             base.Save(fileName); //save the image using OpenCV
          }
+#if ANDROID
+         catch (Exception e)
+         {
+            throw e;
+         }
+#else
          catch
          {
             //Saving with OpenCV fails
@@ -4278,6 +4299,7 @@ namespace Emgu.CV
                }
             }
          }
+#endif
       }
 
       /// <summary>
