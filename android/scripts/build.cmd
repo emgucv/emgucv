@@ -1,6 +1,3 @@
-:: Script from Open CV project.
-:: Modified by Canming Huang, 03/03/2012 for building Emgu CV on android.
-
 @ECHO OFF
 
 :: enable command extensions
@@ -56,7 +53,7 @@ ECHO ANDROID_ABI=%ANDROID_ABI%
 ECHO.
 IF NOT %BUILD_OPENCV%==1 GOTO other-cmake
 :opencv-cmake
-("%CMAKE_EXE%" -G"MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=ON -DANDROID_ABI="%ANDROID_ABI%" -DCMAKE_TOOLCHAIN_FILE="%SOURCE_DIR%"\android.toolchain.cmake -DCMAKE_MAKE_PROGRAM="%MAKE_EXE%" %* "%SOURCE_DIR%\..") && GOTO cmakefin
+("%CMAKE_EXE%" -G"MinGW Makefiles" -DANDROID_ABI="%ANDROID_ABI%" -DCMAKE_TOOLCHAIN_FILE="%SOURCE_DIR%"\android.toolchain.cmake -DCMAKE_MAKE_PROGRAM="%MAKE_EXE%" %* "%SOURCE_DIR%\..") && GOTO cmakefin
 ECHO. & ECHO cmake failed &	GOTO end
 :other-cmake
 ("%CMAKE_EXE%" -G"MinGW Makefiles" -DANDROID_ABI="%ANDROID_ABI%" -DOpenCV_DIR="%OPENCV_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%OPENCV_BUILD_DIR%\..\android.toolchain.cmake" -DCMAKE_MAKE_PROGRAM="%MAKE_EXE%" %* "%SOURCE_DIR%") && GOTO cmakefin

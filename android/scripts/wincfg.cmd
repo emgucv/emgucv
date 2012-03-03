@@ -1,6 +1,3 @@
-:: Script from Open CV project.
-:: Modified by Canming Huang, 03/03/2012 for building Emgu CV on android.
-
 :: variables required for OpenCV build ::
 :: Note: all pathes should be specified without tailing slashes!
 SET ANDROID_NDK=C:\android-ndk-r7b
@@ -14,12 +11,12 @@ SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_27
 
 :: configuration options ::
 :::: general ARM-V7 settings
-::SET ANDROID_ABI=armeabi-v7a
-::SET BUILD_DIR=build
+SET ANDROID_ABI=armeabi-v7a
+SET BUILD_DIR=build
 
 :::: uncomment following lines to compile for old emulator or old device
-SET ANDROID_ABI=armeabi
-SET BUILD_DIR=build_armeabi
+::SET ANDROID_ABI=armeabi
+::SET BUILD_DIR=build_armeabi
 
 :::: uncomment following lines to compile for ARM-V7 with NEON support
 ::SET ANDROID_ABI=armeabi-v7a with NEON
