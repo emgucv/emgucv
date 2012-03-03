@@ -24,10 +24,18 @@ namespace Emgu.CV.GPU
          //Dummy code to make sure the static constructore of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
 
-         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         String[] modules = new String[] 
          {
-            CvInvoke.LoadUnmanagedModules(null, CvInvoke.EXTERN_GPU_LIBRARY);
+            CvInvoke.EXTERN_GPU_LIBRARY
+         };
+
+         String formatString = CvInvoke.GetModuleFormatString();
+         for (int i = 0; i < modules.Length; ++i)
+         {
+            modules[i] = String.Format(formatString, modules[i]);
          }
+
+         CvInvoke.LoadUnmanagedModules(null, modules);
       }
 
       #region device info
