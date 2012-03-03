@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2012 by EMGU. All rights reserved.
 # --------------------------------------------------------
 
-IF(EMGU_CV_EXAMPLE_BUILD)
+IF(EMGU_CV_EXAMPLE_BUILD AND (NOT ANDROID))
 
 SET(EMGU_CV_REFERENCE 
 -r:System.Xml.dll 

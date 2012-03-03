@@ -100,18 +100,20 @@ CHECK_INCLUDE_FILES(string.h HAVE_STRING_H)
 ###############################################################################
 # User-defined build settings
 
-SET(GEOTIFF_CSV_NAMES area.csv codes.csv datum.csv gcs.csv pcs.csv)
-FIND_PATH(GEOTIFF_CSV_DATA_DIR NAMES ${GEOTIFF_CSV_NAMES}
-    PATHS "${LIBGEOTIFF_DIR}/csv"
-    DOC "Default location of GeoTIFF CSV files"
-    NO_DEFAULT_PATH)
-
-IF(IS_DIRECTORY ${GEOTIFF_CSV_DATA_DIR} AND EXISTS "${GEOTIFF_CSV_DATA_DIR}/gcs.csv")
-    MESSAGE(STATUS "Found GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
-    ADD_DEFINITIONS(-DCSV_DATA_DIR="${GEOTIFF_CSV_DATA_DIR}")
-ELSE()
-    MESSAGE(FATAL_ERROR "Failed to find GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
-ENDIF()
+#SET(GEOTIFF_CSV_NAMES area.csv datum.csv gcs.csv pcs.csv)
+#FIND_PATH(GEOTIFF_CSV_DATA_DIR NAMES ${GEOTIFF_CSV_NAMES}
+#    PATHS "${LIBGEOTIFF_DIR}/csv"
+#    DOC "Default location of GeoTIFF CSV files"
+#    NO_DEFAULT_PATH)
+#MESSAGE("LIBGEOTIFF_DIR: ${LIBGEOTIFF_DIR}/csv")
+#MESSAGE("GEOTIFF_CSV_DATA_DIR: ${GEOTIFF_CSV_DATA_DIR}")
+	
+#IF(IS_DIRECTORY ${GEOTIFF_CSV_DATA_DIR} AND EXISTS "${GEOTIFF_CSV_DATA_DIR}/gcs.csv")
+#    MESSAGE(STATUS "Found GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
+#    ADD_DEFINITIONS(-DCSV_DATA_DIR="${GEOTIFF_CSV_DATA_DIR}")
+#ELSE()
+#    MESSAGE(FATAL_ERROR "Failed to find GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
+#ENDIF()
 
 # Has the user requested "incode" EPSG tables, overriding the default
 # use of EPSG tables in csv files?

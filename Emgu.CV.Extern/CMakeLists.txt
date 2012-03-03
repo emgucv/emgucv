@@ -194,22 +194,26 @@ IF(NOT ZLIB_FOUND)
 ENDIF()
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libgeotiff/cmake")
-FIND_PACKAGE(GeoTIFF)
-IF(GEOTIFF_FOUND)
-  MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
+IF (ANDROID)
+  MESSAGE(STATUS "Skippinng GEOTIFF for Android")
+ELSE()
+  SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libgeotiff/cmake")
+  FIND_PACKAGE(GeoTIFF)
+  IF(GEOTIFF_FOUND)
+    MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
+  ENDIF()
+  IF (NOT GEOTIFF_FOUND)
+    MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building from source")
+    # ----------------------------------------------------------------------------
+    #  Build libgeotiff 
+    # ----------------------------------------------------------------------------
+    SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
+    ADD_SUBDIRECTORY(libgeotiff)
+    SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff" ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
+    SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
+  ENDIF()
+  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 ENDIF()
-IF (NOT GEOTIFF_FOUND)
-  MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building from source")
-  # ----------------------------------------------------------------------------
-  #  Build libgeotiff 
-  # ----------------------------------------------------------------------------
-  SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
-  ADD_SUBDIRECTORY(libgeotiff)
-  SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff" ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
-  SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
-ENDIF()
-INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
@@ -224,6 +228,10 @@ IF(EMGU_ENABLE_SSE)
   ENDIF()
 ENDIF()
 
+IF(ANDROID)
+  ADD_DEFINITIONS(-DANDROID)
+ENDIF()
+
 #disable warnings
 IF(MSVC)
   ADD_DEFINITIONS(-wd4251 -D_CRT_SECURE_NO_WARNINGS)
@@ -234,15 +242,19 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
+  ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
 
 #IF(WITH_IPP)
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
+
+IF(NOT ANDROID)
+  target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
+ENDIF()
   
 IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
-#additional linkage required for tesseract built on windows
-  target_link_libraries(${the_target}  Ws2_32)
+  #additional linkage required for tesseract built on windows
+  target_link_libraries(${the_target} Ws2_32)
 ENDIF()
   
 INSTALL(TARGETS ${the_target} 
@@ -250,4 +262,6 @@ INSTALL(TARGETS ${the_target}
     LIBRARY DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
 
-add_subdirectory(gpu)
+IF (NOT ANDROID)
+  add_subdirectory(gpu)
+ENDIF()
