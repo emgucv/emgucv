@@ -4,19 +4,12 @@
 
 using System;
 using System.Diagnostics;
-using Emgu.CV.Structure;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-
-using System.IO;
-#if ANDROID
-#else
-using System.Drawing.Imaging;
-#endif
-using System.Drawing;
-using System.Xml;
-using System.Text;
-using System.Xml.Serialization;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -32,7 +25,7 @@ namespace Emgu.CV
       private string[] _labels;
       private double _eigenDistanceThreshold;
 
-      #region Class Interface
+      #region Properties
       /// <summary>
       /// Get the eigen vectors that form the eigen space
       /// </summary>
@@ -82,13 +75,13 @@ namespace Emgu.CV
          get { return _eigenValues; }
          set { _eigenValues = value; }
       }
-
-      private EigenObjectRecognizer()
-      {
-      }
       #endregion
 
       #region Constructors
+      private EigenObjectRecognizer()
+      {
+      }
+
       /// <summary>
       /// Create an object recognizer using the specific tranning data and parameters, it will always return the most similar object
       /// </summary>
@@ -247,7 +240,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The image to be recognized</param>
       /// <returns>
-      /// Recognition result.
+      /// Recognition result. Null if the eigen distance of the result is greater than the preset threshold.
       /// </returns>
       public RecognitionResult Recognize(Image<Gray, Byte> image)
       {
@@ -269,14 +262,14 @@ namespace Emgu.CV
          result.Index = index;
          result.Label = Labels[index];
 
-         return result;
+         return result.Distance <= _eigenDistanceThreshold ? result : null;
       }
       #endregion
 
       /// <summary>
       /// The result returned the Recognized function is called. Contains the label, index and the eigen distance.
       /// </summary>
-      public struct RecognitionResult
+      public class RecognitionResult
       {
          /// <summary>
          /// Label of the corresponding image if recognized, otherwise String.Empty will be returned
