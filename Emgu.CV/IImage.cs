@@ -5,6 +5,11 @@
 using System;
 using System.Drawing;
 
+#if ANDROID
+using Bitmap =  Android.Graphics.Bitmap;
+#else
+#endif
+
 namespace Emgu.CV
 {
    /// <summary>
@@ -12,8 +17,7 @@ namespace Emgu.CV
    /// </summary>
    public interface IImage : IDisposable, ICloneable
    {
-#if ANDROID
-#else
+
       /// <summary>
       /// Convert this image into Bitmap, when avaialbe, data is shared with this image.
       /// </summary>
@@ -22,7 +26,6 @@ namespace Emgu.CV
       {
          get;
       }
-#endif
 
       /// <summary>
       /// The size of this image

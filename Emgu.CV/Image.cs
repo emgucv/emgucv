@@ -6,10 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+
 #if ANDROID
+using Bitmap = Android.Graphics.Bitmap;
 #else
 using System.Drawing.Imaging;
 #endif
+
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -91,29 +94,28 @@ namespace Emgu.CV
             //possibly Exception in CvInvoke's static constructor.
             throw e;
          }
-#if ANDROID
-#else
          catch 
          {
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
             LoadFileUsingBitmap(fi);
          }
-#endif
       }
 
-#if ANDROID
-#else
       /// <summary>
       /// Load the specific file using Bitmap
       /// </summary>
       /// <param name="file"></param>
       private void LoadFileUsingBitmap(FileInfo file)
       {
+#if ANDROID
+         using (Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(file.FullName))
+#else
          using (Bitmap bmp = new Bitmap(file.FullName))
-            Bitmap = bmp;
-      }
 #endif
+            Bitmap = bmp;
+
+      }
 
       /// <summary>
       /// Load the specific file using OpenCV
@@ -193,8 +195,6 @@ namespace Emgu.CV
 
       }
 
-#if ANDROID
-#else
       /// <summary>
       /// Obtain the image from the specific Bitmap
       /// </summary>
@@ -203,7 +203,6 @@ namespace Emgu.CV
       {
          Bitmap = bmp;
       }
-#endif
 
       ///<summary>
       ///Create a blank Image of the specified width, height and color.
@@ -2594,9 +2593,8 @@ namespace Emgu.CV
       }
       #endregion
 
-#if ANDROID
-#else
-      #region Conversion with Bitmap
+
+      //#region Conversion with Bitmap
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -2609,6 +2607,9 @@ namespace Emgu.CV
       {
          get
          {
+#if ANDROID
+            return ToBitmap();
+#else
             IntPtr scan0;
             int step;
             Size size;
@@ -2667,9 +2668,28 @@ namespace Emgu.CV
             {  //default handler
                return ToBitmap();
             }
+#endif
          }
          set
          {
+#if ANDROID
+            if (value.GetConfig() == Bitmap.Config.Argb8888)
+            {
+               Size size = new Size(value.Width, value.Height);
+               int[] values = new int[size.Width * size.Height];
+               value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
+               GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+               using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
+               {
+                  ConvertFrom(bgra);
+               }
+               handle.Free();
+            }
+            else
+            {
+               throw new NotImplementedException(String.Format("Coping from BMP of {0} is not implemented", value.GetConfig()));
+            }
+#else
             #region reallocate memory if necessary
             if (Ptr == IntPtr.Zero || !Size.Equals(value.Size))
             {
@@ -2835,9 +2855,12 @@ namespace Emgu.CV
                   #endregion
                   break;
             }
+#endif
          }
       }
 
+#if ANDROID
+#else
       /// <summary>
       /// Utility function for Bitmap Set property
       /// </summary>
@@ -2854,6 +2877,7 @@ namespace Emgu.CV
 
          bmp.UnlockBits(data);
       }
+#endif
 
       /// <summary> 
       /// Convert this image into Bitmap, the pixel values are copied over to the Bitmap
@@ -2862,6 +2886,17 @@ namespace Emgu.CV
       /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
       public Bitmap ToBitmap()
       {
+#if ANDROID
+         System.Drawing.Size size = Size;
+         int[] values = new int[size.Width * size.Height];
+         GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+         using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
+         {
+            bgra.ConvertFrom(this);
+            handle.Free();
+            return Bitmap.CreateBitmap(values, size.Width, size.Height, Bitmap.Config.Argb8888);
+         }
+#else
          Type typeOfColor = typeof(TColor);
          Type typeofDepth = typeof(TDepth);
 
@@ -2936,6 +2971,7 @@ namespace Emgu.CV
             using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
                return temp.ToBitmap();
          }
+#endif
       }
 
       ///<summary> Create a Bitmap image of certain size</summary>
@@ -2947,8 +2983,8 @@ namespace Emgu.CV
          using (Image<TColor, TDepth> scaledImage = Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR))
             return scaledImage.ToBitmap();
       }
-      #endregion
-#endif
+     // #endregion
+
 
       #region Pyramids
       ///<summary>
@@ -4262,14 +4298,29 @@ namespace Emgu.CV
          {
             base.Save(fileName); //save the image using OpenCV
          }
-#if ANDROID
-         catch (Exception e)
-         {
-            throw e;
-         }
-#else
          catch
          {
+#if ANDROID
+            FileInfo fileInfo = new FileInfo(fileName);
+            using (Bitmap bmp = Bitmap)
+            using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))
+            {
+               String extension = fileInfo.Extension.ToLower();
+               Debug.Assert(extension.Substring(0, 1).Equals("."));
+               switch (extension)
+               {
+                  case ".jpg":
+                  case ".jpeg":
+                     bmp.Compress(Bitmap.CompressFormat.Jpeg, 90, fs);
+                     break;
+                  case ".png":
+                     bmp.Compress(Bitmap.CompressFormat.Png, 90, fs);
+                     break;
+                  default:
+                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
+               }
+            }
+#else
             //Saving with OpenCV fails
             //Try to save the image using .NET's Bitmap class
             using (Bitmap bmp = Bitmap)
@@ -4298,8 +4349,8 @@ namespace Emgu.CV
                      throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
                }
             }
-         }
 #endif
+         }
       }
 
       /// <summary>
