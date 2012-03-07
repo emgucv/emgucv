@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PlanarSubdivision</RootNamespace>
+    <AssemblyName>PlanarSubdivision</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="PlanarSubdivisionActivity.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libcvextern.so">
+      <Link>armeabi\libcvextern.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libnative_camera_r2.2.2.so">
+      <Link>armeabi\libnative_camera_r2.2.2.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libnative_camera_r2.3.3.so">
+      <Link>armeabi\libnative_camera_r2.3.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libnative_camera_r3.0.1.so">
+      <Link>armeabi\libnative_camera_r3.0.1.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libnative_camera_r4.0.0.so">
+      <Link>armeabi\libnative_camera_r4.0.0.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libnative_camera_r4.0.3.so">
+      <Link>armeabi\libnative_camera_r4.0.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_calib3d.so">
+      <Link>armeabi\libopencv_calib3d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_contrib.so">
+      <Link>armeabi\libopencv_contrib.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_core.so">
+      <Link>armeabi\libopencv_core.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_features2d.so">
+      <Link>armeabi\libopencv_features2d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_flann.so">
+      <Link>armeabi\libopencv_flann.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_highgui.so">
+      <Link>armeabi\libopencv_highgui.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_imgproc.so">
+      <Link>armeabi\libopencv_imgproc.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_legacy.so">
+      <Link>armeabi\libopencv_legacy.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_ml.so">
+      <Link>armeabi\libopencv_ml.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_objdetect.so">
+      <Link>armeabi\libopencv_objdetect.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_stitching.so">
+      <Link>armeabi\libopencv_stitching.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\bin\armeabi\libopencv_video.so">
+      <Link>armeabi\libopencv_video.so</Link>
+    </AndroidNativeLibrary>
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Layout\Main.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV\Emgu.CV.Android.csproj">
+      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
+      <Name>Emgu.CV.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.Util\Emgu.Util.Android.csproj">
+      <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>
+      <Name>Emgu.Util.Android</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+     Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
