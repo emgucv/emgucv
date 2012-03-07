@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.CV.ML.Android</RootNamespace>
+    <AssemblyName>Emgu.CV.ML.Android</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Boost.cs" />
+    <Compile Include="DTree.cs" />
+    <Compile Include="EM.cs" />
+    <Compile Include="EMParams.cs" />
+    <Compile Include="ERTrees.cs" />
+    <Compile Include="GBTrees.cs" />
+    <Compile Include="KNearest.cs" />
+    <Compile Include="ANN_MLP.cs" />
+    <Compile Include="NormalBayesClassifier.cs" />
+    <Compile Include="PInvoke\CvType\MCvBoostParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeNode.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeSplit.cs" />
+    <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvGBTreesParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvParamGrid.cs" />
+    <Compile Include="PInvoke\CvType\MCvRTParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />
+    <Compile Include="PInvoke\MlEnum.cs" />
+    <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />
+    <Compile Include="PInvoke\MlInvoke.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="RTrees.cs" />
+    <Compile Include="StatModel.cs" />
+    <Compile Include="SVM.cs" />
+    <Compile Include="SVMParams.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Emgu.CV.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.Android.csproj">
+      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
+      <Name>Emgu.CV.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Android.csproj">
+      <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>
+      <Name>Emgu.Util.Android</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

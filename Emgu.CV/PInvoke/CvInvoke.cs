@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -93,16 +94,38 @@ namespace Emgu.CV
       /// Static Constructor to setup opencv environment
       /// </summary>
       static CvInvoke()
-      {
-#if ANDROID
-#else
-         String[] modules = new String[] 
+      {    
+         List<string> modules = new List<String> 
          {
             CvInvoke.OPENCV_CORE_LIBRARY,
+            CvInvoke.OPENCV_IMGPROC_LIBRARY,
+            CvInvoke.OPENCV_VIDEO_LIBRARY,
+            CvInvoke.OPENCV_FLANN_LIBRARY,
+            CvInvoke.OPENCV_HIGHGUI_LIBRARY,
+            CvInvoke.OPENCV_FEATURES2D_LIBRARY,
+            CvInvoke.OPENCV_CALIB3D_LIBRARY,
+            CvInvoke.OPENCV_LEGACY_LIBRARY,
+            CvInvoke.OPENCV_ML_LIBRARY,
+            CvInvoke.OPENCV_OBJDETECT_LIBRARY,
+            CvInvoke.OPENCV_CONTRIB_LIBRARY,
             CvInvoke.EXTERN_LIBRARY,
             CvInvoke.OPENCV_FFMPEG_LIBRARY
          };
+         modules.RemoveAll(String.IsNullOrEmpty);
 
+#if ANDROID
+         
+         System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+         FileInfo file = new FileInfo(asm.Location);
+         DirectoryInfo directory = file.Directory;
+         
+         foreach (String module in modules)
+         {
+            //Emgu.Util.Toolbox.LoadLibrary(Path.Combine(directory.FullName, module));
+            //Java.Lang.JavaSystem.Load(Path.Combine(directory.FullName, module));
+            Java.Lang.JavaSystem.LoadLibrary(module);
+         }
+#else
          String formatString = GetModuleFormatString();
          for (int i = 0; i < modules.Length; ++i)
          {

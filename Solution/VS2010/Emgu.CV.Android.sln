@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\Android\HelloWorld\HelloWorld.csproj", "{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Android", "..\..\Emgu.CV\Emgu.CV.Android.csproj", "{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.Android", "..\..\Emgu.Util\Emgu.Util.Android.csproj", "{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\Android\PlanarSubdivision\PlanarSubdivision.csproj", "{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\Android\HelloWorld\HelloWorld.csproj", "{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Android", "..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj", "{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.Android", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj", "{17B67F34-D591-4BAD-ABB8-4D4199B20833}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,12 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +27,26 @@ Global
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
