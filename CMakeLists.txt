@@ -235,6 +235,7 @@ GET_TARGET_PROPERTY(OPENCV_CALIB3D_OUTPUT_NAME opencv_calib3d OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_VIDEO_OUTPUT_NAME opencv_video OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_FLANN_OUTPUT_NAME opencv_flann OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_GPU_OUTPUT_NAME opencv_gpu OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_CONTRIB_OUTPUT_NAME opencv_contrib OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_STITCHING_OUTPUT_NAME opencv_stitching OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_GPU_OUTPUT_NAME cvextern_gpu OUTPUT_NAME)
@@ -268,11 +269,20 @@ SET(OPENCV_LIBRARY_OUTPUT_NAMES
   ${OPENCV_GPU_OUTPUT_NAME}
   ${OPENCV_STITCHING_OUTPUT_NAME}
   ${CVEXTERN_OUTPUT_NAME}
-  ${CVEXTERN_GPU_OUTPUT_NAME})
+  ${CVEXTERN_GPU_OUTPUT_NAME}
+  ${OPENCV_CONTRIB_OUTPUT_NAME})
 
 IF(TARGET opencv_ffmpeg)
 ELSE()
-  SET(OPENCV_FFMPEG_OUTPUT_NAME "unknown")
+  SET(OPENCV_FFMPEG_OUTPUT_NAME "")
+ENDIF()
+IF(TARGET opencv_gpu)
+ELSE()
+  SET(OPENCV_GPU_OUTPUT_NAME "")
+ENDIF()
+IF(TARGET cvextern_gpu)
+ELSE()
+  SET(CVEXTERN_GPU_OUTPUT_NAME "")
 ENDIF()
 
 IF(TARGET_ARCH_64)
@@ -281,7 +291,13 @@ ELSE()
   SET(UNMANAGED_CODE_BITNESS "32")
 ENDIF()
 
-FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
+SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/)
+IF(ANDROID)
+  SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CVINVOKE_ENTRYPOINTS_FILENAME}ANDROID/)
+ENDIF()
+SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CVINVOKE_ENTRYPOINTS_FILENAME}CvInvokeEntryPoints.cs)
+
+FILE(WRITE ${CVINVOKE_ENTRYPOINTS_FILENAME}
   "//This file is automatically generate by CMAKE. DO NOT MODIFY.
 using System;
 
@@ -301,6 +317,10 @@ namespace Emgu.CV
       /// The file name of the highgui library
       /// </summary>
       public const string OPENCV_HIGHGUI_LIBRARY = \"${OPENCV_HIGHGUI_OUTPUT_NAME}\";
+	  /// <summary>
+      /// The file name of the flann library
+      /// </summary>
+      public const string OPENCV_FLANN_LIBRARY = \"${OPENCV_FLANN_OUTPUT_NAME}\";
       /// <summary>
       /// The file name of the feature2d library
       /// </summary>
@@ -337,7 +357,15 @@ namespace Emgu.CV
       /// The file name of the opencv_ffmpeg library
       /// </summary>
       public const string OPENCV_FFMPEG_LIBRARY = \"${OPENCV_FFMPEG_OUTPUT_NAME}\";
-
+	  /// <summary>
+      /// The file name of the ml library
+      /// </summary>
+      public const string OPENCV_ML_LIBRARY = \"${OPENCV_ML_OUTPUT_NAME}\";
+	  /// <summary>
+      /// The file name of the contrib library
+      /// </summary>
+      public const string OPENCV_CONTRIB_LIBRARY = \"${OPENCV_CONTRIB_OUTPUT_NAME}\";
+	  
       /// <summary>
       /// The bit-ness of the unmanaged code (either 32 or 64) 
       /// </summary>

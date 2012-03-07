@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2012 by EMGU. All rights reserved.
 # --------------------------------------------------------
 
-IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND EMGU_CV_WITH_TESSERACT)
+IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND EMGU_CV_WITH_TESSERACT AND (NOT ANDROID))
 
 PROJECT(Emgu.CV.OCR)
 
