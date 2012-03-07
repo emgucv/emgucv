@@ -71,8 +71,7 @@ namespace Emgu.CV
          foreach (String module in unmanagedModules)
          {
             String fullPath = Path.Combine(loadDirectory, module);
-            if (File.Exists(fullPath))
-               success &= !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
+            success &= (File.Exists(fullPath) && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath)));
          }
          Environment.CurrentDirectory = oldDir;
 

@@ -438,7 +438,7 @@ namespace Emgu.Util
          }
          else
          {
-            return Dlopen(dllname, 0);
+            return Dlopen(dllname, 2); // 2 == RTLD_NOW
          }
       }
 
