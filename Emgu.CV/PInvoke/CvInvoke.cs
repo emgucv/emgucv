@@ -51,13 +51,16 @@ namespace Emgu.CV
             FileInfo file = new FileInfo(asm.Location);
             DirectoryInfo directory = file.Directory;
             loadDirectory = directory.FullName;
-            if (IntPtr.Size == 8)
-            {  //64bit process
-               loadDirectory = Path.Combine(loadDirectory, "x64");
-            }
-            else
+            if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             {
-               loadDirectory = Path.Combine(loadDirectory, "x86");
+               if (IntPtr.Size == 8)
+               {  //64bit process
+                  loadDirectory = Path.Combine(loadDirectory, "x64");
+               }
+               else
+               {
+                  loadDirectory = Path.Combine(loadDirectory, "x86");
+               }
             }
          }
 
@@ -114,7 +117,6 @@ namespace Emgu.CV
          modules.RemoveAll(String.IsNullOrEmpty);
 
 #if ANDROID
-         
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
          DirectoryInfo directory = file.Directory;
@@ -127,11 +129,10 @@ namespace Emgu.CV
          }
 #else
          String formatString = GetModuleFormatString();
-         for (int i = 0; i < modules.Length; ++i)
-         {
+         for (int i = 0; i < modules.Count; ++i)
             modules[i] = String.Format(formatString, modules[i]);
-         }
-         LoadUnmanagedModules(null, modules);
+
+         LoadUnmanagedModules(null, modules.ToArray());
 #endif
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
