@@ -111,7 +111,9 @@ namespace Emgu.CV
             CvInvoke.OPENCV_OBJDETECT_LIBRARY,
             CvInvoke.OPENCV_CONTRIB_LIBRARY,
             CvInvoke.EXTERN_LIBRARY,
-            CvInvoke.OPENCV_FFMPEG_LIBRARY
+            CvInvoke.OPENCV_FFMPEG_LIBRARY, 
+            CvInvoke.OPENCV_GPU_LIBRARY, 
+            CvInvoke.EXTERN_GPU_LIBRARY
          };
          modules.RemoveAll(String.IsNullOrEmpty);
 
