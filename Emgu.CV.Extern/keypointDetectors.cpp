@@ -392,13 +392,13 @@ void CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* 
    cv::Mat imageMat = cv::cvarrToMat(image);
    cv::Mat homographyMat = cv::cvarrToMat(homography);
    (*detector)(imageMat, homographyMat,  cornerVec);
-   if (cornerVec.size() > 0)
+   if (!cornerVec.empty())
       cvSeqPushMulti(corners, &cornerVec[0], cornerVec.size());
 }
 void CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
 {
    std::vector<cv::KeyPoint> modelPtVec = detector->getModelPoints();
-   if (modelPtVec.size() > 0)
+   if (!modelPtVec.empty())
       cvSeqPushMulti(modelPoints, &modelPtVec[0], modelPtVec.size());
 }
 
@@ -553,8 +553,8 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
 
 int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
 {
-   CV_Assert(modelKeyPoints->size() > 0);
-   CV_Assert(observedKeyPoints->size() > 0);
+   CV_Assert(!modelKeyPoints->empty());
+   CV_Assert(!observedKeyPoints->empty());
    cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
    cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
    std::vector<float> logScale;

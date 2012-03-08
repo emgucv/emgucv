@@ -60,6 +60,6 @@ void gpuHOGDescriptorDetectMultiScale(
    std::vector<cv::Rect> rects;
 
    descriptor->detectMultiScale(*img, rects, hitThreshold, winStride, padding, scale, groupThreshold);
-   if (rects.size() > 0)
+   if (!rects.empty())
       cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }

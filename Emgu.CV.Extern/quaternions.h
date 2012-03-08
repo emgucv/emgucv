@@ -131,10 +131,10 @@ typedef struct Quaternions
 #endif
    }
 
-   Quaternions operator* (const Quaternions other)
+   Quaternions operator* (const Quaternions& other)
    {
       Quaternions result;
-      multiply(&other, & result);
+      multiply(&other, &result);
       return result;
    }
 

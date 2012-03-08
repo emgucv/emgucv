@@ -28,14 +28,11 @@ void quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointS
    CV_Assert((p.rows == 3 && p.cols == 1) || p.cols ==3);
    CV_Assert(pDst.rows == p.rows && pDst.cols == p.cols);
 
-   double *v;
-
    cv::MatIterator_<double> pIter = p.begin<double>();
    cv::MatIterator_<double> pDstIter = pDst.begin<double>();
 
    if ((p.rows == 3 && p.cols == 1))
    {  
-      v = (double*)pIter.ptr;
       quaternionsRotatePoint( quaternions, (CvPoint3D64f*) pIter.ptr, (CvPoint3D64f*) pDstIter.ptr);
    } else 
    {

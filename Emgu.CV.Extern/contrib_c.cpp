@@ -19,7 +19,7 @@ void CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float 
    std::vector<cv::Point3f> points; 
    tree->getPointsWithinSphere(*center, radius, points);
    cvClearSeq(pointSeq);
-   if (points.size() > 0)
+   if (!points.empty())
       cvSeqPushMulti(pointSeq, &points.front(), (int)points.size());
 }
 void CvOctreeRelease(cv::Octree* tree) { delete tree; } 
