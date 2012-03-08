@@ -260,7 +260,13 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 
 IF(NOT ANDROID)
   target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
+ELSE()
+  IF(EMGU_CV_WITH_TESSERACT)
+    #NOT SURE WHY THE FOLLOWING IS NEEDED, BUT SEEMS TO MAKE THE PROBLEM GOES AWAY
+    target_link_libraries(${the_target} ${TESSERACT_LIBRARY} tesseract_ccstruct tesseract_dict tesseract_classify tesseract_ccutil)
+  ENDIF()
 ENDIF()
+
   
 IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
   #additional linkage required for tesseract built on windows
