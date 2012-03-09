@@ -187,7 +187,7 @@ endif()
 FIND_PACKAGE(TIFF)
 IF(NOT TIFF_FOUND)
   ADD_DEPENDENCIES(${the_target} libtiff)
-  SET(TIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff")
+  SET(TIFF_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/../opencv/3rdparty/libtiff" "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff")
   SET(TIFF_LIBRARY "libtiff")
 ENDIF()
 INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
@@ -219,7 +219,8 @@ ELSE()
     # ----------------------------------------------------------------------------
     SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
     ADD_SUBDIRECTORY(libgeotiff)
-    SET(GEOTIFF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../opencv/3rdparty/libtiff" ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
+	#MESSAGE(STATUS "CURRENT Binary DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+    SET(GEOTIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIR} ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
     SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
   ENDIF()
   INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
@@ -258,6 +259,7 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
 
+
 IF(NOT ANDROID)
   target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
 ELSE()
@@ -273,11 +275,13 @@ IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
   target_link_libraries(${the_target} Ws2_32)
 ENDIF()
   
-INSTALL(TARGETS ${the_target} 
+IF(ANDROID)
+  INSTALL(TARGETS ${the_target} 
+    LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+ELSE()
+  INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     LIBRARY DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
-
-IF (NOT ANDROID)
   add_subdirectory(gpu)
 ENDIF()
