@@ -79,19 +79,40 @@ namespace Emgu.CV.OCR
       }
 
       /// <summary>
+      /// Create a default tesseract engine. Needed to Call Init function to load language files in a later stage.
+      /// </summary>
+      public Tesseract()
+      {
+         _ptr = TessBaseAPICreate();
+      }
+
+      /// <summary>
       /// Create an tesseract OCR engine.
       /// </summary>
       /// <param name="dataPath">The path where the language file is located</param>
       /// <param name="language">The 3 letter language code </param>
       /// <param name="mode">OCR engine mode</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode)
+         : this()
       {
-         if (!IsEngineModeSupported(mode))
-            throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));
-         _ptr = TessBaseAPICreate();
          Init(dataPath, language, mode);
       }
 
+      /// <summary>
+      /// Create an tesseract OCR engine.
+      /// </summary>
+      /// <param name="dataPath">The path where the language file is located</param>
+      /// <param name="language">The 3 letter language code </param>
+      /// <param name="mode">OCR engine mode</param>
+      /// <param name="whiteList">This can be used to specify a white list for OCR. e.g. specify "1234567890" to recognize digits only. Note that the white list currently seems to only work with OcrEngineMode.OEM_TESSERACT_ONLY</param>
+      public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
+         : this()
+      {
+         SetVariable("tessedit_char_whitelist", whiteList);
+         Init(dataPath, language, mode);
+      }
+
+      /*
       /// <summary>
       /// Check of the specific Ocr Engine is supported for the current tesseract release
       /// </summary>
@@ -106,7 +127,7 @@ namespace Emgu.CV.OCR
             return false;
          }
          return true;
-      }
+      }*/
 
       /// <summary>
       /// Initialize the OCR engine using the specific dataPath and language name.
@@ -114,8 +135,10 @@ namespace Emgu.CV.OCR
       /// <param name="dataPath">The path where the language file is located</param>
       /// <param name="language">The 3 letter language code </param>
       /// <param name="mode">OCR engine mode</param>
-      private void Init(String dataPath, String language, OcrEngineMode mode)
+      public void Init(String dataPath, String language, OcrEngineMode mode)
       {
+         /*if (!IsEngineModeSupported(mode))
+            throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
          int initResult= TessBaseAPIInit(_ptr, dataPath, language, mode);
          if (initResult != 0) throw new ArgumentException(String.Format("Unable to create ocr model using Path {0} and language {1}.", dataPath, language));
       }
