@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Android", "..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.Android", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj", "{17B67F34-D591-4BAD-ABB8-4D4199B20833}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAndroidCamera", "..\..\Emgu.CV.Example\Android\MonoAndroidCamera\MonoAndroidCamera.csproj", "{484C276A-6FD1-44A1-99D8-8CDEB564ED27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,12 @@ Global
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
