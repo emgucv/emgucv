@@ -55,6 +55,45 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libcvextern.so">
+      <Link>lib\armeabi\libcvextern.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_calib3d.so">
+      <Link>lib\armeabi\libopencv_calib3d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_contrib.so">
+      <Link>lib\armeabi\libopencv_contrib.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_core.so">
+      <Link>lib\armeabi\libopencv_core.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_features2d.so">
+      <Link>lib\armeabi\libopencv_features2d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_flann.so">
+      <Link>lib\armeabi\libopencv_flann.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_highgui.so">
+      <Link>lib\armeabi\libopencv_highgui.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_imgproc.so">
+      <Link>lib\armeabi\libopencv_imgproc.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_legacy.so">
+      <Link>lib\armeabi\libopencv_legacy.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_ml.so">
+      <Link>lib\armeabi\libopencv_ml.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_objdetect.so">
+      <Link>lib\armeabi\libopencv_objdetect.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_stitching.so">
+      <Link>lib\armeabi\libopencv_stitching.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_video.so">
+      <Link>lib\armeabi\libopencv_video.so</Link>
+    </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -77,6 +116,7 @@
       <Name>Emgu.Util.Android</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

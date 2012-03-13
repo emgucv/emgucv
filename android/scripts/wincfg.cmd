@@ -12,7 +12,7 @@ SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_27
 :: configuration options ::
 :::: general ARM-V7 settings
 :: SET ANDROID_ABI=armeabi-v7a
-:: SET BUILD_DIR=build
+:: SET BUILD_DIR=build_armeabi-v7a
 
 :::: uncomment following lines to compile for old emulator or old device
 SET ANDROID_ABI=armeabi
