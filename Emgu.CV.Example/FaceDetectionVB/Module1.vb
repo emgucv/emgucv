@@ -31,7 +31,8 @@ Module Module1
                          1.1, _
                          10, _
                          CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, _
-                         New Size(20, 20))
+                         New Size(20, 20), _
+                         Size.Empty)
          img.Draw(face.rect, New Bgr(Color.White), 1)
       Next
 

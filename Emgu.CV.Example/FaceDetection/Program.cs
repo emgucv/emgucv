@@ -92,7 +92,8 @@ namespace FaceDetection
                      1.1,
                      10,
                      Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                     new Size(20, 20));
+                     new Size(20, 20),
+                     Size.Empty);
 
                   foreach (MCvAvgComp f in facesDetected)
                   {
@@ -106,7 +107,8 @@ namespace FaceDetection
                         1.1,
                         10,
                         Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                        new Size(20, 20));
+                        new Size(20, 20),
+                        Size.Empty);
                      gray.ROI = Rectangle.Empty;
 
                      foreach (MCvAvgComp e in eyesDetected)

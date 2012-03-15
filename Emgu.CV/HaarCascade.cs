@@ -38,7 +38,7 @@ namespace Emgu.CV
       /// <returns>The objects detected</returns>
       public MCvAvgComp[] Detect(Image<Gray, Byte> image)
       {
-         return Detect(image, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(0, 0));
+         return Detect(image, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, Size.Empty, Size.Empty);
       }
 
       /// <summary>
@@ -54,9 +54,10 @@ namespace Emgu.CV
       /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
       /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
       /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
-      /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
+      /// <param name="minSize">Minimum window size. Use Size.Empty for default, where it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
+      /// <param name="maxSize">Maxumum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public MCvAvgComp[] Detect(Image<Gray, Byte> image, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize)
+      public MCvAvgComp[] Detect(Image<Gray, Byte> image, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize, Size maxSize)
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -67,7 +68,8 @@ namespace Emgu.CV
                 scaleFactor,
                 minNeighbors,
                 flag,
-                minSize);
+                minSize, 
+                maxSize);
 
             if (objects == IntPtr.Zero)
                return new MCvAvgComp[0];

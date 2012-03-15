@@ -27,6 +27,7 @@ namespace Emgu.CV
       /// <param name="minNeighbors">Use 3 as default. Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
       /// <param name="flags">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing</param>
       /// <param name="minSize">Use Size.Empty as default. Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
+      /// <param name="maxSize">Use Size.Empty to ignor the parameter. </param>
       /// <returns>Rectangular regions in the given image that are likely to contain objects the cascade has been trained for</returns>
       [DllImport(OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvHaarDetectObjects(
@@ -36,7 +37,8 @@ namespace Emgu.CV
          double scaleFactor,
          int minNeighbors,
          CvEnum.HAAR_DETECTION_TYPE flags,
-         Size minSize);
+         Size minSize, 
+         Size maxSize);
 
       /// <summary>
       /// Load trained detector from a file

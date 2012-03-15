@@ -909,7 +909,8 @@ namespace Emgu.CV
                        scaleFactor,
                        minNeighbors,
                        flag,
-                       minSize);
+                       minSize, 
+                       Size.Empty);
 
                    if (objects == IntPtr.Zero)
                       return new MCvAvgComp[0];
