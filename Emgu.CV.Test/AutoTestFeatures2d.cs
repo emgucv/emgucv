@@ -31,7 +31,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSIFT()
       {
-         SIFTDetector detector = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
+         SIFTDetector detector = new SIFTDetector();
          Assert.IsTrue( TestFeature2DTracker(detector, detector), "Unable to find homography matrix" );
       }
 
@@ -56,7 +56,7 @@ namespace Emgu.CV.Test
          StarDetector keyPointDetector = new StarDetector();
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
-         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
+         SIFTDetector descriptorGenerator = new SIFTDetector();
          
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
@@ -79,7 +79,7 @@ namespace Emgu.CV.Test
       public void TestMSER()
       {
          MSERDetector keyPointDetector = new MSERDetector();
-         SIFTDetector descriptorGenerator = new SIFTDetector(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true);
+         SIFTDetector descriptorGenerator = new SIFTDetector();
 
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
@@ -164,7 +164,7 @@ namespace Emgu.CV.Test
             stopwatch.Reset(); stopwatch.Start();
 
             int k = 2;
-            DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2F32;
+            DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
             using(Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
             using(Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
             using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))

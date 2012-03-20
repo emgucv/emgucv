@@ -665,12 +665,8 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(model1.Background);
       }
 
-
-      [Test]
-      public void TestPlanarSubdivision1()
+      public void TestPlanarSubdivisionHelper(int pointCount)
       {
-         int pointCount = 10000;
-
          #region generate random points
          PointF[] points = new PointF[pointCount];
          Random r = new Random((int)DateTime.Now.Ticks);
@@ -686,7 +682,7 @@ namespace Emgu.CV.Test
          division = new PlanarSubdivision(points, true);
          Triangle2DF[] triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length));
+         Trace.WriteLine(String.Format("delaunay triangulation: {2} points, {0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length, points));
          watch.Reset();
 
          Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
@@ -695,7 +691,7 @@ namespace Emgu.CV.Test
          division = new PlanarSubdivision(points);
          VoronoiFacet[] facets = division.GetVoronoiFacets();
          watch.Stop();
-         Trace.WriteLine(String.Format("{0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length));
+         Trace.WriteLine(String.Format("Voronoi facets: {2} points, {0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length, points));
 
          //foreach (Triangle2DF t in triangles)
          //{
@@ -705,6 +701,16 @@ namespace Emgu.CV.Test
          //int overlapCount = triangles.FindAll(delegate(Triangle2D t2) { return Util.IsConvexPolygonInConvexPolygon(t2, t);}).Count;
          //Assert.AreEqual(1, overlapCount, "Triangle overlaps");
          //}
+      }
+
+      [Test]
+      public void TestPlanarSubdivision1()
+      {
+         //TestPlanarSubdivisionHelper(10000);
+         TestPlanarSubdivisionHelper(27);
+         TestPlanarSubdivisionHelper(83);
+         TestPlanarSubdivisionHelper(139);
+         TestPlanarSubdivisionHelper(363);
       }
 
       [Test]

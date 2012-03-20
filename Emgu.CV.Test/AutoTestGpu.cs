@@ -528,6 +528,45 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuPyr()
+      {
+         Image<Gray, Byte> img = new Image<Gray, byte>(640, 480);
+         img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+         Image<Gray, Byte> down = img.PyrDown();
+         Image<Gray, Byte> up = down.PyrUp();
+
+         GpuImage<Gray, Byte> gImg = new GpuImage<Gray, byte>(img);
+         GpuImage<Gray, Byte> gDown = new GpuImage<Gray, byte>(gImg.Size.Width >> 1, gImg.Size.Height >> 1);
+         GpuImage<Gray, Byte> gUp = new GpuImage<Gray, byte>(img.Size);
+         GpuInvoke.PyrDown(gImg, gDown, IntPtr.Zero);
+         GpuInvoke.PyrUp(gDown, gUp, IntPtr.Zero);
+
+         CvInvoke.cvAbsDiff(down, gDown.ToImage(), down);
+         CvInvoke.cvAbsDiff(up, gUp.ToImage(), up);
+         double[] minVals, maxVals;
+         Point[] minLocs, maxLocs;
+         down.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
+         double maxVal = 0.0;
+         for (int i = 0; i < maxVals.Length; i++)
+         {
+            if (maxVals[i] > maxVal)
+               maxVal = maxVals[i];
+         }
+         Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
+         Assert.LessOrEqual(maxVal, 1.0);
+
+         up.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
+         maxVal = 0.0;
+         for (int i = 0; i < maxVals.Length; i++)
+         {
+            if (maxVals[i] > maxVal)
+               maxVal = maxVals[i];
+         }
+         Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
+         Assert.LessOrEqual(maxVal, 1.0);
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)
