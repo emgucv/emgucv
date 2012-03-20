@@ -1,0 +1,13 @@
+Index: cvblob.h
+===================================================================
+--- cvblob.h	(revision 395)
++++ cvblob.h	(working copy)
+@@ -337,8 +337,6 @@
+   /// \see cvLabel
+   CvLabel cvLargestBlob(const CvBlobs &blobs);
+ 
+-  cvLabel ((*cvGreaterBlob)(const CvBlobs &blobs)) = cvLargestBlob;
+-
+   /// \fn void cvFilterByArea(CvBlobs &blobs, unsigned int minArea, unsigned int maxArea)
+   /// \brief Filter blobs by area.
+   /// Those blobs whose areas are not in range will be erased from the input list of blobs.
