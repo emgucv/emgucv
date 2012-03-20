@@ -649,7 +649,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="bTreeParam">Pointer to the boost tree parameters to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvBoostParamsRelease(IntPtr bTreeParam);
+      public static extern void CvBoostParamsRelease(ref IntPtr bTreeParam);
 
       /// <summary>
       /// Train the boost tree using the specific traning data

@@ -20,7 +20,7 @@ namespace Emgu.CV.ML.Structure
       {
          IntPtr ptr = MlInvoke.CvBoostParamsCreate();
          MCvBoostParams p = (MCvBoostParams)Marshal.PtrToStructure(ptr, typeof(MCvBoostParams));
-         MlInvoke.CvBoostParamsRelease(ptr);
+         MlInvoke.CvBoostParamsRelease(ref ptr);
          return p;
       }
 
