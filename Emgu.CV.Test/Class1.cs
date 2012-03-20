@@ -782,6 +782,59 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
       }
 
+      
+      public void TestPyrLKGPU()
+      {
+         if (!GpuInvoke.HasCuda)
+            return;
+
+         const int MAX_CORNERS = 500;
+         Capture c = new Capture();
+         ImageViewer viewer = new ImageViewer();
+         GpuImage<Gray, Byte> oldImage = null;
+         GpuImage<Gray, Byte> currentImage = null;
+         using (GpuGoodFeaturesToTrackDetector detector = new GpuGoodFeaturesToTrackDetector(MAX_CORNERS, 0.05, 3.0))
+         using (GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, 0.5, false, 1e-4f))
+         {
+            Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
+            {
+               if (oldImage == null)
+               {
+                  oldImage = new GpuImage<Gray,byte>( c.QueryGrayFrame() );
+               }
+
+               currentImage = new GpuImage<Gray,byte>( c.QueryGrayFrame() );
+               using (GpuImage<Gray, float> u = new GpuImage<Gray, float>())
+               using (GpuImage<Gray, float> v = new GpuImage<Gray, float>())
+               using (GpuMat<float> vertex = new GpuMat<float>())
+               using (GpuMat<float> colors = new GpuMat<float>())
+               {
+                  flow.Dense(oldImage, currentImage, u, v);
+
+                  GpuInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+                  //GpuMat<float> detector.Detect(oldImage, null);
+                  /*
+                  //PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
+                  PointF[] shiftedFeatures;
+                  Byte[] status;
+                  float[] trackErrors;
+                  OpticalFlow.PyrLK(oldImage, currentImage, features, new Size(9, 9), 3, new MCvTermCriteria(20, 0.05),
+                     out shiftedFeatures, out status, out trackErrors);
+                  */
+
+                  GpuImage<Gray, Byte> displayImage = currentImage.Clone();
+                  /*
+                  for (int i = 0; i < features.Length; i++)
+                     displayImage.Draw(new LineSegment2DF(features[i], shiftedFeatures[i]), new Gray(), 2);
+                  */
+                  oldImage = currentImage;
+                  viewer.Image = displayImage;
+               }
+            });
+            viewer.ShowDialog();
+         }
+      }
+
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 400);
@@ -878,6 +931,54 @@ namespace Emgu.CV.Test
             };
             v.ShowDialog();
 
+         }
+      }
+
+
+      public void TestLatenSVM()
+      {
+         using (LatentSvmDetector detector = new LatentSvmDetector("car.xml"))
+         {
+            String[] files = new String[] { 
+               "license-plate.jpg"};
+
+            for (int idx = 0; idx < files.Length; idx++)
+            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(files[idx]))
+            {
+               MCvObjectDetection[] results = detector.Detect(img, 0.5f);
+               if (results.Length >= 0)
+               {
+                  double maxScore = results[0].score;
+                  Rectangle result = results[0].Rect;
+
+                  for (int i = 1; i < results.Length; ++i)
+                  {
+                     if (results[i].score > maxScore)
+                     {
+                        maxScore = results[i].score;
+                        result = results[i].Rect;
+                     }
+                  }
+
+                  result.Inflate((int)(result.Width * 0.2), (int)(result.Height * 0.2));
+                  using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
+                  using (Image<Bgr, Byte> canny = img.Canny(new Bgr(120, 120, 120), new Bgr(80, 80, 80)))
+                  using (Image<Gray, Byte> cannyGray = canny.Convert<Gray, Byte>())
+                  {
+                     MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
+                     CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
+                     CvInvoke.cvSet(cannyGray, new MCvScalar(), mask);
+                     cannyGray.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
+
+                     CvInvoke.cvNot(cannyGray, cannyGray);
+
+                     Image<Bgr, byte> displayImg = img.ConcateHorizontal(cannyGray.Convert<Bgr, Byte>()/*mask.Convert<Bgr, Byte>()*/);
+
+                     //displayImg.Save("out_" + files[idx]);
+                     //ImageViewer.Show(displayImg);
+                  }
+               }
+            }
          }
       }
 
