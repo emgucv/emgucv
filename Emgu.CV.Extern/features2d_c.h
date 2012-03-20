@@ -100,13 +100,9 @@ CVAPI(void) GridAdaptedFeatureDetectorDetect(
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 
 //SURFDetector
-CVAPI(cv::SurfFeatureDetector*) CvSURFGetFeatureDetector(CvSURFParams* detector);
+CVAPI(cv::SURF*) CvSURFGetDetector(CvSURFParams* detector);
 
-CVAPI(cv::SurfDescriptorExtractor*) CvSURFGetDescriptorExtractor(CvSURFParams* detector);
-
-CVAPI(void) CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector);
-
-CVAPI(void) CvSURFDescriptorExtractorRelease(cv::SurfDescriptorExtractor** extractor);
+CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 
 /*
 CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
