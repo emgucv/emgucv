@@ -37,7 +37,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="numberOfFeatures">The number of desired features. Use 500 for default.</param>
       /// <param name="scaleFactor">Coefficient by which we divide the dimensions from one scale pyramid level to the next. Use 1.2f for default value</param>
-      /// <param name="nLevels">The number of levels in the scale pyramid. Use 3 for default value.</param>
+      /// <param name="nLevels">The number of levels in the scale pyramid. Use 8 for default value.</param>
       /// <param name="firstLevel">The level at which the image is given. If 1, that means we will also look at the image.<paramref name="scaleFactor"/> times bigger</param>
       /// <param name="edgeThreshold">How far from the boundary the points should be. Use 0 for default.</param>
       /// <param name="WTK_A">How many random points are used to produce each cell of the descriptor (2, 3, 4 ...). Use 2 for default.</param>
@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="numberOfFeatures">The number of desired features. Use 500 for default.</param>
       public ORBDetector(int numberOfFeatures)
-         : this(numberOfFeatures, 1.2f, 3, 31, 0, 2, ScoreType.Harris, 31)
+         : this(numberOfFeatures, 1.2f, 8, 31, 0, 2, ScoreType.Harris, 31)
       {
       }
 
