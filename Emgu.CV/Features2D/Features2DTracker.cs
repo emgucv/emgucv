@@ -36,7 +36,7 @@ namespace Emgu.CV.Features2D
          VectorOfKeyPoint observedKeyPoints, Matrix<TDescriptor> observedDescriptors, double uniquenessThreshold)
       {
          int k = 2;
-         DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2F32;
+         DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
          using (Matrix<int> indices = new Matrix<int>(observedKeyPoints.Size, k))
          using (Matrix<float> dist = new Matrix<float>(indices.Size))
          using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
@@ -421,7 +421,7 @@ namespace Emgu.CV.Features2D
 
          try
          {
-            DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2F32;
+            DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
             using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
             using (Matrix<float> dists = new Matrix<float>(observedDescriptors.Rows, k))
             using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))

@@ -59,7 +59,7 @@ void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* ima
    //CV_Assert(sumAbs != 0.0f);
    
 }
-int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return descriptor->getDescriptorSize(); }
+int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return static_cast<int>(descriptor->getDescriptorSize()); }
 
 //StarDetector
 cv::StarFeatureDetector* CvStarGetFeatureDetector(cv::StarDetector* detector)
@@ -75,39 +75,19 @@ void CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector)
 
 //SIFTDetector
 cv::SIFT* CvSIFTDetectorCreate(
-   int nOctaves, int nOctaveLayers, int firstOctave, int angleMode,//common parameters
-   double threshold, double edgeThreshold, //detector parameters
-   double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
+   int nFeatures, int nOctaveLayers, 
+   double contrastThreshold, double edgeThreshold, 
+   double sigma)
 {
+   /*
    cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave, angleMode);
 
    cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold);
 
    cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize, recalculateAngles);
 
-   return new cv::SIFT(p, detectorP, descriptorP);
-}
-
-cv::SiftFeatureDetector* CvSiftGetFeatureDetector(cv::SIFT* detector)
-{
-   return new cv::SiftFeatureDetector(detector->getDetectorParams(), detector->getCommonParams());
-}
-
-cv::SiftDescriptorExtractor* CvSiftGetDescriptorExtractor(cv::SIFT* detector)
-{
-   return new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
-}
-
-void CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-void CvSiftDescriptorExtractorRelease(cv::SiftDescriptorExtractor** extractor)
-{
-   delete *extractor;
-   *extractor=0;
+   return new cv::SIFT(p, detectorP, descriptorP);*/
+   return new cv::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
 }
 
 void CvSIFTDetectorRelease(cv::SIFT** detector)
@@ -148,47 +128,17 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
       (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
    else //opponent color
    {
-      cv::Ptr<cv::DescriptorExtractor> siftExtractor = new cv::SiftDescriptorExtractor(detector->getDescriptorParams(), detector->getCommonParams());
+      cv::Ptr<cv::DescriptorExtractor> siftExtractor(detector);
+      siftExtractor.addref(); //add reference such that the detector will not be released when the smart pointer went out of scope.
       cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
       colorDetector.compute(mat, *keypoints, descriptorsMat);
    }
 }
 
 //ORB
-cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
+cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize)
 {
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
-   return new cv::ORB(numberOfFeatures, orbParams);
-}
-
-cv::OrbFeatureDetector* CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
-{
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
-   return new cv::OrbFeatureDetector(numberOfFeatures, orbParams);
-}
-
-cv::OrbDescriptorExtractor* CvOrbGetDescriptorExtractor(float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
-{
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
-   return new cv::OrbDescriptorExtractor(orbParams);
-}
-
-void CvOrbFeatureDetectorRelease(cv::OrbFeatureDetector** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-void CvOrbDescriptorExtractorRelease(cv::OrbDescriptorExtractor** extractor)
-{
-   delete *extractor;
-   *extractor = 0;
-}
-
-void CvOrbDetectorRelease(cv::ORB** detector)
-{ 
-   delete *detector;
-   *detector = 0;
+   return new cv::ORB(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize);
 }
 
 int CvOrbDetectorGetDescriptorSize(cv::ORB* detector)
@@ -356,12 +306,21 @@ void CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
 }
 
 // MSER detector
-cv::MserFeatureDetector* CvMserGetFeatureDetector(CvMSERParams* detector)
+cv::MSER* CvMserGetFeatureDetector(CvMSERParams* detector)
 {  
-   return new cv::MserFeatureDetector(*detector);
+   return new cv::MSER(
+      detector->delta,
+      detector->minArea, 
+      detector->maxArea,
+      detector->maxVariation,
+      detector->minDiversity, 
+      detector->maxEvolution,
+      detector->areaThreshold,
+      detector->minMargin, 
+      detector->edgeBlurSize);
 }
 
-void CvMserFeatureDetectorRelease(cv::MserFeatureDetector** detector)
+void CvMserFeatureDetectorRelease(cv::MSER** detector)
 {
    delete *detector;
    *detector = 0;
@@ -465,50 +424,14 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* qu
    VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
 
-cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType)
+cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType, bool crossCheck)
 {
-   switch(distanceType)
-   {
-   case(0): //L1 float
-      return new cv::BruteForceMatcher< cv::L1<float> >();
-   case(1): //L2 float
-      return new cv::BruteForceMatcher< cv::L2<float> >();
-   case(2): //HammingLUT
-      return new cv::BruteForceMatcher< cv::HammingLUT >();
-   case(3):
-      return new cv::BruteForceMatcher< cv::Hamming >();
-   default:
-      return 0;
-   }
+   return new cv::BFMatcher(distanceType, crossCheck);
 }
 
-void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType)
+void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher)
 {
-   cv::BruteForceMatcher< cv::L1<float> >* m0;
-   cv::BruteForceMatcher< cv::L2<float> >* m1;
-   cv::BruteForceMatcher< cv::HammingLUT >* m2;
-   cv::BruteForceMatcher< cv::Hamming >* m3;
-   switch(distanceType)
-   {
-   case(0): //L1 float
-      m0 = (cv::BruteForceMatcher< cv::L1<float> >*) *matcher;
-      delete m0;
-      break;
-   case(1): //L2 float
-      m1 = (cv::BruteForceMatcher< cv::L2<float> >*) *matcher;
-      delete m1;
-      break;
-   case(2):
-      m2 = (cv::BruteForceMatcher< cv::HammingLUT >*) *matcher;
-      delete m2;
-      break;
-   case(3):
-      m3 = (cv::BruteForceMatcher< cv::Hamming >*) *matcher;
-      delete m3;
-      break;
-   default:
-      CV_Error(-1, "Invalid Distance type");
-   }
+   delete *matcher;
    *matcher = 0;
 }
 

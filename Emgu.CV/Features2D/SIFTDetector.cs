@@ -17,51 +17,27 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
-      private IntPtr _featureDetectorPtr;
-      private IntPtr _descriptorExtractorPtr;
-
-      /// <summary>
-      /// The angle mode for the key point detector
-      /// </summary>
-      public enum AngleMode
-      {
-         /// <summary>
-         /// First angle
-         /// </summary>
-         FIRST_ANGLE = 0,
-         /// <summary>
-         /// Average angle
-         /// </summary>
-         AVERAGE_ANGLE = 1
-      }
-
       /// <summary>
       /// Create a SIFTDetector using the specific values
       /// </summary>
-      /// <param name="nOctaves">The number of octaves. Use 4 for default</param>
-      /// <param name="nOctaveLayers">The number of octaves layers. Use 3 for default</param>
-      /// <param name="firstOctave">Use -1 for default</param>
-      /// <param name="threshold">Detector parameter. Use 0.04 / nOctavesLayers / 2.0 as default</param>
+      /// <param name="nFeatures">The desired number of features. Use 0 for un-restricted number of features</param>
+      /// <param name="nOctaveLayers">The number of octave layers. Use 3 for default</param>
+      /// <param name="contrastThreshold">Contrast threshold. Use 0.04 as default</param>
       /// <param name="edgeThreshold">Detector parameter. Use 10.0 as default</param>
-      /// <param name="angleMode">Angle mode</param>
-      /// <param name="magnification">Descriptor parameter. Use 3.0 as default</param>
-      /// <param name="isNormalize">Descriptor parameter. Use true as default</param>
-      /// <param name="recalculateAngles">Descriptor parameter. Use true as default</param>
+      /// <param name="sigma">Use 1.6 as default</param>
       public SIFTDetector(
-         int nOctaves, int nOctaveLayers, int firstOctave, AngleMode angleMode,//common parameters
-         double threshold, double edgeThreshold,  //detector parameters
-         double magnification, bool isNormalize, bool recalculateAngles) //descriptor parameters
+         int nFeatures, int nOctaveLayers,
+         double contrastThreshold, double edgeThreshold,
+         double sigma)
       {
-         _ptr = CvInvoke.CvSIFTDetectorCreate(nOctaves, nOctaveLayers, firstOctave, angleMode, threshold, edgeThreshold, magnification, isNormalize, recalculateAngles);
-         _featureDetectorPtr = CvInvoke.CvSiftGetFeatureDetector(Ptr);
-         _descriptorExtractorPtr = CvInvoke.CvSiftGetDescriptorExtractor(Ptr);
+         _ptr = CvInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
       }
 
       /// <summary>
       /// Create a SIFT detector with the default parameters
       /// </summary>
       public SIFTDetector()
-         : this(4, 3, -1, SIFTDetector.AngleMode.AVERAGE_ANGLE, 0.04 / 3 / 2.0, 10.0, 3.0, true, true)
+         : this(0, 3, 0.04, 10, 1.6)
       {
       }
 
@@ -147,8 +123,6 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          CvInvoke.CvSIFTDetectorRelease(ref _ptr);
-         CvInvoke.CvSiftFeatureDetectorRelease(ref _featureDetectorPtr);
-         CvInvoke.CvSiftDescriptorExtractorRelease(ref _descriptorExtractorPtr);
       }
 
       #region IKeyPointDetector Members
@@ -161,7 +135,7 @@ namespace Emgu.CV.Features2D
       public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
+         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
          return kpts;
       }
 
@@ -173,7 +147,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _featureDetectorPtr;
+            return _ptr;
          }
       }
       #endregion
@@ -188,7 +162,7 @@ namespace Emgu.CV.Features2D
       private Matrix<float> ComputeDescriptorsRawHelper(CvArray<Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
          if (mask != null)
-            keyPoints.FilterByPixelsMask(mask);  
+            keyPoints.FilterByPixelsMask(mask);
 
          int count = keyPoints.Size;
          if (count == 0) return null;
@@ -224,7 +198,7 @@ namespace Emgu.CV.Features2D
 
       IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
-         get { return _descriptorExtractorPtr; }
+         get { return _ptr; }
       }
 
       #endregion
@@ -235,11 +209,6 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSiftGetFeatureDetector(IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSiftGetDescriptorExtractor(IntPtr detector);
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void CvSIFTDetectorDetectFeature(
@@ -261,21 +230,11 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSIFTDetectorCreate(
-         int nOctaves, int nOctaveLayers, int firstOctave, Features2D.SIFTDetector.AngleMode angleMode, //common parameters
-         double threshold, double edgeThreshold, //detector parameters
-         double magnification, 
-         [MarshalAs(CvInvoke.BoolMarshalType)] 
-         bool isNormalize, 
-         [MarshalAs(CvInvoke.BoolMarshalType)] 
-         bool recalculateAngles); //descriptor parameters
+         int nFeatures, int nOctaveLayers,
+         double contrastThreshold, double edgeThreshold,
+         double sigma);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSIFTDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvSiftFeatureDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvSiftDescriptorExtractorRelease(ref IntPtr extractor);
    }
 }

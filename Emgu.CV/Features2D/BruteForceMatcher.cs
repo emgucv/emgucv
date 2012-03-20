@@ -16,24 +16,35 @@ namespace Emgu.CV.Features2D
    public enum DistanceType
    {
       /// <summary>
-      /// Manhattan distance (city block distance) on float
+      /// 
       /// </summary>
-      L1F32 = 0,
+      Inf = 1,
       /// <summary>
-      /// Squared Euclidean distance on float
+      /// Manhattan distance (city block distance)
       /// </summary>
-      L2F32 = 1,
+      L1 = 2,
+      /// <summary>
+      /// Squared Euclidean distance
+      /// </summary>
+      L2 = 4, 
+      /// <summary>
+      /// Euclidean distance
+      /// </summary>
+      L2Sqr = 5,
       /// <summary>
       /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
-      /// bit count of A exclusive XOR'ed with B
+      /// bit count of A exclusive XOR'ed with B. 
       /// </summary>
-      HammingLUT = 2,
+      Hamming = 6,
       /// <summary>
-      /// Hamming distance functor, this one will try to use gcc's __builtin_popcountl
-      /// but will fall back on HammingLUT if not available
-      /// bit count of A exclusive XOR'ed with B
+      /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
+      /// bit count of A exclusive XOR'ed with B. 
       /// </summary>
-      Hamming = 3
+      Hamming2 = 7, //TODO: update the documentation
+      /*
+      TypeMask = 7, 
+      Relative = 8, 
+      MinMax = 32 */
    }
 
    /// <summary>
@@ -59,27 +70,34 @@ namespace Emgu.CV.Features2D
       private DistanceType _distanceType;
 
       /// <summary>
-      /// Create a BruteForceMatcher of the specific distance type
+      /// Create a BruteForceMatcher of the specific distance type, without cross check.
       /// </summary>
       /// <param name="distanceType">The distance type</param>
       public BruteForceMatcher(DistanceType distanceType)
+         : this (distanceType, false)
       {
-         if (typeof(T) == typeof(byte))
-         {
-            if (!(distanceType == DistanceType.Hamming || distanceType == DistanceType.HammingLUT))
+      }
+
+      /// <summary>
+      /// Create a BruteForceMatcher of the specific distance type
+      /// </summary>
+      /// <param name="distanceType">The distance type</param>
+      /// <param name="crossCheck">Specify whether or not cross check is needed. Use false for default.</param>
+      public BruteForceMatcher(DistanceType distanceType, bool crossCheck)
+      {
+         if (distanceType == DistanceType.Hamming || distanceType == DistanceType.Hamming2)
+         { 
+            if (typeof(T) != typeof(byte))
                throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
          }
-         else if (typeof(T) == typeof(float))
-         {
-            if (!(distanceType == DistanceType.L2F32 || distanceType == DistanceType.L1F32))
-               throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
-         }
-         else
+
+         if (typeof(T) != typeof(byte) && typeof(T) != typeof(float))
          {
             throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
          }
+
          _distanceType = distanceType;
-         _ptr = CvInvoke.CvBruteForceMatcherCreate(_distanceType);
+         _ptr = CvInvoke.CvBruteForceMatcherCreate(_distanceType, crossCheck);
       }
 
       /// <summary>
@@ -96,7 +114,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBruteForceMatcherRelease(ref _ptr, _distanceType);
+         CvInvoke.CvBruteForceMatcherRelease(ref _ptr);
       }
    }
 }
@@ -106,10 +124,13 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvBruteForceMatcherCreate(Features2D.DistanceType distanceType);
+      internal extern static IntPtr CvBruteForceMatcherCreate(
+         Features2D.DistanceType distanceType,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool crossCheck);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher, Features2D.DistanceType distanceType);
+      internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);

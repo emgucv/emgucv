@@ -55,7 +55,7 @@ namespace SURFFeatureExample
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
             using (GpuMat<float> gpuModelDescriptors = surfGPU.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
-            using (GpuBruteForceMatcher<float> matcher = new GpuBruteForceMatcher<float>(DistanceType.L2F32))
+            using (GpuBruteForceMatcher<float> matcher = new GpuBruteForceMatcher<float>(DistanceType.L2))
             {
                modelKeyPoints = new VectorOfKeyPoint();
                surfGPU.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
@@ -116,7 +116,7 @@ namespace SURFFeatureExample
             observedKeyPoints = surfCPU.DetectKeyPointsRaw(observedImage, null);
             Matrix<float> observedDescriptors = surfCPU.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
 
-            BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2F32);
+            BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2);
             matcher.Add(modelDescriptors);
 
             indices = new Matrix<int>(observedDescriptors.Rows, k);

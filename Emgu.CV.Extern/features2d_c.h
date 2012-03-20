@@ -12,6 +12,9 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
 #include "opencv2/contrib/contrib.hpp"
+#include "opencv2/legacy/legacy.hpp"
+#include "opencv2/legacy/compat.hpp"
+#include "opencv2/nonfree/nonfree.hpp"
 #include "vectors_c.h"
 
 //FernClassifier
@@ -48,18 +51,9 @@ CVAPI(void) CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector);
 
 //SIFTDetector
 CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
-   int nOctaves, int nOctaveLayers, int firstOctave, int angleMode,//common parameters
-   double threshold, double edgeThreshold, //detector parameters
-   double magnification, bool isNormalize, bool recalculateAngles //descriptor parameters
-   );
-
-CVAPI(cv::SiftFeatureDetector*) CvSiftGetFeatureDetector(cv::SIFT* detector);
-
-CVAPI(cv::SiftDescriptorExtractor*) CvSiftGetDescriptorExtractor(cv::SIFT* detector);
-
-CVAPI(void) CvSiftFeatureDetectorRelease(cv::SiftFeatureDetector** detector);
-
-CVAPI(void) CvSiftDescriptorExtractorRelease(cv::SiftDescriptorExtractor** extractor);
+   int nFeatures, int nOctaveLayers, 
+   double contrastThreshold, double edgeThreshold, 
+   double sigma);
 
 CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 
@@ -126,15 +120,7 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
 CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
 //ORB
-CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType);
-
-CVAPI(cv::OrbFeatureDetector*) CvOrbGetFeatureDetector(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType);
-
-CVAPI(cv::OrbDescriptorExtractor*) CvOrbGetDescriptorExtractor(float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType);
-
-CVAPI(void) CvOrbFeatureDetectorRelease(cv::OrbFeatureDetector** detector);
-
-CVAPI(void) CvOrbDescriptorExtractorRelease(cv::OrbDescriptorExtractor** extractor);
+CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize);
 
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
@@ -157,9 +143,9 @@ CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool non
 CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
 
 // MSER detector
-CVAPI(cv::MserFeatureDetector*) CvMserGetFeatureDetector(CvMSERParams* detector);
+CVAPI(cv::MSER*) CvMserGetFeatureDetector(CvMSERParams* detector);
 
-CVAPI(void) CvMserFeatureDetectorRelease(cv::MserFeatureDetector** detector);
+CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** detector);
 
 //Plannar Object Detector
 CVAPI(cv::PlanarObjectDetector*) CvPlanarObjectDetectorDefaultCreate();
@@ -209,9 +195,9 @@ CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const
                    const CvMat* mask);*/
 
 //BruteForceMatcher
-CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType);
+CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType, bool crossCheck);
 
-CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher, int distanceType);
+CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
 
 //RTreeClassifier
 CVAPI(cv::RTreeClassifier*) CvRTreeClassifierCreate();
