@@ -10,6 +10,23 @@ using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
+   internal enum GpuMatcherDistanceType
+   {
+      /// <summary>
+      /// Manhattan distance (city block distance)
+      /// </summary>
+      L1Dist = 0,
+      /// <summary>
+      /// Squared Euclidean distance
+      /// </summary>
+      L2Dist,
+      /// <summary>
+      /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
+      /// bit count of A exclusive XOR'ed with B. 
+      /// </summary>
+      HammingDist
+   }
+
    /// <summary>
    /// A Brute force matcher using GPU
    /// </summary>
@@ -17,34 +34,42 @@ namespace Emgu.CV.GPU
    public class GpuBruteForceMatcher<T> : UnmanagedObject
       where T : struct
    {
-      private DistanceType _distanceType;
+      private GpuMatcherDistanceType _distanceType;
+
+
 
       /// <summary>
       /// Create a GPUBruteForce Matcher using the specific distance type
       /// </summary>
-      /// <param name="distType">The distance type</param>
-      public GpuBruteForceMatcher(DistanceType distType)
+      /// <param name="distanceType">The distance type</param>
+      public GpuBruteForceMatcher(DistanceType distanceType)
       {
-         if (distType == DistanceType.Hamming)
-            distType = DistanceType.HammingLUT;
-
-         if (typeof(T) == typeof(byte))
+         if (distanceType == DistanceType.Hamming)
          {
-            if (distType != DistanceType.HammingLUT)
+            if (typeof(T) != typeof(byte))
                throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
          }
-         else if (typeof(T) == typeof(float))
-         {
-            if (!(distType == DistanceType.L2F32 || distType == DistanceType.L1F32))
-               throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
-         }
-         else
+
+         if (typeof(T) != typeof(byte) && typeof(T) != typeof(float))
          {
             throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
          }
 
-         _distanceType = distType;
-         _ptr = GpuInvoke.gpuBruteForceMatcherCreate(distType);
+         switch (distanceType)
+         {
+            case (DistanceType.Hamming):
+               _distanceType = GpuMatcherDistanceType.HammingDist;
+               break;
+            case (DistanceType.L1):
+               _distanceType = GpuMatcherDistanceType.L1Dist;
+               break;
+            case (DistanceType.L2):
+               _distanceType = GpuMatcherDistanceType.L2Dist;
+               break;
+            default:
+               throw new NotImplementedException(String.Format("Distance type of {0} is not implemented in GPU.", distanceType.ToString()));
+         }
+         _ptr = GpuInvoke.gpuBruteForceMatcherCreate(_distanceType);
       }
 
       /*
@@ -101,7 +126,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuBruteForceMatcherCreate(DistanceType distType);
+      internal extern static IntPtr gpuBruteForceMatcherCreate(GpuMatcherDistanceType distType);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
