@@ -1,0 +1,48 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2012 by EMGU. All rights reserved.
+# --------------------------------------------------------
+
+IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND (NOT ANDROID))
+
+PROJECT(Emgu.CV.Stitching)
+
+FILE(GLOB_RECURSE SRC_CV_STITCHING RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+LIST(APPEND SRC_CV_STITCHING ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
+
+GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
+SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;System.Drawing.dll;System.Data.dll")
+
+COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV_STITCHING}" ALL)
+
+if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+endif()
+
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.Util)
+INSTALL(
+FILES 
+${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
+${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
+DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+COMPONENT emgucv_binary)
+
+IF(WIN32)
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  DESTINATION .
+    COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.resx"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMakeFiles" EXCLUDE
+  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+  PATTERN "Android" EXCLUDE
+)
+ENDIF()
+
+ENDIF()

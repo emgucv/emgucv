@@ -3,13 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</ProjectGuid>
+    <ProjectGuid>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.GPU</RootNamespace>
-    <AssemblyName>Emgu.CV.GPU</AssemblyName>
+    <RootNamespace>Emgu.CV.Stitching</RootNamespace>
+    <AssemblyName>Emgu.CV.Stitching</AssemblyName>
+	<SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -18,33 +20,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.CV.GPU.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.CV.GPU.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -52,26 +46,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="GpuBroxOpticalFlow.cs" />
-    <Compile Include="GpuBruteForceMatcher.cs" />
-    <Compile Include="GpuCascadeClassifier.cs" />
-    <Compile Include="GpuDeviceInfo.cs" />
-    <Compile Include="GpuDisparityBilateralFilter.cs" />
-    <Compile Include="GpuFarnebackOpticalFlow.cs" />
-    <Compile Include="GpuFASTDetector.cs" />
-    <Compile Include="GpuGoodFeaturesToTrackDetector.cs" />
-    <Compile Include="GpuHOGDescriptor.cs" />
-    <Compile Include="GpuImage.cs" />
-    <Compile Include="GpuInvoke.cs" />
-    <Compile Include="GpuMat.cs" />
-    <Compile Include="GpuORBDetector.cs" />
-    <Compile Include="GpuPyrLKOpticalFlow.cs" />
-    <Compile Include="GpuStereoBM.cs" />
-    <Compile Include="GpuStereoConstantSpaceBP.cs" />
-    <Compile Include="GpuSURFDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stream.cs" />
-    <Compile Include="TargetArchs.cs" />
+    <Compile Include="Stitcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
@@ -83,7 +59,7 @@
       <Name>Emgu.Util</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

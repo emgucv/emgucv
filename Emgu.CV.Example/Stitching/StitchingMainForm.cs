@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.GPU;
+using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 
 namespace Stitching

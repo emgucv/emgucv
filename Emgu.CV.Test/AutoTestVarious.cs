@@ -16,13 +16,14 @@ using System.Xml;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
+using Emgu.CV.GPU;
+using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 using Emgu.CV.Tiff;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
-using Emgu.CV.GPU;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -1965,6 +1966,22 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(new Gray(30), new Gray(20));
 
          //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
+      }
+
+      [Test]
+      public void TestStitching()
+      {
+         Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
+         images[0] = new Image<Bgr, byte>("stitch1.jpg");
+         images[1] = new Image<Bgr, byte>("stitch2.jpg");
+         images[2] = new Image<Bgr, byte>("stitch3.jpg");
+         images[3] = new Image<Bgr, byte>("stitch4.jpg");
+
+         using (Stitcher stitcher = new Stitcher(false))
+         {
+            Image<Bgr, Byte> result = stitcher.Stitch(images);
+            //ImageViewer.Show(result);
+         }
       }
 
       /*

@@ -464,22 +464,6 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
-      public void TestStitching()
-      {
-         Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
-         images[0] = new Image<Bgr, byte>("stitch1.jpg");
-         images[1] = new Image<Bgr, byte>("stitch2.jpg");
-         images[2] = new Image<Bgr, byte>("stitch3.jpg");
-         images[3] = new Image<Bgr, byte>("stitch4.jpg");
-
-         using (Stitcher stitcher = new Stitcher(false))
-         {
-            Image<Bgr, Byte> result = stitcher.Stitch(images);
-            //ImageViewer.Show(result);
-         }
-      }
-
-      [Test]
       public void TestGpuFASTDetector()
       {
          if (!GpuInvoke.HasCuda)

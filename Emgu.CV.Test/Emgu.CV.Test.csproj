@@ -168,6 +168,10 @@
       <Project>{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}</Project>
       <Name>Emgu.CV.OCR</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
+      <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>
+      <Name>Emgu.CV.Stitching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>
