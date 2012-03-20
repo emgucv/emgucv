@@ -28,9 +28,10 @@ namespace Emgu.CV.GPU
       /// <param name="edgeThreshold">How far from the boundary the points should be. Use 0 for default.</param>
       /// <param name="WTK_A">How many random points are used to produce each cell of the descriptor (2, 3, 4 ...). Use 2 for default.</param>
       /// <param name="scoreType">Type of the score to use. Use Harris for default.</param>
-      public GpuORBDetector(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTK_A, ORBDetector.ScoreType scoreType)
+      /// <param name="patchSize">Patch size. Use 31 for default.</param>
+      public GpuORBDetector(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, ORBDetector.ScoreType scoreType, int patchSize)
       {
-         _ptr = GpuInvoke.gpuORBDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType);
+         _ptr = GpuInvoke.gpuORBDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize);
       }
 
       /// <summary>
@@ -38,7 +39,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="numberOfFeatures">The number of desired features. Use 500 for default.</param>
       public GpuORBDetector(int numberOfFeatures)
-         : this(numberOfFeatures, 1.2f, 3, 31, 0, 2, ORBDetector.ScoreType.Harris)
+         : this(numberOfFeatures, 1.2f, 3, 31, 0, 2, ORBDetector.ScoreType.Harris, 31)
       {
       }
 
@@ -122,7 +123,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, uint nLevels, int edgeThreshold, uint firstLevel, int WTA_K, ORBDetector.ScoreType scoreType);
+      internal static extern IntPtr gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, ORBDetector.ScoreType scoreType, int patchSize);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuORBDetectorRelease(ref IntPtr detector);

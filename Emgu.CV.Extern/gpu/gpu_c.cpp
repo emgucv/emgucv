@@ -423,14 +423,14 @@ void gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* te
    cv::gpu::matchTemplate(*image, *templ, *result, method);
 }
 
-void gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream)
+void gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
-   cv::gpu::pyrDown(*src, *dst, borderType, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::pyrDown(*src, *dst, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream)
+void gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
 {
-   cv::gpu::pyrUp(*src, *dst, borderType, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::pyrUp(*src, *dst, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatBlendLinear(

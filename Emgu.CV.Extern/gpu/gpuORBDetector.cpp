@@ -6,10 +6,9 @@
 
 #include "gpu_c.h"
 
-cv::gpu::ORB_GPU* gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType)
+cv::gpu::ORB_GPU* gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize)
 {
-   cv::ORB::CommonParams orbParams(scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType);
-   return new cv::gpu::ORB_GPU(numberOfFeatures, orbParams);
+   return new cv::gpu::ORB_GPU(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize);
 }
 
 void gpuORBDetectorRelease(cv::gpu::ORB_GPU** detector)

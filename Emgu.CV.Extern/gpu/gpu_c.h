@@ -168,9 +168,9 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
 
 CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int borderType, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatPyrUp(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatBlendLinear(
    const cv::gpu::GpuMat* img1, const cv::gpu::GpuMat* img2, 
@@ -468,7 +468,7 @@ CVAPI(void) gpuFASTDownloadKeypoints(cv::gpu::FAST_GPU* detector, cv::gpu::GpuMa
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::gpu::ORB_GPU*) gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, unsigned int nLevels, int edgeThreshold, unsigned int firstLevel, int WTA_K, int scoreType);
+CVAPI(cv::gpu::ORB_GPU*) gpuORBDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize);
 
 CVAPI(void) gpuORBDetectorRelease(cv::gpu::ORB_GPU** detector);
 
