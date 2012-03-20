@@ -14,11 +14,9 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
-   public class SURFDetector : DisposableObject, IKeyPointDetector, IDescriptorExtractor<float>
+   public class SURFDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
-      #region PInvoke
-
-      #endregion
+      private MCvSURFParams _surfParams;
 
       /// <summary>
       /// Get the SURF parameters
@@ -55,8 +53,7 @@ namespace Emgu.CV.Features2D
       public SURFDetector(MCvSURFParams surfParams)
       {
          _surfParams = surfParams;
-         _featureDetectorPtr = CvInvoke.CvSURFGetFeatureDetector(ref _surfParams);
-         _descriptorExtractorPtr = CvInvoke.CvSURFGetDescriptorExtractor(ref _surfParams);
+         _ptr = CvInvoke.CvSURFGetDetector(ref surfParams);
       }
 
       /// <summary>
@@ -82,11 +79,6 @@ namespace Emgu.CV.Features2D
          : this(new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
       {
       }
-
-      private MCvSURFParams _surfParams;
-
-      private IntPtr _featureDetectorPtr;
-      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// Detect the SURF keypoints from the image
@@ -176,7 +168,7 @@ namespace Emgu.CV.Features2D
       public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
+         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
          return kpts;
       }
 
@@ -188,7 +180,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _featureDetectorPtr;
+            return _ptr;
          }
       }
       #endregion
@@ -198,8 +190,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvSURFFeatureDetectorRelease(ref _featureDetectorPtr);
-         CvInvoke.CvSURFDescriptorExtractorRelease(ref _descriptorExtractorPtr);
+         CvInvoke.CvSURFDetectorRelease(ref _ptr);
       }
 
       #region IDescriptorExtractor<float> Members
@@ -217,7 +208,7 @@ namespace Emgu.CV.Features2D
 
       IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
-         get { return _descriptorExtractorPtr; }
+         get { return _ptr; }
       }
 
       #endregion
@@ -229,10 +220,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFGetFeatureDetector(ref MCvSURFParams detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFGetDescriptorExtractor(ref MCvSURFParams detector);
+      internal extern static IntPtr CvSURFGetDetector(ref MCvSURFParams detector);
 
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -251,9 +239,6 @@ namespace Emgu.CV
          IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvSURFFeatureDetectorRelease(ref IntPtr detector);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvSURFDescriptorExtractorRelease(ref IntPtr extractor);
+      internal extern static void CvSURFDetectorRelease(ref IntPtr detector);
    }
 }

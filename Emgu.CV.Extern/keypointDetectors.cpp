@@ -79,14 +79,6 @@ cv::SIFT* CvSIFTDetectorCreate(
    double contrastThreshold, double edgeThreshold, 
    double sigma)
 {
-   /*
-   cv::SIFT::CommonParams p(nOctaves, nOctaveLayers, firstOctave, angleMode);
-
-   cv::SIFT::DetectorParams detectorP(threshold, edgeThreshold);
-
-   cv::SIFT::DescriptorParams descriptorP(magnification, isNormalize, recalculateAngles);
-
-   return new cv::SIFT(p, detectorP, descriptorP);*/
    return new cv::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
 }
 
@@ -208,26 +200,15 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }
 
 //SURFDetector
-cv::SurfFeatureDetector* CvSURFGetFeatureDetector(CvSURFParams* detector)
+CVAPI(cv::SURF*) CvSURFGetDetector(CvSURFParams* detector)
 {
-   return new cv::SurfFeatureDetector(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->upright != 0);
+   return new cv::SURF(detector->hessianThreshold, detector->extended != 0, detector->upright != 0, detector->nOctaves, detector->nOctaveLayers);
 }
 
-cv::SurfDescriptorExtractor* CvSURFGetDescriptorExtractor(CvSURFParams* detector)
-{
-   return new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
-}
-
-void CvSURFFeatureDetectorRelease(cv::SurfFeatureDetector** detector)
+CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector)
 {
    delete *detector;
    *detector = 0;
-}
-
-void CvSURFDescriptorExtractorRelease(cv::SurfDescriptorExtractor** extractor)
-{
-   delete *extractor;
-   *extractor = 0;
 }
 
 /*
@@ -255,7 +236,8 @@ void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::
    } else //opponent SURF
    {
       cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
-      cv::Ptr<cv::DescriptorExtractor> surfExtractor = new cv::SurfDescriptorExtractor(detector->nOctaves, detector->nOctaveLayers, detector->extended != 0);
+      cv::Ptr<cv::DescriptorExtractor> surfExtractor(detector);
+      surfExtractor.addref();
       cv::OpponentColorDescriptorExtractor colorDetector(surfExtractor);
       colorDetector.compute(img, *keypoints, descriptorsMat);
    }
