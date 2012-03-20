@@ -249,8 +249,12 @@ GET_TARGET_PROPERTY(OPENCV_FLANN_OUTPUT_NAME opencv_flann OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_GPU_OUTPUT_NAME opencv_gpu OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_CONTRIB_OUTPUT_NAME opencv_contrib OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_STITCHING_OUTPUT_NAME opencv_stitching OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_PHOTO_OUTPUT_NAME opencv_photo OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_NONFREE_OUTPUT_NAME opencv_nonfree OUTPUT_NAME)
+GET_TARGET_PROPERTY(OPENCV_VIDEOSTAB_OUTPUT_NAME opencv_videostab OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_GPU_OUTPUT_NAME cvextern_gpu OUTPUT_NAME)
+
 
 IF(TARGET opencv_ffmpeg)
   IF(WIN32)
@@ -280,9 +284,13 @@ SET(OPENCV_LIBRARY_OUTPUT_NAMES
   ${OPENCV_FLANN_OUTPUT_NAME}
   ${OPENCV_GPU_OUTPUT_NAME}
   ${OPENCV_STITCHING_OUTPUT_NAME}
+  ${OPENCV_CONTRIB_OUTPUT_NAME}
+  ${OPENCV_PHOTO_OUTPUT_NAME}
+  ${OPENCV_NONFREE_OUTPUT_NAME}
+  ${OPENCV_VIDEOSTAB_OUTPUT_NAME}
   ${CVEXTERN_OUTPUT_NAME}
   ${CVEXTERN_GPU_OUTPUT_NAME}
-  ${OPENCV_CONTRIB_OUTPUT_NAME})
+)
 
 IF(TARGET opencv_ffmpeg)
 ELSE()
@@ -377,6 +385,18 @@ namespace Emgu.CV
       /// The file name of the contrib library
       /// </summary>
       public const string OPENCV_CONTRIB_LIBRARY = \"${OPENCV_CONTRIB_OUTPUT_NAME}\";
+	  /// <summary>
+      /// The file name of the photo library
+      /// </summary>
+      public const string OPENCV_PHOTO_LIBRARY = \"${OPENCV_PHOTO_OUTPUT_NAME}\";
+	  /// <summary>
+      /// The file name of the nonfree library
+      /// </summary>
+      public const string OPENCV_NONFREE_LIBRARY = \"${OPENCV_NONFREE_OUTPUT_NAME}\";
+	  /// <summary>
+      /// The file name of the videostab library
+      /// </summary>
+      public const string OPENCV_VIDEOSTAB_LIBRARY = \"${OPENCV_VIDEOSTAB_OUTPUT_NAME}\";
 	  
       /// <summary>
       /// The bit-ness of the unmanaged code (either 32 or 64) 

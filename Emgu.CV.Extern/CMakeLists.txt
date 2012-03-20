@@ -21,6 +21,8 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videostab/include")
 
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
@@ -227,7 +229,7 @@ ELSE()
 ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree opencv_videostab
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
@@ -250,7 +252,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect
+  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree opencv_videostab
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
