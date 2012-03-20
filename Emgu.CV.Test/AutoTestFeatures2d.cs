@@ -84,6 +84,7 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
+      /*
       [Test]
       public void TestMSERContour()
       {
@@ -98,7 +99,7 @@ namespace Emgu.CV.Test
                   image.Draw(region, new Gray(255.0), 2);
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestFAST()

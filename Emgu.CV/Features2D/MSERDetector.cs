@@ -110,7 +110,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public int EdgeBlurSize { get { return _edgeBlurSize; } }
 
-
+      /*
       /// <summary>
       /// Extracts the contours of Maximally Stable Extremal Regions
       /// </summary>
@@ -125,7 +125,7 @@ namespace Emgu.CV.Features2D
          CvInvoke.cvExtractMSER(image.Ptr, mask, ref mserPtr, storage, p);
          IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
-      }
+      }*/
 
       /// <summary>
       /// Detect the MSER keypoints from the image

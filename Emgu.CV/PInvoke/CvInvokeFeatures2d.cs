@@ -13,25 +13,6 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       /// <summary>
-      /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="image">The input 8-bit grayscale image</param>
-      /// <param name="mask">The optional input 8-bit mask. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="keypoints">The output parameter; double pointer to the sequence of keypoints. This will be the sequence of MCvSURFPoint structures</param>
-      /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is IntPtr.Zero, the descriptors are not computed</param>
-      /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
-      /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
-      /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvExtractSURF(
-         IntPtr image, IntPtr mask,
-         ref IntPtr keypoints,
-         ref IntPtr descriptors,
-         IntPtr storage,
-         MCvSURFParams parameters,
-         int useProvidedKeyPoints);
-
-      /// <summary>
       /// Create a CvSURFParams using the specific values
       /// </summary>
       /// <param name="hessianThreshold">      
