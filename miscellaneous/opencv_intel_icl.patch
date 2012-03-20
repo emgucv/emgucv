@@ -1,28 +1,8 @@
-Index: 3rdparty/ffmpeg/CMakeLists.txt
-===================================================================
---- 3rdparty/ffmpeg/CMakeLists.txt	(revision 7288)
-+++ 3rdparty/ffmpeg/CMakeLists.txt	(working copy)
-@@ -7,8 +7,7 @@
- set(module_bare_name "opencv_ffmpeg${FFMPEG_SUFFIX}.dll")
- set(module_name "${CMAKE_CURRENT_SOURCE_DIR}/${module_bare_name}")
- 
--get_target_property(bin_dir opencv_traincascade LOCATION)
--get_filename_component(bin_dir ${bin_dir} PATH) 
-+set (bin_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
- 
- message(STATUS "ffmpeg output dir: ${bin_dir}")
- 
-@@ -17,4 +16,4 @@
-                     ${module_name} ${bin_dir}/${module_bare_name}
-                   COMMENT "Copying ${module_name} to the output directory")
- 
--install(FILES ${module_name} DESTINATION bin COMPONENT main)
-+install(FILES ${module_name} DESTINATION "bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}" COMPONENT main)
 Index: cmake/OpenCVDetectTBB.cmake
 ===================================================================
---- cmake/OpenCVDetectTBB.cmake	(revision 7288)
+--- cmake/OpenCVDetectTBB.cmake	(revision 7560)
 +++ cmake/OpenCVDetectTBB.cmake	(working copy)
-@@ -35,12 +35,20 @@
+@@ -41,12 +41,20 @@
        else()
          get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)
  
@@ -41,7 +21,7 @@ Index: cmake/OpenCVDetectTBB.cmake
 +        else(MSVC)
 +            if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64* OR MSVC64)
 +                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
-+            elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
++            else()
 +                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
 +            endif()
 +        endif(MSVC)
@@ -49,11 +29,43 @@ Index: cmake/OpenCVDetectTBB.cmake
          if(MSVC80)
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
+Index: modules/gpu/src/split_merge.cpp
+===================================================================
+--- modules/gpu/src/split_merge.cpp	(revision 7560)
++++ modules/gpu/src/split_merge.cpp	(working copy)
+@@ -90,12 +90,13 @@
+         CV_Assert(single_channel_only);
+         CV_Assert(total_channels <= 4);
+ 
+-        if (total_channels == 1)  
+-            src[0].copyTo(dst);
++        dst.create(size, CV_MAKETYPE(depth, total_channels));
++        if (total_channels == 1)
++        {
++            cudaSafeCall( cudaMemcpy2DAsync(dst.data, dst.step, src[0].data, src[0].step, src[0].cols * src[0].elemSize(), src[0].rows, cudaMemcpyDeviceToDevice, stream) );
++        }
+         else 
+         {
+-            dst.create(size, CV_MAKETYPE(depth, total_channels));
+-
+             DevMem2Db src_as_devmem[4];
+             for(size_t i = 0; i < n; ++i)
+                 src_as_devmem[i] = src[i];
+@@ -117,7 +118,8 @@
+ 
+         if (num_channels == 1)
+         {
+-            src.copyTo(dst[0]);
++            dst[0].create(src.size(), depth);
++            cudaSafeCall( cudaMemcpy2DAsync(dst[0].data, dst[0].step, src.data, src.step, src.cols * src.elemSize(), src.rows, cudaMemcpyDeviceToDevice, stream) );
+             return;
+         }
+ 
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7288)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7560)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
-@@ -462,6 +462,9 @@
+@@ -471,6 +471,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);  
  
@@ -65,9 +77,9 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 7288)
+--- modules/highgui/src/cap_openni.cpp	(revision 7560)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
-@@ -98,6 +98,8 @@
+@@ -97,6 +97,8 @@
  
      bool isOpened() const;
  
@@ -76,7 +88,7 @@ Index: modules/highgui/src/cap_openni.cpp
  protected:
      struct OutputMap
      {
-@@ -763,4 +765,10 @@
+@@ -833,4 +835,10 @@
      return 0;
  }
  
@@ -89,7 +101,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 7288)
+--- modules/legacy/src/3dtracker.cpp	(revision 7560)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
