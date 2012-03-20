@@ -612,6 +612,24 @@ namespace Emgu.CV.GPU
       public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr stream);
 
       /// <summary>
+      /// Performs downsampling step of Gaussian pyramid decomposition. 
+      /// </summary>
+      /// <param name="src">The source GpuImage.</param>
+      /// <param name="dst">The destination GpuImage, should have 2x smaller width and height than the source.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPyrDown")]
+      public static extern void PyrDown(IntPtr src, IntPtr dst, IntPtr stream);
+
+      /// <summary>
+      /// Performs up-sampling step of Gaussian pyramid decomposition.
+      /// </summary>
+      /// <param name="src">The source GpuImage.</param>
+      /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatPyrUp")]
+      public static extern void PyrUp(IntPtr src, IntPtr dst, IntPtr stream);
+
+      /// <summary>
       /// Computes mean value and standard deviation
       /// </summary>
       /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>
