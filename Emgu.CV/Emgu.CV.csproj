@@ -112,6 +112,7 @@
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvInvokeLegacy.cs" />
     <Compile Include="PInvoke\CvInvokeObjdetect.cs" />
+    <Compile Include="PInvoke\CvInvokePhoto.cs" />
     <Compile Include="PInvoke\CvInvokeVideo.cs" />
     <Compile Include="PInvoke\CvType\Cuboid.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />

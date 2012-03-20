@@ -315,5 +315,21 @@ namespace Emgu.CV
       [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool icvSubdiv2DCheck(IntPtr subdiv);
+
+      /// <summary>
+      /// Extracts the contours of Maximally Stable Extremal Regions
+      /// </summary>
+      /// <param name="img">The image where MSER will be extracted</param>
+      /// <param name="mask">The mask for region of interest</param>
+      /// <param name="contours">The contours where MSER will be stored</param>
+      /// <param name="storage">Memory storage</param>
+      /// <param name="parameters">MSER parameters</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvExtractMSER(
+         IntPtr img,
+         IntPtr mask,
+         ref IntPtr contours,
+         IntPtr storage,
+         MCvMSERParams parameters);
    }
 }
