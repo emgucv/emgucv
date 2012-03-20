@@ -158,6 +158,12 @@ void CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, std::ve
    }
 }
 
+void CvOrbDetectorRelease(cv::ORB** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
 //FeatureDetector
 void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
@@ -200,7 +206,7 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFGetDetector(CvSURFParams* detector)
+CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector)
 {
    return new cv::SURF(detector->hessianThreshold, detector->extended != 0, detector->upright != 0, detector->nOctaves, detector->nOctaveLayers);
 }
@@ -229,10 +235,11 @@ void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::
 
    if (img.channels() == 1)
    {
-      std::vector<float> desc;
-      (*detector)(img, maskMat, *keypoints, desc, true);
-      CV_Assert(desc.size() == descriptors->width * descriptors->height);
-      memcpy(descriptors->data.ptr, &desc[0], desc.size() * sizeof(float));
+      //std::vector<float> desc;
+      cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
+      (*detector)(img, maskMat, *keypoints, descriptorsMat, true);
+      //CV_Assert(desc.size() == descriptors->width * descriptors->height);
+      //memcpy(descriptors->data.ptr, &desc[0], desc.size() * sizeof(float));
    } else //opponent SURF
    {
       cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);

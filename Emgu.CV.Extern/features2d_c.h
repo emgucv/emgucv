@@ -100,7 +100,7 @@ CVAPI(void) GridAdaptedFeatureDetectorDetect(
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFGetDetector(CvSURFParams* detector);
+CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector);
 
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 

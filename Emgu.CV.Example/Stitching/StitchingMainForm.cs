@@ -43,8 +43,7 @@ namespace Stitching
             }
             try
             {
-               using (Stitcher stitcher = new Stitcher(false))
-               //using (Stitcher stitcher = new Stitcher(true))
+               using (Stitcher stitcher = new Stitcher(true))
                {
                   Image<Bgr, Byte> result = stitcher.Stitch(sourceImages);
                   resultImageBox.Image = result;

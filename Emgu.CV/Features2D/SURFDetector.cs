@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
       public SURFDetector(MCvSURFParams surfParams)
       {
          _surfParams = surfParams;
-         _ptr = CvInvoke.CvSURFGetDetector(ref surfParams);
+         _ptr = CvInvoke.CvSURFDetectorCreate(ref surfParams);
       }
 
       /// <summary>
@@ -124,7 +124,7 @@ namespace Emgu.CV.Features2D
          if (count == 0) return null;
          int sizeOfdescriptor = _surfParams.Extended ? 128 : 64;
          Matrix<float> descriptors = new Matrix<float>(keyPoints.Size, sizeOfdescriptor * image.NumberOfChannels, 1);
-         CvInvoke.CvSURFDetectorComputeDescriptors(ref _surfParams, image, keyPoints, descriptors);
+         CvInvoke.CvSURFDetectorComputeDescriptors(_ptr, image, keyPoints, descriptors);
          return descriptors;
       }
 
@@ -220,7 +220,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFGetDetector(ref MCvSURFParams detector);
+      internal extern static IntPtr CvSURFDetectorCreate(ref MCvSURFParams detector);
 
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -233,7 +233,7 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorComputeDescriptors(
-         ref MCvSURFParams detector,
+         IntPtr detector,
          IntPtr image,
          IntPtr keypoints,
          IntPtr descriptors);

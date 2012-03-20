@@ -21,7 +21,7 @@ Module Module1
       Dim img As New Image(Of Bgr, Byte)("lena.jpg")
 
       'Load the object detector
-      Dim faceDetector As New HaarCascade("haarcascade_frontalface_alt.xml")
+      Dim faceDetector As New HaarCascade("haarcascade_frontalface_default.xml")
 
       'Convert the image to Grayscale
       Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
