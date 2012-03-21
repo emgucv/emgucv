@@ -14,7 +14,8 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/flann/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/stitching/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../..")
+#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../..")
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/../..")
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
@@ -73,8 +74,13 @@ IF(WITH_CUDA AND DEFINED CVEXTERN_GPU_DEPENDENCY_DLLS)
     COMPONENT main)
 ENDIF()
 
+IF(ANDROID)
+file(GLOB gpu_extern_srcs "./stitching_c.cpp")
+file(GLOB gpu_extern_hdrs "./stitching_c.h*")
+ELSE()
 file(GLOB gpu_extern_srcs "./*.cpp")
 file(GLOB gpu_extern_hdrs "./*.h*")
+ENDIF()
 
 source_group("Src" FILES ${gpu_extern_srcs})
 source_group("Include" FILES ${gpu_extern_hdrs})
@@ -113,7 +119,7 @@ set_target_properties(${the_target} PROPERTIES
 	)
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu opencv_stitching)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching)
 
 #disable warnings
 IF(MSVC)
@@ -122,9 +128,19 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_gpu opencv_stitching)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching)
   
+IF(TARGET opencv_gpu)
+  ADD_DEPENDENCIES(${the_target} opencv_gpu)
+  target_link_libraries(${the_target} opencv_gpu)
+ENDIF()  
+
+IF(ANDROID)
+  INSTALL(TARGETS ${the_target} 
+    LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+ELSE()
 INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     LIBRARY DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+ENDIF()

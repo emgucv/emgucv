@@ -15,7 +15,6 @@ SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_27
 :: SET BUILD_DIR=build_armeabi-v7a
 
 :::: uncomment following lines to compile for old emulator or old device
-SET ANDROID_ABI=armeabi
 SET BUILD_DIR=build_armeabi
 
 :::: uncomment following lines to compile for ARM-V7 with NEON support

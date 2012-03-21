@@ -121,9 +121,11 @@ namespace MonoAndroidCamera
          {
             if (_bmp != null && canvas != null)
             {
+               Stopwatch w = Stopwatch.StartNew();
                canvas.DrawBitmap(_bmp, 0, 0, null);
+               w.Stop();
                _watch.Stop();
-               canvas.DrawText(String.Format("{0:F2} FPS", 1.0 / _watch.ElapsedMilliseconds * 1000), 20, 20, _paint);
+               canvas.DrawText(String.Format("{0:F2} FPS; Render Time: {1} ms", 1.0 / _watch.ElapsedMilliseconds * 1000, w.ElapsedMilliseconds), 20, 20, _paint);
                _watch.Reset();
                _watch.Start();
             }

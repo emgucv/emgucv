@@ -9,10 +9,13 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Android</RootNamespace>
+    <RootNamespace>Emgu.CV</RootNamespace>
     <AssemblyName>Emgu.CV.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidSupportedAbis>armeabi%3barmeabi-v7a</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,7 +80,7 @@
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvInvokeLegacy.cs" />
     <Compile Include="PInvoke\CvInvokeObjdetect.cs" />
-	<Compile Include="PInvoke\CvInvokePhoto.cs" />
+    <Compile Include="PInvoke\CvInvokePhoto.cs" />
     <Compile Include="PInvoke\CvInvokeVideo.cs" />
     <Compile Include="PInvoke\CvType\Cuboid.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />

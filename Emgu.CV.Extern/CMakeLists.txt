@@ -261,29 +261,23 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
 
-
-IF(NOT ANDROID)
-  target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
-ELSE()
+IF(ANDROID)
   IF(EMGU_CV_WITH_TESSERACT)
     #NOT SURE WHY THE FOLLOWING IS NEEDED, BUT SEEMS TO MAKE THE PROBLEM GOES AWAY
     target_link_libraries(${the_target} ${TESSERACT_LIBRARY} tesseract_ccstruct tesseract_dict tesseract_classify tesseract_ccutil)
   ENDIF()
-ENDIF()
-
-  
-IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
-  #additional linkage required for tesseract built on windows
-  target_link_libraries(${the_target} Ws2_32)
-ENDIF()
-  
-IF(ANDROID)
   INSTALL(TARGETS ${the_target} 
     LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
 ELSE()
+  target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
+  IF(WIN32 AND EMGU_CV_WITH_TESSERACT)
+    #additional linkage required for tesseract built on windows
+    target_link_libraries(${the_target} Ws2_32)
+  ENDIF()
   INSTALL(TARGETS ${the_target} 
     RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     LIBRARY DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
-  add_subdirectory(gpu)
 ENDIF()
+
+add_subdirectory(gpu)

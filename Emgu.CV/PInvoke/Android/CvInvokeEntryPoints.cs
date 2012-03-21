@@ -45,6 +45,10 @@ namespace Emgu.CV
       /// The file name of the gpu library
       /// </summary>
       public const string OPENCV_GPU_LIBRARY = "";
+	  /// <summary>
+      /// The file name of the opencv_stitching library
+      /// </summary>
+      public const string OPENCV_STITCHING_LIBRARY = "opencv_stitching";
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
@@ -52,7 +56,7 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cvextern_gpu library
       /// </summary>
-      public const string EXTERN_GPU_LIBRARY = "";
+      public const string EXTERN_GPU_LIBRARY = "cvextern_gpu";
       /// <summary>
       /// The file name of the opencv_ffmpeg library
       /// </summary>
