@@ -9,6 +9,11 @@ PROJECT(Emgu.CV)
 FILE(GLOB_RECURSE SRC_CV RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_CV ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
+#Remove android specific files
+FILE(GLOB SRC_CV_EXCLUDES)
+LIST(REMOVE_ITEM SRC_CV "PInvoke/Android/CvInvokeEntryPoints.cs")
+#MESSAGE(STATUS "SRC_CV: ${SRC_CV}") 
+
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
 ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.ServiceModel.dll;System.Core.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
