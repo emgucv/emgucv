@@ -104,8 +104,8 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
     COMPONENT main)
 ENDIF()
 
-file(GLOB extern_srcs "./*.cpp")
-file(GLOB extern_hdrs "./*.h*")
+file(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
+file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
 
 ############################### TESSERACT START ########################
 IF(ANDROID)
@@ -149,6 +149,14 @@ ENDIF()
 ADD_SUBDIRECTORY(cvblob)
 SET(CVBLOB_LIBRARY cvblob)
 ############################### CVBLOB END ##########################
+
+IF(ANDROID OR APPLE)
+  FILE(GLOB extern_srcs_excludes "${PROJECT_SOURCE_DIR}/tiffio.cpp")
+  LIST(REMOVE_ITEM extern_srcs ${extern_srcs_excludes})
+  #MESSAGE(STATUS "extern_srcs: ${extern_srcs}")
+  FILE(GLOB extern_hdrs_excludes "${PROJECT_SOURCE_DIR}/tiffio_c.h")
+  LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
+ENDIF()
 
 source_group("Src" FILES ${extern_srcs})
 source_group("Include" FILES ${extern_hdrs})
@@ -206,8 +214,9 @@ IF(NOT ZLIB_FOUND)
 ENDIF()
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 
-IF (ANDROID)
-  MESSAGE(STATUS "Skippinng GEOTIFF for Android")
+IF (ANDROID OR APPLE)
+  MESSAGE(STATUS "Skipping GEOTIFF")
+  SET(GEOTIFF_LIBRARY "")
 ELSE()
   SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libgeotiff/cmake")
   FIND_PACKAGE(GeoTIFF)
