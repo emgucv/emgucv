@@ -18,7 +18,11 @@ namespace Emgu.Util.TypeEnum
       /// <summary>
       /// Linux
       /// </summary>
-      Linux
+      Linux, 
+      /// <summary>
+      /// Mac OSX
+      /// </summary>
+      MacOSX
    }
 
    /// <summary>

@@ -17,9 +17,16 @@ namespace Emgu.Util
 
       static Platform()
       {
-         int p = (int)Environment.OSVersion.Platform;
-         _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
-
+         PlatformID pid = Environment.OSVersion.Platform;
+         if (pid == PlatformID.MacOSX)
+         {
+            _os = OS.MacOSX;
+         }
+         else
+         {
+            int p = (int)pid;
+            _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
+         }
          _runtime = (Type.GetType("System.MonoType", false) != null) ? Runtime.Mono : Runtime.DotNet;
       }
 
