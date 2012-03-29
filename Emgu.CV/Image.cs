@@ -9,6 +9,7 @@ using System.Drawing;
 
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
+#elif IOS
 #else
 using System.Drawing.Imaging;
 #endif
@@ -94,14 +95,20 @@ namespace Emgu.CV
             //possibly Exception in CvInvoke's static constructor.
             throw e;
          }
-         catch 
+         catch (Exception e)
          {
+#if IOS
+            throw e;
+#else
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
             LoadFileUsingBitmap(fi);
+#endif
          }
       }
 
+#if IOS
+#else
       /// <summary>
       /// Load the specific file using Bitmap
       /// </summary>
@@ -116,7 +123,7 @@ namespace Emgu.CV
             Bitmap = bmp;
 
       }
-
+#endif
       /// <summary>
       /// Load the specific file using OpenCV
       /// </summary>
@@ -195,6 +202,8 @@ namespace Emgu.CV
 
       }
 
+#if IOS
+#else
       /// <summary>
       /// Obtain the image from the specific Bitmap
       /// </summary>
@@ -203,6 +212,7 @@ namespace Emgu.CV
       {
          Bitmap = bmp;
       }
+#endif
 
       ///<summary>
       ///Create a blank Image of the specified width, height and color.
@@ -2594,7 +2604,8 @@ namespace Emgu.CV
       }
       #endregion
 
-
+#if IOS
+#else
       //#region Conversion with Bitmap
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
@@ -2985,7 +2996,7 @@ namespace Emgu.CV
             return scaledImage.ToBitmap();
       }
      // #endregion
-
+#endif
 
       #region Pyramids
       ///<summary>
@@ -4299,9 +4310,11 @@ namespace Emgu.CV
          {
             base.Save(fileName); //save the image using OpenCV
          }
-         catch
+         catch (Exception e)
          {
-#if ANDROID
+#if IOS
+            throw e;
+#elif ANDROID
             FileInfo fileInfo = new FileInfo(fileName);
             using (Bitmap bmp = Bitmap)
             using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))

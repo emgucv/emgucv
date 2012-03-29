@@ -16,17 +16,17 @@ namespace Emgu.CV
    /// <summary> 
    /// Capture images from either camera or video file. 
    /// </summary>
-#if ANDROID
+#if (ANDROID || IOS)
 #else
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 #endif
    public class Capture :
        UnmanagedObject,
-#if ANDROID
+#if (ANDROID || IOS)
 #else
-       IDuplexCapture,
+ IDuplexCapture,
 #endif
-       ICapture
+ ICapture
    {
       private Thread _captureThread = null;
 
@@ -234,7 +234,8 @@ namespace Emgu.CV
       public virtual bool Grab()
       {
          bool grabbed = CvInvoke.cvGrabFrame(_ptr);
-         if (grabbed && ImageGrabbed != null) ImageGrabbed(this, new EventArgs());
+         if (grabbed && ImageGrabbed != null)
+            ImageGrabbed(this, new EventArgs());
          return grabbed;
       }
 
@@ -252,6 +253,7 @@ namespace Emgu.CV
       public event GrabEventHandler ImageGrabbed;
 
       private volatile bool _pauseGrabProcess;
+
       private void Run()
       {
          while (this.Grab())
@@ -449,7 +451,7 @@ namespace Emgu.CV
       public virtual Image<Bgr, Byte> QuerySmallFrame()
       {
          using (Image<Bgr, Byte> frame = QueryFrame())
-            return frame == null? null : frame.PyrDown();
+            return frame == null ? null : frame.PyrDown();
       }
       #endregion
 
@@ -481,7 +483,7 @@ namespace Emgu.CV
             }
         }*/
 
-#if ANDROID
+#if (ANDROID || IOS)
 #else
       /// <summary>
       /// Query a frame duplexly over WCF

@@ -1,13 +1,11 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Drawing;
 
 #if ANDROID
 using Bitmap =  Android.Graphics.Bitmap;
-#else
 #endif
 
 namespace Emgu.CV
@@ -17,7 +15,8 @@ namespace Emgu.CV
    /// </summary>
    public interface IImage : IDisposable, ICloneable
    {
-
+#if IOS
+#else
       /// <summary>
       /// Convert this image into Bitmap, when avaialbe, data is shared with this image.
       /// </summary>
@@ -26,6 +25,7 @@ namespace Emgu.CV
       {
          get;
       }
+#endif
 
       /// <summary>
       /// The size of this image
@@ -52,7 +52,7 @@ namespace Emgu.CV
       /// in the array represent a single color channel of the original image 
       ///</returns>
       IImage[] Split();
-      
+
       /// <summary>
       /// Get the pointer to the unmanaged memory
       /// </summary>
