@@ -414,6 +414,7 @@ namespace Emgu.CV
 # ----------------------------------------------------------------------------
 #  Build the managed dlls of Emgu CV
 # ----------------------------------------------------------------------------
+IF(NOT (ANDROID OR IOS)) 
 ADD_SUBDIRECTORY(Emgu.Util)
 ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.UI)
@@ -424,6 +425,7 @@ ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(Emgu.CV.GPU)
 ADD_SUBDIRECTORY(Emgu.CV.OCR)
 ADD_SUBDIRECTORY(Emgu.CV.Stitching)
+ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
