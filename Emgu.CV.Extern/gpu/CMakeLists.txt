@@ -74,7 +74,7 @@ IF(WITH_CUDA AND DEFINED CVEXTERN_GPU_DEPENDENCY_DLLS)
     COMPONENT main)
 ENDIF()
 
-IF(ANDROID)
+IF(ANDROID OR IOS)
 file(GLOB gpu_extern_srcs "./stitching_c.cpp")
 file(GLOB gpu_extern_hdrs "./stitching_c.h*")
 ELSE()
