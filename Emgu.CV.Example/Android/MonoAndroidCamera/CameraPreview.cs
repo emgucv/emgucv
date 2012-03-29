@@ -85,6 +85,7 @@ namespace MonoAndroidCamera
       HaarCascade _faceDetector;
       Android.Graphics.Bitmap _bmp;
       int[] _bgraData;
+      byte[] _bgrData;
 
       public ViewMode Mode = ViewMode.Preview;
 
@@ -95,6 +96,8 @@ namespace MonoAndroidCamera
          _paint.SetStyle(Paint.Style.Stroke);
          _paint.SetARGB(255, 255, 0, 0);
          _paint.TextSize = 25;
+
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
 
          System.IO.Stream iStream = context.Assets.Open("haarcascade_frontalface_default.xml"); ;
          Java.IO.File dir = context.GetDir("cascade", FileCreationMode.Private);
@@ -143,31 +146,23 @@ namespace MonoAndroidCamera
                Camera.Size size = camera.GetParameters().PreviewSize;
                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
-                  if (Mode == ViewMode.Canny)
-                  {
-                     using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                     using (Image<Gray, Byte> canny = grey.Canny(new Gray(100), new Gray(60)))
-                     {
-                        lock (this)
-                        {
-                           if (_bmp != null)
-                              _bmp.Dispose();
-                           _bmp = canny.Bitmap;
-                        }
-                     }
-                  }
-                  else if (Mode == ViewMode.Preview)
-                  {
+               if (Mode == ViewMode.Canny)
+               {
+                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height)
+                     _bgrData = new byte[size.Width * size.Height * 3];
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Gray, Byte> canny = new Image<Gray,byte>(size.Width, size.Height, size.Width, bgrHandle.AddrOfPinnedObject()))
+                  { 
+                     CvInvoke.cvCanny(grey, canny, 100, 60, 3);
+
                      if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
                         _bgraData = new int[size.Width * size.Height];
                      GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-
-                     using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                      using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
-                     {
-                        CvInvoke.cvCvtColor(tmp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
-                     }
+                        CvInvoke.cvCvtColor(canny, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGRA);
                      bgraHandle.Free();
+
                      lock (this)
                      {
                         if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
@@ -181,37 +176,67 @@ namespace MonoAndroidCamera
                         _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
                      }
                   }
-                  else
+               }
+               else if (Mode == ViewMode.Preview)
+               {
+                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
+                     _bgraData = new int[size.Width * size.Height];
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                     CvInvoke.cvCvtColor(tmp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
+                  bgraHandle.Free();
+
+                  lock (this)
                   {
-                     MCvAvgComp[] faces;
-                     using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                        faces = _faceDetector.Detect(grey);
-
-                     if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                        _bgraData = new int[size.Width * size.Height];
-                     GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-
-                     using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                     using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                     if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
                      {
-                        CvInvoke.cvCvtColor(tmp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
-                        foreach (MCvAvgComp face in faces)
-                           bgra.Draw(face.rect, new Bgra(255, 0, 0, 255), 2);
+                        _bmp.Dispose();
+                        _bmp = null;
                      }
-                     bgraHandle.Free();
-                     lock (this)
-                     {
-                        if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
-                        {
-                           _bmp.Dispose();
-                           _bmp = null;
-                        }
-                        if (_bmp == null)
-                           _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
+                     if (_bmp == null)
+                        _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
 
-                        _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
-                     }
+                     _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
                   }
+               }
+               else
+               {  //face detection
+                  MCvAvgComp[] faces;
+                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
+                     faces = _faceDetector.Detect(grey);
+
+                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
+                     _bgraData = new int[size.Width * size.Height];
+                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
+                     _bgrData = new byte[size.Width * size.Height * 3];
+
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                  {
+                     CvInvoke.cvCvtColor(tmp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                     foreach (MCvAvgComp face in faces)
+                        bgr.Draw(face.rect, new Bgr(255, 0, 0), 2);
+                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
+                  }
+                  bgraHandle.Free();
+                  bgrHandle.Free();
+                  lock (this)
+                  {
+                     if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
+                     {
+                        _bmp.Dispose();
+                        _bmp = null;
+                     }
+                     if (_bmp == null)
+                        _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
+
+                     _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
+                  }
+               }
 
                handle.Free();
 
@@ -221,6 +246,7 @@ namespace MonoAndroidCamera
             {
                _busy = false;
             }
+         camera.AddCallbackBuffer(data);
       }
    }
 
@@ -267,7 +293,7 @@ namespace MonoAndroidCamera
          // Because the CameraDevice object is not a shared resource, it's very
          // important to release it when the activity is paused.
          camera.StopPreview();
-         camera.SetPreviewCallback(null);
+         camera.SetPreviewCallbackWithBuffer(null);
          camera.Release();
          camera = null;
       }
@@ -336,8 +362,11 @@ namespace MonoAndroidCamera
          //set for protrait mode
          //camera.SetDisplayOrientation(90);
 
-         camera.SetPreviewCallback(_topLayer);
-
+         //camera.SetPreviewCallback(_topLayer);
+         camera.SetPreviewCallbackWithBuffer(_topLayer);
+         int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
+         for (int i = 0; i < 1; ++i)
+            camera.AddCallbackBuffer(new byte[bufferSize]);
          camera.StartPreview();
 
          Layout(0, 0, optimalSize.Width, optimalSize.Height);

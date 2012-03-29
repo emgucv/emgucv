@@ -151,12 +151,15 @@
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libcvextern_gpu.so">
       <Link>lib\armeabi\libcvextern_gpu.so</Link>
     </AndroidNativeLibrary>
-    <None Include="..\..\..\libs\armeabi\libopencv_photo.so">
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_nonfree.so">
+      <Link>lib\armeabi\libopencv_nonfree.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_photo.so">
       <Link>lib\armeabi\libopencv_photo.so</Link>
-    </None>
-    <None Include="..\..\..\libs\armeabi\libopencv_videostab.so">
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_videostab.so">
       <Link>lib\armeabi\libopencv_videostab.so</Link>
-    </None>
+    </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
