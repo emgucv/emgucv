@@ -1,10 +1,10 @@
 cd ..
 ios/configure-device_xcode.sh
 xcodebuild -sdk iphoneos -configuration Release -target ALL_BUILD clean build
-mkdir -p ios/ArmV7
-cp -r lib/Release/* ios/ArmV7/
-cd ios/ArmV7
-for i in *; do j=`echo $i | cut -d . -f 1`; j=$j"_ArmV7.a";mv $i $j; done
+mkdir -p ios/armv7
+cp -r lib/Release/* ios/armv7/
+cd ios/armv7
+for i in *; do j=`echo $i | cut -d . -f 1`; j=$j"_armv7.a";mv $i $j; done
 cd ../..
 rm CMakeCache.txt
 ios/configure-simulator_xcode.sh
