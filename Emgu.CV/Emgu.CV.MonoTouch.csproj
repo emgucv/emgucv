@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{15290E0E-8915-4FA2-963E-30FB0AE4CA2F}</ProjectGuid>
+    <ProjectGuid>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</ProjectGuid>
     <ProjectTypeGuids>{F5B4F3BC-B597-4E2B-B552-EF5D8A32436F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Emgu.CV</RootNamespace>
+    <RootNamespace>Emgu.CV.MonoTouch</RootNamespace>
     <AssemblyName>Emgu.CV.MonoTouch</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="monotouch" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="OpenTK" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdaptiveSkinDetector.cs" />
@@ -232,8 +234,17 @@
     <Compile Include="VideoWriter.cs" />
     <Compile Include="PInvoke\MonoTouch\CvInvokeEntryPoints.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="PInvoke\MonoTouch\ApiDefinition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingCoreSource Include="PInvoke\MonoTouch\StructsAndEnums.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Xamarin.ObjcBinding.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="PInvoke\MonoTouch\" />
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
+      <Name>Emgu.Util.MonoTouch</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

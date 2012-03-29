@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-#if ANDROID
+
+#if (ANDROID || IOS)
 #else
 using System.Drawing.Imaging;
+
 #endif
 using System.IO;
 using System.Runtime.InteropServices;
@@ -23,7 +24,7 @@ namespace Emgu.CV.Util
    /// </summary>
    public static class CvToolbox
    {
-#if ANDROID
+#if (ANDROID || IOS)
 #else
       #region Color Pallette
       /// <summary>
@@ -239,7 +240,8 @@ namespace Emgu.CV.Util
             Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcColorType) ?
                _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
             conversion = table.ContainsKey(destColorType) ?
-                          table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType)); ;
+                          table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType));
+            ;
          }
          return conversion;
       }
