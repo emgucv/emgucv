@@ -1,6 +1,6 @@
 Index: cmake/OpenCVDetectTBB.cmake
 ===================================================================
---- cmake/OpenCVDetectTBB.cmake	(revision 7560)
+--- cmake/OpenCVDetectTBB.cmake	(revision 7713)
 +++ cmake/OpenCVDetectTBB.cmake	(working copy)
 @@ -41,12 +41,20 @@
        else()
@@ -21,7 +21,7 @@ Index: cmake/OpenCVDetectTBB.cmake
 +        else(MSVC)
 +            if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64* OR MSVC64)
 +                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
-+            else()
++            elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
 +                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
 +            endif()
 +        endif(MSVC)
@@ -31,27 +31,26 @@ Index: cmake/OpenCVDetectTBB.cmake
          elseif(MSVC90)
 Index: modules/gpu/src/split_merge.cpp
 ===================================================================
---- modules/gpu/src/split_merge.cpp	(revision 7560)
+--- modules/gpu/src/split_merge.cpp	(revision 7713)
 +++ modules/gpu/src/split_merge.cpp	(working copy)
-@@ -90,12 +90,13 @@
+@@ -96,12 +96,13 @@
          CV_Assert(single_channel_only);
          CV_Assert(total_channels <= 4);
  
--        if (total_channels == 1)  
--            src[0].copyTo(dst);
 +        dst.create(size, CV_MAKETYPE(depth, total_channels));
-+        if (total_channels == 1)
+         if (total_channels == 1)
+-            src[0].copyTo(dst);
 +        {
 +            cudaSafeCall( cudaMemcpy2DAsync(dst.data, dst.step, src[0].data, src[0].step, src[0].cols * src[0].elemSize(), src[0].rows, cudaMemcpyDeviceToDevice, stream) );
 +        }
-         else 
+         else
          {
 -            dst.create(size, CV_MAKETYPE(depth, total_channels));
 -
              DevMem2Db src_as_devmem[4];
              for(size_t i = 0; i < n; ++i)
                  src_as_devmem[i] = src[i];
-@@ -117,7 +118,8 @@
+@@ -129,7 +130,8 @@
  
          if (num_channels == 1)
          {
@@ -63,9 +62,9 @@ Index: modules/gpu/src/split_merge.cpp
  
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7560)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7713)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
-@@ -471,6 +471,9 @@
+@@ -477,6 +477,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);  
  
@@ -77,9 +76,9 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 7560)
+--- modules/highgui/src/cap_openni.cpp	(revision 7713)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
-@@ -97,6 +97,8 @@
+@@ -428,6 +428,8 @@
  
      bool isOpened() const;
  
@@ -88,7 +87,7 @@ Index: modules/highgui/src/cap_openni.cpp
  protected:
      struct OutputMap
      {
-@@ -833,4 +835,10 @@
+@@ -1335,4 +1337,10 @@
      return 0;
  }
  
@@ -101,7 +100,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 7560)
+--- modules/legacy/src/3dtracker.cpp	(revision 7713)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
