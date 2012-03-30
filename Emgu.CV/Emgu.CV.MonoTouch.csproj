@@ -233,23 +233,60 @@
     <Compile Include="VideoSurveillance\IBGFGDetector.cs" />
     <Compile Include="VideoWriter.cs" />
     <Compile Include="PInvoke\MonoTouch\CvInvokeEntryPoints.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libcvextern_gpu_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libcvextern_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_calib3d_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_contrib_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_core_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_features2d_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_flann_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_highgui_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_imgproc_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_legacy_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_ml_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_nonfree_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_objdetect_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_photo_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_stitching_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_video_i386.linkwith.cs" />
-    <Compile Include="PInvoke\MonoTouch\i386\libopencv_videostab_i386.linkwith.cs" />
+    <Compile Include="PInvoke\MonoTouch\i386\libcvextern_gpu_i386.linkwith.cs">
+      <DependentUpon>libcvextern_gpu_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libcvextern_i386.linkwith.cs">
+      <DependentUpon>libcvextern_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_calib3d_i386.linkwith.cs">
+      <DependentUpon>libopencv_calib3d_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_contrib_i386.linkwith.cs">
+      <DependentUpon>libopencv_contrib_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_core_i386.linkwith.cs">
+      <DependentUpon>libopencv_core_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_features2d_i386.linkwith.cs">
+      <DependentUpon>libopencv_features2d_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_flann_i386.linkwith.cs">
+      <DependentUpon>libopencv_flann_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_highgui_i386.linkwith.cs">
+      <DependentUpon>libopencv_highgui_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_imgproc_i386.linkwith.cs">
+      <DependentUpon>libopencv_imgproc_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_legacy_i386.linkwith.cs">
+      <DependentUpon>libopencv_legacy_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_ml_i386.linkwith.cs">
+      <DependentUpon>libopencv_ml_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_nonfree_i386.linkwith.cs">
+      <DependentUpon>libopencv_nonfree_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_objdetect_i386.linkwith.cs">
+      <DependentUpon>libopencv_objdetect_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_photo_i386.linkwith.cs">
+      <DependentUpon>libopencv_photo_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_stitching_i386.linkwith.cs">
+      <DependentUpon>libopencv_stitching_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_video_i386.linkwith.cs">
+      <DependentUpon>libopencv_video_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libopencv_videostab_i386.linkwith.cs">
+      <DependentUpon>libopencv_videostab_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libcvblob_i386.linkwith.cs">
+      <DependentUpon>libcvblob_i386.a</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="PInvoke\MonoTouch\ApiDefinition.cs" />
@@ -282,5 +319,6 @@
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libopencv_stitching_i386.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libopencv_video_i386.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libopencv_videostab_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libcvblob_i386.a" />
   </ItemGroup>
 </Project>
