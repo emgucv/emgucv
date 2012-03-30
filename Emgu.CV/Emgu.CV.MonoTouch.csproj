@@ -287,6 +287,60 @@
     <Compile Include="PInvoke\MonoTouch\i386\libcvblob_i386.linkwith.cs">
       <DependentUpon>libcvblob_i386.a</DependentUpon>
     </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libcvblob_armv7.linkwith.cs">
+      <DependentUpon>libcvblob_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libcvextern_armv7.linkwith.cs">
+      <DependentUpon>libcvextern_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libcvextern_gpu_armv7.linkwith.cs">
+      <DependentUpon>libcvextern_gpu_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_calib3d_armv7.linkwith.cs">
+      <DependentUpon>libopencv_calib3d_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_contrib_armv7.linkwith.cs">
+      <DependentUpon>libopencv_contrib_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_core_armv7.linkwith.cs">
+      <DependentUpon>libopencv_core_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_features2d_armv7.linkwith.cs">
+      <DependentUpon>libopencv_features2d_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_flann_armv7.linkwith.cs">
+      <DependentUpon>libopencv_flann_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_highgui_armv7.linkwith.cs">
+      <DependentUpon>libopencv_highgui_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_imgproc_armv7.linkwith.cs">
+      <DependentUpon>libopencv_imgproc_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_legacy_armv7.linkwith.cs">
+      <DependentUpon>libopencv_legacy_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_ml_armv7.linkwith.cs">
+      <DependentUpon>libopencv_ml_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_nonfree_armv7.linkwith.cs">
+      <DependentUpon>libopencv_nonfree_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_objdetect_armv7.linkwith.cs">
+      <DependentUpon>libopencv_objdetect_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_photo_armv7.linkwith.cs">
+      <DependentUpon>libopencv_photo_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_stitching_armv7.linkwith.cs">
+      <DependentUpon>libopencv_stitching_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_video_armv7.linkwith.cs">
+      <DependentUpon>libopencv_video_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libopencv_videostab_armv7.linkwith.cs">
+      <DependentUpon>libopencv_videostab_armv7.a</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="PInvoke\MonoTouch\ApiDefinition.cs" />
@@ -320,5 +374,23 @@
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libopencv_video_i386.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libopencv_videostab_i386.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libcvblob_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libcvblob_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libcvextern_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libcvextern_gpu_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_calib3d_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_contrib_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_core_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_features2d_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_flann_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_highgui_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_imgproc_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_legacy_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_ml_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_nonfree_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_objdetect_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_photo_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_stitching_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_video_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_videostab_armv7.a" />
   </ItemGroup>
 </Project>
