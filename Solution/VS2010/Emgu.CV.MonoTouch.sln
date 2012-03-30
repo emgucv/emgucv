@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.MonoTouch", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.MonoTouch", "..\..\Emgu.CV.ML\Emgu.CV.ML.MonoTouch.csproj", "{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.MonoTouch", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.MonoTouch.csproj", "{2B9B1965-3A6D-4D06-9427-43335D4C668F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -17,6 +19,14 @@ Global
 		Release|iPhone = Release|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Release|iPhone.Build.0 = Release|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
