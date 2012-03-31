@@ -208,7 +208,7 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 //SURFDetector
 CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector)
 {
-   return new cv::SURF(detector->hessianThreshold, detector->extended != 0, detector->upright != 0, detector->nOctaves, detector->nOctaveLayers);
+   return new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
 }
 
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector)
@@ -341,13 +341,13 @@ void CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* 
    cv::Mat homographyMat = cv::cvarrToMat(homography);
    (*detector)(imageMat, homographyMat,  cornerVec);
    if (!cornerVec.empty())
-      cvSeqPushMulti(corners, &cornerVec[0], cornerVec.size());
+      cvSeqPushMulti(corners, &cornerVec[0], static_cast<int>(cornerVec.size()));
 }
 void CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
 {
    std::vector<cv::KeyPoint> modelPtVec = detector->getModelPoints();
    if (!modelPtVec.empty())
-      cvSeqPushMulti(modelPoints, &modelPtVec[0], modelPtVec.size());
+      cvSeqPushMulti(modelPoints, &modelPtVec[0], static_cast<int>(modelPtVec.size()));
 }
 
 // Draw keypoints.
