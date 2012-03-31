@@ -148,62 +148,6 @@ namespace Emgu.CV
          IntPtr disparity,
          IntPtr image3D,
          IntPtr Q);
-
-      #region StereoGC
-      /// <summary>
-      /// Creates the stereo correspondence structure and initializes it. 
-      /// </summary>
-      /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
-      /// <param name="maxIters">Maximum number of iterations. On each iteration all possible (or reasonable) alpha-expansions are tried. The algorithm may terminate earlier if it could not find an alpha-expansion that decreases the overall cost function value</param>
-      /// <returns>The initialized stereo correspondence structure</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvCreateStereoGCState(
-         int numberOfDisparities,
-         int maxIters);
-
-      /// <summary>
-      /// Releases the stereo correspondence structure and all the associated internal buffers
-      /// </summary>
-      /// <param name="state">A reference to the pointer of StereoGCState structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvReleaseStereoGCState(ref IntPtr state);
-
-      /// <summary>
-      /// Computes disparity maps for the input rectified stereo pair
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
-      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
-      /// <param name="state">Stereo correspondence structure</param>
-      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFindStereoCorrespondenceGC(
-         IntPtr left,
-         IntPtr right,
-         IntPtr dispLeft,
-         IntPtr dispRight,
-         IntPtr state,
-         int useDisparityGuess);
-
-      /// <summary>
-      /// Computes disparity maps for the input rectified stereo pair
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
-      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
-      /// <param name="state">Stereo correspondence structure</param>
-      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFindStereoCorrespondenceGC(
-         IntPtr left,
-         IntPtr right,
-         IntPtr dispLeft,
-         IntPtr dispRight,
-         ref MCvStereoGCState state,
-         int useDisparityGuess);
-      #endregion
       #endregion
 
       /// <summary>

@@ -120,6 +120,489 @@ namespace Emgu.CV
             calcGradient ? 1 : 0);
       }
 
+      #region Codebook background model
+      /// <summary>
+      /// Create a BG code book model
+      /// </summary>
+      /// <returns>Poionter to BG code book model</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr cvCreateBGCodeBookModel();
+
+      /// <summary>
+      /// Update the BG code book model
+      /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image for update</param>
+      /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
+      /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookUpdate(
+         IntPtr model,
+         IntPtr image,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
+      /// Update the BG code book model
+      /// </summary>
+      /// <param name="model">The BGCodeBookModel</param>
+      /// <param name="image">The image for update</param>
+      /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
+      /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookUpdate(
+         ref MCvBGCodeBookModel model,
+         IntPtr image,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image to find diff</param>
+      /// <param name="fgmask">The returned foreground mask</param>
+      /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
+      /// <returns></returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int cvBGCodeBookDiff(
+         IntPtr model,
+         IntPtr image,
+         IntPtr fgmask,
+         Rectangle roi);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model">Pointer to the BGCodeBookModel</param>
+      /// <param name="image">The image to find diff</param>
+      /// <param name="fgmask">The returned foreground mask</param>
+      /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
+      /// <returns></returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int cvBGCodeBookDiff(
+         ref MCvBGCodeBookModel model,
+         IntPtr image,
+         IntPtr fgmask,
+         Rectangle roi);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model"></param>
+      /// <param name="staleThresh"></param>
+      /// <param name="roi"></param>
+      /// <param name="mask"></param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookClearStale(
+         IntPtr model,
+         int staleThresh,
+         Rectangle roi,
+         IntPtr mask);
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="model"></param>
+      /// <param name="staleThresh"></param>
+      /// <param name="roi"></param>
+      /// <param name="mask"></param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvBGCodeBookClearStale(
+         ref MCvBGCodeBookModel model,
+         int staleThresh,
+         Rectangle roi,
+         IntPtr mask);
+
+
+      /// <summary>
+      /// Release the BG code book model
+      /// </summary>
+      /// <param name="model">The BG code book model to be released</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvReleaseBGCodeBookModel(ref IntPtr model);
+      #endregion
+
+      #region background / foreground  statistic
+      /// <summary>
+      /// Releases memory used by BGStatMode
+      /// </summary>
+      /// <param name="bgModel">The bgModel to be released</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static void cvReleaseBGStatModel(ref IntPtr bgModel);
+
+      /// <summary>
+      /// Updates statistical model and returns number of found foreground regions
+      /// </summary>
+      /// <param name="currentFrame">The current frame</param>
+      /// <param name="bgModel">The bg model</param>
+      /// <param name="learningRate">The leaning rate, use -1 for default value</param>
+      /// <returns>The number of found foreground regions</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static int cvUpdateBGStatModel(IntPtr currentFrame, IntPtr bgModel,
+                                double learningRate);
+
+      /// <summary>
+      /// Create a Gaussian background model
+      /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="param">Parameters for the background model</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, IntPtr param);
+
+      /// <summary>
+      /// Create a background model
+      /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="param">Parameters for the background model</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
+
+      /// <summary>
+      /// Create a foreground model
+      /// </summary>
+      /// <param name="firstFrame">The first frame</param>
+      /// <param name="parameters">The foreground statistic parameters</param>
+      /// <returns>Pointer to the foreground model</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
+
+      /// <summary>
+      /// Create a Gaussian background model
+      /// </summary>
+      /// <param name="image">Background image</param>
+      /// <param name="parameters">Parameters for the background model</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, ref MCvGaussBGStatModelParams parameters);
+      #endregion
+
+      #region optical flow
+      /// <summary>
+      /// Computes flow for every pixel of the first input image using Lucas &amp; Kanade algorithm
+      /// </summary>
+      /// <param name="prev">First image, 8-bit, single-channel.</param>
+      /// <param name="curr">Second image, 8-bit, single-channel.</param>
+      /// <param name="winSize">Size of the averaging window used for grouping pixels. </param>
+      /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
+      /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcOpticalFlowLK(
+              IntPtr prev,
+              IntPtr curr,
+              Size winSize,
+              IntPtr velx,
+              IntPtr vely);
+
+      /// <summary>
+      /// Computes flow for every pixel of the first input image using Horn &amp; Schunck algorithm 
+      /// </summary>
+      /// <param name="prev">First image, 8-bit, single-channel</param>
+      /// <param name="curr">Second image, 8-bit, single-channel</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field</param>
+      /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
+      /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
+      /// <param name="lambda">Lagrangian multiplier</param>
+      /// <param name="criteria">Criteria of termination of velocity computing</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcOpticalFlowHS(
+              IntPtr prev,
+              IntPtr curr,
+              bool usePrevious,
+              IntPtr velx,
+              IntPtr vely,
+              double lambda,
+              MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Calculates optical flow for overlapped blocks block_size.width * block_size.height pixels each, thus the velocity fields are smaller than the original images. For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous=1)
+      /// </summary>
+      /// <param name="prev">First image, 8-bit, single-channel.</param>
+      /// <param name="curr">Second image, 8-bit, single-channel. </param>
+      /// <param name="blockSize">Size of basic blocks that are compared.</param>
+      /// <param name="shiftSize">Block coordinate increments. </param>
+      /// <param name="maxRange">Size of the scanned neighborhood in pixels around block.</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field. </param>
+      /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
+      /// <param name="vely">Vertical component of the optical flow of the same size velx, 32-bit floating-point, single-channel.</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcOpticalFlowBM(
+              IntPtr prev,
+              IntPtr curr,
+              Size blockSize,
+              Size shiftSize,
+              Size maxRange,
+              bool usePrevious,
+              IntPtr velx,
+              IntPtr vely);
+
+      /// <summary>
+      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
+      /// </summary>
+      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
+      /// <param name="prev">First frame, at time t. </param>
+      /// <param name="curr">Second frame, at time t + dt .</param>
+      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
+      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
+      /// <param name="count">Number of feature points.</param>
+      /// <param name="winSize">Size of the search window of each pyramid level.</param>
+      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
+      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
+      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
+      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
+      /// <param name="flags">Miscellaneous flags</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcOpticalFlowPyrLK(
+          IntPtr prev,
+          IntPtr curr,
+          IntPtr prevPyr,
+          IntPtr currPyr,
+          float[,] prevFeatures,
+          float[,] currFeatures,
+          int count,
+          Size winSize,
+          int level,
+          Byte[] status,
+          float[] trackError,
+          MCvTermCriteria criteria,
+          CvEnum.LKFLOW_TYPE flags);
+
+      /// <summary>
+      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
+      /// </summary>
+      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
+      /// <param name="prev">First frame, at time t. </param>
+      /// <param name="curr">Second frame, at time t + dt .</param>
+      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
+      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
+      /// <param name="count">Number of feature points.</param>
+      /// <param name="winSize">Size of the search window of each pyramid level.</param>
+      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
+      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
+      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
+      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
+      /// <param name="flags">Miscellaneous flags</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcOpticalFlowPyrLK(
+         IntPtr prev,
+         IntPtr curr,
+         IntPtr prevPyr,
+         IntPtr currPyr,
+         [In]
+         PointF[] prevFeatures,
+         [Out]
+         PointF[] currFeatures,
+         int count,
+         Size winSize,
+         int level,
+         Byte[] status,
+         float[] trackError,
+         MCvTermCriteria criteria,
+         CvEnum.LKFLOW_TYPE flags);
+      #endregion
+
+      #region StereoGC
+      /// <summary>
+      /// Creates the stereo correspondence structure and initializes it. 
+      /// </summary>
+      /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
+      /// <param name="maxIters">Maximum number of iterations. On each iteration all possible (or reasonable) alpha-expansions are tried. The algorithm may terminate earlier if it could not find an alpha-expansion that decreases the overall cost function value</param>
+      /// <returns>The initialized stereo correspondence structure</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvCreateStereoGCState(
+         int numberOfDisparities,
+         int maxIters);
+
+      /// <summary>
+      /// Releases the stereo correspondence structure and all the associated internal buffers
+      /// </summary>
+      /// <param name="state">A reference to the pointer of StereoGCState structure</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvReleaseStereoGCState(ref IntPtr state);
+
+      /// <summary>
+      /// Computes disparity maps for the input rectified stereo pair
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
+      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvFindStereoCorrespondenceGC(
+         IntPtr left,
+         IntPtr right,
+         IntPtr dispLeft,
+         IntPtr dispRight,
+         IntPtr state,
+         int useDisparityGuess);
+
+      /// <summary>
+      /// Computes disparity maps for the input rectified stereo pair
+      /// </summary>
+      /// <param name="left">The left single-channel, 8-bit image</param>
+      /// <param name="right">The right image of the same size and the same type</param>
+      /// <param name="dispLeft">The optional output single-channel 16-bit signed left disparity map of the same size as input images.</param>
+      /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
+      /// <param name="state">Stereo correspondence structure</param>
+      /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvFindStereoCorrespondenceGC(
+         IntPtr left,
+         IntPtr right,
+         IntPtr dispLeft,
+         IntPtr dispRight,
+         ref MCvStereoGCState state,
+         int useDisparityGuess);
+      #endregion
+
+      #region Feature Matching
+      /// <summary>
+      /// Constructs a balanced kd-tree index of the given feature vectors. The lifetime of the desc matrix must exceed that of the returned tree. I.e., no copy is made of the vectors.
+      /// </summary>
+      /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
+      /// <returns>A balanced kd-tree index of the given feature vectors</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvCreateKDTree(IntPtr desc);
+
+      /// <summary>
+      /// Constructs a spill tree index of the given feature vectors. The lifetime of the desc matrix must exceed that of the returned tree. I.e., no copy is made of the vectors.
+      /// </summary>
+      /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
+      /// <param name="naive"></param>
+      /// <param name="rho"></param>
+      /// <param name="tau"></param>
+      /// <returns>A spill tree index of the given feature vectors</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvCreateSpillTree(IntPtr desc, int naive, double rho, double tau);
+
+      /// <summary>
+      /// Deallocates the given kd-tree
+      /// </summary>
+      /// <param name="tr">Pointer to tree being destroyed</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvReleaseFeatureTree(IntPtr tr);
+
+      /// <summary>
+      /// Searches feature tree for k nearest neighbors of given reference points.
+      /// </summary>
+      /// <remarks> In case of k-d tree: Finds (with high probability) the k nearest neighbors in tr for each of the given (row-)vectors in desc, using best-bin-first searching ([Beis97]). The complexity of the entire operation is at most O(m*emax*log2(n)), where n is the number of vectors in the tree</remarks>
+      /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
+      /// <param name="desc">m x d matrix of (row-)vectors to find the nearest neighbors of</param>
+      /// <param name="results">m x k set of row indices of matching vectors (referring to matrix passed to cvCreateFeatureTree). Contains -1 in some columns if fewer than k neighbors found</param>
+      /// <param name="dist">m x k matrix of distances to k nearest neighbors</param>
+      /// <param name="k">The number of neighbors to find</param>
+      /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvFindFeatures(
+         IntPtr tr,
+         IntPtr desc,
+         IntPtr results,
+         IntPtr dist,
+         int k,
+         int emax);
+
+      /// <summary>
+      /// Performs orthogonal range searching on the given kd-tree. That is, it returns the set of vectors v in tr that satisfy bounds_min[i] &lt;= v[i] &lt;= bounds_max[i], 0 &lt;= i &lt; d, where d is the dimension of vectors in the tree. The function returns the number of such vectors found
+      /// </summary>
+      /// <param name="tr">Pointer to kd-tree index of reference vectors</param>
+      /// <param name="boundsMin">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving minimum value for each dimension</param>
+      /// <param name="boundsMax">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving maximum value for each dimension</param>
+      /// <param name="results">1 x m or m x 1 vector (CV_32SC1) to contain output row indices (referring to matrix passed to cvCreateFeatureTree)</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvFindFeaturesBoxed(
+         IntPtr tr,
+         IntPtr boundsMin,
+         IntPtr boundsMax,
+         IntPtr results);
+      #endregion
+
+      #region Plannar Subdivisions
+      /// <summary>
+      /// Creates an empty Delaunay subdivision, where 2d points can be added further using function cvSubdivDelaunay2DInsert. All the points to be added must be within the specified rectangle, otherwise a runtime error will be raised. 
+      /// </summary>
+      /// <param name="rect">Rectangle that includes all the 2d points that are to be added to subdivision.</param>
+      /// <param name="storage">Container for subdivision</param>
+      /// <returns></returns>
+      public static IntPtr cvCreateSubdivDelaunay2D(Rectangle rect, IntPtr storage)
+      {
+         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
+                 Marshal.SizeOf(typeof(MCvSubdiv2D)),
+                 Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
+                 Marshal.SizeOf(typeof(MCvQuadEdge2D)),
+                 storage);
+
+         cvInitSubdivDelaunay2D(subdiv, rect);
+         return subdiv;
+      }
+
+      /// <summary>
+      /// Initializes Delaunay triangulation 
+      /// </summary>
+      /// <param name="subdiv"></param>
+      /// <param name="rect"></param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, Rectangle rect);
+
+      /// <summary>
+      /// Locates input point within subdivision. It finds subdivision vertex that is the closest to the input point. It is not necessarily one of vertices of the facet containing the input point, though the facet (located using cvSubdiv2DLocate) is used as a starting point. 
+      /// </summary>
+      /// <param name="subdiv">Delaunay or another subdivision</param>
+      /// <param name="pt">Input point</param>
+      /// <returns>pointer to the found subdivision vertex (CvSubdiv2DPoint)</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvFindNearestPoint2D(IntPtr subdiv, PointF pt);
+
+      /// <summary>
+      /// Creates new subdivision
+      /// </summary>
+      /// <param name="subdivType"></param>
+      /// <param name="headerSize"></param>
+      /// <param name="vtxSize"></param>
+      /// <param name="quadedgeSize"></param>
+      /// <param name="storage"></param>
+      /// <returns></returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvCreateSubdiv2D(
+          int subdivType,
+          int headerSize,
+          int vtxSize,
+          int quadedgeSize,
+          IntPtr storage);
+
+      /// <summary>
+      /// Inserts a single point to subdivision and modifies the subdivision topology appropriately. If a points with same coordinates exists already, no new points is added. The function returns pointer to the allocated point. No virtual points coordinates is calculated at this stage.
+      /// </summary>
+      /// <param name="subdiv">Delaunay subdivision created by function cvCreateSubdivDelaunay2D</param>
+      /// <param name="pt">Inserted point.</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, PointF pt);
+
+      /// <summary>
+      /// Locates input point within subdivision
+      /// </summary>
+      /// <param name="subdiv">Plannar subdivision</param>
+      /// <param name="pt">The point to locate</param>
+      /// <param name="edge">The output edge the point falls onto or right to</param>
+      /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
+      /// <returns>The type of location for the point</returns>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, PointF pt,
+                                           out IntPtr edge,
+                                           ref IntPtr vertex);
+
+      /// <summary>
+      /// Calculates coordinates of virtual points. All virtual points corresponding to some vertex of original subdivision form (when connected together) a boundary of Voronoi cell of that point
+      /// </summary>
+      /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvCalcSubdivVoronoi2D(IntPtr subdiv);
+      #endregion
+
       #region Eigen Objects
       #region cvEigenDecomposite function
       /// <summary>
@@ -298,6 +781,30 @@ namespace Emgu.CV
       [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConDensUpdateByTime(IntPtr condens);
       #endregion
+
+      /// <summary>
+      /// The function cvPyrSegmentation implements image segmentation by pyramids. The pyramid builds up to the level level. The links between any pixel a on level i and its candidate father pixel b on the adjacent level are established if 
+      /// p(c(a),c(b))&gt;threshold1. After the connected components are defined, they are joined into several clusters. Any two segments A and B belong to the same cluster, if 
+      /// p(c(A),c(B))&gt;threshold2. The input image has only one channel, then 
+      /// p(c1,c2)=|c1-c2|. If the input image has three channels (red, green and blue), then 
+      /// p(c1,c2)=0.3*(c1r-c2r)+0.59 * (c1g-c2g)+0.11 *(c1b-c2b) . There may be more than one connected component per a cluster.
+      /// </summary>
+      /// <param name="src">The source image, should be 8-bit single-channel or 3-channel images </param>
+      /// <param name="dst">The destination image, should be 8-bit single-channel or 3-channel images, same size as src </param>
+      /// <param name="storage">Storage; stores the resulting sequence of connected components</param>
+      /// <param name="comp">Pointer to the output sequence of the segmented components</param>
+      /// <param name="level">Maximum level of the pyramid for the segmentation</param>
+      /// <param name="threshold1">Error threshold for establishing the links</param>
+      /// <param name="threshold2">Error threshold for the segments clustering</param>
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvPyrSegmentation(
+          IntPtr src,
+          IntPtr dst,
+          IntPtr storage,
+          out IntPtr comp,
+          int level,
+          double threshold1,
+          double threshold2);
 
       /// <summary>
       /// Calculates 2D pair-wise geometrical histogram (PGH), described in [Iivarinen97], for the contour. The algorithm considers every pair of the contour edges. The angle between the edges and the minimum/maximum distances are determined for every pair. To do this each of the edges in turn is taken as the base, while the function loops through all the other edges. When the base edge and any other edge are considered, the minimum and maximum distances from the points on the non-base edge and line of the base edge are selected. The angle between the edges defines the row of the histogram in which all the bins that correspond to the distance between the calculated minimum and maximum distances are incremented (that is, the histogram is transposed relatively to [Iivarninen97] definition). The histogram can be used for contour matching
