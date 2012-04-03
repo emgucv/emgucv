@@ -207,7 +207,7 @@ namespace Emgu.CV.GPU.Test
             using (GpuImage<Gray, Single> gpuLaplace = new GpuImage<Gray, Single>(image.Size))
             using (GpuImage<Gray, Single> gpuConv = gpuImg1.Convolution(kernel, s))
             {
-               GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0, s);
+               GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0, CvEnum.BORDER_TYPE.BORDER_DEFAULT, s);
                s.WaitForCompletion();
                Assert.IsTrue(gpuLaplace.Equals(gpuConv));
             }

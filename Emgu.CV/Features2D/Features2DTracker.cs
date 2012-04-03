@@ -472,18 +472,24 @@ namespace Emgu.CV.Features2D
             if (mask != null && mask.Data[i, 0] == 0)
                continue;
 
-            result[resultIdx].SimilarFeatures = new SimilarFeature[k];
+            SimilarFeature[] features = new SimilarFeature[k];
             for (int j = 0; j < k; j++)
             {
-               result[resultIdx].SimilarFeatures[j].Distance = dists.Data[i, j];
+               features[j].Distance = dists.Data[i, j];
                ImageFeature<TDescriptor> imgFeature = new ImageFeature<TDescriptor>();
                int idx = indices.Data[i, j];
+               if (idx == -1)
+               {
+                  Array.Resize(ref features, j);
+                  break;
+               }
                imgFeature.KeyPoint = modelKeyPoints[idx];
                imgFeature.Descriptor = new TDescriptor[descriptorLength];
                Emgu.Util.Toolbox.memcpy(address, new IntPtr(modelPtr + modelStep * idx), descriptorSizeInByte);
                tmp.CopyTo(imgFeature.Descriptor, 0);
-               result[resultIdx].SimilarFeatures[j].Feature = imgFeature;
+               features[j].Feature = imgFeature;
             }
+            result[resultIdx].SimilarFeatures = features;
 
             ImageFeature<TDescriptor> observedFeature = new ImageFeature<TDescriptor>();
             observedFeature.KeyPoint = observedKeyPoints[i];

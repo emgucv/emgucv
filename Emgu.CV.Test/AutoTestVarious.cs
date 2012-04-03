@@ -395,7 +395,7 @@ namespace Emgu.CV.Test
          EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
          for (int i = 0; i < imgs.Length; i++)
          {
-            Assert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]));
+            Assert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]).Label);
          }
 
          XmlDocument xDoc = Toolbox.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
@@ -403,7 +403,7 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < imgs.Length; i++)
          {
-            Assert.AreEqual(i.ToString(), imgRecognizer2.Recognize(imgs[i]));
+            Assert.AreEqual(i.ToString(), imgRecognizer2.Recognize(imgs[i]).Label);
          }
 
          System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
@@ -420,7 +420,7 @@ namespace Emgu.CV.Test
             EigenObjectRecognizer imgRecognizer3 = (EigenObjectRecognizer)formatter.Deserialize(ms2);
             for (int i = 0; i < imgs.Length; i++)
             {
-               Assert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]));
+               Assert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]).Label);
             }
          }
          #endregion
@@ -863,8 +863,8 @@ namespace Emgu.CV.Test
          Size shiftSize = new Size(1, 1);
          Size maxRange = new Size(10, 10);
          Size velSize = new Size(
-            (int)Math.Floor((prevImg.Width - blockSize.Width) / (double)shiftSize.Width),
-            (int)Math.Floor((prevImg.Height - blockSize.Height) / (double)shiftSize.Height));
+            (int)Math.Floor((prevImg.Width - blockSize.Width + shiftSize.Width) / (double)shiftSize.Width),
+            (int)Math.Floor((prevImg.Height - blockSize.Height + shiftSize.Height) / (double)shiftSize.Height));
          Image<Gray, float> velx = new Image<Gray, float>(velSize);
          Image<Gray, float> vely = new Image<Gray, float>(velSize);
 
@@ -1689,6 +1689,8 @@ namespace Emgu.CV.Test
          watch.Stop();
          Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
          File.Delete(fileName);
+
+         Assert.AreEqual(pts.Length, pts2.Length);
 
          //Check for equality
          for (int i = 0; i < pts.Length; i++)

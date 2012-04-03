@@ -2359,7 +2359,11 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Isolated
       /// </summary>
-      ISOLATED = 6
+      ISOLATED = 6, 
+      /// <summary>
+      /// The default border interpolation type.
+      /// </summary>
+      BORDER_DEFAULT = REFLECT101
    }
 
    /// <summary>

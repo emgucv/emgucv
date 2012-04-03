@@ -276,7 +276,7 @@ namespace Emgu.CV.GPU
       public GpuImage<TColor, Single> Convolution(ConvolutionKernelF kernel, Stream stream)
       {
          GpuImage<TColor, Single> result = new GpuImage<TColor, float>(Size);
-         GpuInvoke.Filter2D(_ptr, result, kernel, kernel.Center, stream);
+         GpuInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.BORDER_DEFAULT, stream);
          return result;
       }
 
