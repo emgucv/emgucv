@@ -551,6 +551,44 @@ namespace Emgu.CV.GPU.Test
       }
 
       [Test]
+      public void TestGpuRemap()
+      {
+         Image<Gray, float> xmap = new Image<Gray, float>(2, 2);
+         xmap.Data[0, 0, 0] = 0; xmap.Data[0, 1, 0] = 0;
+         xmap.Data[1, 0, 0] = 1; xmap.Data[1, 1, 0] = 1;
+         Image<Gray, float> ymap = new Image<Gray, float>(2, 2);
+         ymap.Data[0, 0, 0] = 0; ymap.Data[0, 1, 0] = 1;
+         ymap.Data[1, 0, 0] = 0; ymap.Data[1, 1, 0] = 1;
+
+         Image<Gray, Byte> image = new Image<Gray, byte>(2, 2);
+         image.SetRandNormal(new MCvScalar(), new MCvScalar(255));
+
+         using (GpuImage<Gray, Byte> gpuImage = new GpuImage<Gray, byte>(image))
+         using (GpuImage<Gray, float> xGpuImage = new GpuImage<Gray, float>(xmap))
+         using (GpuImage<Gray, float> yGpuImage = new GpuImage<Gray, float>(ymap))
+         using (GpuImage<Gray, Byte> remapedImage = new GpuImage<Gray,byte>(gpuImage.Size))
+         {
+            GpuInvoke.Remap(gpuImage, remapedImage, xGpuImage, yGpuImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.BORDER_DEFAULT, new MCvScalar(), IntPtr.Zero);
+         }
+      }
+
+      [Test]
+      public void TestGpuWarpPerspective()
+      {
+         Matrix<float> transformation = new Matrix<float>(3, 3);
+         transformation.SetIdentity();
+
+         Image<Gray, byte> image = new Image<Gray, byte>(480, 320);
+         image.SetRandNormal(new MCvScalar(), new MCvScalar(255));
+
+         using (GpuImage<Gray, byte> gpuImage = new GpuImage<Gray,byte>(image))
+         using (GpuImage<Gray, Byte> resultGpuImage = new GpuImage<Gray, byte>(gpuImage.Size))
+         {
+            GpuInvoke.WarpPerspective(gpuImage, resultGpuImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.BORDER_DEFAULT, new MCvScalar(), IntPtr.Zero);
+         }
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)
