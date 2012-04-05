@@ -14,11 +14,12 @@ file(GLOB lepton_hdrs "${LEPTON_DIR}/src/*.h")
 source_group("Src" FILES ${lepton_srcs})
 source_group("Include" FILES ${lepton_hdrs})
 set(the_target ${PROJECT_NAME})
-IF (ANDROID)
-  add_definitions(-DL_LITTLE_ENDIAN -DXMD_H -DNO_CONSOLE_IO)
-ELSE()
-  add_definitions(-DL_LITTLE_ENDIAN -DXMD_H -DNO_CONSOLE_IO -W0)
+
+add_definitions(-DL_LITTLE_ENDIAN -DXMD_H -DNO_CONSOLE_IO)
+IF (MSVC)
+  add_definitions(-W0)
 ENDIF()
+
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
