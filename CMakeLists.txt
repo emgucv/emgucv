@@ -110,8 +110,12 @@ SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper 
 IF(ANDROID)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-android")
 ELSE()
+IF (APPLE)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
+ELSE()
 IF (WIN32)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
+ENDIF()
 ENDIF()
 ENDIF()
 
@@ -830,6 +834,29 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DISPLAY_NAME "Emgu CV Examples (Source
 set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 
 ELSE (WIN32)
+IF (APPLE)
+  SET(CPACK_GENERATOR Bundle)
+  SET(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+# ----------------------------------------------------------------------------
+#  Generate required common assembly file for Emgu CV project
+# ----------------------------------------------------------------------------
+  FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+   <key>CFBundleIdentifier</key>
+   <string>com.yourcompany.monomac</string>
+   <key>CFBundleName</key>
+   <string>${CPACK_BUNDLE_NAME}</string>
+   <key>CFBundleVersion</key>
+   <string>1</string>
+   <key>LSMinimumSystemVersion</key>
+   <string>10.6</string>
+</dict>
+</plist>")
+  SET(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist)
+ELSE()
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
   SET(EMGUCV_MANAGED_DLLS "Emgu.Util.dll" "Emgu.CV.dll" "Emgu.CV.ML.dll" "Emgu.CV.GPU.dll" "Emgu.CV.OCR" "Emgu.CV.UI.dll" "Emgu.CV.Stitching.dll" "ZedGraph.dll")
@@ -924,6 +951,7 @@ ELSE (WIN32)
     SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
   ENDIF()	
 ENDIF()  
+ENDIF()
 ENDIF()
 
 MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
