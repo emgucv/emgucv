@@ -41,6 +41,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 #viewer
 PROJECT(tesseract_viewer)
 file(GLOB tesseract_viewer_srcs "${TESSERACT_DIR}/viewer/*.cpp")
+file(GLOB tesseract_viewer_srcs_excludes "${TESSERACT_DIR}/viewer/svpaint.cpp")
+LIST(REMOVE_ITEM tesseract_viewer_srcs ${tesseract_viewer_srcs_excludes})
 file(GLOB tesseract_viewer_hdrs "${TESSERACT_DIR}/viewer/*.h")
 source_group("Src" FILES ${tesseract_viewer_srcs})
 source_group("Include" FILES ${tesseract_viewer_hdrs})
@@ -194,6 +196,8 @@ ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_cc
 #api
 PROJECT(tesseract_api)
 file(GLOB tesseract_api_srcs "${TESSERACT_DIR}/api/*.cpp")
+file(GLOB tesseract_api_srcs_excludes "${TESSERACT_DIR}/api/tesseractmain.cpp")
+LIST(REMOVE_ITEM tesseract_api_srcs ${tesseract_api_srcs_excludes})
 file(GLOB tesseract_api_hdrs "${TESSERACT_DIR}/api/*.h")
 source_group("Src" FILES ${tesseract_api_srcs})
 source_group("Include" FILES ${tesseract_api_hdrs})

@@ -7,7 +7,7 @@ PROJECT(libleptonica)
 SET(LEPTON_DIR "leptonlib-1.68")
 
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
-file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c")
+file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c")
 LIST(REMOVE_ITEM lepton_srcs ${lepton_srcs_excludes})
 file(GLOB lepton_hdrs "${LEPTON_DIR}/src/*.h")
 

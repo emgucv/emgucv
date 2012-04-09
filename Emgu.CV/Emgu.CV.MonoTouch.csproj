@@ -341,6 +341,90 @@
     <Compile Include="PInvoke\MonoTouch\armv7\libopencv_videostab_armv7.linkwith.cs">
       <DependentUpon>libopencv_videostab_armv7.a</DependentUpon>
     </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\liblibleptonica_armv7.linkwith.cs">
+      <DependentUpon>liblibleptonica_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_api_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_api_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_ccmain_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_ccmain_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_ccstruct_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_ccstruct_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_ccutil_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_ccutil_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_classify_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_classify_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_cube_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_cube_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_cutil_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_cutil_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_dict_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_dict_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_image_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_image_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_neural_networks_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_neural_networks_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_textord_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_textord_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_viewer_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_viewer_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\armv7\libtesseract_wordrec_armv7.linkwith.cs">
+      <DependentUpon>libtesseract_wordrec_armv7.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\liblibleptonica_i386.linkwith.cs">
+      <DependentUpon>liblibleptonica_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_api_i386.linkwith.cs">
+      <DependentUpon>libtesseract_api_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_ccmain_i386.linkwith.cs">
+      <DependentUpon>libtesseract_ccmain_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_ccstruct_i386.linkwith.cs">
+      <DependentUpon>libtesseract_ccstruct_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_ccutil_i386.linkwith.cs">
+      <DependentUpon>libtesseract_ccutil_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_classify_i386.linkwith.cs">
+      <DependentUpon>libtesseract_classify_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_cube_i386.linkwith.cs">
+      <DependentUpon>libtesseract_cube_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_cutil_i386.linkwith.cs">
+      <DependentUpon>libtesseract_cutil_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_dict_i386.linkwith.cs">
+      <DependentUpon>libtesseract_dict_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_image_i386.linkwith.cs">
+      <DependentUpon>libtesseract_image_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_neural_networks_i386.linkwith.cs">
+      <DependentUpon>libtesseract_neural_networks_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_textord_i386.linkwith.cs">
+      <DependentUpon>libtesseract_textord_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_viewer_i386.linkwith.cs">
+      <DependentUpon>libtesseract_viewer_i386.a</DependentUpon>
+    </Compile>
+    <Compile Include="PInvoke\MonoTouch\i386\libtesseract_wordrec_i386.linkwith.cs">
+      <DependentUpon>libtesseract_wordrec_i386.a</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="PInvoke\MonoTouch\ApiDefinition.cs" />
@@ -392,5 +476,33 @@
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_stitching_armv7.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_video_armv7.a" />
     <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libopencv_videostab_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\liblibleptonica_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_api_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_ccmain_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_ccstruct_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_ccutil_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_classify_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_cube_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_cutil_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_dict_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_image_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_neural_networks_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_textord_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_viewer_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\armv7\libtesseract_wordrec_armv7.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\liblibleptonica_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_api_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_ccmain_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_ccstruct_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_ccutil_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_classify_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_cube_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_cutil_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_dict_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_image_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_neural_networks_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_textord_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_viewer_i386.a" />
+    <ObjcBindingNativeLibrary Include="PInvoke\MonoTouch\i386\libtesseract_wordrec_i386.a" />
   </ItemGroup>
 </Project>
