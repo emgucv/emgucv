@@ -70,14 +70,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="HelloWorldViewController.cs" />
-    <Compile Include="HelloWorldViewController.designer.cs">
-      <DependentUpon>HelloWorldViewController.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <InterfaceDefinition Include="HelloWorldViewController_iPhone.xib" />
-    <InterfaceDefinition Include="HelloWorldViewController_iPad.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
