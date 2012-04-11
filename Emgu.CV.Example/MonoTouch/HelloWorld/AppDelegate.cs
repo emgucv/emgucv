@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
-
+using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System.Drawing;
+using MonoTouch.CoreGraphics;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 
 namespace HelloWorld
 {
@@ -28,22 +25,22 @@ namespace HelloWorld
       //
       // You have 17 seconds to return from this method, or iOS will terminate your application.
       //
-      public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+      public override bool FinishedLaunching(UIApplication app, NSDictionary options)
       {
-         window = new UIWindow (UIScreen.MainScreen.Bounds);
-         UIViewController viewController = new UIViewController ();
-         MCvFont font = new MCvFont (Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+         window = new UIWindow(UIScreen.MainScreen.Bounds);
+         UIViewController viewController = new UIViewController();
+         MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
          using (Image<Bgr, Byte> image = new Image<Bgr, Byte>(320, 240))
          {
-            image.Draw ("Hello, world", ref font, new Point (30, 30), new Bgr (255, 255, 255));
+            image.Draw("Hello, world", ref font, new Point(30, 30), new Bgr(255, 255, 255));
 
-            UIImageView imageView = new UIImageView (window.Frame);
-            viewController.Add (imageView);
-            imageView.Image = UIImage.FromImage (image.ToCGImage ());
+            UIImageView imageView = new UIImageView(window.Frame);
+            viewController.Add(imageView);
+            imageView.Image = UIImage.FromImage(image.ToCGImage());
          }
 
          window.RootViewController = viewController;
-         window.MakeKeyAndVisible ();
+         window.MakeKeyAndVisible();
          
          return true;
       }
