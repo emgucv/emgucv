@@ -15,7 +15,10 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/gpu/include")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../opencv/modules/stitching/include")
 #INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../..")
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/../..")
+#INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/../..")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videostab/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
@@ -119,7 +122,7 @@ set_target_properties(${the_target} PROPERTIES
 	)
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching opencv_videostab)
 
 #disable warnings
 IF(MSVC)
@@ -128,7 +131,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching)
+  opencv_core opencv_features2d opencv_imgproc opencv_objdetect opencv_stitching opencv_videostab)
   
 IF(TARGET opencv_gpu)
   ADD_DEPENDENCIES(${the_target} opencv_gpu)

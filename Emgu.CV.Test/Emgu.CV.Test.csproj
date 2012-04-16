@@ -176,6 +176,10 @@
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.csproj">
+      <Project>{91A08B78-2FA0-4887-8975-486CE5FC74B3}</Project>
+      <Name>Emgu.CV.VideoStab</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
       <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
       <Name>Emgu.CV</Name>
