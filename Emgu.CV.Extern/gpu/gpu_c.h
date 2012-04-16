@@ -92,6 +92,10 @@ CVAPI(void) gpuMatUpload(cv::gpu::GpuMat* gpuMat, CvArr* arr);
 
 CVAPI(void) gpuMatDownload(cv::gpu::GpuMat* gpuMat, CvArr* arr);
 
+CVAPI(void) gpuMatLShift(const cv::gpu::GpuMat* a, CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+
+CVAPI(void) gpuMatRShift(const cv::gpu::GpuMat* a, CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatAdd(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatAddS(const cv::gpu::GpuMat* a, const CvScalar scale, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);

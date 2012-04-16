@@ -193,6 +193,16 @@ void gpuMatDownload(cv::gpu::GpuMat* gpuMat, CvArr* arr)
    gpuMat->download(mat);
 }
 
+void gpuMatLShift(const cv::gpu::GpuMat* a, CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream)
+{
+	cv::gpu::lshift(*a, scale, *c, stream ? *stream : cv::gpu::Stream::Null());
+}
+
+void gpuMatRShift(const cv::gpu::GpuMat* a, CvScalar scale, cv::gpu::GpuMat* c, cv::gpu::Stream* stream)
+{
+	cv::gpu::rshift(*a, scale, *c, stream ? *stream : cv::gpu::Stream::Null());
+}
+
 void gpuMatAdd(const cv::gpu::GpuMat* a, const cv::gpu::GpuMat* b, cv::gpu::GpuMat* c, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)
 {
    cv::gpu::add(*a, *b, *c, mask ? *mask : cv::gpu::GpuMat(), c->depth(), stream ? *stream : cv::gpu::Stream::Null());

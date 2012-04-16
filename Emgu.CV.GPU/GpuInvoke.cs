@@ -256,6 +256,26 @@ namespace Emgu.CV.GPU
 
       #region arithmatic
       /// <summary>
+      /// Shifts a matrix to the left (c = a &lt;&lt; scalar)
+      /// </summary>
+      /// <param name="a">The matrix to be shifted.</param>
+      /// <param name="scalar">The scalar to shift by.</param>
+      /// <param name="c">The result of the shift</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLShift")]
+      public static extern void LShift(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
+
+      /// <summary>
+      /// Shifts a matrix to the right (c = a >> scalar)
+      /// </summary>
+      /// <param name="a">The matrix to be shifted.</param>
+      /// <param name="scalar">The scalar to shift by.</param>
+      /// <param name="c">The result of the shift</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRShift")]
+      public static extern void RShift(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr stream);
+
+      /// <summary>
       /// Adds one matrix to another (c = a + b).
       /// </summary>
       /// <param name="a">The first matrix to be added.</param>
@@ -767,6 +787,18 @@ namespace Emgu.CV.GPU
       public static extern void BitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
+      /// Calculates per-element bit-wise logical conjunction of a GpuMat and a scalar:
+      /// dst(I)=src1(I)^scalar
+      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
+      /// </summary>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="scalar">The scalar</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseXorS")]
+      public static extern void BitwiseXor(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr stream);
+
+      /// <summary>
       /// Calculates per-element bit-wise logical or of two GpuMats:
       /// dst(I)=src1(I) | src2(I) if mask(I)!=0
       /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
@@ -780,6 +812,18 @@ namespace Emgu.CV.GPU
       public static extern void BitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
+      /// Calculates per-element bit-wise logical or a GpuMat and a scalar:
+      /// dst(I)=src1(I) | scalar
+      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
+      /// </summary>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="src2">The scalar</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseOrS")]
+      public static extern void BitwiseOr(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr stream);
+
+      /// <summary>
       /// Calculates per-element bit-wise logical and of two GpuMats:
       /// dst(I)=src1(I) &amp; src2(I) if mask(I)!=0
       /// In the case of floating-point GpuMats their bit representations are used for the operation. All the GpuMats must have the same type, except the mask, and the same size
@@ -791,6 +835,18 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseAnd")]
       public static extern void BitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
+
+      /// <summary>
+      /// Calculates per-element bit-wise logical and of a GpuMat and a scalar:
+      /// dst(I)=src1(I) &amp; scalar
+      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
+      /// </summary>
+      /// <param name="src1">The first source GpuMat</param>
+      /// <param name="src2">The scalar</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseAndS")]
+      public static extern void BitwiseAnd(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical not
