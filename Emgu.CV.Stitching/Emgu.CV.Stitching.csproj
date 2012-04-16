@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.Stitching</RootNamespace>
     <AssemblyName>Emgu.CV.Stitching</AssemblyName>
-	<SignAssembly>true</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -36,9 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -50,6 +47,10 @@
     <Compile Include="Stitcher.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
+      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
+      <Name>Emgu.CV.GPU</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
       <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
       <Name>Emgu.CV</Name>

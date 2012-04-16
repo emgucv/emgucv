@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.GPU;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -60,8 +61,14 @@ namespace Emgu.CV.Stitching
       }
    }
 
-   public static partial class StitchingInvoke
+   internal static partial class StitchingInvoke
    {
+      static StitchingInvoke()
+      {
+         //Dummy code to make sure the static constructor of GpuInvoke has been called
+         bool hasCuda = GpuInvoke.HasCuda;
+      }
+
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherCreateDefault(
          [MarshalAs(CvInvoke.BoolMarshalType)]
