@@ -21,7 +21,7 @@ namespace Emgu.CV.GPU
    {
       static GpuInvoke()
       {
-         //Dummy code to make sure the static constructore of CvInvoke has been called and the error handler has been registered.
+         //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
 
          String[] modules = new String[] 
