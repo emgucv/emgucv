@@ -6,6 +6,8 @@ using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.ML.Structure;
 using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.ML
 {
@@ -198,15 +200,64 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Create a default EM model
       /// </summary>
+      /// <param name="nclusters">The number of mixture components in the Gaussian mixture model. Use 5 for default.</param>
+      /// <param name="covMatType">Constraint on covariance matrices which defines type of matrices</param>
+      /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
       /// <returns>Pointer to the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMDefaultCreate();
+      public static extern IntPtr CvEMDefaultCreate(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, MCvTermCriteria termcrit);
 
       /// <summary>
       /// Release the EM model
       /// </summary>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvEMRelease(ref IntPtr emModel);
+
+      /// <summary>
+      /// Starts with Expectation step. Initial values of the model parameters will be estimated by the k-means algorithm.
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <param name="samples">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="labels">Can be IntPtr.Zero if not needed. Optionally computed output "class label" for each sample</param>
+      /// <param name="logLikelihoods">The optional output matrix that contains a likelihood logarithm value for each sample. It has nsamples x 1 size and CV_64FC1 type.</param>
+      /// <param name="probs">Initial probabilities p_{i,k} of sample i to belong to mixture component k. It is a one-channel floating-point matrix of nsamples x nclusters size.</param>
+      /// <returns>The methods return true if the Gaussian mixture model was trained successfully, otherwise it returns false.</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      public static extern bool CvEMTrain(
+         IntPtr model,
+         IntPtr samples,
+         IntPtr labels,
+         IntPtr probs,
+         IntPtr logLikelihoods);
+
+      /// <summary>
+      /// Given the EM <paramref name="model"/>, predit the probability of the <paramref name="samples"/>
+      /// </summary>
+      /// <param name="model">The EM model</param>
+      /// <param name="samples">The input samples</param>
+      /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
+      /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern int CvEMPredict(
+         IntPtr model,
+         IntPtr samples,
+         IntPtr probs);
+      #endregion
+
+      #region CvEMLegacy
+      /// <summary>
+      /// Create a default EM model
+      /// </summary>
+      /// <returns>Pointer to the EM model</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr CvEMLegacyDefaultCreate();
+
+      /// <summary>
+      /// Release the EM model
+      /// </summary>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void CvEMLegacyRelease(ref IntPtr emModel);
 
       /// <summary>
       /// Train the EM model using the specific training data
@@ -219,7 +270,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool CvEMTrain(
+      public static extern bool CvEMLegacyTrain(
          IntPtr model,
          IntPtr samples,
          IntPtr sampleIdx,
@@ -234,7 +285,7 @@ namespace Emgu.CV.ML
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
       /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern float CvEMPredict(
+      public static extern float CvEMLegacyPredict(
          IntPtr model,
          IntPtr samples,
          IntPtr probs);
@@ -245,7 +296,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <returns>The means of the clusters of the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMGetMeans(IntPtr model);
+      public static extern IntPtr CvEMLegacyGetMeans(IntPtr model);
 
       /// <summary>
       /// Get the covariance matrices of the clusters from the EM model
@@ -253,7 +304,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <returns>The covariance matrices of the clusters of the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMGetCovs(IntPtr model);
+      public static extern IntPtr CvEMLegacyGetCovs(IntPtr model);
 
       /// <summary>
       /// Get the weights of the clusters from the EM model
@@ -261,7 +312,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <returns>The weights of the clusters of the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMGetWeights(IntPtr model);
+      public static extern IntPtr CvEMLegacyGetWeights(IntPtr model);
 
       /// <summary>
       /// Get the probabilities from the EM model
@@ -269,7 +320,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <returns>The probabilities of the EM model </returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMGetProbs(IntPtr model);
+      public static extern IntPtr CvEMLegacyGetProbs(IntPtr model);
 
       /// <summary>
       /// Get the number of clusters from the EM model
@@ -277,7 +328,7 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <returns>The number of clusters of the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int CvEMGetNclusters(IntPtr model);
+      public static extern int CvEMLegacyGetNclusters(IntPtr model);
       #endregion
 
       #region CvSVM

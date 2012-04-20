@@ -9,6 +9,7 @@
 #define EMGU_ML_C_H
 
 #include "opencv2/core/core_c.h"
+#include "opencv2/legacy/legacy.hpp"
 #include "opencv2/ml/ml.hpp"
 
 //StatModel
@@ -35,16 +36,22 @@ CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int 
                                    float** neighbors, CvMat* neighbor_responses, CvMat* dist );
 
 //EM
-CVAPI(CvEM*) CvEMDefaultCreate();
-CVAPI(void) CvEMRelease(CvEM** model);
-CVAPI(bool) CvEMTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria termcrit);
+CVAPI(void) CvEMRelease(cv::EM** model);
+CVAPI(bool) CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods );
+CVAPI(int) CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs );
+
+//EMLegacy
+CVAPI(CvEM*) CvEMLegacyDefaultCreate();
+CVAPI(void) CvEMLegacyRelease(CvEM** model);
+CVAPI(bool) CvEMLegacyTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
                       CvEMParams params, CvMat* labels );
-CVAPI(float) CvEMPredict(CvEM* model, CvMat* sample, CvMat* probs );
-CVAPI(int) CvEMGetNclusters(CvEM* model);
-CVAPI(CvMat*) CvEMGetMeans(CvEM* model);
-CVAPI(CvMat**) CvEMGetCovs(CvEM* model);
-CVAPI(CvMat*) CvEMGetWeights(CvEM* model);
-CVAPI(CvMat*) CvEMGetProbs(CvEM* model);
+CVAPI(float) CvEMLegacyPredict(CvEM* model, CvMat* sample, CvMat* probs );
+CVAPI(int) CvEMLegacyGetNclusters(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetMeans(CvEM* model);
+CVAPI(CvMat**) CvEMLegacyGetCovs(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetWeights(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetProbs(CvEM* model);
 
 //SVM
 CVAPI(CvSVM*) CvSVMDefaultCreate();

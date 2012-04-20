@@ -3,80 +3,41 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Runtime.InteropServices;
-using Emgu.CV.Structure;
-using Emgu.CV.ML.Structure;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Emgu.CV.ML.Structure;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.ML
 {
    /// <summary>
    /// Expectation Maximization model
    /// </summary>
-   public class EM : StatModel
+   public class EM : UnmanagedObject
    {
       /// <summary>
       /// Create an Expectation Maximization model
       /// </summary>
-      public EM()
+      /// <param name="nclusters">The number of mixture components in the Gaussian mixture model. Use 5 for default.</param>
+      /// <param name="covMatType">Constraint on covariance matrices which defines type of matrices</param>
+      /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
+      public EM(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, MCvTermCriteria termcrit)
       {
-         _ptr = MlInvoke.CvEMDefaultCreate();
+         _ptr = MlInvoke.CvEMDefaultCreate(nclusters, covMatType, termcrit);
       }
 
       /// <summary>
-      /// Creaet an Expectation Maximization model using the specific training parameters
-      /// </summary>
-      /// <param name="samples">The samples to be trained</param>
-      /// <param name="sampleIdx"></param>
-      /// <param name="parameters"></param>
-      /// <param name="labels"></param>
-      public EM(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
-         : this()
-      {
-         Train(samples, sampleIdx, parameters, labels);
-      }
-
-      /// <summary>
-      /// Train the EM model using the specific training data
+      /// Starts with Expectation step. Initial values of the model parameters will be estimated by the k-means algorithm.
       /// </summary>
       /// <param name="samples">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
-      /// <param name="parameters">The parameters for EM</param>
       /// <param name="labels">Can be null if not needed. Optionally computed output "class label" for each sample</param>
-      /// <returns></returns>
-      public bool Train(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
+      /// <param name="logLikelihoods">Can be null if not needed. The optional output matrix that contains a likelihood logarithm value for each sample. It has nsamples x 1 size and CV_64FC1 type.</param>
+      /// <param name="probs">Can be null if not needed. Initial probabilities p_{i,k} of sample i to belong to mixture component k. It is a one-channel floating-point matrix of nsamples x nclusters size.</param>
+      /// <returns>The methods return true if the Gaussian mixture model was trained successfully, otherwise it returns false.</returns>
+      public bool Train(Matrix<float> samples, Matrix<Int32> labels, Matrix<float> probs, Matrix<double> logLikelihoods)
       {
-         MCvEMParams param = new MCvEMParams();
-         param.nclusters = parameters.Nclusters;
-         param.cov_mat_type = parameters.CovMatType;
-         param.start_step = parameters.StartStep;
-         param.probs = parameters.Probs == null ? IntPtr.Zero : parameters.Probs.Ptr;
-         param.means = parameters.Means == null ? IntPtr.Zero : parameters.Means.Ptr;
-         param.weights = parameters.Weights == null ? IntPtr.Zero : parameters.Weights.Ptr;
-
-         GCHandle? covsPtrHandle = null;
-         if (parameters.Covs == null)
-            param.covs = IntPtr.Zero;
-         else
-         {
-            IntPtr[] covsPtr = Array.ConvertAll<Matrix<double>, IntPtr>(parameters.Covs,
-               delegate(Matrix<double> m) { return m.Ptr; });
-            covsPtrHandle = GCHandle.Alloc(covsPtr, GCHandleType.Pinned);
-            param.covs = covsPtrHandle.Value.AddrOfPinnedObject();
-         }
-         param.term_crit = parameters.TermCrit;
-
-         bool res = MlInvoke.CvEMTrain(
-            _ptr,
-            samples.Ptr,
-            sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
-            param,
-            labels == null ? IntPtr.Zero : labels.Ptr);
-
-         if (covsPtrHandle.HasValue)
-            covsPtrHandle.Value.Free();
-
-         return res;
+         return MlInvoke.CvEMTrain(_ptr, samples, labels, probs, logLikelihoods);
       }
 
       /// <summary>
@@ -91,76 +52,6 @@ namespace Emgu.CV.ML
             _ptr,
             samples.Ptr,
             probs == null ? IntPtr.Zero : probs.Ptr);
-      }
-
-      /// <summary>
-      /// Get the number of clusters of this EM model
-      /// </summary>
-      public int NumberOfClusters
-      {
-         get
-         {
-            return MlInvoke.CvEMGetNclusters(_ptr);
-         }
-      }
-
-      /// <summary>
-      /// Get the mean of the clusters
-      /// </summary>
-      public Matrix<double> Means
-      {
-         get
-         {
-            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetMeans(_ptr));
-         }
-      }
-
-      /// <summary>
-      /// Get the weights of the clusters
-      /// </summary>
-      public Matrix<double> Weights
-      {
-         get
-         {
-            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetWeights(_ptr));
-         }
-      }
-
-      /// <summary>
-      /// Get the matrix of probability. 
-      /// A entry on the m_th row and n_th col indicates the probability of the m_th data point given the n_th cluster.
-      /// </summary>
-      public Matrix<double> Probabilities
-      {
-         get
-         {
-            return IntPtrToDoubleMatrix(MlInvoke.CvEMGetProbs(_ptr));
-         }
-      }
-
-      /// <summary>
-      /// Get the covariance matrices for each cluster
-      /// </summary>
-      /// <returns>Get the array of covariance matrix for each data point.</returns>
-      public Matrix<double>[] GetCovariances()
-      {
-         IntPtr ptrToCovs = MlInvoke.CvEMGetCovs(_ptr);
-         if (ptrToCovs == IntPtr.Zero) return null;
-
-         int ncluster = NumberOfClusters;
-         IntPtr[] covPtrs = new IntPtr[ncluster];
-         Marshal.Copy(ptrToCovs, covPtrs, 0, ncluster);
-
-         return Array.ConvertAll<IntPtr, Matrix<double>>(covPtrs, IntPtrToDoubleMatrix);
-      }
-
-      private static Matrix<double> IntPtrToDoubleMatrix(IntPtr matPtr)
-      {
-         if (matPtr == IntPtr.Zero) return null;
-         MCvMat mat = (MCvMat)Marshal.PtrToStructure(matPtr, typeof(MCvMat));
-         Matrix<double> result = new Matrix<double>(mat.rows, mat.cols, 1, mat.data, mat.step);
-         Debug.Assert(mat.type == result.MCvMat.type, "Matrix type is not double");
-         return result;
       }
 
       /// <summary>

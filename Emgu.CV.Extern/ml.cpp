@@ -37,18 +37,49 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 { return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
 
 //EM
-CvEM* CvEMDefaultCreate() { return new CvEM; }
-void CvEMRelease(CvEM** model) { delete *model; *model = 0;}
-bool CvEMTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria termcrit)
+{ 
+   return new cv::EM(nclusters, covMatType, termcrit); 
+}
+void CvEMRelease(cv::EM** model) 
+{ 
+   delete *model;  
+   *model = 0;
+}
+bool CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods )
+{
+   cv::Mat samplesMat = cv::cvarrToMat(samples);
+   cv::OutputArray labelsMat = labels? cv::Mat_<int>(samplesMat.rows, 1) : cv::noArray();
+   cv::OutputArray probsMat = probs? cv::cvarrToMat(probs) : cv::noArray();
+   cv::OutputArray logLikelihoodsMat = logLikelihoods ? cv::cvarrToMat(logLikelihoods) : cv::noArray();
+   bool result = model->train(samplesMat, labelsMat, probsMat, logLikelihoodsMat);
+   if (labels)
+   {
+      labelsMat.getMatRef().copyTo(cv::cvarrToMat(labels));
+   }
+   return result;
+}
+
+int CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs )  
+{ 
+   cv::Mat sampleMat = cv::cvarrToMat(sample);
+   cv::OutputArray probsMat = probs? cv::cvarrToMat(probs) : cv::noArray(); 
+   return model->predict(sampleMat, probsMat); 
+}
+
+//EMLegacy
+CvEM* CvEMLegacyDefaultCreate() { return new CvEM; }
+void CvEMLegacyRelease(CvEM** model) { delete *model; *model = 0;}
+bool CvEMLegacyTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
                       CvEMParams params, CvMat* labels )
 { return model->train(samples, sample_idx, params, labels); }
-float CvEMPredict(CvEM* model, CvMat* sample, CvMat* probs )
+float CvEMLegacyPredict(CvEM* model, CvMat* sample, CvMat* probs )
 { return model->predict(sample, probs); }
-int CvEMGetNclusters(CvEM* model) { return model->get_nclusters(); }
-CvMat* CvEMGetMeans(CvEM* model) { return (CvMat*) model->get_means(); }
-CvMat** CvEMGetCovs(CvEM* model) { return (CvMat**) model->get_covs(); }
-CvMat* CvEMGetWeights(CvEM* model) { return (CvMat*) model->get_weights(); }
-CvMat* CvEMGetProbs(CvEM* model) { return (CvMat*) model->get_probs(); }
+int CvEMLegacyGetNclusters(CvEM* model) { return model->get_nclusters(); }
+CvMat* CvEMLegacyGetMeans(CvEM* model) { return (CvMat*) model->get_means(); }
+CvMat** CvEMLegacyGetCovs(CvEM* model) { return (CvMat**) model->get_covs(); }
+CvMat* CvEMLegacyGetWeights(CvEM* model) { return (CvMat*) model->get_weights(); }
+CvMat* CvEMLegacyGetProbs(CvEM* model) { return (CvMat*) model->get_probs(); }
 
 //SVM
 CvSVM* CvSVMDefaultCreate() { return new CvSVM; }
