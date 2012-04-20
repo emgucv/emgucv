@@ -64,20 +64,6 @@ namespace Emgu.CV.Features2D
             return _ptr;
          }
       }
-
-      /// <summary>
-      /// Detect the keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of key points</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, byte> image, Image<Gray, byte> mask)
-      {
-         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
-         return kpts;
-      }
-
       #endregion
    }
 }

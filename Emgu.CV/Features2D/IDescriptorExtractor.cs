@@ -31,5 +31,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <returns>The descriptor extractor</returns>
       IntPtr DescriptorExtratorPtr { get; }
+
+      /// <summary>
+      /// Get the size of the descriptor.
+      /// </summary>
+      int DescriptorSize { get; }
    }
 }

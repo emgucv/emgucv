@@ -54,6 +54,7 @@
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
+    <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />

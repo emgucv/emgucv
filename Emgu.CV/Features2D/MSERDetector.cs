@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvMSERParams structure
    /// </summary>
-   public class MSERDetector : DisposableObject, IKeyPointDetector
+   public class MSERDetector : UnmanagedObject, IKeyPointDetector
    {
       /// <summary>
       /// Create a MSER detector using the specific parameters
@@ -43,7 +43,7 @@ namespace Emgu.CV.Features2D
          _edgeBlurSize = edgeBlurSize;
 
          MCvMSERParams p = GetMSERParameters();
-         _featureDetectorPtr = CvInvoke.CvMserGetFeatureDetector(ref p);
+         _ptr = CvInvoke.CvMserGetFeatureDetector(ref p);
       }
 
       /// <summary>
@@ -63,8 +63,6 @@ namespace Emgu.CV.Features2D
       private double _areaThreshold;
       private double _minMargin;
       private int _edgeBlurSize;
-
-      private IntPtr _featureDetectorPtr;
 
       /// <summary>
       /// Delta, in the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}
@@ -127,34 +125,7 @@ namespace Emgu.CV.Features2D
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }*/
 
-      /// <summary>
-      /// Detect the MSER keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract MSER keypoints from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of MSER key points</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
-         {
-            return kpts.ToArray();
-         }
-      }
-
       #region KeyPointDetector Members
-      /// <summary>
-      /// Detect the MSER keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract MSER keypoints from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of MSER key points</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
-         return kpts;
-      }
-
       /// <summary>
       /// Get the feature detector. 
       /// </summary>
@@ -163,7 +134,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _featureDetectorPtr;
+            return _ptr;
          }
       }
       #endregion
@@ -192,7 +163,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvMserFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvMserFeatureDetectorRelease(ref _ptr);
       }
    }
 }

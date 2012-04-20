@@ -42,20 +42,6 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Detect the SURF keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract SURF features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of SURF key points</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, mask))
-         {
-            return kpts.ToArray();
-         }
-      }
-
-      /// <summary>
       /// Detect image features from the given image
       /// </summary>
       /// <param name="image">The image to detect features from</param>
@@ -63,7 +49,7 @@ namespace Emgu.CV.Features2D
       /// <returns>The Image features detected from the given image</returns>
       public ImageFeature<float>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
-         using (VectorOfKeyPoint pts = DetectKeyPointsRaw(image, mask))
+         using (VectorOfKeyPoint pts = this.DetectKeyPointsRaw(image, mask))
          using (Matrix<float> descVec = ComputeDescriptorsRaw(image, mask, pts))
          {
             return ImageFeature<float>.ConvertFromRaw(pts, descVec);
@@ -98,26 +84,6 @@ namespace Emgu.CV.Features2D
       }*/
 
       /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public ImageFeature<float>[] ComputeDescriptors(Image<Gray, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
-      {
-         if (keyPoints.Length == 0) return new ImageFeature<float>[0];
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
-         {
-            kpts.Push(keyPoints);
-            using (Matrix<float> descriptor = ComputeDescriptorsRaw(image, mask, kpts))
-            {
-               return ImageFeature<float>.ConvertFromRaw(kpts, descriptor);
-            }
-         }
-      }
-
-      /// <summary>
       /// Release the unmanaged resources associated with this object
       /// </summary>
       protected override void DisposeObject()
@@ -126,19 +92,6 @@ namespace Emgu.CV.Features2D
       }
 
       #region IKeyPointDetector Members
-      /// <summary>
-      /// Detect the SIFT keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract SIFT features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of SIFT key points</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
-         return kpts;
-      }
-
       /// <summary>
       /// Get the feature detector. 
       /// </summary>

@@ -13,7 +13,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// StarDetector
    /// </summary>
-   public class StarDetector : DisposableObject, IKeyPointDetector
+   public class StarDetector : UnmanagedObject, IKeyPointDetector
    {
       #region IKeyPointDetector Members
       /// <summary>
@@ -24,7 +24,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _featureDetectorPtr;
+            return _ptr;
          }
       }
       #endregion
@@ -49,8 +49,6 @@ namespace Emgu.CV.Features2D
       private int _lineThresholdProjected;
       private int _lineThresholdBinarized;
       private int _suppressNonmaxSize;
-
-      private IntPtr _featureDetectorPtr;
 
       /// <summary>
       /// Maximum size of the features. The following
@@ -120,33 +118,7 @@ namespace Emgu.CV.Features2D
          _suppressNonmaxSize = suppressNonmaxSize;
 
          MCvStarDetectorParams p = GetStarDetectorParameters();
-         _featureDetectorPtr = CvInvoke.CvStarGetFeatureDetector(ref p);
-      }
-
-      /// <summary>
-      /// Detect the keypoints in the image
-      /// </summary>
-      /// <param name="image">The image from which the key point will be detected from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The key pionts in the image</returns>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, Byte> mask)
-      {
-         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_featureDetectorPtr, image, mask, kpts);
-         return kpts;
-      }
-
-      /// <summary>
-      /// Detect the keypoints in the image
-      /// </summary>
-      /// <param name="image">The image from which the key point will be detected from</param>
-      /// <returns>The key pionts in the image</returns>
-      public MKeyPoint[] DetectKeyPoints(Image<Gray, Byte> image)
-      {
-         using (VectorOfKeyPoint kpts = DetectKeyPointsRaw(image, null))
-         {
-            return kpts.ToArray();
-         }
+         _ptr = CvInvoke.CvStarGetFeatureDetector(ref p);
       }
 
       /// <summary>
@@ -154,7 +126,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvStarFeatureDetectorRelease(ref _featureDetectorPtr);
+         CvInvoke.CvStarFeatureDetectorRelease(ref _ptr);
       }
    }
 }

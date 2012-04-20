@@ -48,20 +48,6 @@ namespace Emgu.CV.Features2D
 
       #region IKeyPointDetector Members
       /// <summary>
-      /// Detect the FAST keypoints from the image
-      /// </summary>
-      /// <param name="image">The image to extract SURF features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of FAST key points</returns>
-      /// <remarks>FAST keypoint do not contains orientation (angle = -1). Size are fixed to 6.0</remarks>
-      public VectorOfKeyPoint DetectKeyPointsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(_ptr, image, mask, kpts);
-         return kpts;
-      }
-
-      /// <summary>
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>

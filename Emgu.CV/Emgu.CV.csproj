@@ -90,6 +90,7 @@
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
     <Compile Include="Features2D\IKeyPointDetector.cs" />
+    <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\ORBDetector.cs" />
     <Compile Include="Features2D\SIFTDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
