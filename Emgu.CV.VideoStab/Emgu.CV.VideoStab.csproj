@@ -43,7 +43,10 @@
     </Compile>
     <Compile Include="CaptureFrameSource.cs" />
     <Compile Include="FrameSource.cs" />
+    <Compile Include="GaussianMotionFilter.cs" />
+    <Compile Include="MotionModel.cs" />
     <Compile Include="OnePassStabilizer.cs" />
+    <Compile Include="PyrLkRobustMotionEstimator.cs" />
     <Compile Include="VideoStabInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

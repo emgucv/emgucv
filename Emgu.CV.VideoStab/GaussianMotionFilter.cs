@@ -4,30 +4,26 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
-using Emgu.CV;
-using Emgu.CV.Structure;
 using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
-   public class CaptureFrameSource : FrameSource
+   public class GaussianMotionFilter : UnmanagedObject
    {
-      public CaptureFrameSource(Capture capture)
+      public GaussianMotionFilter()
+         : this(15, -1.0f)
       {
-         _ptr = VideoStabInvoke.CaptureFrameSourceCreate(capture);
       }
 
-      protected override IntPtr GetFrameSourcePointer()
+      public GaussianMotionFilter(int radius, float stdev)
       {
-         return _ptr;
+         _ptr = VideoStabInvoke.GaussianMotionFilterCreate(radius, stdev);
       }
 
       protected override void DisposeObject()
       {
-         VideoStabInvoke.CaptureFrameSourceRelease(ref _ptr);
-         base.DisposeObject();
+         VideoStabInvoke.GaussianMotionFilterRelease(ref _ptr);
       }
    }
 }

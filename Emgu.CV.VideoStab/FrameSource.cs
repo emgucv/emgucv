@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Emgu.Util;
-using Emgu.CV.Structure;
-using Emgu.CV;
-using System.Runtime.InteropServices;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
@@ -12,9 +16,11 @@ namespace Emgu.CV.VideoStab
    {
       private IntPtr _frameBuffer;
 
+      protected abstract IntPtr GetFrameSourcePointer();
+
       public Image<Bgr, Byte> NextFrame()
       {
-         if (!VideoStabInvoke.CaptureFrameSourceGetNextFrame(Ptr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
+         if (!VideoStabInvoke.FrameSourceGetNextFrame(GetFrameSourcePointer(), ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
@@ -35,7 +41,7 @@ namespace Emgu.CV.VideoStab
 
       protected override void DisposeObject()
       {
-         if (_frameBuffer != null)
+         if (_frameBuffer != IntPtr.Zero)
          {
             CvInvoke.cvReleaseImage(ref _frameBuffer);
          }
