@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Runtime.InteropServices;
 
@@ -36,13 +35,21 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-      public byte[] colorModel;
+
+      public byte colorModel0;
+      public byte colorModel1;
+      public byte colorModel2;
+      public byte colorModel3;
+
       /// <summary>
       /// ditto
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-      public byte[] channelSeq;
+
+      public byte channelSeq0;
+      public byte channelSeq1;
+      public byte channelSeq2;
+      public byte channelSeq3;
+
       /// <summary>
       /// 0 - interleaved color channels, 1 - separate color channels.
       /// cvCreateImage can only create interleaved images 
@@ -98,13 +105,21 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// border completion mode, ignored by OpenCV 
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-      public int[] BorderMode;
+
+      public int BorderMode0;
+      public int BorderMode1;
+      public int BorderMode2;
+      public int BorderMode3;
+
       /// <summary>
       /// ditto
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-      public int[] BorderConst;
+
+      public int BorderConst0;
+      public int BorderConst1;
+      public int BorderConst2;
+      public int BorderConst3;
+
       /// <summary>
       ///  pointer to a very origin of image data (not necessarily aligned) - it is needed for correct image deallocation 
       /// </summary>

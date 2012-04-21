@@ -107,6 +107,10 @@ ENDIF()
 file(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
 file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
 
+IF(IOS)
+  LIST(APPEND extern_srcs "ios/divmodsi4.c")
+ENDIF()
+
 ############################### TESSERACT START ########################
 IF(ANDROID)
   SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")

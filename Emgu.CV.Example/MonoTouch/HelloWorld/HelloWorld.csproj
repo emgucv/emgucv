@@ -22,8 +22,14 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
-    <MtouchLink>None</MtouchLink>
     <MtouchI18n />
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="MONO_LOG_LEVEL" value="debug" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
+    <MtouchArch>ARMv6_ARMv7</MtouchArch>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -33,8 +39,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
-    <MtouchExtraArgs>-gcc_flags "-L${ProjectDir} -lcvextern -force_load ${ProjectDir}/libcvextern.a"</MtouchExtraArgs>
     <MtouchI18n />
+    <MtouchArch>ARMv6_ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +54,15 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
+    <MtouchI18n />
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="MONO_LOG_LEVEL" value="debug" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
+    <MtouchArch>ARMv6_ARMv7</MtouchArch>
+    <IpaPackageName />
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -57,6 +72,10 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchI18n />
+    <MtouchArch>ARMv6_ARMv7</MtouchArch>
+    <IpaPackageName />
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

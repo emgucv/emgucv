@@ -1,13 +1,14 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-#if !ANDROID
+
+#if !(ANDROID || IOS)
 using Emgu.CV.GPU;
+
 #endif
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -47,7 +48,7 @@ namespace Emgu.CV.Stitching
          if (resultIplImage == IntPtr.Zero)
             throw new ArgumentException("Requires more images");
 
-         MIplImage tmp = (MIplImage)Marshal.PtrToStructure(resultIplImage, typeof(MIplImage));
+         MIplImage tmp = (MIplImage) Marshal.PtrToStructure(resultIplImage, typeof(MIplImage));
          Image<Bgr, Byte> result = new Image<Bgr, byte>(tmp.width, tmp.height);
          CvInvoke.cvCopy(resultIplImage, result, IntPtr.Zero);
          CvInvoke.cvReleaseImage(ref resultIplImage);
@@ -67,7 +68,7 @@ namespace Emgu.CV.Stitching
    {
       static StitchingInvoke()
       {
-#if ANDROID
+#if (ANDROID || IOS)
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
 
