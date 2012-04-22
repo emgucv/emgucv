@@ -47,6 +47,7 @@
     <Compile Include="MotionModel.cs" />
     <Compile Include="OnePassStabilizer.cs" />
     <Compile Include="PyrLkRobustMotionEstimator.cs" />
+    <Compile Include="TwoPassStabilizer.cs" />
     <Compile Include="VideoStabInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

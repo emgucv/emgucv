@@ -1986,20 +1986,18 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
-            [Test]
-            public void TestDataMatrix()
-            {
-               //using (Image<Gray, Byte> img = new Image<Gray,byte>("dataMatrix.bmp"))
-               using (Image<Gray, Byte> img = new Image<Gray, byte>("dataMatrix.jpg"))
-               using (Emgu.CV.Util.VectorOfDataMatrixCode v = new VectorOfDataMatrixCode())
-               {
-                  //ImageViewer.Show(img);
-                  v.Find(img);
-                  v.Draw(img);
-                  //ImageViewer.Show(img);
-               }
+      [Test]
+      public void TestDataMatrix()
+      {
+         using (Image<Gray, Byte> img = new Image<Gray, byte>("qrcode.png"))
+         using (Emgu.CV.Util.VectorOfDataMatrixCode v = new VectorOfDataMatrixCode())
+         {
+            //ImageViewer.Show(img);
+            v.Find(img);
+            v.Draw(img);
+            //ImageViewer.Show(img);
+         }
 
-            }*/
+      }
    }
 }
