@@ -17,6 +17,8 @@ namespace Emgu.CV.Features2D
    public class SURFDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
       private MCvSURFParams _surfParams;
+      private IntPtr _featureDetectorPtr;
+      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// Get the SURF parameters
@@ -53,7 +55,7 @@ namespace Emgu.CV.Features2D
       public SURFDetector(MCvSURFParams surfParams)
       {
          _surfParams = surfParams;
-         _ptr = CvInvoke.CvSURFDetectorCreate(ref surfParams);
+         _ptr = CvInvoke.CvSURFDetectorCreate(ref surfParams, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
       }
 
       /// <summary>
@@ -156,6 +158,8 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          CvInvoke.CvSURFDetectorRelease(ref _ptr);
+         _featureDetectorPtr = IntPtr.Zero;
+         _descriptorExtractorPtr = IntPtr.Zero;
       }
 
       #region IDescriptorExtractor<float> Members
@@ -173,7 +177,7 @@ namespace Emgu.CV.Features2D
 
       IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
-         get { return _ptr; }
+         get { return _descriptorExtractorPtr; }
       }
 
       #endregion
@@ -185,7 +189,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFDetectorCreate(ref MCvSURFParams detector);
+      internal extern static IntPtr CvSURFDetectorCreate(ref MCvSURFParams detector, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -17,6 +17,9 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
    {
+      private IntPtr _featureDetectorPtr;
+      private IntPtr _descriptorExtractorPtr;
+
       /// <summary>
       /// Create a SIFTDetector using the specific values
       /// </summary>
@@ -30,7 +33,7 @@ namespace Emgu.CV.Features2D
          double contrastThreshold, double edgeThreshold,
          double sigma)
       {
-         _ptr = CvInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+         _ptr = CvInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
       }
 
       /// <summary>
@@ -89,6 +92,8 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          CvInvoke.CvSIFTDetectorRelease(ref _ptr);
+         _featureDetectorPtr = IntPtr.Zero;
+         _descriptorExtractorPtr = IntPtr.Zero;
       }
 
       #region IKeyPointDetector Members
@@ -100,7 +105,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return _ptr;
+            return _featureDetectorPtr;
          }
       }
       #endregion
@@ -151,7 +156,7 @@ namespace Emgu.CV.Features2D
 
       IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
       {
-         get { return _ptr; }
+         get { return _descriptorExtractorPtr; }
       }
 
       #endregion
@@ -185,7 +190,7 @@ namespace Emgu.CV
       internal extern static IntPtr CvSIFTDetectorCreate(
          int nFeatures, int nOctaveLayers,
          double contrastThreshold, double edgeThreshold,
-         double sigma);
+         double sigma, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSIFTDetectorRelease(ref IntPtr detector);

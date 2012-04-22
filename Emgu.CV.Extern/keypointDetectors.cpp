@@ -77,9 +77,12 @@ void CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector)
 cv::SIFT* CvSIFTDetectorCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
-   double sigma)
+   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
-   return new cv::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+   cv::SIFT* sift = new cv::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+   *featureDetector = static_cast<cv::FeatureDetector*>(sift);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(sift);
+   return sift;
 }
 
 void CvSIFTDetectorRelease(cv::SIFT** detector)
@@ -128,9 +131,12 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }
 
 //ORB
-cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize)
+cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
-   return new cv::ORB(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize);
+   cv::ORB* orb = new cv::ORB(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize);
+   *featureDetector = static_cast<cv::FeatureDetector*>(orb);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(orb);
+   return orb;
 }
 
 int CvOrbDetectorGetDescriptorSize(cv::ORB* detector)
@@ -206,9 +212,12 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector)
+CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
-   return new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
+   cv::SURF* surf = new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
+   *featureDetector = static_cast<cv::FeatureDetector*>(surf);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(surf);
+   return surf;
 }
 
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector)

@@ -53,7 +53,7 @@ CVAPI(void) CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector);
 CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
-   double sigma);
+   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 
 CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 
@@ -100,7 +100,7 @@ CVAPI(void) GridAdaptedFeatureDetectorDetect(
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector);
+CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 
@@ -116,7 +116,7 @@ CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, Ipl
 CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
 
 //ORB
-CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize);
+CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
