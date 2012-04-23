@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PlanarSubdivision</RootNamespace>
-    <AssemblyName>PlanarSubdivision</AssemblyName>
+    <AssemblyName>PlanarSubdivisionExample</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="..\..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PlanarSubdivision\DrawSubdivision.cs">
+      <Link>DrawSubdivision.cs</Link>
     </Compile>
     <Compile Include="PlanarSubdivisionActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

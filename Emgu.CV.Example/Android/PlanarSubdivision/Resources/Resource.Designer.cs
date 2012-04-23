@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PlanarSubdivision
+namespace PlanarSubdivisionExample
 {
 	
 	
