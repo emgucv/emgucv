@@ -43,8 +43,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\PlanarSubdivision\PlanarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPlusPlus", "..\..\Emgu.CV.Example\CPlusPlus\CPlusPlus2010.vcxproj", "{32330110-727C-41A1-9377-6BA41002983D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emgu.CV.Example\ShapeDetection\ShapeDetection.csproj", "{F42D1B92-5722-41F4-B8F1-98185CD09D87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\SURFFeature\SURFFeature.csproj", "{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}"
@@ -235,20 +233,6 @@ Global
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|Win32.ActiveCfg = Release|Any CPU
 		{4220DDC1-A966-4BB3-BD36-5A0110819E84}.Release|x86.ActiveCfg = Release|Any CPU
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|.NET.ActiveCfg = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|Win32.Build.0 = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Debug|x86.ActiveCfg = Debug|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|.NET.ActiveCfg = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|Any CPU.ActiveCfg = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.ActiveCfg = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|Win32.Build.0 = Release|Win32
-		{32330110-727C-41A1-9377-6BA41002983D}.Release|x86.ActiveCfg = Release|Win32
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
