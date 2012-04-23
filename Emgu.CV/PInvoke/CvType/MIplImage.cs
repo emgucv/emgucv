@@ -32,22 +32,39 @@ namespace Emgu.CV.Structure
       /// pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16U, IPL_DEPTH_16S, IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported 
       /// </summary>
       public CvEnum.IPL_DEPTH depth;
+
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-
       public byte colorModel0;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte colorModel1;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte colorModel2;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte colorModel3;
 
       /// <summary>
-      /// ditto
+      /// ignored by OpenCV 
       /// </summary>
-
       public byte channelSeq0;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte channelSeq1;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte channelSeq2;
+      /// <summary>
+      /// ignored by OpenCV 
+      /// </summary>
       public byte channelSeq3;
 
       /// <summary>
@@ -102,22 +119,39 @@ namespace Emgu.CV.Structure
       /// size of aligned image row in bytes 
       /// </summary>
       public int widthStep;
+
       /// <summary>
       /// border completion mode, ignored by OpenCV 
       /// </summary>
-
       public int BorderMode0;
+      /// <summary>
+      /// border completion mode, ignored by OpenCV 
+      /// </summary>
       public int BorderMode1;
+      /// <summary>
+      /// border completion mode, ignored by OpenCV 
+      /// </summary>
       public int BorderMode2;
+      /// <summary>
+      /// border completion mode, ignored by OpenCV 
+      /// </summary>
       public int BorderMode3;
 
       /// <summary>
-      /// ditto
+      /// border const, ignored by OpenCV 
       /// </summary>
-
       public int BorderConst0;
+      /// <summary>
+      /// border const, ignored by OpenCV 
+      /// </summary>
       public int BorderConst1;
+      /// <summary>
+      /// border const, ignored by OpenCV 
+      /// </summary>
       public int BorderConst2;
+      /// <summary>
+      /// border const, ignored by OpenCV 
+      /// </summary>
       public int BorderConst3;
 
       /// <summary>

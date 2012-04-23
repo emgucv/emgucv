@@ -817,7 +817,7 @@ namespace Emgu.CV.GPU
       /// In the case of a floating-point GpuMat its bit representation is used for the operation.
       /// </summary>
       /// <param name="src1">The first source GpuMat</param>
-      /// <param name="src2">The scalar</param>
+      /// <param name="scalar">The scalar</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseOrS")]
@@ -842,7 +842,7 @@ namespace Emgu.CV.GPU
       /// In the case of a floating-point GpuMat its bit representation is used for the operation.
       /// </summary>
       /// <param name="src1">The first source GpuMat</param>
-      /// <param name="src2">The scalar</param>
+      /// <param name="scalar">The scalar</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBitwiseAndS")]
