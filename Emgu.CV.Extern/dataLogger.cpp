@@ -8,7 +8,7 @@
 
 using namespace emgu;
 
-DataLogger* DataLoggerCreate(int logLevel) { return new DataLogger(logLevel); }
+DataLogger* DataLoggerCreate(int logLevel, int loggerId) { return new DataLogger(logLevel, loggerId); }
 
 void DataLoggerRelease(DataLogger** logger) { if (*logger) { delete *logger; *logger = 0; } }
 
