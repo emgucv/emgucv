@@ -28,7 +28,7 @@ namespace Emgu.CV.Features2D
          }
       }
       #endregion
-
+      /*
       /// <summary>
       /// Get the Star detector parameters
       /// </summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
          p.LineThresholdBinarized = LineThresholdBinarized;
          p.SuppressNonmaxSize = SuppressNonmaxSize;
          return p;
-      }
+      }*/
 
       private int _maxSize;
       private int _responseThreshold;
@@ -113,12 +113,10 @@ namespace Emgu.CV.Features2D
       {
          _maxSize = maxSize;
          _responseThreshold = responseThreshold;
-         _lineThresholdProjected = lineThresholdProjected;
+         _lineThresholdProjected = lineThresholdBinarized;
          _lineThresholdBinarized = lineThresholdBinarized;
          _suppressNonmaxSize = suppressNonmaxSize;
-
-         MCvStarDetectorParams p = GetStarDetectorParameters();
-         _ptr = CvInvoke.CvStarGetFeatureDetector(ref p);
+         _ptr = CvInvoke.CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
       }
 
       /// <summary>
@@ -126,7 +124,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvStarFeatureDetectorRelease(ref _ptr);
+         CvInvoke.CvStarDetectorRelease(ref _ptr);
       }
    }
 }
@@ -136,9 +134,9 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvStarGetFeatureDetector(ref MCvStarDetectorParams detector);
+      internal extern static IntPtr CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvStarFeatureDetectorRelease(ref IntPtr detector);
+      internal extern static void CvStarDetectorRelease(ref IntPtr detector);
    }
 }

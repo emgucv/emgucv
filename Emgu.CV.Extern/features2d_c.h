@@ -46,8 +46,8 @@ CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplIma
 CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor);
 
 //StarDetector
-CVAPI(cv::StarFeatureDetector*) CvStarGetFeatureDetector(cv::StarDetector* detector);
-CVAPI(void) CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector);
+CVAPI(cv::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
+CVAPI(void) CvStarDetectorRelease(cv::StarDetector** detector);
 
 //SIFTDetector
 CVAPI(cv::SIFT*) CvSIFTDetectorCreate(

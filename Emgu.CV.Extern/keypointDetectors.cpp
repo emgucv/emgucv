@@ -62,12 +62,12 @@ void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* ima
 int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return static_cast<int>(descriptor->getDescriptorSize()); }
 
 //StarDetector
-cv::StarFeatureDetector* CvStarGetFeatureDetector(cv::StarDetector* detector)
+cv::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
 {
-   return new cv::StarFeatureDetector(*detector);
+   return new cv::StarDetector(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
 }
 
-void CvStarFeatureDetectorRelease(cv::StarFeatureDetector** detector)
+void CvStarDetectorRelease(cv::StarDetector** detector)
 {
    delete *detector;
    *detector = 0;
