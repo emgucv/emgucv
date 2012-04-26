@@ -9,9 +9,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.GPU;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
+using Emgu.CV.GPU;
 
 namespace PedestrianDetection
 {
@@ -26,53 +26,13 @@ namespace PedestrianDetection
          if (!IsPlaformCompatable()) return;
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Run();
-      }
-
-      static void Run()
-      {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png");
-
-         Stopwatch watch;  
-         Rectangle[] regions;
-
-         //check if there is a compatible GPU to run pedestrian detection
-         if (GpuInvoke.HasCuda) 
-         {  //this is the GPU version
-            using (GpuHOGDescriptor des = new GpuHOGDescriptor())
-            {
-               des.SetSVMDetector(GpuHOGDescriptor.GetDefaultPeopleDetector());
-
-               watch = Stopwatch.StartNew();
-               using (GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(image))
-               using (GpuImage<Bgra, Byte> gpuBgra = gpuImg.Convert<Bgra, Byte>())
-               {
-                  regions = des.DetectMultiScale(gpuBgra);
-               }
-            }
-         }
-         else
-         {  //this is the CPU version
-            using (HOGDescriptor des = new HOGDescriptor())
-            {
-               des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-
-               watch = Stopwatch.StartNew();
-               regions = des.DetectMultiScale(image);
-            }
-         }
-         watch.Stop();
-
-         foreach (Rectangle pedestrain in regions)
-         {
-            image.Draw(pedestrain, new Bgr(Color.Red), 1);
-         }
-
+         long processingTime;
+         Image<Bgr, Byte> image = FindPedestrian.Find("pedestrian.png", out processingTime);
          ImageViewer.Show(
             image,
             String.Format("Pedestrain detection using {0} in {1} milliseconds.", 
                GpuInvoke.HasCuda ? "GPU" : "CPU", 
-               watch.ElapsedMilliseconds));
+               processingTime));
       }
 
       /// <summary>
