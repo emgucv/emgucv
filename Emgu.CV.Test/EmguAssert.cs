@@ -1,7 +1,10 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
 using System;
-using NUnit.Framework;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
@@ -43,6 +46,40 @@ namespace Emgu.CV.Test
          Console.WriteLine(message);
       }
 #else
+      public static void IsTrue(bool condition)
+      {
+         Assert.IsTrue(condition);
+      }
+
+      public static void IsTrue(bool condition, String message)
+      {
+         Assert.IsTrue(condition, message);
+      }
+
+      public static void AreEqual(object a, object b)
+      {
+         Assert.IsTrue(a.Equals(b));
+      }
+
+      public static void AreEqual(object a, object b, string message)
+      {
+         Assert.IsTrue(a.Equals(b), message);
+      }
+
+      public static void AreNotEqual(object a, object b, string message)
+      {
+         Assert.IsFalse(a.Equals(b), message);
+      }
+
+      public static void IsFalse(bool condition)
+      {
+         Assert.IsFalse(condition);
+      }
+
+      public static void WriteLine(String message)
+      {
+         Trace.WriteLine(message);
+      }
 #endif
    }
 }
