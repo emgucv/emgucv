@@ -18,6 +18,8 @@ mkdir -p ios-package/Emgu.CV.Example/PlanarSubdivision
 mkdir -p ios-package/Emgu.CV.Example/LicensePlateRecognition
 mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
 mkdir -p ios-package/Emgu.CV.Example/TrafficSignRecognition
+mkdir -p ios-package/Emgu.CV.Example/FaceDetection
+mkdir -p ios-package/opencv/data/haarcascades
 svn export ../Emgu.CV.Example/MonoTouch ios-package/Emgu.CV.Example/MonoTouch
 svn export ../Emgu.CV.Example/SURFFeature/box.png ios-package/Emgu.CV.Example/SURFFeature/box.png
 svn export ../Emgu.CV.Example/SURFFeature/box_in_scene.png ios-package/Emgu.CV.Example/SURFFeature/box_in_scene.png
@@ -30,7 +32,9 @@ svn export ../Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs ios-package/
 svn export ../Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg ios-package/Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg
 svn export ../Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png ios-package/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png
 svn export ../Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs ios-package/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs
-
+svn export ../Emgu.CV.Example/FaceDetection/lena.jpg ios-package/Emgu.CV.Example/FaceDetection/lena.jpg
+svn export ../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/haarcascades/haarcascade_eye.xml
+svn export ../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../CommonAssemblyInfo.cs ios-package
 find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 find ./ios-package -type f -name *Android* -exec rm '{}' \;

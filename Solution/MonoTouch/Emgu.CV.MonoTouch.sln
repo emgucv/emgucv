@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\MonoTouch\TrafficSignRecognition\TrafficSignRecognition.csproj", "{F0A16E00-5269-481C-BBA2-46FA81A64535}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\MonoTouch\FaceDetection\FaceDetection.csproj", "{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -97,6 +99,14 @@ Global
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhone.Build.0 = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhone.Build.0 = Debug|iPhone
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhone.ActiveCfg = Release|iPhone
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhone.Build.0 = Release|iPhone
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -131,6 +141,6 @@ Global
 		{F3A74390-59C8-473F-BE20-99119295CE17}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\..\Emgu.CV.Example\MonoTouch\TrafficSignRecognition\TrafficSignRecognition.csproj
+		StartupItem = ..\..\Emgu.CV.Example\MonoTouch\FaceDetection\FaceDetection.csproj
 	EndGlobalSection
 EndGlobal
