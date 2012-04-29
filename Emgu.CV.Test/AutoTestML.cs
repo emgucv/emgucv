@@ -1,21 +1,24 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.ML;
 using Emgu.CV.ML.Structure;
 using Emgu.CV.Structure;
+using Emgu.CV;
 using NUnit.Framework;
+using MlEnum = Emgu.CV.ML.MlEnum;
 
-namespace Emgu.CV.ML.UnitTest
+namespace Emgu.CV.Test
 {
    [TestFixture]
-   public class UnitTests
+   public class AutoTestML
    {
       [Test]
       public void TestKNearest()
@@ -93,7 +96,7 @@ namespace Emgu.CV.ML.UnitTest
       public void TestEMLegacy()
       {
          int N = 4; //number of clusters
-         int N1 = (int)Math.Sqrt((double)4);
+         int N1 = (int) Math.Sqrt((double) 4);
 
          Bgr[] colors = new Bgr[] { 
             new Bgr(0, 0, 255), 
@@ -153,7 +156,7 @@ namespace Emgu.CV.ML.UnitTest
 
                   Bgr color = colors[response];
                   
-                  img[j, i] = new Bgr(color.Blue*0.5, color.Green * 0.5, color.Red * 0.5 );
+                  img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
                }
             #endregion 
 
@@ -179,7 +182,7 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
          for (int i = 0; i < numberOfPoints; i++)
             for (int j = 0; j < dimensions; j++)
-               featuresM[i, j] = 100 * (float)r.NextDouble() - 50;
+               featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
 
          EMParams pars = new EMParams();
          pars.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
@@ -188,8 +191,9 @@ namespace Emgu.CV.ML.UnitTest
          pars.TermCrit = new MCvTermCriteria(100, 1.0e-6);
 
          em.Train(featuresM, null, pars, labels);
-      }      
+      }
 
+      /*
       [Test]
       public void TestEM2()
       {
@@ -203,10 +207,10 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
          for (int i = 0; i < numberOfPoints; i++)
             for (int j = 0; j < dimensions; j++)
-               featuresM[i, j] = 100 * (float)r.NextDouble() - 50;
+               featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
 
          em.Train(featuresM, labels, null, null);
-      }
+      }*/
       
       #region contribution from Albert G
       [Test]
@@ -254,8 +258,10 @@ namespace Emgu.CV.ML.UnitTest
 
             //bool trained = model.Train(trainData, trainClasses, null, null, p);
             bool trained = model.TrainAuto(trainData, trainClasses, null, null, p.MCvSVMParams, 5);
-
-            model.Save("svmModel.xml");
+            String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
+            model.Save(fileName);
+            if (File.Exists(fileName))
+               File.Delete(fileName);
 
             for (int i = 0; i < img.Height; i++)
             {
@@ -331,11 +337,14 @@ namespace Emgu.CV.ML.UnitTest
          trainClasses3.SetValue(3);
          #endregion
 
-         using (NormalBayesClassifier classifier = new NormalBayesClassifier() )
+         using (NormalBayesClassifier classifier = new NormalBayesClassifier())
          {
             classifier.Train(trainData, trainClasses, null, null, false);
 
-            classifier.Save("normalBayes.xml");
+            String fileName = Path.Combine(Path.GetTempPath(), "normalBayes.xml");
+            classifier.Save(fileName);
+            if (File.Exists(fileName))
+               File.Delete(fileName);
 
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
@@ -345,7 +354,7 @@ namespace Emgu.CV.ML.UnitTest
                   sample.Data[0, 1] = j;
                   int response = (int) classifier.Predict(sample, null);
 
-                  Bgr color = colors[response -1];
+                  Bgr color = colors[response - 1];
 
                   img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
                }
@@ -415,15 +424,17 @@ namespace Emgu.CV.ML.UnitTest
          {
             classifier.Train(trainData, MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, trainClasses.Convert<float>(), null, null, null, null, MCvGBTreesParams.GetDefaultParameter(), false);
 
-            classifier.Save("GBTrees.xml");
-
+            String fileName = Path.Combine(Path.GetTempPath(), "GBTrees.xml");
+            classifier.Save(fileName);
+            if (File.Exists(fileName))
+               File.Delete(fileName);
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
                {
                   sample.Data[0, 0] = i;
                   sample.Data[0, 1] = j;
-                  int response = (int) Math.Round( classifier.Predict(sample, null, null, MCvSlice.WholeSeq, false ) );
+                  int response = (int) Math.Round(classifier.Predict(sample, null, null, MCvSlice.WholeSeq, false));
 
                   Bgr color = colors[response - 1];
 
@@ -491,10 +502,10 @@ namespace Emgu.CV.ML.UnitTest
          ReadMushroomData(out data, out response);
 
          //Use the first 80% of data as training sample
-         int trainingSampleCount = (int)(data.Rows * 0.8);
+         int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte)MlEnum.VAR_TYPE.CATEGORICAL); //the data is categorical
+         varType.SetValue((byte) MlEnum.VAR_TYPE.CATEGORICAL); //the data is categorical
 
          Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
          using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
@@ -526,7 +537,8 @@ namespace Emgu.CV.ML.UnitTest
                null,
                param);
 
-            if (!success) return;
+            if (!success)
+               return;
             double trainDataCorrectRatio = 0;
             double testDataCorrectRatio = 0;
             for (int i = 0; i < data.Rows; i++)
@@ -548,8 +560,8 @@ namespace Emgu.CV.ML.UnitTest
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
 
-            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
-            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio * 100));
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio * 100));
          }
 
          priorsHandle.Free();
@@ -561,10 +573,10 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> data, response;
          ReadLetterRecognitionData(out data, out response);
 
-         int trainingSampleCount = (int)(data.Rows * 0.8);
+         int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte)MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
+         varType.SetValue((byte) MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
          varType[data.Cols, 0] = (byte) MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
 
          Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
@@ -595,7 +607,8 @@ namespace Emgu.CV.ML.UnitTest
                null, 
                param);
 
-            if (!success) return;
+            if (!success)
+               return;
             
             double trainDataCorrectRatio = 0;
             double testDataCorrectRatio = 0;
@@ -627,9 +640,9 @@ namespace Emgu.CV.ML.UnitTest
                }
             }
 
-            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
-            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
-            Trace.WriteLine(builder.ToString());
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio * 100));
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio * 100));
+            EmguAssert.WriteLine(builder.ToString());
          }
       }
 
@@ -639,11 +652,11 @@ namespace Emgu.CV.ML.UnitTest
          Matrix<float> data, response;
          ReadLetterRecognitionData(out data, out response);
 
-         int trainingSampleCount = (int)(data.Rows * 0.8);
+         int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte)MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
-         varType[data.Cols, 0] = (byte)MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
+         varType.SetValue((byte) MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
+         varType[data.Cols, 0] = (byte) MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
 
          MCvRTParams param = new MCvRTParams();
          param.maxDepth = 10;
@@ -669,9 +682,13 @@ namespace Emgu.CV.ML.UnitTest
                null,
                param);
 
-            forest.Save("ERTree.xml");
+            if (!success)
+               return;
 
-            if (!success) return;
+            String fileName = Path.Combine(Path.GetTempPath(), "ERTree.xml");
+            forest.Save(fileName);
+            if (File.Exists(fileName))
+               File.Delete(fileName);
 
             double trainDataCorrectRatio = 0;
             double testDataCorrectRatio = 0;
@@ -694,8 +711,8 @@ namespace Emgu.CV.ML.UnitTest
             trainDataCorrectRatio /= trainingSampleCount;
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
 
-            Trace.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio*100));
-            Trace.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio*100));
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio * 100));
+            EmguAssert.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio * 100));
 
          }
       }
@@ -736,7 +753,11 @@ namespace Emgu.CV.ML.UnitTest
          using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
          {
             network.Train(trainData, trainClasses, null, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
-            network.Save("ann_mlp_model.xml");
+
+            String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
+            network.Save(fileName);
+            if (File.Exists(fileName))
+               File.Delete(fileName);
 
             for (int i = 0; i < img.Height; i++)
             {
@@ -747,7 +768,7 @@ namespace Emgu.CV.ML.UnitTest
                   network.Predict(sample, prediction);
 
                   // estimates the response and get the neighbors' labels
-                  float response = prediction.Data[0,0];
+                  float response = prediction.Data[0, 0];
 
                   // highlight the pixel depending on the accuracy (or confidence)
                   img[i, j] = response < 1.5 ? new Bgr(90, 0, 0) : new Bgr(0, 90, 0);
@@ -760,7 +781,7 @@ namespace Emgu.CV.ML.UnitTest
          {
             PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
             img.Draw(new CircleF(p1, 2), new Bgr(255, 100, 100), -1);
-            PointF p2 = new PointF((int)trainData2[i, 0], (int)trainData2[i, 1]);
+            PointF p2 = new PointF((int) trainData2[i, 0], (int) trainData2[i, 1]);
             img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
          }
       }
@@ -773,10 +794,10 @@ namespace Emgu.CV.ML.UnitTest
          int imageSize = 500;
 
          Bgr[] colors = new Bgr[] {
-            new Bgr(0,0,255),
+            new Bgr(0, 0, 255),
             new Bgr(0, 255, 0),
             new Bgr(255, 100, 100),
-            new Bgr(255,0,255),
+            new Bgr(255, 0, 255),
             new Bgr(0, 255, 255)};
 
          Image<Bgr, Byte> image = new Image<Bgr, byte>(imageSize, imageSize);
@@ -789,7 +810,7 @@ namespace Emgu.CV.ML.UnitTest
          for (int i = 0; i < clustersCount; i++)
          {
             Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount), (i + 1) * (sampleCount / clustersCount), 1);
-            row.SetRandNormal(new MCvScalar(r.Next() % imageSize , r.Next() % imageSize), new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
+            row.SetRandNormal(new MCvScalar(r.Next() % imageSize, r.Next() % imageSize), new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
          }
          CvInvoke.cvAbsDiffS(points, points, new MCvScalar());
          CvInvoke.cvRandShuffle(points, IntPtr.Zero, 1.0);

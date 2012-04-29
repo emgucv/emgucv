@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Text;
 using System.Xml;
@@ -58,7 +57,7 @@ namespace Emgu.Util
       /// <returns>The object representation as a result of the deserialization of the xml document</returns>
       public static T XmlDeserialize<T>(XmlDocument xDoc)
       {
-         return (T)(new XmlSerializer(typeof(T))).Deserialize(new XmlNodeReader(xDoc));
+         return (T) (new XmlSerializer(typeof(T))).Deserialize(new XmlNodeReader(xDoc));
       }
 
       /// <summary>
@@ -70,7 +69,7 @@ namespace Emgu.Util
       /// <returns>The object representation as a result of the deserialization of the xml document</returns>
       public static T XmlDeserialize<T>(XmlDocument xDoc, Type[] knownTypes)
       {
-         return (T)(new XmlSerializer(typeof(T), knownTypes)).Deserialize(new XmlNodeReader(xDoc));
+         return (T) (new XmlSerializer(typeof(T), knownTypes)).Deserialize(new XmlNodeReader(xDoc));
       }
 
       /// <summary>
@@ -81,7 +80,7 @@ namespace Emgu.Util
       /// <returns>The object representation as a result of the deserialization of the xml string</returns>
       public static T XmlStringDeserialize<T>(String xmlString)
       {
-         return (T)(new XmlSerializer(typeof(T))).Deserialize(new StringReader(xmlString));
+         return (T) (new XmlSerializer(typeof(T))).Deserialize(new StringReader(xmlString));
       }
       #endregion
 
@@ -137,8 +136,7 @@ namespace Emgu.Util
             try
             {
                processor.Start();
-            }
-            catch (Exception)
+            } catch (Exception)
             {
                //error = e.Message;
             }
@@ -246,13 +244,15 @@ namespace Emgu.Util
       /// <param name="src">The sorted data that will be interpolated from</param>
       /// <param name="indexes">The indexes of the interpolate result</param>
       /// <returns></returns>
-      public static IEnumerable<T> LinearInterpolate<T> (IEnumerable<T> src, IEnumerable<double> indexes) where T:IInterpolatable<T>, new()
+      public static IEnumerable<T> LinearInterpolate<T>(IEnumerable<T> src, IEnumerable<double> indexes) where T:IInterpolatable<T>, new()
       {
          using (IEnumerator<T> sampleEnumerator = src.GetEnumerator())
          {
-            if (!sampleEnumerator.MoveNext()) yield break;
+            if (!sampleEnumerator.MoveNext())
+               yield break;
             T old = sampleEnumerator.Current;
-            if (!sampleEnumerator.MoveNext()) yield break;
+            if (!sampleEnumerator.MoveNext())
+               yield break;
 
             T current = sampleEnumerator.Current;
 
@@ -279,20 +279,23 @@ namespace Emgu.Util
       {
          using (IEnumerator<T> sampleEnumerator = src.GetEnumerator())
          {
-            if (!sampleEnumerator.MoveNext()) yield break;
+            if (!sampleEnumerator.MoveNext())
+               yield break;
             T old = sampleEnumerator.Current;
             yield return old;
 
-            if (!sampleEnumerator.MoveNext()) yield break;
+            if (!sampleEnumerator.MoveNext())
+               yield break;
             T current = sampleEnumerator.Current;
             double currentIndex = old.InterpolationIndex + subsampleRate;
 
             bool endOfSubsample = false;
             while (!endOfSubsample)
             {
-               while (currentIndex > current.InterpolationIndex )
+               while (currentIndex > current.InterpolationIndex)
                {
-                  if (endOfSubsample = !sampleEnumerator.MoveNext()) break;
+                  if (endOfSubsample = !sampleEnumerator.MoveNext())
+                     break;
 
                   old = current;
                   current = sampleEnumerator.Current;
@@ -322,13 +325,11 @@ namespace Emgu.Util
          {
             foreach (T sample in enums[0])
                yield return sample;
-         }
-         else if (enums.Length == 2)
+         } else if (enums.Length == 2)
          {
             foreach (T sample in JoinTwoInterpolatables(enums[0], enums[1]))
                yield return sample;
-         }
-         else
+         } else
          {
             int middle = enums.Length / 2;
             IEnumerable<T>[] lower = new IEnumerable<T>[middle];
@@ -350,8 +351,7 @@ namespace Emgu.Util
             while (l2.MoveNext())
                yield return l2.Current;
             yield break;
-         }
-         else if (!l2.MoveNext())
+         } else if (!l2.MoveNext())
          {
             while (l1.MoveNext())
                yield return l1.Current;
@@ -374,8 +374,7 @@ namespace Emgu.Util
                      yield return l2.Current;
                   yield break;
                }
-            }
-            else
+            } else
             {
                yield return s2;
                if (l2.MoveNext())
@@ -415,6 +414,16 @@ namespace Emgu.Util
       }*/
 
 
+#if IOS
+      /// <summary>
+      /// memcpy function
+      /// </summary>
+      /// <param name="dest">the destination of memory copy</param>
+      /// <param name="src">the source of memory copy</param>
+      /// <param name="len">the number of bytes to be copied</param>
+      [DllImport("c", EntryPoint = "memcpy")]
+      public static extern void memcpy(IntPtr dest, IntPtr src, int len);
+#else
       /// <summary>
       /// memcpy function
       /// </summary>
@@ -423,6 +432,7 @@ namespace Emgu.Util
       /// <param name="len">the number of bytes to be copied</param>
       [DllImport("kernel32.dll", EntryPoint = "CopyMemory")]
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
+#endif
       #endregion
 
       /// <summary>
@@ -435,8 +445,7 @@ namespace Emgu.Util
          if (Platform.OperationSystem == TypeEnum.OS.Windows)
          {
             return WinAPILoadLibrary(dllname);
-         }
-         else
+         } else
          {
             return Dlopen(dllname, 2); // 2 == RTLD_NOW
          }

@@ -8,10 +8,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-using Emgu.CV;
-using Emgu.CV.Structure;
-
-namespace HelloWorld
+namespace LicensePlateRecognition
 {
    public class Application
    {

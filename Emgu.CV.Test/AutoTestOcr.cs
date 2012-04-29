@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,10 +9,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using NUnit.Framework;
 
-namespace Emgu.CV.OCR.UnitTest
+namespace Emgu.CV.Test
 {
    [TestFixture]
    public class AutoTestOcr
@@ -32,7 +30,7 @@ namespace Emgu.CV.OCR.UnitTest
             ocr.Recognize(img);
 
             String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-            Assert.AreEqual(message, messageOcr);
+            EmguAssert.AreEqual(message, messageOcr, String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
             Tesseract.Charactor[] results = ocr.GetCharactors();
          }
@@ -52,7 +50,7 @@ namespace Emgu.CV.OCR.UnitTest
             ocr.Recognize(img);
 
             String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-            Assert.AreEqual(message, messageOcr);
+            EmguAssert.AreEqual(message, messageOcr, String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
             Tesseract.Charactor[] results = ocr.GetCharactors();
          }
@@ -68,7 +66,7 @@ namespace Emgu.CV.OCR.UnitTest
          {
             ocr.Recognize(img);
             Tesseract.Charactor[] results = ocr.GetCharactors();
-            Assert.AreEqual(results.Length, 0);
+            EmguAssert.IsTrue(results.Length == 0);
          }
       }
 

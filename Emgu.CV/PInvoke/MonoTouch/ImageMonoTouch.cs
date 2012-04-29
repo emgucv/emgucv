@@ -3,6 +3,7 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using MonoTouch.CoreGraphics;
+using MonoTouch.UIKit;
 
 namespace Emgu.CV
 {
@@ -14,7 +15,7 @@ namespace Emgu.CV
       public Image(CGImage cgImage)
          : this(cgImage.Width, cgImage.Height)
       {
-         if (this is Image<Bgra, Byte>)
+         if (this is Image<Rgba, Byte>)
          {
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
             using (CGBitmapContext context = new CGBitmapContext(
@@ -27,14 +28,19 @@ namespace Emgu.CV
                context.DrawImage(rect, cgImage);
          } else
          {
-            using (Image<Bgra, Byte> tmp = new Image<Bgra, Byte>(cgImage))
+            using (Image<Rgba, Byte> tmp = new Image<Rgba, Byte>(cgImage))
                ConvertFrom(tmp);
          }
       }
 
-      public CGImage ToCGImage()
+      public Image(UIImage uiImage)
+         : this (uiImage.CGImage)
       {
-         if (this is Image<Bgra, Byte>)
+      }
+
+      public UIImage ToUIImage()
+      {
+         if (this is Image<Rgba, Byte>)
          {
             using (CGBitmapContext context = new CGBitmapContext(
          		MIplImage.imageData,
@@ -43,12 +49,15 @@ namespace Emgu.CV
          		Width * 4,
          		CGColorSpace.CreateDeviceRGB(),
          		CGImageAlphaInfo.PremultipliedLast))
-               return context.ToImage();
+            using (CGImage cgImage =  context.ToImage())
+            {
+               return UIImage.FromImage(cgImage);
+            }
          } else
          {
-            using (Image<Bgra, Byte> tmp = Convert<Bgra, Byte>())
+            using (Image<Rgba, Byte> tmp = Convert<Rgba, Byte>())
             {
-               return tmp.ToCGImage();
+               return tmp.ToUIImage();
             }
          }
       }

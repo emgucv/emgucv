@@ -1,25 +1,22 @@
-//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
-//----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using MonoTouch.CoreGraphics;
+using System.Linq;
+
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.NUnit.UI;
 
-namespace HelloWorld
+namespace Emgu.CV.Test
 {
    // The UIApplicationDelegate for the application. This class is responsible for launching the 
    // User Interface of the application, as well as listening (and optionally responding) to 
    // application events from iOS.
    [Register ("AppDelegate")]
-   public partial class AppDelegate : UIApplicationDelegate
+	public partial class AppDelegate : UIApplicationDelegate
    {
       // class-level declarations
       UIWindow window;
+      TouchRunner runner;
 
       //
       // This method is invoked when the application has loaded and is ready to run. In this 
@@ -30,21 +27,18 @@ namespace HelloWorld
       //
       public override bool FinishedLaunching(UIApplication app, NSDictionary options)
       {
+         // create a new window instance based on the screen size
          window = new UIWindow(UIScreen.MainScreen.Bounds);
-         UIViewController viewController = new UIViewController();
-         MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
-         using (Image<Bgr, Byte> image = new Image<Bgr, Byte>(320, 240))
-         {
-            image.Draw("Hello, world", ref font, new Point(30, 30), new Bgr(255, 255, 255));
+         runner = new TouchRunner(window);
 
-            UIImageView imageView = new UIImageView(window.Frame);
-            viewController.Add(imageView);
-            imageView.Image = image.ToUIImage();
-         }
+         // register every tests included in the main application/assembly
+         runner.Add(System.Reflection.Assembly.GetExecutingAssembly());
 
-         window.RootViewController = viewController;
+         window.RootViewController = new UINavigationController(runner.GetViewController());
+			
+         // make the window visible
          window.MakeKeyAndVisible();
-         
+			
          return true;
       }
    }

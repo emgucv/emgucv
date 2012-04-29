@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -72,11 +71,11 @@ namespace Emgu.CV
       /// <summary>
       /// The default Exception callback to handle Error thrown by OpenCV
       /// </summary>
-      public static readonly CvErrorCallback CvErrorHandlerThrowException = (CvErrorCallback)CvErrorHandler;
+      public static readonly CvErrorCallback CvErrorHandlerThrowException = (CvErrorCallback) CvErrorHandler;
       /// <summary>
       /// An error handler which will ignore any error and continute
       /// </summary>
-      public static readonly CvErrorCallback CvErrorHandlerIgnoreError = (CvErrorCallback)CvIgnoreErrorErrorHandler;
+      public static readonly CvErrorCallback CvErrorHandlerIgnoreError = (CvErrorCallback) CvIgnoreErrorErrorHandler;
 
       /// <summary>
       /// A custome error handler for opencv
@@ -88,6 +87,9 @@ namespace Emgu.CV
       /// <param name="line">The line number in the souce where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <returns></returns>
+#if IOS
+      [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
+#endif
       private static int CvIgnoreErrorErrorHandler(
                   int status,
          String funcName,
@@ -110,6 +112,9 @@ namespace Emgu.CV
       /// <param name="line">The line number in the souce where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
       /// <returns></returns>
+#if IOS
+      [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
+#endif
       private static int CvErrorHandler(
          int status,
          String funcName,
@@ -122,8 +127,7 @@ namespace Emgu.CV
          {
             cvSetErrStatus(Emgu.CV.CvEnum.ERROR_CODES.CV_STSOK); //clear the error status
             return 0; //signal the process to continute
-         }
-         finally
+         } finally
          {
             throw new CvException(status, funcName, errMsg, fileName, line);
          }
@@ -328,7 +332,7 @@ namespace Emgu.CV
       /// <returns>The read object</returns>
       public static T CV_READ_SEQ_ELEM<T>(ref MCvSeqReader reader)
       {
-         T res = (T)Marshal.PtrToStructure(reader.ptr, typeof(T));
+         T res = (T) Marshal.PtrToStructure(reader.ptr, typeof(T));
          CV_NEXT_SEQ_ELEM(Marshal.SizeOf(typeof(T)), ref reader);
          return res;
       }
@@ -1323,8 +1327,7 @@ namespace Emgu.CV
          try
          {
             return _cvLoad(fileName, memstorage, name, realName);
-         }
-         catch (CvException)
+         } catch (CvException)
          {
             //cv.dll needed to be load before creating HaarCascade object
             //creating the following dummy will do the job
@@ -1465,9 +1468,9 @@ namespace Emgu.CV
          int flipMode =
             //-1 indicates vertical and horizontal flip
             flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
-            //1 indicates horizontal flip only
+         //1 indicates horizontal flip only
             flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
-            //0 indicates vertical flip only
+         //0 indicates vertical flip only
             0;
          cvFlip(src, dst, flipMode);
       }
@@ -1744,8 +1747,8 @@ namespace Emgu.CV
           int shift)
       {
          Size axes = new Size();
-         axes.Width = (int)Math.Round(box.size.Height * 0.5);
-         axes.Height = (int)Math.Round(box.size.Width * 0.5);
+         axes.Width = (int) Math.Round(box.size.Height * 0.5);
+         axes.Height = (int) Math.Round(box.size.Width * 0.5);
 
          cvEllipse(img, Point.Round(box.center), axes, box.angle, 0, 360, color, thickness, lineType, shift);
       }

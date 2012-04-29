@@ -1,18 +1,15 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.GPU;
 
@@ -35,7 +32,6 @@ namespace SURFFeatureExample
          HomographyMatrix homography = null;
 
          SURFDetector surfCPU = new SURFDetector(500, false);
-
          VectorOfKeyPoint modelKeyPoints;
          VectorOfKeyPoint observedKeyPoints;
          Matrix<int> indices;
@@ -97,12 +93,10 @@ namespace SURFFeatureExample
                   watch.Stop();
                }
             }
-         }
-         else
+         } else
          {
             //extract features from the object image
             modelKeyPoints = surfCPU.DetectKeyPointsRaw(modelImage, null);
-            //MKeyPoint[] kpts = modelKeyPoints.ToArray();
             Matrix<float> modelDescriptors = surfCPU.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
 
             watch = Stopwatch.StartNew();
@@ -110,7 +104,6 @@ namespace SURFFeatureExample
             // extract features from the observed image
             observedKeyPoints = surfCPU.DetectKeyPointsRaw(observedImage, null);
             Matrix<float> observedDescriptors = surfCPU.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
-
             BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2);
             matcher.Add(modelDescriptors);
 

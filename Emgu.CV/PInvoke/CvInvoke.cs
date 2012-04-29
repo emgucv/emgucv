@@ -130,25 +130,16 @@ namespace Emgu.CV
             //Java.Lang.JavaSystem.Load(Path.Combine(directory.FullName, module));
             Java.Lang.JavaSystem.LoadLibrary(module);
          }
-         //Use the custom error handler
-         cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
 #elif IOS
-         //try
-         //{
-            //CvErrorHandler(0, "", "", "", 0, IntPtr.Zero);
-         //} catch
-         //{
-         //}
 #else
          String formatString = GetModuleFormatString();
          for (int i = 0; i < modules.Count; ++i)
             modules[i] = String.Format(formatString, modules[i]);
 
          LoadUnmanagedModules(null, modules.ToArray());
+#endif
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
-#endif
-
       }
 
       /*

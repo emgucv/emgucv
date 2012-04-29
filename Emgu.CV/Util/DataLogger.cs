@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -120,8 +119,7 @@ namespace Emgu.CV.Util
             IntPtr unmanagedData = Marshal.StringToHGlobalAnsi(d);
             _logger.Log(unmanagedData, logLevel);
             Marshal.FreeHGlobal(unmanagedData);
-         }
-         else
+         } else
          {
             IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
             Marshal.StructureToPtr(data, unmanagedData, false);
@@ -137,11 +135,10 @@ namespace Emgu.CV.Util
             T result;
             if (typeof(T) == typeof(String))
             {
-               result = (T)((Object)Marshal.PtrToStringAnsi(e.Value));
-            }
-            else
+               result = (T) ((Object) Marshal.PtrToStringAnsi(e.Value));
+            } else
             {
-               result = (T)Marshal.PtrToStructure(e.Value, typeof(T));
+               result = (T) Marshal.PtrToStructure(e.Value, typeof(T));
             }
             OnDataReceived(this, new EventArgs<T>(result));
          }
@@ -190,6 +187,9 @@ namespace Emgu.CV.Util
 
       public static DataCallback Handler = DataHandler;
 
+#if IOS
+      [MonoTouch.MonoPInvokeCallback(typeof(DataLoggerHelper.DataCallback))]
+#endif
       public static void DataHandler(IntPtr data, int loggerId)
       {
          if (OnDataReceived != null)

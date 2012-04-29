@@ -1,25 +1,21 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Emgu.CV;
-using Emgu.UI;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using Emgu.CV.Features2D;
-using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Xml;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using Emgu.CV;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
@@ -43,7 +39,7 @@ namespace Emgu.CV.Test
             for (int j = 0; j < img1.Height; j++)
             {
                Bgr c = img1[j, i];
-               Assert.IsTrue(c.Equals(new Bgr(8.0, 1.0, 2.0)));
+               EmguAssert.IsTrue(c.Equals(new Bgr(8.0, 1.0, 2.0)));
             }
       }
 
@@ -58,7 +54,7 @@ namespace Emgu.CV.Test
             img2._Max(120.0);
             for (int i = 0; i < img2.Width; i++)
                for (int j = 0; j < img2.Height; j++)
-                  Assert.GreaterOrEqual(img2[j, i].Intensity, 120.0);
+                  EmguAssert.IsTrue(img2[j, i].Intensity >= 120.0);
          }
 
          using (Image<Gray, Byte> img2 = img1.Convert<Byte>(delegate(Byte f) { return (Byte)r.Next(255); }))
@@ -66,7 +62,7 @@ namespace Emgu.CV.Test
             img2._Min(120.0);
             for (int i = 0; i < img2.Width; i++)
                for (int j = 0; j < img2.Height; j++)
-                  Assert.GreaterOrEqual(120.0, img2[j, i].Intensity);
+                  EmguAssert.IsTrue(120.0 >= img2[j, i].Intensity);
          }
 
          using (Image<Gray, Byte> img2 = img1.Convert<Byte>(delegate(Byte f) { return (Byte)r.Next(255); }))
@@ -77,8 +73,8 @@ namespace Emgu.CV.Test
                for (int j = 0; j < img2.Height; j++)
                {
                   Point location = new Point(i, j);
-                  Assert.GreaterOrEqual(img4[location].Intensity, img2[location].Intensity);
-                  Assert.GreaterOrEqual(img4[j, i].Intensity, img3[j, i].Intensity);
+                  EmguAssert.IsTrue(img4[location].Intensity >= img2[location].Intensity);
+                  EmguAssert.IsTrue(img4[j, i].Intensity >= img3[j, i].Intensity);
                }
          }
 
@@ -124,35 +120,40 @@ namespace Emgu.CV.Test
          img2.ROI = new Rectangle(0, 2, 40, 20 - 2);
          img2.SetValue(new Gray(2.0));
 
-         Assert.AreEqual(img1.Width, img2.Width);
-         Assert.AreEqual(img1.Height, img2.Height);
+         EmguAssert.IsTrue(img1.Width == img2.Width);
+         EmguAssert.IsTrue(img1.Height == img2.Height);
 
          Stopwatch watch = Stopwatch.StartNew();
          Image<Gray, Single> img3 = img1.Add(img2);
          long cvAddTime = watch.ElapsedMilliseconds;
 
-         watch.Reset(); watch.Start();
-         Image<Gray, Single> img4 = img1.Convert<Single, Single>(img2, delegate(Single v1, Single v2) { return v1 + v2; });
+         watch.Reset();
+         watch.Start();
+         Image<Gray, Single> img4 = img1.Convert<Single, Single>(img2, delegate(Single v1, Single v2) {
+            return v1 + v2; });
          long genericAddTime = watch.ElapsedMilliseconds;
 
          Image<Gray, Single> img5 = img3.AbsDiff(img4);
 
-         watch.Reset(); watch.Start();
+         watch.Reset();
+         watch.Start();
          double sum1 = img5.GetSum().Intensity;
          long cvSumTime = watch.ElapsedMilliseconds;
 
-         watch.Reset(); watch.Start();
+         watch.Reset();
+         watch.Start();
          Single sum2 = 0.0f;
-         img5.Action(delegate(Single v) { sum2 += v; });
+         img5.Action(delegate(Single v) {
+            sum2 += v; });
          long genericSumTime = watch.ElapsedMilliseconds;
 
-         Trace.WriteLine(String.Format("CV Add     : {0} milliseconds", cvAddTime));
-         Trace.WriteLine(String.Format("Generic Add: {0} milliseconds", genericAddTime));
-         Trace.WriteLine(String.Format("CV Sum     : {0} milliseconds", cvSumTime));
-         Trace.WriteLine(String.Format("Generic Sum: {0} milliseconds", genericSumTime));
-         Trace.WriteLine(String.Format("Abs Diff = {0}", sum1));
-         Trace.WriteLine(String.Format("Abs Diff = {0}", sum2));
-         Assert.AreEqual(sum1, sum2);
+         EmguAssert.WriteLine(String.Format("CV Add     : {0} milliseconds", cvAddTime));
+         EmguAssert.WriteLine(String.Format("Generic Add: {0} milliseconds", genericAddTime));
+         EmguAssert.WriteLine(String.Format("CV Sum     : {0} milliseconds", cvSumTime));
+         EmguAssert.WriteLine(String.Format("Generic Sum: {0} milliseconds", genericSumTime));
+         EmguAssert.WriteLine(String.Format("Abs Diff = {0}", sum1));
+         EmguAssert.WriteLine(String.Format("Abs Diff = {0}", sum2));
+         EmguAssert.IsTrue(sum1 == sum2);
 
          img3.Dispose();
          img4.Dispose();
@@ -161,7 +162,8 @@ namespace Emgu.CV.Test
          DateTime t1 = DateTime.Now;
          img3 = img1.Mul(2.0);
          DateTime t2 = DateTime.Now;
-         img4 = img1.Convert<Single>(delegate(Single v1) { return v1 * 2.0f; });
+         img4 = img1.Convert<Single>(delegate(Single v1) {
+            return v1 * 2.0f; });
          DateTime t3 = DateTime.Now;
 
          /*
@@ -171,7 +173,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("Generic Mul: {0} milliseconds", ts2.TotalMilliseconds));
          */
 
-         Assert.IsTrue(img3.Equals(img4));
+         EmguAssert.IsTrue(img3.Equals(img4));
          img3.Dispose();
          img4.Dispose();
 
@@ -179,7 +181,8 @@ namespace Emgu.CV.Test
          img3 = img1.Add(img1);
          img4 = img3.Add(img1);
          t2 = DateTime.Now;
-         img5 = img1.Convert<Single, Single, Single>(img1, img1, delegate(Single v1, Single v2, Single v3) { return v1 + v2 + v3; });
+         img5 = img1.Convert<Single, Single, Single>(img1, img1, delegate(Single v1, Single v2, Single v3) {
+            return v1 + v2 + v3; });
          t3 = DateTime.Now;
 
          /*
@@ -188,7 +191,7 @@ namespace Emgu.CV.Test
          Trace.WriteLine(String.Format("CV Sum (3 images)     : {0} milliseconds", ts1.TotalMilliseconds));
          Trace.WriteLine(String.Format("Generic Sum (3 images): {0} milliseconds", ts2.TotalMilliseconds));
          */
-         Assert.IsTrue(img5.Equals(img4));
+         EmguAssert.IsTrue(img5.Equals(img4));
          img3.Dispose();
          img4.Dispose();
          img5.Dispose();
@@ -197,7 +200,8 @@ namespace Emgu.CV.Test
          img2.Dispose();
 
          Image<Gray, Byte> gimg1 = new Image<Gray, Byte>(400, 300, new Gray(30));
-         Image<Gray, Byte> gimg2 = gimg1.Convert<Byte>(delegate(Byte b) { return (Byte)(255 - b); });
+         Image<Gray, Byte> gimg2 = gimg1.Convert<Byte>(delegate(Byte b) {
+            return (Byte) (255 - b); });
          gimg1.Dispose();
          gimg2.Dispose();
       }
@@ -209,11 +213,11 @@ namespace Emgu.CV.Test
          img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
          Image<Gray, Single> img2 = img1.ConvertScale<Single>(2.0, 0.0);
          Image<Gray, Byte> img3 = img2.ConvertScale<Byte>(0.5, 0.0);
-         Assert.IsTrue(img3.Equals(img1));
+         EmguAssert.IsTrue(img3.Equals(img1));
 
          Image<Gray, Double> img4 = img1.Convert<Gray, Double>();
          Image<Gray, Byte> img5 = img4.Convert<Gray, Byte>();
-         Assert.IsTrue(img5.Equals(img1));
+         EmguAssert.IsTrue(img5.Equals(img1));
       }
 
       [Test]
@@ -246,9 +250,9 @@ namespace Emgu.CV.Test
 
          Image<Bgr, Byte> img2 = img1.Convert<Byte>(
              delegate(Byte b)
-             {
-                return ((flag++ % 3) == 0) ? (Byte)255 : (Byte)0;
-             });
+         {
+            return ((flag++ % 3) == 0) ? (Byte) 255 : (Byte) 0;
+         });
 
          img1.SetValue(new Bgr(255, 0, 0));
 
@@ -260,13 +264,13 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          Image<Bgr, Byte> imgMasked = img.Convert<Byte, Byte>(mask,
             delegate(Byte byteFromImg, Byte byteFromMask)
-            {
-               return byteFromMask > (Byte)120 ? byteFromImg : (Byte)0;
-            });
+         {
+            return byteFromMask > (Byte) 120 ? byteFromImg : (Byte) 0;
+         });
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
-         Assert.IsTrue(img1.Equals(img2));
+         EmguAssert.IsTrue(img1.Equals(img2));
       }
 
       [Test]
@@ -286,8 +290,8 @@ namespace Emgu.CV.Test
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)o;
-               Assert.IsTrue(img.Equals(img2));
+               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>) o;
+               EmguAssert.IsTrue(img.Equals(img2));
             }
          }
       }
@@ -311,8 +315,8 @@ namespace Emgu.CV.Test
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>)o;
-               Assert.IsTrue(img.Equals(img2));
+               Image<Bgr, Byte> img2 = (Image<Bgr, Byte>) o;
+               EmguAssert.IsTrue(img.Equals(img2));
             }
          }
       }
@@ -325,18 +329,17 @@ namespace Emgu.CV.Test
 
          Byte[,] buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(0, 100)));
          for (int i = 0; i < 100; i++)
-            Assert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
+            EmguAssert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
 
          buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.CONNECTIVITY.FOUR_CONNECTED);
       }
-
 
       [Test]
       public void TestGetSize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
          Size size = img.Size;
-         Assert.AreEqual(size, new Size(10, 10));
+         EmguAssert.AreEqual(size, new Size(10, 10));
       }
 
       [Test]
@@ -349,17 +352,17 @@ namespace Emgu.CV.Test
          XmlDocument doc1 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
          String str = doc1.OuterXml;
          Image<Bgr, Byte> img2 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc1);
-         Assert.IsTrue(img.Equals(img2));
+         EmguAssert.IsTrue(img.Equals(img2));
 
          img.SerializationCompressionRatio = 9;
          XmlDocument doc2 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
          Image<Bgr, Byte> img3 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc2);
-         Assert.IsTrue(img.Equals(img3));
+         EmguAssert.IsTrue(img.Equals(img3));
 
          XmlDocument doc3 = new XmlDocument();
          doc3.LoadXml(str);
          Image<Bgr, Byte> img4 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc3);
-         Assert.IsTrue(img.Equals(img4));
+         EmguAssert.IsTrue(img.Equals(img4));
 
       }
 
@@ -371,8 +374,8 @@ namespace Emgu.CV.Test
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
          Image<Bgr, Byte> imgRotated = img.Rotate(90, new Bgr(), false);
-         Assert.AreEqual(img.Width, imgRotated.Height);
-         Assert.AreEqual(img.Height, imgRotated.Width);
+         EmguAssert.AreEqual(img.Width, imgRotated.Height);
+         EmguAssert.AreEqual(img.Height, imgRotated.Width);
          imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
 
       }
@@ -408,30 +411,31 @@ namespace Emgu.CV.Test
                   MCvAvgComp[] rect = rects.ToArray();
                   for (int i = 0; i < rects.Total; i++)
                   {
-                     Assert.AreEqual(rect[i].rect, rects[i].rect);
+                     EmguAssert.IsTrue(rect[i].rect.Equals(rects[i].rect));
                   }
                }
             }
          }
       }
 
+#if !IOS
       [Test]
       public void TestConstructor()
       {
          for (int i = 0; i < 20; i++)
          {
             Image<Gray, Byte> img = new Image<Gray, Byte>(500, 500, new Gray());
-            Assert.AreEqual(0, System.Convert.ToInt32(img.GetSum().Intensity));
+            EmguAssert.AreEqual(0, System.Convert.ToInt32(img.GetSum().Intensity));
          }
 
          for (int i = 0; i < 20; i++)
          {
             Image<Bgr, Single> img = new Image<Bgr, Single>(500, 500);
-            Assert.IsTrue(img.GetSum().Equals(new Bgr(0.0, 0.0, 0.0)));
+            EmguAssert.IsTrue(img.GetSum().Equals(new Bgr(0.0, 0.0, 0.0)));
          }
 
          Image<Bgr, Byte> img2 = new Image<Bgr, byte>(1, 2);
-         Assert.AreEqual(img2.Data.GetLength(1), 4);
+         EmguAssert.AreEqual(img2.Data.GetLength(1), 4);
 
          Byte[, ,] data = new Byte[,,] { { { 255, 0, 0 } }, { { 0, 255, 0 } } };
          Image<Bgr, Byte> img3 = new Image<Bgr, byte>(data);
@@ -446,12 +450,12 @@ namespace Emgu.CV.Test
          Image<Hsv, Byte> img8 = new Image<Hsv, byte>("stuff.jpg");
 
       }
-
+#endif
       [Test]
       public void TestSub()
       {
          Image<Bgr, Byte> img = new Image<Bgr, Byte>(101, 133);
-         Assert.IsTrue(img.Not().Equals(255 - img));
+         EmguAssert.IsTrue(img.Not().Equals(255 - img));
 
          Image<Bgr, Byte> img2 = img - 10;
       }
@@ -470,7 +474,7 @@ namespace Emgu.CV.Test
          ConvolutionKernelF kernel = new ConvolutionKernelF(k);
 
          Image<Gray, float> convoluted = image * kernel;
-         Assert.IsTrue(laplace.Equals(convoluted));
+         EmguAssert.IsTrue(laplace.Equals(convoluted));
 
          /*
          try
@@ -494,7 +498,7 @@ namespace Emgu.CV.Test
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
 
-
+#if !IOS
       [Test]
       public void TestImageSave()
       {
@@ -551,12 +555,10 @@ namespace Emgu.CV.Test
                   }*/
                }
             }
-         }
-         catch (Exception e)
+         } catch (Exception e)
          {
             throw e;
-         }
-         finally
+         } finally
          {
             File.Delete(fileName);
          }
@@ -613,7 +615,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img2 = new Image<Bgr,byte>(bmp);
          Assert.IsTrue(img.Equals(img2));
       }
-
+#endif
       [Test]
       public void TestSplitMerge()
       {
@@ -622,7 +624,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte>[] channels = img1.Split();
 
          Image<Bgr, Byte> img2 = new Image<Bgr, byte>(channels);
-         Assert.IsTrue(img1.Equals(img2));
+         EmguAssert.IsTrue(img1.Equals(img2));
       }
 
       [Test]
@@ -636,7 +638,7 @@ namespace Emgu.CV.Test
          Image<Gray, Single> img3 = img1.Copy();
          img3.Acc(img2);
 
-         Assert.IsTrue(img3.Equals(img1 + img2));
+         EmguAssert.IsTrue(img3.Equals(img1 + img2));
       }
 
       [Test]
@@ -664,7 +666,7 @@ namespace Emgu.CV.Test
             {
                Bgr c1 = image[i, j];
                Bgr c2 = imageOld[image.Rows - i - 1, j];
-               Assert.IsTrue(c1.Equals(c2));
+               EmguAssert.IsTrue(c1.Equals(c2));
             }
       }
 
@@ -676,7 +678,7 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          image._Flip(Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       [Test]
@@ -699,7 +701,7 @@ namespace Emgu.CV.Test
 
          using (MemStorage stor = new MemStorage())
          {
-            Seq<Point> pts = new Seq<Point>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+            Seq<Point> pts = new Seq<Point>((int) CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
             pts.Push(new Point(20, 20));
             pts.Push(new Point(20, 80));
             pts.Push(new Point(80, 80));
@@ -722,7 +724,7 @@ namespace Emgu.CV.Test
          marker.Draw(
             new CircleF(
                new PointF(rect.Left + rect.Width / 2.0f, rect.Top + rect.Height / 2.0f),
-               /*(float)(Math.Min(image.Width, image.Height) / 20.0f)*/ 5.0f),
+         /*(float)(Math.Min(image.Width, image.Height) / 20.0f)*/ 5.0f),
             new Gray(255),
             0);
          Image<Bgr, Byte> result = image.ConcateHorizontal(marker.Convert<Bgr, byte>());
@@ -739,9 +741,9 @@ namespace Emgu.CV.Test
          //The matrix to be transformed.
          Matrix<float> matB = new Matrix<float>(
             new float[,] { 
-            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 
-            {1.0f/16.0f, 8.0f/16.0f, 1.0f/16.0f}, 
-            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}});
+            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}, 
+            {1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f}, 
+            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
 
          Matrix<float> matBDft = new Matrix<float>(
             CvInvoke.cvGetOptimalDFTSize(matB.Rows),
@@ -769,9 +771,9 @@ namespace Emgu.CV.Test
          //The matrix to be convolved with matA, a bluring filter
          Matrix<float> matB = new Matrix<float>(
             new float[,] { 
-            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}, 
-            {1.0f/16.0f, 8.0f/16.0f, 1.0f/16.0f}, 
-            {1.0f/16.0f, 1.0f/16.0f, 1.0f/16.0f}});
+            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}, 
+            {1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f}, 
+            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
 
          Image<Gray, float> convolvedImage = new Image<Gray, float>(matA.Size + matB.Size - new Size(1, 1));
 
@@ -819,8 +821,8 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> image = new Image<Bgr, byte>(1, 1);
          Rectangle roi = image.ROI;
 
-         Assert.AreEqual(roi.Width, image.Width);
-         Assert.AreEqual(roi.Height, image.Height);
+         EmguAssert.AreEqual(roi.Width, image.Width);
+         EmguAssert.AreEqual(roi.Height, image.Height);
       }
 
       [Test]
@@ -831,7 +833,7 @@ namespace Emgu.CV.Test
          Rectangle roi = new Rectangle(10, 20, 30, 40);
          Image<Bgr, Single> roi1 = image.Copy(roi);
          Image<Bgr, Single> roi2 = image.GetSubRect(roi);
-         Assert.IsTrue(roi1.Equals(roi2));
+         EmguAssert.IsTrue(roi1.Equals(roi2));
       }
 
       [Test]
@@ -856,7 +858,7 @@ namespace Emgu.CV.Test
                PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
             }
             watch.Stop();
-            Trace.WriteLine(String.Format("Avg time to extract good features from image of {0}: {1}", img.Size, watch.ElapsedMilliseconds / runs));
+            EmguAssert.WriteLine(String.Format("Avg time to extract good features from image of {0}: {1}", img.Size, watch.ElapsedMilliseconds / runs));
          }
       }
 
@@ -919,7 +921,6 @@ namespace Emgu.CV.Test
          }
       }
 
-
       [Test]
       public void TestBayerBG2BGR()
       {
@@ -940,25 +941,27 @@ namespace Emgu.CV.Test
       [Test]
       public void TestImageIndexer()
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>(1000, 5000);
-         image.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-         Stopwatch watch = Stopwatch.StartNew();
-         for (int i = 0; i < image.Height; i++)
-            for (int j = 0; j < image.Width; j++)
-            {
-               Bgr color = image[i, j];
-            }
-         watch.Stop();
-         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
-         watch = Stopwatch.StartNew();
-         for (int i = 0; i < image.Height; i++)
-            for (int j = 0; j < image.Width; j++)
-               for (int k = 0; k < image.NumberOfChannels; k++)
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>(100, 500))
+         {
+            image.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
+            Stopwatch watch = Stopwatch.StartNew();
+            for (int i = 0; i < image.Height; i++)
+               for (int j = 0; j < image.Width; j++)
                {
-                  Byte b = image.Data[i, j, k];
+                  Bgr color = image[i, j];
                }
-         watch.Stop();
-         Trace.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
+            watch.Stop();
+            EmguAssert.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
+            watch = Stopwatch.StartNew();
+            for (int i = 0; i < image.Height; i++)
+               for (int j = 0; j < image.Width; j++)
+                  for (int k = 0; k < image.NumberOfChannels; k++)
+                  {
+                     Byte b = image.Data[i, j, k];
+                  }
+            watch.Stop();
+            EmguAssert.WriteLine("Time used: " + watch.ElapsedMilliseconds + ".");
+         }
       }
 
       [Test]
@@ -973,7 +976,8 @@ namespace Emgu.CV.Test
       public void TestGenericConvert()
       {
          Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
-         Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) { return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
+         Image<Gray, Single> g2 = g.Convert<Single>(delegate(Single v, int x, int y) {
+            return System.Convert.ToSingle(Math.Sqrt(0.0 + x * x + y * y)); });
       }
 
       [Test]
@@ -1008,7 +1012,7 @@ namespace Emgu.CV.Test
          image.ROI = rect;
          Image<Bgr, Byte> region = image.Copy();
          image.ROI = Rectangle.Empty;
-         Assert.IsTrue(image.GetSubRect(rect).Equals(region));
+         EmguAssert.IsTrue(image.GetSubRect(rect).Equals(region));
 
          Stopwatch watch = Stopwatch.StartNew();
          for (int i = 0; i < 100000; i++)
@@ -1016,7 +1020,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> tmp = image.GetSubRect(rect);
          }
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
       }
 
@@ -1039,7 +1043,7 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
          {
             Image<Gray, Byte>[] channels = img.Split();
-            Assert.AreEqual(img.NumberOfChannels, channels.Length);
+            EmguAssert.AreEqual(img.NumberOfChannels, channels.Length);
          }
       }
 
@@ -1066,7 +1070,7 @@ namespace Emgu.CV.Test
             CvInvoke.cvThreshold(image, thresh1, 0, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
             CvInvoke.cvThreshold(image, thresh2, 255, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
 
-            Assert.IsTrue(thresh1.Equals(thresh2));
+            EmguAssert.IsTrue(thresh1.Equals(thresh2));
          }
       }
 
@@ -1155,8 +1159,7 @@ namespace Emgu.CV.Test
          {
             Image<Bgr, double> img1 = new Image<Bgr, double>("box.png");
             Image<Gray, double> img2 = img1.Convert<Gray, double>();
-         }
-         catch (NotSupportedException)
+         } catch (NotSupportedException)
          {
             return;
          }
@@ -1181,7 +1184,7 @@ namespace Emgu.CV.Test
 
             detector.Train(box, 300, 31, 50, 9, 5000, ref keypointDetector, ref pGen);
             watch.Stop();
-            Trace.WriteLine(String.Format("Training time: {0} milliseconds.", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Training time: {0} milliseconds.", watch.ElapsedMilliseconds));
 
             MKeyPoint[] modelPoints = detector.GetModelPoints();
             int i = modelPoints.Length;
@@ -1190,7 +1193,7 @@ namespace Emgu.CV.Test
             watch = Stopwatch.StartNew();
             PointF[] corners = detector.Detect(scene, h);
             watch.Stop();
-            Trace.WriteLine(String.Format("Detection time: {0} milliseconds.", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Detection time: {0} milliseconds.", watch.ElapsedMilliseconds));
 
             foreach (PointF c in corners)
             {
@@ -1202,17 +1205,19 @@ namespace Emgu.CV.Test
          }
       }
 
-
       [Test]
-      public void T()
+      public void TestSaveImage()
       {
+         String fileName = Path.Combine(Path.GetTempPath(), "tmp.jpg");
          DateTime t1 = DateTime.Now;
-         for (int i = 0; i < 100; i++)
+         for (int i = 0; i < 10; i++)
          {
             Image<Gray, Byte> img = new Image<Gray, byte>("stuff.jpg");
-            img.Save("tmp.jpg");
+            img.Save(fileName);
          }
-         Trace.WriteLine(DateTime.Now.Subtract(t1).TotalMilliseconds / 100);
+         EmguAssert.WriteLine(String.Format("Time needed to save the image {0}", DateTime.Now.Subtract(t1).TotalMilliseconds / 10));
+         if (File.Exists(fileName))
+            File.Delete(fileName);
       }
 
       [Test]
@@ -1228,10 +1233,11 @@ namespace Emgu.CV.Test
          Stopwatch w = Stopwatch.StartNew();
          Image<Gray, Byte> sum1 = img1 + img2;
          w.Stop();
-         Trace.WriteLine(String.Format("OpenCV Time:\t\t\t\t\t\t{0} ms", w.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("OpenCV Time:\t\t\t\t\t\t{0} ms", w.ElapsedMilliseconds));
 
 
-         w.Reset(); w.Start();
+         w.Reset();
+         w.Start();
          Image<Gray, Byte> sum2 = new Image<Gray, byte>(img1.Size);
          Byte[, ,] data1 = img1.Data;
          Byte[, ,] data2 = img2.Data;
@@ -1240,22 +1246,25 @@ namespace Emgu.CV.Test
          int cols = img1.Cols;
          for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
-               dataSum[i, j, 0] = (Byte)(data1[i, j, 0] + data2[i, j, 0]);
+               dataSum[i, j, 0] = (Byte) (data1[i, j, 0] + data2[i, j, 0]);
          w.Stop();
-         Trace.WriteLine(String.Format(".NET array manipulation Time:\t\t{0} ms", w.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format(".NET array manipulation Time:\t\t{0} ms", w.ElapsedMilliseconds));
 
-         Assert.IsTrue(sum2.Equals(sum1));
+         EmguAssert.IsTrue(sum2.Equals(sum1));
 
-         w.Reset(); w.Start();
-         Func<Byte, Byte, Byte> convertor = delegate(Byte b1, Byte b2) { return (Byte)(b1 + b2); };
+         w.Reset();
+         w.Start();
+         Func<Byte, Byte, Byte> convertor = delegate(Byte b1, Byte b2) {
+            return (Byte) (b1 + b2); };
          Image<Gray, Byte> sum3 = img1.Convert<Byte, Byte>(img2, convertor);
          w.Stop();
-         Trace.WriteLine(String.Format("Generic image manipulation Time:\t{0} ms", w.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Generic image manipulation Time:\t{0} ms", w.ElapsedMilliseconds));
 
-         Assert.IsTrue(sum3.Equals(sum1));
+         EmguAssert.IsTrue(sum3.Equals(sum1));
 
       }
 
+#if !IOS
       [Test]
       public void TestMultiThreadInMemoryWithBMP()
       {
@@ -1322,12 +1331,12 @@ namespace Emgu.CV.Test
             {
                int index = i;
                threads[i] = new Thread(delegate()
+               {
                   {
-                     {
-                        Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
-                        Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
-                     }
-                  });
+                     Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
+                     Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
+                  }
+               });
 
                threads[i].Priority = ThreadPriority.Highest;
                threads[i].Start();
@@ -1339,9 +1348,11 @@ namespace Emgu.CV.Test
             }
 
             //delete random images;
-            foreach (string s in imageNames) File.Delete(s);
+            foreach (string s in imageNames)
+               File.Delete(s);
          }
       }
+#endif
 
       [Test]
       public void TestMorphologyClosing()

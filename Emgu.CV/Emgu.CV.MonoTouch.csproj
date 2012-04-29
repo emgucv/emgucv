@@ -246,6 +246,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\StringTable.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringTable.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <ObjcBindingApiDefinition Include="PInvoke\MonoTouch\ApiDefinition.cs" />
   </ItemGroup>
   <ItemGroup>

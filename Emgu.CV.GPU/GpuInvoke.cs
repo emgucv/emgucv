@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +22,8 @@ namespace Emgu.CV.GPU
       {
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
-
+         
+#if !IOS
          String[] modules = new String[] 
          {
             CvInvoke.EXTERN_GPU_LIBRARY
@@ -36,6 +36,7 @@ namespace Emgu.CV.GPU
          }
 
          CvInvoke.LoadUnmanagedModules(null, modules);
+#endif
       }
 
       #region device info
@@ -49,6 +50,9 @@ namespace Emgu.CV.GPU
       {
          get
          {
+#if IOS || ANDROID
+            return _hasCuda;
+#else
             if (_testedCuda)
                return _hasCuda;
             else
@@ -57,13 +61,13 @@ namespace Emgu.CV.GPU
                try
                {
                   _hasCuda = GetCudaEnabledDeviceCount() > 0;
-               }
-               catch (Exception)
+               } catch (Exception)
                {
                }
 
                return _hasCuda;
             }
+#endif
          }
       }
 
@@ -718,9 +722,9 @@ namespace Emgu.CV.GPU
          int flipMode =
             //-1 indicates vertical and horizontal flip
             flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
-            //1 indicates horizontal flip only
+         //1 indicates horizontal flip only
             flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
-            //0 indicates vertical flip only
+         //0 indicates vertical flip only
             0;
          gpuMatFlip(src, dst, flipMode, stream);
       }

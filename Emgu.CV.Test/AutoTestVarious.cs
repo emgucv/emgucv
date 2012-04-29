@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +10,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Emgu.CV;
@@ -20,10 +18,8 @@ using Emgu.CV.GPU;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 using Emgu.CV.Tiff;
-using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
-using Emgu.UI;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -37,7 +33,7 @@ namespace Emgu.CV.Test
       {
          Bgr c1 = new Bgr(0.0, 0.0, 0.0);
          Bgr c2 = new Bgr(0.0, 0.0, 0.0);
-         Assert.IsTrue(c1.Equals(c2));
+         EmguAssert.IsTrue(c1.Equals(c2));
       }
 
       [Test]
@@ -46,14 +42,14 @@ namespace Emgu.CV.Test
          Point m1 = new Point(-1, 10);
          Point m2 = new Point(100, 10);
          int inside = CvInvoke.cvClipLine(new Size(20, 20), ref m1, ref m2);
-         Assert.AreEqual(0, m1.X);
-         Assert.AreEqual(19, m2.X);
+         EmguAssert.AreEqual(0, m1.X);
+         EmguAssert.AreEqual(19, m2.X);
       }
 
       [Test]
       public void TestRectangleSize()
       {
-         Assert.AreEqual(4 * sizeof(int), Marshal.SizeOf(typeof(Rectangle)));
+         EmguAssert.AreEqual(4 * sizeof(int), Marshal.SizeOf(typeof(Rectangle)));
       }
 
       [Test]
@@ -74,8 +70,8 @@ namespace Emgu.CV.Test
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               DenseHistogram hist2 = (DenseHistogram)o;
-               Assert.IsTrue(hist.Equals(hist2));
+               DenseHistogram hist2 = (DenseHistogram) o;
+               EmguAssert.IsTrue(hist.Equals(hist2));
             }
          }
       }
@@ -92,11 +88,11 @@ namespace Emgu.CV.Test
          IEnumerable<MCvPoint2D64f> interPts = Toolbox.LinearInterpolate(pts, new double[2] { 1.5, 3.5 });
          IEnumerator<MCvPoint2D64f> enumerator = interPts.GetEnumerator();
          enumerator.MoveNext();
-         Assert.AreEqual(1.5, enumerator.Current.x);
-         Assert.AreEqual(2.5, enumerator.Current.y);
+         EmguAssert.IsTrue(1.5 == enumerator.Current.x);
+         EmguAssert.IsTrue(2.5 == enumerator.Current.y);
          enumerator.MoveNext();
-         Assert.AreEqual(3.5, enumerator.Current.x);
-         Assert.AreEqual(-1, enumerator.Current.y);
+         EmguAssert.IsTrue(3.5 == enumerator.Current.x);
+         EmguAssert.IsTrue(-1 == enumerator.Current.y);
       }
 
       [Test]
@@ -113,7 +109,7 @@ namespace Emgu.CV.Test
          PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, out direction, out pointOnLine);
 
          //check if the line is 45 degree from +x axis
-         Assert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
+         EmguAssert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
       }
 
       [Test]
@@ -137,10 +133,10 @@ namespace Emgu.CV.Test
 
          Byte[] a1 = img1.Bytes;
          Byte[] a2 = img2.Bytes;
-         Assert.AreEqual(a1.Length, a2.Length);
+         EmguAssert.AreEqual(a1.Length, a2.Length);
          for (int i = 0; i < a1.Length; i++)
          {
-            Assert.AreEqual(a1[i], a2[i]);
+            EmguAssert.AreEqual(a1[i], a2[i]);
          }
 
          img1.Dispose();
@@ -156,7 +152,7 @@ namespace Emgu.CV.Test
          RotationVector3D rodVec2 = new RotationVector3D();
          rodVec2.RotationMatrix = rodVec.RotationMatrix;
          Matrix<double> diff = rodVec - rodVec2;
-         Assert.IsTrue(diff.Norm < 1.0e-8);
+         EmguAssert.IsTrue(diff.Norm < 1.0e-8);
       }
 
       [Test]
@@ -175,41 +171,41 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Contour<Point> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
-               Assert.AreEqual(cs.MCvContour.elem_size, Marshal.SizeOf(typeof(Point)));
-               Assert.AreEqual(rect.Width * rect.Height, cs.Area);
+               EmguAssert.IsTrue(cs.MCvContour.elem_size == Marshal.SizeOf(typeof(Point)));
+               EmguAssert.IsTrue(rect.Width * rect.Height == cs.Area);
 
-               Assert.IsTrue(cs.Convex);
-               Assert.AreEqual(rect.Width * 2 + rect.Height * 2, cs.Perimeter);
+               EmguAssert.IsTrue(cs.Convex);
+               EmguAssert.IsTrue(rect.Width * 2 + rect.Height * 2 == cs.Perimeter);
                Rectangle rect2 = cs.BoundingRectangle;
                rect2.Width -= 1;
                rect2.Height -= 1;
                //rect2.Center.X -= 0.5;
                //rect2.Center.Y -= 0.5;
-               Assert.IsTrue(rect2.Equals(rect));
-               Assert.IsTrue(cs.InContour(pIn) > 0);
-               Assert.IsTrue(cs.InContour(pOut) < 0);
-               Assert.AreEqual(cs.Distance(pIn), 10);
-               Assert.AreEqual(cs.Distance(pOut), -50);
+               EmguAssert.IsTrue(rect2.Equals(rect));
+               EmguAssert.IsTrue(cs.InContour(pIn) > 0);
+               EmguAssert.IsTrue(cs.InContour(pOut) < 0);
+               EmguAssert.IsTrue(cs.Distance(pIn) == 10);
+               EmguAssert.IsTrue(cs.Distance(pOut) == -50);
                img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
 
                MCvPoint2D64f rectangleCenter = new MCvPoint2D64f(rect.X + rect.Width / 2.0, rect.Y + rect.Height / 2.0);
                MCvMoments moment = cs.GetMoments();
                MCvPoint2D64f center = moment.GravityCenter;
-               Assert.AreEqual(center, rectangleCenter);
+               EmguAssert.IsTrue(center.Equals(rectangleCenter));
             }
 
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
                Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
-               Assert.AreEqual(c, null);
+               EmguAssert.IsTrue(c == null);
             }
          }
 
          int s1 = Marshal.SizeOf(typeof(MCvSeq));
          int s2 = Marshal.SizeOf(typeof(MCvContour));
          int sizeRect = Marshal.SizeOf(typeof(Rectangle));
-         Assert.AreEqual(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)), s2);
+         EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
       }
 
       [Test]
@@ -233,12 +229,12 @@ namespace Emgu.CV.Test
                   stor,
                   Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
-            Assert.AreEqual(1, defacts.Length);
-            Assert.AreEqual(new Point(100, 100), defacts[0].DepthPoint);
+            EmguAssert.IsTrue(1 == defacts.Length);
+            EmguAssert.IsTrue(new Point(100, 100).Equals(defacts[0].DepthPoint));
 
-            Assert.IsTrue(contour.InContour(new PointF(90, 90)) > 0);
-            Assert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
-            Assert.IsTrue(contour.InContour(new PointF(10, 10)) == 0);
+            EmguAssert.IsTrue(contour.InContour(new PointF(90, 90)) > 0);
+            EmguAssert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
+            EmguAssert.IsTrue(contour.InContour(new PointF(10, 10)) == 0);
          }
       }
 
@@ -252,13 +248,12 @@ namespace Emgu.CV.Test
             try
             {
                double det = mat.Det;
-            }
-            catch (CvException excpt)
+            } catch (CvException excpt)
             {
-               Assert.AreEqual(-215, excpt.Status);
+               EmguAssert.AreEqual(-215, excpt.Status);
                exceptionCaught = true;
             }
-            Assert.IsTrue(exceptionCaught);
+            EmguAssert.IsTrue(exceptionCaught);
          }
       }
 
@@ -388,14 +383,14 @@ namespace Emgu.CV.Test
          #region using batch method
          Image<Gray, Byte>[] imgs = Array.ConvertAll<String, Image<Gray, Byte>>(fileNames,
              delegate(String file)
-             {
-                return new Image<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
-             });
+         {
+            return new Image<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
+         });
 
          EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
          for (int i = 0; i < imgs.Length; i++)
          {
-            Assert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]).Label);
+            EmguAssert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]).Label);
          }
 
          XmlDocument xDoc = Toolbox.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
@@ -403,7 +398,7 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < imgs.Length; i++)
          {
-            Assert.AreEqual(i.ToString(), imgRecognizer2.Recognize(imgs[i]).Label);
+            EmguAssert.AreEqual(i.ToString(), imgRecognizer2.Recognize(imgs[i]).Label);
          }
 
          System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
@@ -417,10 +412,10 @@ namespace Emgu.CV.Test
          }
          using (MemoryStream ms2 = new MemoryStream(bytes))
          {
-            EigenObjectRecognizer imgRecognizer3 = (EigenObjectRecognizer)formatter.Deserialize(ms2);
+            EigenObjectRecognizer imgRecognizer3 = (EigenObjectRecognizer) formatter.Deserialize(ms2);
             for (int i = 0; i < imgs.Length; i++)
             {
-               Assert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]).Label);
+               EmguAssert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]).Label);
             }
          }
          #endregion
@@ -543,13 +538,13 @@ namespace Emgu.CV.Test
          PointF p = new PointF(0.0f, 0.0f);
          XmlDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(Point) });
          PointF p2 = Toolbox.XmlDeserialize<PointF>(xDoc, new Type[] { typeof(Point) });
-         Assert.IsTrue(p.Equals(p2));
+         EmguAssert.IsTrue(p.Equals(p2));
 
 
          Rectangle rect = new Rectangle(3, 4, 5, 3);
          XmlDocument xDoc2 = Toolbox.XmlSerialize<Rectangle>(rect);
          Rectangle rect2 = Toolbox.XmlDeserialize<Rectangle>(xDoc2);
-         Assert.IsTrue(rect.Equals(rect2));
+         EmguAssert.IsTrue(rect.Equals(rect2));
 
       }
 
@@ -563,7 +558,7 @@ namespace Emgu.CV.Test
          double epsilon = 1e-12;
          //Trace.WriteLine(tri.Area);
          //Trace.WriteLine(((p2.X - p1.X) * (p3.Y - p1.Y) - (p2.Y - p1.Y) * (p3.X - p1.X))*0.5);
-         Assert.IsTrue(Math.Abs(tri.Area - 0.5) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(tri.Area - 0.5) < epsilon);
       }
 
       [Test]
@@ -575,7 +570,7 @@ namespace Emgu.CV.Test
          LineSegment2DF l1 = new LineSegment2DF(p1, p2);
          LineSegment2DF l2 = new LineSegment2DF(p1, p3);
          double angle = l1.GetExteriorAngleDegree(l2);
-         Assert.AreEqual(angle, 90.0);
+         EmguAssert.AreEqual(angle, 90.0);
       }
 
       [Test]
@@ -591,6 +586,7 @@ namespace Emgu.CV.Test
          //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
+#if !IOS
       [Test]
       public void TestGrayscaleBitmapConstructor()
       {
@@ -604,27 +600,31 @@ namespace Emgu.CV.Test
          Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
          Image<Bgra, Byte> absDiff = new Image<Bgra, Byte>(320, 240);
          CvInvoke.cvAbsDiff(img, img2, absDiff);
-         double[] min, max; Point[] minLoc, maxLoc; double eps = 1;
+         double[] min, max;
+         Point[] minLoc, maxLoc;
+         double eps = 1;
          absDiff.MinMax(out min, out max, out minLoc, out maxLoc); //ImageViewer.Show(absDiff);
-         Assert.Less(max[0], eps);
-         Assert.Less(max[0], eps);
-         Assert.Less(max[0], eps);
-         Assert.Less(max[0], eps);
+         EmguAssert.IsTrue(max[0] < eps);
+         EmguAssert.IsTrue(max[1] < eps);
+         EmguAssert.IsTrue(max[2] < eps);
+         EmguAssert.IsTrue(max[3] < eps);
 
-         stopwatch.Reset(); stopwatch.Start();
+         stopwatch.Reset();
+         stopwatch.Start();
          using (Bitmap bmp = new Bitmap("tmp.png"))
          using (Image bmpImage = Bitmap.FromFile("tmp.png"))
          {
-            Assert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
+            EmguAssert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
 
             Image<Gray, Byte> img3 = new Image<Gray, byte>(bmp);
             stopwatch.Stop();
             Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
             Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
-            Assert.AreEqual(0, CvInvoke.cvCountNonZero(diff));
-            Assert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+            EmguAssert.AreEqual(0, CvInvoke.cvCountNonZero(diff));
+            EmguAssert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
          }
       }
+#endif
 
       [Test]
       public void TestMorphEx()
@@ -670,10 +670,10 @@ namespace Emgu.CV.Test
       {
          #region generate random points
          PointF[] points = new PointF[pointCount];
-         Random r = new Random((int)DateTime.Now.Ticks);
+         Random r = new Random((int) DateTime.Now.Ticks);
          for (int i = 0; i < points.Length; i++)
          {
-            points[i] = new PointF((float)(r.NextDouble() * 20), (float)(r.NextDouble() * 20));
+            points[i] = new PointF((float) (r.NextDouble() * 20), (float) (r.NextDouble() * 20));
          }
          #endregion
 
@@ -683,16 +683,16 @@ namespace Emgu.CV.Test
          division = new PlanarSubdivision(points, true);
          Triangle2DF[] triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
-         Trace.WriteLine(String.Format("delaunay triangulation: {2} points, {0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length, points));
+         EmguAssert.WriteLine(String.Format("delaunay triangulation: {2} points, {0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length, points));
          watch.Reset();
 
-         Assert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
+         EmguAssert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
 
          watch.Start();
          division = new PlanarSubdivision(points);
          VoronoiFacet[] facets = division.GetVoronoiFacets();
          watch.Stop();
-         Trace.WriteLine(String.Format("Voronoi facets: {2} points, {0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length, points));
+         EmguAssert.WriteLine(String.Format("Voronoi facets: {2} points, {0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length, points));
 
          //foreach (Triangle2DF t in triangles)
          //{
@@ -786,7 +786,7 @@ namespace Emgu.CV.Test
          MCvPoint3D32f p1 = new MCvPoint3D32f(1.0f, 0.0f, 0.0f);
          MCvPoint3D32f p2 = new MCvPoint3D32f(0.0f, 1.0f, 0.0f);
          MCvPoint3D32f p3 = p1.CrossProduct(p2);
-         Assert.IsTrue(new MCvPoint3D32f(0.0f, 0.0f, 1.0f).Equals(p3));
+         EmguAssert.IsTrue(new MCvPoint3D32f(0.0f, 0.0f, 1.0f).Equals(p3));
       }
 
       [Test]
@@ -814,8 +814,8 @@ namespace Emgu.CV.Test
          Point[] minLoc, maxLoc;
          match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
-         Assert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
-         Assert.AreEqual(minLoc[0].Y, templCenter.Y - templHeight / 2);
+         EmguAssert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
+         EmguAssert.AreEqual(minLoc[0].Y, templCenter.Y - templHeight / 2);
       }
 
       /// <summary>
@@ -863,8 +863,8 @@ namespace Emgu.CV.Test
          Size shiftSize = new Size(1, 1);
          Size maxRange = new Size(10, 10);
          Size velSize = new Size(
-            (int)Math.Floor((prevImg.Width - blockSize.Width + shiftSize.Width) / (double)shiftSize.Width),
-            (int)Math.Floor((prevImg.Height - blockSize.Height + shiftSize.Height) / (double)shiftSize.Height));
+            (int) Math.Floor((prevImg.Width - blockSize.Width + shiftSize.Width) / (double) shiftSize.Width),
+            (int) Math.Floor((prevImg.Height - blockSize.Height + shiftSize.Height) / (double) shiftSize.Height));
          Image<Gray, float> velx = new Image<Gray, float>(velSize);
          Image<Gray, float> vely = new Image<Gray, float>(velSize);
 
@@ -874,7 +874,7 @@ namespace Emgu.CV.Test
 
          watch.Stop();
 
-         Trace.WriteLine(String.Format(
+         EmguAssert.WriteLine(String.Format(
             "Time: {0} milliseconds",
             watch.ElapsedMilliseconds));
 
@@ -898,7 +898,7 @@ namespace Emgu.CV.Test
             prevImg, currImg, prevFeature, new Size(10, 10), 3, new MCvTermCriteria(10, 0.01),
             out currFeature, out status, out trackError);
          watch.Stop();
-         Trace.WriteLine(String.Format(
+         EmguAssert.WriteLine(String.Format(
             "prev: ({0}, {1}); curr: ({2}, {3}); \r\nTime: {4} milliseconds",
             prevFeature[0].X, prevFeature[0].Y,
             currFeature[0].X, currFeature[0].Y,
@@ -911,7 +911,7 @@ namespace Emgu.CV.Test
       {
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new float[] { (float)i };
+            features[i] = new float[] { (float) i };
          FeatureTree tree = new FeatureTree(features);
 
          Matrix<Int32> result;
@@ -920,8 +920,8 @@ namespace Emgu.CV.Test
          features2[0] = new float[] { 5.0f };
 
          tree.FindFeatures(features2, out result, out distance, 1, 20);
-         Assert.AreEqual(result[0, 0], 5);
-         Assert.AreEqual(distance[0, 0], 0.0);
+         EmguAssert.IsTrue(result[0, 0] == 5);
+         EmguAssert.IsTrue(distance[0, 0] == 0.0);
       }
 
       [Test]
@@ -929,7 +929,7 @@ namespace Emgu.CV.Test
       {
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new float[] { (float)i };
+            features[i] = new float[] { (float) i };
          FeatureTree tree = new FeatureTree(features, 50, .7, .1);
 
          Matrix<Int32> result;
@@ -938,8 +938,8 @@ namespace Emgu.CV.Test
          features2[0] = new float[] { 5.0f };
 
          tree.FindFeatures(features2, out result, out distance, 1, 20);
-         Assert.AreEqual(result[0, 0], 5);
-         Assert.AreEqual(distance[0, 0], 0.0);
+         EmguAssert.IsTrue(result[0, 0] == 5);
+         EmguAssert.IsTrue(distance[0, 0] == 0.0);
       }
 
       [Test]
@@ -947,7 +947,7 @@ namespace Emgu.CV.Test
       {
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new float[] { (float)i };
+            features[i] = new float[] { (float) i };
 
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features));
 
@@ -958,8 +958,8 @@ namespace Emgu.CV.Test
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
          index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
-         Assert.AreEqual(indices[0, 0], 5);
-         Assert.AreEqual(distances[0, 0], 0.0);
+         EmguAssert.IsTrue(indices[0, 0] == 5);
+         EmguAssert.IsTrue(distances[0, 0] == 0.0);
       }
 
       [Test]
@@ -967,7 +967,7 @@ namespace Emgu.CV.Test
       {
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new float[] { (float)i };
+            features[i] = new float[] { (float) i };
 
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4);
 
@@ -978,8 +978,8 @@ namespace Emgu.CV.Test
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
          index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
-         Assert.AreEqual(indices[0, 0], 5);
-         Assert.AreEqual(distances[0, 0], 0.0);
+         EmguAssert.IsTrue(indices[0, 0] == 5);
+         EmguAssert.IsTrue(distances[0, 0] == 0.0);
       }
 
       [Test]
@@ -987,7 +987,7 @@ namespace Emgu.CV.Test
       {
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
-            features[i] = new float[] { (float)i };
+            features[i] = new float[] { (float) i };
 
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
 
@@ -998,8 +998,8 @@ namespace Emgu.CV.Test
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
          index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
 
-         Assert.AreEqual(indices[0, 0], 5);
-         Assert.AreEqual(distances[0, 0], 0.0);
+         EmguAssert.IsTrue(indices[0, 0] == 5);
+         EmguAssert.IsTrue(distances[0, 0] == 0.0);
       }
 
       [Test]
@@ -1055,24 +1055,24 @@ namespace Emgu.CV.Test
             contour.Push(new Point(0, 2));
             contour.Push(new Point(2, 2));
             contour.Push(new Point(2, 0));
-            Assert.IsTrue(contour.Convex);
-            Assert.AreEqual(contour.Area, 4.0);
+            EmguAssert.IsTrue(contour.Convex);
+            EmguAssert.AreEqual(contour.Area, 4.0);
             //InContour function requires MCvContour.rect to be pre-computed
             CvInvoke.cvBoundingRect(contour, 1);
-            Assert.GreaterOrEqual(contour.InContour(new Point(1, 1)), 0);
-            Assert.Less(contour.InContour(new Point(3, 3)), 0);
+            EmguAssert.IsTrue(contour.InContour(new Point(1, 1)) >= 0);
+            EmguAssert.IsTrue(contour.InContour(new Point(3, 3)) < 0);
 
             Contour<PointF> contourF = new Contour<PointF>(stor);
             contourF.Push(new PointF(0, 0));
             contourF.Push(new PointF(0, 2));
             contourF.Push(new PointF(2, 2));
             contourF.Push(new PointF(2, 0));
-            Assert.IsTrue(contourF.Convex);
-            Assert.AreEqual(contourF.Area, 4.0);
+            EmguAssert.IsTrue(contourF.Convex);
+            EmguAssert.AreEqual(contourF.Area, 4.0);
             //InContour function requires MCvContour.rect to be pre-computed
             CvInvoke.cvBoundingRect(contourF, 1);
-            Assert.GreaterOrEqual(contourF.InContour(new PointF(1, 1)), 0);
-            Assert.Less(contourF.InContour(new PointF(3, 3)), 0);
+            EmguAssert.IsTrue(contourF.InContour(new PointF(1, 1)) >= 0);
+            EmguAssert.IsTrue(contourF.InContour(new PointF(3, 3)) < 0);
 
             Contour<MCvPoint2D64f> contourD = new Contour<MCvPoint2D64f>(stor);
             contourD.Push(new MCvPoint2D64f(0, 0));
@@ -1102,7 +1102,7 @@ namespace Emgu.CV.Test
          PointF[] pts = new PointF[200];
          for (int i = 0; i < pts.Length; i++)
          {
-            pts[i] = new PointF((float)(100 + r.NextDouble() * 400), (float)(100 + r.NextDouble() * 400));
+            pts[i] = new PointF((float) (100 + r.NextDouble() * 400), (float) (100 + r.NextDouble() * 400));
          }
          #endregion
 
@@ -1137,19 +1137,21 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          stereoSolver.FindStereoCorrespondence(left, right, leftDisparity, rightDisparity);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
          Matrix<double> q = new Matrix<double>(4, 4);
          q.SetIdentity();
          MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(leftDisparity * (-16), q);
 
-         float min = (float)1.0e10, max = 0;
+         float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
-            if (p.z < min) min = p.z;
-            else if (p.z > max) max = p.z;
+            if (p.z < min)
+               min = p.z;
+            else if (p.z > max)
+               max = p.z;
          }
-         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+         EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
          //ImageViewer.Show(leftDisparity*(-16));
       }
@@ -1167,19 +1169,21 @@ namespace Emgu.CV.Test
          bm.FindStereoCorrespondence(left, right, leftDisparity);
          watch.Stop();
 
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
          Matrix<double> q = new Matrix<double>(4, 4);
          q.SetIdentity();
          MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(leftDisparity * (-16), q);
 
-         float min = (float)1.0e10, max = 0;
+         float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
-            if (p.z < min) min = p.z;
-            else if (p.z > max) max = p.z;
+            if (p.z < min)
+               min = p.z;
+            else if (p.z > max)
+               max = p.z;
          }
-         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+         EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
       }
 
@@ -1197,19 +1201,21 @@ namespace Emgu.CV.Test
          bm.FindStereoCorrespondence(left, right, disparity);
          watch.Stop();
 
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
          Matrix<double> q = new Matrix<double>(4, 4);
          q.SetIdentity();
          MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparity * (-16), q);
 
-         float min = (float)1.0e10, max = 0;
+         float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
-            if (p.z < min) min = p.z;
-            else if (p.z > max) max = p.z;
+            if (p.z < min)
+               min = p.z;
+            else if (p.z > max)
+               max = p.z;
          }
-         Trace.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
+         EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
       }
 
@@ -1232,9 +1238,9 @@ namespace Emgu.CV.Test
          }
          using (MemoryStream ms2 = new MemoryStream(bytes))
          {
-            ExtrinsicCameraParameters param2 = (ExtrinsicCameraParameters)formatter.Deserialize(ms2);
+            ExtrinsicCameraParameters param2 = (ExtrinsicCameraParameters) formatter.Deserialize(ms2);
 
-            Assert.IsTrue(param.Equals(param2));
+            EmguAssert.IsTrue(param.Equals(param2));
          }
       }
 
@@ -1257,9 +1263,9 @@ namespace Emgu.CV.Test
          }
          using (MemoryStream ms2 = new MemoryStream(bytes))
          {
-            IntrinsicCameraParameters param2 = (IntrinsicCameraParameters)formatter.Deserialize(ms2);
+            IntrinsicCameraParameters param2 = (IntrinsicCameraParameters) formatter.Deserialize(ms2);
 
-            Assert.IsTrue(param.Equals(param2));
+            EmguAssert.IsTrue(param.Equals(param2));
          }
       }
 
@@ -1335,7 +1341,6 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
-
       [Test]
       public void TestMemstorage()
       {
@@ -1386,11 +1391,10 @@ namespace Emgu.CV.Test
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               SURFFeature sf2 = (SURFFeature)o;
+               SURFFeature sf2 = (SURFFeature) o;
             }
          }
       }
-
 
       [Test]
       public void TestMatNDRuntimeSerialization()
@@ -1410,8 +1414,8 @@ namespace Emgu.CV.Test
                using (MemoryStream ms2 = new MemoryStream(bytes))
                {
                   Object o = formatter.Deserialize(ms2);
-                  MatND<float> mat2 = (MatND<float>)o;
-                  Assert.IsTrue(mat.Equals(mat2));
+                  MatND<float> mat2 = (MatND<float>) o;
+                  EmguAssert.IsTrue(mat.Equals(mat2));
                }
             }
          }
@@ -1434,7 +1438,7 @@ namespace Emgu.CV.Test
                using (MemoryStream ms2 = new MemoryStream(bytes))
                {
                   Object o = formatter.Deserialize(ms2);
-                  VectorOfKeyPoint kpts2 = (VectorOfKeyPoint)o;
+                  VectorOfKeyPoint kpts2 = (VectorOfKeyPoint) o;
                }
             }
          }
@@ -1475,7 +1479,8 @@ namespace Emgu.CV.Test
                }
             }
 
-            foreach (Image<Gray, Byte> i in HSVs) i.Dispose();
+            foreach (Image<Gray, Byte> i in HSVs)
+               i.Dispose();
          }
       }
 
@@ -1492,11 +1497,11 @@ namespace Emgu.CV.Test
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
-            Assert.AreEqual(1, rects.Length);
+            EmguAssert.AreEqual(1, rects.Length);
 
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
-            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
@@ -1515,10 +1520,10 @@ namespace Emgu.CV.Test
             Rectangle[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
-            Assert.AreEqual(0, rects.Length);
+            EmguAssert.AreEqual(0, rects.Length);
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
-            Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
@@ -1554,7 +1559,7 @@ namespace Emgu.CV.Test
             foreach (Rectangle rect in rects)
                image.Draw(rect, new Bgr(Color.Red), 1);
 
-            Trace.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
@@ -1651,7 +1656,6 @@ namespace Emgu.CV.Test
          CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, 3, null, IntPtr.Zero);
       }
 
-
       [Test]
       public void TestAdaptiveSkinDetector()
       {
@@ -1669,7 +1673,7 @@ namespace Emgu.CV.Test
       public void TestBinaryStorage()
       {
          //generate some randome points
-         PointF[] pts = new PointF[10000000];
+         PointF[] pts = new PointF[100];
          GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
          using (Matrix<float> ptsMat = new Matrix<float>(pts.Length, 2, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
          {
@@ -1679,30 +1683,33 @@ namespace Emgu.CV.Test
 
          String fileName = GetTempFileName();
          Stopwatch watch = Stopwatch.StartNew();
-         //BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>(fileName, pts);
-         BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>("abc.data", pts);
+         BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>(fileName, pts);
+         //BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>("abc.data", pts);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
-         watch.Reset(); watch.Start();
+         watch.Reset();
+         watch.Start();
          PointF[] pts2 = stor.ToArray();
          watch.Stop();
-         Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
-         File.Delete(fileName);
+         EmguAssert.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
-         Assert.AreEqual(pts.Length, pts2.Length);
+         if (File.Exists(fileName))
+            File.Delete(fileName);
+
+         EmguAssert.IsTrue(pts.Length == pts2.Length);
 
          //Check for equality
          for (int i = 0; i < pts.Length; i++)
          {
-            Assert.AreEqual(pts[i], pts2[i]);
+            EmguAssert.IsTrue(pts[i] == pts2[i]);
          }
       }
 
       [Test]
       public void TestSeqPerformance()
       {
-         Point[] pts = new Point[1000000];
+         Point[] pts = new Point[100];
 
          using (MemStorage stor = new MemStorage())
          {
@@ -1710,16 +1717,17 @@ namespace Emgu.CV.Test
             Seq<Point> seq = new Seq<Point>(stor);
             seq.PushMulti(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
             watch.Stop();
-            Trace.WriteLine(String.Format("Time for storing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Time for storing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
-            watch.Reset(); watch.Start();
+            watch.Reset();
+            watch.Start();
             int counter = 0;
             foreach (Point p in seq)
             {
                counter++;
             }
             watch.Stop();
-            Trace.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Time for reading {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
          }
       }
@@ -1765,7 +1773,7 @@ namespace Emgu.CV.Test
          }
 
          FileInfo fi = new FileInfo(fileName);
-         Assert.AreNotEqual(fi.Length, 0);
+         EmguAssert.IsTrue(fi.Length != 0);
 
          using (Capture capture = new Capture(fileName))
          {
@@ -1773,13 +1781,13 @@ namespace Emgu.CV.Test
             int count = 0;
             while (img2 != null)
             {
-               Assert.AreEqual(img2.Width, width);
-               Assert.AreEqual(img2.Height, height);
+               EmguAssert.IsTrue(img2.Width == width);
+               EmguAssert.IsTrue(img2.Height == height);
                //Assert.IsTrue(img2.Equals( images[count]) );
                img2 = capture.QueryFrame();
                count++;
             }
-            Assert.AreEqual(numberOfFrames, count);
+            EmguAssert.IsTrue(numberOfFrames == count);
          }
          File.Delete(fi.FullName);
       }
@@ -1793,13 +1801,14 @@ namespace Emgu.CV.Test
          {
             SURFDetector surf = new SURFDetector(300, false);
             MKeyPoint[] keypoints = surf.DetectKeyPoints(gray, null);
-            Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) { return Point.Round(kp.Point); });
+            Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) {
+               return Point.Round(kp.Point); });
             Stopwatch watch = Stopwatch.StartNew();
             classifier.Train(image, points, 48, 9, 50, 176, 4);
             watch.Stop();
-            Trace.WriteLine(String.Format("Training time: {0} milliseconds", watch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Training time: {0} milliseconds", watch.ElapsedMilliseconds));
             float[] signiture = classifier.GetSigniture(image, points[0], 15);
-            Assert.AreEqual(signiture.Length, classifier.NumberOfClasses);
+            EmguAssert.IsTrue(signiture.Length == classifier.NumberOfClasses);
          }
       }
 
@@ -1811,15 +1820,15 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < points.Length; i++)
          {
-            points[i].x = (float)r.NextDouble();
-            points[i].y = (float)r.NextDouble();
-            points[i].z = (float)r.NextDouble();
+            points[i].x = (float) r.NextDouble();
+            points[i].y = (float) r.NextDouble();
+            points[i].z = (float) r.NextDouble();
          }
 
          MCvPoint3D32f searchPoint = new MCvPoint3D32f();
-         searchPoint.x = (float)r.NextDouble();
-         searchPoint.y = (float)r.NextDouble();
-         searchPoint.z = (float)r.NextDouble();
+         searchPoint.x = (float) r.NextDouble();
+         searchPoint.y = (float) r.NextDouble();
+         searchPoint.z = (float) r.NextDouble();
 
          int indexOfClosest1 = 0;
          double shortestDistance1 = double.MaxValue;
@@ -1838,8 +1847,8 @@ namespace Emgu.CV.Test
          int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
          shortestDistance2 = Math.Sqrt(shortestDistance2);
 
-         Assert.AreEqual(indexOfClosest1, indexOfClosest2);
-         Assert.LessOrEqual(Math.Sqrt(shortestDistance1 - shortestDistance2), 1.0e-3 * shortestDistance1);
+         EmguAssert.IsTrue(indexOfClosest1 == indexOfClosest2);
+         EmguAssert.IsTrue(Math.Sqrt(shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
       }
 
       [Test]
@@ -1855,12 +1864,14 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(320, 240);
          Size tileSize = new Size(32, 32);
-
-         using (TileTiffWriter<Bgr, Byte> writer = new TileTiffWriter<Bgr, byte>("temp.tiff", image.Size, tileSize))
+         String fileName = Path.Combine(Path.GetTempPath(), "temp.tiff");
+         using (TileTiffWriter<Bgr, Byte> writer = new TileTiffWriter<Bgr, byte>(fileName, image.Size, tileSize))
          {
-            Assert.AreEqual(tileSize, writer.TileSize, "tile size not equals");
+            EmguAssert.IsTrue(tileSize == writer.TileSize, "Tile size not equals");
             writer.WriteImage(image);
          }
+         if (File.Exists(fileName))
+            File.Delete(fileName);
       }
 
       [Test]
@@ -1872,17 +1883,17 @@ namespace Emgu.CV.Test
          {
             logger.OnDataReceived +=
                  delegate(object sender, EventArgs<string> e)
-                 {
-                    Assert.AreEqual(e.Value, "Test");
-                    dataLogged = true;
-                 };
+            {
+               EmguAssert.AreEqual(e.Value, "Test");
+               dataLogged = true;
+            };
 
             logger.Log("Test", 0);
-            Assert.IsFalse(dataLogged);
+            EmguAssert.IsFalse(dataLogged);
 
             logger.Log("Test", 1);
 
-            Assert.IsTrue(dataLogged);
+            EmguAssert.IsTrue(dataLogged);
          }
       }
 
@@ -1896,7 +1907,7 @@ namespace Emgu.CV.Test
          vf.Push(values);
          float[] valuesCopy = vf.ToArray();
          for (int i = 0; i < values.Length; i++)
-            Assert.AreEqual(values[i], valuesCopy[i]);
+            EmguAssert.AreEqual(values[i], valuesCopy[i]);
       }
 
       [Test]
@@ -1926,9 +1937,9 @@ namespace Emgu.CV.Test
          {
             PointF[] corners = new PointF[] {
                   new PointF(0, 0),
-                  new PointF(size.Width - 1 , 0),
-                  new PointF(size.Width - 1, size.Height -1),
-                  new PointF(0, size.Height -1)};
+                  new PointF(size.Width - 1, 0),
+                  new PointF(size.Width - 1, size.Height - 1),
+                  new PointF(0, size.Height - 1)};
             PointF[] oldCorners = new PointF[corners.Length];
             corners.CopyTo(oldCorners, 0);
 
@@ -1941,7 +1952,7 @@ namespace Emgu.CV.Test
             double min = 0, max = 0;
             Point minLoc = new Point(), maxLoc = new Point();
             CvInvoke.cvMinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, IntPtr.Zero);
-            Assert.Less(max, 1.0e-4, "Error is too large");
+            EmguAssert.IsTrue(max < 1.0e-4, "Error is too large");
          }
       }
 
@@ -1950,11 +1961,14 @@ namespace Emgu.CV.Test
       {
          if (IntPtr.Size == 4) //Only perform the test in 32bit mode
          {
+            String fileName = Path.Combine(Path.GetTempPath(), "tmp.avi");
             using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 320))
-            using (VideoWriter writer = new VideoWriter("tmp.avi", CvInvoke.CV_FOURCC('M', 'P', '4', '2'), 10, 480, 320, false))
+            using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('M', 'P', '4', '2'), 10, 480, 320, false))
             {
                writer.WriteFrame(img);
             }
+            if (File.Exists(fileName))
+               File.Delete(fileName);
          }
       }
 

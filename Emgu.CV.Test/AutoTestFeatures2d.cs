@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,14 +10,11 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using Emgu.CV.Util;
-using Emgu.UI;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -32,14 +28,14 @@ namespace Emgu.CV.Test
       public void TestSIFT()
       {
          SIFTDetector detector = new SIFTDetector();
-         Assert.IsTrue( TestFeature2DTracker(detector, detector), "Unable to find homography matrix" );
+         EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
       [Test]
       public void TestSURF()
       {
          SURFDetector detector = new SURFDetector(500, false);
-         Assert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+         EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
       [Test]
@@ -107,14 +103,14 @@ namespace Emgu.CV.Test
          FastDetector fast = new FastDetector(10, true);
          GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
          BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
-         Assert.IsTrue(TestFeature2DTracker<byte>(fastGrid, brief), "Unable to find homography matrix");
+         EmguAssert.IsTrue(TestFeature2DTracker<byte>(fastGrid, brief), "Unable to find homography matrix");
       }
 
       [Test]
       public void TestORB()
       {
          ORBDetector orb = new ORBDetector(700);
-         Assert.IsTrue(TestFeature2DTracker<byte>(orb, orb), "Unable to find homography matrix");
+         EmguAssert.IsTrue(TestFeature2DTracker<byte>(orb, orb), "Unable to find homography matrix");
       }
 
       public static bool TestFeature2DTracker<TDescriptor>(IKeyPointDetector keyPointDetector, IDescriptorExtractor<TDescriptor> descriptorGenerator)
@@ -133,7 +129,7 @@ namespace Emgu.CV.Test
             VectorOfKeyPoint modelKeypoints = keyPointDetector.DetectKeyPointsRaw(modelImage, null);
             Matrix<TDescriptor> modelDescriptors = descriptorGenerator.ComputeDescriptorsRaw(modelImage, null, modelKeypoints);
             stopwatch.Stop();
-            Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
             //Image<Gray, Byte> observedImage = new Image<Gray, byte>("traffic.jpg");
@@ -143,11 +139,12 @@ namespace Emgu.CV.Test
 
             //observedImage._EqualizeHist();
             #region extract features from the observed image
-            stopwatch.Reset(); stopwatch.Start();
+            stopwatch.Reset();
+            stopwatch.Start();
             VectorOfKeyPoint observedKeypoints = keyPointDetector.DetectKeyPointsRaw(observedImage, null);
             Matrix<TDescriptor> observedDescriptors = descriptorGenerator.ComputeDescriptorsRaw(observedImage, null, observedKeypoints);
             stopwatch.Stop();
-            Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
             //Merge the object image and the observed image into one big image for display
@@ -162,12 +159,13 @@ namespace Emgu.CV.Test
 
             HomographyMatrix homography = null;
 
-            stopwatch.Reset(); stopwatch.Start();
+            stopwatch.Reset();
+            stopwatch.Start();
 
             int k = 2;
             DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
-            using(Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
-            using(Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
+            using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
+            using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
             using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
             {
                matcher.Add(modelDescriptors);
@@ -186,7 +184,7 @@ namespace Emgu.CV.Test
                }
             }
             stopwatch.Stop();
-            Trace.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
+            EmguAssert.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             if (homography != null)
             {
                PointF[] points = pts.Clone() as PointF[];
@@ -196,8 +194,7 @@ namespace Emgu.CV.Test
                   points[i].Y += modelImage.Height;
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
                return true;
-            }
-            else
+            } else
             {
                return false;
             }
@@ -244,10 +241,10 @@ namespace Emgu.CV.Test
          //using (Util.VectorOfKeyPoint kpts = surf.DetectKeyPointsRaw(gray, null))
          using (Util.VectorOfKeyPoint kpts = sift.DetectKeyPointsRaw(gray, null))
          {
-            for (int i = 1; i < 100; i++)
+            for (int i = 1; i < 2; i++)
             {
                using (Matrix<float> surfDescriptors = surf.ComputeDescriptorsRaw(box, null, kpts))
-                  Assert.AreEqual(surfDescriptors.Width, (surf.SURFParams.Extended ? 128 : 64) * 3);
+                  EmguAssert.IsTrue(surfDescriptors.Width == (surf.SURFParams.Extended ? 128 : 64) * 3);
 
                //TODO: Find out why the following test fails
                //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(box, kpts))
@@ -269,24 +266,27 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          ImageFeature<float>[] features1 = detector.DetectFeatures(box, null);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
-         watch.Reset(); watch.Start();
+         watch.Reset();
+         watch.Start();
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, null);
          ImageFeature<float>[] features2 = detector.ComputeDescriptors(box, null, keypoints);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
-         watch.Reset(); watch.Start();
+         watch.Reset();
+         watch.Start();
          MCvSURFParams p = detector.SURFParams;
          SURFFeature[] features3 = box.ExtractSURF(ref p);
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds.", watch.ElapsedMilliseconds));
 
-         Assert.AreEqual(features1.Length, features2.Length);
-         Assert.AreEqual(features2.Length, features3.Length);
+         EmguAssert.IsTrue(features1.Length == features2.Length);
+         EmguAssert.IsTrue(features2.Length == features3.Length);
 
-         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) { return mkp.Point; });
+         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) {
+            return mkp.Point; });
          //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
          //int count = features.Length;
 
@@ -316,7 +316,7 @@ namespace Emgu.CV.Test
          GridAdaptedFeatureDetector detector = new GridAdaptedFeatureDetector(surfdetector, 1000, 2, 2);
          VectorOfKeyPoint kpts1 = detector.DetectKeyPointsRaw(box, null);
          VectorOfKeyPoint kpts2 = detector.DetectKeyPointsRaw(box, null);
-         Assert.AreEqual(kpts1.Size, kpts2.Size);
+         EmguAssert.IsTrue(kpts1.Size == kpts2.Size);
       }
 
       [Test]
@@ -340,7 +340,7 @@ namespace Emgu.CV.Test
          for (int i = 0; i < 100; i++)
          {
             Features2DTracker<float>.MatchedImageFeature[] matchedFeaturesNew = tracker.MatchFeature(imageFeatures, 2);
-            Assert.AreEqual(length1, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+            EmguAssert.IsTrue(length1 == matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
             /*
             for (int j = 0; j < length1; j++)
             {
@@ -352,9 +352,9 @@ namespace Emgu.CV.Test
                }
             }*/
             matchedFeaturesNew = Features2DTracker<float>.VoteForUniqueness(matchedFeaturesNew, 0.8);
-            Assert.AreEqual(length2, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+            EmguAssert.IsTrue(length2 == matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
             matchedFeaturesNew = Features2DTracker<float>.VoteForSizeAndOrientation(matchedFeaturesNew, 1.5, 20);
-            Assert.AreEqual(length3, matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
+            EmguAssert.IsTrue(length3 == matchedFeaturesNew.Length, String.Format("Failed in iteration {0}", i));
          }
       }
 
@@ -377,7 +377,8 @@ namespace Emgu.CV.Test
 
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
 
-         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) { return Point.Round(k.Point); });
+         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) {
+            return Point.Round(k.Point); });
 
          SelfSimDescriptor descriptor = new SelfSimDescriptor(5, 41, 3, 7, 20);
          int descriptorSize = descriptor.DescriptorSize;
@@ -388,9 +389,9 @@ namespace Emgu.CV.Test
          foreach (float f in descriptors)
             absSum += Math.Abs(f);
 
-         Assert.AreNotEqual(0, absSum, "The sum of the descriptor should not be zero");
+         EmguAssert.IsTrue(0 != absSum, "The sum of the descriptor should not be zero");
 
-         Assert.AreEqual(descriptors.Length / descriptor.DescriptorSize, pts.Length);
+         EmguAssert.IsTrue(descriptors.Length / descriptor.DescriptorSize == pts.Length);
 
          foreach (MKeyPoint kp in keypoints)
          {

@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -40,7 +39,7 @@ namespace Emgu.CV
       public DenseHistogram(SerializationInfo info, StreamingContext context)
       {
          MatND<float> matND = new MatND<float>(info, context);
-         RangeF[] ranges = (RangeF[])info.GetValue("Ranges", typeof(RangeF[]));
+         RangeF[] ranges = (RangeF[]) info.GetValue("Ranges", typeof(RangeF[]));
          InitializeComponent(matND, ranges);
       }
 
@@ -64,7 +63,8 @@ namespace Emgu.CV
 
          CvInvoke.cvMakeHistHeaderForArray(
             cvMatND.dims,
-            Array.ConvertAll<MCvMatND.Dimension, int>(cvMatND.dim, delegate(MCvMatND.Dimension d) { return d.Size; }),//binSizes
+            Array.ConvertAll<MCvMatND.Dimension, int>(cvMatND.dim, delegate(MCvMatND.Dimension d) {
+            return d.Size; }), //binSizes
             _ptr,
             _matND.MCvMatND.data,
             rangesPts,
@@ -102,8 +102,11 @@ namespace Emgu.CV
       /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
       public void Calculate<TDepth>(Image<Gray, TDepth>[] imgs, bool accumulate, Image<Gray, Byte> mask) where TDepth : new()
       {
+         IntPtr[] ptrs = new IntPtr[imgs.Length];
+         for (int i = 0; i < imgs.Length; i++)
+            ptrs[i] = imgs[i].Ptr;
          Calculate(
-            Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(imgs, delegate(Image<Gray, TDepth> img) { return img.Ptr; }),
+            ptrs,
             accumulate,
             mask);
       }
@@ -117,10 +120,10 @@ namespace Emgu.CV
       /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
       public void Calculate<TDepth>(Matrix<TDepth>[] matrices, bool accumulate, Matrix<Byte> mask) where TDepth : new()
       {
-         Calculate(
-            Array.ConvertAll<Matrix<TDepth>, IntPtr>(matrices, delegate(Matrix<TDepth> img) { return img.Ptr; }),
-            accumulate,
-            mask);
+         IntPtr[] ptrs = new IntPtr[matrices.Length];
+         for (int i = 0; i < matrices.Length; i++)
+            ptrs[i] = matrices[i].Ptr;
+         Calculate(ptrs, accumulate, mask);
       }
 
       /// <summary>
@@ -131,10 +134,10 @@ namespace Emgu.CV
       /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
       public void Calculate(IImage[] imgs, bool accumulate, Image<Gray, Byte> mask)
       {
-         Calculate(
-            Array.ConvertAll<IImage, IntPtr>(imgs, delegate(IImage img) { return img.Ptr; }),
-            accumulate,
-            mask);
+         IntPtr[] ptrs = new IntPtr[imgs.Length];
+         for (int i = 0; i < imgs.Length; i++)
+            ptrs[i] = imgs[i].Ptr;
+         Calculate(ptrs, accumulate, mask);
       }
 
       private void Calculate(IntPtr[] arrays, bool accumulate, CvArray<Byte> mask)
@@ -181,7 +184,8 @@ namespace Emgu.CV
          IntPtr[] imgPtrs =
              Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
                  srcs,
-                 delegate(Image<Gray, TDepth> img) { return img.Ptr; });
+                 delegate(Image<Gray, TDepth> img) {
+            return img.Ptr; });
 
          Image<Gray, TDepth> res = srcs[0].CopyBlank();
          CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
@@ -201,10 +205,10 @@ namespace Emgu.CV
       {
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
-         IntPtr[] imgPtrs =
-             Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
-                 srcs,
-                 delegate(Image<Gray, TDepth> img) { return img.Ptr; });
+         IntPtr[] imgPtrs = new IntPtr[srcs.Length];
+         for (int i = 0; i < srcs.Length; i++)
+            imgPtrs[i] = srcs[i].Ptr;
+
          Size imgSize = srcs[0].Size;
          Image<Gray, Single> res = new Image<Gray, float>(imgSize.Width - patchSize.Width + 1, imgSize.Height - patchSize.Height + 1);
          CvInvoke.cvCalcBackProjectPatch(imgPtrs, res.Ptr, patchSize, Ptr, method, factor);
@@ -221,10 +225,9 @@ namespace Emgu.CV
       {
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
 
-         IntPtr[] imgPtrs =
-             Array.ConvertAll<Matrix<TDepth>, IntPtr>(
-                 srcs,
-                 delegate(Matrix<TDepth> img) { return img.Ptr; });
+         IntPtr[] imgPtrs = new IntPtr[srcs.Length];
+         for (int i = 0; i < srcs.Length; i++)
+            imgPtrs[i] = srcs[i].Ptr;
 
          Matrix<TDepth> res = new Matrix<TDepth>(srcs[0].Size);
          CvInvoke.cvCalcBackProject(imgPtrs, res.Ptr, _ptr);
@@ -312,7 +315,7 @@ namespace Emgu.CV
       {
          get
          {
-            return (MCvHistogram)Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
+            return (MCvHistogram) Marshal.PtrToStructure(Ptr, typeof(MCvHistogram));
          }
       }
 
@@ -348,8 +351,8 @@ namespace Emgu.CV
          get
          {
             MCvHistogram h = MCvHistogram;
-            RangeF[] res = new RangeF[h.mat.dims];
-            Array.Copy(h.thresh, res, res.Length);
+            RangeF[] res = h.thresh;
+            Array.Resize(ref res, h.mat.dims);
             return res;
          }
       }

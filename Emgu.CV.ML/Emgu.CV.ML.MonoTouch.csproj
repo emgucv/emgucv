@@ -63,6 +63,7 @@
     <Compile Include="StatModel.cs" />
     <Compile Include="SVM.cs" />
     <Compile Include="SVMParams.cs" />
+    <Compile Include="EMLegacy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

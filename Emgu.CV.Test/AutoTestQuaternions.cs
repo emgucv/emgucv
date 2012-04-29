@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,15 +10,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using Emgu.CV.VideoSurveillance;
-using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.Tiff;
 using NUnit.Framework;
@@ -47,7 +43,7 @@ namespace Emgu.CV.Test
             q.SetEuler(x1, y1, z1);
             q.GetEuler(ref x2, ref y2, ref z2);
 
-            Assert.IsTrue(
+            EmguAssert.IsTrue(
                Math.Abs(x2 - x1) < epsilon &&
                Math.Abs(y2 - y1) < epsilon &&
                Math.Abs(z2 - z1) < epsilon);
@@ -60,7 +56,7 @@ namespace Emgu.CV.Test
 
             CvInvoke.cvAbsDiff(pt1, pt2, pt3);
 
-            Assert.IsTrue(
+            EmguAssert.IsTrue(
                pt3[0, 0] < epsilon &&
                pt3[1, 0] < epsilon &&
                pt3[2, 0] < epsilon);
@@ -69,19 +65,19 @@ namespace Emgu.CV.Test
 
          double rotationAngle = 0.2;
          q.SetEuler(rotationAngle, 0.0, 0.0);
-         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
          q.SetEuler(0.0, rotationAngle, 0.0);
-         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
          q.SetEuler(0.0, 0.0, rotationAngle);
-         Assert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q.RotationAngle - rotationAngle) < epsilon);
 
          q = q * q;
-         Assert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - rotationAngle) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - rotationAngle) < epsilon);
 
          q.SetEuler(0.2, 0.1, 0.05);
          double t = q.RotationAngle;
          q = q * q;
-         Assert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - t) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q.RotationAngle / 2.0 - t) < epsilon);
 
       }
 
@@ -98,7 +94,7 @@ namespace Emgu.CV.Test
             sum *= q;
          }
          watch.Stop();
-         Trace.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
 
       }
 
@@ -112,9 +108,9 @@ namespace Emgu.CV.Test
          double roll2 = 0, pitch2 = 0, yaw2 = 0;
          q1.SetEuler(roll1, pitch1, yaw1);
          q1.GetEuler(ref roll2, ref pitch2, ref yaw2);
-         Assert.AreEqual(roll1, roll2, epsilon);
-         Assert.AreEqual(pitch1, pitch2, epsilon);
-         Assert.AreEqual(yaw1, yaw2, epsilon);
+         EmguAssert.IsTrue(Math.Abs(roll1 - roll2) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(pitch1 - pitch2) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(yaw1 - yaw2) < epsilon);
 
          Quaternions q2 = new Quaternions();
          q2.SetEuler(r.NextDouble(), r.NextDouble(), r.NextDouble());
@@ -123,9 +119,9 @@ namespace Emgu.CV.Test
 
          MCvPoint3D64f delta = (q1 * q2).RotatePoint(p) - q1.RotatePoint(q2.RotatePoint(p));
 
-         Assert.Less(delta.x, epsilon);
-         Assert.Less(delta.y, epsilon);
-         Assert.Less(delta.z, epsilon);
+         EmguAssert.IsTrue(delta.x < epsilon);
+         EmguAssert.IsTrue(delta.y < epsilon);
+         EmguAssert.IsTrue(delta.z < epsilon);
 
       }
 
@@ -140,10 +136,10 @@ namespace Emgu.CV.Test
          q2.AxisAngle = q1.AxisAngle;
 
          double epsilon = 1.0e-12;
-         Assert.Less(Math.Abs(q1.W - q2.W), epsilon);
-         Assert.Less(Math.Abs(q1.X - q2.X), epsilon);
-         Assert.Less(Math.Abs(q1.Y - q2.Y), epsilon);
-         Assert.Less(Math.Abs(q1.Z - q2.Z), epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.W - q2.W) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.X - q2.X) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.Y - q2.Y) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.Z - q2.Z) < epsilon);
 
          RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.x, q1.AxisAngle.y, q1.AxisAngle.z });
          Matrix<double> m1 = rVec.RotationMatrix;
@@ -152,10 +148,10 @@ namespace Emgu.CV.Test
          Matrix<double> diff = new Matrix<double>(3, 3);
          CvInvoke.cvAbsDiff(m1, m2, diff);
          double norm = CvInvoke.cvNorm(diff, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_C, IntPtr.Zero);
-         Assert.Less(norm, epsilon);
+         EmguAssert.IsTrue(norm < epsilon);
 
          Quaternions q4 = q1 * Quaternions.Empty;
-         Assert.AreEqual(q4, q1);
+         EmguAssert.IsTrue(q4.Equals(q1));
       }
 
       [Test]
@@ -170,15 +166,15 @@ namespace Emgu.CV.Test
          Quaternions q = q1 * q2;
 
          MCvPoint3D64f angle = q.AxisAngle;
-         Assert.AreNotEqual(double.NaN, angle.x, "Invalid value x");
-         Assert.AreNotEqual(double.NaN, angle.y, "Invalid value y");
-         Assert.AreNotEqual(double.NaN, angle.z, "Invalid value z");
+         EmguAssert.AreNotEqual(double.NaN, angle.x, "Invalid value x");
+         EmguAssert.AreNotEqual(double.NaN, angle.y, "Invalid value y");
+         EmguAssert.AreNotEqual(double.NaN, angle.z, "Invalid value z");
       }
 
       [Test]
       public void TestQuaternionsSize()
       {
-         Assert.AreEqual(4 * Marshal.SizeOf(typeof(double)), Marshal.SizeOf(typeof(Quaternions)));
+         EmguAssert.AreEqual(4 * Marshal.SizeOf(typeof(double)), Marshal.SizeOf(typeof(Quaternions)));
       }
 
       [Test]
@@ -193,16 +189,16 @@ namespace Emgu.CV.Test
          double epsilon = 1.0e-12;
 
          Quaternions q = q1.Slerp(q2, 0.0);
-         Assert.Less(Math.Abs(q1.W - q.W), epsilon);
-         Assert.Less(Math.Abs(q1.X - q.X), epsilon);
-         Assert.Less(Math.Abs(q1.Y - q.Y), epsilon);
-         Assert.Less(Math.Abs(q1.Z - q.Z), epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.W - q.W) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.X - q.X) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.Y - q.Y) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q1.Z - q.Z) < epsilon);
 
          q = q1.Slerp(q2, 1.0);
-         Assert.Less(Math.Abs(q2.W - q.W), epsilon);
-         Assert.Less(Math.Abs(q2.X - q.X), epsilon);
-         Assert.Less(Math.Abs(q2.Y - q.Y), epsilon);
-         Assert.Less(Math.Abs(q2.Z - q.Z), epsilon);
+         EmguAssert.IsTrue(Math.Abs(q2.W - q.W) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q2.X - q.X) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q2.Y - q.Y) < epsilon);
+         EmguAssert.IsTrue(Math.Abs(q2.Z - q.Z) < epsilon);
 
       }
 
@@ -221,17 +217,17 @@ namespace Emgu.CV.Test
          Quaternions q = q1.Slerp(q2, 0.5);
          q.GetEuler(ref x, ref y, ref z);
          double deltaDegree = Math.Abs(x / Math.PI * 180.0 - 35.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
 
          q = q1.Slerp(q2, 0.8);
          q.GetEuler(ref x, ref y, ref z);
          deltaDegree = Math.Abs(x / Math.PI * 180.0 - 38.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
 
          q = q1.Slerp(q2, 0.15);
          q.GetEuler(ref x, ref y, ref z);
          deltaDegree = Math.Abs(x / Math.PI * 180.0 - 31.5);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
       }
 
       [Test]
@@ -249,17 +245,17 @@ namespace Emgu.CV.Test
          Quaternions q = q1.Slerp(q2, 0.5);
          q.GetEuler(ref x, ref y, ref z);
          double deltaDegree = Math.Abs(y / Math.PI * 180.0 - 35.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
 
          q = q1.Slerp(q2, 0.8);
          q.GetEuler(ref x, ref y, ref z);
          deltaDegree = Math.Abs(y / Math.PI * 180.0 - 38.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
 
          q = q1.Slerp(q2, 0.15);
          q.GetEuler(ref x, ref y, ref z);
          deltaDegree = Math.Abs(y / Math.PI * 180.0 - 31.5);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
       }
 
       [Test]
@@ -276,11 +272,11 @@ namespace Emgu.CV.Test
 
          Quaternions q = q1.Slerp(q2, 0.5);
          q.GetEuler(ref x, ref y, ref z);
-         Assert.IsFalse(double.IsNaN(x));
-         Assert.IsFalse(double.IsNaN(y));
-         Assert.IsFalse(double.IsNaN(z));
+         EmguAssert.IsFalse(double.IsNaN(x));
+         EmguAssert.IsFalse(double.IsNaN(y));
+         EmguAssert.IsFalse(double.IsNaN(z));
          double deltaDegree = Math.Abs(y / Math.PI * 180.0 - 90.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
       }
 
       [Test]
@@ -297,19 +293,19 @@ namespace Emgu.CV.Test
 
          Quaternions q = q1.Slerp(q2, 0.5);
          q.GetEuler(ref x, ref y, ref z);
-         Assert.IsFalse(double.IsNaN(x));
-         Assert.IsFalse(double.IsNaN(y));
-         Assert.IsFalse(double.IsNaN(z));
+         EmguAssert.IsFalse(double.IsNaN(x));
+         EmguAssert.IsFalse(double.IsNaN(y));
+         EmguAssert.IsFalse(double.IsNaN(z));
          double deltaDegree = Math.Abs(y / Math.PI * 180.0 - 0.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
 
          q = q2.Slerp(q1, 0.5);
          q.GetEuler(ref x, ref y, ref z);
-         Assert.IsFalse(double.IsNaN(x));
-         Assert.IsFalse(double.IsNaN(y));
-         Assert.IsFalse(double.IsNaN(z));
+         EmguAssert.IsFalse(double.IsNaN(x));
+         EmguAssert.IsFalse(double.IsNaN(y));
+         EmguAssert.IsFalse(double.IsNaN(z));
          deltaDegree = Math.Abs(y / Math.PI * 180.0 - 0.0);
-         Assert.LessOrEqual(deltaDegree, epsilon);
+         EmguAssert.IsTrue(deltaDegree <= epsilon);
       }
    }
 }

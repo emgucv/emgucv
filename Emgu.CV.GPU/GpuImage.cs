@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -139,8 +138,7 @@ namespace Emgu.CV.GPU
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
             {
                GpuInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero);
-            }
-            else //different depth
+            } else //different depth
             {
                if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
                {
@@ -162,23 +160,20 @@ namespace Emgu.CV.GPU
                   }
 
                   GpuInvoke.ConvertTo(srcImage.Ptr, Ptr, scale, shift, IntPtr.Zero);
-               }
-               else
+               } else
                {
                   GpuInvoke.ConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
                }
 
             }
             #endregion
-         }
-         else
+         } else
          {
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
                ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
-            }
-            else
+            } else
             {   //different depth
                using (GpuImage<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
                   ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
@@ -193,8 +188,7 @@ namespace Emgu.CV.GPU
          {
             // if the direct conversion exist, apply the conversion
             GpuInvoke.CvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), stream);
-         }
-         catch
+         } catch
          {
             try
             {
@@ -207,8 +201,7 @@ namespace Emgu.CV.GPU
                   GpuInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
                   stream.WaitForCompletion();
                }
-            }
-            catch
+            } catch
             {
                throw new NotSupportedException(String.Format(
                   "Convertion from Image<{0}, {1}> to Image<{2}, {3}> is not supported by OpenCV",
@@ -299,7 +292,7 @@ namespace Emgu.CV.GPU
       /// <remarks>The parent GpuImage should never be released before the returned GpuImage that represent the subregion</remarks>
       public new GpuImage<TColor, TDepth> Row(int i)
       {
-         return RowRange(i, i+1);
+         return RowRange(i, i + 1);
       }
 
       /// <summary>
@@ -338,9 +331,11 @@ namespace Emgu.CV.GPU
       }
 
       #region IImage Members
+#if !IOS
       /// <summary>
       /// convert the current GpuImage to its equavalent Bitmap representation
       /// </summary>
+      ///
       public Bitmap Bitmap
       {
          get
@@ -357,12 +352,13 @@ namespace Emgu.CV.GPU
                result.UnlockBits(data);
                return result;
             } else
-            using (Image<TColor, TDepth> tmp = ToImage())
-            {
-               return tmp.ToBitmap();
-            }
+               using (Image<TColor, TDepth> tmp = ToImage())
+               {
+                  return tmp.ToBitmap();
+               }
          }
       }
+#endif
 
       IImage[] IImage.Split()
       {

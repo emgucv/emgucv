@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using Emgu.Util.TypeEnum;
 
@@ -17,17 +16,21 @@ namespace Emgu.Util
 
       static Platform()
       {
+#if IOS
+         _os = OS.IOS;
+         _runtime = Runtime.Mono;
+#else
          PlatformID pid = Environment.OSVersion.Platform;
          if (pid == PlatformID.MacOSX)
          {
             _os = OS.MacOSX;
-         }
-         else
+         } else
          {
-            int p = (int)pid;
+            int p = (int) pid;
             _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
          }
          _runtime = (Type.GetType("System.MonoType", false) != null) ? Runtime.Mono : Runtime.DotNet;
+#endif
       }
 
       /// <summary>

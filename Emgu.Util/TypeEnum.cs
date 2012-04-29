@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 
 namespace Emgu.Util.TypeEnum
@@ -22,7 +21,11 @@ namespace Emgu.Util.TypeEnum
       /// <summary>
       /// Mac OSX
       /// </summary>
-      MacOSX
+      MacOSX,
+      /// <summary>
+      /// iOS devices. iPhone, iPad, iPod Touch
+      /// </summary>
+      IOS
    }
 
    /// <summary>

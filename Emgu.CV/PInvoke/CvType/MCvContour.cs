@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -80,9 +79,16 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int color;
       /// <summary>
-      /// 
+      /// Reserved0
       /// </summary>
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-      public int[] reserved;
+      public int reserved0;
+      /// <summary>
+      /// Reserved1
+      /// </summary>
+      public int reserved1;
+      /// <summary>
+      /// Reserved2
+      /// </summary>
+      public int reserved2;
    }
 }

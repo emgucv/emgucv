@@ -1,25 +1,21 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Emgu.CV;
-using Emgu.UI;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using Emgu.CV.Features2D;
-using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Xml;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using Emgu.CV;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
+using Emgu.Util;
+using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
