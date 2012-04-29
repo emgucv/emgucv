@@ -52,14 +52,5 @@ namespace Emgu.CV.VideoStab
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void StabilizerBaseSetMotionEstimator(IntPtr stabilizer, IntPtr motionEstimator);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr PyrLkRobustMotionEstimatorCreate(MotionModel motionModel);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void PyrLkRobustMotionEstimatorSetDetector(IntPtr motionEstimator, IntPtr featureDetector);
-
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void PyrLkRobustMotionEstimatorRelease(ref IntPtr estimator);
    }
 }

@@ -373,7 +373,6 @@ namespace Emgu.CV.Test
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
          using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
-         using (PyrLkRobustMotionEstimator motionEstimator = new PyrLkRobustMotionEstimator(MotionModel.TRANSLATION_AND_SCALE)) 
          using (OnePassStabilizer stabilizer = new OnePassStabilizer(capture))
          {
             stabilizer.SetMotionFilter(motionFilter);
@@ -395,7 +394,7 @@ namespace Emgu.CV.Test
          ImageViewer viewer = new ImageViewer();
          using (Capture capture = new Capture())
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
-         using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
+         //using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
          using (TwoPassStabilizer stabilizer = new TwoPassStabilizer(capture))
          {

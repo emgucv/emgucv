@@ -29,10 +29,11 @@ namespace Emgu.CV.VideoStab
          VideoStabInvoke.OnePassStabilizerSetMotionFilter(_ptr, motionFilter);
       }
 
+      /*
       public void SetMotionEstimator(PyrLkRobustMotionEstimator estimator)
       {
          VideoStabInvoke.StabilizerBaseSetMotionEstimator(_stabilizerBase, estimator);
-      }
+      }*/
 
       protected override IntPtr GetFrameSourcePointer()
       {

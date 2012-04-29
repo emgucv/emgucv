@@ -34,7 +34,7 @@ CVAPI(void) CaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);
 
 CVAPI(bool) FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame);
 
-CVAPI(void) StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::GlobalMotionEstimatorBase* motionEstimator);
+CVAPI(void) StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator);
 
 CVAPI(cv::videostab::OnePassStabilizer*) OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) OnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter);
@@ -46,7 +46,4 @@ CVAPI(void) TwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabiliz
 CVAPI(cv::videostab::GaussianMotionFilter*) GaussianMotionFilterCreate(int radius, float stdev);
 CVAPI(void) GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter);
 
-CVAPI(cv::videostab::PyrLkRobustMotionEstimator*) PyrLkRobustMotionEstimatorCreate(int motionModel);
-CVAPI(void) PyrLkRobustMotionEstimatorSetDetector(cv::videostab::PyrLkRobustMotionEstimator* motionEstimator, cv::Feature2D::FeatureDetector* featureDetector);
-CVAPI(void) PyrLkRobustMotionEstimatorRelease(cv::videostab::PyrLkRobustMotionEstimator** estimator);
 #endif

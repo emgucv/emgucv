@@ -33,9 +33,9 @@ bool FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage*
    return true;
 }
 
-void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::GlobalMotionEstimatorBase* motionEstimator)
+void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
 {
-   cv::Ptr<cv::videostab::GlobalMotionEstimatorBase> ptr(motionEstimator);
+   cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator);
    ptr.addref(); // add reference such that it won't release the motion estimator
    stabalizer->setMotionEstimator(motionEstimator);
 }
@@ -88,23 +88,4 @@ void GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter)
 {
    delete *filter;
    *filter = 0;
-}
-
-cv::videostab::PyrLkRobustMotionEstimator* PyrLkRobustMotionEstimatorCreate(int motionModel)
-{
-   cv::videostab::PyrLkRobustMotionEstimator* result = new cv::videostab::PyrLkRobustMotionEstimator((cv::videostab::MotionModel) motionModel);
-   cv::videostab::GlobalMotionEstimatorBase* base = static_cast<cv::videostab::GlobalMotionEstimatorBase*>(result);
-   CV_Assert((void*)result == (void*)base);
-   return result;
-}
-void PyrLkRobustMotionEstimatorSetDetector(cv::videostab::PyrLkRobustMotionEstimator* motionEstimator, cv::Feature2D::FeatureDetector* featureDetector)
-{
-   cv::Ptr<cv::Feature2D::FeatureDetector> ptr(featureDetector);
-   ptr.addref(); // add reference such that it won't release the deature detector;
-   motionEstimator->setDetector(ptr);
-}
-void PyrLkRobustMotionEstimatorRelease(cv::videostab::PyrLkRobustMotionEstimator** estimator)
-{
-   delete *estimator;
-   *estimator = 0;
 }

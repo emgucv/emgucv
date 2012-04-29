@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.VideoStab</RootNamespace>
     <AssemblyName>Emgu.CV.VideoStab</AssemblyName>
-	<SignAssembly>true</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,7 +48,6 @@
     <Compile Include="GaussianMotionFilter.cs" />
     <Compile Include="MotionModel.cs" />
     <Compile Include="OnePassStabilizer.cs" />
-    <Compile Include="PyrLkRobustMotionEstimator.cs" />
     <Compile Include="TwoPassStabilizer.cs" />
     <Compile Include="VideoStabInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
