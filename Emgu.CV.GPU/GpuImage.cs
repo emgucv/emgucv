@@ -9,6 +9,9 @@ using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+#if ANDROID
+using Bitmap = Android.Graphics.Bitmap;
+#endif
 
 namespace Emgu.CV.GPU
 {
@@ -340,6 +343,7 @@ namespace Emgu.CV.GPU
       {
          get
          {
+#if !ANDROID
             if (this is Image<Bgr, Byte>)
             {  
                Size s = Size;
@@ -352,6 +356,7 @@ namespace Emgu.CV.GPU
                result.UnlockBits(data);
                return result;
             } else
+#endif
                using (Image<TColor, TDepth> tmp = ToImage())
                {
                   return tmp.ToBitmap();

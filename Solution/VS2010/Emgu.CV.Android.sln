@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAndroidCamera", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Android", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj", "{89BCA3BE-823B-4702-9498-025C6B21462F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
