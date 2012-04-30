@@ -2,11 +2,12 @@
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using Emgu.Util;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -62,6 +63,9 @@ namespace Emgu.CV
             }
          }
 
+         if (!Directory.Exists(loadDirectory))
+            return false;
+
          String oldDir = Environment.CurrentDirectory;
          Environment.CurrentDirectory = loadDirectory;
          bool success = true;
@@ -104,8 +108,8 @@ namespace Emgu.CV
             CvInvoke.OPENCV_HIGHGUI_LIBRARY,
             CvInvoke.OPENCV_FEATURES2D_LIBRARY,
             CvInvoke.OPENCV_CALIB3D_LIBRARY,
-            CvInvoke.OPENCV_LEGACY_LIBRARY,
             CvInvoke.OPENCV_ML_LIBRARY,
+            CvInvoke.OPENCV_LEGACY_LIBRARY,
             CvInvoke.OPENCV_OBJDETECT_LIBRARY,
             CvInvoke.OPENCV_CONTRIB_LIBRARY,
             CvInvoke.OPENCV_NONFREE_LIBRARY,
@@ -123,12 +127,11 @@ namespace Emgu.CV
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
          DirectoryInfo directory = file.Directory;
-         
+
          foreach (String module in modules)
          {
-            //Emgu.Util.Toolbox.LoadLibrary(Path.Combine(directory.FullName, module));
-            //Java.Lang.JavaSystem.Load(Path.Combine(directory.FullName, module));
             Java.Lang.JavaSystem.LoadLibrary(module);
+            Debug.WriteLine(string.Format("Loaded {0}.", module));
          }
 #elif IOS
 #else
