@@ -12,7 +12,7 @@ IF EXIST .\jni\nul (SET BUILD_JAVA_PART=1) ELSE (SET BUILD_JAVA_PART=0)
 :: load configuration
 PUSHD %~dp0
 SET SCRIPTS_DIR=%cd%
-IF EXIST .\wincfg.cmd CALL .\wincfg.cmd
+IF EXIST .\wincfg.cmd CALL .\wincfg.cmd %1
 POPD
 
 :: defaults
