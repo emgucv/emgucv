@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #pragma once
 #ifndef EMGU_VIDEOSTAB_C_H
 #define EMGU_VIDEOSTAB_C_H
@@ -47,3 +48,4 @@ CVAPI(cv::videostab::GaussianMotionFilter*) GaussianMotionFilterCreate(int radiu
 CVAPI(void) GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter);
 
 #endif
+*/

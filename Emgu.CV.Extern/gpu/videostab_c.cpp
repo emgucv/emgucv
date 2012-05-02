@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #include "videostab_c.h"
 
 CaptureFrameSource* CaptureFrameSourceCreate(CvCapture* capture)
@@ -88,4 +89,4 @@ void GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter)
 {
    delete *filter;
    *filter = 0;
-}
+}*/
