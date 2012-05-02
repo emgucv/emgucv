@@ -4,8 +4,8 @@
 //
 //----------------------------------------------------------------------------
 
-#if ANDROID
-#else
+#ifdef EMGU_CV_WITH_TIFF
+
 #include "tiffio_c.h"
 
 TIFF* tiffWriterOpen(char* fileName)
@@ -106,4 +106,5 @@ void tiffWriterClose(TIFF** pTiff)
    XTIFFClose(*pTiff);
    *pTiff = 0;
 }
+
 #endif

@@ -4,6 +4,8 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef EMGU_CV_WITH_TIFF
+
 #pragma once
 #ifndef EMGU_TIFFIO_H
 #define EMGU_TIFFIO_H
@@ -31,8 +33,10 @@ CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage);
 
 CVAPI(void) tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize);
 
+CVAPI(void) tiffWriterClose(TIFF** pTiff);
+
 CVAPI(void) tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale);
 
-CVAPI(void) tiffWriterClose(TIFF** pTiff);
+#endif
 
 #endif
