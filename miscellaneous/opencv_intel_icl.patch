@@ -1,10 +1,10 @@
 Index: cmake/OpenCVDetectTBB.cmake
 ===================================================================
---- cmake/OpenCVDetectTBB.cmake	(revision 7713)
+--- cmake/OpenCVDetectTBB.cmake	(revision 8283)
 +++ cmake/OpenCVDetectTBB.cmake	(working copy)
 @@ -41,12 +41,20 @@
        else()
-         get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIR}/../lib" ABSOLUTE)
+         get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIRS}/../lib" ABSOLUTE)
  
 -        if(CMAKE_SYSTEM_PROCESSOR MATCHES amd64*|x86_64* OR MSVC64)
 -          set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
@@ -31,7 +31,7 @@ Index: cmake/OpenCVDetectTBB.cmake
          elseif(MSVC90)
 Index: modules/gpu/src/split_merge.cpp
 ===================================================================
---- modules/gpu/src/split_merge.cpp	(revision 7713)
+--- modules/gpu/src/split_merge.cpp	(revision 8283)
 +++ modules/gpu/src/split_merge.cpp	(working copy)
 @@ -96,12 +96,13 @@
          CV_Assert(single_channel_only);
@@ -62,9 +62,9 @@ Index: modules/gpu/src/split_merge.cpp
  
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 7713)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 8283)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
-@@ -477,6 +477,9 @@
+@@ -534,6 +534,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);  
  
@@ -76,9 +76,9 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 7713)
+--- modules/highgui/src/cap_openni.cpp	(revision 8283)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
-@@ -428,6 +428,8 @@
+@@ -433,6 +433,8 @@
  
      bool isOpened() const;
  
@@ -87,7 +87,7 @@ Index: modules/highgui/src/cap_openni.cpp
  protected:
      struct OutputMap
      {
-@@ -1335,4 +1337,10 @@
+@@ -1359,4 +1361,10 @@
      return 0;
  }
  
@@ -100,7 +100,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 7713)
+--- modules/legacy/src/3dtracker.cpp	(revision 8283)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
