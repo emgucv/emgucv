@@ -33,6 +33,7 @@ namespace Emgu.CV.Util
          }
       }
 
+      /*
       /// <summary>
       /// Extract the DataMatrixCode from the image
       /// </summary>
@@ -50,7 +51,7 @@ namespace Emgu.CV.Util
       {
          CvInvoke.VectorOfDataMatrixCodeDraw(_ptr, image);
       }
-
+      */
       /// <summary>
       /// Release the standard vector
       /// </summary>

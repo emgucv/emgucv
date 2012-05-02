@@ -114,23 +114,23 @@ CVAPI(void) VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int in
 //  Vector of DataMatrixCode
 //
 //----------------------------------------------------------------------------
-CVAPI(std::vector<cv::DataMatrixCode>*) VectorOfDataMatrixCodeCreate();
+CVAPI(std::vector<CvDataMatrixCode>*) VectorOfDataMatrixCodeCreate();
 
-CVAPI(std::vector<cv::DataMatrixCode>*) VectorOfDataMatrixCodeCreateSize(int size);
+CVAPI(std::vector<CvDataMatrixCode>*) VectorOfDataMatrixCodeCreateSize(int size);
 
-CVAPI(int) VectorOfDataMatrixCodeGetSize(std::vector<cv::DataMatrixCode>* v);
+CVAPI(int) VectorOfDataMatrixCodeGetSize(std::vector<CvDataMatrixCode>* v);
 
-CVAPI(void) VectorOfDataMatrixCodePushMulti(std::vector<cv::DataMatrixCode>* v, cv::DataMatrixCode* values, int count);
+CVAPI(void) VectorOfDataMatrixCodePushMulti(std::vector<CvDataMatrixCode>* v, CvDataMatrixCode* values, int count);
 
-CVAPI(void) VectorOfDataMatrixCodeClear(std::vector<cv::DataMatrixCode>* v);
+CVAPI(void) VectorOfDataMatrixCodeClear(std::vector<CvDataMatrixCode>* v);
 
-CVAPI(void) VectorOfDataMatrixCodeRelease(std::vector<cv::DataMatrixCode>* v);
+CVAPI(void) VectorOfDataMatrixCodeRelease(std::vector<CvDataMatrixCode>* v);
 
-CVAPI(cv::DataMatrixCode*) VectorOfDataMatrixCodeGetStartAddress(std::vector<cv::DataMatrixCode>* v);
+CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetStartAddress(std::vector<CvDataMatrixCode>* v);
 
-CVAPI(cv::DataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<cv::DataMatrixCode>* v, int index);
+CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<CvDataMatrixCode>* v, int index);
 
-CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<cv::DataMatrixCode>* v, IplImage* image);
+CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* image);
 
-CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<cv::DataMatrixCode>* v, IplImage* image);
+CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image);
 #endif

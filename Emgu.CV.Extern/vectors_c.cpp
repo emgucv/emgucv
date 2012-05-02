@@ -291,49 +291,50 @@ void VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv
 //  Vector of DataMatrixCode
 //
 //----------------------------------------------------------------------------
-std::vector<cv::DataMatrixCode>* VectorOfDataMatrixCodeCreate()
+std::vector<CvDataMatrixCode>* VectorOfDataMatrixCodeCreate()
 {
-   return new std::vector<cv::DataMatrixCode>();
+   return new std::vector<CvDataMatrixCode>();
 }
 
-std::vector<cv::DataMatrixCode>* VectorOfDataMatrixCodeCreateSize(int size)
+std::vector<CvDataMatrixCode>* VectorOfDataMatrixCodeCreateSize(int size)
 {
-   return new std::vector<cv::DataMatrixCode>();
+   return new std::vector<CvDataMatrixCode>();
 }
 
-int VectorOfDataMatrixCodeGetSize(std::vector<cv::DataMatrixCode>* v)
+int VectorOfDataMatrixCodeGetSize(std::vector<CvDataMatrixCode>* v)
 {
    return v->size();
 }
 
-void VectorOfDataMatrixCodeClear(std::vector<cv::DataMatrixCode>* v)
+void VectorOfDataMatrixCodeClear(std::vector<CvDataMatrixCode>* v)
 {
    v->clear();
 }
 
-void VectorOfDataMatrixCodeRelease(std::vector<cv::DataMatrixCode>* v)
+void VectorOfDataMatrixCodeRelease(std::vector<CvDataMatrixCode>* v)
 {
    delete v;
 }
 
-cv::DataMatrixCode* VectorOfDataMatrixCodeGetStartAddress(std::vector<cv::DataMatrixCode>* v)
+CvDataMatrixCode* VectorOfDataMatrixCodeGetStartAddress(std::vector<CvDataMatrixCode>* v)
 {
    return v->empty()? NULL : &(*v)[0];
 }
 
-cv::DataMatrixCode* VectorOfDataMatrixCodeGetItem(std::vector<cv::DataMatrixCode>* v, int index)
+CvDataMatrixCode* VectorOfDataMatrixCodeGetItem(std::vector<CvDataMatrixCode>* v, int index)
 {
    return &(*v)[index];
 }
 
-void VectorOfDataMatrixCodeFind(std::vector<cv::DataMatrixCode>* v, IplImage* image)
+/*
+void VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* image)
 {
    cv::Mat m = cv::cvarrToMat(image);
    cv::findDataMatrix(m, *v);
 }
 
-void VectorOfDataMatrixCodeDraw(std::vector<cv::DataMatrixCode>* v, IplImage* image)
+void VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image)
 {
    cv::Mat m = cv::cvarrToMat(image);
    cv::drawDataMatrixCodes(*v, m);
-}
+}*/
