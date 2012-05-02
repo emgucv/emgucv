@@ -85,6 +85,8 @@ void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, i
    CvSeqReader reader;
    cvStartReadSeq((CvSeq*) subdivEdges, &reader);
 
+   schar* start = reader.ptr;
+   
    Triangle2DF* currentTriangle = triangles;
 
    Triangle2DF t;
@@ -103,6 +105,10 @@ void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, i
             *currentTriangle++ = t;
 
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
+
+         // prevent infinite loop
+         if(reader.ptr == start)
+            break;
       }
    } else
    {
@@ -121,6 +127,10 @@ void PlanarSubdivisionGetTriangles(CvSubdiv2D* subdiv, Triangle2DF* triangles, i
             *currentTriangle++ = t;
 
          CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
+
+         // prevent infinite loop
+         if(reader.ptr == start)
+            break;
       }
    }
 
@@ -158,6 +168,9 @@ void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points
 
    CvSeqReader reader;
    cvStartReadSeq((CvSeq*) subdivEdges, &reader);
+   
+   schar* start = reader.ptr;
+   
    while(CV_IS_SET_ELEM(reader.ptr))
    {
       CvQuadEdge2D* qEdge = (CvQuadEdge2D*)reader.ptr;
@@ -186,9 +199,12 @@ void PlanarSubdivisionGetSubdiv2DPoints(CvSubdiv2D* subdiv, CvPoint2D32f* points
                *currentEdge++ = cvSubdiv2DRotateEdge(e, 3);
             }
          }
-
-         CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
       }
+      CV_NEXT_SEQ_ELEM(subdivEdges->elem_size, reader);
+      
+      // prevent infinite loop
+      if(reader.ptr == start)
+         break;
    }
    *pointCount = currentPoint - points;
 }
