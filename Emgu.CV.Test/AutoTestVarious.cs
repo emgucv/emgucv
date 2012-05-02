@@ -607,7 +607,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(max[0] < eps);
          EmguAssert.IsTrue(max[1] < eps);
          EmguAssert.IsTrue(max[2] < eps);
-         EmguAssert.IsTrue(max[3] < eps);
+
 
          stopwatch.Reset();
          stopwatch.Start();
@@ -1681,12 +1681,14 @@ namespace Emgu.CV.Test
          }
          handle.Free();
 
-         String fileName = GetTempFileName();
+         String fileName = Path.Combine(Path.GetTempPath(), "tmp.dat");
          Stopwatch watch = Stopwatch.StartNew();
          BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>(fileName, pts);
          //BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>("abc.data", pts);
          watch.Stop();
          EmguAssert.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
+         int estimatedSize = stor.EstimateSize();
+         EmguAssert.IsTrue(pts.Length == estimatedSize);
 
          watch.Reset();
          watch.Start();
@@ -1748,6 +1750,7 @@ namespace Emgu.CV.Test
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
 
+      /*
       [Test]
       public void TestVideoWriter()
       {
@@ -1790,7 +1793,7 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(numberOfFrames == count);
          }
          File.Delete(fi.FullName);
-      }
+      }*/
 
       [Test]
       public void TestRTreeClassifier()
@@ -1848,7 +1851,7 @@ namespace Emgu.CV.Test
          shortestDistance2 = Math.Sqrt(shortestDistance2);
 
          EmguAssert.IsTrue(indexOfClosest1 == indexOfClosest2);
-         EmguAssert.IsTrue(Math.Sqrt(shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
+         EmguAssert.IsTrue((shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
       }
 
       [Test]
@@ -1859,6 +1862,7 @@ namespace Emgu.CV.Test
          CvInvoke.cvReleasePOSITObject(ref ptr);
       }
 
+      /*
       [Test]
       public void TestTiffWriter()
       {
@@ -1872,7 +1876,7 @@ namespace Emgu.CV.Test
          }
          if (File.Exists(fileName))
             File.Delete(fileName);
-      }
+      }*/
 
       [Test]
       public void TestDataLogger()
@@ -1956,6 +1960,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void Test_MPEG_4_2_Codec()
       {
@@ -1970,7 +1975,7 @@ namespace Emgu.CV.Test
             if (File.Exists(fileName))
                File.Delete(fileName);
          }
-      }
+      }*/
 
       [Test]
       public void TestPyrMeanshiftSegmentation()
@@ -2000,6 +2005,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestDataMatrix()
       {
@@ -2011,7 +2017,6 @@ namespace Emgu.CV.Test
             v.Draw(img);
             //ImageViewer.Show(img);
          }
-
-      }
+      }*/
    }
 }

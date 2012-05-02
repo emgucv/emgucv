@@ -1166,6 +1166,7 @@ namespace Emgu.CV.Test
          Assert.Fail("NotSupportedException should be thrown");
       }
 
+      /*
       [Test]
       public void TestPlanarObjectDetector()
       {
@@ -1203,7 +1204,7 @@ namespace Emgu.CV.Test
 
             //ImageViewer.Show(scene);
          }
-      }
+      }*/
 
       [Test]
       public void TestSaveImage()
