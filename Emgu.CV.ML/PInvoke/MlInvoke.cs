@@ -239,10 +239,11 @@ namespace Emgu.CV.ML
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
       /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int CvEMPredict(
+      public static extern double CvEMPredict(
          IntPtr model,
          IntPtr samples,
-         IntPtr probs);
+         IntPtr probs,
+         ref double likelihood);
       #endregion
 
       #region CvEMLegacy

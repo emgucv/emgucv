@@ -69,11 +69,13 @@ bool CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat
    return result;
 }
 
-int CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs )  
+double CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs, double* likelihood)  
 { 
    cv::Mat sampleMat = cv::cvarrToMat(sample);
    cv::Mat probsMat = probs? cv::cvarrToMat(probs) : cv::Mat(); 
-   return model->predict(sampleMat, probs ? probsMat : cv::noArray()); 
+   cv::Vec2d result = model->predict(sampleMat, probs ? probsMat : cv::noArray()); 
+   *likelihood =  result(0);
+   return result(1);
 }
 
 //EMLegacy

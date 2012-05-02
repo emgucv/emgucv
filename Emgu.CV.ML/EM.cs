@@ -45,13 +45,16 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
-      /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
-      public float Predict(Matrix<float> samples, Matrix<float> probs)
+      /// <param name="likelihood">The likelihood logarithm value</param>
+      /// <returns>an index of the most probable mixture component for the given sample.</returns>
+      public double Predict(Matrix<float> samples, Matrix<float> probs, out double likelihood)
       {
-         return MlInvoke.CvEMPredict(
+         likelihood = 0;
+         return  MlInvoke.CvEMPredict(
             _ptr,
             samples.Ptr,
-            probs == null ? IntPtr.Zero : probs.Ptr);
+            probs == null ? IntPtr.Zero : probs.Ptr,
+            ref likelihood);
       }
 
       /// <summary>

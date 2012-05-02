@@ -39,7 +39,7 @@ CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int 
 CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria termcrit);
 CVAPI(void) CvEMRelease(cv::EM** model);
 CVAPI(bool) CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods );
-CVAPI(int) CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs );
+CVAPI(double) CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs, double* likelihood);
 
 //EMLegacy
 CVAPI(CvEM*) CvEMLegacyDefaultCreate();
