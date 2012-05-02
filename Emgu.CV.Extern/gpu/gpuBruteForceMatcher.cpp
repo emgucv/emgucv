@@ -6,18 +6,18 @@
 
 #include "gpu_c.h"
 
-cv::gpu::BFMatcher_GPU* gpuBruteForceMatcherCreate(int distType) 
+cv::gpu::BruteForceMatcher_GPU_base* gpuBruteForceMatcherCreate(cv::gpu::BruteForceMatcher_GPU_base::DistType distType) 
 {
-   return new cv::gpu::BFMatcher_GPU(distType);
+   return new cv::gpu::BruteForceMatcher_GPU_base(distType);
 }
 
-void gpuBruteForceMatcherRelease(cv::gpu::BFMatcher_GPU** matcher) 
+void gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher) 
 {
    delete *matcher;
    *matcher = 0;
 }
 
-void gpuBruteForceMatcherAdd(cv::gpu::BFMatcher_GPU* matcher, const cv::gpu::GpuMat* trainDescs)
+void gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const cv::gpu::GpuMat* trainDescs)
 {
    std::vector< cv::gpu::GpuMat > mats;
    mats.push_back( *trainDescs );
@@ -25,7 +25,7 @@ void gpuBruteForceMatcherAdd(cv::gpu::BFMatcher_GPU* matcher, const cv::gpu::Gpu
 }
 
 void gpuBruteForceMatcherKnnMatchSingle(
-                                  cv::gpu::BFMatcher_GPU* matcher,
+                                  cv::gpu::BruteForceMatcher_GPU_base* matcher,
                                   const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
                                   cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 
                                   int k, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream)

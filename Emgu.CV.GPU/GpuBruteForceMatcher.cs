@@ -10,6 +10,23 @@ using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
+   internal enum GpuMatcherDistanceType
+   {
+      /// <summary>
+      /// Manhattan distance (city block distance)
+      /// </summary>
+      L1Dist = 0,
+      /// <summary>
+      /// Squared Euclidean distance
+      /// </summary>
+      L2Dist,
+      /// <summary>
+      /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
+      /// bit count of A exclusive XOR'ed with B. 
+      /// </summary>
+      HammingDist
+   }
+
    /// <summary>
    /// A Brute force matcher using GPU
    /// </summary>
@@ -17,7 +34,7 @@ namespace Emgu.CV.GPU
    public class GpuBruteForceMatcher<T> : UnmanagedObject
       where T : struct
    {
-      private DistanceType _distanceType;
+      private GpuMatcherDistanceType _distanceType;
 
 
 
@@ -38,7 +55,20 @@ namespace Emgu.CV.GPU
             throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
          }
 
-         _distanceType = distanceType;
+         switch (distanceType)
+         {
+            case (DistanceType.Hamming):
+               _distanceType = GpuMatcherDistanceType.HammingDist;
+               break;
+            case (DistanceType.L1):
+               _distanceType = GpuMatcherDistanceType.L1Dist;
+               break;
+            case (DistanceType.L2):
+               _distanceType = GpuMatcherDistanceType.L2Dist;
+               break;
+            default:
+               throw new NotImplementedException(String.Format("Distance type of {0} is not implemented in GPU.", distanceType.ToString()));
+         }
          _ptr = GpuInvoke.gpuBruteForceMatcherCreate(_distanceType);
       }
 
@@ -96,7 +126,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuBruteForceMatcherCreate(DistanceType distType);
+      internal extern static IntPtr gpuBruteForceMatcherCreate(GpuMatcherDistanceType distType);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
