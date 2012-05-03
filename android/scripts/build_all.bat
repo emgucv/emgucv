@@ -1,5 +1,3 @@
-rm -rf ..\build_armeabi
-rm -rf 
 cd ..
 rm -rf build_armeabi
 rm -rf build_armeabi-v7a
