@@ -50,7 +50,8 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DEMGU_ENABLE_SSE:BOOL=TRUE ^
 -DCMAKE_INSTALL_PREFIX="%TEMP%" ^
 -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE ^
--DBUILD_WITH_STATIC_CRT:BOOL=FALSE 
+-DBUILD_WITH_STATIC_CRT:BOOL=FALSE ^
+-DBUILD_opencv_ts:BOOL=FALSE
 
 IF NOT "%4%"=="openni" GOTO END_OF_OPENNI
 
@@ -115,23 +116,28 @@ IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 
 REM create visual studio project
 %CMAKE% %CMAKE_CONF_FLAGS%
+%CMAKE% %CMAKE_CONF_FLAGS%
+
+IF %DEVENV%==%VS2008% SET IC_COMMAND=/IC
+IF %DEVENV%==%VS2010% SET IC_COMMAND=/IC:"Intel C++ Compiler XE 12.1"
 
 REM convert the project to use intel compiler 
-IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln /IC
+IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln %IC_COMMAND%
 REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
 REM these projects create problems for intel compiler
-IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln ^
-Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
-Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
-Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
-/VC
-
+REM IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln ^
+REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
+REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
+REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
+REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
+REM /VC
 GOTO BUILD
 
 :VISUAL_STUDIO
 @echo on
-%CMAKE% %CMAKE_CONF_FLAGS% -DWITH_IPP:BOOL=FALSE  
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DWITH_IPP:BOOL=FALSE 
+%CMAKE% %CMAKE_CONF_FLAGS%
+%CMAKE% %CMAKE_CONF_FLAGS%
 
 :BUILD
 
