@@ -29,6 +29,19 @@ Index: cmake/OpenCVDetectTBB.cmake
          if(MSVC80)
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
+Index: cmake/OpenCVModule.cmake
+===================================================================
+--- cmake/OpenCVModule.cmake	(revision 8283)
++++ cmake/OpenCVModule.cmake	(working copy)
+@@ -473,7 +473,7 @@
+   endif()
+ 
+   install(TARGETS ${the_module}
+-    RUNTIME DESTINATION bin COMPONENT main
++    RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
+     LIBRARY DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+     ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+     )
 Index: modules/gpu/src/split_merge.cpp
 ===================================================================
 --- modules/gpu/src/split_merge.cpp	(revision 8283)
