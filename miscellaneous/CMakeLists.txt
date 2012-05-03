@@ -15,14 +15,14 @@ ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV
 PROJECT(Emgu.CV.Documentation.chm)
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
-   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath= /property:HelpFileFormat=HtmlHelp1
+   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath=. /property:HelpFileFormat=HtmlHelp1
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.GPU Emgu.CV.OCR)
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/Help/Emgu.CV.Documentation.chm"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Documentation.chm"
   DESTINATION ./
   COMPONENT emgucv_document
   )
