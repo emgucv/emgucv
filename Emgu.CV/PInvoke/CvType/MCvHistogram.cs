@@ -151,6 +151,9 @@ namespace Emgu.CV.Structure
       /// </summary>
       public RangeF thresh31;
 
+      /// <summary>
+      /// Get the thresh value as an array
+      /// </summary>
       public RangeF[] thresh
       {
          get
