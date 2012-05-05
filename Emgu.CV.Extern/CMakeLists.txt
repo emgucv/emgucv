@@ -114,7 +114,6 @@ ENDIF()
 ############################### TESSERACT START ########################
 IF(ANDROID)
   SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
-  MESSAGE(STATUS "Android: Tesseract ${EMGU_CV_WITH_TESSERACT}")
   IF(EMGU_CV_WITH_TESSERACT)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
     SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccutil" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/api" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccmain" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccstruct" "${PROJECT_SOURCE_DIR}/tesseract")

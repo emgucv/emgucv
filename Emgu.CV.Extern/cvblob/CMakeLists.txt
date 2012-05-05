@@ -33,7 +33,12 @@ LIST(APPEND cvblob_hdrs ${CVBLOB_HDRS})
 source_group("Src" FILES ${cvblob_srcs})
 source_group("Include" FILES ${cvblob_hdrs})
 set(the_target ${PROJECT_NAME})
+
 add_library(${the_target} STATIC ${cvblob_srcs} ${cvblob_hdrs})
+
+if (NOT WIN32)
+  set_target_properties(${the_target} PROPERTIES COMPILE_FLAGS "-fPIC")
+ENDIF()
 
 INSTALL(
   FILES
