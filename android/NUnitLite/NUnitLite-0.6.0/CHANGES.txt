@@ -1,0 +1,157 @@
+NUnitLite Version 0.6 - January 13, 2010
+
+This is the first release of NUnitLite under the MIT license.
+
+New Features and Enhancements
+
+* New Asserts
+          Pass
+          Ignore
+          Inconclusive
+
+* New Syntax Helpers:
+
+  Throws: InnerException
+          InvalidOperationException
+          ArgumentException
+          TargetInvocationException
+
+  Has:    InnerException
+
+  ConstraintExpression:
+          BinarySerializable
+          XmlSerializable
+          ContainsSubstring
+          StartsWith
+          EndsWith
+          Matches
+
+Bug fixes:
+
+* Additional control characters are now escaped in message output
+
+* A Stream now compares correctly as equal to itself
+
+
+NUnitLite Version 0.5 - June 14, 2009
+
+This is the first release from our new Launchpad.net project
+and aims at improved compatibility with NUnit 2.5.
+
+New Features and Enhancements
+
+* New Constraints: 
+       AssignableToConstraint
+       AttributeConstraint
+       AttributeExistsConstraint,
+       BinarySerializableConstraint (not available on compact framework)
+       CollectionOrderedConstraint
+       EmptyCollectionConstraint
+       EmptyStringConstraint
+       EqualConstraint
+       FalseConstraint
+       NaNConstraint
+       NullConstraint
+       NullOrEmptyStringConstraint
+       RangeConstraint
+       SamePathConstraint
+       SamePathOrUnderConstraint
+       ThrowsConstraint
+       ThrowsNothingConstraint
+       TrueConstraint
+       XmlSerializableConstraint (not available on compact framework 1.0)
+
+* New Syntax Helpers
+
+  Is:  AssignableTo
+       BinarySerializable (not available on compact framework)
+       TypeOf (replacing Type)
+       InRange
+       InstanceOf (replacing InstanceOfType)
+       Ordered
+       SamePath
+       SamePathOrUnder
+       XmlSerializable (not available on compact framework 1.0)
+
+  Has: Attribute
+       Message
+
+
+----------------------------------------------------------------------------
+NUnitLite Version 0.2 - November 3, 2007
+
+New Features and Enhancements
+
+* New attributes: PropertyAttribute, DescriptionAttribute, IgnoreAttribute
+* Text runner output may now be redirected (issue 12449) 
+* Added VS solution for building under the compact framework (issue 14447) 
+* Solutions are no longer bound to Source Control and anonymous access is now possible using several clients
+
+Bug fixes:
+
+* Fixed incorrect preprocessor constants (12361, 12411)
+* Fixed StackFilter to use correct namespace (12372)
+* Expected Exception is now handled corretly on Compact Framework (1446)
+
+----------------------------------------------------------------------------
+NUnitLite Version 0.1 - August 20, 2007
+
+The initial release of NUnitLite includes the following features:
+
+* Builds and runs on .NET 1.0, 1.1 and 2.0, .NET CF 1.0 and 2.0 and Mono 1.0 and 2.0 profiles. Since only a console runner is provided, it is not yet possible to run on devices that do not include a console.
+
+* Attributes recognized: 
+       TestFixtureAttribute
+       TestAttribute
+       SetUpAttribute
+       TearDownAttribute
+       ExpectedExceptionAttribute
+
+* Tests may be identified by inheritance from TestCase or using attributes.
+
+* Assert methods:
+       Assert.Null
+       Assert.NotNull
+       Assert.True
+       Assert.False
+       Assert.Fail
+       Assert.That
+
+* Constraint classes (excluding abstract classes):
+       AllItemsConstraint
+       AndConstraint
+       AssignableFromConstraint
+       CollectionContainsConstraint
+       CollectionEquivalentConstraint
+       CollectionSubsetConstraint
+       ContainsConstraint
+       EmptyConstraint
+       EndsWithConstraint
+       ExactTypeConstraint
+       GreaterThanConstraint
+       GreaterThanOrEqualConstraint
+       InstanceOfTypeConstraint
+       LessThanConstraint
+       LessThanOrEqualConstraint
+       NoItemConstraint
+       NotConstraint
+       OrConstraint
+       PropertyConstraint
+       RegexConstraint (not available on compact framework)
+       SameAsConstraint
+       SomeItemsConstraint
+       StartsWithConstraint
+       SubstringConstraint
+       UniqueItemsConstraint
+
+* Syntax helpers:
+       Is: Not, All, Null, True, False, NaN, Empty, Unique, EqualTo, SameAs,
+           GreaterThan, GreaterThanOrEqualTo, LessThan, LessThanOrEqualTo,
+           AtLeast, AtMost, Type, InstanceOfType, AssignableFrom, StringContaining,
+           StringStarting, StringEnding, StringMatching (except compact framework),
+           EquivalentTo, SubsetOf
+
+       Contains: Substring, Item
+
+       Has: No, All, Some, None,Property, Length, Count, Member
+

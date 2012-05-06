@@ -1,0 +1,208 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{83EB135D-3C74-4FB3-86A1-F8DFD98F70F4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NUnitLite</RootNamespace>
+    <AssemblyName>NUnitLiteTests</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>WindowsCE</PlatformFamilyName>
+    <PlatformID>E2BECB1F-8C8C-41ba-B736-9BE7D946A398</PlatformID>
+    <OSVersion>5.0</OSVersion>
+    <DeployDirSuffix>NUnitLiteTests</DeployDirSuffix>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FormFactorID>
+    </FormFactorID>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\src\NUnitLiteTests\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\AndTest.cs">
+      <Link>Constraints\AndTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\BasicConstraintTests.cs">
+      <Link>Constraints\BasicConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\CollectionConstraintTests.cs">
+      <Link>Constraints\CollectionConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ComparisonConstraintTests.cs">
+      <Link>Constraints\ComparisonConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ConstraintTestBase.cs">
+      <Link>Constraints\ConstraintTestBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\EmptyTest.cs">
+      <Link>Constraints\EmptyTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\EqualTest.cs">
+      <Link>Constraints\EqualTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\MessageWriterTests.cs">
+      <Link>Constraints\MessageWriterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\NotTest.cs">
+      <Link>Constraints\NotTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\OrTest.cs">
+      <Link>Constraints\OrTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\PathConstraintTests.cs">
+      <Link>Constraints\PathConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\RangeTests.cs">
+      <Link>Constraints\RangeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\SameAsTest.cs">
+      <Link>Constraints\SameAsTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\StringConstraintTests.cs">
+      <Link>Constraints\StringConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\TestDelegates.cs">
+      <Link>Constraints\TestDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ThrowsConstraintTests.cs">
+      <Link>Constraints\ThrowsConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\TypeConstraintTests.cs">
+      <Link>Constraints\TypeConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\DummyTestCase.cs">
+      <Link>DummyTestCase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\DummyTestSuite.cs">
+      <Link>DummyTestSuite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\ArrayEqualityTests.cs">
+      <Link>Framework\ArrayEqualityTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\ArrayFailureMessageTests.cs">
+      <Link>Framework\ArrayFailureMessageTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\AssertionExceptionTests.cs">
+      <Link>Framework\AssertionExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\AssertTests.cs">
+      <Link>Framework\AssertTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\AttributeTests.cs">
+      <Link>Framework\AttributeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\CollectionTests.cs">
+      <Link>Framework\CollectionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\ExpectedExceptionTests.cs">
+      <Link>Framework\ExpectedExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\IgnoreTests.cs">
+      <Link>Framework\IgnoreTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\StackFilterTest.cs">
+      <Link>Framework\StackFilterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\SyntaxTests.cs">
+      <Link>Framework\SyntaxTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestCaseInvocationTests.cs">
+      <Link>Framework\TestCaseInvocationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestResultTests.cs">
+      <Link>Framework\TestResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestSuiteBasicTests.cs">
+      <Link>Framework\TestSuiteBasicTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestSuiteCreationTests.cs">
+      <Link>Framework\TestSuiteCreationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\RecordingTestListener.cs">
+      <Link>RecordingTestListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\CommandLineOptionTests.cs">
+      <Link>Runner\CommandLineOptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\ResultSummaryTests.cs">
+      <Link>Runner\ResultSummaryTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TestLoaderTests.cs">
+      <Link>Runner\TestLoaderTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TestRunnerTests.cs">
+      <Link>Runner\TestRunnerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TextUITests.cs">
+      <Link>Runner\TextUITests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\SimpleTestCase.cs">
+      <Link>SimpleTestCase.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NUnitLite\NUnitLite.csproj">
+      <Project>{45E39417-288B-4902-8513-E9993A8031EB}</Project>
+      <Name>NUnitLite</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />
+  <Import Condition="'$(TargetFrameworkVersion)' == 'v2.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

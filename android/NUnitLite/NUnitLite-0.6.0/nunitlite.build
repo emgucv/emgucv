@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+<project name="NUnit" default="help" basedir=".">
+
+<!-- ***************************************************************** -->
+<!-- This script has been tested using NAnt 0.85. At least             -->
+<!-- one of the supported runtimes and sdk must be installed. In       -->
+<!-- order to build the msi, WiX 2.0 and the WiX tasks for NAnt        -->
+<!-- are required. To run the test coverage target, NCover is          -->
+<!-- required.                                                         -->
+<!-- ***************************************************************** -->
+
+<!-- ***************************************************************** -->
+<!-- ***                 Default Help Target                       *** -->
+<!-- ***************************************************************** -->
+
+<target name="help">
+  <echo>
+    This build file will build NUnitLite for any of the supported
+    runtime frameworks which are actually installed. To add or
+    support for a framework, edit this script
+
+    Running on the current system, the following runtime frameworks
+    are available for building and testing NUnit:
+  </echo>
+
+  <foreach item="String" delim="," 
+      property="framework" in="${installed.frameworks}">
+    <echo message="        ${string::pad-right(framework,15,' ')}${framework::get-description(framework)}"/>
+  </foreach>
+
+  <echo>
+    The default build target is the ${default.runtime} debug config.
+    Generic runtime targets use the following defaults:
+        net           ${default.net.runtime}
+        netcf         ${default.netcf.runtime}
+        mono          ${default.mono.runtime}
+
+    Note that targets that set the build configuration or runtime
+    to be used must come before action targets. For example:
+
+        nant net-2.0 release build
+        nant build-all
+        nant debug clean build
+
+    Use   nant -projecthelp to see a full list of targets.
+  </echo>
+</target>
+
+<!-- ***************************************************************** -->
+<!-- ********* Common properties that control the build ************** -->
+<!-- ***************************************************************** -->
+ 
+  <!-- Project name - used as a prefix for packages -->
+  <property name="project.name" value="NUnitLite"/>
+
+  <!-- NUnit version for packaging -->
+  <property name="package.version" value="0.6.0"/>
+
+  <!-- Additional suffix used to distinguish files with the same version -->
+  <property name="package.suffix" value=""/>
+
+  <!-- Nominal version used for install directory and program
+       files menu. Normally the same as the package version, 
+       but may differ when we are in alpha or beta. -->
+  <property name="nominal.version" value="0.6.0" />
+
+  <!-- Frameworks supported by this build script. The first
+         installed framework found is the default for builds. 
+         The first .NET and Mono frameworks found are the
+         respective net and mono defaults. -->
+  <property name="supported.frameworks" 
+    value="net-2.0,net-1.1,net-1.0,netcf-2.0,netcf-1.0,mono-2.0,mono-1.0"/>
+
+  <!-- Framework versions for which packages are normally created -->
+  <property name="standard.packages"
+    value="net-1.1,net-2.0,net-1.0,mono-1.0,mono-2.0" />
+
+  <!-- Additional internal properties are set in the include file -->
+  <include buildfile="nunitlite.build.include"/>
+
+<!-- ***************************************************************** -->
+<!-- ***          Targets that set the build configuration         *** -->
+<!-- ***     These must come before actions like build or test     *** -->
+<!-- ***************************************************************** -->
+
+  <target name="debug" description="Set config to debug for commands that follow">
+    <call target="set-debug-build-config" />
+  </target>
+
+  <target name="release" description="Set config to release for commands that follow">
+    <call target="set-release-build-config" />
+  </target>
+
+<!-- ***************************************************************** -->
+<!-- ***         Targets that set the runtime configuration        *** -->
+<!-- ***     These must come before actions like build or test     *** -->
+<!-- ***************************************************************** -->
+
+  <target name="net" 
+    description="Set runtime to .NET 1.1 for targets that follow"
+    depends="set-default-dot-net-runtime-config"/>
+
+  <target name="net-1.0" 
+    description="Set runtime to .NET 1.0 for targets that follow"
+    depends="set-net-1.0-runtime-config"/>
+
+  <target name="net-1.1" 
+    description="Set runtime to .NET 1.1 for targets that follow"
+    depends="set-net-1.1-runtime-config"/>
+      
+  <target name="net-2.0" 
+    description="Set runtime to .NET 2.0 for targets that follow"
+    depends="set-net-2.0-runtime-config"/>
+      
+  <target name="net-3.0" 
+    description="Set runtime to .NET 3.0 for targets that follow"
+    depends="set-net-3.0-runtime-config"/>
+      
+  <target name="net-3.5" 
+    description="Set runtime to .NET 3.5 for targets that follow"
+    depends="set-net-3.5-runtime-config"/>
+      
+  <target name="netcf" 
+    description="Set runtime to default .NET CF version for targets that follow"
+    depends="set-default-netcf-runtime-config"/>
+
+  <target name="netcf-1.0" 
+    description="Set runtime to .NET CF 1.0 for targets that follow"
+    depends="set-netcf-1.0-runtime-config"/>
+      
+  <target name="netcf-2.0" 
+    description="Set runtime to .NET CF 2.0 for targets that follow"
+    depends="set-netcf-2.0-runtime-config"/>
+      
+  <target name="mono" 
+    description="Set runtime to Mono 1.0 for targets that follow"
+    depends="set-default-mono-runtime-config"/>
+
+  <target name="mono-1.0" 
+    description="Set runtime to Mono 1.0 for targets that follow"
+    depends="set-mono-1.0-runtime-config"/>
+  
+  <target name="mono-2.0" 
+    description="Set runtime to Mono 2.0 for targets that follow"
+    depends="set-mono-2.0-runtime-config"/>
+
+<!-- ***************************************************************** -->
+<!-- ***             Targets that clean directories                *** -->
+<!-- ***************************************************************** -->
+
+  <target name="clean" depends="set-build-dir"
+      description="Removes the current build directory">
+    <delete dir="${current.build.dir}" 
+      if="${directory::exists( current.build.dir )}"/>
+  </target>
+
+  <target name="clean-all" description="Removes all build directories">
+    <delete dir="${project.build.dir}" 
+      if="${directory::exists( project.build.dir )}"/>
+  </target>
+
+  <target name="clean-package-dir"
+    description="Removes the current package working directory">
+        <delete dir="${package.working.dir}" 
+            if="${directory::exists( package.working.dir )}"/>
+  </target>
+
+  <target name="clean-source-dirs">
+    <delete>
+      <fileset>
+        <include name="*/*/obj/**/*"/>
+        <include name="*/*/bin/**/*"/>
+      </fileset>
+    </delete>
+  </target>
+.
+<!-- ***************************************************************** -->
+<!-- ***              Targets that perform builds                  *** -->
+<!-- ***************************************************************** -->
+
+
+  <target name="rebuild" depends="clean,build"
+    description="Rebuild NUnit for default runtime version and config"/>
+
+  <target name="build" depends="make-build-dir"
+    description="Build NUnit for default runtime version and config">
+
+    <echo message="*"/>
+    <echo message="* Starting ${runtime.config} ${build.config} build"/>
+    <echo message="* Current Build Directory = ${current.build.dir}"/>
+    <echo message="*"/>
+
+    <echo message="* Building NUnitLite as a separate assembly"/>
+    <echo message="*"/>
+    <csc target="library"
+        output="${current.build.dir}/NUnitLite.dll"
+        debug="${build.debug}" 
+        define="${build.defines}">
+      <sources basedir="${project.src.dir}/NUnitLite">
+        <include name="**/*.cs"/>
+      </sources>
+      <references>
+        <include name="mscorlib.dll"/>
+        <include name="System.dll"/>
+        <include name="System.Drawing.dll"/>
+        <include name="System.Xml.dll"/>
+      </references>
+    </csc>
+
+    <echo message="*"/>
+    <echo message="* Building NUnitLiteTests as a separate assembly"/>
+    <echo message="*"/>
+
+    <csc target="exe"
+        output="${current.build.dir}/NUnitLiteTests.exe"
+        debug="${build.debug}" 
+        define="${build.defines}">
+      <sources basedir="${project.src.dir}/NUnitLiteTests">
+        <include name="**/*.cs"/>
+      </sources>
+      <references basedir="${current.build.dir}">
+        <include name="mscorlib.dll"/>
+        <include name="System.Drawing.dll"/>
+        <include name="NUnitLite.dll"/>
+      </references>
+    </csc>
+
+    <echo message="*"/>
+    <echo message="* Building NUnitLite and Tests combined"/>
+    <echo message="*"/>
+
+    <csc target="exe"
+        output="${current.build.dir}/NUnitLiteCombined.exe"
+        debug="${build.debug}" 
+        define="${build.defines}">
+      <sources basedir="${project.src.dir}">
+        <include name="NUnitLite/**/*.cs"/>
+        <include name="NUnitLiteTests/**/*.cs"/>
+        <exclude name="NUnitLiteTests/**/AssemblyInfo.cs"/>
+      </sources>
+      <references basedir="${current.build.dir}">
+        <include name="mscorlib.dll"/>
+        <include name="System.dll"/>
+        <include name="System.Drawing.dll"/>
+        <include name="System.Xml.dll"/>
+      </references>
+    </csc>
+
+  </target>
+
+  <target name="rebuild-all" depends="clean-all,build-all"
+      description="Rebuild current config for all available runtimes"/>
+
+  <target name="build-all"
+      description="Build current config for all available runtime">
+    <foreach item="String" delim="," 
+        property="framework" in="${installed.frameworks}">
+      <call target="set-${framework}-runtime-config"/>
+      <call target="build"/>
+    </foreach>
+  </target>
+
+<!-- ***************************************************************** -->
+<!-- ***                 Targets for running tests                 *** -->
+<!-- ***************************************************************** -->
+
+  <target name="test" depends="build,run-test"
+    description="Build and run tests for selected config and runtime"/>
+
+  <target name="run-test"
+      description="Run tests for selected config and runtime (no rebuild)">
+
+    <echo message="*"/>
+    <echo message="* Testing ${runtime.config} ${build.config} build"/>
+    <echo message="*    Running under ${nant.settings.currentframework}"/>
+    <echo message="*"/>
+    <echo message="* Testing with NUnitLite in a separate assembly"/>
+    <echo message="*"/>
+
+    <exec basedir="${current.build.dir}"
+      workingdir="${current.build.dir}" 
+      program="NUnitLiteTests.exe" 
+      managed="Strict"/>
+
+    <echo message="*"/>
+    <echo message="* Testing with NUnitLite included in the test assembly"/>
+    <echo message="*"/>
+
+    <exec basedir="${current.build.dir}"
+      workingdir="${current.build.dir}" 
+      program="NUnitLiteCombined.exe" 
+      managed="Strict"/>
+
+  </target>
+
+  <target name="test-all"
+      description="Build and test all runtimes for current config">
+    <foreach item="String" delim="," 
+        property="framework" in="${installed.frameworks}">
+      <call target="set-${framework}-runtime-config"/>
+      <call target="test" />
+    </foreach>
+  </target>
+
+  <target name="test-each-runtime" depends="build"
+      description="Run tests for the current build under each runtime">
+
+    <foreach item="String" delim=","
+        property="framework" in="${test.platforms}">
+      <if test="${framework::exists( framework )}">
+        <property name="nant.settings.currentframework" value="${framework}" />
+        <call target="run-test" failonerror="false" />
+      </if>
+    </foreach>
+    <property name="nant.settings.currentframework" value="${runtime.config}" />
+
+    <echo message="*" />
+    <echo message="* Restored runtime to ${nant.settings.currentframework}" />
+    <echo message="*" />
+
+  </target>
+
+  <target name="test-all-under-each"
+      description="Build all runtimes and test the builds under each runtime.">
+
+    <call target="set-release-build-config"/>
+
+    <foreach item="String" delim="," 
+        property="framework" in="${installed.frameworks}">
+
+      <call target="set-${framework}-runtime-config"/>
+      <call target="test-each-runtime" failonerror="false"/>
+
+    </foreach>
+  </target>
+
+  <target name="nunit2-test" depends="build"
+    description="Run tests for a build using the nunit2 task">
+
+    <echo message="*"/>
+    <echo message="* Starting ${runtime.config} ${build.config} test run"/>
+    <echo message="*"/>
+
+    <nunit2>
+      <formatter type="Plain"/>
+      <test assemblyname="${current.build.dir}/nunit.framework.tests.dll"/>
+    </nunit2>
+  </target>
+
+<!-- ***************************************************************** -->
+<!-- ***         Targets for packaging the NUnitLite distribution      *** -->
+<!-- ***************************************************************** -->
+
+  <target name="package" depends="clean-package-dir"
+    description="Create full source package for developer use">
+
+    <copy todir="${package.working.dir}">
+      <fileset basedir="${project.base.dir}">
+        <include name="README.txt"/>
+        <include name="CHANGES.txt"/>
+        <include name="LICENSE.txt"/>
+        <include name="nunitlite.build"/>
+        <include name="nunitlite.build.include"/>
+      </fileset>
+    </copy>
+
+    <call target="copy-src"/>
+    <call target="copy-solutions"/>
+
+    <!-- Create the zip file -->
+    <zip zipfile="${project.package.dir}/${package.name}.zip" ziplevel="9">
+      <fileset basedir="${package.working.dir}" prefix="${package.name}">
+        <include name="**"/>
+      </fileset>
+    </zip>
+  </target>
+  
+</project>

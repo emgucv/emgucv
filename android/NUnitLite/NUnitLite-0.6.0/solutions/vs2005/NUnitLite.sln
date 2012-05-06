@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLite", "NUnitLite\NUnitLite.csproj", "{C24A3FC4-2541-4E9C-BADD-564777610B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLiteTests", "NUnitLiteTests\NUnitLiteTests.csproj", "{C8FA4073-B24E-4178-93A1-5E1256C8B528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestResultConsole", "TestResultConsole\TestResultConsole.csproj", "{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

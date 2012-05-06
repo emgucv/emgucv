@@ -433,7 +433,7 @@ ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
-  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.Stitching)
+  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.GPU Emgu.CV.Stitching)
   FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
   INSTALL(
   DIRECTORY
@@ -466,8 +466,8 @@ IF (ANDROID)
   )
   INSTALL(
     FILES
-    "Solution/VS2010/Emgu.CV.Android.sln"
-    DESTINATION "Solution/VS2010"
+    "Solution/Android/Emgu.CV.Android.sln"
+    DESTINATION "Solution/Android"
     COMPONENT main
     )
   INSTALL(

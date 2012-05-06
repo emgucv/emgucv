@@ -2685,9 +2685,17 @@ namespace Emgu.CV
          set
          {
 #if ANDROID
-            if (value.GetConfig() == Bitmap.Config.Argb8888)
+            #region reallocate memory if necessary
+            Size size = new Size(value.Width, value.Height);
+            if (Ptr == IntPtr.Zero || !Size.Equals(size))
             {
-               Size size = new Size(value.Width, value.Height);
+               AllocateData(value.Height, value.Width, NumberOfChannels);
+            }
+            #endregion
+
+            Bitmap.Config config = value.GetConfig();
+            if (config.Equals(Bitmap.Config.Argb8888))
+            {
                int[] values = new int[size.Width * size.Height];
                value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
                GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);

@@ -586,7 +586,7 @@ namespace Emgu.CV.Test
          //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
-#if !IOS
+#if !(IOS || ANDROID)
       [Test]
       public void TestGrayscaleBitmapConstructor()
       {

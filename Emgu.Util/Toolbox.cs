@@ -414,7 +414,7 @@ namespace Emgu.Util
       }*/
 
 
-#if IOS
+#if IOS || ANDROID
       /// <summary>
       /// memcpy function
       /// </summary>

@@ -53,7 +53,7 @@ namespace Emgu.CV.Test
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
          SIFTDetector descriptorGenerator = new SIFTDetector();
-         
+
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -70,7 +70,7 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }*/
 
-      
+
       [Test]
       public void TestMSER()
       {
@@ -118,7 +118,7 @@ namespace Emgu.CV.Test
       {
          //for (int k = 0; k < 1; k++)
          {
-            Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png");
+            Image<Gray, Byte> modelImage = EmguAssert.LoadImage<Gray, byte>("box.png");
             //Image<Gray, Byte> modelImage = new Image<Gray, byte>("stop.jpg");
             //modelImage = modelImage.Resize(400, 400, true);
 
@@ -133,7 +133,7 @@ namespace Emgu.CV.Test
             #endregion
 
             //Image<Gray, Byte> observedImage = new Image<Gray, byte>("traffic.jpg");
-            Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
+            Image<Gray, Byte> observedImage = EmguAssert.LoadImage<Gray, byte>("box_in_scene.png");
             //Image<Gray, Byte> observedImage = modelImage.Rotate(45, new Gray(0.0));
             //image = image.Resize(400, 400, true);
 
@@ -194,11 +194,12 @@ namespace Emgu.CV.Test
                   points[i].Y += modelImage.Height;
                res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
                return true;
-            } else
+            }
+            else
             {
                return false;
             }
-            
+
             /*
             stopwatch.Reset(); stopwatch.Start();
             //set the initial region to be the whole image
@@ -233,7 +234,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestDetectorColor()
       {
-         Image<Bgr, byte> box = new Image<Bgr, byte>("box.png");
+         Image<Bgr, byte> box = EmguAssert.LoadImage<Bgr, byte>("box.png");
          Image<Gray, byte> gray = box.Convert<Gray, Byte>();
 
          SURFDetector surf = new SURFDetector(400, false);
@@ -249,7 +250,7 @@ namespace Emgu.CV.Test
                //TODO: Find out why the following test fails
                //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(box, kpts))
                //   Assert.AreEqual(siftDescriptors.Width, sift.DescriptorSize * 3);
-               
+
                //using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(gray, null, kpts))
                //   Assert.AreEqual(siftDescriptors.Width, sift.DescriptorSize);
             }
@@ -260,7 +261,7 @@ namespace Emgu.CV.Test
       public void TestSURFDetector2()
       {
          //Trace.WriteLine("Size of MCvSURFParams: " + Marshal.SizeOf(typeof(MCvSURFParams)));
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          SURFDetector detector = new SURFDetector(400, false);
 
          Stopwatch watch = Stopwatch.StartNew();
@@ -285,8 +286,10 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(features1.Length == features2.Length);
          EmguAssert.IsTrue(features2.Length == features3.Length);
 
-         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp) {
-            return mkp.Point; });
+         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp)
+         {
+            return mkp.Point;
+         });
          //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
          //int count = features.Length;
 
@@ -310,7 +313,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGridAdaptedFeatureDetectorRepeatedRun()
       {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          SURFDetector surfdetector = new SURFDetector(400, false);
 
          GridAdaptedFeatureDetector detector = new GridAdaptedFeatureDetector(surfdetector, 1000, 2, 2);
@@ -322,10 +325,10 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSURFDetectorRepeatedRun()
       {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          SURFDetector detector = new SURFDetector(400, false);
          Image<Gray, Byte> boxInScene = new Image<Gray, byte>("box_in_scene.png");
-         
+
          ImageFeature<float>[] features1 = detector.DetectFeatures(box, null);
          Features2DTracker<float> tracker = new Features2DTracker<float>(features1);
 
@@ -361,7 +364,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSelfMatch()
       {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          SURFDetector surfDetector = new SURFDetector(300, false);
          ImageFeature<float>[] features1 = surfDetector.DetectFeatures(box, null);
          Features2DTracker<float> tracker = new Features2DTracker<float>(features1);
@@ -377,8 +380,10 @@ namespace Emgu.CV.Test
 
          MKeyPoint[] keypoints = detector.DetectKeyPoints(box, 200, true);
 
-         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k) {
-            return Point.Round(k.Point); });
+         Point[] pts = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint k)
+         {
+            return Point.Round(k.Point);
+         });
 
          SelfSimDescriptor descriptor = new SelfSimDescriptor(5, 41, 3, 7, 20);
          int descriptorSize = descriptor.DescriptorSize;

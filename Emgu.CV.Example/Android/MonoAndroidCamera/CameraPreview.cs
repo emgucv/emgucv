@@ -43,7 +43,7 @@ namespace MonoAndroidCamera
          SetContentView(preview);
          AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
 
-         SetRequestedOrientation(Android.Content.PM.ScreenOrientation.Landscape);
+         RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
       }
 
       public override bool OnCreateOptionsMenu(IMenu menu)
@@ -346,7 +346,7 @@ namespace MonoAndroidCamera
          return optimalSize;
       }
 
-      public void SurfaceChanged(ISurfaceHolder holder, int format, int w, int h)
+      public void SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int w, int h)
       {
          // Now that the size is known, set up the camera parameters and begin
          // the preview.

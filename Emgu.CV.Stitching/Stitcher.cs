@@ -6,10 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-#if !(ANDROID || IOS)
 using Emgu.CV.GPU;
-
-#endif
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -68,26 +65,8 @@ namespace Emgu.CV.Stitching
    {
       static StitchingInvoke()
       {
-#if (ANDROID || IOS)
-         //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
-         CvInvoke.CV_MAKETYPE(0, 0);
-
-         String[] modules = new String[] 
-         {
-            CvInvoke.EXTERN_GPU_LIBRARY
-         };
-
-         String formatString = CvInvoke.GetModuleFormatString();
-         for (int i = 0; i < modules.Length; ++i)
-         {
-            modules[i] = String.Format(formatString, modules[i]);
-         }
-
-         CvInvoke.LoadUnmanagedModules(null, modules);
-#else
          //Dummy code to make sure the static constructor of GpuInvoke has been called
          bool hasCuda = GpuInvoke.HasCuda;
-#endif
       }
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

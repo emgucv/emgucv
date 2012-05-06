@@ -98,28 +98,35 @@ namespace Emgu.CV
       /// Static Constructor to setup opencv environment
       /// </summary>
       static CvInvoke()
-      {    
+      {
          List<string> modules = new List<String> 
          {
             CvInvoke.OPENCV_CORE_LIBRARY,
             CvInvoke.OPENCV_IMGPROC_LIBRARY,
+
             CvInvoke.OPENCV_VIDEO_LIBRARY,
             CvInvoke.OPENCV_FLANN_LIBRARY,
+            CvInvoke.OPENCV_ML_LIBRARY,
+
             CvInvoke.OPENCV_HIGHGUI_LIBRARY,
+            CvInvoke.OPENCV_OBJDETECT_LIBRARY,
             CvInvoke.OPENCV_FEATURES2D_LIBRARY,
             CvInvoke.OPENCV_CALIB3D_LIBRARY,
-            CvInvoke.OPENCV_ML_LIBRARY,
+
             CvInvoke.OPENCV_LEGACY_LIBRARY,
-            CvInvoke.OPENCV_OBJDETECT_LIBRARY,
+
             CvInvoke.OPENCV_CONTRIB_LIBRARY,
             CvInvoke.OPENCV_NONFREE_LIBRARY,
             CvInvoke.OPENCV_PHOTO_LIBRARY,
             CvInvoke.OPENCV_VIDEOSTAB_LIBRARY,
-            CvInvoke.EXTERN_LIBRARY,
+ 
             CvInvoke.OPENCV_FFMPEG_LIBRARY, 
             CvInvoke.OPENCV_GPU_LIBRARY, 
             CvInvoke.OPENCV_STITCHING_LIBRARY,
-            CvInvoke.EXTERN_GPU_LIBRARY
+            
+            CvInvoke.EXTERN_GPU_LIBRARY,
+            CvInvoke.EXTERN_LIBRARY
+
          };
          modules.RemoveAll(String.IsNullOrEmpty);
 
@@ -130,6 +137,8 @@ namespace Emgu.CV
 
          foreach (String module in modules)
          {
+            //IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(module);
+            //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
             Java.Lang.JavaSystem.LoadLibrary(module);
             Debug.WriteLine(string.Format("Loaded {0}.", module));
          }
