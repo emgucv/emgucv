@@ -87,6 +87,9 @@ IF EXIST "%CUDA_PATH%" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :END_OF_GPU
 
+SET BUILD_PROJECT=
+IF "%6%"=="package" SET BUILD_PROJECT= /project PACKAGE 
+
 IF "%3%"=="intel" GOTO INTEL_COMPILER
 IF NOT "%3%"=="intel" GOTO VISUAL_STUDIO
 
@@ -116,7 +119,6 @@ IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 
 REM create visual studio project
 %CMAKE% %CMAKE_CONF_FLAGS%
-%CMAKE% %CMAKE_CONF_FLAGS%
 
 IF %DEVENV%==%VS2008% SET IC_COMMAND=/IC
 IF %DEVENV%==%VS2010% SET IC_COMMAND=/IC:"Intel C++ Compiler XE 12.1"
@@ -131,17 +133,15 @@ REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
 REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
 REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
 REM /VC
-GOTO BUILD
+GOTO END
 
 :VISUAL_STUDIO
 @echo on
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DWITH_IPP:BOOL=FALSE 
 %CMAKE% %CMAKE_CONF_FLAGS%
-%CMAKE% %CMAKE_CONF_FLAGS%
 
 :BUILD
 
-SET BUILD_PROJECT=
-IF "%6%"=="package" SET BUILD_PROJECT= /project PACKAGE 
-
 %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT% /out "%CD%\build.log"
+
+:END
