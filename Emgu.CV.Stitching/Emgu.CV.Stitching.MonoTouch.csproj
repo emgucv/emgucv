@@ -53,5 +53,9 @@
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
       <Name>Emgu.Util.MonoTouch</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
+      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
+      <Name>Emgu.CV.GPU.MonoTouch</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

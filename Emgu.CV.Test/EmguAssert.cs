@@ -20,9 +20,11 @@ namespace Emgu.CV.Test
          return AssetsUtil.LoadImage<TColor, TDepth>(name);
       }
 #else
-      public static Image<Bgr, Byte> LoadImage(String name)
+      public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
+         where TColor : struct, IColor
+         where TDepth : new()
       {
-         return new Image<Bgr, Byte>(name);
+         return new Image<TColor, TDepth>(name);
       }
 #endif
 
