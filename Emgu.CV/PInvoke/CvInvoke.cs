@@ -60,7 +60,11 @@ namespace Emgu.CV
                {
                   loadDirectory = Path.Combine(loadDirectory, "x86");
                }
+            } else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+            {
+               loadDirectory = Path.Combine(loadDirectory, "../lib");
             }
+
          }
 
          if (!Directory.Exists(loadDirectory))
@@ -91,6 +95,8 @@ namespace Emgu.CV
             formatString = "{0}.dll";
          else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
             formatString = "lib{0}.so";
+         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+            formatString = "lib{0}.dylib";
          return formatString;
       }
 
