@@ -24,7 +24,7 @@ namespace Emgu.Util
          _os = OS.IOS;
          _runtime = Runtime.Mono;
 #elif ANDROID
-         _os = OS.ANDROID;
+         _os = OS.Android;
          _runtime = Runtime.Mono;
 #else
          PlatformID pid = Environment.OSVersion.Platform;
