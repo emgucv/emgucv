@@ -151,9 +151,9 @@ SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt")
 
-IF (WIN32)
+IF (WIN32 OR APPLE)
   SET(CPACK_PACKAGE_CLI_FOLDER bin)
-ELSE (WIN32)
+ELSE ()
   SET(CPACK_PACKAGE_CLI_FOLDER lib/cli/${PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
 ENDIF()
 
@@ -835,8 +835,121 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 
 ELSE (WIN32)
 IF (APPLE)
-  SET(CPACK_GENERATOR Bundle)
+  SET(CPACK_GENERATOR TGZ)
   SET(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+
+# ----------------------------------------------------------------------------
+#  The source files
+# ----------------------------------------------------------------------------
+INSTALL(
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
+  "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
+  DESTINATION .
+  COMPONENT emgucv_source
+  )
+
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
+  DESTINATION .
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.dll"
+  PATTERN "*.txt"
+  PATTERN "*.xml"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMake*" EXCLUDE
+  PATTERN "Release" EXCLUDE
+  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+  PATTERN "3rdParty/x86" EXCLUDE #exclude 32bit osg binary
+  PATTERN "3rdParty/x86_64" EXCLUDE #exclude 64bit osg binary
+  )
+
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+  DESTINATION .
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "Emgu.CV.sln"
+  PATTERN "Emgu.CV.DebuggerVisualizers.sln"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "bin" EXCLUDE
+  )
+  
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WPF
+  DESTINATION .
+  COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN ".svn" EXCLUDE
+  )
+  
+# ----------------------------------------------------------------------------
+#  The example files
+# ----------------------------------------------------------------------------
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+  DESTINATION .
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.resx"
+  PATTERN "*.h"
+  PATTERN "*.cpp"
+  PATTERN "*.resX"
+  PATTERN "*.ico"
+  PATTERN "*.rc"
+  PATTERN "CPlusPlus/*.vcproj"
+  PATTERN "CPlusPlus/*.vcxproj"
+  PATTERN "*.vb"
+  PATTERN "*.vbproj"
+  PATTERN "*.aspx" 
+  PATTERN "*.dll"
+  PATTERN "*.txt"
+  PATTERN "*.xml"
+  PATTERN "*.xaml"
+  PATTERN "*.jpg"
+  PATTERN "*.png"  
+  PATTERN "*.settings"
+  PATTERN "*.config"
+  PATTERN "tessdata/*"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMake*" EXCLUDE
+  PATTERN "Release" EXCLUDE
+  PATTERN "Debug" EXCLUDE
+  PATTERN "*.dir" EXCLUDE
+  PATTERN "Android" EXCLUDE
+  PATTERN "MonoTouch" EXCLUDE
+  )
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+  DESTINATION .
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "Emgu.CV.Example.sln"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "bin" EXCLUDE
+  )
+
+INSTALL(
+  FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
+  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_eye.xml"
+  DESTINATION ./opencv/data/haarcascades
+  COMPONENT emgucv_example_source
+  )
+
+
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
 # ----------------------------------------------------------------------------
