@@ -466,6 +466,12 @@ IF (ANDROID)
   )
   INSTALL(
     FILES
+    "Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs"
+    DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
     "Solution/Android/Emgu.CV.Android.sln"
     DESTINATION "Solution/Android"
     COMPONENT main
