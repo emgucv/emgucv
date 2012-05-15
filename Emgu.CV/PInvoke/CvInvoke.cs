@@ -62,7 +62,7 @@ namespace Emgu.CV
                }
             } else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             {
-               loadDirectory = Path.Combine(loadDirectory, "../lib");
+               loadDirectory = Path.Combine(loadDirectory, "..");
             }
 
          }
@@ -74,9 +74,15 @@ namespace Emgu.CV
          Environment.CurrentDirectory = loadDirectory;
          bool success = true;
 
+         string prefix = string.Empty;
+         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+         {
+            prefix = "lib";
+         }
+
          foreach (String module in unmanagedModules)
          {
-            String fullPath = Path.Combine(loadDirectory, module);
+            String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, module));
             success &= (File.Exists(fullPath) && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath)));
          }
          Environment.CurrentDirectory = oldDir;
