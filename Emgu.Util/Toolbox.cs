@@ -456,7 +456,7 @@ namespace Emgu.Util
          [MarshalAs(UnmanagedType.LPStr)]
          String dllname);
 
-      [DllImport("libdl.so", EntryPoint = "dlopen")]
+      [DllImport("dl", EntryPoint = "dlopen")]
       private static extern IntPtr Dlopen(
          [MarshalAs(UnmanagedType.LPStr)]
          String dllname, int mode);

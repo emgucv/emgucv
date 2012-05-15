@@ -25,7 +25,11 @@ namespace Emgu.Util.TypeEnum
       /// <summary>
       /// iOS devices. iPhone, iPad, iPod Touch
       /// </summary>
-      IOS
+      IOS, 
+      /// <summary>
+      /// Android devices
+      /// </summary>
+      Android
    }
 
    /// <summary>
