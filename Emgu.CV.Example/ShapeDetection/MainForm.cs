@@ -41,13 +41,12 @@ namespace ShapeDetection
             #region circle detection
             Stopwatch watch = Stopwatch.StartNew();
             Gray cannyThreshold = new Gray(180);
-            Gray cannyThresholdLinking = new Gray(120);
-            Gray circleAccumulatorThreshold = new Gray(500);
+            Gray circleAccumulatorThreshold = new Gray(120);
             CircleF[] circles = gray.HoughCircles(
                 cannyThreshold,
                 circleAccumulatorThreshold,
-                4.0, //Resolution of the accumulator used to detect centers of the circles
-                15.0, //min distance 
+                2.0, //Resolution of the accumulator used to detect centers of the circles
+                20.0, //min distance 
                 5, //min radius
                 0 //max radius
                 )[0]; //Get the circles from the first channel
@@ -57,6 +56,7 @@ namespace ShapeDetection
 
             #region Canny and edge detection
             watch.Reset(); watch.Start();
+            Gray cannyThresholdLinking = new Gray(120);
             Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
             LineSegment2D[] lines = cannyEdges.HoughLinesBinary(
                 1, //Distance resolution in pixel-related units
