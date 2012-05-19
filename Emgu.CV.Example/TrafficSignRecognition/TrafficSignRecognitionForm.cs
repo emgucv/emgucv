@@ -23,9 +23,12 @@ namespace TrafficSignRecognition
       public TrafficSignRecognitionForm()
       {
          InitializeComponent();
-         _stopSignDetector = new StopSignDetector();
-
-         ProcessImage(new Image<Bgr, byte>("stop-sign.jpg"));
+         using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("stop-sign.jpg"))
+         {
+            _stopSignDetector = new StopSignDetector(stopSignModel);
+            ProcessImage(image);
+         }
       }
 
       private void ProcessImage(Image<Bgr, byte> image)

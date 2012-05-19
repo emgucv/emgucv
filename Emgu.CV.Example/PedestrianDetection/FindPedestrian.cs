@@ -17,13 +17,11 @@ namespace PedestrianDetection
       /// <summary>
       /// Find the pedestrian in the image
       /// </summary>
-      /// <param name="imageFileName">The name of the image</param>
+      /// <param name="image">The image</param>
       /// <param name="processingTime">The pedestrian detection time in milliseconds</param>
       /// <returns>The image with pedestrian highlighted.</returns>
-      public static Image<Bgr, Byte> Find(String imageFileName, out long processingTime)
+      public static Image<Bgr, Byte> Find(Image<Bgr, Byte> image, out long processingTime)
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>(imageFileName);
-
          Stopwatch watch;
          Rectangle[] regions;
 

@@ -20,14 +20,12 @@ namespace SURFFeatureExample
       /// <summary>
       /// Draw the model image and observed image, the matched features and homography projection.
       /// </summary>
-      /// <param name="modelImageFileName">The model image</param>
-      /// <param name="observedImageFileName">The observed image</param>
+      /// <param name="modelImage">The model image</param>
+      /// <param name="observedImage">The observed image</param>
       /// <param name="matchTime">The output total time for computing the homography matrix.</param>
       /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-      public static Image<Bgr, Byte> Draw(String modelImageFileName, String observedImageFileName, out long matchTime)
+      public static Image<Bgr, Byte> Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
       {
-         Image<Gray, Byte> modelImage = new Image<Gray, byte>(modelImageFileName);
-         Image<Gray, Byte> observedImage = new Image<Gray, byte>(observedImageFileName);
          Stopwatch watch;
          HomographyMatrix homography = null;
 

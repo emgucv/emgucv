@@ -26,13 +26,17 @@ namespace PedestrianDetection
          if (!IsPlaformCompatable()) return;
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         long processingTime;
-         Image<Bgr, Byte> image = FindPedestrian.Find("pedestrian.png", out processingTime);
-         ImageViewer.Show(
-            image,
-            String.Format("Pedestrain detection using {0} in {1} milliseconds.", 
-               GpuInvoke.HasCuda ? "GPU" : "CPU", 
-               processingTime));
+
+         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         {
+            long processingTime;
+            Image<Bgr, Byte> result = FindPedestrian.Find(image, out processingTime);
+            ImageViewer.Show(
+               result,
+               String.Format("Pedestrain detection using {0} in {1} milliseconds.",
+                  GpuInvoke.HasCuda ? "GPU" : "CPU",
+                  processingTime));
+         }
       }
 
       /// <summary>

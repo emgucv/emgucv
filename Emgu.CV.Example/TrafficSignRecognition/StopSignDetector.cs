@@ -21,10 +21,9 @@ namespace TrafficSignRecognition
       private MemStorage _octagonStorage;
       private Contour<Point> _octagon;
 
-      public StopSignDetector()
+      public StopSignDetector(Image<Bgr, Byte> stopSignModel)
       {
          _detector = new SURFDetector(500, false);
-         using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
             _tracker = new Features2DTracker<float>(_detector.DetectFeatures(redMask, null));  
