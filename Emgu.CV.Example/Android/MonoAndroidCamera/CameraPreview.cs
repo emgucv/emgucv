@@ -99,20 +99,10 @@ namespace MonoAndroidCamera
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
 
-         System.IO.Stream iStream = context.Assets.Open("haarcascade_frontalface_default.xml"); ;
-         Java.IO.File dir = context.GetDir("cascade", FileCreationMode.Private);
-         Java.IO.File file = new Java.IO.File(dir, "cascade.xml");
-         using (System.IO.Stream os = System.IO.File.OpenWrite(file.AbsolutePath))
+         using (Emgu.Util.AndroidFileAsset asset = new Emgu.Util.AndroidFileAsset(context, "haarcascade_frontalface_default.xml"))
          {
-            byte[] buffer = new byte[8 * 1024];
-            int len;
-            while ((len = iStream.Read(buffer, 0, buffer.Length)) > 0)
-               os.Write(buffer, 0, len);
+            _faceDetector = new HaarCascade(asset.FileName);
          }
-         _faceDetector = new HaarCascade(file.AbsolutePath);
-         file.Delete();
-         dir.Delete();
-
          _watch = Stopwatch.StartNew();
       }
 
@@ -162,19 +152,6 @@ namespace MonoAndroidCamera
                      using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                         CvInvoke.cvCvtColor(canny, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGRA);
                      bgraHandle.Free();
-
-                     lock (this)
-                     {
-                        if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
-                        {
-                           _bmp.Dispose();
-                           _bmp = null;
-                        }
-                        if (_bmp == null)
-                           _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
-
-                        _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
-                     }
                   }
                }
                else if (Mode == ViewMode.Preview)
@@ -186,22 +163,11 @@ namespace MonoAndroidCamera
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                      CvInvoke.cvCvtColor(tmp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
                   bgraHandle.Free();
-
-                  lock (this)
-                  {
-                     if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
-                     {
-                        _bmp.Dispose();
-                        _bmp = null;
-                     }
-                     if (_bmp == null)
-                        _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
-
-                     _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
-                  }
                }
                else
-               {  //face detection
+               {  
+                  
+                  //face detection
                   MCvAvgComp[] faces;
                   using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
                      faces = _faceDetector.Detect(grey);
@@ -218,27 +184,28 @@ namespace MonoAndroidCamera
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                   {
                      CvInvoke.cvCvtColor(tmp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                     
                      foreach (MCvAvgComp face in faces)
                         bgr.Draw(face.rect, new Bgr(255, 0, 0), 2);
                      CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
                   }
                   bgraHandle.Free();
                   bgrHandle.Free();
-                  lock (this)
-                  {
-                     if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
-                     {
-                        _bmp.Dispose();
-                        _bmp = null;
-                     }
-                     if (_bmp == null)
-                        _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
-
-                     _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
-                  }
                }
-
                handle.Free();
+
+               lock (this)
+               {
+                  if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
+                  {
+                     _bmp.Dispose();
+                     _bmp = null;
+                  }
+                  if (_bmp == null)
+                     _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
+
+                  _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
+               }
 
                this.Invalidate();
             }

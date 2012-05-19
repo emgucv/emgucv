@@ -30,11 +30,11 @@ namespace HelloWorld
          Image<Bgr, Byte> image = new Image<Bgr, byte>(480, 320);
          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 4.0, 4.0);
 
-         image.SetValue(new Bgr(Color.Blue));
-         image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgr(Color.White));
+         image.SetValue(new Bgr(Color.White));
+         image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgr(Color.Blue));
 
-         Emgu.Util.TypeEnum.OS os = Emgu.Util.Platform.OperationSystem;
-         Image<Bgr, byte> subrect = image.GetSubRect(new Rectangle(0, 0, 50, 60));
+         //Emgu.Util.TypeEnum.OS os = Emgu.Util.Platform.OperationSystem;
+         //Image<Bgr, byte> subrect = image.GetSubRect(new Rectangle(0, 0, 50, 60));
          ImageView imageView = FindViewById<ImageView>(Resource.Id.MyImage);
          imageView.SetImageBitmap(image.ToBitmap());         
       }

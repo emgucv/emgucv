@@ -15,7 +15,7 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidSupportedAbis>armeabi%3barmeabi-v7a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
   </PropertyGroup>
@@ -161,6 +161,66 @@
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libcvextern_gpu.so">
       <Link>lib\armeabi-v7a\libcvextern_gpu.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libcvextern.so">
+      <Link>lib\x86\libcvextern.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libcvextern_gpu.so">
+      <Link>lib\x86\libcvextern_gpu.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libnative_camera_r2.3.3.so">
+      <Link>lib\x86\libnative_camera_r2.3.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libnative_camera_r3.0.1.so">
+      <Link>lib\x86\libnative_camera_r3.0.1.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libnative_camera_r4.0.3.so">
+      <Link>lib\x86\libnative_camera_r4.0.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_calib3d.so">
+      <Link>lib\x86\libopencv_calib3d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_contrib.so">
+      <Link>lib\x86\libopencv_contrib.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_core.so">
+      <Link>lib\x86\libopencv_core.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_features2d.so">
+      <Link>lib\x86\libopencv_features2d.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_flann.so">
+      <Link>lib\x86\libopencv_flann.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_highgui.so">
+      <Link>lib\x86\libopencv_highgui.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_imgproc.so">
+      <Link>lib\x86\libopencv_imgproc.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_legacy.so">
+      <Link>lib\x86\libopencv_legacy.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_ml.so">
+      <Link>lib\x86\libopencv_ml.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_nonfree.so">
+      <Link>lib\x86\libopencv_nonfree.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_objdetect.so">
+      <Link>lib\x86\libopencv_objdetect.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_photo.so">
+      <Link>lib\x86\libopencv_photo.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_stitching.so">
+      <Link>lib\x86\libopencv_stitching.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_video.so">
+      <Link>lib\x86\libopencv_video.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\x86\libopencv_videostab.so">
+      <Link>lib\x86\libopencv_videostab.so</Link>
     </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />

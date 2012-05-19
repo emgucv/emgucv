@@ -23,11 +23,20 @@ namespace PlanarSubdivisionExample
          // Set our view from the "main" layout resource
          SetContentView(Resource.Layout.Main);
 
-         Image<Bgr, Byte> img = DrawSubdivision.Draw(600, 20);
+         Button redrawButton = FindViewById<Button>(Resource.Id.RedrawButton);
+         redrawButton.Click += new EventHandler(redrawButton_Click);
 
+         redrawButton_Click(this, null);
+      }
+
+      void redrawButton_Click(object sender, EventArgs e)
+      {
          //display the image
          ImageView imageView = FindViewById<ImageView>(Resource.Id.MyImage);
-         imageView.SetImageBitmap(img.ToBitmap());   
+         using (Image<Bgr, Byte> img = DrawSubdivision.Draw(600, 20))
+         {
+            imageView.SetImageBitmap(img.ToBitmap());
+         }
       }
    }
 }

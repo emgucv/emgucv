@@ -37,8 +37,11 @@ namespace PlanarSubdivisionExample
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050001
+			public const int MyImage = 2131034113;
+			
 			// aapt resource value: 0x7f050000
-			public const int MyImage = 2131034112;
+			public const int RedrawButton = 2131034112;
 			
 			private Id()
 			{
