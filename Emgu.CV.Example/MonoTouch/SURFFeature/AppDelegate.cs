@@ -15,36 +15,38 @@ using MonoTouch.UIKit;
 
 namespace SURFFeatureExample
 {
-   // The UIApplicationDelegate for the application. This class is responsible for launching the 
-   // User Interface of the application, as well as listening (and optionally responding) to 
-   // application events from iOS.
-   [Register ("AppDelegate")]
-	public partial class AppDelegate : UIApplicationDelegate
-   {
-      // class-level declarations
-      UIWindow window;
+    // The UIApplicationDelegate for the application. This class is responsible for launching the 
+    // User Interface of the application, as well as listening (and optionally responding) to 
+    // application events from iOS.
+    [Register ("AppDelegate")]
+    public partial class AppDelegate : UIApplicationDelegate
+    {
+        // class-level declarations
+        UIWindow window;
 
-      //
-      // This method is invoked when the application has loaded and is ready to run. In this 
-      // method you should instantiate the window, load the UI into it and then make the window
-      // visible.
-      //
-      // You have 17 seconds to return from this method, or iOS will terminate your application.
-      //
-      public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-      {
-         Console.WriteLine("Finishes launching");
-         // create a new window instance based on the screen size
-         window = new UIWindow(UIScreen.MainScreen.Bounds);
+        //
+        // This method is invoked when the application has loaded and is ready to run. In this 
+        // method you should instantiate the window, load the UI into it and then make the window
+        // visible.
+        //
+        // You have 17 seconds to return from this method, or iOS will terminate your application.
+        //
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            Console.WriteLine("Finishes launching");
+            // create a new window instance based on the screen size
+            window = new UIWindow(UIScreen.MainScreen.Bounds);
 
-         RootElement root = new RootElement("");
-         UIImageView imageView = new UIImageView(window.Frame);
-         StringElement messageElement = new StringElement("");
+            RootElement root = new RootElement("");
+            UIImageView imageView = new UIImageView(window.Frame);
+            StringElement messageElement = new StringElement("");
 
-         root.Add(new Section()
+            root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
             long processingTime;
-            using (Image<Bgr, Byte> image = DrawMatches.Draw("box.png", "box_in_scene.png", out processingTime))
+            using (Image<Gray, byte> modelImage = new Image<Gray, byte>("box.png"))
+            using (Image<Gray, byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
+            using (Image<Bgr, Byte> image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
             using (Image<Bgr, Byte> resized =image.Resize((int)window.Frame.Width, (int)window.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
             {
                imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
@@ -55,19 +57,20 @@ namespace SURFFeatureExample
 
             imageView.SetNeedsDisplay();
          }
-         )});
-         root.Add(new Section() {messageElement});
-         root.Add(new Section() {imageView});
+         )}
+            );
+            root.Add(new Section() {messageElement});
+            root.Add(new Section() {imageView});
 
-         DialogViewController viewController = new DialogViewController(root);
+            DialogViewController viewController = new DialogViewController(root);
 
-         window.RootViewController = viewController;
+            window.RootViewController = viewController;
 
-         // make the window visible
-         window.MakeKeyAndVisible();
+            // make the window visible
+            window.MakeKeyAndVisible();
 
-         return true;
-      }
-   }
+            return true;
+        }
+    }
 }
 

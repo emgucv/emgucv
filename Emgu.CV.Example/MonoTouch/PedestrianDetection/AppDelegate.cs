@@ -13,36 +13,37 @@ using MonoTouch.UIKit;
 
 namespace PedestrianDetection
 {
-   // The UIApplicationDelegate for the application. This class is responsible for launching the 
-   // User Interface of the application, as well as listening (and optionally responding) to 
-   // application events from iOS.
-   [Register ("AppDelegate")]
-	public partial class AppDelegate : UIApplicationDelegate
-   {
-      // class-level declarations
-      UIWindow window;
+    // The UIApplicationDelegate for the application. This class is responsible for launching the 
+    // User Interface of the application, as well as listening (and optionally responding) to 
+    // application events from iOS.
+    [Register ("AppDelegate")]
+    public partial class AppDelegate : UIApplicationDelegate
+    {
+        // class-level declarations
+        UIWindow window;
 
-      //
-      // This method is invoked when the application has loaded and is ready to run. In this 
-      // method you should instantiate the window, load the UI into it and then make the window
-      // visible.
-      //
-      // You have 17 seconds to return from this method, or iOS will terminate your application.
-      //
-      public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-      {
-         // create a new window instance based on the screen size
-         window = new UIWindow(UIScreen.MainScreen.Bounds);
-			
-         RootElement root = new RootElement("");
-         UIImageView imageView = new UIImageView(window.Frame);
-         StringElement messageElement = new StringElement("");
+        //
+        // This method is invoked when the application has loaded and is ready to run. In this 
+        // method you should instantiate the window, load the UI into it and then make the window
+        // visible.
+        //
+        // You have 17 seconds to return from this method, or iOS will terminate your application.
+        //
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            // create a new window instance based on the screen size
+            window = new UIWindow(UIScreen.MainScreen.Bounds);
+         
+            RootElement root = new RootElement("");
+            UIImageView imageView = new UIImageView(window.Frame);
+            StringElement messageElement = new StringElement("");
 
-         root.Add(new Section()
+            root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
             long processingTime;
-            using (Image<Bgr, Byte> image = FindPedestrian.Find("pedestrian.png",  out processingTime))
-            using (Image<Bgr, Byte> resized =image.Resize((int)window.Frame.Width, (int)window.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+            using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
+            using (Image<Bgr, Byte> result = FindPedestrian.Find(image,  out processingTime))
+            using (Image<Bgr, Byte> resized = result.Resize((int)window.Frame.Width, (int)window.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
             {
                imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
                imageView.Image = resized.ToUIImage();
@@ -51,20 +52,21 @@ namespace PedestrianDetection
             messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
 
             imageView.SetNeedsDisplay();
-         }
-         )});
-         root.Add(new Section() {messageElement});
-         root.Add(new Section() {imageView});
+            }
+            )}
+            );
+            root.Add(new Section() {messageElement});
+            root.Add(new Section() {imageView});
 
-         DialogViewController viewController = new DialogViewController(root);
+            DialogViewController viewController = new DialogViewController(root);
 
-         window.RootViewController = viewController;
-			
-         // make the window visible
-         window.MakeKeyAndVisible();
-			
-         return true;
-      }
-   }
+            window.RootViewController = viewController;
+         
+            // make the window visible
+            window.MakeKeyAndVisible();
+         
+            return true;
+        }
+    }
 }
 

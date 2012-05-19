@@ -42,13 +42,14 @@ namespace TrafficSignRecognition
 
          root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
+            using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("stop-sign.jpg"))
             {
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
                List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
                List<Rectangle> stopSignBoxList = new List<Rectangle>();
-               StopSignDetector detector = new StopSignDetector();
+               StopSignDetector detector = new StopSignDetector(stopSignModel);
                detector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
                watch.Stop(); //stop the timer
