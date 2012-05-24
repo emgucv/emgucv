@@ -71,4 +71,14 @@ CVAPI(void) cvHOGDescriptorDetect(
 CVAPI(unsigned int) CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor);
 
 
+CVAPI(cv::CascadeClassifier*) CvCascadeClassifierCreate(char* fileName);
+CVAPI(void) CvCascadeClassifierRelease(cv::CascadeClassifier** classifier);
+CVAPI(void) CvCascadeClassifierDetectMultiScale( 
+   cv::CascadeClassifier* classifier,
+   const IplImage* image,
+   CvSeq* objects,
+   double scaleFactor,
+   int minNeighbors, int flags,
+   CvSize minSize,
+   CvSize maxSize); 
 #endif

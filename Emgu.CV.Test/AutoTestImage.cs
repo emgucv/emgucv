@@ -393,7 +393,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestFaceDetect()
+      public void TestHaarCascadeFaceDetect()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
@@ -427,6 +427,20 @@ namespace Emgu.CV.Test
                   }
                }
             }
+         }
+      }
+
+      [Test]
+      public void TestCascadeClassifierFaceDetect()
+      {
+         Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
+         //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
+         using (CascadeClassifier cascade = new CascadeClassifier("haarcascade_eye.xml"))
+         //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
+         {
+            Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 10, new Size(10, 10), Size.Empty);
+            foreach (Rectangle obj in objects)
+               image.Draw(obj, new Gray(0.0), 1);
          }
       }
 

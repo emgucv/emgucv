@@ -21,19 +21,18 @@ Module Module1
       Dim img As New Image(Of Bgr, Byte)("lena.jpg")
 
       'Load the object detector
-      Dim faceDetector As New HaarCascade("haarcascade_frontalface_default.xml")
+      Dim faceDetector As New CascadeClassifier("haarcascade_frontalface_default.xml")
 
       'Convert the image to Grayscale
       Dim imgGray As Image(Of Gray, Byte) = img.Convert(Of Gray, Byte)()
 
-      For Each face As MCvAvgComp In faceDetector.Detect( _
+      For Each face As Rectangle In faceDetector.DetectMultiScale( _
                          imgGray, _
                          1.1, _
                          10, _
-                         CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, _
                          New Size(20, 20), _
                          Size.Empty)
-         img.Draw(face.rect, New Bgr(Color.White), 1)
+         img.Draw(face, New Bgr(Color.White), 1)
       Next
 
       'Show the image

@@ -81,6 +81,7 @@
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
     <Compile Include="Capture\KinectCapture.cs" />
+    <Compile Include="CascadeClassifier.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
