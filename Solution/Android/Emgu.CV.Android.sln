@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Android",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\Android\SURFFeature\SURFFeature.csproj", "{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,12 @@ Global
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
