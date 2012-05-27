@@ -33,7 +33,7 @@ namespace FaceDetection
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"); //Read the files as an 8-bit Bgr image  
          long detectionTime;
-         DetectFace.DetectAndDraw(image, out detectionTime);
+         DetectFace.DetectAndDraw(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", out detectionTime);
          //display the image 
          ImageViewer.Show(image, String.Format(
             "Completed face and eye detection using {0} in {1} milliseconds", 
