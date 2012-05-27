@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 using Android.App;
 using Android.Content;
@@ -7,14 +6,14 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using Android.Graphics;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
-namespace SURFFeatureExample
+namespace PedestrianDetection
 {
-   [Activity(Label = "SURF Feature", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Pedestrian Detection", MainLauncher = true, Icon = "@drawable/icon")]
    public class Activity1 : Activity
    {
       protected override void OnCreate(Bundle bundle)
@@ -26,19 +25,18 @@ namespace SURFFeatureExample
 
          // Get our button from the layout resource,
          // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.MatchButton);
+         Button button = FindViewById<Button>(Resource.Id.DetectButton);
          ImageView imageView = FindViewById<ImageView>(Resource.Id.ResultImageView);
          TextView messageView = FindViewById<TextView>(Resource.Id.MessageView);
 
-         button.Click += delegate 
+         button.Click += delegate
          {
             long time;
-            using (Image<Gray, Byte> box = new Image<Gray,byte>(Assets, "box.png"))
-            using (Image<Gray, Byte> boxInScene = new Image<Gray, byte>(Assets, "box_in_scene.png"))
-            using (Image<Bgr, Byte> result = DrawMatches.Draw(box, boxInScene, out time))
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "pedestrian.png"))
+            using (Image<Bgr, Byte> result = FindPedestrian.Find(image, out time))
             {
-               messageView.Text = String.Format("Matched in {0} milliseconds.", time);
-               imageView.SetImageBitmap( result.ToBitmap() );
+               messageView.Text = String.Format("Detection completed in {0} milliseconds.", time);
+               imageView.SetImageBitmap(result.ToBitmap());
             }
          };
       }

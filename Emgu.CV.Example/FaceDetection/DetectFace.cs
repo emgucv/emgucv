@@ -14,11 +14,9 @@ namespace FaceDetection
 {
    public static class DetectFace
    {
-      public static void DetectAndDraw(Image<Bgr, Byte> image, out long detectionTime)
+      public static void DetectAndDraw(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, out long detectionTime)
       {
          Stopwatch watch;
-         String faceFileName = "haarcascade_frontalface_default.xml";
-         String eyeFileName = "haarcascade_eye.xml";
 
          if (GpuInvoke.HasCuda)
          {

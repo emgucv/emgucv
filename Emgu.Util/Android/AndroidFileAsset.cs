@@ -10,6 +10,7 @@ using Android.Content;
 using Android.Views;
 using Android.Runtime;
 using Android.OS;
+using Android.Content.Res;
 
 namespace Emgu.Util
 {

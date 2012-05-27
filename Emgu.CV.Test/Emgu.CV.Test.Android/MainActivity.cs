@@ -47,11 +47,7 @@ namespace Emgu.CV.Test
          where TColor : struct, IColor
          where TDepth : new()
       {
-         using (BufferedStream buf = new BufferedStream(Assets.Open(name)))
-         {
-            Bitmap bmp = BitmapFactory.DecodeStream(buf);
-            return new Image<TColor, TDepth>(bmp);
-         }
+         return new Image<TColor, TDepth>(Assets, name);
       }
    }
 }

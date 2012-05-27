@@ -327,7 +327,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          SURFDetector detector = new SURFDetector(400, false);
-         Image<Gray, Byte> boxInScene = new Image<Gray, byte>("box_in_scene.png");
+         Image<Gray, Byte> boxInScene = EmguAssert.LoadImage<Gray, byte>("box_in_scene.png");
 
          ImageFeature<float>[] features1 = detector.DetectFeatures(box, null);
          Features2DTracker<float> tracker = new Features2DTracker<float>(features1);
@@ -374,7 +374,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestLDetectorAndSelfSimDescriptor()
       {
-         Image<Gray, byte> box = new Image<Gray, byte>("box.png");
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
          LDetector detector = new LDetector();
          detector.Init();
 

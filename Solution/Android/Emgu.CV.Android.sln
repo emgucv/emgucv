@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\Android\SURFFeature\SURFFeature.csproj", "{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\Android\FaceDetection\FaceDetection.csproj", "{30690D95-CC5F-43E9-850B-91B20A1957E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\..\Emgu.CV.Example\Android\PedestrianDetection\PedestrianDetection.csproj", "{E557F210-7DDE-44C9-8D57-6CAB85C7349C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\Android\TrafficSignRecognition\TrafficSignRecognition.csproj", "{D5F1E744-0AED-455C-B240-852E489C2C70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +81,24 @@ Global
 		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

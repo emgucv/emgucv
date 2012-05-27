@@ -11,10 +11,11 @@ using Android.Graphics;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
-namespace SURFFeatureExample
+namespace FaceDetection
 {
-   [Activity(Label = "SURF Feature", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Face Detection", MainLauncher = true, Icon = "@drawable/icon")]
    public class Activity1 : Activity
    {
       protected override void OnCreate(Bundle bundle)
@@ -26,19 +27,20 @@ namespace SURFFeatureExample
 
          // Get our button from the layout resource,
          // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.MatchButton);
+         Button button = FindViewById<Button>(Resource.Id.DetectButton);
          ImageView imageView = FindViewById<ImageView>(Resource.Id.ResultImageView);
          TextView messageView = FindViewById<TextView>(Resource.Id.MessageView);
 
          button.Click += delegate 
          {
             long time;
-            using (Image<Gray, Byte> box = new Image<Gray,byte>(Assets, "box.png"))
-            using (Image<Gray, Byte> boxInScene = new Image<Gray, byte>(Assets, "box_in_scene.png"))
-            using (Image<Bgr, Byte> result = DrawMatches.Draw(box, boxInScene, out time))
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "lena.jpg"))
+            using (AndroidFileAsset faceXml = new AndroidFileAsset(this, "haarcascade_eye.xml"))
+            using (AndroidFileAsset eyeXml = new AndroidFileAsset(this, "haarcascade_frontalface_default.xml"))
             {
-               messageView.Text = String.Format("Matched in {0} milliseconds.", time);
-               imageView.SetImageBitmap( result.ToBitmap() );
+               DetectFace.DetectAndDraw(image, faceXml.FileName, eyeXml.FileName, out time);
+               messageView.Text = String.Format("Detected in {0} milliseconds.", time);
+               imageView.SetImageBitmap(image.ToBitmap());
             }
          };
       }

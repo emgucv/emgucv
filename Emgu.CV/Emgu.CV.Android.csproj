@@ -37,7 +37,6 @@
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
-    <Reference Include="OpenTK" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -49,6 +48,7 @@
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
     <Compile Include="Capture\KinectCapture.cs" />
+    <Compile Include="CascadeClassifier.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
     <Compile Include="PInvoke\Android\CvInvokeEntryPoints.cs" />
+    <Compile Include="PInvoke\Android\ImageAndroid.cs" />
     <Compile Include="PInvoke\CvInvokeCalib3d.cs" />
     <Compile Include="PInvoke\CvInvokeFFMPEG.cs" />
     <Compile Include="PInvoke\CvInvokeImgproc.cs" />

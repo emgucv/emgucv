@@ -26,7 +26,7 @@ namespace Emgu.CV.Test
       public void TestCalibration()
       {
          Size patternSize = new Size(9, 6);
-         Image<Gray, Byte> left01 = new Image<Gray, byte>("left01.jpg");
+         Image<Gray, Byte> left01 = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
          PointF[] corners = CameraCalibration.FindChessboardCorners(left01, patternSize, CvEnum.CALIB_CB_TYPE.DEFAULT);
       }
 
@@ -44,7 +44,7 @@ namespace Emgu.CV.Test
       {
          Size patternSize = new Size(9, 6);
 
-         Image<Gray, Byte> chessboardImage = new Image<Gray, byte>("left01.jpg");
+         Image<Gray, Byte> chessboardImage = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
          PointF[] corners =
             CameraCalibration.FindChessboardCorners(
             chessboardImage,

@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{484C276A-6FD1-44A1-99D8-8CDEB564ED27}</ProjectGuid>
+    <ProjectGuid>{E557F210-7DDE-44C9-8D57-6CAB85C7349C}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoAndroidCamera</RootNamespace>
-    <AssemblyName>MonoAndroidCamera</AssemblyName>
+    <RootNamespace>PedestrianDetection</RootNamespace>
+    <AssemblyName>PedestrianDetection</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -29,6 +29,8 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,16 +51,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+    <Compile Include="..\..\PedestrianDetection\FindPedestrian.cs">
+      <Link>FindPedestrian.cs</Link>
     </Compile>
-    <Compile Include="CameraPreview.cs" />
+    <Compile Include="Activity1.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libcvextern.so">
       <Link>lib\armeabi\libcvextern.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libcvextern_gpu.so">
+      <Link>lib\armeabi\libcvextern_gpu.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libnative_camera_r2.2.0.so">
+      <Link>lib\armeabi\libnative_camera_r2.2.0.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libnative_camera_r2.3.3.so">
+      <Link>lib\armeabi\libnative_camera_r2.3.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libnative_camera_r3.0.1.so">
+      <Link>lib\armeabi\libnative_camera_r3.0.1.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libnative_camera_r4.0.0.so">
+      <Link>lib\armeabi\libnative_camera_r4.0.0.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libnative_camera_r4.0.3.so">
+      <Link>lib\armeabi\libnative_camera_r4.0.3.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_calib3d.so">
       <Link>lib\armeabi\libopencv_calib3d.so</Link>
@@ -87,8 +107,14 @@
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_ml.so">
       <Link>lib\armeabi\libopencv_ml.so</Link>
     </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_nonfree.so">
+      <Link>lib\armeabi\libopencv_nonfree.so</Link>
+    </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_objdetect.so">
       <Link>lib\armeabi\libopencv_objdetect.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_photo.so">
+      <Link>lib\armeabi\libopencv_photo.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_stitching.so">
       <Link>lib\armeabi\libopencv_stitching.so</Link>
@@ -96,8 +122,29 @@
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_video.so">
       <Link>lib\armeabi\libopencv_video.so</Link>
     </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_videostab.so">
+      <Link>lib\armeabi\libopencv_videostab.so</Link>
+    </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libcvextern.so">
       <Link>lib\armeabi-v7a\libcvextern.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libcvextern_gpu.so">
+      <Link>lib\armeabi-v7a\libcvextern_gpu.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libnative_camera_r2.2.0.so">
+      <Link>lib\armeabi-v7a\libnative_camera_r2.2.0.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libnative_camera_r2.3.3.so">
+      <Link>lib\armeabi-v7a\libnative_camera_r2.3.3.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libnative_camera_r3.0.1.so">
+      <Link>lib\armeabi-v7a\libnative_camera_r3.0.1.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libnative_camera_r4.0.0.so">
+      <Link>lib\armeabi-v7a\libnative_camera_r4.0.0.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libnative_camera_r4.0.3.so">
+      <Link>lib\armeabi-v7a\libnative_camera_r4.0.3.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libopencv_calib3d.so">
       <Link>lib\armeabi-v7a\libopencv_calib3d.so</Link>
@@ -143,21 +190,6 @@
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libopencv_videostab.so">
       <Link>lib\armeabi-v7a\libopencv_videostab.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\..\libs\armeabi-v7a\libcvextern_gpu.so">
-      <Link>lib\armeabi-v7a\libcvextern_gpu.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libcvextern_gpu.so">
-      <Link>lib\armeabi\libcvextern_gpu.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_nonfree.so">
-      <Link>lib\armeabi\libopencv_nonfree.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_photo.so">
-      <Link>lib\armeabi\libopencv_photo.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\..\libs\armeabi\libopencv_videostab.so">
-      <Link>lib\armeabi\libopencv_videostab.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\..\libs\x86\libcvextern.so">
       <Link>lib\x86\libcvextern.so</Link>
@@ -223,15 +255,19 @@
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\Layout\Main.axml" />
+  </ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Layout\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
+      <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
+      <Name>Emgu.CV.GPU.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Emgu.CV\Emgu.CV.Android.csproj">
       <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
       <Name>Emgu.CV.Android</Name>
@@ -242,7 +278,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\haarcascade_frontalface_default.xml" />
+    <AndroidAsset Include="..\..\PedestrianDetection\pedestrian.png">
+      <Link>Assets\pedestrian.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
