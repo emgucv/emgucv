@@ -5,27 +5,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Android", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.Android", "..\..\Emgu.Util\Emgu.Util.Android.csproj", "{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\Android\PlanarSubdivision\PlanarSubdivision.csproj", "{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\Android\HelloWorld\HelloWorld.csproj", "{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Android", "..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj", "{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.Android", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj", "{17B67F34-D591-4BAD-ABB8-4D4199B20833}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAndroidCamera", "..\..\Emgu.CV.Example\Android\MonoAndroidCamera\MonoAndroidCamera.csproj", "{484C276A-6FD1-44A1-99D8-8CDEB564ED27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Android", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj", "{89BCA3BE-823B-4702-9498-025C6B21462F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\Android\SURFFeature\SURFFeature.csproj", "{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\Android\FaceDetection\FaceDetection.csproj", "{30690D95-CC5F-43E9-850B-91B20A1957E9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\..\Emgu.CV.Example\Android\PedestrianDetection\PedestrianDetection.csproj", "{E557F210-7DDE-44C9-8D57-6CAB85C7349C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\Android\TrafficSignRecognition\TrafficSignRecognition.csproj", "{D5F1E744-0AED-455C-B240-852E489C2C70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidExamples", "..\..\Emgu.CV.Example\Android\AndroidExamples.csproj", "{543E1066-E02A-4078-AFA4-AD00B7168780}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,18 +29,6 @@ Global
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DDB7E03-AA4B-470C-8AA4-AA25C1B2957A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DC83C8A-E8D3-4BF6-AB33-B20E50C7E368}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -61,12 +37,6 @@ Global
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.Build.0 = Release|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{484C276A-6FD1-44A1-99D8-8CDEB564ED27}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89BCA3BE-823B-4702-9498-025C6B21462F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,30 +45,12 @@ Global
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE5E6C85-E393-49FF-93CA-3BC2F45BB654}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30690D95-CC5F-43E9-850B-91B20A1957E9}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E557F210-7DDE-44C9-8D57-6CAB85C7349C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5F1E744-0AED-455C-B240-852E489C2C70}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

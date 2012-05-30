@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <Button
+        android:text="@string/HelloWorld"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoHelloWorldButton" />
+    <Button
+        android:text="@string/PlanarSubdivision"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoPlanarSubdivisionButton" />
+    <Button
+        android:text="@string/FaceDetection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoFaceDetectionButton" />
+    <Button
+        android:id="@+id/GotoSURFFeaturesButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SURFFeatures" />
+    <Button
+        android:text="@string/PedestrianDetection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoPedestrianDetectionButton" />
+    <Button
+        android:text="@string/TrafficSignRecognition"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoTrafficSignRecognitionButton" />
+    <Button
+        android:text="@string/Camera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoCameraButton" />
+</LinearLayout>
