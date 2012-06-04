@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Emgu.CV.Example.MonoTouch</RootNamespace>
+    <AssemblyName>EmguCVExampleMonoTouch</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchLink>None</MtouchLink>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchLink>None</MtouchLink>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <BuildIpa>true</BuildIpa>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="MonoTouch.Dialog-1" />
+    <Reference Include="OpenTK" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="ExamplesDialogViewController.cs" />
+    <Compile Include="HelloWorldUIViewController.cs" />
+    <Compile Include="..\SURFFeature\DrawMatches.cs">
+      <Link>DrawMatches.cs</Link>
+    </Compile>
+    <Compile Include="SURFFeatureDialogViewController.cs" />
+    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+      <Link>FindPedestrian.cs</Link>
+    </Compile>
+    <Compile Include="PedestrianDetectionDialogViewController.cs" />
+    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
+      <Link>LicensePlateDetector.cs</Link>
+    </Compile>
+    <Compile Include="LicensePlateRecognitionDialogViewController.cs" />
+    <Compile Include="PlanarSubdivisionDialogViewController.cs" />
+    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
+      <Link>DrawSubdivision.cs</Link>
+    </Compile>
+    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
+      <Link>StopSignDetector.cs</Link>
+    </Compile>
+    <Compile Include="TrafficSignRecognitionDialogViewController.cs" />
+    <Compile Include="FaceDetectionDialogViewController.cs" />
+    <Compile Include="..\FaceDetection\DetectFace.cs">
+      <Link>DetectFace.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
+      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
+      <Name>Emgu.CV.GPU.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.MonoTouch.csproj">
+      <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
+      <Name>Emgu.CV.ML.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
+      <Name>Emgu.CV.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.MonoTouch.csproj">
+      <Project>{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}</Project>
+      <Name>Emgu.CV.OCR.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.MonoTouch.csproj">
+      <Project>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</Project>
+      <Name>Emgu.CV.Stitching.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
+      <Name>Emgu.Util.MonoTouch</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SURFFeature\box.png">
+      <Link>box.png</Link>
+    </Content>
+    <Content Include="..\SURFFeature\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+    </Content>
+    <Content Include="..\PedestrianDetection\pedestrian.png">
+      <Link>pedestrian.png</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
+      <Link>tessdata\eng.cube.bigrams</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
+      <Link>tessdata\eng.cube.fold</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
+      <Link>tessdata\eng.cube.lm</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
+      <Link>tessdata\eng.cube.nn</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
+      <Link>tessdata\eng.cube.params</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
+      <Link>tessdata\eng.cube.size</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
+      <Link>tessdata\eng.cube.word-freq</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
+      <Link>tessdata\eng.tesseract_cube.nn</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
+      <Link>tessdata\eng.traineddata</Link>
+    </Content>
+    <Content Include="..\LicensePlateRecognition\license-plate.jpg">
+      <Link>license-plate.jpg</Link>
+    </Content>
+    <Content Include="..\TrafficSignRecognition\stop-sign.jpg">
+      <Link>stop-sign.jpg</Link>
+    </Content>
+    <Content Include="..\TrafficSignRecognition\stop-sign-model.png">
+      <Link>stop-sign-model.png</Link>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+      <Link>haarcascade_frontalface_default.xml</Link>
+    </Content>
+    <Content Include="..\FaceDetection\lena.jpg">
+      <Link>lena.jpg</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tessdata\" />
+  </ItemGroup>
+</Project>

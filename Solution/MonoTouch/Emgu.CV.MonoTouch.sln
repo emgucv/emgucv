@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\MonoTouch\HelloWorld\HelloWorld.csproj", "{F3302881-1E20-4A31-A689-1C75EC0C551A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.MonoTouch", "..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj", "{317AF9CE-1B65-47A2-B142-BE556A312C72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.MonoTouch", "..\..\Emgu.CV\Emgu.CV.MonoTouch.csproj", "{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}"
@@ -13,19 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.MonoTouch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.MonoTouch", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.MonoTouch.csproj", "{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\MonoTouch\PlanarSubdivision\PlanarSubdivision.csproj", "{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\MonoTouch\SURFFeature\SURFFeature.csproj", "{F3A74390-59C8-473F-BE20-99119295CE17}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.MonoTouch", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj", "{765DB687-906C-47C0-B0BD-531A1A4E51CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\..\Emgu.CV.Example\MonoTouch\PedestrianDetection\PedestrianDetection.csproj", "{390D5825-11C4-45F8-8316-40595937683B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\MonoTouch\LicensePlateRecognition\LicensePlateRecognition.csproj", "{25183C2F-6F46-4F35-82EC-EA040FB317D5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\MonoTouch\TrafficSignRecognition\TrafficSignRecognition.csproj", "{F0A16E00-5269-481C-BBA2-46FA81A64535}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\MonoTouch\FaceDetection\FaceDetection.csproj", "{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Example.MonoTouch", "..\..\Emgu.CV.Example\MonoTouch\Emgu.CV.Example.MonoTouch.csproj", "{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,24 +21,10 @@ Global
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 		Debug|iPhone = Debug|iPhone
 		Release|iPhone = Release|iPhone
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Debug|iPhone.Build.0 = Debug|iPhone
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Release|iPhone.ActiveCfg = Release|iPhone
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Release|iPhone.Build.0 = Release|iPhone
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{15D7F2C2-A7DE-4B2B-9982-EC2666FC88FC}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Debug|iPhone.Build.0 = Debug|iPhone
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Release|iPhone.ActiveCfg = Release|iPhone
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Release|iPhone.Build.0 = Release|iPhone
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{25183C2F-6F46-4F35-82EC-EA040FB317D5}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -67,14 +41,6 @@ Global
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhone.Build.0 = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{390D5825-11C4-45F8-8316-40595937683B}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{390D5825-11C4-45F8-8316-40595937683B}.Debug|iPhone.Build.0 = Debug|iPhone
-		{390D5825-11C4-45F8-8316-40595937683B}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{390D5825-11C4-45F8-8316-40595937683B}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{390D5825-11C4-45F8-8316-40595937683B}.Release|iPhone.ActiveCfg = Release|iPhone
-		{390D5825-11C4-45F8-8316-40595937683B}.Release|iPhone.Build.0 = Release|iPhone
-		{390D5825-11C4-45F8-8316-40595937683B}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{390D5825-11C4-45F8-8316-40595937683B}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -99,14 +65,18 @@ Global
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhone.Build.0 = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhone.Build.0 = Debug|iPhone
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhone.ActiveCfg = Release|iPhone
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhone.Build.0 = Release|iPhone
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{A07B35DF-F1CB-405E-95D1-140E09B8CCCB}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.Build.0 = Debug|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.ActiveCfg = Release|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.Build.0 = Release|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -115,32 +85,8 @@ Global
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Release|iPhone.Build.0 = Release|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Debug|iPhone.Build.0 = Debug|iPhone
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Release|iPhone.ActiveCfg = Release|iPhone
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Release|iPhone.Build.0 = Release|iPhone
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{F0A16E00-5269-481C-BBA2-46FA81A64535}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Debug|iPhone.Build.0 = Debug|iPhone
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Release|iPhone.ActiveCfg = Release|iPhone
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Release|iPhone.Build.0 = Release|iPhone
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{F3302881-1E20-4A31-A689-1C75EC0C551A}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Debug|iPhone.Build.0 = Debug|iPhone
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Release|iPhone.ActiveCfg = Release|iPhone
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Release|iPhone.Build.0 = Release|iPhone
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{F3A74390-59C8-473F-BE20-99119295CE17}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\..\Emgu.CV.Example\MonoTouch\FaceDetection\FaceDetection.csproj
+		StartupItem = ..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj
 	EndGlobalSection
 EndGlobal

@@ -244,6 +244,7 @@
     <Compile Include="PInvoke\MonoTouch\libemgucv.linkwith.cs">
       <DependentUpon>libemgucv.a</DependentUpon>
     </Compile>
+    <Compile Include="CascadeClassifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">

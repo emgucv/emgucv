@@ -11,36 +11,28 @@ using Emgu.CV.Structure;
 using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using TrafficSignRecognition;
 
-namespace TrafficSignRecognition
+namespace Emgu.CV.Example.MonoTouch
 {
-   // The UIApplicationDelegate for the application. This class is responsible for launching the 
-   // User Interface of the application, as well as listening (and optionally responding) to 
-   // application events from iOS.
-   [Register ("AppDelegate")]
-	public partial class AppDelegate : UIApplicationDelegate
-   {
-      // class-level declarations
-      UIWindow window;
+    public class TrafficSignRecognitionDialogViewController : DialogViewController
+    {
+        public TrafficSignRecognitionDialogViewController()
+         : base(new RootElement(""), true)
+        {
+        }
 
-      //
-      // This method is invoked when the application has loaded and is ready to run. In this 
-      // method you should instantiate the window, load the UI into it and then make the window
-      // visible.
-      //
-      // You have 17 seconds to return from this method, or iOS will terminate your application.
-      //
-      public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-      {
-         // create a new window instance based on the screen size
-         window = new UIWindow(UIScreen.MainScreen.Bounds);
-			
-         RootElement root = new RootElement("");
-         UIImageView imageView = new UIImageView(window.Frame);
-         StringElement messageElement = new StringElement("");
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            RootElement root = Root;
+            UIImageView imageView = new UIImageView(View.Frame);
+
+            StringElement messageElement = new StringElement("");
 
 
-         root.Add(new Section()
+            root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("stop-sign.jpg"))
@@ -59,23 +51,19 @@ namespace TrafficSignRecognition
                {
                   image.Draw(rect, new Bgr(Color.Red), 2);
                }
-               imageView.Image = image.ToUIImage();
+              using (Image<Bgr, byte> resized = image.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+              {
+                 imageView.Image = resized.ToUIImage();
+                 imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
+              }
                imageView.SetNeedsDisplay();
             }
          }
-         )});
-         root.Add(new Section() {messageElement});
-         root.Add(new Section() {imageView});
-
-         DialogViewController viewController = new DialogViewController(root);
-
-         window.RootViewController = viewController;
-			
-         // make the window visible
-         window.MakeKeyAndVisible();
-			
-         return true;
-      }
-   }
+         )}
+            );
+            root.Add(new Section() {messageElement});
+            root.Add(new Section() {imageView});
+        }
+    }
 }
 

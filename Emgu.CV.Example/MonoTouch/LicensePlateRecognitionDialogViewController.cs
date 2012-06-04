@@ -12,32 +12,23 @@ using Emgu.CV.Structure;
 using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using LicensePlateRecognition;
 
-namespace LicensePlateRecognition
+namespace Emgu.CV.Example.MonoTouch
 {
-   // The UIApplicationDelegate for the application. This class is responsible for launching the 
-   // User Interface of the application, as well as listening (and optionally responding) to 
-   // application events from iOS.
-   [Register ("AppDelegate")]
-	public partial class AppDelegate : UIApplicationDelegate
-   {
-      // class-level declarations
-      UIWindow window;
+    public class LicensePlateRecognitionDialogViewController :DialogViewController
+    {
+        public LicensePlateRecognitionDialogViewController()
+         : base(new RootElement(""), true)
+        {
 
-      //
-      // This method is invoked when the application has loaded and is ready to run. In this 
-      // method you should instantiate the window, load the UI into it and then make the window
-      // visible.
-      //
-      // You have 17 seconds to return from this method, or iOS will terminate your application.
-      //
-      public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        }
+
+      public override void ViewDidLoad()
       {
-         // create a new window instance based on the screen size
-         window = new UIWindow(UIScreen.MainScreen.Bounds);
-
-         RootElement root = new RootElement("");
-         UIImageView imageView = new UIImageView(window.Frame);
+         base.ViewDidLoad();
+                 RootElement root = Root;
+         UIImageView imageView = new UIImageView(View.Frame);
          StringElement messageElement = new StringElement("");
          StringElement licenseElement = new StringElement("");
 
@@ -72,8 +63,11 @@ namespace LicensePlateRecognition
                {
                   image.Draw(box, new Bgr(Color.Red), 2);
                }
-
-               imageView.Image = image.ToUIImage();
+                  using (Image<Bgr, byte> resized = image.Resize((int)View.Frame.Width, (int) View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+                  {
+                     imageView.Image = resized.ToUIImage();
+                     imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
+                  }
                imageView.SetNeedsDisplay();
             }
          }
@@ -81,16 +75,7 @@ namespace LicensePlateRecognition
          root.Add(new Section("Recognition Time") {messageElement});
          root.Add(new Section("License Plate") { licenseElement});
          root.Add(new Section() {imageView});
-
-         DialogViewController viewController = new DialogViewController(root);
-
-         window.RootViewController = viewController;
-
-         // make the window visible
-         window.MakeKeyAndVisible();
-			
-         return true;
       }
-   }
+    }
 }
 
