@@ -1,6 +1,6 @@
 Index: cmake/OpenCVDetectTBB.cmake
 ===================================================================
---- cmake/OpenCVDetectTBB.cmake	(revision 8352)
+--- cmake/OpenCVDetectTBB.cmake	(revision 8558)
 +++ cmake/OpenCVDetectTBB.cmake	(working copy)
 @@ -41,12 +41,20 @@
        else()
@@ -31,9 +31,9 @@ Index: cmake/OpenCVDetectTBB.cmake
          elseif(MSVC90)
 Index: cmake/OpenCVModule.cmake
 ===================================================================
---- cmake/OpenCVModule.cmake	(revision 8352)
+--- cmake/OpenCVModule.cmake	(revision 8558)
 +++ cmake/OpenCVModule.cmake	(working copy)
-@@ -473,7 +473,7 @@
+@@ -489,7 +489,7 @@
    endif()
  
    install(TARGETS ${the_module}
@@ -44,7 +44,7 @@ Index: cmake/OpenCVModule.cmake
      )
 Index: modules/gpu/src/split_merge.cpp
 ===================================================================
---- modules/gpu/src/split_merge.cpp	(revision 8352)
+--- modules/gpu/src/split_merge.cpp	(revision 8558)
 +++ modules/gpu/src/split_merge.cpp	(working copy)
 @@ -96,12 +96,13 @@
          CV_Assert(single_channel_only);
@@ -75,9 +75,9 @@ Index: modules/gpu/src/split_merge.cpp
  
 Index: modules/highgui/CMakeLists.txt
 ===================================================================
---- modules/highgui/CMakeLists.txt	(revision 8352)
+--- modules/highgui/CMakeLists.txt	(revision 8558)
 +++ modules/highgui/CMakeLists.txt	(working copy)
-@@ -281,22 +281,12 @@
+@@ -240,22 +240,13 @@
    #                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/$<CONFIGURATION>/${ffmpeg_bare_name_ver}"
    #                     COMMENT "Copying ${ffmpeg_path} to the output directory")
    #else
@@ -95,20 +95,20 @@ Index: modules/highgui/CMakeLists.txt
 -                       COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/${ffmpeg_bare_name_ver}"
 -                       COMMENT "Copying ${ffmpeg_path} to the output directory")
 -  endif()
--  
+ 
 -  install(FILES "${ffmpeg_path}" DESTINATION bin COMPONENT main RENAME "${ffmpeg_bare_name_ver}")
-+
 +  add_custom_command(TARGET ${the_module} POST_BUILD
 +                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ffmpeg_bare_name_ver}"
 +                     COMMENT "Copying ${ffmpeg_path} to the output directory")
 +
 +  install(FILES "${ffmpeg_path}" DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main RENAME "${ffmpeg_bare_name_ver}")
++
  endif()
  
  ocv_add_accuracy_tests()
 Index: modules/highgui/include/opencv2/highgui/highgui_c.h
 ===================================================================
---- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 8352)
+--- modules/highgui/include/opencv2/highgui/highgui_c.h	(revision 8558)
 +++ modules/highgui/include/opencv2/highgui/highgui_c.h	(working copy)
 @@ -534,6 +534,9 @@
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
@@ -122,7 +122,7 @@ Index: modules/highgui/include/opencv2/highgui/highgui_c.h
  
 Index: modules/highgui/src/cap_openni.cpp
 ===================================================================
---- modules/highgui/src/cap_openni.cpp	(revision 8352)
+--- modules/highgui/src/cap_openni.cpp	(revision 8558)
 +++ modules/highgui/src/cap_openni.cpp	(working copy)
 @@ -433,6 +433,8 @@
  
@@ -146,7 +146,7 @@ Index: modules/highgui/src/cap_openni.cpp
  #endif
 Index: modules/legacy/src/3dtracker.cpp
 ===================================================================
---- modules/legacy/src/3dtracker.cpp	(revision 8352)
+--- modules/legacy/src/3dtracker.cpp	(revision 8558)
 +++ modules/legacy/src/3dtracker.cpp	(working copy)
 @@ -331,7 +331,7 @@
      int i;
@@ -172,7 +172,7 @@ Index: modules/legacy/src/3dtracker.cpp
      for (y = 0, i = 0; y < etalon_size.height; y++)
 Index: modules/objdetect/src/latentsvm.cpp
 ===================================================================
---- modules/objdetect/src/latentsvm.cpp	(revision 8352)
+--- modules/objdetect/src/latentsvm.cpp	(revision 8558)
 +++ modules/objdetect/src/latentsvm.cpp	(working copy)
 @@ -277,7 +277,7 @@
  
