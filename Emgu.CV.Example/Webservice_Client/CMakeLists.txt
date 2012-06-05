@@ -10,11 +10,12 @@ LIST(APPEND SRC_Example_Webservice_Client
   ${CMAKE_CURRENT_SOURCE_DIR}/../Webservice_Host/IImageService.cs
   ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
-IF(TARGET_ARCH_64)
-  LIST(APPEND CS_FLAGS -platform:x64)
-ELSE()
-  LIST(APPEND CS_FLAGS -platform:x86)
-ENDIF()
+#IF(TARGET_ARCH_64)
+#  LIST(APPEND CS_FLAGS -platform:x64)
+#ELSE()
+#  LIST(APPEND CS_FLAGS -platform:x86)
+#ENDIF()
+
 LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 
 ADD_CS_REFERENCES(System.ServiceModel.dll)
