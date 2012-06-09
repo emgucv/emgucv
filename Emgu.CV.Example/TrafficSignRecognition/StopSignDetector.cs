@@ -135,7 +135,7 @@ namespace TrafficSignRecognition
          smoothedRedMask._Dilate(1);
          smoothedRedMask._Erode(1);
 
-         using (Image<Gray, Byte> canny = smoothedRedMask.Canny(new Gray(100), new Gray(50)))
+         using (Image<Gray, Byte> canny = smoothedRedMask.Canny(100, 50))
          using (MemStorage stor = new MemStorage())
          {
             Contour<Point> contours = canny.FindContours(

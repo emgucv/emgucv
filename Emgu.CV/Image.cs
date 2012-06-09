@@ -979,9 +979,9 @@ namespace Emgu.CV
       ///<param name="minLineWidth">Minimum width of a line</param>
       ///<param name="gapBetweenLines">Minimum gap between lines</param>
       ///<returns>The line segments detected for each of the channels</returns>
-      public LineSegment2D[][] HoughLines(TColor cannyThreshold, TColor cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+      public LineSegment2D[][] HoughLines(double cannyThreshold, double cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
       {
-         using (Image<TColor, TDepth> canny = Canny(cannyThreshold, cannyThresholdLinking))
+         using (Image<Gray, Byte> canny = Canny(cannyThreshold, cannyThresholdLinking))
          {
             return canny.HoughLinesBinary(
                rhoResolution,
@@ -1345,18 +1345,20 @@ namespace Emgu.CV
       ///<param name="threshLinking"> The threshold used for edge Linking</param>
       ///<returns> The edges found by the Canny edge detector</returns>
       [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
-      public Image<TColor, TDepth> Canny(TColor thresh, TColor threshLinking)
+      public Image<Gray, Byte> Canny(double thresh, double threshLinking)
       {
-         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         double[] t1 = thresh.MCvScalar.ToArray();
-         double[] t2 = threshLinking.MCvScalar.ToArray();
-         Action<IntPtr, IntPtr, int> act =
-             delegate(IntPtr src, IntPtr dest, int channel)
-             {
-                CvInvoke.cvCanny(src, dest, t1[channel], t2[channel], 3);
-             };
-         ForEachDuplicateChannel<TDepth>(act, res);
+         return Canny(thresh, threshLinking, 3);
+      }
 
+      ///<summary> Find the edges on this image and marked them in the returned image.</summary>
+      ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
+      ///<param name="threshLinking"> The threshold used for edge Linking</param>
+      ///<param name="apertureSize">The aperture size, use 3 for default</param>
+      ///<returns> The edges found by the Canny edge detector</returns>
+      public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize)
+      {
+         Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
+         CvInvoke.cvCanny(this, res, thresh, threshLinking, apertureSize);
          return res;
       }
 

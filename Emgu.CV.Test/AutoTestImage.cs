@@ -673,7 +673,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, byte>("stuff.jpg");
 
          //make sure canny works for multi channel image
-         Image<Bgr, Byte> image2 = image.Canny(new Bgr(200, 200, 200), new Bgr(100, 100, 100));
+         Image<Gray, Byte> image2 = image.Canny(200, 100);
 
          Size size = image2.Size;
       }
@@ -733,7 +733,7 @@ namespace Emgu.CV.Test
             pts.Push(new Point(80, 80));
             pts.Push(new Point(80, 20));
 
-            Image<Gray, Byte> canny = img.Canny(new Gray(100.0), new Gray(40.0));
+            Image<Gray, Byte> canny = img.Canny(100.0, 40.0);
             Seq<Point> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new Size(21, 21), new MCvTermCriteria(40, 0.0002), stor);
 
             img.Draw(pts, new Gray(120), 1);
@@ -893,7 +893,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> img = EmguAssert.LoadImage<Gray, byte>("stuff.jpg");
          img.SmoothGaussian(3);
-         img = img.Canny(new Gray(80), new Gray(50));
+         img = img.Canny(80, 50);
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
 
@@ -1123,7 +1123,7 @@ namespace Emgu.CV.Test
                   using (Image<Bgr, Byte> imageRGB = imgHsv2.Convert<Bgr, Byte>())
                   {
                      LineSegment2D[][] lines = imgHsv2.HoughLines(
-                         new Hsv(50.0, 50.0, 50.0), new Hsv(200.0, 200.0, 200.0),
+                         50.0, 200.0,
                          1, Math.PI / 180.0, 50, 50, 10);
 
                      CircleF[][] circles = img.HoughCircles(
@@ -1384,6 +1384,15 @@ namespace Emgu.CV.Test
          }
       }
 #endif
+
+      [Test]
+      public void TestColorMap()
+      {
+         Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
+         CvInvoke.ApplyColorMap(image, result, CvEnum.ColorMapType.Hot);
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+      }
 
       [Test]
       public void TestMorphologyClosing()
