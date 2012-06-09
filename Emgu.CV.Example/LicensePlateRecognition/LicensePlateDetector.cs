@@ -30,7 +30,7 @@ namespace LicensePlateRecognition
       public LicensePlateDetector()
       {
          //create OCR engine
-         _ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
          _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
       }
 
@@ -203,7 +203,7 @@ namespace LicensePlateRecognition
          Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
 
          using (Image<Gray, Byte> plateMask = new Image<Gray, byte>(plate.Size))
-         using (Image<Gray, Byte> plateCanny = plate.Canny(new Gray(100), new Gray(50)))
+         using (Image<Gray, Byte> plateCanny = plate.Canny(100, 50))
          using (MemStorage stor = new MemStorage())
          {
             plateMask.SetValue(255.0);

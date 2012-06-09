@@ -21,7 +21,7 @@ namespace OCR
       public OCRForm()
       {
          InitializeComponent();
-         _ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
          languageNameLabel.Text = "eng : tesseract + cube";
       }
 
