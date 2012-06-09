@@ -55,6 +55,7 @@
     <Compile Include="GpuImage.cs" />
     <Compile Include="GpuInvoke.cs" />
     <Compile Include="GpuMat.cs" />
+    <Compile Include="GpuMatchTemplateBuf.cs" />
     <Compile Include="GpuORBDetector.cs" />
     <Compile Include="GpuPyrLKOpticalFlow.cs" />
     <Compile Include="GpuStereoBM.cs" />

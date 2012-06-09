@@ -51,6 +51,7 @@
     <Compile Include="CascadeClassifier.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
+    <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
