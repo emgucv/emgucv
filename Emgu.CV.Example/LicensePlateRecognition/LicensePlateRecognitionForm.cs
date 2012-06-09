@@ -24,7 +24,7 @@ namespace LicensePlateRecognition
       public LicensePlateRecognitionForm()
       {
          InitializeComponent();
-         _licensePlateDetector = new LicensePlateDetector();
+         _licensePlateDetector = new LicensePlateDetector("");
 
          ProcessImage(new Image<Bgr, byte>("license-plate.jpg"));
       }

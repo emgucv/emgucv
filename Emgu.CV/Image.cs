@@ -2691,11 +2691,11 @@ namespace Emgu.CV
             Size size = new Size(value.Width, value.Height);
             if (Ptr == IntPtr.Zero)
             {
-               AllocateData(value.Height, value.Width, NumberOfChannels);
+               AllocateData(size.Height, size.Width, NumberOfChannels);
             } else if (!Size.Equals(size))
             {
                DisposeObject();
-               AllocateData(value.Height, value.Width, NumberOfChannels);
+               AllocateData(size.Height, size.Width, NumberOfChannels);
             }
             #endregion
 
@@ -2717,14 +2717,14 @@ namespace Emgu.CV
             }
 #else
             #region reallocate memory if necessary
-            Size size = new Size(value.Width, value.Height);
+            Size size = value.Size;
             if (Ptr == IntPtr.Zero)
             {
-               AllocateData(value.Height, value.Width, NumberOfChannels);
+               AllocateData(size.Height, size.Width, NumberOfChannels);
             } else if (!Size.Equals(size))
             {
                DisposeObject();
-               AllocateData(value.Height, value.Width, NumberOfChannels);
+               AllocateData(size.Height, size.Width, NumberOfChannels);
             }
             #endregion
 
@@ -2820,7 +2820,6 @@ namespace Emgu.CV
                case PixelFormat.Format1bppIndexed:
                   if (this is Image<Gray, Byte>)
                   {
-                     Size size = value.Size;
                      int rows = size.Height;
                      int cols = size.Width;
                      BitmapData data = value.LockBits(

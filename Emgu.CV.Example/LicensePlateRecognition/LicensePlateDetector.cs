@@ -27,10 +27,14 @@ namespace LicensePlateRecognition
       /// <summary>
       /// Create a license plate detector
       /// </summary>
+      /// <param name="dataPath">
+      /// The datapath must be the name of the parent directory of tessdata and
+      /// must end in / . Any name after the last / will be stripped.
+      /// </param>
       public LicensePlateDetector(String dataPath)
       {
          //create OCR engine
-         //_ocr = new Tesseract(dataPath, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         _ocr = new Tesseract(dataPath, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
          _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
       }
 
