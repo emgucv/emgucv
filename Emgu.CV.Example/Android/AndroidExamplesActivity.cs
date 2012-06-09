@@ -62,6 +62,12 @@ namespace AndroidExamples
          {
             StartActivity(typeof(CameraPreviewActivity));
          };
+
+         Button licensePlateRecognitionButton = FindViewById<Button>(Resource.Id.GotoLicensePlateRecognitionButton);
+         licensePlateRecognitionButton.Click += delegate
+         {
+            StartActivity(typeof(LicensePlateRecognitionActivity));
+         };
       }
    }
 }

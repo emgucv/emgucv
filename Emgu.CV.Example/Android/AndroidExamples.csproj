@@ -16,7 +16,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
-    <AndroidStoreUncompressedFileExtensions />
+    <AndroidStoreUncompressedFileExtensions>.bigrams%3b.fold%3b.lm%3b.nn%3b.params%3b.size%3b.word-freq%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,6 +52,9 @@
     <Compile Include="..\FaceDetection\DetectFace.cs">
       <Link>DetectFace.cs</Link>
     </Compile>
+    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
+      <Link>LicensePlateDetector.cs</Link>
+    </Compile>
     <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
@@ -65,6 +68,7 @@
       <Link>StopSignDetector.cs</Link>
     </Compile>
     <Compile Include="CameraPreviewActivity.cs" />
+    <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />
     <Compile Include="HelloWorldActivity.cs" />
@@ -268,6 +272,33 @@
     <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_videostab.so">
       <Link>lib\x86\libopencv_videostab.so</Link>
     </AndroidNativeLibrary>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.bigrams">
+      <Link>Assets\tessdata\eng.cube.bigrams</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.fold">
+      <Link>Assets\tessdata\eng.cube.fold</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.lm">
+      <Link>Assets\tessdata\eng.cube.lm</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.nn">
+      <Link>Assets\tessdata\eng.cube.nn</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.params">
+      <Link>Assets\tessdata\eng.cube.params</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.size">
+      <Link>Assets\tessdata\eng.cube.size</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.word-freq">
+      <Link>Assets\tessdata\eng.cube.word-freq</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.tesseract_cube.nn">
+      <Link>Assets\tessdata\eng.tesseract_cube.nn</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.traineddata">
+      <Link>Assets\tessdata\eng.traineddata</Link>
+    </AndroidAsset>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\SURFFeature.axml" />
@@ -276,6 +307,9 @@
     <AndroidResource Include="Resources\Layout\FaceDetection.axml" />
     <AndroidResource Include="Resources\Layout\HelloWorld.axml" />
     <AndroidResource Include="Resources\Layout\TrafficSignRecognition.axml" />
+    <AndroidResource Include="Resources\Layout\LicensePlateRecognition.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />
@@ -290,6 +324,10 @@
     <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.GPU.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj">
+      <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>
+      <Name>Emgu.CV.OCR.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
       <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
@@ -330,6 +368,11 @@
     </AndroidAsset>
     <AndroidAsset Include="..\TrafficSignRecognition\stop-sign.jpg">
       <Link>Assets\stop-sign.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\LicensePlateRecognition\license-plate.jpg">
+      <Link>Assets\license-plate.jpg</Link>
     </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

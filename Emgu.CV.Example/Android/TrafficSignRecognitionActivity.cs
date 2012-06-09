@@ -19,7 +19,7 @@ using TrafficSignRecognition;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Traffic Sign Recognition", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Traffic Sign Recognition")]
    public class TrafficSignRecognitionActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)

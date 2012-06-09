@@ -14,7 +14,7 @@ using PlanarSubdivisionExample;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Planar Subdivision", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Planar Subdivision")]
    public class PlanarSubdivisionActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)

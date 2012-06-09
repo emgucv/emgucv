@@ -27,10 +27,10 @@ namespace LicensePlateRecognition
       /// <summary>
       /// Create a license plate detector
       /// </summary>
-      public LicensePlateDetector()
+      public LicensePlateDetector(String dataPath)
       {
          //create OCR engine
-         _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         //_ocr = new Tesseract(dataPath, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
          _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
       }
 

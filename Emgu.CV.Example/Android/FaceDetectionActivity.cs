@@ -16,7 +16,7 @@ using FaceDetection;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Face Detection", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Face Detection")]
    public class FaceDetectionActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)
@@ -36,10 +36,10 @@ namespace AndroidExamples
          {
             long time;
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "lena.jpg"))
-            using (AndroidFileAsset faceXml = new AndroidFileAsset(this, "haarcascade_eye.xml"))
-            using (AndroidFileAsset eyeXml = new AndroidFileAsset(this, "haarcascade_frontalface_default.xml"))
+            using (AndroidCacheFileAsset eyeXml = new AndroidCacheFileAsset(this, "haarcascade_eye.xml"))
+            using (AndroidCacheFileAsset faceXml = new AndroidCacheFileAsset(this, "haarcascade_frontalface_default.xml"))
             {
-               DetectFace.DetectAndDraw(image, faceXml.FileName, eyeXml.FileName, out time);
+               DetectFace.DetectAndDraw(image, faceXml.FileFullPath, eyeXml.FileFullPath, out time);
                messageView.Text = String.Format("Detected in {0} milliseconds.", time);
                imageView.SetImageBitmap(image.ToBitmap());
             }

@@ -15,7 +15,7 @@ using PedestrianDetection;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Pedestrian Detection", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Pedestrian Detection")]
    public class PedestrianDetectionActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)

@@ -15,7 +15,7 @@ using SURFFeatureExample;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "SURF Feature", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "SURF Feature")]
    public class SURFFeatureActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)

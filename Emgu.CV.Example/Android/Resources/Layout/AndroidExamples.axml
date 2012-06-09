@@ -29,6 +29,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/GotoPedestrianDetectionButton" />
     <Button
+        android:text="License Plate Recognition"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GotoLicensePlateRecognitionButton" />
+    <Button
         android:text="@string/TrafficSignRecognition"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

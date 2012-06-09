@@ -23,7 +23,7 @@ using System.Diagnostics;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "MonoAndroidCamera", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "MonoAndroidCamera")]
    public class CameraPreviewActivity : Activity
    {
       private Preview preview;
@@ -82,7 +82,7 @@ namespace AndroidExamples
    {
       private Stopwatch _watch;
       Paint _paint;
-      HaarCascade _faceDetector;
+      CascadeClassifier _faceDetector;
       Android.Graphics.Bitmap _bmp;
       int[] _bgraData;
       byte[] _bgrData;
@@ -99,9 +99,9 @@ namespace AndroidExamples
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
 
-         using (Emgu.Util.AndroidFileAsset asset = new Emgu.Util.AndroidFileAsset(context, "haarcascade_frontalface_default.xml"))
+         using (Emgu.Util.AndroidCacheFileAsset asset = new Emgu.Util.AndroidCacheFileAsset(context, "haarcascade_frontalface_default.xml"))
          {
-            _faceDetector = new HaarCascade(asset.FileName);
+            _faceDetector = new CascadeClassifier(asset.FileFullPath);
          }
          _watch = Stopwatch.StartNew();
       }
@@ -118,7 +118,11 @@ namespace AndroidExamples
                canvas.DrawBitmap(_bmp, 0, 0, null);
                w.Stop();
                _watch.Stop();
-               canvas.DrawText(String.Format("{0:F2} FPS; Render Time: {1} ms", 1.0 / _watch.ElapsedMilliseconds * 1000, w.ElapsedMilliseconds), 20, 20, _paint);
+               canvas.DrawText(String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms", 
+                  1.0 / _watch.ElapsedMilliseconds * 1000, 
+                  _bmp.Width,
+                  _bmp.Height,
+                  w.ElapsedMilliseconds), 20, 20, _paint);
                _watch.Reset();
                _watch.Start();
             }
@@ -159,18 +163,17 @@ namespace AndroidExamples
                   if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
                      _bgraData = new int[size.Width * size.Height];
                   GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
-                     CvInvoke.cvCvtColor(tmp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
+                     CvInvoke.cvCvtColor(yuv420sp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
                   bgraHandle.Free();
                }
                else
                {  
-                  
                   //face detection
-                  MCvAvgComp[] faces;
+                  Rectangle[] faces;
                   using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                     faces = _faceDetector.Detect(grey);
+                     faces = _faceDetector.DetectMultiScale(grey, 1.1, 3, Size.Empty, Size.Empty);
 
                   if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
                      _bgraData = new int[size.Width * size.Height];
@@ -179,14 +182,14 @@ namespace AndroidExamples
 
                   GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
                   GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                   using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                   {
-                     CvInvoke.cvCvtColor(tmp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                     CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
                      
-                     foreach (MCvAvgComp face in faces)
-                        bgr.Draw(face.rect, new Bgr(255, 0, 0), 2);
+                     foreach (Rectangle face in faces)
+                        bgr.Draw(face, new Bgr(255, 0, 0), 2);
                      CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
                   }
                   bgraHandle.Free();

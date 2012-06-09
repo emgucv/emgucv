@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Hello World", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Hello World")]
    public class HelloWorldActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)
@@ -32,7 +32,7 @@ namespace AndroidExamples
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 4.0, 4.0);
 
             image.SetValue(new Bgr(Color.White));
-            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgr(Color.Blue));
+            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgr(Color.Green));
 
             ImageView imageView = FindViewById<ImageView>(Resource.Id.HelloWorldImageView);
             imageView.SetImageBitmap(image.ToBitmap());
