@@ -2689,8 +2689,12 @@ namespace Emgu.CV
 #if ANDROID
             #region reallocate memory if necessary
             Size size = new Size(value.Width, value.Height);
-            if (Ptr == IntPtr.Zero || !Size.Equals(size))
+            if (Ptr == IntPtr.Zero)
             {
+               AllocateData(value.Height, value.Width, NumberOfChannels);
+            } else if (!Size.Equals(size))
+            {
+               DisposeObject();
                AllocateData(value.Height, value.Width, NumberOfChannels);
             }
             #endregion
@@ -2709,12 +2713,17 @@ namespace Emgu.CV
             }
             else
             {
-               throw new NotImplementedException(String.Format("Coping from BMP of {0} is not implemented", value.GetConfig()));
+               throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", value.GetConfig()));
             }
 #else
             #region reallocate memory if necessary
-            if (Ptr == IntPtr.Zero || !Size.Equals(value.Size))
+            Size size = new Size(value.Width, value.Height);
+            if (Ptr == IntPtr.Zero)
             {
+               AllocateData(value.Height, value.Width, NumberOfChannels);
+            } else if (!Size.Equals(size))
+            {
+               DisposeObject();
                AllocateData(value.Height, value.Width, NumberOfChannels);
             }
             #endregion
@@ -2851,7 +2860,7 @@ namespace Emgu.CV
                   }
                   break;
                default:
-                  #region Handle other image type
+            #region Handle other image type
                   /*
 				               Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
 				               using (Graphics g = Graphics.FromImage(bgraImage))
@@ -2874,7 +2883,7 @@ namespace Emgu.CV
 
                      ConvertFrom<Bgra, Byte>(tmp1);
                   }
-                  #endregion
+            #endregion
                   break;
             }
 #endif
@@ -2915,9 +2924,9 @@ namespace Emgu.CV
          using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
          {
             bgra.ConvertFrom(this);
-            handle.Free();
-            return Bitmap.CreateBitmap(values, size.Width, size.Height, Bitmap.Config.Argb8888);
          }
+         handle.Free();
+         return Bitmap.CreateBitmap(values, size.Width, size.Height, Bitmap.Config.Argb8888);
 #else
          Type typeOfColor = typeof(TColor);
          Type typeofDepth = typeof(TDepth);
