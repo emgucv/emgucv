@@ -93,6 +93,16 @@ namespace Emgu.CV.Example.MonoTouch
             };
             examplesSection.Add(licensePlateDetectionElement);
 
+         StyledStringElement cameraElement = new StyledStringElement("Camera");
+         cameraElement.Tapped += () => 
+         {
+            NavigationController.PushViewController(
+               new CameraDialogViewController(),
+               true);
+
+         };
+         examplesSection.Add(cameraElement);
+   
             root.Add(examplesSection);
         }
     }

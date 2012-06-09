@@ -16,41 +16,29 @@ using SURFFeatureExample;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class SURFFeatureDialogViewController : DialogViewController
+    public class SURFFeatureDialogViewController : ButtonMessageImageDialogViewController
     {
         public SURFFeatureDialogViewController()
-         : base(new RootElement("SURF Feature"), true)
+         : base()
         {
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            RootElement root = Root;
-            UIImageView imageView = new UIImageView(View.Frame); 
-            StringElement messageElement = new StringElement("");
-
-            root.Add(new Section()
-                 { new StyledStringElement("Process", delegate {
+         ButtonText = "Match";
+         base.OnButtonClick +=
+            delegate {
             long processingTime;
             using (Image<Gray, byte> modelImage = new Image<Gray, byte>("box.png"))
             using (Image<Gray, byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
             using (Image<Bgr, Byte> image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
             using (Image<Bgr, Byte> resized =image.Resize((int) View.Frame.Width, (int) View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
             {
-               imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
-               imageView.Image  = resized.ToUIImage();
-
+               MessageText = String.Format("Matching Time: {0} milliseconds.", processingTime);
+               SetImage(resized);
             }
-            messageElement.Value = String.Format("Matching Time: {0} milliseconds.", processingTime);
-            messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
-
-            imageView.SetNeedsDisplay();
-         }
-         )}
-            );
-            root.Add(new Section() {messageElement});
-            root.Add(new Section() {imageView});
+         };
         }
     }
 }

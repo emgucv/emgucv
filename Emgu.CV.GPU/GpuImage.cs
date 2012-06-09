@@ -334,7 +334,12 @@ namespace Emgu.CV.GPU
       }
 
       #region IImage Members
-#if !IOS
+#if IOS
+      public MonoTouch.UIKit.UIImage ToUIImage()
+      {
+         throw new NotImplementedException();
+      }
+#else
       /// <summary>
       /// convert the current GpuImage to its equavalent Bitmap representation
       /// </summary>

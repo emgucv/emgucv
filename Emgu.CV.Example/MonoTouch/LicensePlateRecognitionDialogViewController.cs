@@ -37,7 +37,7 @@ namespace Emgu.CV.Example.MonoTouch
 
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("license-plate.jpg"))
             {
-               LicensePlateDetector detector = new LicensePlateDetector();
+               LicensePlateDetector detector = new LicensePlateDetector("");
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
                List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();

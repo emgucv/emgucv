@@ -6,6 +6,9 @@ using System.Drawing;
 
 #if ANDROID
 using Bitmap =  Android.Graphics.Bitmap;
+#elif IOS
+using MonoTouch.CoreGraphics;
+using MonoTouch.UIKit;
 #endif
 
 namespace Emgu.CV
@@ -16,6 +19,13 @@ namespace Emgu.CV
    public interface IImage : IDisposable, ICloneable
    {
 #if IOS
+      /// <summary>
+      /// Conver this image to UIImage
+      /// </summary>
+      /// <returns>
+      /// The UIImage
+      /// </returns>
+      UIImage ToUIImage();
 #else
       /// <summary>
       /// Convert this image into Bitmap, when avaialbe, data is shared with this image.

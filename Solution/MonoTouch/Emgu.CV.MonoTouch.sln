@@ -87,6 +87,6 @@ Global
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj
+		StartupItem = ..\..\Emgu.CV.Example\MonoTouch\Emgu.CV.Example.MonoTouch.csproj
 	EndGlobalSection
 EndGlobal

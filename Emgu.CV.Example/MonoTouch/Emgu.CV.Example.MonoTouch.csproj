@@ -45,6 +45,8 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
+    <MtouchLink>None</MtouchLink>
+    <MtouchI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -114,6 +116,8 @@
     <Compile Include="..\FaceDetection\DetectFace.cs">
       <Link>DetectFace.cs</Link>
     </Compile>
+    <Compile Include="ButtonMessageImageDialogViewController.cs" />
+    <Compile Include="CameraDialogViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -15,25 +15,19 @@ using TrafficSignRecognition;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class TrafficSignRecognitionDialogViewController : DialogViewController
+    public class TrafficSignRecognitionDialogViewController : ButtonMessageImageDialogViewController
     {
         public TrafficSignRecognitionDialogViewController()
-         : base(new RootElement(""), true)
+         : base()
         {
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            RootElement root = Root;
-            UIImageView imageView = new UIImageView(View.Frame);
-
-            StringElement messageElement = new StringElement("");
-
-
-            root.Add(new Section()
-                 { new StyledStringElement("Process", delegate {
+         ButtonText = "Detect Stop Sign";
+            OnButtonClick +=
+         delegate {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("stop-sign.jpg"))
             {
@@ -45,24 +39,20 @@ namespace Emgu.CV.Example.MonoTouch
                detector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
                watch.Stop(); //stop the timer
-               messageElement.Value = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
-               messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
                foreach (Rectangle rect in stopSignBoxList)
                {
                   image.Draw(rect, new Bgr(Color.Red), 2);
                }
+
               using (Image<Bgr, byte> resized = image.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
               {
-                 imageView.Image = resized.ToUIImage();
-                 imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
+                  MessageText = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
+                  SetImage(resized);
               }
-               imageView.SetNeedsDisplay();
+
             }
-         }
-         )}
-            );
-            root.Add(new Section() {messageElement});
-            root.Add(new Section() {imageView});
+         };
+
         }
     }
 }

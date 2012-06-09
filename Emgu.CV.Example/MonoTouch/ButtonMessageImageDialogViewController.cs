@@ -1,0 +1,151 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using MonoTouch.Dialog;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
+
+namespace Emgu.CV.Example.MonoTouch
+{
+    public class ButtonMessageImageDialogViewController : DialogViewController
+    {
+        StyledStringElement _button;
+        UIImageView _imageView;
+        StringElement _messageElement;
+      ProgressView _progressView;
+
+        public ButtonMessageImageDialogViewController()
+           : base(new RootElement(""), true)
+        {
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            RootElement root = Root;
+            _imageView = new UIImageView(View.Frame);
+            _messageElement = new StringElement("");
+
+            _button = new StyledStringElement("", delegate
+            {
+                if (OnButtonClick != null)
+            {
+               if (_progressView == null)
+                _progressView = new ProgressView();
+
+               _progressView.Show("Please wait",
+                  delegate() {
+                     OnButtonClick(this, new EventArgs());});
+            }
+            }
+            );
+            root.Add(new Section() {_button });
+            root.Add(new Section() {_messageElement});
+            root.Add(new Section() {_imageView});
+        }
+        
+        public string ButtonText
+        {
+            get { return _button.Caption; }
+            set
+            { 
+            _button.Caption = value;
+            Root.Reload(_button, UITableViewRowAnimation.None);
+            }
+        }
+
+        public string MessageText
+        {
+            get { return _messageElement.Value;}
+            set
+            { 
+            InvokeOnMainThread( delegate
+                               {
+
+                _messageElement.Value = value;
+                Root.Reload(
+                    _messageElement,
+                    UITableViewRowAnimation.None
+                  );});
+            }
+        }
+
+        public void SetImage(IImage image)
+        {
+         InvokeOnMainThread(delegate
+                            {
+         using (UIImage i = image.ToUIImage())
+         {
+            _imageView.Frame = new RectangleF(
+            PointF.Empty,
+            i.Size
+            );
+            _imageView.Image = i;
+            _imageView.SetNeedsDisplay();
+            }
+         });
+        }
+
+        public event EventHandler<EventArgs> OnButtonClick;
+    }
+
+       public class ProgressView : UIAlertView
+    { 
+        private UIActivityIndicatorView _activityView;
+
+        public ProgressView()
+          : base()
+        {
+        }
+
+        public void Show(string title, Action action)
+        {
+            Title = title;
+            Show();
+ 
+         if (_activityView ==null)
+         {  
+            _activityView = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.WhiteLarge);
+
+            _activityView.Frame = new RectangleF(
+                (Bounds.Width / 2) - 15,
+                Bounds.Height - 50,
+                30,
+                30
+            );
+         }
+
+         AddSubview(_activityView);
+         
+         _activityView.StartAnimating();
+
+         ThreadPool.QueueUserWorkItem(delegate {
+            try
+            {
+            action();
+            } finally
+            {
+
+               this.InvokeOnMainThread(delegate
+                                       {
+                  _activityView.StopAnimating();
+                  _activityView.RemoveFromSuperview();
+                  DismissWithClickedButtonIndex(0, false);
+               });
+            }
+         });
+        }
+
+    }
+}
+
