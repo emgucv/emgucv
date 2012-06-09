@@ -67,3 +67,68 @@ void CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
 {
    retina->setup(*p);
 }
+
+//FaceRecognizer
+cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents)
+{
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createEigenFaceRecognizer(numComponents);
+   ptr.addref();
+   return ptr.obj;
+}
+    
+cv::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents)
+{
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createFisherFaceRecognizer(numComponents);
+   ptr.addref();
+   return ptr.obj;
+}
+    
+cv::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY)
+{
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY);
+   ptr.addref();
+   return ptr.obj;
+}
+
+void CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count)
+{
+   std::vector<cv::Mat> imageVec(count);
+   std::vector<int> labelVec(count);
+   for (int i = 0; i < count; ++i)
+   {
+      imageVec[i] = cv::cvarrToMat(images[i]);
+      labelVec[i] = labels[i];
+   }
+   recognizer->train(imageVec, labelVec);
+}
+
+void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName)
+{
+   std::string file(fileName);
+   recognizer->save(file);
+}
+
+void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName)
+{
+   std::string file(fileName);
+   recognizer->save(file);
+}
+
+int CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image)
+{
+   cv::Mat mat = cv::cvarrToMat(image);
+   return recognizer->predict(mat);
+}
+
+void CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer)
+{
+   delete *recognizer;
+   *recognizer = 0;
+}
+
+void CvApplyColorMap(IplImage* src, IplImage* dst, int colorMap)
+{
+   cv::Mat srcMat = cv::cvarrToMat(src);
+   cv::Mat dstMat = cv::cvarrToMat(dst);
+   cv::applyColorMap(srcMat, dstMat, colorMap);
+}

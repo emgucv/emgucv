@@ -35,4 +35,17 @@ CVAPI(void) CvRetinaGetMagno(cv::Retina* retina, IplImage* magno);
 CVAPI(void) CvRetinaClearBuffers(cv::Retina* retina);
 CVAPI(void) CvRetinaGetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p);
 CVAPI(void) CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p);
+
+//FaceRecognizer
+CVAPI(cv::FaceRecognizer*) CvEigenFaceRecognizerCreate(int numComponents);   
+CVAPI(cv::FaceRecognizer*) CvFisherFaceRecognizerCreate(int numComponents);
+CVAPI(cv::FaceRecognizer*) CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY);
+CVAPI(void) CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count);
+CVAPI(int) CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image);
+CVAPI(void) CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName);
+CVAPI(void) CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName);
+CVAPI(void) CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer);
+
+//color map
+CVAPI(void) CvApplyColorMap(IplImage* src, IplImage* dst, int colorMap);
 #endif

@@ -55,6 +55,15 @@ namespace Emgu.CV
       public extern static void cvSqrt(IntPtr src, IntPtr dst);
 
       /// <summary>
+      /// Apply color map to the image
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image</param>
+      /// <param name="colorMapType">The type of color map</param>
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvApplyColorMap")]
+      public extern static void ApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
+
+      /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
       /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed
       /// independently. If some values are out of range, position of the first outlier is stored in pos, 
