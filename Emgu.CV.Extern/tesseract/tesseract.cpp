@@ -23,11 +23,7 @@ EmguTesseract* TessBaseAPICreate()
 
 int TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode)
 { 
-#ifdef _WIN32
    return ocr->Init(dataPath, language, (tesseract::OcrEngineMode) mode);
-#else
-   return ocr->Init(dataPath, language);
-#endif
 }
 
 void TessBaseAPIRelease(EmguTesseract** ocr)
