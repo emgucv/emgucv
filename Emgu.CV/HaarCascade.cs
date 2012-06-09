@@ -13,6 +13,7 @@ namespace Emgu.CV
    ///<summary> 
    /// HaarCascade for object detection
    /// </summary>
+   [Obsolete("Please use CascadeClassifier instead. This class will be removed in the next version")]
    public class HaarCascade : UnmanagedObject
    {
       ///<summary> Create a HaarCascade object from the specific file</summary>
