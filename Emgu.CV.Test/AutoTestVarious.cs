@@ -126,7 +126,7 @@ namespace Emgu.CV.Test
          //Trace.WriteLine(xdoc.OuterXml);
          cir = Toolbox.XmlDeserialize<CircleF>(xdoc);
 
-         Image<Bgr, Byte> img1 = new Image<Bgr, byte>("stuff.jpg");
+         Image<Bgr, Byte> img1 = EmguAssert.LoadImage<Bgr, byte>("stuff.jpg");
          xdoc = Toolbox.XmlSerialize(img1);
          //Trace.WriteLine(xdoc.OuterXml);
          Image<Bgr, Byte> img2 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(xdoc);
@@ -384,7 +384,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte>[] imgs = Array.ConvertAll<String, Image<Gray, Byte>>(fileNames,
              delegate(String file)
          {
-            return new Image<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
+            return EmguAssert.LoadImage<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
          });
 
          EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
@@ -433,30 +433,6 @@ namespace Emgu.CV.Test
             //MCvAvgComp[] comps = img.DetectHaarCascade(cascade)[0];
          }
       }*/
-
-      /*
-      [Test]
-      public void TestPointInPolygon()
-      {
-         Triangle2D tri = new Triangle2D(
-             new Point2D<float>(-10, -10),
-             new Point2D<float>(0, 10),
-             new Point2D<float>(10, -10));
-
-         Rectangle<float> rect = new Rectangle(
-             new Point2D<float>(0.0f, 0.0f),
-             10f, 10f);
-
-         Point2D<float> p1 = new Point2D<float>(0, 0);
-         Point2D<float> p2 = new Point2D<float>(-20, -20);
-
-         Assert.IsTrue(p1.InConvexPolygon(tri));
-         Assert.IsTrue(p1.InConvexPolygon(rect));
-         Assert.IsFalse(p2.InConvexPolygon(tri));
-         Assert.IsFalse(p2.InConvexPolygon(rect));
-      }*/
-
-
 
       private static float[,] ProjectPoints(float[,] points3D, RotationVector3D rotation, Matrix<double> translation, float focalLength)
       {
@@ -1021,6 +997,43 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestFaceRecognizer()
+      {
+         Image<Gray, Byte>[] images = new Image<Gray, byte>[20];
+         int[] labels = new int[20];
+         for (int i = 0; i < images.Length; i++)
+         {
+            images[i] = new Image<Gray, byte>(200, 200);
+            images[i].SetRandUniform(new MCvScalar(0), new MCvScalar(255));
+            labels[i] = i;
+         }
+
+         EigenFaceRecognizer eigen = new EigenFaceRecognizer(0);
+         eigen.Train(images, labels);
+         for (int i = 0; i < images.Length; i++)
+         {
+            EmguAssert.IsTrue(eigen.Predict(images[i]) == i);
+         }
+         eigen.Save("abc.xml");
+         eigen.Load("abc.xml");
+
+         FisherFaceRecognizer fisher = new FisherFaceRecognizer(0);
+         fisher.Train(images, labels);
+         for (int i = 0; i < images.Length; i++)
+         {
+            EmguAssert.IsTrue(fisher.Predict(images[i]) == i);
+         }
+
+         LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8);
+         lbph.Train(images, labels);
+         for (int i = 0; i < images.Length; i++)
+         {
+            EmguAssert.IsTrue(lbph.Predict(images[i]) == i);
+         }
+
+      }
+
       /*
       //This took ~ 60 seconds to finishes
       [Test]
@@ -1128,8 +1141,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoGCCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
-         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
+         Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("scene_r.bmp");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 
@@ -1159,8 +1172,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoBMCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
-         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
+         Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("scene_r.bmp");
          Image<Gray, Int16> leftDisparity = new Image<Gray, Int16>(left.Size);
          Image<Gray, Int16> rightDisparity = new Image<Gray, Int16>(left.Size);
 
@@ -1190,8 +1203,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoSGBMCorrespondence()
       {
-         Image<Gray, Byte> left = new Image<Gray, byte>("scene_l.bmp");
-         Image<Gray, Byte> right = new Image<Gray, byte>("scene_r.bmp");
+         Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("scene_l.bmp");
+         Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("scene_r.bmp");
          Size size = left.Size;
 
          Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
@@ -1447,7 +1460,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPyrSegmentation()
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
+         Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
          Image<Bgr, Byte> segImage = new Image<Bgr, byte>(image.Size);
          MemStorage storage = new MemStorage();
          IntPtr comp;
@@ -1457,7 +1470,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestHistogram()
       {
-         using (Image<Bgr, Byte> img = new Image<Bgr, byte>("stuff.jpg"))
+         using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("stuff.jpg"))
          using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
          {
             Image<Gray, Byte>[] HSVs = img2.Split();
@@ -1488,7 +1501,7 @@ namespace Emgu.CV.Test
       public void TestHOG1()
       {
          using (HOGDescriptor hog = new HOGDescriptor())
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
          {
             float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
             hog.SetSVMDetector(pedestrianDescriptor);
@@ -1511,7 +1524,7 @@ namespace Emgu.CV.Test
       public void TestHOG2()
       {
          using (HOGDescriptor hog = new HOGDescriptor())
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
          {
             float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
             hog.SetSVMDetector(pedestrianDescriptor);
@@ -1532,7 +1545,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestHOGTrain64x128()
       {
-         using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
          using (Image<Bgr, Byte> resize = image.Resize(64, 128, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC))
          using (HOGDescriptor hog = new HOGDescriptor(resize))
          {
@@ -1549,7 +1562,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestHOGTrainAnySize()
       {
-         using (Image<Bgr, byte> image = new Image<Bgr, byte>("lena.jpg"))
+         using (Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
          using (HOGDescriptor hog = new HOGDescriptor(image))
          {
 
@@ -1599,7 +1612,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGrabCut1()
       {
-         Image<Bgr, Byte> img = new Image<Bgr, byte>("airplane.jpg");
+         Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("airplane.jpg");
 
          Rectangle rect = new Rectangle(new Point(24, 126), new Size(483, 294));
          Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5);
@@ -1615,7 +1628,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGrabCut2()
       {
-         Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
+         Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
          HOGDescriptor desc = new HOGDescriptor();
          desc.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
 
@@ -1659,7 +1672,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestAdaptiveSkinDetector()
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg");
+         Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
          using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.ERODE_DILATE))
          {
             Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
@@ -1798,7 +1811,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestRTreeClassifier()
       {
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("box_in_scene.png"))
+         using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("box_in_scene.png"))
          using (Image<Gray, Byte> gray = image.Convert<Gray, byte>())
          using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
          {
@@ -1980,11 +1993,11 @@ namespace Emgu.CV.Test
       [Test]
       public void TestPyrMeanshiftSegmentation()
       {
-         Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png");
+         Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.cvPyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
          //Image<Gray, Byte> hue = result.Convert<Hsv, Byte>()[0];
-         Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(new Gray(30), new Gray(20));
+         Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(30, 20);
 
          //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
       }
@@ -1993,15 +2006,63 @@ namespace Emgu.CV.Test
       public void TestStitching()
       {
          Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
-         images[0] = new Image<Bgr, byte>("stitch1.jpg");
-         images[1] = new Image<Bgr, byte>("stitch2.jpg");
-         images[2] = new Image<Bgr, byte>("stitch3.jpg");
-         images[3] = new Image<Bgr, byte>("stitch4.jpg");
+
+         images[0] = EmguAssert.LoadImage<Bgr,Byte>("stitch1.jpg");
+         images[1] = EmguAssert.LoadImage<Bgr, Byte>("stitch2.jpg");
+         images[2] = EmguAssert.LoadImage<Bgr, Byte>("stitch3.jpg");
+         images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
 
          using (Stitcher stitcher = new Stitcher(false))
          {
             Image<Bgr, Byte> result = stitcher.Stitch(images);
             //ImageViewer.Show(result);
+         }
+      }
+
+      [Test]
+      public void TestLatenSVM()
+      {
+         using (LatentSvmDetector detector = new LatentSvmDetector("car.xml"))
+         {
+            String[] files = new String[] { 
+               "license-plate.jpg"};
+
+            for (int idx = 0; idx < files.Length; idx++)
+               using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>(files[idx]))
+               {
+                  MCvObjectDetection[] results = detector.Detect(img, 0.5f);
+                  if (results.Length >= 0)
+                  {
+                     double maxScore = results[0].score;
+                     Rectangle result = results[0].Rect;
+
+                     for (int i = 1; i < results.Length; ++i)
+                     {
+                        if (results[i].score > maxScore)
+                        {
+                           maxScore = results[i].score;
+                           result = results[i].Rect;
+                        }
+                     }
+
+                     result.Inflate((int)(result.Width * 0.2), (int)(result.Height * 0.2));
+                     using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
+                     using (Image<Gray, Byte> canny = img.Canny(120, 80))
+                     {
+                        MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
+                        CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
+                        CvInvoke.cvSet(canny, new MCvScalar(), mask);
+                        canny.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
+
+                        CvInvoke.cvNot(canny, canny);
+
+                        Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>()/*mask.Convert<Bgr, Byte>()*/);
+
+                        //displayImg.Save("out_" + files[idx]);
+                        //ImageViewer.Show(displayImg);
+                     }
+                  }
+               }
          }
       }
 

@@ -995,54 +995,6 @@ namespace Emgu.CV.Test
          }
       }
 
-
-      public void TestLatenSVM()
-      {
-         using (LatentSvmDetector detector = new LatentSvmDetector("car.xml"))
-         {
-            String[] files = new String[] { 
-               "license-plate.jpg"};
-
-            for (int idx = 0; idx < files.Length; idx++)
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(files[idx]))
-            {
-               MCvObjectDetection[] results = detector.Detect(img, 0.5f);
-               if (results.Length >= 0)
-               {
-                  double maxScore = results[0].score;
-                  Rectangle result = results[0].Rect;
-
-                  for (int i = 1; i < results.Length; ++i)
-                  {
-                     if (results[i].score > maxScore)
-                     {
-                        maxScore = results[i].score;
-                        result = results[i].Rect;
-                     }
-                  }
-
-                  result.Inflate((int)(result.Width * 0.2), (int)(result.Height * 0.2));
-                  using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
-                  using (Image<Bgr, Byte> canny = img.Canny(new Bgr(120, 120, 120), new Bgr(80, 80, 80)))
-                  using (Image<Gray, Byte> cannyGray = canny.Convert<Gray, Byte>())
-                  {
-                     MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
-                     CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
-                     CvInvoke.cvSet(cannyGray, new MCvScalar(), mask);
-                     cannyGray.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
-
-                     CvInvoke.cvNot(cannyGray, cannyGray);
-
-                     Image<Bgr, byte> displayImg = img.ConcateHorizontal(cannyGray.Convert<Bgr, Byte>()/*mask.Convert<Bgr, Byte>()*/);
-
-                     //displayImg.Save("out_" + files[idx]);
-                     //ImageViewer.Show(displayImg);
-                  }
-               }
-            }
-         }
-      }
-
       public void TestStereo()
       {
          using (ImageViewer v = new ImageViewer())
