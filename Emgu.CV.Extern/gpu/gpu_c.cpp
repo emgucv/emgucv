@@ -293,6 +293,11 @@ void gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, 
    cv::gpu::cvtColor(*src, *dst, code, dst->channels(), stream ? *stream : cv::gpu::Stream::Null());
 }
 
+void gpuMatSwapChannels(cv::gpu::GpuMat* image, const int* dstOrder, cv::gpu::Stream* stream)
+{
+   cv::gpu::swapChannels(*image, dstOrder, stream ? *stream : cv::gpu::Stream::Null());
+}
+
 void gpuMatConvertTo(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double alpha, double beta, cv::gpu::Stream* stream)
 {
    if (stream)
@@ -425,14 +430,25 @@ void gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
                      const cv::gpu::GpuMat* mask)
 {
    cv::Point minimunLoc, maximunLoc;
-   cv::gpu::minMaxLoc(*src, minVal, maxVal, &minimunLoc, &maximunLoc, *mask);
+   cv::gpu::GpuMat maskMat = mask ? *mask : cv::gpu::GpuMat();
+   cv::gpu::minMaxLoc(*src, minVal, maxVal, &minimunLoc, &maximunLoc, maskMat);
    maxLoc->x = maximunLoc.x; maxLoc->y = maximunLoc.y;
-   minLoc->x = minimunLoc.x; maxLoc->y = minimunLoc.y;
+   minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
 }
 
-void gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method)
+void gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::MatchTemplateBuf* buffer, cv::gpu::Stream* stream)
 {
-   cv::gpu::matchTemplate(*image, *templ, *result, method);
+   if (buffer)
+      cv::gpu::matchTemplate(*image, *templ, *result, method, *buffer, stream ? *stream : cv::gpu::Stream::Null());
+   else
+   {
+      if (stream)
+         CV_Error(CV_StsError, "Must specify gpu MatchTemplateBuf when using Stream");
+      else
+      {
+         cv::gpu::matchTemplate(*image, *templ, *result, method);
+      }
+   }
 }
 
 void gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream)
@@ -708,4 +724,19 @@ void gpuGoodFeaturesToTrackDetectorRelease(cv::gpu::GoodFeaturesToTrackDetector_
 void gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gpu::GpuMat* v, cv::gpu::GpuMat* vertex, cv::gpu::GpuMat* colors)
 {
    cv::gpu::createOpticalFlowNeedleMap(*u, *v, *vertex, *colors);
+}
+
+//----------------------------------------------------------------------------
+//
+//  GpuMatchTemplateBuf
+//
+//----------------------------------------------------------------------------
+cv::gpu::MatchTemplateBuf* gpuMatchTemplateBufCreate()
+{
+   return new cv::gpu::MatchTemplateBuf();
+}
+void gpuMatchTemplateBufRelease(cv::gpu::MatchTemplateBuf** buffer)
+{
+   delete *buffer;
+   *buffer = 0;
 }

@@ -15,7 +15,7 @@ using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using NUnit.Framework;
 
-namespace Emgu.CV.GPU.Test
+namespace Emgu.CV.Test
 {
    [TestFixture]
    public class TestGpuMat
@@ -548,6 +548,51 @@ namespace Emgu.CV.GPU.Test
          }
          Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
          Assert.LessOrEqual(maxVal, 1.0);
+      }
+
+      [Test]
+      public void TestMatchTemplate()
+      {
+         #region prepare synthetic image for testing
+         int templWidth = 50;
+         int templHeight = 50;
+         Point templCenter = new Point(120, 100);
+
+         //Create a random object
+         Image<Bgr, Byte> randomObj = new Image<Bgr, byte>(templWidth, templHeight);
+         randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+
+         //Draw the object in image1 center at templCenter;
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
+         Rectangle objectLocation = new Rectangle(templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1), templWidth, templHeight);
+         img.ROI = objectLocation;
+         randomObj.Copy(img, null);
+         img.ROI = Rectangle.Empty;
+         #endregion
+
+         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
+         double[] minVal, maxVal;
+         Point[] minLoc, maxLoc;
+         match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
+
+         double gpuMinVal = 0, gpuMaxVal = 0;
+         Point gpuMinLoc = Point.Empty, gpuMaxLoc = Point.Empty;
+         GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(img);
+         GpuImage<Bgr, Byte> gpuRandomObj = new GpuImage<Bgr, byte>(randomObj);
+         GpuImage<Gray, Single> gpuMatch = new GpuImage<Gray, float>(match.Size);
+         using (GpuMatchTemplateBuf buffer = new GpuMatchTemplateBuf())
+         using (Stream stream = new Stream())
+         {
+            GpuInvoke.MatchTemplate(gpuImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer, stream);
+            stream.WaitForCompletion();
+            GpuInvoke.MinMaxLoc(gpuMatch, ref gpuMinVal, ref gpuMaxVal, ref gpuMinLoc, ref gpuMaxLoc, IntPtr.Zero);
+         }
+
+         EmguAssert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
+         EmguAssert.AreEqual(minLoc[0].Y, templCenter.Y - templHeight / 2);
+         EmguAssert.IsTrue(minLoc[0].Equals(gpuMinLoc));
+         EmguAssert.IsTrue(maxLoc[0].Equals(gpuMaxLoc));
+         
       }
 
       [Test]

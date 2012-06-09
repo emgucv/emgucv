@@ -240,6 +240,29 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCvtColor")]
       public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code, IntPtr stream);
 
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void gpuMatSwapChannels(IntPtr src, IntPtr dstOrder, IntPtr stream);
+
+      /// <summary>
+      /// Swap channels.
+      /// </summary>
+      /// <param name="src">The image where the channels will be swapped</param>
+      /// <param name="dstOrder">
+      /// Integer array describing how channel values are permutated. The n-th entry
+      /// of the array contains the number of the channel that is stored in the n-th channel of
+      /// the output image. E.g. Given an RGBA image, aDstOrder = [3,2,1,0] converts this to ABGR
+      /// channel order.
+      /// </param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      public static void SwapChannels(IntPtr src, int[] dstOrder, IntPtr stream)
+      {
+         if (dstOrder == null || dstOrder.Length < 4)
+            throw new ArgumentException("dstOrder must be an int array of size 4");
+         GCHandle handle = GCHandle.Alloc(dstOrder, GCHandleType.Pinned);
+         gpuMatSwapChannels(src, handle.AddrOfPinnedObject(), stream);
+         handle.Free();
+      }
+
       /// <summary>
       /// Copy the source GpuMat to destination GpuMat, using an optional mask.
       /// </summary>
@@ -631,9 +654,10 @@ namespace Emgu.CV.GPU
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      /// <param name="gpuMatchTemplateBuf">Pointer to GpuMatchTemplateBuf, if you use <paramref name="stream"/>, you must specify a GpuMatchTemplateBuf</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMatchTemplate")]
-      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr stream);
+      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr gpuMatchTemplateBuf, IntPtr stream);
 
       /// <summary>
       /// Performs downsampling step of Gaussian pyramid decomposition. 

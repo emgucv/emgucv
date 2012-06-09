@@ -132,6 +132,8 @@ CVAPI(double) gpuMatThreshold(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, 
 
 CVAPI(void) gpuMatCvtColor(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int code, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatSwapChannels(cv::gpu::GpuMat* image, const int* dstOrder, cv::gpu::Stream* stream);
+
 CVAPI(void) gpuMatConvertTo(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, double alpha, double beta, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatCopy(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* mask);
@@ -170,7 +172,7 @@ CVAPI(void) gpuMatMinMaxLoc(const cv::gpu::GpuMat* src,
    CvPoint* minLoc, CvPoint* maxLoc, 
    const cv::gpu::GpuMat* mask);
 
-CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatMatchTemplate(const cv::gpu::GpuMat* image, const cv::gpu::GpuMat* templ, cv::gpu::GpuMat* result, int method, cv::gpu::MatchTemplateBuf* buffer, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatPyrDown(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, cv::gpu::Stream* stream);
 
@@ -496,5 +498,12 @@ CVAPI(int) gpuORBDetectorGetDescriptorSize(cv::gpu::ORB_GPU* detector);
 //----------------------------------------------------------------------------
 CVAPI(void) gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gpu::GpuMat* v, cv::gpu::GpuMat* vertex, cv::gpu::GpuMat* colors);
 
+//----------------------------------------------------------------------------
+//
+//  GpuMatchTemplateBuf
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::MatchTemplateBuf*) gpuMatchTemplateBufCreate();
+CVAPI(void) gpuMatchTemplateBufRelease(cv::gpu::MatchTemplateBuf** buffer);
 
 #endif
