@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
+using System.Diagnostics;
 
 namespace Emgu.CV.OCR
 {
@@ -89,8 +91,26 @@ namespace Emgu.CV.OCR
       /// <summary>
       /// Create an tesseract OCR engine.
       /// </summary>
-      /// <param name="dataPath">The path where the language file is located</param>
-      /// <param name="language">The 3 letter language code </param>
+      /// <param name="dataPath">
+      /// The datapath must be the name of the parent directory of tessdata and
+      /// must end in / . Any name after the last / will be stripped.
+      /// </param>
+      /// <param name="language">
+      /// The language is (usually) an ISO 639-3 string or NULL will default to eng.
+      /// It is entirely safe (and eventually will be efficient too) to call
+      /// Init multiple times on the same instance to change language, or just
+      /// to reset the classifier.
+      /// The language may be a string of the form [~]%lt;lang&gt;[+[~]&lt;lang&gt;]* indicating
+      /// that multiple languages are to be loaded. Eg hin+eng will load Hindi and
+      /// English. Languages may specify internally that they want to be loaded
+      /// with one or more other languages, so the ~ sign is available to override
+      /// that. Eg if hin were set to load eng by default, then hin+~eng would force
+      /// loading only hin. The number of loaded languages is limited only by
+      /// memory, with the caveat that loading additional languages will impact
+      /// both speed and accuracy, as there is more work to do to decide on the
+      /// applicable language, and there is more chance of hallucinating incorrect
+      /// words.
+      /// </param>
       /// <param name="mode">OCR engine mode</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode)
          : this()
@@ -101,8 +121,26 @@ namespace Emgu.CV.OCR
       /// <summary>
       /// Create an tesseract OCR engine.
       /// </summary>
-      /// <param name="dataPath">The path where the language file is located</param>
-      /// <param name="language">The 3 letter language code </param>
+      /// <param name="dataPath">
+      /// The datapath must be the name of the parent directory of tessdata and
+      /// must end in / . Any name after the last / will be stripped.
+      /// </param>
+      /// <param name="language">
+      /// The language is (usually) an ISO 639-3 string or NULL will default to eng.
+      /// It is entirely safe (and eventually will be efficient too) to call
+      /// Init multiple times on the same instance to change language, or just
+      /// to reset the classifier.
+      /// The language may be a string of the form [~]%lt;lang&gt;[+[~]&lt;lang&gt;]* indicating
+      /// that multiple languages are to be loaded. Eg hin+eng will load Hindi and
+      /// English. Languages may specify internally that they want to be loaded
+      /// with one or more other languages, so the ~ sign is available to override
+      /// that. Eg if hin were set to load eng by default, then hin+~eng would force
+      /// loading only hin. The number of loaded languages is limited only by
+      /// memory, with the caveat that loading additional languages will impact
+      /// both speed and accuracy, as there is more work to do to decide on the
+      /// applicable language, and there is more chance of hallucinating incorrect
+      /// words.
+      /// </param>
       /// <param name="mode">OCR engine mode</param>
       /// <param name="whiteList">This can be used to specify a white list for OCR. e.g. specify "1234567890" to recognize digits only. Note that the white list currently seems to only work with OcrEngineMode.OEM_TESSERACT_ONLY</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
@@ -132,14 +170,57 @@ namespace Emgu.CV.OCR
       /// <summary>
       /// Initialize the OCR engine using the specific dataPath and language name.
       /// </summary>
-      /// <param name="dataPath">The path where the language file is located</param>
-      /// <param name="language">The 3 letter language code </param>
+      /// <param name="dataPath">
+      /// The datapath must be the name of the parent directory of tessdata and
+      /// must end in / . Any name after the last / will be stripped.
+      /// </param>
+      /// <param name="language">
+      /// The language is (usually) an ISO 639-3 string or NULL will default to eng.
+      /// It is entirely safe (and eventually will be efficient too) to call
+      /// Init multiple times on the same instance to change language, or just
+      /// to reset the classifier.
+      /// The language may be a string of the form [~]%lt;lang&gt;[+[~]&lt;lang&gt;]* indicating
+      /// that multiple languages are to be loaded. Eg hin+eng will load Hindi and
+      /// English. Languages may specify internally that they want to be loaded
+      /// with one or more other languages, so the ~ sign is available to override
+      /// that. Eg if hin were set to load eng by default, then hin+~eng would force
+      /// loading only hin. The number of loaded languages is limited only by
+      /// memory, with the caveat that loading additional languages will impact
+      /// both speed and accuracy, as there is more work to do to decide on the
+      /// applicable language, and there is more chance of hallucinating incorrect
+      /// words.
+      /// </param>
       /// <param name="mode">OCR engine mode</param>
       public void Init(String dataPath, String language, OcrEngineMode mode)
       {
+         
+         
+         if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
+         {  //if the data path end in slash
+            int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+            if (lastSlash != -1)
+            {  
+               //there is a direcotry separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
+               dataPath = dataPath.Substring(0, lastSlash + 1);
+            }
+         }
+         
+         /*
+         if (!System.IO.Directory.Exists(System.IO.Path.Combine(dataPath, "tessdata")))
+         {
+            throw new ArgumentException(String.Format("The directory {0} doesn't exist!", Path.Combine(dataPath, "tessdata")));
+         }
+
+         //make sure the tesseract file exist.
+         if (mode == OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED || mode == OcrEngineMode.OEM_TESSERACT_ONLY)
+         {
+            if (!System.IO.File.Exists(System.IO.Path.Combine(dataPath, "tessdata", language + ".traineddata")))
+               throw new ArgumentException(String.Format("The required tesseract file {0}.traineddata doesn't exist", System.IO.Path.Combine(dataPath, language)));
+         }*/
+
          /*if (!IsEngineModeSupported(mode))
             throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
-         int initResult= TessBaseAPIInit(_ptr, dataPath, language, mode);
+         int initResult = TessBaseAPIInit(_ptr, dataPath, language, mode);
          if (initResult != 0) throw new ArgumentException(String.Format("Unable to create ocr model using Path {0} and language {1}.", dataPath, language));
       }
 
@@ -198,7 +279,7 @@ namespace Emgu.CV.OCR
             Seq<byte> textSeq = new Seq<byte>(stor);
             Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
             TessBaseAPIExtractResult(_ptr, textSeq, results);
-            
+
             byte[] bytes = textSeq.ToArray();
             TesseractResult[] trs = results.ToArray();
 
@@ -261,22 +342,22 @@ namespace Emgu.CV.OCR
          /// <summary>
          /// Run Tesseract only - fastest
          /// </summary>
-         OEM_TESSERACT_ONLY,          
+         OEM_TESSERACT_ONLY,
          /// <summary>
          /// Run Cube only - better accuracy, but slower
          /// </summary>
-         OEM_CUBE_ONLY,               
+         OEM_CUBE_ONLY,
          /// <summary>
          /// Run both and combine results - best accuracy
          /// </summary>
-         OEM_TESSERACT_CUBE_COMBINED, 
+         OEM_TESSERACT_CUBE_COMBINED,
          /// <summary>
          /// Specify this mode to indicate that any of the above modes
          /// should be automatically inferred from the variables in the 
          /// language-specific config, or if not specified in any of 
          /// the above should be set to the default OEM_TESSERACT_ONLY.
          /// </summary>
-         OEM_DEFAULT                   
+         OEM_DEFAULT
       };
    }
 }
