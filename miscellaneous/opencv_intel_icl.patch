@@ -42,6 +42,18 @@ Index: cmake/OpenCVModule.cmake
      LIBRARY DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
      ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
      )
+Index: modules/contrib/src/colormap.cpp
+===================================================================
+--- modules/contrib/src/colormap.cpp	(revision 8558)
++++ modules/contrib/src/colormap.cpp	(working copy)
+@@ -573,6 +573,7 @@
+             colormap == COLORMAP_BONE ? (colormap::ColorMap*)(new colormap::Bone) :
+             colormap == COLORMAP_JET ? (colormap::ColorMap*)(new colormap::Jet) :
+             colormap == COLORMAP_WINTER ? (colormap::ColorMap*)(new colormap::Winter) :
++            colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
+             colormap == COLORMAP_OCEAN ? (colormap::ColorMap*)(new colormap::Ocean) :
+             colormap == COLORMAP_SUMMER ? (colormap::ColorMap*)(new colormap::Summer) :
+             colormap == COLORMAP_SPRING ? (colormap::ColorMap*)(new colormap::Spring) :
 Index: modules/gpu/src/split_merge.cpp
 ===================================================================
 --- modules/gpu/src/split_merge.cpp	(revision 8558)
