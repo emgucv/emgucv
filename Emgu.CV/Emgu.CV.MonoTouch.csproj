@@ -245,6 +245,7 @@
       <DependentUpon>libemgucv.a</DependentUpon>
     </Compile>
     <Compile Include="CascadeClassifier.cs" />
+    <Compile Include="FaceRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">
