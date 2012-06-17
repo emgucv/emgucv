@@ -15,37 +15,14 @@ namespace Simlpe3DReconstruction
       /// </summary>
       private void InitializeComponent()
       {
-         this.components = new System.ComponentModel.Container();
-         
-         this.viewer3D = new OsgControl();
-
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
+         this.View3DGlControl = new OpenTK.GLControl();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
          this.SuspendLayout();
-         
-         // 
-         // simpleOsgControl
-         // 
-         this.viewer3D.AccumBits = ((byte)(0));
-         this.viewer3D.AutoCheckErrors = false;
-         this.viewer3D.AutoFinish = false;
-         this.viewer3D.AutoMakeCurrent = true;
-         this.viewer3D.AutoSwapBuffers = true;
-         this.viewer3D.BackColor = System.Drawing.Color.Black;
-         this.viewer3D.ColorBits = ((byte)(32));
-         this.viewer3D.DepthBits = ((byte)(16));
-         this.viewer3D.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.viewer3D.Location = new System.Drawing.Point(0, 0);
-         this.viewer3D.Name = "simpleOpenGlControl1";
-         this.viewer3D.Size = new System.Drawing.Size(367, 309);
-         this.viewer3D.StencilBits = ((byte)(0));
-         this.viewer3D.TabIndex = 0;
-         this.viewer3D.Paint += new System.Windows.Forms.PaintEventHandler(this.viewer3D_Paint);
-         
          // 
          // splitContainer1
          // 
@@ -59,7 +36,7 @@ namespace Simlpe3DReconstruction
          // 
          // splitContainer1.Panel2
          // 
-         this.splitContainer1.Panel2.Controls.Add(this.viewer3D);
+         this.splitContainer1.Panel2.Controls.Add(this.View3DGlControl);
          this.splitContainer1.Size = new System.Drawing.Size(791, 309);
          this.splitContainer1.SplitterDistance = 420;
          this.splitContainer1.TabIndex = 1;
@@ -73,6 +50,18 @@ namespace Simlpe3DReconstruction
          this.imageBox1.Size = new System.Drawing.Size(420, 309);
          this.imageBox1.TabIndex = 2;
          this.imageBox1.TabStop = false;
+         // 
+         // View3DGlControl
+         // 
+         this.View3DGlControl.BackColor = System.Drawing.Color.Black;
+         this.View3DGlControl.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.View3DGlControl.Location = new System.Drawing.Point(0, 0);
+         this.View3DGlControl.Name = "View3DGlControl";
+         this.View3DGlControl.Size = new System.Drawing.Size(367, 309);
+         this.View3DGlControl.TabIndex = 0;
+         this.View3DGlControl.VSync = false;
+         this.View3DGlControl.Load += new System.EventHandler(this.View3DGlControl_Load);
+         this.View3DGlControl.Paint += new System.Windows.Forms.PaintEventHandler(this.View3DGlControl_Paint);
          // 
          // Simple3DReconstruction
          // 
@@ -92,9 +81,10 @@ namespace Simlpe3DReconstruction
 
       #endregion
 
-      private OsgControl viewer3D;
+      //private OsgControl viewer3D;
       private System.Windows.Forms.SplitContainer splitContainer1;
       private Emgu.CV.UI.ImageBox imageBox1;
+      private OpenTK.GLControl View3DGlControl;
    }
 }
 
