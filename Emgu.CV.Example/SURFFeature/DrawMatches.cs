@@ -94,14 +94,14 @@ namespace SURFFeatureExample
          } else
          {
             //extract features from the object image
-            modelKeyPoints = surfCPU.DetectKeyPointsRaw(modelImage, null);
-            Matrix<float> modelDescriptors = surfCPU.ComputeDescriptorsRaw(modelImage, null, modelKeyPoints);
+            modelKeyPoints = new VectorOfKeyPoint();
+            Matrix<float> modelDescriptors = surfCPU.DetectAndCompute(modelImage, null, modelKeyPoints);
 
             watch = Stopwatch.StartNew();
 
             // extract features from the observed image
-            observedKeyPoints = surfCPU.DetectKeyPointsRaw(observedImage, null);
-            Matrix<float> observedDescriptors = surfCPU.ComputeDescriptorsRaw(observedImage, null, observedKeyPoints);
+            observedKeyPoints = new VectorOfKeyPoint();
+            Matrix<float> observedDescriptors = surfCPU.DetectAndCompute(observedImage, null, observedKeyPoints);
             BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2);
             matcher.Add(modelDescriptors);
 
