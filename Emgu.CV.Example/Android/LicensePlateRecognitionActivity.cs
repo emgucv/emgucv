@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Graphics;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -17,34 +18,29 @@ using LicensePlateRecognition;
 namespace AndroidExamples
 {
    [Activity(Label = "License Plate Recognition")]
-   public class LicensePlateRecognitionActivity : Activity
+   public class LicensePlateRecognitionActivity : ButtonMessageImageActivity
    {
+      public LicensePlateRecognitionActivity()
+         : base("Detect License Plate")
+      {
+      }
+
       protected override void OnCreate(Bundle bundle)
       {
          base.OnCreate(bundle);
 
-         // Set our view from the "main" layout resource
-         SetContentView(Resource.Layout.LicensePlateRecognition);
-
-         // Get our button from the layout resource,
-         // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.RecognizeLicensePlateButton);
-         ImageView imageView = FindViewById<ImageView>(Resource.Id.LicensePlateRecognitionImageView);
-         TextView messageView = FindViewById<TextView>(Resource.Id.LicensePlateRecognitionMessageView);
-
-         String[] files = Assets.List(".");
-
-         button.Click += delegate
+         OnButtonClick += delegate
          {
-            using (AndroidPermanantFileAsset a8 = new AndroidPermanantFileAsset(this, "tessdata/eng.traineddata", "tmp", true))
-            using (AndroidPermanantFileAsset a0 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.bigrams", "tmp", true))
-            using (AndroidPermanantFileAsset a1 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.fold", "tmp", true))
-            using (AndroidPermanantFileAsset a2 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.lm", "tmp", true))
-            using (AndroidPermanantFileAsset a3 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.nn", "tmp", true))
-            using (AndroidPermanantFileAsset a4 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.params", "tmp", true))
-            using (AndroidPermanantFileAsset a5 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.size", "tmp", true))
-            using (AndroidPermanantFileAsset a6 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.word-freq", "tmp", true))
-            using (AndroidPermanantFileAsset a7 = new AndroidPermanantFileAsset(this, "tessdata/eng.tesseract_cube.nn", "tmp", true))
+            AndroidPermanantFileAsset.OverwriteMethod overwriteMethod = AndroidPermanantFileAsset.OverwriteMethod.NeverOverwrite;
+            using (AndroidPermanantFileAsset a8 = new AndroidPermanantFileAsset(this, "tessdata/eng.traineddata", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a0 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.bigrams", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a1 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.fold", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a2 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.lm", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a3 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.nn", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a4 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.params", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a5 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.size", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a6 = new AndroidPermanantFileAsset(this, "tessdata/eng.cube.word-freq", "tmp", overwriteMethod))
+            using (AndroidPermanantFileAsset a7 = new AndroidPermanantFileAsset(this, "tessdata/eng.tesseract_cube.nn", "tmp", overwriteMethod))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>(Assets, "license-plate.jpg"))
             {
                LicensePlateDetector detector = new LicensePlateDetector( System.IO.Path.Combine( a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar );
@@ -65,14 +61,26 @@ namespace AndroidExamples
                builder.Append(String.Format("{0} milli-seconds. ", watch.Elapsed.TotalMilliseconds));
                foreach (String w in words)
                   builder.AppendFormat("{0} ", w);
-               messageView.Text = builder.ToString();
+               SetMessage(builder.ToString());
 
-               foreach (MCvBox2D box in licenseBoxList)
+               Bitmap bmp = null;
+               using (Bitmap tmp = image.ToBitmap())
+                  bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+               using (Canvas c = new Canvas(bmp))
+               using (Paint p = new Paint())
                {
-                  image.Draw(box, new Bgr(Color.Red), 2);
+                  p.Color = Android.Graphics.Color.Red;
+                  p.StrokeWidth = 2;
+                  p.SetStyle(Paint.Style.Stroke);
+
+                  foreach (MCvBox2D box in licenseBoxList)
+                  {
+                     Rectangle rect = box.MinAreaRect();
+                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  }
                }
 
-               imageView.SetImageBitmap(image.ToBitmap());
+               SetImageBitmap(bmp);
             }
          };
       }

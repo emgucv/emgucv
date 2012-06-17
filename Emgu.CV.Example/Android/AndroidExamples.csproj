@@ -16,7 +16,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
-    <AndroidStoreUncompressedFileExtensions>.bigrams%3b.fold%3b.lm%3b.nn%3b.params%3b.size%3b.word-freq%3b.traineddata</AndroidStoreUncompressedFileExtensions>
+    <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -67,6 +67,7 @@
     <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
       <Link>StopSignDetector.cs</Link>
     </Compile>
+    <Compile Include="ButtonMessageImageActivity.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
@@ -301,15 +302,8 @@
     </AndroidAsset>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <AndroidResource Include="Resources\Layout\SURFFeature.axml" />
     <AndroidResource Include="Resources\Layout\PlanarSubdivision.axml" />
-    <AndroidResource Include="Resources\Layout\PedestrianDetection.axml" />
-    <AndroidResource Include="Resources\Layout\FaceDetection.axml" />
     <AndroidResource Include="Resources\Layout\HelloWorld.axml" />
-    <AndroidResource Include="Resources\Layout\TrafficSignRecognition.axml" />
-    <AndroidResource Include="Resources\Layout\LicensePlateRecognition.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />

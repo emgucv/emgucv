@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
    <string name="SURFFeatures">SURF Features</string>
-   <string name="MatchSURFFeatures">Match SURF Features</string>
    <string name="PlanarSubdivision">Planar Subdivision</string>
    <string name="RedrawSubdivision">Redraw Subdivision</string>
    <string name="PedestrianDetection">Pedestrian Detection</string>
-   <string name="DetectPedestrian">Detect Pedestrians</string>
    <string name="FaceDetection">Face Detection</string>
-   <string name="DetectFace">Detect Faces</string>
    <string name="HelloWorld">Hello World</string>
    <string name="TrafficSignRecognition">Traffic Sign Recognition</string>
-   <string name="DetectStopSign">Detect Stop Sign</string>
    <string name="ApplicationName">AndroidExamples</string>
    <string name="Camera">Camera</string>
 </resources>

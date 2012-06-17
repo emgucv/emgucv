@@ -1,4 +1,8 @@
-﻿//
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
+//
 // Camera preview based on monodroid API-samples
 // https://github.com/xamarin/monodroid-samples/blob/master/ApiDemo/Graphics/CameraPreview.cs
 //
@@ -30,7 +34,7 @@ namespace AndroidExamples
       private TopLayer _topLayer;
 
       private IMenuItem _menuCanny;
-      private IMenuItem _menuFacedetect;
+      private IMenuItem _menuColorMap;
       private IMenuItem _menuPreview;
 
       protected override void OnCreate(Bundle bundle)
@@ -50,7 +54,7 @@ namespace AndroidExamples
       {
          _menuPreview = menu.Add("Preview");
          _menuCanny = menu.Add("Canny");
-         _menuFacedetect = menu.Add("Face Detect");
+         _menuColorMap = menu.Add("Color Map");
          return base.OnCreateOptionsMenu(menu);
       }
 
@@ -60,9 +64,9 @@ namespace AndroidExamples
          {
             _topLayer.Mode = ViewMode.Canny;
          }
-         else if (item == _menuFacedetect)
+         else if (item == _menuColorMap)
          {
-            _topLayer.Mode = ViewMode.FaceDetect;
+            _topLayer.Mode = ViewMode.ColorMap;
          } else
          {
             _topLayer.Mode = ViewMode.Preview;
@@ -74,15 +78,16 @@ namespace AndroidExamples
    enum ViewMode
    {
       Preview,
-      Canny, 
-      FaceDetect
+      Canny,
+      ColorMap
+      //FaceDetect
    }
 
    class TopLayer : View, Camera.IPreviewCallback
    {
       private Stopwatch _watch;
       Paint _paint;
-      CascadeClassifier _faceDetector;
+      //CascadeClassifier _faceDetector;
       Android.Graphics.Bitmap _bmp;
       int[] _bgraData;
       byte[] _bgrData;
@@ -98,11 +103,11 @@ namespace AndroidExamples
          _paint.TextSize = 25;
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
-
+         /*
          using (Emgu.Util.AndroidCacheFileAsset asset = new Emgu.Util.AndroidCacheFileAsset(context, "haarcascade_frontalface_default.xml"))
          {
             _faceDetector = new CascadeClassifier(asset.FileFullPath);
-         }
+         }*/
          _watch = Stopwatch.StartNew();
       }
 
@@ -169,7 +174,28 @@ namespace AndroidExamples
                   bgraHandle.Free();
                }
                else
-               {  
+               {
+                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
+                     _bgraData = new int[size.Width * size.Height];
+                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
+                     _bgrData = new byte[size.Width * size.Height * 3];
+
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                  {
+                     CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                     CvInvoke.ApplyColorMap(bgr, bgr, Emgu.CV.CvEnum.ColorMapType.Summer);
+                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
+                  }
+                  bgraHandle.Free();
+                  bgrHandle.Free();
+               }
+               /*
+               else
+               { 
                   //face detection
                   Rectangle[] faces;
                   using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
@@ -194,7 +220,7 @@ namespace AndroidExamples
                   }
                   bgraHandle.Free();
                   bgrHandle.Free();
-               }
+               }*/
                handle.Free();
 
                lock (this)

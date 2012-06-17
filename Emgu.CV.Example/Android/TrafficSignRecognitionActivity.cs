@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android.Graphics;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -20,22 +21,18 @@ using TrafficSignRecognition;
 namespace AndroidExamples
 {
    [Activity(Label = "Traffic Sign Recognition")]
-   public class TrafficSignRecognitionActivity : Activity
+   public class TrafficSignRecognitionActivity : ButtonMessageImageActivity
    {
+      public TrafficSignRecognitionActivity()
+         : base("Find Stop Sign")
+      {
+      }
+
       protected override void OnCreate(Bundle bundle)
       {
          base.OnCreate(bundle);
 
-         // Set our view from the "main" layout resource
-         SetContentView(Resource.Layout.TrafficSignRecognition);
-
-         // Get our button from the layout resource,
-         // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.DetectStopSignButton);
-         ImageView imageView = FindViewById<ImageView>(Resource.Id.TrafficSignRecognitionImageView);
-         TextView messageView = FindViewById<TextView>(Resource.Id.TrafficSignRecognitionMessageView);
-
-         button.Click += delegate 
+         OnButtonClick += delegate 
          { 
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>(Assets, "stop-sign-model.png"))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>(Assets, "stop-sign.jpg"))
@@ -48,13 +45,25 @@ namespace AndroidExamples
                detector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
                watch.Stop(); //stop the timer
-               messageView.Text = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
+               SetMessage(String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds));
 
-               foreach (Rectangle rect in stopSignBoxList)
+               
+               Bitmap bmp = null;
+               using (Bitmap tmp = image.ToBitmap())
+                 bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+               using (Canvas c = new Canvas(bmp))
+               using (Paint p = new Paint())
                {
-                  image.Draw(rect, new Bgr(Color.Red), 2);
+                  p.Color = Android.Graphics.Color.Red;
+                  p.StrokeWidth = 2;
+                  p.SetStyle(Paint.Style.Stroke);
+                 
+                  foreach (Rectangle rect in stopSignBoxList)
+                  {
+                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  }
                }
-               imageView.SetImageBitmap(image.ToBitmap());
+               SetImageBitmap(bmp);
             }
          };
       }

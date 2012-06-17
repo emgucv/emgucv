@@ -10,35 +10,50 @@ using Android.OS;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
-
+using System.Drawing;
+using Android.Graphics;
 using PedestrianDetection;
 
 namespace AndroidExamples
 {
    [Activity(Label = "Pedestrian Detection")]
-   public class PedestrianDetectionActivity : Activity
+   public class PedestrianDetectionActivity : ButtonMessageImageActivity
    {
+      public PedestrianDetectionActivity()
+         : base("Detect Pedestrian")
+      {
+      }
+
       protected override void OnCreate(Bundle bundle)
       {
          base.OnCreate(bundle);
 
-         // Set our view from the "main" layout resource
-         SetContentView(Resource.Layout.PedestrianDetection);
-
-         // Get our button from the layout resource,
-         // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.DetectPedestrianButton);
-         ImageView imageView = FindViewById<ImageView>(Resource.Id.PedestrianDetectionImageView);
-         TextView messageView = FindViewById<TextView>(Resource.Id.PedestrianDetectionMessageView);
-
-         button.Click += delegate
+         OnButtonClick += delegate
          {
             long time;
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "pedestrian.png"))
-            using (Image<Bgr, Byte> result = FindPedestrian.Find(image, out time))
             {
-               messageView.Text = String.Format("Detection completed in {0} milliseconds.", time);
-               imageView.SetImageBitmap(result.ToBitmap());
+               Rectangle[] pedestrians = FindPedestrian.Find(image, out time);
+
+               SetMessage(String.Format("Detection completed in {0} milliseconds.", time));
+
+               Bitmap bmp = null;
+               using (Bitmap tmp = image.ToBitmap())
+                  bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+               using (Canvas c = new Canvas(bmp))
+               using (Paint p = new Paint())
+               {
+                  p.Color = Android.Graphics.Color.Red;
+                  p.StrokeWidth = 2;
+                  p.SetStyle(Paint.Style.Stroke);
+
+                  foreach (Rectangle rect in pedestrians)
+                  {
+                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  }
+               }
+
+               SetImageBitmap(bmp);
             }
          };
       }

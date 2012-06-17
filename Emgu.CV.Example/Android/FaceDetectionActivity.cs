@@ -17,22 +17,18 @@ using FaceDetection;
 namespace AndroidExamples
 {
    [Activity(Label = "Face Detection")]
-   public class FaceDetectionActivity : Activity
+   public class FaceDetectionActivity : ButtonMessageImageActivity
    {
+      public FaceDetectionActivity()
+         : base("Detect Face")
+      {
+      }
+
       protected override void OnCreate(Bundle bundle)
       {
          base.OnCreate(bundle);
 
-         // Set our view from the "main" layout resource
-         SetContentView(Resource.Layout.FaceDetection);
-
-         // Get our button from the layout resource,
-         // and attach an event to it
-         Button button = FindViewById<Button>(Resource.Id.DetectFaceButton);
-         ImageView imageView = FindViewById<ImageView>(Resource.Id.FaceDetectionImageView);
-         TextView messageView = FindViewById<TextView>(Resource.Id.FaceDetectionMessageView);
-
-         button.Click += delegate 
+         OnButtonClick += delegate 
          {
             long time;
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "lena.jpg"))
@@ -40,8 +36,8 @@ namespace AndroidExamples
             using (AndroidCacheFileAsset faceXml = new AndroidCacheFileAsset(this, "haarcascade_frontalface_default.xml"))
             {
                DetectFace.DetectAndDraw(image, faceXml.FileFullPath, eyeXml.FileFullPath, out time);
-               messageView.Text = String.Format("Detected in {0} milliseconds.", time);
-               imageView.SetImageBitmap(image.ToBitmap());
+               SetMessage( String.Format("Detected in {0} milliseconds.", time) );
+               SetImageBitmap(image.ToBitmap());
             }
          };
       }

@@ -27,12 +27,12 @@ namespace AndroidExamples
          // Set our view from the "main" layout resource
          SetContentView(Resource.Layout.HelloWorld);
 
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>(480, 320))
+         using (Image<Bgra, Byte> image = new Image<Bgra, byte>(480, 320))
          {
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 4.0, 4.0);
 
-            image.SetValue(new Bgr(Color.White));
-            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgr(Color.Green));
+            image.SetValue(new Bgra(255,255,255,255));
+            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgra(0,255,255,0));
 
             ImageView imageView = FindViewById<ImageView>(Resource.Id.HelloWorldImageView);
             imageView.SetImageBitmap(image.ToBitmap());

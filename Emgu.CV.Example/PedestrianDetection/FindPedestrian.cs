@@ -19,8 +19,8 @@ namespace PedestrianDetection
       /// </summary>
       /// <param name="image">The image</param>
       /// <param name="processingTime">The pedestrian detection time in milliseconds</param>
-      /// <returns>The image with pedestrian highlighted.</returns>
-      public static Image<Bgr, Byte> Find(Image<Bgr, Byte> image, out long processingTime)
+      /// <returns>The region where pedestrians are detected</returns>
+      public static Rectangle[] Find(Image<Bgr, Byte> image, out long processingTime)
       {
          Stopwatch watch;
          Rectangle[] regions;
@@ -54,11 +54,7 @@ namespace PedestrianDetection
 
          processingTime = watch.ElapsedMilliseconds;
 
-         foreach (Rectangle pedestrain in regions)
-         {
-            image.Draw(pedestrain, new Bgr(Color.Red), 1);
-         }
-         return image;
+         return regions;
       }
    }
 }
