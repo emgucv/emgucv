@@ -91,12 +91,12 @@ void CvSIFTDetectorRelease(cv::SIFT** detector)
    *detector = 0;
 }
 
+/*
 int CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
 {
    return detector->descriptorSize();
 }
 
-/*
 void CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
 {
    cv::Mat mat = cv::cvarrToMat(image);
@@ -109,7 +109,7 @@ void CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* 
 
    if (keypoints->size() > 0)
       memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
-}*/
+}
 
 void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
@@ -128,7 +128,7 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
       cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
       colorDetector.compute(mat, *keypoints, descriptorsMat);
    }
-}
+}*/
 
 //ORB
 cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
@@ -139,6 +139,7 @@ cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevel
    return orb;
 }
 
+/*
 int CvOrbDetectorGetDescriptorSize(cv::ORB* detector)
 {
    return detector->descriptorSize();
@@ -162,7 +163,7 @@ void CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, std::ve
       cv::OpponentColorDescriptorExtractor colorExtractor(extractor);
       colorExtractor.compute(mat, *keypoints, descriptorsMat);
    }
-}
+}*/
 
 void CvOrbDetectorRelease(cv::ORB** detector)
 {
@@ -233,7 +234,7 @@ void CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* 
    cv::Mat maskMat;
    if (mask) maskMat = cv::cvarrToMat(mask);
    (*detector)(mat, maskMat, *keypoints, *descriptors, false);
-}*/
+}
 
 void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
 {
@@ -257,33 +258,33 @@ void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::
       cv::OpponentColorDescriptorExtractor colorDetector(surfExtractor);
       colorDetector.compute(img, *keypoints, descriptorsMat);
    }
-}
+}*/
 
 cv::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize)
 {
    return new cv::BriefDescriptorExtractor(descriptorSize);
 }
 
+/*
 int CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
 {
    return extractor->descriptorSize();
 }
 
-void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
+void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors)
 {
    if (keypoints->size() <= 0) return;
    cv::Mat img = cv::cvarrToMat(image);
-   cv::Mat result = cv::cvarrToMat(descriptors);
    if (img.channels() == 1)
    {
-     extractor->compute(img, *keypoints, result);
+     extractor->compute(img, *keypoints, *descriptors);
    } else //opponent brief
    {
       cv::Ptr<cv::DescriptorExtractor> briefExtractor = new cv::BriefDescriptorExtractor(extractor->descriptorSize());
       cv::OpponentColorDescriptorExtractor colorDescriptorExtractor(briefExtractor);
-      colorDescriptorExtractor.compute(img, *keypoints, result);
+      colorDescriptorExtractor.compute(img, *keypoints, *descriptors);
    }
-}
+}*/
 
 void CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
 {
@@ -539,4 +540,58 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
       }
    }
    return nonZeroCount;
+}
+
+void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors, bool useProvidedKeyPoints)
+{
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
+   (*feature2D)(imageMat, maskMat, *keypoints, *descriptors, useProvidedKeyPoints);
+}
+
+//OpponentColorDescriptorExtractor
+cv::OpponentColorDescriptorExtractor* CvOpponentColorDescriptorExtractorCreate(cv::DescriptorExtractor* extractor)
+{
+   cv::Ptr<cv::DescriptorExtractor> ptr(extractor);
+   ptr.addref();
+   return new cv::OpponentColorDescriptorExtractor(ptr);
+}
+void CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtractor** extractor)
+{
+   delete *extractor;
+   *extractor = 0;
+}
+
+//DescriptorExtractor
+void CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, const IplImage* image,  std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors )
+{
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   extractor->compute(imageMat, *keypoints, *descriptors);
+}
+
+int CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor)
+{
+   return extractor->descriptorSize();
+}
+
+//GFTT
+cv::GFTTDetector* CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k)
+{
+   return new cv::GFTTDetector(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
+}
+void CvGFTTDetectorRelease(cv::GFTTDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+//DenseFeatureDetector
+cv::DenseFeatureDetector* CvDenseFeatureDetectorCreate( float initFeatureScale, int featureScaleLevels, float featureScaleMul, int initXyStep, int initImgBound, bool varyXyStepWithScale, bool varyImgBoundWithScale)
+{
+   return new cv::DenseFeatureDetector(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
+}
+void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
+{
+   delete * detector;
+   *detector = 0;
 }

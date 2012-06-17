@@ -17,7 +17,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// BRIEF Descriptor
    /// </summary>
-   public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor<byte>
+   public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
    {
       /// <summary>
       /// Create a BRIEF descriptor extractor using descriptor size of 32.
@@ -36,6 +36,7 @@ namespace Emgu.CV.Features2D
          _ptr = CvInvoke.CvBriefDescriptorExtractorCreate(descriptorSize);
       }
 
+      /*
       /// <summary>
       /// Get the size of the descriptor
       /// </summary>
@@ -56,17 +57,15 @@ namespace Emgu.CV.Features2D
       /// <returns>The descriptors founded on the keypoint location</returns>
       private Matrix<Byte> ComputeDescriptorsRawHelper(CvArray<Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
-         const float epsilon = 1.192092896e-07f;        // smallest such that 1.0+epsilon != 1.0 
-         keyPoints.FilterByImageBorder(image.Size, 48 / 2 + 9 / 2); //this value comes from opencv's BriefDescriptorExtractor::computeImpl implementation
-         keyPoints.FilterByKeypointSize(epsilon, float.MaxValue);
-         if (mask != null)
-            keyPoints.FilterByPixelsMask(mask);
-         int count = keyPoints.Size;
-         if (count == 0) return null;
-         Matrix<Byte> descriptors = new Matrix<Byte>(count, DescriptorSize * image.NumberOfChannels, 1);
-         CvInvoke.CvBriefDescriptorComputeDescriptors(_ptr, image, keyPoints, descriptors);
-         Debug.Assert(keyPoints.Size == descriptors.Rows);
-         return descriptors;
+         using (Mat descriptors = new Mat())
+         {
+            CvInvoke.CvBriefDescriptorComputeDescriptors(_ptr, image, keyPoints, descriptors);
+            if (keyPoints.Size == 0)
+               return null;
+            Matrix<Byte> result = new Matrix<byte>(descriptors.Size);
+            CvInvoke.cvMatCopyToCvArr(descriptors, result);
+            return result;
+         }
       }
 
       /// <summary>
@@ -91,7 +90,7 @@ namespace Emgu.CV.Features2D
       public Matrix<Byte> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
          return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
+      }*/
 
       /// <summary>
       /// Release all the unmanaged resource associated with BRIEF
@@ -101,7 +100,7 @@ namespace Emgu.CV.Features2D
          CvInvoke.CvBriefDescriptorExtractorRelease(ref _ptr);
       }
 
-      IntPtr IDescriptorExtractor<byte>.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
       {
          get { return _ptr; }
       }
@@ -118,10 +117,11 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBriefDescriptorExtractorRelease(ref IntPtr extractor);
 
+      /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int CvBriefDescriptorExtractorGetDescriptorSize(IntPtr extractor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvBriefDescriptorComputeDescriptors(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
+      internal extern static void CvBriefDescriptorComputeDescriptors(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);*/
    }
 }

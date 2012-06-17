@@ -15,11 +15,8 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped SIFT detector
    /// </summary>
-   public class SIFTDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
+   public class SIFTDetector : Feature2DBase<float>
    {
-      private IntPtr _featureDetectorPtr;
-      private IntPtr _descriptorExtractorPtr;
-
       /// <summary>
       /// Create a SIFTDetector using the specific values
       /// </summary>
@@ -44,25 +41,11 @@ namespace Emgu.CV.Features2D
       {
       }
 
-      /// <summary>
-      /// Detect image features from the given image
-      /// </summary>
-      /// <param name="image">The image to detect features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature<float>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         using (VectorOfKeyPoint pts = this.DetectKeyPointsRaw(image, mask))
-         using (Matrix<float> descVec = ComputeDescriptorsRaw(image, mask, pts))
-         {
-            return ImageFeature<float>.ConvertFromRaw(pts, descVec);
-         }
-      }
-
+      /*
       /// <summary>
       /// Get the size of the descriptor
       /// </summary>
-      public int DescriptorSize
+      public override int DescriptorSize
       {
          get
          {
@@ -70,7 +53,6 @@ namespace Emgu.CV.Features2D
          }
       }
 
-      /*
       /// <summary>
       /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
       /// </summary>
@@ -92,24 +74,10 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          CvInvoke.CvSIFTDetectorRelease(ref _ptr);
-         _featureDetectorPtr = IntPtr.Zero;
-         _descriptorExtractorPtr = IntPtr.Zero;
+         base.DisposeObject();
       }
 
-      #region IKeyPointDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
-      {
-         get
-         {
-            return _featureDetectorPtr;
-         }
-      }
-      #endregion
-
+      /*
       /// <summary>
       /// Compute the descriptor given the image and the point location
       /// </summary>
@@ -139,27 +107,7 @@ namespace Emgu.CV.Features2D
       public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
       {
          return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
-
-      #region IDescriptorExtractor<float>
-      /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
-
-      IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
-      {
-         get { return _descriptorExtractorPtr; }
-      }
-
-      #endregion
+      }*/
    }
 }
 
@@ -174,10 +122,7 @@ namespace Emgu.CV
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         IntPtr descriptors);*/
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int CvSIFTDetectorGetDescriptorSize(IntPtr detector);
+         IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSIFTDetectorComputeDescriptors(
@@ -185,6 +130,9 @@ namespace Emgu.CV
          IntPtr image,
          IntPtr keypoints,
          IntPtr descriptors);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int CvSIFTDetectorGetDescriptorSize(IntPtr detector);*/
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSIFTDetectorCreate(

@@ -18,6 +18,8 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class GridAdaptedFeatureDetector : UnmanagedObject, IKeyPointDetector
    {
+      private IKeyPointDetector _baseDetector;
+
       /// <summary>
       /// Maximum count of keypoints detected on the image. Only the strongest keypoints
       /// </summary>
@@ -42,6 +44,7 @@ namespace Emgu.CV.Features2D
       /// <param name="gridCols">Grid column count</param>
       public GridAdaptedFeatureDetector(IKeyPointDetector detector, int maxTotalKeyPoints, int gridRows, int gridCols)
       {
+         _baseDetector = detector;
          MaxTotalKeyPoints = maxTotalKeyPoints;
          GridRows = gridRows;
          GridCols = gridCols;

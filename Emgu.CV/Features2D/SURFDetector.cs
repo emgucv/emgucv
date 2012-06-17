@@ -14,11 +14,9 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
-   public class SURFDetector : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<float>
+   public class SURFDetector : Feature2DBase<float>
    {
       private MCvSURFParams _surfParams;
-      private IntPtr _featureDetectorPtr;
-      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// Get the SURF parameters
@@ -82,21 +80,7 @@ namespace Emgu.CV.Features2D
       {
       }
 
-      /// <summary>
-      /// Detect image features from the given image
-      /// </summary>
-      /// <param name="image">The image to detect features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature<float>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         using (VectorOfKeyPoint kpts = this.DetectKeyPointsRaw(image, mask))
-         using (Matrix<float> desc = ComputeDescriptorsRaw(image, mask, kpts))
-         {
-            return ImageFeature<float>.ConvertFromRaw(kpts, desc);
-         }
-      }
-
+      /*
       /// <summary>
       /// Compute the descriptor given the bgr image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
       /// </summary>
@@ -118,7 +102,7 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Get the size of the Descriptor
       /// </summary>
-      public int DescriptorSize
+      public override int DescriptorSize
       {
          get
          {
@@ -136,21 +120,7 @@ namespace Emgu.CV.Features2D
       public Matrix<float> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
          return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
-
-      #region IKeyPointDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      public IntPtr FeatureDetectorPtr
-      {
-         get
-         {
-            return _ptr;
-         }
-      }
-      #endregion
+      }*/
 
       /// <summary>
       /// Release the unmanaged memory associated with this detector.
@@ -158,29 +128,8 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          CvInvoke.CvSURFDetectorRelease(ref _ptr);
-         _featureDetectorPtr = IntPtr.Zero;
-         _descriptorExtractorPtr = IntPtr.Zero;
+         base.DisposeObject();
       }
-
-      #region IDescriptorExtractor<float> Members
-      /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public Matrix<float> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
-
-      IntPtr IDescriptorExtractor<float>.DescriptorExtratorPtr
-      {
-         get { return _descriptorExtractorPtr; }
-      }
-
-      #endregion
    }
 }
 
@@ -198,14 +147,14 @@ namespace Emgu.CV
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints,
-         IntPtr descriptors);*/
+         IntPtr descriptors);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorComputeDescriptors(
          IntPtr detector,
          IntPtr image,
          IntPtr keypoints,
-         IntPtr descriptors);
+         IntPtr descriptors);*/
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorRelease(ref IntPtr detector);
