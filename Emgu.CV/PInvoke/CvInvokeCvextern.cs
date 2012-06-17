@@ -57,7 +57,10 @@ namespace Emgu.CV
       /// <summary>
       /// Apply color map to the image
       /// </summary>
-      /// <param name="src">The source image</param>
+      /// <param name="src">
+      /// The source image.         
+      /// This function expects Image&lt;Bgr, Byte&gt; or Image&lt;Gray, Byte&gt;. If the wrong image type is given, the original image
+      /// will be returned.</param>
       /// <param name="dst">The destination image</param>
       /// <param name="colorMapType">The type of color map</param>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvApplyColorMap")]
