@@ -99,7 +99,6 @@
     <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
-    <Compile Include="PedestrianDetectionDialogViewController.cs" />
     <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
       <Link>LicensePlateDetector.cs</Link>
     </Compile>
@@ -118,6 +117,7 @@
     </Compile>
     <Compile Include="ButtonMessageImageDialogViewController.cs" />
     <Compile Include="CameraDialogViewController.cs" />
+    <Compile Include="PedestrianDetectionDialogViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

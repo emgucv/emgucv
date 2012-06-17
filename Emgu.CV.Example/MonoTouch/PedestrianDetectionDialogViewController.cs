@@ -21,23 +21,35 @@ namespace Emgu.CV.Example.MonoTouch
         {
         }
 
-      public override void ViewDidLoad()
-      {
-         base.ViewDidLoad();
-        ButtonText = "Detect Pedestrian";
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            ButtonText = "Detect Pedestrian";
             OnButtonClick += delegate
             { 
-            long processingTime;
-            using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
-            using (Image<Bgr, Byte> result = FindPedestrian.Find(image,  out processingTime))
-            using (Image<Bgr, Byte> resized = result.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
-            {
-               MessageText = String.Format("Detection Time: {0} milliseconds.", processingTime);
-               SetImage(resized);
-            }
-         };
+                long processingTime;
+                using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
+                {
+                    Rectangle[] pedestrians = FindPedestrian.Find(
+                        image,
+                        out processingTime
+                    );
+                    foreach (Rectangle rect in pedestrians)
+                    {
+                        image.Draw(rect, new Bgr(Color.Red), 1);
+                    }
+                    using (Image<Bgr, Byte> resized = image.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+                    {
+                        MessageText = String.Format(
+                            "Detection Time: {0} milliseconds.",
+                            processingTime
+                        );
+                        SetImage(resized);
+                    }
+                }
+            };
            
-      }
+        }
     }
 }
 
