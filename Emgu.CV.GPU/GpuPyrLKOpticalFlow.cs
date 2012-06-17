@@ -42,6 +42,27 @@ namespace Emgu.CV.GPU
          GpuInvoke.gpuPryLKOpticalFlowDense(_ptr, frame0, frame1, u, v, IntPtr.Zero);
       }
 
+      /// <summary>
+      /// Calculate an optical flow for a sparse feature set.
+      /// </summary>
+      /// <param name="frame0">First 8-bit input image (supports both grayscale and color images).</param>
+      /// <param name="frame1">Second input image of the same size and the same type as <paramref name="frame0"/></param>
+      /// <param name="points0">
+      /// Vector of 2D points for which the flow needs to be found. It must be one row
+      /// matrix with 2 channels
+      /// </param>
+      /// <param name="points1">
+      /// Output vector of 2D points (with single-precision two channel floating-point coordinates)
+      /// containing the calculated new positions of input features in the second image.</param>
+      /// <param name="status">
+      /// Output status vector (CV_8UC1 type). Each element of the vector is set to 1 if the
+      /// flow for the corresponding features has been found. Otherwise, it is set to 0.
+      /// </param>
+      /// <param name="err">
+      /// Output vector (CV_32FC1 type) that contains the difference between patches around
+      /// the original and moved points or min eigen value if getMinEigenVals is checked. It can be
+      /// null, if not needed.
+      /// </param>
       public void Sparse(GpuImage<Gray, byte> frame0, GpuImage<Gray, byte> frame1, GpuMat<float> points0, out GpuMat<float> points1, out GpuMat<Byte> status, out GpuMat<float> err)
       {
          points1 = new GpuMat<float>();
@@ -73,12 +94,12 @@ namespace Emgu.CV.GPU
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void gpuPryLKOpticalFlowSparse(
-         IntPtr flow, 
-         IntPtr prevImg, 
-         IntPtr nextImg, 
-         IntPtr prevPts, 
+         IntPtr flow,
+         IntPtr prevImg,
+         IntPtr nextImg,
+         IntPtr prevPts,
          IntPtr nextPts,
-         IntPtr status, 
+         IntPtr status,
          IntPtr err);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
