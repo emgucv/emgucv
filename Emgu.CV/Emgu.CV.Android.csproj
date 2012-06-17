@@ -54,12 +54,16 @@
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
+    <Compile Include="Features2D\DenseFeatureDetector.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
+    <Compile Include="Features2D\Feature2DBase.cs" />
     <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
+    <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
     <Compile Include="Features2D\IKeyPointDetector.cs" />
+    <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
     <Compile Include="Features2D\ORBDetector.cs" />
     <Compile Include="Features2D\SIFTDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
+    <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
