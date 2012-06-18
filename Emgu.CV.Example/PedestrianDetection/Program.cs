@@ -30,9 +30,13 @@ namespace PedestrianDetection
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
          {
             long processingTime;
-            Image<Bgr, Byte> result = FindPedestrian.Find(image, out processingTime);
+            Rectangle[] results = FindPedestrian.Find(image, out processingTime);
+            foreach (Rectangle rect in results)
+            {
+               image.Draw(rect, new Bgr(Color.Red), 1);
+            }
             ImageViewer.Show(
-               result,
+               image,
                String.Format("Pedestrain detection using {0} in {1} milliseconds.",
                   GpuInvoke.HasCuda ? "GPU" : "CPU",
                   processingTime));
