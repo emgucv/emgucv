@@ -62,6 +62,7 @@ namespace Simlpe3DReconstruction
          this.View3DGlControl.VSync = false;
          this.View3DGlControl.Load += new System.EventHandler(this.View3DGlControl_Load);
          this.View3DGlControl.Paint += new System.Windows.Forms.PaintEventHandler(this.View3DGlControl_Paint);
+         this.View3DGlControl.Resize += new System.EventHandler(this.View3DGlControl_Resize);
          // 
          // Simple3DReconstruction
          // 

@@ -97,11 +97,8 @@ namespace Simlpe3DReconstruction
          _glLoaded = true;
 
          GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-         GL.MatrixMode(MatrixMode.Projection);
-         GL.LoadIdentity();
-         GL.Ortho(-1.5, 1.5, -1.5, 1.5, -1.5, 1.5);
+         SetupViewport();
 
-         
          #region Create texture for the 3D Point clouds
          int repeat = (int)OpenTK.Graphics.OpenGL.All.Repeat;
          int linear = (int)OpenTK.Graphics.OpenGL.All.Linear;
@@ -159,6 +156,23 @@ namespace Simlpe3DReconstruction
          _angle += _angleIncrement;
          GraphicsContext.CurrentContext.SwapBuffers();
          View3DGlControl.Invalidate();
+      }
+
+      private void SetupViewport()
+      {
+         int w = View3DGlControl.Width;
+         int h = View3DGlControl.Height;
+         GL.MatrixMode(MatrixMode.Projection);
+         GL.LoadIdentity();
+         GL.Ortho(-1.5, 1.5, -1.5, 1.5, -1.5, 1.5);
+         GL.Viewport(0, 0, w, h);
+      }
+
+      private void View3DGlControl_Resize(object sender, EventArgs e)
+      {
+         if (!_glLoaded)
+            return;
+         SetupViewport();
       }
    }
 }
