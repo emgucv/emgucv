@@ -45,7 +45,7 @@ namespace Emgu.CV.VideoStab
       internal static extern void TwoPassStabilizerRelease(ref IntPtr stabilizer);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr GaussianMotionFilterCreate(int radius, float stdev);
+      internal static extern IntPtr GaussianMotionFilterCreate();
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void GaussianMotionFilterRelease(ref IntPtr filter);

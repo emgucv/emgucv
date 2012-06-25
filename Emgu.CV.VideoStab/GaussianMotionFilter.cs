@@ -11,14 +11,15 @@ namespace Emgu.CV.VideoStab
 {
    public class GaussianMotionFilter : UnmanagedObject
    {
+      /*
       public GaussianMotionFilter()
          : this(15, -1.0f)
       {
-      }
+      }*/
 
-      public GaussianMotionFilter(int radius, float stdev)
+      public GaussianMotionFilter()
       {
-         _ptr = VideoStabInvoke.GaussianMotionFilterCreate(radius, stdev);
+         _ptr = VideoStabInvoke.GaussianMotionFilterCreate();
       }
 
       protected override void DisposeObject()

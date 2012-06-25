@@ -16,11 +16,11 @@ namespace Emgu.CV.VideoStab
    {
       private IntPtr _frameBuffer;
 
-      protected abstract IntPtr GetFrameSourcePointer();
+      protected IntPtr _framSourcePtr;
 
       public Image<Bgr, Byte> NextFrame()
       {
-         if (!VideoStabInvoke.FrameSourceGetNextFrame(GetFrameSourcePointer(), ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
+         if (!VideoStabInvoke.FrameSourceGetNextFrame(_framSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
@@ -45,6 +45,7 @@ namespace Emgu.CV.VideoStab
          {
             CvInvoke.cvReleaseImage(ref _frameBuffer);
          }
+         _framSourcePtr = IntPtr.Zero;
       }
    }
 }

@@ -17,11 +17,7 @@ namespace Emgu.CV.VideoStab
       public CaptureFrameSource(Capture capture)
       {
          _ptr = VideoStabInvoke.CaptureFrameSourceCreate(capture);
-      }
-
-      protected override IntPtr GetFrameSourcePointer()
-      {
-         return _ptr;
+         _framSourcePtr = _ptr;
       }
 
       protected override void DisposeObject()

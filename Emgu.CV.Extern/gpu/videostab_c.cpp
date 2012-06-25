@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-/*
+
 #include "videostab_c.h"
 
 CaptureFrameSource* CaptureFrameSourceCreate(CvCapture* capture)
@@ -34,22 +34,35 @@ bool FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage*
    return true;
 }
 
-void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
+void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator)
 {
-   cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator);
+   cv::Ptr<cv::videostab::IGlobalMotionEstimator> ptr(motionEstimator);
    ptr.addref(); // add reference such that it won't release the motion estimator
    stabalizer->setMotionEstimator(motionEstimator);
 }
 
-cv::videostab::OnePassStabilizer* OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
+template<class cvstabilizer> cvstabilizer* StabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
-   cv::videostab::OnePassStabilizer* stabilizer = new cv::videostab::OnePassStabilizer();
+   cvstabilizer* stabilizer = new cvstabilizer();
    cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
    ptr.addref(); // add reference such that it won't release the CaptureFrameSource
    stabilizer->setFrameSource(ptr);
    *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
    *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
    return stabilizer;
+}
+
+cv::videostab::OnePassStabilizer* OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
+{
+   return StabilizerCreate<cv::videostab::OnePassStabilizer>(capture, stabilizerBase, frameSource);
+   /*
+   cv::videostab::OnePassStabilizer* stabilizer = new cv::videostab::OnePassStabilizer();
+   cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
+   ptr.addref(); // add reference such that it won't release the CaptureFrameSource
+   stabilizer->setFrameSource(ptr);
+   *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
+   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
+   return stabilizer;*/
 }
 
 void OnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter)
@@ -67,13 +80,15 @@ void OnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer)
 
 cv::videostab::TwoPassStabilizer* TwoPassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
+   return StabilizerCreate<cv::videostab::TwoPassStabilizer>(capture, stabilizerBase, frameSource);
+   /*
    cv::videostab::TwoPassStabilizer* stabilizer = new cv::videostab::TwoPassStabilizer();
    cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
    ptr.addref(); // add reference such that it won't release the CaptureFrameSource
    stabilizer->setFrameSource(ptr);
    *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
    *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
-   return stabilizer;
+   return stabilizer;*/
 }
 void TwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer)
 {
@@ -81,12 +96,12 @@ void TwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer)
    *stabilizer = 0;
 }
 
-cv::videostab::GaussianMotionFilter* GaussianMotionFilterCreate(int radius, float stdev)
+cv::videostab::GaussianMotionFilter* GaussianMotionFilterCreate()
 {
-   return new cv::videostab::GaussianMotionFilter(radius, stdev);
+   return new cv::videostab::GaussianMotionFilter();
 }
 void GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter)
 {
    delete *filter;
    *filter = 0;
-}*/
+}
