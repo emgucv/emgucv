@@ -1135,6 +1135,7 @@ namespace Emgu.CV.Test
                         imageRGB.Draw(lines[0][i], new Bgr(255.0, 0.0, 0.0), 1);
                      }
 
+                     /*
                      for (int i = 0; i < lines[1].Length; i++)
                      {
                         imageRGB.Draw(lines[1][i], new Bgr(0.0, 255.0, 0.0), 1);
@@ -1143,7 +1144,7 @@ namespace Emgu.CV.Test
                      for (int i = 0; i < lines[2].Length; i++)
                      {
                         imageRGB.Draw(lines[2][i], new Bgr(0.0, 0.0, 255.0), 1);
-                     }
+                     }*/
 
                      foreach (CircleF[] cs in circles)
                         foreach (CircleF c in cs)

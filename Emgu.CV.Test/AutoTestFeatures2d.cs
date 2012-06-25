@@ -65,13 +65,14 @@ namespace Emgu.CV.Test
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
+      /*
       [Test]
       public void TestDenseFeatureDetector()
       {
          DenseFeatureDetector keyPointDetector = new DenseFeatureDetector(1, 1, 0.1f, 6, 0, true, false);
          SIFTDetector descriptorGenerator = new SIFTDetector();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
-      }
+      }*/
 
       /*
       [Test]

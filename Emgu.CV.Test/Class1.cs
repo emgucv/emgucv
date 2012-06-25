@@ -393,6 +393,7 @@ namespace Emgu.CV.Test
       {
          ImageViewer viewer = new ImageViewer();
          using (Capture capture = new Capture())
+         using (GaussianMotionFilter motionFilter = new GaussianMotionFilter())
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
          //using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
