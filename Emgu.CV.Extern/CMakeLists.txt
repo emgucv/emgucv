@@ -23,6 +23,15 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
 
+#gpu related
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpu/include")
+#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/stitching/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videostab/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
+#end gpu realted
+
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
@@ -161,6 +170,71 @@ ELSE()
 ENDIF()
 ############################### CVBLOB END ##########################
 
+############################### GPU START ##############################
+IF(WIN32 AND WITH_CUDA)
+SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
+
+if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
+    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
+
+    string( REGEX REPLACE "#define NPP_VERSION_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
+    string( REGEX REPLACE "#define NPP_VERSION_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
+    string( REGEX REPLACE "#define NPP_VERSION_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
+
+    string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
+    string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
+    string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
+endif()
+
+SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
+#replace any potential backslash in the path with slash
+#STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
+
+IF(TARGET_ARCH_64) 
+  SET(CUDA_POSTFIX 64)
+else()
+  SET(CUDA_POSTFIX 32)
+ENDIF()
+
+LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLLS 
+  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+  "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+  )
+LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES 
+  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+
+IF(WITH_CUFFT)
+  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
+ENDIF()
+
+IF(WITH_CUBLAS)
+  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+  LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+ENDIF()
+
+ENDIF()
+
+IF(WITH_CUDA AND DEFINED CVEXTERN_GPU_DEPENDENCY_DLLS)
+  INSTALL(
+    FILES 
+    ${CVEXTERN_GPU_DEPENDENCY_DLLS}
+    DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}
+    COMPONENT main)
+ENDIF()
+
+IF(ANDROID OR IOS)
+file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp")
+file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h*")
+ELSE()
+file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
+file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
+ENDIF()
+############################### GPU END ################################
+
 IF(ANDROID OR APPLE)
   FILE(GLOB extern_srcs_excludes "${PROJECT_SOURCE_DIR}/tiffio.cpp")
   LIST(REMOVE_ITEM extern_srcs ${extern_srcs_excludes})
@@ -169,10 +243,12 @@ IF(ANDROID OR APPLE)
   LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
 ENDIF()
 
-source_group("Src" FILES ${extern_srcs})
-source_group("Include" FILES ${extern_hdrs})
+source_group("Src_extern" FILES ${extern_srcs})
+source_group("Include_extern" FILES ${extern_hdrs})
+source_group("Src_gpu" FILES ${gpu_extern_srcs})
+source_group("Include_gpu" FILES ${gpu_extern_hdrs})
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} ${extern_srcs} ${extern_hdrs})
+add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} )
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})
@@ -186,6 +262,20 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
     POST_BUILD
     ${CVEXTERN_DEPENDENCY_DLL_DEPLOY_COMMAND}
     COMMENT "Copying ${CVEXTERN_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+ENDIF()
+
+IF(WITH_CUDA AND DEFINED CVEXTERN_GPU_DEPENDENCY_DLLS)
+  FOREACH(CVEXTERN_GPU_DEPENDENCY_DLL ${CVEXTERN_GPU_DEPENDENCY_DLLS})
+    LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_DEPLOY_COMMAND COMMAND ${CMAKE_COMMAND} -E copy "${CVEXTERN_GPU_DEPENDENCY_DLL}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  ENDFOREACH()
+  #Promote this to parent scope such that cpack will know what dlls to be included in the package
+  SET(CVEXTERN_GPU_DEPENDENCY_DLL_NAMES ${CVEXTERN_GPU_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
+
+  ADD_CUSTOM_COMMAND(
+    TARGET ${the_target}
+    POST_BUILD
+    ${CVEXTERN_GPU_DEPENDENCY_DLL_DEPLOY_COMMAND}
+    COMMENT "Copying ${CVEXTERN_GPU_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 ENDIF()
 
 # For dynamic link numbering convenions
@@ -256,10 +346,16 @@ ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
+  opencv_stitching opencv_videostab
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
 
+IF(TARGET opencv_gpu)
+  ADD_DEPENDENCIES(${the_target} opencv_gpu)
+  target_link_libraries(${the_target} opencv_gpu)
+ENDIF()  
+  
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
   IF(MSVC AND (NOT CV_ICC) AND (NOT TARGET_ARCH_64)) 
@@ -279,6 +375,7 @@ ENDIF()
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
+  opencv_stitching opencv_videostab
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
@@ -306,4 +403,4 @@ ELSE()
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
 ENDIF()
 
-add_subdirectory(gpu)
+#add_subdirectory(gpu)
