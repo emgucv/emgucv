@@ -1496,7 +1496,6 @@ namespace Emgu.CV
           Point pt2,
           MCvScalar color,
           int thickness,
-          [MarshalAs(UnmanagedType.U4)] 
           CvEnum.LINE_TYPE lineType,
           int shift);
 
@@ -1526,7 +1525,6 @@ namespace Emgu.CV
          int isClosed,
          MCvScalar color,
          int thickness,
-         [MarshalAs(UnmanagedType.U4)] 
          CvEnum.LINE_TYPE lineType,
          int shift);
 
@@ -1577,8 +1575,7 @@ namespace Emgu.CV
          Point pt1,
          Point pt2,
          MCvScalar color,
-         int thickness,
-         [MarshalAs(UnmanagedType.U4)] 
+         int thickness, 
          CvEnum.LINE_TYPE lineType,
          int shift);
 
@@ -1676,7 +1673,7 @@ namespace Emgu.CV
          int radius,
          MCvScalar color,
          int thickness,
-         [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
+         CvEnum.LINE_TYPE lineType,
          int shift);
 
       /// <summary>
@@ -1890,7 +1887,7 @@ namespace Emgu.CV
           MCvScalar holeColor,
           int maxLevel,
           int thickness,
-          [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
+          CvEnum.LINE_TYPE lineType,
           Point offset);
 
       /// <summary>
@@ -1909,7 +1906,7 @@ namespace Emgu.CV
          Point[] pts,
          int npts,
          MCvScalar color,
-         [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType,
+         CvEnum.LINE_TYPE lineType,
          int shift);
 
       #region Text
@@ -1931,7 +1928,7 @@ namespace Emgu.CV
           double vscale,
           double shear,
           int thickness,
-          [MarshalAs(UnmanagedType.U4)] CvEnum.LINE_TYPE lineType);
+          CvEnum.LINE_TYPE lineType);
 
       /// <summary>
       /// Renders the text in the image with the specified font and color. The printed text is clipped by ROI rectangle. Symbols that do not belong to the specified font are replaced with the rectangle symbol.
