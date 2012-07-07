@@ -688,6 +688,10 @@ namespace Emgu.CV.Test
          TestPlanarSubdivisionHelper(83);
          TestPlanarSubdivisionHelper(139);
          TestPlanarSubdivisionHelper(363);
+
+         TestPlanarSubdivisionHelper(13);
+         TestPlanarSubdivisionHelper(41);
+         TestPlanarSubdivisionHelper(69);
       }
 
       [Test]
@@ -746,6 +750,79 @@ namespace Emgu.CV.Test
 
          VoronoiFacet[] facets = subdiv.GetVoronoiFacets();
       }
+
+
+
+      #region Test code from Bug 36, thanks to Bart
+
+      [Test]
+      public void TestPlanarSubdivision3()
+      {
+         testCrashPSD(13, 5);
+         testCrashPSD(41, 5);
+         testCrashPSD(69, 5);
+      }
+
+      public static void testCrashPSD(int nPoints, int maxIter)
+      {
+         if (maxIter < 0)
+         {
+            // some ridiculously large number
+            maxIter = 1000000000;
+         }
+         else if (maxIter == 0)
+         {
+            maxIter = 1;
+         }
+
+         int iter = 0;
+
+         do
+         {
+            iter++;
+            Trace.WriteLine(String.Format("Running iteration {0} ... ", iter));
+
+            PointF[] points = getPoints(nPoints);
+
+            /*
+            // write points to file
+            TextWriter writer = new StreamWriter("points.txt");
+            writer.WriteLine("// {0} generated points:", points.Length);
+            writer.WriteLine("PointF[] points = new PointF[]");
+            writer.WriteLine("{");
+            foreach (PointF p in points)
+            {
+               writer.WriteLine("\tnew PointF({0}f, {1}f),", p.X, p.Y);
+            }
+            writer.WriteLine("};");
+            writer.Close();
+            */
+            Emgu.CV.PlanarSubdivision psd = new Emgu.CV.PlanarSubdivision(points);
+
+            // hangs here:
+            Emgu.CV.Structure.Triangle2DF[] triangles = psd.GetDelaunayTriangles();
+
+            System.Console.WriteLine("done.");
+         }
+         while (iter < maxIter);
+      }
+
+      public static PointF[] getPoints(int amount)
+      {
+         Random rand = new Random();
+         PointF[] points = new PointF[amount];
+
+         for (int i = 0; i < amount; i++)
+         {
+            // ensure unique points within [(0f,0f)..(800f,600f)]
+            float x = (int)(rand.NextDouble() * 799) + (float)i / amount;
+            float y = (int)(rand.NextDouble() * 599) + (float)i / amount;
+            points[i] = new PointF(x, y);
+         }
+
+         return points;
+      }
+      #endregion
 
       [Test]
       public void TestGetModuleInfo()
