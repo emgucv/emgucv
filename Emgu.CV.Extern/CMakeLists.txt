@@ -50,14 +50,14 @@ ENDIF()
 ############################### IPP END ################################
 
 ############################### TBB START ##############################
-if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
+if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
   MESSAGE(STATUS "CVEXTERN: using TBB")
   add_definitions(-DHAVE_TBB)
   include_directories(${TBB_INCLUDE_DIR})
   link_directories(${TBB_LIB_DIR})
   
   IF(WIN32)
-  SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIR}/../../redist")
+  SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIRS}/../../redist")
   IF(TARGET_ARCH_64)
     SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/intel64/tbb")
   ELSE()
@@ -73,8 +73,19 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
 
   LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${TBB_BINARY_FILE_DIR}/tbb.dll")
+   
   ENDIF()
 endif()
+
+IF(WITH_TBB)
+  IF (NOT TBB_INCLUDE_DIRS)
+    MESSAGE(STATUS "Cannot find TBB_INCLUDE_DIRS")
+  ELSEIF (NOT TBB_LIB_DIR)
+    MESSAGE(STATUS "Cannot find TBB_LIB_DIR")
+  ELSE()
+    MESSAGE(STATUS "tbb dll: ${TBB_BINARY_FILE_DIR}/tbb.dll")
+  ENDIF()
+ENDIF()
 ############################### TBB END ################################
 
 ############################### INTEL ICL START ##############################
