@@ -145,7 +145,7 @@ ENDIF()
 SET(CPACK_PACKAGE_VENDOR "Emgu")
 SET(CPACK_PACKAGE_VERSION_MAJOR "2")
 SET(CPACK_PACKAGE_VERSION_MINOR "4")
-SET(CPACK_PACKAGE_VERSION_PATCH "1")
+SET(CPACK_PACKAGE_VERSION_PATCH "2")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_SVNVERSION}")
 SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
@@ -197,46 +197,21 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 #SET(DESTDIR "")
 #SET(CPACK_OUTPUT_FILE_PREFIX "")
 
-
 SET(EMGU_CV_BUILD ON CACHE BOOL "BUILD Emgu CV")
 SET(EMGU_CV_EXAMPLE_BUILD ON CACHE BOOL "Build Emgu CV Example")
 
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
 # ----------------------------------------------------------------------------
-FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs
-  "using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-[assembly: AssemblyVersion(\"${CPACK_PACKAGE_VERSION}\")]
-[assembly: AssemblyFileVersion(\"${CPACK_PACKAGE_VERSION}\")]
-[assembly: AssemblyConfiguration(\"\")]
-[assembly: AssemblyCompany(\"${CPACK_PACKAGE_VENDOR}\")]
-[assembly: AssemblyProduct(\"Emgu.CV\")]
-[assembly: AssemblyCopyright(\"Copyright ${CPACK_PACKAGE_VENDOR} 2012\")]
-[assembly: AssemblyTrademark(\"\")]
-[assembly: AssemblyCulture(\"\")]
-")
+INCLUDE(Today)
+TODAY() #set the variable CURRENT_YEAR
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonAssemblyInfo.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs)
 
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
 # ----------------------------------------------------------------------------
-FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt
-  "Version ${CPACK_PACKAGE_VERSION}
-==================================================================
-
-For online documentation please visit
-http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0/Index.html
-
-For tutorials and helps please visit the Emgu CV wiki 
-http://www.emgu.com/wiki/
-
-For questions and discussions please visit the Emgu CV forum
-http://www.emgu.com/forum/
-
-To report a bug, please visit
-http://www.emgu.com/bugs/
-")
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_BINARY_DIR}/Emgu.CV/README.txt)
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT main)
 
 # ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project
@@ -259,7 +234,6 @@ GET_TARGET_PROPERTY(OPENCV_PHOTO_OUTPUT_NAME opencv_photo OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_NONFREE_OUTPUT_NAME opencv_nonfree OUTPUT_NAME)
 GET_TARGET_PROPERTY(OPENCV_VIDEOSTAB_OUTPUT_NAME opencv_videostab OUTPUT_NAME)
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
-#GET_TARGET_PROPERTY(CVEXTERN_GPU_OUTPUT_NAME cvextern_gpu OUTPUT_NAME)
 
 if(WIN32 AND WITH_FFMPEG)
   if(TARGET_ARCH_64)
@@ -293,7 +267,6 @@ SET(OPENCV_LIBRARY_OUTPUT_NAMES
   ${OPENCV_NONFREE_OUTPUT_NAME}
   ${OPENCV_VIDEOSTAB_OUTPUT_NAME}
   ${CVEXTERN_OUTPUT_NAME}
-  #${CVEXTERN_GPU_OUTPUT_NAME}
 )
 
 IF(TARGET opencv_gpu)
@@ -301,114 +274,18 @@ ELSE()
   SET(OPENCV_GPU_OUTPUT_NAME "")
 ENDIF()
 
-#IF(TARGET cvextern_gpu)
-#ELSE()
-#  SET(CVEXTERN_GPU_OUTPUT_NAME "")
-#ENDIF()
-
 IF(TARGET_ARCH_64)
   SET(UNMANAGED_CODE_BITNESS "64")
 ELSE()
   SET(UNMANAGED_CODE_BITNESS "32")
 ENDIF()
 
-SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/)
 IF(ANDROID)
-  SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CVINVOKE_ENTRYPOINTS_FILENAME}Android/)
+  SET(CVINVOKE_ENTRYPOINTS_FILE_SUBFOLDER "Android/")
+ELSE()
+  SET(CVINVOKE_ENTRYPOINTS_FILE_SUBFOLDER "")
 ENDIF()
-SET(CVINVOKE_ENTRYPOINTS_FILENAME ${CVINVOKE_ENTRYPOINTS_FILENAME}CvInvokeEntryPoints.cs)
-
-FILE(WRITE ${CVINVOKE_ENTRYPOINTS_FILENAME}
-  "//This file is automatically generate by CMAKE. DO NOT MODIFY.
-using System;
-
-namespace Emgu.CV
-{
-   public partial class CvInvoke
-   {
-      /// <summary>
-      /// The file name of the core library
-      /// </summary>
-      public const string OPENCV_CORE_LIBRARY = \"${OPENCV_CORE_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the imgproc library
-      /// </summary>
-      public const string OPENCV_IMGPROC_LIBRARY = \"${OPENCV_IMGPROC_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the highgui library
-      /// </summary>
-      public const string OPENCV_HIGHGUI_LIBRARY = \"${OPENCV_HIGHGUI_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the flann library
-      /// </summary>
-      public const string OPENCV_FLANN_LIBRARY = \"${OPENCV_FLANN_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the feature2d library
-      /// </summary>
-      public const string OPENCV_FEATURES2D_LIBRARY = \"${OPENCV_FEATURES2D_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the objdetect library
-      /// </summary>
-      public const string OPENCV_OBJDETECT_LIBRARY = \"${OPENCV_OBJDETECT_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the calib3d library
-      /// </summary>
-      public const string OPENCV_CALIB3D_LIBRARY = \"${OPENCV_CALIB3D_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the legacy library
-      /// </summary>
-      public const string OPENCV_LEGACY_LIBRARY = \"${OPENCV_LEGACY_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the video library
-      /// </summary>
-      public const string OPENCV_VIDEO_LIBRARY = \"${OPENCV_VIDEO_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the gpu library
-      /// </summary>
-      public const string OPENCV_GPU_LIBRARY = \"${OPENCV_GPU_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the opencv_stitching library
-      /// </summary>
-      public const string OPENCV_STITCHING_LIBRARY = \"${OPENCV_STITCHING_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the cvextern library
-      /// </summary>
-      public const string EXTERN_LIBRARY = \"${CVEXTERN_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the cvextern_gpu library
-      /// </summary>
-      public const string EXTERN_GPU_LIBRARY = \"${CVEXTERN_OUTPUT_NAME}\";
-      /// <summary>
-      /// The file name of the opencv_ffmpeg library
-      /// </summary>
-      public const string OPENCV_FFMPEG_LIBRARY = \"${OPENCV_FFMPEG_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the ml library
-      /// </summary>
-      public const string OPENCV_ML_LIBRARY = \"${OPENCV_ML_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the contrib library
-      /// </summary>
-      public const string OPENCV_CONTRIB_LIBRARY = \"${OPENCV_CONTRIB_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the photo library
-      /// </summary>
-      public const string OPENCV_PHOTO_LIBRARY = \"${OPENCV_PHOTO_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the nonfree library
-      /// </summary>
-      public const string OPENCV_NONFREE_LIBRARY = \"${OPENCV_NONFREE_OUTPUT_NAME}\";
-	  /// <summary>
-      /// The file name of the videostab library
-      /// </summary>
-      public const string OPENCV_VIDEOSTAB_LIBRARY = \"${OPENCV_VIDEOSTAB_OUTPUT_NAME}\";
-	  
-      /// <summary>
-      /// The bit-ness of the unmanaged code (either 32 or 64) 
-      /// </summary>
-      public const uint UnmanagedCodeBitness = ${UNMANAGED_CODE_BITNESS};
-   }
-}")
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/PInvoke/${CVINVOKE_ENTRYPOINTS_FILE_SUBFOLDER}CvInvokeEntryPoints.cs)
 
 # ----------------------------------------------------------------------------
 #  Build the managed dlls of Emgu CV
@@ -445,6 +322,7 @@ IF (ANDROID)
   PATTERN ".svn" EXCLUDE
   )
   ENDFOREACH()
+  
   INSTALL(
   DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/Android"
@@ -479,8 +357,7 @@ IF (ANDROID)
     DESTINATION .
     COMPONENT main
     )
-ELSE()
-IF (WIN32)
+ELSEIF (WIN32)
   SET(CPACK_GENERATOR NSIS;ZIP)
   
   SET(CPACK_ARCHIVE_COMPONENT_INSTALL ON) #enable components install for zip
@@ -495,27 +372,29 @@ IF (WIN32)
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
   IF(MSVC)
-  IF(MSVC100)
-    SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
-  ENDIF()
-  IF(MSVC90)
-    SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
-  ENDIF()
+    IF(MSVC10)
+      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
+    ELSEIF(MSVC90)
+      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
+    ENDIF()
   
-  SET(VCRT_REDIST_NAME "vcredist_x86.exe")
-  IF(TARGET_ARCH_64)
+    SET(VCRT_REDIST_NAME "vcredist_x86.exe")
+    IF(TARGET_ARCH_64)
       SET(VCRT_REDIST_NAME "vcredist_x64.exe")
-  ENDIF()
-  
-  IF(MSVC_REDIST_FOLDER)
-  INSTALL(
-    FILES
-    "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
-    DESTINATION .
-    COMPONENT emgucv_binary 
-    )
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
-  ENDIF()
+    ENDIF()
+   
+    IF(MSVC_REDIST_FOLDER)
+      MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
+      INSTALL(
+        FILES
+        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
+        DESTINATION .
+        COMPONENT emgucv_binary 
+        )
+    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
+	ELSE()
+	  MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
+    ENDIF()
   ENDIF()
 
   # ----------------------------------------------------------------------------
@@ -532,13 +411,15 @@ IF (WIN32)
   
   IF (${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} MATCHES "^$")
     SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER "")
-  ELSEIF()
+  ELSE()
+    #MESSAGE(STATUS "UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER: ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
     #remove leading slashes
-    STRING(REGEX REPLACE "^\\" "" DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER})
+    STRING(REGEX REPLACE "^/" "" DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER})
 	#add tailing slashes
     SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER "${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}\\")
 	#replace single slashes with quard slashes
-    STRING(REGEX REPLACE "\\" "\\\\" DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER ${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER})
+    STRING(REGEX REPLACE "\\\\" "\\\\\\\\" DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER ${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER})
+	#MESSAGE(STATUS "DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER: ${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}")
   ENDIF()
 	
   #FOREACH(UNMANAGE_DLL_NAME ${CVEXTERN_DEPENDENCY_DLL_NAMES})
@@ -834,8 +715,7 @@ set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS main)
 set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DISPLAY_NAME "Emgu CV Examples (Source)")
 set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 
-ELSE (WIN32)
-IF (APPLE)
+ELSEIF (APPLE)
   SET(CPACK_GENERATOR TGZ)
   SET(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
 
@@ -954,13 +834,14 @@ INSTALL(
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
 # ----------------------------------------------------------------------------
-  FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist
+  SET(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist)
+  FILE(WRITE ${CPACK_BUNDLE_PLIST}
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
 <dict>
    <key>CFBundleIdentifier</key>
-   <string>com.yourcompany.monomac</string>
+   <string>com.emgu.emgucv</string>
    <key>CFBundleName</key>
    <string>${CPACK_BUNDLE_NAME}</string>
    <key>CFBundleVersion</key>
@@ -969,8 +850,8 @@ INSTALL(
    <string>10.6</string>
 </dict>
 </plist>")
-  SET(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist)
-ELSE()
+
+ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
   SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.GPU" "Emgu.CV.UI" "Emgu.CV.Stitching" "ZedGraph")
@@ -1071,8 +952,6 @@ ELSE()
     SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
   ENDIF()	
 ENDIF()  
-ENDIF()
-ENDIF()
 
 MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
 INCLUDE (CPack)

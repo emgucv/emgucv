@@ -1,0 +1,11 @@
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+[assembly: AssemblyVersion("${CPACK_PACKAGE_VERSION}")]
+[assembly: AssemblyFileVersion("${CPACK_PACKAGE_VERSION}")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("${CPACK_PACKAGE_VENDOR}")]
+[assembly: AssemblyProduct("Emgu.CV")]
+[assembly: AssemblyCopyright("Copyright ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
