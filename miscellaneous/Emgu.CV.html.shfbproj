@@ -43,7 +43,7 @@
       <DocumentationSource sourceFile="..\Solution\VS2008\Emgu.CV.sln" />
     </DocumentationSources>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper for the Intel OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython. The wrapper can be compiled in Mono and run on Linux, Solaris &amp; Mac OS X.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS X, iPhone, iPad and Android devices.</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
 Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
@@ -69,7 +69,8 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.Util" isDocumented="True">A collection of utilities used by Emgu.CV projects</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.OCR" isDocumented="True">Optical character recognition. Wraps the tesseract-ocr engine.</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.Cvb" isDocumented="True">Contains interface for the CvBlob library</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem></NamespaceSummaries>
+<NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">Video Stabalization</NamespaceSummaryItem></NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
   </PropertyGroup>

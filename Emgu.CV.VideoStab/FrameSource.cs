@@ -12,15 +12,25 @@ using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
+   /// <summary>
+   /// A FrameSource that can be used by the Video Stabilizer
+   /// </summary>
    public abstract class FrameSource : UnmanagedObject
    {
       private IntPtr _frameBuffer;
 
-      protected IntPtr _framSourcePtr;
+      /// <summary>
+      /// The unmanaged pointer the the frameSource
+      /// </summary>
+      protected IntPtr _frameSourcePtr;
 
+      /// <summary>
+      /// Retrieve the next frame from the FrameSoure
+      /// </summary>
+      /// <returns></returns>
       public Image<Bgr, Byte> NextFrame()
       {
-         if (!VideoStabInvoke.FrameSourceGetNextFrame(_framSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
+         if (!VideoStabInvoke.FrameSourceGetNextFrame(_frameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
@@ -39,13 +49,16 @@ namespace Emgu.CV.VideoStab
          return res;
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this FrameSource
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_frameBuffer != IntPtr.Zero)
          {
             CvInvoke.cvReleaseImage(ref _frameBuffer);
          }
-         _framSourcePtr = IntPtr.Zero;
+         _frameSourcePtr = IntPtr.Zero;
       }
    }
 }

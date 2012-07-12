@@ -392,17 +392,25 @@ namespace Emgu.CV.Test
       public static void TestTwoPassVideoStabilizer()
       {
          ImageViewer viewer = new ImageViewer();
-         using (Capture capture = new Capture())
+         using (Capture capture = new Capture("tree.avi"))
          using (GaussianMotionFilter motionFilter = new GaussianMotionFilter())
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
          //using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
          using (TwoPassStabilizer stabilizer = new TwoPassStabilizer(capture))
          {
+            Stopwatch watch = new Stopwatch();
             //stabilizer.SetMotionEstimator(motionEstimator);
             Application.Idle += delegate(object sender, EventArgs e)
             {
+               watch.Reset();
+               watch.Start();
                Image<Bgr, byte> frame = stabilizer.NextFrame();
+               watch.Stop();
+               if (watch.ElapsedMilliseconds < 200)
+               {
+                  Thread.Sleep(200 - (int) watch.ElapsedMilliseconds);
+               }
                if (frame != null)
                   viewer.Image = frame;
             };

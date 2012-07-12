@@ -18,7 +18,10 @@ public:
       : _capture(capture)
    {};
 
-   virtual void reset() {};
+   virtual void reset() 
+   { 
+      cvSetCaptureProperty(_capture, CV_CAP_PROP_POS_FRAMES, 0);  
+   };
 
    virtual cv::Mat nextFrame()
    {
