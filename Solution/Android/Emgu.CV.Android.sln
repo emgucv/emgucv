@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidExamples", "..\..\Emgu.CV.Example\Android\AndroidExamples.csproj", "{543E1066-E02A-4078-AFA4-AD00B7168780}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.Android", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.Android.csproj", "{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.Build.0 = Release|Any CPU
 		{543E1066-E02A-4078-AFA4-AD00B7168780}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

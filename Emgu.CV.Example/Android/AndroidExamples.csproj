@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AndroidExamples</RootNamespace>
-    <AssemblyName>Emgu.CV</AssemblyName>
+    <AssemblyName>Emgu.CV.Example</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -18,6 +18,7 @@
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\FaceDetection\DetectFace.cs">
       <Link>DetectFace.cs</Link>
     </Compile>
@@ -83,9 +87,6 @@
   <ItemGroup>
     <AndroidNativeLibrary Include="..\..\libs\armeabi\libcvextern.so">
       <Link>lib\armeabi\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libcvextern_gpu.so">
-      <Link>lib\armeabi\libcvextern_gpu.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r2.2.0.so">
       <Link>lib\armeabi\libnative_camera_r2.2.0.so</Link>
@@ -150,9 +151,6 @@
     <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libcvextern.so">
       <Link>lib\armeabi-v7a\libcvextern.so</Link>
     </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libcvextern_gpu.so">
-      <Link>lib\armeabi-v7a\libcvextern_gpu.so</Link>
-    </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r2.2.0.so">
       <Link>lib\armeabi-v7a\libnative_camera_r2.2.0.so</Link>
     </AndroidNativeLibrary>
@@ -215,9 +213,6 @@
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\x86\libcvextern.so">
       <Link>lib\x86\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libcvextern_gpu.so">
-      <Link>lib\x86\libcvextern_gpu.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\x86\libnative_camera_r2.3.3.so">
       <Link>lib\x86\libnative_camera_r2.3.3.so</Link>
@@ -368,6 +363,9 @@
     <AndroidAsset Include="..\LicensePlateRecognition\license-plate.jpg">
       <Link>Assets\license-plate.jpg</Link>
     </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
