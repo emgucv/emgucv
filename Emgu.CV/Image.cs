@@ -645,6 +645,7 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
       public virtual void Draw(Rectangle rect, TColor color, int thickness)
       {
+         /*
          CvInvoke.cvRectangle(
              Ptr,
              rect.Location,
@@ -652,7 +653,13 @@ namespace Emgu.CV
              color.MCvScalar,
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
-             0);
+             0);*/
+         CvInvoke.cvRectangleR(
+            Ptr,
+            rect, color.MCvScalar,
+            thickness,
+            CvEnum.LINE_TYPE.EIGHT_CONNECTED,
+            0);
       }
 
       ///<summary> Draw a 2D Cross using the specific color and thickness </summary>

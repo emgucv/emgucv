@@ -136,7 +136,7 @@ namespace Emgu.CV
             CvInvoke.OPENCV_GPU_LIBRARY, 
             CvInvoke.OPENCV_STITCHING_LIBRARY,
             
-            CvInvoke.EXTERN_GPU_LIBRARY,
+            //CvInvoke.EXTERN_GPU_LIBRARY,
             CvInvoke.EXTERN_LIBRARY
 
          };

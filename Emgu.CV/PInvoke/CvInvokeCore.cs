@@ -1579,6 +1579,22 @@ namespace Emgu.CV
          CvEnum.LINE_TYPE lineType,
          int shift);
 
+      /// <summary>
+      /// Draws a rectangle specified by a CvRect structure
+      /// </summary>
+      /// /// <param name="img">Image</param>
+      /// <param name="pt1">One of the rectangle vertices</param>
+      /// <param name="pt2">Opposite rectangle vertex</param>
+      /// <param name="color">Line color </param>
+      /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
+      /// <param name="lineType">Type of the line</param>
+      /// <param name="shift">Number of fractional bits in the point coordinates</param>
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvRectangleR(IntPtr img, Rectangle r,
+                           MCvScalar color, int thickness,
+                           CvEnum.LINE_TYPE lineType,
+                           int shift);
+
       #region Accessing Elements and sub-Arrays
       /// <summary>
       /// Returns header, corresponding to a specified rectangle of the input array. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array. ROI is taken into account by the function so the sub-array of ROI is actually extracted.
@@ -1939,7 +1955,7 @@ namespace Emgu.CV
       /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPutText(IntPtr img, [MarshalAs(UnmanagedType.LPStr)] String text, Point org, ref MCvFont font, MCvScalar color);
+      public static extern void cvPutText(IntPtr img, [MarshalAs(CvInvoke.StringMarshalType)] String text, Point org, ref MCvFont font, MCvScalar color);
 
       /// <summary>
       /// Calculates the binding rectangle for the given text string when a specified font is used
@@ -1949,7 +1965,7 @@ namespace Emgu.CV
       /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetTextSize([MarshalAs(UnmanagedType.LPStr)] String textString, ref MCvFont font, ref Size textSize, ref int baseline);
+      public static extern void cvGetTextSize([MarshalAs(CvInvoke.StringMarshalType)] String textString, ref MCvFont font, ref Size textSize, ref int baseline);
       #endregion
 
       /// <summary>
