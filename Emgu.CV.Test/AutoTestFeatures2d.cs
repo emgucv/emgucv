@@ -130,6 +130,14 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(TestFeature2DTracker<byte>(orb, orb), "Unable to find homography matrix");
       }
 
+      [Test]
+      public void TestFreak()
+      {
+         FastDetector fast = new FastDetector(10, true);
+         Freak freak = new Freak(true, true, 22.0f, 4);
+         EmguAssert.IsTrue(TestFeature2DTracker<byte>(fast, freak), "Unable to find homography matrix");
+      }
+
       public static bool TestFeature2DTracker<TDescriptor>(IKeyPointDetector keyPointDetector, IDescriptorExtractor<Gray, TDescriptor> descriptorGenerator)
          where TDescriptor : struct
       {

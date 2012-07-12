@@ -120,6 +120,10 @@ CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int
 
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
+CVAPI(cv::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves);
+
+CVAPI(void) CvFreakRelease(cv::FREAK** detector);
+
 /*
 CVAPI(int) CvOrbDetectorGetDescriptorSize(cv::ORB* detector);
 

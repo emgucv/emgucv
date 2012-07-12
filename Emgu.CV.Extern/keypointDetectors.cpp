@@ -171,6 +171,17 @@ void CvOrbDetectorRelease(cv::ORB** detector)
    *detector = 0;
 }
 
+cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves)
+{
+   return new cv::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+}
+
+void CvFreakRelease(cv::FREAK** detector)
+{
+   delete * detector;
+   *detector = 0;
+}
+
 //FeatureDetector
 void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
 {
