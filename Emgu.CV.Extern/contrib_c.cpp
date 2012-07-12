@@ -69,23 +69,23 @@ void CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
 }
 
 //FaceRecognizer
-cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents)
+cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double threshold)
 {
-   cv::Ptr<cv::FaceRecognizer> ptr = cv::createEigenFaceRecognizer(numComponents);
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createEigenFaceRecognizer(numComponents, threshold);
    ptr.addref();
    return ptr.obj;
 }
     
-cv::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents)
+cv::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents, double threshold)
 {
-   cv::Ptr<cv::FaceRecognizer> ptr = cv::createFisherFaceRecognizer(numComponents);
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createFisherFaceRecognizer(numComponents, threshold);
    ptr.addref();
    return ptr.obj;
 }
     
-cv::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY)
+cv::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
 {
-   cv::Ptr<cv::FaceRecognizer> ptr = cv::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY);
+   cv::Ptr<cv::FaceRecognizer> ptr = cv::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY, threshold);
    ptr.addref();
    return ptr.obj;
 }
@@ -114,10 +114,14 @@ void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName)
    recognizer->save(file);
 }
 
-int CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image)
+void CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image, int* label, double* dist)
 {
    cv::Mat mat = cv::cvarrToMat(image);
-   return recognizer->predict(mat);
+   int l = -1;
+   double d = -1;
+   recognizer->predict(mat, l, d);
+   *label = l;
+   *dist = d;
 }
 
 void CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer)
