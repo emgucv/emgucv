@@ -32,7 +32,7 @@ namespace AndroidExamples
             MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 4.0, 4.0);
 
             image.SetValue(new Bgra(255,255,255,255));
-            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgra(0,255,255,0));
+            image.Draw("Hello, World!", ref font, new Point(50, 50), new Bgra(0,0,255,255));
 
             ImageView imageView = FindViewById<ImageView>(Resource.Id.HelloWorldImageView);
             imageView.SetImageBitmap(image.ToBitmap());

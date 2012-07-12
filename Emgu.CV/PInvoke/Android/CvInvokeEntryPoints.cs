@@ -56,7 +56,7 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cvextern_gpu library
       /// </summary>
-      public const string EXTERN_GPU_LIBRARY = "cvextern_gpu";
+      public const string EXTERN_GPU_LIBRARY = "cvextern";
       /// <summary>
       /// The file name of the opencv_ffmpeg library
       /// </summary>

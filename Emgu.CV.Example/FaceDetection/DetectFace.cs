@@ -14,7 +14,7 @@ namespace FaceDetection
 {
    public static class DetectFace
    {
-      public static void DetectAndDraw(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, out long detectionTime)
+      public static void Detect(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, List<Rectangle> faces, List<Rectangle> eyes, out long detectionTime)
       {
          Stopwatch watch;
 
@@ -28,10 +28,9 @@ namespace FaceDetection
                using (GpuImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
                {
                   Rectangle[] faceRegion = face.DetectMultiScale(gpuGray, 1.1, 10, Size.Empty);
+                  faces.AddRange(faceRegion);
                   foreach (Rectangle f in faceRegion)
                   {
-                     //draw the face detected in the 0th (gray) channel with blue color
-                     image.Draw(f, new Bgr(Color.Blue), 2);
                      using (GpuImage<Gray, Byte> faceImg = gpuGray.GetSubRect(f))
                      {
                         //For some reason a clone is required.
@@ -44,7 +43,7 @@ namespace FaceDetection
                            {
                               Rectangle eyeRect = e;
                               eyeRect.Offset(f.X, f.Y);
-                              image.Draw(eyeRect, new Bgr(Color.Red), 2);
+                              eyes.Add(eyeRect);
                            }
                         }
                      }
@@ -74,6 +73,7 @@ namespace FaceDetection
                      10,
                      new Size(20, 20),
                      Size.Empty);
+                  faces.AddRange(facesDetected);
 
                   foreach (Rectangle f in facesDetected)
                   {
@@ -94,7 +94,7 @@ namespace FaceDetection
                      {
                         Rectangle eyeRect = e;
                         eyeRect.Offset(f.X, f.Y);
-                        image.Draw(eyeRect, new Bgr(Color.Red), 2);
+                        eyes.Add(eyeRect);
                      }
                   }
                }
