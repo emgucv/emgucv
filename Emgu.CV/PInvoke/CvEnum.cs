@@ -817,10 +817,270 @@ namespace Emgu.CV.CvEnum
       /// Convert YUV420sp to BGRA
       /// </summary>
       CV_YUV420sp2BGRA = 97,
+
+      /// <summary>
+      /// Convert YUV (YV12) to RGB
+      /// </summary>
+      CV_YUV2RGB_YV12 = 98,
+      /// <summary>
+      /// Convert YUV (YV12) to BGR
+      /// </summary>
+      CV_YUV2BGR_YV12 = 99,
+      /// <summary>
+      /// Convert YUV (iYUV) to RGB
+      /// </summary>
+      CV_YUV2RGB_IYUV = 100,
+      /// <summary>
+      /// Convert YUV (iYUV) to BGR
+      /// </summary>
+      CV_YUV2BGR_IYUV = 101,
+      /// <summary>
+      /// Convert YUV (i420) to RGB
+      /// </summary>
+      CV_YUV2RGB_I420 = CV_YUV2RGB_IYUV,
+      /// <summary>
+      /// Convert YUV (i420) to BGR
+      /// </summary>
+      CV_YUV2BGR_I420 = CV_YUV2BGR_IYUV,
+      /// <summary>
+      /// Convert YUV (420p) to RGB
+      /// </summary>
+      CV_YUV420p2RGB = CV_YUV2RGB_YV12,
+      /// <summary>
+      /// Convert YUV (420p) to BGR
+      /// </summary>
+      CV_YUV420p2BGR = CV_YUV2BGR_YV12,
+
+      /// <summary>
+      /// Convert YUV (YV12) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_YV12 = 102,
+      /// <summary>
+      /// Convert YUV (YV12) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_YV12 = 103,
+      /// <summary>
+      /// Convert YUV (iYUV) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_IYUV = 104,
+      /// <summary>
+      /// Convert YUV (iYUV) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_IYUV = 105,
+      /// <summary>
+      /// Convert YUV (i420) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_I420 = CV_YUV2RGBA_IYUV,
+      /// <summary>
+      /// Convert YUV (i420) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_I420 = CV_YUV2BGRA_IYUV,
+      /// <summary>
+      /// Convert YUV (420p) to RGBA
+      /// </summary>
+      CV_YUV420p2RGBA = CV_YUV2RGBA_YV12,
+      /// <summary>
+      /// Convert YUV (420p) to BGRA
+      /// </summary>
+      CV_YUV420p2BGRA = CV_YUV2BGRA_YV12,
+
+      /// <summary>
+      /// Convert YUV 420 to Gray
+      /// </summary>
+      CV_YUV2GRAY_420 = 106,
+      /// <summary>
+      /// Convert YUV NV21 to Gray
+      /// </summary>
+      CV_YUV2GRAY_NV21 = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV NV12 to Gray
+      /// </summary>
+      CV_YUV2GRAY_NV12 = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV YV12 to Gray
+      /// </summary>
+      CV_YUV2GRAY_YV12 = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV (iYUV) to Gray
+      /// </summary>
+      CV_YUV2GRAY_IYUV = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV (i420) to Gray
+      /// </summary>
+      CV_YUV2GRAY_I420 = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV (420sp) to Gray
+      /// </summary>
+      CV_YUV420sp2GRAY = CV_YUV2GRAY_420,
+      /// <summary>
+      /// Convert YUV (420p) to Gray
+      /// </summary>
+      CV_YUV420p2GRAY = CV_YUV2GRAY_420,
+
+      //YUV 4:2:2 formats family
+      /// <summary>
+      /// Convert YUV (UYVY) to RGB
+      /// </summary>
+      CV_YUV2RGB_UYVY = 107,
+      /// <summary>
+      /// Convert YUV (UYVY) to BGR
+      /// </summary>
+      CV_YUV2BGR_UYVY = 108,
+      //CV_YUV2RGB_VYUY = 109,
+      //CV_YUV2BGR_VYUY = 110,
+      /// <summary>
+      /// Convert YUV (Y422) to RGB
+      /// </summary>
+      CV_YUV2RGB_Y422 = CV_YUV2RGB_UYVY,
+      /// <summary>
+      /// Convert YUV (Y422) to BGR
+      /// </summary>
+      CV_YUV2BGR_Y422 = CV_YUV2BGR_UYVY,
+      /// <summary>
+      /// Convert YUV (UYNY) to RGB
+      /// </summary>
+      CV_YUV2RGB_UYNV = CV_YUV2RGB_UYVY,
+      /// <summary>
+      /// Convert YUV (UYNV) to BGR
+      /// </summary>
+      CV_YUV2BGR_UYNV = CV_YUV2BGR_UYVY,
+
+      /// <summary>
+      /// Convert YUV (UYVY) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_UYVY = 111,
+      /// <summary>
+      /// Convert YUV (VYUY) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_UYVY = 112,
+      //CV_YUV2RGBA_VYUY = 113,
+      //CV_YUV2BGRA_VYUY = 114,
+      /// <summary>
+      /// Convert YUV (Y422) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_Y422 = CV_YUV2RGBA_UYVY,
+      /// <summary>
+      /// Convert YUV (Y422) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_Y422 = CV_YUV2BGRA_UYVY,
+      /// <summary>
+      /// Convert YUV (UYNV) to RGBA 
+      /// </summary>
+      CV_YUV2RGBA_UYNV = CV_YUV2RGBA_UYVY,
+      /// <summary>
+      /// Convert YUV (UYNV) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_UYNV = CV_YUV2BGRA_UYVY,
+
+      /// <summary>
+      /// Convert YUV (YUY2) to RGB
+      /// </summary>
+      CV_YUV2RGB_YUY2 = 115,
+      /// <summary>
+      /// Convert YUV (YUY2) to BGR
+      /// </summary>
+      CV_YUV2BGR_YUY2 = 116,
+      /// <summary>
+      /// Convert YUV (YVYU) to RGB
+      /// </summary>
+      CV_YUV2RGB_YVYU = 117,
+      /// <summary>
+      /// Convert YUV (YVYU) to BGR
+      /// </summary>
+      CV_YUV2BGR_YVYU = 118,
+      /// <summary>
+      /// Convert YUV (YUYV) to RGB
+      /// </summary>
+      CV_YUV2RGB_YUYV = CV_YUV2RGB_YUY2,
+      /// <summary>
+      /// Convert YUV (YUYV) to BGR 
+      /// </summary>
+      CV_YUV2BGR_YUYV = CV_YUV2BGR_YUY2,
+      /// <summary>
+      /// Convert YUV (YUNV) to RGB
+      /// </summary>
+      CV_YUV2RGB_YUNV = CV_YUV2RGB_YUY2,
+      /// <summary>
+      /// Convert YUV (YUNV) to BGR
+      /// </summary>
+      CV_YUV2BGR_YUNV = CV_YUV2BGR_YUY2,
+
+      /// <summary>
+      /// Convert YUV (YUY2) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_YUY2 = 119,
+      /// <summary>
+      /// Convert YUV (YUY2) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_YUY2 = 120,
+      /// <summary>
+      /// Convert YUV (YVYU) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_YVYU = 121,
+      /// <summary>
+      /// Convert YUV (YVYU) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_YVYU = 122,
+      /// <summary>
+      /// Convert YUV (YUYV) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_YUYV = CV_YUV2RGBA_YUY2,
+      /// <summary>
+      /// Convert YUV (YUYV) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_YUYV = CV_YUV2BGRA_YUY2,
+      /// <summary>
+      /// Convert YUV (YUNV) to RGBA
+      /// </summary>
+      CV_YUV2RGBA_YUNV = CV_YUV2RGBA_YUY2,
+      /// <summary>
+      /// Convert YUV (YUNV) to BGRA
+      /// </summary>
+      CV_YUV2BGRA_YUNV = CV_YUV2BGRA_YUY2,
+
+      /// <summary>
+      /// Convert YUV (UYVY) to Gray
+      /// </summary>
+      CV_YUV2GRAY_UYVY = 123,
+      /// <summary>
+      /// Convert YUV (YUY2) to Gray
+      /// </summary>
+      CV_YUV2GRAY_YUY2 = 124,
+      //CV_YUV2GRAY_VYUY = CV_YUV2GRAY_UYVY,
+      /// <summary>
+      /// Convert YUV (Y422) to Gray
+      /// </summary>
+      CV_YUV2GRAY_Y422 = CV_YUV2GRAY_UYVY,
+      /// <summary>
+      /// Convert YUV (UYNV) to Gray
+      /// </summary>
+      CV_YUV2GRAY_UYNV = CV_YUV2GRAY_UYVY,
+      /// <summary>
+      /// Convert YUV (YVYU) to Gray
+      /// </summary>
+      CV_YUV2GRAY_YVYU = CV_YUV2GRAY_YUY2,
+      /// <summary>
+      /// Convert YUV (YUYV) to Gray
+      /// </summary>
+      CV_YUV2GRAY_YUYV = CV_YUV2GRAY_YUY2,
+      /// <summary>
+      /// Convert YUV (YUNV) to Gray
+      /// </summary>
+      CV_YUV2GRAY_YUNV = CV_YUV2GRAY_YUY2,
+
+      /// <summary>
+      /// Alpha premultiplication
+      /// </summary>
+      CV_RGBA2mRGBA = 125,
+      /// <summary>
+      /// Alpha premultiplication
+      /// </summary>
+      CV_mRGBA2RGBA = 126,
+
       /// <summary>
       /// The max number, do not use
       /// </summary>
-      CV_COLORCVT_MAX = 100
+      CV_COLORCVT_MAX = 127
    }
 
    /// <summary>
