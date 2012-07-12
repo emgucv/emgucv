@@ -29,8 +29,8 @@ PUSHD .
 IF NOT DEFINED ANDROID_NDK (ECHO. & ECHO You should set an environment variable ANDROID_NDK to the full path to your copy of Android NDK & GOTO end)
 (CD "%ANDROID_NDK%") || (ECHO. & ECHO Directory "%ANDROID_NDK%" specified by ANDROID_NDK variable does not exist & GOTO end)
 
-IF NOT EXIST "%CMAKE_EXE%" (ECHO. & ECHO You should set an environment variable CMAKE_EXE to the full path to cmake executable & GOTO end)
-IF NOT EXIST "%MAKE_EXE%" (ECHO. & ECHO You should set an environment variable MAKE_EXE to the full path to native port of make executable & GOTO end)
+IF NOT EXIST "%CMAKE%" (ECHO. & ECHO You should set an environment variable CMAKE to the full path to cmake executable & GOTO end)
+IF NOT EXIST "%MAKE%" (ECHO. & ECHO You should set an environment variable MAKE to the full path to native port of make executable & GOTO end)
 
 IF NOT %BUILD_JAVA_PART%==1 GOTO required_variables_checked
 

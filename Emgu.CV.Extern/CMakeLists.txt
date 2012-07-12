@@ -239,7 +239,7 @@ ENDIF()
 
 IF(ANDROID OR IOS)
 file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp" "gpu/videostab_c.cpp")
-file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h)
+file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h")
 ELSE()
 file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
 file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
