@@ -1086,27 +1086,27 @@ namespace Emgu.CV.Test
             labels[i] = i;
          }
 
-         EigenFaceRecognizer eigen = new EigenFaceRecognizer(0);
+         EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
          eigen.Train(images, labels);
          for (int i = 0; i < images.Length; i++)
          {
-            EmguAssert.IsTrue(eigen.Predict(images[i]) == i);
+            EmguAssert.IsTrue(eigen.Predict(images[i]).Label == i);
          }
          eigen.Save("abc.xml");
          eigen.Load("abc.xml");
 
-         FisherFaceRecognizer fisher = new FisherFaceRecognizer(0);
+         FisherFaceRecognizer fisher = new FisherFaceRecognizer(0, double.MaxValue);
          fisher.Train(images, labels);
          for (int i = 0; i < images.Length; i++)
          {
-            EmguAssert.IsTrue(fisher.Predict(images[i]) == i);
+            EmguAssert.IsTrue(fisher.Predict(images[i]).Label == i);
          }
 
-         LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8);
+         LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
          lbph.Train(images, labels);
          for (int i = 0; i < images.Length; i++)
          {
-            EmguAssert.IsTrue(lbph.Predict(images[i]) == i);
+            EmguAssert.IsTrue(lbph.Predict(images[i]).Label == i);
          }
 
       }
