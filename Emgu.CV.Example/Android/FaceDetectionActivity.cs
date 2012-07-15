@@ -60,7 +60,6 @@ namespace AndroidExamples
                }
 
                SetImageBitmap(bmp);
-               SetImageBitmap(image.ToBitmap());
             }
          };
       }

@@ -76,7 +76,6 @@
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />
-    <Compile Include="HelloWorldActivity.cs" />
     <Compile Include="PedestrianDetectionActivity.cs" />
     <Compile Include="PlanarSubdivisionActivity.cs" />
     <Compile Include="SURFFeatureActivity.cs" />
@@ -298,7 +297,6 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\PlanarSubdivision.axml" />
-    <AndroidResource Include="Resources\Layout\HelloWorld.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />

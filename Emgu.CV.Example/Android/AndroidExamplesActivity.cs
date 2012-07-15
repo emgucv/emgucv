@@ -19,13 +19,14 @@ namespace AndroidExamples
          // Set our view from the "main" layout resource
          SetContentView(Resource.Layout.AndroidExamples);
 
+         /*
          // Get our buttons from the layout resource,
          // and attach events to it
          Button helloWorldButton = FindViewById<Button>(Resource.Id.GotoHelloWorldButton);
          helloWorldButton.Click += delegate
          {
             StartActivity(typeof(HelloWorldActivity));
-         };
+         };*/
 
          Button plannarSubdivisionButton = FindViewById<Button>(Resource.Id.GotoPlanarSubdivisionButton);
          plannarSubdivisionButton.Click += delegate
