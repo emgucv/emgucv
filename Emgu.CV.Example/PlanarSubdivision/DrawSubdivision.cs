@@ -14,12 +14,11 @@ namespace PlanarSubdivisionExample
    public static class DrawSubdivision
    {
       /// <summary>
-      /// Draw the planar subdivision
+      /// Create planar subdivision for random points
       /// </summary>
-      /// <param name="maxValue">The points contains values between [0, 600)</param>
-      /// <param name="pointCount">The total number of points</param>
-      /// <returns>An image representing the planar subvidision of the points</returns>
-      public static Image<Bgr, Byte> Draw(float maxValue, int pointCount)
+      /// <param name="maxValue">The points contains values between [0, maxValue)</param>
+      /// <param name="pointCount">The total number of points to create</param>
+      public static void CreateSubdivision(float maxValue, int pointCount, out Triangle2DF[] delaunayTriangles, out VoronoiFacet[] voronoiFacets)
       {
          #region create random points in the range of [0, maxValue]
          PointF[] pts = new PointF[pointCount];
@@ -28,8 +27,6 @@ namespace PlanarSubdivisionExample
             pts[i] = new PointF((float)r.NextDouble() * maxValue, (float)r.NextDouble() * maxValue);
          #endregion
 
-         Triangle2DF[] delaunayTriangles;
-         VoronoiFacet[] voronoiFacets;
          using (PlanarSubdivision subdivision = new PlanarSubdivision(pts))
          {
             //Obtain the delaunay's triangulation from the set of points;
@@ -38,6 +35,21 @@ namespace PlanarSubdivisionExample
             //Obtain the voronoi facets from the set of points
             voronoiFacets = subdivision.GetVoronoiFacets();
          }
+      }
+
+      /// <summary>
+      /// Draw the planar subdivision
+      /// </summary>
+      /// <param name="maxValue">The points contains values between [0, maxValue)</param>
+      /// <param name="pointCount">The total number of points</param>
+      /// <returns>An image representing the planar subvidision of the points</returns>
+      public static Image<Bgr, Byte> Draw(float maxValue, int pointCount)
+      {
+         Triangle2DF[] delaunayTriangles;
+         VoronoiFacet[] voronoiFacets;
+         Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
+
+         CreateSubdivision(maxValue, pointCount, out delaunayTriangles, out voronoiFacets);
 
          //create an image for display purpose
          Image<Bgr, Byte> img = new Image<Bgr, byte>((int)maxValue, (int)maxValue);
@@ -61,8 +73,8 @@ namespace PlanarSubdivisionExample
          }
 
          //Draw the Delaunay triangulation
-         foreach (Triangle2DF triangles in delaunayTriangles)
-            img.Draw(triangles, new Bgr(Color.White), 1);
+         foreach (Triangle2DF triangle in delaunayTriangles)
+            img.Draw(triangle, new Bgr(Color.White), 1);
 
          return img;
       }
