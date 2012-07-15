@@ -77,9 +77,6 @@ namespace FaceDetection
 
                   foreach (Rectangle f in facesDetected)
                   {
-                     //draw the face detected in the 0th (gray) channel with blue color
-                     image.Draw(f, new Bgr(Color.Blue), 2);
-
                      //Set the region of interest on the faces
                      gray.ROI = f;
                      Rectangle[] eyesDetected = eye.DetectMultiScale(
