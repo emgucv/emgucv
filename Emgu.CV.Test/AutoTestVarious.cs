@@ -63,14 +63,14 @@ namespace Emgu.CV.Test
          using (MemoryStream ms = new MemoryStream())
          {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             formatter.Serialize(ms, hist);
             Byte[] bytes = ms.GetBuffer();
 
             using (MemoryStream ms2 = new MemoryStream(bytes))
             {
                Object o = formatter.Deserialize(ms2);
-               DenseHistogram hist2 = (DenseHistogram) o;
+               DenseHistogram hist2 = (DenseHistogram)o;
                EmguAssert.IsTrue(hist.Equals(hist2));
             }
          }
@@ -83,9 +83,13 @@ namespace Emgu.CV.Test
          double[] a = new double[4] { 1, 3, 2, 0 };
          MCvPoint2D64f[] pts = new MCvPoint2D64f[b.Length];
          for (int i = 0; i < pts.Length; i++)
-            pts[i] = new MCvPoint2D64f(b[i], a[i]);
+            pts [i] = new MCvPoint2D64f(b [i], a [i]);
 
-         IEnumerable<MCvPoint2D64f> interPts = Toolbox.LinearInterpolate(pts, new double[2] { 1.5, 3.5 });
+         IEnumerable<MCvPoint2D64f> interPts = Toolbox.LinearInterpolate(pts, new double[2]
+         {
+            1.5,
+            3.5
+         });
          IEnumerator<MCvPoint2D64f> enumerator = interPts.GetEnumerator();
          enumerator.MoveNext();
          EmguAssert.IsTrue(1.5 == enumerator.Current.x);
@@ -136,7 +140,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(a1.Length, a2.Length);
          for (int i = 0; i < a1.Length; i++)
          {
-            EmguAssert.AreEqual(a1[i], a2[i]);
+            EmguAssert.AreEqual(a1 [i], a2 [i]);
          }
 
          img1.Dispose();
@@ -230,7 +234,7 @@ namespace Emgu.CV.Test
                   Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
             EmguAssert.IsTrue(1 == defacts.Length);
-            EmguAssert.IsTrue(new Point(100, 100).Equals(defacts[0].DepthPoint));
+            EmguAssert.IsTrue(new Point(100, 100).Equals(defacts [0].DepthPoint));
 
             EmguAssert.IsTrue(contour.InContour(new PointF(90, 90)) > 0);
             EmguAssert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
@@ -375,7 +379,12 @@ namespace Emgu.CV.Test
       [Test]
       public void TestEigenObjects()
       {
-         String[] fileNames = new string[] { "stuff.jpg", "squares.gif", "lena.jpg" };
+         String[] fileNames = new string[]
+         {
+            "stuff.jpg",
+            "squares.gif",
+            "lena.jpg"
+         };
 
          int width = 100, height = 100;
          MCvTermCriteria termCrit = new MCvTermCriteria(3, 0.001);
@@ -780,9 +789,9 @@ namespace Emgu.CV.Test
          do
          {
             iter++;
-            Trace.WriteLine(String.Format("Running iteration {0} ... ", iter));
+            EmguAssert.WriteLine(String.Format("Running iteration {0} ... ", iter));
 
-            PointF[] points = getPoints(nPoints);
+            PointF[] points = getPoints(nPoints); 
 
             /*
             // write points to file
