@@ -15,25 +15,25 @@ using System.IO;
 
 namespace Emgu.Util
 {
-   /// <summary>
-   /// Copy the Android assets to the cache folder
-   /// </summary>
-   public class AndroidCacheFileAsset : DisposableObject
+
+   public abstract class AndroidFileAsset : DisposableObject
    {
-      private Java.IO.File _dir;
-      private Java.IO.File _file;
+      protected FileInfo _file;
+      protected OverwriteMethod _overwriteMethod;
 
-      public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix)
+      public enum OverwriteMethod
       {
-         System.IO.Stream iStream = context.Assets.Open(assertName);
-         String fileName = Path.GetFileName(assertName);
-         String fullPath = Path.Combine(cacheFolderPostfix, fileName);
-         _dir = context.GetDir(cacheFolderPostfix, FileCreationMode.Private);
-         _file = new Java.IO.File(_dir, fileName);
-         if (_file.Exists())
-            throw new IOException(String.Format("A file with the name {0} already exist.", _file.ToString()));
+         AlwaysOverwrite,
+         NeverOverwrite
+      }
 
-         using (System.IO.Stream os = System.IO.File.OpenWrite(_file.AbsolutePath))
+      protected void WriteStream(System.IO.Stream iStream)
+      {
+         if (_overwriteMethod == OverwriteMethod.NeverOverwrite && File.Exists(FileFullPath))
+         {
+            throw new IOException(String.Format("A file with the name {0} already exist.", FileFullPath));
+         }
+         using (System.IO.Stream os = System.IO.File.OpenWrite(FileFullPath))
          {
             byte[] buffer = new byte[8 * 1024];
             int len;
@@ -42,16 +42,11 @@ namespace Emgu.Util
          }
       }
 
-      public AndroidCacheFileAsset(Context context, String assertName)
-         : this(context, assertName, "tmp")
-      {
-      }
-
       public String DirectoryName
       {
          get
          {
-            return _dir.ToString();
+            return _file.DirectoryName;
          }
       }
 
@@ -59,72 +54,68 @@ namespace Emgu.Util
       {
          get
          {
-            return _file.AbsolutePath;
+            return _file.FullName;
          }
       }
 
       protected override void DisposeObject()
       {
-         if (_file.Exists())
+      }
+   }
+
+
+   /// <summary>
+   /// Copy the Android assets to the cache folder
+   /// </summary>
+   public class AndroidCacheFileAsset : AndroidFileAsset
+   {
+
+      public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix)
+         : this(context, assertName, cacheFolderPostfix, OverwriteMethod.NeverOverwrite)
+      {
+      }
+
+      public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix, OverwriteMethod overwrite)
+      {
+         String fileName = Path.GetFileName(assertName);
+         fileName = Path.Combine(context.GetDir(cacheFolderPostfix, FileCreationMode.Private).AbsolutePath, fileName);
+         _file = new FileInfo(fileName);
+         _overwriteMethod = overwrite;
+
+         using(System.IO.Stream iStream = context.Assets.Open(assertName))
+            WriteStream(iStream);
+
+      }
+
+      public AndroidCacheFileAsset(Context context, String assertName)
+         : this(context, assertName, "tmp")
+      {
+      }
+
+      protected override void DisposeObject()
+      {
+         if (_file.Exists)
             _file.Delete();
-         //_dir.Delete();
+           
+         base.DisposeObject();
       }
    }
 
    /// <summary>
    /// Copy the Android assets to the app's FilesDir
    /// </summary>
-   public class AndroidPermanantFileAsset : DisposableObject
+   public class AndroidPermanantFileAsset : AndroidFileAsset
    {
-      private Java.IO.File _dir;
-      private Java.IO.File _file;
-
-      public enum OverwriteMethod
-      {
-         AlwaysOverwrite,
-         NeverOverwrite
-      }
-
       public AndroidPermanantFileAsset(Context context, String assertName, String dstDir, OverwriteMethod overwrite)
       {
+         String fullPath = Path.Combine(context.FilesDir.AbsolutePath, dstDir, assertName);
+         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+         _file = new FileInfo(fullPath);
 
-         String fullPath = Path.Combine( context.FilesDir.AbsolutePath, dstDir, assertName);
-         _dir = new Java.IO.File( Path.GetDirectoryName(fullPath));
-         _dir.Mkdirs();
-         string fileName = Path.GetFileName(assertName);
-         _file = new Java.IO.File(_dir, fileName);
+         _overwriteMethod = overwrite;
 
-         if (!(overwrite == OverwriteMethod.NeverOverwrite && _file.Exists()))
-         {
-            System.IO.Stream iStream = context.Assets.Open(assertName);
-            using (System.IO.Stream os = System.IO.File.OpenWrite(_file.AbsolutePath))
-            {
-               byte[] buffer = new byte[8 * 1024];
-               int len;
-               while ((len = iStream.Read(buffer, 0, buffer.Length)) > 0)
-                  os.Write(buffer, 0, len);
-            }
-         }
-      }
-
-      public String DirectoryName
-      {
-         get
-         {
-            return _dir.ToString();
-         }
-      }
-
-      public String FileFullPath
-      {
-         get
-         {
-            return _file.AbsolutePath;
-         }
-      }
-
-      protected override void DisposeObject()
-      {
+         using (System.IO.Stream iStream = context.Assets.Open(assertName))
+            WriteStream(iStream);
       }
    }
 }

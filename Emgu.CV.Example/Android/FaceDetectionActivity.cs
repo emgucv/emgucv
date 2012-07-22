@@ -33,33 +33,37 @@ namespace AndroidExamples
          OnButtonClick += delegate 
          {
             long time;
-            using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "lena.jpg"))
-            using (AndroidCacheFileAsset eyeXml = new AndroidCacheFileAsset(this, "haarcascade_eye.xml"))
-            using (AndroidCacheFileAsset faceXml = new AndroidCacheFileAsset(this, "haarcascade_frontalface_default.xml"))
+
+            using (Image<Bgr, Byte> image = PickImage("lena.jpg"))
             {
-               List<Rectangle> faces = new List<Rectangle>();
-               List<Rectangle> eyes = new List<Rectangle>();
-               DetectFace.Detect(image, faceXml.FileFullPath, eyeXml.FileFullPath, faces, eyes, out time);
-               SetMessage( String.Format("Detected in {0} milliseconds.", time) );
-
-               Bitmap bmp = null;
-               using (Bitmap tmp = image.ToBitmap())
-                  bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
-               using (Canvas c = new Canvas(bmp))
-               using (Paint p = new Paint())
+               if (image == null) return;
+               using (AndroidCacheFileAsset eyeXml = new AndroidCacheFileAsset(this, "haarcascade_eye.xml", "tmp", AndroidFileAsset.OverwriteMethod.AlwaysOverwrite))
+               using (AndroidCacheFileAsset faceXml = new AndroidCacheFileAsset(this, "haarcascade_frontalface_default.xml", "tmp", AndroidFileAsset.OverwriteMethod.AlwaysOverwrite))
                {
-                  p.Color = Android.Graphics.Color.Red;
-                  p.StrokeWidth = 2;
-                  p.SetStyle(Paint.Style.Stroke);
-                  foreach (Rectangle rect in faces)
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  List<Rectangle> faces = new List<Rectangle>();
+                  List<Rectangle> eyes = new List<Rectangle>();
+                  DetectFace.Detect(image, faceXml.FileFullPath, eyeXml.FileFullPath, faces, eyes, out time);
+                  SetMessage(String.Format("Detected in {0} milliseconds.", time));
 
-                  p.Color = Android.Graphics.Color.Blue;
-                  foreach (Rectangle rect in eyes)
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  Bitmap bmp = null;
+                  using (Bitmap tmp = image.ToBitmap())
+                     bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+                  using (Canvas c = new Canvas(bmp))
+                  using (Paint p = new Paint())
+                  {
+                     p.Color = Android.Graphics.Color.Red;
+                     p.StrokeWidth = 2;
+                     p.SetStyle(Paint.Style.Stroke);
+                     foreach (Rectangle rect in faces)
+                        c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+
+                     p.Color = Android.Graphics.Color.Blue;
+                     foreach (Rectangle rect in eyes)
+                        c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
+                  }
+
+                  SetImageBitmap(bmp);
                }
-
-               SetImageBitmap(bmp);
             }
          };
       }

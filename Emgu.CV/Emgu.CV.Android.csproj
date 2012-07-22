@@ -59,6 +59,7 @@
     <Compile Include="Features2D\Feature2DBase.cs" />
     <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
+    <Compile Include="Features2D\Freak.cs" />
     <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />

@@ -17,26 +17,14 @@ namespace SURFFeatureExample
 {
    public static class DrawMatches
    {
-      /// <summary>
-      /// Draw the model image and observed image, the matched features and homography projection.
-      /// </summary>
-      /// <param name="modelImage">The model image</param>
-      /// <param name="observedImage">The observed image</param>
-      /// <param name="matchTime">The output total time for computing the homography matrix.</param>
-      /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-      public static Image<Bgr, Byte> Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
+      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, out Matrix<int> indices, out Matrix<byte> mask, out HomographyMatrix homography)
       {
-         Stopwatch watch;
-         HomographyMatrix homography = null;
-
-         SURFDetector surfCPU = new SURFDetector(500, false);
-         VectorOfKeyPoint modelKeyPoints;
-         VectorOfKeyPoint observedKeyPoints;
-         Matrix<int> indices;
-
-         Matrix<byte> mask;
          int k = 2;
          double uniquenessThreshold = 0.8;
+         SURFDetector surfCPU = new SURFDetector(500, false);
+         Stopwatch watch;
+         homography = null;
+
          if (GpuInvoke.HasCuda)
          {
             GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f);
@@ -91,7 +79,8 @@ namespace SURFFeatureExample
                   watch.Stop();
                }
             }
-         } else
+         }
+         else
          {
             //extract features from the object image
             modelKeyPoints = new VectorOfKeyPoint();
@@ -124,6 +113,25 @@ namespace SURFFeatureExample
 
             watch.Stop();
          }
+         matchTime = watch.ElapsedMilliseconds;
+      }
+
+      /// <summary>
+      /// Draw the model image and observed image, the matched features and homography projection.
+      /// </summary>
+      /// <param name="modelImage">The model image</param>
+      /// <param name="observedImage">The observed image</param>
+      /// <param name="matchTime">The output total time for computing the homography matrix.</param>
+      /// <returns>The model image and observed image, the matched features and homography projection.</returns>
+      public static Image<Bgr, Byte> Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
+      {
+         HomographyMatrix homography;
+         VectorOfKeyPoint modelKeyPoints;
+         VectorOfKeyPoint observedKeyPoints;
+         Matrix<int> indices;
+         Matrix<byte> mask;
+
+         FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, out indices, out mask, out homography);
 
          //Draw the matched keypoints
          Image<Bgr, Byte> result = Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
@@ -143,8 +151,6 @@ namespace SURFFeatureExample
             result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
          }
          #endregion
-
-         matchTime = watch.ElapsedMilliseconds;
 
          return result;
       }

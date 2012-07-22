@@ -31,10 +31,11 @@ namespace AndroidExamples
          OnButtonClick += delegate
          {
             int maxValue = 600, pointCount = 30;
+            //SetImageBitmap(DrawSubdivision.Draw(maxValue, pointCount).Bitmap);
             Triangle2DF[] delaunayTriangles;
             VoronoiFacet[] voronoiFacets;
             Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
-
+            
             DrawSubdivision.CreateSubdivision(maxValue, pointCount, out delaunayTriangles, out voronoiFacets);
 
             //create an image for display purpose

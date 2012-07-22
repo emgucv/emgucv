@@ -16,8 +16,10 @@ using Android.Widget;
 using Android.Graphics;
 
 using System.Threading;
+using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Xamarin.Media;
 
 namespace AndroidExamples
 {
@@ -28,14 +30,81 @@ namespace AndroidExamples
       private ImageView _imageView;
       private String _buttonText;
       private ProgressDialog _progress;
+      //private Image<Bgr, Byte> _defaultImage;
+      private MediaPicker _mediaPicker;
 
       public ButtonMessageImageActivity(String buttonText)
          : base()
       {
          _buttonText = buttonText;
+
          //dummy code to load the opencv libraries
          CvInvoke.CV_FOURCC('m', 'j', 'p', 'g');
       }
+
+      
+      public Image<Bgr, Byte> PickImage(String defaultImageName)
+      {
+         AutoResetEvent e = new AutoResetEvent(false);
+
+         Task<Image<Bgr, Byte>> task = null;
+         RunOnUiThread(delegate
+         {
+            if (_mediaPicker == null)
+            {
+               _mediaPicker = new MediaPicker(this);
+            }
+            AlertDialog.Builder respondTypeDialog = new AlertDialog.Builder(this);
+            respondTypeDialog.SetTitle("Use");
+            respondTypeDialog.SetPositiveButton("Default Image", (s, er) => 
+            {
+               task = new Task<Image<Bgr, byte>>(delegate
+                  {
+                     return new Image<Bgr, byte>(Assets, defaultImageName);
+                  });
+               task.Start();
+               e.Set();
+            });
+            respondTypeDialog.SetNeutralButton("Image from Camera", (s, er) => 
+            {
+               if (_mediaPicker.IsCameraAvailable)
+               {
+                  task = _mediaPicker.TakePhotoAsync(new StoreCameraMediaOptions()).ContinueWith<Image<Bgr, Byte>>(GetResultFromTask );
+               }
+               e.Set();
+            });
+            respondTypeDialog.SetNegativeButton("Image from Library", (s, er) => 
+            { 
+               task = _mediaPicker.PickPhotoAsync().ContinueWith<Image<Bgr, Byte>>(GetResultFromTask);
+               e.Set();
+            });
+            respondTypeDialog.Show();
+
+         });
+         e.WaitOne();
+
+         if (task == null)
+            return null;
+
+         task.Wait();
+         if (task.Status != TaskStatus.Canceled && task.Status != TaskStatus.Faulted)
+            return task.Result;
+
+         return null;
+      }
+
+      private Image<Bgr, Byte> GetResultFromTask(Task<MediaFile> task)
+      {
+         if (task == null) 
+            return null;
+
+         task.Wait();
+         if (task.Status != TaskStatus.Canceled && task.Status != TaskStatus.Faulted)
+            return new Image<Bgr, byte>(task.Result.Path);
+
+         return null;
+      }
+
 
       protected override void OnCreate(Bundle savedInstanceState)
       {
@@ -86,7 +155,7 @@ namespace AndroidExamples
                   }
                   finally
                   {
-                     RunOnUiThread(() => { _progress.Hide(); });
+                     RunOnUiThread( _progress.Hide);
                   }
                }
                );

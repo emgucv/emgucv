@@ -31,8 +31,10 @@ namespace AndroidExamples
          OnButtonClick += delegate
          {
             long time;
-            using (Image<Bgr, Byte> image = new Image<Bgr, byte>(Assets, "pedestrian.png"))
+            using (Image<Bgr, Byte> image = PickImage("pedestrian.png"))
             {
+               if (image == null)
+                  return;
                Rectangle[] pedestrians = FindPedestrian.Find(image, out time);
 
                SetMessage(String.Format("Detection completed in {0} milliseconds.", time));

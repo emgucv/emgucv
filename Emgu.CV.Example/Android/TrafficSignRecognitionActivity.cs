@@ -35,8 +35,11 @@ namespace AndroidExamples
          OnButtonClick += delegate 
          { 
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>(Assets, "stop-sign-model.png"))
-            using (Image<Bgr, Byte> image = new Image<Bgr, Byte>(Assets, "stop-sign.jpg"))
+            using (Image<Bgr, Byte> image = PickImage("stop-sign.jpg"))
             {
+               if (image == null)
+                  return;
+
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
                List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
