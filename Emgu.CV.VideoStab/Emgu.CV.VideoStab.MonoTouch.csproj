@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0F4522BD-7526-4052-BAC2-7CB674F94412}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Emgu.CV.VideoStab</RootNamespace>
+    <AssemblyName>Emgu.CV.VideoStab</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CaptureFrameSource.cs" />
+    <Compile Include="FrameSource.cs" />
+    <Compile Include="GaussianMotionFilter.cs" />
+    <Compile Include="MotionModel.cs" />
+    <Compile Include="OnePassStabilizer.cs" />
+    <Compile Include="TwoPassStabilizer.cs" />
+    <Compile Include="VideoStabInvoke.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
+      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
+      <Name>Emgu.CV.GPU.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
+      <Name>Emgu.CV.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
+      <Name>Emgu.Util.MonoTouch</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

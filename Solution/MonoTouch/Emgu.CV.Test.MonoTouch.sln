@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.MonoTouch", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.MonoTouch", "..\..\Emgu.CV.Test\Emgu.CV.Test.MonoTouch\Emgu.CV.Test.MonoTouch.csproj", "{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.MonoTouch", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.MonoTouch.csproj", "{0F4522BD-7526-4052-BAC2-7CB674F94412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -23,6 +25,14 @@ Global
 		Release|iPhone = Release|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhone.Build.0 = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
