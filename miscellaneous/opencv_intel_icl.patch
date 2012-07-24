@@ -1,3 +1,78 @@
+Index: 3rdparty/libjasper/CMakeLists.txt
+===================================================================
+--- 3rdparty/libjasper/CMakeLists.txt	(revision 9064)
++++ 3rdparty/libjasper/CMakeLists.txt	(working copy)
+@@ -39,6 +39,10 @@
+   ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+   )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${JASPER_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${JASPER_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+Index: 3rdparty/libjpeg/CMakeLists.txt
+===================================================================
+--- 3rdparty/libjpeg/CMakeLists.txt	(revision 9064)
++++ 3rdparty/libjpeg/CMakeLists.txt	(working copy)
+@@ -33,6 +33,10 @@
+   ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+   )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${JPEG_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${JPEG_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+Index: 3rdparty/libpng/CMakeLists.txt
+===================================================================
+--- 3rdparty/libpng/CMakeLists.txt	(revision 9064)
++++ 3rdparty/libpng/CMakeLists.txt	(working copy)
+@@ -33,6 +33,10 @@
+   set_target_properties(${PNG_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${PNG_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(NOT BUILD_SHARED_LIBS)
+   install(TARGETS ${PNG_LIBRARY} ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT main)
+ endif()
+Index: 3rdparty/libtiff/CMakeLists.txt
+===================================================================
+--- 3rdparty/libtiff/CMakeLists.txt	(revision 9064)
++++ 3rdparty/libtiff/CMakeLists.txt	(working copy)
+@@ -105,6 +105,10 @@
+     ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+     )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${TIFF_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${TIFF_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+Index: 3rdparty/zlib/CMakeLists.txt
+===================================================================
+--- 3rdparty/zlib/CMakeLists.txt	(revision 9064)
++++ 3rdparty/zlib/CMakeLists.txt	(working copy)
+@@ -90,6 +90,10 @@
+         ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+     )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${ZLIB_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
 Index: cmake/OpenCVDetectTBB.cmake
 ===================================================================
 --- cmake/OpenCVDetectTBB.cmake	(revision 9064)
@@ -33,7 +108,18 @@ Index: cmake/OpenCVModule.cmake
 ===================================================================
 --- cmake/OpenCVModule.cmake	(revision 9064)
 +++ cmake/OpenCVModule.cmake	(working copy)
-@@ -486,7 +486,7 @@
+@@ -460,6 +460,10 @@
+     INSTALL_NAME_DIR lib
+   )
+ 
++  IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++    set_target_properties(${the_module} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++  ENDIF()
++  
+   # For dynamic link numbering convenions
+   if(NOT ANDROID)
+     # Android SDK build scripts can include only .so files into final .apk
+@@ -486,7 +490,7 @@
    endif()
  
    install(TARGETS ${the_module}

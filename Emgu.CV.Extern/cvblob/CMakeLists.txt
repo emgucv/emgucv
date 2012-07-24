@@ -53,6 +53,10 @@ set_target_properties(${the_target} PROPERTIES
     OUTPUT_NAME "${the_target}"
     )
 
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
+
 if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${the_target} PROPERTIES FOLDER "3rdparty")
 endif() 
@@ -60,8 +64,8 @@ endif()
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect)
 
-INSTALL(TARGETS ${the_target} 
-    ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+#INSTALL(TARGETS ${the_target} 
+#    ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
 
 
 

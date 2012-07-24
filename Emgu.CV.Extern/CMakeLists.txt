@@ -391,6 +391,10 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  xtiff 
   ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
 
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
+
 #IF(WITH_IPP)
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  

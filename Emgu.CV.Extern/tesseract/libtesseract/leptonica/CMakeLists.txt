@@ -22,4 +22,8 @@ ENDIF()
 
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
+
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
