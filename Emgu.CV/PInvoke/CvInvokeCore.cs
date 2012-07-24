@@ -1563,7 +1563,7 @@ namespace Emgu.CV
       /// Draws a rectangle with two opposite corners pt1 and pt2
       /// </summary>
       /// <param name="img">Image</param>
-      /// <param name="pt1">One of the rectangle vertices</param>
+      /// <param name="pt1">A rectangle vertex</param>
       /// <param name="pt2">Opposite rectangle vertex</param>
       /// <param name="color">Line color </param>
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
@@ -1583,14 +1583,13 @@ namespace Emgu.CV
       /// Draws a rectangle specified by a CvRect structure
       /// </summary>
       /// /// <param name="img">Image</param>
-      /// <param name="pt1">One of the rectangle vertices</param>
-      /// <param name="pt2">Opposite rectangle vertex</param>
+      /// <param name="rect">The rectangle to be drawn</param>
       /// <param name="color">Line color </param>
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
       /// <param name="lineType">Type of the line</param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRectangleR(IntPtr img, Rectangle r,
+      public static extern void cvRectangleR(IntPtr img, Rectangle rect,
                            MCvScalar color, int thickness,
                            CvEnum.LINE_TYPE lineType,
                            int shift);
