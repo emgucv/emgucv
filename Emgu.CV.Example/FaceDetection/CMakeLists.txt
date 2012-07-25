@@ -18,8 +18,8 @@ LIST(APPEND CS_FLAGS ${EMGU_CV_GPU_REFERENCE})
 #copy the test image for this example
 SET(EXAMPLE_FACE_DETECTION_DATA_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/lena.jpg"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/data/haarcascades/haarcascade_eye.xml"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/data/haarcascades/haarcascade_frontalface_default.xml")
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml")
  
 FOREACH(EXAMPLE_FACE_DETECTION_DATA_FILE ${EXAMPLE_FACE_DETECTION_DATA_FILES})
 ADD_CS_FILE_TO_DEPLOY(${EXAMPLE_FACE_DETECTION_DATA_FILE})

@@ -23,7 +23,7 @@ INCLUDE (CheckTargetArch)
 SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
 
 # ----------------------------------------------------------------------------
-#  Autodetect if we are in a SVN repository
+#  Autodetect if we are in a GIT repository
 # ----------------------------------------------------------------------------
 FIND_PROGRAM(GIT_PATH git)
 FIND_PROGRAM(WC_PATH wc)
@@ -43,7 +43,7 @@ IF(GIT_PATH AND WC_PATH)
   ENDIF()
   MESSAGE(STATUS "Emgu CV GIT VERSION: ${EMGUCV_GITVERSION}")
 ELSE()
-  # We don't have svnversion:
+  # We don't have git or wc:
   SET(EMGUCV_GITVERSION "0")
 ENDIF()
 
@@ -318,7 +318,7 @@ IF (ANDROID)
   PATTERN "*.xml"
   PATTERN "*.resx"
   PATTERN "CMakeLists.txt" EXCLUDE
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   )
   ENDFOREACH()
   
@@ -334,7 +334,7 @@ IF (ANDROID)
   PATTERN "*.xml"
   PATTERN "*.txt"
   PATTERN "*.png"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   )
   INSTALL(
     FILES
@@ -532,7 +532,7 @@ INSTALL(
   PATTERN "*.dll"
   PATTERN "*.txt"
   PATTERN "*.xml"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMake*" EXCLUDE
   PATTERN "Release" EXCLUDE
@@ -549,7 +549,7 @@ INSTALL(
   FILES_MATCHING 
   PATTERN "Emgu.CV.sln"
   PATTERN "Emgu.CV.DebuggerVisualizers.sln"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "bin" EXCLUDE
   )
   
@@ -560,7 +560,7 @@ INSTALL(
   COMPONENT emgucv_source
   FILES_MATCHING 
   PATTERN "*.cs"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   )
   
 # ----------------------------------------------------------------------------
@@ -594,7 +594,7 @@ INSTALL(
   PATTERN "*.settings"
   PATTERN "*.config"
   PATTERN "tessdata/*"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMake*" EXCLUDE
   PATTERN "Release" EXCLUDE
@@ -610,15 +610,15 @@ INSTALL(
   COMPONENT emgucv_example_source
   FILES_MATCHING 
   PATTERN "Emgu.CV.Example.sln"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "bin" EXCLUDE
   )
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
-  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_eye.xml"
-  DESTINATION ./opencv/data/haarcascades
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+  DESTINATION opencv_attic/opencv/data/haarcascades
   COMPONENT emgucv_example_source
   )
 
@@ -739,7 +739,7 @@ INSTALL(
   PATTERN "*.dll"
   PATTERN "*.txt"
   PATTERN "*.xml"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMake*" EXCLUDE
   PATTERN "Release" EXCLUDE
@@ -756,7 +756,7 @@ INSTALL(
   FILES_MATCHING 
   PATTERN "Emgu.CV.sln"
   PATTERN "Emgu.CV.DebuggerVisualizers.sln"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "bin" EXCLUDE
   )
   
@@ -767,7 +767,7 @@ INSTALL(
   COMPONENT emgucv_source
   FILES_MATCHING 
   PATTERN "*.cs"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   )
   
 # ----------------------------------------------------------------------------
@@ -801,7 +801,7 @@ INSTALL(
   PATTERN "*.settings"
   PATTERN "*.config"
   PATTERN "tessdata/*"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMake*" EXCLUDE
   PATTERN "Release" EXCLUDE
@@ -817,15 +817,15 @@ INSTALL(
   COMPONENT emgucv_example_source
   FILES_MATCHING 
   PATTERN "Emgu.CV.Example.sln"
-  PATTERN ".svn" EXCLUDE
+  PATTERN ".git" EXCLUDE
   PATTERN "bin" EXCLUDE
   )
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
-  "${CMAKE_CURRENT_SOURCE_DIR}/opencv/data/haarcascades/haarcascade_eye.xml"
-  DESTINATION ./opencv/data/haarcascades
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
+  "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+  DESTINATION opencv_attic/opencv/data/haarcascades
   COMPONENT emgucv_example_source
   )
 
