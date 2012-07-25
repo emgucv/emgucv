@@ -23,8 +23,8 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
 
 ############################### CVBLOB START ########################
-file(GLOB CVBLOB_SRCS "libcvblob/*.cpp")
-file(GLOB CVBLOB_HDRS "libcvblob/*.h*")
+file(GLOB CVBLOB_SRCS "libcvblob/cvBlob/*.cpp")
+file(GLOB CVBLOB_HDRS "libcvblob/cvBlob/*.h*")
 
 LIST(APPEND cvblob_srcs ${CVBLOB_SRCS})
 LIST(APPEND cvblob_hdrs ${CVBLOB_HDRS})

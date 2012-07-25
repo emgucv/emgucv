@@ -1,0 +1,357 @@
+From bbdfad94eb43601d5a9cebfd43d2938cc657ebcf Mon Sep 17 00:00:00 2001
+From: Canming Huang <support@emgu.com>
+Date: Wed, 25 Jul 2012 13:13:42 -0400
+Subject: [PATCH] patch opencv for emgucv.
+
+---
+ opencv/3rdparty/libjasper/CMakeLists.txt           |    4 ++++
+ opencv/3rdparty/libjpeg/CMakeLists.txt             |    4 ++++
+ opencv/3rdparty/libpng/CMakeLists.txt              |    4 ++++
+ opencv/3rdparty/libtiff/CMakeLists.txt             |    4 ++++
+ opencv/3rdparty/zlib/CMakeLists.txt                |    4 ++++
+ opencv/cmake/OpenCVDetectTBB.cmake                 |   20 +++++++++++++------
+ opencv/cmake/OpenCVModule.cmake                    |    6 +++++-
+ opencv/modules/contrib/src/colormap.cpp            |    1 +
+ opencv/modules/core/src/drawing.cpp                |   14 ++++++-------
+ opencv/modules/gpu/src/match_template.cpp          |    2 +-
+ opencv/modules/gpu/src/split_merge.cpp             |    7 ++++---
+ opencv/modules/highgui/CMakeLists.txt              |   21 ++++++--------------
+ .../highgui/include/opencv2/highgui/highgui_c.h    |    3 +++
+ opencv/modules/highgui/src/cap_openni.cpp          |    8 ++++++++
+ opencv/modules/legacy/src/3dtracker.cpp            |    6 +++---
+ opencv/modules/objdetect/src/latentsvm.cpp         |    2 +-
+ 16 files changed, 73 insertions(+), 37 deletions(-)
+
+diff --git a/opencv/3rdparty/libjasper/CMakeLists.txt b/opencv/3rdparty/libjasper/CMakeLists.txt
+index 5b850c9..46ce17f 100644
+--- a/opencv/3rdparty/libjasper/CMakeLists.txt
++++ b/opencv/3rdparty/libjasper/CMakeLists.txt
+@@ -39,6 +39,10 @@ set_target_properties(${JASPER_LIBRARY}
+   ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+   )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${JASPER_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${JASPER_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+diff --git a/opencv/3rdparty/libjpeg/CMakeLists.txt b/opencv/3rdparty/libjpeg/CMakeLists.txt
+index 708e63e..a26b2b3 100644
+--- a/opencv/3rdparty/libjpeg/CMakeLists.txt
++++ b/opencv/3rdparty/libjpeg/CMakeLists.txt
+@@ -33,6 +33,10 @@ set_target_properties(${JPEG_LIBRARY}
+   ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+   )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${JPEG_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${JPEG_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+diff --git a/opencv/3rdparty/libpng/CMakeLists.txt b/opencv/3rdparty/libpng/CMakeLists.txt
+index 41d57f3..d123f62 100644
+--- a/opencv/3rdparty/libpng/CMakeLists.txt
++++ b/opencv/3rdparty/libpng/CMakeLists.txt
+@@ -33,6 +33,10 @@ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${PNG_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${PNG_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(NOT BUILD_SHARED_LIBS)
+   install(TARGETS ${PNG_LIBRARY} ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT main)
+ endif()
+diff --git a/opencv/3rdparty/libtiff/CMakeLists.txt b/opencv/3rdparty/libtiff/CMakeLists.txt
+index ed9d1c8..d2cdfd9 100644
+--- a/opencv/3rdparty/libtiff/CMakeLists.txt
++++ b/opencv/3rdparty/libtiff/CMakeLists.txt
+@@ -105,6 +105,10 @@ set_target_properties(${TIFF_LIBRARY}
+     ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+     )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${TIFF_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${TIFF_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+diff --git a/opencv/3rdparty/zlib/CMakeLists.txt b/opencv/3rdparty/zlib/CMakeLists.txt
+index 17bfab4..4d56a1c 100644
+--- a/opencv/3rdparty/zlib/CMakeLists.txt
++++ b/opencv/3rdparty/zlib/CMakeLists.txt
+@@ -90,6 +90,10 @@ set_target_properties(${ZLIB_LIBRARY} PROPERTIES
+         ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
+     )
+ 
++IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++  set_target_properties(${ZLIB_LIBRARY} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++ENDIF()
++
+ if(ENABLE_SOLUTION_FOLDERS)
+   set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
+ endif()
+diff --git a/opencv/cmake/OpenCVDetectTBB.cmake b/opencv/cmake/OpenCVDetectTBB.cmake
+index c37a8c3..37a8e33 100644
+--- a/opencv/cmake/OpenCVDetectTBB.cmake
++++ b/opencv/cmake/OpenCVDetectTBB.cmake
+@@ -44,12 +44,20 @@ if(NOT HAVE_TBB)
+       else()
+         get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIRS}/../lib" ABSOLUTE)
+ 
+-        if(CMAKE_SYSTEM_PROCESSOR MATCHES amd64*|x86_64* OR MSVC64)
+-          set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
+-        else()
+-          set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
+-        endif()
+-
++		if (MSVC)
++            if(CMAKE_CL_64)
++                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
++            else()
++                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
++            endif()
++        else(MSVC)
++            if(${CMAKE_SYSTEM_PROCESSOR} MATCHES amd64*|x86_64* OR MSVC64)
++                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/intel64")
++            elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*|i386*|i686*)
++                set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/ia32")
++            endif()
++        endif(MSVC)
++		
+         if(MSVC80)
+           set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
+         elseif(MSVC90)
+diff --git a/opencv/cmake/OpenCVModule.cmake b/opencv/cmake/OpenCVModule.cmake
+index 543f997..2274e40 100644
+--- a/opencv/cmake/OpenCVModule.cmake
++++ b/opencv/cmake/OpenCVModule.cmake
+@@ -460,6 +460,10 @@ macro(ocv_create_module)
+     INSTALL_NAME_DIR lib
+   )
+ 
++  IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
++    set_target_properties(${the_module} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
++  ENDIF()
++  
+   # For dynamic link numbering convenions
+   if(NOT ANDROID)
+     # Android SDK build scripts can include only .so files into final .apk
+@@ -486,7 +490,7 @@ macro(ocv_create_module)
+   endif()
+ 
+   install(TARGETS ${the_module}
+-    RUNTIME DESTINATION bin COMPONENT main
++    RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
+     LIBRARY DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+     ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
+     )
+diff --git a/opencv/modules/contrib/src/colormap.cpp b/opencv/modules/contrib/src/colormap.cpp
+index bb317f7..867e534 100644
+--- a/opencv/modules/contrib/src/colormap.cpp
++++ b/opencv/modules/contrib/src/colormap.cpp
+@@ -513,6 +513,7 @@ namespace colormap
+             colormap == COLORMAP_HOT ? (colormap::ColorMap*)(new colormap::Hot) :
+             colormap == COLORMAP_HSV ? (colormap::ColorMap*)(new colormap::HSV) :
+             colormap == COLORMAP_JET ? (colormap::ColorMap*)(new colormap::Jet) :
++            colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
+             colormap == COLORMAP_OCEAN ? (colormap::ColorMap*)(new colormap::Ocean) :
+             colormap == COLORMAP_PINK ? (colormap::ColorMap*)(new colormap::Pink) :
+             colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
+diff --git a/opencv/modules/core/src/drawing.cpp b/opencv/modules/core/src/drawing.cpp
+index 9e33408..ec456ef 100644
+--- a/opencv/modules/core/src/drawing.cpp
++++ b/opencv/modules/core/src/drawing.cpp
+@@ -554,9 +554,9 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
+     int ax, ay;
+     int i, j, x, y;
+     int x_step, y_step;
+-    int cb = ((uchar*)color)[0];
+-    int cg = ((uchar*)color)[1];
+-    int cr = ((uchar*)color)[2];
++    uchar cb = ((uchar*)color)[0];
++    uchar cg = ((uchar*)color)[1];
++    uchar cr = ((uchar*)color)[2];
+     int pix_size = (int)img.elemSize();
+     uchar *ptr = img.data, *tptr;
+     size_t step = img.step;
+@@ -617,9 +617,9 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
+             0 <= y && y < size.height ) \
+         {                               \
+             tptr = ptr + y*step + x*3;  \
+-            tptr[0] = (uchar)cb;        \
+-            tptr[1] = (uchar)cg;        \
+-            tptr[2] = (uchar)cr;        \
++            tptr[0] = cb;        \
++            tptr[1] = cg;        \
++            tptr[2] = cr;        \
+         }
+ 
+         ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
+@@ -660,7 +660,7 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
+             0 <= y && y < size.height ) \
+         {                           \
+             tptr = ptr + y*step + x;\
+-            tptr[0] = (uchar)cb;    \
++            tptr[0] = cb;    \
+         }
+ 
+         ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
+diff --git a/opencv/modules/gpu/src/match_template.cpp b/opencv/modules/gpu/src/match_template.cpp
+index c4a8180..a1ceeb0 100644
+--- a/opencv/modules/gpu/src/match_template.cpp
++++ b/opencv/modules/gpu/src/match_template.cpp
+@@ -49,7 +49,7 @@ using namespace std;
+ #if !defined (HAVE_CUDA)
+ 
+ void cv::gpu::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, Stream&) { throw_nogpu(); }
+-
++void cv::gpu::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, MatchTemplateBuf&, Stream&) { throw_nogpu(); }
+ #else
+ 
+ namespace cv { namespace gpu { namespace device 
+diff --git a/opencv/modules/gpu/src/split_merge.cpp b/opencv/modules/gpu/src/split_merge.cpp
+index 2d5b1b1..993f4aa 100644
+--- a/opencv/modules/gpu/src/split_merge.cpp
++++ b/opencv/modules/gpu/src/split_merge.cpp
+@@ -95,9 +95,9 @@ namespace
+ 
+         CV_Assert(single_channel_only);
+         CV_Assert(total_channels <= 4);
+-
++        dst.create(size, CV_MAKETYPE(depth, total_channels));
+         if (total_channels == 1)
+-            src[0].copyTo(dst);
++            cudaSafeCall( cudaMemcpy2DAsync(dst.data, dst.step, src[0].data, src[0].step, src[0].cols * src[0].elemSize(), src[0].rows, cudaMemcpyDeviceToDevice, stream) );
+         else
+         {
+             dst.create(size, CV_MAKETYPE(depth, total_channels));
+@@ -129,7 +129,8 @@ namespace
+ 
+         if (num_channels == 1)
+         {
+-            src.copyTo(dst[0]);
++            dst[0].create(src.size(), depth);
++			cudaSafeCall( cudaMemcpy2DAsync(dst[0].data, dst[0].step, src.data, src.step, src.cols * src.elemSize(), src.rows, cudaMemcpyDeviceToDevice, stream) );
+             return;
+         }
+ 
+diff --git a/opencv/modules/highgui/CMakeLists.txt b/opencv/modules/highgui/CMakeLists.txt
+index 6b9341b..2f2034a 100644
+--- a/opencv/modules/highgui/CMakeLists.txt
++++ b/opencv/modules/highgui/CMakeLists.txt
+@@ -246,22 +246,13 @@ if(WIN32 AND WITH_FFMPEG)
+   #                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/$<CONFIGURATION>/${ffmpeg_bare_name_ver}"
+   #                     COMMENT "Copying ${ffmpeg_path} to the output directory")
+   #else
+-  if(MSVC_IDE)
+-    add_custom_command(TARGET ${the_module} POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/Release/${ffmpeg_bare_name_ver}"
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/Debug/${ffmpeg_bare_name_ver}"
+-                       COMMENT "Copying ${ffmpeg_path} to the output directory")
+-  elseif(MSVC)
+-    add_custom_command(TARGET ${the_module} POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/${ffmpeg_bare_name_ver}"
+-                       COMMENT "Copying ${ffmpeg_path} to the output directory")
+-  else()
+-    add_custom_command(TARGET ${the_module} POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/${ffmpeg_bare_name_ver}"
+-                       COMMENT "Copying ${ffmpeg_path} to the output directory")
+-  endif()
+ 
+-  install(FILES "${ffmpeg_path}" DESTINATION bin COMPONENT main RENAME "${ffmpeg_bare_name_ver}")
++  add_custom_command(TARGET ${the_module} POST_BUILD
++                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ffmpeg_bare_name_ver}"
++                     COMMENT "Copying ${ffmpeg_path} to the output directory")
++
++  install(FILES "${ffmpeg_path}" DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main RENAME "${ffmpeg_bare_name_ver}")
++
+ endif()
+ 
+ ocv_add_accuracy_tests()
+diff --git a/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h b/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
+index ddd3003..f8dcad5 100644
+--- a/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
++++ b/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
+@@ -534,6 +534,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
+ // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
+ CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
+ 
++// Return a pointer to the xn::Context of OpenNI from the CvCapture)
++CVAPI(void*) cvGetOpenniCaptureContext( CvCapture* capture);
++
+ /* "black box" video file writer structure */
+ typedef struct CvVideoWriter CvVideoWriter;
+ 
+diff --git a/opencv/modules/highgui/src/cap_openni.cpp b/opencv/modules/highgui/src/cap_openni.cpp
+index b440e0a..d73f886 100644
+--- a/opencv/modules/highgui/src/cap_openni.cpp
++++ b/opencv/modules/highgui/src/cap_openni.cpp
+@@ -449,6 +449,8 @@ public:
+ 
+     bool isOpened() const;
+ 
++    xn::Context* getOpenNIContext() { return &context; }
++
+ protected:
+     struct OutputMap
+     {
+@@ -1376,4 +1378,10 @@ CvCapture* cvCreateFileCapture_OpenNI( const char* filename )
+     return 0;
+ }
+ 
++// Return a pointer to the xn::Context of OpenNI from the CvCapture)
++void* cvGetOpenniCaptureContext( CvCapture* capture)
++{
++   CvCapture_OpenNI* openniCapture = (CvCapture_OpenNI*) capture;
++   return openniCapture->getOpenNIContext();
++}
+ #endif
+diff --git a/opencv/modules/legacy/src/3dtracker.cpp b/opencv/modules/legacy/src/3dtracker.cpp
+index 536a534..866c1d8 100644
+--- a/opencv/modules/legacy/src/3dtracker.cpp
++++ b/opencv/modules/legacy/src/3dtracker.cpp
+@@ -322,7 +322,7 @@ static void DrawEtalon(IplImage *img, CvPoint2D32f *corners,
+     int i;
+     int x, y;
+     CvPoint prev_pt = { 0, 0 };
+-    static const CvScalar rgb_colors[] = {
++    static CvScalar rgb_colors[] = {
+         {{0,0,255}},
+         {{0,128,255}},
+         {{0,200,200}},
+@@ -330,10 +330,10 @@ static void DrawEtalon(IplImage *img, CvPoint2D32f *corners,
+         {{200,200,0}},
+         {{255,0,0}},
+         {{255,0,255}} };
+-    static const CvScalar gray_colors[] = {
++    static CvScalar gray_colors[] = {
+         {{80}}, {{120}}, {{160}}, {{200}}, {{100}}, {{140}}, {{180}}
+     };
+-    const CvScalar* colors = img->nChannels == 3 ? rgb_colors : gray_colors;
++    CvScalar* colors = img->nChannels == 3 ? rgb_colors : gray_colors;
+ 
+     CvScalar color = colors[0];
+     for (y = 0, i = 0; y < etalon_size.height; y++)
+diff --git a/opencv/modules/objdetect/src/latentsvm.cpp b/opencv/modules/objdetect/src/latentsvm.cpp
+index 89fd048..e6991e7 100644
+--- a/opencv/modules/objdetect/src/latentsvm.cpp
++++ b/opencv/modules/objdetect/src/latentsvm.cpp
+@@ -277,7 +277,7 @@ int searchObjectThreshold(const CvLSVMFeaturePyramid *H,
+ 
+ 
+     // Matching
+-#ifdef HAVE_TBB
++#ifdef 0
+     if (numThreads <= 0)
+     {
+         opResult = LATENT_SVM_TBB_NUMTHREADS_NOT_CORRECT;
+-- 
+1.7.10.msysgit.1
+
