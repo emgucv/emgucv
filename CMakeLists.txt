@@ -853,7 +853,7 @@ INSTALL(
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.GPU" "Emgu.CV.UI" "Emgu.CV.Stitching" "ZedGraph")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.GPU" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "ZedGraph")
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND EMGUCV_MANAGED_DLLS "Emgu.CV.OCR")
   ENDIF()
@@ -923,7 +923,7 @@ ELSE() #LINUX
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff1.2, gtk2-engines, libgstreamer0.10-0, libavcodec52, libswscale0, libavformat52, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff2, gtk2-engines, libgstreamer0.10-0, libavcodec52, libswscale0, libavformat52, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
     IF(EMGU_CV_WITH_TESSERACT)
       SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtesseract3")
     ENDIF()
