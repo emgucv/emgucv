@@ -1196,7 +1196,7 @@ LEPT_DLL extern l_int32 saConcatenatePdfToData ( SARRAY *sa, l_uint8 **pdata, si
 LEPT_DLL extern l_int32 ptraConcatenatePdfToData ( L_PTRA *pa_data, SARRAY *sa, l_uint8 **pdata, size_t *pnbytes );
 LEPT_DLL extern void l_pdfSetG4ImageMask ( l_int32 flag );
 LEPT_DLL extern void l_pdfSetDateAndVersion ( l_int32 flag );
-LEPT_DLL extern void setPixMemoryManager ( void * ( allocator ( size_t ) ), void  ( deallocator ( void * ) ) );
+//LEPT_DLL extern void setPixMemoryManager ( void * ( allocator ( size_t ) ), void  ( deallocator ( void * ) ) );
 LEPT_DLL extern PIX * pixCreate ( l_int32 width, l_int32 height, l_int32 depth );
 LEPT_DLL extern PIX * pixCreateNoInit ( l_int32 width, l_int32 height, l_int32 depth );
 LEPT_DLL extern PIX * pixCreateTemplate ( PIX *pixs );
