@@ -26,7 +26,7 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 
 ############################### IPP START ##############################
 IF(WITH_IPP)
-include(${PROJECT_SOURCE_DIR}/../../opencv/cmake/OpenCVFindIPP.cmake)
+include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
   IF (IPP_FOUND)
     message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
     add_definitions(-DHAVE_IPP)

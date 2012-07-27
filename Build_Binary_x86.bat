@@ -106,7 +106,7 @@ SET INTEL_ICL=%ICPP_COMPILER12%bin\ia32\icl.exe
 IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%ICPP_COMPILER12%bin\intel64\icl.exe
 SET INTEL_TBB=%ICPP_COMPILER12%\tbb\include
 IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER12%redist\intel64\ipp
-SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert121.exe
+REM SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert121.exe
 
 REM initiate the compiler enviroment
 @echo on
@@ -138,7 +138,7 @@ REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
 REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
 REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
 REM /VC
-GOTO END
+GOTO BUILD
 
 :VISUAL_STUDIO
 @echo on
