@@ -1,4 +1,4 @@
-From bbdfad94eb43601d5a9cebfd43d2938cc657ebcf Mon Sep 17 00:00:00 2001
+From caeed7265974831b49ac27b85b6c9ed782e8a380 Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
 Date: Wed, 25 Jul 2012 13:13:42 -0400
 Subject: [PATCH] patch opencv for emgucv.
@@ -340,7 +340,7 @@ index 536a534..866c1d8 100644
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
 diff --git a/opencv/modules/objdetect/src/latentsvm.cpp b/opencv/modules/objdetect/src/latentsvm.cpp
-index 89fd048..e6991e7 100644
+index 89fd048..45490be 100644
 --- a/opencv/modules/objdetect/src/latentsvm.cpp
 +++ b/opencv/modules/objdetect/src/latentsvm.cpp
 @@ -277,7 +277,7 @@ int searchObjectThreshold(const CvLSVMFeaturePyramid *H,
@@ -348,7 +348,7 @@ index 89fd048..e6991e7 100644
  
      // Matching
 -#ifdef HAVE_TBB
-+#ifdef 0
++#if 0
      if (numThreads <= 0)
      {
          opResult = LATENT_SVM_TBB_NUMTHREADS_NOT_CORRECT;
