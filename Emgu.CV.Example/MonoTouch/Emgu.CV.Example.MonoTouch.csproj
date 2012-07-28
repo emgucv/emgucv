@@ -192,10 +192,10 @@
     <Content Include="..\TrafficSignRecognition\stop-sign-model.png">
       <Link>stop-sign-model.png</Link>
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+    <Content Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+    <Content Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>haarcascade_frontalface_default.xml</Link>
     </Content>
     <Content Include="..\FaceDetection\lena.jpg">

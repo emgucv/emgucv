@@ -10,6 +10,7 @@ using System.Drawing;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
+using MonoTouch.UIKit;
 #else
 using System.Drawing.Imaging;
 #endif
@@ -89,16 +90,18 @@ namespace Emgu.CV
          try
          {
             LoadImageUsingOpenCV(fi);
-         }
-         catch (TypeInitializationException e)
+         } catch (TypeInitializationException e)
          {
             //possibly Exception in CvInvoke's static constructor.
             throw e;
-         }
-         catch (Exception e)
+         } catch (Exception e)
          {
 #if IOS
-            throw e;
+            using (UIImage tmp = UIImage.FromFile(fileName))
+            {
+               AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
+               ConvertFromCGImage(tmp.CGImage);
+            }
 #else
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
@@ -165,8 +168,7 @@ namespace Emgu.CV
                   default:
                      throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
                }
-            }
-            else if (mptr.nChannels == 3)
+            } else if (mptr.nChannels == 3)
             {  //BGR image
                switch (mptr.depth)
                {
@@ -189,13 +191,11 @@ namespace Emgu.CV
                   default:
                      throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
                }
-            }
-            else
+            } else
             {
                throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
             }
-         }
-         finally
+         } finally
          {
             CvInvoke.cvReleaseImage(ref ptr);
          }
@@ -291,8 +291,7 @@ namespace Emgu.CV
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
             _array = new TDepth[rows, (cols & (~3)) + 4, numberOfChannels];
-         }
-         else
+         } else
          {
             _array = new TDepth[rows, cols, numberOfChannels];
          }
@@ -308,21 +307,20 @@ namespace Emgu.CV
       public Image(Image<Gray, TDepth>[] channels)
       {
          Debug.Assert(NumberOfChannels == channels.Length);
-         AllocateData(channels[0].Height, channels[0].Width, NumberOfChannels);
+         AllocateData(channels [0].Height, channels [0].Width, NumberOfChannels);
 
          if (NumberOfChannels == 1)
          {
             //if this image only have a single channel
-            CvInvoke.cvCopy(channels[0].Ptr, Ptr, IntPtr.Zero);
-         }
-         else
+            CvInvoke.cvCopy(channels [0].Ptr, Ptr, IntPtr.Zero);
+         } else
          {
             int channelsCount = channels.Length;
             CvInvoke.cvMerge(
-               channelsCount > 0 ? channels[0].Ptr : IntPtr.Zero,
-               channelsCount > 1 ? channels[1].Ptr : IntPtr.Zero,
-               channelsCount > 2 ? channels[2].Ptr : IntPtr.Zero,
-               channelsCount > 3 ? channels[3].Ptr : IntPtr.Zero,
+               channelsCount > 0 ? channels [0].Ptr : IntPtr.Zero,
+               channelsCount > 1 ? channels [1].Ptr : IntPtr.Zero,
+               channelsCount > 2 ? channels [2].Ptr : IntPtr.Zero,
+               channelsCount > 3 ? channels [3].Ptr : IntPtr.Zero,
                Ptr);
          }
       }
@@ -355,8 +353,7 @@ namespace Emgu.CV
             base.GetObjectData(info, context);
             ROI = roi;
             info.AddValue("Roi", roi);
-         }
-         else
+         } else
          {
             base.GetObjectData(info, context);
             info.AddValue("Roi", ROI);
@@ -388,8 +385,7 @@ namespace Emgu.CV
             {
                //reset the image ROI
                CvInvoke.cvResetImageROI(Ptr);
-            }
-            else
+            } else
             {   //set the image ROI to the specific value
                CvInvoke.cvSetImageROI(Ptr, value);
             }
@@ -564,9 +560,9 @@ namespace Emgu.CV
          PointF[] srcCorners = box.GetVertices();
 
          PointF[] destCorners = new PointF[] {
-            new PointF(0, box.size.Height-1),
+            new PointF(0, box.size.Height - 1),
             new PointF(0, 0),
-            new PointF(box.size.Width-1, 0)};
+            new PointF(box.size.Width - 1, 0)};
 
          using (RotationMatrix2D<double> rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
          {
@@ -760,12 +756,24 @@ namespace Emgu.CV
       {
          if (thickness > 0)
          {
-            GCHandle[] handles = Array.ConvertAll<Point[], GCHandle>(pts, delegate(Point[] polyline) { return GCHandle.Alloc(polyline, GCHandleType.Pinned); });
+            GCHandle[] handles = Array.ConvertAll<Point[], GCHandle>(pts, delegate(Point[] polyline)
+            {
+               return GCHandle.Alloc(polyline, GCHandleType.Pinned);
+            }
+            );
 
             CvInvoke.cvPolyLine(
                 Ptr,
-                Array.ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h) { return h.AddrOfPinnedObject(); }),
-                Array.ConvertAll<Point[], int>(pts, delegate(Point[] polyline) { return polyline.Length; }),
+                Array.ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h)
+            {
+               return h.AddrOfPinnedObject();
+            }
+            ),
+                Array.ConvertAll<Point[], int>(pts, delegate(Point[] polyline)
+            {
+                    return polyline.Length;
+                }
+                ),
                 pts.Length,
                 isClosed,
                 color.MCvScalar,
@@ -773,18 +781,18 @@ namespace Emgu.CV
                 Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED,
                 0);
 
-            foreach (GCHandle h in handles)
-               h.Free();
-         }
-      }
+                foreach (GCHandle h in handles)
+                    h.Free();
+            }
+        }
 
-      ///<summary> Draw a Circle of the specific color and thickness </summary>
-      ///<param name="circle"> The circle to be drawn</param>
-      ///<param name="color"> The color of the circle </param>
-      ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
-      public virtual void Draw(CircleF circle, TColor color, int thickness)
-      {
-         CvInvoke.cvCircle(
+        ///<summary> Draw a Circle of the specific color and thickness </summary>
+        ///<param name="circle"> The circle to be drawn</param>
+        ///<param name="color"> The color of the circle </param>
+        ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+        public virtual void Draw(CircleF circle, TColor color, int thickness)
+        {
+            CvInvoke.cvCircle(
              Ptr,
              Point.Round(circle.Center),
              (int)circle.Radius,
@@ -792,15 +800,15 @@ namespace Emgu.CV
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
              0);
-      }
+        }
 
-      ///<summary> Draw a Ellipse of the specific color and thickness </summary>
-      ///<param name="ellipse"> The ellipse to be draw</param>
-      ///<param name="color"> The color of the ellipse </param>
-      ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
-      public void Draw(Ellipse ellipse, TColor color, int thickness)
-      {
-         /*
+        ///<summary> Draw a Ellipse of the specific color and thickness </summary>
+        ///<param name="ellipse"> The ellipse to be draw</param>
+        ///<param name="color"> The color of the ellipse </param>
+        ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
+        public void Draw(Ellipse ellipse, TColor color, int thickness)
+        {
+            /*
          CvInvoke.cvEllipse(
              Ptr,
              Point.Round(ellipse.MCvBox2D.center),
@@ -812,72 +820,72 @@ namespace Emgu.CV
              (thickness <= 0) ? -1 : thickness,
              CvEnum.LINE_TYPE.EIGHT_CONNECTED,
              0);*/
-         CvInvoke.cvEllipseBox(Ptr, ellipse.MCvBox2D, color.MCvScalar, thickness, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
-      }
+            CvInvoke.cvEllipseBox(Ptr, ellipse.MCvBox2D, color.MCvScalar, thickness, Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED, 0);
+        }
 
-      /// <summary>
-      /// Draw the text using the specific font on the image
-      /// </summary>
-      /// <param name="message">The text message to be draw</param>
-      /// <param name="font">The font used for drawing</param>
-      /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
-      /// <param name="color">The color of the text</param>
-      public virtual void Draw(String message, ref MCvFont font, Point bottomLeft, TColor color)
-      {
-         CvInvoke.cvPutText(
+        /// <summary>
+        /// Draw the text using the specific font on the image
+        /// </summary>
+        /// <param name="message">The text message to be draw</param>
+        /// <param name="font">The font used for drawing</param>
+        /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
+        /// <param name="color">The color of the text</param>
+        public virtual void Draw(String message, ref MCvFont font, Point bottomLeft, TColor color)
+        {
+            CvInvoke.cvPutText(
              Ptr,
              message,
              bottomLeft,
              ref font,
              color.MCvScalar);
-      }
+        }
 
-      /// <summary>
-      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
-      /// </summary>
-      /// <param name="c">Pointer to the contour</param>
-      /// <param name="color">Color of the contour</param>
-      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-      public void Draw(Seq<Point> c, TColor color, int thickness)
-      {
-         Draw(c, color, color, 0, thickness, Point.Empty);
-      }
+        /// <summary>
+        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+        /// </summary>
+        /// <param name="c">Pointer to the contour</param>
+        /// <param name="color">Color of the contour</param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+        public void Draw(Seq<Point> c, TColor color, int thickness)
+        {
+            Draw(c, color, color, 0, thickness, Point.Empty);
+        }
 
-      /// <summary>
-      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
-      /// </summary>
-      /// <param name="c">Pointer to the first contour</param>
-      /// <param name="externalColor">Color of the external contours</param>
-      /// <param name="holeColor">Color of internal contours (holes). </param>
-      /// <param name="maxLevel">
-      /// Maximal level for drawn contours. 
-      /// If 0, only contour is drawn. 
-      /// If 1, the contour and all contours after it on the same level are drawn. 
-      /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
-      /// </param>
-      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-      public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
-      {
-         Draw(c, externalColor, holeColor, maxLevel, thickness, Point.Empty);
-      }
+        /// <summary>
+        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+        /// </summary>
+        /// <param name="c">Pointer to the first contour</param>
+        /// <param name="externalColor">Color of the external contours</param>
+        /// <param name="holeColor">Color of internal contours (holes). </param>
+        /// <param name="maxLevel">
+        /// Maximal level for drawn contours.
+        /// If 0, only contour is drawn.
+        /// If 1, the contour and all contours after it on the same level are drawn.
+        /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
+        /// </param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+        public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
+        {
+            Draw(c, externalColor, holeColor, maxLevel, thickness, Point.Empty);
+        }
 
-      /// <summary>
-      /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
-      /// </summary>
-      /// <param name="c">Pointer to the first contour</param>
-      /// <param name="externalColor">Color of the external contours</param>
-      /// <param name="holeColor">Color of internal contours (holes). </param>
-      /// <param name="maxLevel">
-      /// Maximal level for drawn contours. 
-      /// If 0, only contour is drawn. 
-      /// If 1, the contour and all contours after it on the same level are drawn. 
-      /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
-      /// </param>
-      /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-      /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
-      public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
-      {
-         CvInvoke.cvDrawContours(
+        /// <summary>
+        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+        /// </summary>
+        /// <param name="c">Pointer to the first contour</param>
+        /// <param name="externalColor">Color of the external contours</param>
+        /// <param name="holeColor">Color of internal contours (holes). </param>
+        /// <param name="maxLevel">
+        /// Maximal level for drawn contours.
+        /// If 0, only contour is drawn.
+        /// If 1, the contour and all contours after it on the same level are drawn.
+        /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
+        /// </param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
+        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
+        public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
+        {
+            CvInvoke.cvDrawContours(
           Ptr,
           c.Ptr,
           externalColor.MCvScalar,
@@ -886,40 +894,40 @@ namespace Emgu.CV
           thickness,
           CvEnum.LINE_TYPE.EIGHT_CONNECTED,
           offset);
-      }
+        }
       #endregion
 
       #region Object Detection
       #region Haar detection
-      /// <summary>
-      /// Detect HaarCascade object in the current image, using predefined parameters
-      /// </summary>
-      /// <param name="haarObj">The object to be detected</param>
-      /// <returns>The objects detected, one array per channel</returns>
-      [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
-      public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj)
-      {
-         return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(0, 0));
-      }
+        /// <summary>
+        /// Detect HaarCascade object in the current image, using predefined parameters
+        /// </summary>
+        /// <param name="haarObj">The object to be detected</param>
+        /// <returns>The objects detected, one array per channel</returns>
+        [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
+        public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj)
+        {
+            return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(0, 0));
+        }
 
-      /// <summary>
-      /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing). 
-      /// </summary>
-      /// <param name="haarObj">Haar classifier cascade in internal representation</param>
-      /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
-      /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
-      /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
-      /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
-      /// <returns>The objects detected, one array per channel</returns>
-      [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
-      public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            Func<IImage, int, MCvAvgComp[]> detector =
+        /// <summary>
+        /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing).
+        /// </summary>
+        /// <param name="haarObj">Haar classifier cascade in internal representation</param>
+        /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
+        /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
+        /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
+        /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
+        /// <returns>The objects detected, one array per channel</returns>
+        [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
+        public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize)
+        {
+            using (MemStorage stor = new MemStorage())
+            {
+                Func<IImage, int, MCvAvgComp[]> detector =
                 delegate(IImage img, int channel)
                 {
-                   IntPtr objects = CvInvoke.cvHaarDetectObjects(
+                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
                        img.Ptr,
                        haarObj.Ptr,
                        stor.Ptr,
@@ -929,38 +937,38 @@ namespace Emgu.CV
                        minSize, 
                        Size.Empty);
 
-                   if (objects == IntPtr.Zero)
-                      return new MCvAvgComp[0];
+                    if (objects == IntPtr.Zero)
+                        return new MCvAvgComp[0];
 
-                   Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objects, stor);
-                   return rects.ToArray();
+                    Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objects, stor);
+                    return rects.ToArray();
                 };
 
-            MCvAvgComp[][] res = ForEachDuplicateChannel(detector);
-            return res;
-         }
-      }
+                MCvAvgComp[][] res = ForEachDuplicateChannel(detector);
+                return res;
+            }
+        }
       #endregion
 
       #region Hough line and circles
-      ///<summary> 
-      ///Apply Probabilistic Hough transform to find line segments. 
-      ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector) 
-      ///</summary> 
-      ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
-      ///<param name="thetaResolution">Angle resolution measured in radians</param>
-      ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
-      ///<param name="minLineWidth">Minimum width of a line</param>
-      ///<param name="gapBetweenLines">Minimum gap between lines</param>
-      ///<returns>The line segments detected for each of the channels</returns>
-      public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            return ForEachDuplicateChannel<LineSegment2D[]>(
+        ///<summary>
+        ///Apply Probabilistic Hough transform to find line segments.
+        ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector)
+        ///</summary>
+        ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
+        ///<param name="thetaResolution">Angle resolution measured in radians</param>
+        ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+        ///<param name="minLineWidth">Minimum width of a line</param>
+        ///<param name="gapBetweenLines">Minimum gap between lines</param>
+        ///<returns>The line segments detected for each of the channels</returns>
+        public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+        {
+            using (MemStorage stor = new MemStorage())
+            {
+                return ForEachDuplicateChannel<LineSegment2D[]>(
                delegate(IImage img, int channel)
-               {
-                  IntPtr lines = CvInvoke.cvHoughLines2(
+                {
+                    IntPtr lines = CvInvoke.cvHoughLines2(
                      img.Ptr,
                      stor.Ptr,
                      CvEnum.HOUGH_TYPE.CV_HOUGH_PROBABILISTIC,
@@ -969,57 +977,58 @@ namespace Emgu.CV
                      threshold,
                      minLineWidth,
                      gapBetweenLines);
-                  Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
-                  return segments.ToArray();
-               });
-         }
-      }
+                    Seq<LineSegment2D> segments = new Seq<LineSegment2D>(lines, stor);
+                    return segments.ToArray();
+                }
+                );
+            }
+        }
 
-      ///<summary> 
-      /// Apply Canny Edge Detector follows by Probabilistic Hough transform to find line segments in the image 
-      ///</summary>
-      ///<param name="cannyThreshold"> The threshhold to find initial segments of strong edges</param>
-      ///<param name="cannyThresholdLinking"> The threshold used for edge Linking</param>
-      ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
-      ///<param name="thetaResolution">Angle resolution measured in radians</param>
-      ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
-      ///<param name="minLineWidth">Minimum width of a line</param>
-      ///<param name="gapBetweenLines">Minimum gap between lines</param>
-      ///<returns>The line segments detected for each of the channels</returns>
-      public LineSegment2D[][] HoughLines(double cannyThreshold, double cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
-      {
-         using (Image<Gray, Byte> canny = Canny(cannyThreshold, cannyThresholdLinking))
-         {
-            return canny.HoughLinesBinary(
+        ///<summary>
+        /// Apply Canny Edge Detector follows by Probabilistic Hough transform to find line segments in the image
+        ///</summary>
+        ///<param name="cannyThreshold"> The threshhold to find initial segments of strong edges</param>
+        ///<param name="cannyThresholdLinking"> The threshold used for edge Linking</param>
+        ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
+        ///<param name="thetaResolution">Angle resolution measured in radians</param>
+        ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+        ///<param name="minLineWidth">Minimum width of a line</param>
+        ///<param name="gapBetweenLines">Minimum gap between lines</param>
+        ///<returns>The line segments detected for each of the channels</returns>
+        public LineSegment2D[][] HoughLines(double cannyThreshold, double cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+        {
+            using (Image<Gray, Byte> canny = Canny(cannyThreshold, cannyThresholdLinking))
+            {
+                return canny.HoughLinesBinary(
                rhoResolution,
                thetaResolution,
                threshold,
                minLineWidth,
                gapBetweenLines);
-         }
-      }
+            }
+        }
 
-      ///<summary> 
-      ///First apply Canny Edge Detector on the current image, 
-      ///then apply Hough transform to find circles 
-      ///</summary>
-      ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
-      ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
-      ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
-      ///<param name="minRadius">Minimal radius of the circles to search for</param>
-      ///<param name="maxRadius">Maximal radius of the circles to search for</param>
-      ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
-      ///<returns>The circle detected for each of the channels</returns>
-      public CircleF[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
-            double[] accumulatorThresh = accumulatorThreshold.MCvScalar.ToArray();
-            Func<IImage, int, CircleF[]> detector =
+        ///<summary>
+        ///First apply Canny Edge Detector on the current image,
+        ///then apply Hough transform to find circles
+        ///</summary>
+        ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
+        ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
+        ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
+        ///<param name="minRadius">Minimal radius of the circles to search for</param>
+        ///<param name="maxRadius">Maximal radius of the circles to search for</param>
+        ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+        ///<returns>The circle detected for each of the channels</returns>
+        public CircleF[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius, int maxRadius)
+        {
+            using (MemStorage stor = new MemStorage())
+            {
+                double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
+                double[] accumulatorThresh = accumulatorThreshold.MCvScalar.ToArray();
+                Func<IImage, int, CircleF[]> detector =
                 delegate(IImage img, int channel)
                 {
-                   IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
+                    IntPtr circlesSeqPtr = CvInvoke.cvHoughCircles(
                        img.Ptr,
                        stor.Ptr,
                        CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT,
@@ -1030,63 +1039,63 @@ namespace Emgu.CV
                        minRadius,
                        maxRadius);
 
-                   Seq<CircleF> cirSeq = new Seq<CircleF>(circlesSeqPtr, stor);
-                   return cirSeq.ToArray();
+                    Seq<CircleF> cirSeq = new Seq<CircleF>(circlesSeqPtr, stor);
+                    return cirSeq.ToArray();
                 };
-            return ForEachDuplicateChannel(detector);
-         }
-      }
+                return ForEachDuplicateChannel(detector);
+            }
+        }
       #endregion
 
       #region Contour detection
-      /// <summary>
-      /// Find a list of contours using simple approximation method.
-      /// </summary>
-      /// <returns>
-      /// Contour if there is any;
-      /// null if no contour is found
-      /// </returns>
-      public Contour<Point> FindContours()
-      {
-         return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
-      }
+        /// <summary>
+        /// Find a list of contours using simple approximation method.
+        /// </summary>
+        /// <returns>
+        /// Contour if there is any;
+        /// null if no contour is found
+        /// </returns>
+        public Contour<Point> FindContours()
+        {
+            return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
+        }
 
-      /// <summary>
-      /// Find contours 
-      /// </summary>
-      /// <param name="method">The type of approximation method</param>
-      /// <param name="type">The retrival type</param>
-      /// <returns>
-      /// Contour if there is any;
-      /// null if no contour is found
-      /// </returns>
-      public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
-      {
-         return FindContours(method, type, new MemStorage());
-      }
+        /// <summary>
+        /// Find contours
+        /// </summary>
+        /// <param name="method">The type of approximation method</param>
+        /// <param name="type">The retrival type</param>
+        /// <returns>
+        /// Contour if there is any;
+        /// null if no contour is found
+        /// </returns>
+        public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
+        {
+            return FindContours(method, type, new MemStorage());
+        }
 
-      /// <summary>
-      /// Find contours using the specific memory storage
-      /// </summary>
-      /// <param name="method">The type of approximation method</param>
-      /// <param name="type">The retrival type</param>
-      /// <param name="stor">The storage used by the sequences</param>
-      /// <returns>
-      /// Contour if there is any;
-      /// null if no contour is found
-      /// </returns>
-      public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
-      {
-         if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
-         {
-            //TODO: wrap CvChain and add code here
-            throw new NotImplementedException(Properties.StringTable.NotImplemented);
-         }
+        /// <summary>
+        /// Find contours using the specific memory storage
+        /// </summary>
+        /// <param name="method">The type of approximation method</param>
+        /// <param name="type">The retrival type</param>
+        /// <param name="stor">The storage used by the sequences</param>
+        /// <returns>
+        /// Contour if there is any;
+        /// null if no contour is found
+        /// </returns>
+        public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
+        {
+            if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
+            {
+                //TODO: wrap CvChain and add code here
+                throw new NotImplementedException(Properties.StringTable.NotImplemented);
+            }
 
-         using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
-         {
-            IntPtr seq = IntPtr.Zero;
-            CvInvoke.cvFindContours(
+            using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
+            {
+                IntPtr seq = IntPtr.Zero;
+                CvInvoke.cvFindContours(
                 imagecopy.Ptr,
                 stor.Ptr,
                 ref seq,
@@ -1095,395 +1104,394 @@ namespace Emgu.CV
                 method,
                 Point.Empty);
 
-            return (seq == IntPtr.Zero) ? null : new Contour<Point>(seq, stor);
-         }
-      }
+                return (seq == IntPtr.Zero) ? null : new Contour<Point>(seq, stor);
+            }
+        }
       #endregion
       #endregion
 
       #region Indexer
-      /// <summary>
-      /// Get or Set the specific channel of the current image. 
-      /// For Get operation, a copy of the specific channel is returned.
-      /// For Set operation, the specific channel is copied to this image.
-      /// </summary>
-      /// <param name="channel">The channel to get from the current image, zero based index</param>
-      /// <returns>The specific channel of the current image</returns>
-      public Image<Gray, TDepth> this[int channel]
-      {
-         get
-         {
-            Image<Gray, TDepth> imageChannel = new Image<Gray, TDepth>(Size);
-            int coi = CvInvoke.cvGetImageCOI(Ptr);
-            CvInvoke.cvSetImageCOI(Ptr, channel + 1);
-            CvInvoke.cvCopy(Ptr, imageChannel.Ptr, IntPtr.Zero);
-            CvInvoke.cvSetImageCOI(Ptr, coi);
-            return imageChannel;
-         }
-         set
-         {
-            IntPtr[] channels = new IntPtr[4];
-            channels[channel] = value.Ptr;
-            CvInvoke.cvCvtPlaneToPix(channels[0], channels[1], channels[2], channels[3], Ptr);
-         }
-      }
+        /// <summary>
+        /// Get or Set the specific channel of the current image.
+        /// For Get operation, a copy of the specific channel is returned.
+        /// For Set operation, the specific channel is copied to this image.
+        /// </summary>
+        /// <param name="channel">The channel to get from the current image, zero based index</param>
+        /// <returns>The specific channel of the current image</returns>
+        public Image<Gray, TDepth> this[int channel]
+        {
+            get
+            {
+                Image<Gray, TDepth> imageChannel = new Image<Gray, TDepth>(Size);
+                int coi = CvInvoke.cvGetImageCOI(Ptr);
+                CvInvoke.cvSetImageCOI(Ptr, channel + 1);
+                CvInvoke.cvCopy(Ptr, imageChannel.Ptr, IntPtr.Zero);
+                CvInvoke.cvSetImageCOI(Ptr, coi);
+                return imageChannel;
+            }
+            set
+            {
+                IntPtr[] channels = new IntPtr[4];
+                channels[channel] = value.Ptr;
+                CvInvoke.cvCvtPlaneToPix(channels[0], channels[1], channels[2], channels[3], Ptr);
+            }
+        }
 
-      /// <summary>
-      /// Get or Set the color in the <paramref name="row"/>th row (y direction) and <paramref name="column"/>th column (x direction)
-      /// </summary>
-      /// <param name="row">The zero-based row (y direction) of the pixel </param>
-      /// <param name="column">The zero-based column (x direction) of the pixel</param>
-      /// <returns>The color in the specific <paramref name="row"/> and <paramref name="column"/></returns>
-      public TColor this[int row, int column]
-      {
-         get
-         {
-            TColor res = new TColor();
-            res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, column);
-            return res;
-         }
-         set
-         {
-            CvInvoke.cvSet2D(Ptr, row, column, value.MCvScalar);
-         }
-      }
+        /// <summary>
+        /// Get or Set the color in the <paramref name="row"/>th row (y direction) and <paramref name="column"/>th column (x direction)
+        /// </summary>
+        /// <param name="row">The zero-based row (y direction) of the pixel </param>
+        /// <param name="column">The zero-based column (x direction) of the pixel</param>
+        /// <returns>The color in the specific <paramref name="row"/> and <paramref name="column"/></returns>
+        public TColor this[int row, int column]
+        {
+            get
+            {
+                TColor res = new TColor();
+                res.MCvScalar = CvInvoke.cvGet2D(Ptr, row, column);
+                return res;
+            }
+            set
+            {
+                CvInvoke.cvSet2D(Ptr, row, column, value.MCvScalar);
+            }
+        }
 
-      /// <summary>
-      /// Get or Set the color in the <paramref name="location"/>
-      /// </summary>
-      /// <param name="location">the location of the pixel </param>
-      /// <returns>the color in the <paramref name="location"/></returns>
-      public TColor this[Point location]
-      {
-         get
-         {
-            return this[location.Y, location.X];
-         }
-         set
-         {
-            this[location.Y, location.X] = value;
-         }
-      }
+        /// <summary>
+        /// Get or Set the color in the <paramref name="location"/>
+        /// </summary>
+        /// <param name="location">the location of the pixel </param>
+        /// <returns>the color in the <paramref name="location"/></returns>
+        public TColor this[Point location]
+        {
+            get
+            {
+                return this[location.Y, location.X];
+            }
+            set
+            {
+                this[location.Y, location.X] = value;
+            }
+        }
       #endregion
 
       #region utilities
-      /// <summary>
-      /// Return parameters based on ROI
-      /// </summary>
-      /// <param name="ptr">The Pointer to the IplImage</param>
-      /// <param name="start">The address of the pointer that point to the start of the Bytes taken into consideration ROI</param>
-      /// <param name="elementCount">ROI.Width * ColorType.Dimension</param>
-      /// <param name="byteWidth">The number of bytes in a row taken into consideration ROI</param>
-      /// <param name="rows">The number of rows taken into consideration ROI</param>
-      /// <param name="widthStep">The width step required to jump to the next row</param>
-      protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
-      {
-         MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-         start = ipl.imageData.ToInt64();
-         widthStep = ipl.widthStep;
+        /// <summary>
+        /// Return parameters based on ROI
+        /// </summary>
+        /// <param name="ptr">The Pointer to the IplImage</param>
+        /// <param name="start">The address of the pointer that point to the start of the Bytes taken into consideration ROI</param>
+        /// <param name="elementCount">ROI.Width * ColorType.Dimension</param>
+        /// <param name="byteWidth">The number of bytes in a row taken into consideration ROI</param>
+        /// <param name="rows">The number of rows taken into consideration ROI</param>
+        /// <param name="widthStep">The width step required to jump to the next row</param>
+        protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
+        {
+            MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+            start = ipl.imageData.ToInt64();
+            widthStep = ipl.widthStep;
 
-         if (ipl.roi != IntPtr.Zero)
-         {
-            Rectangle rec = CvInvoke.cvGetImageROI(ptr);
-            elementCount = rec.Width * ipl.nChannels;
-            byteWidth = ((int)ipl.depth >> 3) * elementCount;
+            if (ipl.roi != IntPtr.Zero)
+            {
+                Rectangle rec = CvInvoke.cvGetImageROI(ptr);
+                elementCount = rec.Width * ipl.nChannels;
+                byteWidth = ((int)ipl.depth >> 3) * elementCount;
 
-            start += rec.Y * widthStep
+                start += rec.Y * widthStep
                     + ((int)ipl.depth >> 3) * rec.X;
-            rows = rec.Height;
-         }
-         else
-         {
-            byteWidth = widthStep;
-            elementCount = ipl.width * ipl.nChannels;
-            rows = ipl.height;
-         }
-      }
-
-      /// <summary>
-      /// Apply convertor and compute result for each channel of the image.
-      /// </summary>
-      /// <remarks>
-      /// For single channel image, apply converter directly.
-      /// For multiple channel image, set the COI for the specific channel before appling the convertor
-      /// </remarks>
-      /// <typeparam name="TResult">The return type</typeparam>
-      /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
-      /// <returns>An array which contains result for each channel</returns>
-      private TResult[] ForEachChannel<TResult>(Func<IntPtr, int, TResult> conv)
-      {
-         TResult[] res = new TResult[NumberOfChannels];
-         if (NumberOfChannels == 1)
-            res[0] = conv(Ptr, 0);
-         else
-         {
-            for (int i = 0; i < NumberOfChannels; i++)
+                rows = rec.Height;
+            } else
             {
-               CvInvoke.cvSetImageCOI(Ptr, i + 1);
-               res[i] = conv(Ptr, i);
+                byteWidth = widthStep;
+                elementCount = ipl.width * ipl.nChannels;
+                rows = ipl.height;
             }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
-         }
-         return res;
-      }
+        }
+
+        /// <summary>
+        /// Apply convertor and compute result for each channel of the image.
+        /// </summary>
+        /// <remarks>
+        /// For single channel image, apply converter directly.
+        /// For multiple channel image, set the COI for the specific channel before appling the convertor
+        /// </remarks>
+        /// <typeparam name="TResult">The return type</typeparam>
+        /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+        /// <returns>An array which contains result for each channel</returns>
+        private TResult[] ForEachChannel<TResult>(Func<IntPtr, int, TResult> conv)
+        {
+            TResult[] res = new TResult[NumberOfChannels];
+            if (NumberOfChannels == 1)
+                res[0] = conv(Ptr, 0);
+            else
+            {
+                for (int i = 0; i < NumberOfChannels; i++)
+                {
+                    CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                    res[i] = conv(Ptr, i);
+                }
+                CvInvoke.cvSetImageCOI(Ptr, 0);
+            }
+            return res;
+        }
 
 
-      /// <summary>
-      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
-      /// </summary>
-      /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
-      /// <returns>An array which contains result for each channel</returns>
-      private void ForEachDuplicateChannel(Action<IImage, int> action)
-      {
-         if (NumberOfChannels == 1)
-            action(this, 0);
-         else
-         {
-            int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
-            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
-               for (int i = 0; i < NumberOfChannels; i++)
-               {
-                  CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                  CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
-                  action(tmp, i);
-               }
-            CvInvoke.cvSetImageCOI(Ptr, oldCOI);
-         }
-      }
+        /// <summary>
+        /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+        /// </summary>
+        /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+        /// <returns>An array which contains result for each channel</returns>
+        private void ForEachDuplicateChannel(Action<IImage, int> action)
+        {
+            if (NumberOfChannels == 1)
+                action(this, 0);
+            else
+            {
+                int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
+                using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
+                    for (int i = 0; i < NumberOfChannels; i++)
+                    {
+                        CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                        CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
+                        action(tmp, i);
+                    }
+                CvInvoke.cvSetImageCOI(Ptr, oldCOI);
+            }
+        }
 
-      /// <summary>
-      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
-      /// </summary>
-      /// <typeparam name="TReturn">The return type</typeparam>
-      /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
-      /// <returns>An array which contains result for each channel</returns>
-      private TReturn[] ForEachDuplicateChannel<TReturn>(Func<IImage, int, TReturn> conv)
-      {
-         TReturn[] res = new TReturn[NumberOfChannels];
-         if (NumberOfChannels == 1)
-            res[0] = conv(this, 0);
-         else
-         {
-            int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
-            using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
-               for (int i = 0; i < NumberOfChannels; i++)
-               {
-                  CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                  CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
-                  res[i] = conv(tmp, i);
-               }
+        /// <summary>
+        /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+        /// </summary>
+        /// <typeparam name="TReturn">The return type</typeparam>
+        /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+        /// <returns>An array which contains result for each channel</returns>
+        private TReturn[] ForEachDuplicateChannel<TReturn>(Func<IImage, int, TReturn> conv)
+        {
+            TReturn[] res = new TReturn[NumberOfChannels];
+            if (NumberOfChannels == 1)
+                res[0] = conv(this, 0);
+            else
+            {
+                int oldCOI = CvInvoke.cvGetImageCOI(Ptr);
+                using (Image<Gray, TDepth> tmp = new Image<Gray, TDepth>(Size))
+                    for (int i = 0; i < NumberOfChannels; i++)
+                    {
+                        CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                        CvInvoke.cvCopy(Ptr, tmp.Ptr, IntPtr.Zero);
+                        res[i] = conv(tmp, i);
+                    }
 
-            CvInvoke.cvSetImageCOI(Ptr, oldCOI);
-         }
-         return res;
-      }
+                CvInvoke.cvSetImageCOI(Ptr, oldCOI);
+            }
+            return res;
+        }
 
-      /// <summary>
-      /// If the image has only one channel, apply the action directly on the IntPtr of this image and <paramref name="dest"/>,
-      /// otherwise, make copy each channel of this image to a temperary one, apply action on it and another temperory image and copy the resulting image back to image2
-      /// </summary>
-      /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>
-      /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
-      /// <param name="dest">The destination image</param>
-      private void ForEachDuplicateChannel<TOtherDepth>(Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
+        /// <summary>
+        /// If the image has only one channel, apply the action directly on the IntPtr of this image and <paramref name="dest"/>,
+        /// otherwise, make copy each channel of this image to a temperary one, apply action on it and another temperory image and copy the resulting image back to image2
+        /// </summary>
+        /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>
+        /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
+        /// <param name="dest">The destination image</param>
+        private void ForEachDuplicateChannel<TOtherDepth>(Action<IntPtr, IntPtr, int> act, Image<TColor, TOtherDepth> dest)
             where TOtherDepth : new()
-      {
-         if (NumberOfChannels == 1)
-            act(Ptr, dest.Ptr, 0);
-         else
-         {
-            int sourceCOI = CvInvoke.cvGetImageCOI(Ptr);
-            int destCOI = CvInvoke.cvGetImageCOI(dest);
-            using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Size))
-            using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Size))
+        {
+            if (NumberOfChannels == 1)
+                act(Ptr, dest.Ptr, 0);
+            else
             {
-               for (int i = 0; i < NumberOfChannels; i++)
-               {
-                  CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                  CvInvoke.cvSetImageCOI(dest.Ptr, i + 1);
-                  CvInvoke.cvCopy(Ptr, tmp1.Ptr, IntPtr.Zero);
-                  act(tmp1.Ptr, tmp2.Ptr, i);
-                  CvInvoke.cvCopy(tmp2.Ptr, dest.Ptr, IntPtr.Zero);
-               }
+                int sourceCOI = CvInvoke.cvGetImageCOI(Ptr);
+                int destCOI = CvInvoke.cvGetImageCOI(dest);
+                using (Image<Gray, TDepth> tmp1 = new Image<Gray, TDepth>(Size))
+                using (Image<Gray, TOtherDepth> tmp2 = new Image<Gray, TOtherDepth>(dest.Size))
+                {
+                    for (int i = 0; i < NumberOfChannels; i++)
+                    {
+                        CvInvoke.cvSetImageCOI(Ptr, i + 1);
+                        CvInvoke.cvSetImageCOI(dest.Ptr, i + 1);
+                        CvInvoke.cvCopy(Ptr, tmp1.Ptr, IntPtr.Zero);
+                        act(tmp1.Ptr, tmp2.Ptr, i);
+                        CvInvoke.cvCopy(tmp2.Ptr, dest.Ptr, IntPtr.Zero);
+                    }
+                }
+                CvInvoke.cvSetImageCOI(Ptr, sourceCOI);
+                CvInvoke.cvSetImageCOI(dest.Ptr, destCOI);
             }
-            CvInvoke.cvSetImageCOI(Ptr, sourceCOI);
-            CvInvoke.cvSetImageCOI(dest.Ptr, destCOI);
-         }
-      }
+        }
       #endregion
 
       #region Gradient, Edges and Features
-      /// <summary>
-      /// Calculates the image derivative by convolving the image with the appropriate kernel
-      /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
-      /// </summary>
-      /// <param name="xorder">Order of the derivative x</param>
-      /// <param name="yorder">Order of the derivative y</param>
-      /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size xaperture_size separable kernel will be used to calculate the derivative.</param>
-      /// <returns>The result of the sobel edge detector</returns>
-      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
-      public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
-      {
-         Image<TColor, Single> res = new Image<TColor, float>(Size);
-         CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
-         return res;
-      }
+        /// <summary>
+        /// Calculates the image derivative by convolving the image with the appropriate kernel
+        /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
+        /// </summary>
+        /// <param name="xorder">Order of the derivative x</param>
+        /// <param name="yorder">Order of the derivative y</param>
+        /// <param name="apertureSize">Size of the extended Sobel kernel, must be 1, 3, 5 or 7. In all cases except 1, aperture_size xaperture_size separable kernel will be used to calculate the derivative.</param>
+        /// <returns>The result of the sobel edge detector</returns>
+        [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
+        public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
+        {
+            Image<TColor, Single> res = new Image<TColor, float>(Size);
+            CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
+            return res;
+        }
 
-      /// <summary>
-      /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator.
-      /// Specifying aperture_size=1 gives the fastest variant that is equal to convolving the image with the following kernel:
-      ///
-      /// |0  1  0|
-      /// |1 -4  1|
-      /// |0  1  0|
-      /// </summary>
-      /// <param name="apertureSize">Aperture size </param>
-      /// <returns>The Laplacian of the image</returns>
-      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
-      public Image<TColor, Single> Laplace(int apertureSize)
-      {
-         Image<TColor, Single> res = new Image<TColor, float>(Size);
-         CvInvoke.cvLaplace(Ptr, res.Ptr, apertureSize);
-         return res;
-      }
+        /// <summary>
+        /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator.
+        /// Specifying aperture_size=1 gives the fastest variant that is equal to convolving the image with the following kernel:
+        ///
+        /// |0  1  0|
+        /// |1 -4  1|
+        /// |0  1  0|
+        /// </summary>
+        /// <param name="apertureSize">Aperture size </param>
+        /// <returns>The Laplacian of the image</returns>
+        [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
+        public Image<TColor, Single> Laplace(int apertureSize)
+        {
+            Image<TColor, Single> res = new Image<TColor, float>(Size);
+            CvInvoke.cvLaplace(Ptr, res.Ptr, apertureSize);
+            return res;
+        }
 
-      ///<summary> Find the edges on this image and marked them in the returned image.</summary>
-      ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
-      ///<param name="threshLinking"> The threshold used for edge Linking</param>
-      ///<returns> The edges found by the Canny edge detector</returns>
-      [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
-      public Image<Gray, Byte> Canny(double thresh, double threshLinking)
-      {
-         return Canny(thresh, threshLinking, 3);
-      }
+        ///<summary> Find the edges on this image and marked them in the returned image.</summary>
+        ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
+        ///<param name="threshLinking"> The threshold used for edge Linking</param>
+        ///<returns> The edges found by the Canny edge detector</returns>
+        [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
+        public Image<Gray, Byte> Canny(double thresh, double threshLinking)
+        {
+            return Canny(thresh, threshLinking, 3);
+        }
 
-      ///<summary> Find the edges on this image and marked them in the returned image.</summary>
-      ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
-      ///<param name="threshLinking"> The threshold used for edge Linking</param>
-      ///<param name="apertureSize">The aperture size, use 3 for default</param>
-      ///<returns> The edges found by the Canny edge detector</returns>
-      public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize)
-      {
-         Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
-         CvInvoke.cvCanny(this, res, thresh, threshLinking, apertureSize);
-         return res;
-      }
+        ///<summary> Find the edges on this image and marked them in the returned image.</summary>
+        ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
+        ///<param name="threshLinking"> The threshold used for edge Linking</param>
+        ///<param name="apertureSize">The aperture size, use 3 for default</param>
+        ///<returns> The edges found by the Canny edge detector</returns>
+        public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize)
+        {
+            Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
+            CvInvoke.cvCanny(this, res, thresh, threshLinking, apertureSize);
+            return res;
+        }
 
       #region SURF
-      /// <summary>
-      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="param">The SURF parameters</param>
-      /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
-      {
-         return ExtractSURF(null, ref param);
-      }
+        /// <summary>
+        /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+        /// </summary>
+        /// <param name="param">The SURF parameters</param>
+        /// <returns>The SURF features</returns>
+        public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
+        {
+            return ExtractSURF(null, ref param);
+        }
 
-      /// <summary>
-      /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="param">The SURF parameters</param>
-      /// <returns>The SURF features</returns>
-      public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr descriptorPtr = new IntPtr();
-            IntPtr keypointsPtr = new IntPtr();
+        /// <summary>
+        /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
+        /// </summary>
+        /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
+        /// <param name="param">The SURF parameters</param>
+        /// <returns>The SURF features</returns>
+        public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
+        {
+            using (MemStorage stor = new MemStorage())
+            {
+                IntPtr descriptorPtr = new IntPtr();
+                IntPtr keypointsPtr = new IntPtr();
 
-            CvInvoke.cvExtractSURF(
+                CvInvoke.cvExtractSURF(
                Ptr, mask == null ? IntPtr.Zero : mask.Ptr,
                ref keypointsPtr,
                ref descriptorPtr,
                stor.Ptr,
                param,
                0);
-            Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
+                Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
 
-            MCvSURFPoint[] surfPoints = keypoints.ToArray();
+                MCvSURFPoint[] surfPoints = keypoints.ToArray();
 
-            SURFFeature[] res = new SURFFeature[surfPoints.Length];
+                SURFFeature[] res = new SURFFeature[surfPoints.Length];
 
-            int elementsInDescriptor = param.Extended ? 128 : 64;
+                int elementsInDescriptor = param.Extended ? 128 : 64;
 
-            for (int i = 0; i < res.Length; i++)
-            {
-               float[] descriptor = new float[elementsInDescriptor];
-               Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
-               res[i] = new SURFFeature(ref surfPoints[i], descriptor);
+                for (int i = 0; i < res.Length; i++)
+                {
+                    float[] descriptor = new float[elementsInDescriptor];
+                    Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
+                    res[i] = new SURFFeature(ref surfPoints[i], descriptor);
+                }
+
+                return res;
             }
-
-            return res;
-         }
-      }
+        }
 
       #endregion
 
-      /// <summary>
-      /// Get the star keypoints from this image
-      /// </summary>
-      /// <param name="param">The Star Detector parameters</param>
-      /// <returns>The Star keypoints in this image</returns>
-      public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
-      {
-         using (MemStorage stor = new MemStorage())
-         {
-            IntPtr keyPointsPtr = CvInvoke.cvGetStarKeypoints(_ptr, stor.Ptr, param);
-            Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
-            return keyPoints.ToArray();
-         }
-      }
+        /// <summary>
+        /// Get the star keypoints from this image
+        /// </summary>
+        /// <param name="param">The Star Detector parameters</param>
+        /// <returns>The Star keypoints in this image</returns>
+        public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
+        {
+            using (MemStorage stor = new MemStorage())
+            {
+                IntPtr keyPointsPtr = CvInvoke.cvGetStarKeypoints(_ptr, stor.Ptr, param);
+                Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
+                return keyPoints.ToArray();
+            }
+        }
 
-      /// <summary>
-      /// Finds corners with big eigenvalues in the image. 
-      /// </summary>
-      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-      /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-      /// <returns>The good features for each channel</returns>
-      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
-      {
-         return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, false, 0);
-      }
+        /// <summary>
+        /// Finds corners with big eigenvalues in the image.
+        /// </summary>
+        /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
+        /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
+        /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+        /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+        /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+        /// <returns>The good features for each channel</returns>
+        public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
+        {
+            return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, false, 0);
+        }
 
-      /// <summary>
-      /// Finds corners with big eigenvalues in the image. 
-      /// </summary>
-      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-      /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-      /// <param name="k">Free parameter of Harris detector. If provided, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal. </param>
-      /// <returns>The good features for each channel</returns>
-      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
-      {
-         return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
-      }
+        /// <summary>
+        /// Finds corners with big eigenvalues in the image.
+        /// </summary>
+        /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
+        /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
+        /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+        /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+        /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+        /// <param name="k">Free parameter of Harris detector. If provided, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal. </param>
+        /// <returns>The good features for each channel</returns>
+        public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
+        {
+            return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
+        }
 
-      /// <summary>
-      /// Finds corners with big eigenvalues in the image. 
-      /// </summary>
-      /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-      /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-      /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
-      /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
-      /// <returns>The good features for each channel</returns>
-      public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
-      {
-         using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
-         using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
-         {
-            return ForEachDuplicateChannel<PointF[]>(
+        /// <summary>
+        /// Finds corners with big eigenvalues in the image.
+        /// </summary>
+        /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
+        /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
+        /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
+        /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
+        /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
+        /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
+        /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
+        /// <returns>The good features for each channel</returns>
+        public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
+        {
+            using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
+            using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
+            {
+                return ForEachDuplicateChannel<PointF[]>(
                delegate(IImage img, int channel)
-               {
+                {
                   int cornercount = maxFeaturesPerChannel;
                   PointF[] pts = new PointF[maxFeaturesPerChannel];
                   GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);

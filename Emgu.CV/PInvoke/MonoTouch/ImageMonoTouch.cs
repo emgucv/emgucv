@@ -15,6 +15,11 @@ namespace Emgu.CV
       public Image(CGImage cgImage)
          : this(cgImage.Width, cgImage.Height)
       {
+         ConvertFromCGImage(cgImage);
+      }
+
+      private void ConvertFromCGImage(CGImage cgImage)
+      {
          if (this is Image<Rgba, Byte>)
          {
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
