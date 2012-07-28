@@ -1,7 +1,7 @@
 [submodule "opencv_attic"]
 	path = opencv_attic
 	url = git://code.opencv.org/opencv_attic.git
-
+	ignore = dirty
 [submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr"]
 	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr
 	url = git://emgucv.git.sourceforge.net/gitroot/emgucv/tesseract-ocr
