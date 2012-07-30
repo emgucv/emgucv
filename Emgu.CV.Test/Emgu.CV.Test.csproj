@@ -90,47 +90,47 @@
     <Compile Include="AutoTestML.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\opencv\data\haarcascades\haarcascade_eye.xml">
+    <Content Include="..\opencv_attic\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\data\haarcascades\haarcascade_frontalface_alt2.xml">
+    <Content Include="..\opencv_attic\opencv\data\haarcascades\haarcascade_frontalface_alt2.xml">
       <Link>haarcascade_frontalface_alt2.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\left01.jpg">
+    <Content Include="..\opencv_attic\opencv\samples\cpp\left01.jpg">
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\airplane.jpg">
+    <Content Include="..\opencv_attic\opencv\samples\c\airplane.jpg">
       <Link>airplane.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\box.png">
+    <Content Include="..\opencv_attic\opencv\samples\c\box.png">
       <Link>box.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\box_in_scene.png">
+    <Content Include="..\opencv_attic\opencv\samples\c\box_in_scene.png">
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\lena.jpg">
+    <Content Include="..\opencv_attic\opencv\samples\c\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\scene_l.bmp">
+    <Content Include="..\opencv_attic\opencv\samples\c\scene_l.bmp">
       <Link>scene_l.bmp</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\scene_r.bmp">
+    <Content Include="..\opencv_attic\opencv\samples\c\scene_r.bmp">
       <Link>scene_r.bmp</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\stuff.jpg">
+    <Content Include="..\opencv_attic\opencv\samples\c\stuff.jpg">
       <Link>stuff.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\tree.avi">
+    <Content Include="..\opencv_attic\opencv\samples\c\tree.avi">
       <Link>tree.avi</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -204,11 +204,11 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\opencv\samples\cpp\letter-recognition.data">
+    <Content Include="..\opencv_attic\opencv\samples\cpp\letter-recognition.data">
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="..\opencv\samples\c\agaricus-lepiota.data">
+    <None Include="..\opencv_attic\opencv\samples\c\agaricus-lepiota.data">
       <Link>agaricus-lepiota.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

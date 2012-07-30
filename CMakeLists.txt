@@ -924,7 +924,7 @@ ELSE() #LINUX
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff2, gtk2-engines, libgstreamer0.10-0, libavcodec52, libswscale0, libavformat52, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libmono-wcf3.0-cil, libtiff4, libgeotiff2, gtk2-engines, libgstreamer0.10-0, libavcodec53, libswscale2, libavformat53, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
     IF(EMGU_CV_WITH_TESSERACT)
       SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtesseract3")
     ENDIF()

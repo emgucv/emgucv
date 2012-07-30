@@ -1,4 +1,4 @@
-From 59d9b04692bbf80ad8eac18bb02a98c5246ddd0f Mon Sep 17 00:00:00 2001
+From d8fa387606a3fd0c6e5934aef89e5a6a5882407c Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
 Date: Wed, 25 Jul 2012 13:13:42 -0400
 Subject: [PATCH] patch opencv for emgucv.
@@ -10,7 +10,7 @@ Subject: [PATCH] patch opencv for emgucv.
  opencv/3rdparty/libtiff/CMakeLists.txt             |    4 ++++
  opencv/3rdparty/zlib/CMakeLists.txt                |    4 ++++
  opencv/cmake/OpenCVDetectTBB.cmake                 |   20 +++++++++++++------
- opencv/cmake/OpenCVModule.cmake                    |    8 ++++++--
+ opencv/cmake/OpenCVModule.cmake                    |   13 ++++++++----
  opencv/modules/contrib/src/colormap.cpp            |    1 +
  opencv/modules/core/src/drawing.cpp                |   14 ++++++-------
  opencv/modules/gpu/src/match_template.cpp          |    2 +-
@@ -20,7 +20,7 @@ Subject: [PATCH] patch opencv for emgucv.
  opencv/modules/highgui/src/cap_openni.cpp          |    8 ++++++++
  opencv/modules/legacy/src/3dtracker.cpp            |    6 +++---
  opencv/modules/objdetect/src/latentsvm.cpp         |    2 +-
- 16 files changed, 74 insertions(+), 38 deletions(-)
+ 16 files changed, 77 insertions(+), 40 deletions(-)
 
 diff --git a/opencv/3rdparty/libjasper/CMakeLists.txt b/opencv/3rdparty/libjasper/CMakeLists.txt
 index 5b850c9..46ce17f 100644
@@ -129,10 +129,18 @@ index c37a8c3..37a8e33 100644
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
 diff --git a/opencv/cmake/OpenCVModule.cmake b/opencv/cmake/OpenCVModule.cmake
-index 543f997..29825e8 100644
+index 543f997..44d1379 100644
 --- a/opencv/cmake/OpenCVModule.cmake
 +++ b/opencv/cmake/OpenCVModule.cmake
-@@ -460,6 +460,10 @@ macro(ocv_create_module)
+@@ -455,11 +455,16 @@ macro(ocv_create_module)
+   set_target_properties(${the_module} PROPERTIES
+     OUTPUT_NAME "${the_module}${OPENCV_DLLVERSION}"
+     DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+-    ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+-    RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
++    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}
++	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}
++    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}
      INSTALL_NAME_DIR lib
    )
  
@@ -143,7 +151,7 @@ index 543f997..29825e8 100644
    # For dynamic link numbering convenions
    if(NOT ANDROID)
      # Android SDK build scripts can include only .so files into final .apk
-@@ -486,8 +490,8 @@ macro(ocv_create_module)
+@@ -486,8 +491,8 @@ macro(ocv_create_module)
    endif()
  
    install(TARGETS ${the_module}
