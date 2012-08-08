@@ -19,6 +19,7 @@
     <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -342,10 +343,10 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+    <AndroidAsset Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>Assets\haarcascade_eye.xml</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+    <AndroidAsset Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>Assets\haarcascade_frontalface_default.xml</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\FaceDetection\lena.jpg">

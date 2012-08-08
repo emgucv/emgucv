@@ -89,7 +89,55 @@ namespace Emgu.CV
 
          try
          {
+#if ANDROID
+            int rotation = 0;
+            Android.Media.ExifInterface exif = new Android.Media.ExifInterface(fi.FullName);
+            int orientation = exif.GetAttributeInt(Android.Media.ExifInterface.TagOrientation, int.MinValue);
+            switch (orientation)
+            {
+               case (int)Android.Media.Orientation.Rotate270:
+                  rotation = 270;
+                  break;
+               case (int)Android.Media.Orientation.Rotate180:
+                  rotation = 180;
+                  break;
+               case (int)Android.Media.Orientation.Rotate90:
+                  rotation = 90;
+                  break;
+            }
+            if (rotation == 0)
+               LoadImageUsingOpenCV(fi);
+            else
+            {
+               using(Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fi.FullName))
+               {
+                  Android.Graphics.Matrix matrix = new Android.Graphics.Matrix();
+               
+                  matrix.PostRotate(rotation);
+                  using (Bitmap rotated = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
+                  {
+                     //manually disposed sooner such that memory is released.
+                     bmp.Dispose();
+                     Bitmap = rotated;
+                  }
+               }
+               /*
+               //LoadFileUsingBitmap(fi);
+               
+               Size dstImgSize;
+               using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>())
+               {
+                  tmp.LoadImageUsingOpenCV(fi);
+                  using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(new PointF(tmp.Width *0.5f, tmp.Height * 0.5f), -rotation, tmp.Size, out dstImgSize))
+                  {
+                     AllocateData(dstImgSize.Height, dstImgSize.Width, NumberOfChannels);
+                     CvInvoke.cvWarpAffine(tmp.Ptr, Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+                  }
+               }*/
+            }
+#else
             LoadImageUsingOpenCV(fi);
+#endif
          } catch (TypeInitializationException e)
          {
             //possibly Exception in CvInvoke's static constructor.
@@ -2423,7 +2471,7 @@ namespace Emgu.CV
       /// <summary>
       /// Rotate this image the specified <paramref name="angle"/>
       /// </summary>
-      /// <param name="angle">The angle of rotation in degrees.</param>
+      /// <param name="angle">The angle of rotation in degrees. Positive means clockwise.</param>
       /// <param name="background">The color with wich to fill the background</param>
       /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
       /// <param name="center">The center of rotation</param>
@@ -2431,28 +2479,18 @@ namespace Emgu.CV
       /// <returns>The rotated image</returns>
       public Image<TColor, TDepth> Rotate(double angle, PointF center, CvEnum.INTER interpolationMethod, TColor background, bool crop)
       {
-         Size size = Size;
-         //PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-         using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
+         if (crop)
          {
-            if (crop)
+            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
                return WarpAffine(rotationMatrix, interpolationMethod, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
-
-            PointF[] corners = new PointF[] {
-                  new PointF(0, 0),
-                  new PointF(size.Width - 1 , 0),
-                  new PointF(size.Width - 1, size.Height -1),
-                  new PointF(0, size.Height -1)};
-            rotationMatrix.RotatePoints(corners);
-            int minX = (int)Math.Round(Math.Min(Math.Min(corners[0].X, corners[1].X), Math.Min(corners[2].X, corners[3].X)));
-            int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
-            int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
-            int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
-
-            rotationMatrix[0, 2] -= minX;
-            rotationMatrix[1, 2] -= minY;
-
-            return WarpAffine(rotationMatrix, maxX - minX + 1, maxY - minY + 1, interpolationMethod, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
+         }
+         else
+         {
+            Size dstImgSize;
+            using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(center, -angle, Size, out dstImgSize))
+            {
+               return WarpAffine(rotationMatrix, dstImgSize.Width, dstImgSize.Height, interpolationMethod, Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, background);
+            }
          }
       }
 

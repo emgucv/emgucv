@@ -4,14 +4,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Android.App;
 using Android.Content;
-using Android.Views;
-using Android.Runtime;
-using Android.OS;
 using Android.Content.Res;
-using System.IO;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
 
 namespace Emgu.Util
 {
@@ -23,17 +23,48 @@ namespace Emgu.Util
 
       public enum OverwriteMethod
       {
+         /// <summary>
+         /// Always overwrite the file
+         /// </summary>
          AlwaysOverwrite,
+         /*
+         /// <summary>
+         /// Copy if the current file is newer than the existing one
+         /// </summary>
+         CopyIfNewer,*/
+         /// <summary>
+         /// Will never overwrite. Throw exception if the file already exist
+         /// </summary>
          NeverOverwrite
       }
 
-      protected void WriteStream(System.IO.Stream iStream)
+      /// <summary>
+      /// Copy the Android assets to the app's FilesDir
+      /// </summary>
+      /// <param name="context">The android context</param>
+      /// <param name="assertName">The name of the assert</param>
+      /// <param name="dstDir">The subfolder in the app's FilesDir</param>
+      /// <param name="overwriteMethod">overwrite method</param>
+      /// <returns>The resulting FileInfo</returns>
+      public static FileInfo WritePermanantFileAsset(Context context, String assertName, String dstDir, OverwriteMethod overwriteMethod)
       {
-         if (_overwriteMethod == OverwriteMethod.NeverOverwrite && File.Exists(FileFullPath))
+         String fullPath = Path.Combine(context.FilesDir.AbsolutePath, dstDir, assertName);
+
+         //Create the directory if it is not already exist.
+         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+
+         using (Stream iStream = context.Assets.Open(assertName))
+            WriteStream(iStream, fullPath, overwriteMethod);
+         return new FileInfo(fullPath);
+      }
+
+      public static void WriteStream(System.IO.Stream iStream, String fileFullPath, OverwriteMethod method)
+      {
+         if (method == OverwriteMethod.NeverOverwrite && File.Exists(fileFullPath))
          {
-            throw new IOException(String.Format("A file with the name {0} already exist.", FileFullPath));
+            throw new IOException(String.Format("A file with the name {0} already exist.", fileFullPath));
          }
-         using (System.IO.Stream os = System.IO.File.OpenWrite(FileFullPath))
+         using (Stream os = File.OpenWrite(fileFullPath))
          {
             byte[] buffer = new byte[8 * 1024];
             int len;
@@ -63,27 +94,25 @@ namespace Emgu.Util
       }
    }
 
-
    /// <summary>
    /// Copy the Android assets to the cache folder
    /// </summary>
    public class AndroidCacheFileAsset : AndroidFileAsset
    {
-
       public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix)
          : this(context, assertName, cacheFolderPostfix, OverwriteMethod.NeverOverwrite)
       {
       }
 
-      public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix, OverwriteMethod overwrite)
+      public AndroidCacheFileAsset(Context context, String assertName, String cacheFolderPostfix, OverwriteMethod method)
       {
          String fileName = Path.GetFileName(assertName);
          fileName = Path.Combine(context.GetDir(cacheFolderPostfix, FileCreationMode.Private).AbsolutePath, fileName);
          _file = new FileInfo(fileName);
-         _overwriteMethod = overwrite;
+         _overwriteMethod = method;
 
          using(System.IO.Stream iStream = context.Assets.Open(assertName))
-            WriteStream(iStream);
+            WriteStream(iStream, FileFullPath, _overwriteMethod);
 
       }
 
@@ -98,24 +127,6 @@ namespace Emgu.Util
             _file.Delete();
            
          base.DisposeObject();
-      }
-   }
-
-   /// <summary>
-   /// Copy the Android assets to the app's FilesDir
-   /// </summary>
-   public class AndroidPermanantFileAsset : AndroidFileAsset
-   {
-      public AndroidPermanantFileAsset(Context context, String assertName, String dstDir, OverwriteMethod overwrite)
-      {
-         String fullPath = Path.Combine(context.FilesDir.AbsolutePath, dstDir, assertName);
-         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-         _file = new FileInfo(fullPath);
-
-         _overwriteMethod = overwrite;
-
-         using (System.IO.Stream iStream = context.Assets.Open(assertName))
-            WriteStream(iStream);
       }
    }
 }

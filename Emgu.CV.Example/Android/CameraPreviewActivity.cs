@@ -30,7 +30,7 @@ namespace AndroidExamples
    [Activity(Label = "MonoAndroidCamera")]
    public class CameraPreviewActivity : Activity
    {
-      private Preview preview;
+      private Preview _preview;
       private TopLayer _topLayer;
 
       private IMenuItem _menuCanny;
@@ -41,10 +41,10 @@ namespace AndroidExamples
       {
          base.OnCreate(bundle);
 
-         _topLayer = new TopLayer(this);
-
-         preview = new Preview(this, _topLayer);
-         SetContentView(preview);
+         bool cameraPreviewCallbackWithBuffer = false;
+         _topLayer = new TopLayer(this, cameraPreviewCallbackWithBuffer);
+         _preview = new Preview(this, _topLayer, cameraPreviewCallbackWithBuffer);
+         SetContentView(_preview);
          AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
 
          RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
@@ -80,34 +80,32 @@ namespace AndroidExamples
       Preview,
       Canny,
       ColorMap
-      //FaceDetect
    }
 
    class TopLayer : View, Camera.IPreviewCallback
    {
       private Stopwatch _watch;
       Paint _paint;
-      //CascadeClassifier _faceDetector;
       Android.Graphics.Bitmap _bmp;
       int[] _bgraData;
       byte[] _bgrData;
 
+      private bool _cameraPreviewCallbackWithBuffer;
+
       public ViewMode Mode = ViewMode.Preview;
 
-      public TopLayer(Context context)
+      public TopLayer(Context context, bool cameraPreviewCallbackWithBuffer)
          : base(context)
       {
+         _cameraPreviewCallbackWithBuffer = cameraPreviewCallbackWithBuffer;
+
          _paint = new Paint();
          _paint.SetStyle(Paint.Style.Stroke);
          _paint.SetARGB(255, 255, 0, 0);
          _paint.TextSize = 25;
 
          Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
-         /*
-         using (Emgu.Util.AndroidCacheFileAsset asset = new Emgu.Util.AndroidCacheFileAsset(context, "haarcascade_frontalface_default.xml"))
-         {
-            _faceDetector = new CascadeClassifier(asset.FileFullPath);
-         }*/
+
          _watch = Stopwatch.StartNew();
       }
 
@@ -122,6 +120,7 @@ namespace AndroidExamples
                Stopwatch w = Stopwatch.StartNew();
                canvas.DrawBitmap(_bmp, 0, 0, null);
                w.Stop();
+
                _watch.Stop();
                canvas.DrawText(String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms", 
                   1.0 / _watch.ElapsedMilliseconds * 1000, 
@@ -157,6 +156,7 @@ namespace AndroidExamples
 
                      if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
                         _bgraData = new int[size.Width * size.Height];
+
                      GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
                      using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                         CvInvoke.cvCvtColor(canny, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGRA);
@@ -193,34 +193,6 @@ namespace AndroidExamples
                   bgraHandle.Free();
                   bgrHandle.Free();
                }
-               /*
-               else
-               { 
-                  //face detection
-                  Rectangle[] faces;
-                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                     faces = _faceDetector.DetectMultiScale(grey, 1.1, 3, Size.Empty, Size.Empty);
-
-                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                     _bgraData = new int[size.Width * size.Height];
-                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
-                     _bgrData = new byte[size.Width * size.Height * 3];
-
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
-                  {
-                     CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
-                     
-                     foreach (Rectangle face in faces)
-                        bgr.Draw(face, new Bgr(255, 0, 0), 2);
-                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
-                  }
-                  bgraHandle.Free();
-                  bgrHandle.Free();
-               }*/
                handle.Free();
 
                lock (this)
@@ -242,7 +214,9 @@ namespace AndroidExamples
             {
                _busy = false;
             }
-         camera.AddCallbackBuffer(data);
+
+         if (_cameraPreviewCallbackWithBuffer)
+            camera.AddCallbackBuffer(data);
       }
    }
 
@@ -252,14 +226,17 @@ namespace AndroidExamples
       Camera camera;
       TopLayer _topLayer;
 
-      public Preview(Context context, TopLayer topLayer)
+      private bool _cameraPreviewCallbackWithBuffer;
+
+      public Preview(Context context, TopLayer topLayer, bool cameraPreviewCallbackWithBuffer)
          : base(context)
       {
+         _cameraPreviewCallbackWithBuffer = cameraPreviewCallbackWithBuffer;
+
          // Install a SurfaceHolder.Callback so we get notified when the
          // underlying surface is created and destroyed.
          surface_holder = Holder;
          surface_holder.AddCallback(this);
-         //surface_holder.SetType(SurfaceType.PushBuffers);
 
          _topLayer = topLayer;
       }
@@ -268,18 +245,22 @@ namespace AndroidExamples
       {
          // The Surface has been created, acquire the camera and tell it where
          // to draw.
-         camera = Camera.Open();
-         
-         try
+
+         int numberOfCameras = Camera.NumberOfCameras;
+         if (numberOfCameras > 0)
          {
-            camera.SetPreviewDisplay(holder);
-            //camera.SetPreviewDisplay(null);
-         }
-         catch (Exception)
-         {
-            camera.Release();
-            camera = null;
-            // TODO: add more exception handling logic here
+            camera = Camera.Open(0);
+
+            try
+            {
+               camera.SetPreviewDisplay(holder);
+            }
+            catch (Exception)
+            {
+               camera.Release();
+               camera = null;
+               // TODO: add more exception handling logic here
+            }
          }
       }
 
@@ -288,13 +269,19 @@ namespace AndroidExamples
          // Surface will be destroyed when we return, so stop the preview.
          // Because the CameraDevice object is not a shared resource, it's very
          // important to release it when the activity is paused.
-         camera.StopPreview();
-         camera.SetPreviewCallbackWithBuffer(null);
-         camera.Release();
-         camera = null;
+         if (camera != null)
+         {
+            camera.StopPreview();
+            if (_cameraPreviewCallbackWithBuffer)
+               camera.SetPreviewCallbackWithBuffer(null);
+            else
+               camera.SetPreviewCallback(null);
+            camera.Release();
+            camera = null;
+         }
       }
 
-      private Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h)
+      private Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h, int maxWidth, int maxHeight)
       {
          const double ASPECT_TOLERANCE = 0.05;
          double targetRatio = (double)w / h;
@@ -311,6 +298,10 @@ namespace AndroidExamples
          for (int i = 0; i < sizes.Count; i++)
          {
             Camera.Size size = sizes[i];
+
+            if (size.Width > maxWidth || size.Height > maxHeight)
+               continue;
+
             double ratio = (double)size.Width / size.Height;
 
             if (Math.Abs(ratio - targetRatio) > ASPECT_TOLERANCE)
@@ -344,12 +335,14 @@ namespace AndroidExamples
 
       public void SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int w, int h)
       {
+         int maxWidth = 640, maxHeight = 480;
+
          // Now that the size is known, set up the camera parameters and begin
          // the preview.
          Camera.Parameters parameters = camera.GetParameters();
 
          IList<Camera.Size> sizes = parameters.SupportedPreviewSizes;
-         Camera.Size optimalSize = GetOptimalPreviewSize(sizes, w, h);
+         Camera.Size optimalSize = GetOptimalPreviewSize(sizes, w, h, maxWidth, maxHeight);
 
          parameters.SetPreviewSize(optimalSize.Width, optimalSize.Height);
          
@@ -358,11 +351,16 @@ namespace AndroidExamples
          //set for protrait mode
          //camera.SetDisplayOrientation(90);
 
-         //camera.SetPreviewCallback(_topLayer);
-         camera.SetPreviewCallbackWithBuffer(_topLayer);
-         int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
-         for (int i = 0; i < 1; ++i)
-            camera.AddCallbackBuffer(new byte[bufferSize]);
+         if (_cameraPreviewCallbackWithBuffer)
+         {
+            int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
+            camera.SetPreviewCallbackWithBuffer(_topLayer);
+            for (int i = 0; i < 1; ++i)
+               camera.AddCallbackBuffer(new byte[bufferSize]);
+         }
+         else
+            camera.SetPreviewCallback(_topLayer);
+
          camera.StartPreview();
 
          Layout(0, 0, optimalSize.Width, optimalSize.Height);

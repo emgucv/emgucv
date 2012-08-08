@@ -133,5 +133,34 @@ namespace Emgu.CV
          CvInvoke.cvCopy(_ptr, clone, IntPtr.Zero);
          return clone;
       }
+
+      /// <summary>
+      /// Create a rotation matrix for rotating an image
+      /// </summary>
+      /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at image centre). </param>
+      /// <param name="center">The rotation center</param>
+      /// <param name="srcImageSize">The source image size</param>
+      /// <param name="dstImageSize">The minimun size of the destination image</param>
+      /// <returns>The rotation matrix that rotate the source image to the destination image.</returns>
+      public static RotationMatrix2D<float> CreateRotationMatrix(PointF center, double angle, Size srcImageSize, out Size dstImageSize)
+      {
+         RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, angle, 1);
+         PointF[] corners = new PointF[] {
+                  new PointF(0, 0),
+                  new PointF(srcImageSize.Width - 1 , 0),
+                  new PointF(srcImageSize.Width - 1, srcImageSize.Height -1),
+                  new PointF(0, srcImageSize.Height -1)};
+         rotationMatrix.RotatePoints(corners);
+         int minX = (int)Math.Round(Math.Min(Math.Min(corners[0].X, corners[1].X), Math.Min(corners[2].X, corners[3].X)));
+         int maxX = (int)Math.Round(Math.Max(Math.Max(corners[0].X, corners[1].X), Math.Max(corners[2].X, corners[3].X)));
+         int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
+         int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
+
+         rotationMatrix[0, 2] -= minX;
+         rotationMatrix[1, 2] -= minY;
+
+         dstImageSize = new Size(maxX - minX + 1, maxY - minY + 1);
+         return rotationMatrix;
+      }
    }
 }

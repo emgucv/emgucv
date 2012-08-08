@@ -209,8 +209,8 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonAssemblyInfo.cs.in ${CMAK
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
 # ----------------------------------------------------------------------------
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_BINARY_DIR}/Emgu.CV/README.txt)
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT main)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT main)
 
 # ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project

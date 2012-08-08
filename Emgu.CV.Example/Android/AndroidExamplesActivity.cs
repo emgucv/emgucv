@@ -59,10 +59,17 @@ namespace AndroidExamples
          };
 
          Button cameraButton = FindViewById<Button>(Resource.Id.GotoCameraButton);
-         cameraButton.Click += delegate
+         if (Android.Hardware.Camera.NumberOfCameras > 0)
          {
-            StartActivity(typeof(CameraPreviewActivity));
-         };
+            cameraButton.Click += delegate
+            {
+               StartActivity(typeof(CameraPreviewActivity));
+            };
+         }
+         else
+         {
+            cameraButton.Visibility = ViewStates.Gone;
+         }
 
          Button licensePlateRecognitionButton = FindViewById<Button>(Resource.Id.GotoLicensePlateRecognitionButton);
          licensePlateRecognitionButton.Click += delegate
