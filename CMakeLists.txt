@@ -305,7 +305,7 @@ ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
-  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.GPU Emgu.CV.Stitching)
+  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.GPU Emgu.CV.Stitching Emgu.CV.VideoStab)
   FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
   INSTALL(
   DIRECTORY
@@ -341,6 +341,36 @@ IF (ANDROID)
     FILES
     "Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs"
     DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/FaceDetection/DetectFace.cs"
+    DESTINATION "Emgu.CV.Example/FaceDetection"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/SURFFeature/DrawMatches.cs"
+    DESTINATION "Emgu.CV.Example/SURFFeature"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs"
+    DESTINATION "Emgu.CV.Example/PedestrianDetection"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs"
+    DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
+    DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
     COMPONENT main
     )
   INSTALL(
