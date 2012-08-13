@@ -50,10 +50,7 @@ namespace AndroidExamples
                watch.Stop(); //stop the timer
                SetMessage(String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds));
 
-               
-               Bitmap bmp = null;
-               using (Bitmap tmp = image.ToBitmap())
-                 bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+               Bitmap bmp = image.ToBitmap();
                using (Canvas c = new Canvas(bmp))
                using (Paint p = new Paint())
                {

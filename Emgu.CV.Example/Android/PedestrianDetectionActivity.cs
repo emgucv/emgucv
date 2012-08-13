@@ -39,9 +39,7 @@ namespace AndroidExamples
 
                SetMessage(String.Format("Detection completed in {0} milliseconds.", time));
 
-               Bitmap bmp = null;
-               using (Bitmap tmp = image.ToBitmap())
-                  bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+               Bitmap bmp = image.ToBitmap();
                using (Canvas c = new Canvas(bmp))
                using (Paint p = new Paint())
                {

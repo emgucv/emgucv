@@ -336,7 +336,7 @@ namespace Emgu.CV
 
          Debug.Assert(MIplImage.align == 4, "Only 4 align is supported at this moment");
 
-         if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0)
+         if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0 && (numberOfChannels & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
             _array = new TDepth[rows, (cols & (~3)) + 4, numberOfChannels];
          } else
@@ -2753,7 +2753,7 @@ namespace Emgu.CV
             #endregion
 
             Bitmap.Config config = value.GetConfig();
-            if (config.Equals(Bitmap.Config.Argb8888))
+            if (config.Equals(Bitmap.Config.Argb8888) || config.Equals(Bitmap.Config.Rgb565))
             {
                int[] values = new int[size.Width * size.Height];
                value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
@@ -2766,7 +2766,7 @@ namespace Emgu.CV
             }
             else
             {
-               throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", value.GetConfig()));
+               throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
             }
 #else
             #region reallocate memory if necessary
@@ -2978,7 +2978,9 @@ namespace Emgu.CV
             bgra.ConvertFrom(this);
          }
          handle.Free();
-         return Bitmap.CreateBitmap(values, size.Width, size.Height, Bitmap.Config.Argb8888);
+         Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
+         result.SetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
+         return result;
 #else
          Type typeOfColor = typeof(TColor);
          Type typeofDepth = typeof(TDepth);

@@ -93,7 +93,9 @@ ENDIF()
 ENDIF()
 
 SET(UNMANAGED_LIBRARY_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH}${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
-
+IF(ANDROID)
+  SET(LIBRARY_OUTPUT_PATH ${UNMANAGED_LIBRARY_OUTPUT_PATH})
+ENDIF()
 #MESSAGE(STATUS "Changing library output path to '${LIBRARY_OUTPUT_PATH}'")
 
 # ----------------------------------------------------------------------------
@@ -145,7 +147,11 @@ SET(CPACK_PACKAGE_VERSION_MAJOR "2")
 SET(CPACK_PACKAGE_VERSION_MINOR "4")
 SET(CPACK_PACKAGE_VERSION_PATCH "2")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_GITVERSION}")
-SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+IF(ANDROID)
+  SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}")
+ELSE()
+  SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+ENDIF()
 
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt")
 
@@ -335,6 +341,7 @@ IF (ANDROID)
   PATTERN "*.xml"
   PATTERN "*.txt"
   PATTERN "*.png"
+  PATTERN "*.dll"
   PATTERN ".git" EXCLUDE
   )
   INSTALL(
@@ -346,30 +353,51 @@ IF (ANDROID)
   INSTALL(
     FILES
     "Emgu.CV.Example/FaceDetection/DetectFace.cs"
+	"Emgu.CV.Example/FaceDetection/lena.jpg"
     DESTINATION "Emgu.CV.Example/FaceDetection"
     COMPONENT main
     )
   INSTALL(
     FILES
+    "opencv_attic/opencv/data/haarcascades/haarcascade_eye.xml"
+	"opencv_attic/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
+    DESTINATION "opencv_attic/opencv/data/haarcascades"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
     "Emgu.CV.Example/SURFFeature/DrawMatches.cs"
+	"Emgu.CV.Example/SURFFeature/box.png"
+	"Emgu.CV.Example/SURFFeature/box_in_scene.png"
     DESTINATION "Emgu.CV.Example/SURFFeature"
     COMPONENT main
     )
   INSTALL(
     FILES
     "Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs"
+	"Emgu.CV.Example/PedestrianDetection/pedestrian.png"
     DESTINATION "Emgu.CV.Example/PedestrianDetection"
     COMPONENT main
     )
   INSTALL(
     FILES
     "Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs"
+	"Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg"
     DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
     COMPONENT main
     )
   INSTALL(
+    DIRECTORY "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr/tessdata"
+	DESTINATION "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr"
+    COMPONENT main
+    FILES_MATCHING 
+    PATTERN "*eng.*"
+    )
+  INSTALL(
     FILES
     "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
+	"Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png"
+	"Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg"
     DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
     COMPONENT main
     )

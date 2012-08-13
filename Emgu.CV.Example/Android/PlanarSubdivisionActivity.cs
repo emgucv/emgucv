@@ -28,6 +28,23 @@ namespace AndroidExamples
       {
          base.OnCreate(bundle);
 
+         /*
+         OnButtonClick += delegate
+         {
+            Bitmap bmp = Bitmap.CreateBitmap(2, 4, Bitmap.Config.Rgb565);
+            Canvas c = new Canvas(bmp);
+            int[] values = new int[bmp.Width * bmp.Height]; 
+            
+            c.DrawColor(new Color(255,0,0));
+            bmp.GetPixels(values, 0, bmp.Width, 0, 0, bmp.Width, bmp.Height);
+            Image<Bgra, Byte> image = new Image<Bgra, byte>(bmp);
+            image.SetValue(new Bgra(255, 0, 0, 255));
+            Bitmap bmp2 = image.Bitmap;
+            int[] values2 = new int[bmp2.Width * bmp2.Height];
+            bmp2.GetPixels(values2, 0, bmp2.Width, 0, 0, bmp2.Width, bmp2.Height);
+            bool equals = values[0] == values2[0] ;
+         };*/
+         
          OnButtonClick += delegate
          {
             int maxValue = 600, pointCount = 30;
@@ -56,9 +73,7 @@ namespace AndroidExamples
                image.Draw(new CircleF(facet.Point, 5.0f), new Bgr(System.Drawing.Color.Red), 0);
             }
 
-            Bitmap bmp = null;
-            using (Bitmap tmp = image.ToBitmap())
-               bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+            Bitmap bmp = image.ToBitmap();
             using (Canvas c = new Canvas(bmp))
             using (Paint p = new Paint())
             {
@@ -95,6 +110,7 @@ namespace AndroidExamples
                }
             }
             SetImageBitmap(bmp);
+
          };
       }
    }

@@ -27,7 +27,7 @@ using System.Diagnostics;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "MonoAndroidCamera")]
+   [Activity(Label = "Android Camera")]
    public class CameraPreviewActivity : Activity
    {
       private Preview _preview;
@@ -36,6 +36,7 @@ namespace AndroidExamples
       private IMenuItem _menuCanny;
       private IMenuItem _menuColorMap;
       private IMenuItem _menuPreview;
+      private IMenuItem _menuDistor;
 
       protected override void OnCreate(Bundle bundle)
       {
@@ -55,6 +56,7 @@ namespace AndroidExamples
          _menuPreview = menu.Add("Preview");
          _menuCanny = menu.Add("Canny");
          _menuColorMap = menu.Add("Color Map");
+         _menuDistor = menu.Add("Distor");
          return base.OnCreateOptionsMenu(menu);
       }
 
@@ -67,9 +69,14 @@ namespace AndroidExamples
          else if (item == _menuColorMap)
          {
             _topLayer.Mode = ViewMode.ColorMap;
-         } else
+         }
+         else if (item == _menuColorMap)
          {
             _topLayer.Mode = ViewMode.Preview;
+         }
+         else
+         {
+            _topLayer.Mode = ViewMode.Distor;
          }
          return base.OnOptionsItemSelected(item);
       }
@@ -79,16 +86,20 @@ namespace AndroidExamples
    {
       Preview,
       Canny,
-      ColorMap
+      ColorMap, 
+      Distor
    }
 
    class TopLayer : View, Camera.IPreviewCallback
    {
       private Stopwatch _watch;
       Paint _paint;
-      Android.Graphics.Bitmap _bmp;
+      Size _imageSize;
       int[] _bgraData;
       byte[] _bgrData;
+
+      Matrix<float> _mapX;
+      Matrix<float> _mapY;
 
       private bool _cameraPreviewCallbackWithBuffer;
 
@@ -115,17 +126,17 @@ namespace AndroidExamples
 
          lock (this)
          {
-            if (_bmp != null && canvas != null)
+            if (_bgraData != null && !_imageSize.IsEmpty && canvas != null)
             {
                Stopwatch w = Stopwatch.StartNew();
-               canvas.DrawBitmap(_bmp, 0, 0, null);
+               canvas.DrawBitmap(_bgraData, 0, _imageSize.Width, 0, 0, _imageSize.Width, _imageSize.Height, true, _paint);
                w.Stop();
 
                _watch.Stop();
                canvas.DrawText(String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms", 
                   1.0 / _watch.ElapsedMilliseconds * 1000, 
-                  _bmp.Width,
-                  _bmp.Height,
+                  _imageSize.Width,
+                  _imageSize.Height,
                   w.ElapsedMilliseconds), 20, 20, _paint);
                _watch.Reset();
                _watch.Start();
@@ -141,16 +152,19 @@ namespace AndroidExamples
             try
             {
                _busy = true;
-               Camera.Size size = camera.GetParameters().PreviewSize;
+               Camera.Size cSize = camera.GetParameters().PreviewSize;
+               _imageSize = new Size(cSize.Width, cSize.Height);
+               Size size = _imageSize;
+               
                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
                if (Mode == ViewMode.Canny)
                {
-                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height)
-                     _bgrData = new byte[size.Width * size.Height * 3];
+                  if (_bgrData == null || _bgrData.Length < _imageSize.Width * _imageSize.Height)
+                     _bgrData = new byte[_imageSize.Width * _imageSize.Height * 3];
                   GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(size.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Gray, Byte> canny = new Image<Gray,byte>(size.Width, size.Height, size.Width, bgrHandle.AddrOfPinnedObject()))
+                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(_imageSize.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Gray, Byte> canny = new Image<Gray,byte>(_imageSize.Width, size.Height, size.Width, bgrHandle.AddrOfPinnedObject()))
                   { 
                      CvInvoke.cvCanny(grey, canny, 100, 60, 3);
 
@@ -173,7 +187,7 @@ namespace AndroidExamples
                      CvInvoke.cvCvtColor(yuv420sp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
                   bgraHandle.Free();
                }
-               else
+               else if (Mode == ViewMode.ColorMap)
                {
                   if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
                      _bgraData = new int[size.Width * size.Height];
@@ -193,20 +207,48 @@ namespace AndroidExamples
                   bgraHandle.Free();
                   bgrHandle.Free();
                }
-               handle.Free();
-
-               lock (this)
+               else
                {
-                  if (_bmp != null && (_bmp.Width != size.Width || _bmp.Height != size.Height))
-                  {
-                     _bmp.Dispose();
-                     _bmp = null;
-                  }
-                  if (_bmp == null)
-                     _bmp = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
+                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
+                     _bgraData = new int[size.Width * size.Height];
+                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
+                     _bgrData = new byte[size.Width * size.Height * 3];
 
-                  _bmp.SetPixels(_bgraData, 0, size.Width, 0, 0, size.Width, size.Height);
+                  if (_mapX == null || _mapY == null)
+                  {
+                     /*
+                     IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+                     CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
+                     p.DistortionCoeffs.Data[0, 0] = 1.0;
+                     p.InitUndistortMap(_imageSize.Width, _imageSize.Height, out _mapX, out _mapY);*/
+
+                     IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+                     int centerY = size.Width >> 1;
+                     int centerX = size.Height >> 1;
+                     CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
+                     p.IntrinsicMatrix.Data[0, 2] = centerY;
+                     p.IntrinsicMatrix.Data[1, 2] = centerX;
+                     p.IntrinsicMatrix.Data[2, 2] = 1;
+                     p.DistortionCoeffs.Data[0, 0] = -0.000003;
+
+                     p.InitUndistortMap(size.Width, size.Height, out _mapX, out _mapY);
+                  }
+
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
+                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
+                  using (Image<Bgr, Byte> tmp = new Image<Bgr,byte>(size.Width, size.Height, size.Width * 3, bgraHandle.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                  {
+                     CvInvoke.cvCvtColor(yuv420sp, tmp, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                     CvInvoke.cvRemap(tmp, bgr, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
+                  }
+                  bgraHandle.Free();
+                  bgrHandle.Free();
                }
+               handle.Free();
 
                this.Invalidate();
             }

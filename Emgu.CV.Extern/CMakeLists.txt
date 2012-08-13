@@ -407,7 +407,7 @@ IF(ANDROID)
     target_link_libraries(${the_target} ${TESSERACT_LIBRARY} tesseract_ccstruct tesseract_dict tesseract_classify tesseract_ccutil)
   ENDIF()
   INSTALL(TARGETS ${the_target} 
-    LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+    LIBRARY DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
 ELSE()
   target_link_libraries(${the_target} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY})
   IF(WIN32 AND EMGU_CV_WITH_TESSERACT)

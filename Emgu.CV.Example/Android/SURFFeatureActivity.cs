@@ -56,8 +56,9 @@ namespace AndroidExamples
 
                   Bitmap bmp = null;
                   using (Image<Gray, Byte> result = boxInScene.ConcateVertical(box))
-                  using (Bitmap tmp = result.ToBitmap())
-                     bmp = tmp.Copy(Bitmap.Config.Argb8888, true);
+                  {
+                     bmp = result.ToBitmap();
+                  }
                   using (Canvas c = new Canvas(bmp))
                   using (Paint p = new Paint())
                   {
@@ -75,7 +76,6 @@ namespace AndroidExamples
 
                      SetMessage(String.Format("Matched in {0} milliseconds.", time));
                      SetImageBitmap(bmp);
-
                   }
                }
                #endregion

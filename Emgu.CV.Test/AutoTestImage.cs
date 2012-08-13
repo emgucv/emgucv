@@ -1396,6 +1396,28 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestDistor()
+      {
+         Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+         Matrix<float> mapx, mapy;
+
+         IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+         int centerY = image.Width >> 1;
+         int centerX = image.Height >> 1;
+         CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
+         p.IntrinsicMatrix.Data[0, 2] = centerY;
+         p.IntrinsicMatrix.Data[1, 2] = centerX;
+         p.IntrinsicMatrix.Data[2, 2] = 1;
+         p.DistortionCoeffs.Data[0, 0] = -0.000003;
+
+         p.InitUndistortMap(image.Width, image.Height, out mapx, out mapy);
+
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
+         CvInvoke.cvRemap(image, result, mapx, mapy, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+      }
+
+      [Test]
       public void TestMorphologyClosing()
       {
          //draw some blobs
