@@ -4,3 +4,6 @@
 [submodule "Emgu.CV.Extern/cvblob/libcvblob"]
 	path = Emgu.CV.Extern/cvblob/libcvblob
 	url = git://emgucv.git.sourceforge.net/gitroot/emgucv/cvblob
+[submodule "opencv"]
+	path = opencv
+	url = git://code.opencv.org/opencv.git
