@@ -8,7 +8,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv6 
     cp -r lib/Release/* ios/armv6/
     cp -r bin/Release/* ios/armv6/
-    cp -r opencv_attic/opencv/lib/Release/* ios/armv6/
+    cp -r opencv/lib/Release/* ios/armv6/
     cd ios/armv6
     libtool -static -o libemgucv_armv6.a *.a
     cd ../..
@@ -20,7 +20,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv7 
     cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* ios/armv7/
-    cp -r opencv_attic/opencv/lib/Release/* ios/armv7/
+    cp -r opencv/lib/Release/* ios/armv7/
     cd ios/armv7
     libtool -static -o libemgucv_armv7.a *.a
     cd ../..
@@ -33,7 +33,7 @@ xcodebuild -sdk iphonesimulator -configuration Release -target ALL_BUILD clean b
 mkdir -p ios/i386
 cp -r lib/Release/* ios/i386/
 cp -r bin/Release/* ios/i386/
-cp -r opencv_attic/opencv/lib/Release/* ios/i386/
+cp -r opencv/lib/Release/* ios/i386/
 cd ios/i386
 libtool -static -o libemgucv_i386.a *.a
 cd ../..

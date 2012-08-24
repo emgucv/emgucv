@@ -9,6 +9,7 @@
 #define EMGU_VIDEOSTAB_C_H
 
 #include "opencv2/core/core_c.h"
+#include "opencv2/highgui/highgui_c.h"
 #include "opencv2/videostab/stabilizer.hpp"
 
 class CaptureFrameSource : public cv::videostab::IFrameSource
@@ -37,8 +38,9 @@ CVAPI(void) CaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);
 
 CVAPI(bool) FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame);
 
+/*
 CVAPI(void) StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator);
-
+*/
 CVAPI(cv::videostab::OnePassStabilizer*) OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) OnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter);
 CVAPI(void) OnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer);

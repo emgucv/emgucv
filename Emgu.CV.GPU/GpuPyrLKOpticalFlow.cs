@@ -22,12 +22,10 @@ namespace Emgu.CV.GPU
       /// <param name="winSize">Windows size. Use 21x21 for default</param>
       /// <param name="maxLevel">The maximum number of pyramid leveles. Use 3 for default</param>
       /// <param name="iters">The number of iterations. Use 30 for default.</param>
-      /// <param name="derivLambda">Use 0.5 for default.</param>
       /// <param name="useInitialFlow">Weather or not use the initial flow in the input matrix. Use false for default.</param>
-      /// <param name="minEigThreshold">Threshold for the minimum eigen values. Use 1e-4f for default.</param>
-      public GpuPyrLKOpticalFlow(Size winSize, int maxLevel, int iters, double derivLambda, bool useInitialFlow, float minEigThreshold)
+      public GpuPyrLKOpticalFlow(Size winSize, int maxLevel, int iters, bool useInitialFlow)
       {
-         _ptr = GpuInvoke.gpuPryLKOpticalFlowCreate(winSize, maxLevel, iters, derivLambda, useInitialFlow, minEigThreshold);
+         _ptr = GpuInvoke.gpuPryLKOpticalFlowCreate(winSize, maxLevel, iters, useInitialFlow);
       }
 
       /// <summary>
@@ -84,10 +82,9 @@ namespace Emgu.CV.GPU
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr gpuPryLKOpticalFlowCreate(
-         Size winSize, int maxLevel, int iters, double derivLambda,
+         Size winSize, int maxLevel, int iters,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useInitialFlow,
-         float minEigThreshold);
+         bool useInitialFlow);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void gpuPryLKOpticalFlowDense(IntPtr flow, IntPtr prevImg, IntPtr nextImg, IntPtr u, IntPtr v, IntPtr err);

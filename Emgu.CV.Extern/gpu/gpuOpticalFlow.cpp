@@ -71,16 +71,14 @@ void gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow)
 //  GpuPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-cv::gpu::PyrLKOpticalFlow* gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, double derivLambda, bool useInitialFlow, float minEigThreshold)
+cv::gpu::PyrLKOpticalFlow* gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow)
 {
    cv::gpu::PyrLKOpticalFlow* flow = new cv::gpu::PyrLKOpticalFlow();
    
    flow->winSize = winSize;
    flow->maxLevel = maxLevel;
    flow->iters = iters;
-   flow->derivLambda = derivLambda;
    flow->useInitialFlow = useInitialFlow;
-   flow->minEigThreshold = minEigThreshold;
    return flow;
 }
 

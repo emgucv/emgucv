@@ -173,7 +173,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 #SET(DESTDIR ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER})
 #SET(CPACK_OUTPUT_FILE_PREFIX "x64")
 
-SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_attic/opencv)
+SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 SET(CMAKE_OLD_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 SET(CMAKE_SOURCE_DIR ${OPENCV_SUBFOLDER})
 IF(MSVC)
@@ -381,9 +381,9 @@ IF (ANDROID)
     )
   INSTALL(
     FILES
-    "opencv_attic/opencv/data/haarcascades/haarcascade_eye.xml"
-	"opencv_attic/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
-    DESTINATION "opencv_attic/opencv/data/haarcascades"
+    "${OPENCV_SUBFOLDER}/opencv/data/haarcascades/haarcascade_eye.xml"
+	"${OPENCV_SUBFOLDER}/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
+    DESTINATION "opencv/data/haarcascades"
     COMPONENT main
     )
   INSTALL(
@@ -697,7 +697,7 @@ INSTALL(
   FILES
   "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
   "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-  DESTINATION opencv_attic/opencv/data/haarcascades
+  DESTINATION opencv/data/haarcascades
   COMPONENT emgucv_example_source
   )
 
@@ -902,7 +902,7 @@ INSTALL(
   FILES
   "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
   "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-  DESTINATION opencv_attic/opencv/data/haarcascades
+  DESTINATION opencv/data/haarcascades
   COMPONENT emgucv_example_source
   )
 

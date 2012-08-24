@@ -343,10 +343,10 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_eye.xml">
+    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>Assets\haarcascade_eye.xml</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv_attic\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>Assets\haarcascade_frontalface_default.xml</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\FaceDetection\lena.jpg">

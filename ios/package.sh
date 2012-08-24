@@ -39,8 +39,8 @@ cp ../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png ios-package
 cp ../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs ios-package/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs
 cp ../tmp/Emgu.CV.Example/FaceDetection/lena.jpg ios-package/Emgu.CV.Example/FaceDetection/lena.jpg
 cp ../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs ios-package/Emgu.CV.Example/FaceDetection/DetectFace.cs
-cp ../opencv_attic/opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv_attic/opencv/data/haarcascades/haarcascade_eye.xml
-cp ../opencv_attic/opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv_attic/opencv/data/haarcascades/haarcascade_frontalface_default.xml
+cp ../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv_attic/opencv/data/haarcascades/haarcascade_eye.xml
+cp ../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv_attic/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../CommonAssemblyInfo.cs ios-package
 find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 find ./ios-package -type f -name *Android* -exec rm '{}' \;

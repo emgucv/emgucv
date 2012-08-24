@@ -268,14 +268,14 @@ CVAPI(void) gpuMatCanny(const cv::gpu::GpuMat* image, cv::gpu::GpuMat* edges, do
 //  GpuBruteForceMatcher
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::gpu::BruteForceMatcher_GPU_base*) gpuBruteForceMatcherCreate(cv::gpu::BruteForceMatcher_GPU_base::DistType distType);
+CVAPI(cv::gpu::BFMatcher_GPU*) gpuBruteForceMatcherCreate(int distType);
 
-CVAPI(void) gpuBruteForceMatcherRelease(cv::gpu::BruteForceMatcher_GPU_base** matcher);
+CVAPI(void) gpuBruteForceMatcherRelease(cv::gpu::BFMatcher_GPU** matcher);
 
-CVAPI(void) gpuBruteForceMatcherAdd(cv::gpu::BruteForceMatcher_GPU_base* matcher, const cv::gpu::GpuMat* trainDescs);
+CVAPI(void) gpuBruteForceMatcherAdd(cv::gpu::BFMatcher_GPU* matcher, const cv::gpu::GpuMat* trainDescs);
 
 CVAPI(void) gpuBruteForceMatcherKnnMatchSingle(
-   cv::gpu::BruteForceMatcher_GPU_base* matcher,
+   cv::gpu::BFMatcher_GPU* matcher,
    const cv::gpu::GpuMat* queryDescs, const cv::gpu::GpuMat* trainDescs,
    cv::gpu::GpuMat* trainIdx, cv::gpu::GpuMat* distance, 
    int k, const cv::gpu::GpuMat* mask, cv::gpu::Stream* stream);
@@ -408,7 +408,7 @@ CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
 //  GpuPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, double derivLambda, bool useInitialFlow, float minEigThreshold);
+CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow);
 CVAPI(void) gpuPryLKOpticalFlowSparse(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 

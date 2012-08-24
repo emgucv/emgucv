@@ -7,3 +7,4 @@
 [submodule "opencv"]
 	path = opencv
 	url = git://code.opencv.org/opencv.git
+	ignore = dirty

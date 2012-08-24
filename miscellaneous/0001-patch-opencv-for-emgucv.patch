@@ -1,31 +1,31 @@
-From d8fa387606a3fd0c6e5934aef89e5a6a5882407c Mon Sep 17 00:00:00 2001
+From d552eb45950b100fbb5e919c7e71d9b978b88f4b Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
 Date: Wed, 25 Jul 2012 13:13:42 -0400
 Subject: [PATCH] patch opencv for emgucv.
 
 ---
- opencv/3rdparty/libjasper/CMakeLists.txt           |    4 ++++
- opencv/3rdparty/libjpeg/CMakeLists.txt             |    4 ++++
- opencv/3rdparty/libpng/CMakeLists.txt              |    4 ++++
- opencv/3rdparty/libtiff/CMakeLists.txt             |    4 ++++
- opencv/3rdparty/zlib/CMakeLists.txt                |    4 ++++
- opencv/cmake/OpenCVDetectTBB.cmake                 |   20 +++++++++++++------
- opencv/cmake/OpenCVModule.cmake                    |   13 ++++++++----
- opencv/modules/contrib/src/colormap.cpp            |    1 +
- opencv/modules/core/src/drawing.cpp                |   14 ++++++-------
- opencv/modules/gpu/src/match_template.cpp          |    2 +-
- opencv/modules/gpu/src/split_merge.cpp             |    7 ++++---
- opencv/modules/highgui/CMakeLists.txt              |   21 ++++++--------------
+ 3rdparty/libjasper/CMakeLists.txt                  |    4 ++++
+ 3rdparty/libjpeg/CMakeLists.txt                    |    4 ++++
+ 3rdparty/libpng/CMakeLists.txt                     |    4 ++++
+ 3rdparty/libtiff/CMakeLists.txt                    |    4 ++++
+ 3rdparty/zlib/CMakeLists.txt                       |    4 ++++
+ cmake/OpenCVDetectTBB.cmake                        |   20 +++++++++++++------
+ cmake/OpenCVModule.cmake                           |   13 ++++++++----
+ modules/contrib/src/colormap.cpp                   |    1 +
+ modules/core/src/drawing.cpp                       |   14 ++++++-------
+ modules/gpu/src/match_template.cpp                 |    2 +-
+ modules/gpu/src/split_merge.cpp                    |    7 ++++---
+ modules/highgui/CMakeLists.txt                     |   21 ++++++--------------
  .../highgui/include/opencv2/highgui/highgui_c.h    |    3 +++
- opencv/modules/highgui/src/cap_openni.cpp          |    8 ++++++++
- opencv/modules/legacy/src/3dtracker.cpp            |    6 +++---
- opencv/modules/objdetect/src/latentsvm.cpp         |    2 +-
+ modules/highgui/src/cap_openni.cpp                 |    8 ++++++++
+ modules/legacy/src/3dtracker.cpp                   |    6 +++---
+ modules/objdetect/src/latentsvm.cpp                |    2 +-
  16 files changed, 77 insertions(+), 40 deletions(-)
 
-diff --git a/opencv/3rdparty/libjasper/CMakeLists.txt b/opencv/3rdparty/libjasper/CMakeLists.txt
+diff --git a/3rdparty/libjasper/CMakeLists.txt b/3rdparty/libjasper/CMakeLists.txt
 index 5b850c9..46ce17f 100644
---- a/opencv/3rdparty/libjasper/CMakeLists.txt
-+++ b/opencv/3rdparty/libjasper/CMakeLists.txt
+--- a/3rdparty/libjasper/CMakeLists.txt
++++ b/3rdparty/libjasper/CMakeLists.txt
 @@ -39,6 +39,10 @@ set_target_properties(${JASPER_LIBRARY}
    ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
    )
@@ -37,10 +37,10 @@ index 5b850c9..46ce17f 100644
  if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${JASPER_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
-diff --git a/opencv/3rdparty/libjpeg/CMakeLists.txt b/opencv/3rdparty/libjpeg/CMakeLists.txt
+diff --git a/3rdparty/libjpeg/CMakeLists.txt b/3rdparty/libjpeg/CMakeLists.txt
 index 708e63e..a26b2b3 100644
---- a/opencv/3rdparty/libjpeg/CMakeLists.txt
-+++ b/opencv/3rdparty/libjpeg/CMakeLists.txt
+--- a/3rdparty/libjpeg/CMakeLists.txt
++++ b/3rdparty/libjpeg/CMakeLists.txt
 @@ -33,6 +33,10 @@ set_target_properties(${JPEG_LIBRARY}
    ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
    )
@@ -52,10 +52,10 @@ index 708e63e..a26b2b3 100644
  if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${JPEG_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
-diff --git a/opencv/3rdparty/libpng/CMakeLists.txt b/opencv/3rdparty/libpng/CMakeLists.txt
+diff --git a/3rdparty/libpng/CMakeLists.txt b/3rdparty/libpng/CMakeLists.txt
 index 41d57f3..d123f62 100644
---- a/opencv/3rdparty/libpng/CMakeLists.txt
-+++ b/opencv/3rdparty/libpng/CMakeLists.txt
+--- a/3rdparty/libpng/CMakeLists.txt
++++ b/3rdparty/libpng/CMakeLists.txt
 @@ -33,6 +33,10 @@ if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${PNG_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
@@ -67,10 +67,10 @@ index 41d57f3..d123f62 100644
  if(NOT BUILD_SHARED_LIBS)
    install(TARGETS ${PNG_LIBRARY} ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT main)
  endif()
-diff --git a/opencv/3rdparty/libtiff/CMakeLists.txt b/opencv/3rdparty/libtiff/CMakeLists.txt
+diff --git a/3rdparty/libtiff/CMakeLists.txt b/3rdparty/libtiff/CMakeLists.txt
 index ed9d1c8..d2cdfd9 100644
---- a/opencv/3rdparty/libtiff/CMakeLists.txt
-+++ b/opencv/3rdparty/libtiff/CMakeLists.txt
+--- a/3rdparty/libtiff/CMakeLists.txt
++++ b/3rdparty/libtiff/CMakeLists.txt
 @@ -105,6 +105,10 @@ set_target_properties(${TIFF_LIBRARY}
      ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
      )
@@ -82,10 +82,10 @@ index ed9d1c8..d2cdfd9 100644
  if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${TIFF_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
-diff --git a/opencv/3rdparty/zlib/CMakeLists.txt b/opencv/3rdparty/zlib/CMakeLists.txt
-index 17bfab4..4d56a1c 100644
---- a/opencv/3rdparty/zlib/CMakeLists.txt
-+++ b/opencv/3rdparty/zlib/CMakeLists.txt
+diff --git a/3rdparty/zlib/CMakeLists.txt b/3rdparty/zlib/CMakeLists.txt
+index 72b3309..57ef02c 100644
+--- a/3rdparty/zlib/CMakeLists.txt
++++ b/3rdparty/zlib/CMakeLists.txt
 @@ -90,6 +90,10 @@ set_target_properties(${ZLIB_LIBRARY} PROPERTIES
          ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
      )
@@ -97,10 +97,10 @@ index 17bfab4..4d56a1c 100644
  if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
-diff --git a/opencv/cmake/OpenCVDetectTBB.cmake b/opencv/cmake/OpenCVDetectTBB.cmake
+diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
 index c37a8c3..37a8e33 100644
---- a/opencv/cmake/OpenCVDetectTBB.cmake
-+++ b/opencv/cmake/OpenCVDetectTBB.cmake
+--- a/cmake/OpenCVDetectTBB.cmake
++++ b/cmake/OpenCVDetectTBB.cmake
 @@ -44,12 +44,20 @@ if(NOT HAVE_TBB)
        else()
          get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIRS}/../lib" ABSOLUTE)
@@ -128,10 +128,10 @@ index c37a8c3..37a8e33 100644
          if(MSVC80)
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
-diff --git a/opencv/cmake/OpenCVModule.cmake b/opencv/cmake/OpenCVModule.cmake
-index 543f997..44d1379 100644
---- a/opencv/cmake/OpenCVModule.cmake
-+++ b/opencv/cmake/OpenCVModule.cmake
+diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
+index 018a467..9e2edb0 100644
+--- a/cmake/OpenCVModule.cmake
++++ b/cmake/OpenCVModule.cmake
 @@ -455,11 +455,16 @@ macro(ocv_create_module)
    set_target_properties(${the_module} PROPERTIES
      OUTPUT_NAME "${the_module}${OPENCV_DLLVERSION}"
@@ -162,10 +162,10 @@ index 543f997..44d1379 100644
      ARCHIVE DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main
      )
  
-diff --git a/opencv/modules/contrib/src/colormap.cpp b/opencv/modules/contrib/src/colormap.cpp
+diff --git a/modules/contrib/src/colormap.cpp b/modules/contrib/src/colormap.cpp
 index bb317f7..867e534 100644
---- a/opencv/modules/contrib/src/colormap.cpp
-+++ b/opencv/modules/contrib/src/colormap.cpp
+--- a/modules/contrib/src/colormap.cpp
++++ b/modules/contrib/src/colormap.cpp
 @@ -513,6 +513,7 @@ namespace colormap
              colormap == COLORMAP_HOT ? (colormap::ColorMap*)(new colormap::Hot) :
              colormap == COLORMAP_HSV ? (colormap::ColorMap*)(new colormap::HSV) :
@@ -174,10 +174,10 @@ index bb317f7..867e534 100644
              colormap == COLORMAP_OCEAN ? (colormap::ColorMap*)(new colormap::Ocean) :
              colormap == COLORMAP_PINK ? (colormap::ColorMap*)(new colormap::Pink) :
              colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
-diff --git a/opencv/modules/core/src/drawing.cpp b/opencv/modules/core/src/drawing.cpp
-index 9e33408..ec456ef 100644
---- a/opencv/modules/core/src/drawing.cpp
-+++ b/opencv/modules/core/src/drawing.cpp
+diff --git a/modules/core/src/drawing.cpp b/modules/core/src/drawing.cpp
+index 50e51fb..a8e64df 100644
+--- a/modules/core/src/drawing.cpp
++++ b/modules/core/src/drawing.cpp
 @@ -554,9 +554,9 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
      int ax, ay;
      int i, j, x, y;
@@ -213,10 +213,10 @@ index 9e33408..ec456ef 100644
          }
  
          ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
-diff --git a/opencv/modules/gpu/src/match_template.cpp b/opencv/modules/gpu/src/match_template.cpp
-index c4a8180..a1ceeb0 100644
---- a/opencv/modules/gpu/src/match_template.cpp
-+++ b/opencv/modules/gpu/src/match_template.cpp
+diff --git a/modules/gpu/src/match_template.cpp b/modules/gpu/src/match_template.cpp
+index c988000..97fbeb5 100644
+--- a/modules/gpu/src/match_template.cpp
++++ b/modules/gpu/src/match_template.cpp
 @@ -49,7 +49,7 @@ using namespace std;
  #if !defined (HAVE_CUDA)
  
@@ -225,11 +225,11 @@ index c4a8180..a1ceeb0 100644
 +void cv::gpu::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, MatchTemplateBuf&, Stream&) { throw_nogpu(); }
  #else
  
- namespace cv { namespace gpu { namespace device 
-diff --git a/opencv/modules/gpu/src/split_merge.cpp b/opencv/modules/gpu/src/split_merge.cpp
-index 2d5b1b1..993f4aa 100644
---- a/opencv/modules/gpu/src/split_merge.cpp
-+++ b/opencv/modules/gpu/src/split_merge.cpp
+ namespace cv { namespace gpu { namespace device
+diff --git a/modules/gpu/src/split_merge.cpp b/modules/gpu/src/split_merge.cpp
+index 3153c5f..3a4ff80 100644
+--- a/modules/gpu/src/split_merge.cpp
++++ b/modules/gpu/src/split_merge.cpp
 @@ -95,9 +95,9 @@ namespace
  
          CV_Assert(single_channel_only);
@@ -242,7 +242,7 @@ index 2d5b1b1..993f4aa 100644
          else
          {
              dst.create(size, CV_MAKETYPE(depth, total_channels));
-@@ -129,7 +129,8 @@ namespace
+@@ -128,7 +128,8 @@ namespace
  
          if (num_channels == 1)
          {
@@ -252,11 +252,11 @@ index 2d5b1b1..993f4aa 100644
              return;
          }
  
-diff --git a/opencv/modules/highgui/CMakeLists.txt b/opencv/modules/highgui/CMakeLists.txt
-index 6b9341b..2f2034a 100644
---- a/opencv/modules/highgui/CMakeLists.txt
-+++ b/opencv/modules/highgui/CMakeLists.txt
-@@ -246,22 +246,13 @@ if(WIN32 AND WITH_FFMPEG)
+diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
+index d53c17c..011c58b 100644
+--- a/modules/highgui/CMakeLists.txt
++++ b/modules/highgui/CMakeLists.txt
+@@ -252,22 +252,13 @@ if(WIN32 AND WITH_FFMPEG)
    #                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/$<CONFIGURATION>/${ffmpeg_bare_name_ver}"
    #                     COMMENT "Copying ${ffmpeg_path} to the output directory")
    #else
@@ -285,10 +285,10 @@ index 6b9341b..2f2034a 100644
  endif()
  
  ocv_add_accuracy_tests()
-diff --git a/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h b/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
+diff --git a/modules/highgui/include/opencv2/highgui/highgui_c.h b/modules/highgui/include/opencv2/highgui/highgui_c.h
 index ddd3003..f8dcad5 100644
---- a/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
-+++ b/opencv/modules/highgui/include/opencv2/highgui/highgui_c.h
+--- a/modules/highgui/include/opencv2/highgui/highgui_c.h
++++ b/modules/highgui/include/opencv2/highgui/highgui_c.h
 @@ -534,6 +534,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
@@ -299,10 +299,10 @@ index ddd3003..f8dcad5 100644
  /* "black box" video file writer structure */
  typedef struct CvVideoWriter CvVideoWriter;
  
-diff --git a/opencv/modules/highgui/src/cap_openni.cpp b/opencv/modules/highgui/src/cap_openni.cpp
-index b440e0a..d73f886 100644
---- a/opencv/modules/highgui/src/cap_openni.cpp
-+++ b/opencv/modules/highgui/src/cap_openni.cpp
+diff --git a/modules/highgui/src/cap_openni.cpp b/modules/highgui/src/cap_openni.cpp
+index 75aed56..074d494 100644
+--- a/modules/highgui/src/cap_openni.cpp
++++ b/modules/highgui/src/cap_openni.cpp
 @@ -449,6 +449,8 @@ public:
  
      bool isOpened() const;
@@ -312,7 +312,7 @@ index b440e0a..d73f886 100644
  protected:
      struct OutputMap
      {
-@@ -1376,4 +1378,10 @@ CvCapture* cvCreateFileCapture_OpenNI( const char* filename )
+@@ -1381,4 +1383,10 @@ CvCapture* cvCreateFileCapture_OpenNI( const char* filename )
      return 0;
  }
  
@@ -323,10 +323,10 @@ index b440e0a..d73f886 100644
 +   return openniCapture->getOpenNIContext();
 +}
  #endif
-diff --git a/opencv/modules/legacy/src/3dtracker.cpp b/opencv/modules/legacy/src/3dtracker.cpp
+diff --git a/modules/legacy/src/3dtracker.cpp b/modules/legacy/src/3dtracker.cpp
 index 536a534..866c1d8 100644
---- a/opencv/modules/legacy/src/3dtracker.cpp
-+++ b/opencv/modules/legacy/src/3dtracker.cpp
+--- a/modules/legacy/src/3dtracker.cpp
++++ b/modules/legacy/src/3dtracker.cpp
 @@ -322,7 +322,7 @@ static void DrawEtalon(IplImage *img, CvPoint2D32f *corners,
      int i;
      int x, y;
@@ -349,10 +349,10 @@ index 536a534..866c1d8 100644
  
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
-diff --git a/opencv/modules/objdetect/src/latentsvm.cpp b/opencv/modules/objdetect/src/latentsvm.cpp
+diff --git a/modules/objdetect/src/latentsvm.cpp b/modules/objdetect/src/latentsvm.cpp
 index 89fd048..45490be 100644
---- a/opencv/modules/objdetect/src/latentsvm.cpp
-+++ b/opencv/modules/objdetect/src/latentsvm.cpp
+--- a/modules/objdetect/src/latentsvm.cpp
++++ b/modules/objdetect/src/latentsvm.cpp
 @@ -277,7 +277,7 @@ int searchObjectThreshold(const CvLSVMFeaturePyramid *H,
  
  

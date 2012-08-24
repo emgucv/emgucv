@@ -864,7 +864,7 @@ namespace Emgu.CV.Test
          GpuImage<Gray, Byte> oldImage = null;
          GpuImage<Gray, Byte> currentImage = null;
          using (GpuGoodFeaturesToTrackDetector detector = new GpuGoodFeaturesToTrackDetector(MAX_CORNERS, 0.05, 3.0))
-         using (GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, 0.5, false, 1e-4f))
+         using (GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
          {
             Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
             {

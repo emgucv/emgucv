@@ -34,12 +34,13 @@ bool FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage*
    return true;
 }
 
+/*
 void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator)
 {
    cv::Ptr<cv::videostab::IGlobalMotionEstimator> ptr(motionEstimator);
    ptr.addref(); // add reference such that it won't release the motion estimator
    stabalizer->setMotionEstimator(motionEstimator);
-}
+}*/
 
 template<class cvstabilizer> cvstabilizer* StabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
