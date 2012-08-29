@@ -78,6 +78,7 @@
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
+    <Compile Include="PInvoke\Android\BitmapArgb8888Image.cs" />
     <Compile Include="PInvoke\Android\CvInvokeEntryPoints.cs" />
     <Compile Include="PInvoke\Android\ImageAndroid.cs" />
     <Compile Include="PInvoke\CvInvokeCalib3d.cs" />

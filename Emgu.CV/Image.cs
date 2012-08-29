@@ -72,6 +72,11 @@ namespace Emgu.CV
       /// <remarks>The caller is responsible for allocating and freeing the block of memory specified by the scan0 parameter, however, the memory should not be released until the related Image is released. </remarks>
       public Image(int width, int height, int stride, IntPtr scan0)
       {
+         MapDataToImage(width, height, stride, scan0);
+      }
+
+      internal void MapDataToImage(int width, int height, int stride, IntPtr scan0)
+      {
          _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
          MIplImage iplImage = MIplImage;
          iplImage.imageData = scan0;
@@ -112,7 +117,6 @@ namespace Emgu.CV
                using(Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fi.FullName))
                {
                   Android.Graphics.Matrix matrix = new Android.Graphics.Matrix();
-               
                   matrix.PostRotate(rotation);
                   using (Bitmap rotated = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                   {
@@ -121,19 +125,6 @@ namespace Emgu.CV
                      Bitmap = rotated;
                   }
                }
-               /*
-               //LoadFileUsingBitmap(fi);
-               
-               Size dstImgSize;
-               using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>())
-               {
-                  tmp.LoadImageUsingOpenCV(fi);
-                  using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(new PointF(tmp.Width *0.5f, tmp.Height * 0.5f), -rotation, tmp.Size, out dstImgSize))
-                  {
-                     AllocateData(dstImgSize.Height, dstImgSize.Width, NumberOfChannels);
-                     CvInvoke.cvWarpAffine(tmp.Ptr, Ptr, rotationMatrix.Ptr, (int)CvEnum.INTER.CV_INTER_CUBIC | (int)CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
-                  }
-               }*/
             }
 #else
             LoadImageUsingOpenCV(fi);
@@ -2753,7 +2744,26 @@ namespace Emgu.CV
             #endregion
 
             Bitmap.Config config = value.GetConfig();
-            if (config.Equals(Bitmap.Config.Argb8888) || config.Equals(Bitmap.Config.Rgb565))
+            if (config.Equals(Bitmap.Config.Argb8888))
+            {
+               using (BitmapArgb8888Image bi = new BitmapArgb8888Image(value))
+               {
+                  ConvertFrom(bi);
+               }
+               /*
+               try
+               {
+                  IntPtr ptr = value.LockPixels();
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, value.RowBytes, ptr))
+                  {
+                     ConvertFrom(bgra);
+                  }
+               }
+               finally
+               {
+                  value.UnlockPixels();
+               }*/
+            } else if (config.Equals(Bitmap.Config.Rgb565))
             {
                int[] values = new int[size.Width * size.Height];
                value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
@@ -2971,6 +2981,12 @@ namespace Emgu.CV
       {
 #if ANDROID
          System.Drawing.Size size = Size;
+         Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
+
+         using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
+            bi.ConvertFrom(this);
+
+         /*
          int[] values = new int[size.Width * size.Height];
          GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
          using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
@@ -2978,8 +2994,8 @@ namespace Emgu.CV
             bgra.ConvertFrom(this);
          }
          handle.Free();
-         Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
          result.SetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
+         */
          return result;
 #else
          Type typeOfColor = typeof(TColor);
