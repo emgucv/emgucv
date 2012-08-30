@@ -45,6 +45,7 @@
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -77,6 +78,7 @@
     </Compile>
     <Compile Include="ButtonMessageImageActivity.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
+    <Compile Include="GLImageView.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />

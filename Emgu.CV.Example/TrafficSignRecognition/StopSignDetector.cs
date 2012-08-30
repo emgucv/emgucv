@@ -111,16 +111,21 @@ namespace TrafficSignRecognition
 
                ImageFeature<float>[] features = _detector.DetectFeatures(candidate, null);
 
-               Features2DTracker<float>.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
+               int minMatchCount = 10;
 
-               int goodMatchCount = 0;
-               foreach (Features2DTracker<float>.MatchedImageFeature ms in matchedFeatures)
-                  if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
-
-               if (goodMatchCount >= 10)
+               if (features != null && features.Length >= minMatchCount)
                {
-                  boxList.Add(box);
-                  stopSignList.Add(candidate);
+                  Features2DTracker<float>.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
+
+                  int goodMatchCount = 0;
+                  foreach (Features2DTracker<float>.MatchedImageFeature ms in matchedFeatures)
+                     if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
+
+                  if (goodMatchCount >= minMatchCount)
+                  {
+                     boxList.Add(box);
+                     stopSignList.Add(candidate);
+                  }
                }
             }
          }

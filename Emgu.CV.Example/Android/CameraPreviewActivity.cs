@@ -7,6 +7,8 @@
 // https://github.com/xamarin/monodroid-samples/blob/master/ApiDemo/Graphics/CameraPreview.cs
 //
 
+//#define GL_VIEW
+
 using System;
 using System.Collections.Generic;
 
@@ -43,11 +45,15 @@ namespace AndroidExamples
          base.OnCreate(bundle);
 
          bool cameraPreviewCallbackWithBuffer = false;
+        
          _topLayer = new TopLayer(this, cameraPreviewCallbackWithBuffer);
          _preview = new Preview(this, _topLayer, cameraPreviewCallbackWithBuffer);
+
          SetContentView(_preview);
          AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
-
+#if GL_VIEW
+         _topLayer.SetZOrderOnTop(true);
+#endif
          RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
       }
 
@@ -70,7 +76,7 @@ namespace AndroidExamples
          {
             _topLayer.Mode = ViewMode.ColorMap;
          }
-         else if (item == _menuColorMap)
+         else if (item == _menuPreview)
          {
             _topLayer.Mode = ViewMode.Preview;
          }
@@ -90,14 +96,21 @@ namespace AndroidExamples
       Distor
    }
 
-   class TopLayer : View, Camera.IPreviewCallback
+   class TopLayer : 
+#if GL_VIEW
+      GLImageView,
+#else
+      View, 
+#endif
+      Camera.IPreviewCallback
    {
       private Stopwatch _watch;
       Paint _paint;
       Size _imageSize;
-      int[] _bgraData;
-      byte[] _bgrData;
+      int[] _bgraData1;
+      int[] _bgraData2;
 
+      Activity _activity;
       Matrix<float> _mapX;
       Matrix<float> _mapY;
 
@@ -105,9 +118,10 @@ namespace AndroidExamples
 
       public ViewMode Mode = ViewMode.Preview;
 
-      public TopLayer(Context context, bool cameraPreviewCallbackWithBuffer)
-         : base(context)
+      public TopLayer(Activity activity, bool cameraPreviewCallbackWithBuffer)
+         : base(activity)
       {
+         _activity = activity;
          _cameraPreviewCallbackWithBuffer = cameraPreviewCallbackWithBuffer;
 
          _paint = new Paint();
@@ -120,19 +134,24 @@ namespace AndroidExamples
          _watch = Stopwatch.StartNew();
       }
 
+#if !GL_VIEW
       protected override void OnDraw(Android.Graphics.Canvas canvas)
       {
          base.OnDraw(canvas);
 
          lock (this)
          {
-            if (_bgraData != null && !_imageSize.IsEmpty && canvas != null)
+            
+            if (_bgraData1 != null && !_imageSize.IsEmpty && canvas != null)
             {
                Stopwatch w = Stopwatch.StartNew();
-               canvas.DrawBitmap(_bgraData, 0, _imageSize.Width, 0, 0, _imageSize.Width, _imageSize.Height, true, _paint);
+       
+               canvas.DrawBitmap(_bgraData1, 0, _imageSize.Width, 0, 0, _imageSize.Width, _imageSize.Height, true, _paint);
+
                w.Stop();
 
                _watch.Stop();
+
                canvas.DrawText(String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms", 
                   1.0 / _watch.ElapsedMilliseconds * 1000, 
                   _imageSize.Width,
@@ -143,7 +162,7 @@ namespace AndroidExamples
             }
          }
       }
-
+#endif
       private bool _busy;
 
       public void OnPreviewFrame(byte[] data, Camera camera)
@@ -160,18 +179,18 @@ namespace AndroidExamples
 
                if (Mode == ViewMode.Canny)
                {
-                  if (_bgrData == null || _bgrData.Length < _imageSize.Width * _imageSize.Height)
-                     _bgrData = new byte[_imageSize.Width * _imageSize.Height * 3];
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  if (_bgraData2 == null || _bgraData2.Length < _imageSize.Width * _imageSize.Height)
+                     _bgraData2 = new int[_imageSize.Width * _imageSize.Height];
+                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
+                     _bgraData1 = new int[size.Width * size.Height];
+
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
                   using (Image<Gray, Byte> grey = new Image<Gray, byte>(_imageSize.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
                   using (Image<Gray, Byte> canny = new Image<Gray,byte>(_imageSize.Width, size.Height, size.Width, bgrHandle.AddrOfPinnedObject()))
                   { 
                      CvInvoke.cvCanny(grey, canny, 100, 60, 3);
 
-                     if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                        _bgraData = new int[size.Width * size.Height];
-
-                     GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                     GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
                      using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                         CvInvoke.cvCvtColor(canny, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGRA);
                      bgraHandle.Free();
@@ -179,9 +198,9 @@ namespace AndroidExamples
                }
                else if (Mode == ViewMode.Preview)
                {
-                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                     _bgraData = new int[size.Width * size.Height];
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
+                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
+                     _bgraData1 = new int[size.Width * size.Height];
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
                   using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
                      CvInvoke.cvCvtColor(yuv420sp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
@@ -189,13 +208,13 @@ namespace AndroidExamples
                }
                else if (Mode == ViewMode.ColorMap)
                {
-                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                     _bgraData = new int[size.Width * size.Height];
-                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
-                     _bgrData = new byte[size.Width * size.Height * 3];
+                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
+                     _bgraData1 = new int[size.Width * size.Height];
+                  if (_bgraData2 == null || _bgraData2.Length < size.Width * size.Height)
+                     _bgraData2 = new int[size.Width * size.Height];
 
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
+                  GCHandle bgrHandle = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
                   using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                   using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
                   using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
@@ -209,19 +228,13 @@ namespace AndroidExamples
                }
                else
                {
-                  if (_bgraData == null || _bgraData.Length < size.Width * size.Height)
-                     _bgraData = new int[size.Width * size.Height];
-                  if (_bgrData == null || _bgrData.Length < size.Width * size.Height * 3)
-                     _bgrData = new byte[size.Width * size.Height * 3];
+                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
+                     _bgraData1 = new int[size.Width * size.Height];
+                  if (_bgraData2 == null || _bgraData2.Length < size.Width * size.Height)
+                     _bgraData2 = new int[size.Width * size.Height];
 
                   if (_mapX == null || _mapY == null)
                   {
-                     /*
-                     IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
-                     CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
-                     p.DistortionCoeffs.Data[0, 0] = 1.0;
-                     p.InitUndistortMap(_imageSize.Width, _imageSize.Height, out _mapX, out _mapY);*/
-
                      IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
                      int centerY = size.Width >> 1;
                      int centerX = size.Height >> 1;
@@ -234,23 +247,48 @@ namespace AndroidExamples
                      p.InitUndistortMap(size.Width, size.Height, out _mapX, out _mapY);
                   }
 
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData, GCHandleType.Pinned);
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgrData, GCHandleType.Pinned);
+                  GCHandle bgraHandle1 = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
+                  GCHandle bgraHandle2 = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
                   using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
-                  using (Image<Bgr, Byte> tmp = new Image<Bgr,byte>(size.Width, size.Height, size.Width * 3, bgraHandle.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> tmp = new Image<Bgra,byte>(size.Width, size.Height, size.Width * 4, bgraHandle2.AddrOfPinnedObject()))
+                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle1.AddrOfPinnedObject()))
                   {
-                     CvInvoke.cvCvtColor(yuv420sp, tmp, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
-                     CvInvoke.cvRemap(tmp, bgr, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
-                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
+                     CvInvoke.cvCvtColor(yuv420sp, tmp, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
+                     CvInvoke.cvRemap(tmp, bgra, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
                   }
-                  bgraHandle.Free();
-                  bgrHandle.Free();
+                  bgraHandle1.Free();
+                  bgraHandle2.Free();
                }
                handle.Free();
 
-               this.Invalidate();
+#if GL_VIEW
+               Stopwatch w = Stopwatch.StartNew();
+
+               GCHandle tHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
+
+               using (Image<Bgra, Byte> img = new Image<Bgra, byte>(_imageSize.Width, _imageSize.Height, _imageSize.Width * 4, tHandle.AddrOfPinnedObject()))
+               using (Image<Bgra, Byte> texture = img.Resize(512, 512, Emgu.CV.CvEnum.INTER.CV_INTER_NN))
+               {
+                  LoadTextureBGRA(texture.Size, texture.MIplImage.imageData);
+                  SetupCamera();
+                  RenderCube();
+               }
+               tHandle.Free();
+
+               w.Stop();
+
+               _watch.Stop();
+
+               Android.Util.Log.Verbose("Emgu.CV", String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms",
+                  1.0 / _watch.ElapsedMilliseconds * 1000,
+                  _imageSize.Width,
+                  _imageSize.Height,
+                  w.ElapsedMilliseconds));
+               _watch.Reset();
+               _watch.Start();
+#else
+               Invalidate();
+#endif
             }
             finally
             {

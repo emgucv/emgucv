@@ -201,6 +201,7 @@ namespace AndroidExamples
                   {
                      OnButtonClick(sender, e);
                   }
+#if !DEBUG
                   catch (Exception excpt)
                   {
                      while (excpt.InnerException != null)
@@ -217,6 +218,7 @@ namespace AndroidExamples
                         alert.Show();
                      });
                   }
+#endif
                   finally
                   {
                      RunOnUiThread( _progress.Hide);
