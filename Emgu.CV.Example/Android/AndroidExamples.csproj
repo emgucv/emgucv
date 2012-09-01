@@ -311,9 +311,6 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.GPU.Android</Name>
@@ -370,7 +367,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
+    <Content Include="Resources\drawable-hdpi\ic_launcher.png" />
+    <Content Include="Resources\drawable-ldpi\ic_launcher.png" />
+    <Content Include="Resources\drawable-mdpi\ic_launcher.png" />
+    <Content Include="Resources\drawable-xdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

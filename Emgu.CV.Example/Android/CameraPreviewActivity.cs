@@ -129,8 +129,9 @@ namespace AndroidExamples
          _paint.SetARGB(255, 255, 0, 0);
          _paint.TextSize = 25;
 
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8);
-
+         using (Image<Bgr, Byte> img = new Image<Bgr, byte>(4, 8))
+         {
+         }
          _watch = Stopwatch.StartNew();
       }
 

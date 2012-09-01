@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "Emgu CV Examples", MainLauncher = true, Icon = "@drawable/icon")]
+   [Activity(Label = "Emgu CV Examples", MainLauncher = true)]
    public class AndroidExamplesActivity : Activity
    {
       protected override void OnCreate(Bundle bundle)

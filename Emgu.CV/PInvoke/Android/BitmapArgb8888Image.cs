@@ -23,6 +23,17 @@ namespace Emgu.CV
       private Bitmap _bmp;
 
       /// <summary>
+      /// Get the bitmap that this object is sharing data with.
+      /// </summary>
+      public Bitmap Bitmap
+      {
+         get
+         {
+            return _bmp;
+         }
+      }
+
+      /// <summary>
       /// Create a Bgra Image of Bytes that shares data with Bitmap
       /// </summary>
       /// <param name="bmp">The Bitmap to create the BitmapImage from. The BitmapImage should always be disposed before this Bitmap is disposed.</param>
