@@ -381,8 +381,8 @@ IF (ANDROID)
     )
   INSTALL(
     FILES
-    "${OPENCV_SUBFOLDER}/opencv/data/haarcascades/haarcascade_eye.xml"
-	"${OPENCV_SUBFOLDER}/opencv/data/haarcascades/haarcascade_frontalface_default.xml"
+    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+	"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
     DESTINATION "opencv/data/haarcascades"
     COMPONENT main
     )
