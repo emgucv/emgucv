@@ -36,7 +36,7 @@ namespace AndroidExamples
          { 
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>(Assets, "stop-sign-model.png"))
             using (Image<Bgr, Byte> image = PickImage("stop-sign.jpg"))
-            {
+            {             
                if (image == null)
                   return;
 

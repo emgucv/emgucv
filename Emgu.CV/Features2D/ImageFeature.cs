@@ -76,6 +76,12 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public static void ConvertToRaw(ImageFeature<TDescriptor>[] features, out VectorOfKeyPoint keyPoints, out Matrix<TDescriptor> descriptors)
       {
+         if (features.Length == 0)
+         {
+            keyPoints = null;
+            descriptors = null;
+            return;
+         }
          keyPoints = new VectorOfKeyPoint();
          keyPoints.Push(Array.ConvertAll<ImageFeature<TDescriptor>, MKeyPoint>(features, delegate(ImageFeature<TDescriptor> feature) { return feature.KeyPoint; }));
 

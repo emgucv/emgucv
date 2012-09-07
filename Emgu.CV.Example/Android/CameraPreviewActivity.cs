@@ -43,18 +43,34 @@ namespace AndroidExamples
       protected override void OnCreate(Bundle bundle)
       {
          base.OnCreate(bundle);
-
+         RequestWindowFeature(WindowFeatures.NoTitle);
          bool cameraPreviewCallbackWithBuffer = false;
-        
+         SetContentView(Resource.Layout.CameraPreviewLayout);
+
          _topLayer = new TopLayer(this, cameraPreviewCallbackWithBuffer);
          _preview = new Preview(this, _topLayer, cameraPreviewCallbackWithBuffer);
 
-         SetContentView(_preview);
-         AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
+         RelativeLayout mainLayout = FindViewById<RelativeLayout>(Resource.Id.CameraPreiewRelativeLayout);
+         mainLayout.AddView(_preview, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
+         mainLayout.AddView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
+         //AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
 #if GL_VIEW
          _topLayer.SetZOrderOnTop(true);
 #endif
          RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
+
+         ImageButton switchCameraButton = FindViewById<ImageButton>(Resource.Id.CameraPreviewSwitchCameraImageButton);
+         if (Camera.NumberOfCameras <= 1)
+            switchCameraButton.Visibility = ViewStates.Invisible;
+         else
+         {
+            switchCameraButton.BringToFront();
+         }
+         switchCameraButton.Click += delegate
+         {
+            _preview.SwitchCamera();
+         };
+
       }
 
       public override bool OnCreateOptionsMenu(IMenu menu)
@@ -303,8 +319,9 @@ namespace AndroidExamples
 
    class Preview : SurfaceView, ISurfaceHolderCallback
    {
-      ISurfaceHolder surface_holder;
-      Camera camera;
+      ISurfaceHolder _surfaceHolder;
+      Camera _camera;
+      int _cameraIndex;
       TopLayer _topLayer;
 
       private bool _cameraPreviewCallbackWithBuffer;
@@ -316,32 +333,75 @@ namespace AndroidExamples
 
          // Install a SurfaceHolder.Callback so we get notified when the
          // underlying surface is created and destroyed.
-         surface_holder = Holder;
-         surface_holder.AddCallback(this);
+         _surfaceHolder = Holder;
+         _surfaceHolder.AddCallback(this);
 
          _topLayer = topLayer;
+      }
+
+      public void SwitchCamera()
+      {
+         int numberOfCameras = Camera.NumberOfCameras;
+         if (numberOfCameras > 1)
+         {
+            _cameraIndex++;
+            _cameraIndex %= numberOfCameras;
+
+            CreateCamera(_cameraIndex);
+
+            SurfaceChanged(
+               _surfaceHolder,
+               Android.Graphics.Format.Rgb888, //doesn't matter, omitted by the Surface changed function.
+               Width,
+               Height);
+         }
+      }
+
+      private void CreateCamera(int cameraIndex)
+      {
+         StopCamera();
+         
+         _camera = Camera.Open(cameraIndex);
+
+         try
+         {
+            _camera.SetPreviewDisplay(_surfaceHolder);
+         }
+         catch (Exception)
+         {
+            _camera.Release();
+            _camera = null;
+            // TODO: add more exception handling logic here
+         }
+      }
+
+      private void StopCamera()
+      {
+         if (_camera != null)
+         {
+            _camera.StopPreview();
+            if (_cameraPreviewCallbackWithBuffer)
+               _camera.SetPreviewCallbackWithBuffer(null);
+            else
+               _camera.SetPreviewCallback(null);
+            _camera.Release();
+            _camera = null;
+         }
       }
 
       public void SurfaceCreated(ISurfaceHolder holder)
       {
          // The Surface has been created, acquire the camera and tell it where
          // to draw.
-
+         if (_surfaceHolder != holder)
+         {
+            _surfaceHolder = holder;
+            _surfaceHolder.AddCallback(this);
+         }
          int numberOfCameras = Camera.NumberOfCameras;
          if (numberOfCameras > 0)
          {
-            camera = Camera.Open(0);
-
-            try
-            {
-               camera.SetPreviewDisplay(holder);
-            }
-            catch (Exception)
-            {
-               camera.Release();
-               camera = null;
-               // TODO: add more exception handling logic here
-            }
+            CreateCamera(_cameraIndex);
          }
       }
 
@@ -350,16 +410,7 @@ namespace AndroidExamples
          // Surface will be destroyed when we return, so stop the preview.
          // Because the CameraDevice object is not a shared resource, it's very
          // important to release it when the activity is paused.
-         if (camera != null)
-         {
-            camera.StopPreview();
-            if (_cameraPreviewCallbackWithBuffer)
-               camera.SetPreviewCallbackWithBuffer(null);
-            else
-               camera.SetPreviewCallback(null);
-            camera.Release();
-            camera = null;
-         }
+         StopCamera();
       }
 
       private Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h, int maxWidth, int maxHeight)
@@ -414,20 +465,29 @@ namespace AndroidExamples
          return optimalSize;
       }
 
+      
+      private Camera.Size SetCameraOptimalPreviewSize(Camera camera, int w, int h)
+      {
+         Camera.Parameters parameters = _camera.GetParameters();
+         IList<Camera.Size> sizes = parameters.SupportedPreviewSizes;
+         int maxWidth = 640, maxHeight = 480;
+         Camera.Size optimalSize = GetOptimalPreviewSize(sizes, w, h, maxWidth, maxHeight);
+         parameters.SetPreviewSize(optimalSize.Width, optimalSize.Height);
+         _camera.SetParameters(parameters);
+         return optimalSize;
+      }
+
       public void SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int w, int h)
       {
-         int maxWidth = 640, maxHeight = 480;
+         if (_surfaceHolder != holder)
+         {
+            _surfaceHolder = holder;
+            _surfaceHolder.AddCallback(this);
+         }
 
          // Now that the size is known, set up the camera parameters and begin
          // the preview.
-         Camera.Parameters parameters = camera.GetParameters();
-
-         IList<Camera.Size> sizes = parameters.SupportedPreviewSizes;
-         Camera.Size optimalSize = GetOptimalPreviewSize(sizes, w, h, maxWidth, maxHeight);
-
-         parameters.SetPreviewSize(optimalSize.Width, optimalSize.Height);
-         
-         camera.SetParameters(parameters);
+         Camera.Size optimalSize = SetCameraOptimalPreviewSize(_camera, w, h);
 
          //set for protrait mode
          //camera.SetDisplayOrientation(90);
@@ -435,14 +495,14 @@ namespace AndroidExamples
          if (_cameraPreviewCallbackWithBuffer)
          {
             int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
-            camera.SetPreviewCallbackWithBuffer(_topLayer);
+            _camera.SetPreviewCallbackWithBuffer(_topLayer);
             for (int i = 0; i < 1; ++i)
-               camera.AddCallbackBuffer(new byte[bufferSize]);
+               _camera.AddCallbackBuffer(new byte[bufferSize]);
          }
          else
-            camera.SetPreviewCallback(_topLayer);
+            _camera.SetPreviewCallback(_topLayer);
 
-         camera.StartPreview();
+         _camera.StartPreview();
 
          Layout(0, 0, optimalSize.Width, optimalSize.Height);
       }

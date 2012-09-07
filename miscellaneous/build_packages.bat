@@ -61,7 +61,7 @@ mv libemgucv*.exe ..\release
 
 call miscellaneous\git-clean.bat
 REM build 64 bit package with gpu using intel compiler, with document
-call Build_Binary_x86.bat 64 gpu intel nopenni doc package
+call Build_Binary_x86.bat 64 gpu intel noopenni doc package
 mv libemgucv*.zip ..\release
 mv libemgucv*.exe ..\release
 

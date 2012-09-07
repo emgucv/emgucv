@@ -2744,7 +2744,7 @@ namespace Emgu.CV
             #endregion
 
             Bitmap.Config config = value.GetConfig();
-            if (config.Equals(Bitmap.Config.Argb8888) || config.Equals(Bitmap.Config.Rgb565))
+            if (config.Equals(Bitmap.Config.Argb8888))
             {
                using (BitmapArgb8888Image bi = new BitmapArgb8888Image(value))
                {
@@ -2994,7 +2994,6 @@ namespace Emgu.CV
             bgra.ConvertFrom(this);
          }
          handle.Free();
-         Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
          result.SetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
          */
          return result;
