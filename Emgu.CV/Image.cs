@@ -2750,19 +2750,6 @@ namespace Emgu.CV
                {
                   ConvertFrom(bi);
                }
-               /*
-               try
-               {
-                  IntPtr ptr = value.LockPixels();
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, value.RowBytes, ptr))
-                  {
-                     ConvertFrom(bgra);
-                  }
-               }
-               finally
-               {
-                  value.UnlockPixels();
-               }*/
             } else if (config.Equals(Bitmap.Config.Rgb565))
             {
                int[] values = new int[size.Width * size.Height];
@@ -2980,23 +2967,7 @@ namespace Emgu.CV
       public Bitmap ToBitmap()
       {
 #if ANDROID
-         System.Drawing.Size size = Size;
-         Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
-
-         using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
-            bi.ConvertFrom(this);
-
-         /*
-         int[] values = new int[size.Width * size.Height];
-         GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
-         using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
-         {
-            bgra.ConvertFrom(this);
-         }
-         handle.Free();
-         result.SetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
-         */
-         return result;
+         return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888);
 #else
          Type typeOfColor = typeof(TColor);
          Type typeofDepth = typeof(TDepth);

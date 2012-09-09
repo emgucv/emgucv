@@ -26,6 +26,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Emgu.Util;
 
 namespace AndroidExamples
 {
@@ -123,12 +124,13 @@ namespace AndroidExamples
       private Stopwatch _watch;
       Paint _paint;
       Size _imageSize;
-      int[] _bgraData1;
-      int[] _bgraData2;
 
+      //Image<Bgr, Byte> _image;
+      ImageBufferFactory<Bgr> _bgrBuffers;
+      private CannyFilter _cannyFilter;
+      private ColorMapFilter _colorMapFilter;
+      private DistorFilter _distorFilter;
       Activity _activity;
-      Matrix<float> _mapX;
-      Matrix<float> _mapY;
 
       private bool _cameraPreviewCallbackWithBuffer;
 
@@ -149,21 +151,50 @@ namespace AndroidExamples
          {
          }
          _watch = Stopwatch.StartNew();
+         _bgrBuffers = new ImageBufferFactory<Bgr>();
+      }
+
+      protected override void Dispose(bool disposing)
+      {
+         base.Dispose(disposing);
+         _bgrBuffers.Dispose();
+         if (_cannyFilter != null)
+            _cannyFilter.Dispose();
       }
 
 #if !GL_VIEW
+      private Android.Graphics.Bitmap _bmp;
+      private BitmapRgb565Image _bmpImage;
+
       protected override void OnDraw(Android.Graphics.Canvas canvas)
       {
          base.OnDraw(canvas);
 
          lock (this)
          {
-            
-            if (_bgraData1 != null && !_imageSize.IsEmpty && canvas != null)
+            Image<Bgr, byte> image = _bgrBuffers.GetBuffer(0);
+
+            if (image != null && !_imageSize.IsEmpty && canvas != null)
             {
                Stopwatch w = Stopwatch.StartNew();
-       
-               canvas.DrawBitmap(_bgraData1, 0, _imageSize.Width, 0, 0, _imageSize.Width, _imageSize.Height, true, _paint);
+
+               if ((_bmpImage != null) && (!_imageSize.Equals(_bmpImage.Size)))
+               {
+                  _bmp.Dispose();
+                  _bmpImage.Dispose();
+                  _bmp = null;
+                  _bmpImage = null;
+               }
+
+               if (_bmpImage == null)
+               {
+                  _bmp = Android.Graphics.Bitmap.CreateBitmap(_imageSize.Width, _imageSize.Height, Android.Graphics.Bitmap.Config.Rgb565);
+                  _bmpImage = new BitmapRgb565Image(_bmp);
+               }
+
+               _bmpImage.ConvertFrom(image);
+
+               canvas.DrawBitmap(_bmp, 0, 0, _paint);
 
                w.Stop();
 
@@ -182,6 +213,8 @@ namespace AndroidExamples
 #endif
       private bool _busy;
 
+
+
       public void OnPreviewFrame(byte[] data, Camera camera)
       {
          if (!_busy)
@@ -191,107 +224,58 @@ namespace AndroidExamples
                Camera.Size cSize = camera.GetParameters().PreviewSize;
                _imageSize = new Size(cSize.Width, cSize.Height);
                Size size = _imageSize;
-               
+               Image<Bgr, Byte> image = _bgrBuffers.GetBuffer(size, 0);
+
                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-
-               if (Mode == ViewMode.Canny)
+               using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                {
-                  if (_bgraData2 == null || _bgraData2.Length < _imageSize.Width * _imageSize.Height)
-                     _bgraData2 = new int[_imageSize.Width * _imageSize.Height];
-                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
-                     _bgraData1 = new int[size.Width * size.Height];
-
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> grey = new Image<Gray, byte>(_imageSize.Width, size.Height, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Gray, Byte> canny = new Image<Gray,byte>(_imageSize.Width, size.Height, size.Width, bgrHandle.AddrOfPinnedObject()))
-                  { 
-                     CvInvoke.cvCanny(grey, canny, 100, 60, 3);
-
-                     GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
-                     using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
-                        CvInvoke.cvCvtColor(canny, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGRA);
-                     bgraHandle.Free();
-                  }
-               }
-               else if (Mode == ViewMode.Preview)
-               {
-                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
-                     _bgraData1 = new int[size.Width * size.Height];
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
-                     CvInvoke.cvCvtColor(yuv420sp, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
-                  bgraHandle.Free();
-               }
-               else if (Mode == ViewMode.ColorMap)
-               {
-                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
-                     _bgraData1 = new int[size.Width * size.Height];
-                  if (_bgraData2 == null || _bgraData2.Length < size.Width * size.Height)
-                     _bgraData2 = new int[size.Width * size.Height];
-
-                  GCHandle bgraHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
-                  GCHandle bgrHandle = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Bgr, Byte> bgr = new Image<Bgr, byte>(size.Width, size.Height, size.Width * 3, bgrHandle.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle.AddrOfPinnedObject()))
+                  if (Mode == ViewMode.Preview)
                   {
+                     CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+                  }
+                  else
+                  {
+                     Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(size, 1);
                      CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
-                     CvInvoke.ApplyColorMap(bgr, bgr, Emgu.CV.CvEnum.ColorMapType.Summer);
-                     CvInvoke.cvCvtColor(bgr, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
-                  }
-                  bgraHandle.Free();
-                  bgrHandle.Free();
-               }
-               else
-               {
-                  if (_bgraData1 == null || _bgraData1.Length < size.Width * size.Height)
-                     _bgraData1 = new int[size.Width * size.Height];
-                  if (_bgraData2 == null || _bgraData2.Length < size.Width * size.Height)
-                     _bgraData2 = new int[size.Width * size.Height];
 
-                  if (_mapX == null || _mapY == null)
-                  {
-                     IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
-                     int centerY = size.Width >> 1;
-                     int centerX = size.Height >> 1;
-                     CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
-                     p.IntrinsicMatrix.Data[0, 2] = centerY;
-                     p.IntrinsicMatrix.Data[1, 2] = centerX;
-                     p.IntrinsicMatrix.Data[2, 2] = 1;
-                     p.DistortionCoeffs.Data[0, 0] = -0.000003;
+                     if (Mode == ViewMode.Canny)
+                     {
+                        if (_cannyFilter == null)
+                           _cannyFilter = new CannyFilter();
 
-                     p.InitUndistortMap(size.Width, size.Height, out _mapX, out _mapY);
-                  }
+                        _cannyFilter.ProcessData(bgr, image);
 
-                  GCHandle bgraHandle1 = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
-                  GCHandle bgraHandle2 = GCHandle.Alloc(_bgraData2, GCHandleType.Pinned);
-                  using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> tmp = new Image<Bgra,byte>(size.Width, size.Height, size.Width * 4, bgraHandle2.AddrOfPinnedObject()))
-                  using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, bgraHandle1.AddrOfPinnedObject()))
-                  {
-                     CvInvoke.cvCvtColor(yuv420sp, tmp, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGRA);
-                     CvInvoke.cvRemap(tmp, bgra, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+                     }
+                     else if (Mode == ViewMode.ColorMap)
+                     {
+                        if (_colorMapFilter == null)
+                           _colorMapFilter = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+
+                        _colorMapFilter.ProcessData(bgr, image);
+                     }
+                     else //if (Mode == ViewMode.Distor)
+                     {
+                        if (_distorFilter == null)
+                           _distorFilter = new DistorFilter(0.5, 0.5, -1.5);
+
+                        _distorFilter.ProcessData(bgr, image);
+                     }
                   }
-                  bgraHandle1.Free();
-                  bgraHandle2.Free();
                }
                handle.Free();
 
 #if GL_VIEW
                Stopwatch w = Stopwatch.StartNew();
 
-               GCHandle tHandle = GCHandle.Alloc(_bgraData1, GCHandleType.Pinned);
-
-               using (Image<Bgra, Byte> img = new Image<Bgra, byte>(_imageSize.Width, _imageSize.Height, _imageSize.Width * 4, tHandle.AddrOfPinnedObject()))
-               using (Image<Bgra, Byte> texture = img.Resize(512, 512, Emgu.CV.CvEnum.INTER.CV_INTER_NN))
+               Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(512, 512), 2);
+               CvInvoke.cvResize(image, resized, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+               using (Image<Bgra, Byte> texture = resized.Convert<Bgra, Byte>())
                {
                   LoadTextureBGRA(texture.Size, texture.MIplImage.imageData);
                   SetupCamera();
                   RenderCube();
                }
-               tHandle.Free();
-
+               
                w.Stop();
 
                _watch.Stop();
@@ -506,6 +490,195 @@ namespace AndroidExamples
 
          Layout(0, 0, optimalSize.Width, optimalSize.Height);
       }
+   }
+
+   public class ImageBufferFactory<TColor> : Emgu.Util.DisposableObject
+   where TColor : struct, IColor
+   {
+      public ImageBufferFactory()
+      {
+         _sizes = new List<Size>();
+         _buffers = new List<Image<TColor, byte>>();
+      }
+
+      private List<System.Drawing.Size> _sizes;
+
+      private List<Image<TColor, Byte>> _buffers;
+
+      public Image<TColor, Byte> GetBuffer(int index)
+      {
+         if (index < _buffers.Count)
+            return _buffers[index];
+         else
+            return null;
+      }
+
+      public Image<TColor, Byte> GetBuffer(System.Drawing.Size size, int index)
+      {
+         for (int i = _buffers.Count; i < index + 1; i++)
+         {
+            _buffers.Add(null);
+            _sizes.Add(Size.Empty);
+         }
+
+         if (!_sizes[index].Equals(size))
+         {
+            if (_buffers[index] == null)
+               _buffers[index] = new Image<TColor, byte>(size);
+            else
+            {
+               _buffers[index].Dispose();
+               _buffers[index] = new Image<TColor, byte>(size);
+            }
+
+            _sizes[index] = size;
+         }
+         return _buffers[index];
+      }
+
+      protected override void DisposeObject()
+      {
+         for (int i = 0; i < _buffers.Count; i++)
+         {
+            if (_buffers[i] != null)
+               _buffers[i].Dispose();
+         }
+      }
+   }
+
+   public class ImageFilter : Emgu.Util.DisposableObject
+   {
+      protected ImageBufferFactory<Bgr> _bgrBuffers;
+      protected ImageBufferFactory<Gray> _grayBuffers;
+
+      public ImageFilter()
+      {
+      }
+
+      public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
+      {
+         if (_bgrBuffers == null)
+            _bgrBuffers = new ImageBufferFactory<Bgr>();
+         return _bgrBuffers.GetBuffer(size, index);
+      }
+
+      public Image<Gray, Byte> GetBufferGray(Size size, int index)
+      {
+         if (_grayBuffers == null)
+            _grayBuffers = new ImageBufferFactory<Gray>();
+         return _grayBuffers.GetBuffer(size, index);
+      }
+
+      protected override void DisposeObject()
+      {
+         if (_bgrBuffers != null)
+            _bgrBuffers.Dispose();
+         if (_grayBuffers != null)
+            _grayBuffers.Dispose();
+      }
+   }
+
+   public class CannyFilter : ImageFilter
+   {
+      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      {
+         Size size = sourceImage.Size;
+
+         Image<Gray, Byte> b = GetBufferGray(size, 0);
+         Image<Gray, Byte> g = GetBufferGray(size, 1);
+         Image<Gray, Byte> r = GetBufferGray(size, 2);
+         Image<Gray, Byte> bCanny = GetBufferGray(size, 3);
+         Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
+         Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
+         Image<Bgr, Byte> buffer0 = GetBufferBgr(sourceImage.Size, 0);
+
+         CvInvoke.cvSplit(sourceImage, b, g, r, IntPtr.Zero);
+         CvInvoke.cvCanny(b, bCanny, 100, 60, 3);
+         CvInvoke.cvCanny(g, gCanny, 100, 60, 3);
+         CvInvoke.cvCanny(r, rCanny, 100, 60, 3);
+         CvInvoke.cvMerge(bCanny, gCanny, rCanny, IntPtr.Zero, dest);
+
+      }
+   }
+
+   public class ColorMapFilter : ImageFilter
+   {
+      private Emgu.CV.CvEnum.ColorMapType _colorMapType;
+
+      public ColorMapFilter(Emgu.CV.CvEnum.ColorMapType type)
+      {
+         _colorMapType = type;
+      }
+
+      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      {
+         CvInvoke.ApplyColorMap(sourceImage, dest, _colorMapType);
+      }
+   }
+
+   public class DistorFilter : ImageFilter
+   {
+      private double _centerX;
+      private double _centerY;
+      private double _distorCoeff;
+
+      private Matrix<float> _mapX;
+      private Matrix<float> _mapY;
+
+      private Size _size;
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="centerWidth">A value between 0 and 1.0, if 0, the center is on the left side of the image, if 1, the center is on the right side of the image</param>
+      /// <param name="centerHeight">A value between 0 and 1.0, if 0, the center is on the top of the image, if 1, the center is on the bottom of the image</param>
+      /// <param name="distorCoeff"></param>
+      public DistorFilter(double centerWidth, double centerHeight, double distorCoeff)
+      {
+         if (centerWidth < 0 || centerWidth > 1.0 || centerHeight < 0 || centerHeight > 1.0)
+         {
+            throw new ArgumentException("CenterWidth and CenterHeight must be a number >= 0 and <= 1.0");
+         }
+         _centerX = centerWidth;
+         _centerY = centerHeight;
+         _distorCoeff = distorCoeff;
+      }
+
+      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      {
+         if (!sourceImage.Size.Equals(_size))
+         {
+            if (_mapX != null)
+            {
+               _mapX.Dispose();
+               _mapX = null;
+            }
+            if (_mapY != null)
+            {
+               _mapY.Dispose();
+               _mapY = null;
+            }
+
+            _size = sourceImage.Size;
+         }
+
+         if (_mapX == null || _mapY == null)
+         {
+            IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+            int centerY = (int)(_size.Width * _centerY);
+            int centerX = (int)(_size.Height * _centerX);
+            CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
+            p.IntrinsicMatrix.Data[0, 2] = centerY;
+            p.IntrinsicMatrix.Data[1, 2] = centerX;
+            p.IntrinsicMatrix.Data[2, 2] = 1;
+            p.DistortionCoeffs.Data[0, 0] = _distorCoeff / (_size.Width * _size.Width);
+
+            p.InitUndistortMap(_size.Width, _size.Height, out _mapX, out _mapY);
+         }
+
+         CvInvoke.cvRemap(sourceImage, dest, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+      }
+
    }
 }
 

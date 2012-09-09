@@ -51,4 +51,32 @@ namespace Emgu.CV
          _bmp.UnlockPixels();
       }
    }
+
+   public class BitmapRgb565Image : Image<Bgr565, Byte>
+   {
+      private Bitmap _bmp;
+
+      public Bitmap Bitmap
+      {
+         get
+         {
+            return _bmp;
+         }
+      }
+
+      public BitmapRgb565Image(Bitmap bmp)
+      {
+         if (!bmp.GetConfig().Equals(Bitmap.Config.Rgb565))
+            throw new NotImplementedException("Only Bitmap format of Rgb565 is supported for this class.");
+         _bmp = bmp;
+         MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
+      }
+
+      protected override void ReleaseManagedResources()
+      {
+         base.ReleaseManagedResources();
+         _bmp.UnlockPixels();
+      }
+
+   }
 }

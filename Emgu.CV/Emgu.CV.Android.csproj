@@ -50,6 +50,7 @@
     <Compile Include="Capture\KinectCapture.cs" />
     <Compile Include="CascadeClassifier.cs" />
     <Compile Include="Color\Rgb.cs" />
+    <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />

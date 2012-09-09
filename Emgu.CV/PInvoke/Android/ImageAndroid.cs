@@ -32,5 +32,32 @@ namespace Emgu.CV
          using (Bitmap imageBmp = BitmapFactory.DecodeStream(imageStream))
             Bitmap = imageBmp;
       }
+
+      public Bitmap ToBitmap(Bitmap.Config config)
+      {
+         System.Drawing.Size size = Size;
+
+         if (config == Bitmap.Config.Argb8888)
+         {
+            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
+
+            using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
+               bi.ConvertFrom(this);
+            return result;
+         }
+         else if (config == Bitmap.Config.Rgb565)
+         {
+            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Rgb565);
+
+            using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
+               bi.ConvertFrom(this);
+            return result;
+         }
+         else
+         {
+            throw new NotImplementedException("Only Bitmap config of Argb888 or Rgb565 is supported.");
+         }
+
+      }
    }
 }
