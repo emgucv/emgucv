@@ -20,6 +20,7 @@ using Android.Widget;
 using Android.OS;
 using Android.Hardware;
 using Paint = Android.Graphics.Paint;
+using Android.Media;
 
 using System.Drawing;
 using Emgu.CV;
@@ -27,6 +28,7 @@ using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Emgu.Util;
+using System.IO;
 
 namespace AndroidExamples
 {
@@ -54,7 +56,7 @@ namespace AndroidExamples
          RelativeLayout mainLayout = FindViewById<RelativeLayout>(Resource.Id.CameraPreiewRelativeLayout);
          mainLayout.AddView(_preview, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
          mainLayout.AddView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
-         //AddContentView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent ));
+         
 #if GL_VIEW
          _topLayer.SetZOrderOnTop(true);
 #endif
@@ -72,6 +74,22 @@ namespace AndroidExamples
             _preview.SwitchCamera();
          };
 
+         //JpegCallback cameraCallback = new JpegCallback();
+
+         ImageButton captureImageButton = FindViewById<ImageButton>(Resource.Id.CameraPreviewCaptureImageButton);
+         captureImageButton.Click += delegate
+         {
+            Camera camera = _preview.Camera;
+
+            if (camera != null)
+            {
+               Camera.Parameters p = camera.GetParameters();
+               p.PictureFormat = Android.Graphics.ImageFormatType.Jpeg;
+               //p.PictureFormat = Android.Graphics.ImageFormatType.Rgb565;
+               camera.SetParameters(p);
+               camera.TakePicture(null, null, _topLayer);
+            }
+         };
       }
 
       public override bool OnCreateOptionsMenu(IMenu menu)
@@ -88,6 +106,7 @@ namespace AndroidExamples
          if (item == _menuCanny)
          {
             _topLayer.Mode = ViewMode.Canny;
+           
          }
          else if (item == _menuColorMap)
          {
@@ -119,22 +138,61 @@ namespace AndroidExamples
 #else
       View, 
 #endif
-      Camera.IPreviewCallback
+      Camera.IPreviewCallback,
+      Camera.IPictureCallback
    {
       private Stopwatch _watch;
       Paint _paint;
       Size _imageSize;
 
-      //Image<Bgr, Byte> _image;
       ImageBufferFactory<Bgr> _bgrBuffers;
-      private CannyFilter _cannyFilter;
-      private ColorMapFilter _colorMapFilter;
-      private DistorFilter _distorFilter;
+
+      private ImageFilter _imageFilter;
+
       Activity _activity;
 
       private bool _cameraPreviewCallbackWithBuffer;
 
-      public ViewMode Mode = ViewMode.Preview;
+      private ViewMode _mode = ViewMode.Preview;
+
+
+      public ViewMode Mode
+      {
+         get
+         {
+            return _mode;
+         }
+         set
+         {
+            if (_mode != value)
+            {
+               _mode = value;
+
+               lock (typeof(ImageFilter))
+               {
+                  if (_imageFilter != null)
+                     _imageFilter.Dispose();
+
+                  if (value == ViewMode.Canny)
+                  {
+                     _imageFilter = new CannyFilter(100, 60, 3);
+
+                  }
+                  else if (value == ViewMode.ColorMap)
+                  {
+                     _imageFilter = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+
+                  }
+                  else //if (Mode == ViewMode.Distor)
+                  {
+                     _imageFilter = new DistorFilter(0.5, 0.5, -1.5);
+                  }
+               }
+            }
+
+
+         }
+      }
 
       public TopLayer(Activity activity, bool cameraPreviewCallbackWithBuffer)
          : base(activity)
@@ -158,8 +216,86 @@ namespace AndroidExamples
       {
          base.Dispose(disposing);
          _bgrBuffers.Dispose();
-         if (_cannyFilter != null)
-            _cannyFilter.Dispose();
+         if (_imageFilter != null)
+            _imageFilter.Dispose();
+      }
+
+      public void OnPictureTaken(byte[] data, Camera camera)
+      {
+         if (data != null)
+         {
+
+            Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeByteArray(data, 0, data.Length);
+            Image<Bgr, Byte> buffer1 = new Image<Bgr, byte>(bmp);
+            {
+               bmp.Dispose();
+
+               String fileName = DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".jpg";
+               FileInfo f = new FileInfo(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), "EMGU", fileName));
+               if (!f.Directory.Exists)
+                  f.Directory.Create();
+               try
+               {
+                  Image<Bgr, Byte> buffer2 = new Image<Bgr, byte>(buffer1.Size);
+                  ImageFilter filter = _imageFilter.Clone() as ImageFilter;
+                  {
+                     filter.ProcessData(buffer1, buffer2);
+                     buffer1.Dispose();
+                     filter.Dispose();
+                     using (Android.Graphics.Bitmap result = buffer2.ToBitmap())
+                     {
+                        buffer2.Dispose();
+                        using (System.IO.FileStream writer = new System.IO.FileStream(
+                            f.FullName,
+                            System.IO.FileMode.Create))
+                        {
+                           result.Compress(Android.Graphics.Bitmap.CompressFormat.Jpeg, 90, writer);
+                           //Image<Bgr, Byte> img = new Image<Bgr, byte>(bmp);
+                        }
+                     }
+                  }
+                  /*
+                  Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeByteArray(data, 0, data.Length);
+                  using (System.IO.FileStream writer = new System.IO.FileStream(
+                     f.FullName,
+                     System.IO.FileMode.Create))
+                  {
+                     bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Jpeg, 90, writer);
+                     //Image<Bgr, Byte> img = new Image<Bgr, byte>(bmp);
+                  }*/
+               }
+               catch (FileNotFoundException e)
+               {
+                  Android.Util.Log.Debug("Emgu.CV", e.Message);
+               }
+               catch (IOException e)
+               {
+                  Android.Util.Log.Debug("Emgu.CV", e.Message);
+               }
+
+               try
+               {
+
+                  ExifInterface exif = new ExifInterface(f.FullName);
+                  // Read the camera model and location attributes
+                  exif.GetAttribute(ExifInterface.TagModel);
+                  float[] latLng = new float[2];
+                  exif.GetLatLong(latLng);
+                  // Set the camera make
+                  exif.SetAttribute(ExifInterface.TagMake, "My Phone");
+                  exif.SetAttribute(ExifInterface.TagDatetime, System.DateTime.Now.ToString());
+               }
+               catch (IOException e)
+               {
+
+                  Android.Util.Log.Debug("Emgu.CV", e.Message);
+               }
+            }
+         }
+         else
+         {
+            Android.Util.Log.Debug("Emgu.CV", "No image");
+         }
       }
 
 #if !GL_VIEW
@@ -213,8 +349,6 @@ namespace AndroidExamples
 #endif
       private bool _busy;
 
-
-
       public void OnPreviewFrame(byte[] data, Camera camera)
       {
          if (!_busy)
@@ -238,28 +372,9 @@ namespace AndroidExamples
                      Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(size, 1);
                      CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
 
-                     if (Mode == ViewMode.Canny)
-                     {
-                        if (_cannyFilter == null)
-                           _cannyFilter = new CannyFilter();
+                     lock (typeof(ImageFilter))
+                        _imageFilter.ProcessData(bgr, image);
 
-                        _cannyFilter.ProcessData(bgr, image);
-
-                     }
-                     else if (Mode == ViewMode.ColorMap)
-                     {
-                        if (_colorMapFilter == null)
-                           _colorMapFilter = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
-
-                        _colorMapFilter.ProcessData(bgr, image);
-                     }
-                     else //if (Mode == ViewMode.Distor)
-                     {
-                        if (_distorFilter == null)
-                           _distorFilter = new DistorFilter(0.5, 0.5, -1.5);
-
-                        _distorFilter.ProcessData(bgr, image);
-                     }
                   }
                }
                handle.Free();
@@ -323,6 +438,14 @@ namespace AndroidExamples
          _topLayer = topLayer;
       }
 
+      public Camera Camera
+      {
+         get
+         {
+            return _camera;
+         }
+      }
+
       public void SwitchCamera()
       {
          int numberOfCameras = Camera.NumberOfCameras;
@@ -341,22 +464,23 @@ namespace AndroidExamples
          }
       }
 
-      private void CreateCamera(int cameraIndex)
+      private bool CreateCamera(int cameraIndex)
       {
-         StopCamera();
-         
-         _camera = Camera.Open(cameraIndex);
-
          try
          {
+            StopCamera();
+            _camera = Camera.Open(cameraIndex);
             _camera.SetPreviewDisplay(_surfaceHolder);
          }
          catch (Exception)
          {
             _camera.Release();
             _camera = null;
+            return false;
             // TODO: add more exception handling logic here
          }
+
+         return true;
       }
 
       private void StopCamera()
@@ -546,7 +670,7 @@ namespace AndroidExamples
       }
    }
 
-   public class ImageFilter : Emgu.Util.DisposableObject
+   public abstract class ImageFilter : Emgu.Util.DisposableObject, ICloneable
    {
       protected ImageBufferFactory<Bgr> _bgrBuffers;
       protected ImageBufferFactory<Gray> _grayBuffers;
@@ -554,6 +678,8 @@ namespace AndroidExamples
       public ImageFilter()
       {
       }
+
+      public abstract void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest);
 
       public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
       {
@@ -576,11 +702,24 @@ namespace AndroidExamples
          if (_grayBuffers != null)
             _grayBuffers.Dispose();
       }
+
+      public abstract Object Clone();
    }
 
    public class CannyFilter : ImageFilter
    {
-      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      private double _thresh;
+      private double _threshLinking;
+      public int _apertureSize;
+
+      public CannyFilter(double thresh, double threshLinking, int apertureSize)
+      {
+         _thresh = thresh;
+         _threshLinking = threshLinking;
+         _apertureSize = apertureSize;
+      }
+
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
       {
          Size size = sourceImage.Size;
 
@@ -593,11 +732,16 @@ namespace AndroidExamples
          Image<Bgr, Byte> buffer0 = GetBufferBgr(sourceImage.Size, 0);
 
          CvInvoke.cvSplit(sourceImage, b, g, r, IntPtr.Zero);
-         CvInvoke.cvCanny(b, bCanny, 100, 60, 3);
-         CvInvoke.cvCanny(g, gCanny, 100, 60, 3);
-         CvInvoke.cvCanny(r, rCanny, 100, 60, 3);
+         CvInvoke.cvCanny(b, bCanny, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.cvCanny(g, gCanny, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.cvCanny(r, rCanny, _thresh, _threshLinking, _apertureSize);
          CvInvoke.cvMerge(bCanny, gCanny, rCanny, IntPtr.Zero, dest);
 
+      }
+
+      public override object Clone()
+      {
+         return new CannyFilter(_thresh, _threshLinking, _apertureSize);
       }
    }
 
@@ -610,9 +754,14 @@ namespace AndroidExamples
          _colorMapType = type;
       }
 
-      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
       {
          CvInvoke.ApplyColorMap(sourceImage, dest, _colorMapType);
+      }
+
+      public override object Clone()
+      {
+         return new ColorMapFilter(_colorMapType);
       }
    }
 
@@ -644,7 +793,7 @@ namespace AndroidExamples
          _distorCoeff = distorCoeff;
       }
 
-      public void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
       {
          if (!sourceImage.Size.Equals(_size))
          {
@@ -679,6 +828,10 @@ namespace AndroidExamples
          CvInvoke.cvRemap(sourceImage, dest, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
       }
 
+      public override object Clone()
+      {
+         return new DistorFilter(_centerX, _centerY, _distorCoeff);
+      }
    }
 }
 

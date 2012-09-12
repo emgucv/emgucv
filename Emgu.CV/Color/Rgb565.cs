@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2012 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
-?using System;
+using System;
 using Emgu.CV;
 
 namespace Emgu.CV.Structure
