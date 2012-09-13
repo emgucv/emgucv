@@ -48,13 +48,18 @@ namespace AndroidExamples
          bool cameraPreviewCallbackWithBuffer = false;
          SetContentView(Resource.Layout.CameraPreviewLayout);
 
+         _bgrBuffers = new ImageBufferFactory<Bgr>();
+
          _topLayer = new ProcessedCameraPreview(this, cameraPreviewCallbackWithBuffer);
+         _topLayer.PictureTaken += this.PictureTaken;
+         _topLayer.ImagePreview += this.ImagePreview;
+
          _preview = new CameraPreview(this, _topLayer, cameraPreviewCallbackWithBuffer);
 
          RelativeLayout mainLayout = FindViewById<RelativeLayout>(Resource.Id.CameraPreiewRelativeLayout);
          mainLayout.AddView(_preview, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
          mainLayout.AddView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
-         
+
 #if GL_VIEW
          _topLayer.SetZOrderOnTop(true);
 #endif
@@ -72,8 +77,6 @@ namespace AndroidExamples
             _preview.SwitchCamera();
          };
 
-         //JpegCallback cameraCallback = new JpegCallback();
-
          ImageButton captureImageButton = FindViewById<ImageButton>(Resource.Id.CameraPreviewCaptureImageButton);
          captureImageButton.Click += delegate
          {
@@ -90,6 +93,144 @@ namespace AndroidExamples
          };
       }
 
+      private ViewMode _mode = ViewMode.Preview;
+
+      public ViewMode Mode
+      {
+         get
+         {
+            return _mode;
+         }
+         set
+         {
+            if (_mode != value)
+            {
+               _mode = value;
+
+               lock (typeof(ImageFilter))
+               {
+                  if (_imageFilter != null)
+                     _imageFilter.Dispose();
+
+                  if (value == ViewMode.Canny)
+                  {
+                     _imageFilter = new CannyFilter(100, 60, 3);
+                  }
+                  else if (value == ViewMode.ColorMap)
+                  {
+                     _imageFilter = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+
+                  }
+                  else //if (Mode == ViewMode.Distor)
+                  {
+                     _imageFilter = new DistorFilter(0.5, 0.5, -1.5);
+                  }
+               }
+            }
+         }
+      }
+
+      private ImageFilter _imageFilter;
+      private ImageBufferFactory<Bgr> _bgrBuffers;
+
+      public void ImagePreview(Object sender, ProcessedCameraPreview.ImagePreviewEventArgs e)
+      {
+         Image<Gray, Byte> yuv420sp = e.Yuv420sp;
+         Image<Bgr, Byte> image = e.Result;
+         if (Mode == ViewMode.Preview)
+         {
+            CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+         }
+         else
+         {
+            Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(image.Size, 0);
+            CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+
+            lock (typeof(ImageFilter))
+               _imageFilter.ProcessData(bgr, image);
+         }
+      }
+
+      public void PictureTaken(object sender, ProcessedCameraPreview.PictureTakenEventArgs ea)
+      {
+         Android.Graphics.Bitmap bmp = ea.Bitmap;
+         Camera camera = ea.Camera;
+         try
+         {
+            Android.Graphics.Bitmap thumbnail = null;
+            int maxThumbnailSize = 96;
+            if (_imageFilter == null)
+            {
+               ProcessedCameraPreview.SaveBitmap(this, bmp, _topLayer);
+               thumbnail = ProcessedCameraPreview.GetThumbnail(bmp, maxThumbnailSize);
+               bmp.Dispose();
+
+            }
+            else
+            {
+               Image<Bgr, Byte> buffer1 = new Image<Bgr, byte>(bmp);
+               bmp.Dispose();
+               Image<Bgr, Byte> buffer2 = new Image<Bgr, byte>(buffer1.Size);
+               ImageFilter filter = _imageFilter.Clone() as ImageFilter;
+
+               filter.ProcessData(buffer1, buffer2);
+               buffer1.Dispose();
+               filter.Dispose();
+
+               using (Android.Graphics.Bitmap result = buffer2.ToBitmap())
+               {
+                  buffer2.Dispose();
+                  thumbnail = ProcessedCameraPreview.GetThumbnail(result, maxThumbnailSize);
+                  ProcessedCameraPreview.SaveBitmap(this, result, _topLayer);
+               }
+            }
+         }
+         catch (Exception excpt)
+         {
+            this.RunOnUiThread(() =>
+            {
+               while (excpt.InnerException != null)
+                  excpt = excpt.InnerException;
+               AlertDialog.Builder alert = new AlertDialog.Builder(this);
+               alert.SetTitle("Error saving file");
+               alert.SetMessage(excpt.Message);
+               alert.SetPositiveButton("OK", (s, er) => { });
+               alert.Show();
+            });
+            return;
+         }
+         /*
+      catch (FileNotFoundException e)
+      {
+         Android.Util.Log.Debug("Emgu.CV", e.Message);
+      }
+      catch (IOException e)
+      {
+         Android.Util.Log.Debug("Emgu.CV", e.Message);
+      } */
+
+         /*
+         try
+         {
+            ExifInterface exif = new ExifInterface(f.FullName);
+            // Read the camera model and location attributes
+            exif.GetAttribute(ExifInterface.TagModel);
+            float[] latLng = new float[2];
+            exif.GetLatLong(latLng);
+            // Set the camera make
+            exif.SetAttribute(ExifInterface.TagMake, "My Phone");
+            exif.SetAttribute(ExifInterface.TagDatetime, System.DateTime.Now.ToString());
+         }
+         catch (IOException e)
+         {
+            Android.Util.Log.Debug("Emgu.CV", e.Message);
+         }*/
+
+
+         Toast.MakeText(this, "File Saved.", ToastLength.Short).Show();
+         camera.StartPreview();
+      }
+
       public override bool OnCreateOptionsMenu(IMenu menu)
       {
          _menuPreview = menu.Add("Preview");
@@ -103,22 +244,29 @@ namespace AndroidExamples
       {
          if (item == _menuCanny)
          {
-            _topLayer.Mode = ViewMode.Canny;
-           
+            Mode = ViewMode.Canny;
          }
          else if (item == _menuColorMap)
          {
-            _topLayer.Mode = ViewMode.ColorMap;
+            Mode = ViewMode.ColorMap;
          }
          else if (item == _menuPreview)
          {
-            _topLayer.Mode = ViewMode.Preview;
+            Mode = ViewMode.Preview;
          }
          else
          {
-            _topLayer.Mode = ViewMode.Distor;
+            Mode = ViewMode.Distor;
          }
          return base.OnOptionsItemSelected(item);
+      }
+
+      protected override void Dispose(bool disposing)
+      {
+         base.Dispose(disposing);
+         if (_imageFilter != null)
+            _imageFilter.Dispose();
+         _bgrBuffers.Dispose();
       }
    }
 
@@ -126,7 +274,7 @@ namespace AndroidExamples
    {
       Preview,
       Canny,
-      ColorMap, 
+      ColorMap,
       Distor
    }
 
