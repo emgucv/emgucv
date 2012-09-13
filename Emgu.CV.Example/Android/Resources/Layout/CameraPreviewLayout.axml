@@ -50,6 +50,14 @@
                     android:id="@+id/CameraPreviewSwitchCameraImageButton"
                     android:background="@android:color/transparent"
                     android:layout_alignParentRight="true" />
+                <ImageButton
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:id="@+id/capturedImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

@@ -77,9 +77,13 @@
       <Link>StopSignDetector.cs</Link>
     </Compile>
     <Compile Include="ButtonMessageImageActivity.cs" />
+    <Compile Include="CameraPreview.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
     <Compile Include="GLImageView.cs" />
+    <Compile Include="ImageBufferFactory.cs" />
+    <Compile Include="ImageFilter.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
+    <Compile Include="ProcessedCameraPreview.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />
     <Compile Include="PedestrianDetectionActivity.cs" />

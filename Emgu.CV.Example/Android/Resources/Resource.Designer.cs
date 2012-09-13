@@ -67,14 +67,17 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f050005
 			public const int GotoTrafficSignRecognitionButton = 2131034117;
 			
-			// aapt resource value: 0x7f05000f
-			public const int MyImage = 2131034127;
-			
 			// aapt resource value: 0x7f050010
-			public const int PlanarSubdivisionImageView = 2131034128;
+			public const int MyImage = 2131034128;
+			
+			// aapt resource value: 0x7f050011
+			public const int PlanarSubdivisionImageView = 2131034129;
+			
+			// aapt resource value: 0x7f05000f
+			public const int RedrawSubdivisionButton = 2131034127;
 			
 			// aapt resource value: 0x7f05000e
-			public const int RedrawSubdivisionButton = 2131034126;
+			public const int capturedImageButton = 2131034126;
 			
 			// aapt resource value: 0x7f050008
 			public const int linearLayout1 = 2131034120;
