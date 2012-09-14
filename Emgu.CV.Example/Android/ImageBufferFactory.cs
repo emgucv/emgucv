@@ -9,20 +9,23 @@ using System.Drawing;
 
 namespace AndroidExamples
 {
-   public class ImageBufferFactory<TColor> : Emgu.Util.DisposableObject
-   where TColor : struct, IColor
+   public class ImageBufferFactory<T> : Emgu.Util.DisposableObject
+   where T : class, IDisposable
    {
-      public ImageBufferFactory()
+      private Func<System.Drawing.Size, T> _createBufferFunc;
+
+      public ImageBufferFactory(Func<System.Drawing.Size, T> createBufferFunc)
       {
          _sizes = new List<Size>();
-         _buffers = new List<Image<TColor, byte>>();
+         _buffers = new List<T>();
+         _createBufferFunc = createBufferFunc;
       }
 
       private List<System.Drawing.Size> _sizes;
 
-      private List<Image<TColor, Byte>> _buffers;
+      private List<T> _buffers;
 
-      public Image<TColor, Byte> GetBuffer(int index)
+      public T GetBuffer(int index)
       {
          if (index < _buffers.Count)
             return _buffers[index];
@@ -30,7 +33,7 @@ namespace AndroidExamples
             return null;
       }
 
-      public Image<TColor, Byte> GetBuffer(System.Drawing.Size size, int index)
+      public T GetBuffer(System.Drawing.Size size, int index)
       {
          for (int i = _buffers.Count; i < index + 1; i++)
          {
@@ -40,14 +43,10 @@ namespace AndroidExamples
 
          if (!_sizes[index].Equals(size))
          {
-            if (_buffers[index] == null)
-               _buffers[index] = new Image<TColor, byte>(size);
-            else
-            {
+            if (_buffers[index] != null)
                _buffers[index].Dispose();
-               _buffers[index] = new Image<TColor, byte>(size);
-            }
 
+            _buffers[index] = _createBufferFunc(size);
             _sizes[index] = size;
          }
          return _buffers[index];
@@ -58,7 +57,11 @@ namespace AndroidExamples
          for (int i = 0; i < _buffers.Count; i++)
          {
             if (_buffers[i] != null)
+            {
                _buffers[i].Dispose();
+               _buffers[i] = null;
+               _sizes[i] = Size.Empty;
+            }
          }
       }
    }

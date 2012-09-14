@@ -34,26 +34,22 @@ namespace AndroidExamples
 #if GL_VIEW
       GLImageView,
 #else
- View,
+      View,
 #endif
- Camera.IPreviewCallback,
+      Camera.IPreviewCallback,
       Camera.IPictureCallback,
       MediaScannerConnection.IOnScanCompletedListener
    {
       private Stopwatch _watch;
-      Paint _paint;
-      Size _imageSize;
-
-      ImageBufferFactory<Bgr> _bgrBuffers;
-
-      Activity _activity;
-
+      private Paint _paint;
+      private Size _imageSize;
+      private ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
       private bool _cameraPreviewCallbackWithBuffer;
+      private bool _busy;
 
       public ProcessedCameraPreview(Activity activity, bool cameraPreviewCallbackWithBuffer)
          : base(activity)
       {
-         _activity = activity;
          _cameraPreviewCallbackWithBuffer = cameraPreviewCallbackWithBuffer;
 
          _paint = new Paint();
@@ -65,16 +61,25 @@ namespace AndroidExamples
          {
          }
          _watch = Stopwatch.StartNew();
-         _bgrBuffers = new ImageBufferFactory<Bgr>();
+         _bgrBuffers = new ImageBufferFactory<Image<Bgr, byte>>( size => new Image<Bgr, Byte>(size) );
       }
 
       protected override void Dispose(bool disposing)
       {
          base.Dispose(disposing);
          _bgrBuffers.Dispose();
-
       }
 
+      /// <summary>
+      /// Function to call when the image is scanned by the media scanner
+      /// </summary>
+      /// <param name="path">The path to the file that has been scanned.</param>
+      /// <param name="uri">The Uri for the file if the scanning operation succeeded and the file was added to the media database, or null if scanning failed.</param>
+      public void OnScanCompleted(string path, Android.Net.Uri uri)
+      {
+      }
+
+      #region static methods
       public static FileInfo SaveBitmap(Context context, Android.Graphics.Bitmap bmp, MediaScannerConnection.IOnScanCompletedListener onScanCompleteListener)
       {
          String fileName = DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".jpg";
@@ -93,31 +98,25 @@ namespace AndroidExamples
          return f;
       }
 
-      /// <summary>
-      /// Function to call when the image is scanned by the media scanner
-      /// </summary>
-      /// <param name="path">The path to the file that has been scanned.</param>
-      /// <param name="uri">The Uri for the file if the scanning operation succeeded and the file was added to the media database, or null if scanning failed.</param>
-      public void OnScanCompleted(string path, Android.Net.Uri uri)
-      {
-      }
+     
 
-      public static Android.Graphics.Bitmap GetThumbnail(Android.Graphics.Bitmap bmp, int maxSize)
+      public static Android.Graphics.Bitmap GetThumbnail(Android.Graphics.Bitmap bmp, int maxDimension)
       {
-         int width = maxSize;
-         int height = maxSize;
+         int width = maxDimension;
+         int height = maxDimension;
          if (bmp.Width > bmp.Height)
          {
-            height = maxSize * bmp.Height / bmp.Width;
+            height = maxDimension * bmp.Height / bmp.Width;
          }
          else
          {
-            width = maxSize * bmp.Width / bmp.Height;
+            width = maxDimension * bmp.Width / bmp.Height;
          }
          return Android.Media.ThumbnailUtils.ExtractThumbnail(bmp, width, height);
       }
+      #endregion
 
-
+      #region definitions for events and eventArgs
       public class PictureTakenEventArgs
       {
          public Android.Graphics.Bitmap Bitmap;
@@ -129,8 +128,24 @@ namespace AndroidExamples
             Camera = camera;
          }
       }
+
+      public class ImagePreviewEventArgs
+      {
+         public Image<Gray, Byte> Yuv420sp;
+         public Image<Bgr, Byte> Result;
+
+         public ImagePreviewEventArgs(Image<Gray, Byte> yuv420sp, Image<Bgr, Byte> result)
+         {
+            Yuv420sp = yuv420sp;
+            Result = result;
+         }
+      }
+
+      public delegate void ImagePreviewEventHandler(Object sender, ImagePreviewEventArgs e);
+      public event ImagePreviewEventHandler ImagePreview;
       public delegate void PictureTakenEventHandler(object sender, PictureTakenEventArgs eventArgs);
       public event PictureTakenEventHandler PictureTaken;
+      #endregion
 
       public void OnPictureTaken(byte[] data, Camera camera)
       {
@@ -138,8 +153,6 @@ namespace AndroidExamples
          {
             Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeByteArray(data, 0, data.Length);
             PictureTaken(this, new PictureTakenEventArgs(bmp, camera));
-            
-
          }
          else
          {
@@ -197,24 +210,6 @@ namespace AndroidExamples
       }
 #endif
 
-      private bool _busy;
-
-      public class ImagePreviewEventArgs 
-      {
-         public Image<Gray, Byte> Yuv420sp;
-         public Image<Bgr, Byte> Result;
-
-         public ImagePreviewEventArgs(Image<Gray, Byte> yuv420sp, Image<Bgr, Byte> result)
-         {
-            Yuv420sp = yuv420sp;
-            Result = result;
-         }
-      }
-
-      public delegate void ImagePreviewEventHandler(Object sender, ImagePreviewEventArgs e);
-
-      public event ImagePreviewEventHandler ImagePreview;
-
       public void OnPreviewFrame(byte[] data, Camera camera)
       {
          if (!_busy && ImagePreview != null)
@@ -230,7 +225,6 @@ namespace AndroidExamples
                using (Image<Gray, Byte> yuv420sp = new Image<Gray, byte>(size.Width, (size.Height >> 1) * 3, size.Width, handle.AddrOfPinnedObject()))
                {
                   ImagePreview(this, new ImagePreviewEventArgs(yuv420sp, image));
-
                }
                handle.Free();
 

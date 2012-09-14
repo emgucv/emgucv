@@ -35,7 +35,31 @@
                 android:minHeight="25px"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/relativeLayout3" />
+                android:id="@+id/relativeLayout3">
+                <ImageButton
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/previewImageButton" />
+                <ImageButton
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/previewImageButton"
+                    android:id="@+id/cannyImageButton" />
+                <ImageButton
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/cannyImageButton"
+                    android:id="@+id/colorMapImageButton" />
+                <ImageButton
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/colorMapImageButton"
+                    android:id="@+id/distorImageButton" />
+            </RelativeLayout>
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"

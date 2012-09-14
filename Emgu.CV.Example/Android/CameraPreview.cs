@@ -35,11 +35,11 @@ namespace AndroidExamples
       ISurfaceHolder _surfaceHolder;
       Camera _camera;
       int _cameraIndex;
-      ProcessedCameraPreview _topLayer;
+      Camera.IPreviewCallback _cameraPreviewCallback;
 
       private bool _cameraPreviewCallbackWithBuffer;
 
-      public CameraPreview(Context context, ProcessedCameraPreview topLayer, bool cameraPreviewCallbackWithBuffer)
+      public CameraPreview(Context context, Camera.IPreviewCallback previewCallback, bool cameraPreviewCallbackWithBuffer)
          : base(context)
       {
          _cameraPreviewCallbackWithBuffer = cameraPreviewCallbackWithBuffer;
@@ -49,7 +49,7 @@ namespace AndroidExamples
          _surfaceHolder = Holder;
          _surfaceHolder.AddCallback(this);
 
-         _topLayer = topLayer;
+         _cameraPreviewCallback = previewCallback;
       }
 
       public Camera Camera
@@ -137,6 +137,45 @@ namespace AndroidExamples
 
       private static Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h, int maxWidth, int maxHeight)
       {
+         Camera.Size size = sizes[0];
+         double area = size.Width * size.Height;
+         double minArea = area;
+         int minAreaIdx = 0;
+
+         bool found = false;
+
+         for (int i = 1; i < sizes.Count; i++)
+         {
+            Camera.Size s = sizes[i];
+            double a = s.Width * s.Height;
+            if (a < minArea)
+            {
+               minArea = a;
+               minAreaIdx = i;
+            }
+
+            if (s.Width <= maxWidth && s.Height <= maxHeight)
+            {
+               if (!found)
+               {
+                  found = true;
+                  area = a;
+                  size = s;
+               } else if (a > area)
+               {
+                  area = a;
+                  size = s;
+               }
+            }
+         }
+
+         if (size.Width > maxWidth || size.Height > maxHeight)
+         {
+            size = sizes[minAreaIdx];
+         }
+         return size;
+
+         /*
          const double ASPECT_TOLERANCE = 0.05;
          double targetRatio = (double)w / h;
 
@@ -184,7 +223,7 @@ namespace AndroidExamples
             }
          }
 
-         return optimalSize;
+         return optimalSize;*/
       }
 
 
@@ -192,7 +231,7 @@ namespace AndroidExamples
       {
          Camera.Parameters parameters = camera.GetParameters();
          IList<Camera.Size> sizes = parameters.SupportedPreviewSizes;
-         int maxWidth = 640, maxHeight = 480;
+         int maxWidth = 512, maxHeight = 512;
          Camera.Size optimalSize = GetOptimalPreviewSize(sizes, w, h, maxWidth, maxHeight);
          parameters.SetPreviewSize(optimalSize.Width, optimalSize.Height);
          camera.SetParameters(parameters);
@@ -214,16 +253,18 @@ namespace AndroidExamples
          //set for protrait mode
          //camera.SetDisplayOrientation(90);
 
-         if (_cameraPreviewCallbackWithBuffer)
+         if (_cameraPreviewCallback != null)
          {
-            int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
-            _camera.SetPreviewCallbackWithBuffer(_topLayer);
-            for (int i = 0; i < 1; ++i)
-               _camera.AddCallbackBuffer(new byte[bufferSize]);
+            if (_cameraPreviewCallbackWithBuffer)
+            {
+               int bufferSize = optimalSize.Width * (optimalSize.Height >> 1) * 3;
+               _camera.SetPreviewCallbackWithBuffer(_cameraPreviewCallback);
+               for (int i = 0; i < 1; ++i)
+                  _camera.AddCallbackBuffer(new byte[bufferSize]);
+            }
+            else
+               _camera.SetPreviewCallback(_cameraPreviewCallback);
          }
-         else
-            _camera.SetPreviewCallback(_topLayer);
-
          _camera.StartPreview();
 
          Layout(0, 0, optimalSize.Width, optimalSize.Height);

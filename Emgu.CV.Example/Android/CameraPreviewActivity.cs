@@ -36,10 +36,19 @@ namespace AndroidExamples
       private CameraPreview _preview;
       private ProcessedCameraPreview _topLayer;
 
+      /*
       private IMenuItem _menuCanny;
       private IMenuItem _menuColorMap;
       private IMenuItem _menuPreview;
       private IMenuItem _menuDistor;
+      */
+
+      private ImageButton[] _previewButtons;
+      private ImageFilter[] _previewFilters;
+      
+      private ImageBufferFactory<Android.Graphics.Bitmap> _previewBitmapBuffers;
+      
+      private ImageButton _lastCapturedImageButton;
 
       protected override void OnCreate(Bundle bundle)
       {
@@ -48,7 +57,8 @@ namespace AndroidExamples
          bool cameraPreviewCallbackWithBuffer = false;
          SetContentView(Resource.Layout.CameraPreviewLayout);
 
-         _bgrBuffers = new ImageBufferFactory<Bgr>();
+         _bgrBuffers = new ImageBufferFactory<Image<Bgr, Byte>>(size => new Image<Bgr, Byte>(size));
+         _previewBitmapBuffers = new ImageBufferFactory<Android.Graphics.Bitmap>(s => Android.Graphics.Bitmap.CreateBitmap(s.Width, s.Height, Android.Graphics.Bitmap.Config.Rgb565));
 
          _topLayer = new ProcessedCameraPreview(this, cameraPreviewCallbackWithBuffer);
          _topLayer.PictureTaken += this.PictureTaken;
@@ -91,64 +101,120 @@ namespace AndroidExamples
                camera.TakePicture(null, null, _topLayer);
             }
          };
-      }
 
-      private ViewMode _mode = ViewMode.Preview;
-
-      public ViewMode Mode
-      {
-         get
+         _lastCapturedImageButton = mainLayout.FindViewById<ImageButton>(Resource.Id.capturedImageButton);
+         _lastCapturedImageButton.Click += delegate
          {
-            return _mode;
-         }
-         set
-         {
-            if (_mode != value)
+            if (_lastSavedImageFile != null)
             {
-               _mode = value;
-
-               lock (typeof(ImageFilter))
-               {
-                  if (_imageFilter != null)
-                     _imageFilter.Dispose();
-
-                  if (value == ViewMode.Canny)
-                  {
-                     _imageFilter = new CannyFilter(100, 60, 3);
-                  }
-                  else if (value == ViewMode.ColorMap)
-                  {
-                     _imageFilter = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
-
-                  }
-                  else //if (Mode == ViewMode.Distor)
-                  {
-                     _imageFilter = new DistorFilter(0.5, 0.5, -1.5);
-                  }
-               }
+               Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.FromFile(new Java.IO.File(_lastSavedImageFile.FullName)));
+               intent.SetType("image/jpeg");
+               StartActivity(intent);
             }
+         };
+         _lastCapturedImageButton.BringToFront();
+
+         _previewButtons = new ImageButton[4];
+         _previewFilters = new ImageFilter[4];
+         _previewButtons[0] = FindViewById<ImageButton>(Resource.Id.previewImageButton);
+         _previewFilters[0] = null;
+         _previewButtons[0].Click += delegate
+         {
+            if (_imageFilter != null)
+            {
+               _imageFilter.Dispose();
+               _imageFilter = null;
+            }
+         };
+         _previewButtons[1] = FindViewById<ImageButton>(Resource.Id.cannyImageButton);
+         //_previewFilters[1] = new CannyFilter(100, 60, 3);
+         _previewFilters[1] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Autumn);
+         _previewButtons[2] = FindViewById<ImageButton>(Resource.Id.colorMapImageButton);
+         _previewFilters[2] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+         _previewButtons[3] = FindViewById<ImageButton>(Resource.Id.distorImageButton);
+         _previewFilters[3] =  new DistorFilter(0.5, 0.5, -1.5);
+         for (int i = 1; i < _previewButtons.Length; ++i)
+         {
+            ImageFilter f = _previewFilters[i];
+            _previewButtons[i].Click += delegate
+            {
+               if (_imageFilter != null)
+                  _imageFilter.Dispose();
+               _imageFilter = f.Clone() as ImageFilter;
+            };
          }
       }
 
       private ImageFilter _imageFilter;
-      private ImageBufferFactory<Bgr> _bgrBuffers;
+      private ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
+      private FileInfo _lastSavedImageFile;
 
       public void ImagePreview(Object sender, ProcessedCameraPreview.ImagePreviewEventArgs e)
       {
          Image<Gray, Byte> yuv420sp = e.Yuv420sp;
          Image<Bgr, Byte> image = e.Result;
-         if (Mode == ViewMode.Preview)
+
+#region get the thumbnail size buffer
+         Size s = image.Size;
+         int maxDimension = 96;
+         int width = maxDimension;
+         int height = maxDimension;
+         if (s.Width > s.Height)
+         {
+            height = maxDimension * s.Height / s.Width;
+         }
+         else
+         {
+            width = maxDimension * s.Width / s.Height;
+         }
+         s.Width = width;
+         s.Height = height;
+         Image<Bgr, byte> thumbnail = _bgrBuffers.GetBuffer(s, 1);
+#endregion
+
+         if (_imageFilter == null)
          {
             CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+            CvInvoke.cvResize(image, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
          }
          else
          {
             Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(image.Size, 0);
             CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
-
             lock (typeof(ImageFilter))
                _imageFilter.ProcessData(bgr, image);
+            CvInvoke.cvResize(bgr, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
          }
+
+         {
+            //TODO: Find out why this function fails some times, remove the try/catch block in the future.
+            Android.Graphics.Bitmap thumbnailBmp = _previewBitmapBuffers.GetBuffer(s, 0);
+            using (BitmapRgb565Image img565 = new BitmapRgb565Image(thumbnailBmp))
+               img565.ConvertFrom(thumbnail);
+            _previewButtons[0].SetImageBitmap(thumbnailBmp);
+
+            
+            int startBufferIndex = 2;
+            for (int i = 1; i < _previewFilters.Length; i++)
+            {
+               Image<Bgr, Byte> buffer = _bgrBuffers.GetBuffer(s, startBufferIndex + i - 1);
+               _previewFilters[i].ProcessData(thumbnail, buffer);
+
+               Android.Graphics.Bitmap bmp = _previewBitmapBuffers.GetBuffer(s, i);
+               using (BitmapRgb565Image tmp = new BitmapRgb565Image(bmp))
+               {
+                  tmp.ConvertFrom(buffer);
+               }
+               _previewButtons[i].SetImageBitmap(bmp);
+            }
+         } /*
+         catch (Exception excpt)
+         {
+            while (excpt.InnerException != null)
+               excpt = excpt.InnerException;
+            Android.Util.Log.Debug("Emgu.CV", String.Format("Failed to generate preview: {0}", excpt.Message));
+         }*/
+
       }
 
       public void PictureTaken(object sender, ProcessedCameraPreview.PictureTakenEventArgs ea)
@@ -161,10 +227,9 @@ namespace AndroidExamples
             int maxThumbnailSize = 96;
             if (_imageFilter == null)
             {
-               ProcessedCameraPreview.SaveBitmap(this, bmp, _topLayer);
+               _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, bmp, _topLayer);
                thumbnail = ProcessedCameraPreview.GetThumbnail(bmp, maxThumbnailSize);
                bmp.Dispose();
-
             }
             else
             {
@@ -180,10 +245,13 @@ namespace AndroidExamples
                using (Android.Graphics.Bitmap result = buffer2.ToBitmap())
                {
                   buffer2.Dispose();
+                  _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, result, _topLayer);
                   thumbnail = ProcessedCameraPreview.GetThumbnail(result, maxThumbnailSize);
-                  ProcessedCameraPreview.SaveBitmap(this, result, _topLayer);
                }
             }
+
+            _lastCapturedImageButton.SetImageBitmap(thumbnail);
+            
          }
          catch (Exception excpt)
          {
@@ -229,36 +297,6 @@ namespace AndroidExamples
 
          Toast.MakeText(this, "File Saved.", ToastLength.Short).Show();
          camera.StartPreview();
-      }
-
-      public override bool OnCreateOptionsMenu(IMenu menu)
-      {
-         _menuPreview = menu.Add("Preview");
-         _menuCanny = menu.Add("Canny");
-         _menuColorMap = menu.Add("Color Map");
-         _menuDistor = menu.Add("Distor");
-         return base.OnCreateOptionsMenu(menu);
-      }
-
-      public override bool OnOptionsItemSelected(IMenuItem item)
-      {
-         if (item == _menuCanny)
-         {
-            Mode = ViewMode.Canny;
-         }
-         else if (item == _menuColorMap)
-         {
-            Mode = ViewMode.ColorMap;
-         }
-         else if (item == _menuPreview)
-         {
-            Mode = ViewMode.Preview;
-         }
-         else
-         {
-            Mode = ViewMode.Distor;
-         }
-         return base.OnOptionsItemSelected(item);
       }
 
       protected override void Dispose(bool disposing)

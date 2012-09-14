@@ -11,8 +11,8 @@ namespace AndroidExamples
 {
    public abstract class ImageFilter : Emgu.Util.DisposableObject, ICloneable
    {
-      protected ImageBufferFactory<Bgr> _bgrBuffers;
-      protected ImageBufferFactory<Gray> _grayBuffers;
+      protected ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
+      protected ImageBufferFactory<Image<Gray, Byte>> _grayBuffers;
 
       public ImageFilter()
       {
@@ -23,14 +23,14 @@ namespace AndroidExamples
       public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
       {
          if (_bgrBuffers == null)
-            _bgrBuffers = new ImageBufferFactory<Bgr>();
+            _bgrBuffers = new ImageBufferFactory<Image<Bgr, Byte>>( s => new Image<Bgr, Byte>(s));
          return _bgrBuffers.GetBuffer(size, index);
       }
 
       public Image<Gray, Byte> GetBufferGray(Size size, int index)
       {
          if (_grayBuffers == null)
-            _grayBuffers = new ImageBufferFactory<Gray>();
+            _grayBuffers = new ImageBufferFactory<Image<Gray, Byte>>( s => new Image<Gray, Byte>(s));
          return _grayBuffers.GetBuffer(size, index);
       }
 
@@ -68,7 +68,7 @@ namespace AndroidExamples
          Image<Gray, Byte> bCanny = GetBufferGray(size, 3);
          Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
          Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
-         Image<Bgr, Byte> buffer0 = GetBufferBgr(sourceImage.Size, 0);
+         Image<Bgr, Byte> buffer0 = GetBufferBgr(size, 0);
 
          CvInvoke.cvSplit(sourceImage, b, g, r, IntPtr.Zero);
          CvInvoke.cvCanny(b, bCanny, _thresh, _threshLinking, _apertureSize);
