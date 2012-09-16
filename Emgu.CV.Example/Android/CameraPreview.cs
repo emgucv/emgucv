@@ -85,6 +85,10 @@ namespace Emgu.CV
             StopCamera();
             _camera = Camera.Open(cameraIndex);
             _camera.SetPreviewDisplay(_surfaceHolder);
+            if (OnCameraCreated != null)
+            {
+               OnCameraCreated(this, new EventArgs<Camera>(_camera));
+            }
          }
          catch (Exception)
          {
@@ -96,6 +100,8 @@ namespace Emgu.CV
 
          return true;
       }
+
+      public event EventHandler<EventArgs<Camera>> OnCameraCreated;
 
       private void StopCamera()
       {
