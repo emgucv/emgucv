@@ -7,18 +7,30 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
-namespace AndroidExamples
+namespace Emgu.CV
 {
    public abstract class ImageFilter : Emgu.Util.DisposableObject, ICloneable
    {
       protected ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
       protected ImageBufferFactory<Image<Gray, Byte>> _grayBuffers;
+      protected bool _inplaceCapable = false;
 
       public ImageFilter()
       {
       }
 
-      public abstract void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest);
+      /// <summary>
+      /// If true, the sourceImage and destImage in ProcessData function can be the same
+      /// </summary>
+      public bool InplaceCapable
+      {
+         get
+         {
+            return _inplaceCapable;
+         }
+      }
+
+      public abstract void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage);
 
       public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
       {
@@ -37,9 +49,15 @@ namespace AndroidExamples
       protected override void DisposeObject()
       {
          if (_bgrBuffers != null)
+         {
             _bgrBuffers.Dispose();
+            _bgrBuffers = null;
+         }
          if (_grayBuffers != null)
+         {
             _grayBuffers.Dispose();
+            _grayBuffers = null;
+         }
       }
 
       public abstract Object Clone();
@@ -56,9 +74,11 @@ namespace AndroidExamples
          _thresh = thresh;
          _threshLinking = threshLinking;
          _apertureSize = apertureSize;
+
+         _inplaceCapable = true;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
       {
          Size size = sourceImage.Size;
 
@@ -68,13 +88,12 @@ namespace AndroidExamples
          Image<Gray, Byte> bCanny = GetBufferGray(size, 3);
          Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
          Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
-         Image<Bgr, Byte> buffer0 = GetBufferBgr(size, 0);
 
          CvInvoke.cvSplit(sourceImage, b, g, r, IntPtr.Zero);
          CvInvoke.cvCanny(b, bCanny, _thresh, _threshLinking, _apertureSize);
          CvInvoke.cvCanny(g, gCanny, _thresh, _threshLinking, _apertureSize);
          CvInvoke.cvCanny(r, rCanny, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvMerge(bCanny, gCanny, rCanny, IntPtr.Zero, dest);
+         CvInvoke.cvMerge(bCanny, gCanny, rCanny, IntPtr.Zero, destImage);
 
       }
 
@@ -91,11 +110,12 @@ namespace AndroidExamples
       public ColorMapFilter(Emgu.CV.CvEnum.ColorMapType type)
       {
          _colorMapType = type;
+         _inplaceCapable = true;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
       {
-         CvInvoke.ApplyColorMap(sourceImage, dest, _colorMapType);
+         CvInvoke.ApplyColorMap(sourceImage, destImage, _colorMapType);
       }
 
       public override object Clone()
@@ -132,7 +152,7 @@ namespace AndroidExamples
          _distorCoeff = distorCoeff;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> dest)
+      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
       {
          if (!sourceImage.Size.Equals(_size))
          {
@@ -164,7 +184,7 @@ namespace AndroidExamples
             p.InitUndistortMap(_size.Width, _size.Height, out _mapX, out _mapY);
          }
 
-         CvInvoke.cvRemap(sourceImage, dest, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+         CvInvoke.cvRemap(sourceImage, destImage, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
       }
 
       public override object Clone()

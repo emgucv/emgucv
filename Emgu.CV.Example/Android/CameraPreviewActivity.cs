@@ -36,13 +36,6 @@ namespace AndroidExamples
       private CameraPreview _preview;
       private ProcessedCameraPreview _topLayer;
 
-      /*
-      private IMenuItem _menuCanny;
-      private IMenuItem _menuColorMap;
-      private IMenuItem _menuPreview;
-      private IMenuItem _menuDistor;
-      */
-
       private ImageButton[] _previewButtons;
       private ImageFilter[] _previewFilters;
       
@@ -63,10 +56,11 @@ namespace AndroidExamples
          _topLayer = new ProcessedCameraPreview(this, cameraPreviewCallbackWithBuffer);
          _topLayer.PictureTaken += this.PictureTaken;
          _topLayer.ImagePreview += this.ImagePreview;
-
+         
          _preview = new CameraPreview(this, _topLayer, cameraPreviewCallbackWithBuffer);
 
          RelativeLayout mainLayout = FindViewById<RelativeLayout>(Resource.Id.CameraPreiewRelativeLayout);
+         
          mainLayout.AddView(_preview, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
          mainLayout.AddView(_topLayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
 
@@ -102,7 +96,7 @@ namespace AndroidExamples
             }
          };
 
-         _lastCapturedImageButton = mainLayout.FindViewById<ImageButton>(Resource.Id.capturedImageButton);
+         _lastCapturedImageButton = FindViewById<ImageButton>(Resource.Id.capturedImageButton);
          _lastCapturedImageButton.Click += delegate
          {
             if (_lastSavedImageFile != null)
@@ -187,13 +181,11 @@ namespace AndroidExamples
          }
 
          {
-            //TODO: Find out why this function fails some times, remove the try/catch block in the future.
             Android.Graphics.Bitmap thumbnailBmp = _previewBitmapBuffers.GetBuffer(s, 0);
             using (BitmapRgb565Image img565 = new BitmapRgb565Image(thumbnailBmp))
                img565.ConvertFrom(thumbnail);
             _previewButtons[0].SetImageBitmap(thumbnailBmp);
-
-            
+  
             int startBufferIndex = 2;
             for (int i = 1; i < _previewFilters.Length; i++)
             {
@@ -235,16 +227,31 @@ namespace AndroidExamples
             {
                Image<Bgr, Byte> buffer1 = new Image<Bgr, byte>(bmp);
                bmp.Dispose();
-               Image<Bgr, Byte> buffer2 = new Image<Bgr, byte>(buffer1.Size);
-               ImageFilter filter = _imageFilter.Clone() as ImageFilter;
 
-               filter.ProcessData(buffer1, buffer2);
-               buffer1.Dispose();
-               filter.Dispose();
-
-               using (Android.Graphics.Bitmap result = buffer2.ToBitmap())
+               using (ImageFilter filter = _imageFilter.Clone() as ImageFilter)
                {
-                  buffer2.Dispose();
+                  if (filter is DistorFilter)
+                  {
+                     //reduce the image size to half because the distor filter used lots of memory
+                     Image<Bgr, Byte> tmp = buffer1.PyrDown();
+                     buffer1.Dispose();
+                     buffer1 = tmp;
+                  }
+
+                  if (filter.InplaceCapable)
+                     filter.ProcessData(buffer1, buffer1);
+                  else
+                  {
+                     Image<Bgr, Byte> buffer2 = new Image<Bgr, byte>(buffer1.Size);
+                     filter.ProcessData(buffer1, buffer2);
+                     buffer1.Dispose();
+                     buffer1 = buffer2;
+                  }
+               }
+               
+               using (Android.Graphics.Bitmap result = buffer1.ToBitmap())
+               {
+                  buffer1.Dispose();
                   _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, result, _topLayer);
                   thumbnail = ProcessedCameraPreview.GetThumbnail(result, maxThumbnailSize);
                }

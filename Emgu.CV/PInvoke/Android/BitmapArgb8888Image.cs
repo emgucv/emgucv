@@ -18,7 +18,7 @@ namespace Emgu.CV
    /// <summary>
    /// An image that shares the data with Bitmap
    /// </summary>
-   public class BitmapArgb8888Image : Image<Bgra, Byte>
+   public class BitmapArgb8888Image : Image<Rgba, Byte>
    {
       private Bitmap _bmp;
 

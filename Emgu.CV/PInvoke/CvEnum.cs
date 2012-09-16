@@ -3079,6 +3079,7 @@ namespace Emgu.CV.CvEnum
       /// Hot
       /// </summary>
       Hot = 11,
+      /*
       /// <summary>
       /// Mkpj1
       /// </summary>
@@ -3086,6 +3087,6 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Mpkj2
       /// </summary>
-      Mkpj2 = 13
+      Mkpj2 = 13*/
    }
 }

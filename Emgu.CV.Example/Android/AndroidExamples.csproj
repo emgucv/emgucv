@@ -374,10 +374,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
-    <Content Include="Resources\drawable-hdpi\ic_launcher.png" />
-    <Content Include="Resources\drawable-ldpi\ic_launcher.png" />
-    <Content Include="Resources\drawable-mdpi\ic_launcher.png" />
-    <Content Include="Resources\drawable-xdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-ldpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
   </ItemGroup>
   <ItemGroup />

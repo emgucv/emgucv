@@ -7,7 +7,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 
-namespace AndroidExamples
+namespace Emgu.CV
 {
    public class ImageBufferFactory<T> : Emgu.Util.DisposableObject
    where T : class, IDisposable
@@ -31,6 +31,15 @@ namespace AndroidExamples
             return _buffers[index];
          else
             return null;
+      }
+
+      public void ReleaseBuffer(int index)
+      {
+         if (index < _buffers.Count && _buffers[index] != null)
+         {
+            _buffers[index].Dispose();
+            _buffers[index] = null;
+         }
       }
 
       public T GetBuffer(System.Drawing.Size size, int index)

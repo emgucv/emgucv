@@ -42,14 +42,17 @@ namespace Emgu.CV
             Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
 
             using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
+            {
                bi.ConvertFrom(this);
+               //CvInvoke.cvSet(bi, new MCvScalar(0, 0, 255, 255), IntPtr.Zero);
+            }
             return result;
          }
          else if (config == Bitmap.Config.Rgb565)
          {
             Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Rgb565);
 
-            using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
+            using (BitmapRgb565Image bi = new BitmapRgb565Image(result))
                bi.ConvertFrom(this);
             return result;
          }

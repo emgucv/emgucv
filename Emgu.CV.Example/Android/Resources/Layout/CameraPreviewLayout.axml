@@ -11,17 +11,34 @@
         android:id="@+id/relativeLayout1">
         <RelativeLayout
             android:orientation="vertical"
-            android:minWidth="25px"
+            android:minWidth="100px"
             android:minHeight="25px"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:id="@+id/linearLayout1">
+            android:id="@+id/toolbarLayout"
+            android:layout_alignParentRight="true">
+            <ImageButton
+                android:src="@android:drawable/ic_popup_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/CameraPreviewSwitchCameraImageButton"
+                android:background="@android:color/transparent"
+                android:layout_centerHorizontal="true" />
             <ImageButton
                 android:src="@android:drawable/presence_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/CameraPreviewCaptureImageButton"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+            <ImageButton
+                android:src="@android:drawable/ic_menu_gallery"
+                android:id="@+id/capturedImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@android:color/transparent"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
         <RelativeLayout
             android:minWidth="25px"
@@ -29,7 +46,7 @@
             android:id="@+id/relativeLayout2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_toRightOf="@id/linearLayout1">
+            android:layout_toLeftOf="@id/toolbarLayout">
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -66,23 +83,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@id/relativeLayout3"
-                android:id="@+id/CameraPreiewRelativeLayout">
-                <ImageButton
-                    android:src="@android:drawable/ic_popup_sync"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/CameraPreviewSwitchCameraImageButton"
-                    android:background="@android:color/transparent"
-                    android:layout_alignParentRight="true" />
-                <ImageButton
-                    android:src="@android:drawable/ic_menu_gallery"
-                    android:id="@+id/capturedImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent" />
-            </RelativeLayout>
+                android:id="@+id/CameraPreiewRelativeLayout"
+                android:gravity="center" />
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

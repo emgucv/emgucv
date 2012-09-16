@@ -28,7 +28,7 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using Paint = Android.Graphics.Paint;
 
-namespace AndroidExamples
+namespace Emgu.CV
 {
    public class CameraPreview : SurfaceView, ISurfaceHolderCallback
    {

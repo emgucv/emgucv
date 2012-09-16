@@ -28,7 +28,7 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using Paint = Android.Graphics.Paint;
 
-namespace AndroidExamples
+namespace Emgu.CV
 {
    public class ProcessedCameraPreview :
 #if GL_VIEW
@@ -197,12 +197,14 @@ namespace AndroidExamples
                w.Stop();
 
                _watch.Stop();
-
+               
+#if DEBUG
                canvas.DrawText(String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms",
                   1.0 / _watch.ElapsedMilliseconds * 1000,
                   _imageSize.Width,
                   _imageSize.Height,
                   w.ElapsedMilliseconds), 20, 20, _paint);
+#endif
                _watch.Reset();
                _watch.Start();
             }
