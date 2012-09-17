@@ -156,7 +156,10 @@ namespace Emgu.CV
          }
          else
          {
-            Android.Util.Log.Debug("Emgu.CV", "No image or PictureTake is not registered");
+            if (data == null)
+               Android.Util.Log.Debug("Emgu.CV", "No image is recevide from PictureTakenEventArgs");
+            else
+               Android.Util.Log.Debug("Emgu.CV", "PictureTaken event handler is not registered");
          }
       }
 

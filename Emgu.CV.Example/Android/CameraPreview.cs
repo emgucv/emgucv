@@ -68,19 +68,28 @@ namespace Emgu.CV
             _cameraIndex++;
             _cameraIndex %= numberOfCameras;
 
-            CreateCamera(_cameraIndex);
-
-            SurfaceChanged(
-               _surfaceHolder,
-               Android.Graphics.Format.Rgb888, //doesn't matter, omitted by the Surface changed function.
-               Width,
-               Height);
+            if (CreateCamera(_cameraIndex))
+            {
+               SurfaceChanged(
+                  _surfaceHolder,
+                  Android.Graphics.Format.Rgb888, //doesn't matter, omitted by the Surface changed function.
+                  Width,
+                  Height);
+            }
+            else
+            {
+               _cameraIndex--;
+               if (_cameraIndex < 0)
+                  _cameraIndex = numberOfCameras - 1;
+            }
          }
       }
 
       private bool CreateCamera(int cameraIndex)
       {
+#if !DEBUG
          try
+#endif
          {
             StopCamera();
             _camera = Camera.Open(cameraIndex);
@@ -90,13 +99,20 @@ namespace Emgu.CV
                OnCameraCreated(this, new EventArgs<Camera>(_camera));
             }
          }
-         catch (Exception)
+#if !DEBUG
+         catch (Exception excpt)
          {
             _camera.Release();
             _camera = null;
+
+            while (excpt.InnerException != null)
+               excpt = excpt.InnerException;
+            Android.Util.Log.Debug("Emgu.CV", String.Format("Unable to create camera: {0}", e.Message));
+
             return false;
             // TODO: add more exception handling logic here
          }
+#endif
 
          return true;
       }
