@@ -7,7 +7,7 @@
 // https://github.com/xamarin/monodroid-samples/blob/master/ApiDemo/Graphics/CameraPreview.cs
 //
 
-//#define GL_VIEW
+#define GL_VIEW
 
 using System;
 using System.Collections.Generic;
@@ -98,8 +98,6 @@ namespace Emgu.CV
          return f;
       }
 
-     
-
       public static Android.Graphics.Bitmap GetThumbnail(Android.Graphics.Bitmap bmp, int maxDimension)
       {
          int width = maxDimension;
@@ -157,9 +155,9 @@ namespace Emgu.CV
          else
          {
             if (data == null)
-               Android.Util.Log.Debug("Emgu.CV", "No image is recevide from PictureTakenEventArgs");
+               Report.Error(Context.PackageName, "No image is recevide from PictureTakenEventArgs");
             else
-               Android.Util.Log.Debug("Emgu.CV", "PictureTaken event handler is not registered");
+               Report.Error(Context.PackageName, "PictureTaken event handler is not registered");
          }
       }
 
@@ -236,7 +234,7 @@ namespace Emgu.CV
 #if GL_VIEW
                Stopwatch w = Stopwatch.StartNew();
 
-               Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(512, 512), 2);
+               Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(512, 512), 1);
                CvInvoke.cvResize(image, resized, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
                using (Image<Bgra, Byte> texture = resized.Convert<Bgra, Byte>())
                {
@@ -249,11 +247,12 @@ namespace Emgu.CV
 
                _watch.Stop();
 
-               Android.Util.Log.Verbose("Emgu.CV", String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms",
+               /*
+               Report.Debug(Context.PackageName, String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms",
                   1.0 / _watch.ElapsedMilliseconds * 1000,
                   _imageSize.Width,
                   _imageSize.Height,
-                  w.ElapsedMilliseconds));
+                  w.ElapsedMilliseconds));*/
                _watch.Reset();
                _watch.Start();
 #else

@@ -84,6 +84,7 @@
     <Compile Include="ImageFilter.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="ProcessedCameraPreview.cs" />
+    <Compile Include="Report.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />
     <Compile Include="PedestrianDetectionActivity.cs" />

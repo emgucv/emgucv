@@ -7,8 +7,6 @@
 // https://github.com/xamarin/monodroid-samples/blob/master/ApiDemo/Graphics/CameraPreview.cs
 //
 
-//#define GL_VIEW
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,6 +32,7 @@ namespace Emgu.CV
    {
       ISurfaceHolder _surfaceHolder;
       Camera _camera;
+      Camera.CameraInfo _cameraInfo;
       int _cameraIndex;
       Camera.IPreviewCallback _cameraPreviewCallback;
 
@@ -57,6 +56,14 @@ namespace Emgu.CV
          get
          {
             return _camera;
+         }
+      }
+
+      public Camera.CameraInfo CameraInfo
+      {
+         get
+         {
+            return _cameraInfo;
          }
       }
 
@@ -96,7 +103,11 @@ namespace Emgu.CV
             _camera.SetPreviewDisplay(_surfaceHolder);
             if (OnCameraCreated != null)
             {
-               OnCameraCreated(this, new EventArgs<Camera>(_camera));
+               if (_cameraInfo == null)
+                  _cameraInfo = new Android.Hardware.Camera.CameraInfo();
+
+               Camera.GetCameraInfo(cameraIndex, _cameraInfo);
+               OnCameraCreated(this, new CameraInfoEventArgs(_camera, _cameraInfo));
             }
          }
 #if !DEBUG
@@ -107,7 +118,8 @@ namespace Emgu.CV
 
             while (excpt.InnerException != null)
                excpt = excpt.InnerException;
-            Android.Util.Log.Debug("Emgu.CV", String.Format("Unable to create camera: {0}", e.Message));
+            
+            Report.Error(Context.PackageName, String.Format("Unable to create camera: {0}", excpt.Message));
 
             return false;
             // TODO: add more exception handling logic here
@@ -117,7 +129,34 @@ namespace Emgu.CV
          return true;
       }
 
-      public event EventHandler<EventArgs<Camera>> OnCameraCreated;
+      public class CameraInfoEventArgs : EventArgs
+      {
+         private Camera _camera;
+         private Camera.CameraInfo _cameraInfo;
+         public Camera Camera
+         {
+            get
+            {
+               return _camera;
+            }
+         }
+
+         public Camera.CameraInfo CameraInfo
+         {
+            get
+            {
+               return _cameraInfo;
+            }
+         }
+
+         public CameraInfoEventArgs(Camera camera, Camera.CameraInfo cameraInfo)
+         {
+            _camera = camera;
+            _cameraInfo = cameraInfo;
+         }
+      }
+
+      public event EventHandler<CameraInfoEventArgs> OnCameraCreated;
 
       private void StopCamera()
       {
@@ -288,8 +327,8 @@ namespace Emgu.CV
                _camera.SetPreviewCallback(_cameraPreviewCallback);
          }
          _camera.StartPreview();
-
-         Layout(0, 0, optimalSize.Width, optimalSize.Height);
+        
+         //Layout(0, 0, optimalSize.Width, optimalSize.Height);
       }
    }
 }

@@ -21,7 +21,7 @@ namespace Emgu.CV
       float xangle, yangle;
       int[] textureIds;
       //int cur_texture;
-      int width, height;
+      int _viewPortWidth, _viewPortHeight;
       Context context;
 
       private System.Drawing.Size _imageSize = System.Drawing.Size.Empty;
@@ -53,8 +53,8 @@ namespace Emgu.CV
 
          Resize += delegate
          {
-            height = Height;
-            width = Width;
+            //_viewPortHeight = Height;
+            //_viewPortWidth = Width;
             SetupCamera();
             RenderCube();
          };
@@ -70,7 +70,7 @@ namespace Emgu.CV
          // the default GraphicsMode that is set consists of (16, 16, 0, 0, 2, false)
          try
          {
-            Log.Verbose("TexturedCube", "Loading with default settings");
+            Report.Debug(context.PackageName, "Loading with GL Image View with default settings");
 
             // if you don't call this, the context won't be created
             base.CreateFrameBuffer();
@@ -78,7 +78,7 @@ namespace Emgu.CV
          }
          catch (Exception ex)
          {
-            Log.Verbose("TexturedCube", "{0}", ex);
+            Report.Error(context.PackageName , ex.Message);
          }
 
          // Fallback modes
@@ -99,7 +99,7 @@ namespace Emgu.CV
          // Android implementations, so the AndroidGraphicsMode object allows it.
          try
          {
-            Log.Verbose("TexturedCube", "Loading with custom Android settings (low mode)");
+            Report.Debug(context.PackageName, "Loading with custom Android settings (low mode)");
             GraphicsMode = new AndroidGraphicsMode(16, 0, 0, 0, 0, false);
 
             // if you don't call this, the context won't be created
@@ -108,7 +108,7 @@ namespace Emgu.CV
          }
          catch (Exception ex)
          {
-            Log.Verbose("TexturedCube", "{0}", ex);
+            Report.Error(context.PackageName, ex.Message);
          }
 
          // this is a setting that doesn't specify any color values. Certain devices
@@ -117,7 +117,7 @@ namespace Emgu.CV
          // even requesting a default value of 0 would return an invalid mode.
          try
          {
-            Log.Verbose("TexturedCube", "Loading with no Android settings");
+            Report.Debug(context.PackageName, "Loading with no Android settings");
             GraphicsMode = new AndroidGraphicsMode(0, 4, 0, 0, 0, false);
 
             // if you don't call this, the context won't be created
@@ -126,7 +126,7 @@ namespace Emgu.CV
          }
          catch (Exception ex)
          {
-            Log.Verbose("TexturedCube", "{0}", ex);
+            Report.Error(context.PackageName, ex.Message);
          }
          throw new Exception("Can't load egl, aborting");
       }
@@ -136,7 +136,7 @@ namespace Emgu.CV
          base.OnLoad(e);
 
          GL.ShadeModel(All.Smooth);
-         GL.ClearColor(1, 1, 1, 1);
+         GL.ClearColor(0, 0, 0, 1);
 
          GL.ClearDepth(1.0f);
          GL.Enable(All.DepthTest);
@@ -155,24 +155,45 @@ namespace Emgu.CV
          {
             LoadTextureBGRA(image.Size, image.MIplImage.imageData);
          }
-
          SetupCamera();
          RenderCube();
       }
 
       public void SetupCamera()
       {
-         width = Width;
-         height = Height;
+         _viewPortWidth = Width;
+         _viewPortHeight = Height;
 
-         GL.Viewport(0, 0, width, height);
+         GL.Viewport(0, 0, _viewPortWidth, _viewPortHeight);
+         
          // setup projection matrix
          GL.MatrixMode(All.Projection);
          GL.LoadIdentity();
-         GL.Ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+         
+         // setup the projection matrix to compensate for the aspect ratio of the imageSize;
+         if (_imageSize.IsEmpty || _viewPortHeight == 0)
+            GL.Ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+         else
+         {
+            double viewPortWidthHeight = (double)_viewPortWidth / (double)_viewPortHeight;
+            double imageWidthHeight = (double)_imageSize.Width / (double)_imageSize.Height;
+
+            if (viewPortWidthHeight > imageWidthHeight)
+            {
+               //view port is too wide
+               float compensation = (float)((viewPortWidthHeight - imageWidthHeight) / 2);
+               GL.Ortho(-1.0f - compensation, 1.0f + compensation, -1.0f, 1.0f, -1.0f, 1.0f);
+            }
+            else
+            {
+               float compensation = (float)((1.0 / viewPortWidthHeight) - (1.0 / imageWidthHeight)) / 2.0f;
+               //viewport is too tall
+               GL.Ortho(-1.0f, 1.0f, -1.0f - compensation, 1.0f + compensation, -1.0f, 1.0f);
+            }
+         }
       }
 
-
+      /*
       public override bool OnTouchEvent(MotionEvent e)
       {
          base.OnTouchEvent(e);
@@ -196,7 +217,7 @@ namespace Emgu.CV
          if (e.Action == MotionEventActions.Down || e.Action == MotionEventActions.Move)
             RenderCube();
          return true;
-      }
+      }*/
 
       protected override void OnUnload(EventArgs e)
       {
@@ -247,7 +268,7 @@ namespace Emgu.CV
          All error = GL.GetError();
          if (error != All.NoError)
          {
-            Android.Util.Log.Verbose("Emgu.CV", String.Format("Error before attemps to bing Texture: {0}", error));
+            Report.Error(context.PackageName, String.Format("Error before attemps to bing Texture: {0}", error));
          }
 
          GL.BindTexture(All.Texture2D, textureIds[0]);
@@ -255,7 +276,7 @@ namespace Emgu.CV
          error = GL.GetError();
          if (error != All.NoError)
          {
-            Android.Util.Log.Verbose("Emgu.CV", String.Format("Failed to bing Texture: {0}", error));
+            Report.Error(context.PackageName, String.Format("Failed to bing Texture: {0}", error));
          }
 
          // setup texture parameters
@@ -266,7 +287,7 @@ namespace Emgu.CV
          error = GL.GetError();
          if (error != All.NoError)
          {
-            Android.Util.Log.Verbose("Emgu.CV", String.Format("Failed to set Texture Parameter: {0}", error));
+            Report.Error(context.PackageName, String.Format("Failed to set Texture Parameter: {0}", error));
          }
 
          if (!_imageSize.IsEmpty && _imageSize.Equals(imageSize))
@@ -281,7 +302,7 @@ namespace Emgu.CV
          error = GL.GetError();
          if (error != All.NoError)
          {
-            Android.Util.Log.Verbose("Emgu.CV", String.Format("Failed to load Texture: {0}", error));
+            Report.Error(context.PackageName, String.Format("Failed to load Texture: {0}", error));
          }
       }
 
