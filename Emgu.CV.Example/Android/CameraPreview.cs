@@ -328,7 +328,7 @@ namespace Emgu.CV
          }
          _camera.StartPreview();
         
-         //Layout(0, 0, optimalSize.Width, optimalSize.Height);
+         Layout(0, 0, optimalSize.Width, optimalSize.Height);
       }
    }
 }

@@ -124,6 +124,26 @@ namespace Emgu.CV
       }
    }
 
+   public class SolidColorFilter : ImageFilter
+   {
+      private Rgb _color;
+
+      public SolidColorFilter(Rgb color)
+      {
+         _color = color;
+      }
+
+      public override void ProcessData(Image<Bgr, byte> sourceImage, Image<Bgr, byte> destImage)
+      {
+         CvInvoke.cvSet(destImage, _color.MCvScalar, IntPtr.Zero);
+      }
+
+      public override object Clone()
+      {
+         return new SolidColorFilter(_color);
+      }
+   }
+
    public class DistorFilter : ImageFilter
    {
       private double _centerX;

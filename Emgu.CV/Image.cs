@@ -91,6 +91,10 @@ namespace Emgu.CV
       public Image(String fileName)
       {
          FileInfo fi = new FileInfo(fileName);
+         if (!fi.Exists)
+         {
+            throw new FileNotFoundException(String.Format("The file {0} could not be not found.", fileName), fileName);
+         }
 
          if (this is Image<Bgra, Byte> && fi.Extension.Equals(".png"))
          {
@@ -3516,6 +3520,8 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
+         base.DisposeObject();
+
          if (_ptr != IntPtr.Zero)
          {
             CvInvoke.cvReleaseImageHeader(ref _ptr);
@@ -3523,7 +3529,7 @@ namespace Emgu.CV
             GC.RemoveMemoryPressure(StructSize.MIplImage);
          }
 
-         base.DisposeObject();
+         _array = null;
       }
       #endregion
 

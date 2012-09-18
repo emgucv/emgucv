@@ -10,6 +10,7 @@ namespace Emgu.CV
       public static void Error(String packageName, String message)
       {
          Android.Util.Log.Error(packageName, message);
+         throw new Exception(message);
       }
 
       public static void Debug(String packageName, String message)

@@ -58,6 +58,7 @@ namespace Emgu.CV
          CvInvoke.cvReleaseStructuringElement(ref _ptr);
          if (_handle.IsAllocated)
             _handle.Free();
+         _values = null;
       }
    }
 }

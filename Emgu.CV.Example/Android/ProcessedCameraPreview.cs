@@ -31,11 +31,7 @@ using Paint = Android.Graphics.Paint;
 namespace Emgu.CV
 {
    public class ProcessedCameraPreview :
-#if GL_VIEW
-      GLImageView,
-#else
       View,
-#endif
       Camera.IPreviewCallback,
       Camera.IPictureCallback,
       MediaScannerConnection.IOnScanCompletedListener
@@ -80,10 +76,12 @@ namespace Emgu.CV
       }
 
       #region static methods
-      public static FileInfo SaveBitmap(Context context, Android.Graphics.Bitmap bmp, MediaScannerConnection.IOnScanCompletedListener onScanCompleteListener)
+      public static FileInfo SaveBitmap(Context context, Android.Graphics.Bitmap bmp, String folderName, MediaScannerConnection.IOnScanCompletedListener onScanCompleteListener)
       {
-         String fileName = DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".jpg";
-         FileInfo f = new FileInfo(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), "EMGU", fileName));
+         DateTime dateTime = DateTime.Now;
+         String fileName = String.Format("IMG_{0}{1}{2}_{3}{4}{5}.jpg", dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
+         //String fileName =  DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".jpg";
+         FileInfo f = new FileInfo(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), folderName, fileName));
          if (!f.Directory.Exists)
             f.Directory.Create();
 
@@ -161,7 +159,6 @@ namespace Emgu.CV
          }
       }
 
-#if !GL_VIEW
       private Android.Graphics.Bitmap _bmp;
       private BitmapRgb565Image _bmpImage;
 
@@ -211,8 +208,6 @@ namespace Emgu.CV
             }
          }
       }
-#endif
-
       public void OnPreviewFrame(byte[] data, Camera camera)
       {
          if (!_busy && ImagePreview != null)
@@ -231,33 +226,7 @@ namespace Emgu.CV
                }
                handle.Free();
 
-#if GL_VIEW
-               Stopwatch w = Stopwatch.StartNew();
-
-               Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(512, 512), 1);
-               CvInvoke.cvResize(image, resized, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
-               using (Image<Bgra, Byte> texture = resized.Convert<Bgra, Byte>())
-               {
-                  LoadTextureBGRA(texture.Size, texture.MIplImage.imageData);
-                  SetupCamera();
-                  RenderCube();
-               }
-               
-               w.Stop();
-
-               _watch.Stop();
-
-               /*
-               Report.Debug(Context.PackageName, String.Format("{0:F2} FPS; {1}x{2}; Render Time: {3} ms",
-                  1.0 / _watch.ElapsedMilliseconds * 1000,
-                  _imageSize.Width,
-                  _imageSize.Height,
-                  w.ElapsedMilliseconds));*/
-               _watch.Reset();
-               _watch.Start();
-#else
                Invalidate();
-#endif
             }
             finally
             {

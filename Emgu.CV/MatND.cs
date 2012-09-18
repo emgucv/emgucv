@@ -122,14 +122,14 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
+         base.DisposeObject();
          if (_ptr != IntPtr.Zero)
          {
             Marshal.FreeHGlobal(_ptr);
             GC.RemoveMemoryPressure(StructSize.MCvMatND);
             _ptr = IntPtr.Zero;
          }
-
-         base.DisposeObject();
+         _array = null;
       }
 
       #region ISerializable Members

@@ -60,3 +60,4 @@ void cvArrSqrt(CvArr* src, CvArr* dst)
    cv::Mat dstMat = cv::cvarrToMat(dst);
    cv::sqrt(srcMat, dstMat);
 }
+

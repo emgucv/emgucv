@@ -219,7 +219,7 @@ namespace AndroidExamples
             int maxThumbnailSize = 96;
             if (_imageFilter == null)
             {
-               _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, bmp, _topLayer);
+               _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, bmp, PackageName, _topLayer);
                thumbnail = ProcessedCameraPreview.GetThumbnail(bmp, maxThumbnailSize);
                bmp.Dispose();
             }
@@ -252,7 +252,7 @@ namespace AndroidExamples
                using (Android.Graphics.Bitmap result = buffer1.ToBitmap())
                {
                   buffer1.Dispose();
-                  _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, result, _topLayer);
+                  _lastSavedImageFile = ProcessedCameraPreview.SaveBitmap(this, result, PackageName, _topLayer);
                   thumbnail = ProcessedCameraPreview.GetThumbnail(result, maxThumbnailSize);
                }
             }

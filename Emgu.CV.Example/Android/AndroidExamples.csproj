@@ -79,7 +79,6 @@
     <Compile Include="ButtonMessageImageActivity.cs" />
     <Compile Include="CameraPreview.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
-    <Compile Include="GLImageView.cs" />
     <Compile Include="ImageBufferFactory.cs" />
     <Compile Include="ImageFilter.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
@@ -97,21 +96,6 @@
   <ItemGroup>
     <AndroidNativeLibrary Include="..\..\libs\armeabi\libcvextern.so">
       <Link>lib\armeabi\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r2.2.0.so">
-      <Link>lib\armeabi\libnative_camera_r2.2.0.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r2.3.3.so">
-      <Link>lib\armeabi\libnative_camera_r2.3.3.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r3.0.1.so">
-      <Link>lib\armeabi\libnative_camera_r3.0.1.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r4.0.0.so">
-      <Link>lib\armeabi\libnative_camera_r4.0.0.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libnative_camera_r4.0.3.so">
-      <Link>lib\armeabi\libnative_camera_r4.0.3.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_calib3d.so">
       <Link>lib\armeabi\libopencv_calib3d.so</Link>
@@ -161,21 +145,6 @@
     <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libcvextern.so">
       <Link>lib\armeabi-v7a\libcvextern.so</Link>
     </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r2.2.0.so">
-      <Link>lib\armeabi-v7a\libnative_camera_r2.2.0.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r2.3.3.so">
-      <Link>lib\armeabi-v7a\libnative_camera_r2.3.3.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r3.0.1.so">
-      <Link>lib\armeabi-v7a\libnative_camera_r3.0.1.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r4.0.0.so">
-      <Link>lib\armeabi-v7a\libnative_camera_r4.0.0.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libnative_camera_r4.0.3.so">
-      <Link>lib\armeabi-v7a\libnative_camera_r4.0.3.so</Link>
-    </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_calib3d.so">
       <Link>lib\armeabi-v7a\libopencv_calib3d.so</Link>
     </AndroidNativeLibrary>
@@ -223,15 +192,6 @@
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\x86\libcvextern.so">
       <Link>lib\x86\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libnative_camera_r2.3.3.so">
-      <Link>lib\x86\libnative_camera_r2.3.3.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libnative_camera_r3.0.1.so">
-      <Link>lib\x86\libnative_camera_r3.0.1.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libnative_camera_r4.0.3.so">
-      <Link>lib\x86\libnative_camera_r4.0.3.so</Link>
     </AndroidNativeLibrary>
     <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_calib3d.so">
       <Link>lib\x86\libopencv_calib3d.so</Link>
