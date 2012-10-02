@@ -111,7 +111,7 @@ void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName)
 void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName)
 {
    std::string file(fileName);
-   recognizer->save(file);
+   recognizer->load(file);
 }
 
 void CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image, int* label, double* dist)
