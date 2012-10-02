@@ -76,9 +76,8 @@ namespace Emgu.CV
       protected override void ReleaseManagedResources()
       {
          base.ReleaseManagedResources();
-         if (_bmp.IsRecycled)
+         if (!_bmp.IsRecycled)
             _bmp.UnlockPixels();
       }
-
    }
 }
