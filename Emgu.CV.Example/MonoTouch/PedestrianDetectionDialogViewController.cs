@@ -14,42 +14,43 @@ using PedestrianDetection;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class PedestrianDetectionDialogViewController : ButtonMessageImageDialogViewController
-    {
-        public PedestrianDetectionDialogViewController()
+   public class PedestrianDetectionDialogViewController : ButtonMessageImageDialogViewController
+   {
+      public PedestrianDetectionDialogViewController()
          : base()
-        {
-        }
+      {
+      }
 
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
-            ButtonText = "Detect Pedestrian";
-            OnButtonClick += delegate
-            { 
-                long processingTime;
-                using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
-                {
-                    Rectangle[] pedestrians = FindPedestrian.Find(
+      public override void ViewDidLoad()
+      {
+         base.ViewDidLoad();
+         ButtonText = "Detect Pedestrian";
+         OnButtonClick += delegate
+         { 
+            long processingTime;
+            using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
+            {
+               Rectangle[] pedestrians = FindPedestrian.Find(
                         image,
                         out processingTime
-                    );
-                    foreach (Rectangle rect in pedestrians)
-                    {
-                        image.Draw(rect, new Bgr(Color.Red), 1);
-                    }
-                    using (Image<Bgr, Byte> resized = image.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
-                    {
-                        MessageText = String.Format(
+               );
+               foreach (Rectangle rect in pedestrians)
+               {
+                  image.Draw(rect, new Bgr(Color.Red), 1);
+               }
+               Size frameSize = FrameSize;
+               using (Image<Bgr, Byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+               {
+                  MessageText = String.Format(
                             "Detection Time: {0} milliseconds.",
                             processingTime
-                        );
-                        SetImage(resized);
-                    }
-                }
-            };
+                  );
+                  SetImage(resized);
+               }
+            }
+         };
            
-        }
-    }
+      }
+   }
 }
 

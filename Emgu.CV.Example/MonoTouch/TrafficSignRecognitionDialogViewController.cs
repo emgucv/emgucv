@@ -15,19 +15,20 @@ using TrafficSignRecognition;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class TrafficSignRecognitionDialogViewController : ButtonMessageImageDialogViewController
-    {
-        public TrafficSignRecognitionDialogViewController()
+   public class TrafficSignRecognitionDialogViewController : ButtonMessageImageDialogViewController
+   {
+      public TrafficSignRecognitionDialogViewController()
          : base()
-        {
-        }
+      {
+      }
 
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
+      public override void ViewDidLoad()
+      {
+         base.ViewDidLoad();
          ButtonText = "Detect Stop Sign";
-            OnButtonClick +=
-         delegate {
+         OnButtonClick +=
+         delegate
+         {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("stop-sign.jpg"))
             {
@@ -43,17 +44,17 @@ namespace Emgu.CV.Example.MonoTouch
                {
                   image.Draw(rect, new Bgr(Color.Red), 2);
                }
-
-              using (Image<Bgr, byte> resized = image.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
-              {
+               Size frameSize = FrameSize;
+               using (Image<Bgr, byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+               {
                   MessageText = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
                   SetImage(resized);
-              }
+               }
 
             }
          };
 
-        }
-    }
+      }
+   }
 }
 

@@ -16,18 +16,32 @@ using LicensePlateRecognition;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class LicensePlateRecognitionDialogViewController :DialogViewController
-    {
-        public LicensePlateRecognitionDialogViewController()
+   public class LicensePlateRecognitionDialogViewController :DialogViewController
+   {
+      public LicensePlateRecognitionDialogViewController()
          : base(new RootElement(""), true)
-        {
+      {
 
-        }
+      }
+
+      public Size FrameSize
+      {
+         get
+         {
+            int width = 0, height = 0;
+            InvokeOnMainThread(delegate
+            {
+               width = (int)View.Frame.Width;
+               height = (int)View.Frame.Height;
+            });
+            return new Size(width, height);
+         }
+      }
 
       public override void ViewDidLoad()
       {
          base.ViewDidLoad();
-                 RootElement root = Root;
+         RootElement root = Root;
          UIImageView imageView = new UIImageView(View.Frame);
          StringElement messageElement = new StringElement("");
          StringElement licenseElement = new StringElement("");
@@ -37,7 +51,7 @@ namespace Emgu.CV.Example.MonoTouch
 
             using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("license-plate.jpg"))
             {
-               LicensePlateDetector detector = new LicensePlateDetector("");
+               LicensePlateDetector detector = new LicensePlateDetector(".");
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
                List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
@@ -63,7 +77,8 @@ namespace Emgu.CV.Example.MonoTouch
                {
                   image.Draw(box, new Bgr(Color.Red), 2);
                }
-                  using (Image<Bgr, byte> resized = image.Resize((int)View.Frame.Width, (int) View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+                  Size frameSize = FrameSize;
+                  using (Image<Bgr, byte> resized = image.Resize( frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
                   {
                      imageView.Image = resized.ToUIImage();
                      imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
@@ -76,6 +91,6 @@ namespace Emgu.CV.Example.MonoTouch
          root.Add(new Section("License Plate") { licenseElement});
          root.Add(new Section() {imageView});
       }
-    }
+   }
 }
 

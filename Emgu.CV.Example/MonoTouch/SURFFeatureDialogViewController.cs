@@ -16,30 +16,32 @@ using SURFFeatureExample;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-    public class SURFFeatureDialogViewController : ButtonMessageImageDialogViewController
-    {
-        public SURFFeatureDialogViewController()
+   public class SURFFeatureDialogViewController : ButtonMessageImageDialogViewController
+   {
+      public SURFFeatureDialogViewController()
          : base()
-        {
-        }
+      {
+      }
 
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
+      public override void ViewDidLoad()
+      {
+         base.ViewDidLoad();
          ButtonText = "Match";
          base.OnButtonClick +=
-            delegate {
+            delegate
+         {
             long processingTime;
+            Size frameSize = FrameSize;
             using (Image<Gray, byte> modelImage = new Image<Gray, byte>("box.png"))
             using (Image<Gray, byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
             using (Image<Bgr, Byte> image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
-            using (Image<Bgr, Byte> resized =image.Resize((int) View.Frame.Width, (int) View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+            using (Image<Bgr, Byte> resized =image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
             {
                MessageText = String.Format("Matching Time: {0} milliseconds.", processingTime);
                SetImage(resized);
             }
          };
-        }
-    }
+      }
+   }
 }
 
