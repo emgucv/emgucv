@@ -13,6 +13,7 @@ namespace Emgu.CV
    {
       protected ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
       protected ImageBufferFactory<Image<Gray, Byte>> _grayBuffers;
+      protected ImageBufferFactory<Image<Bgr, Single>> _bgrSingleBuffers;
       protected bool _inplaceCapable = false;
 
       public ImageFilter()
@@ -31,6 +32,13 @@ namespace Emgu.CV
       }
 
       public abstract void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage);
+
+      public Image<Bgr, Single> GetBufferBgrSingle(Size size, int index)
+      {
+         if (_bgrSingleBuffers == null)
+            _bgrSingleBuffers = new ImageBufferFactory<Image<Bgr, Single>>(s => new Image<Bgr, Single>(s));
+         return _bgrSingleBuffers.GetBuffer(size, index);
+      }
 
       public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
       {
@@ -58,6 +66,11 @@ namespace Emgu.CV
             _grayBuffers.Dispose();
             _grayBuffers = null;
          }
+         if (_bgrSingleBuffers != null)
+         {
+            _bgrSingleBuffers.Dispose();
+            _bgrSingleBuffers = null;
+         }
       }
 
       public abstract Object Clone();
@@ -82,19 +95,18 @@ namespace Emgu.CV
       {
          Size size = sourceImage.Size;
 
-         Image<Gray, Byte> b = GetBufferGray(size, 0);
-         Image<Gray, Byte> g = GetBufferGray(size, 1);
-         Image<Gray, Byte> r = GetBufferGray(size, 2);
-         Image<Gray, Byte> bCanny = GetBufferGray(size, 3);
-         Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
-         Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
+         Image<Gray, Byte> i0 = GetBufferGray(size, 0);
+         Image<Gray, Byte> i1 = GetBufferGray(size, 1);
+         Image<Gray, Byte> i2 = GetBufferGray(size, 2);
+         Image<Gray, Byte> i3 = GetBufferGray(size, 3);
+         //Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
+         //Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
 
-         CvInvoke.cvSplit(sourceImage, b, g, r, IntPtr.Zero);
-         CvInvoke.cvCanny(b, bCanny, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvCanny(g, gCanny, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvCanny(r, rCanny, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvMerge(bCanny, gCanny, rCanny, IntPtr.Zero, destImage);
-
+         CvInvoke.cvSplit(sourceImage, i1, i2, i3, IntPtr.Zero);
+         CvInvoke.cvCanny(i1, i0, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.cvCanny(i2, i1, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.cvCanny(i3, i2, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.cvMerge(i0, i1, i2, IntPtr.Zero, destImage);
       }
 
       public override object Clone()
