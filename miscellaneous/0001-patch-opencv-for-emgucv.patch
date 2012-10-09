@@ -1,6 +1,6 @@
-From d552eb45950b100fbb5e919c7e71d9b978b88f4b Mon Sep 17 00:00:00 2001
+From d1f9539859cd99e351ab1950f67fa093227fee70 Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
-Date: Wed, 25 Jul 2012 13:13:42 -0400
+Date: Mon, 8 Oct 2012 21:59:05 -0400
 Subject: [PATCH] patch opencv for emgucv.
 
 ---
@@ -10,6 +10,7 @@ Subject: [PATCH] patch opencv for emgucv.
  3rdparty/libtiff/CMakeLists.txt                    |    4 ++++
  3rdparty/zlib/CMakeLists.txt                       |    4 ++++
  cmake/OpenCVDetectTBB.cmake                        |   20 +++++++++++++------
+ cmake/OpenCVFindIPP.cmake                          |    5 +++--
  cmake/OpenCVModule.cmake                           |   13 ++++++++----
  modules/contrib/src/colormap.cpp                   |    1 +
  modules/core/src/drawing.cpp                       |   14 ++++++-------
@@ -20,7 +21,7 @@ Subject: [PATCH] patch opencv for emgucv.
  modules/highgui/src/cap_openni.cpp                 |    8 ++++++++
  modules/legacy/src/3dtracker.cpp                   |    6 +++---
  modules/objdetect/src/latentsvm.cpp                |    2 +-
- 16 files changed, 77 insertions(+), 40 deletions(-)
+ 17 files changed, 80 insertions(+), 42 deletions(-)
 
 diff --git a/3rdparty/libjasper/CMakeLists.txt b/3rdparty/libjasper/CMakeLists.txt
 index 5b850c9..46ce17f 100644
@@ -128,6 +129,27 @@ index c37a8c3..37a8e33 100644
          if(MSVC80)
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
+diff --git a/cmake/OpenCVFindIPP.cmake b/cmake/OpenCVFindIPP.cmake
+index 6d735be..c080539 100644
+--- a/cmake/OpenCVFindIPP.cmake
++++ b/cmake/OpenCVFindIPP.cmake
+@@ -64,13 +64,14 @@ function(get_ipp_version _ROOT_DIR)
+     # read IPP version info from file
+     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR1 REGEX "IPP_VERSION_MAJOR")
+     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR2 REGEX "IPP_VERSION_MINOR")
+-    file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR3 REGEX "IPP_VERSION_BUILD")
++    #file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR3 REGEX "IPP_VERSION_BUILD")
+     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR4 REGEX "IPP_VERSION_STR")
+ 
+     # extract info and assign to variables
+     string(REGEX MATCHALL "[0-9]+" _MAJOR ${STR1})
+     string(REGEX MATCHALL "[0-9]+" _MINOR ${STR2})
+-    string(REGEX MATCHALL "[0-9]+" _BUILD ${STR3})
++    #string(REGEX MATCHALL "[0-9]+" _BUILD ${STR3})
++	set (_BUILD 0)
+     string(REGEX MATCHALL "[0-9]+[.]+[0-9]+[^\"]+|[0-9]+[.]+[0-9]+" _VERSION_STR ${STR4})
+ 
+     # export info to parent scope
 diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
 index 018a467..9e2edb0 100644
 --- a/cmake/OpenCVModule.cmake
