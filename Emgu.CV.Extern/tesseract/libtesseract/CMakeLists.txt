@@ -38,9 +38,9 @@ ENDIF()
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccutil_srcs} ${tesseract_ccutil_hdrs})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
-#IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
-#  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
-#ENDIF()
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
 
 #viewer
 PROJECT(tesseract_viewer)
@@ -114,9 +114,9 @@ ENDIF()
 include_directories("${TESSERACT_DIR}/ccutil" "${TESSERACT_DIR}/viewer" "${TESSERACT_DIR}/cutil" "${TESSERACT_DIR}/image" "${LEPTONICA_DIR}")
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccstruct_srcs} ${tesseract_ccstruct_hdrs})
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
-#IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
-#  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
-#ENDIF()
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_cutil tesseract_viewer tesseract_image libleptonica)
 
 #dict
@@ -168,9 +168,9 @@ ENDIF()
 include_directories("../cutil" "../ccstruct" "../ccutil" "../viewer" "../image" "../dict" "../classify")
 add_library(${PROJECT_NAME} STATIC ${tesseract_wordrec_srcs} ${tesseract_wordrec_hdrs})
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
-#IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
-#  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
-#ENDIF()
+IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
+  set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
+ENDIF()
 ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_image tesseract_dict tesseract_classify)
 
 #neural_networks

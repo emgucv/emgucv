@@ -1,6 +1,6 @@
-From d1f9539859cd99e351ab1950f67fa093227fee70 Mon Sep 17 00:00:00 2001
+From 5a7af9016f8ba65f605419101af8dad07813df9c Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
-Date: Mon, 8 Oct 2012 21:59:05 -0400
+Date: Tue, 16 Oct 2012 11:16:49 -0400
 Subject: [PATCH] patch opencv for emgucv.
 
 ---
@@ -10,7 +10,6 @@ Subject: [PATCH] patch opencv for emgucv.
  3rdparty/libtiff/CMakeLists.txt                    |    4 ++++
  3rdparty/zlib/CMakeLists.txt                       |    4 ++++
  cmake/OpenCVDetectTBB.cmake                        |   20 +++++++++++++------
- cmake/OpenCVFindIPP.cmake                          |    5 +++--
  cmake/OpenCVModule.cmake                           |   13 ++++++++----
  modules/contrib/src/colormap.cpp                   |    1 +
  modules/core/src/drawing.cpp                       |   14 ++++++-------
@@ -21,10 +20,10 @@ Subject: [PATCH] patch opencv for emgucv.
  modules/highgui/src/cap_openni.cpp                 |    8 ++++++++
  modules/legacy/src/3dtracker.cpp                   |    6 +++---
  modules/objdetect/src/latentsvm.cpp                |    2 +-
- 17 files changed, 80 insertions(+), 42 deletions(-)
+ 16 files changed, 77 insertions(+), 40 deletions(-)
 
 diff --git a/3rdparty/libjasper/CMakeLists.txt b/3rdparty/libjasper/CMakeLists.txt
-index 5b850c9..46ce17f 100644
+index a6fb71e..8ccc6b5 100644
 --- a/3rdparty/libjasper/CMakeLists.txt
 +++ b/3rdparty/libjasper/CMakeLists.txt
 @@ -39,6 +39,10 @@ set_target_properties(${JASPER_LIBRARY}
@@ -54,10 +53,10 @@ index 708e63e..a26b2b3 100644
    set_target_properties(${JPEG_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
 diff --git a/3rdparty/libpng/CMakeLists.txt b/3rdparty/libpng/CMakeLists.txt
-index 41d57f3..d123f62 100644
+index d47dd53..02cc943 100644
 --- a/3rdparty/libpng/CMakeLists.txt
 +++ b/3rdparty/libpng/CMakeLists.txt
-@@ -33,6 +33,10 @@ if(ENABLE_SOLUTION_FOLDERS)
+@@ -50,6 +50,10 @@ if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${PNG_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
  
@@ -69,10 +68,10 @@ index 41d57f3..d123f62 100644
    install(TARGETS ${PNG_LIBRARY} ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT main)
  endif()
 diff --git a/3rdparty/libtiff/CMakeLists.txt b/3rdparty/libtiff/CMakeLists.txt
-index ed9d1c8..d2cdfd9 100644
+index dedcc39..f082677 100644
 --- a/3rdparty/libtiff/CMakeLists.txt
 +++ b/3rdparty/libtiff/CMakeLists.txt
-@@ -105,6 +105,10 @@ set_target_properties(${TIFF_LIBRARY}
+@@ -109,6 +109,10 @@ set_target_properties(${TIFF_LIBRARY}
      ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
      )
  
@@ -84,7 +83,7 @@ index ed9d1c8..d2cdfd9 100644
    set_target_properties(${TIFF_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
 diff --git a/3rdparty/zlib/CMakeLists.txt b/3rdparty/zlib/CMakeLists.txt
-index 72b3309..57ef02c 100644
+index 537690c..ddef3c1 100644
 --- a/3rdparty/zlib/CMakeLists.txt
 +++ b/3rdparty/zlib/CMakeLists.txt
 @@ -90,6 +90,10 @@ set_target_properties(${ZLIB_LIBRARY} PROPERTIES
@@ -99,10 +98,10 @@ index 72b3309..57ef02c 100644
    set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
 diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
-index c37a8c3..37a8e33 100644
+index fc6a635..5ecd38d 100644
 --- a/cmake/OpenCVDetectTBB.cmake
 +++ b/cmake/OpenCVDetectTBB.cmake
-@@ -44,12 +44,20 @@ if(NOT HAVE_TBB)
+@@ -49,12 +49,20 @@ if(NOT HAVE_TBB)
        else()
          get_filename_component(_TBB_LIB_PATH "${TBB_INCLUDE_DIRS}/../lib" ABSOLUTE)
  
@@ -129,29 +128,8 @@ index c37a8c3..37a8e33 100644
          if(MSVC80)
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
-diff --git a/cmake/OpenCVFindIPP.cmake b/cmake/OpenCVFindIPP.cmake
-index 6d735be..c080539 100644
---- a/cmake/OpenCVFindIPP.cmake
-+++ b/cmake/OpenCVFindIPP.cmake
-@@ -64,13 +64,14 @@ function(get_ipp_version _ROOT_DIR)
-     # read IPP version info from file
-     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR1 REGEX "IPP_VERSION_MAJOR")
-     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR2 REGEX "IPP_VERSION_MINOR")
--    file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR3 REGEX "IPP_VERSION_BUILD")
-+    #file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR3 REGEX "IPP_VERSION_BUILD")
-     file(STRINGS ${_ROOT_DIR}/include/ippversion.h STR4 REGEX "IPP_VERSION_STR")
- 
-     # extract info and assign to variables
-     string(REGEX MATCHALL "[0-9]+" _MAJOR ${STR1})
-     string(REGEX MATCHALL "[0-9]+" _MINOR ${STR2})
--    string(REGEX MATCHALL "[0-9]+" _BUILD ${STR3})
-+    #string(REGEX MATCHALL "[0-9]+" _BUILD ${STR3})
-+	set (_BUILD 0)
-     string(REGEX MATCHALL "[0-9]+[.]+[0-9]+[^\"]+|[0-9]+[.]+[0-9]+" _VERSION_STR ${STR4})
- 
-     # export info to parent scope
 diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
-index 018a467..9e2edb0 100644
+index 72c7fc8..b874214 100644
 --- a/cmake/OpenCVModule.cmake
 +++ b/cmake/OpenCVModule.cmake
 @@ -455,11 +455,16 @@ macro(ocv_create_module)
@@ -197,7 +175,7 @@ index bb317f7..867e534 100644
              colormap == COLORMAP_PINK ? (colormap::ColorMap*)(new colormap::Pink) :
              colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
 diff --git a/modules/core/src/drawing.cpp b/modules/core/src/drawing.cpp
-index 50e51fb..a8e64df 100644
+index c48b048..aadb0d5 100644
 --- a/modules/core/src/drawing.cpp
 +++ b/modules/core/src/drawing.cpp
 @@ -554,9 +554,9 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
@@ -236,11 +214,11 @@ index 50e51fb..a8e64df 100644
  
          ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
 diff --git a/modules/gpu/src/match_template.cpp b/modules/gpu/src/match_template.cpp
-index c988000..97fbeb5 100644
+index 3b05433..807c8b0 100644
 --- a/modules/gpu/src/match_template.cpp
 +++ b/modules/gpu/src/match_template.cpp
 @@ -49,7 +49,7 @@ using namespace std;
- #if !defined (HAVE_CUDA)
+ #if !defined (HAVE_CUDA) || defined (CUDA_DISABLER)
  
  void cv::gpu::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, Stream&) { throw_nogpu(); }
 -
@@ -249,7 +227,7 @@ index c988000..97fbeb5 100644
  
  namespace cv { namespace gpu { namespace device
 diff --git a/modules/gpu/src/split_merge.cpp b/modules/gpu/src/split_merge.cpp
-index 3153c5f..3a4ff80 100644
+index d185f78..e1978ab 100644
 --- a/modules/gpu/src/split_merge.cpp
 +++ b/modules/gpu/src/split_merge.cpp
 @@ -95,9 +95,9 @@ namespace
@@ -275,7 +253,7 @@ index 3153c5f..3a4ff80 100644
          }
  
 diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
-index d53c17c..011c58b 100644
+index 30c0c82..2481f3f 100644
 --- a/modules/highgui/CMakeLists.txt
 +++ b/modules/highgui/CMakeLists.txt
 @@ -252,22 +252,13 @@ if(WIN32 AND WITH_FFMPEG)
@@ -308,10 +286,10 @@ index d53c17c..011c58b 100644
  
  ocv_add_accuracy_tests()
 diff --git a/modules/highgui/include/opencv2/highgui/highgui_c.h b/modules/highgui/include/opencv2/highgui/highgui_c.h
-index ddd3003..f8dcad5 100644
+index c82d208..6f594b7 100644
 --- a/modules/highgui/include/opencv2/highgui/highgui_c.h
 +++ b/modules/highgui/include/opencv2/highgui/highgui_c.h
-@@ -534,6 +534,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
+@@ -535,6 +535,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
  
