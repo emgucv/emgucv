@@ -2670,7 +2670,7 @@ namespace Emgu.CV
       /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
       /// The Set property convert the bitmap to this Image type.
       /// </summary>
-      public Bitmap Bitmap
+      public virtual Bitmap Bitmap
       {
          get
          {
