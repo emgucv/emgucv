@@ -27,7 +27,8 @@ namespace Emgu.Util
       public static XmlDocument XmlSerialize<T>(T o)
       {
          StringBuilder sb = new StringBuilder();
-         (new XmlSerializer(typeof(T))).Serialize(new StringWriter(sb), o);
+         using (StringWriter sw = new StringWriter(sb))
+            (new XmlSerializer(typeof(T))).Serialize(sw, o);
          XmlDocument doc = new XmlDocument();
          doc.LoadXml(sb.ToString());
          return doc;
@@ -43,7 +44,8 @@ namespace Emgu.Util
       public static XmlDocument XmlSerialize<T>(T o, Type[] knownTypes)
       {
          StringBuilder sb = new StringBuilder();
-         (new XmlSerializer(typeof(T), knownTypes)).Serialize(new StringWriter(sb), o);
+         using (StringWriter sw = new StringWriter(sb))
+            (new XmlSerializer(typeof(T), knownTypes)).Serialize(sw, o);
          XmlDocument doc = new XmlDocument();
          doc.LoadXml(sb.ToString());
          return doc;
