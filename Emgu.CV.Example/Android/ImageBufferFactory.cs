@@ -39,6 +39,7 @@ namespace Emgu.CV
          {
             _buffers[index].Dispose();
             _buffers[index] = null;
+            _sizes[index] = Size.Empty;
          }
       }
 
@@ -72,6 +73,7 @@ namespace Emgu.CV
                _sizes[i] = Size.Empty;
             }
          }
+         _createBufferFunc = null;
       }
    }
 }

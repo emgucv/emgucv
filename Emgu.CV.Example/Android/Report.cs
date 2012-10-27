@@ -18,5 +18,10 @@ namespace Emgu.CV
          Android.Util.Log.Debug(packageName, message);
       }
 
+      public static void Warn(String packageName, String message)
+      {
+         Android.Util.Log.Warn(packageName, message);
+      }
+
    }
 }

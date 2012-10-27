@@ -80,7 +80,7 @@ namespace Emgu.CV
    {
       private double _thresh;
       private double _threshLinking;
-      public int _apertureSize;
+      private int _apertureSize;
 
       public CannyFilter(double thresh, double threshLinking, int apertureSize)
       {
@@ -133,26 +133,6 @@ namespace Emgu.CV
       public override object Clone()
       {
          return new ColorMapFilter(_colorMapType);
-      }
-   }
-
-   public class SolidColorFilter : ImageFilter
-   {
-      private Rgb _color;
-
-      public SolidColorFilter(Rgb color)
-      {
-         _color = color;
-      }
-
-      public override void ProcessData(Image<Bgr, byte> sourceImage, Image<Bgr, byte> destImage)
-      {
-         CvInvoke.cvSet(destImage, _color.MCvScalar, IntPtr.Zero);
-      }
-
-      public override object Clone()
-      {
-         return new SolidColorFilter(_color);
       }
    }
 
