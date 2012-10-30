@@ -452,7 +452,9 @@ ELSEIF (WIN32)
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
   IF(MSVC)
-    IF(MSVC10)
+    IF(MSVC11)
+	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc11_redist")
+    ELSEIF(MSVC10)
       SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
     ELSEIF(MSVC90)
       SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
