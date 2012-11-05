@@ -57,7 +57,7 @@ namespace VideoSurveilance
 
          #region use the BG/FG detector to find the forground mask
          _detector.Update(frame);
-         Image<Gray, Byte> forgroundMask = _detector.ForgroundMask;
+         Image<Gray, Byte> forgroundMask = _detector.ForegroundMask;
          #endregion
 
          _tracker.Process(frame, forgroundMask);

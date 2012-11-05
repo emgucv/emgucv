@@ -76,7 +76,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get the foreground mask. Do not dispose this image.
       /// </summary>
-      public Image<Gray, Byte> ForgroundMask
+      public Image<Gray, Byte> ForegroundMask
       {
          get
          {

@@ -68,7 +68,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get the foreground mask from the detector
       /// </summary>
-      public Image<Gray, Byte> ForgroundMask
+      public Image<Gray, Byte> ForegroundMask
       {
          get
          {
@@ -86,7 +86,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return ForgroundMask.Not();
+            return ForegroundMask.Not();
          }
       }
 

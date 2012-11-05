@@ -24,7 +24,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get the mask of the forground
       /// </summary>
-      Image<Gray, Byte> ForgroundMask
+      Image<Gray, Byte> ForegroundMask
       {
          get;
       }

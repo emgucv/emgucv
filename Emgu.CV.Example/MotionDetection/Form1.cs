@@ -68,9 +68,9 @@ namespace MotionDetection
             capturedImageBox.Image = image;
 
             //update the motion history
-            _motionHistory.Update(_forgroundDetector.ForgroundMask);
+            _motionHistory.Update(_forgroundDetector.ForegroundMask);
 
-            forgroundImageBox.Image = _forgroundDetector.ForgroundMask;
+            forgroundImageBox.Image = _forgroundDetector.ForegroundMask;
 
             #region get a copy of the motion mask and enhance its color
             double[] minValues, maxValues;
