@@ -24,7 +24,7 @@ namespace Emgu.CV
       /// <param name="imagePoints">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
       /// <param name="imageSize">The size of the image, used only to initialize intrinsic camera matrix</param>
       /// <param name="intrinsicParam">The intrisinc parameters, might contains some initial values. The values will be modified by this function.</param>
-      /// <param name="flags">Flags</param>
+      /// <param name="calibrationType">cCalibration type</param>
       /// <param name="extrinsicParams">The output array of extrinsic parameters.</param>
       /// <returns>The final reprojection error</returns>
       public static double CalibrateCamera(
@@ -32,7 +32,7 @@ namespace Emgu.CV
          PointF[][] imagePoints,
          Size imageSize,
          IntrinsicCameraParameters intrinsicParam,
-         CvEnum.CALIB_TYPE flags,
+         CvEnum.CALIB_TYPE calibrationType,
          out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
@@ -63,7 +63,7 @@ namespace Emgu.CV
                 intrinsicParam.DistortionCoeffs,
                 rotationVectors,
                 translationVectors,
-                flags);
+                calibrationType);
 
             extrinsicParams = new ExtrinsicCameraParameters[imageCount];
             IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
