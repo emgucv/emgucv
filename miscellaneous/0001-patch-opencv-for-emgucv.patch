@@ -1,4 +1,4 @@
-From 5a7af9016f8ba65f605419101af8dad07813df9c Mon Sep 17 00:00:00 2001
+From a7ffb3dd6f4fc365d9ef6d5e3c29ab0c0abb5304 Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
 Date: Tue, 16 Oct 2012 11:16:49 -0400
 Subject: [PATCH] patch opencv for emgucv.
@@ -68,10 +68,10 @@ index d47dd53..02cc943 100644
    install(TARGETS ${PNG_LIBRARY} ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT main)
  endif()
 diff --git a/3rdparty/libtiff/CMakeLists.txt b/3rdparty/libtiff/CMakeLists.txt
-index dedcc39..f082677 100644
+index 25ff0d9..365dd5b 100644
 --- a/3rdparty/libtiff/CMakeLists.txt
 +++ b/3rdparty/libtiff/CMakeLists.txt
-@@ -109,6 +109,10 @@ set_target_properties(${TIFF_LIBRARY}
+@@ -111,6 +111,10 @@ set_target_properties(${TIFF_LIBRARY}
      ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
      )
  
@@ -98,7 +98,7 @@ index 537690c..ddef3c1 100644
    set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
 diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
-index fc6a635..5ecd38d 100644
+index 1ffd454..9a37457 100644
 --- a/cmake/OpenCVDetectTBB.cmake
 +++ b/cmake/OpenCVDetectTBB.cmake
 @@ -49,12 +49,20 @@ if(NOT HAVE_TBB)
@@ -129,7 +129,7 @@ index fc6a635..5ecd38d 100644
            set(_TBB_LIB_PATH "${_TBB_LIB_PATH}/vc8")
          elseif(MSVC90)
 diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
-index 72c7fc8..b874214 100644
+index 91b65f5..23ba49c 100644
 --- a/cmake/OpenCVModule.cmake
 +++ b/cmake/OpenCVModule.cmake
 @@ -455,11 +455,16 @@ macro(ocv_create_module)
@@ -175,7 +175,7 @@ index bb317f7..867e534 100644
              colormap == COLORMAP_PINK ? (colormap::ColorMap*)(new colormap::Pink) :
              colormap == COLORMAP_RAINBOW ? (colormap::ColorMap*)(new colormap::Rainbow) :
 diff --git a/modules/core/src/drawing.cpp b/modules/core/src/drawing.cpp
-index c48b048..aadb0d5 100644
+index 50e51fb..a8e64df 100644
 --- a/modules/core/src/drawing.cpp
 +++ b/modules/core/src/drawing.cpp
 @@ -554,9 +554,9 @@ Line2( Mat& img, Point pt1, Point pt2, const void* color )
@@ -214,7 +214,7 @@ index c48b048..aadb0d5 100644
  
          ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
 diff --git a/modules/gpu/src/match_template.cpp b/modules/gpu/src/match_template.cpp
-index 3b05433..807c8b0 100644
+index 4643f3b..e835673 100644
 --- a/modules/gpu/src/match_template.cpp
 +++ b/modules/gpu/src/match_template.cpp
 @@ -49,7 +49,7 @@ using namespace std;
@@ -227,7 +227,7 @@ index 3b05433..807c8b0 100644
  
  namespace cv { namespace gpu { namespace device
 diff --git a/modules/gpu/src/split_merge.cpp b/modules/gpu/src/split_merge.cpp
-index d185f78..e1978ab 100644
+index 0aa0e58..32a15b7 100644
 --- a/modules/gpu/src/split_merge.cpp
 +++ b/modules/gpu/src/split_merge.cpp
 @@ -95,9 +95,9 @@ namespace
@@ -253,10 +253,10 @@ index d185f78..e1978ab 100644
          }
  
 diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
-index 30c0c82..2481f3f 100644
+index b4b2896..5976cf7 100644
 --- a/modules/highgui/CMakeLists.txt
 +++ b/modules/highgui/CMakeLists.txt
-@@ -252,22 +252,13 @@ if(WIN32 AND WITH_FFMPEG)
+@@ -259,22 +259,13 @@ if(WIN32 AND WITH_FFMPEG)
    #                     COMMAND ${CMAKE_COMMAND} -E copy "${ffmpeg_path}" "${EXECUTABLE_OUTPUT_PATH}/$<CONFIGURATION>/${ffmpeg_bare_name_ver}"
    #                     COMMENT "Copying ${ffmpeg_path} to the output directory")
    #else
@@ -286,10 +286,10 @@ index 30c0c82..2481f3f 100644
  
  ocv_add_accuracy_tests()
 diff --git a/modules/highgui/include/opencv2/highgui/highgui_c.h b/modules/highgui/include/opencv2/highgui/highgui_c.h
-index c82d208..6f594b7 100644
+index 9c7166f..a18b3e8 100644
 --- a/modules/highgui/include/opencv2/highgui/highgui_c.h
 +++ b/modules/highgui/include/opencv2/highgui/highgui_c.h
-@@ -535,6 +535,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
+@@ -552,6 +552,9 @@ CVAPI(int)    cvSetCaptureProperty( CvCapture* capture, int property_id, double
  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
  
@@ -300,7 +300,7 @@ index c82d208..6f594b7 100644
  typedef struct CvVideoWriter CvVideoWriter;
  
 diff --git a/modules/highgui/src/cap_openni.cpp b/modules/highgui/src/cap_openni.cpp
-index 75aed56..074d494 100644
+index 59e19d1..7d8830e 100644
 --- a/modules/highgui/src/cap_openni.cpp
 +++ b/modules/highgui/src/cap_openni.cpp
 @@ -449,6 +449,8 @@ public:
@@ -312,7 +312,7 @@ index 75aed56..074d494 100644
  protected:
      struct OutputMap
      {
-@@ -1381,4 +1383,10 @@ CvCapture* cvCreateFileCapture_OpenNI( const char* filename )
+@@ -1403,4 +1405,10 @@ CvCapture* cvCreateFileCapture_OpenNI( const char* filename )
      return 0;
  }
  
@@ -350,7 +350,7 @@ index 536a534..866c1d8 100644
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
 diff --git a/modules/objdetect/src/latentsvm.cpp b/modules/objdetect/src/latentsvm.cpp
-index 89fd048..45490be 100644
+index 521f0fd..5a8edc1 100644
 --- a/modules/objdetect/src/latentsvm.cpp
 +++ b/modules/objdetect/src/latentsvm.cpp
 @@ -277,7 +277,7 @@ int searchObjectThreshold(const CvLSVMFeaturePyramid *H,
