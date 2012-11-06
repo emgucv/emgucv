@@ -165,9 +165,9 @@
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
-    <Compile Include="VideoSurveillance\BackgroundSubstractor.cs" />
-    <Compile Include="VideoSurveillance\BackgroundSubstractorMOG.cs" />
-    <Compile Include="VideoSurveillance\BackgroundSubstractorMOG2.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorMOG2.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />
     <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
     <Compile Include="VideoSurveillance\BlobDetector.cs" />
