@@ -7,5 +7,8 @@ Solution files are located in 'Solution\VS2005_MonoDevelop' folder
 2. Visual Studio 2008
 Solution files are located in 'Solution\VS2008' folder
 
+2. Visual Studio 2010-12
+Solution files are located in 'Solution\VS2010_12' folder
+
 3. MonoDevelop
 Solution files are located in 'Solution\VS2005_MonoDevelop' folder
