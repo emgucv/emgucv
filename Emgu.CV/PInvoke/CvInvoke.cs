@@ -48,27 +48,49 @@ namespace Emgu.CV
          if (loadDirectory == null)
          {
             System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+
             FileInfo file = new FileInfo(asm.Location);
+            //FileInfo file = new FileInfo(asm.CodeBase);
             DirectoryInfo directory = file.Directory;
             loadDirectory = directory.FullName;
+
+            String subfolder = String.Empty;
             if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             {
                if (IntPtr.Size == 8)
                {  //64bit process
-                  loadDirectory = Path.Combine(loadDirectory, "x64");
-               } else
-               {
-                  loadDirectory = Path.Combine(loadDirectory, "x86");
+                  subfolder = "x64";
                }
-            } else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+               else
+               {
+                  subfolder = "x86";
+               }
+            }
+            else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             {
-               loadDirectory = Path.Combine(loadDirectory, "..");
+               subfolder = "..";
             }
 
-         }
+            if (!String.IsNullOrEmpty(subfolder))
+               loadDirectory = Path.Combine(loadDirectory, subfolder);
 
-         if (!Directory.Exists(loadDirectory))
-            return false;
+            if (!Directory.Exists(loadDirectory))
+            {
+               //try to find an alternative loadDirectory path
+               //The following code should handle finding the asp.NET BIN folder 
+               String altLoadDirectory = Path.GetDirectoryName(asm.CodeBase);
+               if (altLoadDirectory.StartsWith(@"file:\"))
+                  altLoadDirectory = altLoadDirectory.Substring(6);
+
+               if (!String.IsNullOrEmpty(subfolder))
+                  altLoadDirectory = Path.Combine(altLoadDirectory, subfolder);
+
+               if (!Directory.Exists(altLoadDirectory))
+                  return false;
+               else
+                  loadDirectory = altLoadDirectory;
+            }
+         }
 
          String oldDir = Environment.CurrentDirectory;
          Environment.CurrentDirectory = loadDirectory;
