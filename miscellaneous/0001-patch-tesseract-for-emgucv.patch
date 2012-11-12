@@ -1,0 +1,25 @@
+From ba9fb4094c19a1d4cdbb211dd83176667e7be7d4 Mon Sep 17 00:00:00 2001
+From: Canming Huang <support@emgu.com>
+Date: Fri, 9 Nov 2012 12:52:55 -0500
+Subject: [PATCH] Fixed tesseract for Emgu CV.
+
+---
+ api/baseapi.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/api/baseapi.cpp b/api/baseapi.cpp
+index 0d4e2a0..b43aee7 100644
+--- a/api/baseapi.cpp
++++ b/api/baseapi.cpp
+@@ -824,7 +824,7 @@ bool TessBaseAPI::ProcessPages(const char* filename,
+         "lang=\"en\">\n <head>\n  <title></title>\n"
+         "  <meta http-equiv=\"Content-Type\" content=\"text/html; "
+ 		"charset=utf-8\" />\n"
+-        "  <meta name='ocr-system' content='tesseract " VERSION "' />\n"
++        "  <meta name='ocr-system' content='tesseract \" VERSION \"' />\n"
+         "  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par"
+         " ocr_line ocrx_word'/>\n"
+         " </head>\n <body>\n";
+-- 
+1.7.10.msysgit.1
+

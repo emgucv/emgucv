@@ -1,7 +1,7 @@
-From a7ffb3dd6f4fc365d9ef6d5e3c29ab0c0abb5304 Mon Sep 17 00:00:00 2001
+From c4b75b95eaedb4cbf345104b4208367cb7b153ab Mon Sep 17 00:00:00 2001
 From: Canming Huang <support@emgu.com>
 Date: Tue, 16 Oct 2012 11:16:49 -0400
-Subject: [PATCH] patch opencv for emgucv.
+Subject: [PATCH] patch opencv for emgucv
 
 ---
  3rdparty/libjasper/CMakeLists.txt                  |    4 ++++
@@ -9,6 +9,7 @@ Subject: [PATCH] patch opencv for emgucv.
  3rdparty/libpng/CMakeLists.txt                     |    4 ++++
  3rdparty/libtiff/CMakeLists.txt                    |    4 ++++
  3rdparty/zlib/CMakeLists.txt                       |    4 ++++
+ android/libinfo/CMakeLists.txt                     |    2 +-
  cmake/OpenCVDetectTBB.cmake                        |   20 +++++++++++++------
  cmake/OpenCVModule.cmake                           |   13 ++++++++----
  modules/contrib/src/colormap.cpp                   |    1 +
@@ -20,7 +21,7 @@ Subject: [PATCH] patch opencv for emgucv.
  modules/highgui/src/cap_openni.cpp                 |    8 ++++++++
  modules/legacy/src/3dtracker.cpp                   |    6 +++---
  modules/objdetect/src/latentsvm.cpp                |    2 +-
- 16 files changed, 77 insertions(+), 40 deletions(-)
+ 17 files changed, 78 insertions(+), 41 deletions(-)
 
 diff --git a/3rdparty/libjasper/CMakeLists.txt b/3rdparty/libjasper/CMakeLists.txt
 index a6fb71e..8ccc6b5 100644
@@ -97,6 +98,18 @@ index 537690c..ddef3c1 100644
  if(ENABLE_SOLUTION_FOLDERS)
    set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
  endif()
+diff --git a/android/libinfo/CMakeLists.txt b/android/libinfo/CMakeLists.txt
+index f8e8e15..8affd3e 100644
+--- a/android/libinfo/CMakeLists.txt
++++ b/android/libinfo/CMakeLists.txt
+@@ -36,4 +36,4 @@ set_target_properties(${the_module} PROPERTIES
+   )
+ 
+ get_filename_component(lib_name "opencv_info" NAME)
+-install(FILES "${LIBRARY_OUTPUT_PATH}/${lib_name}" DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main)
+\ No newline at end of file
++#install(FILES "${LIBRARY_OUTPUT_PATH}/${lib_name}" DESTINATION ${OPENCV_LIB_INSTALL_PATH} COMPONENT main)
+\ No newline at end of file
 diff --git a/cmake/OpenCVDetectTBB.cmake b/cmake/OpenCVDetectTBB.cmake
 index 1ffd454..9a37457 100644
 --- a/cmake/OpenCVDetectTBB.cmake
@@ -214,7 +227,7 @@ index 50e51fb..a8e64df 100644
  
          ICV_PUT_POINT((pt2.x + (XY_ONE >> 1)) >> XY_SHIFT,
 diff --git a/modules/gpu/src/match_template.cpp b/modules/gpu/src/match_template.cpp
-index 4643f3b..e835673 100644
+index 4643f3b..f14b219 100644
 --- a/modules/gpu/src/match_template.cpp
 +++ b/modules/gpu/src/match_template.cpp
 @@ -49,7 +49,7 @@ using namespace std;
@@ -227,7 +240,7 @@ index 4643f3b..e835673 100644
  
  namespace cv { namespace gpu { namespace device
 diff --git a/modules/gpu/src/split_merge.cpp b/modules/gpu/src/split_merge.cpp
-index 0aa0e58..32a15b7 100644
+index 0aa0e58..4cc31d4 100644
 --- a/modules/gpu/src/split_merge.cpp
 +++ b/modules/gpu/src/split_merge.cpp
 @@ -95,9 +95,9 @@ namespace
@@ -350,7 +363,7 @@ index 536a534..866c1d8 100644
      CvScalar color = colors[0];
      for (y = 0, i = 0; y < etalon_size.height; y++)
 diff --git a/modules/objdetect/src/latentsvm.cpp b/modules/objdetect/src/latentsvm.cpp
-index 521f0fd..5a8edc1 100644
+index 521f0fd..200f176 100644
 --- a/modules/objdetect/src/latentsvm.cpp
 +++ b/modules/objdetect/src/latentsvm.cpp
 @@ -277,7 +277,7 @@ int searchObjectThreshold(const CvLSVMFeaturePyramid *H,
