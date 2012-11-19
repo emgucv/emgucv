@@ -96,11 +96,13 @@ namespace Emgu.CV
             throw new FileNotFoundException(String.Format("The file {0} could not be not found.", fileName), fileName);
          }
 
+#if !IOS
          if (this is Image<Bgra, Byte> && fi.Extension.Equals(".png"))
          {
             //Open CV is unable to load the alpha channel of the png file, use Bitmap to load it correctly
             LoadFileUsingBitmap(fi);
          } else
+#endif
          try
          {
 #if ANDROID

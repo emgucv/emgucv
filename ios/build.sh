@@ -9,7 +9,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv7 
     cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* ios/armv7/
-    cp -r opencv/lib/Release/* ios/armv7/
+    #cp -r opencv/lib/Release/* ios/armv7/
     cd ios/armv7
     libtool -static -o libemgucv_armv7.a *.a
     cd ../..
