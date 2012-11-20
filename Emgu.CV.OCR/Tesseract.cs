@@ -144,10 +144,12 @@ namespace Emgu.CV.OCR
       /// <param name="mode">OCR engine mode</param>
       /// <param name="whiteList">This can be used to specify a white list for OCR. e.g. specify "1234567890" to recognize digits only. Note that the white list currently seems to only work with OcrEngineMode.OEM_TESSERACT_ONLY</param>
       public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
-         : this()
+         : this(dataPath, language, mode)
       {
+         if (mode == OcrEngineMode.OEM_CUBE_ONLY || mode == OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED)
+            throw new ArgumentException("White list is not supported by CUBE engine");
+
          SetVariable("tessedit_char_whitelist", whiteList);
-         Init(dataPath, language, mode);
       }
 
       /*
