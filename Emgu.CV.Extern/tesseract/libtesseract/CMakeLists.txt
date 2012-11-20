@@ -230,9 +230,11 @@ ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_cc
 #api
 PROJECT(tesseract_api)
 file(GLOB tesseract_api_srcs "${TESSERACT_DIR}/api/*.cpp")
-file(GLOB tesseract_api_srcs_excludes "${TESSERACT_DIR}/api/tesseractmain.cpp")
+file(GLOB tesseract_api_srcs_excludes "${TESSERACT_DIR}/api/tesseractmain.cpp" "${TESSERACT_DIR}/api/capi.cpp")
 LIST(REMOVE_ITEM tesseract_api_srcs ${tesseract_api_srcs_excludes})
 file(GLOB tesseract_api_hdrs "${TESSERACT_DIR}/api/*.h")
+file(GLOB tesseract_api_hdrs_excludes "${TESSERACT_DIR}/api/capi.h")
+LIST(REMOVE_ITEM tesseract_api_hdrs ${tesseract_api_hdrs_excludes})
 IF(ANDROID)
   LIST(APPEND tesseract_api_hdrs "${CMAKE_CURRENT_SOURCE_DIR}/glob/android/glob.h")
   LIST(APPEND tesseract_api_srcs "${CMAKE_CURRENT_SOURCE_DIR}/glob/android/glob.c")

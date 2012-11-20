@@ -1,6 +1,18 @@
 cd ..
 
 if [ "$1" != "simulator" ]; then    
+
+    rm -f CMakeCache.txt
+    ios/configure-device_xcode.sh
+    rm -rf ios/armv7s lib/Release bin/Release
+    xcodebuild -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
+    mkdir -p ios/armv7s 
+    cp -r lib/Release/* ios/armv7s/
+    cp -r bin/Release/* ios/armv7s/
+    #cp -r opencv/lib/Release/* ios/armv7/
+    cd ios/armv7s
+    libtool -static -o libemgucv_armv7s.a *.a
+    cd ../..
     
     rm -f CMakeCache.txt
     ios/configure-device_xcode.sh
@@ -9,10 +21,11 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv7 
     cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* ios/armv7/
-    cp -r opencv/lib/Release/* ios/armv7/
+    #cp -r opencv/lib/Release/* ios/armv7/
     cd ios/armv7
     libtool -static -o libemgucv_armv7.a *.a
     cd ../..
+
 fi
 
 rm -f CMakeCache.txt
@@ -33,7 +46,7 @@ if [ "$1" == "simulator" ]; then
     cp ios/i386/libemgucv_i386.a ios/universal/libemgucv.a
 else
 #    lipo -create -output ios/universal/libemgucv.a ios/armv6/libemgucv_armv6.a ios/armv7/libemgucv_armv7.a ios/i386/libemgucv_i386.a
-    lipo -create -output ios/universal/libemgucv.a ios/armv7/libemgucv_armv7.a ios/i386/libemgucv_i386.a
+    lipo -create -output ios/universal/libemgucv.a ios/armv7/libemgucv_armv7.a ios/armv7s/libemgucv_armv7s.a ios/i386/libemgucv_i386.a
 fi
 
 mkdir -p Emgu.CV/PInvoke/MonoTouch

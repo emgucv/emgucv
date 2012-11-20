@@ -95,7 +95,7 @@ namespace Emgu.CV
          {
             throw new FileNotFoundException(String.Format("The file {0} could not be not found.", fileName), fileName);
          }
-
+#if !IOS
          if ((this is Image<Bgra, Byte> && (fi.Extension.Equals(".png")) 
             || fi.Extension.Equals(".tiff") || fi.Extension.Equals(".tif") ))
          {
@@ -104,6 +104,7 @@ namespace Emgu.CV
             //use Bitmap to load it correctly.
             LoadFileUsingBitmap(fi);
          } else
+#endif
          try
          {
 #if ANDROID
