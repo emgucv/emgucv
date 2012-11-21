@@ -23,6 +23,8 @@
     <MtouchDebug>True</MtouchDebug>
     <MtouchProfiling>True</MtouchProfiling>
     <MtouchLink>None</MtouchLink>
+    <MtouchI18n />
+    <MtouchArch>ARMv7, ARMv7s</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -32,6 +34,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchLink>None</MtouchLink>
+    <MtouchI18n />
+    <MtouchArch>ARMv7, ARMv7s</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
@@ -217,6 +221,7 @@
     <Content Include="AppIcons\appIcon_114x114.png" />
     <Content Include="AppIcons\appIcon_144x144.png" />
     <Content Include="AppIcons\appIcon_57x57.png" />
+    <Content Include="AppIcons\iTunesArtwork_512x512.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tessdata\" />

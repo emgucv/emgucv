@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>EMGU CV</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>AppIcons/appIcon_72x72.png</string>
@@ -16,6 +18,8 @@
 		<integer>1</integer>
 		<integer>2</integer>
 	</array>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
