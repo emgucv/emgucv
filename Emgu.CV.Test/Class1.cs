@@ -473,7 +473,7 @@ namespace Emgu.CV.Test
                   else if (learningFrames <= 0)
                   {
                      bgmodel.Diff(ycc, Rectangle.Empty);
-                     Image<Gray, Byte> m = bgmodel.ForgroundMask.Clone();
+                     Image<Gray, Byte> m = bgmodel.ForegroundMask.Clone();
                      blobs.Clear();
                      if (detector.DetectNewBlob(m, blobs, null))
                      {
@@ -704,7 +704,7 @@ namespace Emgu.CV.Test
             {
                Image<Bgr, Byte> frame = capture.QueryFrame();
                model.Update(frame);
-               viewer.Image = model.ForgroundMask; 
+               viewer.Image = model.ForegroundMask; 
             };
             viewer.ShowDialog();
          }
@@ -746,7 +746,7 @@ namespace Emgu.CV.Test
                
                //Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
 
-               Image<Bgr, Byte> img = tracker.ForgroundMask.Convert<Bgr, Byte>();
+               Image<Bgr, Byte> img = tracker.ForegroundMask.Convert<Bgr, Byte>();
                foreach (MCvBlob blob in tracker)
                {
                   img.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
@@ -767,7 +767,7 @@ namespace Emgu.CV.Test
          using (Capture capture = new Capture())
          {
             //BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
-            BackgroundSubstractorMOG2 bgModel = new BackgroundSubstractorMOG2(0, 0, true);
+            BackgroundSubtractorMOG2 bgModel = new BackgroundSubtractorMOG2(0, 0, true);
             //BackgroundSubstractorMOG bgModel = new BackgroundSubstractorMOG(0, 0, 0, 0);
 
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
@@ -775,7 +775,7 @@ namespace Emgu.CV.Test
                Image<Bgr, Byte> frame = capture.RetrieveBgrFrame();
                bgModel.Update(frame);
 
-               Image<Gray, Byte> gray = bgModel.ForgroundMask;
+               Image<Gray, Byte> gray = bgModel.ForegroundMask;
                using (CvBlobDetector detector = new CvBlobDetector())
                using (CvBlobs blobs = new CvBlobs())
                {

@@ -26,9 +26,10 @@ namespace Emgu.CV.Test
       public void TestRunningAvg()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(100, 40, new Gray(100));
-         Image<Gray, Single> img2 = new Image<Gray, float>(100, 40, new Gray(50));
-         IImage img = img2;
-         img1.RunningAvg(img2, 0.5);
+         Image<Gray, Single> acc = new Image<Gray, float>(100, 40, new Gray(50));
+         //IImage img = img2;
+         img1.RunningAvg(acc, 0.5);
+         CvInvoke.cvRunningAvg(img1, acc, 0.3, IntPtr.Zero); 
       }
 
       [Test]

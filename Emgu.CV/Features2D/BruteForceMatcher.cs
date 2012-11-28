@@ -51,22 +51,9 @@ namespace Emgu.CV.Features2D
    /// Wrapped BruteForceMatcher
    /// </summary>
    /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
-   public class BruteForceMatcher<T> : UnmanagedObject
+   public class BruteForceMatcher<T> : DescriptorMatcher<T>
       where T : struct
    {
-      /// <summary>
-      /// Find the k-nearest match
-      /// </summary>
-      /// <param name="queryDescriptor">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
-      /// <param name="trainIdx">The resulting n x <paramref name="k"/> matrix of descriptor index from the training descriptors</param>
-      /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
-      /// <param name="k">Number of nearest neighbors to search for</param>
-      /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
-      public void KnnMatch(Matrix<T> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
-      {
-         CvInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
-      }
-
       private DistanceType _distanceType;
 
       /// <summary>
@@ -101,15 +88,6 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Add the model descriptors
-      /// </summary>
-      /// <param name="modelDescriptors">The model discriptors</param>
-      public void Add(Matrix<T> modelDescriptors)
-      {
-         CvInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
-      }
-
-      /// <summary>
       /// Release the unmanaged resource associated with the BruteForceMatcher
       /// </summary>
       protected override void DisposeObject()
@@ -131,13 +109,5 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
-                   IntPtr trainIdx, IntPtr distance, int k,
-                   IntPtr mask);
    }
 }

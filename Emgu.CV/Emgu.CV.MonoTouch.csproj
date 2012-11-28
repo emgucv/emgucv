@@ -48,8 +48,14 @@
     <Compile Include="Capture\KinectCapture.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
+	<Compile Include="FaceRecognizer.cs" />
+	<Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
+    <Compile Include="Features2D\BOWKMeansTrainer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
+	<Compile Include="Features2D\Brisk.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
+	<Compile Include="Features2D\DenseFeatureDetector.cs" />
+	<Compile Include="Features2D\DescriptorMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />

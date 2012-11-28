@@ -6,6 +6,13 @@
 
 #include "gpu_c.h"
 
+#if !defined (HAVE_CUDA) || defined (CUDA_DISABLER)
+void cv::gpu::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, MatchTemplateBuf&, Stream&) 
+{
+   CV_Error(CV_GpuNotSupported, "The library is compiled without GPU support");
+}
+#endif
+
 //----------------------------------------------------------------------------
 //
 //  Gpu Device Info

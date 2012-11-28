@@ -15,7 +15,14 @@ using Emgu.Util;
 namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// Freak Descriptor
+   /// The FREAK (Fast Retina Keypoint) keypoint descriptor:
+   /// Alahi, R. Ortiz, and P. Vandergheynst. FREAK: Fast Retina Keypoint. In IEEE Conference on Computer
+   /// Vision and Pattern Recognition, 2012. CVPR 2012 Open Source Award Winner.
+   /// The algorithm
+   /// propose a novel keypoint descriptor inspired by the human visual system and more precisely the retina, coined Fast
+   /// Retina Key- point (FREAK). A cascade of binary strings is computed by efficiently comparing image intensities over a
+   /// retinal sampling pattern. FREAKs are in general faster to compute with lower memory load and also more robust than
+   /// SIFT, SURF or BRISK. They are competitive alternatives to existing keypoints in particular for embedded applications.
    /// </summary>
    public class Freak : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
    {

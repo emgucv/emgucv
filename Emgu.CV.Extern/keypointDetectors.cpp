@@ -171,6 +171,7 @@ void CvOrbDetectorRelease(cv::ORB** detector)
    *detector = 0;
 }
 
+//FREAK
 cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves)
 {
    return new cv::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
@@ -179,6 +180,21 @@ cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float
 void CvFreakRelease(cv::FREAK** detector)
 {
    delete * detector;
+   *detector = 0;
+}
+
+//Brisk
+cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+{
+   cv::BRISK* brisk = new cv::BRISK(thresh, octaves, patternScale);
+   *featureDetector = static_cast<cv::FeatureDetector*>(brisk);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(brisk);
+   return brisk;
+}
+
+void CvBriskRelease(cv::BRISK** detector)
+{
+   delete *detector;
    *detector = 0;
 }
 
@@ -606,3 +622,54 @@ void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
    delete * detector;
    *detector = 0;
 }
+
+//BowKMeansTrainer
+cv::BOWKMeansTrainer* CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria termcrit, int attempts, int flags)
+{
+   return new cv::BOWKMeansTrainer(clusterCount, termcrit, attempts, flags);
+}
+void CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
+{
+   delete * trainer;
+   *trainer = 0;
+}
+int CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
+{
+   return trainer->descripotorsCount();
+}
+void CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, CvMat* descriptors)
+{
+   cv::Mat m = cv::cvarrToMat(descriptors);
+   trainer->add(m);
+}
+void CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
+{
+   cv::Mat m = trainer->cluster();
+   cv::swap(m, *descriptors);
+}
+
+//BOWImgDescriptorExtractor
+cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::DescriptorExtractor* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
+{
+      cv::Ptr<cv::DescriptorExtractor> extractorPtr(descriptorExtractor);
+   extractorPtr.addref();
+         cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher);
+   matcherPtr.addref();
+   return new cv::BOWImgDescriptorExtractor(extractorPtr, matcherPtr);
+}
+void CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor)
+{
+   delete *descriptorExtractor;
+   *descriptorExtractor = 0;
+}
+void CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, CvMat* vocabulary)
+{
+   cv::Mat voc = cv::cvarrToMat(vocabulary);
+   bowImgDescriptorExtractor->setVocabulary(voc);
+}
+void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, const IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
+{
+   cv::Mat img = cv::cvarrToMat(image);
+   bowImgDescriptorExtractor->compute(img, *keypoints, *imgDescriptor);
+}
+

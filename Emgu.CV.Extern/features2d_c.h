@@ -54,28 +54,8 @@ CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
    double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
-
 CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 
-/*
-CVAPI(int) CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector);
-
-CVAPI(void) CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   cv::Mat descriptorsMat;
-   (*detector)(mat, maskMat, *keypoints, descriptorsMat, false);
-
-   descriptors->resize(keypoints->size()*detector->descriptorSize());
-
-   if (keypoints->size() > 0)
-      memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
-}
-
-CVAPI(void) CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
-*/
 //FeatureDetector
 CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints);
 
@@ -87,62 +67,30 @@ CVAPI(cv::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(
    int maxTotalKeypoints,
    int gridRows, int gridCols);
 
-/*
-CVAPI(void) GridAdaptedFeatureDetectorDetect(
-   cv::GridAdaptedFeatureDetector* detector, 
-   const cv::Mat* image, std::vector<cv::KeyPoint>* keypoints, const cv::Mat* mask)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat = mask? cv::cvarrToMat(mask) : cv::Mat();
-   detector->detect(mat, *keypoints, maskMat);
-}*/
-
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 
 //SURFDetector
 CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
-
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 
-/*
-CVAPI(void) CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   (*detector)(mat, maskMat, *keypoints, *descriptors, false);
-}
-
-CVAPI(void) CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
-*/
 //ORB
 CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
-
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
+//Freak
 CVAPI(cv::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves);
-
 CVAPI(void) CvFreakRelease(cv::FREAK** detector);
 
-/*
-CVAPI(int) CvOrbDetectorGetDescriptorSize(cv::ORB* detector);
-
-CVAPI(void) CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors);
-*/
+//Brisk
+CVAPI(cv::BRISK*) CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(void) CvBriskRelease(cv::BRISK** detector);
 
 //Brief descriptor extractor
 CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
-
-/*
-CVAPI(int) CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor);
-
-CVAPI(void) CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors);
-*/
 CVAPI(void) CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor);
 
-// detect corners using FAST algorithm
+//FAST algorithm
 CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression);
-
 CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
 
 //GFTT
@@ -155,7 +103,6 @@ CVAPI(void) CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector);
 
 // MSER detector
 CVAPI(cv::MSER*) CvMserGetFeatureDetector(CvMSERParams* detector);
-
 CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** detector);
 
 //Plannar Object Detector
@@ -266,5 +213,17 @@ CVAPI(void) CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescripto
 CVAPI(void) CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, const IplImage* image,  std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors );
 CVAPI(int) CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor);
 
+//BowKMeansTrainer
+CVAPI(cv::BOWKMeansTrainer*) CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria termcrit, int attempts, int flags);
+CVAPI(void) CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer);
+CVAPI(int) CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer);
+CVAPI(void) CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, CvMat* descriptors);
+CVAPI(void) CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors);
+
+//BOWImgDescriptorExtractor
+CVAPI(cv::BOWImgDescriptorExtractor*) CvBOWImgDescriptorExtractorCreate(cv::DescriptorExtractor* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
+CVAPI(void) CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor);
+CVAPI(void) CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, CvMat* vocabulary);
+CVAPI(void) CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, const IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
 
 #endif

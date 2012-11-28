@@ -23,6 +23,12 @@ namespace Emgu.CV.Test
    [TestFixture]
    public class AutoTestFeatures2d
    {
+      [Test]
+      public void TestBrisk()
+      {
+         Brisk detector = new Brisk(30, 3, 1.0f);
+         EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+      }
 
       [Test]
       public void TestSIFT()
@@ -456,6 +462,47 @@ namespace Emgu.CV.Test
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
          }
+      }
+
+      [Test]
+      public void TestBOWKmeansTrainer()
+      {
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
+         SURFDetector detector = new SURFDetector(500, false);
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         Matrix<float> descriptors = detector.DetectAndCompute(box, null, kpts);
+
+         BOWKMeansTrainer trainer = new BOWKMeansTrainer(100, new MCvTermCriteria(), 3, CvEnum.KMeansInitType.PPCenters);
+         trainer.Add(descriptors);
+         Matrix<float> vocabulary = trainer.Cluster();
+
+         BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2);
+
+         BOWImgDescriptorExtractor<float> extractor = new BOWImgDescriptorExtractor<float>(detector, matcher);
+         extractor.SetVocabulary(vocabulary);
+
+         Matrix<float> d = extractor.Compute(box, kpts);
+      }
+
+      [Test]
+      public void TestBOWKmeansTrainer2()
+      {
+         Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
+         Brisk detector = new Brisk(30, 3, 1.0f);
+         VectorOfKeyPoint kpts = new VectorOfKeyPoint();
+         Matrix<byte> descriptors = detector.DetectAndCompute(box, null, kpts);
+         Matrix<float> descriptorsF = descriptors.Convert<float>();
+         BOWKMeansTrainer trainer = new BOWKMeansTrainer(100, new MCvTermCriteria(), 3, CvEnum.KMeansInitType.PPCenters);
+         trainer.Add(descriptorsF);
+         Matrix<float> vocabulary = trainer.Cluster();
+
+         BruteForceMatcher<byte> matcher = new BruteForceMatcher<byte>(DistanceType.L2);
+
+         BOWImgDescriptorExtractor<byte> extractor = new BOWImgDescriptorExtractor<byte>(detector, matcher);
+         Matrix<Byte> vocabularyByte = vocabulary.Convert<Byte>();
+         extractor.SetVocabulary(vocabularyByte);
+
+         Matrix<float> d = extractor.Compute(box, kpts);
       }
    }
 }
