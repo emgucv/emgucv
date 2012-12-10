@@ -1,4 +1,11 @@
+#!/usr/bin/env bash
+
 cd ..
+
+if [ ! -f ios/cmake ]
+then 
+  ln -s ../opencv/ios/cmake ios/cmake
+fi
 
 if [ "$1" != "simulator" ]; then    
 
