@@ -66,10 +66,11 @@ namespace Emgu.CV
                   subfolder = "x86";
                }
             }
+            /*
             else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             {
                subfolder = "..";
-            }
+            }*/
 
             if (!String.IsNullOrEmpty(subfolder))
                loadDirectory = Path.Combine(loadDirectory, subfolder);
@@ -97,10 +98,11 @@ namespace Emgu.CV
          bool success = true;
 
          string prefix = string.Empty;
+         /*
          if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
          {
             prefix = "lib";
-         }
+         }*/
 
          foreach (String module in unmanagedModules)
          {
