@@ -98,12 +98,7 @@ namespace Emgu.CV
          bool success = true;
 
          string prefix = string.Empty;
-         /*
-         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
-         {
-            prefix = "lib";
-         }*/
-
+         
          foreach (String module in unmanagedModules)
          {
             String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, module));
@@ -180,11 +175,15 @@ namespace Emgu.CV
          }
 #elif IOS
 #else
+
+         if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
+         {
          String formatString = GetModuleFormatString();
          for (int i = 0; i < modules.Count; ++i)
             modules[i] = String.Format(formatString, modules[i]);
 
          LoadUnmanagedModules(null, modules.ToArray());
+         }
 #endif
          //Use the custom error handler
          cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
