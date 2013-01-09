@@ -13,10 +13,6 @@ Module Module1
 
    Sub Main()
 
-      If Not IsPlaformCompatable() Then
-         Return
-      End If
-
       'Load the image from file
       Dim img As New Image(Of Bgr, Byte)("lena.jpg")
 
@@ -39,18 +35,5 @@ Module Module1
       UI.ImageViewer.Show(img)
 
    End Sub
-
-   ' Check if both the managed and unmanaged code are compiled for the same architecture
-   Public Function IsPlaformCompatable() As Boolean
-      Dim clrBitness As Integer = Marshal.SizeOf(GetType(IntPtr)) * 8
-      If clrBitness <> CvInvoke.UnmanagedCodeBitness Then
-         MessageBox.Show(String.Format("Platform mismatched: CLR is {0} bit, C++ code is {1} bit." _
-            + "Please consider recompiling the executable with the same platform target as C++ code.", _
-            clrBitness, CvInvoke.UnmanagedCodeBitness))
-         Return False
-      End If
-      Return True
-   End Function
-
 
 End Module

@@ -81,10 +81,5 @@ namespace Emgu.CV
       /// The file name of the videostab library
       /// </summary>
       public const string OPENCV_VIDEOSTAB_LIBRARY = "${OPENCV_VIDEOSTAB_OUTPUT_NAME}";
-	  
-      /// <summary>
-      /// The bit-ness of the unmanaged code (either 32 or 64) 
-      /// </summary>
-      public const uint UnmanagedCodeBitness = ${UNMANAGED_CODE_BITNESS};
    }
 }
