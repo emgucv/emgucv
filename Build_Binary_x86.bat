@@ -110,34 +110,31 @@ REM SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia3
 
 REM initiate the compiler enviroment
 @echo on
-REM IF "%OS_MODE%"=="" CALL "%INTEL_ENV%" ia32
-REM IF "%OS_MODE%"==" WIN64" CALL "%INTEL_ENV%" intel64
-
-REM SET INTEL_ICL_CMAKE=%INTEL_ICL:\=/%
 
 IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 -DWITH_TBB:BOOL=TRUE ^
 -DTBB_INCLUDE_DIR="%INTEL_TBB:\=/%" ^
 -DWITH_IPP:BOOL=TRUE ^
+-DENABLE_PRECOMPILED_HEADERS:BOOL=FALSE ^
 -DCV_ICC:BOOL=TRUE ^
 %CMAKE_CONF_FLAGS%
+
+IF NOT "%2%"=="gpu" GOTO END_OF_INTEL_GPU
+
+SET CUDA_HOST_COMPILER=%VS100COMNTOOLS%..\..\VC\bin
+IF "%OS_MODE%"==" Win64" SET CUDA_HOST_COMPILER=%CUDA_HOST_COMPILER%\amd64
+IF EXIST %VS2010% SET CMAKE_CONF_FLAGS=^
+-DCUDA_HOST_COMPILER="%CUDA_HOST_COMPILER%" ^
+%CMAKE_CONF_FLAGS%
+IF "%OS_MODE%"==" Win64" SET CMAKE_CONF_FLAGS=^
+-DCUDA_64_BIT_DEVICE_CODE:BOOL=ON ^
+%CMAKE_CONF_FLAGS%
+
+:END_OF_INTEL_GPU
 
 REM create visual studio project
 %CMAKE% %CMAKE_CONF_FLAGS%
 
-REM IF %DEVENV%==%VS2008% SET IC_COMMAND=/IC
-REM IF %DEVENV%==%VS2010% SET IC_COMMAND=/IC:"Intel C++ Compiler XE 12.1"
-
-REM convert the project to use intel compiler 
-REM IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln %IC_COMMAND%
-REM exclude tesseract_wordrec, tesseract_ccstruct, tesseract_ccmain and libjpeg
-REM these projects create problems for intel compiler
-REM IF EXIST "%ICPROJCONVERT%" "%ICPROJCONVERT%" emgucv.sln ^
-REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\libxtiff\xtiff.icproj ^
-REM Emgu.CV.Extern\libgeotiff\libgeotiff-1.3.0\geotiff_archive.icproj ^
-REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_ccstruct.icproj ^
-REM Emgu.CV.Extern\tesseract\libtesseract\tesseract_wordrec.icproj ^
-REM /VC
 GOTO BUILD
 
 :VISUAL_STUDIO
