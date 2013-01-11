@@ -477,22 +477,34 @@ ELSEIF (WIN32)
     ENDIF()
   
     SET(VCRT_REDIST_NAME "vcredist_x86.exe")
-    IF(TARGET_ARCH_64)
-      SET(VCRT_REDIST_NAME "vcredist_x64.exe")
-    ENDIF()
-   
-    IF(MSVC_REDIST_FOLDER)
-      MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
+    IF(MSVC_REDIST_FOLDER AND (DEFINED UNIVERSAL_BUILD OR (NOT DEFINED TARGET_ARCH_64)))    
+	  MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
       INSTALL(
         FILES
         "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
         DESTINATION .
         COMPONENT emgucv_binary 
         )
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
-	ELSE()
-	  MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
+      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
     ENDIF()
+	
+    IF(TARGET_ARCH_64)
+      SET(VCRT_REDIST_NAME "vcredist_x64.exe")
+   
+      IF(MSVC_REDIST_FOLDER)
+        MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
+        INSTALL(
+        FILES
+        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
+        DESTINATION .
+        COMPONENT emgucv_binary 
+        )
+        SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+		"${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n!include 'x64.nsh'\n${If} ${RunningX64}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'\n${EndIf}")
+	  ELSE()
+	    MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
+      ENDIF()
+	ENDIF()
   ENDIF()
 
   IF(DEFINED UNIVERSAL_BUILD)
