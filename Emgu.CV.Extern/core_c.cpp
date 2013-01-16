@@ -24,3 +24,7 @@ void cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray)
    IplImage iplImage = (*mat);
    cvCopy(&iplImage, cvArray);
 }
+int cvMatGetElementSize(cv::Mat* mat)
+{
+   return static_cast<int>( mat->elemSize());
+}

@@ -95,5 +95,31 @@ namespace Emgu.CV
          IntPtr image,
          IntPtr mask,
          IntPtr keypoints);
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvEstimateAffine3D")]
+      internal extern static int  _CvEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers, double ransacThreshold, double confidence);
+
+      public static int CvEstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate, out Byte[] inliers, double ransacThreshold, double confidence)
+      {
+         GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
+         GCHandle dstHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
+         int result;
+
+         estimate = new Matrix<double>(3, 4);
+         using (Mat affineEstimate = new Mat())
+         using (Matrix<float> srcMat = new Matrix<float>(1,  src.Length, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * src.Length))
+         using (Matrix<float> dstMat = new Matrix<float>(1,  dst.Length, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * dst.Length ))
+         using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
+         {
+            result = _CvEstimateAffine3D(srcMat, dstMat, affineEstimate, vectorOfByte, ransacThreshold, confidence);
+            inliers = vectorOfByte.ToArray();
+            CvInvoke.cvMatCopyToCvArr(affineEstimate, estimate);  
+         }
+
+         srcHandle.Free();
+         dstHandle.Free();
+
+         return result;
+      }
    }
 }

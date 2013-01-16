@@ -28,6 +28,14 @@ namespace Emgu.CV
          }
       }
 
+      public int ElementSize
+      {
+         get
+         {
+            return CvInvoke.cvMatGetElementSize(_ptr);
+         }
+      }
+
       protected override void DisposeObject()
       {
          CvInvoke.cvMatRelease(ref _ptr);
@@ -45,5 +53,8 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvMatCopyToCvArr(IntPtr mat, IntPtr cvArray);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cvMatGetElementSize(IntPtr mat);
    }
 }

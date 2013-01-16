@@ -15,5 +15,6 @@ CVAPI(cv::Mat*) cvMatCreate();
 CVAPI(void) cvMatRelease(cv::Mat** mat);
 CVAPI(CvSize) cvMatGetSize(cv::Mat* mat);
 CVAPI(void) cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray);
+CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
 
 #endif

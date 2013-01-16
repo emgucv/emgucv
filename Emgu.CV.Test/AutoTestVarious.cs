@@ -2106,6 +2106,40 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestEstimateAffine3D()
+      {
+         Random r = new Random();
+         Matrix<double> affine = new Matrix<double>(3, 4);
+         for(int i = 0; i < 3; i++)
+            for (int j = 0; j < 4; j++)
+            {
+               affine.Data[i, j] = r.NextDouble() * 2 + 1; 
+            }
+
+         MCvPoint3D32f[] srcPts = new MCvPoint3D32f[4];
+         for (int i = 0; i < srcPts.Length; i++)
+         {
+            srcPts[i] = new MCvPoint3D32f((float) (r.NextDouble() + 1), (float) (r.NextDouble() + 1), (float) (r.NextDouble() + 5));
+         }
+         MCvPoint3D32f[] dstPts = new MCvPoint3D32f[srcPts.Length];
+
+         GCHandle srcHandle = GCHandle.Alloc(srcPts, GCHandleType.Pinned);
+         GCHandle dstHandle = GCHandle.Alloc(dstPts, GCHandleType.Pinned);
+         using (Matrix<float> srcMat = new Matrix<float>(srcPts.Length, 1, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
+         using (Matrix<float> dstMat = new Matrix<float>(dstPts.Length, 1, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
+         {
+            CvInvoke.cvTransform(srcMat, dstMat, affine, IntPtr.Zero);
+         }
+         srcHandle.Free();
+         dstHandle.Free();
+
+         byte[] inlier;
+         Matrix<double> estimate;
+         CvInvoke.CvEstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
+      }
+
+
+      [Test]
       public void TestLatenSVM()
       {
          using (LatentSvmDetector detector = new LatentSvmDetector("car.xml"))
