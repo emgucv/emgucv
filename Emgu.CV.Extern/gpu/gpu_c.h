@@ -506,4 +506,21 @@ CVAPI(void) gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gp
 CVAPI(cv::gpu::MatchTemplateBuf*) gpuMatchTemplateBufCreate();
 CVAPI(void) gpuMatchTemplateBufRelease(cv::gpu::MatchTemplateBuf** buffer);
 
+//----------------------------------------------------------------------------
+//
+//  VIBE GPU
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::VIBE_GPU*) gpuVibeCreate(unsigned long rngSeed, cv::gpu::GpuMat* firstFrame, cv::gpu::Stream* stream);
+CVAPI(void) gpuVibeCompute(cv::gpu::VIBE_GPU* vibe, cv::gpu::GpuMat* frame, cv::gpu::GpuMat* fgMask, cv::gpu::Stream* stream);
+CVAPI(void) gpuVibeRelease(cv::gpu::VIBE_GPU** vibe);
+
+//----------------------------------------------------------------------------
+//
+//  MOG2 GPU
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::gpu::MOG2_GPU*) gpuMog2Create(int nMixtures);
+CVAPI(void) gpuMog2Compute(cv::gpu::MOG2_GPU* mog, cv::gpu::GpuMat* frame, float learningRate, cv::gpu::GpuMat* fgMask, cv::gpu::Stream* stream);
+CVAPI(void) gpuMog2Release(cv::gpu::MOG2_GPU** mog);
 #endif

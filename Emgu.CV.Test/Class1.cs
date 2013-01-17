@@ -235,6 +235,98 @@ namespace Emgu.CV.Test
          }
       }
 
+      public void TestGpuVibe()
+      {
+         int warmUpFrames = 20;
+
+         GpuVibe<Gray> vibe = null;
+         Image<Gray, Byte> mask = null;
+         using (ImageViewer viewer = new ImageViewer()) //create an image viewer
+         using (Capture capture = new Capture()) //create a camera captue
+         {
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
+            {  
+               //run this until application closed (close button click on image viewer)
+               
+               using(Image<Bgr, byte> frame = capture.RetrieveBgrFrame(0))
+               using (GpuImage<Bgr, byte> gpuFrame = new GpuImage<Bgr, byte>(frame))
+               using (GpuImage<Gray, Byte> gpuGray = gpuFrame.Convert<Gray, Byte>())
+               {
+                  if (warmUpFrames > 0)
+                  {
+                     warmUpFrames--;
+                     return;
+                  }
+                  
+                  if (vibe == null)
+                  {
+                     vibe = new GpuVibe<Gray>(1234567, gpuGray, null);
+                     return;
+                  }
+                  else
+                  {
+                     vibe.Update(gpuGray, null);
+                     if (mask == null)
+                        mask = new Image<Gray, byte>(vibe.ForgroundMask.Size);
+
+                     vibe.ForgroundMask.Download(mask);
+                     viewer.Image = frame.ConcateHorizontal(mask.Convert<Bgr, Byte>()); //draw the image obtained from camera
+
+                  }
+               }
+
+               
+            };
+            capture.Start();
+            viewer.ShowDialog(); //show the image viewer
+         }
+      }
+
+      public void TestGpuMOG()
+      {
+         int warmUpFrames = 20;
+
+         GpuMOG2<Bgr>  mog2 = null;
+         Image<Gray, Byte> mask = null;
+         using (ImageViewer viewer = new ImageViewer()) //create an image viewer
+         using (Capture capture = new Capture()) //create a camera captue
+         {
+            capture.ImageGrabbed += delegate(object sender, EventArgs e)
+            {
+               //run this until application closed (close button click on image viewer)
+
+               using (Image<Bgr, byte> frame = capture.RetrieveBgrFrame(0))
+               using (GpuImage<Bgr, byte> gpuFrame = new GpuImage<Bgr, byte>(frame))
+               {
+                  if (warmUpFrames > 0)
+                  {
+                     warmUpFrames--;
+                     return;
+                  }
+
+                  if (mog2 == null)
+                  {
+                     mog2 = new GpuMOG2<Bgr>(-1);
+                     mog2.Update(gpuFrame, -1.0f, null);
+                     return;
+                  }
+                  else
+                  {
+                     mog2.Update(gpuFrame, -1.0f, null);
+                     if (mask == null)
+                        mask = new Image<Gray, byte>(mog2.ForgroundMask.Size);
+
+                     mog2.ForgroundMask.Download(mask);
+                     viewer.Image = frame.ConcateHorizontal(mask.Convert<Bgr, Byte>()); //draw the image obtained from camera
+
+                  }
+               }
+            };
+            capture.Start();
+            viewer.ShowDialog(); //show the image viewer
+         }
+      }
+
       public void CameraTest()
       {
          using (ImageViewer viewer = new ImageViewer()) //create an image viewer
