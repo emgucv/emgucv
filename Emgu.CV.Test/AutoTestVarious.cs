@@ -2055,6 +2055,17 @@ namespace Emgu.CV.Test
             double min = 0, max = 0;
             Point minLoc = new Point(), maxLoc = new Point();
             CvInvoke.cvMinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, IntPtr.Zero);
+
+            double min2, max2;
+            int[] minLoc2 = new int[2], maxLoc2 = new int[2];
+            CvInvoke.CvMinMaxIdx(delta, out min2, out max2, minLoc2, maxLoc2, IntPtr.Zero);
+            EmguAssert.IsTrue(min == min2);
+            EmguAssert.IsTrue(max == max2);
+            EmguAssert.IsTrue(minLoc.X == minLoc2[1]);
+            EmguAssert.IsTrue(minLoc.Y == minLoc2[0]);
+            EmguAssert.IsTrue(maxLoc.X == maxLoc2[1]);
+            EmguAssert.IsTrue(maxLoc.Y == maxLoc2[0]);
+
             EmguAssert.IsTrue(max < 1.0e-4, "Error is too large");
          }
       }

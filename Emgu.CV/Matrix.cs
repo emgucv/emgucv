@@ -493,9 +493,13 @@ namespace Emgu.CV
       /// </summary>
       public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation)
       {
-         minValue = 0; maxValue = 0;
+         //minValue = 0; maxValue = 0;
          minLocation = new Point(); maxLocation = new Point();
-         CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
+         int[] minArr = new int[2], maxArr = new int[2];
+         CvInvoke.CvMinMaxIdx(Ptr, out minValue, out maxValue, minArr, maxArr, IntPtr.Zero);
+         minLocation.X = minArr[1]; minLocation.Y = minArr[0];
+         maxLocation.X = maxArr[1]; maxLocation.Y = maxArr[0];
+         //CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
       }
 
       #region Addition

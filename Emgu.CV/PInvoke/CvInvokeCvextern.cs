@@ -121,5 +121,20 @@ namespace Emgu.CV
 
          return result;
       }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvMinMaxIdx")]
+      internal extern static void _CvMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx, IntPtr maxIdx, IntPtr mask);
+
+      public static void CvMinMaxIdx(IntPtr src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx, IntPtr mask)
+      {
+         GCHandle minHandle = GCHandle.Alloc(minIdx, GCHandleType.Pinned);
+         GCHandle maxHandle = GCHandle.Alloc(maxIdx, GCHandleType.Pinned);
+         minVal = 0;
+         maxVal = 0;
+         _CvMinMaxIdx(src, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(), mask);
+         minHandle.Free();
+         maxHandle.Free();
+      }
+
    }
 }

@@ -4207,11 +4207,16 @@ namespace Emgu.CV
 
          double minVal = 0, maxVal = 0;
          Point minLoc = new Point(), maxLoc = new Point();
+         //int[] minIdx = new int[2], maxIdx = new int[2];
          if (NumberOfChannels == 1)
          {
             CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+            //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
             minValues[0] = minVal; maxValues[0] = maxVal;
+            //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
+            //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
             minLocations[0] = minLoc; maxLocations[0] = maxLoc;
+            
          }
          else
          {
@@ -4219,7 +4224,10 @@ namespace Emgu.CV
             {
                CvInvoke.cvSetImageCOI(Ptr, i + 1);
                CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+               //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
                minValues[i] = minVal; maxValues[i] = maxVal;
+               //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
+               //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
                minLocations[i] = minLoc; maxLocations[i] = maxLoc;
             }
             CvInvoke.cvSetImageCOI(Ptr, 0);
