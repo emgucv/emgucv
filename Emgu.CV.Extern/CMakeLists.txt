@@ -53,7 +53,7 @@ ENDIF()
 if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
   MESSAGE(STATUS "CVEXTERN: using TBB")
   add_definitions(-DHAVE_TBB)
-  include_directories(${TBB_INCLUDE_DIR})
+  include_directories(${TBB_INCLUDE_DIRS})
   link_directories(${TBB_LIB_DIR})
   
   IF(WIN32)
