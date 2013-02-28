@@ -191,7 +191,7 @@ namespace Emgu.CV
             p.IntrinsicMatrix.Data[0, 2] = centerY;
             p.IntrinsicMatrix.Data[1, 2] = centerX;
             p.IntrinsicMatrix.Data[2, 2] = 1;
-            p.DistortionCoeffs.Data[0, 0] = _distorCoeff / (_size.Width * _size.Width);
+            p.DistortionCoeffs.Data[0, 0] = _distorCoeff / (_size.Width * _size.Height);
 
             p.InitUndistortMap(_size.Width, _size.Height, out _mapX, out _mapY);
          }
