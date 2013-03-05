@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
@@ -100,7 +101,7 @@ namespace Emgu.CV
       /// JPEG 2000 images - jp2. 
       /// </summary>
       /// <param name="filename">The name of the file to be loaded</param>
-      /// <param name="loadType">The load image type</param>
+      /// <param name="loadType">The image loading type</param>
       /// <returns>The loaded image</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvLoadImage(
@@ -116,6 +117,44 @@ namespace Emgu.CV
       /// <returns></returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern bool cvSaveImage([MarshalAs(StringMarshalType)] String filename, IntPtr image, IntPtr parameters);
+
+      /// <summary>
+      /// Decode image stored in the buffer
+      /// </summary>
+      /// <param name="bufMat">A pointer to the CvMat that holds the buffer</param>
+      /// <param name="loadType">The image loading type</param>
+      /// <returns>A pointer to the Image decoded.</returns>
+      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LOAD_IMAGE_TYPE loadType);
+
+
+      /// <summary>
+      /// Decode image stored in the buffer
+      /// </summary>
+      /// <param name="bufMat">The buffer</param>
+      /// <param name="loadType">The image loading type</param>
+      /// <returns>A pointer to the Image decoded.</returns>
+      public static IntPtr cvDecodeImage(byte[] bufMat, CvEnum.LOAD_IMAGE_TYPE loadType)
+      {
+         GCHandle handle = GCHandle.Alloc(bufMat, GCHandleType.Pinned);
+         try
+         {
+            using (Matrix<byte> mat = new Matrix<byte>(bufMat.Length, 1, 1, handle.AddrOfPinnedObject(), bufMat.Length))
+            {
+#region set the continute flag for the mat
+               int CV_MAT_CONT_FLAG = 1<< 14;
+               int type = Marshal.ReadInt32(mat.Ptr, MCvMatConstants.TypeOffset );
+               Marshal.WriteInt32(mat.Ptr, MCvMatConstants.TypeOffset, type | CV_MAT_CONT_FLAG);
+#endregion
+
+               return cvDecodeImage(mat, loadType);
+            }
+         }
+         finally
+         {
+            handle.Free();
+         }
+      }
 
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
       private static extern int _cvNamedWindow([MarshalAs(StringMarshalType)] String name, int flags);

@@ -2031,6 +2031,30 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestImageDecodeBuffer()
+      {
+         using (FileStream fs = File.OpenRead("lena.jpg"))
+         {
+            byte[] data = new byte[fs.Length];
+            fs.Read(data, 0, (int) fs.Length);
+
+            IntPtr image = CvInvoke.cvDecodeImage(data, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+
+            try
+            {
+               Image<Bgr, Byte> img = new Image<Bgr, byte>(2, 2);
+               img.LoadImageFromIplImagePtr(image);
+
+               //Emgu.CV.UI.ImageViewer.Show(img);
+            }
+            finally
+            {
+               CvInvoke.cvReleaseImage(ref image);
+            }
+         }
+      }
+
+      [Test]
       public void TestRotationMatrix2D()
       {
          double angle = 32;

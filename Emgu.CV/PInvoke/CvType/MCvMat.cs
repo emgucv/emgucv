@@ -69,4 +69,15 @@ namespace Emgu.CV.Structure
          }
       }
    }
+
+   /// <summary>
+   /// Constants used by the MCvMat structure
+   /// </summary>
+   internal static class MCvMatConstants
+   {
+      /// <summary>
+      /// Offset of roi
+      /// </summary>
+      public static readonly int TypeOffset = (int)Marshal.OffsetOf(typeof(MCvMat), "type");
+   }
 }

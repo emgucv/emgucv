@@ -180,6 +180,69 @@ namespace Emgu.CV
 
       }
 #endif
+
+      public void LoadImageFromIplImagePtr(IntPtr iplImage)
+      {
+         MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
+         Size size = new Size(mptr.width, mptr.height);
+
+         //Allocate data in mamanged memory
+         AllocateData(size.Height, size.Width, NumberOfChannels);
+
+         if (mptr.nChannels == 1)
+         {  //Grayscale image;
+            switch (mptr.depth)
+            {
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                  using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                  using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                  using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               default:
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+            }
+         }
+         else if (mptr.nChannels == 3)
+         {  //BGR image
+            switch (mptr.depth)
+            {
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                  using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                  using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                  using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               default:
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+            }
+         }
+         else
+         {
+            throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+         }
+      }
+
       /// <summary>
       /// Load the specific file using OpenCV
       /// </summary>
@@ -192,62 +255,7 @@ namespace Emgu.CV
 
          try
          {
-            MIplImage mptr = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-            Size size = new Size(mptr.width, mptr.height);
-
-            //Allocate data in mamanged memory
-            AllocateData(size.Height, size.Width, NumberOfChannels);
-
-            if (mptr.nChannels == 1)
-            {  //Grayscale image;
-               switch (mptr.depth)
-               {
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                     using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                     using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                     using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                     using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-               }
-            } else if (mptr.nChannels == 3)
-            {  //BGR image
-               switch (mptr.depth)
-               {
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                     using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                     using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                     using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                     using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                        ConvertFrom(tmp);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-               }
-            } else
-            {
-               throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-            }
+            LoadImageFromIplImagePtr(ptr);
          } finally
          {
             CvInvoke.cvReleaseImage(ref ptr);
