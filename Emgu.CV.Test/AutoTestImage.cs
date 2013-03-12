@@ -1104,6 +1104,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestThreshold2()
+      {
+         using (Image<Gray, short> image = new Image<Gray, short>(1024, 960))
+         {
+            image.SetRandUniform(new MCvScalar(short.MinValue), new MCvScalar(short.MaxValue));
+            image.ThresholdBinary(new Gray((short.MinValue + short.MaxValue) / 2), new Gray(short.MaxValue));
+         }
+      }
+
+      [Test]
       public void TestBgra()
       {
          Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);

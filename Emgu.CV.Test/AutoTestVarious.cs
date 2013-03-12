@@ -2031,6 +2031,17 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestRotationMatrix()
+      {
+         Size dstImageSize;
+         using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(new System.Drawing.PointF(320, 240), -90, new Size(640, 480), out dstImageSize))
+         {
+            Trace.WriteLine("com.aurora.lens", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
+            Trace.WriteLine("com.aurora.lens", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", rotationMatrix.Data[0, 0], rotationMatrix.Data[0, 1], rotationMatrix.Data[0, 2], rotationMatrix.Data[1, 0], rotationMatrix.Data[1, 1], rotationMatrix.Data[1, 2]));
+         }
+      }
+
+      [Test]
       public void TestImageDecodeBuffer()
       {
          using (FileStream fs = File.OpenRead("lena.jpg"))
