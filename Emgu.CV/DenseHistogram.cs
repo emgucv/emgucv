@@ -15,8 +15,12 @@ namespace Emgu.CV
    ///<summary> 
    /// A Uniform Multi-dimensional Dense Histogram 
    ///</summary>
+#if !NETFX_CORE
    [Serializable]
    public class DenseHistogram : UnmanagedObject, ISerializable, IEquatable<DenseHistogram>
+#else
+   public class DenseHistogram : UnmanagedObject, IEquatable<DenseHistogram>
+#endif
    {
       private MatND<float> _matND;
 
@@ -31,6 +35,7 @@ namespace Emgu.CV
       {
       }
 
+#if !NETFX_CORE
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>
@@ -42,6 +47,7 @@ namespace Emgu.CV
          RangeF[] ranges = (RangeF[]) info.GetValue("Ranges", typeof(RangeF[]));
          InitializeComponent(matND, ranges);
       }
+#endif
 
       private void InitializeComponent(MatND<float> matND, RangeF[] ranges)
       {
@@ -384,6 +390,7 @@ namespace Emgu.CV
       }
       #endregion
 
+#if !NETFX_CORE
       #region ISerializable Members
       /// <summary>
       /// A function used for runtime serialization of the object
@@ -396,8 +403,8 @@ namespace Emgu.CV
          _matND.GetObjectData(info, context);
          info.AddValue("Ranges", Ranges);
       }
-
       #endregion
+#endif
 
       #region IEquatable<DenseHistogram> Members
       /// <summary>

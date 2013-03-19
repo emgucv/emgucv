@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Cvb;
 using Emgu.CV.GPU;
@@ -721,17 +722,17 @@ namespace Emgu.CV.Test
       public void TestPoint()
       {
          Point p = new Point(1, 2);
-         XmlDocument d = Emgu.Util.Toolbox.XmlSerialize<Point>(p);
+         XDocument d = Emgu.Util.Toolbox.XmlSerialize<Point>(p);
          Point p2 = Emgu.Util.Toolbox.XmlDeserialize<Point>(d);
          Assert.AreEqual(p, p2);
 
          Size s = new Size(1, 2);
          d = Emgu.Util.Toolbox.XmlSerialize<Size>(s);
-         Trace.WriteLine(d.InnerXml);
+         Trace.WriteLine(d.ToString());
 
          Rectangle r = new Rectangle(1, 2, 3, 4);
          d = Emgu.Util.Toolbox.XmlSerialize<Rectangle>(r);
-         Trace.WriteLine(d.InnerXml);
+         Trace.WriteLine(d.ToString());
       }
 
       public void TestNegate()

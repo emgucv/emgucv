@@ -12,9 +12,13 @@ namespace Emgu.CV
    /// <summary>
    /// A 3x3 homography matrix. This matrix defines an perspective transform
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class HomographyMatrix : Matrix<double> 
    {
+
+#if !NETFX_CORE
       /// <summary>
       /// Constructor used to deserialize homography matrix
       /// </summary>
@@ -24,6 +28,7 @@ namespace Emgu.CV
          : base(info, context)
       {
       }
+#endif
 
       /// <summary>
       /// Create an empty homography matrix

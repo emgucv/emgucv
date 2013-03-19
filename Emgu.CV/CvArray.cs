@@ -8,7 +8,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+#if !NETFX_CORE
 using System.Security.Permissions;
+#endif
 using System.Xml.Serialization;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
@@ -21,7 +23,11 @@ namespace Emgu.CV
    ///Wrapped CvArr 
    ///</summary>
    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam>
+#if NETFX_CORE
+   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable where TDepth : new()
+#else
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable where TDepth : new()
+#endif
    {
       /// <summary>
       /// The size of the elements in the CvArray, it is the cached value of Marshal.SizeOf(typeof(TDepth)).
@@ -604,6 +610,7 @@ namespace Emgu.CV
       }
       #endregion
 
+#if !NETFX_CORE
       #region ISerializable Members
       /// <summary>
       /// A function used for runtime serialization of the object
@@ -635,5 +642,6 @@ namespace Emgu.CV
          Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
       }
       #endregion
+#endif
    }
 }

@@ -26,6 +26,9 @@ namespace Emgu.Util
 #elif ANDROID
          _os = OS.Android;
          _runtime = Runtime.Mono;
+#elif NETFX_CORE
+         _os = OS.Windows;
+         _runtime = Runtime.DotNet;
 #else
          PlatformID pid = Environment.OSVersion.Platform;
          if (pid == PlatformID.MacOSX)

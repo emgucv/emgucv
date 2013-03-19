@@ -10,7 +10,9 @@ namespace Emgu.CV
    /// <summary>
    /// Extrinsic camera parameters
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class ExtrinsicCameraParameters : IEquatable<ExtrinsicCameraParameters>
    {
       private RotationVector3D _rotationVector;

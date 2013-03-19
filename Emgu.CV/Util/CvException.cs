@@ -9,7 +9,9 @@ namespace Emgu.CV.Util
    /// <summary>
    /// The default exception to be thrown when error encounter in Open CV 
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class CvException : Exception
    {
       private int _status;

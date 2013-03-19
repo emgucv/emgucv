@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
@@ -362,18 +363,18 @@ namespace Emgu.CV.Test
 
          img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
          img.SerializationCompressionRatio = 9;
-         XmlDocument doc1 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
-         String str = doc1.OuterXml;
+         XDocument doc1 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
+         String str = doc1.ToString();
          Image<Bgr, Byte> img2 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc1);
          EmguAssert.IsTrue(img.Equals(img2));
 
          img.SerializationCompressionRatio = 9;
-         XmlDocument doc2 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
+         XDocument doc2 = Toolbox.XmlSerialize<Image<Bgr, Byte>>(img);
          Image<Bgr, Byte> img3 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc2);
          EmguAssert.IsTrue(img.Equals(img3));
 
-         XmlDocument doc3 = new XmlDocument();
-         doc3.LoadXml(str);
+         XDocument doc3 = XDocument.Parse(str);
+        
          Image<Bgr, Byte> img4 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc3);
          EmguAssert.IsTrue(img.Equals(img4));
 

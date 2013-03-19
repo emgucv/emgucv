@@ -13,7 +13,9 @@ namespace Emgu.CV
    /// <summary>
    /// Intrinsic camera parameters
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class IntrinsicCameraParameters : IEquatable<IntrinsicCameraParameters>
    {
       private Matrix<double> _intrinsicMatrix;

@@ -5,7 +5,9 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+#if !NETFX_CORE
 using System.Security.Permissions;
+#endif
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -16,7 +18,9 @@ namespace Emgu.CV
    /// A MatND is a wrapper to cvMatND of OpenCV. 
    /// </summary>
    /// <typeparam name="TDepth">The type of depth</typeparam>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class MatND<TDepth> : CvArray<TDepth>, IEquatable<MatND<TDepth>> where TDepth : new()
    {
       private Array _array;
@@ -30,6 +34,7 @@ namespace Emgu.CV
          ManagedArray = Array.CreateInstance(typeof(TDepth), sizes);
       }
 
+#if !NETFX_CORE
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>
@@ -39,6 +44,7 @@ namespace Emgu.CV
       {
          DeserializeObjectData(info, context);
       }
+#endif
 
       /// <summary>
       /// This function is not implemented for MatND
@@ -132,6 +138,7 @@ namespace Emgu.CV
          _array = null;
       }
 
+#if !NETFX_CORE
       #region ISerializable Members
       /// <summary>
       /// A function used for runtime serialization of the object
@@ -160,6 +167,8 @@ namespace Emgu.CV
          Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
       }
       #endregion
+#endif
+
       /// <summary>
       /// Not Implemented
       /// </summary>

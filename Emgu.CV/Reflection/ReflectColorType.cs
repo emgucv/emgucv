@@ -4,7 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+#if NETFX_CORE
+using Windows.UI;
+#else
 using System.Drawing;
+#endif
 
 namespace Emgu.CV.Reflection
 {

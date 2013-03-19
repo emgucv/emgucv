@@ -11,7 +11,9 @@ namespace Emgu.CV.Structure
    /// Wrapped CvSURFPoint structure
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
+#if !NETFX_CORE
    [Serializable]
+#endif
    public struct MCvSURFPoint
    {
       /// <summary>

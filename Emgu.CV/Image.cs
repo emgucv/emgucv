@@ -11,6 +11,7 @@ using System.Drawing;
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using MonoTouch.UIKit;
+#elif NETFX_CORE
 #else
 using System.Drawing.Imaging;
 #endif
@@ -18,7 +19,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+#if !NETFX_CORE
 using System.Security.Permissions;
+#endif
 using Emgu.CV.Features2D;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
@@ -32,7 +35,9 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public partial class Image<TColor, TDepth>
       : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
       where TColor : struct, IColor
@@ -163,7 +168,7 @@ namespace Emgu.CV
          }
       }
 
-#if IOS
+#if IOS || NETFX_CORE
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -263,7 +268,7 @@ namespace Emgu.CV
 
       }
 
-#if IOS
+#if IOS || NETFX_CORE
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -387,6 +392,7 @@ namespace Emgu.CV
       }
       #endregion
 
+#if !NETFX_CORE
       #region Implement ISerializable interface
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
@@ -421,6 +427,7 @@ namespace Emgu.CV
          }
       }
       #endregion
+#endif
 
       #region Image Properties
 
@@ -2672,7 +2679,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if IOS
+#if IOS || NETFX_CORE
 #else
       //#region Conversion with Bitmap
       /// <summary>

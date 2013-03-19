@@ -3,7 +3,12 @@
 //----------------------------------------------------------------------------
 
 using System;
+
+#if NETFX_CORE
+using Windows.UI;
+#else
 using System.Drawing;
+#endif
 
 namespace Emgu.CV
 {

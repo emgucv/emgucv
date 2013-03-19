@@ -14,9 +14,15 @@ namespace Emgu.CV.Util
    /// <summary>
    /// Wraped class of the C++ standard vector of MKeyPoint.
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
    public class VectorOfKeyPoint : Emgu.Util.UnmanagedObject, ISerializable
+#else
+   public class VectorOfKeyPoint : Emgu.Util.UnmanagedObject
+#endif
    {
+
+#if !NETFX_CORE
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>
@@ -27,6 +33,7 @@ namespace Emgu.CV.Util
       {
          Push((MKeyPoint[])info.GetValue("KeyPoints", typeof(MKeyPoint[])));
       }
+#endif
 
       /// <summary>
       /// Create an empty standard vector of KeyPoint
@@ -156,6 +163,7 @@ namespace Emgu.CV.Util
          CvInvoke.VectorOfKeyPointRelease(_ptr);
       }
 
+#if !NETFX_CORE
       /// <summary>
       /// A function used for runtime serialization of the object
       /// </summary>
@@ -165,6 +173,7 @@ namespace Emgu.CV.Util
       {
          info.AddValue("KeyPoints", ToArray());
       }
+#endif
    }
 }
 

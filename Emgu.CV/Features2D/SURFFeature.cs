@@ -11,7 +11,9 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// A SURF feature
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class SURFFeature
    {
       private MCvSURFPoint _point;

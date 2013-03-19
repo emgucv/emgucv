@@ -4,6 +4,11 @@
 
 ﻿using System;
 using Emgu.CV;
+#if NETFX_CORE
+using Windows.UI;
+#else
+using System.Drawing;
+#endif
 
 namespace Emgu.CV.Structure
 {
@@ -31,7 +36,7 @@ namespace Emgu.CV.Structure
       /// Create a Rgb color using the System.Drawing.Color
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
-      public Rgb(System.Drawing.Color winColor)
+      public Rgb(Color winColor)
          : this(winColor.R, winColor.G, winColor.B)
       {
       }

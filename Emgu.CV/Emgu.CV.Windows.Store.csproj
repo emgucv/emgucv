@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1F7091DA-C6EB-417B-8D2F-58C6151377A0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.CV</RootNamespace>
+    <AssemblyName>Emgu.CV</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Windows.Store.csproj">
+      <Project>{991d295c-714d-4427-835b-e0314009ae5c}</Project>
+      <Name>Emgu.Util.Windows.Store</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdaptiveSkinDetector.cs" />
+    <Compile Include="CameraCalibration\HomographyMatrix.cs" />
+    <Compile Include="CameraCalibration\Quaternions.cs" />
+    <Compile Include="Capture\KinectCapture.cs" />
+    <Compile Include="CascadeClassifier.cs" />
+    <Compile Include="Color\Rgb.cs" />
+    <Compile Include="Color\Rgba.cs" />
+    <Compile Include="FaceRecognizer.cs" />
+    <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
+    <Compile Include="Features2D\BOWKMeansTrainer.cs" />
+    <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
+    <Compile Include="Features2D\Brisk.cs" />
+    <Compile Include="Features2D\BruteForceMatcher.cs" />
+    <Compile Include="Features2D\DenseFeatureDetector.cs" />
+    <Compile Include="Features2D\DescriptorMatcher.cs" />
+    <Compile Include="Features2D\FastDetector.cs" />
+    <Compile Include="Features2D\Feature2DBase.cs" />
+    <Compile Include="Features2D\Features2DTracker.cs" />
+    <Compile Include="Features2D\Freak.cs" />
+    <Compile Include="Features2D\GFTTDetector.cs" />
+    <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
+    <Compile Include="Features2D\IDescriptorExtractor.cs" />
+    <Compile Include="Features2D\IKeyPointDetector.cs" />
+    <Compile Include="Features2D\Features2DExtensions.cs" />
+    <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
+    <Compile Include="Features2D\ORBDetector.cs" />
+    <Compile Include="Features2D\SIFTDetector.cs" />
+    <Compile Include="Flann\CenterInitType.cs" />
+    <Compile Include="Flann\Index.cs" />
+    <Compile Include="Flann\Index3D.cs" />
+    <Compile Include="Geodetic\GeodeticCoordinate.cs" />
+    <Compile Include="Features2D\ImageFeature.cs" />
+    <Compile Include="Features2D\LDetector.cs" />
+    <Compile Include="LatentSvmDetector.cs" />
+    <Compile Include="Mat.cs" />
+    <Compile Include="Octree.cs" />
+    <Compile Include="HOGDescriptor.cs" />
+    <Compile Include="Features2D\PatchGenerator.cs" />
+    <Compile Include="PInvoke\CvInvokeCalib3d.cs" />
+    <Compile Include="PInvoke\CvInvokeFFMPEG.cs" />
+    <Compile Include="PInvoke\CvInvokeImgproc.cs" />
+    <Compile Include="PInvoke\CvInvokeCvextern.cs" />
+    <Compile Include="PInvoke\CvInvokeCore.cs" />
+    <Compile Include="PInvoke\CvInvokeEntryPoints.cs" />
+    <Compile Include="PInvoke\CvInvokeFeatures2d.cs" />
+    <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
+    <Compile Include="PInvoke\CvInvokeLegacy.cs" />
+    <Compile Include="PInvoke\CvInvokeObjdetect.cs" />
+    <Compile Include="PInvoke\CvInvokePhoto.cs" />
+    <Compile Include="PInvoke\CvInvokeVideo.cs" />
+    <Compile Include="PInvoke\CvType\Cuboid.cs" />
+    <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
+    <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
+    <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
+    <Compile Include="Features2D\SURFDetector.cs" />
+    <Compile Include="Features2D\PlanarObjectDetector.cs" />
+    <Compile Include="Features2D\RTreeClassifier.cs" />
+    <Compile Include="Features2D\SelfSimDescriptor.cs" />
+    <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
+    <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
+    <Compile Include="PInvoke\CvType\MDMatch.cs" />
+    <Compile Include="PInvoke\Windows.Store\ICloneable.cs" />
+    <Compile Include="PInvoke\Windows.Store\Point.cs" />
+    <Compile Include="PInvoke\Windows.Store\PointF.cs" />
+    <Compile Include="PInvoke\Windows.Store\Size.cs" />
+    <Compile Include="PInvoke\Windows.Store\SizeF.cs" />
+    <Compile Include="Retina.cs" />
+    <Compile Include="SparseMatrix.cs" />
+    <Compile Include="Features2D\StarDetector.cs" />
+    <Compile Include="Features2D\MSERDetector.cs" />
+    <Compile Include="PInvoke\CvType\MCvStarKeypoint.cs" />
+    <Compile Include="PInvoke\CvType\MKeyPoint.cs" />
+    <Compile Include="PInvoke\CvType\RangeF.cs" />
+    <Compile Include="PointAndLine\LineSegment3DF.cs" />
+    <Compile Include="Properties\StringTable.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringTable.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reflection\GenericParameter.cs" />
+    <Compile Include="StereoGC.cs" />
+    <Compile Include="StereoSGBM.cs" />
+    <Compile Include="Tiff\TiffWriter.cs" />
+    <Compile Include="Tiff\TileTiffWriter.cs" />
+    <Compile Include="Util\CvException.cs" />
+    <Compile Include="Util\CvToolbox.cs" />
+    <Compile Include="Util\DataLogger.cs" />
+    <Compile Include="Util\StructSize.cs" />
+    <Compile Include="Util\TbbTaskScheduler.cs" />
+    <Compile Include="Util\VectorOfByte.cs" />
+    <Compile Include="Util\VectorOfDataMatrixCode.cs" />
+    <Compile Include="Util\VectorOfDMatch.cs" />
+    <Compile Include="Util\VectorOfFloat.cs" />
+    <Compile Include="Util\VectorOfKeyPoint.cs" />
+    <Compile Include="Util\ZlibCompression.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorMOG2.cs" />
+    <Compile Include="VideoSurveillance\BGStatModel.cs" />
+    <Compile Include="VideoSurveillance\BGCodeBookModel.cs" />
+    <Compile Include="VideoSurveillance\BlobDetector.cs" />
+    <Compile Include="VideoSurveillance\BlobSeq.cs" />
+    <Compile Include="VideoSurveillance\BlobSeqBase.cs" />
+    <Compile Include="VideoSurveillance\BlobTracker.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackerAuto.cs" />
+    <Compile Include="CameraCalibration\RotationVector3D.cs" />
+    <Compile Include="Color\Bgra.cs" />
+    <Compile Include="Color\DisplayColorAttribute.cs" />
+    <Compile Include="Color\IColor.cs" />
+    <Compile Include="Contour.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackerAutoParam.cs" />
+    <Compile Include="VideoSurveillance\BlobTrackPostProc.cs" />
+    <Compile Include="Cvb\CvBlob.cs" />
+    <Compile Include="Cvb\CvBlobs.cs" />
+    <Compile Include="Cvb\CvBlobDetector.cs" />
+    <Compile Include="Cvb\CvTrack.cs" />
+    <Compile Include="Cvb\CvTracks.cs" />
+    <Compile Include="VideoSurveillance\FGDetector.cs" />
+    <Compile Include="PInvoke\CvType\MCvBlob.cs" />
+    <Compile Include="PInvoke\CvType\MCvBlobTrackerAutoParam1.cs" />
+    <Compile Include="PInvoke\CvType\MCvBlobTrackerParamLH.cs" />
+    <Compile Include="PInvoke\CvType\MCvBlobTrackerParamMS.cs" />
+    <Compile Include="PInvoke\CvType\MCvFGDStatModelParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvAvgComp.cs" />
+    <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeqBlock.cs" />
+    <Compile Include="PlanarSubdivision.cs" />
+    <Compile Include="CvArray.cs" />
+    <Compile Include="CameraCalibration\CameraCalibration.cs" />
+    <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
+    <Compile Include="CameraCalibration\IntrinsicCameraParameters.cs" />
+    <Compile Include="Color\Bgr.cs" />
+    <Compile Include="Color\ColorInfoAttribute.cs" />
+    <Compile Include="Color\Gray.cs" />
+    <Compile Include="Color\Hls.cs" />
+    <Compile Include="Color\Hsv.cs" />
+    <Compile Include="Color\Lab.cs" />
+    <Compile Include="Color\Luv.cs" />
+    <Compile Include="Color\Xyz.cs" />
+    <Compile Include="Color\Ycc.cs" />
+    <Compile Include="EigenObjectRecognizer.cs" />
+    <Compile Include="FeatureTree.cs" />
+    <Compile Include="MatND.cs" />
+    <Compile Include="PointAndLine\LineSegment2DF.cs" />
+    <Compile Include="Reflection\ExposableMethodAttribute.cs" />
+    <Compile Include="IImage.cs" />
+    <Compile Include="Kalman.cs" />
+    <Compile Include="MotionHistory.cs" />
+    <Compile Include="OpticalFlow.cs" />
+    <Compile Include="PInvoke\CvType\MCvBGStatModel.cs" />
+    <Compile Include="PInvoke\CvType\MCvChain.cs" />
+    <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
+    <Compile Include="PInvoke\CvType\MCvKalman.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint2D64f.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint3D64f.cs" />
+    <Compile Include="PInvoke\CvType\MCvQuadEdge2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
+    <Compile Include="PInvoke\CvType\MCvSet.cs" />
+    <Compile Include="PInvoke\CvType\MCvSetElem.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoBMState.cs" />
+    <Compile Include="PInvoke\CvType\MCvStereoGCState.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
+    <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
+    <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
+    <Compile Include="Reflection\ReflectColorType.cs" />
+    <Compile Include="Reflection\ReflectIImage.cs" />
+    <Compile Include="Shape\Cross2DF.cs" />
+    <Compile Include="Shape\IConvexPolygon.cs" />
+    <Compile Include="Shape\IConvexPolygonF.cs" />
+    <Compile Include="Shape\Triangle2DF.cs" />
+    <Compile Include="Shape\Triangle3DF.cs" />
+    <Compile Include="StereoBM.cs" />
+    <Compile Include="StructuringElementEx.cs" />
+    <Compile Include="Features2D\SURFFeature.cs" />
+    <Compile Include="MemStorage.cs" />
+    <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
+    <Compile Include="PInvoke\CvType\MCvContour.cs" />
+    <Compile Include="PInvoke\CvType\MCvFont.cs" />
+    <Compile Include="PInvoke\CvType\MCvHistogram.cs" />
+    <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
+    <Compile Include="PInvoke\CvType\MCvMat.cs" />
+    <Compile Include="PInvoke\CvType\MCvMatND.cs" />
+    <Compile Include="PInvoke\CvType\MCvMoments.cs" />
+    <Compile Include="PInvoke\CvType\MCvPoint3D32f.cs" />
+    <Compile Include="PInvoke\CvType\MCvScalar.cs" />
+    <Compile Include="PInvoke\CvType\MCvSeq.cs" />
+    <Compile Include="PInvoke\CvType\MCvSlice.cs" />
+    <Compile Include="PInvoke\CvType\MCvTermCriteria.cs" />
+    <Compile Include="PInvoke\CvType\MIplImage.cs" />
+    <Compile Include="CameraCalibration\RotationMatrix2D.cs" />
+    <Compile Include="Capture\Capture.cs" />
+    <Compile Include="Shape\CircleF.cs" />
+    <Compile Include="Seq.cs" />
+    <Compile Include="ConvolutionKernelF.cs" />
+    <Compile Include="PInvoke\CvEnum.cs" />
+    <Compile Include="PInvoke\CvInvoke.cs" />
+    <Compile Include="Shape\Ellipse.cs" />
+    <Compile Include="HaarCascade.cs" />
+    <Compile Include="DenseHistogram.cs" />
+    <Compile Include="Capture\ICapture.cs" />
+    <Compile Include="Capture\IDuplexCapture.cs" />
+    <Compile Include="Capture\IDuplexCaptureCallback.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="PointAndLine\LineSegment2D.cs" />
+    <Compile Include="PointAndLine\PointCollection.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="TimedImage.cs" />
+    <Compile Include="VideoSurveillance\IBGFGDetector.cs" />
+    <Compile Include="VideoWriter.cs" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

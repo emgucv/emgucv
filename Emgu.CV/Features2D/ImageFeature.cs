@@ -18,7 +18,9 @@ namespace Emgu.CV.Features2D
    /// An ImageFeature contains a keypoint and its descriptor
    /// </summary>
    /// <typeparam name="TDescriptor">The type of data used for the descriptor. Either float or Byte</typeparam>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public struct ImageFeature<TDescriptor>
       where TDescriptor: struct
    {

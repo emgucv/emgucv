@@ -14,7 +14,9 @@ namespace Emgu.CV.Structure
    /// <summary>
    /// OpenCV's KeyPoint class
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    [StructLayout(LayoutKind.Sequential)]
    public struct MKeyPoint
    {

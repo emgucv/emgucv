@@ -4,6 +4,11 @@
 
 using System;
 using Emgu.CV;
+#if NETFX_CORE
+using Windows.UI;
+#else
+using System.Drawing;
+#endif
 
 namespace Emgu.CV.Structure
 {
@@ -31,7 +36,7 @@ namespace Emgu.CV.Structure
       /// Create a Bgr color using the System.Drawing.Color
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
-      public Bgr(System.Drawing.Color winColor)
+      public Bgr(Color winColor)
       {
          _scalar = new MCvScalar(winColor.B, winColor.G, winColor.R);
       }

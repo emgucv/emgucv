@@ -5,7 +5,9 @@
 using System;
 using System.Drawing;
 using System.Runtime.Serialization;
+#if !NETFX_CORE
 using System.Security.Permissions;
+#endif
 using Emgu.CV;
 using Emgu.CV.Structure;
 
@@ -17,7 +19,9 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class Map<TColor, TDepth> : Image<TColor, TDepth>
       where TColor : struct, IColor
       where TDepth : new()
@@ -273,6 +277,7 @@ namespace Emgu.CV
              thickness);
       }
 
+#if !NETFX_CORE
       #region Implement ISerializable interface
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
@@ -299,6 +304,7 @@ namespace Emgu.CV
          info.AddValue("Resolution", _resolution);
       }
       #endregion
+#endif
 
       /*
       /// <summary>

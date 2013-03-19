@@ -16,7 +16,7 @@ namespace Emgu.CV
    /// <summary> 
    /// Capture images from either camera or video file. 
    /// </summary>
-#if (ANDROID || IOS)
+#if (ANDROID || IOS || NETFX_CORE)
 #else
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 #endif

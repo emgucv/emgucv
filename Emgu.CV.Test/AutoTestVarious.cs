@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
@@ -121,7 +122,7 @@ namespace Emgu.CV.Test
       {
          MCvPoint2D64f pt2d = new MCvPoint2D64f(12.0, 5.5);
 
-         XmlDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d);
+         XDocument xdoc = Toolbox.XmlSerialize<MCvPoint2D64f>(pt2d);
          //Trace.WriteLine(xdoc.OuterXml);
          pt2d = Toolbox.XmlDeserialize<MCvPoint2D64f>(xdoc);
 
@@ -402,7 +403,7 @@ namespace Emgu.CV.Test
             EmguAssert.AreEqual(i.ToString(), imgRecognizer1.Recognize(imgs[i]).Label);
          }
 
-         XmlDocument xDoc = Toolbox.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
+         XDocument xDoc = Toolbox.XmlSerialize<EigenObjectRecognizer>(imgRecognizer1);
          EigenObjectRecognizer imgRecognizer2 = Toolbox.XmlDeserialize<EigenObjectRecognizer>(xDoc);
 
          for (int i = 0; i < imgs.Length; i++)
@@ -521,13 +522,13 @@ namespace Emgu.CV.Test
       public void TestXmlSerialize()
       {
          PointF p = new PointF(0.0f, 0.0f);
-         XmlDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(Point) });
+         XDocument xDoc = Toolbox.XmlSerialize<PointF>(p, new Type[] { typeof(Point) });
          PointF p2 = Toolbox.XmlDeserialize<PointF>(xDoc, new Type[] { typeof(Point) });
          EmguAssert.IsTrue(p.Equals(p2));
 
 
          Rectangle rect = new Rectangle(3, 4, 5, 3);
-         XmlDocument xDoc2 = Toolbox.XmlSerialize<Rectangle>(rect);
+         XDocument xDoc2 = Toolbox.XmlSerialize<Rectangle>(rect);
          Rectangle rect2 = Toolbox.XmlDeserialize<Rectangle>(xDoc2);
          EmguAssert.IsTrue(rect.Equals(rect2));
 

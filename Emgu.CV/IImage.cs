@@ -18,7 +18,8 @@ namespace Emgu.CV
    /// </summary>
    public interface IImage : IDisposable, ICloneable
    {
-#if IOS
+#if NETFX_CORE
+#elif IOS 
       /// <summary>
       /// Conver this image to UIImage
       /// </summary>

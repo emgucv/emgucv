@@ -15,9 +15,13 @@ namespace Emgu.CV
    /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
    /// </summary>
    ///<typeparam name="T">The depth of the rotation matrix, should be float / double</typeparam>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class RotationMatrix2D<T> : Matrix<T> where T: struct
    {
+
+#if !NETFX_CORE
       /// <summary>
       /// Constructor used to deserialize 2D rotation matrix
       /// </summary>
@@ -27,6 +31,7 @@ namespace Emgu.CV
          : base(info, context)
       {
       }
+#endif
 
       /// <summary>
       /// Create an empty (2x3) 2D rotation matrix

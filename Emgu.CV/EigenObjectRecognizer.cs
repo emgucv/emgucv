@@ -16,7 +16,9 @@ namespace Emgu.CV
    /// <summary>
    /// An object recognizer using PCA (Principle Components Analysis)
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    public class EigenObjectRecognizer
    {
       private Image<Gray, Single>[] _eigenImages;

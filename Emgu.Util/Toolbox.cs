@@ -4,6 +4,7 @@
 using System;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -24,14 +25,13 @@ namespace Emgu.Util
       /// <typeparam name="T">The type of the object to be converted</typeparam>
       /// <param name="o">The object to be serialized</param>
       /// <returns>An xml document that represents the object</returns>
-      public static XmlDocument XmlSerialize<T>(T o)
+      public static XDocument XmlSerialize<T>(T o)
       {
          StringBuilder sb = new StringBuilder();
          using (StringWriter sw = new StringWriter(sb))
             (new XmlSerializer(typeof(T))).Serialize(sw, o);
-         XmlDocument doc = new XmlDocument();
-         doc.LoadXml(sb.ToString());
-         return doc;
+
+         return XDocument.Parse(sb.ToString());
       }
 
       /// <summary>
@@ -41,14 +41,12 @@ namespace Emgu.Util
       /// <param name="o">The object to be serialized</param>
       /// <param name="knownTypes">Other types that it must known ahead to serialize the object</param>
       /// <returns>An xml document that represents the object</returns>
-      public static XmlDocument XmlSerialize<T>(T o, Type[] knownTypes)
+      public static XDocument XmlSerialize<T>(T o, Type[] knownTypes)
       {
          StringBuilder sb = new StringBuilder();
          using (StringWriter sw = new StringWriter(sb))
             (new XmlSerializer(typeof(T), knownTypes)).Serialize(sw, o);
-         XmlDocument doc = new XmlDocument();
-         doc.LoadXml(sb.ToString());
-         return doc;
+         return XDocument.Parse(sb.ToString());
       }
 
       /// <summary>
@@ -57,9 +55,17 @@ namespace Emgu.Util
       /// <typeparam name="T">The type of the object to be converted to</typeparam>
       /// <param name="xDoc">The xml document</param>
       /// <returns>The object representation as a result of the deserialization of the xml document</returns>
-      public static T XmlDeserialize<T>(XmlDocument xDoc)
+      public static T XmlDeserialize<T>(XDocument xDoc)
       {
-         return (T) (new XmlSerializer(typeof(T))).Deserialize(new XmlNodeReader(xDoc));
+         using (XmlReader reader = xDoc.Root.CreateReader())
+         {
+            if (reader.CanReadBinaryContent)
+               return (T)(new XmlSerializer(typeof(T))).Deserialize(reader);
+            else
+            {
+               return XmlStringDeserialize<T>(xDoc.ToString());
+            }
+         }
       }
 
       /// <summary>
@@ -69,9 +75,20 @@ namespace Emgu.Util
       /// <param name="xDoc">The xml document</param>
       /// <param name="knownTypes">Other types that it must known ahead to deserialize the object</param>
       /// <returns>The object representation as a result of the deserialization of the xml document</returns>
-      public static T XmlDeserialize<T>(XmlDocument xDoc, Type[] knownTypes)
+      public static T XmlDeserialize<T>(XDocument xDoc, Type[] knownTypes)
       {
-         return (T) (new XmlSerializer(typeof(T), knownTypes)).Deserialize(new XmlNodeReader(xDoc));
+         using (XmlReader reader = xDoc.Root.CreateReader())
+         {
+            if (reader.CanReadBinaryContent)
+               return (T)(new XmlSerializer(typeof(T), knownTypes)).Deserialize(reader);
+            else
+            {
+               using (StringReader stringReader = new StringReader(xDoc.ToString()))
+               {
+                  return (T)(new XmlSerializer(typeof(T), knownTypes)).Deserialize(stringReader);
+               }
+            }
+         }
       }
 
       /// <summary>
@@ -82,7 +99,8 @@ namespace Emgu.Util
       /// <returns>The object representation as a result of the deserialization of the xml string</returns>
       public static T XmlStringDeserialize<T>(String xmlString)
       {
-         return (T) (new XmlSerializer(typeof(T))).Deserialize(new StringReader(xmlString));
+         using (StringReader stringReader = new StringReader(xmlString))
+            return (T) (new XmlSerializer(typeof(T))).Deserialize(stringReader);
       }
       #endregion
 
@@ -118,6 +136,7 @@ namespace Emgu.Util
          return c;
       }
 
+#if !NETFX_CORE
       /// <summary>
       /// Call a command from command line
       /// </summary>
@@ -168,6 +187,7 @@ namespace Emgu.Util
          return (baseType == null) ?
             null : GetBaseType(baseType, baseclassName);
       }
+#endif
 
       #region memory copy
       /// <summary>

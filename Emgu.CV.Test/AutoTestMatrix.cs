@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -165,7 +166,7 @@ namespace Emgu.CV.Test
          using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
          {
             mat.SetRandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
-            XmlDocument doc = Toolbox.XmlSerialize<Matrix<Byte>>(mat);
+            XDocument doc = Toolbox.XmlSerialize<Matrix<Byte>>(mat);
             //Trace.WriteLine(doc.OuterXml);
 
             using (Matrix<Byte> mat2 = Toolbox.XmlDeserialize<Matrix<Byte>>(doc))
@@ -346,7 +347,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(20, m.Cols);
          EmguAssert.AreEqual(2, m.NumberOfChannels);
 
-         XmlDocument xDoc = Toolbox.XmlSerialize<Matrix<float>>(m);
+         XDocument xDoc = Toolbox.XmlSerialize<Matrix<float>>(m);
          Matrix<float> m2 = Toolbox.XmlDeserialize<Matrix<float>>(xDoc);
          EmguAssert.IsTrue(m.Equals(m2));
       }

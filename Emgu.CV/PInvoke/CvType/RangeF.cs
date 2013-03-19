@@ -10,7 +10,9 @@ namespace Emgu.CV.Structure
    /// <summary>
    /// The range use to setup the histogram
    /// </summary>
+#if !NETFX_CORE
    [Serializable]
+#endif
    [StructLayout(LayoutKind.Sequential)]
    public struct RangeF : IEquatable<RangeF>
    {
