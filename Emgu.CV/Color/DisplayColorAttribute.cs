@@ -17,7 +17,11 @@ namespace Emgu.CV
    {
       public DisplayColorAttribute(int blue, int green, int red)
       {
+#if NETFX_CORE
+         _displayColor = Color.FromArgb(255, (byte)red, (byte)green, (byte) blue);
+#else
          _displayColor = Color.FromArgb(red, green, blue);
+#endif
       }
 
       private Color _displayColor;

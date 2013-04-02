@@ -169,9 +169,12 @@
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
+    <Compile Include="PInvoke\Windows.Store\Extensions.cs" />
     <Compile Include="PInvoke\Windows.Store\ICloneable.cs" />
     <Compile Include="PInvoke\Windows.Store\Point.cs" />
     <Compile Include="PInvoke\Windows.Store\PointF.cs" />
+    <Compile Include="PInvoke\Windows.Store\Rectangle.cs" />
+    <Compile Include="PInvoke\Windows.Store\RectangleF.cs" />
     <Compile Include="PInvoke\Windows.Store\Size.cs" />
     <Compile Include="PInvoke\Windows.Store\SizeF.cs" />
     <Compile Include="Retina.cs" />
@@ -182,11 +185,6 @@
     <Compile Include="PInvoke\CvType\MKeyPoint.cs" />
     <Compile Include="PInvoke\CvType\RangeF.cs" />
     <Compile Include="PointAndLine\LineSegment3DF.cs" />
-    <Compile Include="Properties\StringTable.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StringTable.resx</DependentUpon>
-    </Compile>
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
     <Compile Include="StereoSGBM.cs" />

@@ -109,7 +109,7 @@ namespace Emgu.CV.Tiff
          int sizeOfElement = Image<TColor, TDepth>.SizeOfElement;
          int tileRowSizeInBytes = TileRowSizeInBytes;
          Size tileSize = TileSize;
-         Size imageSize = originalROI == Rectangle.Empty ? image.Size : originalROI.Size;
+         Size imageSize = originalROI.Equals(Rectangle.Empty) ? image.Size : originalROI.Size;
 
          for (int row = 0; row < image.Height; row += tileSize.Height)
          {

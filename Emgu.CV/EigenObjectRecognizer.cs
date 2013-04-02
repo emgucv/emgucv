@@ -139,11 +139,17 @@ namespace Emgu.CV
              img.SerializationCompressionRatio = 9;
          */
 
-         _eigenValues = Array.ConvertAll<Image<Gray, Byte>, Matrix<float>>(images,
-             delegate(Image<Gray, Byte> img)
-             {
-                return new Matrix<float>(EigenDecomposite(img, _eigenImages, _avgImage));
-             });
+         _eigenValues =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, Byte>, Matrix<float>>(images,
+            delegate(Image<Gray, Byte> img)
+            {
+               return new Matrix<float>(EigenDecomposite(img, _eigenImages, _avgImage));
+            });
 
          _labels = labels;
 
@@ -165,7 +171,13 @@ namespace Emgu.CV
          int width = trainingImages[0].Width;
          int height = trainingImages[0].Height;
 
-         IntPtr[] inObjs = Array.ConvertAll<Image<Gray, Byte>, IntPtr>(trainingImages, delegate(Image<Gray, Byte> img) { return img.Ptr; });
+         IntPtr[] inObjs =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, Byte>, IntPtr>(trainingImages, delegate(Image<Gray, Byte> img) { return img.Ptr; });
 
          if (termCrit.max_iter <= 0 || termCrit.max_iter > trainingImages.Length)
             termCrit.max_iter = trainingImages.Length;
@@ -176,7 +188,13 @@ namespace Emgu.CV
          eigenImages = new Image<Gray, float>[maxEigenObjs];
          for (int i = 0; i < eigenImages.Length; i++)
             eigenImages[i] = new Image<Gray, float>(width, height);
-         IntPtr[] eigObjs = Array.ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; });
+         IntPtr[] eigObjs =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; });
          #endregion
 
          avg = new Image<Gray, Single>(width, height);
@@ -199,9 +217,14 @@ namespace Emgu.CV
       public static float[] EigenDecomposite(Image<Gray, Byte> src, Image<Gray, Single>[] eigenImages, Image<Gray, Single> avg)
       {
          return CvInvoke.cvEigenDecomposite(
-             src.Ptr,
-             Array.ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; }),
-             avg.Ptr);
+            src.Ptr,
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, Single>, IntPtr>(eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; }),
+            avg.Ptr);
       }
       #endregion
 
@@ -215,10 +238,15 @@ namespace Emgu.CV
       {
          Image<Gray, Byte> res = new Image<Gray, byte>(_avgImage.Width, _avgImage.Height);
          CvInvoke.cvEigenProjection(
-             Array.ConvertAll<Image<Gray, Single>, IntPtr>(_eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; }),
-             eigenValue,
-             _avgImage.Ptr,
-             res.Ptr);
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, Single>, IntPtr>(_eigenImages, delegate(Image<Gray, Single> img) { return img.Ptr; }),
+            eigenValue,
+            _avgImage.Ptr,
+            res.Ptr);
          return res;
       }
 
@@ -230,11 +258,17 @@ namespace Emgu.CV
       public float[] GetEigenDistances(Image<Gray, Byte> image)
       {
          using (Matrix<float> eigenValue = new Matrix<float>(EigenDecomposite(image, _eigenImages, _avgImage)))
-            return Array.ConvertAll<Matrix<float>, float>(_eigenValues,
-                delegate(Matrix<float> eigenValueI)
-                {
-                   return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
-                });
+            return
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll<Matrix<float>, float>(_eigenValues,
+               delegate(Matrix<float> eigenValueI)
+               {
+                  return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+               });
       }
 
       /// <summary>

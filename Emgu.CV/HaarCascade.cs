@@ -20,15 +20,22 @@ namespace Emgu.CV
       ///<param name="fileName"> The name of the file that contains the HaarCascade object</param>
       public HaarCascade(String fileName)
       {
+#if NETFX_CORE
+         _ptr = CvInvoke.cvLoad(fileName, IntPtr.Zero, null, IntPtr.Zero);
+#else
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
-
          _ptr = CvInvoke.cvLoad(file.FullName, IntPtr.Zero, null, IntPtr.Zero);
+#endif
 
          if (_ptr == IntPtr.Zero)
          {
+#if NETFX_CORE
+            throw new NullReferenceException(String.Format("Fail to create HaarCascade object: {0}", fileName));
+#else
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));
+#endif
          }
       }
 

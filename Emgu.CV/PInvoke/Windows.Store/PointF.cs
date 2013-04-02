@@ -8,7 +8,21 @@ namespace System.Drawing
 {
    public struct PointF
    {
-      public float X { get; set; }
-      public float Y { get; set; }
+      public float X;
+      public float Y;
+
+      public PointF(float x, float y)
+      {
+         X = x;
+         Y = y;
+      }
+
+      public static PointF Empty
+      {
+         get
+         {
+            return new PointF(0, 0);
+         }
+      }
    }
 }

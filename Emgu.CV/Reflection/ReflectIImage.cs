@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
+
+#if !NETFX_CORE
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -16,6 +18,7 @@ namespace Emgu.CV.Reflection
    /// </summary>
    public static class ReflectIImage
    {
+
       /// <summary>
       /// Get all the methods that belongs to the IImage and Image class with ExposableMethodAttribute set true.
       /// </summary>
@@ -66,6 +69,7 @@ namespace Emgu.CV.Reflection
          return baseType == null ? null : baseType.GetGenericArguments()[1];
       }
 
+
       /// <summary>
       /// Get the color at the specific location of the image
       /// </summary>
@@ -88,3 +92,4 @@ namespace Emgu.CV.Reflection
       }
    }
 }
+#endif

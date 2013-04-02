@@ -219,11 +219,43 @@ namespace Emgu.CV.Util
 
       private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
       {
-         ColorInfoAttribute srcInfo = (ColorInfoAttribute)srcType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-         ColorInfoAttribute destInfo = (ColorInfoAttribute)destType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
-
-         String key = String.Format("CV_{0}2{1}", srcInfo.ConversionCodename, destInfo.ConversionCodename);
+         String key = String.Format("CV_{0}2{1}", GetConversionCodenameFromType(srcType), GetConversionCodenameFromType(destType));
          return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
+      }
+
+      private static String GetConversionCodenameFromType(Type colorType)
+      {
+#if NETFX_CORE
+
+         if (colorType == typeof(Bgr))
+            return "BGR";
+         else if (colorType == typeof(Bgra))
+            return "BGRA";
+         else if (colorType == typeof(Gray))
+            return "GRAY";
+         else if (colorType == typeof(Hls))
+            return "HLS";
+         else if (colorType == typeof(Hsv))
+            return "HSV";
+         else if (colorType == typeof(Lab))
+            return "Lab";
+         else if (colorType == typeof(Luv))
+            return "Luv";
+         else if (colorType == typeof(Rgb))
+            return "RGB";
+         else if (colorType == typeof(Rgba))
+            return "RGBA";
+         else if (colorType == typeof(Xyz))
+            return "XYZ";
+         else if (colorType == typeof(Ycc))
+            return "YCrCb";
+         else
+            throw new Exception(String.Format("Unable to get Color Conversion Codename for type {0}", colorType.ToString()));
+         
+#else
+         ColorInfoAttribute info = (ColorInfoAttribute)colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
+         return info.ConversionCodename;
+#endif
       }
 
       /// <summary>

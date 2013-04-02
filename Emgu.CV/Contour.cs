@@ -71,7 +71,9 @@ namespace Emgu.CV
       /// <remarks>Requires MCvContour.rect to be pre-computed</remarks>
       public override double InContour(PointF point)
       {
+#if !NETFX_CORE
          Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
+#endif
          return base.InContour(point);
       }
 
@@ -81,7 +83,9 @@ namespace Emgu.CV
       {
          get
          {
+#if !NETFX_CORE
             Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
+#endif
             return base.BoundingRectangle;
          }
       }

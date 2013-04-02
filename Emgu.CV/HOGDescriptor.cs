@@ -159,7 +159,13 @@ namespace Emgu.CV
          {
             Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
             CvInvoke.CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
-            return Array.ConvertAll(seq.ToArray(), delegate(MCvObjectDetection obj) { return obj.Rect; });
+            return
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll(seq.ToArray(), delegate(MCvObjectDetection obj) { return obj.Rect; });
          }
       }
 

@@ -239,9 +239,15 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
-         Point[] pts = Array.ConvertAll<PointF, Point>(
-             polygon.GetVertices(),
-             MapPointToImagePoint);
+         Point[] pts =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<PointF, Point>(
+            polygon.GetVertices(),
+            MapPointToImagePoint);
 
          if (thickness > 0)
             base.DrawPolyline(pts, true, color, thickness);
@@ -271,10 +277,15 @@ namespace Emgu.CV
       public void DrawPolyline(PointF[] pts, bool isClosed, TColor color, int thickness)
       {
          base.DrawPolyline(
-             Array.ConvertAll<PointF, Point>(pts, MapPointToImagePoint),
-             isClosed,
-             color,
-             thickness);
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<PointF, Point>(pts, MapPointToImagePoint),
+            isClosed,
+            color,
+            thickness);
       }
 
 #if !NETFX_CORE

@@ -9,8 +9,8 @@ PROJECT(Emgu.CV)
 FILE(GLOB_RECURSE SRC_CV RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_CV ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
-#Remove android or ios specific files
-FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/MonoTouch/*.cs" "PInvoke/Android/*.cs")
+#Remove android, os or windows store library related files
+FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/MonoTouch/*.cs" "PInvoke/Android/*.cs" "PInvoke/Windows.Store/*.cs")
 LIST(REMOVE_ITEM SRC_CV ${SRC_CV_EXCLUDES})
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})

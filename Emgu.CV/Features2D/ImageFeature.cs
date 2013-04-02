@@ -85,7 +85,13 @@ namespace Emgu.CV.Features2D
             return;
          }
          keyPoints = new VectorOfKeyPoint();
-         keyPoints.Push(Array.ConvertAll<ImageFeature<TDescriptor>, MKeyPoint>(features, delegate(ImageFeature<TDescriptor> feature) { return feature.KeyPoint; }));
+         keyPoints.Push(
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<ImageFeature<TDescriptor>, MKeyPoint>(features, delegate(ImageFeature<TDescriptor> feature) { return feature.KeyPoint; }));
 
          descriptors = new Matrix<TDescriptor>(features.Length, features[0].Descriptor.Length);
          int descriptorLength = features[0].Descriptor.Length;

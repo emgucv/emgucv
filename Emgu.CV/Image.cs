@@ -95,6 +95,19 @@ namespace Emgu.CV
       /// <param name="fileName">the name of the file that contains the image</param>
       public Image(String fileName)
       {
+#if NETFX_CORE
+         IntPtr ptr = CvInvoke.cvLoadImage(fileName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYCOLOR | CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYDEPTH);
+         if (ptr == IntPtr.Zero)
+            throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
+         try
+         {
+            LoadImageFromIplImagePtr(ptr);
+         } finally
+         {
+            CvInvoke.cvReleaseImage(ref ptr);
+         }
+#else
+
          FileInfo fi = new FileInfo(fileName);
          if (!fi.Exists)
          {
@@ -166,6 +179,7 @@ namespace Emgu.CV
             LoadFileUsingBitmap(fi);
 #endif
          }
+#endif
       }
 
 #if IOS || NETFX_CORE
@@ -248,6 +262,7 @@ namespace Emgu.CV
          }
       }
 
+#if !NETFX_CORE
       /// <summary>
       /// Load the specific file using OpenCV
       /// </summary>
@@ -265,8 +280,8 @@ namespace Emgu.CV
          {
             CvInvoke.cvReleaseImage(ref ptr);
          }
-
       }
+#endif
 
 #if IOS || NETFX_CORE
 #else
@@ -515,7 +530,11 @@ namespace Emgu.CV
             else if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32S;
             else
+#if NETFX_CORE
+               throw new NotImplementedException("Unsupported image depth");
+#else
                throw new NotImplementedException(Properties.StringTable.UnsupportedImageDepth);
+#endif
          }
       }
 
@@ -732,7 +751,9 @@ namespace Emgu.CV
       ///<param name="thickness"> Must be &gt; 0 </param>
       public void Draw(Cross2DF cross, TColor color, int thickness)
       {
+#if !NETFX_CORE
          Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
+#endif
          if (thickness > 0)
          {
             Draw(cross.Horizontal, color, thickness);
@@ -745,7 +766,9 @@ namespace Emgu.CV
       ///<param name="thickness"> The thickness of the line segment </param>
       public virtual void Draw(LineSegment2DF line, TColor color, int thickness)
       {
+#if !NETFX_CORE
          Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
+#endif
          if (thickness > 0)
             CvInvoke.cvLine(
                 Ptr,
@@ -763,7 +786,9 @@ namespace Emgu.CV
       ///<param name="thickness"> The thickness of the line segment </param>
       public virtual void Draw(LineSegment2D line, TColor color, int thickness)
       {
+#if !NETFX_CORE
          Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
+#endif
          if (thickness > 0)
             CvInvoke.cvLine(
                 Ptr,
@@ -781,7 +806,13 @@ namespace Emgu.CV
       ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
       public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
-         Point[] vertices = Array.ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
+         Point[] vertices =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
 
          if (thickness > 0)
             DrawPolyline(vertices, true, color, thickness);
@@ -824,30 +855,43 @@ namespace Emgu.CV
       {
          if (thickness > 0)
          {
-            GCHandle[] handles = Array.ConvertAll<Point[], GCHandle>(pts, delegate(Point[] polyline)
-            {
-               return GCHandle.Alloc(polyline, GCHandleType.Pinned);
-            }
-            );
+            GCHandle[] handles =
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll<Point[], GCHandle>(pts, delegate(Point[] polyline)
+               {
+                  return GCHandle.Alloc(polyline, GCHandleType.Pinned);
+               });
 
             CvInvoke.cvPolyLine(
-                Ptr,
-                Array.ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h)
-            {
-               return h.AddrOfPinnedObject();
-            }
-            ),
-                Array.ConvertAll<Point[], int>(pts, delegate(Point[] polyline)
-            {
-                    return polyline.Length;
-                }
-                ),
-                pts.Length,
-                isClosed,
-                color.MCvScalar,
-                thickness,
-                Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED,
-                0);
+               Ptr,
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h)
+               {
+                  return h.AddrOfPinnedObject();
+               }),
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll<Point[], int>(pts, delegate(Point[] polyline)
+               {
+                  return polyline.Length;
+               }),
+               pts.Length,
+               isClosed,
+               color.MCvScalar,
+               thickness,
+               Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED,
+               0);
 
                 foreach (GCHandle h in handles)
                     h.Free();
@@ -1157,7 +1201,11 @@ namespace Emgu.CV
             if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
             {
                 //TODO: wrap CvChain and add code here
+#if NETFX_CORE
+               throw new NotImplementedException("Not implmented");
+#else
                 throw new NotImplementedException(Properties.StringTable.NotImplemented);
+#endif
             }
 
             using (Image<TColor, TDepth> imagecopy = Copy()) //since cvFindContours modifies the content of the source, we need to make a clone
@@ -3274,7 +3322,8 @@ namespace Emgu.CV
             for (int row = 0; row < Height; row++, data1 += step1)
             {
                Toolbox.memcpy(row1.AddrOfPinnedObject(), new IntPtr(data1), width1);
-               Array.ForEach(row1.Array, action);
+               foreach (TDepth v in row1.Array)
+                  action(v);
             }
       }
 
@@ -4411,7 +4460,7 @@ namespace Emgu.CV
          }
          catch (Exception e)
          {
-#if IOS
+#if IOS || NETFX_CORE
             throw e;
 #elif ANDROID
             FileInfo fileInfo = new FileInfo(fileName);
@@ -4433,7 +4482,7 @@ namespace Emgu.CV
                      throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
                }
             }
-#else
+#else 
             //Saving with OpenCV fails
             //Try to save the image using .NET's Bitmap class
             using (Bitmap bmp = Bitmap)
@@ -4505,7 +4554,12 @@ namespace Emgu.CV
       IImage[] IImage.Split()
       {
          return
-            Array.ConvertAll<Image<Gray, TDepth>, IImage>(
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<Image<Gray, TDepth>, IImage>(
                Split(),
                delegate(Image<Gray, TDepth> img) { return (IImage)img; });
       }

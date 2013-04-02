@@ -36,6 +36,7 @@ namespace Emgu.CV
       /// </summary>
       public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;
 
+#if !NETFX_CORE
       /// <summary>
       /// Attemps to load opencv modules from the specific location
       /// </summary>
@@ -108,7 +109,7 @@ namespace Emgu.CV
 
          return success;
       }
-
+#endif
       /// <summary>
       /// Get the module format string.
       /// </summary>
@@ -173,7 +174,7 @@ namespace Emgu.CV
             Java.Lang.JavaSystem.LoadLibrary(module);
             Debug.WriteLine(string.Format("Loaded {0}.", module));
          }
-#elif IOS
+#elif IOS || NETFX_CORE
 #else
 
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)

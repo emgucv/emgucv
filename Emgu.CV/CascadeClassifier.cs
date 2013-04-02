@@ -20,15 +20,21 @@ namespace Emgu.CV
       ///<param name="fileName"> The name of the file that contains the CascadeClassifier</param>
       public CascadeClassifier(String fileName)
       {
+#if !NETFX_CORE
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
+#endif
 
          _ptr = CvInvoke.CvCascadeClassifierCreate(fileName);
 
          if (_ptr == IntPtr.Zero)
          {
+#if NETFX_CORE
+            throw new NullReferenceException(String.Format("Fail to create HaarCascade object: {0}", fileName));
+#else
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));
+#endif
          }
       }
 

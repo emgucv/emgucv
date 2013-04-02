@@ -69,7 +69,12 @@ namespace Emgu.CV
 
          CvInvoke.cvMakeHistHeaderForArray(
             cvMatND.dims,
-            Array.ConvertAll<MCvMatND.Dimension, int>(cvMatND.dim, delegate(MCvMatND.Dimension d) {
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<MCvMatND.Dimension, int>(cvMatND.dim, delegate(MCvMatND.Dimension d) {
             return d.Size; }), //binSizes
             _ptr,
             _matND.MCvMatND.data,
@@ -148,7 +153,9 @@ namespace Emgu.CV
 
       private void Calculate(IntPtr[] arrays, bool accumulate, CvArray<Byte> mask)
       {
+#if !NETFX_CORE
          Debug.Assert(arrays.Length == Dimension, Properties.StringTable.IncompatibleDimension);
+#endif
          CvInvoke.cvCalcHist(
             arrays,
             _ptr,
@@ -185,10 +192,17 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the image</typeparam>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs) where TDepth : new()
       {
+#if !NETFX_CORE
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
+#endif
 
          IntPtr[] imgPtrs =
-             Array.ConvertAll<Image<Gray, TDepth>, IntPtr>(
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+             ConvertAll<Image<Gray, TDepth>, IntPtr>(
                  srcs,
                  delegate(Image<Gray, TDepth> img) {
             return img.Ptr; });
@@ -209,7 +223,9 @@ namespace Emgu.CV
       /// <returns>Destination back projection image of the same type as the source images</returns>
       public Image<Gray, Single> BackProjectPatch<TDepth>(Image<Gray, TDepth>[] srcs, System.Drawing.Size patchSize, CvEnum.HISTOGRAM_COMP_METHOD method, double factor) where TDepth : new()
       {
+#if !NETFX_CORE
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
+#endif
 
          IntPtr[] imgPtrs = new IntPtr[srcs.Length];
          for (int i = 0; i < srcs.Length; i++)
@@ -229,7 +245,9 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the matrix</typeparam>
       public Matrix<TDepth> BackProject<TDepth>(Matrix<TDepth>[] srcs) where TDepth : new()
       {
+#if !NETFX_CORE
          Debug.Assert(srcs.Length == Dimension, Properties.StringTable.IncompatibleDimension);
+#endif
 
          IntPtr[] imgPtrs = new IntPtr[srcs.Length];
          for (int i = 0; i < srcs.Length; i++)

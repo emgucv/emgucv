@@ -275,8 +275,6 @@ namespace Emgu.CV.Test
 
                   }
                }
-
-               
             };
             capture.Start();
             viewer.ShowDialog(); //show the image viewer

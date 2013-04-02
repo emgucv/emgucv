@@ -17,6 +17,7 @@ namespace Emgu.CV.Reflection
    /// </summary>
    public static class ReflectColorType
    {
+#if !NETFX_CORE
       /// <summary>
       /// Get the display color for each channel
       /// </summary>
@@ -36,6 +37,7 @@ namespace Emgu.CV.Reflection
          //create default color
          Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
+            //res[i] = Color.FromArgb(255, 125, 125, 125);
             res[i] = Color.Gray;
          return res;
       }
@@ -61,5 +63,6 @@ namespace Emgu.CV.Reflection
             res[i] = String.Format("Channel {0}", i);
          return res;
       }
+#endif
    }
 }

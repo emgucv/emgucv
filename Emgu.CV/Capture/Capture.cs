@@ -8,6 +8,10 @@ using System.ServiceModel;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
+#if NETFX_CORE
+using Windows.System.Threading;
+using System.Threading.Tasks;
+#endif
 using Emgu.Util;
 using Emgu.CV.Structure;
 
@@ -22,14 +26,13 @@ namespace Emgu.CV
 #endif
    public class Capture :
        UnmanagedObject,
-#if (ANDROID || IOS)
+#if (ANDROID || IOS || NETFX_CORE)
 #else
  IDuplexCapture,
 #endif
  ICapture
    {
-      private Thread _captureThread = null;
-
+      
       /// <summary>
       /// the type of flipping
       /// </summary>
@@ -198,11 +201,9 @@ namespace Emgu.CV
       {
 #if TEST_CAPTURE
 #else
+         Stop();
          CvInvoke.cvReleaseCapture(ref _ptr);
-         if (_captureThread != null && _captureThread.IsAlive)
-         {
-            _captureThread.Abort();
-         }
+         
 #endif
       }
       #endregion
@@ -233,6 +234,9 @@ namespace Emgu.CV
       /// <returns>True on success</returns>
       public virtual bool Grab()
       {
+         if (_ptr == IntPtr.Zero)
+            return false;
+
          bool grabbed = CvInvoke.cvGrabFrame(_ptr);
          if (grabbed && ImageGrabbed != null)
             ImageGrabbed(this, new EventArgs());
@@ -252,25 +256,50 @@ namespace Emgu.CV
       /// </summary>
       public event GrabEventHandler ImageGrabbed;
 
-      private volatile bool _pauseGrabProcess;
+      private enum GrabState
+      {
+         Stopped,
+         Running,
+         Pause,
+         Stopping,
+      }
+
+      private volatile GrabState _grabState = GrabState.Stopped;
 
       private void Run()
       {
-         while (this.Grab())
+         try
          {
-            if (_pauseGrabProcess)
-               try
+            while (_grabState == GrabState.Running || _grabState == GrabState.Pause)
+            {
+               if (_grabState == GrabState.Pause)
                {
-                  Thread.Sleep(Timeout.Infinite);
+                  Wait(100);
                }
-               catch (ThreadInterruptedException)
+               else if (!Grab())
                {
+                  //no more frames to grab, this is the end of the stream. We should stop.
+                  _grabState = GrabState.Stopping;
                }
-               catch (ThreadAbortException)
-               {
-                  break;
-               }
+            }
          }
+         catch (Exception)
+         {
+         }
+         finally
+         {
+            _grabState = GrabState.Stopped;
+         }
+      }
+
+      private static void Wait(int millisecond)
+      {
+#if NETFX_CORE
+         Task t = Task.Delay(millisecond);
+         t.Wait();
+#else
+         Thread.Sleep(millisecond);
+#endif     
       }
 
       /// <summary>
@@ -278,22 +307,14 @@ namespace Emgu.CV
       /// </summary>
       public void Start()
       {
-         _pauseGrabProcess = false;
-
-         if (_captureThread == null || !_captureThread.IsAlive)
+         if (_grabState != GrabState.Running)
          {
-            //create a new thread
-            ThreadStart ts = new ThreadStart(Run);
-            _captureThread = new Thread(ts);
-            _captureThread.Start();
-         }
-         else if (_captureThread.ThreadState == ThreadState.WaitSleepJoin)
-         {
-            _captureThread.Interrupt();
-         }
-         else if (_captureThread.ThreadState != ThreadState.Running)
-         {
-            _captureThread.Start();
+            _grabState = GrabState.Running;
+#if NETFX_CORE
+            ThreadPool.RunAsync(delegate { Run(); });
+#else
+            ThreadPool.QueueUserWorkItem(delegate { Run(); });
+#endif
          }
       }
 
@@ -302,21 +323,8 @@ namespace Emgu.CV
       /// </summary>
       public void Pause()
       {
-         if (_captureThread != null && _captureThread.IsAlive)
-         {
-            _pauseGrabProcess = true;
-         }
-      }
-
-      /// <summary>
-      /// Wait for the grabbing thread to complete
-      /// </summary>
-      public void Wait()
-      {
-         if (_captureThread != null)
-         {
-            _captureThread.Join();
-         }
+         if (_grabState == GrabState.Running)
+            _grabState = GrabState.Pause;
       }
 
       /// <summary>
@@ -324,24 +332,10 @@ namespace Emgu.CV
       /// </summary>
       public void Stop()
       {
-         if (_captureThread != null)
+         if ( _grabState != GrabState.Stopped)
          {
-            _pauseGrabProcess = false;
-            _captureThread.Abort();
-         }
-      }
-
-      /// <summary>
-      /// The current state of the grab process
-      /// </summary>
-      public ThreadState GrabProcessState
-      {
-         get
-         {
-            if (_captureThread == null)
-               return ThreadState.Unstarted;
-            else
-               return _captureThread.ThreadState;
+            if (_grabState != GrabState.Stopping)
+               _grabState = GrabState.Stopping;
          }
       }
       #endregion
@@ -483,7 +477,7 @@ namespace Emgu.CV
             }
         }*/
 
-#if (ANDROID || IOS)
+#if (ANDROID || IOS || NETFX_CORE)
 #else
       /// <summary>
       /// Query a frame duplexly over WCF
