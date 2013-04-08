@@ -58,10 +58,10 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image">The image to run diff against</param>
       /// <param name="roi">The region of interest. Use Rectangle.Empty for the whole region</param>
-      public void Diff(Image<TColor, Byte> image, Rectangle roi)
+      public int Diff(Image<TColor, Byte> image, Rectangle roi)
       {
          if (_foregroundMask == null) _foregroundMask = new Image<Gray, byte>(image.Size);
-         CvInvoke.cvBGCodeBookDiff(ref MCvBGCodeBookModel, image, _foregroundMask, roi);
+         return CvInvoke.cvBGCodeBookDiff(ref MCvBGCodeBookModel, image, _foregroundMask, roi);
       }
 
       /// <summary>

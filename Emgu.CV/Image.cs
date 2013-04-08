@@ -43,6 +43,8 @@ namespace Emgu.CV
       where TColor : struct, IColor
       where TDepth : new()
    {
+      private ImageDataReleaseMode _imageDataReleaseMode;
+
       private TDepth[, ,] _array;
 
       /// <summary>
@@ -365,6 +367,8 @@ namespace Emgu.CV
          Debug.Assert(!_dataHandle.IsAllocated, "Handle should be free");
 
          _ptr = CvInvoke.cvCreateImageHeader(new Size(cols, rows), CvDepth, numberOfChannels);
+         _imageDataReleaseMode = ImageDataReleaseMode.ReleaseHeaderOnly;
+
          GC.AddMemoryPressure(StructSize.MIplImage);
 
          Debug.Assert(MIplImage.align == 4, "Only 4 align is supported at this moment");
@@ -2769,7 +2773,7 @@ namespace Emgu.CV
             // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
             else if (
                Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
-               Platform.Runtime == Emgu.Util.TypeEnum.Runtime.DotNet &&
+               Platform.ClrType == Emgu.Util.TypeEnum.ClrType.DotNet &&
                this is Image<Bgr, Byte>)
             {   //Bgr byte    
                return new Bitmap(
@@ -3049,75 +3053,46 @@ namespace Emgu.CV
          Type typeOfColor = typeof(TColor);
          Type typeofDepth = typeof(TDepth);
 
+         PixelFormat format = PixelFormat.Undefined;
+
          if (typeOfColor == typeof(Gray)) // if this is a gray scale image
          {
-            if (typeofDepth == typeof(Byte))
-            {
-               Size size = Size;
-               Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format8bppIndexed);
-               BitmapData data = bmp.LockBits(
-                   new Rectangle(Point.Empty, size),
-                   ImageLockMode.WriteOnly,
-                   PixelFormat.Format8bppIndexed);
-               using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
-                  CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
-
-               bmp.UnlockBits(data);
-               bmp.Palette = CvToolbox.GrayscalePalette;
-               return bmp;
-            }
-            else
-            {
-               using (Image<Gray, Byte> temp = Convert<Gray, Byte>())
-                  return temp.ToBitmap();
-            }
+            format = PixelFormat.Format8bppIndexed;
          }
          else if (typeOfColor == typeof(Bgra)) //if this is Bgra image
          {
-            if (typeofDepth == typeof(byte))
-            {
-               Size size = Size;
-
-               Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
-               BitmapData data = bmp.LockBits(
-                    new Rectangle(Point.Empty, size),
-                    ImageLockMode.WriteOnly,
-                    PixelFormat.Format32bppArgb);
-
-               using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 4, data.Scan0, data.Stride))
-                  CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
-
-               bmp.UnlockBits(data);
-               return bmp;
-            }
-            else
-            {
-               using (Image<Bgra, Byte> tmp = Convert<Bgra, Byte>())
-                  return tmp.ToBitmap();
-            }
+            format = PixelFormat.Format32bppArgb;
          }
-         else if (this is Image<Bgr, Byte>)
-         {   //if this is a Bgr Byte image
-            Size size = Size;
-
-            //create the bitmap and get the pointer to the data
-            Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format24bppRgb);
-
-            BitmapData data = bmp.LockBits(
-                new Rectangle(Point.Empty, size),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format24bppRgb);
-
-            using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, 3, data.Scan0, data.Stride))
-               CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
-
-            bmp.UnlockBits(data);
-
-            return bmp;
+         else if (typeOfColor == typeof(Bgr))  //if this is a Bgr Byte image
+         {  
+            format = PixelFormat.Format24bppRgb;
          }
          else
          {
             using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
+               return temp.ToBitmap();
+         }
+
+         if (typeof(TDepth) == typeof(Byte))
+         {
+            Size size = Size;
+            Bitmap bmp = new Bitmap(size.Width, size.Height, format);
+            BitmapData data = bmp.LockBits(
+                new Rectangle(Point.Empty, size),
+                ImageLockMode.WriteOnly,
+                format);
+            using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
+               CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
+
+            bmp.UnlockBits(data);
+
+            if (format == PixelFormat.Format8bppIndexed)
+               bmp.Palette = CvToolbox.GrayscalePalette;
+            return bmp;
+         }
+         else
+         {
+            using (Image<TColor, Byte> temp = Convert<TColor, Byte>())
                return temp.ToBitmap();
          }
 #endif
@@ -3593,9 +3568,17 @@ namespace Emgu.CV
 
          if (_ptr != IntPtr.Zero)
          {
-            CvInvoke.cvReleaseImageHeader(ref _ptr);
-            Debug.Assert(_ptr == IntPtr.Zero);
-            GC.RemoveMemoryPressure(StructSize.MIplImage);
+            if (_imageDataReleaseMode == ImageDataReleaseMode.ReleaseHeaderOnly)
+            {
+               CvInvoke.cvReleaseImageHeader(ref _ptr);
+               Debug.Assert(_ptr == IntPtr.Zero);
+               GC.RemoveMemoryPressure(StructSize.MIplImage);
+            }
+            else //ImageDataReleaseMode.ReleaseIplImage
+            {
+               CvInvoke.cvReleaseImage(ref _ptr);
+               Debug.Assert(_ptr == IntPtr.Zero);
+            }
          }
 
          _array = null;
@@ -4573,6 +4556,25 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      
+      public static Image<TColor, TDepth> FromJpegData(byte[] jpegData)
+      {
+         if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(byte))
+         {
+            Image<TColor, TDepth> result = new Image<TColor, TDepth>();
+            result._ptr = CvInvoke.cvDecodeImage(jpegData, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+            result._imageDataReleaseMode = ImageDataReleaseMode.ReleaseIplImage;
+            return result;
+         }
+         else
+         {
+            using (Image<Bgr, Byte> tmp = Image<Bgr, Byte>.FromJpegData(jpegData))
+            {
+               return tmp.Convert<TColor, TDepth>();
+            }
+         }
+      }
    }
 
    /// <summary>
@@ -4584,6 +4586,12 @@ namespace Emgu.CV
       /// Offset of roi
       /// </summary>
       public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
+   }
+
+   internal enum ImageDataReleaseMode
+   {
+      ReleaseHeaderOnly,
+      ReleaseIplImage
    }
 }
 

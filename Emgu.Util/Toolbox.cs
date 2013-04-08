@@ -23,13 +23,13 @@ namespace Emgu.Util
       /// Convert an object to an xml document
       /// </summary>
       /// <typeparam name="T">The type of the object to be converted</typeparam>
-      /// <param name="o">The object to be serialized</param>
+      /// <param name="sourceObject">The object to be serialized</param>
       /// <returns>An xml document that represents the object</returns>
-      public static XDocument XmlSerialize<T>(T o)
+      public static XDocument XmlSerialize<T>(T sourceObject)
       {
          StringBuilder sb = new StringBuilder();
          using (StringWriter sw = new StringWriter(sb))
-            (new XmlSerializer(typeof(T))).Serialize(sw, o);
+            (new XmlSerializer(typeof(T))).Serialize(sw, sourceObject);
 
          return XDocument.Parse(sb.ToString());
       }
@@ -38,14 +38,14 @@ namespace Emgu.Util
       /// Convert an object to an xml document
       /// </summary>
       /// <typeparam name="T">The type of the object to be converted</typeparam>
-      /// <param name="o">The object to be serialized</param>
+      /// <param name="sourceObject">The object to be serialized</param>
       /// <param name="knownTypes">Other types that it must known ahead to serialize the object</param>
       /// <returns>An xml document that represents the object</returns>
-      public static XDocument XmlSerialize<T>(T o, Type[] knownTypes)
+      public static XDocument XmlSerialize<T>(T sourceObject, Type[] knownTypes)
       {
          StringBuilder sb = new StringBuilder();
          using (StringWriter sw = new StringWriter(sb))
-            (new XmlSerializer(typeof(T), knownTypes)).Serialize(sw, o);
+            (new XmlSerializer(typeof(T), knownTypes)).Serialize(sw, sourceObject);
          return XDocument.Parse(sb.ToString());
       }
 
@@ -53,17 +53,17 @@ namespace Emgu.Util
       /// Convert an xml document to an object
       /// </summary>
       /// <typeparam name="T">The type of the object to be converted to</typeparam>
-      /// <param name="xDoc">The xml document</param>
+      /// <param name="document">The xml document</param>
       /// <returns>The object representation as a result of the deserialization of the xml document</returns>
-      public static T XmlDeserialize<T>(XDocument xDoc)
+      public static T XmlDeserialize<T>(XDocument document)
       {
-         using (XmlReader reader = xDoc.Root.CreateReader())
+         using (XmlReader reader = document.Root.CreateReader())
          {
             if (reader.CanReadBinaryContent)
                return (T)(new XmlSerializer(typeof(T))).Deserialize(reader);
             else
             {
-               return XmlStringDeserialize<T>(xDoc.ToString());
+               return XmlStringDeserialize<T>(document.ToString());
             }
          }
       }
@@ -176,16 +176,16 @@ namespace Emgu.Util
       /// Use reflection to find the base type. If such type do not exist, null is returned
       /// </summary>
       /// <param name="currentType">The type to search from</param>
-      /// <param name="baseclassName">The name of the base class to search</param>
+      /// <param name="baseClassName">The name of the base class to search</param>
       /// <returns>The base type</returns>
-      public static Type GetBaseType(Type currentType, String baseclassName)
+      public static Type GetBaseType(Type currentType, String baseClassName)
       {
-         if (currentType.Name.Equals(baseclassName))
+         if (currentType.Name.Equals(baseClassName))
             return currentType;
          Type baseType = currentType.BaseType;
 
          return (baseType == null) ?
-            null : GetBaseType(baseType, baseclassName);
+            null : GetBaseType(baseType, baseClassName);
       }
 #endif
 
@@ -193,12 +193,12 @@ namespace Emgu.Util
       /// <summary>
       /// Convert some generic vector to vector of Bytes
       /// </summary>
-      /// <typeparam name="D">type of the input vector</typeparam>
+      /// <typeparam name="TData">type of the input vector</typeparam>
       /// <param name="data">array of data</param>
       /// <returns>the byte vector</returns>
-      public static Byte[] ToBytes<D>(D[] data)
+      public static Byte[] ToBytes<TData>(TData[] data)
       {
-         int size = Marshal.SizeOf(typeof(D)) * data.Length;
+         int size = Marshal.SizeOf(typeof(TData)) * data.Length;
          Byte[] res = new Byte[size];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          Marshal.Copy(handle.AddrOfPinnedObject(), res, 0, size);
@@ -209,12 +209,12 @@ namespace Emgu.Util
       /// <summary>
       /// Copy a generic vector to the unmanaged memory
       /// </summary>
-      /// <typeparam name="D">The data type of the vector</typeparam>
+      /// <typeparam name="TData">The data type of the vector</typeparam>
       /// <param name="src">The source vector</param>
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      public static void CopyVector<D>(D[] src, IntPtr dest)
+      public static void CopyVector<TData>(TData[] src, IntPtr dest)
       {
-         int size = Marshal.SizeOf(typeof(D)) * src.Length;
+         int size = Marshal.SizeOf(typeof(TData)) * src.Length;
          GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
          memcpy(dest, handle.AddrOfPinnedObject(), size);
          handle.Free();
@@ -223,18 +223,18 @@ namespace Emgu.Util
       /// <summary>
       /// Copy a jagged two dimensional array to the unmanaged memory
       /// </summary>
-      /// <typeparam name="D">The data type of the jagged two dimensional</typeparam>
-      /// <param name="src">The src array</param>
+      /// <typeparam name="TData">The data type of the jagged two dimensional</typeparam>
+      /// <param name="source">The source array</param>
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      public static void CopyMatrix<D>(D[][] src, IntPtr dest)
+      public static void CopyMatrix<TData>(TData[][] source, IntPtr dest)
       {
-         int datasize = Marshal.SizeOf(typeof(D));
-         int step = datasize * src[0].Length;
+         int datasize = Marshal.SizeOf(typeof(TData));
+         int step = datasize * source[0].Length;
          int current = dest.ToInt32();
 
-         for (int i = 0; i < src.Length; i++, current += step)
+         for (int i = 0; i < source.Length; i++, current += step)
          {
-            GCHandle handle = GCHandle.Alloc(src[i], GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(source[i], GCHandleType.Pinned);
             memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
             handle.Free();
          }
@@ -466,12 +466,25 @@ namespace Emgu.Util
       {
          if (Platform.OperationSystem == TypeEnum.OS.Windows)
          {
-            return WinAPILoadLibrary(dllname);
+            if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
+            {
+               const int LoadLibrarySearchDllLoadDir = 0x00000100;
+               const int LoadLibrarySearchDefaultDirs = 0x00001000;
+               return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, LoadLibrarySearchDllLoadDir | LoadLibrarySearchDefaultDirs);
+            } else
+               return WinAPILoadLibrary(dllname);
          } else
          {
             return Dlopen(dllname, 2); // 2 == RTLD_NOW
          }
       }
+
+      [DllImport("Kernel32.dll", EntryPoint="LoadLibraryEx")]
+      private static extern IntPtr NetFxCoreLoadLibrary(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String fileName, 
+         IntPtr hFile,
+         int dwFlags);
 
       [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]
       private static extern IntPtr WinAPILoadLibrary(

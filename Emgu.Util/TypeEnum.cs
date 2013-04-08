@@ -35,12 +35,16 @@ namespace Emgu.Util.TypeEnum
    /// <summary>
    /// The runtime environment
    /// </summary>
-   public enum Runtime
+   public enum ClrType
    {
       /// <summary>
       /// .Net runtime
       /// </summary>
       DotNet,
+      /// <summary>
+      /// Windows Store app runtime
+      /// </summary>
+      NetFxCore,
       /// <summary>
       /// Mono runtime
       /// </summary>

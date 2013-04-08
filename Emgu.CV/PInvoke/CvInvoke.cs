@@ -36,7 +36,6 @@ namespace Emgu.CV
       /// </summary>
       public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;
 
-#if !NETFX_CORE
       /// <summary>
       /// Attemps to load opencv modules from the specific location
       /// </summary>
@@ -44,17 +43,41 @@ namespace Emgu.CV
       /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
       /// <returns>True if all the modules has been loaded sucessfully</returns>
       /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
-      public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
+      public static 
+#if NETFX_CORE 
+         async System.Threading.Tasks.Task<bool>
+#else
+         bool
+#endif
+         LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
       {
+#if NETFX_CORE
+         if (loadDirectory != null)
+         {
+            throw new NotImplementedException("Loading modules from a specific directory is not implemented in Windows Store App");
+         }
+
+         String subfolder = String.Empty;
+         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         {
+            if (IntPtr.Size == 8)
+            {  //64bit process
+               subfolder = "x64";
+            }
+            else
+            {
+               subfolder = "x86";
+            }
+         }
+
+         Windows.Storage.StorageFolder installFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+         loadDirectory = Path.Combine(installFolder.Path, subfolder);
+
+         Windows.Storage.StorageFolder loadFolder = await installFolder.GetFolderAsync(subfolder);
+         List<Windows.Storage.StorageFile> loadableFiles = new List<Windows.Storage.StorageFile>(await loadFolder.GetFilesAsync());
+#else
          if (loadDirectory == null)
          {
-            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-
-            FileInfo file = new FileInfo(asm.Location);
-            //FileInfo file = new FileInfo(asm.CodeBase);
-            DirectoryInfo directory = file.Directory;
-            loadDirectory = directory.FullName;
-
             String subfolder = String.Empty;
             if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             {
@@ -66,15 +89,21 @@ namespace Emgu.CV
                {
                   subfolder = "x86";
                }
-            }
+            }  
             /*
             else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             {
                subfolder = "..";
             }*/
 
+            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            FileInfo file = new FileInfo(asm.Location);
+            //FileInfo file = new FileInfo(asm.CodeBase);
+            DirectoryInfo directory = file.Directory;
+            loadDirectory = directory.FullName;
+            
             if (!String.IsNullOrEmpty(subfolder))
-               loadDirectory = Path.Combine(loadDirectory, subfolder);
+            loadDirectory = Path.Combine(loadDirectory, subfolder);
 
             if (!Directory.Exists(loadDirectory))
             {
@@ -93,9 +122,12 @@ namespace Emgu.CV
                   loadDirectory = altLoadDirectory;
             }
          }
-
+         
          String oldDir = Environment.CurrentDirectory;
          Environment.CurrentDirectory = loadDirectory;
+#endif
+
+
          bool success = true;
 
          string prefix = string.Empty;
@@ -103,13 +135,30 @@ namespace Emgu.CV
          foreach (String module in unmanagedModules)
          {
             String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, module));
-            success &= (File.Exists(fullPath) && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath)));
-         }
-         Environment.CurrentDirectory = oldDir;
+#if NETFX_CORE
+            String relativePath = Path.Combine(subfolder, Path.Combine(prefix, module));
 
+            bool exist = loadableFiles.Exists(sf => sf.Path.Equals(fullPath));
+            if (exist)
+            {
+               IntPtr handle = Toolbox.LoadLibrary(fullPath);
+               success &= (!IntPtr.Zero.Equals(handle));
+            }
+            else
+            {
+               success = false;
+            }
+#else
+            success &= (File.Exists(fullPath) && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath)));
+#endif
+         }
+
+#if !NETFX_CORE
+         Environment.CurrentDirectory = oldDir;
+#endif
          return success;
       }
-#endif
+
       /// <summary>
       /// Get the module format string.
       /// </summary>
@@ -174,7 +223,7 @@ namespace Emgu.CV
             Java.Lang.JavaSystem.LoadLibrary(module);
             Debug.WriteLine(string.Format("Loaded {0}.", module));
          }
-#elif IOS || NETFX_CORE
+#elif IOS 
 #else
 
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)

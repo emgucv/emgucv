@@ -268,11 +268,11 @@ namespace Emgu.CV
       /// src1 dot src2 = sumI(src1(I)*src2(I))
       /// </summary>
       /// <remarks>In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||^2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.</remarks>
-      /// <param name="src2">The other Array to apply dot product with</param>
+      /// <param name="otherArray">The other Array to apply dot product with</param>
       /// <returns>src1 dot src2</returns>
-      public double DotProduct(CvArray<TDepth> src2)
+      public double DotProduct(CvArray<TDepth> otherArray)
       {
-         return CvInvoke.cvDotProduct(Ptr, src2.Ptr);
+         return CvInvoke.cvDotProduct(Ptr, otherArray.Ptr);
       }
 
       /// <summary>
@@ -312,50 +312,50 @@ namespace Emgu.CV
 
       #region Coping and filling
       ///<summary>
-      /// Copy the current array to <paramref name="dest"/>
+      /// Copy the current array to <paramref name="destination"/>
       /// </summary>
-      /// <param name="dest"> The destination Array</param>
-      public void CopyTo(CvArray<TDepth> dest)
+      /// <param name="destination"> The destination Array</param>
+      public void CopyTo(CvArray<TDepth> destination)
       {
-         CvInvoke.cvCopy(Ptr, dest.Ptr, IntPtr.Zero);
+         CvInvoke.cvCopy(Ptr, destination.Ptr, IntPtr.Zero);
       }
 
       ///<summary> 
-      ///Set the element of the Array to <paramref name="val"/>
+      ///Set the element of the Array to <paramref name="value"/>
       ///</summary>
-      ///<param name="val"> The value to be set for each element of the Array </param>
-      public void SetValue(MCvScalar val)
+      ///<param name="value"> The value to be set for each element of the Array </param>
+      public void SetValue(MCvScalar value)
       {
-         CvInvoke.cvSet(_ptr, val, IntPtr.Zero);
+         CvInvoke.cvSet(_ptr, value, IntPtr.Zero);
       }
 
       ///<summary> 
-      ///Set the element of the Array to <paramref name="val"/>
+      ///Set the element of the Array to <paramref name="value"/>
       ///</summary>
-      ///<param name="val"> The value to be set for each element of the Array </param>
-      public void SetValue(double val)
+      ///<param name="value"> The value to be set for each element of the Array </param>
+      public void SetValue(double value)
       {
-         SetValue(new MCvScalar(val, val, val, val));
+         SetValue(new MCvScalar(value, value, value, value));
       }
 
       ///<summary>
-      ///Set the element of the Array to <paramref name="val"/>, using the specific <paramref name="mask"/>
+      ///Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
       ///</summary>
-      ///<param name="val">The value to be set</param>
+      ///<param name="value">The value to be set</param>
       ///<param name="mask">The mask for the operation</param>
-      public void SetValue(MCvScalar val, CvArray<Byte> mask)
+      public void SetValue(MCvScalar value, CvArray<Byte> mask)
       {
-         CvInvoke.cvSet(_ptr, val, mask == null ? IntPtr.Zero : mask.Ptr);
+         CvInvoke.cvSet(_ptr, value, mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       ///<summary>
-      ///Set the element of the Array to <paramref name="val"/>, using the specific <paramref name="mask"/>
+      ///Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
       ///</summary>
-      ///<param name="val">The value to be set</param>
+      ///<param name="value">The value to be set</param>
       ///<param name="mask">The mask for the operation</param>
-      public void SetValue(double val, CvArray<Byte> mask)
+      public void SetValue(double value, CvArray<Byte> mask)
       {
-         SetValue(new MCvScalar(val, val, val, val), mask);
+         SetValue(new MCvScalar(value, value, value, value), mask);
       }
 
       private readonly static Random _randomGenerator = new Random();
@@ -504,21 +504,21 @@ namespace Emgu.CV
 
       #region Inplace Logic Operators
       /// <summary>
-      /// Inplace And operation with <paramref name="src2"/>
+      /// Inplace And operation with <paramref name="otherArray"/>
       /// </summary>
-      /// <param name="src2">The other array to perform AND operation</param>
-      public void _And(CvArray<TDepth> src2)
+      /// <param name="otherArray">The other array to perform AND operation</param>
+      public void _And(CvArray<TDepth> otherArray)
       {
-         CvInvoke.cvAnd(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
+         CvInvoke.cvAnd(Ptr, otherArray.Ptr, Ptr, IntPtr.Zero);
       }
 
       /// <summary>
-      /// Inplace Or operation with <paramref name="src2"/>
+      /// Inplace Or operation with <paramref name="otherArray"/>
       /// </summary>
-      /// <param name="src2">The other array to perform OR operation</param>
-      public void _Or(CvArray<TDepth> src2)
+      /// <param name="otherArray">The other array to perform OR operation</param>
+      public void _Or(CvArray<TDepth> otherArray)
       {
-         CvInvoke.cvOr(Ptr, src2.Ptr, Ptr, IntPtr.Zero);
+         CvInvoke.cvOr(Ptr, otherArray.Ptr, Ptr, IntPtr.Zero);
       }
 
       ///<summary> 

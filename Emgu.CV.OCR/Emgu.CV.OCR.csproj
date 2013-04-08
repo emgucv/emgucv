@@ -26,6 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>0649</NoWarn>
     <DocumentationFile>..\bin\Emgu.CV.OCR.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

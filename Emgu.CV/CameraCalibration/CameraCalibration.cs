@@ -345,18 +345,18 @@ namespace Emgu.CV
       /// <summary>
       /// Estimate rigid transformation between 2 point sets.
       /// </summary>
-      /// <param name="src">The points from the source image</param>
-      /// <param name="dest">The corresponding points from the destination image</param>
+      /// <param name="sourcePoints">The points from the source image</param>
+      /// <param name="destinationPoints">The corresponding points from the destination image</param>
       /// <param name="fullAffine">Indicates if full affine should be performed</param>
       /// <returns>If success, the 2x3 rotation matrix that defines the Affine transform. Otherwise null is returned.</returns>
-      public static RotationMatrix2D<double> EstimateRigidTransform(PointF[] src, PointF[] dest, bool fullAffine)
+      public static RotationMatrix2D<double> EstimateRigidTransform(PointF[] sourcePoints, PointF[] destinationPoints, bool fullAffine)
       {
          RotationMatrix2D<double> result = new RotationMatrix2D<double>();
-         GCHandle handleA = GCHandle.Alloc(src, GCHandleType.Pinned);
-         GCHandle handleB = GCHandle.Alloc(dest, GCHandleType.Pinned);
+         GCHandle handleA = GCHandle.Alloc(sourcePoints, GCHandleType.Pinned);
+         GCHandle handleB = GCHandle.Alloc(destinationPoints, GCHandleType.Pinned);
          bool success;
-         using (Matrix<float> a = new Matrix<float>(src.Length, 1, 2, handleA.AddrOfPinnedObject(), 2 * sizeof(float)))
-         using (Matrix<float> b = new Matrix<float>(dest.Length, 1, 2, handleB.AddrOfPinnedObject(), 2 * sizeof(float)))
+         using (Matrix<float> a = new Matrix<float>(sourcePoints.Length, 1, 2, handleA.AddrOfPinnedObject(), 2 * sizeof(float)))
+         using (Matrix<float> b = new Matrix<float>(destinationPoints.Length, 1, 2, handleB.AddrOfPinnedObject(), 2 * sizeof(float)))
          {
             success = CvInvoke.cvEstimateRigidTransform(a, b, result, fullAffine);
          }
@@ -393,38 +393,22 @@ namespace Emgu.CV
       }
 
       #region helper methods
-      private static Matrix<float> ToMatrix(MCvPoint3D32f[][] data)
+      private static Matrix<float> ToMatrix<T>(T[][] data)
+         where T: struct
       {
          int elementCount = 0;
-         foreach (MCvPoint3D32f[] d in data) elementCount += d.Length;
+         int structureSize = Marshal.SizeOf(typeof(T));
+         int floatValueInStructure = Marshal.SizeOf(typeof(T)) / Marshal.SizeOf(typeof(float));
+         foreach (T[] d in data) 
+            elementCount += d.Length;
 
-         Matrix<float> res = new Matrix<float>(elementCount, 3);
+         Matrix<float> res = new Matrix<float>(elementCount, floatValueInStructure);
 
          Int64 address = res.MCvMat.data.ToInt64();
 
-         foreach (MCvPoint3D32f[] d in data)
+         foreach (T[] d in data)
          {
-            int lengthInBytes = d.Length * StructSize.MCvPoint3D32f;
-            GCHandle handle = GCHandle.Alloc(d, GCHandleType.Pinned);
-            Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle.AddrOfPinnedObject(), lengthInBytes);
-            handle.Free();
-            address += lengthInBytes;
-         }
-
-         return res;
-      }
-
-      private static Matrix<float> ToMatrix(PointF[][] data)
-      {
-         int elementCount = 0;
-         foreach (PointF[] d in data) elementCount += d.Length;
-
-         Matrix<float> res = new Matrix<float>(elementCount, 2);
-         Int64 address = res.MCvMat.data.ToInt64();
-
-         foreach (PointF[] d in data)
-         {
-            int lengthInBytes = d.Length * StructSize.PointF;
+            int lengthInBytes = d.Length * structureSize;
             GCHandle handle = GCHandle.Alloc(d, GCHandleType.Pinned);
             Emgu.Util.Toolbox.memcpy(new IntPtr(address), handle.AddrOfPinnedObject(), lengthInBytes);
             handle.Free();

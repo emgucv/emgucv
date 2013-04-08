@@ -245,16 +245,9 @@ namespace Emgu.CV
 
       #region Grab process
       /// <summary>
-      /// The event handler when an image is grabbed
-      /// </summary>
-      /// <param name="sender">The capture</param>
-      /// <param name="e">The event args</param>
-      public delegate void GrabEventHandler(object sender, EventArgs e);
-
-      /// <summary>
       /// The event to be called when an image is grabbed
       /// </summary>
-      public event GrabEventHandler ImageGrabbed;
+      public event EventHandler ImageGrabbed;
 
       private enum GrabState
       {
@@ -352,11 +345,11 @@ namespace Emgu.CV
       /// <summary> 
       /// Retrieve a Gray image frame after Grab()
       /// </summary>
-      /// <param name="streamIdx">Stream index. Use 0 for default.</param>
+      /// <param name="streamIndex">Stream index. Use 0 for default.</param>
       /// <returns> A Gray image frame</returns>
-      public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIdx)
+      public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIndex)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIndex);
          if (img == IntPtr.Zero)
             return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
@@ -390,11 +383,11 @@ namespace Emgu.CV
       /// <summary> 
       /// Retrieve a Bgr image frame after Grab()
       /// </summary>
-      /// <param name="streamIdx">Stream index</param>
+      /// <param name="streamIndex">Stream index</param>
       /// <returns> A Bgr image frame</returns>
-      public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIdx)
+      public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIndex)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIdx);
+         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIndex);
          if (img == IntPtr.Zero)
             return null;
 

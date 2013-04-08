@@ -34,16 +34,9 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Define the type of callback when data is received
-      /// </summary>
-      /// <param name="sender">The DataLogger that send the message</param>
-      /// <param name="e">The data</param>
-      public delegate void DataCallbackHandler(object sender, EventArgs<IntPtr> e);
-
-      /// <summary>
       /// The event that will be raised when the unmanaged code send over data
       /// </summary>
-      public event DataCallbackHandler OnDataReceived;
+      public event EventHandler<EventArgs<IntPtr>> OnDataReceived;
 
       private void HelperDataHandler(IntPtr data, int loggerId)
       {
@@ -81,14 +74,7 @@ namespace Emgu.CV.Util
    {
       private DataLogger _logger;
 
-      /// <summary>
-      /// Define the type of callback when data is received
-      /// </summary>
-      /// <param name="sender">The DataLogger that send the message</param>
-      /// <param name="e">The data</param>
-      public delegate void DataCallbackHandler(object sender, EventArgs<T> e);
-
-      private DataLogger.DataCallbackHandler _handler;
+      private EventHandler<EventArgs<IntPtr>> _handler;
 
       /// <summary>
       /// Create a new DataLogger
@@ -104,7 +90,7 @@ namespace Emgu.CV.Util
       /// <summary>
       /// The event that will be raised when the unmanaged code send over data
       /// </summary>
-      public event DataCallbackHandler OnDataReceived;
+      public event EventHandler<EventArgs<T>> OnDataReceived;
 
       /// <summary>
       /// Log some data

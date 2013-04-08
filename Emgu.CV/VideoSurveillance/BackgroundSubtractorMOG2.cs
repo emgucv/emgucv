@@ -25,10 +25,10 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="history">The length of the history. Use 0 for default</param>
       /// <param name="varThreshold">The maximum allowed number of mixture comonents.  Actual number is determined dynamically per pixel.</param>
-      /// <param name="bShadowDetection">If true, perform shadow detection.</param>
-      public BackgroundSubtractorMOG2(int history, float varThreshold, bool bShadowDetection)
+      /// <param name="shadowDetection">If true, perform shadow detection.</param>
+      public BackgroundSubtractorMOG2(int history, float varThreshold, bool shadowDetection)
       {
-         _ptr = CvInvoke.CvBackgroundSubtractorMOG2Create(history, varThreshold, bShadowDetection);
+         _ptr = CvInvoke.CvBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
       }
 
       /// <summary>

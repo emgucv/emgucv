@@ -24,9 +24,9 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Return the blob given the specific index
       /// </summary>
-      /// <param name="i">The index of the blob</param>
+      /// <param name="index">The index of the blob</param>
       /// <returns>The blob in the specific index</returns>
-      public abstract MCvBlob this[int i]
+      public abstract MCvBlob this[int index]
       {
          get;
       }
@@ -34,9 +34,9 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Get the blob with the specific id
       /// </summary>
-      /// <param name="blobID">The id of the blob</param>
+      /// <param name="blobId">The id of the blob</param>
       /// <returns>The blob of the specific id, if do not exist, MCvBlob.Empty is returned</returns>
-      public abstract MCvBlob GetBlobByID(int blobID);
+      public abstract MCvBlob GetBlobByID(int blobId);
 
       #region IEnumerable<MCvBlob> Members
       /// <summary>

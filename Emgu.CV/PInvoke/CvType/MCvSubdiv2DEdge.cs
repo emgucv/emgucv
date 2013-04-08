@@ -27,17 +27,13 @@ namespace Emgu.CV.Structure
          edge = e;
       }
 
-      /// <summary>
-      /// similar to cvSubdiv2DEdgeOrg
-      /// </summary>
-      /// <returns></returns>
-      public MCvSubdiv2DPoint cvSubdiv2DEdgeOrg()
+      private MCvSubdiv2DPoint cvSubdiv2DEdge(int offset)
       {
          Int64 edgeInt64 = edge.ToInt64();
 
          IntPtr ptr = (IntPtr)(edgeInt64 & -4); //the last 2 bits are set to zero
          MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
-         IntPtr pointPtr = qe.pt[edgeInt64 & 3]; //use only the last 2 bit as index
+         IntPtr pointPtr = qe.pt[(edgeInt64 + offset) & 3]; //use only the last 2 bit as index
          if (pointPtr == IntPtr.Zero)
          {
             MCvSubdiv2DPoint pt = new MCvSubdiv2DPoint();
@@ -51,26 +47,21 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
+      /// similar to cvSubdiv2DEdgeOrg
+      /// </summary>
+      /// <returns></returns>
+      public MCvSubdiv2DPoint cvSubdiv2DEdgeOrg()
+      {
+         return cvSubdiv2DEdge(0);
+      }
+
+      /// <summary>
       /// similar to cvSubdiv2DEdgeDst
       /// </summary>
       /// <returns></returns>
       public MCvSubdiv2DPoint cvSubdiv2DEdgeDst()
       {
-         Int64 edgeInt64 = edge.ToInt64();
-
-         IntPtr ptr = (IntPtr)(edgeInt64 & -4);
-         MCvQuadEdge2D qe = (MCvQuadEdge2D)Marshal.PtrToStructure(ptr, typeof(MCvQuadEdge2D));
-         IntPtr pointPtr = qe.pt[(edgeInt64 + 2) & 3];
-         if (pointPtr == IntPtr.Zero)
-         {
-            MCvSubdiv2DPoint pt = new MCvSubdiv2DPoint();
-            pt.flags = -1;
-            return pt; // return an invalid point
-         }
-         else
-         {
-            return (MCvSubdiv2DPoint)Marshal.PtrToStructure(pointPtr, typeof(MCvSubdiv2DPoint));
-         }
+         return cvSubdiv2DEdge(2);
       }
 
       /// <summary>

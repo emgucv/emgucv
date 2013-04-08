@@ -13,7 +13,7 @@ namespace Emgu.Util
    public static class Platform
    {
       private static readonly OS _os;
-      private static readonly Runtime _runtime;
+      private static readonly ClrType _runtime;
 
       [DllImport("c")]
       private static extern int uname(IntPtr buffer);
@@ -22,13 +22,13 @@ namespace Emgu.Util
       {
 #if IOS
          _os = OS.IOS;
-         _runtime = Runtime.Mono;
+         _runtime = ClrType.Mono;
 #elif ANDROID
          _os = OS.Android;
-         _runtime = Runtime.Mono;
+         _runtime = ClrType.Mono;
 #elif NETFX_CORE
          _os = OS.Windows;
-         _runtime = Runtime.DotNet;
+         _runtime = ClrType.NetFxCore;
 #else
          PlatformID pid = Environment.OSVersion.Platform;
          if (pid == PlatformID.MacOSX)
@@ -58,7 +58,7 @@ namespace Emgu.Util
                }
             }
          }
-         _runtime = (Type.GetType("System.MonoType", false) != null) ? Runtime.Mono : Runtime.DotNet;
+         _runtime = (Type.GetType("System.MonoType", false) != null) ? ClrType.Mono : ClrType.DotNet;
 #endif
       }
 
@@ -76,7 +76,7 @@ namespace Emgu.Util
       /// <summary>
       /// Get the type of the current runtime environment
       /// </summary>
-      public static Runtime Runtime
+      public static ClrType ClrType
       {
          get
          {

@@ -111,7 +111,7 @@ namespace Emgu.CV.UI
             {
                return _getParamFunction();
             }
-            catch (Exception)
+            catch 
             {
                return null;
             }
@@ -387,9 +387,11 @@ namespace Emgu.CV.UI
             return new object[0];
 
          #region Handle the cases where at least one parameter is required as input
-         ParameterInputDialog dlg = new ParameterInputDialog(parameterList.ToArray(), defaultParameterValueList.ToArray());
-         dlg.ShowDialog();
-         return dlg.Successed ? dlg.Parameters : null;
+         using (ParameterInputDialog dlg = new ParameterInputDialog(parameterList.ToArray(), defaultParameterValueList.ToArray()))
+         {
+            dlg.ShowDialog();
+            return dlg.Successed ? dlg.Parameters : null;
+         }
          #endregion
       }
    }
