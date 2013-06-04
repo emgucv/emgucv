@@ -544,7 +544,7 @@ namespace Emgu.CV.Test
 
             ImageViewer viewer = new ImageViewer();
             int count = 0;
-            Capture.GrabEventHandler processFrame = delegate(Object sender, EventArgs e)
+            EventHandler processFrame = delegate(Object sender, EventArgs e)
             {
                Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
                if (img == null)

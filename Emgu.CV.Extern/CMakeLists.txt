@@ -230,13 +230,26 @@ IF(WIN32 AND WITH_CUDA)
 ENDIF()
 
 IF(ANDROID OR IOS)
-file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp" "gpu/videostab_c.cpp")
-file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h")
+  file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp" "gpu/videostab_c.cpp")
+  file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h")
 ELSE()
-file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
-file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
+  file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
+  file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
 ENDIF()
 ############################### GPU END ################################
+
+############################### OpenCL START ##############################
+IF(WITH_OPENCL)
+  MESSAGE(STATUS "Building cvextern with opencv_ocl")
+  file(GLOB_RECURSE ocl_extern_srcs "opencl/*.cpp")
+  file(GLOB_RECURSE ocl_extern_hdrs "opencl/*.h*")
+  
+  source_group("Src_ocl" FILES ${ocl_extern_srcs})
+  source_group("Include_ocl" FILES ${ocl_extern_hdrs})
+
+  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ocl/include")
+ENDIF()
+############################### OpenCL END ################################
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   INSTALL(
@@ -256,10 +269,11 @@ ENDIF()
 
 source_group("Src_extern" FILES ${extern_srcs})
 source_group("Include_extern" FILES ${extern_hdrs})
-source_group("Src_gpu" FILES ${gpu_extern_srcs})
-source_group("Include_gpu" FILES ${gpu_extern_hdrs})
+source_group("Src_cuda" FILES ${gpu_extern_srcs})
+source_group("Include_cuda" FILES ${gpu_extern_hdrs})
+
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} )
+add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} ${ocl_extern_srcs} ${ocl_extern_hdrs} )
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})

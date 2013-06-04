@@ -19,11 +19,11 @@ CVAPI(void) CvGrabCut(IplImage* img, IplImage* mask, cv::Rect* rect, IplImage* b
 
 //StereoSGBM
 CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
-  int minDisparity, int numDisparities, int SADWindowSize,
+  int minDisparity, int numDisparities, int blockSize,
   int P1, int P2, int disp12MaxDiff,
   int preFilterCap, int uniquenessRatio,
   int speckleWindowSize, int speckleRange,
-  bool fullDP);
+  int mode);
 
 CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM* obj);
 CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity);

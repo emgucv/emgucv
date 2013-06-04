@@ -5,6 +5,7 @@
 #include "quaternions.h"
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/imgproc/types_c.h"
 
 //#include "opencv2/gpu/gpu.hpp"
 
@@ -182,6 +183,8 @@ int main()
    Test_MatchTemplate();
 #ifdef _MSC_VER
    Test_quaternions_performance();
+   cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
+   cout << "Size of CvSize: (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
 }

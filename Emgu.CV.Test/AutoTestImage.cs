@@ -46,6 +46,16 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestIplImageSize()
+      {
+         EmguAssert.IsTrue(Marshal.SizeOf(typeof(MIplImage)) == 112);
+         EmguAssert.IsTrue(Marshal.SizeOf(typeof(Size)) == 8);
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
+         Size s = img.Size;
+         int tmp = s.Width + s.Height;
+      }
+
+      [Test]
       public void TestMinMax()
       {
          Image<Gray, Byte> img1 = new Image<Gray, Byte>(50, 60);

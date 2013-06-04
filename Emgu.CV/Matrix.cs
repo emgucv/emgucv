@@ -810,5 +810,19 @@ namespace Emgu.CV
       }
 
       #endregion
+
+      ///<summary> 
+      /// Get the size of the array
+      ///</summary>
+      public override System.Drawing.Size Size
+      {
+         get
+         {
+            //TODO: this override should not be necessary if cvGetSize is working correctly, need to check when this will be fixed.
+            MCvMat cvMat = MCvMat;
+            return new Size(cvMat.width, cvMat.height);
+            
+         }
+      }
    }
 }

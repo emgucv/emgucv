@@ -73,63 +73,6 @@ void CvStarDetectorRelease(cv::StarDetector** detector)
    *detector = 0;
 }
 
-//SIFTDetector
-cv::SIFT* CvSIFTDetectorCreate(
-   int nFeatures, int nOctaveLayers, 
-   double contrastThreshold, double edgeThreshold, 
-   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
-{
-   cv::SIFT* sift = new cv::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
-   *featureDetector = static_cast<cv::FeatureDetector*>(sift);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(sift);
-   return sift;
-}
-
-void CvSIFTDetectorRelease(cv::SIFT** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-/*
-int CvSIFTDetectorGetDescriptorSize(cv::SIFT* detector)
-{
-   return detector->descriptorSize();
-}
-
-void CvSIFTDetectorDetectFeature(cv::SIFT* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   cv::Mat descriptorsMat;
-   (*detector)(mat, maskMat, *keypoints, descriptorsMat, false);
-
-   descriptors->resize(keypoints->size()*detector->descriptorSize());
-
-   if (keypoints->size() > 0)
-      memcpy(&(*descriptors)[0], descriptorsMat.ptr<float>(), sizeof(float)* descriptorsMat.rows * descriptorsMat.cols);
-}
-
-void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
-{
-   if (keypoints->size() <= 0) return;
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-
-   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
-
-   if (mat.channels() == 1)
-      (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
-   else //opponent color
-   {
-      cv::Ptr<cv::DescriptorExtractor> siftExtractor(detector);
-      siftExtractor.addref(); //add reference such that the detector will not be released when the smart pointer went out of scope.
-      cv::OpponentColorDescriptorExtractor colorDetector(siftExtractor);
-      colorDetector.compute(mat, *keypoints, descriptorsMat);
-   }
-}*/
-
 //ORB
 cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
@@ -238,54 +181,6 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
    delete *detector;
    *detector = 0;
 }
-
-//SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
-{
-   cv::SURF* surf = new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
-   *featureDetector = static_cast<cv::FeatureDetector*>(surf);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(surf);
-   return surf;
-}
-
-CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-/*
-void CvSURFDetectorDetectFeature(cv::SURF* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, std::vector<float>* descriptors)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   (*detector)(mat, maskMat, *keypoints, *descriptors, false);
-}
-
-void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
-{
-   if (keypoints->size() <= 0) return;
-
-   cv::Mat img = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-
-   if (img.channels() == 1)
-   {
-      //std::vector<float> desc;
-      cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
-      (*detector)(img, maskMat, *keypoints, descriptorsMat, true);
-      //CV_Assert(desc.size() == descriptors->width * descriptors->height);
-      //memcpy(descriptors->data.ptr, &desc[0], desc.size() * sizeof(float));
-   } else //opponent SURF
-   {
-      cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
-      cv::Ptr<cv::DescriptorExtractor> surfExtractor(detector);
-      surfExtractor.addref();
-      cv::OpponentColorDescriptorExtractor colorDetector(surfExtractor);
-      colorDetector.compute(img, *keypoints, descriptorsMat);
-   }
-}*/
 
 cv::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize)
 {

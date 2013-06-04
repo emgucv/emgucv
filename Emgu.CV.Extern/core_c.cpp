@@ -17,7 +17,7 @@ void cvMatRelease(cv::Mat** mat)
 }
 CvSize cvMatGetSize(cv::Mat* mat)
 {
-   return mat->size();
+   return CvSize(mat->cols, mat->rows);
 }
 void cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray)
 {

@@ -335,6 +335,7 @@ void VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* imag
 
 void VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image)
 {
-   cv::Mat m = cv::cvarrToMat(image);
+   cv::Mat m = cv::
+   (image);
    cv::drawDataMatrixCodes(*v, m);
 }*/

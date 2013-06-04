@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/objdetect/objdetect.hpp"
+#include "opencv2/objdetect/objdetect_c.h"
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq);
 

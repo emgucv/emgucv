@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "gpu_c.h"
+#include "nonfree_c.h"
 
 cv::gpu::SURF_GPU* gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
 {

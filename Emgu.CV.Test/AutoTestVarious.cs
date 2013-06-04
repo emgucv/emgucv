@@ -1296,7 +1296,7 @@ namespace Emgu.CV.Test
 
          Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
 
-         StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, false);
+         StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM);
          Stopwatch watch = Stopwatch.StartNew();
          bm.FindStereoCorrespondence(left, right, disparity);
          watch.Stop();

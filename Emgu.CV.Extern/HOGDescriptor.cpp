@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "objdetect_c.h"
+
 //#include "stdio.h"
 void CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
 {   

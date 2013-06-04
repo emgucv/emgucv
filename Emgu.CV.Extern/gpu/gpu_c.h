@@ -9,6 +9,8 @@
 #define EMGU_GPU_C_H
 
 #include "opencv2/gpu/gpu.hpp"
+#include "opencv2/core/types_c.h"
+#include "opencv2/core/core_c.h"
 
 //----------------------------------------------------------------------------
 //
@@ -82,7 +84,7 @@ CVAPI(void) gpuMatRelease(cv::gpu::GpuMat** mat);
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr);
 
-CVAPI(CvSize) gpuMatGetSize(cv::gpu::GpuMat* gpuMat, cv::Size* size);
+CVAPI(CvSize) gpuMatGetSize(cv::gpu::GpuMat* gpuMat);
 
 CVAPI(bool) gpuMatIsEmpty(cv::gpu::GpuMat* gpuMat);
 
@@ -367,32 +369,6 @@ CVAPI(void) streamEnqueueCopy(cv::gpu::Stream* stream, cv::gpu::GpuMat* src, cv:
 
 //----------------------------------------------------------------------------
 //
-//  GpuSURFDetector
-//
-//----------------------------------------------------------------------------
-
-CVAPI(cv::gpu::SURF_GPU*) gpuSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright);
-
-CVAPI(void) gpuSURFDetectorRelease(cv::gpu::SURF_GPU** detector);
-
-CVAPI(void) gpuSURFDetectorDetectKeyPoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* img, const cv::gpu::GpuMat* mask, cv::gpu::GpuMat* keypoints);
-
-CVAPI(void) gpuSURFDownloadKeypoints(cv::gpu::SURF_GPU* detector, const cv::gpu::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
-
-CVAPI(void) gpuSURFUploadKeypoints(cv::gpu::SURF_GPU* detector, const std::vector<cv::KeyPoint>* keypoints, cv::gpu::GpuMat* keypointsGPU);
-
-CVAPI(void) gpuSURFDetectorCompute(
-   cv::gpu::SURF_GPU* detector, 
-   const cv::gpu::GpuMat* img, 
-   const cv::gpu::GpuMat* mask, 
-   cv::gpu::GpuMat* keypoints, 
-   cv::gpu::GpuMat* descriptors, 
-   bool useProvidedKeypoints);
-
-CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector);
-
-//----------------------------------------------------------------------------
-//
 //  GpuBroxOpticalFlow 
 //
 //----------------------------------------------------------------------------
@@ -505,15 +481,6 @@ CVAPI(void) gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gp
 //----------------------------------------------------------------------------
 CVAPI(cv::gpu::MatchTemplateBuf*) gpuMatchTemplateBufCreate();
 CVAPI(void) gpuMatchTemplateBufRelease(cv::gpu::MatchTemplateBuf** buffer);
-
-//----------------------------------------------------------------------------
-//
-//  VIBE GPU
-//
-//----------------------------------------------------------------------------
-CVAPI(cv::gpu::VIBE_GPU*) gpuVibeCreate(unsigned long rngSeed, cv::gpu::GpuMat* firstFrame, cv::gpu::Stream* stream);
-CVAPI(void) gpuVibeCompute(cv::gpu::VIBE_GPU* vibe, cv::gpu::GpuMat* frame, cv::gpu::GpuMat* fgMask, cv::gpu::Stream* stream);
-CVAPI(void) gpuVibeRelease(cv::gpu::VIBE_GPU** vibe);
 
 //----------------------------------------------------------------------------
 //

@@ -13,9 +13,18 @@
 #include <set>
 //#endif
 
+namespace emgu
+{
+  struct Point2D32f
+  {
+     float x; 
+     float y;
+  };
+}
+
 union PointKey
 {
-   CvPoint2D32f pt;
+   emgu::Point2D32f pt;
    double key;
 };
 
@@ -38,7 +47,8 @@ public:
    std::pair<std::set<double>::iterator, bool> insert(const CvPoint2D32f& pt )
    {
       PointKey pk;
-      pk.pt = pt;
+      pk.pt.x = pt.x;
+      pk.pt.y = pt.y;
       return std::set<double>::insert(pk.key);
    }
 };

@@ -306,7 +306,10 @@ namespace Emgu.CV
       public Image(int width, int height, TColor value)
          : this(width, height)
       {
+         int n1 = MIplImage.nSize;
          SetValue(value);
+         int n2 = MIplImage.nSize;
+         int nDiff = n2 - n1;
       }
 
       ///<summary>
@@ -382,7 +385,10 @@ namespace Emgu.CV
          }
 
          _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
+         int n1 = MIplImage.nSize;
          CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * SizeOfElement);
+         int n2 = MIplImage.nSize;
+         int nDiff = n2 - n1;
       }
 
       ///<summary>
@@ -3081,7 +3087,8 @@ namespace Emgu.CV
                 new Rectangle(Point.Empty, size),
                 ImageLockMode.WriteOnly,
                 format);
-            using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
+            //using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
+            using (Image<TColor, Byte> m = new Image<TColor, Byte>(size.Width, size.Height, data.Stride, data.Scan0))
                CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
 
             bmp.UnlockBits(data);
@@ -4572,6 +4579,27 @@ namespace Emgu.CV
             using (Image<Bgr, Byte> tmp = Image<Bgr, Byte>.FromJpegData(jpegData))
             {
                return tmp.Convert<TColor, TDepth>();
+            }
+         }
+      }
+
+
+      ///<summary> 
+      /// Get the size of the array
+      ///</summary>
+      public override System.Drawing.Size Size
+      {
+         get
+         {
+            //TODO: this override should not be necessary if cvGetSize is working correctly, need to check when this will be fixed.
+            MIplImage iplImage = MIplImage;
+            if (iplImage.roi != IntPtr.Zero)
+            {
+               return ROI.Size;
+            }
+            else
+            {
+               return new Size(iplImage.width, iplImage.height);
             }
          }
       }

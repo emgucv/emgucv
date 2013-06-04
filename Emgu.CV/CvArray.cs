@@ -77,7 +77,7 @@ namespace Emgu.CV
       ///<summary> 
       /// Get the size of the array
       ///</summary>
-      public System.Drawing.Size Size
+      public virtual System.Drawing.Size Size
       {
          get
          {

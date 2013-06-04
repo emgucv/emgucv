@@ -514,6 +514,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGpuPyr()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
          Image<Gray, Byte> img = new Image<Gray, byte>(640, 480);
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          Image<Gray, Byte> down = img.PyrDown();
@@ -553,6 +555,9 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMatchTemplate()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
+
          #region prepare synthetic image for testing
          int templWidth = 50;
          int templHeight = 50;
@@ -598,6 +603,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGpuRemap()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
          Image<Gray, float> xmap = new Image<Gray, float>(2, 2);
          xmap.Data[0, 0, 0] = 0; xmap.Data[0, 1, 0] = 0;
          xmap.Data[1, 0, 0] = 1; xmap.Data[1, 1, 0] = 1;
@@ -620,6 +627,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGpuWarpPerspective()
       {
+         if (!GpuInvoke.HasCuda)
+            return;
          Matrix<float> transformation = new Matrix<float>(3, 3);
          transformation.SetIdentity();
 

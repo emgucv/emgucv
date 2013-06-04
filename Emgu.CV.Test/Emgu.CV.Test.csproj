@@ -81,6 +81,7 @@
     <Compile Include="AutoTestGpu.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />
+    <Compile Include="AutoTestOpenCL.cs" />
     <Compile Include="AutoTestQuaternions.cs" />
     <Compile Include="AutoTestVarious.cs" />
     <Compile Include="Class1.cs" />
@@ -175,6 +176,10 @@
     <ProjectReference Include="..\Emgu.CV.OCR\Emgu.CV.OCR.csproj">
       <Project>{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}</Project>
       <Name>Emgu.CV.OCR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.csproj">
+      <Project>{bdec3f55-bbd2-4ed8-9d14-3f0196a944c5}</Project>
+      <Name>Emgu.CV.OpenCL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
       <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>

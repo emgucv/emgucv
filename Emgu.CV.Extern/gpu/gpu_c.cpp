@@ -173,7 +173,7 @@ cv::gpu::GpuMat* gpuMatCreateFromArr(CvArr* arr)
    return new cv::gpu::GpuMat(mat);
 }
 
-CvSize gpuMatGetSize(cv::gpu::GpuMat* gpuMat, cv::Size* size)
+CvSize gpuMatGetSize(cv::gpu::GpuMat* gpuMat)
 {
    return gpuMat->size();
 }

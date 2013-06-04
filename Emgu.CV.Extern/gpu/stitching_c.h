@@ -9,7 +9,7 @@
 #define EMGU_STITCHING_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/stitching/stitcher.hpp"
+#include "opencv2/stitching.hpp"
 
 namespace cv {
 

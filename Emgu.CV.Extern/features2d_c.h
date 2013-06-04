@@ -14,7 +14,7 @@
 #include "opencv2/contrib/contrib.hpp"
 #include "opencv2/legacy/legacy.hpp"
 #include "opencv2/legacy/compat.hpp"
-#include "opencv2/nonfree/nonfree.hpp"
+//#include "opencv2/nonfree/nonfree.hpp"
 #include "vectors_c.h"
 
 //FernClassifier
@@ -49,13 +49,6 @@ CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descripto
 CVAPI(cv::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
 CVAPI(void) CvStarDetectorRelease(cv::StarDetector** detector);
 
-//SIFTDetector
-CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
-   int nFeatures, int nOctaveLayers, 
-   double contrastThreshold, double edgeThreshold, 
-   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
-CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
-
 //FeatureDetector
 CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints);
 
@@ -68,10 +61,6 @@ CVAPI(cv::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(
    int gridRows, int gridCols);
 
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
-
-//SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
-CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 
 //ORB
 CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);

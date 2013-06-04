@@ -18,12 +18,18 @@ namespace Emgu.CV
    /// </summary>
    public class StereoSGBM : UnmanagedObject
    {
+      public enum Mode
+      {
+         SGBM = 0,
+         HH = 1
+      }
+
       /// <summary>
       /// Create a stereo disparity solver using StereoSGBM algorithm (combination of H. Hirschmuller + K. Konolige approaches) 
       /// </summary>
       /// <param name="minDisparity"></param>
       /// <param name="numDisparities"></param>
-      /// <param name="SADWindowSize">Set this to 0 for default</param>
+      /// <param name="blockSize">Use 0 for default</param>
       /// <param name="P1">Use 0 for default</param>
       /// <param name="P2">Use 0 for default</param>
       /// <param name="disp12MaxDiff">Use 0 for default</param>
@@ -31,14 +37,14 @@ namespace Emgu.CV
       /// <param name="uniquenessRatio">Use 0 for default</param>
       /// <param name="speckleWindowSize">Use 0 for default</param>
       /// <param name="speckleRange">Use 0 for default</param>
-      /// <param name="fullDP">Use false for default</param>
-      public StereoSGBM(int minDisparity, int numDisparities, int SADWindowSize,
+      /// <param name="mode">Use SGBM for default</param>
+      public StereoSGBM(int minDisparity, int numDisparities, int blockSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
          int speckleWindowSize, int speckleRange,
-         bool fullDP)
+         Mode mode)
       {
-         _ptr = CvInvoke.CvStereoSGBMCreate(minDisparity, numDisparities, SADWindowSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, fullDP);
+         _ptr = CvInvoke.CvStereoSGBMCreate(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, (int) mode);
       }
 
       /// <summary>
@@ -66,12 +72,11 @@ namespace Emgu.CV
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvStereoSGBMCreate(
-         int minDisparity, int numDisparities, int SADWindowSize,
+         int minDisparity, int numDisparities, int blockSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
          int speckleWindowSize, int speckleRange,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool fullDP);
+         int mode);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStereoSGBMRelease(IntPtr obj);

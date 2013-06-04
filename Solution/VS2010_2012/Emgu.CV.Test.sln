@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.csproj", "{91A08B78-2FA0-4887-8975-486CE5FC74B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OpenCL", "..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.csproj", "{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,14 @@ Global
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Release|x64.ActiveCfg = Release|Any CPU
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
