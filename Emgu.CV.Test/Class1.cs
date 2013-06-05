@@ -236,6 +236,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public void TestGpuVibe()
       {
          int warmUpFrames = 20;
@@ -279,7 +280,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
-      }
+      }*/
 
       public void TestGpuMOG()
       {

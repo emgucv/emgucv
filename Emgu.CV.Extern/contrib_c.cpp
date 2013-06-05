@@ -32,7 +32,9 @@ void CvAdaptiveSkinDetectorProcess(CvAdaptiveSkinDetector* detector, IplImage *i
 //Retina
 cv::Retina* CvRetinaCreate(CvSize inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
 {
-   return new cv::Retina(inputSize, colorMode, (cv::RETINA_COLORSAMPLINGMETHOD)colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+   cv::Ptr<cv::Retina> ptr = cv::createRetina(inputSize, colorMode, (cv::RETINA_COLORSAMPLINGMETHOD)colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+   ptr.addref();
+   return ptr.obj;
 }
 void CvRetinaRelease(cv::Retina** retina)
 {

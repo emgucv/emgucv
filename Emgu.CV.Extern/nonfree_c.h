@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef EMGU_NONFREE_GPU_C_H
-#define EMGU_NONFREE_GPU_C_H
+#ifndef EMGU_NONFREE_C_H
+#define EMGU_NONFREE_C_H
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -17,7 +17,6 @@
 #include "opencv2/nonfree/nonfree.hpp"
 #include "opencv2/nonfree/features2d.hpp"
 #include "opencv2/nonfree/gpu.hpp"
-/*
 #include "vectors_c.h"
 
 //SIFTDetector
@@ -30,8 +29,8 @@ CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 //SURFDetector
 CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
-*/
 
+/*
 //----------------------------------------------------------------------------
 //
 //  GpuSURFDetector
@@ -58,7 +57,6 @@ CVAPI(void) gpuSURFDetectorCompute(
 
 CVAPI(int) gpuSURFDetectorGetDescriptorSize(cv::gpu::SURF_GPU* detector);
 
-/*
 //----------------------------------------------------------------------------
 //
 //  VIBE GPU
