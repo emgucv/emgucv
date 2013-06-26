@@ -35,9 +35,10 @@ namespace Emgu.Util
          {
             //This never works, it is a bug in Mono
             _os = OS.MacOSX;
-         } else
+         }
+         else
          {
-            int p = (int) pid;
+            int p = (int)pid;
             _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
 
             if (_os == OS.Linux)
@@ -47,12 +48,19 @@ namespace Emgu.Util
                {
                   buf = Marshal.AllocHGlobal(8192);
                   // This is a hacktastic way of getting sysname from uname () 
-                if (uname(buf) == 0){ 
-                    string os = Marshal.PtrToStringAnsi(buf); 
-                    if (os == "Darwin") 
-                        _os = OS.MacOSX; 
-                } 
-               } finally
+                  if (uname(buf) == 0)
+                  {
+                     string os = Marshal.PtrToStringAnsi(buf);
+                     if (os == "Darwin")
+                        _os = OS.MacOSX;
+                  }
+               }
+               catch
+               {
+                  //Some unix system may not be able to call "libc"
+                  //such as Ubuntu 13.04, we provide a safe catch here
+               }
+               finally
                {
                   if (buf != IntPtr.Zero) Marshal.FreeHGlobal(buf);
                }
