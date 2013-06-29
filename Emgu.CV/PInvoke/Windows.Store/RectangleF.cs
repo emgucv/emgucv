@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
 
 namespace System.Drawing
 {

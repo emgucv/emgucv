@@ -132,7 +132,11 @@ IF(ANDROID)
 ELSEIF (APPLE)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
 ELSEIF (WIN32)
-  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
+  IF (NETFX_CORE)
+    SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows-store") 
+  ELSE()
+    SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
+  ENDIF()
 ENDIF()
 
 IF(ANDROID)
@@ -695,18 +699,31 @@ INSTALL(
   PATTERN "${PROJECT_NAME}.dir" EXCLUDE
   )
 
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-  DESTINATION .
-  COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "Emgu.CV.sln"
-  PATTERN "Emgu.CV.DebuggerVisualizers.sln"
-  PATTERN ".git" EXCLUDE
-  PATTERN "bin" EXCLUDE
+IF(NETFX_CORE)  
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Windows.Store.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
   )
-  
+ELSE()
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.sln"
+    PATTERN "Emgu.CV.DebuggerVisualizers.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
+  )
+ENDIF()
+
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WPF
@@ -717,56 +734,95 @@ INSTALL(
   PATTERN ".git" EXCLUDE
   )
   
-# ----------------------------------------------------------------------------
-#  The example files
-# ----------------------------------------------------------------------------
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-  DESTINATION .
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.resx"
-  PATTERN "*.h"
-  PATTERN "*.cpp"
-  PATTERN "*.resX"
-  PATTERN "*.ico"
-  PATTERN "*.rc"
-  PATTERN "CPlusPlus/*.vcproj"
-  PATTERN "CPlusPlus/*.vcxproj"
-  PATTERN "*.vb"
-  PATTERN "*.vbproj"
-  PATTERN "*.aspx" 
-  PATTERN "*.dll"
-  PATTERN "*.txt"
-  PATTERN "*.xml"
-  PATTERN "*.xaml"
-  PATTERN "*.jpg"
-  PATTERN "*.png"  
-  PATTERN "*.settings"
-  PATTERN "*.config"
-  PATTERN "tessdata/*"
-  PATTERN ".git" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMake*" EXCLUDE
-  PATTERN "Release" EXCLUDE
-  PATTERN "Debug" EXCLUDE
-  PATTERN "*.dir" EXCLUDE
-  PATTERN "Android" EXCLUDE
-  PATTERN "MonoTouch" EXCLUDE
+IF(NETFX_CORE)      
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Windows.Store.Example.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    )
+	
+  # ----------------------------------------------------------------------------
+  #  The example files
+  # ----------------------------------------------------------------------------
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "WindowsStoreCameraApp/*.cs"
+	PATTERN "WindowsStoreCameraApp/Properties/*.cs"
+	PATTERN "WindowsStoreCameraApp/Common/*.xaml"
+    PATTERN "WindowsStoreCameraApp/*.csproj"
+    PATTERN "WindowsStoreCameraApp/*.appxmanifest"
+    PATTERN "WindowsStoreCameraApp/*.xaml"
+    PATTERN "WindowsStoreCameraApp/Assets/*.png"  
+    PATTERN ".git" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMake*" EXCLUDE
+    PATTERN "Release" EXCLUDE
+    PATTERN "Debug" EXCLUDE
+    PATTERN "*.dir" EXCLUDE
   )
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-  DESTINATION .
-  COMPONENT emgucv_example_source
-  FILES_MATCHING 
-  PATTERN "Emgu.CV.Example.sln"
-  PATTERN ".git" EXCLUDE
-  PATTERN "bin" EXCLUDE
+ELSE()
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Example.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    )
+	
+  # ----------------------------------------------------------------------------
+  #  The example files
+  # ----------------------------------------------------------------------------
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "*.cs"
+    PATTERN "*.csproj"
+    PATTERN "*.resx"
+    PATTERN "*.h"
+    PATTERN "*.cpp"
+    PATTERN "*.resX"
+    PATTERN "*.ico"
+    PATTERN "*.rc"
+    PATTERN "CPlusPlus/*.vcproj"
+    PATTERN "CPlusPlus/*.vcxproj"
+    PATTERN "*.vb"
+    PATTERN "*.vbproj"
+    PATTERN "*.aspx" 
+    PATTERN "*.dll"
+    PATTERN "*.txt"
+    PATTERN "*.xml"
+    PATTERN "*.xaml"
+    PATTERN "*.jpg"
+    PATTERN "*.png"  
+    PATTERN "*.settings"
+    PATTERN "*.config"
+    PATTERN "tessdata/*"
+    PATTERN ".git" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMake*" EXCLUDE
+    PATTERN "Release" EXCLUDE
+    PATTERN "Debug" EXCLUDE
+    PATTERN "*.dir" EXCLUDE
+    PATTERN "Android" EXCLUDE
+    PATTERN "MonoTouch" EXCLUDE
+    PATTERN "WindowsStore" EXCLUDE
   )
+ENDIF()
 
 INSTALL(
   FILES

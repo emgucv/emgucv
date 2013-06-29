@@ -4571,6 +4571,8 @@ namespace Emgu.CV
          {
             Image<TColor, TDepth> result = new Image<TColor, TDepth>();
             result._ptr = CvInvoke.cvDecodeImage(jpegData, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+            if (result._ptr == IntPtr.Zero)
+               throw new Exception("Unable to decode image data.");
             result._imageDataReleaseMode = ImageDataReleaseMode.ReleaseIplImage;
             return result;
          }
@@ -4581,6 +4583,17 @@ namespace Emgu.CV
                return tmp.Convert<TColor, TDepth>();
             }
          }
+      }
+
+      public byte[] ToJpegData()
+      {
+         IntPtr mat = CvInvoke.cvEncodeImage(".jpg", Ptr, IntPtr.Zero);
+         MCvMat cvMat = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
+         byte[] data = new byte[cvMat.rows * cvMat.cols];
+         //GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         Marshal.Copy(cvMat.data, data, 0, data.Length);
+         CvInvoke.cvReleaseMat(ref mat);
+         return data;
       }
 
 

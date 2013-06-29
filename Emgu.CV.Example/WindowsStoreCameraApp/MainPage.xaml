@@ -8,8 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Draw" HorizontalAlignment="Left" Margin="93,64,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="Capture and invert" HorizontalAlignment="Left" Margin="93,64,0,0" VerticalAlignment="Top" Click="CaptureAndProcessButtonClick"/>
+        <Button Content="Load and invert" HorizontalAlignment="Left" Margin="292,64,0,0" VerticalAlignment="Top" Click="LoadAndProcessButtonClick"/>
         <Image x:Name="ImageView" HorizontalAlignment="Left" Height="581" Margin="93,138,0,0" VerticalAlignment="Top" Width="1178"/>
+        
 
     </Grid>
 </Page>

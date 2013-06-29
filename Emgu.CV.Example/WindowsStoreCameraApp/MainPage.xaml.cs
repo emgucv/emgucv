@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Windows.Foundation;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.Util;
+using System.Drawing;
+//using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Capture;
+using Windows.Storage.Streams;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Windows.Graphics.Imaging;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Popups;
-
-using Windows.Media.Capture;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
-using Emgu.Util;
-using Emgu.CV;
-using Emgu.CV.Structure;
+using Windows.UI.Xaml.Navigation;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace WindowsStoreCameraApp
@@ -53,25 +59,32 @@ namespace WindowsStoreCameraApp
       {
       }
 
-      private async void Button_Click_1(object sender, RoutedEventArgs e)
+      private async void CaptureAndProcessButtonClick(object sender, RoutedEventArgs e)
       {
-         InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream();
+         using (Image<Bgr, Byte> img = await Image<Bgr, Byte>.FromMediaCapture(_mediaCapture))
          {
-            await _mediaCapture.CapturePhotoToStreamAsync(Windows.Media.MediaProperties.ImageEncodingProperties.CreateJpeg(), stream);
-            stream.Seek(0);
+            img._Not();
+            ImageView.Source = img.ToWritableBitmap();
+         }
+      }
 
-            WriteableBitmap bmp = new WriteableBitmap(1, 1);
-            System.IO.Stream streamTmp = stream.AsStreamForRead();
-            MemoryStream ms = new MemoryStream();
+      private async void LoadAndProcessButtonClick(object sender, RoutedEventArgs e)
+      {
+         FileOpenPicker picker = new FileOpenPicker();
+         picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+         picker.FileTypeFilter.Add(".png");
+         picker.FileTypeFilter.Add(".jpeg");
+         picker.FileTypeFilter.Add(".jpg");
+         picker.FileTypeFilter.Add(".bmp");
+
+         StorageFile file = await picker.PickSingleFileAsync();
+         if (file != null)
+         {
+            using (Image<Bgr, byte> img = await Image<Bgr, Byte>.FromStorageFile(file))
             {
-               streamTmp.CopyTo(ms);
-               using (Image<Bgr, Byte> img = Image<Bgr, Byte>.FromJpegData(ms.ToArray()))
-                  CvInvoke.cvNot(img, img);
-
+               img._Not();
+               ImageView.Source = img.ToWritableBitmap();
             }
-            
-            //await bmp.SetSourceAsync(stream);
-            //ImageView.Source = bmp; 
          }
       }
    }

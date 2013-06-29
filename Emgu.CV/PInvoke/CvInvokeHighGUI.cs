@@ -127,6 +127,15 @@ namespace Emgu.CV
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LOAD_IMAGE_TYPE loadType);
 
+      /// <summary>
+      /// encode image and store the result as a byte vector.
+      /// </summary>
+      /// <param name="ext">The image format</param>
+      /// <param name="image">The image</param>
+      /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
+      /// <returns>A pointer to single-row 8uC1 CvMat that represent the encoded image.</returns>
+      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvEncodeImage([MarshalAs(StringMarshalType)] String ext, IntPtr image, IntPtr parameters);
 
       /// <summary>
       /// Decode image stored in the buffer

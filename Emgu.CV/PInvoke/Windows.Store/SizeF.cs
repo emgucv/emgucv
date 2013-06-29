@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
 
 namespace System.Drawing
 {

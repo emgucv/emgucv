@@ -171,6 +171,7 @@
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
     <Compile Include="PInvoke\Windows.Store\Extensions.cs" />
     <Compile Include="PInvoke\Windows.Store\ICloneable.cs" />
+    <Compile Include="PInvoke\Windows.Store\ImageWindowsStore.cs" />
     <Compile Include="PInvoke\Windows.Store\Point.cs" />
     <Compile Include="PInvoke\Windows.Store\PointF.cs" />
     <Compile Include="PInvoke\Windows.Store\Rectangle.cs" />
