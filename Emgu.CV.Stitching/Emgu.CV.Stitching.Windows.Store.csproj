@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{991D295C-714D-4427-835B-E0314009AE5C}</ProjectGuid>
+    <ProjectGuid>{67658000-1E4B-4417-A982-54A374E9D94B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.Util</RootNamespace>
-    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.CV.Stitching.Windows.Store</RootNamespace>
+    <AssemblyName>Emgu.CV.Stitching.Windows.Store</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -100,20 +100,25 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.Windows.Store.csproj">
+      <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
+      <Name>Emgu.CV.GPU.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
+      <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
+      <Name>Emgu.CV.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Windows.Store.csproj">
+      <Project>{991d295c-714d-4427-835b-e0314009ae5c}</Project>
+      <Name>Emgu.Util.Windows.Store</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryFileStorage.cs" />
-    <Compile Include="DisposableObject.cs" />
-    <Compile Include="EventArgs.cs" />
-    <Compile Include="ICodeGenerable.cs" />
-    <Compile Include="IInterpolatable.cs" />
-    <Compile Include="PinnedArray.cs" />
-    <Compile Include="Platform.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\CommonAssemblyInfo.cs" />
-    <Compile Include="Toolbox.cs" />
-    <Compile Include="TypeEnum.cs" />
-    <Compile Include="UnmanagedObject.cs" />
+    <Compile Include="Stitcher.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

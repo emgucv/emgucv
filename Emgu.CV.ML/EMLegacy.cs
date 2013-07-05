@@ -60,8 +60,13 @@ namespace Emgu.CV.ML
             param.covs = IntPtr.Zero;
          else
          {
-            IntPtr[] covsPtr = Array.ConvertAll<Matrix<double>, IntPtr>(parameters.Covs,
-               delegate(Matrix<double> m) { return m.Ptr; });
+            IntPtr[] covsPtr = 
+#if NETFX_CORE
+               Extensions.
+#else
+               Array.
+#endif
+               ConvertAll<Matrix<double>, IntPtr>(parameters.Covs, delegate(Matrix<double> m) { return m.Ptr; });
             covsPtrHandle = GCHandle.Alloc(covsPtr, GCHandleType.Pinned);
             param.covs = covsPtrHandle.Value.AddrOfPinnedObject();
          }
@@ -152,7 +157,13 @@ namespace Emgu.CV.ML
          IntPtr[] covPtrs = new IntPtr[ncluster];
          Marshal.Copy(ptrToCovs, covPtrs, 0, ncluster);
 
-         return Array.ConvertAll<IntPtr, Matrix<double>>(covPtrs, IntPtrToDoubleMatrix);
+         return 
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<IntPtr, Matrix<double>>(covPtrs, IntPtrToDoubleMatrix);
       }
 
       private static Matrix<double> IntPtrToDoubleMatrix(IntPtr matPtr)

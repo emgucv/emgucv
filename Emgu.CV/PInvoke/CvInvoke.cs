@@ -228,11 +228,16 @@ namespace Emgu.CV
 
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
-         String formatString = GetModuleFormatString();
-         for (int i = 0; i < modules.Count; ++i)
-            modules[i] = String.Format(formatString, modules[i]);
+            String formatString = GetModuleFormatString();
+            for (int i = 0; i < modules.Count; ++i)
+               modules[i] = String.Format(formatString, modules[i]);
 
-         LoadUnmanagedModules(null, modules.ToArray());
+#if NETFX_CORE
+            System.Threading.Tasks.Task<bool> t = LoadUnmanagedModules(null, modules.ToArray());
+            t.Wait();
+#else
+            LoadUnmanagedModules(null, modules.ToArray());
+#endif
          }
 #endif
          //Use the custom error handler

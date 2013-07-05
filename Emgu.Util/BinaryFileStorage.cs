@@ -8,13 +8,21 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 
+#if NETFX_CORE
+using Windows.Storage;
+#endif
+
 namespace Emgu.Util
 {
    /// <summary>
    /// A raw data storage
    /// </summary>
    /// <typeparam name="T">The type of elments in the storage</typeparam>
-   public class BinaryFileStorage<T> : IEnumerable<T> where T : struct
+   public class BinaryFileStorage<T> 
+#if !NETFX_CORE
+      : IEnumerable<T> 
+#endif
+      where T : struct
    {
       private static int _elementSize = Marshal.SizeOf(typeof(T));
 
@@ -25,7 +33,11 @@ namespace Emgu.Util
       /// <summary>
       /// The file info
       /// </summary>
+#if NETFX_CORE
+      protected string _fileInfo;
+#else
       protected FileInfo _fileInfo;
+#endif
 
       /// <summary>
       /// Create a binary File Storage
@@ -43,7 +55,11 @@ namespace Emgu.Util
       /// <param name="trunkSize">The data will be read in trunk of this size internally. Can be use to seed up the file read. A good number will be 4096</param>
       public BinaryFileStorage(String fileName, int trunkSize)
       {
+#if NETFX_CORE
+         _fileInfo = fileName;
+#else
          _fileInfo = new FileInfo(fileName);
+#endif
          _trunkSize = trunkSize <= 0 ? _defaultTrunkSize : trunkSize;
       }
 
@@ -60,19 +76,14 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// Delete all data in the existing storage, if there is any.
-      /// </summary>
-      public void Clear()
-      {
-         if (_fileInfo.Exists)
-            _fileInfo.Delete();
-      }
-
-      /// <summary>
       /// Append the samples to the end of the storage
       /// </summary>
       /// <param name="samples">The samples to be appended to the storage</param>
-      public void Append(IEnumerable<T> samples)
+      public
+#if NETFX_CORE
+         async
+#endif
+         void Append(IEnumerable<T> samples)
       {
          int elementsInTrunk = _trunkSize / _elementSize;
          if (elementsInTrunk <= 0)
@@ -80,10 +91,19 @@ namespace Emgu.Util
 
          byte[] byteBuffer = new byte[elementsInTrunk * _elementSize];
          int index = 0;
+         
+#if NETFX_CORE
+         StorageFile storageFile = await StorageFile.GetFileFromPathAsync(_fileInfo);
+         using (PinnedArray<T> buffer = new PinnedArray<T>(elementsInTrunk))
+         using (Stream bufferStream = await storageFile.OpenStreamForWriteAsync())
+         {
+            bufferStream.Seek(0, SeekOrigin.End);
+#else
          using (PinnedArray<T> buffer = new PinnedArray<T>(elementsInTrunk))
          using (FileStream stream = _fileInfo.Open(FileMode.Append, FileAccess.Write))
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
          {
+#endif
             IntPtr ptr = buffer.AddrOfPinnedObject();
             foreach (T s in samples)
             {
@@ -108,29 +128,67 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// Get a copy of the first element in the storage. If the storage is empty, a default value will be returned
-      /// </summary>
-      /// <returns>A copy of the first element in the storage. If the storage is empty, a default value will be returned</returns>
-      public T Peek()
-      {
-         using (FileStream stream = _fileInfo.OpenRead())
-         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
-         {
-            return (stream.Read(buffer.Array, 0, _elementSize) > 0) ?
-               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
-               new T();
-         }
-      }
-
-      /// <summary>
       /// The file name of the storage
       /// </summary>
       public String FileName
       {
          get
          {
+#if NETFX_CORE
+            return _fileInfo;
+#else
             return _fileInfo.FullName;
+#endif
          }
+      }
+
+#if NETFX_CORE
+      /// <summary>
+      /// Delete all data in the existing storage, if there is any.
+      /// </summary>
+      public async void Clear()
+      {
+         StorageFile file;
+         try
+         {
+            file = await ApplicationData.Current.LocalFolder.GetFileAsync(_fileInfo);
+            //no exception means file exists
+         }
+         catch (Exception ex)
+         {
+            //find out through exception 
+            return;
+         }
+         await file.DeleteAsync();
+      }
+
+      /// <summary>
+      /// Estimate the number of elements in this storage as the size of the storage divided by the size of the elements
+      /// </summary>
+      /// <returns>An estimation of the number of elements in this storage</returns>
+      public async System.Threading.Tasks.Task<int> EstimateSize()
+      {
+         StorageFile file;
+         try
+         {
+            file = await StorageFile.GetFileFromPathAsync(_fileInfo);
+         }
+         catch
+         {
+            //file doesn't exist
+            return 0;
+         }
+         Windows.Storage.FileProperties.BasicProperties properties = await file.GetBasicPropertiesAsync();
+         return (int)(properties.Size / ((ulong) _elementSize));
+      }
+#else
+      /// <summary>
+      /// Delete all data in the existing storage, if there is any.
+      /// </summary>
+      public void Clear()
+      {
+         if (_fileInfo.Exists)
+            _fileInfo.Delete();
       }
 
       /// <summary>
@@ -145,6 +203,21 @@ namespace Emgu.Util
             0;
       }
 
+      /// <summary>
+      /// Get a copy of the first element in the storage. If the storage is empty, a default value will be returned
+      /// </summary>
+      /// <returns>A copy of the first element in the storage. If the storage is empty, a default value will be returned</returns>
+      public T Peek()
+      {
+         using (FileStream stream = _fileInfo.OpenRead())
+         using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
+         {
+            return (stream.Read(buffer.Array, 0, _elementSize) > 0) ?
+               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
+               new T();
+         }
+      }
+      
       /// <summary>
       /// Get the subsampled data in this storage
       /// </summary>
@@ -170,7 +243,7 @@ namespace Emgu.Util
             }
          }
       }
-
+      
       #region IEnumerable<T> Members
       /// <summary>
       /// Get the data in this storage
@@ -204,9 +277,8 @@ namespace Emgu.Util
             }
          }
       }
-
       #endregion
-
+      
       #region IEnumerable Members
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -215,5 +287,6 @@ namespace Emgu.Util
       }
 
       #endregion
+#endif
    }
 }

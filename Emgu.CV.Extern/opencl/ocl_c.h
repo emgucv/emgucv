@@ -33,6 +33,8 @@ CVAPI(cv::ocl::oclMat*) oclMatCreateDefault();
 
 CVAPI(cv::ocl::oclMat*) oclMatCreate(int rows, int cols, int type);
 
+CVAPI(cv::ocl::oclMat*) oclMatCreateFromArr(CvArr* arr);
+
 CVAPI(emgu::size) oclMatGetSize(cv::ocl::oclMat* oclMat);
 
 CVAPI(bool) oclMatIsEmpty(cv::ocl::oclMat* oclMat);
@@ -98,6 +100,8 @@ CVAPI(void) oclMatMinMaxLoc(const cv::ocl::oclMat* src,
    const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclMatSplit(const cv::ocl::oclMat* src, cv::ocl::oclMat** dst);
+
+CVAPI(void) oclMatMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst);
 
 CVAPI(void) oclMatConvertTo(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double alpha, double beta);
 

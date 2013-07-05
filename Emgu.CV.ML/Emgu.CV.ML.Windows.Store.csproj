@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{991D295C-714D-4427-835B-E0314009AE5C}</ProjectGuid>
+    <ProjectGuid>{8DE0B8CF-C318-44CC-9363-221067B74347}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.Util</RootNamespace>
-    <AssemblyName>Emgu.Util</AssemblyName>
+    <RootNamespace>Emgu.CV.ML.Windows.Store</RootNamespace>
+    <AssemblyName>Emgu.CV.ML.Windows.Store</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -100,20 +100,44 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
+      <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
+      <Name>Emgu.CV.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Windows.Store.csproj">
+      <Project>{991d295c-714d-4427-835b-e0314009ae5c}</Project>
+      <Name>Emgu.Util.Windows.Store</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryFileStorage.cs" />
-    <Compile Include="DisposableObject.cs" />
-    <Compile Include="EventArgs.cs" />
-    <Compile Include="ICodeGenerable.cs" />
-    <Compile Include="IInterpolatable.cs" />
-    <Compile Include="PinnedArray.cs" />
-    <Compile Include="Platform.cs" />
+    <Compile Include="Boost.cs" />
+    <Compile Include="DTree.cs" />
+    <Compile Include="EM.cs" />
+    <Compile Include="EMLegacy.cs" />
+    <Compile Include="EMParams.cs" />
+    <Compile Include="ERTrees.cs" />
+    <Compile Include="GBTrees.cs" />
+    <Compile Include="KNearest.cs" />
+    <Compile Include="ANN_MLP.cs" />
+    <Compile Include="NormalBayesClassifier.cs" />
+    <Compile Include="PInvoke\CvType\MCvBoostParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeNode.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvDTreeSplit.cs" />
+    <Compile Include="PInvoke\CvType\MCvEMParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvGBTreesParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvParamGrid.cs" />
+    <Compile Include="PInvoke\CvType\MCvRTParams.cs" />
+    <Compile Include="PInvoke\CvType\MCvSVMParams.cs" />
+    <Compile Include="PInvoke\MlEnum.cs" />
+    <Compile Include="PInvoke\CvType\MCvANN_MLP_TrainParams.cs" />
+    <Compile Include="PInvoke\MlInvoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
-    <Compile Include="Toolbox.cs" />
-    <Compile Include="TypeEnum.cs" />
-    <Compile Include="UnmanagedObject.cs" />
+    <Compile Include="RTrees.cs" />
+    <Compile Include="StatModel.cs" />
+    <Compile Include="SVM.cs" />
+    <Compile Include="SVMParams.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

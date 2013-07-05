@@ -112,6 +112,15 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
+      /// Create an OclMat from an CvArray of the same depth type
+      /// </summary>
+      /// <param name="arr">The CvArry to be converted to OclMat</param>
+      public OclMat(CvArray<TDepth> arr)
+      {
+         _ptr = OclInvoke.OclMatCreateFromArr(arr);
+      }
+
+      /// <summary>
       /// Pefroms blocking upload data to OclMat
       /// </summary>
       /// <param name="arr">The CvArray to be uploaded to OclMat</param>
@@ -223,6 +232,35 @@ namespace Emgu.CV.OpenCL
 
          SplitInto(result);
          return result;
+      }
+
+      /// <summary>
+      /// Makes multi-channel array out of several single-channel arrays
+      /// </summary>
+      ///<param name="gpuMats"> 
+      ///An array of single channel OclMat where each item
+      ///in the array represent a single channel of the GpuMat 
+      ///</param>
+      public void MergeFrom(OclMat<TDepth>[] gpuMats)
+      {
+         Debug.Assert(NumberOfChannels == gpuMats.Length, "Number of channels does not agrees with the length of gpuMats");
+         //If single channel, perform a copy
+         if (NumberOfChannels == 1)
+         {
+               OclInvoke.Copy(gpuMats[0].Ptr, _ptr, IntPtr.Zero);
+         }
+
+         //handle multiple channels
+         Size size = Size;
+         IntPtr[] ptrs = new IntPtr[gpuMats.Length];
+         for (int i = 0; i < gpuMats.Length; i++)
+         {
+            Debug.Assert(gpuMats[i].Size == size, "Size mismatch");
+            ptrs[i] = gpuMats[i].Ptr;
+         }
+         GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
+         OclInvoke.Merge(handle.AddrOfPinnedObject(), _ptr);
+         handle.Free();
       }
 
       public bool Equals(OclMat<TDepth> other)

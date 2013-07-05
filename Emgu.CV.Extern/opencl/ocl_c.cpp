@@ -22,6 +22,12 @@ cv::ocl::oclMat* oclMatCreate(int rows, int cols, int type)
    return new cv::ocl::oclMat(rows, cols, type);
 }
 
+cv::ocl::oclMat* oclMatCreateFromArr(CvArr* arr)
+{
+   cv::Mat mat = cv::cvarrToMat(arr);
+   return new cv::ocl::oclMat(mat);
+}
+
 emgu::size oclMatGetSize(cv::ocl::oclMat* oclMat)
 {
    emgu::size s;
@@ -203,11 +209,22 @@ void oclMatMinMaxLoc(const cv::ocl::oclMat* src,
 void oclMatSplit(const cv::ocl::oclMat* src, cv::ocl::oclMat** dst)
 {
    int channels = src->channels();
-   cv::ocl::oclMat* dstArr = new cv::ocl::oclMat[channels];
+   std::vector<cv::ocl::oclMat> dstArr(channels);
+   //cv::ocl::oclMat* dstArr = new cv::ocl::oclMat[channels];
    for (int i = 0; i < channels; i++)
       dstArr[i] = *(dst[i]);
    cv::ocl::split(*src, dstArr);
-   delete[] dstArr;
+   //delete[] dstArr;
+}
+
+void oclMatMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst)
+{
+   int channels = dst->channels();
+   cv::ocl::oclMat* srcArr = new cv::ocl::oclMat[channels];
+   for (int i = 0; i < channels; ++i)
+      srcArr[i] = *(src[i]);
+   cv::ocl::merge(srcArr, dst->channels(), *dst);
+   delete[] srcArr;
 }
 
 void oclMatConvertTo(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double alpha, double beta)

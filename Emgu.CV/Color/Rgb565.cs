@@ -5,6 +5,12 @@
 using System;
 using Emgu.CV;
 
+#if NETFX_CORE
+using Windows.UI;
+#else
+using System.Drawing;
+#endif
+
 namespace Emgu.CV.Structure
 {
    ///<summary> 
@@ -34,7 +40,7 @@ namespace Emgu.CV.Structure
       /// Create a Bgr565 color using the System.Drawing.Color
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
-      public Bgr565(System.Drawing.Color winColor)
+      public Bgr565(Color winColor)
          : this(winColor.R, winColor.G, winColor.B)
       {
       }

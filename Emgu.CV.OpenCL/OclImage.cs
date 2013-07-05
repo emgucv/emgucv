@@ -39,7 +39,7 @@ namespace Emgu.CV.OpenCL
       {
       }
 
-      /*
+      
       /// <summary>
       /// Create a GPU image from a regular image
       /// </summary>
@@ -49,6 +49,7 @@ namespace Emgu.CV.OpenCL
       {
       }
 
+      /*
       /// <summary>
       /// Create a OclImage of the specific size
       /// </summary>
@@ -198,6 +199,17 @@ namespace Emgu.CV.OpenCL
             }
             #endregion
          }
+      }
+
+      /// <summary>
+      /// Convert the current GpuImage to a regular Image.
+      /// </summary>
+      /// <returns>A regular image</returns>
+      public Image<TColor, TDepth> ToImage()
+      {
+         Image<TColor, TDepth> img = new Image<TColor, TDepth>(Size);
+         Download(img);
+         return img;
       }
 
       private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)

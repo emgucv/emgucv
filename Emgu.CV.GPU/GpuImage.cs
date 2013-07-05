@@ -339,7 +339,7 @@ namespace Emgu.CV.GPU
       {
          throw new NotImplementedException();
       }
-#else
+#elif !NETFX_CORE
       /// <summary>
       /// convert the current GpuImage to its equavalent Bitmap representation
       /// </summary>

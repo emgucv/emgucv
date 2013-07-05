@@ -29,7 +29,9 @@ namespace Emgu.CV.GPU
       /// <param name="fileName">The file to create the classifier from</param>
       public GpuCascadeClassifier(String fileName)
       {
+#if !NETFX_CORE
          Debug.Assert(File.Exists(fileName), String.Format("The Cascade file {0} does not exist.", fileName));
+#endif
          _ptr = GpuInvoke.gpuCascadeClassifierCreate(fileName);
          _buffer = new GpuMat<int>(1, 100, 4);
          _stor = new MemStorage();

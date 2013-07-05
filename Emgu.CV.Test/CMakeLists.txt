@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2013 by EMGU. All rights reserved.
 # --------------------------------------------------------
 
-IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND NOT ANDROID)
+IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND NOT ANDROID AND NOT NETFX_CORE)
 
 PROJECT(Emgu.CV.Test)
 

@@ -55,6 +55,14 @@ namespace Emgu.CV.OpenCL
       public static extern IntPtr OclMatCreate(int rows, int cols, int type);
 
       /// <summary>
+      /// Convert a CvArr to an OclMat
+      /// </summary>
+      /// <param name="arr">Pointer to a CvArr</param>
+      /// <returns>Pointer to the OclMat</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCreateFromArr")]
+      public static extern IntPtr OclMatCreateFromArr(IntPtr arr);
+
+      /// <summary>
       /// Check if the OclMat is empty
       /// </summary>
       /// <param name="oclMat">The OclMat</param>
@@ -269,6 +277,14 @@ namespace Emgu.CV.OpenCL
       /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSplit")]
       public static extern void Split(IntPtr src, IntPtr dstArray);
+
+      /// <summary>
+      /// Makes multi-channel OclMat out of several single-channel OclMats
+      /// </summary>
+      /// <param name="srcArr">Pointer to an array of single channel OclMat pointers</param>
+      /// <param name="dst">The multi-channel oclMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMerge")]
+      public static extern void Merge(IntPtr srcArr, IntPtr dst);
 
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one OclMat to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
