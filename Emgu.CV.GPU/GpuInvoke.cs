@@ -393,7 +393,7 @@ namespace Emgu.CV.GPU
       /// Computes element-wise weighted reciprocal of an array (c = scale/ b).
       /// </summary>
       /// <param name="b">The second GpuMat to be element-wise divided.</param>
-      /// <param name="scalar">The dirst scalar to be divided</param>
+      /// <param name="scalar">The first scalar to be divided</param>
       /// <param name="c">The result of the scalar dividing the GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDivideSL")]

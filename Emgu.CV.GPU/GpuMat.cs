@@ -171,6 +171,7 @@ namespace Emgu.CV.GPU
       /// <param name="arr">The destination CvArray where the GpuMat data will be downloaded to.</param>
       public void Download(CvArray<TDepth> arr)
       {
+         Debug.Assert(arr.Size.Equals(Size), "Destination CvArray size does not match source GpuMat size");
          GpuInvoke.GpuMatDownload(_ptr, arr);
       }
 

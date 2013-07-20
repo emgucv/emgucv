@@ -10,10 +10,11 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "emgu_c.h"
 
 CVAPI(cv::Mat*) cvMatCreate();
 CVAPI(void) cvMatRelease(cv::Mat** mat);
-CVAPI(CvSize) cvMatGetSize(cv::Mat* mat);
+CVAPI(emgu::size) cvMatGetSize(cv::Mat* mat);
 CVAPI(void) cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray);
 CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
 

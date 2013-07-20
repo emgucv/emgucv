@@ -81,5 +81,17 @@ namespace Emgu.CV
       /// The file name of the videostab library
       /// </summary>
       public const string OPENCV_VIDEOSTAB_LIBRARY = "${OPENCV_VIDEOSTAB_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the opencl library
+      /// </summary>
+      public const string OPENCV_OCL_LIBRARY = "${OPENCV_OCL_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the superres library
+      /// </summary>
+      public const string OPENCV_SUPERRES_LIBRARY = "${OPENCV_SUPERRES_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the softcascade library
+      /// </summary>
+      public const string OPENCV_SOFTCASCADE_LIBRARY = "${OPENCV_SOFTCASCADE_OUTPUT_NAME}";
    }
 }

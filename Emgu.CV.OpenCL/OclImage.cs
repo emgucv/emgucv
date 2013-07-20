@@ -18,7 +18,7 @@ namespace Emgu.CV.OpenCL
    /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    public class OclImage<TColor, TDepth>
-      : OclMat<TDepth>
+      : OclMat<TDepth>, IImage
       where TColor : struct, IColor
       where TDepth : new()
    {
@@ -212,6 +212,18 @@ namespace Emgu.CV.OpenCL
          return img;
       }
 
+      ///<summary> 
+      ///Performs a convolution using the specific <paramref name="kernel"/> 
+      ///</summary>
+      ///<param name="kernel">The convolution kernel</param>
+      ///<returns>The result of the convolution</returns>
+      public OclImage<TColor, Single> Convolution(ConvolutionKernelF kernel)
+      {
+         OclImage<TColor, Single> result = new OclImage<TColor, float>(Size);
+         OclInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.BORDER_DEFAULT);
+         return result;
+      }
+
       private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)
       {
          try
@@ -242,6 +254,61 @@ namespace Emgu.CV.OpenCL
                   typeof(TDepth).ToString()));
             }
          }
+      }
+
+      /// <summary>
+      /// Create a clone of this OclImage
+      /// </summary>
+      /// <returns>A clone of this GpuImage</returns>
+      public OclImage<TColor, TDepth> Clone()
+      {
+         OclImage<TColor, TDepth> result = new OclImage<TColor, TDepth>(Size);
+         OclInvoke.Copy(_ptr, result, IntPtr.Zero);
+         return result;
+      }
+
+      public Bitmap Bitmap
+      {
+         get
+         {
+#if !ANDROID
+            if (this is Image<Bgr, Byte>)
+            {
+               Size s = Size;
+               Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+               System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
+               using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0))
+               {
+                  Download(tmp);
+               }
+               result.UnlockBits(data);
+               return result;
+            }
+            else
+#endif
+               using (Image<TColor, TDepth> tmp = ToImage())
+               {
+                  return tmp.ToBitmap();
+               }
+         }  
+      }
+
+      IImage[] IImage.Split()
+      {
+         return Split();
+      }
+
+      public void Save(string fileName)
+      {
+         using (Image<TColor, TDepth> tmp = ToImage())
+         {
+            tmp.Save(fileName);
+         }
+      }
+
+      object ICloneable.Clone()
+      {
+         return Clone();
       }
    }
 }

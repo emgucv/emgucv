@@ -66,11 +66,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OclBruteForceMatcher.cs" />
+    <Compile Include="OclSURFDetector.cs" />
+    <Compile Include="OclStereoBM.cs" />
+    <Compile Include="OclStereoConstantSpaceBP.cs" />
+    <Compile Include="OclPyrLKOpticalFlow.cs" />
+    <Compile Include="OclCascadeClassifier.cs" />
+    <Compile Include="OclMatchTemplateBuf.cs" />
+    <Compile Include="OclHOGDescriptor.cs" />
     <Compile Include="OclImage.cs" />
     <Compile Include="OclInvoke.cs" />
     <Compile Include="OclMat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-	<Compile Include="..\CommonAssemblyInfo.cs">
+    <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>

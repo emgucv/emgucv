@@ -9,12 +9,12 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
-namespace Emgu.CV.GPU
+namespace Emgu.CV.OpenCL
 {
    /// <summary>
    /// PyrLK optical flow
    /// </summary>
-   public class GpuPyrLKOpticalFlow : UnmanagedObject
+   public class OclPyrLKOpticalFlow : UnmanagedObject
    {
       /// <summary>
       /// Create the PyrLK optical flow solver
@@ -23,9 +23,9 @@ namespace Emgu.CV.GPU
       /// <param name="maxLevel">The maximum number of pyramid leveles. Use 3 for default</param>
       /// <param name="iters">The number of iterations. Use 30 for default.</param>
       /// <param name="useInitialFlow">Weather or not use the initial flow in the input matrix. Use false for default.</param>
-      public GpuPyrLKOpticalFlow(Size winSize, int maxLevel, int iters, bool useInitialFlow)
+      public OclPyrLKOpticalFlow(Size winSize, int maxLevel, int iters, bool useInitialFlow)
       {
-         _ptr = GpuInvoke.gpuPyrLKOpticalFlowCreate(winSize, maxLevel, iters, useInitialFlow);
+         _ptr = OclInvoke.oclPyrLKOpticalFlowCreate(winSize, maxLevel, iters, useInitialFlow);
       }
 
       /// <summary>
@@ -35,9 +35,9 @@ namespace Emgu.CV.GPU
       /// <param name="frame1">Frame to track (with the same size as <paramref name="frame0"/>)</param>
       /// <param name="u">Flow horizontal component (along x axis)</param>
       /// <param name="v">Flow vertical component (along y axis)</param>
-      public void Dense(GpuImage<Gray, byte> frame0, GpuImage<Gray, byte> frame1, GpuImage<Gray, float> u, GpuImage<Gray, float> v)
+      public void Dense(OclImage<Gray, byte> frame0, OclImage<Gray, byte> frame1, OclImage<Gray, float> u, OclImage<Gray, float> v)
       {
-         GpuInvoke.gpuPyrLKOpticalFlowDense(_ptr, frame0, frame1, u, v, IntPtr.Zero);
+         OclInvoke.oclPyrLKOpticalFlowDense(_ptr, frame0, frame1, u, v, IntPtr.Zero);
       }
 
       /// <summary>
@@ -61,12 +61,12 @@ namespace Emgu.CV.GPU
       /// the original and moved points or min eigen value if getMinEigenVals is checked. It can be
       /// null, if not needed.
       /// </param>
-      public void Sparse(GpuImage<Gray, byte> frame0, GpuImage<Gray, byte> frame1, GpuMat<float> points0, out GpuMat<float> points1, out GpuMat<Byte> status, out GpuMat<float> err)
+      public void Sparse(OclImage<Gray, byte> frame0, OclImage<Gray, byte> frame1, OclMat<float> points0, out OclMat<float> points1, out OclMat<Byte> status, out OclMat<float> err)
       {
-         points1 = new GpuMat<float>();
-         status = new GpuMat<byte>();
-         err = new GpuMat<float>();
-         GpuInvoke.gpuPyrLKOpticalFlowSparse(_ptr, frame0, frame1, points0, points1, status, err);
+         points1 = new OclMat<float>();
+         status = new OclMat<byte>();
+         err = new OclMat<float>();
+         OclInvoke.oclPyrLKOpticalFlowSparse(_ptr, frame0, frame1, points0, points1, status, err);
       }
 
       /// <summary>
@@ -74,23 +74,23 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuPyrLKOpticalFlowRelease(ref _ptr);
+         OclInvoke.oclPyrLKOpticalFlowRelease(ref _ptr);
       }
    }
 
-   public static partial class GpuInvoke
+   public static partial class OclInvoke
    {
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuPyrLKOpticalFlowCreate(
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr oclPyrLKOpticalFlowCreate(
          Size winSize, int maxLevel, int iters,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useInitialFlow);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuPyrLKOpticalFlowDense(IntPtr flow, IntPtr prevImg, IntPtr nextImg, IntPtr u, IntPtr v, IntPtr err);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void oclPyrLKOpticalFlowDense(IntPtr flow, IntPtr prevImg, IntPtr nextImg, IntPtr u, IntPtr v, IntPtr err);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuPyrLKOpticalFlowSparse(
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void oclPyrLKOpticalFlowSparse(
          IntPtr flow,
          IntPtr prevImg,
          IntPtr nextImg,
@@ -99,7 +99,7 @@ namespace Emgu.CV.GPU
          IntPtr status,
          IntPtr err);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuPyrLKOpticalFlowRelease(ref IntPtr flow);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void oclPyrLKOpticalFlowRelease(ref IntPtr flow);
    }
 }

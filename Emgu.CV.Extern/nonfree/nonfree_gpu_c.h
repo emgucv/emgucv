@@ -17,6 +17,7 @@
 #include "opencv2/nonfree/nonfree.hpp"
 #include "opencv2/nonfree/features2d.hpp"
 #include "opencv2/nonfree/gpu.hpp"
+
 /*
 #include "vectors_c.h"
 
@@ -68,4 +69,5 @@ CVAPI(cv::gpu::VIBE_GPU*) gpuVibeCreate(unsigned long rngSeed, cv::gpu::GpuMat* 
 CVAPI(void) gpuVibeCompute(cv::gpu::VIBE_GPU* vibe, cv::gpu::GpuMat* frame, cv::gpu::GpuMat* fgMask, cv::gpu::Stream* stream);
 CVAPI(void) gpuVibeRelease(cv::gpu::VIBE_GPU** vibe);
 */
+
 #endif

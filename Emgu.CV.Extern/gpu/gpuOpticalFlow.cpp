@@ -71,7 +71,7 @@ void gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow)
 //  GpuPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-cv::gpu::PyrLKOpticalFlow* gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow)
+cv::gpu::PyrLKOpticalFlow* gpuPyrLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow)
 {
    cv::gpu::PyrLKOpticalFlow* flow = new cv::gpu::PyrLKOpticalFlow();
    
@@ -82,7 +82,7 @@ cv::gpu::PyrLKOpticalFlow* gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLe
    return flow;
 }
 
-void gpuPryLKOpticalFlowSparse(
+void gpuPyrLKOpticalFlowSparse(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 
    const cv::gpu::GpuMat* nextImg, 
@@ -94,7 +94,7 @@ void gpuPryLKOpticalFlowSparse(
    flow->sparse(*prevImg, *nextImg, *prevPts, *nextPts, *status, err);
 }
 
-void gpuPryLKOpticalFlowDense(
+void gpuPyrLKOpticalFlowDense(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 
    const cv::gpu::GpuMat* nextImg,
@@ -105,7 +105,7 @@ void gpuPryLKOpticalFlowDense(
    flow->dense(*prevImg, *nextImg, *u, *v, err);
 }
 
-void gpuPryLKOpticalFlowRelease(cv::gpu::PyrLKOpticalFlow** flow)
+void gpuPyrLKOpticalFlowRelease(cv::gpu::PyrLKOpticalFlow** flow)
 {
    delete *flow;
    *flow = 0;

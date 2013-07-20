@@ -197,14 +197,18 @@ namespace Emgu.CV
             CvInvoke.OPENCV_LEGACY_LIBRARY,
 
             CvInvoke.OPENCV_CONTRIB_LIBRARY,
-            CvInvoke.OPENCV_NONFREE_LIBRARY,
+
             CvInvoke.OPENCV_PHOTO_LIBRARY,
-            CvInvoke.OPENCV_VIDEOSTAB_LIBRARY,
- 
+
             CvInvoke.OPENCV_FFMPEG_LIBRARY, 
             CvInvoke.OPENCV_GPU_LIBRARY, 
+            CvInvoke.OPENCV_OCL_LIBRARY,
+
+            CvInvoke.OPENCV_VIDEOSTAB_LIBRARY,
+            CvInvoke.OPENCV_SUPERRES_LIBRARY,
+            CvInvoke.OPENCV_NONFREE_LIBRARY,
             CvInvoke.OPENCV_STITCHING_LIBRARY,
-            
+
             //CvInvoke.EXTERN_GPU_LIBRARY,
             CvInvoke.EXTERN_LIBRARY
 

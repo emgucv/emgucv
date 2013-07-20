@@ -384,7 +384,7 @@ CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
 //  GpuPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPryLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow);
+CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPyrLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow);
 CVAPI(void) gpuPryLKOpticalFlowSparse(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 
@@ -393,14 +393,14 @@ CVAPI(void) gpuPryLKOpticalFlowSparse(
    cv::gpu::GpuMat* nextPts,
    cv::gpu::GpuMat* status, 
    cv::gpu::GpuMat* err);
-CVAPI(void) gpuPryLKOpticalFlowDense(
+CVAPI(void) gpuPyrLKOpticalFlowDense(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 
    const cv::gpu::GpuMat* nextImg,
    cv::gpu::GpuMat* u, 
    cv::gpu::GpuMat* v, 
    cv::gpu::GpuMat* err);
-CVAPI(void) gpuPryLKOpticalFlowRelease(cv::gpu::PyrLKOpticalFlow** flow);
+CVAPI(void) gpuPyrLKOpticalFlowRelease(cv::gpu::PyrLKOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //

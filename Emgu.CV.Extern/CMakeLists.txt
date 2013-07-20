@@ -21,7 +21,7 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
 
 #gpu related
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpu/include")
@@ -248,8 +248,29 @@ IF(WITH_OPENCL)
   source_group("Include_ocl" FILES ${ocl_extern_hdrs})
 
   INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ocl/include")
+
+  IF(WIN32)
+    IF(TARGET_ARCH_64) 
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "C:/Windows/System32/OpenCL.dll")
+    else()
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "C:/Windows/SysWOW64/OpenCL.dll")
+    ENDIF()
+  ENDIF()
 ENDIF()
 ############################### OpenCL END ################################
+
+############################### nonfree START ##############################
+IF(BUILD_opencv_nonfree)
+  MESSAGE(STATUS "Building cvextern with opencv_nonfree")
+  file(GLOB_RECURSE nonfree_extern_srcs "nonfree/*.cpp")
+  file(GLOB_RECURSE nonfree_extern_hdrs "nonfree/*.h*")
+  
+  source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
+  source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
+
+  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
+ENDIF()
+############################### nonfree END ################################
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   INSTALL(
@@ -271,9 +292,11 @@ source_group("Src_extern" FILES ${extern_srcs})
 source_group("Include_extern" FILES ${extern_hdrs})
 source_group("Src_cuda" FILES ${gpu_extern_srcs})
 source_group("Include_cuda" FILES ${gpu_extern_hdrs})
+source_group("Src_nonfree" FILES ${nonfree_srcs})
+source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} ${ocl_extern_srcs} ${ocl_extern_hdrs} )
+add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} ${ocl_extern_srcs} ${ocl_extern_hdrs} ${nonfree_extern_srcs} ${nonfree_extern_hdrs})
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})

@@ -45,12 +45,12 @@ namespace Emgu.CV.OpenCL
       internal static extern IntPtr OclMatCreateDefault();
 
       /// <summary>
-      /// Create a GpuMat of the specified size
+      /// Create a OclMat of the specified size
       /// </summary>
       /// <param name="rows">The number of rows (height)</param>
       /// <param name="cols">The number of columns (width)</param>
-      /// <param name="type">The type of GpuMat</param>
-      /// <returns>Pointer to the GpuMat</returns>
+      /// <param name="type">The type of OclMat</param>
+      /// <returns>Pointer to the OclMat</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCreate")]
       public static extern IntPtr OclMatCreate(int rows, int cols, int type);
 
@@ -61,6 +61,16 @@ namespace Emgu.CV.OpenCL
       /// <returns>Pointer to the OclMat</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCreateFromArr")]
       public static extern IntPtr OclMatCreateFromArr(IntPtr arr);
+
+      /// <summary>
+      /// Copies scalar value to every selected element of the destination OclMat:
+      /// arr(I)=value if mask(I)!=0
+      /// </summary>
+      /// <param name="mat">The destination OclMat</param>
+      /// <param name="value">Fill value</param>
+      /// <param name="mask">Operation mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Can be IntPtr.Zero if not used</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSetTo")]
+      public static extern void OclMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask);
 
       /// <summary>
       /// Check if the OclMat is empty
@@ -89,6 +99,14 @@ namespace Emgu.CV.OpenCL
       public static extern void OclMatRelease(ref IntPtr mat);
 
       /// <summary>
+      /// Get the OclMat type.
+      /// </summary>
+      /// <param name="oclMat">The OclMat</param>
+      /// <returns>The type of the matrix</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGetType")]
+      public static extern int OclMatGetType(IntPtr oclMat);
+
+      /// <summary>
       /// Get the OclMat size:
       /// width == number of columns, height == number of rows
       /// </summary>
@@ -96,6 +114,15 @@ namespace Emgu.CV.OpenCL
       /// <returns>The size of the matrix</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGetSize")]
       public static extern Size OclMatGetSize(IntPtr oclMat);
+
+      /// <summary>
+      /// Get the OclMat wholeSize:
+      /// width == wholecols, height == wholerows
+      /// </summary>
+      /// <param name="oclMat">The OclMat</param>
+      /// <returns>The whole size of the matrix</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGetWholeSize")]
+      public static extern Size OclMatGetWholeSize(IntPtr oclMat);
 
       /// <summary>
       /// Get the number of channels in the OclMat
@@ -170,7 +197,7 @@ namespace Emgu.CV.OpenCL
       public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask);
 
       /// <summary>
-      /// Computes element-wise product of the two GpuMat: c = scale * a * b.
+      /// Computes element-wise product of the two OclMat: c = scale * a * b.
       /// </summary>
       /// <param name="a">The first OclMat to be element-wise multiplied.</param>
       /// <param name="b">The second OclMat to be element-wise multiplied.</param>
@@ -180,7 +207,16 @@ namespace Emgu.CV.OpenCL
       public static extern void Multiply(IntPtr a, IntPtr b, IntPtr c, double scale);
 
       /// <summary>
-      /// Computes element-wise quotient of the two GpuMat (c = scale *  a / b).
+      /// Multiplies OclMat to a scalar (c = a * scalar).
+      /// </summary>
+      /// <param name="a">The first OclMat to be element-wise multiplied.</param>
+      /// <param name="scalar">The scalar to be multiplied</param>
+      /// <param name="c">The result of the OclMat mutiplied by the scalar</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMultiplyS")]
+      public static extern void Multiply(IntPtr a, double scalar, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise quotient of the two OclMat (c = scale *  a / b).
       /// </summary>
       /// <param name="a">The first OclMat</param>
       /// <param name="b">The second OclMat</param>
@@ -188,6 +224,45 @@ namespace Emgu.CV.OpenCL
       /// <param name="scale">The scale</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivide")]
       public static extern void Divide(IntPtr a, IntPtr b, IntPtr c, double scale);
+
+      /// <summary>
+      /// Computes element-wise weighted reciprocal of an array (c = scale/ b).
+      /// </summary>
+      /// <param name="b">The second OclMat to be element-wise divided.</param>
+      /// <param name="scalar">The first scalar to be divided</param>
+      /// <param name="c">The result of the scalar dividing the OclMat</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivideSL")]
+      public static extern void Divide(double scalar, IntPtr b, IntPtr c);
+
+      /// <summary>
+      /// Computes the weighted sum of two arrays (dst = alpha*src1 + beta*src2 + gamma)
+      /// </summary>
+      /// <param name="src1">The first source OclMat</param>
+      /// <param name="alpha">The weight for <paramref name="src1"/></param>
+      /// <param name="src2">The second source OclMat</param>
+      /// <param name="beta">The weight for <paramref name="src2"/></param>
+      /// <param name="gamma">The constant to be added</param>
+      /// <param name="dst">The result</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAddWeighted")]
+      public static extern void AddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst);
+
+      /// <summary>
+      /// Computes element-wise absolute difference of two OclMats (c = abs(a - b)).
+      /// </summary>
+      /// <param name="a">The first OclMat</param>
+      /// <param name="b">The second OclMat</param>
+      /// <param name="c">The result of the element-wise absolute difference.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAbsdiff")]
+      public static extern void Absdiff(IntPtr a, IntPtr b, IntPtr c);
+
+      /// <summary>
+      /// Computes element-wise absolute difference of OclMat and scalar (c = abs(a - s)).
+      /// </summary>
+      /// <param name="a">An OclMat</param>
+      /// <param name="scalar">A scalar</param>
+      /// <param name="c">The result of the element-wise absolute difference.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAbsdiffS")]
+      public static extern void Absdiff(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Flips the OclMat in one of different 3 ways (row and column indices are 0-based):
@@ -198,7 +273,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">Source OclMat.</param>
       /// <param name="dst">Destination OclMat.</param>
       /// <param name="flipMode">
-      /// Specifies how to flip the GpuMat.
+      /// Specifies how to flip the OclMat.
       /// flip_mode = 0 means flipping around x-axis, 
       /// flip_mode &gt; 0 (e.g. 1) means flipping around y-axis and 
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
@@ -223,6 +298,17 @@ namespace Emgu.CV.OpenCL
             0;
          oclMatFlip(src, dst, flipMode);
       }
+
+      /// <summary>
+      /// Compares elements of two OclMats (c = a &lt;cmpop&gt; b).
+      /// Supports all types except CV_8SC1,CV_8SC2,CV8SC3,CV_8SC4 types
+      /// </summary>
+      /// <param name="a">The first OclMat</param>
+      /// <param name="b">The second OclMat</param>
+      /// <param name="c">The result of the comparison.</param>
+      /// <param name="cmpop">The type of comparison</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCompare")]
+      public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
 
       /// <summary>
       /// Converts image from one color space to another
@@ -271,10 +357,37 @@ namespace Emgu.CV.OpenCL
          IntPtr mask);
 
       /// <summary>
+      /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
+      /// </summary>
+      /// <param name="image">Image where the search is running. It should be 8-bit or 32-bit floating-point</param>
+      /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
+      /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
+      /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      /// <param name="oclMatchTemplateBuf">Pointer to OclMatchTemplateBuf</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMatchTemplate")]
+      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr oclMatchTemplateBuf);
+
+      /// <summary>
+      /// Performs downsampling step of Gaussian pyramid decomposition. 
+      /// </summary>
+      /// <param name="src">The source GpuImage.</param>
+      /// <param name="dst">The destination GpuImage, should have 2x smaller width and height than the source.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrDown")]
+      public static extern void PyrDown(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// Performs up-sampling step of Gaussian pyramid decomposition.
+      /// </summary>
+      /// <param name="src">The source GpuImage.</param>
+      /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrUp")]
+      public static extern void PyrUp(IntPtr src, IntPtr dst);
+
+      /// <summary>
       /// Copies each plane of a multi-channel OclMat to a dedicated OclMat
       /// </summary>
-      /// <param name="src">The multi-channel gpuMat</param>
-      /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
+      /// <param name="src">The multi-channel OclMat</param>
+      /// <param name="dstArray">Pointer to an array of single channel OclMat pointers</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSplit")]
       public static extern void Split(IntPtr src, IntPtr dstArray);
 
@@ -297,14 +410,14 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">Destination OclMat</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source OclMat elements</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatConvertTo")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatConvertTo")]
       public static extern void ConvertTo(IntPtr src, IntPtr dst, double scale, double shift);
 
       #region Logical operators
       /// <summary>
       /// Calculates per-element bit-wise logical conjunction of two OclMats:
       /// dst(I)=src1(I)^src2(I) if mask(I)!=0
-      /// In the case of floating-point GpuMats their bit representations are used for the operation. All the OclMats must have the same type, except the mask, and the same size
+      /// In the case of floating-point OclMats their bit representations are used for the operation. All the OclMats must have the same type, except the mask, and the same size
       /// </summary>
       /// <param name="src1">The first source OclMat</param>
       /// <param name="src2">The second source OclMat</param>
@@ -382,6 +495,148 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination OclMat</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseNot")]
       public static extern void BitwiseNot(IntPtr src, IntPtr dst);
+      #endregion
+
+      #region filters
+      /// <summary>
+      /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The destination OclImage</param>
+      /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the ocl image into separate color planes and process them individually</param>
+      /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
+      /// <param name="borderType">Border type. </param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatFilter2D")]
+      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
+      /// Applies generalized Sobel operator to the image
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The resulting OclMat</param>
+      /// <param name="dx">Order of the derivative x</param>
+      /// <param name="dy">Order of the derivative y</param>
+      /// <param name="ksize">Size of the extended Sobel kernel</param>
+      /// <param name="scale">Optional scale, use 1 for default.</param>
+      /// <param name="borderType">The border type.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSobel")]
+      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
+      /// Applies Laplacian operator to the OclMat
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The resulting OclMat</param>
+      /// <param name="ksize">Either 1 or 3</param>
+      /// <param name="scale">Optional scale. Use 1.0 for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLaplacian")]
+      public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale);
+
+      /// <summary>
+      /// Performs generalized matrix multiplication:
+      /// dst = alpha*op(src1)*op(src2) + beta*op(src3), where op(X) is X or XT
+      /// </summary>
+      /// <param name="src1">The first source array. </param>
+      /// <param name="src2">The second source array. </param>
+      /// <param name="alpha">The scalar</param>
+      /// <param name="src3">The third source array (shift). Can be IntPtr.Zero, if there is no shift.</param>
+      /// <param name="beta">The scalar</param>
+      /// <param name="dst">The destination array.</param>
+      /// <param name="tABC">The gemm operation type</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGemm")]
+      public static extern void Gemm(
+         IntPtr src1,
+         IntPtr src2,
+         double alpha,
+         IntPtr src3,
+         double beta,
+         IntPtr dst,
+         CvEnum.GEMM_TYPE tABC);
+
+      /// <summary>
+      /// Smooths the OclMat using Gaussian filter.
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The smoothed OclMat</param>
+      /// <param name="ksize">The size of the kernel</param>
+      /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
+      /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
+      /// <param name="borderType">The border type.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGaussianBlur")]
+      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
+      /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
+      /// </summary>
+      /// <param name="image">Input image</param>
+      /// <param name="edges">Image to store the edges found by the function</param>
+      /// <param name="lowThreshold">The first threshold</param>
+      /// <param name="highThreshold">The second threshold</param>
+      /// <param name="apertureSize">Aperture parameter for Sobel operator, use 3 for default</param>
+      /// <param name="L2gradient">Use false for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCanny")]
+      public static extern void Canny(
+         IntPtr image,
+         IntPtr edges,
+         double lowThreshold,
+         double highThreshold,
+         int apertureSize,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool L2gradient);
+      #endregion
+
+      /// <summary>
+      /// Reshape the src OclMat  
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The resulting OclMat, as input it should be an empty OclMat.</param>
+      /// <param name="cn">The new number of channels</param>
+      /// <param name="rows">The new number of rows</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatReshape")]
+      public static extern void OclMatReshape(IntPtr src, IntPtr dst, int cn, int rows);
+
+      #region morphology operation
+      /// <summary>
+      /// Erodes the image (applies the local minimum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The destination OclMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+
+      /// <summary>
+      /// Dilate the image (applies the local maximum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
+      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+
+      /// <summary>
+      /// Applies an advanced morphological operation to the image
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="op">The type of morphological operation</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations);
+
       #endregion
    }
 }

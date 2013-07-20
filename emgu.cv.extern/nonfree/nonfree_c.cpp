@@ -64,7 +64,7 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }*/
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+cv::SURF* CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
    cv::SURF* surf = new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
    *featureDetector = static_cast<cv::FeatureDetector*>(surf);
@@ -72,7 +72,7 @@ CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetecto
    return surf;
 }
 
-CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector)
+void CvSURFDetectorRelease(cv::SURF** detector)
 {
    delete *detector;
    *detector = 0;
@@ -131,4 +131,52 @@ void gpuVibeRelease(cv::gpu::VIBE_GPU** vibe)
    (*vibe)->release();
    delete *vibe;
    *vibe = 0;
+}*/
+
+/*
+cv::ocl::SURF_OCL* oclSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
+{
+   return new cv::ocl::SURF_OCL(_hessianThreshold, _nOctaves, _nOctaveLayers, _extended, _keypointsRatio, _upright);
+}
+
+void oclSURFDetectorRelease(cv::ocl::SURF_OCL** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+void oclSURFDetectorDetectKeyPoints(cv::ocl::SURF_OCL* detector, const cv::ocl::oclMat* img, const cv::ocl::oclMat* mask, cv::ocl::oclMat* keypoints)
+{
+   (*detector)(*img, mask ? *mask : cv::ocl::oclMat() , *keypoints);
+}
+
+void oclSURFDownloadKeypoints(cv::ocl::SURF_OCL* detector, const cv::ocl::oclMat* keypointsOcl, std::vector<cv::KeyPoint>* keypoints)
+{
+   detector->downloadKeypoints(*keypointsOcl, *keypoints);
+}
+
+void oclSURFUploadKeypoints(cv::ocl::SURF_OCL* detector, const std::vector<cv::KeyPoint>* keypoints, cv::ocl::oclMat* keypointsOcl)
+{
+   detector->uploadKeypoints(*keypoints, *keypointsOcl);
+}
+
+void oclSURFDetectorCompute(
+   cv::ocl::SURF_OCL* detector, 
+   const cv::ocl::oclMat* img, 
+   const cv::ocl::oclMat* mask, 
+   cv::ocl::oclMat* keypoints, 
+   cv::ocl::oclMat* descriptors, 
+   bool useProvidedKeypoints)
+{
+   (*detector)(
+      *img, 
+      mask? *mask : cv::ocl::oclMat(), 
+      *keypoints,
+      *descriptors,
+      useProvidedKeypoints);
+}
+
+int oclSURFDetectorGetDescriptorSize(cv::ocl::SURF_OCL* detector)
+{
+   return detector->descriptorSize();
 }*/

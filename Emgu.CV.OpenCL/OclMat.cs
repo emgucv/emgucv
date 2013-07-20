@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Util;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Release the unmanaged memory associated with this GpuMat
+      /// Release the unmanaged memory associated with this OclMat
       /// </summary>
       protected override void DisposeObject()
       {
@@ -36,7 +37,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Check if the GpuMat is Empty
+      /// Check if the OclMat is Empty
       /// </summary>
       public bool IsEmpty
       {
@@ -47,7 +48,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Check if the GpuMat is Continuous
+      /// Check if the OclMat is Continuous
       /// </summary>
       public bool IsContinuous
       {
@@ -58,12 +59,29 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Get the GpuMat size:
+      /// Get the OclMat type
+      /// </summary>
+      public int Type
+      {
+         get { return OclInvoke.OclMatGetType(_ptr); }
+      }
+
+      /// <summary>
+      /// Get the OclMat size:
       /// width == number of columns, height == number of rows
       /// </summary>
       public Size Size
       {
          get { return OclInvoke.OclMatGetSize(_ptr); }
+      }
+
+      /// <summary>
+      /// Get the OclMat size:
+      /// width == wholcols, height == wholerows
+      /// </summary>
+      public Size WholeSize
+      {
+         get { return OclInvoke.OclMatGetWholeSize(_ptr); }
       }
 
       /// <summary>
@@ -83,7 +101,7 @@ namespace Emgu.CV.OpenCL
       where TDepth : new()
    {
       /// <summary>
-      /// Create a OclMat from the unmanaged pointer
+      /// Create an OclMat from the unmanaged pointer
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the OclMat</param>
       public OclMat(IntPtr ptr)
@@ -92,7 +110,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Create an empty GpuMat
+      /// Create an empty OclMat
       /// </summary>
       public OclMat()
          : base()
@@ -100,7 +118,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Create a GpuMat of the specified size
+      /// Create an OclMat of the specified size
       /// </summary>
       /// <param name="rows">The number of rows (height)</param>
       /// <param name="cols">The number of columns (width)</param>
@@ -109,6 +127,16 @@ namespace Emgu.CV.OpenCL
       {
          int matType = CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels);
          _ptr = OclInvoke.OclMatCreate(rows, cols, matType);
+      }
+
+      /// <summary>
+      /// Create an OclMat of the specified size
+      /// </summary>
+      /// <param name="size">The size of the OclMat</param>
+      /// <param name="channels">The number of channels</param>
+      public OclMat(Size size, int channels)
+         : this(size.Height, size.Width, channels)
+      {
       }
 
       /// <summary>
@@ -135,10 +163,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="arr">The destination CvArray where the OclMat data will be downloaded to.</param>
       public void Download(CvArray<TDepth> arr)
       {
+         Debug.Assert(arr.Size.Equals(WholeSize), "Destination CvArray size does not match source OclMat wholesize");
          OclInvoke.OclMatDownload(_ptr, arr);
       }
 
-      
       /// <summary>
       /// Returns the min / max location and values for the image
       /// </summary>
@@ -263,9 +291,73 @@ namespace Emgu.CV.OpenCL
          handle.Free();
       }
 
+      /// <summary>
+      /// Changes shape of OclMat without copying data.
+      /// </summary>
+      /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
+      /// <param name="newRows">New number of rows. newRows = 0 means that the number of rows remains unchanged unless it needs to be changed according to newCn value.</param>
+      /// <returns>An OclMat of different shape</returns>
+      public OclMat<TDepth> Reshape(int newCn, int newRows)
+      {
+         OclMat<TDepth> result = new OclMat<TDepth>();
+         OclInvoke.OclMatReshape(this, result, newCn, newRows);
+         return result;
+      }
+
+      /// <summary>
+      /// Copies scalar value to every selected element of the destination OclMat:
+      /// OclMat(I)=value if mask(I)!=0
+      /// </summary>
+      /// <param name="value">Fill value</param>
+      /// <param name="mask">Operation mask, 8-bit single channel OclMat; specifies elements of destination array to be changed. Can be null if not used.</param>
+      public void SetTo(MCvScalar value, OclMat<Byte> mask)
+      {
+         OclInvoke.OclMatSetTo(_ptr, value, mask);
+      }
+
+      /// <summary>
+      /// Returns true if the two GpuMat equals
+      /// </summary>
+      /// <param name="other">The other GpuMat to be compares with</param>
+      /// <returns>True if the two GpuMat equals</returns>
       public bool Equals(OclMat<TDepth> other)
       {
-         throw new NotImplementedException();
+         if (NumberOfChannels != other.NumberOfChannels || Size != other.Size) return false;
+
+         using (OclMat<TDepth> xor = new OclMat<TDepth>(Size, NumberOfChannels))
+         {
+            OclInvoke.BitwiseXor(_ptr, other, xor, IntPtr.Zero);
+
+            if (NumberOfChannels == 3)
+            {
+               //we cannot apply count non-zeros on 3 channel oclMat because 3 channel oclMat actually contains 4 channels
+               //The 4th channel may contains randome element and we only wish to check for the first 3 channels.
+               //so we split up the channels and count one by one.
+               OclMat[] channels = xor.Split();
+               try
+               {
+                  for (int i = 0; i < channels.Length; i++)
+                  {
+                     int nonZero = OclInvoke.CountNonZero(channels[i]);
+                     if (nonZero > 0)
+                        return false;
+                  }
+                  return true;
+               }
+               finally
+               {
+                  for (int i = 0; i < channels.Length; i++)
+                  {
+                     channels[i].Dispose();
+                     channels[i] = null;
+                  }
+               }
+            }
+
+            return OclInvoke.CountNonZero(xor) == 0;
+
+         }         
       }
+
    }
 }

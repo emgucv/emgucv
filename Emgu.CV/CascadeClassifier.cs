@@ -16,6 +16,13 @@ namespace Emgu.CV
    /// </summary>
    public class CascadeClassifier : UnmanagedObject
    {
+      /// <summary>
+      /// A dummy constructor that mainly aimed for those who would like to inherite this class
+      /// </summary>
+      protected CascadeClassifier()
+      {
+      }
+
       ///<summary> Create a CascadeClassifier from the specific file</summary>
       ///<param name="fileName"> The name of the file that contains the CascadeClassifier</param>
       public CascadeClassifier(String fileName)

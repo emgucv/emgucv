@@ -11,19 +11,19 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.GPU
+namespace Emgu.CV.OpenCL
 {
    /// <summary>
    /// A HOG descriptor
    /// </summary>
-   public class GpuHOGDescriptor : UnmanagedObject
+   public class OclHOGDescriptor : UnmanagedObject
    {
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
-      public GpuHOGDescriptor()
+      public OclHOGDescriptor()
       {
-         _ptr = GpuInvoke.gpuHOGDescriptorCreateDefault();
+         _ptr = OclInvoke.oclHOGDescriptorCreateDefault();
       }
 
       /// <summary>
@@ -38,7 +38,7 @@ namespace Emgu.CV.GPU
       /// <param name="nLevels">Maximum number of detection window increases. Use 64 for default</param>
       /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default.</param>
       /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
-      public GpuHOGDescriptor(
+      public OclHOGDescriptor(
          Size winSize,
          Size blockSize,
          Size blockStride,
@@ -49,7 +49,7 @@ namespace Emgu.CV.GPU
          bool gammaCorrection,
          int nLevels)
       {
-         _ptr = GpuInvoke.gpuHOGDescriptorCreate(
+         _ptr = OclInvoke.oclHOGDescriptorCreate(
             ref winSize,
             ref blockSize,
             ref blockStride,
@@ -78,7 +78,7 @@ namespace Emgu.CV.GPU
       {
          using (VectorOfFloat f = new VectorOfFloat())
          {
-            GpuInvoke.gpuHOGDescriptorGetPeopleDetector48x96(f);
+            OclInvoke.oclHOGDescriptorGetPeopleDetector48x96(f);
             return f.ToArray();
          }
       }
@@ -91,7 +91,7 @@ namespace Emgu.CV.GPU
       {
          using (VectorOfFloat f = new VectorOfFloat())
          {
-            GpuInvoke.gpuHOGDescriptorGetPeopleDetector64x128(f);
+            OclInvoke.oclHOGDescriptorGetPeopleDetector64x128(f);
             return f.ToArray();
          }
       }
@@ -105,7 +105,7 @@ namespace Emgu.CV.GPU
          using (VectorOfFloat vec = new VectorOfFloat())
          {
             vec.Push(detector);
-            GpuInvoke.gpuHOGSetSVMDetector(_ptr, vec);
+            OclInvoke.oclHOGSetSVMDetector(_ptr, vec);
          }
       }
 
@@ -120,7 +120,7 @@ namespace Emgu.CV.GPU
          using (MemStorage storage = new MemStorage())
          {
             Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
-            GpuInvoke.gpuHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+            OclInvoke.oclHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
             return rectSeq.ToArray();
          }
       }
@@ -128,7 +128,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="image">The OclImage to search in</param>
       /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
       /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
       /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
@@ -136,7 +136,7 @@ namespace Emgu.CV.GPU
       /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
       /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(
-         GpuImage<Bgra, Byte> image,
+         OclImage<Bgra, Byte> image,
          double hitThreshold,
          Size winStride,
          Size padding,
@@ -149,7 +149,7 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="image">The OclImage to search in</param>
       /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
       /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
       /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
@@ -157,7 +157,7 @@ namespace Emgu.CV.GPU
       /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
       /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(
-         GpuImage<Gray, Byte> image,
+         OclImage<Gray, Byte> image,
          double hitThreshold,
          Size winStride,
          Size padding,
@@ -170,11 +170,11 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="image">The OclImage to search in</param>
       /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(GpuImage<Bgra, Byte> image)
+      public Rectangle[] DetectMultiScale(OclImage<Bgra, Byte> image)
       {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
+         return DetectMultiScale(image, 0, new Size(0, 0), new Size(0, 0), 1.05, 2);
       }
 
       /// <summary>
@@ -182,9 +182,9 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="image">The GpuImage to search in</param>
       /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(GpuImage<Gray, Byte> image)
+      public Rectangle[] DetectMultiScale(OclImage<Gray, Byte> image)
       {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
+         return DetectMultiScale(image, 0, new Size(0, 0), new Size(0, 0), 1.05, 2);
       }
 
       /// <summary>
@@ -192,23 +192,23 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuHOGDescriptorRelease(ref _ptr);
+         OclInvoke.oclHOGDescriptorRelease(ref _ptr);
       }
    }
 
-   public static partial class GpuInvoke
+   public static partial class OclInvoke
    {
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuHOGDescriptorGetPeopleDetector64x128(IntPtr vector);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void oclHOGDescriptorGetPeopleDetector64x128(IntPtr vector);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuHOGDescriptorGetPeopleDetector48x96(IntPtr vector);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void oclHOGDescriptorGetPeopleDetector48x96(IntPtr vector);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuHOGDescriptorCreateDefault();
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr oclHOGDescriptorCreateDefault();
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuHOGDescriptorCreate(
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr oclHOGDescriptorCreate(
          ref Size winSize,
          ref Size blockSize,
          ref Size blockStride,
@@ -221,13 +221,13 @@ namespace Emgu.CV.GPU
          int nLevels);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuHOGDescriptorRelease(ref IntPtr descriptor);
+      internal extern static void oclHOGDescriptorRelease(ref IntPtr descriptor);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
+      internal extern static void oclHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuHOGDescriptorDetectMultiScale(
+      internal extern static void oclHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,
          IntPtr foundLocations,

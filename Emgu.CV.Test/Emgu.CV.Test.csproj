@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
-      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
+      <Project>{8728cb1f-f193-4f75-aea9-221aa85a3e80}</Project>
       <Name>Emgu.CV.GPU</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.ML\Emgu.CV.ML.csproj">

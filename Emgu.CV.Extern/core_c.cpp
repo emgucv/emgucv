@@ -15,9 +15,12 @@ void cvMatRelease(cv::Mat** mat)
    delete *mat;
    *mat = 0;
 }
-CvSize cvMatGetSize(cv::Mat* mat)
+emgu::size cvMatGetSize(cv::Mat* mat)
 {
-   return CvSize(mat->cols, mat->rows);
+   emgu::size s;
+   s.width = mat->cols;
+   s.height = mat->rows;
+   return s;
 }
 void cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray)
 {
