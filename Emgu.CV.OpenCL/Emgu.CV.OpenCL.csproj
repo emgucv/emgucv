@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OclBruteForceMatcher.cs" />
+    <Compile Include="OclInfo.cs" />
     <Compile Include="OclSURFDetector.cs" />
     <Compile Include="OclStereoBM.cs" />
     <Compile Include="OclStereoConstantSpaceBP.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="VectorOfOclInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">

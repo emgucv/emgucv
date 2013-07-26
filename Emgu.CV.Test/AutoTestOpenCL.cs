@@ -19,11 +19,23 @@ namespace Emgu.CV.Test
    [TestFixture]
    public class AutoTestOpenCL
    {
+      [Test]
+      public void TestOclInfo()
+      {
+         VectorOfOclInfo oclInfoVec = new VectorOfOclInfo();
+         int count = OclInvoke.GetDevice(oclInfoVec, OclDeviceType.All);
+         if (oclInfoVec.Size > 0)
+         {
+            OclInfo info = oclInfoVec[0];
+            String platformName = info.PlatformName;
+         }
+         Trace.WriteLine("count = " + count);
+      }
 
       [Test]
       public void TestOclMatAdd()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             int repeat = 1000;
@@ -58,7 +70,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestSplitMerge()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
@@ -94,7 +106,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclFlip()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
@@ -115,7 +127,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestConvolutionAndLaplace()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
@@ -154,7 +166,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestClone()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             Image<Gray, Byte> img = new Image<Gray, byte>(300, 400);
@@ -172,7 +184,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestColorConvert()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
@@ -193,7 +205,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestInplaceNot()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
@@ -213,7 +225,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestResizeBgr()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
@@ -239,7 +251,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCanny()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
@@ -256,7 +268,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestHOG1()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device > 0)
          {
             using (OclHOGDescriptor hog = new OclHOGDescriptor())
@@ -295,7 +307,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestErodeDilate()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
 
@@ -323,7 +335,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclSURFKeypointDetection()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
          
@@ -343,7 +355,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGpuPyr()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
 
@@ -386,7 +398,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMatchTemplate()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
 
@@ -433,7 +445,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCascadeClassifierFaceDetect()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
@@ -452,7 +464,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestBruteForceHammingDistance()
       {
-         int device = OclInvoke.GetDevice(OclDeviceType.All);
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
          if (device <= 0)
             return;
          Image<Gray, byte> box = new Image<Gray, byte>("box.png");

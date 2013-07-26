@@ -6,10 +6,15 @@
 
 #include "ocl_c.h"
 
-int oclGetDevice(int deviceType)
+int oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int deviceType)
 {
-   std::vector< cv::ocl::Info> deviceInfo;
-   return cv::ocl::getDevice(deviceInfo, deviceType);
+   if (oclInfoVec)
+      return cv::ocl::getDevice(*oclInfoVec, deviceType);
+   else
+   {
+      std::vector<cv::ocl::Info> oclInfo;
+      return cv::ocl::getDevice(oclInfo, deviceType);
+   }
 }
 
 cv::ocl::oclMat* oclMatCreateDefault()
@@ -594,4 +599,64 @@ void oclBruteForceMatcherKnnMatchSingle(
       CV_Assert(distMat.data == distance->data);
    } else*/
       matcher->knnMatchSingle(*queryDescs, *trainDescs, *trainIdx, *distance, emptyMat, k, *mask);
+}
+
+
+//----------------------------------------------------------------------------
+//
+//  Vector of VectorOfOclInfo
+//
+//----------------------------------------------------------------------------
+std::vector<cv::ocl::Info>* VectorOfOclInfoCreate()
+{
+   return new std::vector<cv::ocl::Info>();
+}
+
+std::vector<cv::ocl::Info>* VectorOfOclInfoCreateSize(int size)
+{
+   return new std::vector<cv::ocl::Info>();
+}
+
+int VectorOfOclInfoGetSize(std::vector<cv::ocl::Info>* v)
+{
+   return v->size();
+}
+
+void VectorOfOclInfoClear(std::vector<cv::ocl::Info>* v)
+{
+   v->clear();
+}
+
+void VectorOfOclInfoRelease(std::vector<cv::ocl::Info>* v)
+{
+   delete v;
+}
+
+cv::ocl::Info* VectorOfOclInfoGetStartAddress(std::vector<cv::ocl::Info>* v)
+{
+   return v->empty() ? NULL : &(*v)[0];
+}
+
+cv::ocl::Info* VectorOfOclInfoGetItem(std::vector<cv::ocl::Info>* v, int index)
+{
+   return &(*v)[index];
+}
+
+//----------------------------------------------------------------------------
+//
+//  OclInfo
+//
+//----------------------------------------------------------------------------
+const char* oclInfoGetPlatformName(cv::ocl::Info* oclInfo)
+{
+   return oclInfo->PlatformName.c_str();
+}
+
+int oclInfoGetDeviceCount(cv::ocl::Info* oclInfo)
+{
+   return oclInfo->DeviceName.size();
+}
+const char* oclInfoGetDeviceName(cv::ocl::Info* oclInfo, int index)
+{
+   return oclInfo->DeviceName[index].c_str();
 }

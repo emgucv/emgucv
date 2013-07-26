@@ -13,7 +13,7 @@
 #include "opencv2/core/core_c.h"
 #include "../emgu_c.h"
 
-CVAPI(int) oclGetDevice(int devicetype);
+CVAPI(int) oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int devicetype);
 
 //----------------------------------------------------------------------------
 //
@@ -250,4 +250,35 @@ CVAPI(void) oclBruteForceMatcherKnnMatchSingle(
    const cv::ocl::oclMat* queryDescs, const cv::ocl::oclMat* trainDescs,
    cv::ocl::oclMat* trainIdx, cv::ocl::oclMat* distance, 
    int k, const cv::ocl::oclMat* mask);
+
+//----------------------------------------------------------------------------
+//
+//  Vector of VectorOfOclInfo
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::ocl::Info>*) VectorOfOclInfoCreate();
+
+CVAPI(std::vector<cv::ocl::Info>*) VectorOfOclInfoCreateSize(int size);
+
+CVAPI(int) VectorOfOclInfoGetSize(std::vector<cv::ocl::Info>* v);
+
+CVAPI(void) VectorOfOclInfoClear(std::vector<cv::ocl::Info>* v);
+
+CVAPI(void) VectorOfOclInfoRelease(std::vector<cv::ocl::Info>* v);
+
+CVAPI(cv::ocl::Info*) VectorOfOclInfoGetStartAddress(std::vector<cv::ocl::Info>* v);
+
+CVAPI(cv::ocl::Info*) VectorOfOclInfoGetItem(std::vector<cv::ocl::Info>* v, int index);
+
+//----------------------------------------------------------------------------
+//
+//  OclInfo
+//
+//----------------------------------------------------------------------------
+CVAPI(const char*) oclInfoGetPlatformName(cv::ocl::Info* oclInfo);
+
+CVAPI(int) oclInfoGetDeviceCount(cv::ocl::Info* oclInfo);
+
+CVAPI(const char*) oclInfoGetDeviceName(cv::ocl::Info* oclInfo, int index);
+
 #endif

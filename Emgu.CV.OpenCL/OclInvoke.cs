@@ -34,7 +34,7 @@ namespace Emgu.CV.OpenCL
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGetDevice")]
-      public static extern int GetDevice(OclDeviceType deviceType);
+      public static extern int GetDevice(IntPtr oclInfoVector, OclDeviceType deviceType);
 
 
       /// <summary>
