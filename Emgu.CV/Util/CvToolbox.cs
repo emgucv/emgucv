@@ -219,7 +219,7 @@ namespace Emgu.CV.Util
 
       private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
       {
-         String key = String.Format("CV_{0}2{1}", GetConversionCodenameFromType(srcType), GetConversionCodenameFromType(destType));
+         String key = String.Format("{0}2{1}", GetConversionCodenameFromType(srcType), GetConversionCodenameFromType(destType));
          return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
       }
 

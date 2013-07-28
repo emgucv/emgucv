@@ -635,16 +635,6 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
-      /// </summary>
-      /// <param name="src">The source image</param>
-      /// <param name="dst">The destination image</param>
-      /// <param name="kernel">Convolution kernel, single-channel floating point matrix. If you want to apply different kernels to different channels, split the image using cvSplit into separate color planes and process them individually</param>
-      /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor);
-
-      /// <summary>
       /// Copies the source 2D array into interior of destination array and makes a border of the specified type around the copied area. The function is useful when one needs to emulate border type that is different from the one embedded into a specific algorithm implementation. For example, morphological functions, as well as most of other filtering functions in OpenCV, internally use replication border type, while the user may need zero border or a border, filled with 1's or 255's
       /// </summary>
       /// <param name="src">The source image</param>

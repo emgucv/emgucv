@@ -39,7 +39,7 @@ namespace Emgu.CV.VideoStab
          if (iplImage.nChannels == 1)
          {  //if the image captured is Grayscale, convert it to BGR
             res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
-            CvInvoke.cvCvtColor(_frameBuffer, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_GRAY2BGR);
+            CvInvoke.cvCvtColor(_frameBuffer, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.GRAY2BGR);
          }
          else
          {

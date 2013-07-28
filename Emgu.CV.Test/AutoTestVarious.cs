@@ -970,6 +970,24 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestOpticalFlowDualTVL1()
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         OptiocalFlowImage(out prevImg, out currImg);
+         Image<Gray, float> velx = new Image<Gray, float>(prevImg.Size);
+         Image<Gray, float> vely = new Image<Gray, float>(prevImg.Size);
+
+         Stopwatch watch = Stopwatch.StartNew();
+
+         OpticalFlow.DualTVL1(prevImg, currImg, velx, vely);
+
+         watch.Stop();
+         EmguAssert.WriteLine(String.Format(
+            "Time: {0} milliseconds",
+            watch.ElapsedMilliseconds));
+      }
+
+      [Test]
       public void TestKDTree()
       {
          float[][] features = new float[10][];

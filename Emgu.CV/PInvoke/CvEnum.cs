@@ -365,722 +365,808 @@ namespace Emgu.CV.CvEnum
       ///<summary>
       ///Convert BGR color to BGRA color
       ///</summary>
-      CV_BGR2BGRA = 0,
+      BGR2BGRA = 0,
       /// <summary>
       /// Convert RGB color to RGBA color
       /// </summary>
-      CV_RGB2RGBA = CV_BGR2BGRA,
+      RGB2RGBA = BGR2BGRA,
 
       ///<summary>
       ///Convert BGRA color to BGR color
       ///</summary>
-      CV_BGRA2BGR = 1,
+      BGRA2BGR = 1,
       /// <summary>
       /// Convert RGBA color to RGB color
       /// </summary>
-      CV_RGBA2RGB = CV_BGRA2BGR,
+      RGBA2RGB = BGRA2BGR,
       /// <summary>
       /// Convert BGR color to RGBA color
       /// </summary>
-      CV_BGR2RGBA = 2,
+      BGR2RGBA = 2,
       /// <summary>
       /// Convert RGB color to BGRA color
       /// </summary>
-      CV_RGB2BGRA = CV_BGR2RGBA,
+      RGB2BGRA = BGR2RGBA,
       /// <summary>
       /// Convert RGBA color to BGR color
       /// </summary>
-      CV_RGBA2BGR = 3,
+      RGBA2BGR = 3,
       /// <summary>
       /// Convert BGRA color to RGB color
       /// </summary>
-      CV_BGRA2RGB = CV_RGBA2BGR,
+      BGRA2RGB = RGBA2BGR,
       /// <summary>
       /// Convert BGR color to RGB color
       /// </summary>
-      CV_BGR2RGB = 4,
+      BGR2RGB = 4,
       /// <summary>
       /// Convert RGB color to BGR color
       /// </summary>
-      CV_RGB2BGR = CV_BGR2RGB,
+      RGB2BGR = BGR2RGB,
       /// <summary>
       /// Convert BGRA color to RGBA color
       /// </summary>
-      CV_BGRA2RGBA = 5,
+      BGRA2RGBA = 5,
       /// <summary>
       /// Convert RGBA color to BGRA color
       /// </summary>
-      CV_RGBA2BGRA = CV_BGRA2RGBA,
+      RGBA2BGRA = BGRA2RGBA,
       ///<summary>
       ///Convert BGR color to GRAY color
       ///</summary>
-      CV_BGR2GRAY = 6,
+      BGR2GRAY = 6,
       /// <summary>
       /// Convert RGB color to GRAY color
       /// </summary>
-      CV_RGB2GRAY = 7,
+      RGB2GRAY = 7,
       ///<summary>
       ///Convert GRAY color to BGR color
       ///</summary>
-      CV_GRAY2BGR = 8,
+      GRAY2BGR = 8,
       /// <summary>
       /// Convert GRAY color to RGB color
       /// </summary>
-      CV_GRAY2RGB = CV_GRAY2BGR,
+      GRAY2RGB = GRAY2BGR,
       ///<summary>
       ///Convert GRAY color to BGRA color
       ///</summary>
-      CV_GRAY2BGRA = 9,
+      GRAY2BGRA = 9,
       /// <summary>
       /// Convert GRAY color to RGBA color
       /// </summary>
-      CV_GRAY2RGBA = CV_GRAY2BGRA,
+      GRAY2RGBA = GRAY2BGRA,
       ///<summary>
       ///Convert BGRA color to GRAY color
       ///</summary>
-      CV_BGRA2GRAY = 10,
+      BGRA2GRAY = 10,
       /// <summary>
       /// Convert RGBA color to GRAY color
       /// </summary>
-      CV_RGBA2GRAY = 11,
+      RGBA2GRAY = 11,
       ///<summary>
       ///Convert BGR color to BGR565 color
       ///</summary>
-      CV_BGR2BGR565 = 12,
+      BGR2BGR565 = 12,
       /// <summary>
       /// Convert RGB color to BGR565 color
       /// </summary>
-      CV_RGB2BGR565 = 13,
+      RGB2BGR565 = 13,
       ///<summary>
       ///Convert BGR565 color to BGR color
       ///</summary>
-      CV_BGR5652BGR = 14,
+      BGR5652BGR = 14,
       /// <summary>
       /// Convert BGR565 color to RGB color
       /// </summary>
-      CV_BGR5652RGB = 15,
+      BGR5652RGB = 15,
       ///<summary>
       ///Convert BGRA color to BGR565 color
       ///</summary>
-      CV_BGRA2BGR565 = 16,
+      BGRA2BGR565 = 16,
       /// <summary>
       /// Convert RGBA color to BGR565 color
       /// </summary>
-      CV_RGBA2BGR565 = 17,
+      RGBA2BGR565 = 17,
       ///<summary>
       ///Convert BGR565 color to BGRA color
       ///</summary>
-      CV_BGR5652BGRA = 18,
+      BGR5652BGRA = 18,
       /// <summary>
       /// Convert BGR565 color to RGBA color
       /// </summary>
-      CV_BGR5652RGBA = 19,
+      BGR5652RGBA = 19,
       ///<summary>
       ///Convert GRAY color to BGR565 color
       ///</summary>
-      CV_GRAY2BGR565 = 20,
+      GRAY2BGR565 = 20,
       ///<summary>
       ///Convert BGR565 color to GRAY color
       ///</summary>
-      CV_BGR5652GRAY = 21,
+      BGR5652GRAY = 21,
       ///<summary>
       ///Convert BGR color to BGR555 color
       ///</summary>
-      CV_BGR2BGR555 = 22,
+      BGR2BGR555 = 22,
       /// <summary>
       /// Convert RGB color to BGR555 color
       /// </summary>
-      CV_RGB2BGR555 = 23,
+      RGB2BGR555 = 23,
       ///<summary>
       ///Convert BGR555 color to BGR color
       ///</summary>
-      CV_BGR5552BGR = 24,
+      BGR5552BGR = 24,
       /// <summary>
       /// Convert BGR555 color to RGB color
       /// </summary>
-      CV_BGR5552RGB = 25,
+      BGR5552RGB = 25,
       ///<summary>
       ///Convert BGRA color to BGR555 color
       ///</summary>
-      CV_BGRA2BGR555 = 26,
+      BGRA2BGR555 = 26,
       /// <summary>
       /// Convert RGBA color to BGR555 color
       /// </summary>
-      CV_RGBA2BGR555 = 27,
+      RGBA2BGR555 = 27,
       ///<summary>
       ///Convert BGR555 color to BGRA color
       ///</summary>
-      CV_BGR5552BGRA = 28,
+      BGR5552BGRA = 28,
       /// <summary>
       /// Convert BGR555 color to RGBA color
       /// </summary>
-      CV_BGR5552RGBA = 29,
+      BGR5552RGBA = 29,
       ///<summary>
       ///Convert GRAY color to BGR555 color
       ///</summary>
-      CV_GRAY2BGR555 = 30,
+      GRAY2BGR555 = 30,
       ///<summary>
       ///Convert BGR555 color to GRAY color
       ///</summary>
-      CV_BGR5552GRAY = 31,
+      BGR5552GRAY = 31,
       ///<summary>
       ///Convert BGR color to XYZ color
       ///</summary>
-      CV_BGR2XYZ = 32,
+      BGR2XYZ = 32,
       /// <summary>
       /// Convert RGB color to XYZ color
       /// </summary>
-      CV_RGB2XYZ = 33,
+      RGB2XYZ = 33,
       ///<summary>
       ///Convert XYZ color to BGR color
       ///</summary>
-      CV_XYZ2BGR = 34,
+      XYZ2BGR = 34,
       /// <summary>
       /// Convert XYZ color to RGB color
       /// </summary>
-      CV_XYZ2RGB = 35,
+      XYZ2RGB = 35,
       ///<summary>
       ///Convert BGR color to YCrCb color
       ///</summary>
-      CV_BGR2YCrCb = 36,
+      BGR2YCrCb = 36,
       /// <summary>
       /// Convert RGB color to YCrCb color
       /// </summary>
-      CV_RGB2YCrCb = 37,
+      RGB2YCrCb = 37,
       ///<summary>
       ///Convert YCrCb color to BGR color
       ///</summary>
-      CV_YCrCb2BGR = 38,
+      YCrCb2BGR = 38,
       /// <summary>
       /// Convert YCrCb color to RGB color
       /// </summary>
-      CV_YCrCb2RGB = 39,
+      YCrCb2RGB = 39,
       ///<summary>
       ///Convert BGR color to HSV color
       ///</summary>
-      CV_BGR2HSV = 40,
+      BGR2HSV = 40,
       /// <summary>
       /// Convert RGB colot to HSV color
       /// </summary>
-      CV_RGB2HSV = 41,
+      RGB2HSV = 41,
       ///<summary>
       ///Convert BGR color to Lab color
       ///</summary>
-      CV_BGR2Lab = 44,
+      BGR2Lab = 44,
       /// <summary>
       /// Convert RGB color to Lab color
       /// </summary>
-      CV_RGB2Lab = 45,
+      RGB2Lab = 45,
       ///<summary>
       ///Convert BayerBG color to BGR color
       ///</summary>
-      CV_BayerBG2BGR = 46,
+      BayerBG2BGR = 46,
       ///<summary>
       ///Convert BayerGB color to BGR color
       ///</summary>
-      CV_BayerGB2BGR = 47,
+      BayerGB2BGR = 47,
       ///<summary>
       ///Convert BayerRG color to BGR color
       ///</summary>
-      CV_BayerRG2BGR = 48,
+      BayerRG2BGR = 48,
       ///<summary>
       ///Convert BayerGR color to BGR color
       ///</summary>
-      CV_BayerGR2BGR = 49,
+      BayerGR2BGR = 49,
       /// <summary>
       /// Convert BayerBG color to BGR color
       /// </summary>
-      CV_BayerBG2RGB = CV_BayerRG2BGR,
+      BayerBG2RGB = BayerRG2BGR,
       /// <summary>
       /// Convert BayerRG color to BGR color
       /// </summary>
-      CV_BayerGB2RGB = CV_BayerGR2BGR,
+      BayerGB2RGB = BayerGR2BGR,
       /// <summary>
       /// Convert BayerRG color to RGB color
       /// </summary>
-      CV_BayerRG2RGB = CV_BayerBG2BGR,
+      BayerRG2RGB = BayerBG2BGR,
       /// <summary>
       /// Convert BayerGR color to RGB color
       /// </summary>
-      CV_BayerGR2RGB = CV_BayerGB2BGR,
+      BayerGR2RGB = BayerGB2BGR,
       ///<summary>
       ///Convert BGR color to Luv color
       ///</summary>
-      CV_BGR2Luv = 50,
+      BGR2Luv = 50,
       /// <summary>
       /// Convert RGB color to Luv color
       /// </summary>
-      CV_RGB2Luv = 51,
+      RGB2Luv = 51,
       ///<summary>
       ///Convert BGR color to HLS color
       ///</summary>
-      CV_BGR2HLS = 52,
+      BGR2HLS = 52,
       /// <summary>
       /// Convert RGB color to HLS color
       /// </summary>
-      CV_RGB2HLS = 53,
+      RGB2HLS = 53,
       ///<summary>
       ///Convert HSV color to BGR color
       ///</summary>
-      CV_HSV2BGR = 54,
+      HSV2BGR = 54,
       /// <summary>
       /// Convert HSV color to RGB color
       /// </summary>
-      CV_HSV2RGB = 55,
+      HSV2RGB = 55,
       ///<summary>
       ///Convert Lab color to BGR color
       ///</summary>
-      CV_Lab2BGR = 56,
+      Lab2BGR = 56,
       /// <summary>
       /// Convert Lab color to RGB color
       /// </summary>
-      CV_Lab2RGB = 57,
+      Lab2RGB = 57,
       ///<summary>
       ///Convert Luv color to BGR color
       ///</summary>
-      CV_Luv2BGR = 58,
+      Luv2BGR = 58,
       /// <summary>
       /// Convert Luv color to RGB color
       /// </summary>
-      CV_Luv2RGB = 59,
+      Luv2RGB = 59,
       ///<summary>
       ///Convert HLS color to BGR color
       ///</summary>
-      CV_HLS2BGR = 60,
+      HLS2BGR = 60,
       /// <summary>
       /// Convert HLS color to RGB color
       /// </summary>
-      CV_HLS2RGB = 61,
+      HLS2RGB = 61,
       /// <summary>
       /// Convert BayerBG pattern to BGR color using VNG
       /// </summary>
-      CV_BayerBG2BGR_VNG = 62,
+      BayerBG2BGR_VNG = 62,
       /// <summary>
       /// Convert BayerGB pattern to BGR color using VNG
       /// </summary>
-      CV_BayerGB2BGR_VNG = 63,
+      BayerGB2BGR_VNG = 63,
       /// <summary>
       /// Convert BayerRG pattern to BGR color using VNG
       /// </summary>
-      CV_BayerRG2BGR_VNG = 64,
+      BayerRG2BGR_VNG = 64,
       /// <summary>
       /// Convert BayerGR pattern to BGR color using VNG
       /// </summary>
-      CV_BayerGR2BGR_VNG = 65,
+      BayerGR2BGR_VNG = 65,
       /// <summary>
       /// Convert BayerBG pattern to RGB color using VNG
       /// </summary>
-      CV_BayerBG2RGB_VNG = CV_BayerRG2BGR_VNG,
+      BayerBG2RGB_VNG = BayerRG2BGR_VNG,
       /// <summary>
       /// Convert BayerGB pattern to RGB color using VNG
       /// </summary>
-      CV_BayerGB2RGB_VNG = CV_BayerGR2BGR_VNG,
+      BayerGB2RGB_VNG = BayerGR2BGR_VNG,
       /// <summary>
       /// Convert BayerRG pattern to RGB color using VNG
       /// </summary>
-      CV_BayerRG2RGB_VNG = CV_BayerBG2BGR_VNG,
+      BayerRG2RGB_VNG = BayerBG2BGR_VNG,
       /// <summary>
       /// Convert BayerGR pattern to RGB color using VNG
       /// </summary>
-      CV_BayerGR2RGB_VNG = CV_BayerGB2BGR_VNG,
+      BayerGR2RGB_VNG = BayerGB2BGR_VNG,
 
       /// <summary>
       /// Convert BGR to HSV
       /// </summary>
-      CV_BGR2HSV_FULL = 66,
+      BGR2HSV_FULL = 66,
       /// <summary>
       /// Convert RGB to HSV
       /// </summary>
-      CV_RGB2HSV_FULL = 67,
+      RGB2HSV_FULL = 67,
       /// <summary>
       /// Convert BGR to HLS
       /// </summary>
-      CV_BGR2HLS_FULL = 68,
+      BGR2HLS_FULL = 68,
       /// <summary>
       /// Convert RGB to HLS
       /// </summary>
-      CV_RGB2HLS_FULL = 69,
+      RGB2HLS_FULL = 69,
 
       /// <summary>
       /// Convert HSV color to BGR color
       /// </summary>
-      CV_HSV2BGR_FULL = 70,
+      HSV2BGR_FULL = 70,
       /// <summary>
       /// Convert HSV color to RGB color
       /// </summary>
-      CV_HSV2RGB_FULL = 71,
+      HSV2RGB_FULL = 71,
       /// <summary>
       /// Convert HLS color to BGR color
       /// </summary>
-      CV_HLS2BGR_FULL = 72,
+      HLS2BGR_FULL = 72,
       /// <summary>
       /// Convert HLS color to RGB color
       /// </summary>
-      CV_HLS2RGB_FULL = 73,
+      HLS2RGB_FULL = 73,
 
       /// <summary>
       /// Convert sBGR color to Lab color
       /// </summary>
-      CV_LBGR2Lab = 74,
+      LBGR2Lab = 74,
       /// <summary>
       /// Convert sRGB color to Lab color
       /// </summary>
-      CV_LRGB2Lab = 75,
+      LRGB2Lab = 75,
       /// <summary>
       /// Convert sBGR color to Luv color
       /// </summary>
-      CV_LBGR2Luv = 76,
+      LBGR2Luv = 76,
       /// <summary>
       /// Convert sRGB color to Luv color
       /// </summary>
-      CV_LRGB2Luv = 77,
+      LRGB2Luv = 77,
 
       /// <summary>
       /// Convert Lab color to sBGR color
       /// </summary>
-      CV_Lab2LBGR = 78,
+      Lab2LBGR = 78,
       /// <summary>
       /// Convert Lab color to sRGB color
       /// </summary>
-      CV_Lab2LRGB = 79,
+      Lab2LRGB = 79,
       /// <summary>
       /// Convert Luv color to sBGR color
       /// </summary>
-      CV_Luv2LBGR = 80,
+      Luv2LBGR = 80,
       /// <summary>
       /// Convert Luv color to sRGB color
       /// </summary>
-      CV_Luv2LRGB = 81,
+      Luv2LRGB = 81,
 
       /// <summary>
       /// Convert BGR color to YUV
       /// </summary>
-      CV_BGR2YUV = 82,
+      BGR2YUV = 82,
       /// <summary>
       /// Convert RGB color to YUV
       /// </summary>
-      CV_RGB2YUV = 83,
+      RGB2YUV = 83,
       /// <summary>
       /// Convert YUV color to BGR
       /// </summary>
-      CV_YUV2BGR = 84,
+      YUV2BGR = 84,
       /// <summary>
       /// Convert YUV color to RGB
       /// </summary>
-      CV_YUV2RGB = 85,
+      YUV2RGB = 85,
 
       /// <summary>
       /// Convert BayerBG to GRAY
       /// </summary>
-      CV_BayerBG2GRAY = 86,
+      BayerBG2GRAY = 86,
       /// <summary>
       /// Convert BayerGB to GRAY
       /// </summary>
-      CV_BayerGB2GRAY = 87,
+      BayerGB2GRAY = 87,
       /// <summary>
       /// Convert BayerRG to GRAY
       /// </summary>
-      CV_BayerRG2GRAY = 88,
+      BayerRG2GRAY = 88,
       /// <summary>
       /// Convert BayerGR to GRAY
       /// </summary>
-      CV_BayerGR2GRAY = 89,
+      BayerGR2GRAY = 89,
       /// <summary>
       /// Convert YUV420i to RGB
       /// </summary>
-      CV_YUV420i2RGB = 90,
+      YUV420i2RGB = 90,
       /// <summary>
       /// Convert YUV420i to BGR
       /// </summary>
-      CV_YUV420i2BGR = 91,
+      YUV420i2BGR = 91,
       /// <summary>
       /// Convert YUV420sp to RGB
       /// </summary>
-      CV_YUV420sp2RGB = 92,
+      YUV420sp2RGB = 92,
       /// <summary>
       /// Convert YUV320sp to BGR
       /// </summary>
-      CV_YUV420sp2BGR = 93,
+      YUV420sp2BGR = 93,
       /// <summary>
       /// Convert YUV320i to RGBA
       /// </summary>
-      CV_YUV420i2RGBA = 94,
+      YUV420i2RGBA = 94,
       /// <summary>
       /// Convert YUV420i to BGRA
       /// </summary>
-      CV_YUV420i2BGRA = 95,
+      YUV420i2BGRA = 95,
       /// <summary>
       /// Convert YUV420sp to RGBA
       /// </summary>
-      CV_YUV420sp2RGBA = 96,
+      YUV420sp2RGBA = 96,
       /// <summary>
       /// Convert YUV420sp to BGRA
       /// </summary>
-      CV_YUV420sp2BGRA = 97,
+      YUV420sp2BGRA = 97,
 
       /// <summary>
       /// Convert YUV (YV12) to RGB
       /// </summary>
-      CV_YUV2RGB_YV12 = 98,
+      YUV2RGB_YV12 = 98,
       /// <summary>
       /// Convert YUV (YV12) to BGR
       /// </summary>
-      CV_YUV2BGR_YV12 = 99,
+      YUV2BGR_YV12 = 99,
       /// <summary>
       /// Convert YUV (iYUV) to RGB
       /// </summary>
-      CV_YUV2RGB_IYUV = 100,
+      YUV2RGB_IYUV = 100,
       /// <summary>
       /// Convert YUV (iYUV) to BGR
       /// </summary>
-      CV_YUV2BGR_IYUV = 101,
+      YUV2BGR_IYUV = 101,
       /// <summary>
       /// Convert YUV (i420) to RGB
       /// </summary>
-      CV_YUV2RGB_I420 = CV_YUV2RGB_IYUV,
+      YUV2RGB_I420 = YUV2RGB_IYUV,
       /// <summary>
       /// Convert YUV (i420) to BGR
       /// </summary>
-      CV_YUV2BGR_I420 = CV_YUV2BGR_IYUV,
+      YUV2BGR_I420 = YUV2BGR_IYUV,
       /// <summary>
       /// Convert YUV (420p) to RGB
       /// </summary>
-      CV_YUV420p2RGB = CV_YUV2RGB_YV12,
+      YUV420p2RGB = YUV2RGB_YV12,
       /// <summary>
       /// Convert YUV (420p) to BGR
       /// </summary>
-      CV_YUV420p2BGR = CV_YUV2BGR_YV12,
+      YUV420p2BGR = YUV2BGR_YV12,
 
       /// <summary>
       /// Convert YUV (YV12) to RGBA
       /// </summary>
-      CV_YUV2RGBA_YV12 = 102,
+      YUV2RGBA_YV12 = 102,
       /// <summary>
       /// Convert YUV (YV12) to BGRA
       /// </summary>
-      CV_YUV2BGRA_YV12 = 103,
+      YUV2BGRA_YV12 = 103,
       /// <summary>
       /// Convert YUV (iYUV) to RGBA
       /// </summary>
-      CV_YUV2RGBA_IYUV = 104,
+      YUV2RGBA_IYUV = 104,
       /// <summary>
       /// Convert YUV (iYUV) to BGRA
       /// </summary>
-      CV_YUV2BGRA_IYUV = 105,
+      YUV2BGRA_IYUV = 105,
       /// <summary>
       /// Convert YUV (i420) to RGBA
       /// </summary>
-      CV_YUV2RGBA_I420 = CV_YUV2RGBA_IYUV,
+      YUV2RGBA_I420 = YUV2RGBA_IYUV,
       /// <summary>
       /// Convert YUV (i420) to BGRA
       /// </summary>
-      CV_YUV2BGRA_I420 = CV_YUV2BGRA_IYUV,
+      YUV2BGRA_I420 = YUV2BGRA_IYUV,
       /// <summary>
       /// Convert YUV (420p) to RGBA
       /// </summary>
-      CV_YUV420p2RGBA = CV_YUV2RGBA_YV12,
+      YUV420p2RGBA = YUV2RGBA_YV12,
       /// <summary>
       /// Convert YUV (420p) to BGRA
       /// </summary>
-      CV_YUV420p2BGRA = CV_YUV2BGRA_YV12,
+      YUV420p2BGRA = YUV2BGRA_YV12,
 
       /// <summary>
       /// Convert YUV 420 to Gray
       /// </summary>
-      CV_YUV2GRAY_420 = 106,
+      YUV2GRAY_420 = 106,
       /// <summary>
       /// Convert YUV NV21 to Gray
       /// </summary>
-      CV_YUV2GRAY_NV21 = CV_YUV2GRAY_420,
+      YUV2GRAY_NV21 = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV NV12 to Gray
       /// </summary>
-      CV_YUV2GRAY_NV12 = CV_YUV2GRAY_420,
+      YUV2GRAY_NV12 = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV YV12 to Gray
       /// </summary>
-      CV_YUV2GRAY_YV12 = CV_YUV2GRAY_420,
+      YUV2GRAY_YV12 = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV (iYUV) to Gray
       /// </summary>
-      CV_YUV2GRAY_IYUV = CV_YUV2GRAY_420,
+      YUV2GRAY_IYUV = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV (i420) to Gray
       /// </summary>
-      CV_YUV2GRAY_I420 = CV_YUV2GRAY_420,
+      YUV2GRAY_I420 = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV (420sp) to Gray
       /// </summary>
-      CV_YUV420sp2GRAY = CV_YUV2GRAY_420,
+      YUV420sp2GRAY = YUV2GRAY_420,
       /// <summary>
       /// Convert YUV (420p) to Gray
       /// </summary>
-      CV_YUV420p2GRAY = CV_YUV2GRAY_420,
+      YUV420p2GRAY = YUV2GRAY_420,
 
       //YUV 4:2:2 formats family
       /// <summary>
       /// Convert YUV (UYVY) to RGB
       /// </summary>
-      CV_YUV2RGB_UYVY = 107,
+      YUV2RGB_UYVY = 107,
       /// <summary>
       /// Convert YUV (UYVY) to BGR
       /// </summary>
-      CV_YUV2BGR_UYVY = 108,
-      //CV_YUV2RGB_VYUY = 109,
-      //CV_YUV2BGR_VYUY = 110,
+      YUV2BGR_UYVY = 108,
+      //YUV2RGB_VYUY = 109,
+      //YUV2BGR_VYUY = 110,
       /// <summary>
       /// Convert YUV (Y422) to RGB
       /// </summary>
-      CV_YUV2RGB_Y422 = CV_YUV2RGB_UYVY,
+      YUV2RGB_Y422 = YUV2RGB_UYVY,
       /// <summary>
       /// Convert YUV (Y422) to BGR
       /// </summary>
-      CV_YUV2BGR_Y422 = CV_YUV2BGR_UYVY,
+      YUV2BGR_Y422 = YUV2BGR_UYVY,
       /// <summary>
       /// Convert YUV (UYNY) to RGB
       /// </summary>
-      CV_YUV2RGB_UYNV = CV_YUV2RGB_UYVY,
+      YUV2RGB_UYNV = YUV2RGB_UYVY,
       /// <summary>
       /// Convert YUV (UYNV) to BGR
       /// </summary>
-      CV_YUV2BGR_UYNV = CV_YUV2BGR_UYVY,
+      YUV2BGR_UYNV = YUV2BGR_UYVY,
 
       /// <summary>
       /// Convert YUV (UYVY) to RGBA
       /// </summary>
-      CV_YUV2RGBA_UYVY = 111,
+      YUV2RGBA_UYVY = 111,
       /// <summary>
       /// Convert YUV (VYUY) to BGRA
       /// </summary>
-      CV_YUV2BGRA_UYVY = 112,
-      //CV_YUV2RGBA_VYUY = 113,
-      //CV_YUV2BGRA_VYUY = 114,
+      YUV2BGRA_UYVY = 112,
+      //YUV2RGBA_VYUY = 113,
+      //YUV2BGRA_VYUY = 114,
       /// <summary>
       /// Convert YUV (Y422) to RGBA
       /// </summary>
-      CV_YUV2RGBA_Y422 = CV_YUV2RGBA_UYVY,
+      YUV2RGBA_Y422 = YUV2RGBA_UYVY,
       /// <summary>
       /// Convert YUV (Y422) to BGRA
       /// </summary>
-      CV_YUV2BGRA_Y422 = CV_YUV2BGRA_UYVY,
+      YUV2BGRA_Y422 = YUV2BGRA_UYVY,
       /// <summary>
       /// Convert YUV (UYNV) to RGBA 
       /// </summary>
-      CV_YUV2RGBA_UYNV = CV_YUV2RGBA_UYVY,
+      YUV2RGBA_UYNV = YUV2RGBA_UYVY,
       /// <summary>
       /// Convert YUV (UYNV) to BGRA
       /// </summary>
-      CV_YUV2BGRA_UYNV = CV_YUV2BGRA_UYVY,
+      YUV2BGRA_UYNV = YUV2BGRA_UYVY,
 
       /// <summary>
       /// Convert YUV (YUY2) to RGB
       /// </summary>
-      CV_YUV2RGB_YUY2 = 115,
+      YUV2RGB_YUY2 = 115,
       /// <summary>
       /// Convert YUV (YUY2) to BGR
       /// </summary>
-      CV_YUV2BGR_YUY2 = 116,
+      YUV2BGR_YUY2 = 116,
       /// <summary>
       /// Convert YUV (YVYU) to RGB
       /// </summary>
-      CV_YUV2RGB_YVYU = 117,
+      YUV2RGB_YVYU = 117,
       /// <summary>
       /// Convert YUV (YVYU) to BGR
       /// </summary>
-      CV_YUV2BGR_YVYU = 118,
+      YUV2BGR_YVYU = 118,
       /// <summary>
       /// Convert YUV (YUYV) to RGB
       /// </summary>
-      CV_YUV2RGB_YUYV = CV_YUV2RGB_YUY2,
+      YUV2RGB_YUYV = YUV2RGB_YUY2,
       /// <summary>
       /// Convert YUV (YUYV) to BGR 
       /// </summary>
-      CV_YUV2BGR_YUYV = CV_YUV2BGR_YUY2,
+      YUV2BGR_YUYV = YUV2BGR_YUY2,
       /// <summary>
       /// Convert YUV (YUNV) to RGB
       /// </summary>
-      CV_YUV2RGB_YUNV = CV_YUV2RGB_YUY2,
+      YUV2RGB_YUNV = YUV2RGB_YUY2,
       /// <summary>
       /// Convert YUV (YUNV) to BGR
       /// </summary>
-      CV_YUV2BGR_YUNV = CV_YUV2BGR_YUY2,
+      YUV2BGR_YUNV = YUV2BGR_YUY2,
 
       /// <summary>
       /// Convert YUV (YUY2) to RGBA
       /// </summary>
-      CV_YUV2RGBA_YUY2 = 119,
+      YUV2RGBA_YUY2 = 119,
       /// <summary>
       /// Convert YUV (YUY2) to BGRA
       /// </summary>
-      CV_YUV2BGRA_YUY2 = 120,
+      YUV2BGRA_YUY2 = 120,
       /// <summary>
       /// Convert YUV (YVYU) to RGBA
       /// </summary>
-      CV_YUV2RGBA_YVYU = 121,
+      YUV2RGBA_YVYU = 121,
       /// <summary>
       /// Convert YUV (YVYU) to BGRA
       /// </summary>
-      CV_YUV2BGRA_YVYU = 122,
+      YUV2BGRA_YVYU = 122,
       /// <summary>
       /// Convert YUV (YUYV) to RGBA
       /// </summary>
-      CV_YUV2RGBA_YUYV = CV_YUV2RGBA_YUY2,
+      YUV2RGBA_YUYV = YUV2RGBA_YUY2,
       /// <summary>
       /// Convert YUV (YUYV) to BGRA
       /// </summary>
-      CV_YUV2BGRA_YUYV = CV_YUV2BGRA_YUY2,
+      YUV2BGRA_YUYV = YUV2BGRA_YUY2,
       /// <summary>
       /// Convert YUV (YUNV) to RGBA
       /// </summary>
-      CV_YUV2RGBA_YUNV = CV_YUV2RGBA_YUY2,
+      YUV2RGBA_YUNV = YUV2RGBA_YUY2,
       /// <summary>
       /// Convert YUV (YUNV) to BGRA
       /// </summary>
-      CV_YUV2BGRA_YUNV = CV_YUV2BGRA_YUY2,
+      YUV2BGRA_YUNV = YUV2BGRA_YUY2,
 
       /// <summary>
       /// Convert YUV (UYVY) to Gray
       /// </summary>
-      CV_YUV2GRAY_UYVY = 123,
+      YUV2GRAY_UYVY = 123,
       /// <summary>
       /// Convert YUV (YUY2) to Gray
       /// </summary>
-      CV_YUV2GRAY_YUY2 = 124,
-      //CV_YUV2GRAY_VYUY = CV_YUV2GRAY_UYVY,
+      YUV2GRAY_YUY2 = 124,
+      //YUV2GRAY_VYUY = YUV2GRAY_UYVY,
       /// <summary>
       /// Convert YUV (Y422) to Gray
       /// </summary>
-      CV_YUV2GRAY_Y422 = CV_YUV2GRAY_UYVY,
+      YUV2GRAY_Y422 = YUV2GRAY_UYVY,
       /// <summary>
       /// Convert YUV (UYNV) to Gray
       /// </summary>
-      CV_YUV2GRAY_UYNV = CV_YUV2GRAY_UYVY,
+      YUV2GRAY_UYNV = YUV2GRAY_UYVY,
       /// <summary>
       /// Convert YUV (YVYU) to Gray
       /// </summary>
-      CV_YUV2GRAY_YVYU = CV_YUV2GRAY_YUY2,
+      YUV2GRAY_YVYU = YUV2GRAY_YUY2,
       /// <summary>
       /// Convert YUV (YUYV) to Gray
       /// </summary>
-      CV_YUV2GRAY_YUYV = CV_YUV2GRAY_YUY2,
+      YUV2GRAY_YUYV = YUV2GRAY_YUY2,
       /// <summary>
       /// Convert YUV (YUNV) to Gray
       /// </summary>
-      CV_YUV2GRAY_YUNV = CV_YUV2GRAY_YUY2,
+      YUV2GRAY_YUNV = YUV2GRAY_YUY2,
 
       /// <summary>
       /// Alpha premultiplication
       /// </summary>
-      CV_RGBA2mRGBA = 125,
+      RGBA2mRGBA = 125,
       /// <summary>
       /// Alpha premultiplication
       /// </summary>
-      CV_mRGBA2RGBA = 126,
+      mRGBA2RGBA = 126,
+
+      // RGB to YUV 4:2:0 family
+      
+      /// <summary>
+      /// Convert RGB to YUV_I420
+      /// </summary>
+      RGB2YUV_I420 = 127,
+      /// <summary>
+      /// Convert BGR to YUV_I420
+      /// </summary>
+      BGR2YUV_I420 = 128,
+      /// <summary>
+      /// Convert RGB to YUV_IYUV
+      /// </summary>
+      RGB2YUV_IYUV = RGB2YUV_I420,
+      /// <summary>
+      /// Convert BGR to YUV_IYUV
+      /// </summary>
+      BGR2YUV_IYUV = BGR2YUV_I420,
+
+      /// <summary>
+      /// Convert RGBA to YUV_I420
+      /// </summary>
+      RGBA2YUV_I420 = 129,
+      /// <summary>
+      /// Convert BGRA to YUV_I420
+      /// </summary>
+      BGRA2YUV_I420 = 130,
+      /// <summary>
+      /// Convert RGBA to YUV_IYUV
+      /// </summary>
+      RGBA2YUV_IYUV = RGBA2YUV_I420,
+      /// <summary>
+      /// Convert BGRA to YUV_IYUV
+      /// </summary>
+      BGRA2YUV_IYUV = BGRA2YUV_I420,
+      /// <summary>
+      /// Convert RGB to YUV_YV12
+      /// </summary>
+      RGB2YUV_YV12 = 131,
+      /// <summary>
+      /// Convert BGR to YUV_YV12
+      /// </summary>
+      BGR2YUV_YV12 = 132,
+      /// <summary>
+      /// Convert RGBA to YUV_YV12
+      /// </summary>
+      RGBA2YUV_YV12 = 133,
+      /// <summary>
+      /// Convert BGRA to YUV_YV12
+      /// </summary>
+      BGRA2YUV_YV12 = 134,
+
+      /// <summary>
+      /// Convert BayerBG to BGR (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerBG2BGR_EA  = 135,
+      /// <summary>
+      /// Convert BayerGB to BGR (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerGB2BGR_EA  = 136,
+      /// <summary>
+      /// Convert BayerRG to BGR (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerRG2BGR_EA  = 137,
+      /// <summary>
+      /// Convert BayerGR to BGR (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerGR2BGR_EA  = 138,
+
+      /// <summary>
+      /// Convert BayerBG to RGB (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerBG2RGB_EA  = BayerRG2BGR_EA,
+      /// <summary>
+      /// Convert BayerGB to RGB (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerGB2RGB_EA  = BayerGR2BGR_EA,
+      /// <summary>
+      /// Convert BayerRG to RGB (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerRG2RGB_EA  = BayerBG2BGR_EA,
+      /// <summary>
+      /// Convert BayerGR to RGB (Edge-Aware Demosaicing)
+      /// </summary>
+      BayerGR2RGB_EA  = BayerGB2BGR_EA,
 
       /// <summary>
       /// The max number, do not use
       /// </summary>
-      CV_COLORCVT_MAX = 127
+      COLORCVT_MAX = 139
    }
 
    /// <summary>
@@ -2616,14 +2702,15 @@ namespace Emgu.CV.CvEnum
       /// Transparent
       /// </summary>
       TRANSPARENT = 5,
-      /// <summary>
-      /// Isolated
-      /// </summary>
-      ISOLATED = 6, 
+
       /// <summary>
       /// The default border interpolation type.
       /// </summary>
-      BORDER_DEFAULT = REFLECT101
+      DEFAULT = REFLECT101,
+      /// <summary>
+      /// do not look outside of ROI
+      /// </summary>
+      ISOLATED = 16 
    }
 
    /// <summary>
