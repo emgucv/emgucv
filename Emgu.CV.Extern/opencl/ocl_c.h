@@ -15,6 +15,8 @@
 
 CVAPI(int) oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int devicetype);
 
+CVAPI(void) oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum);
+
 //----------------------------------------------------------------------------
 //
 //  OclMat
@@ -140,6 +142,18 @@ CVAPI(void) oclMatGemm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2,
 
 CVAPI(void) oclMatCanny(const cv::ocl::oclMat* image, cv::ocl::oclMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient);
 
+CVAPI(void) oclMatMeanStdDev(const cv::ocl::oclMat* mtx, CvScalar* mean, CvScalar* stddev);
+
+CVAPI(double) oclMatNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, int normType);
+
+CVAPI(void) oclMatLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst);
+
+CVAPI(void) oclMatCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value);
+
+CVAPI(void) oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum);
+
+CVAPI(void) oclMatCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int blockSize, int ksize, double k, int borderType);
+
 
 //----------------------------------------------------------------------------
 //
@@ -216,6 +230,15 @@ CVAPI(void) oclPyrLKOpticalFlowDense(
    cv::ocl::oclMat* v, 
    cv::ocl::oclMat* err);
 CVAPI(void) oclPyrLKOpticalFlowRelease(cv::ocl::PyrLKOpticalFlow** flow);
+
+//----------------------------------------------------------------------------
+//
+//  OpticalFlowDual_TVL1_OCL
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::ocl::OpticalFlowDual_TVL1_OCL*)  oclOpticalFlowDualTVL1Create();
+CVAPI(void) oclOpticalFlowDualTVL1Compute(cv::ocl::OpticalFlowDual_TVL1_OCL* flow, cv::ocl::oclMat* i0, cv::ocl::oclMat* i1, cv::ocl::oclMat* flowx, cv::ocl::oclMat* flowy);
+CVAPI(void) oclOpticalFlowDualTVL1Release(cv::ocl::OpticalFlowDual_TVL1_OCL** flow);
 
 //----------------------------------------------------------------------------
 //

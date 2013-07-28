@@ -17,6 +17,11 @@ int oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int deviceType)
    }
 }
 
+void oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum)
+{
+   cv::ocl::setDevice(*oclInfo, deviceNum);
+}
+
 cv::ocl::oclMat* oclMatCreateDefault()
 {
    return new cv::ocl::oclMat();
@@ -370,6 +375,62 @@ void oclMatCanny(const cv::ocl::oclMat* image, cv::ocl::oclMat* edges, double lo
    cv::ocl::Canny(*image, *edges, lowThreshold, highThreshold, apertureSize, L2gradient);
 }
 
+void oclMatMeanStdDev(const cv::ocl::oclMat* mtx, CvScalar* mean, CvScalar* stddev)
+{
+   cv::Scalar meanVal, stdDevVal;
+   cv::ocl::meanStdDev(*mtx, meanVal, stdDevVal);
+
+   memcpy(mean->val, meanVal.val, sizeof(double)*4);
+   memcpy(stddev->val, stdDevVal.val, sizeof(double) * 4);
+}
+
+double oclMatNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, int normType)
+{
+   if (src2)
+      return cv::ocl::norm(*src1, *src2, normType);
+   else
+      return cv::ocl::norm(*src1, normType);
+}
+
+void oclMatLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst)
+{
+   cv::ocl::LUT(*src, *lut, *dst);
+}
+
+void oclMatCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value)
+{
+   cv::ocl::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, value);
+}
+
+void oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum)
+{
+   if (sqrSum)
+   {
+      if (sum)
+      {  //sqrSum && sum
+         cv::ocl::integral(*src, *sum, *sqrSum);
+      } else
+      {
+         //sqrSum && !sum
+         cv::ocl::oclMat tmp;
+         cv::ocl::integral(*src, tmp, *sqrSum);
+      }
+
+   } else if (sum)
+   {  //!sqrSum && sum
+      cv::ocl::integral(*src, *sum);
+   } else 
+   {
+      //!sqrSum && !sum
+      CV_Error(-1, "Neither sum nore sqrSum are initialized");
+   }
+}
+
+void oclMatCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int blockSize, int ksize, double k, int borderType)
+{
+   cv::ocl::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
+}
+
 //----------------------------------------------------------------------------
 //
 //  OclHOGDescriptor
@@ -514,6 +575,25 @@ void oclPyrLKOpticalFlowDense(
 void oclPyrLKOpticalFlowRelease(cv::ocl::PyrLKOpticalFlow** flow)
 {
    delete *flow;
+   *flow = 0;
+}
+
+//----------------------------------------------------------------------------
+//
+//  OpticalFlowDual_TVL1_OCL
+//
+//----------------------------------------------------------------------------
+cv::ocl::OpticalFlowDual_TVL1_OCL*  oclOpticalFlowDualTVL1Create()
+{
+   return new cv::ocl::OpticalFlowDual_TVL1_OCL();
+}
+void oclOpticalFlowDualTVL1Compute(cv::ocl::OpticalFlowDual_TVL1_OCL* flow, cv::ocl::oclMat* i0, cv::ocl::oclMat* i1, cv::ocl::oclMat* flowx, cv::ocl::oclMat* flowy)
+{
+   (*flow)(*i0, *i1, *flowx, *flowy);
+}
+void oclOpticalFlowDualTVL1Release(cv::ocl::OpticalFlowDual_TVL1_OCL** flow)
+{
+   delete * flow;
    *flow = 0;
 }
 

@@ -36,6 +36,8 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGetDevice")]
       public static extern int GetDevice(IntPtr oclInfoVector, OclDeviceType deviceType);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetDevice")]
+      public static extern void SetDevice(IntPtr oclInfo, int deviceNum);
 
       /// <summary>
       /// Create an empty OclMat 
@@ -382,6 +384,75 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrUp")]
       public static extern void PyrUp(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// Computes mean value and standard deviation
+      /// </summary>
+      /// <param name="mtx">The OclMat. Supports only CV_8UC1 type</param>
+      /// <param name="mean">The mean value</param>
+      /// <param name="stddev">The standard deviation</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanStdDev")]
+      public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
+
+      /// <summary>
+      /// Computes norm of the difference between two OclMats
+      /// </summary>
+      /// <param name="src1">The OclMat. Supports only CV_8UC1 type</param>
+      /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the OclMat of type CV_8UC1</param>
+      /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
+      /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two OclMats.</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatNorm")]
+      public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
+
+      /// <summary>
+      /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
+      /// Destination OclMat will have the depth type as lut and the same channels number as source.
+      /// Supports CV_8UC1, CV_8UC3 types.
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="lut">The OclMat that contains the look up table</param>
+      /// <param name="dst">The destination OclMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLUT")]
+      public static extern void LUT(IntPtr src, IntPtr lut, IntPtr dst);
+
+      /// <summary>
+      /// Copies a 2D array to a larger destination array and pads borders with the given constant.
+      /// </summary>
+      /// <param name="src">Source image.</param>
+      /// <param name="dst">Destination image with the same type as src. The size is Size(src.cols+left+right, src.rows+top+bottom).</param>
+      /// <param name="top">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="bottom">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="left">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="right">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="borderType">Border Type</param>
+      /// <param name="value">Border value.</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCopyMakeBorder")]
+      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, MCvScalar value);
+
+      /// <summary>
+      /// Computes the integral image and integral for the squared image
+      /// </summary>
+      /// <param name="src">The source OclMat, supports only CV_8UC1 source type</param>
+      /// <param name="sum">The sum OclMat, supports only CV_32S source type, but will contain unsigned int values.</param>
+      /// <param name="sqrSum">The sqsum OclMat, supports only CV32F source type. Use IntPtr.Zero if you don't want the sqrSum to be computed.</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatIntegral")]
+      public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqrSum);
+
+      /// <summary>
+      /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
+      /// det(M) - k*trace(M)^2
+      /// to the destination image. Corners in the image can be found as local maxima of the destination image.
+      /// </summary>
+      /// <param name="image">Input OclMat</param>
+      /// <param name="harrisResponce">OclMat to store the Harris detector responces. Should have the same size as <paramref name="image"/>. </param>
+      /// <param name="blockSize">Neighborhood size </param>
+      /// <param name="kSize"></param>
+      /// <param name="k">Harris detector free parameter.</param>
+      /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCornerHarris")]
+      public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
+
+ 
 
       /// <summary>
       /// Copies each plane of a multi-channel OclMat to a dedicated OclMat

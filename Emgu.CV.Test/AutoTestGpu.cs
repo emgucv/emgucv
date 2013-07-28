@@ -207,7 +207,7 @@ namespace Emgu.CV.Test
             using (GpuImage<Gray, Single> gpuLaplace = new GpuImage<Gray, Single>(image.Size))
             using (GpuImage<Gray, Single> gpuConv = gpuImg1.Convolution(kernel, s))
             {
-               GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0, CvEnum.BORDER_TYPE.BORDER_DEFAULT, s);
+               GpuInvoke.Laplacian(gpuImg1, gpuLaplace, 1, 1.0, CvEnum.BORDER_TYPE.DEFAULT, s);
                s.WaitForCompletion();
                Assert.IsTrue(gpuLaplace.Equals(gpuConv));
             }
@@ -620,7 +620,7 @@ namespace Emgu.CV.Test
          using (GpuImage<Gray, float> yGpuImage = new GpuImage<Gray, float>(ymap))
          using (GpuImage<Gray, Byte> remapedImage = new GpuImage<Gray,byte>(gpuImage.Size))
          {
-            GpuInvoke.Remap(gpuImage, remapedImage, xGpuImage, yGpuImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.BORDER_DEFAULT, new MCvScalar(), IntPtr.Zero);
+            GpuInvoke.Remap(gpuImage, remapedImage, xGpuImage, yGpuImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), IntPtr.Zero);
          }
       }
 
@@ -638,7 +638,7 @@ namespace Emgu.CV.Test
          using (GpuImage<Gray, byte> gpuImage = new GpuImage<Gray,byte>(image))
          using (GpuImage<Gray, Byte> resultGpuImage = new GpuImage<Gray, byte>(gpuImage.Size))
          {
-            GpuInvoke.WarpPerspective(gpuImage, resultGpuImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.BORDER_DEFAULT, new MCvScalar(), IntPtr.Zero);
+            GpuInvoke.WarpPerspective(gpuImage, resultGpuImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), IntPtr.Zero);
          }
       }
 
