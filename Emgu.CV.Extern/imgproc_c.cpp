@@ -63,3 +63,21 @@ void cvArrSqrt(CvArr* src, CvArr* dst)
    cv::sqrt(srcMat, dstMat);
 }
 
+void cvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType )
+{
+    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
+    cv::Mat kernel = cv::cvarrToMat(_kernel);
+
+    CV_Assert( src.size() == dst.size() && src.channels() == dst.channels() );
+
+    cv::filter2D( src, dst, dst.depth(), kernel, anchor, delta, borderType );
+}
+
+void cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvArr* dstArr)
+{
+   cv::Size s(tileGridSize.width, tileGridSize.height);
+   cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clipLimit, s);
+   cv::Mat srcMat = cv::cvarrToMat(srcArr);
+   cv::Mat dstMat = cv::cvarrToMat(dstArr);
+   clahe->apply(srcMat, dstMat);
+}

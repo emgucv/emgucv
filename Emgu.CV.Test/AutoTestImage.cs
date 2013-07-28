@@ -965,7 +965,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = new Image<Gray, byte>(200, 200);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          Image<Bgr, Byte> img = new Image<Bgr, byte>(image.Size);
-         CvInvoke.cvCvtColor(image, img, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BayerBG2BGR);
+         CvInvoke.cvCvtColor(image, img, Emgu.CV.CvEnum.COLOR_CONVERSION.BayerBG2BGR);
       }
 
       [Test]
@@ -1188,7 +1188,7 @@ namespace Emgu.CV.Test
 
                                  using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
                                  {
-
+                                    //Emgu.CV.UI.ImageViewer.Show(res);
                                  }
                               }
                               applied = true;
@@ -1415,6 +1415,33 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.ApplyColorMap(image, result, CvEnum.ColorMapType.Hot);
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+      }
+
+      [Test]
+      public void TestClahe()
+      {
+         Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
+         Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
+         CvInvoke.cvCLAHE(image, 4, new Size(8,8), result);
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+      }
+
+      [Test]
+      public void TestDenoise()
+      {
+         Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
+         Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
+         CvInvoke.cvFastNlMeansDenoising(image, result, 3f, 7, 21);
+         Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+      }
+
+      [Test]
+      public void TestDenoiseColor()
+      {
+         Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+         Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
+         CvInvoke.cvFastNlMeansDenoisingColored(image, result, 3f, 10, 7, 21);
+         Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
       [Test]

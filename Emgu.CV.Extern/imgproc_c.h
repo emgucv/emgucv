@@ -11,7 +11,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
-
+#include "emgu_c.h"
 CVAPI(IplImage*) cvGetImageSubRect(IplImage* image, CvRect* rect);
 
 //GrabCut
@@ -32,4 +32,7 @@ CVAPI(bool) cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, 
 
 CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst);
 
+CVAPI(void) cvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType );
+
+CVAPI(void) cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvArr* dstArr);
 #endif
