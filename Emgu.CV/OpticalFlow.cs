@@ -206,5 +206,25 @@ namespace Emgu.CV
             CvInvoke.cvReleaseImage(ref flow0);
          }
       }
+
+      /// <summary>
+      /// Dual TV L1 Optical Flow Algorithm.
+      /// </summary>
+      /// <param name="prev">First image</param>
+      /// <param name="curr">Second image</param>
+      /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size. </param>
+      /// <param name="vely">Vertical component of the optical flow of the same size velx.</param>
+      public static void DualTVL1(
+         Image<Gray, Byte> prev,
+         Image<Gray, Byte> curr,
+         Image<Gray, Single> velx,
+         Image<Gray, Single> vely)
+      {
+         using (Matrix<Single> tmp = new Matrix<float>(prev.Rows, prev.Cols, 2))
+         {
+            CvInvoke.cvCalcOpticalFlowDualTVL1(prev, curr, tmp);
+            CvInvoke.cvSplit(tmp, velx, vely, IntPtr.Zero, IntPtr.Zero);
+         }
+      }
    }
 }

@@ -42,3 +42,13 @@ void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstracto
    delete *bgSubstractor;
    *bgSubstractor = 0;
 }
+
+CVAPI(void)  cvCalcOpticalFlowDualTVL1(CvArr* i0, CvArr* i1, CvArr* flow)
+{
+   cv::Mat i0Mat = cv::cvarrToMat(i0);
+   cv::Mat i1Mat = cv::cvarrToMat(i1);
+   cv::Mat flowMat = cv::cvarrToMat(flow);
+
+   cv::Ptr<cv::DenseOpticalFlow> dof = cv::createOptFlow_DualTVL1();
+   dof->calc(i0Mat, i1Mat, flowMat);
+}

@@ -21,4 +21,6 @@ CVAPI(void) CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor
 //BackgroundSubtractorMOG
 CVAPI(cv::BackgroundSubtractorMOG*) CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
 CVAPI(void) CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstractor);
+
+CVAPI(void) cvCalcOpticalFlowDualTVL1(CvArr* i0, CvArr* i1, CvArr* flow);
 #endif
