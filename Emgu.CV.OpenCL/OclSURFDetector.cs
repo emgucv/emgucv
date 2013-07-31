@@ -32,7 +32,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       public OclSURFDetector(MCvSURFParams detector, float FeaturesRatio)
-         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, detector.Extended, 0.01f, detector.Upright)
+         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), 0.01f, (detector.Upright != 0))
       {
       }
 

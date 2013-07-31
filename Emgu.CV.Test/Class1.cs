@@ -26,7 +26,7 @@ using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
 using Emgu.Util;
 using NUnit.Framework;
-using Emgu.CV.VideoStab;
+//using Emgu.CV.VideoStab;
 
 namespace Emgu.CV.Test
 {
@@ -456,7 +456,7 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
 
       }
-
+/*
       public static void TestOnePassVideoStabilizer()
       {
          ImageViewer viewer = new ImageViewer();
@@ -525,7 +525,7 @@ namespace Emgu.CV.Test
             viewer.ShowDialog();
          }
       }
-
+*/
       public static void TestCodeBook()
       {
 

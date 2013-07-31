@@ -31,8 +31,8 @@ namespace Emgu.CV.Structure
       public MCvSURFParams(double hessianThreshold, bool extended, int nOctaves, int nOctaveLayers)
       {
          HessianThreshold = hessianThreshold;
-         Extended = extended;
-         Upright = false;
+         Extended = extended ? 1 : 0;
+         Upright = 0;
          NOctaves = nOctaves;
          NOctaveLayers = nOctaveLayers;
       }
@@ -51,15 +51,15 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
-      /// False means basic descriptors (64 elements each),
-      /// True means extended descriptors (128 elements each)
+      /// Zero means basic descriptors (64 elements each),
+      /// Non-zero means extended descriptors (128 elements each)
       /// </summary>
-      public bool Extended;
+      public int Extended;
 
       /// <summary>
       /// Upright SURF
       /// </summary>
-      public bool Upright;
+      public int Upright;
 
       /// <summary>
       /// Only features with keypoint.hessian larger than that are extracted.

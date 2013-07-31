@@ -265,6 +265,13 @@ IF(BUILD_opencv_nonfree)
   file(GLOB_RECURSE nonfree_extern_srcs "nonfree/*.cpp")
   file(GLOB_RECURSE nonfree_extern_hdrs "nonfree/*.h*")
   
+  IF(NOT WITH_OPENCL)
+    FILE(GLOB nonfree_extern_srcs_excludes "nonfree/nonfree_ocl_c.cpp")
+    LIST(REMOVE_ITEM nonfree_extern_srcs ${nonfree_extern_srcs_excludes})
+    FILE(GLOB nonfree_extern_hdrs_excludes "nonfree/nonfree_ocl_c.h")
+    LIST(REMOVE_ITEM nonfree_extern_hdrs ${nonfree_extern_hdrs_excludes})
+  ENDIF()
+  
   source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
   source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 

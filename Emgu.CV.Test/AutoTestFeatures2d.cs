@@ -304,7 +304,7 @@ namespace Emgu.CV.Test
             for (int i = 1; i < 2; i++)
             {
                using (Matrix<float> surfDescriptors = opponentSurf.ComputeDescriptorsRaw(box, null, kpts))
-                  EmguAssert.IsTrue(surfDescriptors.Width == (surf.SURFParams.Extended ? 128 : 64) * 3);
+                  EmguAssert.IsTrue(surfDescriptors.Width == (surf.SURFParams.Extended == 0? 64 : 128) * 3);
 
                //TODO: Find out why the following test fails
                using (Matrix<float> siftDescriptors = sift.ComputeDescriptorsRaw(gray, null, kpts))

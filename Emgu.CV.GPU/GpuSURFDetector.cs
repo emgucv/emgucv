@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -32,7 +32,7 @@ namespace Emgu.CV.GPU
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       public GpuSURFDetector(MCvSURFParams detector, float FeaturesRatio)
-         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, detector.Extended, 0.01f, detector.Upright)
+         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), 0.01f, (detector.Upright != 0))
       {
       }
 

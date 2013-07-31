@@ -1540,7 +1540,7 @@ namespace Emgu.CV
 
                 SURFFeature[] res = new SURFFeature[surfPoints.Length];
 
-                int elementsInDescriptor = param.Extended ? 128 : 64;
+                int elementsInDescriptor = (param.Extended == 0) ? 64 : 128;
 
                 for (int i = 0; i < res.Length; i++)
                 {

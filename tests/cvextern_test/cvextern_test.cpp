@@ -114,6 +114,7 @@ void Test_GpuMatCopy()
    m1.copyTo(m2);
 }*/
 
+
 #ifdef _MSC_VER
 void Test_quaternions_performance()
 {
@@ -175,16 +176,23 @@ void Test_MatchTemplate()
 int main()
 {
    char tmp;
+   //Test_CvPoint2D32f();
    Test_2D_cross_product();
    Test_3D_cross_product();
+
    Test_double_MulS();
    Test_quaternions();
    //Test_GpuMatCopy();
    Test_MatchTemplate();
+
+   cout << "Size of CvSize (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
+   cout << "Size of CvPoint2D32f (expected " << sizeof(float) * 2 << "): " << sizeof(CvSize) << std::endl;
+   cout << "Size of CvRect (expected " << sizeof(int) * 4 << "): " << sizeof(CvRect) << std::endl;
+   cout << "Size of IplImage (expected 144):" << sizeof(IplImage) << std::endl;
+   cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
+
 #ifdef _MSC_VER
    Test_quaternions_performance();
-   cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
-   cout << "Size of CvSize: (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
 }
