@@ -92,9 +92,9 @@ namespace Emgu.CV
 #endif
       private static int CvIgnoreErrorErrorHandler(
                   int status,
-         String funcName,
-         String errMsg,
-         String fileName,
+         IntPtr funcName,
+         IntPtr errMsg,
+         IntPtr fileName,
          int line,
          IntPtr userData)
       {
@@ -117,9 +117,9 @@ namespace Emgu.CV
 #endif
       private static int CvErrorHandler(
          int status,
-         String funcName,
-         String errMsg,
-         String fileName,
+         IntPtr funcName,
+         IntPtr errMsg,
+         IntPtr fileName,
          int line,
          IntPtr userData)
       {
@@ -129,7 +129,10 @@ namespace Emgu.CV
             return 0; //signal the process to continute
          } finally
          {
-            throw new CvException(status, funcName, errMsg, fileName, line);
+            String funcNameStr = Marshal.PtrToStringAnsi(funcName);
+            String errMsgStr = Marshal.PtrToStringAnsi(errMsg);
+            String fileNameStr = Marshal.PtrToStringAnsi(fileName);
+            throw new CvException(status, funcNameStr, errMsgStr, fileNameStr, line);
          }
       }
 
@@ -145,7 +148,7 @@ namespace Emgu.CV
       /// <returns></returns>
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate int CvErrorCallback(
-         int status, String funcName, String errMsg, String fileName, int line, IntPtr userData);
+         int status, IntPtr funcName, IntPtr errMsg, IntPtr fileName, int line, IntPtr userData);
 
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
