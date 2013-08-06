@@ -1,25 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{47673BC8-F954-4304-9472-2773AA5A94EB}</ProjectGuid>
+    <ProjectGuid>{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Andr.Unit</RootNamespace>
+    <RootNamespace>Emgu.CV.Test</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
-    <AssemblyName>Andr.Unit</AssemblyName>
+    <AssemblyName>Emgu.CV.Test.Android</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <DeployExternal>False</DeployExternal>
-    <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
-    <AndroidStoreUncompressedFileExtensions />
-    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,18 +25,16 @@
     <DefineConstants>DEBUG;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <DefineConstants>ANDROID</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -48,6 +42,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="Xamarin.Android.NUnitLite" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
@@ -175,21 +170,18 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Main.axml" />
-    <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\drawable\Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\android\Andr.Unit\Android.NUnitLite\Android.NUnitLite.csproj">
-      <Project>{6A005891-A3D6-4398-A729-F645397D573A}</Project>
-      <Name>Android.NUnitLite</Name>
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
+      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
+      <Name>Emgu.CV.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
@@ -207,14 +199,9 @@
       <Project>{89BCA3BE-823B-4702-9498-025C6B21462F}</Project>
       <Name>Emgu.CV.Stitching.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
-      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
-      <Name>Emgu.CV.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Android.csproj">
-      <Project>{9cc9534a-41c4-4659-bb5c-47946bf7d7e0}</Project>
+      <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>
       <Name>Emgu.Util.Android</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
 </Project>

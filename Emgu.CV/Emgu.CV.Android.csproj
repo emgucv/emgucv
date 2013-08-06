@@ -25,6 +25,7 @@
     <DefineConstants>TRACE;DEBUG;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -53,13 +55,13 @@
     <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
     <Compile Include="FaceRecognizer.cs" />
-	<Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
+    <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
     <Compile Include="Features2D\BOWKMeansTrainer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
-	<Compile Include="Features2D\Brisk.cs" />
+    <Compile Include="Features2D\Brisk.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
     <Compile Include="Features2D\DenseFeatureDetector.cs" />
-	<Compile Include="Features2D\DescriptorMatcher.cs" />
+    <Compile Include="Features2D\DescriptorMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Feature2DBase.cs" />
     <Compile Include="Features2D\Features2DExtensions.cs" />
