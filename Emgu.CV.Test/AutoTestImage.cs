@@ -1432,7 +1432,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
          Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
          CvInvoke.cvFastNlMeansDenoising(image, result, 3f, 7, 21);
-         Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
       [Test]
@@ -1441,7 +1441,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.cvFastNlMeansDenoisingColored(image, result, 3f, 10, 7, 21);
-         Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
       [Test]

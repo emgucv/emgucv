@@ -168,13 +168,13 @@ namespace AndroidExamples
 
          if (_imageFilter == null)
          {
-            CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+            CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.YUV420sp2BGR);
             CvInvoke.cvResize(image, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
          }
          else
          {
             Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(image.Size, 0);
-            CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_YUV420sp2BGR);
+            CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.YUV420sp2BGR);
             lock (typeof(ImageFilter))
                _imageFilter.ProcessData(bgr, image);
             CvInvoke.cvResize(bgr, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);

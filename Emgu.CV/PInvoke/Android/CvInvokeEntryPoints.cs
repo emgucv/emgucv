@@ -81,10 +81,17 @@ namespace Emgu.CV
       /// The file name of the videostab library
       /// </summary>
       public const string OPENCV_VIDEOSTAB_LIBRARY = "opencv_videostab";
-	  
-      /// <summary>
-      /// The bit-ness of the unmanaged code (either 32 or 64) 
+	  /// <summary>
+      /// The file name of the opencl library
       /// </summary>
-      public const uint UnmanagedCodeBitness = 32;
+      public const string OPENCV_OCL_LIBRARY = "";
+	  /// <summary>
+      /// The file name of the superres library
+      /// </summary>
+      public const string OPENCV_SUPERRES_LIBRARY = "";
+	  /// <summary>
+      /// The file name of the softcascade library
+      /// </summary>
+      public const string OPENCV_SOFTCASCADE_LIBRARY = "opencv_softcascade";
    }
 }

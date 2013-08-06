@@ -54,7 +54,8 @@
     </When>
     <Otherwise>
       <PropertyGroup>
-        <HasX86></HasX86>
+        <HasX86>
+        </HasX86>
       </PropertyGroup>
     </Otherwise>
   </Choose>
@@ -91,7 +92,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Mobile">
-      <HintPath>.\Xamarin.Mobile.dll</HintPath>
+      <HintPath>..\..\Solution\Android\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -132,156 +133,6 @@
     <Compile Include="AndroidExamplesActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\libs\armeabi-v7a\libcvextern.so')">
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libcvextern.so">
-      <Link>lib\armeabi-v7a\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_calib3d.so">
-      <Link>lib\armeabi-v7a\libopencv_calib3d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_contrib.so">
-      <Link>lib\armeabi-v7a\libopencv_contrib.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_core.so">
-      <Link>lib\armeabi-v7a\libopencv_core.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_features2d.so">
-      <Link>lib\armeabi-v7a\libopencv_features2d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_flann.so">
-      <Link>lib\armeabi-v7a\libopencv_flann.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_highgui.so">
-      <Link>lib\armeabi-v7a\libopencv_highgui.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_imgproc.so">
-      <Link>lib\armeabi-v7a\libopencv_imgproc.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_legacy.so">
-      <Link>lib\armeabi-v7a\libopencv_legacy.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_ml.so">
-      <Link>lib\armeabi-v7a\libopencv_ml.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_nonfree.so">
-      <Link>lib\armeabi-v7a\libopencv_nonfree.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_objdetect.so">
-      <Link>lib\armeabi-v7a\libopencv_objdetect.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_photo.so">
-      <Link>lib\armeabi-v7a\libopencv_photo.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_stitching.so">
-      <Link>lib\armeabi-v7a\libopencv_stitching.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_video.so">
-      <Link>lib\armeabi-v7a\libopencv_video.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi-v7a\libopencv_videostab.so">
-      <Link>lib\armeabi-v7a\libopencv_videostab.so</Link>
-    </AndroidNativeLibrary>
-  </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\libs\armeabi\libcvextern.so')">
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libcvextern.so">
-      <Link>lib\armeabi\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_calib3d.so">
-      <Link>lib\armeabi\libopencv_calib3d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_contrib.so">
-      <Link>lib\armeabi\libopencv_contrib.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_core.so">
-      <Link>lib\armeabi\libopencv_core.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_features2d.so">
-      <Link>lib\armeabi\libopencv_features2d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_flann.so">
-      <Link>lib\armeabi\libopencv_flann.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_highgui.so">
-      <Link>lib\armeabi\libopencv_highgui.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_imgproc.so">
-      <Link>lib\armeabi\libopencv_imgproc.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_legacy.so">
-      <Link>lib\armeabi\libopencv_legacy.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_ml.so">
-      <Link>lib\armeabi\libopencv_ml.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_nonfree.so">
-      <Link>lib\armeabi\libopencv_nonfree.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_objdetect.so">
-      <Link>lib\armeabi\libopencv_objdetect.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_photo.so">
-      <Link>lib\armeabi\libopencv_photo.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_stitching.so">
-      <Link>lib\armeabi\libopencv_stitching.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_video.so">
-      <Link>lib\armeabi\libopencv_video.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\armeabi\libopencv_videostab.so">
-      <Link>lib\armeabi\libopencv_videostab.so</Link>
-    </AndroidNativeLibrary>
-  </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\libs\x86\libcvextern.so')">
-    <AndroidNativeLibrary Include="..\..\libs\x86\libcvextern.so">
-      <Link>lib\x86\libcvextern.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_calib3d.so">
-      <Link>lib\x86\libopencv_calib3d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_contrib.so">
-      <Link>lib\x86\libopencv_contrib.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_core.so">
-      <Link>lib\x86\libopencv_core.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_features2d.so">
-      <Link>lib\x86\libopencv_features2d.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_flann.so">
-      <Link>lib\x86\libopencv_flann.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_highgui.so">
-      <Link>lib\x86\libopencv_highgui.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_imgproc.so">
-      <Link>lib\x86\libopencv_imgproc.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_legacy.so">
-      <Link>lib\x86\libopencv_legacy.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_ml.so">
-      <Link>lib\x86\libopencv_ml.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_nonfree.so">
-      <Link>lib\x86\libopencv_nonfree.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_objdetect.so">
-      <Link>lib\x86\libopencv_objdetect.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_photo.so">
-      <Link>lib\x86\libopencv_photo.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_stitching.so">
-      <Link>lib\x86\libopencv_stitching.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_video.so">
-      <Link>lib\x86\libopencv_video.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="..\..\libs\x86\libopencv_videostab.so">
-      <Link>lib\x86\libopencv_videostab.so</Link>
-    </AndroidNativeLibrary>
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.bigrams">
@@ -338,7 +189,7 @@
       <Name>Emgu.CV.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Android.csproj">
-      <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>
+      <Project>{9cc9534a-41c4-4659-bb5c-47946bf7d7e0}</Project>
       <Name>Emgu.Util.Android</Name>
     </ProjectReference>
   </ItemGroup>
@@ -386,7 +237,12 @@
     <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <XamarinComponentReference Include="xamarin.mobile">
+      <Visible>False</Visible>
+      <Version>0.6.3</Version>
+    </XamarinComponentReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

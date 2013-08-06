@@ -53,7 +53,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Filter out pixels if there are other close matches
       /// </summary>
-      public float uniquenessRatio;
+      public int uniquenessRatio;
       #endregion
 
       // with different disparity

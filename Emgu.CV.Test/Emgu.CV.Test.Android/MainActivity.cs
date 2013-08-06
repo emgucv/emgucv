@@ -24,7 +24,10 @@ namespace Emgu.CV.Test
          //Add (typeof (m4a.tests.RunnerTest).Assembly);
          // or in any assembly that you load (since JIT is available)
 
-
+         //dummy code to load emgucv;
+         Image<Bgr, byte> dummy = new Image<Bgr, byte>(2, 2);
+         dummy._Not();
+         
          AssetsUtil.Assets = this.Assets;
 #if false
 			// you can use the default or set your own custom writer (e.g. save to web site and tweet it ;-)
