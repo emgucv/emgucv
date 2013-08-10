@@ -217,10 +217,10 @@ namespace Emgu.CV.OpenCL
       ///</summary>
       ///<param name="kernel">The convolution kernel</param>
       ///<returns>The result of the convolution</returns>
-      public OclImage<TColor, Single> Convolution(ConvolutionKernelF kernel)
+      public OclImage<TColor, Byte> Convolution(ConvolutionKernelF kernel)
       {
-         OclImage<TColor, Single> result = new OclImage<TColor, float>(Size);
-         OclInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.DEFAULT);
+         OclImage<TColor, Byte> result = new OclImage<TColor, Byte>(Size);
+         OclInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.REFLECT101);
          return result;
       }
 

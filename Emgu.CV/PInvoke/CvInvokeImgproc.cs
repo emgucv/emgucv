@@ -66,6 +66,25 @@ namespace Emgu.CV
       /// <param name="mapMatrix">2x3 transformation matrix</param>
       /// <param name="flags"> flags </param>
       /// <param name="fillval">A value used to fill outliers</param>
+#if ANDROID
+      public static void cvWarpAffine(
+          IntPtr src,
+          IntPtr dst,
+          IntPtr mapMatrix,
+          int flags,
+          MCvScalar fillval)
+      {
+         cvWarpAffine(src, dst, mapMatrix, flags, fillval.v0, fillval.v1, fillval.v2, fillval.v3);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvWarpAffine(
+          IntPtr src,
+          IntPtr dst,
+          IntPtr mapMatrix,
+          int flags,
+          double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvWarpAffine(
           IntPtr src,
@@ -73,6 +92,7 @@ namespace Emgu.CV
           IntPtr mapMatrix,
           int flags,
           MCvScalar fillval);
+#endif
 
       /// <summary>
       /// Calculates the matrix of an affine transform such that:
@@ -112,12 +132,31 @@ namespace Emgu.CV
       /// <param name="scale">Isotropic scale factor</param>
       /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
       /// <returns>Pointer to the destination 2x3 matrix</returns>
+#if ANDROID
+      public static IntPtr cv2DRotationMatrix(
+          PointF center,
+          double angle,
+          double scale,
+          IntPtr mapMatrix)
+      {
+         return cv2DRotationMatrix(center.X, center.Y, angle, scale, mapMatrix);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cv2DRotationMatrix(
+          float centerX,
+          float centerY,
+          double angle,
+          double scale,
+          IntPtr mapMatrix);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cv2DRotationMatrix(
           PointF center,
           double angle,
           double scale,
           IntPtr mapMatrix);
+#endif
 
       /// <summary>
       /// Transforms source image using the specified matrix
@@ -127,6 +166,25 @@ namespace Emgu.CV
       /// <param name="mapMatrix">3? transformation matrix</param>
       /// <param name="flags"></param>
       /// <param name="fillval">A value used to fill outliers</param>
+#if ANDROID
+      public static void cvWarpPerspective(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix,
+         int flags,
+         MCvScalar fillval)
+      {
+         cvWarpPerspective(src, dst, mapMatrix, flags, fillval.v0, fillval.v1, fillval.v2, fillval.v3);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvWarpPerspective(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr mapMatrix,
+         int flags,
+         double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvWarpPerspective(
          IntPtr src,
@@ -134,7 +192,7 @@ namespace Emgu.CV
          IntPtr mapMatrix,
          int flags,
          MCvScalar fillval);
-
+#endif
       /// <summary>
       /// calculates matrix of perspective transform such that:
       /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
@@ -642,6 +700,25 @@ namespace Emgu.CV
       /// <param name="offset">Coordinates of the top-left corner (or bottom-left in case of images with bottom-left origin) of the destination image rectangle where the source image (or its ROI) is copied. Size of the rectangle matches the source image size/ROI size</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="value">Value of the border pixels if bordertype=CONSTANT</param>
+#if ANDROID
+      public static void cvCopyMakeBorder(
+         IntPtr src,
+         IntPtr dst,
+         Point offset,
+         CvEnum.BORDER_TYPE bordertype,
+         MCvScalar value)
+      {
+         cvCopyMakeBorder(src, dst, offset.X, offset.Y, bordertype, value.v0, value.v1, value.v2, value.v3);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvCopyMakeBorder(
+         IntPtr src,
+         IntPtr dst,
+         int offsetX, int offsetY,
+         CvEnum.BORDER_TYPE bordertype,
+         double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCopyMakeBorder(
          IntPtr src,
@@ -649,6 +726,7 @@ namespace Emgu.CV
          Point offset,
          CvEnum.BORDER_TYPE bordertype,
          MCvScalar value);
+#endif
 
       /// <summary>
       /// Applies fixed-level thresholding to single-channel array. The function is typically used to get bi-level (binary) image out of grayscale image (cvCmpS could be also used for this purpose) or for removing a noise, i.e. filtering out pixels with too small or too large values. There are several types of thresholding the function supports that are determined by threshold_type

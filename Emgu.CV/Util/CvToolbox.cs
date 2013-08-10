@@ -77,6 +77,7 @@ namespace Emgu.CV.Util
       #endregion
 #endif
 
+      /*
       /// <summary>
       /// Returns information about one of or all of the registered modules
       /// </summary>
@@ -90,7 +91,7 @@ namespace Emgu.CV.Util
 
          pluginName = Marshal.PtrToStringAnsi(pluginInfo);
          versionName = Marshal.PtrToStringAnsi(version);
-      }
+      }*/
 
       /// <summary>
       /// Enable or diable IPL optimization for opencv

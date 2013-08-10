@@ -381,6 +381,10 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
    //cv::Mat_<uchar> ransacMask(srcPtVec.size(), 1);
    std::vector<uchar> ransacMask;
    cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, randsacThreshold, ransacMask);
+   if (result.empty())
+   {
+      return false;
+   }
    cv::Mat hMat = cv::cvarrToMat(homography);
    result.copyTo(hMat);
 

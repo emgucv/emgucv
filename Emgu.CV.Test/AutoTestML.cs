@@ -459,7 +459,7 @@ namespace Emgu.CV.Test
 
       private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
       {
-         string[] rows = System.IO.File.ReadAllLines("letter-recognition.data");
+         string[] rows = System.IO.File.ReadAllLines(EmguAssert.GetFile( "letter-recognition.data" ));
 
          int varCount = rows[0].Split(',').Length - 1;
          data = new Matrix<float>(rows.Length, varCount);
@@ -478,7 +478,7 @@ namespace Emgu.CV.Test
 
       private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
       {
-         string[] rows = System.IO.File.ReadAllLines("agaricus-lepiota.data");
+         string[] rows = System.IO.File.ReadAllLines(EmguAssert.GetFile( "agaricus-lepiota.data" ));
 
          int varCount = rows[0].Split(',').Length - 1;
          data = new Matrix<float>(rows.Length, varCount);

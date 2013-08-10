@@ -19,7 +19,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOCREngGrayText()
       {
-         using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
+         using (Tesseract ocr = GetTesseract())
          using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 200))
          {
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
@@ -39,7 +39,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOCRBgrText()
       {
-         using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
+         using (Tesseract ocr = GetTesseract())
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200))
          {
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
@@ -61,7 +61,7 @@ namespace Emgu.CV.Test
       {
          Version version = Tesseract.Version;
          int i = version.Major;
-         using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
+         using (Tesseract ocr = GetTesseract())
          using (Image<Gray, Byte> img = new Image<Gray, byte>(1024, 960))
          {
             ocr.Recognize(img);
@@ -70,10 +70,30 @@ namespace Emgu.CV.Test
          }
       }
 
+      private static Tesseract GetTesseract()
+      {
+#if ANDROID
+         Emgu.Util.AndroidFileAsset.OverwriteMethod overwriteMethod = Emgu.Util.AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
+         System.IO.FileInfo a8 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context , "tessdata/eng.traineddata", "tmp", overwriteMethod);
+         System.IO.FileInfo a0 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.bigrams", "tmp", overwriteMethod);
+         System.IO.FileInfo a1 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.fold", "tmp", overwriteMethod);
+         System.IO.FileInfo a2 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.lm", "tmp", overwriteMethod);
+         System.IO.FileInfo a3 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.nn", "tmp", overwriteMethod);
+         System.IO.FileInfo a4 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.params", "tmp", overwriteMethod);
+         System.IO.FileInfo a5 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.size", "tmp", overwriteMethod);
+         System.IO.FileInfo a6 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.word-freq", "tmp", overwriteMethod);
+         System.IO.FileInfo a7 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.tesseract_cube.nn", "tmp", overwriteMethod);
+         String path = System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar;
+         return new Tesseract(path, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+#else
+         return new Tesseract("./", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+#endif
+      }
+
       [Test]
       public void TestOCREngConstructor()
       {
-         using (Tesseract ocr = new Tesseract("tessdata", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED))
+         using (Tesseract ocr = GetTesseract())
          {
          }
       }

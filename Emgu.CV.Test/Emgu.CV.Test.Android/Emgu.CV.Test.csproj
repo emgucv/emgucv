@@ -207,4 +207,14 @@
       <Name>Emgu.Util.Android</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\car.xml">
+      <Link>Assets\car.xml</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
+      <Link>Assets\license-plate.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
 </Project>

@@ -252,8 +252,6 @@
       <DependentUpon>libemgucv.a</DependentUpon>
     </Compile>
     <Compile Include="CascadeClassifier.cs" />
-    <Compile Include="FaceRecognizer.cs" />
-    <Compile Include="Features2D\DenseFeatureDetector.cs" />
     <Compile Include="Features2D\Feature2DBase.cs" />
     <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />

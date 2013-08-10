@@ -37,53 +37,6 @@ namespace AndroidExamples
             {
                SetImageBitmap(result.ToBitmap());
                SetMessage(String.Format("Matched in {0} milliseconds.", time));
-               /*
-               HomographyMatrix homography;
-               VectorOfKeyPoint modelKeyPoints;
-               VectorOfKeyPoint observedKeyPoints;
-               Matrix<int> indices;
-               Matrix<byte> mask;
-
-               DrawMatches.FindMatch(box, boxInScene, out time, out modelKeyPoints, out observedKeyPoints, out indices, out mask, out homography);
-
-               #region draw the projected region on the image
-               if (homography != null)
-               {  //draw a rectangle along the projected model
-                  System.Drawing.Rectangle rect = box.ROI;
-                  System.Drawing.PointF[] pts = new System.Drawing.PointF[] { 
-                     new System.Drawing.PointF(rect.Left, rect.Bottom),
-                     new System.Drawing.PointF(rect.Right, rect.Bottom),
-                     new System.Drawing.PointF(rect.Right, rect.Top),
-                     new System.Drawing.PointF(rect.Left, rect.Top)};
-                  homography.ProjectPoints(pts);
-
-                  Bitmap bmp = null;
-                  using (Image<Gray, Byte> result = boxInScene.ConcateVertical(box))
-                  {
-                     bmp = result.ToBitmap();
-                  }
-                  using (Canvas c = new Canvas(bmp))
-                  using (Paint p = new Paint())
-                  {
-                     p.StrokeWidth = 4;
-                     p.Color = Android.Graphics.Color.Red;
-                     p.SetStyle(Paint.Style.Stroke);
-
-                     System.Drawing.PointF p0 = pts[pts.Length - 1];
-                     for (int i = 0; i < pts.Length; i++)
-                     {
-                        System.Drawing.PointF p1 = pts[i];
-                        c.DrawLine(p0.X, p0.Y, p1.X, p1.Y, p);
-                        p0 = p1;
-                     }
-
-                     SetMessage(String.Format("Matched in {0} milliseconds.", time));
-                     SetImageBitmap(bmp);
-                  }
-               }
-               #endregion
-               */
-
             }
          };
       }

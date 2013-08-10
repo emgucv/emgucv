@@ -2,8 +2,10 @@ using System.Reflection;
 using Android.App;
 using Android.OS;
 using Xamarin.Android.NUnitLite;
+using Android.Content;
 using Android.Content.Res;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.Test
 {
@@ -12,12 +14,14 @@ namespace Emgu.CV.Test
 	{
 		protected override void OnCreate (Bundle bundle)
 		{
-//dummy code to load emgucv;
+         //dummy code to load emgucv;
          Image<Bgr, byte> dummy = new Image<Bgr, byte>(2, 2);
          dummy._Not();
          
 
          AssetsUtil.Assets = this.Assets;
+         AssetsUtil.Context = this;
+
 			// tests can be inside the main assembly
 			AddTest (Assembly.GetExecutingAssembly ());
 			// or in any reference assemblies
@@ -30,12 +34,19 @@ namespace Emgu.CV.Test
    public static class AssetsUtil
    {
       public static AssetManager Assets { get; set; }
-
+      public static Context Context { get; set; }
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(string name)
          where TColor : struct, IColor
          where TDepth : new()
       {
          return new Image<TColor, TDepth>(Assets, name);
+      }
+
+      public static string LoadFile(string assetName)
+      {
+         AndroidFileAsset.OverwriteMethod method = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
+         System.IO.FileInfo fi = AndroidFileAsset.WritePermanantFileAsset(Context, assetName, "assetCache", method);
+         return fi.FullName;
       }
    }
 }

@@ -65,7 +65,7 @@
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchI18n />
     <MtouchUseLlvm>True</MtouchUseLlvm>
-    <MtouchExtraArgs>-nosymbolstrip -gcc_flags "-framework AssetsLibrary"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip</MtouchExtraArgs>
     <IpaPackageName />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">

@@ -560,8 +560,18 @@ namespace Emgu.CV
       /// <param name="value">Added scalar.</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed.</param>
+#if ANDROID
+      public static void cvAddS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         cvAddS(src, value.v0, value.v1, value.v2, value.v3, dst, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvAddS(IntPtr src, double v0, double v1, double v2, double v3, IntPtr dst, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvAddS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
+#endif
 
       /// <summary>
       /// Subtracts one array from another one:
@@ -602,8 +612,18 @@ namespace Emgu.CV
       /// <param name="value">Subtracted scalar</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed. </param>
+#if ANDROID
+      public static void cvSubRS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         cvSubRS(src, value.v0, value.v1, value.v2, value.v3, dst, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvSubRS(IntPtr src, double v0, double v1, double v2, double v3, IntPtr dst, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSubRS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
+#endif
 
       /// <summary>
       /// Divides one array by another:
@@ -651,8 +671,18 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
+#if ANDROID
+      public static void cvAndS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         cvAddS(src, value.v0, value.v1, value.v2, value.v3, dst, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvAndS(IntPtr src, double v0, double v1, double v2, double v3, IntPtr dst, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvAndS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
+#endif
 
       /// <summary>
       /// Calculates per-element bit-wise disjunction of two arrays:
@@ -675,9 +705,19 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
+#if ANDROID
+      public static void cvOrS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         cvOrS(src, value.v0, value.v1, value.v2, value.v3, dst, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvOrS(IntPtr src, double v0, double v1, double v2, double v3, IntPtr dst, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvOrS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
-
+#endif
+      
       /// <summary>
       /// Calculates per-element bit-wise logical conjunction of two arrays:
       /// dst(I)=src1(I)^src2(I) if mask(I)!=0
@@ -699,8 +739,18 @@ namespace Emgu.CV
       /// <param name="value">Scalar to use in the operation</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
+#if ANDROID
+      public static void cvXorS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask)
+      {
+         cvXorS(src, value.v0, value.v1, value.v2, value.v3, dst, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvXorS(IntPtr src, double v0, double v1, double v2, double v3, IntPtr dst, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvXorS(IntPtr src, MCvScalar value, IntPtr dst, IntPtr mask);
+#endif
 
       #region Copying and Filling
       /// <summary>
@@ -716,14 +766,24 @@ namespace Emgu.CV
 
       /// <summary>
       /// Copies scalar value to every selected element of the destination array:
-      ///arr(I)=value if mask(I)!=0
-      ///If array arr is of IplImage type, then is ROI used, but COI must not be set
+      /// arr(I)=value if mask(I)!=0
+      /// If array arr is of IplImage type, then is ROI used, but COI must not be set
       /// </summary>
       /// <param name="arr">The destination array</param>
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
+#if ANDROID
+      public static void cvSet(IntPtr arr, MCvScalar value, IntPtr mask)
+      {
+         cvSet(arr, value.v0, value.v1, value.v2, value.v3, mask);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvSet(IntPtr arr, double v0, double v1, double v2, double v3, IntPtr mask);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSet(IntPtr arr, MCvScalar value, IntPtr mask);
+#endif
 
       /// <summary>
       /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
@@ -748,8 +808,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mat">The matrix to initialize (not necesserily square).</param>
       /// <param name="value">The value to assign to the diagonal elements.</param>
+#if ANDROID
+      public static void cvSetIdentity(IntPtr mat, MCvScalar value)
+      {
+         cvSetIdentity(mat, value.v0, value.v1, value.v2, value.v3);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvSetIdentity(IntPtr mat, double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSetIdentity(IntPtr mat, MCvScalar value);
+#endif
 
       /// <summary>
       /// Initializes the matrix as following:
@@ -996,8 +1066,18 @@ namespace Emgu.CV
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="value">The scalar</param>
+#if ANDROID
+      public static void cvAbsDiffS(IntPtr src, IntPtr dst, MCvScalar value)
+      {
+         cvAbsDiffS(src, dst, value.v0, value.v1, value.v2, value.v3);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvAbsDiffS(IntPtr src, IntPtr dst, double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvAbsDiffS(IntPtr src, IntPtr dst, MCvScalar value);
+#endif
 
       /// <summary>
       /// Calculated weighted sum of two arrays as following:
@@ -1026,12 +1106,30 @@ namespace Emgu.CV
       /// <param name="lower">The inclusive lower boundary</param>
       /// <param name="upper">The inclusive upper boundary</param>
       /// <param name="dst">The destination array, must have 8u or 8s type</param>
+#if ANDROID
+      public static void cvInRangeS(
+         IntPtr src,
+         MCvScalar lower,
+         MCvScalar upper,
+         IntPtr dst)
+      {
+         cvInRangeS(src, lower.v0, lower.v1, lower.v2, lower.v3, upper.v0, upper.v1, upper.v2, upper.v3, dst);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvInRangeS(
+         IntPtr src,
+         double l0, double l1, double l2, double l3,
+         double u0, double u1, double u2, double u3,
+         IntPtr dst);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInRangeS(
          IntPtr src,
          MCvScalar lower,
          MCvScalar upper,
          IntPtr dst);
+#endif
 
       /// <summary>
       /// Performs range check for every element of the input array:
@@ -1440,8 +1538,18 @@ namespace Emgu.CV
       /// <param name="idx0">The first zero-based component of the element index</param>
       /// <param name="idx1">The second zero-based component of the element index</param>
       /// <param name="value">The assigned value</param>
+#if ANDROID
+      public static void cvSet2D(IntPtr arr, int idx0, int idx1, MCvScalar value)
+      {
+         cvSet2D(arr, idx0, idx1, value.v0, value.v1, value.v2, value.v3);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvSet2D(IntPtr arr, int idx0, int idx1, double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSet2D(IntPtr arr, int idx0, int idx1, MCvScalar value);
+#endif
 
       /// <summary>
       /// Flips the array in one of different 3 ways (row and column indices are 0-based):
@@ -1635,7 +1743,7 @@ namespace Emgu.CV
       }
 
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRectangle(
+      private static extern void cvRectangle(
          IntPtr img,
          int pt1X,
          int pt1Y,
@@ -1853,6 +1961,40 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the ellipse arc</param>
       /// <param name="lineType">Type of the ellipse boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
+#if ANDROID
+      public static void cvEllipse(
+          IntPtr img,
+          Point center,
+          Size axes,
+          double angle,
+          double startAngle,
+          double endAngle,
+          MCvScalar color,
+          int thickness,
+          CvEnum.LINE_TYPE lineType,
+          int shift)
+      {
+         cvEllipse(img, center.X, center.Y, axes.Width, axes.Height, angle, startAngle, endAngle, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+      
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvEllipse(
+         IntPtr img,
+         int centerX,
+         int centerY,
+         int axesW,
+         int axesH,
+         double angle,
+         double startAngle,
+         double endAngle,
+         double c0,
+         double c1, 
+         double c2,
+         double c3,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvEllipse(
           IntPtr img,
@@ -1865,6 +2007,7 @@ namespace Emgu.CV
           int thickness,
           CvEnum.LINE_TYPE lineType,
           int shift);
+#endif
 
       /// <summary>
       /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
@@ -2102,8 +2245,36 @@ namespace Emgu.CV
       /// <param name="org">Coordinates of the bottom-left corner of the first letter</param>
       /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
+#if ANDROID
+      public static void cvPutText(
+         IntPtr img,
+         String text,
+         Point org,
+         ref MCvFont font,
+         MCvScalar color)
+      {
+         cvPutText(img, text, org.X, org.Y, ref font, color.v0, color.v1, color.v2, color.v3);
+      }
+
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPutText(IntPtr img, [MarshalAs(CvInvoke.StringMarshalType)] String text, Point org, ref MCvFont font, MCvScalar color);
+      private static extern void cvPutText(
+         IntPtr img, 
+         [MarshalAs(CvInvoke.StringMarshalType)] 
+         String text, 
+         int orgX,
+         int orgY,
+         ref MCvFont font, 
+         double v0, double v1, double v2, double v3
+         );
+#else
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvPutText(
+         IntPtr img, 
+         [MarshalAs(CvInvoke.StringMarshalType)] String text, 
+         Point org, 
+         ref MCvFont font, 
+         MCvScalar color);
+#endif
 
       /// <summary>
       /// Calculates the binding rectangle for the given text string when a specified font is used
@@ -2113,7 +2284,12 @@ namespace Emgu.CV
       /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
       /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetTextSize([MarshalAs(CvInvoke.StringMarshalType)] String textString, ref MCvFont font, ref Size textSize, ref int baseline);
+      public static extern void cvGetTextSize(
+         [MarshalAs(CvInvoke.StringMarshalType)] 
+         String textString, 
+         ref MCvFont font, 
+         ref Size textSize, 
+         ref int baseline);
       #endregion
 
       /// <summary>

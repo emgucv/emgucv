@@ -1,7 +1,8 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-﻿using System;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -23,6 +24,7 @@ namespace Emgu.CV.Test
    [TestFixture]
    public class AutoTestFeatures2d
    {
+#if !ANDROID
       [Test]
       public void TestBrisk()
       {
@@ -287,6 +289,7 @@ namespace Emgu.CV.Test
 
          }
       }
+#endif
 
       [Test]
       public void TestDetectorColor()

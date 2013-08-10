@@ -48,8 +48,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIplImageSize()
       {
-         EmguAssert.IsTrue(Marshal.SizeOf(typeof(MIplImage)) == 144);
-         EmguAssert.IsTrue(Marshal.SizeOf(typeof(Size)) == 8);
+         //EmguAssert.IsTrue(Marshal.SizeOf(typeof(MIplImage)) == 144);
+         //EmguAssert.IsTrue(Marshal.SizeOf(typeof(Size)) == 8);
          Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
          Size s = img.Size;
          int tmp = s.Width + s.Height;
@@ -409,16 +409,17 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
-         using (HaarCascade cascade = new HaarCascade("haarcascade_eye.xml"))
+         using (CascadeClassifier cascade = new CascadeClassifier(EmguAssert.GetFile("haarcascade_eye.xml")))
          //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
          {
-            MCvAvgComp[] objects = cascade.Detect(image, 1.05, 0, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(10, 10), Size.Empty);
-            foreach (MCvAvgComp obj in objects)
-               image.Draw(obj.rect, new Gray(0.0), 1);
-
+            Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 0, new Size(10, 10), Size.Empty);
+            foreach (Rectangle obj in objects)
+               image.Draw(obj, new Gray(0.0), 1);
+           
+            /*
             using (MemStorage stor = new MemStorage())
             {
-               IntPtr objs = CvInvoke.cvHaarDetectObjects(
+               IntPtr objs = CvInvoke
                              image.Ptr,
                              cascade.Ptr,
                              stor.Ptr,
@@ -438,7 +439,7 @@ namespace Emgu.CV.Test
                      EmguAssert.IsTrue(rect[i].rect.Equals(rects[i].rect));
                   }
                }
-            }
+            }*/
          }
       }
 
@@ -447,7 +448,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
-         using (CascadeClassifier cascade = new CascadeClassifier("haarcascade_eye.xml"))
+         using (CascadeClassifier cascade = new CascadeClassifier( EmguAssert.GetFile( "haarcascade_eye.xml" )))
          //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
          {
             Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 10, new Size(10, 10), Size.Empty);

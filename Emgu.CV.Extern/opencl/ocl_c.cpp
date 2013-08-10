@@ -232,7 +232,7 @@ void oclMatBitwiseXorS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl
    cv::ocl::bitwise_xor(*src1, sc, *dst, mask? *mask : cv::ocl::oclMat());
 }
 
-void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, cv::Scalar borderValue)
+void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    //char message[2000];
    //sprintf(message, "anchor = (%d, %d); iteration = %d; borderType = %d; borderValue = (%d, %d, %d, %d)", anchor.x, anchor.y, iterations, borderType, borderValue.val[0], borderValue.val[1], borderValue.val[2], borderValue.val[3]);
@@ -241,13 +241,13 @@ void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr*
    cv::ocl::erode(*src, *dst, kernelMat, anchor, iterations, borderType, borderValue);
 }
 
-void oclMatDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel,  CvPoint anchor, int iterations, int borderType, cv::Scalar borderValue)
+void oclMatDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel,  CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::ocl::dilate(*src, *dst, kernelMat, anchor, iterations, borderType, borderValue);
 }
 
-void oclMatMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, cv::Scalar borderValue)
+void oclMatMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::ocl::morphologyEx( *src, *dst, op, kernelMat, anchor, iterations, borderType, borderValue);

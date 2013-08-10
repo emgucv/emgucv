@@ -219,13 +219,14 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public void TestModuleInfo()
       {
          string pluginName;
          string versionName;
          CvToolbox.GetModuleInfo(out pluginName, out versionName);
          Trace.WriteLine(String.Format("Plugin: {0}\r\nVersion: {1}", pluginName, versionName ));
-      }
+      }*/
 
       public void TestRandom()
       {

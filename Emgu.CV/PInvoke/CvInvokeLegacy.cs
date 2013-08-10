@@ -765,6 +765,29 @@ namespace Emgu.CV
       /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
       /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
       /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
+#if ANDROID
+      public static void cvExtractSURF(
+         IntPtr image, IntPtr mask,
+         ref IntPtr keypoints,
+         ref IntPtr descriptors,
+         IntPtr storage,
+         MCvSURFParams parameters,
+         int useProvidedKeyPoints)
+      {
+         cvExtractSURF(image, mask, ref keypoints, ref descriptors, storage, 
+            parameters.Extended, parameters.Upright, parameters.HessianThreshold, parameters.NOctaves, parameters.NOctaveLayers,
+            useProvidedKeyPoints);
+      }
+      
+      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvExtractSURF(
+         IntPtr image, IntPtr mask,
+         ref IntPtr keypoints,
+         ref IntPtr descriptors,
+         IntPtr storage,
+         int extended, int upright, double hessianThreshold, int nOctaves, int nOctaveLayers,
+         int useProvidedKeyPoints);
+#else
       [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
@@ -773,6 +796,7 @@ namespace Emgu.CV
          IntPtr storage,
          MCvSURFParams parameters,
          int useProvidedKeyPoints);
+#endif
 
       /*
       /// <summary>

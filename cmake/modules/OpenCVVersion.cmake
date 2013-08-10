@@ -1,4 +1,4 @@
-SET(OPENCV_VERSION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/opencv/modules/core/include/opencv2/core/version.hpp")
+SET(OPENCV_VERSION_FILE "${OPENCV_SUBFOLDER}/modules/core/include/opencv2/core/version.hpp")
 FILE(STRINGS "${OPENCV_VERSION_FILE}" OPENCV_VERSION_PARTS REGEX "#define CV_VERSION_[A-Z]+[ ]+[0-9]+" )
 
 string(REGEX REPLACE ".+CV_VERSION_EPOCH[ ]+([0-9]+).*" "\\1" OPENCV_VERSION_MAJOR "${OPENCV_VERSION_PARTS}")

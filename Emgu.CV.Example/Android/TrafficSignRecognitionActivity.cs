@@ -50,20 +50,10 @@ namespace AndroidExamples
                watch.Stop(); //stop the timer
                SetMessage(String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds));
 
-               Bitmap bmp = image.ToBitmap();
-               using (Canvas c = new Canvas(bmp))
-               using (Paint p = new Paint())
-               {
-                  p.Color = Android.Graphics.Color.Red;
-                  p.StrokeWidth = 2;
-                  p.SetStyle(Paint.Style.Stroke);
-                 
-                  foreach (Rectangle rect in stopSignBoxList)
-                  {
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
-                  }
-               }
-               SetImageBitmap(bmp);
+               foreach (Rectangle rect in stopSignBoxList)
+                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+
+               SetImageBitmap(image.ToBitmap());
             }
          };
       }

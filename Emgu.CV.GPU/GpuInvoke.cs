@@ -949,7 +949,7 @@ namespace Emgu.CV.GPU
       /// <param name="dst">The destination GpuMmage</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      /// <param name="borderType">Border type. </param>
+      /// <param name="borderType">Border type. Use REFLECT101 as default.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatFilter2D")]
       public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType, IntPtr stream);

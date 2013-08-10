@@ -576,7 +576,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination OclImage</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the ocl image into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      /// <param name="borderType">Border type. </param>
+      /// <param name="borderType">Border type. Use REFLECT101 for default.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatFilter2D")]
       public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType);
 
@@ -705,8 +705,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
+      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
-      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations);
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
 
       #endregion
    }

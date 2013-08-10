@@ -93,6 +93,10 @@
     <Compile Include="AutoTestML.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
+      <Link>license-plate.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

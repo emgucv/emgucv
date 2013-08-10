@@ -123,6 +123,7 @@ namespace Emgu.CV
          IntPtr disparity,
          IntPtr state);
 
+      /*
       /// <summary>
       /// Computes disparity map for the input rectified stereo pair.
       /// </summary>
@@ -135,7 +136,7 @@ namespace Emgu.CV
          IntPtr left,
          IntPtr right,
          IntPtr disparity,
-         ref MCvStereoBMState state);
+         ref MCvStereoBMState state);*/
 
       /// <summary>
       /// Transforms 1-channel disparity map to 3-channel image, a 3D surface.

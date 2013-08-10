@@ -12,11 +12,11 @@ namespace Emgu.CV.Test
 {
    public class FaceDetector
    {
-      private HaarCascade _faceCascade;
+      private CascadeClassifier _faceCascade;
 
       public FaceDetector()
       {
-         _faceCascade = new HaarCascade("haarcascade_frontalface_alt2.xml");
+         _faceCascade = new CascadeClassifier("haarcascade_frontalface_alt2.xml");
 
       }
 
@@ -24,13 +24,13 @@ namespace Emgu.CV.Test
       {
          using (Image<Gray, Byte> gray = img.Convert<Gray, Byte>())
          {
-            MCvAvgComp[] objects = _faceCascade.Detect(gray);
+            Rectangle[] objects = _faceCascade.DetectMultiScale(gray, 1.1, 3, Size.Empty, Size.Empty);
             List<Face> res = new List<Face>();
 
-            foreach (MCvAvgComp o in objects)
+            foreach (Rectangle o in objects)
             {
-               img.ROI = o.rect;
-               res.Add(new Face(img.Copy(), o.rect));
+               img.ROI = o;
+               res.Add(new Face(img.Copy(), o));
             }
             img.ROI = Rectangle.Empty;
             return res;
@@ -71,24 +71,24 @@ namespace Emgu.CV.Test
       private DenseHistogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
       private Rectangle _rect;
-      private HaarCascade _eyeCascade;
+      private CascadeClassifier _eyeCascade;
 
       public Face(Image<Bgr, Byte> img, Rectangle rect)
       {
          _image = img;
          _rect = rect;
-         _eyeCascade = new HaarCascade("haarcascade_eye_tree_eyeglasses.xml");
+         _eyeCascade = new CascadeClassifier("haarcascade_eye_tree_eyeglasses.xml");
       }
 
       public List<Eye> DetectEye()
       {
-         MCvAvgComp[] objects = _eyeCascade.Detect(Gray);
+         Rectangle[] objects = _eyeCascade.DetectMultiScale(Gray, 1.1, 3, Size.Empty, Size.Empty);
          List<Eye> res = new List<Eye>();
 
-         foreach (MCvAvgComp o in objects)
+         foreach (Rectangle o in objects)
          {
-            _image.ROI = o.rect;
-            res.Add(new Eye(_image.Copy(), o.rect));
+            _image.ROI = o;
+            res.Add(new Eye(_image.Copy(), o));
          }
          _image.ROI = Rectangle.Empty;
          return res;

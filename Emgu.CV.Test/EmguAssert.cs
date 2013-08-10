@@ -19,7 +19,17 @@ namespace Emgu.CV.Test
       {
          return AssetsUtil.LoadImage<TColor, TDepth>(name);
       }
+
+      public static String GetFile(String fileName)
+      {
+         return AssetsUtil.LoadFile(fileName);
+      }  
 #else
+      public static String GetFile(String fileName)
+      {
+         return fileName;
+      }
+
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
          where TColor : struct, IColor
          where TDepth : new()

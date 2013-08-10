@@ -76,6 +76,22 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
+      /// Get the number of rows
+      /// </summary>
+      public int Rows
+      {
+         get { return Size.Height; }
+      }
+
+      /// <summary>
+      /// Get the number of columns
+      /// </summary>
+      public int Cols
+      {
+         get { return Size.Width; }
+      }
+
+      /// <summary>
       /// Get the OclMat size:
       /// width == wholcols, height == wholerows
       /// </summary>

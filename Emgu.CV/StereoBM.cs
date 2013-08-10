@@ -16,10 +16,12 @@ namespace Emgu.CV
    {
       private IntPtr _ptr;
 
+      /*
       /// <summary>
       /// The state structure
       /// </summary>
       public MCvStereoBMState State;
+      */
 
       /// <summary>
       /// Create a stereoBMState
@@ -29,7 +31,7 @@ namespace Emgu.CV
       public StereoBM(CvEnum.STEREO_BM_TYPE type, int numberOfDisparities)
       {
          _ptr = CvInvoke.cvCreateStereoBMState(type, numberOfDisparities);
-         State = (MCvStereoBMState) Marshal.PtrToStructure(_ptr, typeof(MCvStereoBMState));
+         //State = (MCvStereoBMState) Marshal.PtrToStructure(_ptr, typeof(MCvStereoBMState));
       }
 
       /// <summary>
@@ -41,7 +43,7 @@ namespace Emgu.CV
       /// <remarks>Invalid pixels (for which disparity can not be computed) are set to (state-&gt;minDisparity-1)*16</remarks>
       public void FindStereoCorrespondence(Image<Gray, Byte> left, Image<Gray, Byte> right, Image<Gray, Int16> disparity)
       {
-         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, ref State);
+         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, _ptr);
       }
 
       /// <summary>
@@ -53,7 +55,7 @@ namespace Emgu.CV
       /// <remarks>Invalid pixels (for which disparity can not be computed) are set to state-&gt;minDisparity - 1 </remarks>
       public void FindStereoCorrespondence(Image<Gray, Byte> left, Image<Gray, Byte> right, Image<Gray, float> disparity)
       {
-         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, ref State);
+         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, _ptr);
       }
 
       /// <summary>
@@ -61,7 +63,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         Marshal.StructureToPtr(State, _ptr, false);
+         //Marshal.StructureToPtr(State, _ptr, false);
          CvInvoke.cvReleaseStereoBMState(ref _ptr);
       }
    }
