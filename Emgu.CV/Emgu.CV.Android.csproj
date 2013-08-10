@@ -100,6 +100,7 @@
     <Compile Include="PInvoke\CvInvokePhoto.cs" />
     <Compile Include="PInvoke\CvInvokeVideo.cs" />
     <Compile Include="PInvoke\CvType\Cuboid.cs" />
+    <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />

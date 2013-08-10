@@ -865,37 +865,20 @@ namespace Emgu.CV
       {
          if (thickness > 0)
          {
-            GCHandle[] handles =
-#if NETFX_CORE
-               Extensions.
-#else
-               Array.
-#endif
-               ConvertAll<Point[], GCHandle>(pts, delegate(Point[] polyline)
-               {
-                  return GCHandle.Alloc(polyline, GCHandleType.Pinned);
-               });
+            GCHandle[] handles = new GCHandle[pts.Length];
+            IntPtr[] ptrs = new IntPtr[pts.Length];
+            int[] lengths = new int[ptrs.Length];
+            for (int i = 0; i < pts.Length; i++)
+            {
+               handles[i] = GCHandle.Alloc(pts[i], GCHandleType.Pinned);
+               ptrs[i] = handles[i].AddrOfPinnedObject();
+               lengths[i] = pts[i].Length;
+            }
 
             CvInvoke.cvPolyLine(
                Ptr,
-#if NETFX_CORE
-               Extensions.
-#else
-               Array.
-#endif
-               ConvertAll<GCHandle, IntPtr>(handles, delegate(GCHandle h)
-               {
-                  return h.AddrOfPinnedObject();
-               }),
-#if NETFX_CORE
-               Extensions.
-#else
-               Array.
-#endif
-               ConvertAll<Point[], int>(pts, delegate(Point[] polyline)
-               {
-                  return polyline.Length;
-               }),
+               ptrs,
+               lengths,
                pts.Length,
                isClosed,
                color.MCvScalar,
@@ -903,10 +886,10 @@ namespace Emgu.CV
                Emgu.CV.CvEnum.LINE_TYPE.EIGHT_CONNECTED,
                0);
 
-                foreach (GCHandle h in handles)
-                    h.Free();
-            }
-        }
+            foreach (GCHandle h in handles)
+               h.Free();
+         }
+      }
 
         ///<summary> Draw a Circle of the specific color and thickness </summary>
         ///<param name="circle"> The circle to be drawn</param>

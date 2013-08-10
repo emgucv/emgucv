@@ -38,22 +38,12 @@ namespace AndroidExamples
                Rectangle[] pedestrians = FindPedestrian.Find(image, out time);
 
                SetMessage(String.Format("Detection completed in {0} milliseconds.", time));
-
-               Bitmap bmp = image.ToBitmap();
-               using (Canvas c = new Canvas(bmp))
-               using (Paint p = new Paint())
+               foreach (Rectangle rect in pedestrians)
                {
-                  p.Color = Android.Graphics.Color.Red;
-                  p.StrokeWidth = 2;
-                  p.SetStyle(Paint.Style.Stroke);
-
-                  foreach (Rectangle rect in pedestrians)
-                  {
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
-                  }
+                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
                }
 
-               SetImageBitmap(bmp);
+               SetImageBitmap(image.ToBitmap());
             }
          };
       }

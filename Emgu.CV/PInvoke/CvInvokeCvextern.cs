@@ -206,5 +206,20 @@ namespace Emgu.CV
       /// <param name="flow">The computed flow image that has the same size as prev and type CV_32FC2 .</param>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowDualTVL1(IntPtr prev, IntPtr nex, IntPtr flow);
+
+      /// <summary>
+      /// This function retrive the Open CV structure sizes in unmanaged code
+      /// </summary>
+      /// <param name="sizes">The structure that will hold the Open CV structure sizes</param>
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="getCvStructSizes")]
+      public static extern void GetCvStructSizes(ref CvStructSizes sizes);
+
+      public static void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, MCvScalar color)
+      {
+         TestDrawLine(img, startX, startY, endX, endY, color.v0, color.v1, color.v2, color.v3);
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
+      private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
    }
 }

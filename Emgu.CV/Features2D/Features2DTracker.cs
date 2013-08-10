@@ -721,6 +721,34 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
 
+#if ANDROID
+      internal static void drawMatchedFeatures(
+         IntPtr img1, IntPtr keypoints1,
+         IntPtr img2, IntPtr keypoints2,
+         IntPtr matchIndices,
+         IntPtr outImg,
+         MCvScalar matchColor, MCvScalar singlePointColor,
+         IntPtr matchesMask,
+         Features2D.Features2DToolbox.KeypointDrawType flags)
+      {
+         drawMatchedFeatures(
+            img1, keypoints1, img2, keypoints2, matchIndices, outImg,
+            matchColor.v0, matchColor.v1, matchColor.v2, matchColor.v3,
+            singlePointColor.v0, singlePointColor.v1, singlePointColor.v2, singlePointColor.v3,
+            matchesMask, flags);
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void drawMatchedFeatures(
+         IntPtr img1, IntPtr keypoints1,
+         IntPtr img2, IntPtr keypoints2,
+         IntPtr matchIndices,
+         IntPtr outImg,
+         double mc0, double mc1, double mc2, double mc3,
+         double spc0, double spc1, double spc2, double spc3,
+         IntPtr matchesMask,
+         Features2D.Features2DToolbox.KeypointDrawType flags);
+#else
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void drawMatchedFeatures(
          IntPtr img1, IntPtr keypoints1,
@@ -730,6 +758,7 @@ namespace Emgu.CV
          MCvScalar matchColor, MCvScalar singlePointColor,
          IntPtr matchesMask,
          Features2D.Features2DToolbox.KeypointDrawType flags);
+#endif
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void drawKeypoints(

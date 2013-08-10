@@ -1492,6 +1492,34 @@ namespace Emgu.CV
       /// CV_AA - antialiased line. 
       /// </param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
+#if ANDROID
+      public static void cvLine(
+          IntPtr img,
+          Point pt1,
+          Point pt2,
+          MCvScalar color,
+          int thickness,
+          CvEnum.LINE_TYPE lineType,
+          int shift)
+      {
+         cvLine(img, pt1.X, pt1.Y, pt2.X, pt2.Y, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvLine(
+         IntPtr img,
+         int pt1X,
+         int pt1Y,
+         int pt2X,
+         int pt2Y,
+         double c0,
+         double c1, 
+         double c2, 
+         double c3,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLine(
           IntPtr img,
@@ -1501,6 +1529,7 @@ namespace Emgu.CV
           int thickness,
           CvEnum.LINE_TYPE lineType,
           int shift);
+#endif
 
       /// <summary>
       /// Draws a single or multiple polygonal curves
@@ -1517,19 +1546,37 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the polyline edges</param>
       /// <param name="lineType">Type of the line segments, see cvLine description</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPolyLine(
+#if ANDROID
+      private static void cvPolyLine(
          IntPtr img,
-         [In]
-         IntPtr[] pts,
-         [In]
-         int[] npts,
+         IntPtr pts,
+         IntPtr npts,
+         int contours,
+         int isClosed,
+         MCvScalar color,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift)
+      {
+         cvPolyLine(img, pts, npts, contours, isClosed, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvPolyLine(IntPtr img, IntPtr pts, IntPtr npts, int coutours, int isClosed, double c0, double c1, double c2, double c3, int thickness, CvEnum.LINE_TYPE lineType, int shift);
+
+#else
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvPolyLine(
+         IntPtr img,
+         IntPtr pts,
+         IntPtr npts,
          int contours,
          int isClosed,
          MCvScalar color,
          int thickness,
          CvEnum.LINE_TYPE lineType,
          int shift);
+#endif
 
       /// <summary>
       /// Draws a single or multiple polygonal curves
@@ -1548,9 +1595,7 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
       public static void cvPolyLine(
          IntPtr img,
-         [In]
          IntPtr[] pts,
-         [In]
          int[] npts,
          int contours,
          bool isClosed,
@@ -1559,7 +1604,11 @@ namespace Emgu.CV
          CvEnum.LINE_TYPE lineType,
          int shift)
       {
-         cvPolyLine(img, pts, npts, contours, isClosed ? 1 : 0, color, thickness, lineType, shift);
+         GCHandle h0 = GCHandle.Alloc(pts, GCHandleType.Pinned);
+         GCHandle h1 = GCHandle.Alloc(npts, GCHandleType.Pinned);
+         cvPolyLine(img, h0.AddrOfPinnedObject(), h1.AddrOfPinnedObject(), contours, isClosed ? 1 : 0, color, thickness, lineType, shift);
+         h0.Free();
+         h1.Free();
       }
 
       /// <summary>
@@ -1572,6 +1621,34 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
       /// <param name="lineType">Type of the line</param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
+#if ANDROID
+      public static void cvRectangle(
+         IntPtr img,
+         Point pt1,
+         Point pt2,
+         MCvScalar color,
+         int thickness, 
+         CvEnum.LINE_TYPE lineType,
+         int shift)
+      {
+         cvRectangle(img, pt1.X, pt1.Y, pt2.X, pt2.Y, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvRectangle(
+         IntPtr img,
+         int pt1X,
+         int pt1Y,
+         int pt2X,
+         int pt2Y,
+         double c0,
+         double c1, 
+         double c2,
+         double c3,
+         int thickness, 
+         CvEnum.LINE_TYPE lineType,
+         int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRectangle(
          IntPtr img,
@@ -1581,6 +1658,7 @@ namespace Emgu.CV
          int thickness, 
          CvEnum.LINE_TYPE lineType,
          int shift);
+#endif
 
       /// <summary>
       /// Draws a rectangle specified by a CvRect structure
@@ -1591,11 +1669,27 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
       /// <param name="lineType">Type of the line</param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
+#if ANDROID
+      public static void cvRectangleR(IntPtr img, Rectangle rect,
+                           MCvScalar color, int thickness,
+                           CvEnum.LINE_TYPE lineType,
+                           int shift)
+      {
+         cvRectangleR(img, rect.X, rect.Y, rect.Width, rect.Height, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvRectangleR(IntPtr img, int rectX, int rectY, int rectWidth, int rectHeight,
+                           double c0, double c1, double c2, double c3, int thickness,
+                           CvEnum.LINE_TYPE lineType,
+                           int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRectangleR(IntPtr img, Rectangle rect,
                            MCvScalar color, int thickness,
                            CvEnum.LINE_TYPE lineType,
                            int shift);
+#endif
 
       #region Accessing Elements and sub-Arrays
       /// <summary>
@@ -1684,6 +1778,33 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the circle outline if positive, otherwise indicates that a filled circle has to be drawn</param>
       /// <param name="lineType">Type of the circle boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
+#if ANDROID
+      public static void cvCircle(
+         IntPtr img,
+         Point center,
+         int radius,
+         MCvScalar color,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift)
+      {
+         cvCircle(img, center.X, center.Y, radius, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvCircle(
+         IntPtr img,
+         int centerX,
+         int centerY,
+         int radius,
+         double c0,
+         double c1, 
+         double c2, 
+         double c3,
+         int thickness,
+         CvEnum.LINE_TYPE lineType,
+         int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCircle(
          IntPtr img,
@@ -1693,6 +1814,7 @@ namespace Emgu.CV
          int thickness,
          CvEnum.LINE_TYPE lineType,
          int shift);
+#endif
 
       /// <summary>
       /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not IntPtr.Zero, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not IntPtr.Zero, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
@@ -1917,15 +2039,39 @@ namespace Emgu.CV
       /// <param name="color">Polygon color</param>
       /// <param name="lineType">Type of the polygon boundaries</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
+#if ANDROID
+      public static void cvFillConvexPoly(
+         IntPtr img,
+         Point[] pts,
+         int npts,
+         MCvScalar color,
+         CvEnum.LINE_TYPE lineType,
+         int shift)
+      {
+         cvFillConvexPoly(img, pts, npts, color.v0, color.v1, color.v2, color.v3, lineType, shift);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvFillConvexPoly(
+         IntPtr img,
+         Point[] pts,
+         int npts,
+         double c0,
+         double c1,
+         double c2, 
+         double c3,
+         CvEnum.LINE_TYPE lineType,
+         int shift);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFillConvexPoly(
          IntPtr img,
-         [In]
          Point[] pts,
          int npts,
          MCvScalar color,
          CvEnum.LINE_TYPE lineType,
          int shift);
+#endif
 
       #region Text
       /// <summary>

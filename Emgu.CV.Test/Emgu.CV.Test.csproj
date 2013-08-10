@@ -83,6 +83,7 @@
     <Compile Include="AutoTestOcr.cs" />
     <Compile Include="AutoTestOpenCL.cs" />
     <Compile Include="AutoTestQuaternions.cs" />
+    <Compile Include="AutoTestSanity.cs" />
     <Compile Include="AutoTestVarious.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="EmguAssert.cs" />

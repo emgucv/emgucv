@@ -82,22 +82,13 @@ namespace AndroidExamples
                   builder.AppendFormat("{0} ", w);
                SetMessage(builder.ToString());
 
-               Bitmap bmp = image.ToBitmap();
-               using (Canvas c = new Canvas(bmp))
-               using (Paint p = new Paint())
+               foreach (MCvBox2D box in licenseBoxList)
                {
-                  p.Color = Android.Graphics.Color.Red;
-                  p.StrokeWidth = 2;
-                  p.SetStyle(Paint.Style.Stroke);
-
-                  foreach (MCvBox2D box in licenseBoxList)
-                  {
-                     Rectangle rect = box.MinAreaRect();
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
-                  }
+                  Rectangle rect = box.MinAreaRect();
+                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
                }
 
-               SetImageBitmap(bmp);
+               SetImageBitmap(image.ToBitmap());
 
             }
          };

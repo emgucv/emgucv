@@ -309,5 +309,30 @@ namespace Emgu.CV
          return (((c1) & 255) + (((c2) & 255) << 8) + (((c3) & 255) << 16) + (((c4) & 255) << 24));
       }
       #endregion
+
+      public static bool SanityCheck()
+      {
+         bool sane = true;
+         CvStructSizes sizes = new CvStructSizes();
+         CvInvoke.GetCvStructSizes(ref sizes);
+
+         sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(MCvBox2D)));
+         sane &= (sizes.CvContour == Marshal.SizeOf(typeof(MCvContour)));
+         sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
+         sane &= (sizes.CvMat == Marshal.SizeOf(typeof(MCvMat)));
+         sane &= (sizes.CvMatND == Marshal.SizeOf(typeof(MCvMatND)));
+         sane &= (sizes.CvPoint == Marshal.SizeOf(typeof(System.Drawing.Point)));
+         sane &= (sizes.CvPoint2D32f == Marshal.SizeOf(typeof(System.Drawing.PointF)));
+         sane &= (sizes.CvPoint3D32f == Marshal.SizeOf(typeof(MCvPoint3D32f)));
+         sane &= (sizes.CvRect == Marshal.SizeOf(typeof(System.Drawing.Rectangle)));
+         sane &= (sizes.CvScalar == Marshal.SizeOf(typeof(MCvScalar)));
+         sane &= (sizes.CvSeq == Marshal.SizeOf(typeof(MCvSeq)));
+         sane &= (sizes.CvSize == Marshal.SizeOf(typeof(System.Drawing.Size)));
+         sane &= (sizes.CvSize2D32f == Marshal.SizeOf(typeof(System.Drawing.SizeF)));
+         sane &= (sizes.CvTermCriteria == Marshal.SizeOf(typeof(MCvTermCriteria)));
+
+
+         return sane;
+      }
    }
 }

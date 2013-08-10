@@ -61,22 +61,12 @@ namespace AndroidExamples
                DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, out time);
                SetMessage(String.Format("Detected in {0} milliseconds.", time));
 
-               Bitmap bmp = image.ToBitmap();
-               using (Canvas c = new Canvas(bmp))
-               using (Paint p = new Paint())
-               {
-                  p.Color = Android.Graphics.Color.Red;
-                  p.StrokeWidth = 2;
-                  p.SetStyle(Paint.Style.Stroke);
-                  foreach (Rectangle rect in faces)
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
-
-                  p.Color = Android.Graphics.Color.Blue;
-                  foreach (Rectangle rect in eyes)
-                     c.DrawRect(new Rect(rect.Left, rect.Top, rect.Right, rect.Bottom), p);
-               }
-
-               SetImageBitmap(bmp);
+               foreach (Rectangle rect in faces)
+                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+               foreach (Rectangle rect in eyes)
+                  image.Draw(rect, new Bgr(System.Drawing.Color.Blue), 2);
+               
+               SetImageBitmap(image.ToBitmap());
             }
          };
       }

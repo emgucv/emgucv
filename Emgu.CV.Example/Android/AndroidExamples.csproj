@@ -19,6 +19,8 @@
     <MandroidI18n />
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
+    <JavaMaximumHeapSize />
+    <JavaOptions />
   </PropertyGroup>
   <Choose>
     <When Condition="Exists('..\..\libs\armeabi-v7a\libcvextern.so')">
@@ -60,7 +62,7 @@
     </Otherwise>
   </Choose>
   <PropertyGroup>
-    <AndroidSupportedAbis>$(HasArmeabiV7a)$(HasArmeabi)$(HasX86)</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,7 +93,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xamarin.Mobile">
+    <Reference Include="Xamarin.Mobile, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Solution\Android\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
