@@ -18,7 +18,7 @@ namespace Emgu.CV
       /// The file name of the highgui library
       /// </summary>
       public const string OPENCV_HIGHGUI_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the flann library
       /// </summary>
       public const string OPENCV_FLANN_LIBRARY = StaticInternalEntryPoint;
@@ -46,7 +46,7 @@ namespace Emgu.CV
       /// The file name of the gpu library
       /// </summary>
       public const string OPENCV_GPU_LIBRARY = "";
-	  /// <summary>
+      /// <summary>
       /// The file name of the opencv_stitching library
       /// </summary>
       public const string OPENCV_STITCHING_LIBRARY = StaticInternalEntryPoint;
@@ -62,27 +62,35 @@ namespace Emgu.CV
       /// The file name of the opencv_ffmpeg library
       /// </summary>
       public const string OPENCV_FFMPEG_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the ml library
       /// </summary>
       public const string OPENCV_ML_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the contrib library
       /// </summary>
       public const string OPENCV_CONTRIB_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the photo library
       /// </summary>
       public const string OPENCV_PHOTO_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the nonfree library
       /// </summary>
       public const string OPENCV_NONFREE_LIBRARY = StaticInternalEntryPoint;
-	  /// <summary>
+      /// <summary>
       /// The file name of the videostab library
       /// </summary>
       public const string OPENCV_VIDEOSTAB_LIBRARY = StaticInternalEntryPoint;
-	  
+      /// <summary>
+      /// The file name of the opencl library
+      /// </summary>
+      public const string OPENCV_OCL_LIBRARY = StaticInternalEntryPoint;
+      /// <summary>
+      /// The file name of the superres library
+      /// </summary>
+      public const string OPENCV_SUPERRES_LIBRARY = StaticInternalEntryPoint;
+
       /// <summary>
       /// The bit-ness of the unmanaged code (either 32 or 64) 
       /// </summary>

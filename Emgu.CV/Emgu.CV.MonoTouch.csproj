@@ -12,14 +12,14 @@
     <AssemblyName>Emgu.CV.MonoTouch</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="MONO_LOG_LEVEL" value="debug" />
@@ -28,11 +28,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -40,7 +40,7 @@
     <Reference Include="monotouch" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="OpenTK" />
-	<Reference Include="System.Xml" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdaptiveSkinDetector.cs" />
@@ -49,14 +49,14 @@
     <Compile Include="Capture\KinectCapture.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgba.cs" />
-	<Compile Include="FaceRecognizer.cs" />
-	<Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
+    <Compile Include="FaceRecognizer.cs" />
+    <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
     <Compile Include="Features2D\BOWKMeansTrainer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
-	<Compile Include="Features2D\Brisk.cs" />
+    <Compile Include="Features2D\Brisk.cs" />
     <Compile Include="Features2D\BruteForceMatcher.cs" />
-	<Compile Include="Features2D\DenseFeatureDetector.cs" />
-	<Compile Include="Features2D\DescriptorMatcher.cs" />
+    <Compile Include="Features2D\DenseFeatureDetector.cs" />
+    <Compile Include="Features2D\DescriptorMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
@@ -257,6 +257,7 @@
     <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
     <Compile Include="Mat.cs" />
     <Compile Include="Features2D\Freak.cs" />
+    <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">
