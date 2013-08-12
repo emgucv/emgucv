@@ -16,6 +16,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv7s 
     cp -r lib/Release/* ios/armv7s/
     cp -r bin/Release/* ios/armv7s/
+    cp -r opencv/3rdparty/lib/release/* ios/armv7s/
     #cp -r opencv/lib/Release/* ios/armv7/
     cd ios/armv7s
     libtool -static -o libemgucv_armv7s.a *.a
@@ -28,6 +29,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p ios/armv7 
     cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* ios/armv7/
+    cp -r opencv/3rdparty/lib/release/* ios/armv7/
     #cp -r opencv/lib/Release/* ios/armv7/
     cd ios/armv7
     libtool -static -o libemgucv_armv7.a *.a
@@ -43,6 +45,7 @@ mkdir -p ios/i386
 cp -r lib/Release/* ios/i386/
 cp -r bin/Release/* ios/i386/
 cp -r opencv/lib/Release/* ios/i386/
+cp -r opencv/3rdparty/lib/release/* ios/i386/
 cd ios/i386
 libtool -static -o libemgucv_i386.a *.a
 cd ../..
