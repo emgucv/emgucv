@@ -48,3 +48,5 @@ cd ios-package
 rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.GPU/Emgu.CV.GPU.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj
 cd ..
 
+gitversion=$(git log --oneline | wc -l | tr -d " ")
+zip -r libemgucv-ios-$gitversion ios-package

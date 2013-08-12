@@ -32,7 +32,7 @@ CVAPI(bool) cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, 
 
 CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst);
 
-CVAPI(void) cvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType );
+CVAPI(void) CvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType );
 
 CVAPI(void) cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvArr* dstArr);
 #endif

@@ -157,7 +157,7 @@ namespace Emgu.CV
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
       /// <param name="borderType">The pixel extrapolation method</param>
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="CvFilter2D")]
       public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType);
 
       /// <summary>

@@ -24,7 +24,8 @@ namespace Emgu.CV
 
       private void ConvertFromCGImage(CGImage cgImage)
       {
-         if (this is Image<Rgba, Byte>)
+         //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
+         if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(byte))
          {
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
             using (CGBitmapContext context = new CGBitmapContext(
@@ -49,7 +50,8 @@ namespace Emgu.CV
 
       public UIImage ToUIImage()
       {
-         if (this is Image<Rgba, Byte>)
+         //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
+         if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
          {
             using (CGBitmapContext context = new CGBitmapContext(
          		MIplImage.imageData,

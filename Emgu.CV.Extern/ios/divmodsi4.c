@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core.hpp"
+#include "opencv2/core/core_c.h"
 
 CVAPI(int) __divmodsi4(int a, int b, int* rem);
 CVAPI(unsigned long) __udivmodsi4(unsigned long num, unsigned long den, int modwanted);

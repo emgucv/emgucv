@@ -63,7 +63,8 @@ void cvArrSqrt(CvArr* src, CvArr* dst)
    cv::sqrt(srcMat, dstMat);
 }
 
-void cvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType )
+//The upper case 'Cv' is needed to avoid a conflic with opencv's native cvFilter2D function
+void CvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType )
 {
     cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
     cv::Mat kernel = cv::cvarrToMat(_kernel);

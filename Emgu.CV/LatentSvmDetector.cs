@@ -48,7 +48,11 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvReleaseLatentSvmDetector(ref _ptr);
+	     if (_ptr != IntPtr.Zero) 
+         {
+		    CvInvoke.cvReleaseLatentSvmDetector (ref _ptr);
+            _ptr = IntPtr.Zero;
+         }
       }
    }
 }

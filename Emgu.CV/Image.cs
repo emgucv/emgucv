@@ -115,8 +115,21 @@ namespace Emgu.CV
          {
             throw new FileNotFoundException(String.Format("The file {0} could not be not found.", fileName), fileName);
          }
-#if !IOS
+
          String extension = fi.Extension.ToLower();
+#if IOS
+         //Open CV's libpng doesn't seem to be able to handle png in iOS
+         //Use UIImage to load png
+         if (extension.Equals(".png"))
+         {
+            using (UIImage tmp = UIImage.FromFile(fileName))
+            {
+               AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
+               ConvertFromCGImage(tmp.CGImage);
+            }
+            return;
+         }
+#else
          if ((this is Image<Bgra, Byte> && (extension.Equals(".png"))
             || extension.Equals(".tiff") || extension.Equals(".tif")))
          {
@@ -306,10 +319,10 @@ namespace Emgu.CV
       public Image(int width, int height, TColor value)
          : this(width, height)
       {
-         int n1 = MIplImage.nSize;
+         //int n1 = MIplImage.nSize;
          SetValue(value);
-         int n2 = MIplImage.nSize;
-         int nDiff = n2 - n1;
+         //int n2 = MIplImage.nSize;
+         //int nDiff = n2 - n1;
       }
 
       ///<summary>
@@ -385,10 +398,10 @@ namespace Emgu.CV
          }
 
          _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
-         int n1 = MIplImage.nSize;
+         //int n1 = MIplImage.nSize;
          CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _array.GetLength(1) * _array.GetLength(2) * SizeOfElement);
-         int n2 = MIplImage.nSize;
-         int nDiff = n2 - n1;
+         //int n2 = MIplImage.nSize;
+         //int nDiff = n2 - n1;
       }
 
       ///<summary>
