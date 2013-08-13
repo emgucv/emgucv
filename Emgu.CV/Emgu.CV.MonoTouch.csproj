@@ -264,6 +264,7 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringTable.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Emgu.CV.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
