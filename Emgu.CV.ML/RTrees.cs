@@ -21,6 +21,14 @@ namespace Emgu.CV.ML
       /// </summary>
       public RTrees()
       {
+         Init();
+      }
+
+      /// <summary>
+      /// Initialize the Random tree
+      /// </summary>
+      protected virtual void Init()
+      {
          _ptr = MlInvoke.CvRTreesCreate();
       }
 

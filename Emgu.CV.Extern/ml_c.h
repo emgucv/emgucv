@@ -57,16 +57,16 @@ CVAPI(CvMat*) CvEMLegacyGetProbs(CvEM* model);
 CVAPI(CvSVM*) CvSVMDefaultCreate();
 CVAPI(bool) CvSVMTrain(CvSVM* model, CvMat* _train_data, CvMat* _responses,
                        CvMat* _var_idx, CvMat* _sample_idx,
-                       CvSVMParams _params);
+                       CvSVMParams* _params);
 CVAPI(bool) CvSVMTrainAuto(CvSVM* model, CvMat* _train_data, CvMat* _responses,
-                           CvMat* _var_idx, CvMat* _sample_idx, CvSVMParams _params,
+                           CvMat* _var_idx, CvMat* _sample_idx, CvSVMParams* _params,
                            int k_fold,
-                           CvParamGrid C_grid,
-                           CvParamGrid gamma_grid,
-                           CvParamGrid p_grid,
-                           CvParamGrid nu_grid,
-                           CvParamGrid coef_grid,
-                           CvParamGrid degree_grid);
+                           CvParamGrid* C_grid,
+                           CvParamGrid* gamma_grid,
+                           CvParamGrid* p_grid,
+                           CvParamGrid* nu_grid,
+                           CvParamGrid* coef_grid,
+                           CvParamGrid* degree_grid);
 CVAPI(void) CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid);
 CVAPI(void) CvSVMRelease(CvSVM** model);
 CVAPI(float) CvSVMPredict(CvSVM* model,  CvMat* _sample );
@@ -137,7 +137,7 @@ CVAPI(bool) CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
                          CvMat* _missing_mask,
-                         CvBoostParams params,
+                         CvBoostParams* params,
                          bool update );
 
 CVAPI(float) CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
@@ -152,7 +152,7 @@ CVAPI(bool) CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
              const CvMat* responses, const CvMat* varIdx,
              const CvMat* sampleIdx, const CvMat* varType,
              const CvMat* missingDataMask,
-             CvGBTreesParams params,
+             CvGBTreesParams* params,
              bool update);
 CVAPI(float) CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
                             CvMat* weak_responses, CvSlice slice,

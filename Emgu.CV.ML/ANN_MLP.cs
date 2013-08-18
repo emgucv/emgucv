@@ -38,7 +38,7 @@ namespace Emgu.CV.ML
       /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
       /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
       /// <param name="sampleWeights">It is not null only for RPROP. The optional floating-point vector of weights for each sample. Some samples may be more important than others for training, e.g. user may want to gain the weight of certain classes to find the right balance between hit-rate and false-alarm rate etc</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
+      /// <param name="sampleMask">Can be null if not needed. When specified, it is a mask identifies samples of interest. It must be a Matrix&gt;Byte&lt; of nx1, where n is the number of rows in <paramref name="trainData"/></param>
       /// <param name="parameters">The parameters for ANN_MLP</param>
       /// <param name="flag">The traning flag</param>
       /// <returns>The number of done iterations</returns>
@@ -46,7 +46,7 @@ namespace Emgu.CV.ML
          Matrix<float> trainData,
          Matrix<float> responses,
          Matrix<float> sampleWeights,
-         Matrix<Byte> sampleIdx,
+         Matrix<Byte> sampleMask,
          MCvANN_MLP_TrainParams parameters,
          MlEnum.ANN_MLP_TRAINING_FLAG flag)
       {
@@ -56,7 +56,63 @@ namespace Emgu.CV.ML
                trainData.Ptr,
                responses.Ptr,
                sampleWeights == null? IntPtr.Zero : sampleWeights.Ptr,
+               sampleMask == null ? IntPtr.Zero : sampleMask.Ptr,
+               ref parameters,
+               flag);
+      }
+
+      /// <summary>
+      /// Train the ANN_MLP model with the specific paramters
+      /// </summary>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleWeights">It is not null only for RPROP. The optional floating-point vector of weights for each sample. Some samples may be more important than others for training, e.g. user may want to gain the weight of certain classes to find the right balance between hit-rate and false-alarm rate etc</param>
+      /// <param name="sampleIdx">Can be null if not needed. When specified, the elements in the matrix contains the index to the samples of interest. It is a Matrix&gt;int&lt; of nx1 where n %lt;= number of rows in <paramref name="trainData"/></param>
+      /// <param name="parameters">The parameters for ANN_MLP</param>
+      /// <param name="flag">The traning flag</param>
+      /// <returns>The number of done iterations</returns>
+      public int Train(
+         Matrix<float> trainData,
+         Matrix<float> responses,
+         Matrix<float> sampleWeights,
+         Matrix<int> sampleIdx,
+         MCvANN_MLP_TrainParams parameters,
+         MlEnum.ANN_MLP_TRAINING_FLAG flag)
+      {
+         return
+            MlInvoke.CvANN_MLPTrain(
+               _ptr,
+               trainData.Ptr,
+               responses.Ptr,
+               sampleWeights == null ? IntPtr.Zero : sampleWeights.Ptr,
                sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
+               ref parameters,
+               flag);
+      }
+
+      /// <summary>
+      /// Train the ANN_MLP model with the specific paramters
+      /// </summary>
+      /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
+      /// <param name="sampleWeights">It is not null only for RPROP. The optional floating-point vector of weights for each sample. Some samples may be more important than others for training, e.g. user may want to gain the weight of certain classes to find the right balance between hit-rate and false-alarm rate etc</param>
+      /// <param name="parameters">The parameters for ANN_MLP</param>
+      /// <param name="flag">The traning flag</param>
+      /// <returns>The number of done iterations</returns>
+      public int Train(
+         Matrix<float> trainData,
+         Matrix<float> responses,
+         Matrix<float> sampleWeights,
+         MCvANN_MLP_TrainParams parameters,
+         MlEnum.ANN_MLP_TRAINING_FLAG flag)
+      {
+         return
+            MlInvoke.CvANN_MLPTrain(
+               _ptr,
+               trainData.Ptr,
+               responses.Ptr,
+               sampleWeights == null ? IntPtr.Zero : sampleWeights.Ptr,
+               IntPtr.Zero,
                ref parameters,
                flag);
       }

@@ -96,19 +96,19 @@ CvMat* CvEMLegacyGetProbs(CvEM* model) { return (CvMat*) model->get_probs(); }
 CvSVM* CvSVMDefaultCreate() { return new CvSVM; }
 bool CvSVMTrain(CvSVM* model, CvMat* _train_data, CvMat* _responses,
    CvMat* _var_idx, CvMat* _sample_idx,
-   CvSVMParams _params)
-{ return model->train(_train_data, _responses, _var_idx, _sample_idx, _params); }
+   CvSVMParams* _params)
+{ return model->train(_train_data, _responses, _var_idx, _sample_idx, *_params); }
 bool CvSVMTrainAuto(CvSVM* model, CvMat* _train_data, CvMat* _responses,
-   CvMat* _var_idx, CvMat* _sample_idx, CvSVMParams _params,
+   CvMat* _var_idx, CvMat* _sample_idx, CvSVMParams* _params,
    int k_fold,
-   CvParamGrid C_grid,
-   CvParamGrid gamma_grid,
-   CvParamGrid p_grid,
-   CvParamGrid nu_grid,
-   CvParamGrid coef_grid,
-   CvParamGrid degree_grid)
-{ return model->train_auto(_train_data, _responses, _var_idx, _sample_idx, _params, k_fold,
-C_grid, gamma_grid, p_grid, nu_grid, coef_grid, degree_grid); }
+   CvParamGrid* C_grid,
+   CvParamGrid* gamma_grid,
+   CvParamGrid* p_grid,
+   CvParamGrid* nu_grid,
+   CvParamGrid* coef_grid,
+   CvParamGrid* degree_grid)
+{ return model->train_auto(_train_data, _responses, _var_idx, _sample_idx, *_params, k_fold,
+*C_grid, *gamma_grid, *p_grid, *nu_grid, *coef_grid, *degree_grid); }
 void CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid)
 {  CvParamGrid defaultGrid = CvSVM::get_default_grid(gridType);
 grid->max_val = defaultGrid.max_val;
@@ -196,10 +196,10 @@ bool CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
    CvMat* _responses, CvMat* _var_idx,
    CvMat* _sample_idx, CvMat* _var_type,
    CvMat* _missing_mask,
-   CvBoostParams params,
+   CvBoostParams* params,
    bool update )
 { return model->train(_train_data, _tflag, _responses, _var_idx,
-_sample_idx, _var_type, _missing_mask, params, update); }
+_sample_idx, _var_type, _missing_mask, *params, update); }
 
 float CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
    CvMat* weak_responses, CvSlice slice,
@@ -226,10 +226,10 @@ bool CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
    const CvMat* responses, const CvMat* varIdx,
    const CvMat* sampleIdx, const CvMat* varType,
    const CvMat* missingDataMask,
-   CvGBTreesParams params,
+   CvGBTreesParams* params,
    bool update)
 {
-   return model->train(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params, update);
+   return model->train(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, *params, update);
 }
 float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
    CvMat* weak_responses, CvSlice slice,

@@ -366,7 +366,7 @@ namespace Emgu.CV.ML
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
-         MCvSVMParams parameters);
+         ref MCvSVMParams parameters);
 
       /// <summary>
       /// Get the default parameter grid for the specific SVM type
@@ -401,14 +401,14 @@ namespace Emgu.CV.ML
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
-         MCvSVMParams parameters,
+         ref MCvSVMParams parameters,
          int kFold,
-         MCvParamGrid cGrid,
-         MCvParamGrid gammaGrid,
-         MCvParamGrid pGrid,
-         MCvParamGrid nuGrid,
-         MCvParamGrid coefGrid,
-         MCvParamGrid degreeGrid);
+         ref MCvParamGrid cGrid,
+         ref MCvParamGrid gammaGrid,
+         ref MCvParamGrid pGrid,
+         ref MCvParamGrid nuGrid,
+         ref MCvParamGrid coefGrid,
+         ref MCvParamGrid degreeGrid);
 
       /// <summary>
       /// Get the parameters of the SVM model
@@ -729,7 +729,7 @@ namespace Emgu.CV.ML
          IntPtr sampleIdx,
          IntPtr varType,
          IntPtr missingMask,
-         MCvBoostParams param,
+         ref MCvBoostParams param,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool update);
 
@@ -794,7 +794,7 @@ namespace Emgu.CV.ML
          IntPtr sampleIdx,
          IntPtr varType,
          IntPtr missingMask,
-         MCvGBTreesParams param,
+         ref MCvGBTreesParams param,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool update);
 
