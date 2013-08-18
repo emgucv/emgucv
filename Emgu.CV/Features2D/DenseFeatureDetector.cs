@@ -39,7 +39,7 @@ namespace Emgu.CV.Features2D
          bool varyXyStepWithScale,
          bool varyImgBoundWithScale)
       {
-         CvInvoke.CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
+         _ptr = CvInvoke.CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
       }
 
       #region IKeyPointDetector Members
