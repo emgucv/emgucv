@@ -16,6 +16,14 @@ namespace Emgu.CV.ML
       /// </summary>
       public ERTrees()
       {
+         //This will call the default base constructor, which calls the Init() function
+      }
+
+      /// <summary>
+      /// Initialize the extreme Randome tree
+      /// </summary>
+      protected override void Init()
+      {
          _ptr = MlInvoke.CvERTreesCreate();
       }
 

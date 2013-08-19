@@ -23,6 +23,15 @@ namespace Emgu.CV.GPU
       /// Create an empty GpuMat
       /// </summary>
       public GpuMat()
+         :this(GpuInvoke.GpuMatCreateDefault())
+      {
+      }
+
+      /// <summary>
+      /// Create a GpuMat from the specific pointer
+      /// </summary>
+      /// <param name="ptr">Pointer to the unmanaged gpuMat</param>
+      public GpuMat(IntPtr ptr)
       {
          _ptr = GpuInvoke.GpuMatCreateDefault();
       }
@@ -82,13 +91,14 @@ namespace Emgu.CV.GPU
    public class GpuMat<TDepth> : GpuMat, IEquatable<GpuMat<TDepth>>
       where TDepth : new()
    {
+      #region constructors
       /// <summary>
       /// Create a GpuMat from the unmanaged pointer
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat</param>
       public GpuMat(IntPtr ptr)
+         : base(ptr)
       {
-         _ptr = ptr;
       }
 
       /// <summary>
@@ -107,12 +117,11 @@ namespace Emgu.CV.GPU
       /// <param name="channels">The number of channels</param>
       /// <param name="continuous">Indicates if the data should be continuous</param>
       public GpuMat(int rows, int cols, int channels, bool continuous)
+         : base(
+            continuous ? 
+            GpuInvoke.GpuMatCreateContinuous(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels))
+            : GpuInvoke.GpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels)))
       {
-         int matType = CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels);
-         if (continuous)
-            _ptr = GpuInvoke.GpuMatCreateContinuous(rows, cols, matType);
-         else
-            _ptr = GpuInvoke.GpuMatCreate(rows, cols, matType);
       }
 
       /// <summary>
@@ -143,8 +152,8 @@ namespace Emgu.CV.GPU
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuMat(GpuMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
+         : base(GpuInvoke.GpuMatGetRegion(mat, rowRange, colRange))
       {
-         _ptr = GpuInvoke.GpuMatGetRegion(mat, rowRange, colRange);
       }
 
       /// <summary>
@@ -152,9 +161,10 @@ namespace Emgu.CV.GPU
       /// </summary>
       /// <param name="arr">The CvArry to be converted to GpuMat</param>
       public GpuMat(CvArray<TDepth> arr)
+         : base(GpuInvoke.GpuMatCreateFromArr(arr))
       {
-         _ptr = GpuInvoke.GpuMatCreateFromArr(arr);
       }
+      #endregion
 
       /// <summary>
       /// Pefroms blocking upload data to GpuMat

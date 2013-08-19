@@ -55,23 +55,16 @@ namespace Emgu.CV
       /// <param name="kernel">The values for the convolution kernel</param>
       /// <param name="center">The center for the convolution kernel</param>
       public ConvolutionKernelF(float[,] kernel, System.Drawing.Point center)
+         : base(Math.Max(2, kernel.GetLength(0)), Math.Max(2, kernel.GetLength(1)))
       {
          int rows = kernel.GetLength(0);
          int cols = kernel.GetLength(1);
          Debug.Assert(!(rows == 0 || cols == 0));
 
-         if (rows == 1 || cols == 1)
-         {
-            float[,] data = new float[Math.Max(2, rows), Math.Max(2, cols)];
-            for (int i = 0; i < rows; i++)
-               for (int j = 0; j < cols; j++)
-                  data[i, j] = kernel[i, j];
-            Data = data;
-         }
-         else
-         {
-            Data = kernel;
-         }
+         float[,] data = Data;
+         for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+               data[i, j] = kernel[i, j];
 
          _center = center;
       }
