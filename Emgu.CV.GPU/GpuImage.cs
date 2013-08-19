@@ -25,6 +25,7 @@ namespace Emgu.CV.GPU
       where TColor : struct, IColor
       where TDepth : new()
    {
+      #region constructors
       /// <summary>
       /// Create an empty GpuImage
       /// </summary>
@@ -88,9 +89,11 @@ namespace Emgu.CV.GPU
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuImage(GpuImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
+         :this(GpuInvoke.GpuMatGetRegion(image, rowRange, colRange))
       {
-         _ptr = GpuInvoke.GpuMatGetRegion(image, rowRange, colRange);
       }
+      #endregion
+
 
       /// <summary>
       /// Convert the current GpuImage to a regular Image.
