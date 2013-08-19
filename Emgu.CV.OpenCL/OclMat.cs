@@ -24,8 +24,17 @@ namespace Emgu.CV.OpenCL
       /// Create an empty OclMat
       /// </summary>
       public OclMat()
+         : this(OclInvoke.OclMatCreateDefault())
       {
-         _ptr = OclInvoke.OclMatCreateDefault();
+      }
+
+      /// <summary>
+      /// Create an OclMat from the unmanaged pointer
+      /// </summary>
+      /// <param name="ptr">The unmanaged pointer to the OclMat</param>
+      internal OclMat(IntPtr ptr)
+      {
+         _ptr = ptr;
       }
 
       /// <summary>
@@ -116,13 +125,14 @@ namespace Emgu.CV.OpenCL
    public class OclMat<TDepth> : OclMat, IEquatable<OclMat<TDepth>>
       where TDepth : new()
    {
+#region constructors
       /// <summary>
       /// Create an OclMat from the unmanaged pointer
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the OclMat</param>
       public OclMat(IntPtr ptr)
+         :base(ptr)
       {
-         _ptr = ptr;
       }
 
       /// <summary>
@@ -140,9 +150,11 @@ namespace Emgu.CV.OpenCL
       /// <param name="cols">The number of columns (width)</param>
       /// <param name="channels">The number of channels</param>
       public OclMat(int rows, int cols, int channels)
+         : base(OclInvoke.OclMatCreate(
+         rows, 
+         cols, 
+         CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels)))
       {
-         int matType = CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels);
-         _ptr = OclInvoke.OclMatCreate(rows, cols, matType);
       }
 
       /// <summary>
@@ -160,9 +172,10 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="arr">The CvArry to be converted to OclMat</param>
       public OclMat(CvArray<TDepth> arr)
+         : base(OclInvoke.OclMatCreateFromArr(arr))
       {
-         _ptr = OclInvoke.OclMatCreateFromArr(arr);
       }
+#endregion
 
       /// <summary>
       /// Pefroms blocking upload data to OclMat

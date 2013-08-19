@@ -22,6 +22,7 @@ namespace Emgu.CV.OpenCL
       where TColor : struct, IColor
       where TDepth : new()
    {
+      #region constructors
       /// <summary>
       /// Create an empty GpuImage
       /// </summary>
@@ -79,6 +80,7 @@ namespace Emgu.CV.OpenCL
          : this(size.Height, size.Width)
       {
       }
+      #endregion
 
       /// <summary>
       /// Resize the OclImage. The calling OclMat be OclMat%lt;Byte&gt;. 
@@ -267,6 +269,7 @@ namespace Emgu.CV.OpenCL
          return result;
       }
 
+#if !NETFX_CORE
       public Bitmap Bitmap
       {
          get
@@ -292,6 +295,7 @@ namespace Emgu.CV.OpenCL
                }
          }  
       }
+#endif
 
       IImage[] IImage.Split()
       {

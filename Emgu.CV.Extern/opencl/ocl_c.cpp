@@ -43,7 +43,9 @@ cv::ocl::oclMat* oclMatCreateContinuous(int rows, int cols, int type)
 cv::ocl::oclMat* oclMatCreateFromArr(CvArr* arr)
 {
    cv::Mat mat = cv::cvarrToMat(arr);
-   return new cv::ocl::oclMat(mat);
+   cv::ocl::oclMat* result = new cv::ocl::oclMat();
+   result -> upload(mat);
+   return result;
 }
 
 int oclMatGetType(cv::ocl::oclMat* oclMat)
@@ -105,7 +107,7 @@ void oclMatDownload(cv::ocl::oclMat* oclMat, CvArr* arr)
    
    oclMat->download(mat);
    CV_Assert(oldRows == mat.rows);
-   CV_Assert(oldCols == mat.cols);
+   //CV_Assert(oldCols == mat.cols);
 
    //char message[2000];
    //sprintf(message, "oldType = %d; newType = %d", oldType, mat.type());
@@ -232,25 +234,75 @@ void oclMatBitwiseXorS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl
    cv::ocl::bitwise_xor(*src1, sc, *dst, mask? *mask : cv::ocl::oclMat());
 }
 
+inline void normalizeAnchor(int& anchor, int ksize)
+{
+   if (anchor < 0)
+      anchor = ksize >> 1;
+
+   CV_Assert(0 <= anchor && anchor < ksize);
+}
+inline void normalizeAnchor(cv::Point* anchor, const cv::Size& ksize)
+{
+   normalizeAnchor(anchor->x, ksize.width);
+   normalizeAnchor(anchor->y, ksize.height);
+}
+
+void oclMatGetKernel(cv::Mat& kernelMat, cv::Point* anchor, int* iterations)
+{
+   cv::Size ksize = kernelMat.data ? kernelMat.size() : cv::Size(3, 3);
+
+   normalizeAnchor(anchor, ksize);
+
+   if (kernelMat.empty())
+   {
+      cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1 + *iterations * 2, 1 + *iterations * 2));
+      cv::swap(kernelMat, se);
+      anchor->x = *iterations;
+      anchor->y = *iterations;
+      *iterations = 1;
+   }
+   else
+   {
+      if (*iterations > 1 && countNonZero(kernelMat) == kernelMat.rows * kernelMat.cols)
+      {
+         anchor->x = anchor->x * (*iterations);
+         anchor->y = anchor->y * (*iterations);
+
+         cv::Mat se = cv::getStructuringElement(cv::MORPH_RECT,
+            cv::Size(ksize.width + (*iterations - 1) * (ksize.width - 1),
+            ksize.height + (*iterations - 1) * (ksize.height - 1)),
+            *anchor);
+         *iterations = 1;
+      }
+   }
+}
+
 void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
-   //char message[2000];
-   //sprintf(message, "anchor = (%d, %d); iteration = %d; borderType = %d; borderValue = (%d, %d, %d, %d)", anchor.x, anchor.y, iterations, borderType, borderValue.val[0], borderValue.val[1], borderValue.val[2], borderValue.val[3]);
-   //CV_Error(0, message);
+
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::ocl::erode(*src, *dst, kernelMat, anchor, iterations, borderType, borderValue);
+   cv::Point an = anchor;
+   oclMatGetKernel(kernelMat, &an, &iterations);
+   //char message[2000];
+   //sprintf(message, "anchor = (%d, %d); iteration = %d; borderType = %d; borderValue = (%d, %d, %d, %d)", an.x, an.y, iterations, borderType, borderValue.val[0], borderValue.val[1], borderValue.val[2], borderValue.val[3]);
+   //CV_Error(0, message);
+   cv::ocl::erode(*src, *dst, kernelMat, an, iterations, borderType, borderValue);
 }
 
 void oclMatDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel,  CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::ocl::dilate(*src, *dst, kernelMat, anchor, iterations, borderType, borderValue);
+   cv::Point an = anchor;
+   oclMatGetKernel(kernelMat, &an, &iterations); 
+   cv::ocl::dilate(*src, *dst, kernelMat, an, iterations, borderType, borderValue);
 }
 
 void oclMatMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::ocl::morphologyEx( *src, *dst, op, kernelMat, anchor, iterations, borderType, borderValue);
+   cv::Point an = anchor;
+   oclMatGetKernel(kernelMat, &an, &iterations);
+   cv::ocl::morphologyEx( *src, *dst, op, kernelMat, an, iterations, borderType, borderValue);
 }
 
 void oclMatCompare(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, int cmpop)
@@ -429,6 +481,46 @@ void oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::o
 void oclMatCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int blockSize, int ksize, double k, int borderType)
 {
    cv::ocl::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
+}
+
+void oclMatBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int d, double sigmaColor, double sigmaSpave, int borderType)
+{
+   cv::ocl::bilateralFilter(*src, *dst, d, sigmaColor, sigmaSpave, borderType);
+}
+
+void oclMatPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y)
+{
+   cv::ocl::pow(*x, p, *y);
+}
+
+void oclMatCartToPolar(const cv::ocl::oclMat* x, const cv::ocl::oclMat* y, cv::ocl::oclMat* magnitude, cv::ocl::oclMat* angle, bool angleInDegrees)
+{
+   cv::ocl::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees);
+}
+
+void oclMatPolarToCart(const cv::ocl::oclMat* magnitude, const cv::ocl::oclMat* angle, cv::ocl::oclMat* x, cv::ocl::oclMat* y, bool angleInDegrees)
+{
+   cv::ocl::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees);
+}
+
+void oclMatCalcHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_hist)
+{
+   cv::ocl::calcHist(*mat_src, *mat_hist);
+}
+
+void oclMatEqualizeHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_dst)
+{
+   cv::ocl::equalizeHist(*mat_src, *mat_dst);
+}
+
+void oclMatHoughCircles(const cv::ocl::oclMat* src, cv::ocl::oclMat* circles, int method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
+{
+   cv::ocl::HoughCircles(*src, *circles, method, dp,  minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
+}
+
+void oclMatHoughCirclesDownload(const cv::ocl::oclMat* d_circles, cv::Mat* h_circles)
+{
+   cv::ocl::HoughCirclesDownload(*d_circles, *h_circles);
 }
 
 //----------------------------------------------------------------------------

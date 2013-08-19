@@ -452,7 +452,71 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCornerHarris")]
       public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
 
- 
+
+      /// <summary>
+      /// Applies bilateral filter to the image. Supports 8UC1 8UC4 data types.
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image; will have the same size and the same type as src</param>
+      /// <param name="d">The diameter of each pixel neighborhood, that is used during filtering. If it is non-positive, it’s computed from sigmaSpace</param>
+      /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
+      /// <param name="sigmaSpave">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBilateralFilter")]
+      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpave, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
+      /// The function pow raises every element of the input array to <paramref name="power"/>. Supports only CV_32FC1 and CV_64FC1 data type.
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="power">The power</param>
+      /// <param name="dst">The resulting OclMat, should be the same type as the source</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPow")]
+      public static extern void Pow(IntPtr src, double power, IntPtr dst);
+
+      /// <summary>
+      /// Calculates the magnitude and angle of 2d vectors. Supports only CV_32F and CV_64F data types.
+      /// </summary>
+      /// <param name="x">The source OclMat of x-coordinates; must be single-precision or double-precision floating-point array</param>
+      /// <param name="y">The source OclMat of y-coordinates; it must have the same size and same type as x</param>
+      /// <param name="magnitude">The destination array of magnitudes of the same size and same type as x</param>
+      /// <param name="angle">The destination array of angles of the same size and same type as x. The angles are measured in radians (0 to 2pi ) or in degrees (0 to 360 degrees).</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians, which is default mode, or in degrees</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCartToPolar")]
+      public static extern void CartToPolar(
+         IntPtr x, IntPtr y, IntPtr magnitude, IntPtr angle,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool angleInDegrees);
+
+      /// <summary>
+      /// The function polarToCart computes the cartesian coordinates of each 2D vector represented by the corresponding elements of magnitude and angle. Supports only CV_32F and CV_64F data types.
+      /// </summary>
+      /// <param name="magnitude">he source floating-point array of magnitudes of 2D vectors. It can be an empty matrix (=Mat()) - in this case the function assumes that all the magnitudes are =1. If it’s not empty, it must have the same size and same type as angle</param>
+      /// <param name="angle">The source floating-point array of angles of the 2D vectors</param>
+      /// <param name="x">The destination array of x-coordinates of 2D vectors; will have the same size and the same type as angle</param>
+      /// <param name="y">The destination array of y-coordinates of 2D vectors; will have the same size and the same type as angle</param>
+      /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians, which is default mode, or in degrees</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPolarToCart")]
+      public static extern void PolarToCart(
+         IntPtr magnitude, IntPtr angle, IntPtr x, IntPtr y,
+         [MarshalAs(CvInvoke.BoolMarshalType)] 
+         bool angleInDegrees);
+
+      /// <summary>
+      /// Calculates histogram of one or more arrays. 
+      /// </summary>
+      /// <param name="src">Source historgram array. Supports only 8UC1 data type.</param>
+      /// <param name="hist">The output histogram, only 256 bins is supported now</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCalcHist")]
+      public static extern void CalcHist(IntPtr src, IntPtr hist);
+
+      /// <summary>
+      /// The algorithm normalizes brightness and increases contrast of the image
+      /// </summary>
+      /// <param name="src">The source OclMat. only 8UC1 is supported now</param>
+      /// <param name="dst">The destination OclMat, only 256 bins is supported now</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatEqualizeHist")]
+      public static extern void EqualizeHist(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Copies each plane of a multi-channel OclMat to a dedicated OclMat
@@ -666,7 +730,83 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatReshape")]
       public static extern void OclMatReshape(IntPtr src, IntPtr dst, int cn, int rows);
 
+      /// <summary>
+      /// Finds circles in a grayscale image using the Hough transform.
+      /// </summary>
+      /// <param name="src"> 8-bit, single-channel grayscale input image.</param>
+      /// <param name="circles">Output vector of found circles. Each vector is encoded as a 3-element floating-point vector (x, y, radius)</param>
+      /// <param name="method">Detection method to use. Currently, the only implemented method is CV_HOUGH_GRADIENT , which is basically 21HT</param>
+      /// <param name="dp">Inverse ratio of the accumulator resolution to the image resolution. For example, if dp=1 , the accumulator has the same resolution as the input image. If dp=2 , the accumulator has half as big width and height.</param>
+      /// <param name="minDist">Minimum distance between the centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed.</param>
+      /// <param name="cannyThreshold">The higher threshold of the two passed to the ocl::Canny() edge detector (the lower one is twice smaller).</param>
+      /// <param name="votesThreshold"> The accumulator threshold for the circle centers at the detection stage. The smaller it is, the more false circles may be detected.</param>
+      /// <param name="minRadius">Minimum circle radius.</param>
+      /// <param name="maxRadius">Maximum circle radius.</param>
+      /// <param name="maxCircles">Maximum number of output circles.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatHoughCircles")]
+      public static extern void HoughCircles(IntPtr src, IntPtr circles, CvEnum.HOUGH_TYPE method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
+
+      /// <summary>
+      /// Finds circles in a grayscale image using the Hough transform.
+      /// </summary>
+      /// <param name="src">8-bit, single-channel grayscale input image.</param>
+      /// <param name="dp">Inverse ratio of the accumulator resolution to the image resolution. For example, if dp=1 , the accumulator has the same resolution as the input image. If dp=2 , the accumulator has half as big width and height.</param>
+      /// <param name="minDist">Minimum distance between the centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed.</param>
+      /// <param name="cannyThreshold">The higher threshold of the two passed to the ocl::Canny() edge detector (the lower one is twice smaller).</param>
+      /// <param name="votesThreshold"> The accumulator threshold for the circle centers at the detection stage. The smaller it is, the more false circles may be detected.</param>
+      /// <param name="minRadius">Minimum circle radius.</param>
+      /// <param name="maxRadius">Maximum circle radius.</param>
+      /// <param name="maxCircles">Maximum number of output circles.</param>
+      public static CircleF[] HoughCircles(OclImage<Gray, Byte> src, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
+      {
+         OclMat<float> oclCircles = new OclMat<float>();
+
+         OclInvoke.HoughCircles(src, oclCircles, CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT, 1, 10, 100, 50, 1, 30, 1000);
+
+         if (oclCircles.IsEmpty || oclCircles.Size.Width == 0)
+         {
+            return new CircleF[0];
+         }
+
+         int wholeCount = oclCircles.WholeSize.Width;
+
+         CircleF[] circles = new CircleF[wholeCount];
+         GCHandle handle = GCHandle.Alloc(circles, GCHandleType.Pinned);
+
+         using (Matrix<float> circleMat = new Matrix<float>(1, wholeCount, 3, handle.AddrOfPinnedObject(), wholeCount * 3 * sizeof(float)))
+         {
+            oclCircles.Download(circleMat);
+         }
+         handle.Free();
+         Array.Resize(ref circles, oclCircles.Size.Width);
+         return circles;
+      }
+
+      /*
+      /// <summary>
+      /// Download hugh circles 
+      /// </summary>
+      /// <param name="detectedCirclesOclMat">The oclMat that contains the hough circles</param>
+      /// <param name="houghCirclesCvMat">The cv::Mat where the circles will be downloaded to</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatHoughCirclesDownload")]
+      public static extern void HoughCirclesDownload(IntPtr detectedCirclesOclMat, IntPtr houghCirclesCvMat);
+      */
+
       #region morphology operation
+      /// <summary>
+      /// Erodes the image (applies the local minimum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The destination OclMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      public static void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations)
+      {
+         Erode(src, dst, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+      }
+
       /// <summary>
       /// Erodes the image (applies the local minimum operator).
       /// Supports CV_8UC1, CV_8UC4 type.
@@ -679,7 +819,21 @@ namespace Emgu.CV.OpenCL
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
-      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      private static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+
+      /// <summary>
+      /// Dilate the image (applies the local maximum operator).
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      public static void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations)
+      {
+         Dilate(src, dst, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+      }
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -693,7 +847,22 @@ namespace Emgu.CV.OpenCL
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
-      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+
+      /// <summary>
+      /// Applies an advanced morphological operation to the image
+      /// Supports CV_8UC1, CV_8UC4 type.
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="op">The type of morphological operation</param>
+      /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
+      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
+      /// <param name="iterations">The number of iterations morphology is applied</param>
+      public static void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations)
+      {
+         MorphologyEx(src, dst, op, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+      }
 
       /// <summary>
       /// Applies an advanced morphological operation to the image
