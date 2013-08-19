@@ -25,6 +25,7 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.UI;
 using Emgu.Util;
+using Emgu.CV.VideoStab;
 using NUnit.Framework;
 //using Emgu.CV.VideoStab;
 
@@ -362,10 +363,10 @@ namespace Emgu.CV.Test
 
       public void TestHaarPerformance()
       {
-         HaarCascade face = new HaarCascade("haarcascade_frontalface_alt2.xml");
+         CascadeClassifier face = new CascadeClassifier("haarcascade_frontalface_alt2.xml");
          Image<Gray, Byte> img = new Image<Gray, byte>("lena.jpg");
          Stopwatch watch = Stopwatch.StartNew();
-         face.Detect(img);
+         face.DetectMultiScale(img, 1.1, 3, Size.Empty, Size.Empty);
          watch.Stop();
          Trace.WriteLine(String.Format("Detecting face from {0}x{1} image took: {2} milliseconds.", img.Width, img.Height, watch.ElapsedMilliseconds));
       }
@@ -457,8 +458,9 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
 
       }
-/*
-      public static void TestOnePassVideoStabilizer()
+
+      /*
+      public static void TestOnePassVideoStabilizerCamera()
       {
          ImageViewer viewer = new ImageViewer();
          using (Capture capture = new Capture())
@@ -480,17 +482,44 @@ namespace Emgu.CV.Test
             };
             viewer.ShowDialog();
          }
+      }*/
+
+      public static void TestOnePassVideoStabilizer()
+      {
+         ImageViewer viewer = new ImageViewer();
+         using (Capture capture = new Capture("tree.avi"))
+         using (CaptureFrameSource frameSource = new CaptureFrameSource(capture))
+         using (OnePassStabilizer stabilizer = new OnePassStabilizer(frameSource))
+         {
+            Stopwatch watch = new Stopwatch();
+            //stabilizer.SetMotionEstimator(motionEstimator);
+            Application.Idle += delegate(object sender, EventArgs e)
+            {
+               watch.Reset();
+               watch.Start();
+               Image<Bgr, byte> frame = stabilizer.NextFrame();
+               watch.Stop();
+               if (watch.ElapsedMilliseconds < 200)
+               {
+                  Thread.Sleep(200 - (int)watch.ElapsedMilliseconds);
+               }
+               if (frame != null)
+                  viewer.Image = frame;
+            };
+            viewer.ShowDialog();
+         }
       }
 
       public static void TestTwoPassVideoStabilizer()
       {
          ImageViewer viewer = new ImageViewer();
          using (Capture capture = new Capture("tree.avi"))
-         using (GaussianMotionFilter motionFilter = new GaussianMotionFilter())
+         using (GaussianMotionFilter motionFilter = new GaussianMotionFilter(15, -1.0f))
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
          //using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
-         using (TwoPassStabilizer stabilizer = new TwoPassStabilizer(capture))
+         using (CaptureFrameSource frameSource = new CaptureFrameSource(capture))
+         using (TwoPassStabilizer stabilizer = new TwoPassStabilizer(frameSource))
          {
             Stopwatch watch = new Stopwatch();
             //stabilizer.SetMotionEstimator(motionEstimator);
@@ -511,6 +540,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      
       public static void TestCaptureFrameSource()
       {
          ImageViewer viewer = new ImageViewer();
@@ -526,10 +556,9 @@ namespace Emgu.CV.Test
             viewer.ShowDialog();
          }
       }
-*/
+
       public static void TestCodeBook()
       {
-
          int learningFrames = 40;
          using (BlobDetector detector = new BlobDetector(CvEnum.BLOB_DETECTOR_TYPE.Simple))
          using (BlobSeq blobs = new BlobSeq())

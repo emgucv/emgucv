@@ -130,7 +130,7 @@ namespace Emgu.CV.Test
             parameters1.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
             parameters1.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
             parameters1.TermCrit = new MCvTermCriteria(10, 0.01);
-            emModel1.Train(samples, null, parameters1, labels);
+            emModel1.Train(samples, parameters1, labels);
 
             EMParams parameters2 = new EMParams();
             parameters2.Nclusters = N;
@@ -141,7 +141,7 @@ namespace Emgu.CV.Test
             parameters2.Covs = emModel1.GetCovariances();
             parameters2.Weights = emModel1.Weights;
                         
-            emModel2.Train(samples, null, parameters2, labels);
+            emModel2.Train(samples, parameters2, labels);
             
             //TODO: Find out when saving of EM model will be enable
             //emModel2.Save("emModel.xml");
@@ -190,7 +190,7 @@ namespace Emgu.CV.Test
          pars.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
          pars.TermCrit = new MCvTermCriteria(100, 1.0e-6);
 
-         em.Train(featuresM, null, pars, labels);
+         em.Train(featuresM, pars, labels);
       }
 
       /*
@@ -422,7 +422,7 @@ namespace Emgu.CV.Test
 
          using (GBTrees classifier = new GBTrees())
          {
-            classifier.Train(trainData, MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, trainClasses.Convert<float>(), null, null, null, null, MCvGBTreesParams.GetDefaultParameter(), false);
+            classifier.Train(trainData, MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, trainClasses.Convert<float>(), null, null, MCvGBTreesParams.GetDefaultParameter(), false);
 
             String fileName = Path.Combine(Path.GetTempPath(), "GBTrees.xml");
             classifier.Save(fileName);
@@ -752,7 +752,7 @@ namespace Emgu.CV.Test
 
          using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
          {
-            network.Train(trainData, trainClasses, null, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
+            network.Train(trainData, trainClasses, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
 
             String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
             network.Save(fileName);

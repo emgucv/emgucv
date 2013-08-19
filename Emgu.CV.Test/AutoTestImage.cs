@@ -34,6 +34,15 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSobelScharr()
+      {
+         Image<Gray, byte> img = EmguAssert.LoadImage<Gray, Byte>("lena.jpg");
+         Image<Gray, Byte> result = new Image<Gray,byte>(img.Size);
+         CvInvoke.cvSobel(img, result, 1, 0, -1);
+
+      }
+
+      [Test]
       public void TestSetValue()
       {
          Image<Bgr, Single> img1 = new Image<Bgr, float>(50, 20, new Bgr(8.0, 1.0, 2.0));

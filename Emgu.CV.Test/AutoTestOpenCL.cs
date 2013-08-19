@@ -164,6 +164,46 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestHughCircle()
+      {
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
+         if (device > 0)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>("board.jpg");
+            Image<Gray, byte> gray = img.Convert<Gray, Byte>();
+            OclImage<Gray, Byte> oclImage = new OclImage<Gray, byte>(gray);
+
+            CircleF[] circles = OclInvoke.HoughCircles(oclImage, 1, 10, 100, 50, 1, 30, 1000);
+
+            OclMat<float> oclCircles = new OclMat<float>();
+            
+            foreach (CircleF c in circles)
+            {
+               img.Draw(c, new Bgr(Color.Red), 1);
+            }
+
+            //Emgu.CV.UI.ImageViewer.Show(img);
+         }
+      }
+
+      [Test]
+      public void TestBilaterialFilter()
+      {
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
+         if (device > 0)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
+            Image<Gray, byte> gray = img.Convert<Gray, Byte>();
+            OclImage<Gray, Byte> oclImage = new OclImage<Gray, byte>(gray);
+            //oclImage.SetTo(new MCvScalar(255, 255, 255, 255), null);
+            OclImage<Gray, Byte> oclBilaterial = new OclImage<Gray, byte>(oclImage.Size);
+            OclInvoke.BilateralFilter(oclImage, oclBilaterial, 5, 5, 5, CvEnum.BORDER_TYPE.DEFAULT);
+
+            //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(oclBilaterial.ToImage()));
+         }
+      }
+
+      [Test]
       public void TestClone()
       {
          int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
@@ -299,7 +339,7 @@ namespace Emgu.CV.Test
                   image.Draw(rect, new Bgr(Color.Red), 1);
                Trace.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
-               Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+               //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             }
          }
       }
@@ -318,8 +358,8 @@ namespace Emgu.CV.Test
          using (OclImage<Gray, Byte> gpuImage = new OclImage<Gray, byte>(image))
          using (OclImage<Gray, Byte> gpuTemp = new OclImage<Gray, byte>(gpuImage.Size))
          {
-            OclInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
-            OclInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+            OclInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), morphIter);
+            OclInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, new Point(-1, -1), morphIter);
 
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {

@@ -31,12 +31,20 @@ namespace Emgu.CV.Test
          Brisk detector = new Brisk(30, 3, 1.0f);
          EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
-
+#endif
       [Test]
       public void TestSIFT()
       {
          SIFTDetector detector = new SIFTDetector();
          EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+      }
+
+      [Test]
+      public void TestDense()
+      {
+         DenseFeatureDetector detector = new DenseFeatureDetector(1.0f, 1, 0.1f, 6, 0, true, false); 
+         SIFTDetector extractor = new SIFTDetector();
+         EmguAssert.IsTrue(TestFeature2DTracker(detector, extractor), "Unable to find homography matrix");
       }
 
       [Test]
@@ -289,7 +297,7 @@ namespace Emgu.CV.Test
 
          }
       }
-#endif
+
 
       [Test]
       public void TestDetectorColor()

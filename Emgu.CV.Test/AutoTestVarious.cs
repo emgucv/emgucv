@@ -2083,8 +2083,7 @@ namespace Emgu.CV.Test
 
             try
             {
-               Image<Bgr, Byte> img = new Image<Bgr, byte>(2, 2);
-               img.LoadImageFromIplImagePtr(image);
+               Image<Bgr, Byte> img = Image<Bgr, byte>.FromIplImagePtr(image);
 
                //Emgu.CV.UI.ImageViewer.Show(img);
             }

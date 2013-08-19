@@ -36,6 +36,25 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGetData()
+      {
+         float[,] data = new float[2, 3];
+         data[0, 0] = 1; data[0, 1] = 2; data[0, 2] = 3;
+         data[1, 0] = 4; data[1, 1] = 5; data[1, 2] = 6;
+         GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         using (Matrix<float> m = new Matrix<float>(data.GetLength(0), data.GetLength(1), dataHandle.AddrOfPinnedObject()))
+         {
+            float[,] data2 = m.Data;
+            for (int i = 0; i < data2.GetLength(0); i++)
+               for (int j = 0; j < data.GetLength(1); j++)
+                  EmguAssert.IsTrue(data2[i, j] == data[i, j]);
+         }
+
+         dataHandle.Free();
+      }
+
+
+      [Test]
       public void TestSolve()
       {
          Matrix<Single> lhs = new Matrix<Single>(3, 3);
