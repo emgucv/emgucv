@@ -27,25 +27,23 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Creaet an Expectation Maximization model using the specific training parameters
       /// </summary>
-      /// <param name="samples">The samples to be trained</param>
-      /// <param name="sampleIdx"></param>
-      /// <param name="parameters"></param>
-      /// <param name="labels"></param>
-      public EMLegacy(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
+      /// <param name="samples">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
+      /// <param name="parameters">The parameters for EM</param>
+      /// <param name="labels">Can be null if not needed. Optionally computed output "class label" for each sample</param>
+      public EMLegacy(Matrix<float> samples, EMParams parameters, Matrix<Int32> labels)
          : this()
       {
-         Train(samples, sampleIdx, parameters, labels);
+         Train(samples, parameters, labels);
       }
 
       /// <summary>
       /// Train the EM model using the specific training data
       /// </summary>
       /// <param name="samples">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
       /// <param name="parameters">The parameters for EM</param>
       /// <param name="labels">Can be null if not needed. Optionally computed output "class label" for each sample</param>
       /// <returns></returns>
-      public bool Train(Matrix<float> samples, Matrix<float> sampleIdx, EMParams parameters, Matrix<Int32> labels)
+      public bool Train(Matrix<float> samples, EMParams parameters, Matrix<Int32> labels)
       {
          MCvEMParams param = new MCvEMParams();
          param.nclusters = parameters.Nclusters;
@@ -75,7 +73,7 @@ namespace Emgu.CV.ML
          bool res = MlInvoke.CvEMLegacyTrain(
             _ptr,
             samples.Ptr,
-            sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
+            IntPtr.Zero,
             param,
             labels == null ? IntPtr.Zero : labels.Ptr);
 
