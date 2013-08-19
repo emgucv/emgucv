@@ -141,7 +141,6 @@
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
-    <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -158,6 +157,7 @@
     <Compile Include="PInvoke\CvInvokePhoto.cs" />
     <Compile Include="PInvoke\CvInvokeVideo.cs" />
     <Compile Include="PInvoke\CvType\Cuboid.cs" />
+    <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
@@ -195,6 +195,7 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
+    <Compile Include="Util\Mat.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />

@@ -11,15 +11,25 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.Util
 {
-   internal class Mat : UnmanagedObject
+   /// <summary>
+   /// The equavailent of cv::Mat, should only be used if you know what you are doing.
+   /// In most case you should use the Matrix class instead
+   /// </summary>
+   public class Mat : UnmanagedObject
    {
+      /// <summary>
+      /// Create an empty cv::Mat
+      /// </summary>
       public Mat()
       {
          _ptr = CvInvoke.cvMatCreate();
       }
 
+      /// <summary>
+      /// The size of this matrix
+      /// </summary>
       public Size Size
       {
          get
@@ -28,6 +38,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The size of the elements in this matrix
+      /// </summary>
       public int ElementSize
       {
          get
@@ -36,12 +49,27 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Copy the data in this cv::Mat to a CvArray
+      /// </summary>
+      /// <param name="cvArray">The CvArray to copy to</param>
+      public void CopyTo(IntPtr cvArray)
+      {
+         CvInvoke.cvMatCopyToCvArr(_ptr, cvArray);
+      }
+
+      /// <summary>
+      /// Release all the unmanaged memory associated with this object.
+      /// </summary>
       protected override void DisposeObject()
       {
          CvInvoke.cvMatRelease(ref _ptr);
       }
    }
+}
 
+namespace Emgu.CV
+{
    public partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
