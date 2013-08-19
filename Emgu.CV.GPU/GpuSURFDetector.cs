@@ -30,9 +30,9 @@ namespace Emgu.CV.GPU
       /// Create a GPU SURF detector using the default parameters
       /// </summary>
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
-      /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
-      public GpuSURFDetector(MCvSURFParams detector, float FeaturesRatio)
-         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), 0.01f, (detector.Upright != 0))
+      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
+      public GpuSURFDetector(MCvSURFParams detector, float featuresRatio)
+         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), featuresRatio, (detector.Upright != 0))
       {
       }
 
