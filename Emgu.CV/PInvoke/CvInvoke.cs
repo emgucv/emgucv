@@ -310,6 +310,10 @@ namespace Emgu.CV
       }
       #endregion
 
+      /// <summary>
+      /// Check if the size of the C structures match those of C#
+      /// </summary>
+      /// <returns>True if the size matches</returns>
       public static bool SanityCheck()
       {
          bool sane = true;

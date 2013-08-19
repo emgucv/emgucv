@@ -18,20 +18,29 @@ namespace Emgu.CV
    /// </summary>
    public class StereoSGBM : UnmanagedObject
    {
+      /// <summary>
+      /// The SGBM mode
+      /// </summary>
       public enum Mode
       {
+         /// <summary>
+         /// This is the defult mode, the algorithm is single-pass, which means that you consider only 5 directions instead of 8
+         /// </summary>
          SGBM = 0,
+         /// <summary>
+         /// Run the full-scale two-pass dynamic programming algorithm. It will consume O(W*H*numDisparities) bytes, which is large for 640x480 stereo and huge for HD-size pictures.
+         /// </summary>
          HH = 1
       }
 
       /// <summary>
       /// Create a stereo disparity solver using StereoSGBM algorithm (combination of H. Hirschmuller + K. Konolige approaches) 
       /// </summary>
-      /// <param name="minDisparity"></param>
-      /// <param name="numDisparities"></param>
-      /// <param name="blockSize">Use 0 for default</param>
-      /// <param name="P1">Use 0 for default</param>
-      /// <param name="P2">Use 0 for default</param>
+      /// <param name="minDisparity">Minimum possible disparity value. Normally, it is zero but sometimes rectification algorithms can shift images, so this parameter needs to be adjusted accordingly.</param>
+      /// <param name="numDisparities">Maximum disparity minus minimum disparity. The value is always greater than zero. In the current implementation, this parameter must be divisible by 16.</param>
+      /// <param name="blockSize">Matched block size. It must be an odd number &gt;=1 . Normally, it should be somewhere in the 3..11 range. Use 0 for default. </param>
+      /// <param name="p1">The first parameter controlling the disparity smoothness. It is the penalty on the disparity change by plus or minus 1 between neighbor pixels. Reasonably good value is 8*number_of_image_channels*SADWindowSize*SADWindowSize. Use 0 for default</param>
+      /// <param name="p2">The second parameter controlling the disparity smoothness. It is the penalty on the disparity change by more than 1 between neighbor pixels. The algorithm requires <paramref name="p2"/> &gt; <paramref name="p1"/>. Reasonably good value is 32*number_of_image_channels*SADWindowSize*SADWindowSize. Use 0 for default</param>
       /// <param name="disp12MaxDiff">Use 0 for default</param>
       /// <param name="preFilterCap">Use 0 for default</param>
       /// <param name="uniquenessRatio">Use 0 for default</param>
@@ -39,12 +48,12 @@ namespace Emgu.CV
       /// <param name="speckleRange">Use 0 for default</param>
       /// <param name="mode">Use SGBM for default</param>
       public StereoSGBM(int minDisparity, int numDisparities, int blockSize,
-         int P1, int P2, int disp12MaxDiff,
+         int p1, int p2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
          int speckleWindowSize, int speckleRange,
          Mode mode)
       {
-         _ptr = CvInvoke.CvStereoSGBMCreate(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, (int) mode);
+         _ptr = CvInvoke.CvStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, (int) mode);
       }
 
       /// <summary>

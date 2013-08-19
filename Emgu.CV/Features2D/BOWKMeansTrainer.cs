@@ -15,7 +15,6 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Kmeans-based class to train visual vocabulary using the bag of visual words approach.
    /// </summary>
-   /// <typeparam name="T">The type of vocabulary, either byte or float</typeparam>
    public class BOWKMeansTrainer : UnmanagedObject
    {
       /// <summary>
@@ -44,7 +43,7 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Add the descriptors to the trainer
       /// </summary>
-      /// <param name="descriptor"></param>
+      /// <param name="descriptors">The descriptors to be added to the trainer</param>
       public void Add(Matrix<float> descriptors)
       {
          CvInvoke.CvBOWKMeansTrainerAdd(_ptr, descriptors);

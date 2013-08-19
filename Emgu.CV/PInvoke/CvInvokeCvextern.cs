@@ -99,6 +99,16 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvEstimateAffine3D")]
       internal extern static int  _CvEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers, double ransacThreshold, double confidence);
 
+      /// <summary>
+      /// Computes an optimal affine transformation between two 3D point sets.
+      /// </summary>
+      /// <param name="src">First input 3D point set.</param>
+      /// <param name="dst">Second input 3D point set.</param>
+      /// <param name="estimate">Output 3D affine transformation matrix.</param>
+      /// <param name="inliers">Output vector indicating which points are inliers.</param>
+      /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
+      /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
+      /// <returns></returns>
       public static int CvEstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate, out Byte[] inliers, double ransacThreshold, double confidence)
       {
          GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
@@ -106,7 +116,7 @@ namespace Emgu.CV
          int result;
 
          estimate = new Matrix<double>(3, 4);
-         using (Mat affineEstimate = new Mat())
+         using (Util.Mat affineEstimate = new Util.Mat())
          using (Matrix<float> srcMat = new Matrix<float>(1,  src.Length, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * src.Length))
          using (Matrix<float> dstMat = new Matrix<float>(1,  dst.Length, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * dst.Length ))
          using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
@@ -125,6 +135,15 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvMinMaxIdx")]
       internal extern static void _CvMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx, IntPtr maxIdx, IntPtr mask);
 
+      /// <summary>
+      /// Finds the global minimum and maximum in an array
+      /// </summary>
+      /// <param name="src">Input single-channel array.</param>
+      /// <param name="minVal">The returned minimum value</param>
+      /// <param name="maxVal">The returned maximum value</param>
+      /// <param name="minIdx">The returned minimum location</param>
+      /// <param name="maxIdx">The returned maximum location</param>
+      /// <param name="mask">The extremums are searched across the whole array if mask is IntPtr.Zert. Otherwise, search is performed in the specified array region.</param>
       public static void CvMinMaxIdx(IntPtr src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx, IntPtr mask)
       {
          GCHandle minHandle = GCHandle.Alloc(minIdx, GCHandleType.Pinned);
@@ -205,7 +224,7 @@ namespace Emgu.CV
       /// <param name="next">The second input image of the same size and the same type as prev.</param>
       /// <param name="flow">The computed flow image that has the same size as prev and type CV_32FC2 .</param>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalcOpticalFlowDualTVL1(IntPtr prev, IntPtr nex, IntPtr flow);
+      public static extern void cvCalcOpticalFlowDualTVL1(IntPtr prev, IntPtr next, IntPtr flow);
 
       /// <summary>
       /// This function retrive the Open CV structure sizes in unmanaged code
@@ -214,6 +233,7 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="getCvStructSizes")]
       public static extern void GetCvStructSizes(ref CvStructSizes sizes);
 
+      /*
       public static void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, MCvScalar color)
       {
          TestDrawLine(img, startX, startY, endX, endY, color.v0, color.v1, color.v2, color.v3);
@@ -221,5 +241,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
       private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
+      */
    }
 }

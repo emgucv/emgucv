@@ -438,6 +438,17 @@ namespace Emgu.CV.Features2D
          }
       }
 
+      /// <summary>
+      /// Convert the raw keypoints and descriptors to array of managed structure.
+      /// </summary>
+      /// <param name="modelKeyPointVec">The model keypoint vector</param>
+      /// <param name="modelDescriptorMat">The mode descriptor vector</param>
+      /// <param name="observedKeyPointVec">The observerd keypoint vector</param>
+      /// <param name="observedDescriptorMat">The observed descriptor vector</param>
+      /// <param name="indices">The indices matrix</param>
+      /// <param name="dists">The distances matrix</param>
+      /// <param name="mask">The mask</param>
+      /// <returns>The managed MatchedImageFeature array</returns>
       public static MatchedImageFeature[] ConvertToMatchedImageFeature(
          VectorOfKeyPoint modelKeyPointVec, Matrix<TDescriptor> modelDescriptorMat,
          VectorOfKeyPoint observedKeyPointVec, Matrix<TDescriptor> observedDescriptorMat,
@@ -748,6 +759,25 @@ namespace Emgu.CV
          double spc0, double spc1, double spc2, double spc3,
          IntPtr matchesMask,
          Features2D.Features2DToolbox.KeypointDrawType flags);
+
+      internal static void drawKeypoints(
+                          IntPtr image,
+                          IntPtr vectorOfKeypoints,
+                          IntPtr outImage,
+                          MCvScalar color,
+                          Features2D.Features2DToolbox.KeypointDrawType flags)
+      {
+         drawKeypoints(image, vectorOfKeypoints, outImage, color.v0, color.v1, color.v2, color.v3, flags);
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void drawKeypoints(
+                          IntPtr image,
+                          IntPtr vectorOfKeypoints,
+                          IntPtr outImage,
+                          double v0, double v1, double v2, double v3,
+                          Features2D.Features2DToolbox.KeypointDrawType flags);
+
 #else
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void drawMatchedFeatures(
@@ -758,7 +788,6 @@ namespace Emgu.CV
          MCvScalar matchColor, MCvScalar singlePointColor,
          IntPtr matchesMask,
          Features2D.Features2DToolbox.KeypointDrawType flags);
-#endif
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void drawKeypoints(
@@ -767,5 +796,8 @@ namespace Emgu.CV
                           IntPtr outImage,
                           MCvScalar color,
                           Features2D.Features2DToolbox.KeypointDrawType flags);
+#endif
+
+
    }
 }

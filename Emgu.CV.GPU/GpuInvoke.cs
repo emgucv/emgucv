@@ -1245,6 +1245,13 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuCreateOpticalFlowNeedleMap")]
       private static extern void CreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
 
+      /// <summary>
+      /// Draw the optical flow needle map
+      /// </summary>
+      /// <param name="u"></param>
+      /// <param name="v"></param>
+      /// <param name="vertex"></param>
+      /// <param name="colors"></param>
       public static void CreateOpticalFlowNeedleMap(GpuImage<Gray, float> u, GpuImage<Gray, float> v, GpuMat<float> vertex, GpuMat<float> colors)
       {
          CreateOpticalFlowNeedleMap(u, v, vertex, colors);
