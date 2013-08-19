@@ -172,7 +172,20 @@ namespace Emgu.CV
       {
          get
          {
-            return _array;
+            if (_array != null)
+               return _array;
+            else
+            {
+               Size s = Size;
+               TDepth[,] data = new TDepth[s.Height, s.Width];
+               GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+               using (Matrix<TDepth> tmp = new Matrix<TDepth>(s.Height, s.Width, dataHandle.AddrOfPinnedObject()))
+               {
+                  CvInvoke.cvCopy(_ptr, tmp._ptr, IntPtr.Zero);
+               }
+               dataHandle.Free();
+               return data;
+            }
          }
          set
          {
