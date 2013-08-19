@@ -232,11 +232,28 @@ namespace Emgu.CV
       /// <param name="mapy">The map of y-coordinates (32fC1 image)</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS </param>
       /// <param name="fillval">A value used to fill outliers</param>
+#if ANDROID
+      public static void cvRemap(
+         IntPtr src, IntPtr dst,
+         IntPtr mapx, IntPtr mapy,
+         int flags,
+         MCvScalar fillval)
+      {
+         cvRemap(src, dst, mapx, mapy, flags, fillval.v0, fillval.v1, fillval.v2, fillval.v3);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvRemap(IntPtr src, IntPtr dst,
+            IntPtr mapx, IntPtr mapy,
+            int flags,
+            double v0, double v1, double v2, double v3);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRemap(IntPtr src, IntPtr dst,
             IntPtr mapx, IntPtr mapy,
             int flags,
             MCvScalar fillval);
+#endif
 
       /// <summary>
       /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
@@ -1567,6 +1584,39 @@ namespace Emgu.CV
       /// Floodfilling can't go across non-zero pixels in the mask, for example, an edge detector output can be used as a mask to stop filling at edges.
       /// Or it is possible to use the same mask in multiple calls to the function to make sure the filled area do not overlap.
       /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
+#if ANDROID
+      public static void cvFloodFill(
+         IntPtr src,
+         Point seedPoint,
+         MCvScalar newVal,
+         MCvScalar loDiff,
+         MCvScalar upDiff,
+         out MCvConnectedComp comp,
+         int flags,
+         IntPtr mask)
+      {
+         cvFloodFill(
+            src,
+            seedPoint.X, seedPoint.Y,
+            newVal.v0, newVal.v1, newVal.v2, newVal.v3,
+            loDiff.v0, loDiff.v1, loDiff.v2, loDiff.v3,
+            upDiff.v0, upDiff.v1, upDiff.v2, upDiff.v3,
+            out comp,
+            flags,
+            mask);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvFloodFill(
+         IntPtr src,
+         int seedPointX, int seedPointY,
+         double newVal0, double newVal1, double newVal2, double newVal3, 
+         double loDiff0, double loDiff1, double loDiff2, double loDiff3,
+         double upDiff0, double upDiff1, double upDiff2, double upDiff3,
+         out MCvConnectedComp comp,
+         int flags,
+         IntPtr mask);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFloodFill(
          IntPtr src,
@@ -1577,6 +1627,7 @@ namespace Emgu.CV
          out MCvConnectedComp comp,
          int flags,
          IntPtr mask);
+#endif
 
       /// <summary>
       /// Fills a connected component with given color.

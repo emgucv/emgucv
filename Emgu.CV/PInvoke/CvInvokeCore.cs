@@ -2162,6 +2162,36 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
       /// <param name="lineType">Type of the contour segments</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
+#if ANDROID
+      public static void cvDrawContours(
+          IntPtr img,
+          IntPtr contour,
+          MCvScalar externalColor,
+          MCvScalar holeColor,
+          int maxLevel,
+          int thickness,
+          CvEnum.LINE_TYPE lineType,
+          Point offset)
+      {
+         cvDrawContours(
+            img, contour,
+            externalColor.v0, externalColor.v1, externalColor.v2, externalColor.v3,
+            holeColor.v0, holeColor.v1, holeColor.v2, holeColor.v3,
+            maxLevel, thickness, lineType,
+            offset.X, offset.Y);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvDrawContours(
+          IntPtr img,
+          IntPtr contour,
+          double ec0, double ec1, double ec2, double ec3,
+          double hc0, double hc1, double hc2, double hc3,
+          int maxLevel,
+          int thickness,
+          CvEnum.LINE_TYPE lineType,
+          int offsetX, int offsetY);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDrawContours(
           IntPtr img,
@@ -2172,6 +2202,7 @@ namespace Emgu.CV
           int thickness,
           CvEnum.LINE_TYPE lineType,
           Point offset);
+#endif
 
       /// <summary>
       /// Fills convex polygon interior. This function is much faster than The function cvFillPoly and can fill not only the convex polygons but any monotonic polygon, i.e. a polygon whose contour intersects every horizontal line (scan line) twice at the most
@@ -2462,11 +2493,24 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="rng">the seed for the random number generator</param>
       /// <param name="arr">The destination array</param>
-      /// <param name="dist_type">Distribution type</param>
+      /// <param name="distType">Distribution type</param>
       /// <param name="param1">The first parameter of distribution. In case of uniform distribution it is the inclusive lower boundary of random numbers range. In case of normal distribution it is the mean value of random numbers</param>
       /// <param name="param2">The second parameter of distribution. In case of uniform distribution it is the exclusive upper boundary of random numbers range. In case of normal distribution it is the standard deviation of random numbers</param>
+#if ANDROID
+      public static void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE distType, MCvScalar param1, MCvScalar param2)
+      {
+         cvRandArr(ref rng, arr, distType, param1.v0, param1.v1, param1.v2, param1.v3, param2.v0, param2.v1, param2.v2, param2.v3);
+      }
+
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE dist_type, MCvScalar param1, MCvScalar param2);
+      private static extern void cvRandArr(
+         ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE dist_type, 
+         double param1v0, double param1v1, double param1v2, double param1v3,
+         double param2v0, double param2v1, double param2v2, double param2v3);
+#else
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE distType, MCvScalar param1, MCvScalar param2);
+#endif
 
       #region Linear Algebra
       /// <summary>
@@ -2690,7 +2734,6 @@ namespace Emgu.CV
           IntPtr eigenvalues,
           IntPtr eigenvectors,
           CvEnum.PCA_TYPE flags);
-
 
       /// <summary>
       /// Projects vectors to the specified subspace
