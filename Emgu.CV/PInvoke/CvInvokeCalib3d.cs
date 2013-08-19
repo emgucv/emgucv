@@ -216,18 +216,20 @@ namespace Emgu.CV
       /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
       /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
       /// <param name="flags">Different flags</param>
+      /// <param name="termCriteria">The termination criteria</param>
       /// <returns>The final reprojection error</returns>
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvCalibrateCamera2(
-          IntPtr objectPoints,
-          IntPtr imagePoints,
-          IntPtr pointCounts,
-          Size imageSize,
-          IntPtr intrinsicMatrix,
-          IntPtr distortionCoeffs,
-          IntPtr rotationVectors,
-          IntPtr translationVectors,
-          CvEnum.CALIB_TYPE flags);
+         IntPtr objectPoints,
+         IntPtr imagePoints,
+         IntPtr pointCounts,
+         Size imageSize,
+         IntPtr intrinsicMatrix,
+         IntPtr distortionCoeffs,
+         IntPtr rotationVectors,
+         IntPtr translationVectors,
+         CvEnum.CALIB_TYPE flags,
+         MCvTermCriteria termCriteria);
 
       /// <summary>
       /// Computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size

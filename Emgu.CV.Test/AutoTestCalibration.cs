@@ -61,11 +61,11 @@ namespace Emgu.CV.Test
          IntrinsicCameraParameters intrisic = new IntrinsicCameraParameters(8);
          ExtrinsicCameraParameters[] extrinsic;
          double error = CameraCalibration.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners },
-            chessboardImage.Size, intrisic, CvEnum.CALIB_TYPE.DEFAULT, out extrinsic);
+            chessboardImage.Size, intrisic, CvEnum.CALIB_TYPE.DEFAULT, new MCvTermCriteria(30, 1.0e-10),  out extrinsic);
 
          CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners);
          Image<Gray, Byte> undistorted = intrisic.Undistort(chessboardImage);
-         //ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
+         //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
       }
    }
 }
