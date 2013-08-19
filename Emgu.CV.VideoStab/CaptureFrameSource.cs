@@ -23,8 +23,8 @@ namespace Emgu.CV.VideoStab
       /// <param name="capture">The capture object that will be converted to a FrameSource</param>
       public CaptureFrameSource(Capture capture)
       {
-         _ptr = VideoStabInvoke.CaptureFrameSourceCreate(capture);
-         _frameSourcePtr = _ptr;
+         _ptr = VideoStabInvoke.CaptureFrameSourceCreate(capture, ref FrameSourcePtr);
+         CaptureSource = capture.CaptureSource;
       }
 
       /// <summary>
@@ -33,6 +33,7 @@ namespace Emgu.CV.VideoStab
       protected override void DisposeObject()
       {
          VideoStabInvoke.CaptureFrameSourceRelease(ref _ptr);
+         FrameSourcePtr = IntPtr.Zero;
          base.DisposeObject();
       }
    }

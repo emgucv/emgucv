@@ -9,19 +9,24 @@ using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
+   /// <summary>
+   /// Gaussian motion filter
+   /// </summary>
    public class GaussianMotionFilter : UnmanagedObject
    {
-      /*
-      public GaussianMotionFilter()
-         : this(15, -1.0f)
+      /// <summary>
+      /// Create a Gaussian motion filter
+      /// </summary>
+      /// <param name="radius">The radius, use 15 for default.</param>
+      /// <param name="stdev">The standard deviation, use -1.0f for default</param>
+      public GaussianMotionFilter(int radius, float stdev)
       {
-      }*/
-
-      public GaussianMotionFilter()
-      {
-         _ptr = VideoStabInvoke.GaussianMotionFilterCreate();
+         _ptr = VideoStabInvoke.GaussianMotionFilterCreate(radius, stdev);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this object
+      /// </summary>
       protected override void DisposeObject()
       {
          VideoStabInvoke.GaussianMotionFilterRelease(ref _ptr);

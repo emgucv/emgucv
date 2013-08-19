@@ -20,7 +20,7 @@ namespace Emgu.CV.VideoStab
       }
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CaptureFrameSourceCreate(IntPtr capture);
+      internal static extern IntPtr CaptureFrameSourceCreate(IntPtr capture, ref IntPtr frameSourcePtr);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CaptureFrameSourceRelease(ref IntPtr captureFrameSource);
@@ -45,7 +45,7 @@ namespace Emgu.CV.VideoStab
       internal static extern void TwoPassStabilizerRelease(ref IntPtr stabilizer);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr GaussianMotionFilterCreate();
+      internal static extern IntPtr GaussianMotionFilterCreate(int radius, float stdev);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void GaussianMotionFilterRelease(ref IntPtr filter);

@@ -18,11 +18,27 @@ namespace Emgu.CV.VideoStab
    public abstract class FrameSource : UnmanagedObject
    {
       private IntPtr _frameBuffer;
+      private Capture.CaptureModuleType _captureSource;
+
+      /// <summary>
+      /// Get or Set the capture type
+      /// </summary>
+      public Capture.CaptureModuleType CaptureSource
+      {
+         get
+         {
+            return _captureSource;
+         }
+         set
+         {
+            _captureSource = value;
+         }
+      }
 
       /// <summary>
       /// The unmanaged pointer the the frameSource
       /// </summary>
-      protected IntPtr _frameSourcePtr;
+      public IntPtr FrameSourcePtr;
 
       /// <summary>
       /// Retrieve the next frame from the FrameSoure
@@ -30,7 +46,7 @@ namespace Emgu.CV.VideoStab
       /// <returns></returns>
       public Image<Bgr, Byte> NextFrame()
       {
-         if (!VideoStabInvoke.FrameSourceGetNextFrame(_frameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
+         if (!VideoStabInvoke.FrameSourceGetNextFrame(FrameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
@@ -58,7 +74,7 @@ namespace Emgu.CV.VideoStab
          {
             CvInvoke.cvReleaseImage(ref _frameBuffer);
          }
-         _frameSourcePtr = IntPtr.Zero;
+         FrameSourcePtr = IntPtr.Zero;
       }
    }
 }

@@ -18,22 +18,22 @@ namespace Emgu.CV.VideoStab
    {
       private IntPtr _stabilizerBase;
 
-      private CaptureFrameSource _captureFrameSource;
+      private FrameSource _baseFrameSource;
 
       /// <summary>
       /// Create a two pass video stabilizer.
       /// </summary>
-      /// <param name="capture">The capture object to be stabilized. Should not be a camera stream.</param>
-      public TwoPassStabilizer(Capture capture)
+      /// <param name="baseFrameSource">The capture object to be stabilized. Should not be a camera stream.</param>
+      public TwoPassStabilizer(FrameSource baseFrameSource)
       {
-         if (capture.CaptureSource == Capture.CaptureModuleType.Camera)
+         if (baseFrameSource.CaptureSource == Capture.CaptureModuleType.Camera)
          {
             throw new ArgumentException("Two pass stabilizer cannot process camera stream");
          }
 
-         _captureFrameSource = new CaptureFrameSource(capture);
+         _baseFrameSource = baseFrameSource;
 
-         _ptr = VideoStabInvoke.TwoPassStabilizerCreate(_captureFrameSource, ref _stabilizerBase, ref _frameSourcePtr);
+         _ptr = VideoStabInvoke.TwoPassStabilizerCreate(_baseFrameSource, ref _stabilizerBase, ref FrameSourcePtr);
       }
 
       /// <summary>
@@ -43,7 +43,7 @@ namespace Emgu.CV.VideoStab
       {
          VideoStabInvoke.TwoPassStabilizerRelease(ref _ptr);
          _stabilizerBase = IntPtr.Zero;
-         _captureFrameSource.Dispose();
+         //_captureFrameSource.Dispose();
          base.Dispose();
       }
    }

@@ -33,7 +33,7 @@ protected:
    CvCapture* _capture;
 };
 
-CVAPI(CaptureFrameSource*) CaptureFrameSourceCreate(CvCapture* capture);
+CVAPI(CaptureFrameSource*) CaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) CaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);
 
 CVAPI(bool) FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame);
@@ -41,14 +41,14 @@ CVAPI(bool) FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, Ip
 /*
 CVAPI(void) StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator);
 */
-CVAPI(cv::videostab::OnePassStabilizer*) OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
+CVAPI(cv::videostab::OnePassStabilizer*) OnePassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) OnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter);
 CVAPI(void) OnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer);
 
-CVAPI(cv::videostab::TwoPassStabilizer*) TwoPassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
+CVAPI(cv::videostab::TwoPassStabilizer*) TwoPassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) TwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer);
 
-CVAPI(cv::videostab::GaussianMotionFilter*) GaussianMotionFilterCreate();
+CVAPI(cv::videostab::GaussianMotionFilter*) GaussianMotionFilterCreate(int radius, float stdev);
 CVAPI(void) GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter);
 
 #endif

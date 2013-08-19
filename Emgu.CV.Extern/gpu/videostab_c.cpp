@@ -7,9 +7,11 @@
 
 #include "videostab_c.h"
 
-CaptureFrameSource* CaptureFrameSourceCreate(CvCapture* capture)
+CaptureFrameSource* CaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource)
 {
-   return new CaptureFrameSource(capture);
+   CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
+   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
+   return stabilizer;
 }
 void CaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource)
 {
@@ -42,10 +44,10 @@ void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer,
    stabalizer->setMotionEstimator(motionEstimator);
 }*/
 
-template<class cvstabilizer> cvstabilizer* StabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
+template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
    cvstabilizer* stabilizer = new cvstabilizer();
-   cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
+   cv::Ptr<cv::videostab::IFrameSource> ptr(baseFrameSource);
    ptr.addref(); // add reference such that it won't release the CaptureFrameSource
    stabilizer->setFrameSource(ptr);
    *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
@@ -53,9 +55,9 @@ template<class cvstabilizer> cvstabilizer* StabilizerCreate(CaptureFrameSource* 
    return stabilizer;
 }
 
-cv::videostab::OnePassStabilizer* OnePassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
+cv::videostab::OnePassStabilizer* OnePassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
-   return StabilizerCreate<cv::videostab::OnePassStabilizer>(capture, stabilizerBase, frameSource);
+   return StabilizerCreate<cv::videostab::OnePassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
    /*
    cv::videostab::OnePassStabilizer* stabilizer = new cv::videostab::OnePassStabilizer();
    cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
@@ -79,9 +81,9 @@ void OnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer)
    *stabilizer = 0;
 }
 
-cv::videostab::TwoPassStabilizer* TwoPassStabilizerCreate(CaptureFrameSource* capture, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
+cv::videostab::TwoPassStabilizer* TwoPassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
-   return StabilizerCreate<cv::videostab::TwoPassStabilizer>(capture, stabilizerBase, frameSource);
+   return StabilizerCreate<cv::videostab::TwoPassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
    /*
    cv::videostab::TwoPassStabilizer* stabilizer = new cv::videostab::TwoPassStabilizer();
    cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
@@ -97,9 +99,9 @@ void TwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer)
    *stabilizer = 0;
 }
 
-cv::videostab::GaussianMotionFilter* GaussianMotionFilterCreate()
+cv::videostab::GaussianMotionFilter* GaussianMotionFilterCreate(int radius, float stdev)
 {
-   return new cv::videostab::GaussianMotionFilter();
+   return new cv::videostab::GaussianMotionFilter(radius, stdev);
 }
 void GaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter)
 {

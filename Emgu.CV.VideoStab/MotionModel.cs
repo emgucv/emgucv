@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Emgu.CV.VideoStab
 {
+   /*
    public enum MotionModel
    {
       TRANSLATION = 0,
@@ -15,5 +16,5 @@ namespace Emgu.CV.VideoStab
       AFFINE = 3,
       HOMOGRAPHY = 4,
       UNKNOWN = 5
-   }
+   }*/
 }

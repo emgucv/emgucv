@@ -19,16 +19,16 @@ namespace Emgu.CV.VideoStab
    {
       private IntPtr _stabilizerBase;
 
-      private CaptureFrameSource _captureFrameSource;
+      private FrameSource _baseFrameSource;
 
       /// <summary>
       /// Create a one pass stabilizer
       /// </summary>
-      /// <param name="capture">The capture object to be stabalized</param>
-      public OnePassStabilizer(Capture capture)
+      /// <param name="baseFrameSource">The capture object to be stabalized</param>
+      public OnePassStabilizer(FrameSource baseFrameSource)
       {
-         _captureFrameSource = new CaptureFrameSource(capture);
-         _ptr = VideoStabInvoke.OnePassStabilizerCreate(_captureFrameSource, ref _stabilizerBase, ref _frameSourcePtr);
+         _baseFrameSource = baseFrameSource;
+         _ptr = VideoStabInvoke.OnePassStabilizerCreate(baseFrameSource.FrameSourcePtr, ref _stabilizerBase, ref FrameSourcePtr);
       }
 
       /// <summary>
@@ -53,7 +53,6 @@ namespace Emgu.CV.VideoStab
       {
          VideoStabInvoke.OnePassStabilizerRelease(ref _ptr);
          _stabilizerBase = IntPtr.Zero;
-         _captureFrameSource.Dispose();
          base.Dispose();
       }
    }
