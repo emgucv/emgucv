@@ -215,68 +215,6 @@ namespace Emgu.CV
       }
 #endif
 
-      public void LoadImageFromIplImagePtr(IntPtr iplImage)
-      {
-         MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
-         Size size = new Size(mptr.width, mptr.height);
-
-         //Allocate data in mamanged memory
-         AllocateData(size.Height, size.Width, NumberOfChannels);
-
-         if (mptr.nChannels == 1)
-         {  //Grayscale image;
-            switch (mptr.depth)
-            {
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                  using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                  using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                  using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               default:
-                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-            }
-         }
-         else if (mptr.nChannels == 3)
-         {  //BGR image
-            switch (mptr.depth)
-            {
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                  using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                  using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                  using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
-                     ConvertFrom(tmp);
-                  break;
-               default:
-                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-            }
-         }
-         else
-         {
-            throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
-         }
-      }
-
 #if !NETFX_CORE
       /// <summary>
       /// Load the specific file using OpenCV
@@ -2172,8 +2110,8 @@ namespace Emgu.CV
       /// <summary>
       /// result = val - this, using a mask
       /// </summary>
-      /// <param name="val">the value which subtract this image</param>
-      /// <param name="mask"> The mask for subtraction</param>
+      /// <param name="val">The value which subtract this image</param>
+      /// <param name="mask">The mask for subtraction</param>
       /// <returns>val - this, with mask</returns>
       public Image<TColor, TDepth> SubR(TColor val, Image<Gray, Byte> mask)
       {
@@ -4560,7 +4498,89 @@ namespace Emgu.CV
 
       #endregion
 
-      
+      /// <summary>
+      /// This function load the image data from the iplImage pointer
+      /// </summary>
+      /// <param name="iplImage">The pointer to the iplImage</param>
+      private void LoadImageFromIplImagePtr(IntPtr iplImage)
+      {
+         MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
+         Size size = new Size(mptr.width, mptr.height);
+
+         //Allocate data in mamanged memory
+         AllocateData(size.Height, size.Width, NumberOfChannels);
+
+         if (mptr.nChannels == 1)
+         {  //Grayscale image;
+            switch (mptr.depth)
+            {
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                  using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                  using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                  using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               default:
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+            }
+         }
+         else if (mptr.nChannels == 3)
+         {  //BGR image
+            switch (mptr.depth)
+            {
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
+                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
+                  using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
+                  using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
+                  using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+                     ConvertFrom(tmp);
+                  break;
+               default:
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+            }
+         }
+         else
+         {
+            throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+         }
+      }
+
+      /// <summary>
+      /// Get the managed image from an unmanaged IplImagePointer
+      /// </summary>
+      /// <param name="iplImage">The pointer to the iplImage</param>
+      /// <returns>The managed image from the iplImage pointer</returns>
+      public static Image<TColor, TDepth> FromIplImagePtr(IntPtr iplImage)
+      {
+         Image<TColor, TDepth> result = new Image<TColor, TDepth>();
+         result.LoadImageFromIplImagePtr(iplImage);
+         return result;
+      }
+
+      /// <summary>
+      /// Decode the image from the jpeg data
+      /// </summary>
+      /// <param name="jpegData">The byte array that repesent the image in jpeg format</param>
+      /// <returns>The image from the jpeg decoding</returns>
       public static Image<TColor, TDepth> FromJpegData(byte[] jpegData)
       {
          if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(byte))
@@ -4581,17 +4601,19 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the jpeg representation of the image
+      /// </summary>
+      /// <returns>An byte array that contains the image as jpeg data</returns>
       public byte[] ToJpegData()
       {
          IntPtr mat = CvInvoke.cvEncodeImage(".jpg", Ptr, IntPtr.Zero);
          MCvMat cvMat = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
          byte[] data = new byte[cvMat.rows * cvMat.cols];
-         //GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          Marshal.Copy(cvMat.data, data, 0, data.Length);
          CvInvoke.cvReleaseMat(ref mat);
          return data;
       }
-
 
       ///<summary> 
       /// Get the size of the array
