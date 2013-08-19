@@ -58,13 +58,14 @@ namespace Emgu.CV.ML
          Matrix<Byte> sampleIdx,
          SVMParams parameters)
       {
+         MCvSVMParams svmparam = parameters.MCvSVMParams;
          return MlInvoke.CvSVMTrain(
             _ptr, 
             trainData.Ptr, 
             responses.Ptr, 
             varIdx == null ? IntPtr.Zero: varIdx.Ptr, 
             sampleIdx == null ? IntPtr.Zero : varIdx.Ptr, 
-            parameters.MCvSVMParams);
+            ref svmparam);
       }
 
       /// <summary>
@@ -148,14 +149,14 @@ namespace Emgu.CV.ML
             responses.Ptr,
             varIdx == null ? IntPtr.Zero : varIdx.Ptr,
             sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
-            parameters,
+            ref parameters,
             kFold,
-            cGrid,
-            gammaGrid, 
-            pGrid, 
-            nuGrid,
-            coefGrid,
-            degreeGrid);
+            ref cGrid,
+            ref gammaGrid, 
+            ref pGrid, 
+            ref nuGrid,
+            ref coefGrid,
+            ref degreeGrid);
       }
 
       #region contribution from Albert G
