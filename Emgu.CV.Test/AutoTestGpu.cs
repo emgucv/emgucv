@@ -643,6 +643,25 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestGpuPyrLKOpticalFlow()
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         AutoTestVarious.OptiocalFlowImage(out prevImg, out currImg);
+         Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
+         Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
+         GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, false);
+         using(GpuImage<Gray, Byte> prevGpu = new GpuImage<Gray,byte>(prevImg))
+         using (GpuImage<Gray, byte> currGpu = new GpuImage<Gray, byte>(currImg))
+         using (GpuImage<Gray, float> flowxGpu = new GpuImage<Gray,float>(prevGpu.Size))
+         using (GpuImage<Gray, float> flowyGpu = new GpuImage<Gray,float>(prevGpu.Size))
+         {
+            flow.Dense(prevGpu, currGpu, flowxGpu, flowyGpu);
+            flowxGpu.Download(flowx);
+            flowyGpu.Download(flowy);
+         }  
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)

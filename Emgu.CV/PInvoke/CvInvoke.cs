@@ -43,13 +43,7 @@ namespace Emgu.CV
       /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
       /// <returns>True if all the modules has been loaded sucessfully</returns>
       /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
-      public static 
-#if NETFX_CORE 
-         async System.Threading.Tasks.Task<bool>
-#else
-         bool
-#endif
-         LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
+      public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
       {
 #if NETFX_CORE
          if (loadDirectory != null)
@@ -73,8 +67,19 @@ namespace Emgu.CV
          Windows.Storage.StorageFolder installFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
          loadDirectory = Path.Combine(installFolder.Path, subfolder);
 
-         Windows.Storage.StorageFolder loadFolder = await installFolder.GetFolderAsync(subfolder);
-         List<Windows.Storage.StorageFile> loadableFiles = new List<Windows.Storage.StorageFile>(await loadFolder.GetFilesAsync());
+         var t = System.Threading.Tasks.Task.Run(async () => 
+         {
+            Windows.Storage.StorageFolder loadFolder = await installFolder.GetFolderAsync(subfolder);
+            List<string> files = new List<string>();
+            foreach (var file in await loadFolder.GetFilesAsync())
+            {
+               files.Add(file.Path);
+            }
+            return files;
+         });
+         t.Wait();
+
+         List<String> loadableFiles = t.Result;
 #else
          if (loadDirectory == null)
          {
@@ -126,20 +131,27 @@ namespace Emgu.CV
          String oldDir = Environment.CurrentDirectory;
          Environment.CurrentDirectory = loadDirectory;
 #endif
-
-
          bool success = true;
 
          string prefix = string.Empty;
          
          foreach (String module in unmanagedModules)
          {
-            String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, module));
-#if NETFX_CORE
-            String relativePath = Path.Combine(subfolder, Path.Combine(prefix, module));
+            string mName = module;
 
-            bool exist = loadableFiles.Exists(sf => sf.Path.Equals(fullPath));
-            if (exist)
+            //handle special case for universal build
+            if (
+               mName.StartsWith("opencv_ffmpeg")  //opencv_ffmpegvvv(_64).dll
+               && (IntPtr.Size == 4) //32bit application
+               )
+            {
+               mName = module.Replace("_64", String.Empty);
+            }
+
+            String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, mName));
+
+#if NETFX_CORE
+            if (loadableFiles.Exists(sf => sf.Equals(fullPath)))
             {
                IntPtr handle = Toolbox.LoadLibrary(fullPath);
                success &= (!IntPtr.Zero.Equals(handle));
@@ -229,19 +241,13 @@ namespace Emgu.CV
          }
 #elif IOS 
 #else
-
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
             String formatString = GetModuleFormatString();
             for (int i = 0; i < modules.Count; ++i)
                modules[i] = String.Format(formatString, modules[i]);
 
-#if NETFX_CORE
-            System.Threading.Tasks.Task<bool> t = LoadUnmanagedModules(null, modules.ToArray());
-            t.Wait();
-#else
             LoadUnmanagedModules(null, modules.ToArray());
-#endif
          }
 #endif
          //Use the custom error handler

@@ -887,7 +887,7 @@ namespace Emgu.CV.Test
       /// </summary>
       /// <param name="prevImg"></param>
       /// <param name="currImg"></param>
-      private static void OptiocalFlowImage(out Image<Gray, Byte> prevImg, out Image<Gray, Byte> currImg)
+      public static void OptiocalFlowImage(out Image<Gray, Byte> prevImg, out Image<Gray, Byte> currImg)
       {
          //Create a random object
          Image<Gray, Byte> randomObj = new Image<Gray, byte>(50, 50);
