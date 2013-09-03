@@ -637,21 +637,21 @@ void gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu
 }
 
 void gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-                              CvTermCriteria criteria, cv::gpu::Stream* stream)
+                              CvTermCriteria* criteria, cv::gpu::Stream* stream)
 {
-   cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, criteria, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::meanShiftFiltering(*src, *dst, sp, sr, *criteria, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-                         CvTermCriteria criteria, cv::gpu::Stream* stream)
+                         CvTermCriteria* criteria, cv::gpu::Stream* stream)
 {
-   cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria, stream ? *stream : cv::gpu::Stream::Null());
+   cv::gpu::meanShiftProc(*src, *dstr, *dstsp, sp, sr, *criteria, stream ? *stream : cv::gpu::Stream::Null());
 }
 
 void gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
-                                 CvTermCriteria criteria)
+                                 CvTermCriteria* criteria)
 {
-   cv::gpu::meanShiftSegmentation(*src, *dst, sp, sr, minsize, criteria);
+   cv::gpu::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria);
 }
 
 void gpuMatHistEven(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* hist, cv::gpu::GpuMat* buffer, int histSize, int lowerLevel, int upperLevel, cv::gpu::Stream* stream)

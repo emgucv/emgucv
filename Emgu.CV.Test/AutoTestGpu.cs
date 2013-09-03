@@ -646,7 +646,7 @@ namespace Emgu.CV.Test
       public void TestGpuPyrLKOpticalFlow()
       {
          Image<Gray, Byte> prevImg, currImg;
-         AutoTestVarious.OptiocalFlowImage(out prevImg, out currImg);
+         AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
          GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, false);

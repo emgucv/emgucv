@@ -3,12 +3,13 @@
 //----------------------------------------------------------------------------
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System.IO;
 using Emgu.Util;
 
 namespace Emgu.CV.OpenCL
@@ -466,6 +467,22 @@ namespace Emgu.CV.OpenCL
       public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpave, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
+      /// Computes exponent of each matrix element (b = exp(a))
+      /// </summary>
+      /// <param name="src">The source OclMat. Supports single channel float type.</param>
+      /// <param name="dst">The resulting OclMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatExp")]
+      public static extern void Exp(IntPtr src, IntPtr dst);
+
+      /// <summary>
+      /// Computes natural logarithm of absolute value of each matrix element: b = log(abs(a))
+      /// </summary>
+      /// <param name="src">The source OclMat. Supports single channel float type.</param>
+      /// <param name="dst">The resulting OclMat</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLog")]
+      public static extern void Log(IntPtr src, IntPtr dst);
+
+      /// <summary>
       /// The function pow raises every element of the input array to <paramref name="power"/>. Supports only CV_32FC1 and CV_64FC1 data type.
       /// </summary>
       /// <param name="src">The source OclMat</param>
@@ -818,7 +835,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
       private static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
 
       /// <summary>
@@ -846,7 +863,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
       private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
 
       /// <summary>
@@ -876,9 +893,94 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
       public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      #endregion
 
+      #region meanshift
+      /// <summary>
+      /// Performs mean-shift filtering for each point of the source image. It maps each point of the source
+      /// image into another point, and as the result we have new color and new position of each point.
+      /// </summary>
+      /// <param name="src">Source OclImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dst">Destination OclImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      public static void MeanShiftFiltering(OclImage<Bgra, Byte> src, OclImage<Bgra, Byte> dst, int sp, int sr, MCvTermCriteria criteria)
+      {
+         Debug.Assert(src.Size.Equals(dst.Size));
+         oclMatMeanShiftFiltering(src, dst, sp, sr, ref criteria);
+      }
+
+      /// <summary>
+      /// Performs mean-shift filtering for each point of the source image. It maps each point of the source
+      /// image into another point, and as the result we have new color and new position of each point.
+      /// </summary>
+      /// <param name="src">Source OclImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dst">Destination OclImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftFiltering")]
+      private static extern void oclMatMeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
+      /// and positions) into two images.
+      /// </summary>
+      /// <param name="src">Source OclImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dstr">Destination OclImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="dstsp">Destination OclImage, containing position of mapped points. Will have the same size as src and CV 16SC2 type.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      public static void MeanShiftProc(OclImage<Bgra, Byte> src, OclImage<Bgra, Byte> dstr, OclMat<Int16> dstsp, int sp, int sr, MCvTermCriteria criteria)
+      {
+         Debug.Assert(src.Size.Equals(dstr.Size) && dstr.Size.Equals(dstsp.Size) && dstsp.NumberOfChannels == 2);
+         oclMatMeanShiftProc(src, dstr, dstsp, sp, sr, ref criteria);
+      }
+
+      /// <summary>
+      /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
+      /// and positions) into two images.
+      /// </summary>
+      /// <param name="src">Source OclImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dstr">Destination OclImage, containing color of mapped points. Will have the same size and type as src.</param>
+      /// <param name="dstsp">Destination OclImage, containing position of mapped points. Will have the same size as src and CV 16SC2 type.</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftProc")]
+      private static extern void oclMatMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Performs mean-shift segmentation of the source image and eleminates small segments.
+      /// </summary>
+      /// <param name="src">Source OclImage. </param>
+      /// <param name="dst">Segmented Image. Will have the same size and type as src. Note that this is an Image type and not OclImage type</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      public static void MeanShiftSegmentation(OclImage<Bgra, Byte> src, Image<Bgra, Byte> dst, int sp, int sr, int minsize, MCvTermCriteria criteria)
+      {
+         Debug.Assert(src.Size.Equals(dst.Size), "size of Image does not match that of OclImage");
+         oclMatMeanShiftSegmentation(src, dst, sp, sr, minsize, ref criteria);
+         CvInvoke.cvOrS(dst, new MCvScalar(0, 0, 0, 255), dst, IntPtr.Zero);
+      }
+
+      /// <summary>
+      /// Performs mean-shift segmentation of the source image and eleminates small segments.
+      /// </summary>
+      /// <param name="src">Source OclImage. Only CV 8UC4 images are supported for now.</param>
+      /// <param name="dst">Segmented Image. Will have the same size and type as src. Note that this is an Image type and not OclImage type</param>
+      /// <param name="sp">Spatial window radius.</param>
+      /// <param name="sr">Color window radius.</param>
+      /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
+      /// <param name="criteria">Termination criteria.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftSegmentation")]
+      private static extern void oclMatMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
       #endregion
    }
 }

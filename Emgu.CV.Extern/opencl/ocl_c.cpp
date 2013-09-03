@@ -493,6 +493,16 @@ void oclMatPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y)
    cv::ocl::pow(*x, p, *y);
 }
 
+void oclMatExp(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
+{
+   cv::ocl::exp(*a, *b);
+}
+
+void oclMatLog(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
+{
+   cv::ocl::exp(*a, *b);
+}
+
 void oclMatCartToPolar(const cv::ocl::oclMat* x, const cv::ocl::oclMat* y, cv::ocl::oclMat* magnitude, cv::ocl::oclMat* angle, bool angleInDegrees)
 {
    cv::ocl::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees);
@@ -522,6 +532,26 @@ void oclMatHoughCirclesDownload(const cv::ocl::oclMat* d_circles, cv::Mat* h_cir
 {
    cv::ocl::HoughCirclesDownload(*d_circles, *h_circles);
 }
+
+void oclMatMeanShiftFiltering(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int sp, int sr,
+                              CvTermCriteria* criteria)
+{
+   cv::ocl::meanShiftFiltering(*src, *dst, sp, sr, *criteria);
+}
+
+void oclMatMeanShiftProc(const cv::ocl::oclMat* src, cv::ocl::oclMat* dstr, cv::ocl::oclMat* dstsp, int sp, int sr,
+                         CvTermCriteria* criteria)
+{
+   cv::ocl::meanShiftProc(*src, *dstr, *dstsp, sp, sr, *criteria);
+}
+
+void oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int sp, int sr, int minsize,
+                                 CvTermCriteria* criteria)
+{
+   cv::Mat dstMat = cv::cvarrToMat(dst);
+   cv::ocl::meanShiftSegmentation(*src, dstMat, sp, sr, minsize, *criteria);
+}
+
 
 //----------------------------------------------------------------------------
 //
@@ -630,11 +660,11 @@ void oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifierBuf** classifier)
 //  OclPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-cv::ocl::PyrLKOpticalFlow* oclPyrLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow)
+cv::ocl::PyrLKOpticalFlow* oclPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow)
 {
    cv::ocl::PyrLKOpticalFlow* flow = new cv::ocl::PyrLKOpticalFlow();
    
-   flow->winSize = winSize;
+   flow->winSize = cv::Size(winSize.width, winSize.height);
    flow->maxLevel = maxLevel;
    flow->iters = iters;
    flow->useInitialFlow = useInitialFlow;

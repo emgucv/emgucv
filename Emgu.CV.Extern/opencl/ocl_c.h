@@ -158,6 +158,10 @@ CVAPI(void) oclMatBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* d
 
 CVAPI(void) oclMatPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y);
 
+CVAPI(void) oclMatExp(const cv::ocl::oclMat* a, cv::ocl::oclMat* b);
+
+CVAPI(void) oclMatLog(const cv::ocl::oclMat* a, cv::ocl::oclMat* b);
+
 CVAPI(void) oclMatCartToPolar(const cv::ocl::oclMat* x, const cv::ocl::oclMat* y, cv::ocl::oclMat* magnitude, cv::ocl::oclMat* angle, bool angleInDegrees);
 
 CVAPI(void) oclMatPolarToCart(const cv::ocl::oclMat* magnitude, const cv::ocl::oclMat* angle, cv::ocl::oclMat* x, cv::ocl::oclMat* y, bool angleInDegrees);
@@ -169,6 +173,15 @@ CVAPI(void) oclMatEqualizeHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* 
 CVAPI(void) oclMatHoughCircles(const cv::ocl::oclMat* src, cv::ocl::oclMat* circles, int method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
 
 CVAPI(void) oclMatHoughCirclesDownload(const cv::ocl::oclMat* d_circles, cv::Mat* h_circles);
+
+CVAPI(void) oclMatMeanShiftFiltering(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int sp, int sr,
+   CvTermCriteria* criteria);
+
+CVAPI(void) oclMatMeanShiftProc(const cv::ocl::oclMat* src, cv::ocl::oclMat* dstr, cv::ocl::oclMat* dstsp, int sp, int sr,
+   CvTermCriteria* criteria);
+
+CVAPI(void) oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int sp, int sr, int minsize,
+   CvTermCriteria* criteria);
 
 //----------------------------------------------------------------------------
 //
@@ -228,7 +241,7 @@ CVAPI(void) oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifierBuf** class
 //  oclPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::ocl::PyrLKOpticalFlow*) oclPyrLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow);
+CVAPI(cv::ocl::PyrLKOpticalFlow*) oclPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow);
 CVAPI(void) oclPyrLKOpticalFlowSparse(
    cv::ocl::PyrLKOpticalFlow* flow, 
    const cv::ocl::oclMat* prevImg, 

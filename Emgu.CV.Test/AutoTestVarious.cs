@@ -887,7 +887,7 @@ namespace Emgu.CV.Test
       /// </summary>
       /// <param name="prevImg"></param>
       /// <param name="currImg"></param>
-      public static void OptiocalFlowImage(out Image<Gray, Byte> prevImg, out Image<Gray, Byte> currImg)
+      public static void OpticalFlowImage(out Image<Gray, Byte> prevImg, out Image<Gray, Byte> currImg)
       {
          //Create a random object
          Image<Gray, Byte> randomObj = new Image<Gray, byte>(50, 50);
@@ -912,7 +912,7 @@ namespace Emgu.CV.Test
       public void TestOpticalFlowFarneback()
       {
          Image<Gray, Byte> prevImg, currImg;
-         OptiocalFlowImage(out prevImg, out currImg);
+         OpticalFlowImage(out prevImg, out currImg);
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
          OpticalFlow.Farneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.DEFAULT);
@@ -922,7 +922,7 @@ namespace Emgu.CV.Test
       public void TestOpticalFlowBM()
       {
          Image<Gray, Byte> prevImg, currImg;
-         OptiocalFlowImage(out prevImg, out currImg);
+         OpticalFlowImage(out prevImg, out currImg);
          Size blockSize = new Size(5, 5);
          Size shiftSize = new Size(1, 1);
          Size maxRange = new Size(10, 10);
@@ -948,7 +948,7 @@ namespace Emgu.CV.Test
       public void TestOpticalFlowLK()
       {
          Image<Gray, Byte> prevImg, currImg;
-         OptiocalFlowImage(out prevImg, out currImg);
+         OpticalFlowImage(out prevImg, out currImg);
 
          PointF[] prevFeature = new PointF[] { new PointF(100f, 100f) };
 
@@ -974,7 +974,7 @@ namespace Emgu.CV.Test
       public void TestOpticalFlowDualTVL1()
       {
          Image<Gray, Byte> prevImg, currImg;
-         OptiocalFlowImage(out prevImg, out currImg);
+         OpticalFlowImage(out prevImg, out currImg);
          Image<Gray, float> velx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, float> vely = new Image<Gray, float>(prevImg.Size);
 
@@ -1031,14 +1031,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features));
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features));
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
          EmguAssert.IsTrue(indices[0, 0] == 5);
          EmguAssert.IsTrue(distances[0, 0] == 0.0);
@@ -1051,14 +1051,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
          EmguAssert.IsTrue(indices[0, 0] == 5);
          EmguAssert.IsTrue(distances[0, 0] == 0.0);
@@ -1071,14 +1071,14 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromDescriptors(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
 
          Matrix<int> indices = new Matrix<int>(features2.Length, 1);
          Matrix<float> distances = new Matrix<float>(features2.Length, 1);
-         index.KnnSearch(CvToolbox.GetMatrixFromDescriptors(features2), indices, distances, 1, 32);
+         index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
          EmguAssert.IsTrue(indices[0, 0] == 5);
          EmguAssert.IsTrue(distances[0, 0] == 0.0);
@@ -1565,6 +1565,29 @@ namespace Emgu.CV.Test
                }
             }
          }
+      }
+
+      [Test]
+      public void TestVectorOfMat()
+      {
+         Matrix<double> m1 = new Matrix<double>(3, 3);
+         m1.SetRandNormal(new MCvScalar(0.0), new MCvScalar(1.0));
+         Matrix<int> m2 = new Matrix<int>(4, 4);
+         m2.SetRandNormal(new MCvScalar(2), new MCvScalar(2));
+
+         VectorOfMat vec = new VectorOfMat();
+         vec.Push(m1);
+         vec.Push(m2);
+
+         Mat tmp1 = vec[0];
+         Mat tmp2 = vec[1];
+         Matrix<double> n1 = new Matrix<double>(tmp1.Size);
+         Matrix<int> n2 = new Matrix<int>(tmp2.Size);
+         tmp1.CopyTo(n1);
+         tmp2.CopyTo(n2);
+
+         EmguAssert.IsTrue(m1.Equals(n1));
+         EmguAssert.IsTrue(m2.Equals(n2));
       }
 
       [Test]
@@ -2213,6 +2236,90 @@ namespace Emgu.CV.Test
          CvInvoke.CvEstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
       }
 
+      #region Test code contributed by Daniel Bell, modified by Canming
+      [Test]
+      public void TestLevMarqSparse()
+      {
+         int N = 11;
+         int pN = 20;
+         MCvPoint3D64f[] points = new MCvPoint3D64f[pN];
+
+         MCvPoint2D64f[][] imagePoints = new MCvPoint2D64f[N][];
+         int[][] visibility = new int[N][];
+         List<Matrix<double>> cameraMatrix = new List<Matrix<double>>();
+         List<Matrix<double>> R = new List<Matrix<double>>();
+         List<Matrix<double>> T = new List<Matrix<double>>();
+         List<Matrix<double>> distcoeff = new List<Matrix<double>>();
+         MCvTermCriteria termCrit = new MCvTermCriteria(30, 1.0e-12);
+
+         Size cameraRes = new Size(640, 480);
+         Matrix<float> pMatrix = new Matrix<float>(3, pN);
+         Matrix<float> imMatrix = new Matrix<float>(2, pN);
+         Matrix<int> visMatrix = new Matrix<int>(1, pN);
+         Matrix<double> RMatrix = new Matrix<double>(3, 3);
+         Matrix<double> TMatrix = new Matrix<double>(3, 1);
+         Matrix<double> dcMatrix = new Matrix<double>(4, 1);
+         Matrix<double> camMatrix = new Matrix<double>(new double[,] { { cameraRes.Width / 4, 0, cameraRes.Width / 2 }, { 0, cameraRes.Height / 4, cameraRes.Height / 2 }, { 0, 0, 1 } });
+         dcMatrix.SetZero();
+
+         for (int y = -pN / 2; y < pN / 2; y += 1)
+         {
+            double r = 4 + Math.Sin(3 * Math.PI * y / 10);
+            for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 4)
+            {
+               double px = r * Math.Cos(theta) + y; /*+ rng.gaussian(1)*/
+               double py = 5 - y; /*+ rng.gaussian(1)*/
+               double pz = r * Math.Sin(theta) + y; /*+ rng.gaussian(1)*/
+
+               points[y + pN / 2] = new MCvPoint3D64f(px, py, pz);
+            }
+         }
+         for (int i = 0; i < N; i++)
+         {
+            visMatrix = new Matrix<int>(1, pN);
+            cameraMatrix.Add(camMatrix);
+            double[,] r = new double[,] { { Math.Cos(i * 2 * Math.PI / N), 0, Math.Sin(i * 2 * Math.PI / N) }, { 0, 1, 0 }, { -Math.Sin(i * 2 * Math.PI / N), 0, Math.Cos(i * 2 * Math.PI / N) } };
+            double[] t = new double[] { 0, 0, 30 };
+            R.Add(new Matrix<double>(r));
+            T.Add(new Matrix<double>(t));
+            distcoeff.Add(dcMatrix.Clone());
+         }
+
+         Random ran = new Random();
+         for (int i = 0; i < N; i++)
+         {
+            imagePoints[i] = new MCvPoint2D64f[pN];
+            visibility[i] = new int[pN];
+            // check if the point is in cameras
+            for (int j = 0; j < pN; j++)
+            {
+               // if the image point is within camera resolution then the point is visible
+               if ((0 <= imagePoints[i][j].x) && (imagePoints[i][j].x <= cameraRes.Height) &&
+                   (0 <= imagePoints[i][j].y) && (imagePoints[i][j].y <= cameraRes.Width))
+               {  // add randomness	
+                  // perturbate
+                  visibility[i][j] = 1;
+                  imagePoints[i][j] = new MCvPoint2D64f((float)points[i].x + ran.Next(0, 3), (float)points[i].y + ran.Next(0, 3));
+               }
+               // else, the point is not visible 
+               else
+               {
+                  visibility[i][j] = 0;
+                  imagePoints[i][j] = new MCvPoint2D64f(-1, -1);
+               }
+            }
+         }
+
+         MCvPoint3D64f[] oldPoints = new MCvPoint3D64f[points.Length];
+         Array.Copy(points, oldPoints, points.Length);
+         Matrix<double> cameraMatOld = cameraMatrix[0].Clone();
+         Matrix<double> rotationMatOld = R[0].Clone();
+         Matrix<double> translationMatOld = T[0].Clone();
+         Matrix<double> distcoeffOld = distcoeff[0].Clone();
+         LevMarqSparse.BundleAdjust(points, imagePoints, visibility, cameraMatrix.ToArray(), R.ToArray(), T.ToArray(), distcoeff.ToArray(), termCrit);
+
+      }
+      #endregion
 
       [Test]
       public void TestLatenSVM()
@@ -2274,5 +2381,27 @@ namespace Emgu.CV.Test
             //ImageViewer.Show(img);
          }
       }*/
+
+      [Test]
+      public void TestChamferMatching()
+      {
+         using (Image<Gray, Byte> logo = EmguAssert.LoadImage<Gray, Byte>("logo.png"))
+         using (Image<Gray, Byte> logoInClutter = EmguAssert.LoadImage<Gray, Byte>("logo_in_clutter.png"))
+         using (Image<Bgr, Byte> image = logoInClutter.Convert<Bgr, Byte>())
+         {
+            Point[][] contours;
+            float[] costs;
+            int count = CvInvoke.cvChamferMatching(logoInClutter, logo, out contours, out costs, 1, 1, 1, 3, 3, 5, 0.6, 1.6, 0.5, 20);
+
+            foreach (Point[] contour in contours)
+            {
+               foreach (Point p in contour)
+               {
+                  image[p] = new Bgr(Color.Red);
+               }
+            }
+            //Emgu.CV.UI.ImageViewer.Show(image);
+         }
+      }
    }
 }

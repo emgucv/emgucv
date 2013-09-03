@@ -1072,7 +1072,7 @@ namespace Emgu.CV.GPU
       /// <param name="criteria">Termination criteria.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftFiltering")]
-      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, MCvTermCriteria criteria, IntPtr stream);
+      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
@@ -1086,7 +1086,7 @@ namespace Emgu.CV.GPU
       /// <param name="criteria">Termination criteria.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftProc")]
-      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, MCvTermCriteria criteria, IntPtr stream);
+      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift segmentation of the source image and eleminates small segments.
@@ -1098,7 +1098,7 @@ namespace Emgu.CV.GPU
       /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
       /// <param name="criteria">Termination criteria.</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMeanShiftSegmentation")]
-      public static extern void MeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, MCvTermCriteria criteria);
+      public static extern void MeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
 
       /// <summary>
       /// Rotates an image around the origin (0,0) and then shifts it.

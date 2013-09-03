@@ -241,13 +241,13 @@ CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftFiltering(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int sp, int sr,
-   CvTermCriteria criteria, cv::gpu::Stream* stream);
+   CvTermCriteria* criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftProc(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dstr, cv::gpu::GpuMat* dstsp, int sp, int sr,
-   CvTermCriteria criteria, cv::gpu::Stream* stream);
+   CvTermCriteria* criteria, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatMeanShiftSegmentation(const cv::gpu::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
-   CvTermCriteria criteria);
+   CvTermCriteria* criteria);
 
 CVAPI(void) gpuMatHistEven(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* hist, cv::gpu::GpuMat* buffer, int histSize, int lowerLevel, int upperLevel, cv::gpu::Stream* stream);
 

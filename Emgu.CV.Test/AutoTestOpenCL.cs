@@ -502,6 +502,68 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestOclOpticalFlowDual_TVL1()
+      {
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
+         if (device <= 0)
+            return;
+         OclImage<Gray, Byte> prevImg, currImg;
+         OpticalFlowOclImage(out prevImg, out currImg);
+         OclImage<Gray, Single> flowx = new OclImage<Gray, float>(prevImg.Size);
+         OclImage<Gray, Single> flowy = new OclImage<Gray, float>(prevImg.Size);
+
+         OclOpticalFlowDual_TVL1 flow = new OclOpticalFlowDual_TVL1();
+         flow.Dense(prevImg, currImg, flowx, flowy);
+         
+      }
+
+
+      [Test]
+      public void TestOclOpticalFlowLK()
+      {
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
+         if (device <= 0)
+            return;
+         OclImage<Gray, Byte> prevImg, currImg;
+         OpticalFlowOclImage(out prevImg, out currImg);
+         OclPyrLKOpticalFlow flow = new OclPyrLKOpticalFlow(new Size(10, 10), 3, 10, false);
+
+         OclImage<Gray, Single> flowx = new OclImage<Gray, float>(prevImg.Size);
+         OclImage<Gray, Single> flowy = new OclImage<Gray, float>(prevImg.Size);
+         flow.Dense(prevImg, currImg, flowx, flowy);
+      }
+
+      private static void OpticalFlowOclImage(out OclImage<Gray, Byte> preOclImg, out OclImage<Gray, Byte> currOclImg)
+      {
+         Image<Gray, Byte> prevImg, currImg;
+         AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+         preOclImg = new OclImage<Gray, byte>(prevImg);
+         currOclImg = new OclImage<Gray, byte>(currImg);
+         prevImg.Dispose();
+         currImg.Dispose();
+      }
+
+      [Test]
+      public void TestMeanShiftFiltering()
+      {
+         int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
+         if (device <= 0)
+            return;
+       
+         Image<Bgra, byte> image = EmguAssert.LoadImage<Bgra, Byte>("pedestrian.png");
+         Image<Bgra, Byte> segmentResult = new Image<Bgra, byte>(image.Size);
+         OclImage<Bgra, Byte> oclImage = new OclImage<Bgra,byte>(image);
+         OclImage<Bgra, Byte> oclFilterResult = new OclImage<Bgra,byte>(oclImage.Size);
+         OclMat<Int16> oclPoints = new OclMat<short>(oclImage.Size, 2);
+         MCvTermCriteria termCrit = new MCvTermCriteria(5, 1);
+         OclInvoke.MeanShiftSegmentation(oclImage, segmentResult, 10, 20, 10, termCrit);
+         OclInvoke.MeanShiftFiltering(oclImage, oclFilterResult, 10, 20, termCrit);
+         OclInvoke.MeanShiftProc(oclImage, oclFilterResult, oclPoints, 10, 20, termCrit);
+         //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(segmentResult));
+      
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          int device = OclInvoke.GetDevice(IntPtr.Zero, OclDeviceType.All);
