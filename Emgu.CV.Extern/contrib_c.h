@@ -49,4 +49,17 @@ CVAPI(void) CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer);
 
 //color map
 CVAPI(void) CvApplyColorMap(IplImage* src, IplImage* dst, int colorMap);
+
+//LevMarqSparse
+CVAPI(cv::LevMarqSparse*) CvCreateLevMarqSparse();
+CVAPI(void) CvLevMarqSparseAdjustBundle(int numberOfFrames, int pointCount, CvPoint3D64f* points, CvMat* imagePoints, CvMat*  visibility, std::vector<cv::Mat>* cameraMatrix, std::vector<cv::Mat>* R, std::vector<cv::Mat>* T, std::vector<cv::Mat>* distCoeffs, CvTermCriteria* termCrit);
+CVAPI(void) CvReleaseLevMarqSparse(cv::LevMarqSparse** levMarq);
+
+CVAPI(int) cvChamferMatching( 
+   IplImage* img, IplImage* templ,
+   std::vector< std::vector<cv::Point> >* results, std::vector<float>* cost,
+   double templScale, int maxMatches,
+   double minMatchDistance, int padX,
+   int padY, int scales, double minScale, double maxScale,
+   double orientationWeight, double truncate);
 #endif

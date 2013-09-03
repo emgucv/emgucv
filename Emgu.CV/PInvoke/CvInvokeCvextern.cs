@@ -242,5 +242,51 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
       private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
       */
+
+      /// <summary>
+      /// Implements the chamfer matching algorithm on images taking into account both distance from
+      /// the template pixels to the nearest pixels and orientation alignment between template and image
+      /// contours.
+      /// </summary>
+      /// <param name="img">The edge image where search is performed</param>
+      /// <param name="templ">The template (an edge image)</param>
+      /// <param name="contours">The output contours</param>
+      /// <param name="cost">The cost associated with the matching</param>
+      /// <param name="templScale">The template scale, use 1 for default</param>
+      /// <param name="maxMatches">The maximum number of matches, use 20 for default</param>
+      /// <param name="minMatchDistance">The minimum match distance. use 1.0 for default</param>
+      /// <param name="padX">PadX, use 3 for default</param>
+      /// <param name="padY">PadY, use 3 for default</param>
+      /// <param name="scales">Scales, use 5 for default</param>
+      /// <param name="minScale">Minimum scale, use 0.6 for default</param>
+      /// <param name="maxScale">Maximum scale, use 1.6 for default</param>
+      /// <param name="orientationWeight">Orientation weight, use 0.5 for default</param>
+      /// <param name="truncate">Truncate, use 20 for default</param>
+      /// <returns>The number of matches</returns>
+      public static int cvChamferMatching(Image<Gray, Byte> img, Image<Gray, Byte> templ,
+         out Point[][] contours, out float[] cost,
+         double templScale, int maxMatches,
+         double minMatchDistance, int padX,
+         int padY, int scales, double minScale, double maxScale,
+         double orientationWeight, double truncate)
+      {
+         using (Emgu.CV.Util.VectorOfVectorOfPoint vecOfVecOfPoint = new Util.VectorOfVectorOfPoint())
+         using (Emgu.CV.Util.VectorOfFloat vecOfFloat = new Util.VectorOfFloat())
+         {
+            int count = _cvChamferMatching(img, templ, vecOfVecOfPoint, vecOfFloat, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
+            contours = vecOfVecOfPoint.ToArray();
+            cost = vecOfFloat.ToArray();
+            return count;
+         }
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvChamferMatching")]
+      private static extern int _cvChamferMatching(
+         IntPtr img, IntPtr templ,
+         IntPtr results, IntPtr cost,
+         double templScale, int maxMatches,
+         double minMatchDistance, int padX,
+         int padY, int scales, double minScale, double maxScale,
+         double orientationWeight, double truncate);
    }
 }
