@@ -339,3 +339,127 @@ void VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* imag
    (image);
    cv::drawDataMatrixCodes(*v, m);
 }*/
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Mat
+//
+//----------------------------------------------------------------------------
+std::vector<cv::Mat>* VectorOfMatCreate()
+{
+   return new std::vector<cv::Mat>();
+}
+
+int VectorOfMatGetSize(std::vector<cv::Mat>* v)
+{
+   return v->size();
+}
+
+void VectorOfMatPush(std::vector<cv::Mat>* v, cv::Mat* value)
+{
+   v->push_back(*value);
+}
+
+void VectorOfMatClear(std::vector<cv::Mat>* v)
+{
+   v->clear();
+}
+
+void VectorOfMatRelease(std::vector<cv::Mat>* v)
+{
+   delete v;
+}
+
+cv::Mat* VectorOfMatGetItem(std::vector<cv::Mat>* v, int index)
+{
+   return &(*v)[index];
+}
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Point
+//
+//----------------------------------------------------------------------------
+std::vector<cv::Point>* VectorOfPointCreate() 
+{ 
+   CV_Assert(sizeof(cv::Point) == 2*sizeof(int));
+   return new std::vector<cv::Point>(); 
+}
+
+std::vector<cv::Point>* VectorOfPointCreateSize(int size) 
+{ 
+   CV_Assert(sizeof(cv::Point) == 2*sizeof(int));
+   return new std::vector<cv::Point>(size); 
+}
+
+int VectorOfPointGetSize(std::vector<cv::Point>* v)
+{
+   return v->size();
+}
+
+void VectorOfPointPushMulti(std::vector<cv::Point>* v, cv::Point* values, int count)
+{
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(cv::Point));
+   }
+}
+
+void VectorOfPointClear(std::vector<cv::Point>* v)
+{
+   v->clear();
+}
+
+void VectorOfPointRelease(std::vector<cv::Point>* v)
+{
+   delete v;
+}
+
+void VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data)
+{
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(cv::Point));
+}
+
+cv::Point* VectorOfPointGetStartAddress(std::vector<cv::Point>* v)
+{
+   return v->empty() ? NULL : &(*v)[0];
+}
+
+void VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* point)
+{
+   *point = points->at(index);
+}
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Vector of Point
+//
+//----------------------------------------------------------------------------
+std::vector< std::vector<cv::Point> >* VectorOfVectorOfPointCreate()
+{
+   CV_Assert(sizeof(cv::Point) == 2*sizeof(int));
+   return new std::vector< std::vector<cv::Point> >();
+}
+
+int VectorOfVectorOfPointGetSize(std::vector< std::vector<cv::Point> >* v)
+{
+   return v->size();
+}
+
+void VectorOfVectorOfPointClear(std::vector< std::vector<cv::Point> >* v)
+{
+   v->clear();
+}
+
+void VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >* v)
+{
+   delete v;
+}
+
+std::vector<cv::Point>* VectorOfVectorOfPointGetItem(std::vector< std::vector<cv::Point> >* points, int index)
+{
+   return &(*points)[index];
+}

@@ -127,27 +127,51 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Convert an array of descriptors to row by row matrix
+      /// Convert arrays of data to matrix
       /// </summary>
-      /// <param name="descriptors">An array of descriptors</param>
-      /// <returns>A matrix where each row is a descriptor</returns>
-      public static Matrix<T> GetMatrixFromDescriptors<T>(T[][] descriptors)
+      /// <param name="data">Arrays of data</param>
+      /// <returns>A two dimension matrix that represent the array</returns>
+      public static Matrix<T> GetMatrixFromArrays<T>(T[][] data)
          where T: struct
       {
-         int rows = descriptors.Length;
-         int cols = descriptors[0].Length;
+         int rows = data.Length;
+         int cols = data[0].Length;
          Matrix<T> res = new Matrix<T>(rows, cols);
          MCvMat mat = res.MCvMat;
          long dataPos = mat.data.ToInt64();
          int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
          for (int i = 0; i < rows; i++, dataPos += mat.step)
          {
-            GCHandle handle = GCHandle.Alloc(descriptors[i], GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(data[i], GCHandleType.Pinned);
             Emgu.Util.Toolbox.memcpy(new IntPtr(dataPos), handle.AddrOfPinnedObject(), rowSizeInBytes);
             handle.Free();
          }
          return res;
       }
+
+      /// <summary>
+      /// Convert arrays of points to matrix
+      /// </summary>
+      /// <param name="points">Arrays of points</param>
+      /// <returns>A two dimension matrix that represent the points</returns>
+      public static Matrix<double> GetMatrixFromPoints(MCvPoint2D64f[][] points)
+      {
+         int rows = points.Length;
+         int cols = points[0].Length;
+         Matrix<double> res = new Matrix<double>(rows, cols, 2);
+
+         MCvMat cvMat = res.MCvMat;
+         for (int i = 0; i < rows; i++)
+         {
+            GCHandle handleTmp = GCHandle.Alloc(points[i], GCHandleType.Pinned);
+            IntPtr dst = new IntPtr(cvMat.data.ToInt64() + cvMat.step * i);
+            Emgu.Util.Toolbox.memcpy(dst, handleTmp.AddrOfPinnedObject(), points[i].Length * Marshal.SizeOf(typeof(MCvPoint2D64f)));
+            handleTmp.Free();
+         }
+         return res;
+      }
+
+
 
       /// <summary>
       /// Compute the minimum and maximum value from the points

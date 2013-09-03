@@ -24,8 +24,13 @@ emgu::size cvMatGetSize(cv::Mat* mat)
 }
 void cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray)
 {
-   IplImage iplImage = (*mat);
-   cvCopy(&iplImage, cvArray);
+   cv::Mat dest = cv::cvarrToMat(cvArray);
+   mat->copyTo(dest);
+}
+void cvMatFromCvArr(cv::Mat* mat, CvArr* cvArray)
+{
+   cv::Mat tmp = cv::cvarrToMat(cvArray);
+   cv::swap(*mat, tmp);
 }
 int cvMatGetElementSize(cv::Mat* mat)
 {

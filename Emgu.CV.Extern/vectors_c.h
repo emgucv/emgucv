@@ -134,4 +134,60 @@ CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<CvDataMatrixC
 CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* image);
 
 CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image);
+
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Mat
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::Mat>*) VectorOfMatCreate();
+
+CVAPI(int) VectorOfMatGetSize(std::vector<cv::Mat>* v);
+
+CVAPI(void) VectorOfMatPush(std::vector<cv::Mat>* v, cv::Mat* value);
+
+CVAPI(void) VectorOfMatClear(std::vector<cv::Mat>* v);
+
+CVAPI(void) VectorOfMatRelease(std::vector<cv::Mat>* v);
+
+CVAPI(cv::Mat*) VectorOfMatGetItem(std::vector<cv::Mat>* v, int index);
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Point
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::Point>*) VectorOfPointCreate();
+
+CVAPI(std::vector<cv::Point>*) VectorOfPointCreateSize(int size);
+
+CVAPI(int) VectorOfPointGetSize(std::vector<cv::Point>* v);
+
+CVAPI(void) VectorOfPointPushMulti(std::vector<cv::Point>* v, cv::Point* values, int count);
+
+CVAPI(void) VectorOfPointClear(std::vector<cv::Point>* v);
+
+CVAPI(void) VectorOfPointRelease(std::vector<cv::Point>* v);
+
+CVAPI(void) VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data);
+
+CVAPI(cv::Point*) VectorOfPointGetStartAddress(std::vector<cv::Point>* v);
+
+CVAPI(void) VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* point);
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Vector of Point
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector< std::vector<cv::Point> >*) VectorOfVectorOfPointCreate();
+
+CVAPI(int) VectorOfVectorOfPointGetSize(std::vector< std::vector<cv::Point> >* v);
+
+CVAPI(void) VectorOfVectorOfPointClear(std::vector< std::vector<cv::Point> >* v);
+
+CVAPI(void) VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >* v);
+
+CVAPI(std::vector<cv::Point>*) VectorOfVectorOfPointGetItem(std::vector< std::vector<cv::Point> >* points, int index);
 #endif

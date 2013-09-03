@@ -19,12 +19,20 @@ namespace Emgu.CV.Util
    /// </summary>
    public class Mat : UnmanagedObject
    {
+      private bool _needDispose;
+
+      internal Mat(IntPtr ptr, bool needDispose)
+      {
+         _ptr = ptr;
+         _needDispose = needDispose;
+      }
+
       /// <summary>
       /// Create an empty cv::Mat
       /// </summary>
       public Mat()
+         : this(CvInvoke.cvMatCreate(), true)
       {
-         _ptr = CvInvoke.cvMatCreate();
       }
 
       /// <summary>
@@ -58,12 +66,23 @@ namespace Emgu.CV.Util
          CvInvoke.cvMatCopyToCvArr(_ptr, cvArray);
       }
 
+
+      /// <summary>
+      /// Make this to represent the cvArray without data copy
+      /// </summary>
+      /// <param name="cvArray">The cvArray to make header from</param>
+      public void From(IntPtr cvArray)
+      {
+         CvInvoke.cvMatFromCvArr(_ptr, cvArray);
+      }
+
       /// <summary>
       /// Release all the unmanaged memory associated with this object.
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvMatRelease(ref _ptr);
+         if (_needDispose)
+            CvInvoke.cvMatRelease(ref _ptr);
       }
    }
 }
@@ -81,6 +100,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvMatCopyToCvArr(IntPtr mat, IntPtr cvArray);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvMatFromCvArr(IntPtr mat, IntPtr cvArray);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetElementSize(IntPtr mat);
