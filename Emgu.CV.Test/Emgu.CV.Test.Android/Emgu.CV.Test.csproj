@@ -217,4 +217,12 @@
       <Link>Assets\license-plate.jpg</Link>
     </AndroidAsset>
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\opencv\samples\cpp\logo.png">
+      <Link>Assets\logo.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\opencv\samples\cpp\logo_in_clutter.png">
+      <Link>Assets\logo_in_clutter.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
 </Project>

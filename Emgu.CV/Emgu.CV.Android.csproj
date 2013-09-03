@@ -81,7 +81,7 @@
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
-    <Compile Include="Mat.cs" />
+    <Compile Include="LevMarqSparse.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -134,6 +134,7 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
+    <Compile Include="Util\Mat.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
@@ -141,6 +142,9 @@
     <Compile Include="Util\VectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
+    <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
