@@ -213,10 +213,7 @@ namespace Emgu.CV.GPU
          if (NumberOfChannels == 1)
          {
             //If single channel, return a copy
-            if (stream == null)
-               GpuInvoke.Copy(_ptr, gpuMats[0], IntPtr.Zero);
-            else
-               stream.Copy<TDepth>(this, gpuMats[0]);
+            GpuInvoke.Copy(_ptr, gpuMats[0], IntPtr.Zero, stream);
          }
          else
          {
@@ -248,10 +245,7 @@ namespace Emgu.CV.GPU
          //If single channel, perform a copy
          if (NumberOfChannels == 1)
          {
-            if (stream == null)
-               GpuInvoke.Copy(gpuMats[0].Ptr, _ptr, IntPtr.Zero);
-            else
-               stream.Copy<TDepth>(gpuMats[0], this);
+            GpuInvoke.Copy(gpuMats[0].Ptr, _ptr, IntPtr.Zero, stream);
          }
 
          //handle multiple channels

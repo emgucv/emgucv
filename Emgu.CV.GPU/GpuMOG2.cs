@@ -35,10 +35,9 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Create a Gaussian Mixture-based Background/Foreground Segmentation model
       /// </summary>
-      /// <param name="nMixtures">Number of Gaussian mixtures, use -1 for default value</param>
-      public GpuMOG2(int nMixtures)
+      public GpuMOG2(int history, double varThreshold, bool detectShadows)
       {
-         _ptr = GpuInvoke.gpuMog2Create(nMixtures);
+         _ptr = GpuInvoke.gpuMog2Create(history, varThreshold,detectShadows);
       }
 
       /// <summary>
@@ -80,7 +79,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr gpuMog2Create(int nMixtures);
+      internal static extern IntPtr gpuMog2Create(int history, double varThreshold, bool detectShadows);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMog2Compute(IntPtr mog, IntPtr frame, float learningRate, IntPtr fgMask, IntPtr stream);

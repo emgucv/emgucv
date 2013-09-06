@@ -46,6 +46,50 @@ namespace Emgu.CV
       /// </summary>
       public const string OPENCV_GPU_LIBRARY = "${OPENCV_GPU_OUTPUT_NAME}";
 	  /// <summary>
+      /// The file name of the cudev library
+      /// </summary>
+      public const string OPENCV_CUDEV_LIBRARY = "${OPENCV_CUDEV_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpuarithm library
+      /// </summary>
+      public const string OPENCV_GPUARITHM_LIBRARY = "${OPENCV_GPUARITHM_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpubgsegm library
+      /// </summary>
+      public const string OPENCV_GPUBGSEGM_LIBRARY = "${OPENCV_GPUBGSEGM_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpucodec library
+      /// </summary>
+      public const string OPENCV_GPUCODEC_LIBRARY = "${OPENCV_GPUCODEC_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpufeatures2d library
+      /// </summary>
+      public const string OPENCV_GPUFEATURES2D_LIBRARY = "${OPENCV_GPUFEATURES2D_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpufilters library
+      /// </summary>
+      public const string OPENCV_GPUFILTERS_LIBRARY = "${OPENCV_GPUFILTERS_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpuimageproc library
+      /// </summary>
+      public const string OPENCV_GPUIMAGEPROC_LIBRARY = "${OPENCV_GPUIMAGEPROC_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpulegacy library
+      /// </summary>
+      public const string OPENCV_GPULEGACY_LIBRARY = "${OPENCV_GPULEGACY_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpuoptflow library
+      /// </summary>
+      public const string OPENCV_GPUOPTFLOW_LIBRARY = "${OPENCV_GPUOPTFLOW_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpustereo library
+      /// </summary>
+      public const string OPENCV_GPUSTEREO_LIBRARY = "${OPENCV_GPUSTEREO_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the gpuwarping library
+      /// </summary>
+      public const string OPENCV_GPUWARPING_LIBRARY = "${OPENCV_GPUWARPING_OUTPUT_NAME}";
+	  /// <summary>
       /// The file name of the opencv_stitching library
       /// </summary>
       public const string OPENCV_STITCHING_LIBRARY = "${OPENCV_STITCHING_OUTPUT_NAME}";
@@ -93,5 +137,9 @@ namespace Emgu.CV
       /// The file name of the softcascade library
       /// </summary>
       public const string OPENCV_SOFTCASCADE_LIBRARY = "${OPENCV_SOFTCASCADE_OUTPUT_NAME}";
+	  /// <summary>
+      /// The file name of the bioinspired library
+      /// </summary>
+      public const string OPENCV_BIOINSPIRED_LIBRARY = "${OPENCV_BIOINSPIRED_OUTPUT_NAME}";
    }
 }

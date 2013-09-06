@@ -29,47 +29,6 @@ CvAdaptiveSkinDetector* CvAdaptiveSkinDetectorCreate(int samplingDivider, int mo
 void CvAdaptiveSkinDetectorRelease(CvAdaptiveSkinDetector* detector) { delete detector; }
 void CvAdaptiveSkinDetectorProcess(CvAdaptiveSkinDetector* detector, IplImage *inputBGRImage, IplImage *outputHueMask) { detector->process(inputBGRImage, outputHueMask); }
 
-//Retina
-cv::Retina* CvRetinaCreate(CvSize inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
-{
-   cv::Ptr<cv::Retina> ptr = cv::createRetina(inputSize, colorMode, (cv::RETINA_COLORSAMPLINGMETHOD)colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
-   ptr.addref();
-   return ptr.obj;
-}
-void CvRetinaRelease(cv::Retina** retina)
-{
-   delete *retina;
-   *retina = 0;
-}
-void CvRetinaRun(cv::Retina* retina, IplImage* image)
-{
-   cv::Mat m = cv::cvarrToMat(image);
-   retina->run(m);
-}
-void CvRetinaGetParvo(cv::Retina* retina, IplImage* parvo)
-{
-   cv::Mat m = cv::cvarrToMat(parvo);
-   retina->getParvo(m);
-}
-void CvRetinaGetMagno(cv::Retina* retina, IplImage* magno)
-{
-   cv::Mat m = cv::cvarrToMat(magno);
-   retina->getMagno(m);
-}
-void CvRetinaClearBuffers(cv::Retina* retina)
-{
-   retina->clearBuffers();
-}
-void CvRetinaGetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
-{
-   cv::Retina::RetinaParameters result = retina->getParameters();
-   memcpy(p, &result, sizeof(cv::Retina::RetinaParameters));
-}
-void CvRetinaSetParameters(cv::Retina* retina, cv::Retina::RetinaParameters* p)
-{
-   retina->setup(*p);
-}
-
 //FaceRecognizer
 cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double threshold)
 {

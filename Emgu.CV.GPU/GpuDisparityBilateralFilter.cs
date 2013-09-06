@@ -24,12 +24,13 @@ namespace Emgu.CV.GPU
       /// <param name="ndisp">Number of disparities. Use 64 as default</param>
       /// <param name="radius">Filter radius, use 3 as default</param>
       /// <param name="iters">Number of iterations, use 1 as default</param>
+      /*
       /// <param name="edgeThreshold">Truncation of data continuity, use 0.1 as default</param>
       /// <param name="maxDiscThreshold">Truncation of disparity continuity, use 0.2 as default</param>
-      /// <param name="sigmaRange">Filter range sigma, use 10.0 as default</param>
-      public GpuDisparityBilateralFilter(int ndisp, int radius, int iters, float edgeThreshold, float maxDiscThreshold, float sigmaRange)
+      /// <param name="sigmaRange">Filter range sigma, use 10.0 as default</param>*/
+      public GpuDisparityBilateralFilter(int ndisp, int radius, int iters)
       {
-         _ptr = GpuInvoke.GpuDisparityBilateralFilterCreate(ndisp, radius, iters, edgeThreshold, maxDiscThreshold, sigmaRange);
+         _ptr = GpuInvoke.GpuDisparityBilateralFilterCreate(ndisp, radius, iters);
       }
 
       /// <summary>
@@ -56,7 +57,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters, float edgeThreshold, float maxDiscThreshold, float sigmaRange);
+      internal extern static IntPtr GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void GpuDisparityBilateralFilterApply(IntPtr filter, IntPtr disparity, IntPtr image, IntPtr dst, IntPtr stream);

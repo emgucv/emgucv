@@ -14,6 +14,7 @@ namespace Emgu.CV.GPU
    /// </summary>
    public class GpuStereoBM : UnmanagedObject
    {
+      /*
       /// <summary>
       /// Preset type
       /// </summary>
@@ -27,17 +28,16 @@ namespace Emgu.CV.GPU
          /// prefilter xsobel
          /// </summary>
          PrefilterXSobel = 1
-      };
+      };*/
 
       /// <summary>
       /// Create a stereoBM 
       /// </summary>
-      /// <param name="preset">Preset type</param>
       /// <param name="numberOfDisparities">The number of disparities. Must be multiple of 8. Use 64 for default </param>
-      /// <param name="winSize">The SAD window size. Use 19 for default</param>
-      public GpuStereoBM(PresetType preset, int numberOfDisparities, int winSize)
+      /// <param name="blockSize">The SAD window size. Use 19 for default</param>
+      public GpuStereoBM(int numberOfDisparities, int blockSize)
       {
-         _ptr = GpuInvoke.GpuStereoBMCreate(preset, numberOfDisparities, winSize);
+         _ptr = GpuInvoke.GpuStereoBMCreate(numberOfDisparities, blockSize);
       }
 
       /// <summary>
@@ -64,7 +64,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr GpuStereoBMCreate(GpuStereoBM.PresetType preset, int ndisparities, int winSize);
+      internal static extern IntPtr GpuStereoBMCreate(int ndisparities, int blockSize);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void GpuStereoBMFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);

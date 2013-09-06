@@ -269,8 +269,9 @@ namespace Emgu.CV.GPU
       /// <param name="src">The GpuMat to be copied from</param>
       /// <param name="dst">The GpuMat to be copied to</param>
       /// <param name="mask">The optional mask, use IntPtr.Zero if not needed.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCopy")]
-      public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask);
+      public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Returns header, corresponding to a specified rectangle of the input GpuMat. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
@@ -646,7 +647,7 @@ namespace Emgu.CV.GPU
          ref double minVal, ref double maxVal,
          ref Point minLoc, ref Point maxLoc,
          IntPtr mask);
-
+      /*
       /// <summary>
       /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
       /// </summary>
@@ -658,7 +659,7 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatMatchTemplate")]
       public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr gpuMatchTemplateBuf, IntPtr stream);
-
+      */
       /// <summary>
       /// Performs downsampling step of Gaussian pyramid decomposition. 
       /// </summary>
@@ -942,17 +943,6 @@ namespace Emgu.CV.GPU
       public static extern double Threshold(IntPtr src, IntPtr dst, double threshold, double maxValue, CvEnum.THRESH thresholdType, IntPtr stream);
 
       #region filters
-      /// <summary>
-      /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The destination GpuMmage</param>
-      /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the gpu image into separate color planes and process them individually</param>
-      /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      /// <param name="borderType">Border type. Use REFLECT101 as default.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatFilter2D")]
-      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType, IntPtr stream);
 
       /// <summary>
       /// Applies generalized Sobel operator to the image
@@ -1222,25 +1212,6 @@ namespace Emgu.CV.GPU
          HistEven(src, hist, buffer, histSize, lowerLevel, upperLevel, stream);
          return hist;
       }
-
-      /// <summary>
-      /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
-      /// </summary>
-      /// <param name="image">Input image</param>
-      /// <param name="edges">Image to store the edges found by the function</param>
-      /// <param name="lowThreshold">The first threshold</param>
-      /// <param name="highThreshold">The second threshold</param>
-      /// <param name="apertureSize">Aperture parameter for Sobel operator, use 3 for default</param>
-      /// <param name="L2gradient">Use false for default</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCanny")]
-      public static extern void Canny(
-         IntPtr image,
-         IntPtr edges,
-         double lowThreshold,
-         double highThreshold,
-         int apertureSize,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool L2gradient);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuCreateOpticalFlowNeedleMap")]
       private static extern void CreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);

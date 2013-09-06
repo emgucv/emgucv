@@ -585,7 +585,7 @@ namespace Emgu.CV.Test
          GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(img);
          GpuImage<Bgr, Byte> gpuRandomObj = new GpuImage<Bgr, byte>(randomObj);
          GpuImage<Gray, Single> gpuMatch = new GpuImage<Gray, float>(match.Size);
-         using (GpuMatchTemplateBuf buffer = new GpuMatchTemplateBuf())
+         using (GpuTemplateMatching buffer = new GpuTemplateMatching())
          using (Stream stream = new Stream())
          {
             GpuInvoke.MatchTemplate(gpuImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer, stream);

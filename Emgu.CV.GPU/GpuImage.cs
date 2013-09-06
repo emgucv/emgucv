@@ -143,7 +143,7 @@ namespace Emgu.CV.GPU
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
             {
-               GpuInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero);
+               GpuInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero, IntPtr.Zero);
             } else //different depth
             {
                if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
@@ -222,11 +222,12 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Create a clone of this GpuImage
       /// </summary>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       /// <returns>A clone of this GpuImage</returns>
-      public GpuImage<TColor, TDepth> Clone()
+      public GpuImage<TColor, TDepth> Clone(Stream stream)
       {
          GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(Size);
-         GpuInvoke.Copy(_ptr, result, IntPtr.Zero);
+         GpuInvoke.Copy(_ptr, result, IntPtr.Zero, stream);
          return result;
       }
 
@@ -396,7 +397,7 @@ namespace Emgu.CV.GPU
 
       object ICloneable.Clone()
       {
-         return Clone();
+         return Clone(null);
       }
 
       #endregion

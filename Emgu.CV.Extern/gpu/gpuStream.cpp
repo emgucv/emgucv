@@ -27,8 +27,9 @@ bool streamQueryIfComplete(cv::gpu::Stream* stream)
    return stream->queryIfComplete(); 
 }
 
+/*
 void streamEnqueueCopy(cv::gpu::Stream* stream, cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst) 
 { 
    return stream->enqueueCopy(*src, *dst); 
-}
+}*/
 

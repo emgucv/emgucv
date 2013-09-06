@@ -43,6 +43,7 @@ namespace Emgu.CV.GPU
          get { return GpuInvoke.streamQueryIfComplete(_ptr); }
       }
 
+      /*
       /// <summary>
       /// Copy the src GpuMat to dst GpuMat asyncronously
       /// </summary>
@@ -52,7 +53,7 @@ namespace Emgu.CV.GPU
       public void Copy<TDepth>(GpuMat<TDepth> src, GpuMat<TDepth> dst) where TDepth : new()
       {
          GpuInvoke.streamEnqueueCopy(_ptr, src, dst);
-      }
+      }*/
 
       /// <summary>
       /// Release the stream
@@ -77,8 +78,9 @@ namespace Emgu.CV.GPU
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool streamQueryIfComplete(IntPtr stream);
-
+      /*
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void streamEnqueueCopy(IntPtr stream, IntPtr src, IntPtr dst);
+       */
    }
 }

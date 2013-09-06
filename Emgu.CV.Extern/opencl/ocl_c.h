@@ -232,9 +232,9 @@ CVAPI(void) oclMatchTemplateBufRelease(cv::ocl::MatchTemplateBuf** buffer);
 //  GpuCascadeClassifier
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::ocl::OclCascadeClassifierBuf*) oclCascadeClassifierCreate(const char* filename);
+CVAPI(cv::ocl::OclCascadeClassifier*) oclCascadeClassifierCreate(const char* filename);
 
-CVAPI(void) oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifierBuf** classifier);
+CVAPI(void) oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifier** classifier);
 
 //----------------------------------------------------------------------------
 //

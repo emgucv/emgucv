@@ -19,9 +19,9 @@ namespace Emgu.CV.GPU
       /// <summary>
       /// Create the Gpu implementation of GoodFeaturesToTrackDetector
       /// </summary>
-      public GpuGoodFeaturesToTrackDetector(int maxCorners, double qualityLevel, double minDistance)
+      public GpuGoodFeaturesToTrackDetector(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK)
       {
-         _ptr = GpuInvoke.gpuGoodFeaturesToTrackDetectorCreate(maxCorners, qualityLevel, minDistance);
+         _ptr = GpuInvoke.gpuGoodFeaturesToTrackDetectorCreate(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
       }
 
       /// <summary>
@@ -30,7 +30,7 @@ namespace Emgu.CV.GPU
       public GpuMat<float> Detect(GpuImage<Gray, byte> image, GpuImage<Gray, byte> mask)
       {
          GpuMat<float> corners = new GPU.GpuMat<float>();
-         GpuInvoke.gpuGoodFeaturesToTrackDetectorDetect(_ptr, image, corners, mask);
+         GpuInvoke.gpuCornersDetectorDetect(_ptr, image, corners, mask);
          return corners;
       }
 
@@ -39,19 +39,22 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuGoodFeaturesToTrackDetectorRelease(ref _ptr);
+         GpuInvoke.gpuCornersDetectorRelease(ref _ptr);
       }
    }
 
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuGoodFeaturesToTrackDetectorCreate(int maxCorners, double qualityLevel, double minDistance);
+      internal extern static IntPtr gpuGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useHarrisDetector, 
+         double harrisK );
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuGoodFeaturesToTrackDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask);
+      internal extern static void gpuCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void gpuGoodFeaturesToTrackDetectorRelease(ref IntPtr detector);
+      internal extern static void gpuCornersDetectorRelease(ref IntPtr detector);
    }
 }

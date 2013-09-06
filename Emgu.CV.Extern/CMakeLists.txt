@@ -21,15 +21,27 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/bioinspired/include")
 #INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
 
 #gpu related
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpu/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuarithm/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpubgsegm/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpucodec/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpufeatures2d/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpufilters/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuimgproc/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpulegacy/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuoptflow/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpustereo/include")
+INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuwarping/include")
 #INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/stitching/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videostab/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 #end gpu realted
 
 IF(WIN32 AND CV_ICC)
@@ -417,7 +429,7 @@ ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
-  opencv_stitching opencv_videostab
+  opencv_stitching opencv_videostab opencv_bioinspired
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
@@ -426,6 +438,56 @@ IF(TARGET opencv_gpu)
   ADD_DEPENDENCIES(${the_target} opencv_gpu)
   target_link_libraries(${the_target} opencv_gpu)
 ENDIF()  
+
+IF(TARGET opencv_cudev)
+  ADD_DEPENDENCIES(${the_target} opencv_cudev)
+  target_link_libraries(${the_target} opencv_cudev)
+ENDIF()
+
+IF(TARGET opencv_gpuarithm)
+  ADD_DEPENDENCIES(${the_target} opencv_gpuarithm)
+  target_link_libraries(${the_target} opencv_gpuarithm)
+ENDIF()  
+
+IF(TARGET opencv_gpubgsegm)
+  ADD_DEPENDENCIES(${the_target} opencv_gpubgsegm)
+  target_link_libraries(${the_target} opencv_gpubgsegm)
+ENDIF()      
+
+IF(TARGET opencv_gpucodec)
+  ADD_DEPENDENCIES(${the_target} opencv_gpucodec)
+  target_link_libraries(${the_target} opencv_gpucodec)
+ENDIF()    
+
+IF(TARGET opencv_gpufeatures2d)
+  ADD_DEPENDENCIES(${the_target} opencv_gpufeatures2d)
+  target_link_libraries(${the_target} opencv_gpufeatures2d)
+ENDIF()    
+
+IF(TARGET opencv_gpufilters)
+  ADD_DEPENDENCIES(${the_target} opencv_gpufilters)
+  target_link_libraries(${the_target} opencv_gpufilters)
+ENDIF()    
+
+IF(TARGET opencv_gpuimgproc)
+  ADD_DEPENDENCIES(${the_target} opencv_gpuimgproc)
+  target_link_libraries(${the_target} opencv_gpuimgproc)
+ENDIF()    
+
+IF(TARGET opencv_gpuoptflow)
+  ADD_DEPENDENCIES(${the_target} opencv_gpuoptflow)
+  target_link_libraries(${the_target} opencv_gpuoptflow)
+ENDIF()    
+
+IF(TARGET opencv_gpustereo)
+  ADD_DEPENDENCIES(${the_target} opencv_gpustereo)
+  target_link_libraries(${the_target} opencv_gpustereo)
+ENDIF()    
+
+IF(TARGET opencv_gpuwarping)
+  ADD_DEPENDENCIES(${the_target} opencv_gpuwarping)
+  target_link_libraries(${the_target} opencv_gpuwarping)
+ENDIF()    
   
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -446,7 +508,7 @@ ENDIF()
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
-  opencv_stitching opencv_videostab
+  opencv_stitching opencv_videostab opencv_bioinspired
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})

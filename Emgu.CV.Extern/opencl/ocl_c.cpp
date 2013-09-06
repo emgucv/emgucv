@@ -642,14 +642,14 @@ void oclMatchTemplateBufRelease(cv::ocl::MatchTemplateBuf** buffer)
 //  oclCascadeClassifier
 //
 //----------------------------------------------------------------------------
-cv::ocl::OclCascadeClassifierBuf* oclCascadeClassifierCreate(const char* filename)
+cv::ocl::OclCascadeClassifier* oclCascadeClassifierCreate(const char* filename)
 {
-   cv::ocl::OclCascadeClassifierBuf* classifier =  new cv::ocl::OclCascadeClassifierBuf();
+   cv::ocl::OclCascadeClassifier* classifier =  new cv::ocl::OclCascadeClassifier();
    classifier->load(filename);
    return classifier;
 }
 
-void oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifierBuf** classifier)
+void oclCascadeClassifierRelease(cv::ocl::OclCascadeClassifier** classifier)
 {
    delete *classifier;
    *classifier = 0;
