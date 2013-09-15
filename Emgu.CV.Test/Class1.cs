@@ -284,6 +284,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
+      /*
       public void TestGpuMOG()
       {
          int warmUpFrames = 20;
@@ -327,7 +328,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
-      }
+      }*/
 
       public void CameraTest()
       {
@@ -974,7 +975,7 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
       }
 
-      
+     
       public void TestPyrLKGPU()
       {
          if (!GpuInvoke.HasCuda)
@@ -985,7 +986,7 @@ namespace Emgu.CV.Test
          ImageViewer viewer = new ImageViewer();
          GpuImage<Gray, Byte> oldImage = null;
          GpuImage<Gray, Byte> currentImage = null;
-         using (GpuGoodFeaturesToTrackDetector detector = new GpuGoodFeaturesToTrackDetector(MAX_CORNERS, 0.05, 3.0))
+         using (GpuGoodFeaturesToTrackDetector<Gray, Byte> detector = new GpuGoodFeaturesToTrackDetector<Gray, Byte>(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
          using (GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
          {
             Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
@@ -1014,7 +1015,7 @@ namespace Emgu.CV.Test
                      out shiftedFeatures, out status, out trackErrors);
                   */
 
-                  GpuImage<Gray, Byte> displayImage = currentImage.Clone();
+                  GpuImage<Gray, Byte> displayImage = currentImage.Clone(null);
                   /*
                   for (int i = 0; i < features.Length; i++)
                      displayImage.Draw(new LineSegment2DF(features[i], shiftedFeatures[i]), new Gray(), 2);
@@ -1132,7 +1133,7 @@ namespace Emgu.CV.Test
          using (Capture cl = new Capture(0))
          using (Capture cr = new Capture(1))
          //using (GpuStereoConstantSpaceBP stereo = new GpuStereoConstantSpaceBP(128, 8, 4, 4))
-         using (GpuStereoBM stereo = new GpuStereoBM(GpuStereoBM.PresetType.BasicPreset, 64, 19))
+         using (GpuStereoBM stereo = new GpuStereoBM(64, 19))
          using (GpuImage<Bgr, byte> leftGpu = new GpuImage<Bgr, byte>(new Size(cl.Width, cl.Height)))
          using (GpuImage<Bgr, byte> rightGpu = new GpuImage<Bgr, byte>(new Size(cr.Width, cr.Height)))
          using (GpuImage<Gray, byte> gpuDisparity = new GpuImage<Gray, byte>(leftGpu.Size))

@@ -33,7 +33,7 @@ namespace Emgu.CV.GPU
       /// <param name="ptr">Pointer to the unmanaged gpuMat</param>
       public GpuMat(IntPtr ptr)
       {
-         _ptr = GpuInvoke.GpuMatCreateDefault();
+         _ptr = ptr;
       }
 
       /// <summary>
@@ -81,6 +81,14 @@ namespace Emgu.CV.GPU
       public int NumberOfChannels
       {
          get { return GpuInvoke.GpuMatGetChannels(_ptr); }
+      }
+
+      /// <summary>
+      /// Get the type of the GpuMat
+      /// </summary>
+      public int Type
+      {
+         get { return GpuInvoke.GpuMatGetType(_ptr); }
       }
    }
 

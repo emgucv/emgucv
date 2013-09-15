@@ -175,9 +175,13 @@ cv::gpu::GpuMat* gpuMatCreateFromArr(CvArr* arr)
    return new cv::gpu::GpuMat(mat);
 }
 
-CvSize gpuMatGetSize(cv::gpu::GpuMat* gpuMat)
+emgu::size gpuMatGetSize(cv::gpu::GpuMat* gpuMat)
 {
-   return gpuMat->size();
+   cv::Size s = gpuMat->size();
+   emgu::size result;
+   result.width = s.width;
+   result.height = s.height;
+   return result;
 }
 
 bool gpuMatIsEmpty(cv::gpu::GpuMat* gpuMat)
@@ -188,6 +192,11 @@ bool gpuMatIsEmpty(cv::gpu::GpuMat* gpuMat)
 int gpuMatGetChannels(cv::gpu::GpuMat* gpuMat)
 {
    return gpuMat->channels();
+}
+
+int gpuMatGetType(cv::gpu::GpuMat* gpuMat)
+{
+   return gpuMat->type();
 }
 
 void gpuMatUpload(cv::gpu::GpuMat* gpuMat, CvArr* arr)
@@ -566,7 +575,7 @@ cv::gpu::Filter* gpuCreateSobelFilter(int srcType, int dstType,  int dx, int dy,
    return ptr.obj;
 }
 
-cv::gpu::Filter* gpuCreateGaussianFilter(int srcType, int dstType, emgu::size* ksize, cv::gpu::GpuMat* buffer, double sigma1, double sigma2, int rowBorderType, int columnBorderType)
+cv::gpu::Filter* gpuCreateGaussianFilter(int srcType, int dstType, emgu::size* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::gpu::Filter> ptr = cv::gpu::createGaussianFilter(srcType, dstType, s, sigma1, sigma2, rowBorderType, columnBorderType); 
@@ -589,18 +598,16 @@ cv::gpu::Filter* gpuCreateLinearFilter(int srcType, int dstType, const CvArr* ke
    return ptr.obj;
 }
 
-cv::gpu::Filter* gpuCreateBoxMaxFilter( int srcType, emgu::size* ksize, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+cv::gpu::Filter* gpuCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
-   cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::gpu::Filter> ptr = cv::gpu::createBoxMaxFilter(srcType, s, *anchor, borderMode, *borderValue);
    ptr.addref();
    return ptr.obj;
 }
 
-cv::gpu::Filter* gpuCreateBoxMinFilter( int srcType, emgu::size* ksize, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+cv::gpu::Filter* gpuCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
-   cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::gpu::Filter> ptr = cv::gpu::createBoxMinFilter(srcType, s, *anchor, borderMode, *borderValue);
    ptr.addref();
@@ -622,13 +629,13 @@ void gpuMatGemm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2, double
    cv::gpu::gemm(*src1, *src2, alpha, src3Mat, beta, *dst, flags, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, int borderMode, cv::Scalar borderValue, cv::gpu::Stream* stream)
+void gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
    cv::gpu::warpAffine(*src, *dst, Mat, dst->size(), flags, borderMode, borderValue, stream ? *stream : cv::gpu::Stream::Null());
 }
 
-void gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags,  int borderMode, cv::Scalar borderValue, cv::gpu::Stream* stream)
+void gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags,  int borderMode, CvScalar borderValue, cv::gpu::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
    cv::gpu::warpPerspective(*src, *dst, Mat, dst->size(), flags, borderMode, borderValue, stream ? *stream : cv::gpu::Stream::Null());

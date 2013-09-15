@@ -306,6 +306,27 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img1.Equals(img2));
       }
 
+      public static byte[] GetBytesFromFile(string fullFilePath)
+      {
+         using (FileStream fs = File.OpenRead(fullFilePath))
+         {
+            byte[] bytes = new byte[fs.Length];
+            fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
+            return bytes;
+         }
+      }
+
+      [Test]
+      public void TestFromJpegData()
+      {
+         Byte[] data = GetBytesFromFile(EmguAssert.GetFile("lena.jpg"));
+         Image<Bgr, Byte> imgJpg = Image<Bgr, Byte>.FromRawImageData(data);
+         //Emgu.CV.UI.ImageViewer.Show(imgJpg);
+         data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
+         Image<Bgr, Byte> imgPng = Image<Bgr, Byte>.FromRawImageData(data);
+         //Emgu.CV.UI.ImageViewer.Show(imgPng);
+      }
+
       [Test]
       public void TestRuntimeSerialize()
       {

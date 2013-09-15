@@ -4577,16 +4577,16 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Decode the image from the jpeg data
+      /// Decode the image from opencv supported image data. 
       /// </summary>
-      /// <param name="jpegData">The byte array that repesent the image in jpeg format</param>
-      /// <returns>The image from the jpeg decoding</returns>
-      public static Image<TColor, TDepth> FromJpegData(byte[] jpegData)
+      /// <param name="rawData">The byte array that repesent the image in opencv supported format. e.g. this can be a stream of the jpeg file</param>
+      /// <returns>The image from decoding the rawData</returns>
+      public static Image<TColor, TDepth> FromRawImageData(byte[] rawData)
       {
          if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(byte))
          {
             Image<TColor, TDepth> result = new Image<TColor, TDepth>();
-            result._ptr = CvInvoke.cvDecodeImage(jpegData, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+            result._ptr = CvInvoke.cvDecodeImage(rawData, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
             if (result._ptr == IntPtr.Zero)
                throw new Exception("Unable to decode image data.");
             result._imageDataReleaseMode = ImageDataReleaseMode.ReleaseIplImage;
@@ -4594,7 +4594,7 @@ namespace Emgu.CV
          }
          else
          {
-            using (Image<Bgr, Byte> tmp = Image<Bgr, Byte>.FromJpegData(jpegData))
+            using (Image<Bgr, Byte> tmp = Image<Bgr, Byte>.FromRawImageData(rawData))
             {
                return tmp.Convert<TColor, TDepth>();
             }

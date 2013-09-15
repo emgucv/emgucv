@@ -10,39 +10,8 @@ INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/legacy/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/bioinspired/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
-
-#gpu related
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpu/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuarithm/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpubgsegm/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpucodec/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpufeatures2d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpufilters/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuimgproc/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpulegacy/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuoptflow/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpustereo/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/gpuwarping/include")
-#INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../opencv/include/opencv")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/stitching/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videostab/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
-#end gpu realted
 
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
@@ -221,6 +190,27 @@ IF(WIN32 AND WITH_CUDA)
     SET(CUDA_POSTFIX 32)
   ENDIF()
 
+  IF ((${npp_major} GREATER 5) OR ((${npp_major} STREQUAL "5") AND (${npp_minor} GREATER 0)))
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
+    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+    "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+    )
+  #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
+  #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+  #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+
+  IF(WITH_CUFFT)
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
+  ENDIF()
+
+  IF(WITH_CUBLAS)
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
+  ENDIF()  
+  ELSE()  
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
     "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
     "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
@@ -238,7 +228,7 @@ IF(WIN32 AND WITH_CUDA)
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
   ENDIF()
-
+  ENDIF()
 ENDIF()
 
 IF(ANDROID OR IOS)
@@ -259,12 +249,12 @@ IF(WITH_OPENCL)
   source_group("Src_ocl" FILES ${ocl_extern_srcs})
   source_group("Include_ocl" FILES ${ocl_extern_hdrs})
 
-  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ocl/include")
-
   IF(WIN32)
     IF(TARGET_ARCH_64) 
+      MESSAGE("Including OpenCL dll: C:/Windows/System32/OpenCL.dll")
       LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "C:/Windows/System32/OpenCL.dll")
     else()
+      MESSAGE("Including OpenCL dll: C:/Windows/SysWOW64/OpenCL.dll")
       LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "C:/Windows/SysWOW64/OpenCL.dll")
     ENDIF()
   ENDIF()
@@ -294,7 +284,6 @@ IF(BUILD_opencv_nonfree)
   source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
   source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 
-  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/nonfree/include")
 ENDIF()
 ############################### nonfree END ################################
 
@@ -341,20 +330,6 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
     ${CVEXTERN_DEPENDENCY_DLL_DEPLOY_COMMAND}
     COMMENT "Copying ${CVEXTERN_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 ENDIF()
-
-#IF(WITH_CUDA AND DEFINED CVEXTERN_GPU_DEPENDENCY_DLLS)
-#  FOREACH(CVEXTERN_GPU_DEPENDENCY_DLL ${CVEXTERN_GPU_DEPENDENCY_DLLS})
-#    LIST(APPEND CVEXTERN_GPU_DEPENDENCY_DLL_DEPLOY_COMMAND COMMAND ${CMAKE_COMMAND} -E copy "${CVEXTERN_GPU_DEPENDENCY_DLL}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-#  ENDFOREACH()
-  #Promote this to parent scope such that cpack will know what dlls to be included in the package
-#  SET(CVEXTERN_GPU_DEPENDENCY_DLL_NAMES ${CVEXTERN_GPU_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
-
-#  ADD_CUSTOM_COMMAND(
-#    TARGET ${the_target}
-#    POST_BUILD
-#    ${CVEXTERN_GPU_DEPENDENCY_DLL_DEPLOY_COMMAND}
-#    COMMENT "Copying ${CVEXTERN_GPU_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-#ENDIF()
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
@@ -428,67 +403,24 @@ IF(EMGU_CV_WITH_TIFF)
 ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
-  opencv_stitching opencv_videostab opencv_bioinspired
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
 
-IF(TARGET opencv_gpu)
-  ADD_DEPENDENCIES(${the_target} opencv_gpu)
-  target_link_libraries(${the_target} opencv_gpu)
-ENDIF()  
+#SET(CVEXTERN_OPTIONAL_DEPS
+#  core calib3d contrib features2d highgui imgproc legacy ml objdetect stitching videostab bioinspired photo optim superres 
+#  ocl
+#  nonfree
+#  gpu cudev gpuarithm gpubgsegm gpucodec 
+#  gpufeatures2d gpufilters gpuimgproc gpuoptflow 
+#  gpustereo gpuwarping)
 
-IF(TARGET opencv_cudev)
-  ADD_DEPENDENCIES(${the_target} opencv_cudev)
-  target_link_libraries(${the_target} opencv_cudev)
-ENDIF()
+FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
+  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+  ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+  target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+ENDFOREACH()
 
-IF(TARGET opencv_gpuarithm)
-  ADD_DEPENDENCIES(${the_target} opencv_gpuarithm)
-  target_link_libraries(${the_target} opencv_gpuarithm)
-ENDIF()  
-
-IF(TARGET opencv_gpubgsegm)
-  ADD_DEPENDENCIES(${the_target} opencv_gpubgsegm)
-  target_link_libraries(${the_target} opencv_gpubgsegm)
-ENDIF()      
-
-IF(TARGET opencv_gpucodec)
-  ADD_DEPENDENCIES(${the_target} opencv_gpucodec)
-  target_link_libraries(${the_target} opencv_gpucodec)
-ENDIF()    
-
-IF(TARGET opencv_gpufeatures2d)
-  ADD_DEPENDENCIES(${the_target} opencv_gpufeatures2d)
-  target_link_libraries(${the_target} opencv_gpufeatures2d)
-ENDIF()    
-
-IF(TARGET opencv_gpufilters)
-  ADD_DEPENDENCIES(${the_target} opencv_gpufilters)
-  target_link_libraries(${the_target} opencv_gpufilters)
-ENDIF()    
-
-IF(TARGET opencv_gpuimgproc)
-  ADD_DEPENDENCIES(${the_target} opencv_gpuimgproc)
-  target_link_libraries(${the_target} opencv_gpuimgproc)
-ENDIF()    
-
-IF(TARGET opencv_gpuoptflow)
-  ADD_DEPENDENCIES(${the_target} opencv_gpuoptflow)
-  target_link_libraries(${the_target} opencv_gpuoptflow)
-ENDIF()    
-
-IF(TARGET opencv_gpustereo)
-  ADD_DEPENDENCIES(${the_target} opencv_gpustereo)
-  target_link_libraries(${the_target} opencv_gpustereo)
-ENDIF()    
-
-IF(TARGET opencv_gpuwarping)
-  ADD_DEPENDENCIES(${the_target} opencv_gpuwarping)
-  target_link_libraries(${the_target} opencv_gpuwarping)
-ENDIF()    
-  
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
   IF(MSVC AND (NOT CV_ICC) AND (NOT TARGET_ARCH_64)) 
@@ -507,8 +439,6 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect opencv_nonfree 
-  opencv_stitching opencv_videostab opencv_bioinspired
   ${ZLIB_LIBRARY} 
 #  xtiff 
   ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})

@@ -85,11 +85,13 @@ CVAPI(void) gpuMatRelease(cv::gpu::GpuMat** mat);
 
 CVAPI(cv::gpu::GpuMat*) gpuMatCreateFromArr(CvArr* arr);
 
-CVAPI(CvSize) gpuMatGetSize(cv::gpu::GpuMat* gpuMat);
+CVAPI(emgu::size) gpuMatGetSize(cv::gpu::GpuMat* gpuMat);
 
 CVAPI(bool) gpuMatIsEmpty(cv::gpu::GpuMat* gpuMat);
 
 CVAPI(int) gpuMatGetChannels(cv::gpu::GpuMat* gpuMat);
+
+CVAPI(int) gpuMatGetType(cv::gpu::GpuMat* gpuMat);
 
 CVAPI(void) gpuMatUpload(cv::gpu::GpuMat* gpuMat, CvArr* arr);
 
@@ -226,21 +228,21 @@ CVAPI(void) gpuMatGemm(const cv::gpu::GpuMat* src1, const cv::gpu::GpuMat* src2,
 
 CVAPI(cv::gpu::Filter*) gpuCreateSobelFilter(int srcType, int dstType,  int dx, int dy, int ksize, double scale, int rowBorderType, int columnBorderType);
 
-CVAPI(cv::gpu::Filter*) gpuCreateGaussianFilter(int srcType, int dstType, emgu::size* ksize, cv::gpu::GpuMat* buffer, double sigma1, double sigma2, int rowBorderType, int columnBorderType);
+CVAPI(cv::gpu::Filter*) gpuCreateGaussianFilter(int srcType, int dstType, emgu::size* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType);
 
 CVAPI(cv::gpu::Filter*) gpuCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, CvScalar* borderValue);
 
-CVAPI(cv::gpu::Filter*) gpuCreateLinearFilter(int srcType, int dstType, const CvArr* kernel, CvPoint anchor, int borderMode, CvScalar* borderValue);
+CVAPI(cv::gpu::Filter*) gpuCreateLinearFilter(int srcType, int dstType, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
-CVAPI(cv::gpu::Filter*) gpuCreateBoxMaxFilter( int srcType, emgu::size* ksize, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
+CVAPI(cv::gpu::Filter*) gpuCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
-CVAPI(cv::gpu::Filter*) gpuCreateBoxMinFilter( int srcType, emgu::size* ksize, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
+CVAPI(cv::gpu::Filter*) gpuCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
 CVAPI(cv::gpu::Filter*) gpuCreateMorphologyFilter( int op, int srcType, const CvArr* kernel, CvPoint* anchor, int iterations);
 
-CVAPI(void) gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* M, int flags, int borderMode, cv::Scalar borderValue, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatWarpAffine( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream);
 
-CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, int borderMode, cv::Scalar borderValue, cv::gpu::Stream* stream);
+CVAPI(void) gpuMatWarpPerspective( const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream);
 
 CVAPI(void) gpuMatRemap(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, const cv::gpu::GpuMat* xmap, const cv::gpu::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue, cv::gpu::Stream* stream);
 
@@ -404,7 +406,7 @@ CVAPI(void) gpuBroxOpticalFlowRelease(cv::gpu::BroxOpticalFlow** flow);
 //  GpuPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPyrLKOpticalFlowCreate(cv::Size winSize, int maxLevel, int iters, bool useInitialFlow);
+CVAPI(cv::gpu::PyrLKOpticalFlow*) gpuPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow);
 CVAPI(void) gpuPryLKOpticalFlowSparse(
    cv::gpu::PyrLKOpticalFlow* flow, 
    const cv::gpu::GpuMat* prevImg, 
@@ -446,7 +448,7 @@ CVAPI(void) gpuFarnebackOpticalFlowRelease(cv::gpu::FarnebackOpticalFlow** flow)
 //  GpuGoodFeaturesToTrackDetector
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::gpu::CornersDetector*) gpuGoodFeaturesToTrackDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK);
+CVAPI(cv::gpu::CornersDetector*) gpuGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK);
 CVAPI(void) gpuCornersDetectorDetect(cv::gpu::CornersDetector* detector, const cv::gpu::GpuMat* image, cv::gpu::GpuMat* corners, const cv::gpu::GpuMat* mask);
 CVAPI(void) gpuCornersDetectorRelease(cv::gpu::CornersDetector** detector);
 
@@ -496,7 +498,7 @@ CVAPI(void) gpuCreateOpticalFlowNeedleMap(const cv::gpu::GpuMat* u, const cv::gp
 
 //----------------------------------------------------------------------------
 //
-//  GpuMatchTemplateBuf
+//  GpuTemplateMatching
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::gpu::TemplateMatching*) gpuTemplateMatchingCreate(int srcType, int method, emgu::size* blockSize);

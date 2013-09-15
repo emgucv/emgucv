@@ -76,7 +76,7 @@ namespace Emgu.CV
             stream.Seek(0);
             byte[] data = new byte[stream.Size];
             await stream.AsStreamForRead().ReadAsync(data, 0, data.Length);
-            return Image<TColor, TDepth>.FromJpegData(data);
+            return Image<TColor, TDepth>.FromRawImageData(data);
          }
       }
    }

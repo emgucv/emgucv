@@ -215,6 +215,14 @@ namespace Emgu.CV.GPU
       public static extern int GpuMatGetChannels(IntPtr gpuMat);
 
       /// <summary>
+      /// Get the GpuMat type
+      /// </summary>
+      /// <param name="gpuMat">The GpuMat</param>
+      /// <returns>The GpuMat type</returns>
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetType")]
+      public static extern int GpuMatGetType(IntPtr gpuMat);
+
+      /// <summary>
       /// Pefroms blocking upload data to GpuMat.
       /// </summary>
       /// <param name="gpuMat">The destination gpuMat</param>
@@ -472,18 +480,6 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCompare")]
       public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop, IntPtr stream);
-
-      /// <summary>
-      /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
-      /// Destination GpuMat will have the depth type as lut and the same channels number as source.
-      /// Supports CV_8UC1, CV_8UC3 types.
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="lut">Pointer to a CvArr (e.g. Emgu.CV.Matrix).</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLUT")]
-      public static extern void LUT(IntPtr src, IntPtr lut, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Resizes the image.
@@ -755,33 +751,7 @@ namespace Emgu.CV.GPU
       }
 
       #region morphology operation
-      /// <summary>
-      /// Erodes the image (applies the local minimum operator).
-      /// Supports CV_8UC1, CV_8UC4 type.
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
-      /// <param name="buffer">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. </param>
-      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
-      /// <param name="iterations">The number of iterations morphology is applied</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatErode")]
-      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, IntPtr buffer, Point anchor, int iterations, IntPtr stream);
 
-      /// <summary>
-      /// Dilate the image (applies the local maximum operator).
-      /// Supports CV_8UC1, CV_8UC4 type.
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
-      /// <param name="buffer">Temperary buffer. Should be the same size and type as the <paramref name="src"/> GpuMat. </param>
-      /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
-      /// <param name="iterations">The number of iterations morphology is applied</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDilate")]
-      public static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, IntPtr buffer, Point anchor, int iterations, IntPtr stream);
 
       /// <summary>
       /// Applies an advanced morphological operation to the image
@@ -941,52 +911,6 @@ namespace Emgu.CV.GPU
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatThreshold")]
       public static extern double Threshold(IntPtr src, IntPtr dst, double threshold, double maxValue, CvEnum.THRESH thresholdType, IntPtr stream);
-
-      #region filters
-
-      /// <summary>
-      /// Applies generalized Sobel operator to the image
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="dx">Order of the derivative x</param>
-      /// <param name="dy">Order of the derivative y</param>
-      /// <param name="buffer">A GpuMat that is used for buffer. Use IntPtr.Zero for default.</param>
-      /// <param name="ksize">Size of the extended Sobel kernel</param>
-      /// <param name="scale">Optional scale, use 1 for default.</param>
-      /// <param name="rowBorderType">The row border type.</param>
-      /// <param name="columnBorderType">The column border type.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatSobel")]
-      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE rowBorderType, CvEnum.BORDER_TYPE columnBorderType, IntPtr stream);
-
-      /// <summary>
-      /// Applies Laplacian operator to the GpuMat
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="ksize">Either 1 or 3</param>
-      /// <param name="scale">Optional scale. Use 1.0 for default</param>
-      /// <param name="borderType">The border type.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatLaplacian")]
-      public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale, CvEnum.BORDER_TYPE borderType, IntPtr stream);
-
-      /// <summary>
-      /// Smooths the GpuMat using Gaussian filter.
-      /// </summary>
-      /// <param name="src">The source GpuMat</param>
-      /// <param name="dst">The smoothed GpuMat</param>
-      /// <param name="ksize">The size of the kernel</param>
-      /// <param name="buffer">A GpuMat that is used for buffer. Use IntPtr.Zero for default.</param>
-      /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
-      /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
-      /// <param name="rowBorderType">The row border type.</param>
-      /// <param name="columnBorderType">The column border type.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGaussianBlur")]
-      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, IntPtr buffer, double sigma1, double sigma2, CvEnum.BORDER_TYPE rowBorderType, CvEnum.BORDER_TYPE columnBorderType, IntPtr stream);
-      #endregion
 
       /// <summary>
       /// Performs generalized matrix multiplication:

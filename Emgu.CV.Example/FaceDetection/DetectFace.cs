@@ -35,7 +35,7 @@ namespace FaceDetection
                      {
                         //For some reason a clone is required.
                         //Might be a bug of GpuCascadeClassifier in opencv
-                        using (GpuImage<Gray, Byte> clone = faceImg.Clone())
+                        using (GpuImage<Gray, Byte> clone = faceImg.Clone(null))
                         {
                            Rectangle[] eyeRegion = eye.DetectMultiScale(clone, 1.1, 10, Size.Empty);
 

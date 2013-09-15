@@ -67,6 +67,7 @@
     <Compile Include="GpuHOGDescriptor.cs" />
     <Compile Include="GpuImage.cs" />
     <Compile Include="GpuInvoke.cs" />
+    <Compile Include="GpuLut.cs" />
     <Compile Include="GpuMat.cs" />
     <Compile Include="GpuTemplateMatching.cs" />
     <Compile Include="GpuMOG2.cs" />

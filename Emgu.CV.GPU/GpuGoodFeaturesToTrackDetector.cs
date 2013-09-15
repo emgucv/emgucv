@@ -14,14 +14,25 @@ namespace Emgu.CV.GPU
    /// <summary>
    /// Gpu implementation of GoodFeaturesToTrackDetector
    /// </summary>
-   public class GpuGoodFeaturesToTrackDetector : UnmanagedObject
+   public class GpuGoodFeaturesToTrackDetector<TColor, TDepth> : UnmanagedObject
+      where TColor : struct, IColor
+      where TDepth : new()
    {
+      static int _srcType;
+
+      static GpuGoodFeaturesToTrackDetector()
+      {
+         using (GpuImage<TColor, TDepth> tmp = new GpuImage<TColor, TDepth>(4, 4))
+         {
+            _srcType = tmp.Type;
+         }
+      }
       /// <summary>
       /// Create the Gpu implementation of GoodFeaturesToTrackDetector
       /// </summary>
-      public GpuGoodFeaturesToTrackDetector(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK)
+      public GpuGoodFeaturesToTrackDetector(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK)
       {
-         _ptr = GpuInvoke.gpuGoodFeaturesToTrackDetectorCreate(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
+         _ptr = GpuInvoke.gpuGoodFeaturesToTrackDetectorCreate(_srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
       }
 
       /// <summary>
@@ -46,7 +57,8 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, 
+      internal extern static IntPtr gpuGoodFeaturesToTrackDetectorCreate(
+         int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useHarrisDetector, 
          double harrisK );

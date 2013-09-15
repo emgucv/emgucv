@@ -273,10 +273,14 @@ namespace Emgu.CV.GPU
       ///<param name="kernel">The convolution kernel</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       ///<returns>The result of the convolution</returns>
-      public GpuImage<TColor, Single> Convolution(ConvolutionKernelF kernel, Stream stream)
+      public GpuImage<TColor, TDepth> Convolution(ConvolutionKernelF kernel, Stream stream)
       {
-         GpuImage<TColor, Single> result = new GpuImage<TColor, float>(Size);
-         GpuInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.REFLECT101, stream);
+         GpuImage<TColor, TDepth> result = new GpuImage<TColor, TDepth>(Size);
+         using (GpuLinearFilter<TColor, TDepth> linearFilter = new GpuLinearFilter<TColor, TDepth>(kernel, kernel.Center, CvEnum.BORDER_TYPE.REFLECT101, new MCvScalar()))
+         {
+            linearFilter.Apply(this, result, stream);
+         }
+         
          return result;
       }
 

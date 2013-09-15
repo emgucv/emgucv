@@ -17,15 +17,21 @@ namespace Emgu.CV.GPU
    /// <summary>
    /// Gpu match template buffer, used by the gpu version of MatchTemplate function.
    /// </summary>
-   public class GpuTemplateMatching : UnmanagedObject
+   public class GpuTemplateMatching<TColor, TDepth> : UnmanagedObject
+      where TColor : struct, IColor
+      where TDepth : new()
    {
+      private CvEnum.TM_TYPE _method;
+      private Size _blockSize;
+
       /// <summary>
       /// Create a GpuMatchTemplateBuf
       /// </summary>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
-      public GpuTemplateMatching(int srcType, CvEnum.TM_TYPE method, Size blockSize)
+      public GpuTemplateMatching(CvEnum.TM_TYPE method, Size blockSize)
       {
-         _ptr = GpuInvoke.gpuMatchTemplateBufCreate(srcType, method, ref blockSize);
+         _method = method;
+         _blockSize = blockSize;
       }
 
       /// <summary>
@@ -35,8 +41,12 @@ namespace Emgu.CV.GPU
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
-      public void Match(IntPtr image, IntPtr templ, IntPtr result, Stream stream)
+      public void Match(GpuImage<TColor, TDepth> image, GpuImage<TColor, TDepth> templ, GpuImage<Gray, float> result, Stream stream)
       {
+         if (_ptr == IntPtr.Zero)
+         {
+            _ptr = GpuInvoke.gpuTemplateMatchingCreate(image.Type, _method, ref _blockSize);
+         }
          GpuInvoke.gpuTemplateMatchingMatch(_ptr, image, templ, result, stream);
       }
 
@@ -46,17 +56,18 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuMatchTemplateBufRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            GpuInvoke.gpuTemplateMatchingRelease(ref _ptr);
       }
    }
 
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr gpuMatchTemplateBufCreate(int srcType, CvEnum.TM_TYPE method, ref Size blockSize);
+      internal static extern IntPtr gpuTemplateMatchingCreate(int srcType, CvEnum.TM_TYPE method, ref Size blockSize);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void gpuMatchTemplateBufRelease(ref IntPtr buf);
+      internal static extern void gpuTemplateMatchingRelease(ref IntPtr buf);
 
       /// <summary>
       /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
@@ -66,7 +77,7 @@ namespace Emgu.CV.GPU
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="tm">Pointer to cv::gpu::TemplateMatching</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuTemplateMatchingMatch")]
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuTemplateMatchingMatch(IntPtr tm, IntPtr image, IntPtr templ, IntPtr result, IntPtr stream);
 
 
