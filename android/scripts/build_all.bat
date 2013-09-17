@@ -1,6 +1,6 @@
 pushd %~p0
 cd ..
-cp -f ..\opencv\android\android.toolchain.cmake android.toolchain.cmake
+cp -f ..\opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
 rm -rf build_armeabi
 rm -rf build_armeabi-v7a
 rm -rf build_x86
