@@ -34,13 +34,13 @@
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>.NET 3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2012 Emgu, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2013 Emgu, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
     <PresentationStyle>vs2005</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Solution\VS2008\Emgu.CV.sln" />
+      <DocumentationSource sourceFile="..\Solution\VS2010_2012\Emgu.CV.sln" />
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS X, iPhone, iPad and Android devices.</NamespaceSummaryItem>
@@ -70,7 +70,8 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.OCR" isDocumented="True">Optical character recognition. Wraps the tesseract-ocr engine.</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.Cvb" isDocumented="True">Contains interface for the CvBlob library</NamespaceSummaryItem>
 <NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">Video Stabalization</NamespaceSummaryItem></NamespaceSummaries>
+<NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">Video Stabalization</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.OpenCL" isDocumented="True">Computer vision using OpenCL</NamespaceSummaryItem></NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
   </PropertyGroup>
