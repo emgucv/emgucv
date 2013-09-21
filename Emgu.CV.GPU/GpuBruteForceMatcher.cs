@@ -10,6 +10,7 @@ using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
+   /*
    internal enum GpuMatcherDistanceType
    {
       /// <summary>
@@ -25,7 +26,7 @@ namespace Emgu.CV.GPU
       /// bit count of A exclusive XOR'ed with B. 
       /// </summary>
       HammingDist
-   }
+   }*/
 
    /// <summary>
    /// A Brute force matcher using GPU
@@ -34,7 +35,7 @@ namespace Emgu.CV.GPU
    public class GpuBruteForceMatcher<T> : UnmanagedObject
       where T : struct
    {
-      private GpuMatcherDistanceType _distanceType;
+      //private GpuMatcherDistanceType _distanceType;
 
 
 
@@ -55,6 +56,7 @@ namespace Emgu.CV.GPU
             throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
          }
 
+         /*
          switch (distanceType)
          {
             case (DistanceType.Hamming):
@@ -68,8 +70,8 @@ namespace Emgu.CV.GPU
                break;
             default:
                throw new NotImplementedException(String.Format("Distance type of {0} is not implemented in GPU.", distanceType.ToString()));
-         }
-         _ptr = GpuInvoke.gpuBruteForceMatcherCreate(_distanceType);
+         }*/
+         _ptr = GpuInvoke.gpuBruteForceMatcherCreate(distanceType);
       }
 
       /*
@@ -126,7 +128,7 @@ namespace Emgu.CV.GPU
    public static partial class GpuInvoke
    {
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr gpuBruteForceMatcherCreate(GpuMatcherDistanceType distType);
+      internal extern static IntPtr gpuBruteForceMatcherCreate(DistanceType distType);
 
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void gpuBruteForceMatcherRelease(ref IntPtr ptr);
