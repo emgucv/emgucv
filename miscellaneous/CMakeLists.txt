@@ -10,7 +10,7 @@ ADD_CUSTOM_TARGET(
    COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.GPU Emgu.CV.OCR)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.GPU Emgu.CV.OCR Emgu.CV.OpenCL)
 
 PROJECT(Emgu.CV.Documentation.chm)
 ADD_CUSTOM_TARGET(
@@ -18,7 +18,7 @@ ADD_CUSTOM_TARGET(
    COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath=. /property:HelpFileFormat=HtmlHelp1
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.GPU Emgu.CV.OCR)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.GPU Emgu.CV.OCR Emgu.CV.OpenCL)
 
 INSTALL(
   FILES
