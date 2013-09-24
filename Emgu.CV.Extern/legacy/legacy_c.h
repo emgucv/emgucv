@@ -10,6 +10,8 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/legacy/blobtrack.hpp"
+#include "opencv2/legacy/legacy.hpp"
+#include "opencv2/ml/ml.hpp"
 
 //Forground detector
 CVAPI(CvFGDetector*) CvCreateFGDetectorBase(int type, void* param);
@@ -70,4 +72,77 @@ CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverRect();
 CVAPI(CvBlobTrackPostProc*) CvCreateModuleBlobTrackPostProcTimeAverExp();
 CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc** postProc);
 
+//EMLegacy
+CVAPI(CvEM*) CvEMLegacyDefaultCreate();
+CVAPI(void) CvEMLegacyRelease(CvEM** model);
+CVAPI(bool) CvEMLegacyTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
+                      CvEMParams params, CvMat* labels );
+CVAPI(float) CvEMLegacyPredict(CvEM* model, CvMat* sample, CvMat* probs );
+CVAPI(int) CvEMLegacyGetNclusters(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetMeans(CvEM* model);
+CVAPI(CvMat**) CvEMLegacyGetCovs(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetWeights(CvEM* model);
+CVAPI(CvMat*) CvEMLegacyGetProbs(CvEM* model);
+
+//FernClassifier
+CVAPI(cv::FernClassifier*) CvFernClassifierCreate();
+CVAPI(void) CvFernClassifierRelease(cv::FernClassifier* classifier);
+
+CVAPI(void) CvFernClassifierTrainFromSingleView(
+                                  cv::FernClassifier* classifier,
+                                  IplImage* image,
+                                  std::vector<cv::KeyPoint>* keypoints,
+                                  int _patchSize,
+                                  int _signatureSize,
+                                  int _nstructs,
+                                  int _structSize,
+                                  int _nviews,
+                                  int _compressionMethod,
+                                  cv::PatchGenerator* patchGenerator);
+
+//Patch Genetator
+CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg);
+
+//LDetector
+CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords);
+
+//Plannar Object Detector
+CVAPI(cv::PlanarObjectDetector*) CvPlanarObjectDetectorDefaultCreate();
+CVAPI(void) CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector);
+CVAPI(void) CvPlanarObjectDetectorTrain(
+   cv::PlanarObjectDetector* objectDetector, 
+   IplImage* image, 
+   int _npoints,
+   int _patchSize,
+   int _nstructs,
+   int _structSize,
+   int _nviews,
+   cv::LDetector* detector,
+   cv::PatchGenerator* patchGenerator);
+CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners);
+
+CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints);
+
+//RTreeClassifier
+CVAPI(cv::RTreeClassifier*) CvRTreeClassifierCreate();
+CVAPI(void) CvRTreeClassifierRelease(cv::RTreeClassifier* classifier);
+CVAPI(void) CvRTreeClassifierTrain(
+      cv::RTreeClassifier* classifier, 
+      IplImage* train_image,
+      CvPoint* train_points,
+      int numberOfPoints,
+		cv::RNG* rng, 
+      int num_trees, int depth,
+		int views, size_t reduced_num_dim,
+		int num_quant_bits);
+
+CVAPI(int) CvRTreeClassifierGetOriginalNumClasses(cv::RTreeClassifier* classifier);
+CVAPI(int) CvRTreeClassifierGetNumClasses(cv::RTreeClassifier* classifier);
+
+CVAPI(int) CvRTreeClassifierGetSigniture(
+   cv::RTreeClassifier* classifier, 
+   IplImage* image, 
+   CvPoint* point,
+   int patchSize,
+   float* signiture);
 #endif

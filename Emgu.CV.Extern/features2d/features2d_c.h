@@ -10,40 +10,12 @@
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/features2d/features2d.hpp"
-#include "opencv2/calib3d/calib3d.hpp"
-#include "opencv2/contrib/contrib.hpp"
-#include "opencv2/legacy/legacy.hpp"
+//#include "opencv2/calib3d/calib3d.hpp"
+//#include "opencv2/contrib/contrib.hpp"
+//#include "opencv2/legacy/legacy.hpp"
 #include "opencv2/legacy/compat.hpp"
 //#include "opencv2/nonfree/nonfree.hpp"
 #include "vectors_c.h"
-
-//FernClassifier
-CVAPI(cv::FernClassifier*) CvFernClassifierCreate();
-CVAPI(void) CvFernClassifierRelease(cv::FernClassifier* classifier);
-
-CVAPI(void) CvFernClassifierTrainFromSingleView(
-                                  cv::FernClassifier* classifier,
-                                  IplImage* image,
-                                  std::vector<cv::KeyPoint>* keypoints,
-                                  int _patchSize,
-                                  int _signatureSize,
-                                  int _nstructs,
-                                  int _structSize,
-                                  int _nviews,
-                                  int _compressionMethod,
-                                  cv::PatchGenerator* patchGenerator);
-
-//Patch Genetator
-CVAPI(void) CvPatchGeneratorInit(cv::PatchGenerator* pg);
-
-//LDetector
-CVAPI(void) CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords);
-
-//SelfSimDescriptor
-CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles);
-CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor);
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation);
-CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor);
 
 //StarDetector
 CVAPI(cv::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
@@ -94,23 +66,6 @@ CVAPI(void) CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector);
 CVAPI(cv::MSER*) CvMserGetFeatureDetector(CvMSERParams* detector);
 CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** detector);
 
-//Plannar Object Detector
-CVAPI(cv::PlanarObjectDetector*) CvPlanarObjectDetectorDefaultCreate();
-CVAPI(void) CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector);
-CVAPI(void) CvPlanarObjectDetectorTrain(
-   cv::PlanarObjectDetector* objectDetector, 
-   IplImage* image, 
-   int _npoints,
-   int _patchSize,
-   int _nstructs,
-   int _structSize,
-   int _nviews,
-   cv::LDetector* detector,
-   cv::PatchGenerator* patchGenerator);
-CVAPI(void) CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners);
-
-CVAPI(void) CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints);
-
 // Draw keypoints.
 CVAPI(void) drawKeypoints(
                           const IplImage* image, 
@@ -146,29 +101,6 @@ CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType, bool c
 
 CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
 
-//RTreeClassifier
-CVAPI(cv::RTreeClassifier*) CvRTreeClassifierCreate();
-CVAPI(void) CvRTreeClassifierRelease(cv::RTreeClassifier* classifier);
-CVAPI(void) CvRTreeClassifierTrain(
-      cv::RTreeClassifier* classifier, 
-      IplImage* train_image,
-      CvPoint* train_points,
-      int numberOfPoints,
-		cv::RNG* rng, 
-      int num_trees, int depth,
-		int views, size_t reduced_num_dim,
-		int num_quant_bits);
-
-CVAPI(int) CvRTreeClassifierGetOriginalNumClasses(cv::RTreeClassifier* classifier);
-CVAPI(int) CvRTreeClassifierGetNumClasses(cv::RTreeClassifier* classifier);
-
-CVAPI(int) CvRTreeClassifierGetSigniture(
-   cv::RTreeClassifier* classifier, 
-   IplImage* image, 
-   CvPoint* point,
-   int patchSize,
-   float* signiture);
-
 //flann index
 CVAPI(cv::flann::Index*) CvFlannIndexCreateKDTree(CvMat* features, int trees);
 
@@ -187,8 +119,6 @@ CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, CvMat* queries, CvM
 CVAPI(void) CvFlannIndexRelease(cv::flann::Index* index);
 
 //2D Tracker
-CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography);
-
 CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins);
 
 //Feature2D

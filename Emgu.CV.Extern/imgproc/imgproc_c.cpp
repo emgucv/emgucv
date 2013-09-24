@@ -25,27 +25,6 @@ cv::Mat fgdModelMat = cv::cvarrToMat(fgdModel);
 cv::grabCut(imgMat, maskMat, *rect, bgdModelMat, fgdModelMat, iterCount, flag);
 }
 
-//StereoSGBM
-cv::StereoSGBM* CvStereoSGBMCreate(
-  int minDisparity, int numDisparities, int blockSize,
-  int P1, int P2, int disp12MaxDiff,
-  int preFilterCap, int uniquenessRatio,
-  int speckleWindowSize, int speckleRange,
-  int mode)
-{
-   cv::Ptr<cv::StereoSGBM> ptr =  cv::createStereoSGBM(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
-   ptr.addref();
-   return ptr.obj;
-}
-void CvStereoSGBMRelease(cv::StereoSGBM* obj) { delete obj;}
-void CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity)
-{
-   cv::Mat leftMat = cv::cvarrToMat(left);
-   cv::Mat rightMat = cv::cvarrToMat(right);
-   cv::Mat dispMat = cv::cvarrToMat(disparity);
-   disparitySolver->compute(leftMat, rightMat, dispMat);
-}
-
 bool cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, double maxVal)
 {
    cv::Mat mat = cv::cvarrToMat(arr);

@@ -9,7 +9,7 @@
 #define EMGU_CORE_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/imgproc/imgproc.hpp"
+//#include "opencv2/imgproc/imgproc.hpp"
 #include "emgu_c.h"
 
 CVAPI(cv::Mat*) cvMatCreate();

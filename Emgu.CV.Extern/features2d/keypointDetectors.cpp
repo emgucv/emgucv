@@ -6,61 +6,6 @@
 
 #include "features2d_c.h"
 
-//FernClassifier
-cv::FernClassifier* CvFernClassifierCreate() { return new cv::FernClassifier; }
-void CvFernClassifierRelease(cv::FernClassifier* classifier) { delete classifier;}
-
-void CvFernClassifierTrainFromSingleView(
-                                  cv::FernClassifier* classifier,
-                                  IplImage* image,
-                                  std::vector<cv::KeyPoint>* keypoints,
-                                  int _patchSize,
-                                  int _signatureSize,
-                                  int _nstructs,
-                                  int _structSize,
-                                  int _nviews,
-                                  int _compressionMethod,
-                                  cv::PatchGenerator* patchGenerator)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   classifier->trainFromSingleView(mat, *keypoints, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, *patchGenerator);
-}
-
-//Patch Genetator
-void CvPatchGeneratorInit(cv::PatchGenerator* pg) 
-{ 
-   cv::PatchGenerator defaultPG;
-   memcpy(pg, &defaultPG, sizeof(cv::PatchGenerator));
-}
-
-//LDetector
-void CvLDetectorDetectKeyPoints(cv::LDetector* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, int maxCount, bool scaleCoords)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   (*detector)(mat, *keypoints, maxCount, scaleCoords);
-}
-
-//SelfSimDescriptor
-cv::SelfSimDescriptor* CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
-{  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
-void CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
-{
-   std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
-   memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
-   //CV_Assert(numberOfLocation == locationVec.size());
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   descriptor->compute(imageMat, *descriptors, *winStride, locationVec);
-
-   //float sumAbs = 0.0f;
-   //for (int i = 0; i < descriptors->data.size(); i++)
-   //   sumAbs += descriptors->data[i];
-   
-   //CV_Assert(sumAbs != 0.0f);
-   
-}
-int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return static_cast<int>(descriptor->getDescriptorSize()); }
-
 //StarDetector
 cv::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
 {
@@ -247,41 +192,6 @@ void CvMserFeatureDetectorRelease(cv::MSER** detector)
    *detector = 0;
 }
 
-//Plannar Object Detector
-cv::PlanarObjectDetector* CvPlanarObjectDetectorDefaultCreate() { return new cv::PlanarObjectDetector; }
-void CvPlanarObjectDetectorRelease(cv::PlanarObjectDetector* detector) { delete detector; }
-void CvPlanarObjectDetectorTrain(
-   cv::PlanarObjectDetector* objectDetector, 
-   IplImage* image, 
-   int _npoints,
-   int _patchSize,
-   int _nstructs,
-   int _structSize,
-   int _nviews,
-   cv::LDetector* detector,
-   cv::PatchGenerator* patchGenerator)
-{
-   std::vector<cv::Mat> pyr;
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   pyr.push_back(imageMat);
-   objectDetector->train(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, *detector, *patchGenerator);
-}
-void CvPlanarObjectDetectorDetect(cv::PlanarObjectDetector* detector, IplImage* image, CvMat* homography, CvSeq* corners)
-{
-   std::vector<cv::Point2f> cornerVec;
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   cv::Mat homographyMat = cv::cvarrToMat(homography);
-   (*detector)(imageMat, homographyMat,  cornerVec);
-   if (!cornerVec.empty())
-      cvSeqPushMulti(corners, &cornerVec[0], static_cast<int>(cornerVec.size()));
-}
-void CvPlanarObjectDetectorGetModelPoints(cv::PlanarObjectDetector* detector, CvSeq* modelPoints)
-{
-   std::vector<cv::KeyPoint> modelPtVec = detector->getModelPoints();
-   if (!modelPtVec.empty())
-      cvSeqPushMulti(modelPoints, &modelPtVec[0], static_cast<int>(modelPtVec.size()));
-}
-
 // Draw keypoints.
 void drawKeypoints(
                           const IplImage* image, 
@@ -357,48 +267,6 @@ void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher)
 }
 
 //2D tracker
-bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography)
-{
-   cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
-
-   cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) cv::cvarrToMat(mask) : cv::Mat_<uchar>(indMat.rows, 1, 255);
-   int nonZero = mask? cv::countNonZero(maskMat): indMat.rows;
-   if (nonZero < 4) return false;
-
-   std::vector<cv::Point2f> srcPtVec;
-   std::vector<cv::Point2f> dstPtVec;
-
-   for(int i = 0; i < maskMat.rows; i++)
-   {
-      if ( maskMat.at<uchar>(i) )
-      {  
-         int modelIdx = indMat(i, 0); 
-         srcPtVec.push_back((*model)[modelIdx].pt);
-         dstPtVec.push_back((*observed)[i].pt);
-      }
-   }
-   
-   //cv::Mat_<uchar> ransacMask(srcPtVec.size(), 1);
-   std::vector<uchar> ransacMask;
-   cv::Mat result = cv::findHomography(cv::Mat(srcPtVec), cv::Mat(dstPtVec), cv::RANSAC, randsacThreshold, ransacMask);
-   if (result.empty())
-   {
-      return false;
-   }
-   cv::Mat hMat = cv::cvarrToMat(homography);
-   result.copyTo(hMat);
-
-   int idx = 0;
-   for (int i = 0; i < maskMat.rows; i++)
-   {
-      uchar* val = maskMat.ptr<uchar>(i);
-      if (*val)
-         *val = ransacMask[idx++];
-   }
-   return true;
-
-}
-
 int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
 {
    CV_Assert(!modelKeyPoints->empty());

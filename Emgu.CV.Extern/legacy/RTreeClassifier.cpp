@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "features2d_c.h"
+#include "legacy_c.h"
 
 cv::RTreeClassifier* CvRTreeClassifierCreate() { return new cv::RTreeClassifier(); }
 void CvRTreeClassifierRelease(cv::RTreeClassifier* classifier) { delete classifier; }

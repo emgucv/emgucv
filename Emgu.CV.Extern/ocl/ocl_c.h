@@ -11,7 +11,7 @@
 #include "opencv2/ocl.hpp"
 #include "opencv2/core/types_c.h"
 #include "opencv2/core/core_c.h"
-#include "../emgu_c.h"
+#include "emgu_c.h"
 
 CVAPI(int) oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int devicetype);
 

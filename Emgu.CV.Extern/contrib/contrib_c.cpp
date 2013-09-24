@@ -154,6 +154,7 @@ void CvReleaseLevMarqSparse(cv::LevMarqSparse** levMarq)
    *levMarq = 0;
 }
 
+//ChamferMatching
 int cvChamferMatching( 
    IplImage* img, IplImage* templ,
    std::vector< std::vector<cv::Point> >* results, std::vector<float>* cost,
@@ -166,3 +167,24 @@ int cvChamferMatching(
    cv::Mat templMat = cv::cvarrToMat(templ);
    return cv::chamerMatching(imgMat, templMat, *results, *cost, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
 }
+
+//SelfSimDescriptor
+cv::SelfSimDescriptor* CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
+{  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
+void CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
+void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+{
+   std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
+   memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
+   //CV_Assert(numberOfLocation == locationVec.size());
+   cv::Mat imageMat = cv::cvarrToMat(image);
+   descriptor->compute(imageMat, *descriptors, *winStride, locationVec);
+
+   //float sumAbs = 0.0f;
+   //for (int i = 0; i < descriptors->data.size(); i++)
+   //   sumAbs += descriptors->data[i];
+   
+   //CV_Assert(sumAbs != 0.0f);
+   
+}
+int CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor) { return static_cast<int>(descriptor->getDescriptorSize()); }

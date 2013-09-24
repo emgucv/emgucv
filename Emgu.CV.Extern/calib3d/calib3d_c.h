@@ -5,17 +5,15 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef EMGU_IMGPROC_C_H
-#define EMGU_IMGPROC_C_H
+#ifndef EMGU_CALIB3D_C_H
+#define EMGU_CALIB3D_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
-#include "emgu_c.h"
-CVAPI(IplImage*) cvGetImageSubRect(IplImage* image, CvRect* rect);
 
-//GrabCut
-CVAPI(void) CvGrabCut(IplImage* img, IplImage* mask, cv::Rect* rect, IplImage* bgdModel, IplImage* fgdModel, int iterCount, int flag);
+CVAPI(int)  CvEstimateAffine3D(CvMat* src, CvMat* dst,
+                               cv::Mat* out, std::vector<unsigned char>* inliers,
+                             double ransacThreshold, double confidence);
 
 //StereoSGBM
 CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
@@ -28,11 +26,7 @@ CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
 CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM* obj);
 CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity);
 
-CVAPI(bool) cvCheckRange(CvArr* arr, bool quiet, CvPoint* index, double minVal, double maxVal);
+//2D Tracker
+CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography);
 
-CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst);
-
-CVAPI(void) CvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType );
-
-CVAPI(void) cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvArr* dstArr);
 #endif

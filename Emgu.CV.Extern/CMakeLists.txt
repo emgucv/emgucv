@@ -13,9 +13,31 @@ SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 
+file(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
+file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
+source_group("Src_extern" FILES ${extern_srcs})
+source_group("Include_extern" FILES ${extern_hdrs})
+
+IF(IOS)
+  LIST(APPEND extern_srcs "ios/divmodsi4.c")
+ENDIF()
+
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-  MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+  #MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+
+  SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
+  IF(EXISTS "${CVEXTERN_OPTIONAL_DIR}" AND IS_DIRECTORY "${CVEXTERN_OPTIONAL_DIR}")
+    
+    INCLUDE_DIRECTORIES("${CVEXTERN_OPTIONAL_DIR}")
+    file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_srcs "${CVEXTERN_OPTIONAL_DEP}/*.cpp")
+	 MESSAGE("srcs: ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs}")
+    file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_hdrs "${CVEXTERN_OPTIONAL_DEP}/*.h*")
+    source_group("Src_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
+    source_group("Include_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
+    LIST(APPEND extern_srcs ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
+    LIST(APPEND extern_hdrs ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
+  ENDIF()
 ENDFOREACH()
 
 IF(WIN32 AND CV_ICC)
@@ -93,22 +115,13 @@ ENDIF()
 IF(WIN32 AND WITH_OPENNI)
   IF(TARGET_ARCH_64)
     SET(OPENNI_BINARY_FILE "${OPENNI_LIB_DIR}/../Bin64/OpenNI64.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES OpenNI64)
   ELSE()
     SET(OPENNI_BINARY_FILE "${OPENNI_LIB_DIR}/../Bin/OpenNI.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES OpenNI)
   ENDIF()
   
 LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${OPENNI_BINARY_FILE})   
 ENDIF()
 ############################### OPENNI END ################################
-
-file(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
-file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
-
-IF(IOS)
-  LIST(APPEND extern_srcs "ios/divmodsi4.c")
-ENDIF()
 
 ############################### TESSERACT START ########################
 IF(ANDROID)
@@ -236,23 +249,18 @@ IF(WIN32 AND WITH_CUDA)
   ENDIF()
 ENDIF()
 
-IF(ANDROID OR IOS)
-  file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp" "gpu/videostab_c.cpp")
-  file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h")
-ELSE()
-  file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
-  file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
-ENDIF()
+#IF(ANDROID OR IOS)
+#  file(GLOB_RECURSE gpu_extern_srcs "gpu/stitching_c.cpp" "gpu/videostab_c.cpp")
+#  file(GLOB_RECURSE gpu_extern_hdrs "gpu/stitching_c.h" "gpu/videostab_c.h")
+#ELSE()
+#  file(GLOB_RECURSE gpu_extern_srcs "gpu/*.cpp")
+#  file(GLOB_RECURSE gpu_extern_hdrs "gpu/*.h*")
+#ENDIF()
 ############################### GPU END ################################
 
 ############################### OpenCL START ##############################
 IF(WITH_OPENCL)
   MESSAGE(STATUS "Building cvextern with opencv_ocl")
-  file(GLOB_RECURSE ocl_extern_srcs "opencl/*.cpp")
-  file(GLOB_RECURSE ocl_extern_hdrs "opencl/*.h*")
-  
-  source_group("Src_ocl" FILES ${ocl_extern_srcs})
-  source_group("Include_ocl" FILES ${ocl_extern_hdrs})
 
   IF(WIN32)
     IF(TARGET_ARCH_64) 
@@ -269,25 +277,25 @@ ENDIF()
 ############################### nonfree START ##############################
 IF(BUILD_opencv_nonfree)
   MESSAGE(STATUS "Building cvextern with opencv_nonfree")
-  file(GLOB_RECURSE nonfree_extern_srcs "nonfree/*.cpp")
-  file(GLOB_RECURSE nonfree_extern_hdrs "nonfree/*.h*")
+  #file(GLOB_RECURSE nonfree_extern_srcs "nonfree/*.cpp")
+  #file(GLOB_RECURSE nonfree_extern_hdrs "nonfree/*.h*")
   
   IF(NOT WITH_OPENCL)
     FILE(GLOB nonfree_ocl_extern_srcs_excludes "nonfree/nonfree_ocl_c.cpp")
-    LIST(REMOVE_ITEM nonfree_extern_srcs ${nonfree_ocl_extern_srcs_excludes})
+    LIST(REMOVE_ITEM extern_srcs ${nonfree_ocl_extern_srcs_excludes})
     FILE(GLOB nonfree_ocl_extern_hdrs_excludes "nonfree/nonfree_ocl_c.h")
-    LIST(REMOVE_ITEM nonfree_extern_hdrs ${nonfree_ocl_extern_hdrs_excludes})
+    LIST(REMOVE_ITEM extern_hdrs ${nonfree_ocl_extern_hdrs_excludes})
   ENDIF()
   
   IF(NOT WITH_CUDA)
     FILE(GLOB nonfree_gpu_extern_srcs_excludes "nonfree/nonfree_gpu_c.cpp")
-    LIST(REMOVE_ITEM nonfree_extern_srcs ${nonfree_gpu_extern_srcs_excludes})
+    LIST(REMOVE_ITEM extern_srcs ${nonfree_gpu_extern_srcs_excludes})
     FILE(GLOB nonfree_gpu_extern_hdrs_excludes "nonfree/nonfree_gpu_c.h")
-    LIST(REMOVE_ITEM nonfree_extern_hdrs ${nonfree_gpu_extern_hdrs_excludes})
+    LIST(REMOVE_ITEM extern_hdrs ${nonfree_gpu_extern_hdrs_excludes})
   ENDIF()
   
-  source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
-  source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
+  #source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
+  #source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 
 ENDIF()
 ############################### nonfree END ################################
@@ -308,15 +316,14 @@ IF(ANDROID OR APPLE)
   LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
 ENDIF()
 
-source_group("Src_extern" FILES ${extern_srcs})
-source_group("Include_extern" FILES ${extern_hdrs})
-source_group("Src_cuda" FILES ${gpu_extern_srcs})
-source_group("Include_cuda" FILES ${gpu_extern_hdrs})
-source_group("Src_nonfree" FILES ${nonfree_srcs})
-source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
+
+#source_group("Src_cuda" FILES ${gpu_extern_srcs})
+#source_group("Include_cuda" FILES ${gpu_extern_hdrs})
+#source_group("Src_nonfree" FILES ${nonfree_srcs})
+#source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} ${extern_srcs} ${extern_hdrs} ${gpu_extern_srcs} ${gpu_extern_hdrs} ${ocl_extern_srcs} ${ocl_extern_hdrs} ${nonfree_extern_srcs} ${nonfree_extern_hdrs})
+add_library(${the_target} ${extern_srcs} ${extern_hdrs} )
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})
