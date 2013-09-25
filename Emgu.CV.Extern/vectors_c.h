@@ -14,6 +14,25 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
 
+template <class dataType> 
+void VectorPushMulti(std::vector<dataType>* v, dataType* values, int count)
+{
+   if (count > 0)
+   {
+      size_t oldSize = v->size();
+      v->resize(oldSize + count);
+      memcpy(&(*v)[oldSize], values, count * sizeof(dataType));
+   }
+}
+
+template <class dataType> 
+void VectorCopyData(std::vector<dataType>* v, dataType* data)
+{
+   if (!v->empty())
+      memcpy(data, &(*v)[0], v->size() * sizeof(dataType));
+}
+
+
 //----------------------------------------------------------------------------
 //
 //  Vector of Byte

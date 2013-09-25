@@ -11,6 +11,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
+#include "vectors_c.h"
 
 CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq);
 
@@ -82,4 +83,32 @@ CVAPI(void) CvCascadeClassifierDetectMultiScale(
    int minNeighbors, int flags,
    CvSize minSize,
    CvSize maxSize); 
+
+//ERFilter
+CVAPI(cv::ERFilter*) CvERFilterNM1Create();
+CVAPI(cv::ERFilter*) CvERFilterNM2Create();
+CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
+CVAPI(void) CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* regions);
+
+//----------------------------------------------------------------------------
+//
+//  Vector of ERStat
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::ERStat>*) VectorOfERStatCreate();
+
+CVAPI(std::vector<cv::ERStat>*) VectorOfERStatCreateSize(int size);
+
+CVAPI(int) VectorOfERStatGetSize(std::vector<cv::ERStat>* v);
+
+CVAPI(void) VectorOfERStatClear(std::vector<cv::ERStat>* v);
+
+CVAPI(void) VectorOfERStatRelease(std::vector<cv::ERStat>* v);
+
+CVAPI(void) VectorOfERStatCopyData(std::vector<cv::ERStat>* v, cv::ERStat* data);
+
+CVAPI(cv::ERStat*) VectorOfERStatGetStartAddress(std::vector<cv::ERStat>* v);
+
+
+
 #endif

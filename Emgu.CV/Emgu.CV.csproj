@@ -85,6 +85,7 @@
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
+    <Compile Include="ERFilter.cs" />
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
     <Compile Include="Features2D\BOWKMeansTrainer.cs" />

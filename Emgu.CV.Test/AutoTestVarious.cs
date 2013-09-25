@@ -2403,5 +2403,26 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
       }
+
+      [Test]
+      public void TestERFilter()
+      {
+         CvInvoke.SanityCheck();
+         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray,Byte>("scenetext.jpg"))
+         using (ERFilterNM1 er1 = new ERFilterNM1())
+         using (VectorOfERStat regionVec = new VectorOfERStat())
+         {
+            er1.Run(image, regionVec);
+            //Emgu.CV.UI.ImageViewer.Show(image);
+            MCvERStat[] regions = regionVec.ToArray();
+            Size size = image.Size;
+            foreach (MCvERStat region in regions)
+            {
+               if (region.ParentPtr != IntPtr.Zero)
+               {
+               }
+            }
+         }
+      }
    }
 }

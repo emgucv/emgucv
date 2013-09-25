@@ -29,12 +29,7 @@ int VectorOfByteGetSize(std::vector<unsigned char>* v)
 
 void VectorOfBytePushMulti(std::vector<unsigned char>* v, unsigned char* values, int count)
 {
-   if (count > 0)
-   {
-      size_t oldSize = v->size();
-      v->resize(oldSize + count);
-      memcpy(&(*v)[oldSize], values, count * sizeof(unsigned char));
-   }
+   VectorPushMulti<unsigned char>(v, values, count);
 }
 
 void VectorOfByteClear(std::vector<unsigned char>* v)
@@ -49,8 +44,7 @@ void VectorOfByteRelease(std::vector<unsigned char>* v)
 
 void VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* data)
 {
-   if (!v->empty())
-      memcpy(data, &(*v)[0], v->size() * sizeof(unsigned char));
+   VectorCopyData<unsigned char>(v, data);
 }
 
 unsigned char* VectorOfByteGetStartAddress(std::vector<unsigned char>* v)
@@ -80,12 +74,7 @@ int VectorOfFloatGetSize(std::vector<float>* v)
 
 void VectorOfFloatPushMulti(std::vector<float>* v, float* values, int count)
 {
-   if (count > 0)
-   {
-      size_t oldSize = v->size();
-      v->resize(oldSize + count);
-      memcpy(&(*v)[oldSize], values, count * sizeof(float));
-   }
+   VectorPushMulti<float>(v, values, count);
 }
 
 void VectorOfFloatClear(std::vector<float>* v)
@@ -100,8 +89,7 @@ void VectorOfFloatRelease(std::vector<float>* v)
 
 void VectorOfFloatCopyData(std::vector<float>* v, float* data)
 {
-   if (!v->empty())
-      memcpy(data, &(*v)[0], v->size() * sizeof(float));
+   VectorCopyData<float>(v, data);
 }
 
 float* VectorOfFloatGetStartAddress(std::vector<float>* v)
@@ -157,12 +145,7 @@ int VectorOfDMatchGetSize(std::vector<cv::DMatch>* v)
 
 void VectorOfDMatchPushMulti(std::vector<cv::DMatch>* v, cv::DMatch* values, int count)
 {
-   if (count > 0)
-   {
-      size_t oldSize = v->size();
-      v->resize(oldSize + count);
-      memcpy(&(*v)[oldSize], values, count * sizeof(cv::DMatch));
-   }
+   VectorPushMulti<cv::DMatch>(v, values, count);
 }
 
 void VectorOfDMatchClear(std::vector<cv::DMatch>* v)
@@ -177,8 +160,7 @@ void VectorOfDMatchRelease(std::vector<cv::DMatch>* v)
 
 void VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data)
 {
-   if (!v->empty())
-      memcpy(data, &(*v)[0], v->size() * sizeof(cv::DMatch));
+   VectorCopyData<cv::DMatch>(v, data);
 }
 
 cv::DMatch* VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v)
@@ -235,12 +217,7 @@ int VectorOfKeyPointGetSize(std::vector<cv::KeyPoint>* v)
 
 void VectorOfKeyPointPushMulti(std::vector<cv::KeyPoint>* v, cv::KeyPoint* values, int count)
 {
-   if (count > 0)
-   {
-      size_t oldSize = v->size();
-      v->resize(oldSize + count);
-      memcpy(&(*v)[oldSize], values, count * sizeof(cv::KeyPoint));
-   }
+   VectorPushMulti<cv::KeyPoint>(v, values, count);
 }
 
 void VectorOfKeyPointClear(std::vector<cv::KeyPoint>* v)
@@ -255,8 +232,7 @@ void VectorOfKeyPointRelease(std::vector<cv::KeyPoint>* v)
 
 void VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data)
 {
-   if (!v->empty())
-      memcpy(data, &(*v)[0], v->size() * sizeof(cv::KeyPoint));
+   VectorCopyData<cv::KeyPoint>(v, data);
 }
 
 cv::KeyPoint* VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v)
@@ -399,12 +375,7 @@ int VectorOfPointGetSize(std::vector<cv::Point>* v)
 
 void VectorOfPointPushMulti(std::vector<cv::Point>* v, cv::Point* values, int count)
 {
-   if (count > 0)
-   {
-      size_t oldSize = v->size();
-      v->resize(oldSize + count);
-      memcpy(&(*v)[oldSize], values, count * sizeof(cv::Point));
-   }
+   VectorPushMulti<cv::Point>(v, values, count);
 }
 
 void VectorOfPointClear(std::vector<cv::Point>* v)
@@ -419,8 +390,7 @@ void VectorOfPointRelease(std::vector<cv::Point>* v)
 
 void VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data)
 {
-   if (!v->empty())
-      memcpy(data, &(*v)[0], v->size() * sizeof(cv::Point));
+   VectorCopyData<cv::Point>(v, data);
 }
 
 cv::Point* VectorOfPointGetStartAddress(std::vector<cv::Point>* v)

@@ -70,5 +70,10 @@ namespace Emgu.CV.Structure
       /// The size of IplImage
       /// </summary>
       public int IplImage;
+
+      /// <summary>
+      /// Size of MCvERStat
+      /// </summary>
+      public int ERStat;
    }
 }
