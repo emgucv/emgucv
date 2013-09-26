@@ -29,7 +29,19 @@ namespace Emgu.CV
          /// <summary>
          /// SXVGA resolution
          /// </summary>
-         SXGA_15HZ = 1
+         SXGA_15HZ = 1,
+         /// <summary>
+         /// SXVGA resolution
+         /// </summary>
+         SXGA_30HZ = 2,
+         /// <summary>
+         /// QVGA resolution
+         /// </summary>
+         QVGA_30HZ = 3,
+         /// <summary>
+         /// QVGA resolution
+         /// </summary>
+         QVGA_60HZ = 4
       }
 
       /// <summary>
@@ -73,11 +85,26 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Kinect device type
+      /// </summary>
+      public enum DeviceType
+      {
+         /// <summary>
+         /// kinect
+         /// </summary>
+         Kinect,
+         /// <summary>
+         /// Asus xtion
+         /// </summary>
+         Xtion
+      }
+
+      /// <summary>
       /// Create the Kinect Camera capture object
       /// </summary>
       /// <param name="outputMode">The output mode</param>
-      public KinectCapture(ImageGeneratorOutputMode outputMode)
-         : base(CvEnum.CaptureType.OPENNI)
+      public KinectCapture(DeviceType type, ImageGeneratorOutputMode outputMode)
+         : base(type == DeviceType.Kinect ? CvEnum.CaptureType.OPENNI : CvEnum.CaptureType.OPENNI_ASUS)
       {
          SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, (double)outputMode);
       }

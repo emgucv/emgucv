@@ -159,7 +159,23 @@ namespace Emgu.CV.CvEnum
    public enum CAP_PROP
    {
       /// <summary>
-      /// film current position in milliseconds or video capture timestamp
+      /// Turn the feature off (not controlled manually nor automatically)
+      /// </summary>
+      CV_CAP_PROP_DC1394_OFF = -4,
+      /// <summary>
+      /// Set automatically when a value of the feature is set by the user
+      /// </summary>
+      CV_CAP_PROP_DC1394_MODE_MANUAL = -3,
+      /// <summary>
+      /// DC1394 mode auto
+      /// </summary>
+      CV_CAP_PROP_DC1394_MODE_AUTO = -2,
+      /// <summary>
+      /// DC1394 mode one push auto
+      /// </summary>
+      CV_CAP_PROP_DC1394_MODE_ONE_PUSH_AUTO = -1,
+      /// <summary>
+      /// Film current position in milliseconds or video capture timestamp
       /// </summary>
       CV_CAP_PROP_POS_MSEC = 0,
       /// <summary>
@@ -167,19 +183,19 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CAP_PROP_POS_FRAMES = 1,
       /// <summary>
-      /// position in relative units (0 - start of the file, 1 - end of the file)
+      /// Position in relative units (0 - start of the file, 1 - end of the file)
       /// </summary>
       CV_CAP_PROP_POS_AVI_RATIO = 2,
       /// <summary>
-      /// width of frames in the video stream
+      /// Width of frames in the video stream
       /// </summary>
       CV_CAP_PROP_FRAME_WIDTH = 3,
       /// <summary>
-      /// height of frames in the video stream
+      /// Height of frames in the video stream
       /// </summary>
       CV_CAP_PROP_FRAME_HEIGHT = 4,
       /// <summary>
-      /// frame rate 
+      /// Frame rate 
       /// </summary>
       CV_CAP_PROP_FPS = 5,
       /// <summary>
@@ -187,15 +203,15 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CAP_PROP_FOURCC = 6,
       /// <summary>
-      /// number of frames in video file
+      /// Number of frames in video file
       /// </summary>
       CV_CAP_PROP_FRAME_COUNT = 7,
       /// <summary>
-      /// 
+      /// Format
       /// </summary>
       CV_CAP_PROP_FORMAT = 8,
       /// <summary>
-      /// 
+      /// Mode
       /// </summary>
       CV_CAP_PROP_MODE = 9,
       /// <summary>
@@ -267,29 +283,73 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CAP_PROP_WHITE_BALANCE_RED_V = 26,
       /// <summary>
-      /// Max DC1394
+      /// Zoom
       /// </summary>
-      CV_CAP_PROP_MAX_DC1394 = 27,
+      CV_CAP_PROP_ZOOM = 27,
+      /// <summary>
+      /// Focus
+      /// </summary>
+      CV_CAP_PROP_FOCUS = 28,
+      /// <summary>
+      /// GUID
+      /// </summary>
+      CV_CAP_PROP_GUID = 29,
+      /// <summary>
+      /// ISO SPEED
+      /// </summary>
+      CV_CAP_PROP_ISO_SPEED = 30,
+      /// <summary>
+      /// MAX DC1394
+      /// </summary>
+      CV_CAP_PROP_MAX_DC1394 = 31,
+      /// <summary>
+      /// Backlight
+      /// </summary>
+      CV_CAP_PROP_BACKLIGHT = 32,
+      /// <summary>
+      /// Pan
+      /// </summary>
+      CV_CAP_PROP_PAN = 33,
+      /// <summary>
+      /// Tilt
+      /// </summary>
+      CV_CAP_PROP_TILT = 34,
+      /// <summary>
+      /// Roll
+      /// </summary>
+      CV_CAP_PROP_ROLL = 35,
+      /// <summary>
+      /// Iris
+      /// </summary>
+      CV_CAP_PROP_IRIS = 36,
+      /// <summary>
+      /// Settings
+      /// </summary>
+      CV_CAP_PROP_SETTINGS = 37,
       /// <summary>
       /// property for highgui class CvCapture_Android only
       /// </summary>
       CV_CAP_PROP_AUTOGRAB = 1024,
       /// <summary>
-      /// tricky property, returns cpnst char* indeed
+      /// readonly, tricky property, returns cpnst char* indeed
       /// </summary>
       CV_CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING = 1025,
       /// <summary>
-      /// OpenNI map generators
+      /// readonly, tricky property, returns cpnst char* indeed
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR = 0,
+      CV_CAP_PROP_PREVIEW_FORMAT = 1026,
       /// <summary>
       /// OpenNI map generators
       /// </summary>
-      CV_CAP_OPENNI_IMAGE_GENERATOR = 1 << 31,
+      CV_CAP_OPENNI_DEPTH_GENERATOR = 1 << 31,
       /// <summary>
       /// OpenNI map generators
       /// </summary>
-      CV_CAP_OPENNI_GENERATORS_MASK = 1 << 31,
+      CV_CAP_OPENNI_IMAGE_GENERATOR = 1 << 30,
+      /// <summary>
+      /// OpenNI map generators
+      /// </summary>
+      CV_CAP_OPENNI_GENERATORS_MASK = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_OPENNI_IMAGE_GENERATOR,
 
       /// <summary>
       /// Properties of cameras available through OpenNI interfaces
@@ -308,6 +368,43 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       CV_CAP_PROP_OPENNI_FOCAL_LENGTH = 103,
       /// <summary>
+      /// Flag that synchronizes the remapping depth map to image map
+      /// by changing depth generator's view point (if the flag is "on") or
+      /// sets this view point to its normal one (if the flag is "off").
+      /// </summary>
+      CV_CAP_PROP_OPENNI_REGISTRATION = 104,
+      /// <summary>
+      /// Flag that synchronizes the remapping depth map to image map
+      /// by changing depth generator's view point (if the flag is "on") or
+      /// sets this view point to its normal one (if the flag is "off").
+      /// </summary>
+      CV_CAP_PROP_OPENNI_REGISTRATION_ON = CV_CAP_PROP_OPENNI_REGISTRATION,
+      /// <summary>
+      /// Approx frame sync
+      /// </summary>
+      CV_CAP_PROP_OPENNI_APPROX_FRAME_SYNC = 105,
+      /// <summary>
+      /// Max buffer size
+      /// </summary>
+      CV_CAP_PROP_OPENNI_MAX_BUFFER_SIZE = 106,
+      /// <summary>
+      /// Circle buffer
+      /// </summary>
+      CV_CAP_PROP_OPENNI_CIRCLE_BUFFER = 107,
+      /// <summary>
+      /// Max time duration
+      /// </summary>
+      CV_CAP_PROP_OPENNI_MAX_TIME_DURATION = 108,
+      /// <summary>
+      /// Generator present
+      /// </summary>
+      CV_CAP_PROP_OPENNI_GENERATOR_PRESENT = 109,
+
+      /// <summary>
+      /// Openni image generator present
+      /// </summary>
+      CV_CAP_OPENNI_IMAGE_GENERATOR_PRESENT = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_GENERATOR_PRESENT,
+      /// <summary>
       /// Image generator output mode
       /// </summary>
       CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_OUTPUT_MODE,
@@ -319,11 +416,193 @@ namespace Emgu.CV.CvEnum
       /// Depth generator focal lenght, in pixels.
       /// </summary>
       CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_FOCAL_LENGTH,
+      /// <summary>
+      /// Openni generator registration
+      /// </summary>
+      CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_REGISTRATION,
+      /// <summary>
+      /// Openni generator registration on
+      /// </summary>
+      CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON = CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION,
 
       /// <summary>
       /// Properties of cameras available through GStreamer interface. Default is 1
       /// </summary>
-      CV_CAP_GSTREAMER_QUEUE_LENGTH = 200
+      CV_CAP_GSTREAMER_QUEUE_LENGTH = 200,
+      /// <summary>
+      /// Ip for anable multicast master mode. 0 for disable multicast
+      /// </summary>
+      CV_CAP_PROP_PVAPI_MULTICASTIP = 300,
+
+      /// <summary>
+      /// Change image resolution by binning or skipping.
+      /// </summary>
+      CV_CAP_PROP_XI_DOWNSAMPLING = 400,      
+      /// <summary>
+      /// Output data format
+      /// </summary>
+      CV_CAP_PROP_XI_DATA_FORMAT = 401,     
+      /// <summary>
+      /// Horizontal offset from the origin to the area of interest (in pixels).
+      /// </summary>
+      CV_CAP_PROP_XI_OFFSET_X = 402,      
+      /// <summary>
+      /// Vertical offset from the origin to the area of interest (in pixels).
+      /// </summary>
+      CV_CAP_PROP_XI_OFFSET_Y = 403,      
+      /// <summary>
+      /// Defines source of trigger.
+      /// </summary>
+      CV_CAP_PROP_XI_TRG_SOURCE = 404,      
+      /// <summary>
+      /// Generates an internal trigger. PRM_TRG_SOURCE must be set to TRG_SOFTWARE.
+      /// </summary>
+      CV_CAP_PROP_XI_TRG_SOFTWARE = 405,      
+      /// <summary>
+      /// Selects general purpose input
+      /// </summary>
+      CV_CAP_PROP_XI_GPI_SELECTOR = 406,      
+      /// <summary>
+      /// Set general purpose input mode
+      /// </summary>
+      CV_CAP_PROP_XI_GPI_MODE = 407,      
+      /// <summary>
+      /// Get general purpose level
+      /// </summary>
+      CV_CAP_PROP_XI_GPI_LEVEL = 408,      
+      /// <summary>
+      /// Selects general purpose output
+      /// </summary>
+      CV_CAP_PROP_XI_GPO_SELECTOR = 409,      
+      /// <summary>
+      /// Set general purpose output mode
+      /// </summary>
+      CV_CAP_PROP_XI_GPO_MODE = 410,      
+      /// <summary>
+      /// Selects camera signalling LED
+      /// </summary>
+      CV_CAP_PROP_XI_LED_SELECTOR = 411,      
+      /// <summary>
+      /// Define camera signalling LED functionality
+      /// </summary>
+      CV_CAP_PROP_XI_LED_MODE = 412,      
+      /// <summary>
+      /// Calculates White Balance(must be called during acquisition)
+      /// </summary>
+      CV_CAP_PROP_XI_MANUAL_WB = 413,      
+      /// <summary>
+      /// Automatic white balance
+      /// </summary>
+      CV_CAP_PROP_XI_AUTO_WB = 414,      
+      /// <summary>
+      /// Automatic exposure/gain
+      /// </summary>
+      CV_CAP_PROP_XI_AEAG = 415,      
+      /// <summary>
+      /// Exposure priority (0.5 - exposure 50%, gain 50%).
+      /// </summary>
+      CV_CAP_PROP_XI_EXP_PRIORITY = 416,      
+      /// <summary>
+      /// Maximum limit of exposure in AEAG procedure
+      /// </summary>
+      CV_CAP_PROP_XI_AE_MAX_LIMIT = 417, 
+      /// <summary>
+      /// Maximum limit of gain in AEAG procedure
+      /// </summary>
+      CV_CAP_PROP_XI_AG_MAX_LIMIT = 418,      
+      /// <summary>
+      /// Average intensity of output signal AEAG should achieve(in %)
+      /// </summary>
+      CV_CAP_PROP_XI_AEAG_LEVEL = 419,       
+      /// <summary>
+      /// Image capture timeout in milliseconds
+      /// </summary>
+      CV_CAP_PROP_XI_TIMEOUT = 420,     
+
+      /// <summary>
+      /// Android flash mode
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FLASH_MODE = 8001,
+      /// <summary>
+      /// Android focus mode
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FOCUS_MODE = 8002,
+      /// <summary>
+      /// Android white balance
+      /// </summary>
+      CV_CAP_PROP_ANDROID_WHITE_BALANCE = 8003,
+      /// <summary>
+      /// Android anti banding
+      /// </summary>
+      CV_CAP_PROP_ANDROID_ANTIBANDING = 8004,
+      /// <summary>
+      /// Android focal length
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FOCAL_LENGTH = 8005,
+      /// <summary>
+      /// Android focus distance near
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_NEAR = 8006,
+      /// <summary>
+      /// Android focus distance optimal
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_OPTIMAL = 8007,
+      /// <summary>
+      /// Android focus distance far
+      /// </summary>
+      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_FAR = 8008,
+
+      /// <summary>
+      /// iOS device focus
+      /// </summary>
+      CV_CAP_PROP_IOS_DEVICE_FOCUS = 9001,
+      /// <summary>
+      /// iOS device exposure
+      /// </summary>
+      CV_CAP_PROP_IOS_DEVICE_EXPOSURE = 9002,
+      /// <summary>
+      /// iOS device flash
+      /// </summary>
+      CV_CAP_PROP_IOS_DEVICE_FLASH = 9003,
+      /// <summary>
+      /// iOS device whitebalance 
+      /// </summary>
+      CV_CAP_PROP_IOS_DEVICE_WHITEBALANCE = 9004,
+      /// <summary>
+      /// iOS device torch
+      /// </summary>
+      CV_CAP_PROP_IOS_DEVICE_TORCH = 9005,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame offset X
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_OFFSET_X = 10001,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame offset Y
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_OFFSET_Y = 10002,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame width max
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_WIDTH_MAX = 10003,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame height max
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_HEIGH_MAX = 10004,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame sens width
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_SENS_WIDTH = 10005,
+
+      /// <summary>
+      /// Smartek Giganetix Ethernet Vision: frame sens height
+      /// </summary>
+      CV_CAP_PROP_GIGA_FRAME_SENS_HEIGH = 10006
+
    }
 
    /// <summary>
@@ -1078,7 +1357,7 @@ namespace Emgu.CV.CvEnum
       mRGBA2RGBA = 126,
 
       // RGB to YUV 4:2:0 family
-      
+
       /// <summary>
       /// Convert RGB to YUV_I420
       /// </summary>
@@ -1132,36 +1411,36 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Convert BayerBG to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerBG2BGR_EA  = 135,
+      BayerBG2BGR_EA = 135,
       /// <summary>
       /// Convert BayerGB to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGB2BGR_EA  = 136,
+      BayerGB2BGR_EA = 136,
       /// <summary>
       /// Convert BayerRG to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerRG2BGR_EA  = 137,
+      BayerRG2BGR_EA = 137,
       /// <summary>
       /// Convert BayerGR to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGR2BGR_EA  = 138,
+      BayerGR2BGR_EA = 138,
 
       /// <summary>
       /// Convert BayerBG to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerBG2RGB_EA  = BayerRG2BGR_EA,
+      BayerBG2RGB_EA = BayerRG2BGR_EA,
       /// <summary>
       /// Convert BayerGB to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGB2RGB_EA  = BayerGR2BGR_EA,
+      BayerGB2RGB_EA = BayerGR2BGR_EA,
       /// <summary>
       /// Convert BayerRG to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerRG2RGB_EA  = BayerBG2BGR_EA,
+      BayerRG2RGB_EA = BayerBG2BGR_EA,
       /// <summary>
       /// Convert BayerGR to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGR2RGB_EA  = BayerGB2BGR_EA,
+      BayerGR2RGB_EA = BayerGB2BGR_EA,
 
       /// <summary>
       /// The max number, do not use
@@ -2710,7 +2989,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// do not look outside of ROI
       /// </summary>
-      ISOLATED = 16 
+      ISOLATED = 16
    }
 
    /// <summary>
@@ -3049,15 +3328,15 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      LEFT = 400,
+      TYZX_LEFT = 400,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      RIGHT = 401,
+      TYZX_RIGHT = 401,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      COLOR = 402,
+      TYZX_COLOR = 402,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
@@ -3079,6 +3358,11 @@ namespace Emgu.CV.CvEnum
       DSHOW = 700,
 
       /// <summary>
+      /// Microsoft Media Foundation (via videoInput)
+      /// </summary>
+      MSMF = 1400,
+
+      /// <summary>
       /// PvAPI, Prosilica GigE SDK
       /// </summary>
       PVAPI = 800,
@@ -3089,9 +3373,36 @@ namespace Emgu.CV.CvEnum
       OPENNI = 900,
 
       /// <summary>
+      /// OpenNI (for Asus Xtion)
+      /// </summary>
+      OPENNI_ASUS = 910,
+
+      /// <summary>
       /// Android
       /// </summary>
-      ANDROID = 1000
+      ANDROID = 1000,
+      /// <summary>
+      /// Android back camera
+      /// </summary>
+      ANDROID_BACK = ANDROID + 99,
+      /// <summary>
+      /// // Android front camera
+      /// </summary>
+      ANDROID_FRONT = ANDROID + 98,
+      /// <summary>
+      /// XIMEA Camera API
+      /// </summary>
+      XIAPI = 1100,
+
+      /// <summary>
+      /// AVFoundation framework for iOS (OS X Lion will have the same API)
+      /// </summary>
+      AVFOUNDATION = 1200,
+
+      /// <summary>
+      ///  Smartek Giganetix GigEVisionSDK
+      /// </summary>
+      GIGANETIX = 1300,
    }
 
    /// <summary>
