@@ -13,7 +13,7 @@ if [ "$1" != "simulator" ]; then
     rm -f CMakeCache.txt
     platforms/ios/configure-device_xcode.sh
     rm -rf platforms/ios/armv7s bin/Release opencv/3rdparty/lib/Release 
-    xcodebuild -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
+    xcodebuild -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
     mkdir -p platforms/ios/armv7s 
     #cp -r lib/Release/* ios/armv7s/
     cp -r bin/Release/* platforms/ios/armv7s/
@@ -26,13 +26,13 @@ if [ "$1" != "simulator" ]; then
     rm -f CMakeCache.txt
     platforms/ios/configure-device_xcode.sh
     rm -rf platforms/ios/armv7 bin/Release opencv/3rdparty/lib/Release
-    xcodebuild -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
-    mkdir -p ios/armv7 
+    xcodebuild -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
+    mkdir -p platforms/ios/armv7 
     #cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* platforms/ios/armv7/
     cp -r opencv/3rdparty/lib/Release/* platforms/ios/armv7/
     #cp -r opencv/lib/Release/* ios/armv7/
-    cd ios/armv7
+    cd platforms/ios/armv7
     libtool -static -o libemgucv_armv7.a *.a
     cd ../../..
 
@@ -41,7 +41,7 @@ fi
 rm -f CMakeCache.txt
 platforms/ios/configure-simulator_xcode.sh
 rm -rf platforms/ios/i386 bin/Release opencv/3rdparty/lib/Release
-xcodebuild -sdk iphonesimulator -configuration Release -target ALL_BUILD clean build
+xcodebuild -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release -target ALL_BUILD clean build
 mkdir -p platforms/ios/i386
 #cp -r lib/Release/* ios/i386/
 cp -r bin/Release/* platforms/ios/i386/

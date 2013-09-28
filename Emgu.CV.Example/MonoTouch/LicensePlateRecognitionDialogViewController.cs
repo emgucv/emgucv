@@ -42,6 +42,7 @@ namespace Emgu.CV.Example.MonoTouch
       {
          base.ViewDidLoad();
          RootElement root = Root;
+         root.UnevenRows = true;
          UIImageView imageView = new UIImageView(View.Frame);
          StringElement messageElement = new StringElement("");
          StringElement licenseElement = new StringElement("");
@@ -84,6 +85,7 @@ namespace Emgu.CV.Example.MonoTouch
                      imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
                   }
                imageView.SetNeedsDisplay();
+                  ReloadData();
             }
          }
          )});

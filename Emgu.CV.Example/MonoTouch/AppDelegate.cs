@@ -34,6 +34,14 @@ namespace Emgu.CV.Example.MonoTouch
 			
             return true;
         }
+
+         public static bool iOS7Plus
+         {
+            get {
+               System.Version version = new Version (UIDevice.CurrentDevice.SystemVersion);
+               return version.Major >= 7;
+            }
+         }
     }
 }
 
