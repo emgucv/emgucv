@@ -245,7 +245,6 @@
     <Compile Include="TimedImage.cs" />
     <Compile Include="VideoSurveillance\IBGFGDetector.cs" />
     <Compile Include="VideoWriter.cs" />
-    <Compile Include="PInvoke\MonoTouch\CvInvokeEntryPoints.cs" />
     <Compile Include="PInvoke\MonoTouch\ImageMonoTouch.cs" />
     <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="PInvoke\MonoTouch\libemgucv.linkwith.cs">
@@ -255,9 +254,15 @@
     <Compile Include="Features2D\Feature2DBase.cs" />
     <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
-    <Compile Include="Mat.cs" />
     <Compile Include="Features2D\Freak.cs" />
     <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
+    <Compile Include="Util\Mat.cs" />
+    <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint.cs" />
+    <Compile Include="ERFilter.cs" />
+    <Compile Include="LevMarqSparse.cs" />
+    <Compile Include="PInvoke\CvInvokeEntryPoints.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">

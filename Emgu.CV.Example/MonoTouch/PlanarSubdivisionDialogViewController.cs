@@ -25,9 +25,10 @@ namespace Emgu.CV.Example.MonoTouch
       {
          base.ViewDidLoad();
            RootElement root = Root;
+         root.UnevenRows = true;
             UIImageView imageView = new UIImageView(View.Frame);
             //StringElement messageElement = new StringElement("");
-
+         Section imageSection = new Section() {imageView};
             root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
 
@@ -41,10 +42,12 @@ namespace Emgu.CV.Example.MonoTouch
             //messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
 
             imageView.SetNeedsDisplay();
+               this.ReloadData();
             }
             )});
             //root.Add(new Section() {messageElement});
-            root.Add(new Section() {imageView});
+
+            root.Add(imageSection);
       }
     }
 }

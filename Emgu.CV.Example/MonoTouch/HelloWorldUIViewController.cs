@@ -19,9 +19,11 @@ namespace Emgu.CV.Example.MonoTouch
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+         if (AppDelegate.iOS7Plus)
+            EdgesForExtendedLayout = UIRectEdge.None;
 
             MCvFont font = new MCvFont(
-                Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX,
+                Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN,
                 1.0,
                 1.0
             );
@@ -32,7 +34,7 @@ namespace Emgu.CV.Example.MonoTouch
                     "Hello, world",
                     ref font,
                     new Point(30, 30),
-                    new Bgr(0, 0, 0)
+                    new Bgr(0, 255, 0)
                 );
 
                 UIImageView imageView = new UIImageView(image.ToUIImage());

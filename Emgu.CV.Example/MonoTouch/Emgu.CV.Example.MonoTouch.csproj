@@ -21,10 +21,11 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchDebug>True</MtouchDebug>
-    <MtouchLink>None</MtouchLink>
     <MtouchI18n />
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <MtouchLink>None</MtouchLink>
+    <MtouchSdkVersion>6.0</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -33,10 +34,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
-    <MtouchLink>None</MtouchLink>
     <MtouchI18n />
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <MtouchSdkVersion>6.0</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
@@ -54,6 +55,7 @@
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <IpaPackageName />
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <MtouchSdkVersion>7.0</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -80,7 +82,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n />
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
-    <MtouchLink>None</MtouchLink>
+    <MtouchExtraArgs>-cxx</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -92,6 +94,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n />
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
+    <MtouchExtraArgs>-cxx</MtouchExtraArgs>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
