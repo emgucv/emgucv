@@ -66,6 +66,10 @@ CVAPI(void) CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector);
 CVAPI(cv::MSER*) CvMserGetFeatureDetector(CvMSERParams* detector);
 CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** detector);
 
+// SimpleBlobDetector
+CVAPI(cv::SimpleBlobDetector*) CvSimpleBlobDetectorCreate();
+CVAPI(void) CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
+
 // Draw keypoints.
 CVAPI(void) drawKeypoints(
                           const IplImage* image, 

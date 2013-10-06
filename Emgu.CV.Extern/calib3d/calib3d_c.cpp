@@ -72,3 +72,11 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
    return true;
 
 }
+
+bool cvFindCirclesGrid(IplImage* image, CvSize* patternSize, std::vector<cv::Point2f>* centers, int flags, cv::FeatureDetector* blobDetector)
+{
+   cv::Mat mat = cv::cvarrToMat(image);
+   cv::Size size(patternSize->width, patternSize->height);
+
+   return cv::findCirclesGrid(mat, size, *centers, flags, blobDetector);
+}

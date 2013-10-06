@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    ///Class for generation of image features which are distributed densely and regularly over the image.
    /// </summary>
-   public class DenseFeatureDetector : UnmanagedObject, IKeyPointDetector
+   public class DenseFeatureDetector : UnmanagedObject, IFeatureDetector
    {
       /// <summary>
       /// Create a dense feature detector.
@@ -47,7 +47,7 @@ namespace Emgu.CV.Features2D
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {

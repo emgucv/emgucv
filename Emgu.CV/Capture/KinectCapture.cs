@@ -102,6 +102,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create the Kinect Camera capture object
       /// </summary>
+      /// <param name="type">The kinect device type</param>
       /// <param name="outputMode">The output mode</param>
       public KinectCapture(DeviceType type, ImageGeneratorOutputMode outputMode)
          : base(type == DeviceType.Kinect ? CvEnum.CaptureType.OPENNI : CvEnum.CaptureType.OPENNI_ASUS)

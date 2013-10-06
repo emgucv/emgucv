@@ -48,7 +48,7 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_ptr != null)
+         if (_ptr != IntPtr.Zero)
             GpuInvoke.gpuCannyEdgeDetectorRelease(ref _ptr);
       }
    }

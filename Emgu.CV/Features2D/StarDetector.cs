@@ -13,14 +13,14 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// StarDetector
    /// </summary>
-   public class StarDetector : UnmanagedObject, IKeyPointDetector
+   public class StarDetector : UnmanagedObject, IFeatureDetector
    {
       #region IKeyPointDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {

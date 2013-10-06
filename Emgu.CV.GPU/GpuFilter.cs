@@ -14,11 +14,23 @@ using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
+   /// <summary>
+   /// Base Gpu filter class
+   /// </summary>
+   /// <typeparam name="TColor">Color type of image this filter can process</typeparam>
+   /// <typeparam name="TDepth">Depth of image this filter can process</typeparam>
    public abstract class GpuFilter<TColor, TDepth> : UnmanagedObject
       where TColor : struct, IColor
       where TDepth : new()
    {
+      /// <summary>
+      /// The MatType for GpuImage&lt; TColor, TDepth &gt;
+      /// </summary>
       protected static int _matType;
+
+      /// <summary>
+      /// dummy code to make sure the _matType value is setup properly
+      /// </summary>
       static GpuFilter()
       {
          using (GpuImage<TColor, TDepth> tmp = new GpuImage<TColor, TDepth>(4, 4))
@@ -27,12 +39,21 @@ namespace Emgu.CV.GPU
          }
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this gpu filter
+      /// </summary>
       protected override void DisposeObject()
       {
-         if (_ptr != null)
+         if (_ptr != IntPtr.Zero)
             GpuInvoke.gpuFilterRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Apply the gpu filter
+      /// </summary>
+      /// <param name="image">The source GpuImage where the filter will be applied to</param>
+      /// <param name="dst">The destination GpuImage</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Apply(GpuImage<TColor, TDepth> image, GpuImage<TColor, TDepth> dst, Stream stream)
       {
          GpuInvoke.gpuFilterApply(_ptr, image, dst, stream);

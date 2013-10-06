@@ -17,7 +17,7 @@ namespace Emgu.CV.Features2D
    /// See Detects corners using FAST algorithm by E. Rosten (”Machine learning for high-speed corner
    /// detection”, 2006).
    /// </summary>
-   public class FastDetector : UnmanagedObject, IKeyPointDetector
+   public class FastDetector : UnmanagedObject, IFeatureDetector
    {
       private int _threshold;
       private bool _nonmaxSupression;
@@ -51,7 +51,7 @@ namespace Emgu.CV.Features2D
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {

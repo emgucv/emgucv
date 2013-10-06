@@ -357,7 +357,7 @@ namespace Emgu.CV.GPU
          get
          {
 #if !ANDROID
-            if (this is Image<Bgr, Byte>)
+            if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
             {  
                Size s = Size;
                Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);

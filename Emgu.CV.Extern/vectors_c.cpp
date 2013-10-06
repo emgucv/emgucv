@@ -405,6 +405,58 @@ void VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* 
 
 //----------------------------------------------------------------------------
 //
+//  Vector of Point
+//
+//----------------------------------------------------------------------------
+std::vector<cv::Point2f>* VectorOfPointFCreate() 
+{ 
+   CV_Assert(sizeof(cv::Point2f) == 2*sizeof(float));
+   return new std::vector<cv::Point2f>(); 
+}
+
+std::vector<cv::Point2f>* VectorOfPointFCreateSize(int size) 
+{ 
+   CV_Assert(sizeof(cv::Point) == 2*sizeof(int));
+   return new std::vector<cv::Point2f>(size); 
+}
+
+int VectorOfPointFGetSize(std::vector<cv::Point2f>* v)
+{
+   return v->size();
+}
+
+void VectorOfPointFPushMulti(std::vector<cv::Point2f>* v, cv::Point2f* values, int count)
+{
+   VectorPushMulti<cv::Point2f>(v, values, count);
+}
+
+void VectorOfPointFClear(std::vector<cv::Point2f>* v)
+{
+   v->clear();
+}
+
+void VectorOfPointFRelease(std::vector<cv::Point2f>* v)
+{
+   delete v;
+}
+
+void VectorOfPointFCopyData(std::vector<cv::Point2f>* v, cv::Point2f* data)
+{
+   VectorCopyData<cv::Point2f>(v, data);
+}
+
+cv::Point2f* VectorOfPointFGetStartAddress(std::vector<cv::Point2f>* v)
+{
+   return v->empty() ? NULL : &(*v)[0];
+}
+
+void VectorOfPointFGetItem(std::vector<cv::Point2f>* points, int index, cv::Point2f* point)
+{
+   *point = points->at(index);
+}
+
+//----------------------------------------------------------------------------
+//
 //  Vector of Vector of Point
 //
 //----------------------------------------------------------------------------
@@ -433,3 +485,4 @@ std::vector<cv::Point>* VectorOfVectorOfPointGetItem(std::vector< std::vector<cv
 {
    return &(*points)[index];
 }
+

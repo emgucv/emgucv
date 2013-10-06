@@ -2762,6 +2762,28 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Type of circles grid calibration
+   /// </summary>
+   [Flags]
+   public enum CalibCgType
+   {
+      /// <summary>
+      /// symmetric grid
+      /// </summary>
+      SymmetricGrid = 1,
+      /// <summary>
+      /// asymmetric grid
+      /// </summary>
+      AsymmetricGrid = 2,
+      /// <summary>
+      /// Clustering
+      /// </summary>
+      Clustering = 4,
+
+   }
+
+
+   /// <summary>
    /// IO type for eigen object related functions
    /// </summary>
    public enum EIGOBJ_TYPE

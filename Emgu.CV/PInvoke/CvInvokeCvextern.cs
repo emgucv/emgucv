@@ -288,5 +288,9 @@ namespace Emgu.CV
          double minMatchDistance, int padX,
          int padY, int scales, double minScale, double maxScale,
          double orientationWeight, double truncate);
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cvFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
    }
 }

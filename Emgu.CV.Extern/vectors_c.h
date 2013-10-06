@@ -197,6 +197,29 @@ CVAPI(void) VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::
 
 //----------------------------------------------------------------------------
 //
+//  Vector of PointF
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::Point2f>*) VectorOfPointFCreate();
+
+CVAPI(std::vector<cv::Point2f>*) VectorOfPointFCreateSize(int size);
+
+CVAPI(int) VectorOfPointFGetSize(std::vector<cv::Point2f>* v);
+
+CVAPI(void) VectorOfPointFPushMulti(std::vector<cv::Point2f>* v, cv::Point2f* values, int count);
+
+CVAPI(void) VectorOfPointFClear(std::vector<cv::Point2f>* v);
+
+CVAPI(void) VectorOfPointFRelease(std::vector<cv::Point2f>* v);
+
+CVAPI(void) VectorOfPointFCopyData(std::vector<cv::Point2f>* v, cv::Point2f* data);
+
+CVAPI(cv::Point2f*) VectorOfPointFGetStartAddress(std::vector<cv::Point2f>* v);
+
+CVAPI(void) VectorOfPointFGetItem(std::vector<cv::Point2f>* points, int index, cv::Point2f* point);
+
+//----------------------------------------------------------------------------
+//
 //  Vector of Vector of Point
 //
 //----------------------------------------------------------------------------

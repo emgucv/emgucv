@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvSURFParams structure
    /// </summary>
-   public class SURFDetector : Feature2DBase<float>
+   public class SURFDetector : Feature2D<float>
    {
       private MCvSURFParams _surfParams;
 

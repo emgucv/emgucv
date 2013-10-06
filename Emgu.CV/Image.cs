@@ -130,8 +130,10 @@ namespace Emgu.CV
             return;
          }
 #else
-         if ((this is Image<Bgra, Byte> && (extension.Equals(".png"))
-            || extension.Equals(".tiff") || extension.Equals(".tif")))
+         if ( 
+            (typeof(TColor) == typeof(Bgra) && typeof(TColor) == typeof(Byte) && extension.Equals(".png"))
+            || extension.Equals(".tiff") 
+            || extension.Equals(".tif"))
          {
             //Open CV is unable to load the alpha channel of the png file, 
             //It is also not able to load some tiff formatted file correctly
@@ -2694,7 +2696,7 @@ namespace Emgu.CV
             Size size;
             CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
-            if (this is Image<Gray, Byte>)
+            if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
             {   //Grayscale of Bytes
                Bitmap bmp = new Bitmap(
                    size.Width,
@@ -2714,7 +2716,7 @@ namespace Emgu.CV
             else if (
                Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
                Platform.ClrType == Emgu.Util.TypeEnum.ClrType.DotNet &&
-               this is Image<Bgr, Byte>)
+               typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
             {   //Bgr byte    
                return new Bitmap(
                    size.Width,
@@ -2723,7 +2725,7 @@ namespace Emgu.CV
                    PixelFormat.Format24bppRgb,
                    scan0);
             }
-            else if (this is Image<Bgra, Byte>)
+            else if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
             {   //Bgra byte
                return new Bitmap(
                    size.Width,
@@ -2802,7 +2804,7 @@ namespace Emgu.CV
             switch (value.PixelFormat)
             {
                case PixelFormat.Format32bppRgb:
-                  if (this is Image<Bgr, Byte>)
+                  if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                   {
                      BitmapData data = value.LockBits(
                         new Rectangle(Point.Empty, value.Size),
@@ -2829,7 +2831,7 @@ namespace Emgu.CV
                   }
                   break;
                case PixelFormat.Format32bppArgb:
-                  if (this is Image<Bgra, Byte>)
+                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
                      CopyFromBitmap(value);
                   else
                   {
@@ -2875,7 +2877,7 @@ namespace Emgu.CV
                   }
                   break;
                case PixelFormat.Format24bppRgb:
-                  if (this is Image<Bgr, Byte>)
+                  if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                      CopyFromBitmap(value);
                   else
                   {
@@ -2889,7 +2891,7 @@ namespace Emgu.CV
                   }
                   break;
                case PixelFormat.Format1bppIndexed:
-                  if (this is Image<Gray, Byte>)
+                  if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
                   {
                      int rows = size.Height;
                      int cols = size.Width;

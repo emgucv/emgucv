@@ -192,6 +192,17 @@ void CvMserFeatureDetectorRelease(cv::MSER** detector)
    *detector = 0;
 }
 
+// SimpleBlobDetector
+cv::SimpleBlobDetector* CvSimpleBlobDetectorCreate()
+{
+   return new cv::SimpleBlobDetector();
+}
+void CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
 // Draw keypoints.
 void drawKeypoints(
                           const IplImage* image, 

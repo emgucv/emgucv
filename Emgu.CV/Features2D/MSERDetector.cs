@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvMSERParams structure
    /// </summary>
-   public class MSERDetector : UnmanagedObject, IKeyPointDetector
+   public class MSERDetector : UnmanagedObject, IFeatureDetector
    {
       /// <summary>
       /// Create a MSER detector using the specific parameters

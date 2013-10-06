@@ -16,7 +16,7 @@ namespace Emgu.CV.Features2D
    /// The feature 2D base class
    /// </summary>
    /// <typeparam name="TDescriptor">The type of data in the descriptor. Can be either float or byte</typeparam>
-   public abstract class Feature2DBase<TDescriptor> : UnmanagedObject, IKeyPointDetector, IDescriptorExtractor<Gray, TDescriptor>
+   public abstract class Feature2D<TDescriptor> : UnmanagedObject, IFeatureDetector, IDescriptorExtractor<Gray, TDescriptor>
             where TDescriptor : struct
    {
       /// <summary>
@@ -38,6 +38,16 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
+      /// Get the pointer to the descriptor extractor. 
+      /// </summary>
+      /// <returns>The descriptor extractor</returns>
+      public IntPtr DescriptorExtratorPtr
+      {
+         get { return _descriptorExtractorPtr; }
+      }
+
+      /*
+      /// <summary>
       /// Compute the descriptors on the image from the given keypoint locations.
       /// </summary>
       /// <param name="image">The image to compute descriptors from</param>
@@ -47,7 +57,7 @@ namespace Emgu.CV.Features2D
       public Matrix<TDescriptor> ComputeDescriptorsRaw(Image<Gray, byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
       {
          return DetectAndComputeHelper(image, mask, keyPoints, true);
-      }
+      }*/
 
       /// <summary>
       /// Compute the descriptors on the image from the given keypoint locations.
@@ -80,22 +90,13 @@ namespace Emgu.CV.Features2D
       /// <param name="image">The image to detect features from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature<TDescriptor>[] DetectFeatures(Image<Gray, Byte> image, Image<Gray, byte> mask)
+      public ImageFeature<TDescriptor>[] DetectAndCompute(Image<Gray, Byte> image, Image<Gray, byte> mask)
       {
          using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
          using (Matrix<TDescriptor> descVec = DetectAndCompute(image, mask, pts))
          {
             return ImageFeature<TDescriptor>.ConvertFromRaw(pts, descVec);
          }
-      }
-
-      /// <summary>
-      /// Get the pointer to the descriptor extractor. 
-      /// </summary>
-      /// <returns>The descriptor extractor</returns>
-      public IntPtr DescriptorExtratorPtr
-      {
-         get { return _descriptorExtractorPtr; }
       }
 
       /*

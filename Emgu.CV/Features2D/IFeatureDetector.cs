@@ -11,9 +11,9 @@ using Emgu.CV.Util;
 namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// An interface for keypoint detector
+   /// An interface for feature detector
    /// </summary>
-   public interface IKeyPointDetector
+   public interface IFeatureDetector
    {
       /// <summary>
       /// Get the pointer to the feature detector. 

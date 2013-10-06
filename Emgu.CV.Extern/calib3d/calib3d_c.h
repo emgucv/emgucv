@@ -29,4 +29,6 @@ CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplI
 //2D Tracker
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography);
 
+//Find circles grid
+CVAPI(bool) cvFindCirclesGrid(IplImage* image, CvSize* patternSize, std::vector<cv::Point2f>* centers, int flags, cv::FeatureDetector* blobDetector);
 #endif

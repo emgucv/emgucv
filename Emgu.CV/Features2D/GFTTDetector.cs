@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    ///  Wrapping class for feature detection using the goodFeaturesToTrack() function.
    /// </summary>
-   public class GFTTDetector : UnmanagedObject, IKeyPointDetector
+   public class GFTTDetector : UnmanagedObject, IFeatureDetector
    {
       /// <summary>
       /// Create a Good Feature to Track detector
@@ -37,7 +37,7 @@ namespace Emgu.CV.Features2D
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {

@@ -16,9 +16,9 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Adapts a detector to partition the source image into a grid and detect points in each cell.
    /// </summary>
-   public class GridAdaptedFeatureDetector : UnmanagedObject, IKeyPointDetector
+   public class GridAdaptedFeatureDetector : UnmanagedObject, IFeatureDetector
    {
-      private IKeyPointDetector _baseDetector;
+      private IFeatureDetector _baseDetector;
 
       /// <summary>
       /// Maximum count of keypoints detected on the image. Only the strongest keypoints
@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
       /// <param name="maxTotalKeyPoints">Maximum count of keypoints detected on the image. Only the strongest keypoints</param>
       /// <param name="gridRows">Grid rows count</param>
       /// <param name="gridCols">Grid column count</param>
-      public GridAdaptedFeatureDetector(IKeyPointDetector detector, int maxTotalKeyPoints, int gridRows, int gridCols)
+      public GridAdaptedFeatureDetector(IFeatureDetector detector, int maxTotalKeyPoints, int gridRows, int gridCols)
       {
          _baseDetector = detector;
          MaxTotalKeyPoints = maxTotalKeyPoints;
@@ -60,7 +60,7 @@ namespace Emgu.CV.Features2D
       }
 
       #region IKeyPointDetector Members
-      IntPtr IKeyPointDetector.FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {

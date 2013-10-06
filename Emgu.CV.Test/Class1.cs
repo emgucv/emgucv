@@ -48,7 +48,7 @@ namespace Emgu.CV.Test
 
       public void TestKinect()
       {
-         using (KinectCapture capture = new KinectCapture(KinectCapture.ImageGeneratorOutputMode.VGA_30HZ))
+         using (KinectCapture capture = new KinectCapture(KinectCapture.DeviceType.Kinect, KinectCapture.ImageGeneratorOutputMode.VGA_30HZ))
          {
             ImageViewer viewer = new ImageViewer();
             Application.Idle += delegate(Object sender, EventArgs e)

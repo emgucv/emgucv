@@ -67,5 +67,18 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> undistorted = intrisic.Undistort(chessboardImage);
          //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
       }
+
+      [Test]
+      public void TestCirclesGrid()
+      {
+         Size patternSize = new Size(4, 3);
+         Image<Gray, Byte> circlesGridImage = EmguAssert.LoadImage<Gray, byte>("circlesGrid.bmp");
+         using (SimpleBlobDetector detector = new SimpleBlobDetector())
+         {
+            PointF[] centers = CameraCalibration.FindCirclesGrid(circlesGridImage, patternSize, CvEnum.CalibCgType.SymmetricGrid | CvEnum.CalibCgType.Clustering, detector);
+            CameraCalibration.DrawChessboardCorners(circlesGridImage, patternSize, centers);
+            //UI.ImageViewer.Show(circlesGridImage);
+         }
+      }
    }
 }

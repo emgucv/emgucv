@@ -42,7 +42,8 @@ namespace Emgu.CV.GPU
       /// </summary>
       protected override void DisposeObject()
       {
-         GpuInvoke.gpuLookUpTableRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            GpuInvoke.gpuLookUpTableRelease(ref _ptr);
       }
    }
 

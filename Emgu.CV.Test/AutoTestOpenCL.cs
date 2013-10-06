@@ -575,8 +575,8 @@ namespace Emgu.CV.Test
 
          #region extract features from the object image
          Stopwatch stopwatch = Stopwatch.StartNew();
-         VectorOfKeyPoint modelKeypoints = fast.DetectKeyPointsRaw(box, null);
-         Matrix<Byte> modelDescriptors = brief.ComputeDescriptorsRaw(box, null, modelKeypoints);
+         VectorOfKeyPoint modelKeypoints = fast.DetectRaw(box, null);
+         Matrix<Byte> modelDescriptors = brief.Compute(box, null, modelKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion
@@ -585,8 +585,8 @@ namespace Emgu.CV.Test
 
          #region extract features from the observed image
          stopwatch.Reset(); stopwatch.Start();
-         VectorOfKeyPoint observedKeypoints = fast.DetectKeyPointsRaw(observedImage, null);
-         Matrix<Byte> observedDescriptors = brief.ComputeDescriptorsRaw(observedImage, null, observedKeypoints);
+         VectorOfKeyPoint observedKeypoints = fast.DetectRaw(observedImage, null);
+         Matrix<Byte> observedDescriptors = brief.Compute(observedImage, null, observedKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion

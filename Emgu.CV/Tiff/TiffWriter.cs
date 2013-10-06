@@ -41,11 +41,13 @@ namespace Emgu.CV.Tiff
       /// <param name="image">The image to be written</param>
       public virtual void WriteImage(Image<TColor, TDepth> image)
       {
-         if (image is Image<Gray, Byte> || image is Image<Rgb, Byte> || image is Image<Rgba, Byte>)
+         if ((typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
+            || (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte))
+            || (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte)))
          {
             CvInvoke.tiffWriteImage(_ptr, image);
          }
-         else if (image is Image<Bgra, Byte>)
+         else if ((typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte)))
          {
             //swap the B and R channel since geotiff assume RGBA for 4 channels image of depth Byte
             using (Image<Rgba, Byte> rgba = (image as Image<Bgra, Byte>).Convert<Rgba, Byte>())
@@ -53,7 +55,7 @@ namespace Emgu.CV.Tiff
                CvInvoke.tiffWriteImage(_ptr, rgba);
             }
          }
-         else if (image is Image<Bgr, Byte>)
+         else if ((typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte)))
          {
             //swap the B and R channel since geotiff assume RGB for 3 channels image of depth Byte
             using (Image<Rgb, Byte> rgb = (image as Image<Bgr, Byte>).Convert<Rgb, Byte>())
