@@ -164,9 +164,20 @@ namespace Emgu.CV.ML
       /// Predicts response for the input sample.
       /// </summary>
       /// <param name="sample">The input sample</param>
+      /// <returns>The predicted lable</returns>
       public float Predict(Matrix<float> sample)
       {
-         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr);
+         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr, false);
+      }
+
+      /// <summary>
+      /// Get the decision value for the input sample.
+      /// </summary>
+      /// <param name="sample">The input sample</param>
+      /// <returns>The decision value for the sample</returns>
+      public float GetDecisionValue(Matrix<float> sample)
+      {
+         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr, true);
       }
 
       /// <summary>

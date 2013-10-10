@@ -32,7 +32,7 @@ namespace Emgu.CV.Features2D
          _ptr = CvInvoke.CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
       }
 
-      #region IKeyPointDetector Members
+      #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>

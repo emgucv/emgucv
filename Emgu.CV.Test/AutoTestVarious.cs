@@ -2408,11 +2408,14 @@ namespace Emgu.CV.Test
       public void TestERFilter()
       {
          CvInvoke.SanityCheck();
-         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray,Byte>("scenetext.jpg"))
+         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("scenetext.jpg"))
+         using (Image<Gray, Byte> mask = new Image<Gray,byte>(image.Size.Width + 2, image.Size.Height + 2))
          using (ERFilterNM1 er1 = new ERFilterNM1())
+         using (ERFilterNM2 er2 = new ERFilterNM2()) 
          using (VectorOfERStat regionVec = new VectorOfERStat())
          {
             er1.Run(image, regionVec);
+            er2.Run(image, regionVec);
             //Emgu.CV.UI.ImageViewer.Show(image);
             MCvERStat[] regions = regionVec.ToArray();
             Size size = image.Size;
@@ -2420,9 +2423,16 @@ namespace Emgu.CV.Test
             {
                if (region.ParentPtr != IntPtr.Zero)
                {
+                  Point p = region.GetCenter(size.Width);
+                  int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
+                  MCvConnectedComp comp;
+                  CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
+                  image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
                }
             }
+            //UI.ImageViewer.Show(image.ConcateHorizontal( mask ));
          }
+        
       }
    }
 }

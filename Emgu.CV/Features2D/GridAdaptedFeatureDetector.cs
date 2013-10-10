@@ -59,7 +59,7 @@ namespace Emgu.CV.Features2D
          CvInvoke.GridAdaptedFeatureDetectorRelease(ref _ptr);
       }
 
-      #region IKeyPointDetector Members
+      #region IFeatureDetector Members
       IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get

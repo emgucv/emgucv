@@ -77,6 +77,7 @@ bool cvFindCirclesGrid(IplImage* image, CvSize* patternSize, std::vector<cv::Poi
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Size size(patternSize->width, patternSize->height);
-
-   return cv::findCirclesGrid(mat, size, *centers, flags, blobDetector);
+   cv::Ptr<cv::FeatureDetector> ptr(blobDetector);
+   ptr.addref();
+   return cv::findCirclesGrid(mat, size, *centers, flags, ptr);
 }

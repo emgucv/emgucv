@@ -102,8 +102,8 @@ grid->min_val = defaultGrid.min_val;
 grid->step = defaultGrid.step;
 }
 void CvSVMRelease(CvSVM** model) { delete *model; *model = 0; }
-float CvSVMPredict(CvSVM* model,  CvMat* _sample )
-{ return model->predict(_sample); }
+float CvSVMPredict(CvSVM* model,  CvMat* _sample, bool returnDFVal )
+{ return model->predict(_sample, returnDFVal); }
 float* CvSVMGetSupportVector(CvSVM* model, int i)
 { return (float*) model->get_support_vector(i); }
 int CvSVMGetSupportVectorCount(CvSVM* model)

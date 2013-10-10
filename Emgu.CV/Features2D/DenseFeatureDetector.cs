@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
          _ptr = CvInvoke.CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
       }
 
-      #region IKeyPointDetector Members
+      #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>

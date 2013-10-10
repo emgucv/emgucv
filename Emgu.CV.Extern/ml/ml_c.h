@@ -57,7 +57,7 @@ CVAPI(bool) CvSVMTrainAuto(CvSVM* model, CvMat* _train_data, CvMat* _responses,
                            CvParamGrid* degree_grid);
 CVAPI(void) CvSVMGetDefaultGrid(int gridType, CvParamGrid* grid);
 CVAPI(void) CvSVMRelease(CvSVM** model);
-CVAPI(float) CvSVMPredict(CvSVM* model,  CvMat* _sample );
+CVAPI(float) CvSVMPredict(CvSVM* model,  CvMat* _sample, bool returnDFVal );
 CVAPI(float*) CvSVMGetSupportVector(CvSVM* model, int i);
 CVAPI(int) CvSVMGetSupportVectorCount(CvSVM* model);
 CVAPI(int) CvSVMGetVarCount(CvSVM* model);

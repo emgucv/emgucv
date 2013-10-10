@@ -273,12 +273,19 @@ CVAPI(void) gpuCornernessCriteriaRelease(cv::gpu::CornernessCriteria** detector)
 
 CVAPI(void) gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags, cv::gpu::Stream* stream);
 
+CVAPI(void) gpuMatBilateralFilter(cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::gpu::Stream* stream);
+
+//----------------------------------------------------------------------------
+//
+//  CannyEdgeDetector
+//
+//----------------------------------------------------------------------------
 CVAPI(cv::gpu::CannyEdgeDetector*) gpuCreateCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize, bool L2gradient);
 
 CVAPI(void) gpuCannyEdgeDetectorDetect(cv::gpu::CannyEdgeDetector* detector, cv::gpu::GpuMat* src, cv::gpu::GpuMat* edges);
 
 CVAPI(void) gpuCannyEdgeDetectorRelease(cv::gpu::CannyEdgeDetector** detector);
- 
+
 //----------------------------------------------------------------------------
 //
 //  GpuBruteForceMatcher

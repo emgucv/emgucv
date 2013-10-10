@@ -722,6 +722,16 @@ void gpuMatDft(const cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int flags, cv::
    cv::gpu::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::gpu::Stream::Null());
 }
 
+void gpuMatBilateralFilter(cv::gpu::GpuMat* src, cv::gpu::GpuMat* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::gpu::Stream* stream)
+{
+   cv::gpu::bilateralFilter(*src, *dst, kernelSize, sigmaColor, sigmaSpatial, borderMode, stream ? *stream : cv::gpu::Stream::Null());
+}
+
+//----------------------------------------------------------------------------
+//
+//  CannyEdgeDetector
+//
+//----------------------------------------------------------------------------
 cv::gpu::CannyEdgeDetector* gpuCreateCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
 {
    cv::Ptr<cv::gpu::CannyEdgeDetector> ptr = cv::gpu::createCannyEdgeDetector(lowThreshold, highThreshold, apertureSize, L2gradient);

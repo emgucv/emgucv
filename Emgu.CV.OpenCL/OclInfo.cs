@@ -7,14 +7,19 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.OpenCL
 {
-   public class OclInfo
+   /// <summary>
+   /// This class contains ocl runtime information
+   /// </summary>
+   public class OclInfo : UnmanagedObject
    {
-      private IntPtr _ptr;
       internal OclInfo(IntPtr ptr)
       {
          _ptr = ptr;
       }
 
+      /// <summary>
+      /// Get the platform name
+      /// </summary>
       public String PlatformName
       {
          get
@@ -24,6 +29,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Get the device names
+      /// </summary>
       public String[] DeviceNames
       {
          get
@@ -36,6 +44,21 @@ namespace Emgu.CV.OpenCL
             return names;
          }
       }
+
+      protected override void DisposeObject()
+      {
+         //throw new NotImplementedException();
+      }
+   }
+
+
+   public enum OclDeviceType
+   {
+      Default = (1 << 0),
+      Cpu = (1 << 1),
+      Gpu = (1 << 2),
+      Accelerator = (1 << 3),
+      All = -1 //0xFFFFFFFF
    }
 
    public static partial class OclInvoke

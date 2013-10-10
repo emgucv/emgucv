@@ -423,9 +423,12 @@ namespace Emgu.CV.ML
       /// Predicts response for the input sample.
       /// </summary>
       /// <param name="model">The SVM model</param>
-      /// <param name="_sample">The input sample</param>
+      /// <param name="sample">The input sample</param>
+      /// <param name="returnDFVal">If true, it will return the decision value rather than the label, use false for default.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern float CvSVMPredict(IntPtr model, IntPtr _sample);
+      public static extern float CvSVMPredict(IntPtr model, IntPtr sample, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool returnDFVal);
 
       /// <summary>
       /// The method retrieves a given support vector

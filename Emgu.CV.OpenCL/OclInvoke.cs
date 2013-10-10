@@ -14,15 +14,6 @@ using Emgu.Util;
 
 namespace Emgu.CV.OpenCL
 {
-   public enum OclDeviceType
-   {
-      Default = (1 << 0),
-      Cpu = (1 << 1),
-      Gpu = (1 << 2),
-      Accelerator = (1 << 3),
-      All = -1 //0xFFFFFFFF
-   }
-
    /// <summary>
    /// This class wraps the functional calls to the opencv_ocl module
    /// </summary>
@@ -32,13 +23,40 @@ namespace Emgu.CV.OpenCL
       {
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
+         
+         _hasOpenCL = oclGetDevice(IntPtr.Zero, OclDeviceType.All) > 0;
+      }
+
+      private static bool _hasOpenCL;
+
+      /// <summary>
+      /// Indicates if OpenCL is presented in the environment
+      /// </summary>
+      public static bool HasOpenCL
+      {
+         get
+         {
+            return _hasOpenCL;
+         }
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGetDevice")]
-      public static extern int GetDevice(IntPtr oclInfoVector, OclDeviceType deviceType);
+      internal static extern int oclGetDevice(IntPtr oclInfoVector, OclDeviceType deviceType);
+
+      public static VectorOfOclInfo GetDevice(OclDeviceType deviceType)
+      {
+         VectorOfOclInfo vec = new VectorOfOclInfo();
+         oclGetDevice(vec, deviceType);
+         return vec;
+      }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetDevice")]
-      public static extern void SetDevice(IntPtr oclInfo, int deviceNum);
+      private static extern void oclSetDevice(IntPtr oclInfo, int deviceNum);
+
+      public static void SetDevice(OclInfo oclInfo, int deviceNum)
+      {
+         oclSetDevice(oclInfo.Ptr, deviceNum);
+      }
 
       /// <summary>
       /// Create an empty OclMat 
@@ -427,8 +445,17 @@ namespace Emgu.CV.OpenCL
       /// <param name="right">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
       /// <param name="borderType">Border Type</param>
       /// <param name="value">Border value.</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCopyMakeBorder")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCopyMakeBorder")]
       public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, MCvScalar value);
+
+      /// <summary>
+      /// Smoothes image using median filter
+      /// </summary>
+      /// <param name="src">Source OCL image, should be either 1 or 4 channel, the image depth should be CV 8U or CV 32F.</param>
+      /// <param name="dst">The result image, should be the same type and size as the source image</param>
+      /// <param name="m">The kernel size, should be either 3 or 5</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMedianFilter")]
+      public static extern void MedianFilter(IntPtr src, IntPtr dst, int m);
 
       /// <summary>
       /// Computes the integral image and integral for the squared image
@@ -436,7 +463,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source OclMat, supports only CV_8UC1 source type</param>
       /// <param name="sum">The sum OclMat, supports only CV_32S source type, but will contain unsigned int values.</param>
       /// <param name="sqrSum">The sqsum OclMat, supports only CV32F source type. Use IntPtr.Zero if you don't want the sqrSum to be computed.</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatIntegral")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatIntegral")]
       public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqrSum);
 
       /// <summary>
@@ -461,10 +488,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination image; will have the same size and the same type as src</param>
       /// <param name="d">The diameter of each pixel neighborhood, that is used during filtering. If it is non-positive, it’s computed from sigmaSpace</param>
       /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
-      /// <param name="sigmaSpave">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBilateralFilter")]
-      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpave, CvEnum.BORDER_TYPE borderType);
+      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
@@ -675,6 +702,19 @@ namespace Emgu.CV.OpenCL
       public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
+      /// Applies the vertical or horizontal Scharr operator to the image
+      /// </summary>
+      /// <param name="src">The source OclMat</param>
+      /// <param name="dst">The resulting OclMat</param>
+      /// <param name="dx">Order of the derivative x</param>
+      /// <param name="dy">Order of the derivative y</param>
+      /// <param name="scale">Optional scale, use 1 for default.</param>
+      /// <param name="delta">Optional delta value, use 0 for default</param>
+      /// <param name="borderType">The border type.</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatScharr")]
+      public static extern void Scharr(IntPtr src, IntPtr dst, int dx, int dy, double scale, double delta, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
       /// Applies Laplacian operator to the OclMat
       /// </summary>
       /// <param name="src">The source OclMat</param>
@@ -704,6 +744,26 @@ namespace Emgu.CV.OpenCL
          double beta,
          IntPtr dst,
          CvEnum.GEMM_TYPE tABC);
+
+      /// <summary>
+      /// Warps the image using affine transformation
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
+      /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatWarpAffine")]
+      public static extern void WarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+
+      /// <summary>
+      /// Warps the image using perspective transformation
+      /// </summary>
+      /// <param name="src">The source GpuMat</param>
+      /// <param name="dst">The destination GpuMat</param>
+      /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
+      /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatWarpPerspective")]
+      public static extern void WarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
 
       /// <summary>
       /// Smooths the OclMat using Gaussian filter.

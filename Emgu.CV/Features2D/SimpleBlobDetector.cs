@@ -21,15 +21,15 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public SimpleBlobDetector()
       {
-         _ptr = _ptr = CvInvoke.CvSimpleBlobDetectorCreate();
+         _ptr = CvInvoke.CvSimpleBlobDetectorCreate();
       }
 
-      #region KeyPointDetector Members
+      #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>
       /// <returns>The feature detector</returns>
-      public IntPtr FeatureDetectorPtr
+      IntPtr IFeatureDetector.FeatureDetectorPtr
       {
          get
          {
@@ -43,7 +43,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvSimpleBlobDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.CvSimpleBlobDetectorRelease(ref _ptr);
       }
    }
 }

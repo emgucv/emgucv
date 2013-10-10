@@ -14,13 +14,14 @@ namespace Emgu.CV.Structure
    /// <summary>
    /// Managed cv::ERStat structure
    /// </summary>
-      [StructLayout(LayoutKind.Sequential)]
+   [StructLayout(LayoutKind.Sequential)]
    public struct MCvERStat
    {
       /// <summary>
       /// Pixel
       /// </summary>
       public int Pixel;
+
       /// <summary>
       /// Level
       /// </summary>
@@ -122,7 +123,7 @@ namespace Emgu.CV.Structure
       //[MarshalAs(UnmanagedType.U1)]
       public Byte LocalMaxima;
 
-        
+
       /// <summary>
       /// Pointer to the ERStat that is the max probability ancestor
       /// </summary>
@@ -131,6 +132,16 @@ namespace Emgu.CV.Structure
       /// Pointer to the ERStat that is the min probability ancestor
       /// </summary>
       public IntPtr MinProbabilityAncestor;
+
+      /// <summary>
+      /// Get the center of the region
+      /// </summary>
+      /// <param name="imageWidth">The source image width</param>
+      /// <returns>The center of the region</returns>
+      public System.Drawing.Point GetCenter(int imageWidth)
+      {
+         return new System.Drawing.Point(Pixel % imageWidth, Pixel / imageWidth);
+      }
    }
 }
 

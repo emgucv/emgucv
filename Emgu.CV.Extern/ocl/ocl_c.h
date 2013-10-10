@@ -133,6 +133,8 @@ CVAPI(void) oclMatReshape(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int 
 
 CVAPI(void) oclMatSobel(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, int ksize, double scale, int borderType);
 
+CVAPI(void) oclMatScharr(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, double scale, double delta, int borderType);
+
 CVAPI(void) oclMatGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize ksize, double sigma1, double sigma2, int borderType);
 
 CVAPI(void) oclMatLaplacian(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int ksize, double scale);
@@ -149,6 +151,8 @@ CVAPI(double) oclMatNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src
 CVAPI(void) oclMatLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst);
 
 CVAPI(void) oclMatCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value);
+
+CVAPI(void) oclMatMedianFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int m);
 
 CVAPI(void) oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum);
 
@@ -182,6 +186,10 @@ CVAPI(void) oclMatMeanShiftProc(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst
 
 CVAPI(void) oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int sp, int sr, int minsize,
    CvTermCriteria* criteria);
+
+CVAPI(void) oclMatWarpAffine(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags);
+
+CVAPI(void) oclMatWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags);
 
 //----------------------------------------------------------------------------
 //

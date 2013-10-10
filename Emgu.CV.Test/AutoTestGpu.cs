@@ -690,6 +690,23 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestBilaterialFilter()
+      {
+         
+         if (GpuInvoke.HasCuda)
+         {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>("pedestrian.png");
+            Image<Gray, byte> gray = img.Convert<Gray, Byte>();
+            GpuImage<Gray, Byte> gpuImage = new GpuImage<Gray, byte>(gray);
+            
+            GpuImage<Gray, Byte> gpuBilaterial = new GpuImage<Gray, byte>(gpuImage.Size);
+            GpuInvoke.BilateralFilter(gpuImage, gpuBilaterial, 7, 5, 5, CvEnum.BORDER_TYPE.DEFAULT, IntPtr.Zero);
+
+            //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(gpuBilaterial.ToImage()));
+         }
+      }
+
+      [Test]
       public void TestBruteForceHammingDistance()
       {
          if (GpuInvoke.HasCuda)

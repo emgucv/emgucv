@@ -46,7 +46,7 @@ namespace Emgu.CV.Features2D
          _ptr = CvInvoke.CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
       }
 
-      #region IKeyPointDetector Members
+      #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>

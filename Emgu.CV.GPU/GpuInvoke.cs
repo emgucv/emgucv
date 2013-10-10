@@ -1152,5 +1152,18 @@ namespace Emgu.CV.GPU
          CreateOpticalFlowNeedleMap(u, v, vertex, colors);
       }
 
+
+      /// <summary>
+      /// Applies bilateral filter to the image.
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image; will have the same size and the same type as src</param>
+      /// <param name="kernelSize">The diameter of each pixel neighborhood, that is used during filtering.</param>
+      /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
+      /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
+      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatBilateralFilter")]
+      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BORDER_TYPE borderType, IntPtr stream);
    }
 }

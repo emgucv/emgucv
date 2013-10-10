@@ -405,6 +405,11 @@ void oclMatSobel(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int d
    cv::ocl::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale, borderType); 
 }
 
+void oclMatScharr(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, double scale, double delta, int borderType)
+{
+   cv::ocl::Scharr(*src, *dst, dst->depth(), dx, dy, scale, delta, borderType);
+}
+
 void oclMatGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize ksize, double sigma1, double sigma2, int borderType)
 {
    cv::ocl::GaussianBlur(*src, *dst, ksize, sigma1, sigma2, borderType);
@@ -452,6 +457,11 @@ void oclMatLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::
 void oclMatCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value)
 {
    cv::ocl::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, value);
+}
+
+void oclMatMedianFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int m)
+{
+   cv::ocl::medianFilter(*src, *dst, m);
 }
 
 void oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum)
@@ -551,6 +561,21 @@ void oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int 
    cv::Mat dstMat = cv::cvarrToMat(dst);
    cv::ocl::meanShiftSegmentation(*src, dstMat, sp, sr, minsize, *criteria);
 }
+
+void oclMatWarpAffine(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
+{
+   cv::Mat mat = cv::cvarrToMat(M);
+   //cv::Size size(dsize->width, dsize->height);
+   cv::ocl::warpAffine(*src, *dst, mat, dst->size(), flags);
+}
+
+void oclMatWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
+{
+   cv::Mat mat = cv::cvarrToMat(M);
+   //cv::Size size(dsize->width, dsize->height);
+   cv::ocl::warpPerspective(*src, *dst, mat, dst->size(), flags);
+}
+
 
 
 //----------------------------------------------------------------------------

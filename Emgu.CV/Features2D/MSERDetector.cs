@@ -125,7 +125,7 @@ namespace Emgu.CV.Features2D
          return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
       }*/
 
-      #region KeyPointDetector Members
+      #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
       /// </summary>
