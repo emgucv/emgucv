@@ -28,6 +28,7 @@ namespace Emgu.CV.GPU
       /// Create a GpuMatchTemplateBuf
       /// </summary>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      /// <param name="blockSize">The block size</param>
       public GpuTemplateMatching(CvEnum.TM_TYPE method, Size blockSize)
       {
          _method = method;

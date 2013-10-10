@@ -59,6 +59,14 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
+      /// Calls oclFinish(); 
+      /// </summary>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclFinish")]
+      public static extern void Finish();
+      
+      
+
+      /// <summary>
       /// Create an empty OclMat 
       /// </summary>
       /// <returns>Pointer to an empty OclMat</returns>

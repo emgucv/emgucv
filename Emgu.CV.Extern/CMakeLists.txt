@@ -262,6 +262,9 @@ ENDIF()
 IF(WITH_OPENCL)
   MESSAGE(STATUS "Building cvextern with opencv_ocl")
 
+  IF(WIN32 AND WITH_OPENCL AND NOT (NETFX_CORE))
+    SET(OPENCL_PROJ OpenCL)
+  ENDIF()
 #  IF(WIN32)
 #    IF(TARGET_ARCH_64) 
 #      MESSAGE("Including OpenCL dll: ${PROJECT_SOURCE_DIR}/../lib/3rdParty/x64/OpenCL.dll")
@@ -415,9 +418,10 @@ IF(EMGU_CV_WITH_TIFF)
 ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
+  ${OPENCL_PROJ}
   ${ZLIB_LIBRARY} 
 #  xtiff
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY} )
 
 #SET(CVEXTERN_OPTIONAL_DEPS
 #  core calib3d contrib features2d highgui imgproc legacy ml objdetect stitching videostab bioinspired photo optim superres 

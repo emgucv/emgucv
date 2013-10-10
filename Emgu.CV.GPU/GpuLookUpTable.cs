@@ -13,6 +13,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.GPU
 {
+   /// <summary>
+   /// Gpu look up table
+   /// </summary>
    public class GpuLookUpTable : UnmanagedObject
    {
       /// <summary>

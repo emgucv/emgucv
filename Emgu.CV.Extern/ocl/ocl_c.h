@@ -17,6 +17,8 @@ CVAPI(int) oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int devicetype);
 
 CVAPI(void) oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum);
 
+CVAPI(void) oclFinish();
+
 //----------------------------------------------------------------------------
 //
 //  OclMat

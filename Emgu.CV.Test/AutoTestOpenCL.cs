@@ -26,8 +26,12 @@ namespace Emgu.CV.Test
          {
             if (oclInfoVec.Size > 0)
             {
-               OclInfo info = oclInfoVec[0];
-               String platformName = info.PlatformName;
+               for (int i = 0; i < oclInfoVec.Size; i++)
+               {
+                  OclInfo info = oclInfoVec[i];
+                  String platformName = info.PlatformName;
+                  Trace.WriteLine(String.Format("Platform {0}: {1}", i, platformName));
+               }
             }
             Trace.WriteLine("count = " + oclInfoVec.Size);
          }
@@ -50,20 +54,46 @@ namespace Emgu.CV.Test
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
-            watch.Reset(); watch.Start();
-            OclImage<Gray, Byte> gpuImg1 = new OclImage<Gray, byte>(img1);
-            OclImage<Gray, Byte> gpuImg2 = new OclImage<Gray, byte>(img2);
-            OclImage<Gray, Byte> gpuImgSum = new OclImage<Gray, byte>(gpuImg1.Size);
-            Stopwatch watch2 = Stopwatch.StartNew();
-            for (int i = 0; i < repeat; i++)
-               OclInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
-            watch2.Stop();
-            Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
-            watch.Stop();
-            Trace.WriteLine(String.Format("Core OpenCL processing time: {0}ms", (double)watch2.ElapsedMilliseconds / repeat));
+            watch.Reset(); 
+
+            Stopwatch watch2 = new Stopwatch();
+
+            using (VectorOfOclInfo oclInfoVec = OclInvoke.GetDevice(OclDeviceType.All))
+            {
+               for (int j = 0; j < oclInfoVec.Size; j++)
+               {
+                  OclInfo device = oclInfoVec[j];
+
+                  for (int k = 0; k < device.DeviceNames.Length; k++)
+                  {
+                     OclInvoke.SetDevice(device, k);
+
+                     OclImage<Gray, Byte> gpuImg1 = new OclImage<Gray, byte>(img1);
+                     OclImage<Gray, Byte> gpuImg2 = new OclImage<Gray, byte>(img2);
+                     OclImage<Gray, Byte> gpuImgSum = new OclImage<Gray, byte>(gpuImg1.Size);
+
+                     //This trigger the compilation of OCL code, should be run outside of performance testing
+                     OclInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
+
+                     watch2.Start();
+                     for (int i = 0; i < repeat; i++)
+                     {
+                        OclInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
+                     }
+                     watch2.Stop();
+                     Trace.WriteLine(String.Format("OpenCL platform: {0}; device: {1}; processing time: {2}ms", device.PlatformName, device.DeviceNames[k], (double)watch2.ElapsedMilliseconds / repeat));
+
+                     Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
+                     Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
+                     OclInvoke.Finish();
+                  }
+               }
+            }
+           
+            
             //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
 
-            Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
+            
          }
       }
 

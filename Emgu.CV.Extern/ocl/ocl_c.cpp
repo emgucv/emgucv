@@ -22,6 +22,11 @@ void oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum)
    cv::ocl::setDevice(*oclInfo, deviceNum);
 }
 
+void oclFinish()
+{
+   cv::ocl::finish();
+}
+
 cv::ocl::oclMat* oclMatCreateDefault()
 {
    return new cv::ocl::oclMat();
