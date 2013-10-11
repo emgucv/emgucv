@@ -20,6 +20,7 @@ include_directories (./inc)
 
 add_library (OpenCL SHARED ${OPENCL_ICD_LOADER_SOURCES})
 set_target_properties (OpenCL PROPERTIES VERSION "1.2" SOVERSION "1")
+set_target_properties (OpenCL PROPERTIES FOLDER "3rdparty")
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
     set_target_properties (OpenCL PROPERTIES LINK_FLAGS "-Wl,--version-script -Wl,../icd_exports.map")
@@ -27,5 +28,5 @@ endif ()
 
 target_link_libraries (OpenCL ${CMAKE_DL_LIBS})
 
-enable_testing()
-add_subdirectory (test)
+#enable_testing()
+#add_subdirectory (test)
