@@ -1,0 +1,43 @@
+"COORD_REF_SYS_CODE","COORD_OP_CODE"
+####################################################################
+# This file contains overrides to determine which datum shift
+# operation is considered preferred for particular GCS codes. 
+#
+# It is used when generating the datum_shift.csv file to mark the
+# preferred operation and this in turn affects what shift gets put
+# into the gcs.csv file. 
+# 
+# Try to include some comments for each preference override indicating
+# why it is here, and potentially referencing a ticket about it.
+####################################################################
+#
+# Tahaa 54
+#
+# Of two options, 15770 uses a 7- parameter shift and seems more accurate.
+# 
+4629,15770
+####################################################################
+#
+# NZGD49 - prefer to use the 7 parameter shift
+#
+4272,1564
+####################################################################
+#
+# Seven-parameter transformation for Pulkovo 1942
+# as defined by the GOST P 51794-2001.
+# See http://trac.osgeo.org/gdal/ticket/3176 for details.
+#
+4284,1267
+####################################################################
+#
+# From Jan: http://bugzilla.remotesensing.org/show_bug.cgi?id=1336, 
+# and michael: http://trac.osgeo.org/gdal/ticket/3362
+# and followup from Michael: http://trac.osgeo.org/geotiff/ticket/32
+#
+4313,15929
+####################################################################
+#
+# We don't want to apply TOWGS84 values for NAD27 - we prefer to use
+# datum grid shift files.
+#
+4267,-1

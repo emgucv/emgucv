@@ -1,0 +1,108 @@
+supersession_id,object_table_name,object_code,superseded_by,supersession_type,supersession_year,remarks
+1,epsg_coordoperation,1026,1027,Retirement,,Replacement has better accuracy.
+2,epsg_coordoperation,1026,1028,Retirement,,Replacement has better accuracy.
+3,epsg_coordoperation,1036,1039,Retirement,2002,Replacement has better accuracy.
+4,epsg_coordoperation,1112,1672,Retirement,,New parameter values derived at a different station set referenced to ETRS89.
+5,epsg_coordoperation,1154,1304,Retirement,1997,Recalculation of parameter values.
+6,epsg_coordoperation,1232,1305,Retirement,1997,Recalculation of parameter values.
+7,epsg_coordoperation,1236,1280,Retirement,,Provisional transformation replaced by authoritative one.
+8,epsg_coordoperation,1236,1669,Retirement,,Provisional transformation replaced by authoritative one.
+9,epsg_coordoperation,1297,1298,Retirement,,Replacement has better accuracy.
+10,epsg_coordoperation,1297,1299,Retirement,,Replacement has better accuracy.
+11,epsg_coordoperation,1297,1300,Retirement,,Replacement has better accuracy.
+12,epsg_coordoperation,1297,1301,Retirement,,Replacement has better accuracy.
+13,epsg_coordoperation,1312,1462,Retirement,1997,Uses method which has been replaced by improved NTv2 algorithm with different file format.
+14,epsg_coordoperation,1312,1313,Retirement,1997,Uses method which has been replaced by improved NTv2 algorithm with different file format.
+15,epsg_coordoperation,1320,1326,Retirement,1994,Replacement has improved determination.
+16,epsg_coordoperation,1321,1324,Retirement,1992,"Supersession applies only to block 7; it does not apply to blocks 8 and 24 or to WGC spec data."
+17,epsg_coordoperation,1322,1324,Retirement,1992,Replacement derived in area of applicability.
+18,epsg_coordoperation,1324,1327,Retirement,1994,"Supersession applies only to blocks 3, 7 and 17; it does not apply to block 15."
+19,epsg_coordoperation,1325,1327,Retirement,1994,Improved determination.
+21,epsg_coordoperation,1330,1557,Retirement,1990,Replacement has improved determination.
+22,epsg_coordoperation,1437,1895,Retirement,2001,Replacement has improved determination.
+23,epsg_coordoperation,1450,1590,Retirement,1997,Change of tfm bounding north side.
+24,epsg_coordoperation,1450,1612,Retirement,2001,Replacement uses frequently-implemented method more suitable for real-time calculations.
+25,epsg_coordoperation,1451,1575,Retirement,1997,Uses method which has been replaced by improved NTv2 algorithm with different file format.
+26,epsg_coordoperation,1459,1594,Retirement,2000,State transformation republished by federal authority with minor changes in parameter values. Application gives result differences which are sub-metre.
+27,epsg_coordoperation,1462,1573,Retirement,1997,Uses method which has been replaced by improved NTv2 algorithm with different file format.
+28,epsg_coordoperation,1464,1596,Retirement,,State transformation included within regional transformation.
+29,epsg_coordoperation,1506,1803,Retirement,2001,State transformation included within national transformation.
+30,epsg_coordoperation,1507,1803,Retirement,2001,State transformation included within national transformation.
+31,epsg_coordoperation,1559,1593,Retirement,2001,Withdrawn and replaced by info source because 8-bit binary grid file format inconsistent with NTv2 16-bit format.
+32,epsg_coordoperation,1590,1612,Retirement,2001,Replacement uses transformation method which is usually implemented in industry applications and more appropriate for real-time calculations.
+33,epsg_coordoperation,1593,1804,Retirement,2001,State transformation included in national transformation.
+34,epsg_coordoperation,1596,1803,Retirement,2001,Regional transformation included within national transformation.
+35,epsg_coordoperation,1655,1997,Retirement,2001,Replacement derived at more stations having better coordinates and is therefore more accurate.
+36,epsg_coordoperation,1657,1992,Retirement,,Replacement derived at more stations having better coordinates and is therefore more accurate.
+37,epsg_coordoperation,1674,1775,Retirement,2001,Replacement is of better accuracy. Replacement applies only within Mecklenburg-Vorpommern and Sachsen-Anhalt.
+38,epsg_coordoperation,1680,1896,Retirement,2001,Source tfm replaced by tfm with improved determination.
+39,epsg_coordoperation,1683,1684,Retirement,,Replacement has better accuracy.
+40,epsg_coordoperation,1683,1685,Retirement,,Replacement has better accuracy.
+41,epsg_coordoperation,1683,1686,Retirement,,Replacement has better accuracy.
+42,epsg_coordoperation,1683,1687,Retirement,,Replacement has better accuracy.
+43,epsg_coordoperation,1807,1808,Retirement,1997,Replacement derived over a wider area.
+44,epsg_coordoperation,1900,1901,Retirement,,Replacement has improved determination.
+46,epsg_coordoperation,8047,8569,Retirement,1997,Improved derivation in northern Norway.
+47,epsg_coordoperation,8047,1612,Retirement,2001,Replacement uses method better suited to implementation in real-time applications.
+48,epsg_coordoperation,8569,1612,Retirement,2001,Replaced by tfm using method which is usually implemented in industry applications.
+137,epsg_coordoperation,1052,1998,Retirement,2004,Replaced by code 1998 for oil industry purposes only.
+140,epsg_coordoperation,1638,10098,Retirement,2003,Replacement has improved determination.
+141,epsg_coordoperation,1639,10099,Retirement,2003,Replacement has improved determination.
+142,epsg_coordoperation,1751,15739,Retirement,2004,Replacement has improved determination.
+143,epsg_coordoperation,1066,15740,Retirement,2004,New parameter values derived at a different set of stations.
+144,epsg_coordoperation,15781,10084,Retirement,1996,Improved geoid model.
+145,epsg_coordoperation,15791,1330,Retirement,1989,Replacement has improved determination.
+146,epsg_coordoperation,15817,15818,Retirement,2003,"Information source states ""Provided for historical purposes only. These parameter [values] should not be used""."
+147,epsg_coordoperation,15852,15851,Retirement,,Replacement recommended by regulatory authority.
+148,epsg_coordoperation,15853,15851,Retirement,,Replacement recommended by regulatory authority.
+149,epsg_coordoperation,15854,15851,Retirement,,Replacement recommended by regulatory authority.
+150,epsg_coordoperation,15856,15851,Retirement,,Replacement recommended by regulatory authority.
+151,epsg_coordoperation,1309,1776,Retirement,2001,Improved determination with better accuracy.
+152,epsg_coordoperation,1673,1777,Retirement,2001,Source tfm code 1309 replaced by tfm code 1776 with better accuracy.
+153,epsg_coordoperation,1753,1766,Retirement,1997,Replacement has improved determination.
+154,epsg_coordoperation,15895,15932,Retirement,2007,Tfm 15895 withdrawn and replaced by informaton source due to grid file format being non-compliant with NTv2 specification.
+155,epsg_coordoperation,15907,15933,Retirement,2007,Superseded record had grid file format which was non-compliant with NTv2 specification.
+156,epsg_coordoperation,8581,1439,Retirement,1997,Replacement uses improved determination directly between source and target CRSs.
+157,epsg_coordoperation,8657,15846,Retirement,,Improved direct determination using GPS replaces indirect tfm using Transit and WGS 72BE.
+158,epsg_coordoperation,1672,15934,Retirement,2004,Source tfm 1751 replaced.
+159,epsg_coordoperation,1829,1449,Retirement,2008,Replacement is national standard.
+160,epsg_coordoperation,1830,1448,Retirement,2008,Replacement is national standard.
+161,epsg_coordoperation,1831,1242,Retirement,2008,Replacement derived at stations across whole country.
+162,epsg_coordoperation,15993,15994,Retirement,2008,Withdrawn by information source. Replacement is of significantly better accuracy.
+163,epsg_coordoperation,1656,1988,Retirement,2001,EPSG copy of tfm which has been replaced by its info source by better direct tfm.
+164,epsg_coordoperation,1658,1987,Retirement,2001,EPSG copy of tfm which has been replaced by its info source for a direct determination.
+165,epsg_coordoperation,1681,15956,Retirement,2002,Transformation from which this is taken has been replaced by improved determination.
+166,epsg_coordoperation,1928,15901,Retirement,2006,Withdrawn by information source and replaced by improved information.
+167,epsg_coordoperation,15783,15901,Retirement,2006,Withdrawn by information source and replaced by improved information from local authority.
+168,epsg_coordoperation,1917,15902,Retirement,2006,Withdrawn by information source and replaced by improved information.
+169,epsg_coordoperation,1927,15902,Retirement,2006,Withdrawn by information source and replaced by improved information.
+170,epsg_coordoperation,1962,15903,Retirement,2006,Withdrawn by information source and replaced by improved information from local authority.
+171,epsg_coordoperation,1963,15903,Retirement,2006,Withdrawn by information source and replaced by improved information.
+1024,epsg_coordoperation,3972,4834,Retirement,2010,Retired in 2005 when SIRGAS 2000 adopted by Brazil.
+1025,epsg_coordoperation,10092,5051,Retirement,2010,Improved determination by Petrobras.
+1026,epsg_coordoperation,1992,5037,Retirement,2010,Improved determination.
+1027,epsg_coordoperation,1281,5043,Retirement,2010,Withdrawn and replaced by improved determination.
+1028,epsg_coordoperation,1267,5044,Retirement,2010,Withdrawn and replaced by improved determination.
+1029,epsg_coordoperation,1997,5038,Retirement,2010,Improved determination.
+1030,epsg_coordoperation,1550,5061,Retirement,2010,Improved determination.
+1031,epsg_coordoperation,1551,5061,Retirement,2010,Improved determination.
+1032,epsg_coordoperation,1552,5061,Retirement,2010,Improved determination.
+1033,epsg_coordoperation,15710,5053,Retirement,2010,Improved resolution.
+1034,epsg_coordoperation,15711,5051,Retirement,2010,Improved resolution.
+1035,epsg_coordoperation,15712,5055,Retirement,2010,Improved resolution.
+1036,epsg_coordoperation,10091,5055,Retirement,2010,Improved determination for area by Petrobras.
+1037,epsg_coordoperation,10089,5051,Retirement,2010,Improved determination for area by Petrobras.
+1038,epsg_coordoperation,10090,5053,Retirement,2010,Improved determination for area by Petrobras.
+1039,epsg_coordoperation,15872,5078,Retirement,2010,Signiicantly improved determination.
+1040,epsg_coordoperation,1642,5485,Retirement,2011,Replacement derived through more observations.
+1041,epsg_coordoperation,1643,5486,Retirement,2011,Replacement derived through more observations.
+1043,epsg_coordoperation,15754,5055,Retirement,2010,Improved determinations for subareas.
+1044,epsg_coordoperation,15754,5053,Retirement,2010,Improved determinations for subareas.
+1045,epsg_coordoperation,15754,5051,Retirement,2010,Improved determinations for subareas.
+1046,epsg_coordoperation,10093,5055,Retirement,2010,Improved determinations for subareas by Petrobras.
+1047,epsg_coordoperation,10093,5053,Retirement,2010,Improved determinations for subareas by Petrobras.
+1048,epsg_coordoperation,10093,5051,Retirement,2010,Improved determinations for subareas by Petrobras.
+1049,epsg_coordoperation,1079,5484,Retirement,2011,Taken from replacement which was derived through more observations.
+1050,epsg_coordoperation,1078,5483,Retirement,2011,Taken from replacement which was derived through more observations.
+1051,epsg_coordinatereferencesystem,3764,3793,Retirement,2011,Withdrawn and replaced by NZGD200 / CITM2000 before being utilised.
+1052,epsg_coordoperation,17959,17965,Retirement,2011,Withdrawn and replaced by Chatham Islands TM2000 before being utilised.
