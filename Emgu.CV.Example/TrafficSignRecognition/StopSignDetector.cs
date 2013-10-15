@@ -26,7 +26,7 @@ namespace TrafficSignRecognition
          _detector = new SURFDetector(500, false);
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
-            ImageFeature<float>[] features = _detector.DetectFeatures(redMask, null);
+            ImageFeature<float>[] features = _detector.DetectAndCompute(redMask, null);
             if (features.Length == 0)
                throw new Exception("No image feature has been found in the stop sign model");
             _tracker = new Features2DTracker<float>(features);  
@@ -112,7 +112,7 @@ namespace TrafficSignRecognition
                   candidate.SetValue(0, mask);
                }
 
-               ImageFeature<float>[] features = _detector.DetectFeatures(candidate, null);
+               ImageFeature<float>[] features = _detector.DetectAndCompute(candidate, null);
 
                int minMatchCount = 10;
 
