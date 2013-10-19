@@ -140,7 +140,7 @@ namespace Emgu.CV.GPU
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       /// <returns>Pointer to the GpuMat</returns>
       [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetRegion")]
-      public static extern IntPtr GpuMatGetRegion(IntPtr gpuMat, MCvSlice rowRange, MCvSlice colRange);
+      public static extern IntPtr GetRegion(IntPtr gpuMat, MCvSlice rowRange, MCvSlice colRange);
 
       /// <summary>
       /// Check if the GpuMat is empty

@@ -18,6 +18,7 @@ CVAPI(emgu::size) cvMatGetSize(cv::Mat* mat);
 CVAPI(void) cvMatCopyToCvArr(cv::Mat* mat, CvArr* cvArray);
 CVAPI(void) cvMatFromCvArr(cv::Mat* mat, CvArr* cvArray);
 CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
+CVAPI(bool) cvMatIsEmpty(cv::Mat* mat);
 
 CVAPI(void) CvMinMaxIdx(CvArr* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, CvArr* mask);
 

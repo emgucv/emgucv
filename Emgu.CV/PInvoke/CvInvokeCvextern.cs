@@ -292,5 +292,17 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool cvFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
+
+      /// <summary>
+      /// Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method). 
+      /// What we mean here by “linear programming problem” (or LP problem, for short) can be formulated as:
+      /// Maximize c x subject to: Ax &lt;= b and x &gt;= 0 
+      /// </summary>
+      /// <param name="functionMatrix">This row-vector corresponds to c in the LP problem formulation (see above). It should contain 32- or 64-bit floating point numbers. As a convenience, column-vector may be also submitted, in the latter case it is understood to correspond to c^T.</param>
+      /// <param name="constraintMatrix">m-by-n+1 matrix, whose rightmost column corresponds to b in formulation above and the remaining to A. It should containt 32- or 64-bit floating point numbers.</param>
+      /// <param name="zMatrix">The solution will be returned here as a column-vector - it corresponds to c in the formulation above. It will contain 64-bit floating point numbers.</param>
+      /// <returns>The return codes</returns>
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvSolveLP")]
+      private static extern CvEnum.SolveLPResult SolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
    }
 }

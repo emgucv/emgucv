@@ -46,7 +46,7 @@ namespace Emgu.CV.VideoStab
       /// <returns></returns>
       public Image<Bgr, Byte> NextFrame()
       {
-         if (!VideoStabInvoke.FrameSourceGetNextFrame(FrameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
+         if (!VideoStabInvoke.VideostabFrameSourceGetNextFrame(FrameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
             return null;
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));

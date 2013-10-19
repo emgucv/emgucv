@@ -165,6 +165,9 @@
       <Link>tree.avi</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="car.avi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="car.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -216,6 +219,10 @@
     <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
       <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>
       <Name>Emgu.CV.Stitching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Superres\Emgu.CV.Superres.csproj">
+      <Project>{806ec1b0-95d0-402b-a9f3-2d3de78dc807}</Project>
+      <Name>Emgu.CV.Superres</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>

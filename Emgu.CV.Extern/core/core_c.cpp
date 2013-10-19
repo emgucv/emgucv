@@ -37,6 +37,11 @@ int cvMatGetElementSize(cv::Mat* mat)
    return static_cast<int>( mat->elemSize());
 }
 
+bool cvMatIsEmpty(cv::Mat* mat)
+{
+   return mat->empty();
+}
+
 void CvMinMaxIdx(CvArr* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, CvArr* mask)
 {
    cv::Mat srcMat = cv::cvarrToMat(src);

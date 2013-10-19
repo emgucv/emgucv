@@ -541,6 +541,42 @@ namespace Emgu.CV.Test
          }
       }
 
+      public static void TestSuperres()
+      {
+         ImageViewer viewer = new ImageViewer();
+         //using (Capture capture = new Capture("car.avi"))
+         using (Superres.FrameSource frameSource = new Superres.FrameSource("car.avi", false))
+         //using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL, frameSource))
+         using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL1_OCL, frameSource))
+         {
+            Stopwatch watch = new Stopwatch();
+            int counter = 0;
+            Application.Idle += delegate(object sender, EventArgs e)
+            {
+               watch.Reset();
+               watch.Start();
+               
+               //Image<Bgr, byte> frame = frameSource.NextFrame();
+               Image<Bgr, Byte> frame = sr.NextFrame();
+               //Image<Gray, Byte> frame = capture.QueryGrayFrame();
+               watch.Stop();
+               if (watch.ElapsedMilliseconds < 200)
+               {
+                  Thread.Sleep(200 - (int)watch.ElapsedMilliseconds);
+               }
+               if (frame != null)
+               {
+                  viewer.Image = frame;
+                  viewer.Text = String.Format("Frame {0}: {1} milliseconds.", counter++, watch.ElapsedMilliseconds);
+               } else
+               {
+                  viewer.Text = String.Format("{0} frames processed", counter);
+               }
+            };
+            viewer.ShowDialog();
+         }
+      }
+
       
       public static void TestCaptureFrameSource()
       {

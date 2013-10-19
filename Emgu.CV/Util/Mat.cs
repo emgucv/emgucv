@@ -77,6 +77,17 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
+      /// Indicates if this cv::Mat is empty
+      /// </summary>
+      public bool IsEmpty
+      {
+         get
+         {
+            return CvInvoke.cvMatIsEmpty(_ptr);
+         }
+      }
+
+      /// <summary>
       /// Release all the unmanaged memory associated with this object.
       /// </summary>
       protected override void DisposeObject()
@@ -106,5 +117,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetElementSize(IntPtr mat);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cvMatIsEmpty(IntPtr mat);
    }
 }

@@ -7,33 +7,19 @@
 
 #include "videostab_c.h"
 
-CaptureFrameSource* CaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource)
+CaptureFrameSource<cv::videostab::IFrameSource>* VideostabCaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource)
 {
-   CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
-   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
-   return stabilizer;
+   return CaptureFrameSourceCreate<cv::videostab::IFrameSource>(capture, frameSource);
 }
-void CaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource)
+void VideostabCaptureFrameSourceRelease(CaptureFrameSource<cv::videostab::IFrameSource>** captureFrameSource)
 {
    delete *captureFrameSource;
    *captureFrameSource = 0;
 }
 
-bool FrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame)
+bool VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame)
 {
-   cv::Mat mat = frameSource->nextFrame();
-   if (mat.empty())
-      return false;
-
-   IplImage tmp = (IplImage) mat;
-   if (!(*nextFrame))
-   {
-      *nextFrame = cvCreateImage(cvSize(tmp.width, tmp.height), tmp.depth, tmp.nChannels);
-   }
-   CV_Assert(*nextFrame && mat.rows == (*nextFrame)->height && mat.cols == (*nextFrame)->width && mat.channels() == (*nextFrame)->nChannels);
-   cv::Mat tmpMat = cv::cvarrToMat(*nextFrame);
-   mat.copyTo(tmpMat);
-   return true;
+   return FrameSourceGetNextFrame<cv::videostab::IFrameSource>(frameSource, nextFrame);
 }
 
 /*

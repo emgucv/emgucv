@@ -581,7 +581,18 @@ void oclMatWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, con
    cv::ocl::warpPerspective(*src, *dst, mat, dst->size(), flags);
 }
 
+cv::ocl::oclMat* oclMatGetSubRect(const cv::ocl::oclMat* arr, CvRect* rect)
+{
+   cv::Rect region(*rect);
+   return new cv::ocl::oclMat(*arr, region);
+}
 
+cv::ocl::oclMat* oclMatGetRegion(cv::ocl::oclMat* other, CvSlice* rowRange, CvSlice* colRange)
+{
+   cv::Range row(*rowRange);
+   cv::Range col(*colRange);
+   return new cv::ocl::oclMat(*other, row, col);
+}
 
 //----------------------------------------------------------------------------
 //

@@ -162,6 +162,26 @@ namespace Emgu.CV.OpenCL
       public static extern int OclMatGetChannels(IntPtr oclMat);
 
       /// <summary>
+      /// Returns header, corresponding to a specified rectangle of the input OclMat. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="mat">Input OclMat</param>
+      /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>Pointer to the resultant sub-array header.</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGetSubRect")]
+      public static extern IntPtr GetSubRect(IntPtr mat, ref Rectangle rect);
+
+      /// <summary>
+      /// Create a OclMat from the specific region of <paramref name="gpuMat"/>. The data is shared between the two GpuMat.
+      /// </summary>
+      /// <param name="oclMat">The gpuMat to extract regions from.</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
+      /// <returns>Pointer to the OclMat</returns>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGetRegion")]
+      public static extern IntPtr GetRegion(IntPtr oclMat, ref MCvSlice rowRange, ref MCvSlice colRange);
+
+
+      /// <summary>
       /// Pefroms blocking upload data to OclMat.
       /// </summary>
       /// <param name="oclMat">The destination oclMat</param>

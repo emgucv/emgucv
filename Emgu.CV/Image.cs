@@ -3514,14 +3514,13 @@ namespace Emgu.CV
             if (_imageDataReleaseMode == ImageDataReleaseMode.ReleaseHeaderOnly)
             {
                CvInvoke.cvReleaseImageHeader(ref _ptr);
-               Debug.Assert(_ptr == IntPtr.Zero);
                GC.RemoveMemoryPressure(StructSize.MIplImage);
             }
             else //ImageDataReleaseMode.ReleaseIplImage
             {
                CvInvoke.cvReleaseImage(ref _ptr);
-               Debug.Assert(_ptr == IntPtr.Zero);
             }
+            Debug.Assert(_ptr == IntPtr.Zero);
          }
 
          _array = null;

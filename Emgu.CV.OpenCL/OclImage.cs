@@ -80,6 +80,17 @@ namespace Emgu.CV.OpenCL
          : this(size.Height, size.Width)
       {
       }
+
+      /// <summary>
+      /// Create an OclImage from the specific region of <paramref name="image"/>. The data is shared between the two OclImage
+      /// </summary>
+      /// <param name="image">The OclImage where the region is extracted from</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
+      public OclImage(OclImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
+         :this(OclInvoke.GetRegion(image, ref rowRange, ref colRange))
+      {
+      }
       #endregion
 
       /// <summary>
@@ -116,6 +127,16 @@ namespace Emgu.CV.OpenCL
          return result;
       }
 
+      /// <summary>
+      /// Returns an OclImage corresponding to a specified rectangle of the current OclImage. The data is shared with the current matrix. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="region">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>An OclImage that represent the region of the current OclImage.</returns>
+      /// <remarks>The parent OclImage should never be released before the returned OclImage that represent the subregion</remarks>
+      public new OclImage<TColor, TDepth> GetSubRect(Rectangle region)
+      {
+         return new OclImage<TColor, TDepth>(OclInvoke.GetSubRect(this, ref region));
+      }
       
       ///<summary> Convert the current GpuImage to the specific color and depth </summary>
       ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
@@ -270,6 +291,9 @@ namespace Emgu.CV.OpenCL
       }
 
 #if !NETFX_CORE
+      /// <summary>
+      /// Get the Bitmap representation of this IclImage
+      /// </summary>
       public Bitmap Bitmap
       {
          get
@@ -297,11 +321,19 @@ namespace Emgu.CV.OpenCL
       }
 #endif
 
+      /// <summary>
+      /// Split up the image channels.
+      /// </summary>
+      /// <returns>An array of image channels</returns>
       IImage[] IImage.Split()
       {
          return Split();
       }
 
+      /// <summary>
+      /// Save the OclImage to file
+      /// </summary>
+      /// <param name="fileName">The fileName</param>
       public void Save(string fileName)
       {
          using (Image<TColor, TDepth> tmp = ToImage())
@@ -310,6 +342,10 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Create a clone of the current OclImage
+      /// </summary>
+      /// <returns></returns>
       object ICloneable.Clone()
       {
          return Clone();

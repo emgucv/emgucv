@@ -160,7 +160,7 @@ namespace Emgu.CV.GPU
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuMat(GpuMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
-         : base(GpuInvoke.GpuMatGetRegion(mat, rowRange, colRange))
+         : base(GpuInvoke.GetRegion(mat, rowRange, colRange))
       {
       }
 

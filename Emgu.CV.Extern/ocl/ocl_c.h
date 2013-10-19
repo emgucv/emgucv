@@ -8,7 +8,7 @@
 #ifndef EMGU_OCL_C_H
 #define EMGU_OCL_C_H
 
-#include "opencv2/ocl.hpp"
+#include "opencv2/ocl/ocl.hpp"
 #include "opencv2/core/types_c.h"
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
@@ -192,6 +192,11 @@ CVAPI(void) oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* ds
 CVAPI(void) oclMatWarpAffine(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags);
 
 CVAPI(void) oclMatWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags);
+
+CVAPI(cv::ocl::oclMat*) oclMatGetSubRect(const cv::ocl::oclMat* arr, CvRect* rect);
+
+CVAPI(cv::ocl::oclMat*) oclMatGetRegion(cv::ocl::oclMat* other, CvSlice* rowRange, CvSlice* colRange);
+
 
 //----------------------------------------------------------------------------
 //

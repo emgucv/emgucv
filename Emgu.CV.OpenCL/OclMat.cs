@@ -175,6 +175,17 @@ namespace Emgu.CV.OpenCL
          : base(OclInvoke.OclMatCreateFromArr(arr))
       {
       }
+
+      /// <summary>
+      /// Create a OclMat from the specific region of <paramref name="mat"/>. The data is shared between the two OclMat
+      /// </summary>
+      /// <param name="mat">The matrix where the region is extracted from</param>
+      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
+      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
+      public OclMat(OclMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
+         : base(OclInvoke.GetRegion(mat, ref rowRange, ref colRange))
+      {
+      }
 #endregion
 
       /// <summary>
@@ -194,6 +205,17 @@ namespace Emgu.CV.OpenCL
       {
          Debug.Assert(arr.Size.Equals(WholeSize), "Destination CvArray size does not match source OclMat wholesize");
          OclInvoke.OclMatDownload(_ptr, arr);
+      }
+
+      /// <summary>
+      /// Returns an OclMat corresponding to a specified rectangle of the current OclMat. The data is shared with the current matrix. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
+      /// </summary>
+      /// <param name="region">Zero-based coordinates of the rectangle of interest.</param>
+      /// <returns>A OclMat that represent the region of the current matrix.</returns>
+      /// <remarks>The parent OClMat should never be released before the returned OclMat the represent the subregion</remarks>
+      public OclMat<TDepth> GetSubRect(Rectangle region)
+      {
+         return new OclMat<TDepth>(OclInvoke.GetSubRect(this, ref region));
       }
 
       /// <summary>

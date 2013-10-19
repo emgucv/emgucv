@@ -45,6 +45,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this OclInfo
+      /// </summary>
       protected override void DisposeObject()
       {
          //throw new NotImplementedException();
@@ -52,12 +55,30 @@ namespace Emgu.CV.OpenCL
    }
 
 
+   /// <summary>
+   /// Ocl Device Type
+   /// </summary>
    public enum OclDeviceType
    {
+      /// <summary>
+      /// Default
+      /// </summary>
       Default = (1 << 0),
+      /// <summary>
+      /// Cpu
+      /// </summary>
       Cpu = (1 << 1),
+      /// <summary>
+      /// Gpu
+      /// </summary>
       Gpu = (1 << 2),
+      /// <summary>
+      /// Accerlerator
+      /// </summary>
       Accelerator = (1 << 3),
+      /// <summary>
+      /// All
+      /// </summary>
       All = -1 //0xFFFFFFFF
    }
 

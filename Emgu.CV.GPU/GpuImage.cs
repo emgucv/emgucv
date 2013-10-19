@@ -89,7 +89,7 @@ namespace Emgu.CV.GPU
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuImage(GpuImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
-         :this(GpuInvoke.GpuMatGetRegion(image, rowRange, colRange))
+         :this(GpuInvoke.GetRegion(image, rowRange, colRange))
       {
       }
       #endregion

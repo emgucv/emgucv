@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -69,16 +69,16 @@ namespace Emgu.CV.Stitching
          bool hasCuda = GpuInvoke.HasCuda;
       }
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherCreateDefault(
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool tryUseGpu
          );
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, int imgCount);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvStitcherRelease(ref IntPtr stitcherWrapper);
    }
 }
