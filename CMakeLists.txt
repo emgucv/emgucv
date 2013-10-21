@@ -534,7 +534,9 @@ ELSEIF (WIN32)
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
   IF(MSVC)
-    IF(MSVC11)
+    IF(MSVC12)
+	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc12_redist")
+    ELSEIF(MSVC11)
 	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc11_redist")
     ELSEIF(MSVC10)
       SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
@@ -697,6 +699,9 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 
   INSTALL_DEBUGER_VISUALIZER("VS2012" "Visual Studio 2012" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\11.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
+  
+  INSTALL_DEBUGER_VISUALIZER("VS2013" "Visual Studio 2013" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\12.0")
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 
   #  UNINSTALL_DEBUGER_VISUALIZER("VS2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
   #  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -709,6 +714,10 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 
   UNINSTALL_DEBUGER_VISUALIZER("VS2012" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\11.0")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+
+  UNINSTALL_DEBUGER_VISUALIZER("VS2013" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\12.0")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+
 ENDIF()
 
 # ----------------------------------------------------------------------------
