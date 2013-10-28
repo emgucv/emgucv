@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.Windows.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OpenCL.Windows.Store", "..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Windows.Store.csproj", "{6E1EE7FA-B1E7-4BBF-AD6A-470C5FBF0F56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Windows.Store", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.Windows.Store.csproj", "{C2293433-3C88-473C-AE81-BBBE5D5E1746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda.Windows.Store", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj", "{C2293433-3C88-473C-AE81-BBBE5D5E1746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

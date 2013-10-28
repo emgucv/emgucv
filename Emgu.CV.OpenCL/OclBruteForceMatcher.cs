@@ -102,7 +102,6 @@ namespace Emgu.CV.OpenCL
       /// <param name="distance">The matrix where the distance valus is stored. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Size.Height</param>
       /// <param name="k">The number of nearest neighbours to be searched</param>
       /// <param name="mask">The mask</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void KnnMatchSingle(OclMat<T> queryDescriptors, OclMat<T> modelDescriptors, OclMat<int> modelIdx, OclMat<float> distance, int k, OclMat<Byte> mask)
       {
          /*

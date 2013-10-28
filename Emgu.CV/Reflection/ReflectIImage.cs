@@ -50,7 +50,7 @@ namespace Emgu.CV.Reflection
       {
          Type baseType =  Toolbox.GetBaseType(image.GetType(), "Image`2");
          if (baseType == null)
-            baseType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2");
+            baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
          return baseType == null ? null : baseType.GetGenericArguments()[0];
       }
@@ -64,7 +64,7 @@ namespace Emgu.CV.Reflection
       {
          Type baseType = Toolbox.GetBaseType(image.GetType(), "Image`2");
          if (baseType == null)
-            baseType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2");
+            baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
          return baseType == null ? null : baseType.GetGenericArguments()[1];
       }

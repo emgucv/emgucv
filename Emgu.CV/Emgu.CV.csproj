@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -106,7 +106,6 @@
     <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
     <Compile Include="Features2D\ORBDetector.cs" />
-    <Compile Include="Features2D\SIFTDetector.cs" />
     <Compile Include="Features2D\SimpleBlobDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
     <Compile Include="Flann\Index.cs" />
@@ -136,7 +135,6 @@
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
-    <Compile Include="Features2D\SURFDetector.cs" />
     <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="Features2D\RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
@@ -175,6 +173,7 @@
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
@@ -258,7 +257,6 @@
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
     <Compile Include="StructuringElementEx.cs" />
-    <Compile Include="Features2D\SURFFeature.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />

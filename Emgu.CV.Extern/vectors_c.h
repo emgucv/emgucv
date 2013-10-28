@@ -232,4 +232,28 @@ CVAPI(void) VectorOfVectorOfPointClear(std::vector< std::vector<cv::Point> >* v)
 CVAPI(void) VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >* v);
 
 CVAPI(std::vector<cv::Point>*) VectorOfVectorOfPointGetItem(std::vector< std::vector<cv::Point> >* points, int index);
+
+//----------------------------------------------------------------------------
+//
+//  Vector of CvRect
+//
+//----------------------------------------------------------------------------
+CVAPI(std::vector<cv::Rect>*) VectorOfRectCreate();
+
+CVAPI(std::vector<cv::Rect>*) VectorOfRectCreateSize(int size);
+
+CVAPI(int) VectorOfRectGetSize(std::vector<cv::Rect>* v);
+
+CVAPI(void) VectorOfRectPushMulti(std::vector<cv::Rect>* v, cv::Rect* values, int count);
+
+CVAPI(void) VectorOfRectClear(std::vector<cv::Rect>* v);
+
+CVAPI(void) VectorOfRectRelease(std::vector<cv::Rect>* v);
+
+CVAPI(void) VectorOfRectCopyData(std::vector<cv::Rect>* v, cv::Rect* data);
+
+CVAPI(cv::Rect*) VectorOfRectGetStartAddress(std::vector<cv::Rect>* v);
+
+CVAPI(void) VectorOfRectGetItem(std::vector<cv::Rect>* points, int index, cv::Rect* point);
+
 #endif

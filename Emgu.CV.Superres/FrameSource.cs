@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
 using Emgu.CV;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
 
@@ -114,7 +114,7 @@ namespace Emgu.CV.Superres
       static SuperresInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called
-         bool hasCuda = GpuInvoke.HasCuda;
+         bool hasCuda = CudaInvoke.HasCuda;
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

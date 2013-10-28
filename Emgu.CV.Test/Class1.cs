@@ -18,7 +18,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Cvb;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -253,8 +253,8 @@ namespace Emgu.CV.Test
                //run this until application closed (close button click on image viewer)
                
                using(Image<Bgr, byte> frame = capture.RetrieveBgrFrame(0))
-               using (GpuImage<Bgr, byte> gpuFrame = new GpuImage<Bgr, byte>(frame))
-               using (GpuImage<Gray, Byte> gpuGray = gpuFrame.Convert<Gray, Byte>())
+               using (CudaImage<Bgr, byte> gpuFrame = new CudaImage<Bgr, byte>(frame))
+               using (CudaImage<Gray, Byte> gpuGray = gpuFrame.Convert<Gray, Byte>())
                {
                   if (warmUpFrames > 0)
                   {
@@ -284,12 +284,17 @@ namespace Emgu.CV.Test
          }
       }*/
 
-      /*
-      public void TestGpuMOG()
+      
+      public void TestGpuBackgroundModel()
       {
          int warmUpFrames = 20;
+         int totalFrames = 0;
+         
+         //CudaBackgroundSubtractorMOG2<Bgr>  bgModel = null;
+         //CudaBackgroundSubtractorMOG<Bgr> bgModel = null;
+         CudaBackgroundSubtractorGMG<Bgr> bgModel = null;
+         //CudaBackgroundSubtractorFGD<Bgr> bgModel = null;
 
-         GpuMOG2<Bgr>  mog2 = null;
          Image<Gray, Byte> mask = null;
          using (ImageViewer viewer = new ImageViewer()) //create an image viewer
          using (Capture capture = new Capture()) //create a camera captue
@@ -297,9 +302,22 @@ namespace Emgu.CV.Test
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
                //run this until application closed (close button click on image viewer)
+               totalFrames++;
 
+               if (viewer != null && !viewer.IsDisposed)
+               {
+                  if (viewer.InvokeRequired)
+                  {
+                     viewer.Invoke((Action)delegate { viewer.Text = String.Format("Processing {0}th frame.", totalFrames); });
+                  }
+                  else
+                  {
+                     viewer.Text = String.Format("Processing {0}th frame.", totalFrames); 
+                  }
+               }
+               
                using (Image<Bgr, byte> frame = capture.RetrieveBgrFrame(0))
-               using (GpuImage<Bgr, byte> gpuFrame = new GpuImage<Bgr, byte>(frame))
+               using (CudaImage<Bgr, byte> gpuFrame = new CudaImage<Bgr, byte>(frame))
                {
                   if (warmUpFrames > 0)
                   {
@@ -307,20 +325,38 @@ namespace Emgu.CV.Test
                      return;
                   }
 
-                  if (mog2 == null)
+                  if (bgModel == null)
                   {
-                     mog2 = new GpuMOG2<Bgr>(-1);
-                     mog2.Update(gpuFrame, -1.0f, null);
+                     //bgModel = new CudaBackgroundSubtractorMOG2<Bgr>(500, 16, true);
+                     //bgModel = new CudaBackgroundSubtractorMOG<Bgr>(200, 5, 0.7, 0);
+                     bgModel = new CudaBackgroundSubtractorGMG<Bgr>(120, 0.8);
+                     bgModel.Update(gpuFrame, -1.0f, null);
+                     //bgModel = new CudaBackgroundSubtractorFGD<Bgr>(128, 15, 25, 64, 25, 40, true, 1, 0.1f, 0.005f, 0.1f, 2.0f, 0.9f, 15.0f);
+                     //bgModel.Update(gpuFrame, -1.0f);
+                     
                      return;
                   }
                   else
                   {
-                     mog2.Update(gpuFrame, -1.0f, null);
+                     bgModel.Update(gpuFrame, -1.0f, null);
+                     //bgModel.Update(gpuFrame, -1.0f);
+                     
                      if (mask == null)
-                        mask = new Image<Gray, byte>(mog2.ForgroundMask.Size);
+                        mask = new Image<Gray, byte>(bgModel.ForgroundMask.Size);
 
-                     mog2.ForgroundMask.Download(mask);
-                     viewer.Image = frame.ConcateHorizontal(mask.Convert<Bgr, Byte>()); //draw the image obtained from camera
+                     bgModel.ForgroundMask.Download(mask);
+                     Image<Bgr, Byte> result = frame.ConcateHorizontal(mask.Convert<Bgr, Byte>());
+                     if (viewer != null && !viewer.IsDisposed)
+                     {
+                        if (viewer.InvokeRequired)
+                        {
+                           viewer.Invoke((Action)delegate { viewer.Image = result; });
+                        }
+                        else
+                        {
+                           viewer.Image = result; //draw the image obtained from camera
+                        }
+                     }
 
                   }
                }
@@ -328,7 +364,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
-      }*/
+      }
 
       public void CameraTest()
       {
@@ -356,8 +392,35 @@ namespace Emgu.CV.Test
                Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
                gray._EqualizeHist();
                viewer.Image = gray;
+
+               capture.Pause();
+               System.Threading.ThreadPool.QueueUserWorkItem(delegate
+               {
+                  Thread.Sleep(1000);
+                  capture.Start();
+               });
             };
             capture.Start();
+            viewer.ShowDialog();
+         }
+      }
+
+      public void CameraTest3()
+      {
+         ImageViewer viewer = new ImageViewer();
+         using (Capture capture = new Capture())
+         {
+            Application.Idle += delegate(object sender, EventArgs e)
+            {
+               Image<Bgr, byte> frame = capture.QueryFrame();
+               if (frame != null)
+               {
+                  Bitmap bmp = frame.ToBitmap();
+
+                  viewer.Image = new Image<Bgr, Byte>(bmp);
+                  
+               }
+            };
             viewer.ShowDialog();
          }
       }
@@ -546,8 +609,8 @@ namespace Emgu.CV.Test
          ImageViewer viewer = new ImageViewer();
          //using (Capture capture = new Capture("car.avi"))
          using (Superres.FrameSource frameSource = new Superres.FrameSource("car.avi", false))
-         //using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL, frameSource))
-         using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL1_OCL, frameSource))
+         using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL, frameSource))
+         //using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL1_OCL, frameSource))
          {
             Stopwatch watch = new Stopwatch();
             int counter = 0;
@@ -1014,33 +1077,33 @@ namespace Emgu.CV.Test
      
       public void TestPyrLKGPU()
       {
-         if (!GpuInvoke.HasCuda)
+         if (!CudaInvoke.HasCuda)
             return;
 
          const int MAX_CORNERS = 500;
          Capture c = new Capture();
          ImageViewer viewer = new ImageViewer();
-         GpuImage<Gray, Byte> oldImage = null;
-         GpuImage<Gray, Byte> currentImage = null;
-         using (GpuGoodFeaturesToTrackDetector<Gray, Byte> detector = new GpuGoodFeaturesToTrackDetector<Gray, Byte>(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
-         using (GpuPyrLKOpticalFlow flow = new GpuPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
+         CudaImage<Gray, Byte> oldImage = null;
+         CudaImage<Gray, Byte> currentImage = null;
+         using (CudaGoodFeaturesToTrackDetector<Gray, Byte> detector = new CudaGoodFeaturesToTrackDetector<Gray, Byte>(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
+         using (CudaPyrLKOpticalFlow flow = new CudaPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
          {
             Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
             {
                if (oldImage == null)
                {
-                  oldImage = new GpuImage<Gray,byte>( c.QueryGrayFrame() );
+                  oldImage = new CudaImage<Gray,byte>( c.QueryGrayFrame() );
                }
 
-               currentImage = new GpuImage<Gray,byte>( c.QueryGrayFrame() );
-               using (GpuImage<Gray, float> u = new GpuImage<Gray, float>())
-               using (GpuImage<Gray, float> v = new GpuImage<Gray, float>())
+               currentImage = new CudaImage<Gray,byte>( c.QueryGrayFrame() );
+               using (CudaImage<Gray, float> u = new CudaImage<Gray, float>())
+               using (CudaImage<Gray, float> v = new CudaImage<Gray, float>())
                using (GpuMat<float> vertex = new GpuMat<float>())
                using (GpuMat<float> colors = new GpuMat<float>())
                {
                   flow.Dense(oldImage, currentImage, u, v);
 
-                  GpuInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+                  CudaInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
                   //GpuMat<float> detector.Detect(oldImage, null);
                   /*
                   //PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
@@ -1051,7 +1114,7 @@ namespace Emgu.CV.Test
                      out shiftedFeatures, out status, out trackErrors);
                   */
 
-                  GpuImage<Gray, Byte> displayImage = currentImage.Clone(null);
+                  CudaImage<Gray, Byte> displayImage = currentImage.Clone(null);
                   /*
                   for (int i = 0; i < features.Length; i++)
                      displayImage.Draw(new LineSegment2DF(features[i], shiftedFeatures[i]), new Gray(), 2);
@@ -1169,10 +1232,10 @@ namespace Emgu.CV.Test
          using (Capture cl = new Capture(0))
          using (Capture cr = new Capture(1))
          //using (GpuStereoConstantSpaceBP stereo = new GpuStereoConstantSpaceBP(128, 8, 4, 4))
-         using (GpuStereoBM stereo = new GpuStereoBM(64, 19))
-         using (GpuImage<Bgr, byte> leftGpu = new GpuImage<Bgr, byte>(new Size(cl.Width, cl.Height)))
-         using (GpuImage<Bgr, byte> rightGpu = new GpuImage<Bgr, byte>(new Size(cr.Width, cr.Height)))
-         using (GpuImage<Gray, byte> gpuDisparity = new GpuImage<Gray, byte>(leftGpu.Size))
+         using (CudaStereoBM stereo = new CudaStereoBM(64, 19))
+         using (CudaImage<Bgr, byte> leftGpu = new CudaImage<Bgr, byte>(new Size(cl.Width, cl.Height)))
+         using (CudaImage<Bgr, byte> rightGpu = new CudaImage<Bgr, byte>(new Size(cr.Width, cr.Height)))
+         using (CudaImage<Gray, byte> gpuDisparity = new CudaImage<Gray, byte>(leftGpu.Size))
          using (Image<Gray, Byte> disparity = new Image<Gray, byte>(gpuDisparity.Size))
          {
             Application.Idle +=
@@ -1185,8 +1248,8 @@ namespace Emgu.CV.Test
                {
                   leftGpu.Upload(left);
                   rightGpu.Upload(right);
-                  using (GpuImage<Gray, byte> leftGray = leftGpu.Convert<Gray, byte>())
-                  using (GpuImage<Gray, byte> rightGray = rightGpu.Convert<Gray, byte>())
+                  using (CudaImage<Gray, byte> leftGray = leftGpu.Convert<Gray, byte>())
+                  using (CudaImage<Gray, byte> rightGray = rightGpu.Convert<Gray, byte>())
                   {
                      stereo.FindStereoCorrespondence(leftGray, rightGray, gpuDisparity, null);
                      gpuDisparity.Download(disparity);

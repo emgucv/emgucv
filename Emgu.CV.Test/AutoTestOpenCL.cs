@@ -1,7 +1,8 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
-﻿using System;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -12,6 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.OpenCL;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
+using Emgu.CV.Nonfree;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test
@@ -230,6 +232,21 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestClahe()
+      {
+         if (OclInvoke.HasOpenCL)
+         {
+            Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
+            OclImage<Gray, Byte> oclImage = new OclImage<Gray, byte>(image);
+            OclImage<Gray, Byte> oclResult = new OclImage<Gray, byte>(oclImage.Size);
+            Image<Gray, Byte> result = new Image<Gray, byte>(oclResult.Size);
+            OclInvoke.CLAHE(oclImage, oclResult, 4, new Size(8, 8));
+            oclResult.Download(result);
+            Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+         }
+      }
+
+      [Test]
       public void TestClone()
       {
          if (OclInvoke.HasOpenCL)
@@ -316,8 +333,8 @@ namespace Emgu.CV.Test
          if (OclInvoke.HasOpenCL)
          {
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
-            using (OclImage<Bgr, Byte> gpuImage = new OclImage<Bgr, byte>(image))
-            using (OclImage<Gray, Byte> gray = gpuImage.Convert<Gray, Byte>())
+            using (OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(image))
+            using (OclImage<Gray, Byte> gray = CudaImage.Convert<Gray, Byte>())
             using (OclImage<Gray, Byte> canny = new OclImage<Gray, byte>(gray.Size))
             {
                OclInvoke.Canny(gray, canny, 20, 100, 3, false);
@@ -340,14 +357,14 @@ namespace Emgu.CV.Test
                Stopwatch watch = Stopwatch.StartNew();
                Rectangle[] rects;
                /*
-               //using (OclImage<Bgr, Byte> gpuImage = new OclImage<Bgr, byte>(image))
-               //using (OclImage<Bgra, Byte> gpuBgra = gpuImage.Convert<Bgra, Byte>())
+               //using (OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(image))
+               //using (OclImage<Bgra, Byte> gpuBgra = CudaImage.Convert<Bgra, Byte>())
                using (Image<Bgra, Byte> imgBgra = image.Convert<Bgra, Byte>())
                using (OclImage<Bgra, Byte> gpuBgra = new OclImage<Bgra,byte>(imgBgra))
                   rects = hog.DetectMultiScale(gpuBgra);
                */
-               using (OclImage<Bgr, Byte> gpuImage = new OclImage<Bgr, byte>(image))
-               using (OclImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
+               using (OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(image))
+               using (OclImage<Gray, Byte> gpuGray = CudaImage.Convert<Gray, Byte>())
                {
                   rects = hog.DetectMultiScale(gpuGray);
                }
@@ -374,11 +391,11 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = new Image<Gray, byte>(640, 320);
          image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 4);
 
-         using (OclImage<Gray, Byte> gpuImage = new OclImage<Gray, byte>(image))
-         using (OclImage<Gray, Byte> gpuTemp = new OclImage<Gray, byte>(gpuImage.Size))
+         using (OclImage<Gray, Byte> CudaImage = new OclImage<Gray, byte>(image))
+         using (OclImage<Gray, Byte> gpuTemp = new OclImage<Gray, byte>(CudaImage.Size))
          {
-            OclInvoke.Erode(gpuImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), morphIter);
-            OclInvoke.Dilate(gpuTemp, gpuImage, IntPtr.Zero, new Point(-1, -1), morphIter);
+            OclInvoke.Erode(CudaImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), morphIter);
+            OclInvoke.Dilate(gpuTemp, CudaImage, IntPtr.Zero, new Point(-1, -1), morphIter);
 
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {
@@ -386,7 +403,7 @@ namespace Emgu.CV.Test
                CvInvoke.cvDilate(temp, image, IntPtr.Zero, morphIter);
             }
 
-            Assert.IsTrue(gpuImage.ToImage().Equals(image));
+            Assert.IsTrue(CudaImage.ToImage().Equals(image));
          }
 
       }
@@ -482,12 +499,12 @@ namespace Emgu.CV.Test
 
          double gpuMinVal = 0, gpuMaxVal = 0;
          Point gpuMinLoc = Point.Empty, gpuMaxLoc = Point.Empty;
-         OclImage<Bgr, Byte> gpuImage = new OclImage<Bgr, byte>(img);
+         OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(img);
          OclImage<Bgr, Byte> gpuRandomObj = new OclImage<Bgr, byte>(randomObj);
          OclImage<Gray, Single> gpuMatch = new OclImage<Gray, float>(match.Size);
          using (OclMatchTemplateBuf buffer = new OclMatchTemplateBuf())
          {
-            OclInvoke.MatchTemplate(gpuImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer);
+            OclInvoke.MatchTemplate(CudaImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer);
             OclInvoke.MinMaxLoc(gpuMatch, ref gpuMinVal, ref gpuMaxVal, ref gpuMinLoc, ref gpuMaxLoc, IntPtr.Zero);
          }
 

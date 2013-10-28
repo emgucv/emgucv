@@ -11,7 +11,7 @@ cv::bioinspired::Retina* CvRetinaCreate(CvSize inputSize, const bool colorMode, 
 {
    cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::createRetina(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
 void CvRetinaRelease(cv::bioinspired::Retina** retina)
 {

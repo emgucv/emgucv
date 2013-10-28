@@ -14,7 +14,7 @@ using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 
 namespace SURFFeatureExample
 {
@@ -33,7 +33,7 @@ namespace SURFFeatureExample
          using (Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
          {
             Image<Bgr, byte> result = DrawMatches.Draw(modelImage, observedImage, out matchTime);
-            ImageViewer.Show(result, String.Format("Matched using {0} in {1} milliseconds", GpuInvoke.HasCuda ? "GPU" : "CPU", matchTime));
+            ImageViewer.Show(result, String.Format("Matched using {0} in {1} milliseconds", CudaInvoke.HasCuda ? "GPU" : "CPU", matchTime));
          }
       }
    }

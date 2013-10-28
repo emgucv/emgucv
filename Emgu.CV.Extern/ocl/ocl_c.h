@@ -197,6 +197,7 @@ CVAPI(cv::ocl::oclMat*) oclMatGetSubRect(const cv::ocl::oclMat* arr, CvRect* rec
 
 CVAPI(cv::ocl::oclMat*) oclMatGetRegion(cv::ocl::oclMat* other, CvSlice* rowRange, CvSlice* colRange);
 
+CVAPI(void) oclCLAHE(cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double clipLimit, emgu::size* tileGridSize);
 
 //----------------------------------------------------------------------------
 //

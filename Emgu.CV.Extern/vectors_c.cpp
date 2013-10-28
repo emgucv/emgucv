@@ -486,3 +486,54 @@ std::vector<cv::Point>* VectorOfVectorOfPointGetItem(std::vector< std::vector<cv
    return &(*points)[index];
 }
 
+//----------------------------------------------------------------------------
+//
+//  Vector of CvRect
+//
+//----------------------------------------------------------------------------
+std::vector<cv::Rect>* VectorOfRectCreate()
+{
+   CV_Assert(sizeof(cv::Rect) == 4 * sizeof(int));
+   return new std::vector<cv::Rect>();
+}
+
+std::vector<cv::Rect>* VectorOfRectCreateSize(int size)
+{
+   CV_Assert(sizeof(cv::Rect) == 4 * sizeof(int));
+   return new std::vector<cv::Rect>(size);
+}
+
+int VectorOfRectGetSize(std::vector<cv::Rect>* v)
+{
+   return v->size();
+}
+
+void VectorOfRectPushMulti(std::vector<cv::Rect>* v, cv::Rect* values, int count)
+{
+   VectorPushMulti<cv::Rect>(v, values, count);
+}
+
+void VectorOfRectClear(std::vector<cv::Rect>* v)
+{
+   v->clear();
+}
+
+void VectorOfRectRelease(std::vector<cv::Rect>* v)
+{
+   delete v;
+}
+
+void VectorOfRectCopyData(std::vector<cv::Rect>* v, cv::Rect* data)
+{
+   VectorCopyData<cv::Rect>(v, data);
+}
+
+cv::Rect* VectorOfRectGetStartAddress(std::vector<cv::Rect>* v)
+{
+   return v->empty() ? NULL : &(*v)[0];
+}
+
+void VectorOfRectGetItem(std::vector<cv::Rect>* points, int index, cv::Rect* point)
+{
+   *point = points->at(index);
+}

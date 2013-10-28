@@ -8,7 +8,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 
 namespace PedestrianDetection
 {
@@ -25,18 +25,18 @@ namespace PedestrianDetection
          Stopwatch watch;
          Rectangle[] regions;
 
-         //check if there is a compatible GPU to run pedestrian detection
-         if (GpuInvoke.HasCuda)
-         {  //this is the GPU version
-            using (GpuHOGDescriptor des = new GpuHOGDescriptor())
+         //check if there is a compatible Cuda device to run pedestrian detection
+         if (CudaInvoke.HasCuda)
+         {  //this is the Cuda version
+            using (CudaHOGDescriptor des = new CudaHOGDescriptor())
             {
-               des.SetSVMDetector(GpuHOGDescriptor.GetDefaultPeopleDetector());
+               des.SetSVMDetector(CudaHOGDescriptor.GetDefaultPeopleDetector());
 
                watch = Stopwatch.StartNew();
-               using (GpuImage<Bgr, Byte> gpuImg = new GpuImage<Bgr, byte>(image))
-               using (GpuImage<Bgra, Byte> gpuBgra = gpuImg.Convert<Bgra, Byte>())
+               using (CudaImage<Bgr, Byte> cudaImg = new CudaImage<Bgr, byte>(image))
+               using (CudaImage<Bgra, Byte> cudaBgra = cudaImg.Convert<Bgra, Byte>())
                {
-                  regions = des.DetectMultiScale(gpuBgra);
+                  regions = des.DetectMultiScale(cudaBgra);
                }
             }
          }

@@ -24,7 +24,7 @@ namespace Emgu.CV.OpenCL
    {
       #region constructors
       /// <summary>
-      /// Create an empty GpuImage
+      /// Create an empty CudaImage
       /// </summary>
       public OclImage()
          : base()
@@ -32,7 +32,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Create the GpuImage from the unmanaged pointer.
+      /// Create the CudaImage from the unmanaged pointer.
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat. It is the user's responsibility that the Color type and depth matches between the managed class and unmanaged pointer.</param>
       public OclImage(IntPtr ptr)
@@ -73,7 +73,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Create a GpuImage of the specific size
+      /// Create a CudaImage of the specific size
       /// </summary>
       /// <param name="size">The size of the image</param>
       public OclImage(Size size)
@@ -138,10 +138,10 @@ namespace Emgu.CV.OpenCL
          return new OclImage<TColor, TDepth>(OclInvoke.GetSubRect(this, ref region));
       }
       
-      ///<summary> Convert the current GpuImage to the specific color and depth </summary>
+      ///<summary> Convert the current CudaImage to the specific color and depth </summary>
       ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
       ///<typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
-      ///<returns>GpuImage of the specific color and depth </returns>
+      ///<returns>CudaImage of the specific color and depth </returns>
       public OclImage<TOtherColor, TOtherDepth> Convert<TOtherColor, TOtherDepth>()
          where TOtherColor : struct, IColor
          where TOtherDepth : new()
@@ -225,7 +225,7 @@ namespace Emgu.CV.OpenCL
       }
 
       /// <summary>
-      /// Convert the current GpuImage to a regular Image.
+      /// Convert the current CudaImage to a regular Image.
       /// </summary>
       /// <returns>A regular image</returns>
       public Image<TColor, TDepth> ToImage()
@@ -282,7 +282,7 @@ namespace Emgu.CV.OpenCL
       /// <summary>
       /// Create a clone of this OclImage
       /// </summary>
-      /// <returns>A clone of this GpuImage</returns>
+      /// <returns>A clone of this CudaImage</returns>
       public OclImage<TColor, TDepth> Clone()
       {
          OclImage<TColor, TDepth> result = new OclImage<TColor, TDepth>(Size);

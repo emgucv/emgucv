@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 
 namespace PedestrianDetection
 {
@@ -37,7 +37,7 @@ namespace PedestrianDetection
             ImageViewer.Show(
                image,
                String.Format("Pedestrain detection using {0} in {1} milliseconds.",
-                  GpuInvoke.HasCuda ? "GPU" : "CPU",
+                  CudaInvoke.HasCuda ? "GPU" : "CPU",
                   processingTime));
          }
       }

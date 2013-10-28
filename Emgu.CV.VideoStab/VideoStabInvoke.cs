@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoStab
@@ -16,7 +16,7 @@ namespace Emgu.CV.VideoStab
       static VideoStabInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called
-         bool hasCuda = GpuInvoke.HasCuda;
+         bool hasCuda = CudaInvoke.HasCuda;
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Emgu.CV.Cuda</RootNamespace>
+    <AssemblyName>Emgu.CV.Cuda.MonoTouch</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;IOS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DefineConstants>IOS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="GpuBroxOpticalFlow.cs" />
+    <Compile Include="GpuBruteForceMatcher.cs" />
+    <Compile Include="GpuCascadeClassifier.cs" />
+    <Compile Include="GpuDeviceInfo.cs" />
+    <Compile Include="GpuDisparityBilateralFilter.cs" />
+    <Compile Include="GpuFarnebackOpticalFlow.cs" />
+    <Compile Include="GpuFASTDetector.cs" />
+    <Compile Include="GpuGoodFeaturesToTrackDetector.cs" />
+    <Compile Include="GpuHOGDescriptor.cs" />
+    <Compile Include="GpuImage.cs" />
+    <Compile Include="GpuInvoke.cs" />
+    <Compile Include="GpuMat.cs" />
+    <Compile Include="GpuORBDetector.cs" />
+    <Compile Include="GpuPyrLKOpticalFlow.cs" />
+    <Compile Include="GpuStereoBM.cs" />
+    <Compile Include="GpuStereoConstantSpaceBP.cs" />
+    <Compile Include="GpuSURFDetector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stream.cs" />
+    <Compile Include="TargetArchs.cs" />
+    <Compile Include="GpuMOG2.cs" />
+    <Compile Include="GpuVibe.cs" />
+    <Compile Include="GpuCannyEdgeDetector.cs" />
+    <Compile Include="GpuFilter.cs" />
+    <Compile Include="GpuLut.cs" />
+    <Compile Include="GpuTemplateMatching.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
+      <Name>Emgu.CV.MonoTouch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
+      <Name>Emgu.Util.MonoTouch</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

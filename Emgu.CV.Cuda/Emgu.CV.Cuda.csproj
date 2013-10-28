@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.CV.Cuda</RootNamespace>
+    <AssemblyName>Emgu.CV.Cuda</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Emgu.CV.Cuda.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Emgu.CV.Cuda.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Bgsegm\CudaBackgroundSubtractorFGD.cs" />
+    <Compile Include="Bgsegm\CudaBackgroundSubtractorGMG.cs" />
+    <Compile Include="Bgsegm\CudaBackgroundSubtractorMOG.cs" />
+    <Compile Include="Filters\CudaBoxMaxFilter.cs" />
+    <Compile Include="Filters\CudaBoxMinFilter.cs" />
+    <Compile Include="Filters\CudaGaussianFilter.cs" />
+    <Compile Include="Filters\CudaLaplacianFilter.cs" />
+    <Compile Include="Filters\CudaLinearFilter.cs" />
+    <Compile Include="Filters\CudaSobelFilter.cs" />
+    <Compile Include="Imgproc\CudaCornernessCriteria.cs" />
+    <Compile Include="Imgproc\CudaHarrisCorner.cs" />
+    <Compile Include="Optflow\CudaBroxOpticalFlow.cs" />
+    <Compile Include="Features2d\CudaBruteForceMatcher.cs" />
+    <Compile Include="Imgproc\CudaCannyEdgeDetector.cs" />
+    <Compile Include="CudaCascadeClassifier.cs" />
+    <Compile Include="CudaDeviceInfo.cs" />
+    <Compile Include="Stereo\CudaDisparityBilateralFilter.cs" />
+    <Compile Include="Optflow\CudaFarnebackOpticalFlow.cs" />
+    <Compile Include="Features2d\CudaFASTDetector.cs" />
+    <Compile Include="Filters\CudaFilter.cs" />
+    <Compile Include="Imgproc\CudaGoodFeaturesToTrackDetector.cs" />
+    <Compile Include="CudaHOGDescriptor.cs" />
+    <Compile Include="CudaImage.cs" />
+    <Compile Include="CudaInvoke.cs" />
+    <Compile Include="CudaLookUpTable.cs" />
+    <Compile Include="GpuMat.cs" />
+    <Compile Include="Imgproc\CudaTemplateMatching.cs" />
+    <Compile Include="Bgsegm\CudaBackgroundSubtractorMOG2.cs" />
+    <Compile Include="Features2d\CudaORBDetector.cs" />
+    <Compile Include="Optflow\CudaPyrLKOpticalFlow.cs" />
+    <Compile Include="Stereo\CudaStereoBM.cs" />
+    <Compile Include="Stereo\CudaStereoConstantSpaceBP.cs" />
+    <Compile Include="Features2d\CudaVibe.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stream.cs" />
+    <Compile Include="TargetArchs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
+      <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
+      <Name>Emgu.CV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
+      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
+      <Name>Emgu.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

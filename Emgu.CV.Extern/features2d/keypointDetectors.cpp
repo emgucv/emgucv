@@ -107,7 +107,7 @@ cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(
    int maxTotalKeypoints,
    int gridRows, int gridCols)
 {
-   cv::Ptr<cv::FeatureDetector> detectorPtr = detector;
+   cv::Ptr<cv::FeatureDetector> detectorPtr(detector);
    detectorPtr.addref(); //increment the counter such that it should never be release by the grid adapeted feature detector
    return new cv::GridAdaptedFeatureDetector(detectorPtr, maxTotalKeypoints, gridRows, gridCols);
 }

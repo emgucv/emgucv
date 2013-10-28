@@ -11,7 +11,7 @@ cv::BackgroundSubtractorMOG2* CvBackgroundSubtractorMOG2Create(int history,  flo
 {
    cv::Ptr<cv::BackgroundSubtractorMOG2> ptr =  cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
    //return new cv::BackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
 }
 
@@ -33,8 +33,9 @@ void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor, IplIm
 cv::BackgroundSubtractorMOG* CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma)
 {
    cv::Ptr<cv::BackgroundSubtractorMOG> ptr = cv::createBackgroundSubtractorMOG(history, nmixtures, backgroundRatio, noiseSigma);
+  
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
 
 void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstractor)

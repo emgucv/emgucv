@@ -7,17 +7,24 @@
 #include "objdetect_c.h"
 
 //ERFilter
-cv::ERFilter* CvERFilterNM1Create()
+cv::ERFilter* CvERFilterNM1Create(
+   const char* classifier, 
+   int thresholdDelta, 
+   float minArea,
+   float maxArea, 
+   float minProbability,
+   bool nonMaxSuppression,
+   float minProbabilityDiff)
 {
-   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM1();
+   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM1(cv::loadClassifierNM1(classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
    filter.addref();
-   return filter.obj;
+   return filter.get();
 }
-cv::ERFilter* CvERFilterNM2Create()
+cv::ERFilter* CvERFilterNM2Create(const char* classifier, float minProbability)
 {
-   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM2();
+   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM2(cv::loadClassifierNM2(classifier), minProbability);
    filter.addref();
-   return filter.obj;
+   return filter.get();
 
 }
 void CvERFilterRelease(cv::ERFilter** filter)
@@ -29,6 +36,19 @@ void CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* 
 {
    cv::Mat mat = cv::cvarrToMat(image);
    filter->run(mat, *regions);
+}
+
+void CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, std::vector<cv::Rect>* groups)
+{
+   std::vector< cv::Mat > channelMat; 
+   std::vector< std::vector< cv::ERStat > > statVecs;
+   for (int i = 0; i < count; i++)
+   {
+      channelMat.push_back(cv::cvarrToMat(channels[i]));
+      statVecs.push_back(*regions[i]);
+   }
+   cv::erGrouping(channelMat, statVecs, *groups);
+
 }
 
 //----------------------------------------------------------------------------

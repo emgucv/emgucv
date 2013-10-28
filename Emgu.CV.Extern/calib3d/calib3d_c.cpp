@@ -19,7 +19,7 @@ cv::StereoSGBM* CvStereoSGBMCreate(
 {
    cv::Ptr<cv::StereoSGBM> ptr =  cv::createStereoSGBM(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
 void CvStereoSGBMRelease(cv::StereoSGBM* obj) { delete obj;}
 void CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity)

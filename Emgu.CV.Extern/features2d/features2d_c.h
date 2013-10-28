@@ -10,11 +10,7 @@
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/features2d/features2d.hpp"
-//#include "opencv2/calib3d/calib3d.hpp"
-//#include "opencv2/contrib/contrib.hpp"
-//#include "opencv2/legacy/legacy.hpp"
 #include "opencv2/legacy/compat.hpp"
-//#include "opencv2/nonfree/nonfree.hpp"
 #include "vectors_c.h"
 
 //StarDetector
@@ -105,22 +101,7 @@ CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType, bool c
 
 CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
 
-//flann index
-CVAPI(cv::flann::Index*) CvFlannIndexCreateKDTree(CvMat* features, int trees);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateLinear(CvMat* features);
-
-CVAPI(cv::flann::Index*) CvFlannIndexCreateKMeans(CvMat* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);
-
-CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(CvMat* features, int trees, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);
-
-CVAPI(cv::flann::Index*) CvFlannIndexCreateAutotuned(CvMat* features, float target_precision, float build_weight, float memory_weight, float sample_fraction);
-
-CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, CvMat* queries, CvMat* indices, CvMat* dists, int knn, int checks);
-
-CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, CvMat* queries, CvMat* indices, CvMat* dists, float radius, int checks);
-
-CVAPI(void) CvFlannIndexRelease(cv::flann::Index* index);
 
 //2D Tracker
 CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins);

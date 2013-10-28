@@ -180,7 +180,7 @@ namespace Emgu.CV.OpenCL
       /// <summary>
       /// Perfroms object detection with increasing detection window.
       /// </summary>
-      /// <param name="image">The GpuImage to search in</param>
+      /// <param name="image">The CudaImage to search in</param>
       /// <returns>The regions where positives are found</returns>
       public Rectangle[] DetectMultiScale(OclImage<Gray, Byte> image)
       {
@@ -220,13 +220,13 @@ namespace Emgu.CV.OpenCL
          bool gammaCorrection,
          int nLevels);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void oclHOGDescriptorRelease(ref IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void oclHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void oclHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,

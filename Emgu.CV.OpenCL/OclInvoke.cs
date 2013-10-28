@@ -280,7 +280,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat to be element-wise divided.</param>
       /// <param name="scalar">The first scalar to be divided</param>
       /// <param name="c">The result of the scalar dividing the OclMat</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivideSL")]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivideSL")]
       public static extern void Divide(double scalar, IntPtr b, IntPtr c);
 
       /// <summary>
@@ -356,7 +356,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat</param>
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCompare")]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCompare")]
       public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
 
       /// <summary>
@@ -419,15 +419,15 @@ namespace Emgu.CV.OpenCL
       /// <summary>
       /// Performs downsampling step of Gaussian pyramid decomposition. 
       /// </summary>
-      /// <param name="src">The source GpuImage.</param>
-      /// <param name="dst">The destination GpuImage, should have 2x smaller width and height than the source.</param>
+      /// <param name="src">The source CudaImage.</param>
+      /// <param name="dst">The destination CudaImage, should have 2x smaller width and height than the source.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrDown")]
       public static extern void PyrDown(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Performs up-sampling step of Gaussian pyramid decomposition.
       /// </summary>
-      /// <param name="src">The source GpuImage.</param>
+      /// <param name="src">The source CudaImage.</param>
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrUp")]
       public static extern void PyrUp(IntPtr src, IntPtr dst);
@@ -921,7 +921,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
       private static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
@@ -979,7 +979,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
       public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
@@ -1039,7 +1039,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
-      [DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftProc")]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftProc")]
       private static extern void oclMatMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria);
 
       /// <summary>
@@ -1070,5 +1070,14 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftSegmentation")]
       private static extern void oclMatMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
       #endregion
+
+      public static void CLAHE(OclMat<Byte> src, OclMat<Byte> dst, double clipLimit, Size tileGridSize)
+      {
+         oclCLAHE(src, dst, clipLimit, ref tileGridSize);
+      }
+
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void oclCLAHE(IntPtr src, IntPtr dst, double clipLimit, ref Size tileGridSize);
+
    }
 }

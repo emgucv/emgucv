@@ -8,6 +8,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Em
 		SccAuxPath = ""
 		SccLocalPath = ""
 		SccProvider = ""
+		Frontpage = "false"
 		TargetFramework = "3.5"
 		ProjectReferences = "{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}|Emgu.CV.dll;{7C2C5325-8235-4A24-9C67-6BD79A4679E2}|Emgu.Utils.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
@@ -63,7 +64,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FaceDetectionVB", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF", "..\..\Emgu.CV.Example\WPF\WPF.csproj", "{B1D43BE6-AF83-41E5-990E-3E163CE42C79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.csproj", "{8728CB1F-F193-4F75-AEA9-221AA85A3E80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj", "{8728CB1F-F193-4F75-AEA9-221AA85A3E80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\..\Emgu.CV.Example\PedestrianDetection\PedestrianDetection.csproj", "{7F6AA856-B9EF-4F86-BDD4-1D9DB596C8FF}"
 EndProject
@@ -76,6 +77,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitching", "..\..\Emgu.CV.Example\Stitching\Stitching.csproj", "{331F904E-E7E8-42E0-8C82-22539C35E8F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj", "{D9C9B824-2B7A-48C0-A7D3-484410288CD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree", "..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj", "{910D133F-1B44-4151-80A5-F3B25741747D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OpenCL", "..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.csproj", "{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,6 +252,18 @@ Global
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|x86.ActiveCfg = Release|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

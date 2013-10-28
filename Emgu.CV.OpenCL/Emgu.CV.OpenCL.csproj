@@ -10,6 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.OpenCL</RootNamespace>
     <AssemblyName>Emgu.CV.OpenCL</AssemblyName>
+	    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -71,7 +73,6 @@
     <Compile Include="OclBruteForceMatcher.cs" />
     <Compile Include="OclInfo.cs" />
     <Compile Include="OclOpticalFlowDual_TVL1.cs" />
-    <Compile Include="OclSURFDetector.cs" />
     <Compile Include="OclStereoBM.cs" />
     <Compile Include="OclStereoConstantSpaceBP.cs" />
     <Compile Include="OclPyrLKOpticalFlow.cs" />

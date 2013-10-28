@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 
 namespace FaceDetection
 {
@@ -18,24 +18,24 @@ namespace FaceDetection
       {
          Stopwatch watch;
 
-         if (GpuInvoke.HasCuda)
+         if (CudaInvoke.HasCuda)
          {
-            using (GpuCascadeClassifier face = new GpuCascadeClassifier(faceFileName))
-            using (GpuCascadeClassifier eye = new GpuCascadeClassifier(eyeFileName))
+            using (CudaCascadeClassifier face = new CudaCascadeClassifier(faceFileName))
+            using (CudaCascadeClassifier eye = new CudaCascadeClassifier(eyeFileName))
             {
                watch = Stopwatch.StartNew();
-               using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
-               using (GpuImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
+               using (CudaImage<Bgr, Byte> gpuImage = new CudaImage<Bgr, byte>(image))
+               using (CudaImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
                {
                   Rectangle[] faceRegion = face.DetectMultiScale(gpuGray, 1.1, 10, Size.Empty);
                   faces.AddRange(faceRegion);
                   foreach (Rectangle f in faceRegion)
                   {
-                     using (GpuImage<Gray, Byte> faceImg = gpuGray.GetSubRect(f))
+                     using (CudaImage<Gray, Byte> faceImg = gpuGray.GetSubRect(f))
                      {
                         //For some reason a clone is required.
-                        //Might be a bug of GpuCascadeClassifier in opencv
-                        using (GpuImage<Gray, Byte> clone = faceImg.Clone(null))
+                        //Might be a bug of CudaCascadeClassifier in opencv
+                        using (CudaImage<Gray, Byte> clone = faceImg.Clone(null))
                         {
                            Rectangle[] eyeRegion = eye.DetectMultiScale(clone, 1.1, 10, Size.Empty);
 

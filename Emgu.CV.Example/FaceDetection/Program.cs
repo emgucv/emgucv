@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 
 namespace FaceDetection
 {
@@ -43,7 +43,7 @@ namespace FaceDetection
          //display the image 
          ImageViewer.Show(image, String.Format(
             "Completed face and eye detection using {0} in {1} milliseconds", 
-            GpuInvoke.HasCuda ? "GPU": "CPU", 
+            CudaInvoke.HasCuda ? "GPU": "CPU", 
             detectionTime));
       }
 

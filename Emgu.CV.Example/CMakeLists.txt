@@ -14,9 +14,10 @@ IF(EMGU_CV_EXAMPLE_BUILD AND (NOT ANDROID))
     -r:"${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll" 
     -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
   
-    SET (EMGU_CV_GPU_REFERENCE
-    ${EMGU_CV_REFERENCE} -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.GPU.dll")
-  
+    SET (EMGU_CV_CUDA_REFERENCE -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.Cuda.dll")
+	SET (EMGU_CV_OPENCL_REFERENCE -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.OpenCL.dll")
+    SET (EMGU_CV_NONFREE_REFERENCE -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.Nonfree.dll")
+	
     add_subdirectory(HelloWorld)
     add_subdirectory(CameraCapture)
     add_subdirectory(PlanarSubdivision)

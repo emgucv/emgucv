@@ -50,9 +50,9 @@
     <Compile Include="Stitcher.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
-      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
-      <Name>Emgu.CV.GPU</Name>
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
+      <Project>{8728cb1f-f193-4f75-aea9-221aa85a3e80}</Project>
+      <Name>Emgu.CV.Cuda</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
       <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>

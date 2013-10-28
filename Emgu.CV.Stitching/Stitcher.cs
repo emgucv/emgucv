@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -66,7 +66,7 @@ namespace Emgu.CV.Stitching
       static StitchingInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called
-         bool hasCuda = GpuInvoke.HasCuda;
+         bool hasCuda = CudaInvoke.HasCuda;
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

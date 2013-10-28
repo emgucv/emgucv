@@ -11,7 +11,8 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
+using Emgu.CV.Nonfree;
 
 namespace SURFFeatureExample
 {
@@ -25,23 +26,23 @@ namespace SURFFeatureExample
          Stopwatch watch;
          homography = null;
 
-         if (GpuInvoke.HasCuda)
+         if (CudaInvoke.HasCuda)
          {
-            GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f);
-            using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
+            CudaSURFDetector surfCuda = new CudaSURFDetector(surfCPU.SURFParams, 0.01f);
+            using (CudaImage<Gray, Byte> gpuModelImage = new CudaImage<Gray, byte>(modelImage))
             //extract features from the object image
-            using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
-            using (GpuMat<float> gpuModelDescriptors = surfGPU.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
-            using (GpuBruteForceMatcher<float> matcher = new GpuBruteForceMatcher<float>(DistanceType.L2))
+            using (GpuMat<float> gpuModelKeyPoints = surfCuda.DetectKeyPointsRaw(gpuModelImage, null))
+            using (GpuMat<float> gpuModelDescriptors = surfCuda.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
+            using (CudaBruteForceMatcher<float> matcher = new CudaBruteForceMatcher<float>(DistanceType.L2))
             {
                modelKeyPoints = new VectorOfKeyPoint();
-               surfGPU.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
+               surfCuda.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
-               using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray, byte>(observedImage))
-               using (GpuMat<float> gpuObservedKeyPoints = surfGPU.DetectKeyPointsRaw(gpuObservedImage, null))
-               using (GpuMat<float> gpuObservedDescriptors = surfGPU.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints))
+               using (CudaImage<Gray, Byte> gpuObservedImage = new CudaImage<Gray, byte>(observedImage))
+               using (GpuMat<float> gpuObservedKeyPoints = surfCuda.DetectKeyPointsRaw(gpuObservedImage, null))
+               using (GpuMat<float> gpuObservedDescriptors = surfCuda.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints))
                using (GpuMat<int> gpuMatchIndices = new GpuMat<int>(gpuObservedDescriptors.Size.Height, k, 1, true))
                using (GpuMat<float> gpuMatchDist = new GpuMat<float>(gpuObservedDescriptors.Size.Height, k, 1, true))
                using (GpuMat<Byte> gpuMask = new GpuMat<byte>(gpuMatchIndices.Size.Height, 1, 1))
@@ -55,12 +56,12 @@ namespace SURFFeatureExample
                   using (GpuMat<float> col0 = gpuMatchDist.Col(0))
                   using (GpuMat<float> col1 = gpuMatchDist.Col(1))
                   {
-                     GpuInvoke.Multiply(col1, new MCvScalar(uniquenessThreshold), col1, stream);
-                     GpuInvoke.Compare(col0, col1, gpuMask, CMP_TYPE.CV_CMP_LE, stream);
+                     CudaInvoke.Multiply(col1, new MCvScalar(uniquenessThreshold), col1, stream);
+                     CudaInvoke.Compare(col0, col1, gpuMask, CMP_TYPE.CV_CMP_LE, stream);
                   }
 
                   observedKeyPoints = new VectorOfKeyPoint();
-                  surfGPU.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
+                  surfCuda.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
 
                   //wait for the stream to complete its tasks
                   //We can perform some other CPU intesive stuffs here while we are waiting for the stream to complete.
@@ -69,7 +70,7 @@ namespace SURFFeatureExample
                   gpuMask.Download(mask);
                   gpuMatchIndices.Download(indices);
 
-                  if (GpuInvoke.CountNonZero(gpuMask) >= 4)
+                  if (CudaInvoke.CountNonZero(gpuMask) >= 4)
                   {
                      int nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                      if (nonZeroCount >= 4)

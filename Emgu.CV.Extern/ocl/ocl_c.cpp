@@ -594,6 +594,13 @@ cv::ocl::oclMat* oclMatGetRegion(cv::ocl::oclMat* other, CvSlice* rowRange, CvSl
    return new cv::ocl::oclMat(*other, row, col);
 }
 
+void oclCLAHE(cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double clipLimit, emgu::size* tileGridSize)
+{
+   cv::Size s(tileGridSize->width, tileGridSize->height);
+   cv::Ptr<cv::CLAHE> clahe = cv::ocl::createCLAHE(clipLimit, s);
+   clahe->apply(*src, *dst);
+}
+
 //----------------------------------------------------------------------------
 //
 //  OclHOGDescriptor

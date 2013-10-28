@@ -34,21 +34,21 @@ cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double thresh
 {
    cv::Ptr<cv::FaceRecognizer> ptr = cv::createEigenFaceRecognizer(numComponents, threshold);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
     
 cv::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents, double threshold)
 {
    cv::Ptr<cv::FaceRecognizer> ptr = cv::createFisherFaceRecognizer(numComponents, threshold);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
     
 cv::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
 {
    cv::Ptr<cv::FaceRecognizer> ptr = cv::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY, threshold);
    ptr.addref();
-   return ptr.obj;
+   return ptr.get();
 }
 
 void CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count)

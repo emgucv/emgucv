@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.csproj">
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
       <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
       <Name>Emgu.CV.GPU</Name>
     </ProjectReference>

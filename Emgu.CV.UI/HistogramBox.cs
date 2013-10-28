@@ -125,7 +125,7 @@ namespace Emgu.CV.UI
          {
             channels = image.Split();
          }
-         else if ((imageType = Toolbox.GetBaseType(image.GetType(), "GpuImage`2")) != null)
+         else if ((imageType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2")) != null)
          {
             IImage img = imageType.GetMethod("ToImage").Invoke(image, null) as IImage;
             channels = img.Split();

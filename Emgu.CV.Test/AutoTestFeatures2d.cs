@@ -16,6 +16,7 @@ using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.CV.Nonfree;
 using Emgu.Util;
 using NUnit.Framework;
 

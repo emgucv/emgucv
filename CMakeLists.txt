@@ -254,12 +254,12 @@ SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 SET (OPENCV_MODULE_NAME_CANDIDATES
   core imgproc video flann ml highgui objdetect features2d calib3d
   legacy contrib 
-  gpulegacy gpuarithm gpuwarping gpu gpufilters gpuimgproc gpuoptflow 
-  gpustereo gpubgsegm gpufeatures2d 
+  cudalegacy cudaarithm cudawarping cuda cudafilters cudaimgproc cudaoptflow 
+  cudastereo cudabgsegm cudafeatures2d 
   ocl
   photo bioinspired superres nonfree stitching 
   videostab  optim softcascade
-  cudev  gpucodec 
+  cudev  cudacodec 
   )
   
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
@@ -398,11 +398,12 @@ ADD_SUBDIRECTORY(Emgu.CV.ML)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
-ADD_SUBDIRECTORY(Emgu.CV.GPU)
+ADD_SUBDIRECTORY(Emgu.CV.Cuda)
 ADD_SUBDIRECTORY(Emgu.CV.OCR)
 ADD_SUBDIRECTORY(Emgu.CV.Stitching)
 ADD_SUBDIRECTORY(Emgu.CV.VideoStab)
 ADD_SUBDIRECTORY(Emgu.CV.OpenCL)
+ADD_SUBDIRECTORY(Emgu.CV.Nonfree)
 ENDIF()
 
 IF (ANDROID)
@@ -1121,7 +1122,7 @@ INSTALL(
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.GPU" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "ZedGraph")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.Cuda" "Emgu.CV.OpenCL" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "Emgu.CV.Superres" "Emgu.CV.Nonfree" "ZedGraph")
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND EMGUCV_MANAGED_DLLS "Emgu.CV.OCR")
   ENDIF()

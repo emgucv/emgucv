@@ -1439,58 +1439,6 @@ namespace Emgu.CV
             return res;
         }
 
-      #region SURF
-        /// <summary>
-        /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-        /// </summary>
-        /// <param name="param">The SURF parameters</param>
-        /// <returns>The SURF features</returns>
-        public SURFFeature[] ExtractSURF(ref MCvSURFParams param)
-        {
-            return ExtractSURF(null, ref param);
-        }
-
-        /// <summary>
-        /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-        /// </summary>
-        /// <param name="mask">The optional input 8-bit mask, can be null if not needed. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-        /// <param name="param">The SURF parameters</param>
-        /// <returns>The SURF features</returns>
-        public SURFFeature[] ExtractSURF(Image<Gray, Byte> mask, ref MCvSURFParams param)
-        {
-            using (MemStorage stor = new MemStorage())
-            {
-                IntPtr descriptorPtr = new IntPtr();
-                IntPtr keypointsPtr = new IntPtr();
-
-                CvInvoke.cvExtractSURF(
-               Ptr, mask == null ? IntPtr.Zero : mask.Ptr,
-               ref keypointsPtr,
-               ref descriptorPtr,
-               stor.Ptr,
-               param,
-               0);
-                Seq<MCvSURFPoint> keypoints = new Seq<MCvSURFPoint>(keypointsPtr, stor);
-
-                MCvSURFPoint[] surfPoints = keypoints.ToArray();
-
-                SURFFeature[] res = new SURFFeature[surfPoints.Length];
-
-                int elementsInDescriptor = (param.Extended == 0) ? 64 : 128;
-
-                for (int i = 0; i < res.Length; i++)
-                {
-                    float[] descriptor = new float[elementsInDescriptor];
-                    Marshal.Copy(CvInvoke.cvGetSeqElem(descriptorPtr, i), descriptor, 0, elementsInDescriptor);
-                    res[i] = new SURFFeature(ref surfPoints[i], descriptor);
-                }
-
-                return res;
-            }
-        }
-
-      #endregion
-
         /// <summary>
         /// Get the star keypoints from this image
         /// </summary>

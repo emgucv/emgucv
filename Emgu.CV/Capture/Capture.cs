@@ -32,7 +32,9 @@ namespace Emgu.CV
 #endif
  ICapture
    {
-      
+
+      AutoResetEvent _pauseEvent = new AutoResetEvent(false);
+
       /// <summary>
       /// the type of flipping
       /// </summary>
@@ -267,17 +269,17 @@ namespace Emgu.CV
             {
                if (_grabState == GrabState.Pause)
                {
-                  Wait(100);
-               }
-               else if (!Grab())
+                  _pauseEvent.WaitOne();
+               } else if (!Grab())
                {
                   //no more frames to grab, this is the end of the stream. We should stop.
                   _grabState = GrabState.Stopping;
                }
             }
          }
-         catch (Exception)
+         catch (Exception e)
          {
+            throw e;
          }
          finally
          {
@@ -300,7 +302,12 @@ namespace Emgu.CV
       /// </summary>
       public void Start()
       {
-         if (_grabState != GrabState.Running)
+         if (_grabState == GrabState.Pause)
+         {
+            _grabState = GrabState.Running;
+            _pauseEvent.Set();
+           
+         } else if (_grabState == GrabState.Stopped || _grabState == GrabState.Stopping)
          {
             _grabState = GrabState.Running;
 #if NETFX_CORE
@@ -325,11 +332,14 @@ namespace Emgu.CV
       /// </summary>
       public void Stop()
       {
-         if ( _grabState != GrabState.Stopped)
+         if (_grabState == GrabState.Pause)
          {
-            if (_grabState != GrabState.Stopping)
-               _grabState = GrabState.Stopping;
+            _grabState = GrabState.Stopping;
+            _pauseEvent.Set();
          }
+         else
+            if (_grabState == GrabState.Running)
+               _grabState = GrabState.Stopping;
       }
       #endregion
 

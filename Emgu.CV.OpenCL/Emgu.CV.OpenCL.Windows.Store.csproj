@@ -112,7 +112,6 @@
   <ItemGroup>
     <Compile Include="OclBruteForceMatcher.cs" />
     <Compile Include="OclInfo.cs" />
-    <Compile Include="OclSURFDetector.cs" />
     <Compile Include="OclStereoBM.cs" />
     <Compile Include="OclStereoConstantSpaceBP.cs" />
     <Compile Include="OclPyrLKOpticalFlow.cs" />

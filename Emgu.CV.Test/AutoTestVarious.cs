@@ -15,12 +15,13 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
-using Emgu.CV.GPU;
+using Emgu.CV.Cuda;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 using Emgu.CV.Tiff;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
+using Emgu.CV.Nonfree;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -2405,34 +2406,138 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestFileCapturePause()
+      {
+         
+         int totalFrames1 = 0;
+
+         Capture capture1 = new Capture(EmguAssert.GetFile("tree.avi"));
+        
+         //capture one will continute capturing all the frames.
+         EventHandler captureHandle1 = delegate
+         {
+            Image<Bgr, Byte> img = capture1.RetrieveBgrFrame(0);
+            totalFrames1++;
+            Trace.WriteLine(String.Format("capture 1 frame {0}: {1}", totalFrames1, DateTime.Now.ToString()));
+         };
+         capture1.ImageGrabbed += captureHandle1;
+         capture1.Start();
+         
+         int totalFrames2 = 0;
+         Capture capture2 = new Capture(EmguAssert.GetFile("tree.avi"));
+         int counter = 0;
+         //capture 2 will capture 2 frames, pause for 1 seconds, then continute;
+         EventHandler captureHandle = delegate
+         {
+            counter++;
+            totalFrames2++;
+
+            bool needPause = (counter >= 2);
+            if (needPause)
+            {
+               capture2.Pause();
+               counter = 0;
+            }
+
+            Image<Bgr, Byte> img = capture2.RetrieveBgrFrame(0);
+            Trace.WriteLine(String.Format("capture 2 frame {0}: {1}", totalFrames2, DateTime.Now.ToString()));
+
+            if (needPause)
+            {
+               System.Threading.ThreadPool.QueueUserWorkItem(delegate
+                  {
+                     Trace.WriteLine("Sleep for 1 sec");
+                     System.Threading.Thread.Sleep(1000);
+                     capture2.Start();
+                  });
+            }
+
+         };
+
+         capture2.ImageGrabbed += captureHandle;
+         capture2.Start();
+
+
+         int totalFrames = 69;
+         while (! (totalFrames1 == totalFrames && totalFrames2 == totalFrames))
+         {
+            System.Threading.Thread.Sleep(1000);
+         }
+         capture1.Dispose();
+         capture2.Dispose();
+      }
+
+      [Test]
       public void TestERFilter()
       {
          CvInvoke.SanityCheck();
+         bool checkInvert = false;
          using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("scenetext.jpg"))
-         using (Image<Gray, Byte> mask = new Image<Gray,byte>(image.Size.Width + 2, image.Size.Height + 2))
-         using (ERFilterNM1 er1 = new ERFilterNM1())
-         using (ERFilterNM2 er2 = new ERFilterNM2()) 
-         using (VectorOfERStat regionVec = new VectorOfERStat())
+         using (ERFilterNM1 er1 = new ERFilterNM1(EmguAssert.GetFile("trained_classifierNM1.xml"), 8, 0.00025f, 0.13f, 0.4f, true, 0.1f))
+         using (ERFilterNM2 er2 = new ERFilterNM2(EmguAssert.GetFile("trained_classifierNM2.xml"), 0.3f))
          {
-            er1.Run(image, regionVec);
-            er2.Run(image, regionVec);
-            //Emgu.CV.UI.ImageViewer.Show(image);
-            MCvERStat[] regions = regionVec.ToArray();
-            Size size = image.Size;
-            foreach (MCvERStat region in regions)
+            //using (Image<Gray, Byte> mask = new Image<Gray,byte>(image.Size.Width + 2, image.Size.Height + 2))
+
+            Image<Gray, byte>[] channels;
+            if (checkInvert)
             {
-               if (region.ParentPtr != IntPtr.Zero)
+               channels = new Image<Gray, byte>[image.NumberOfChannels * 2];
+               Image<Gray, Byte>[] originalChannles = image.Split();
+               for (int i = 0; i < originalChannles.Length; i++)
                {
-                  Point p = region.GetCenter(size.Width);
-                  int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
-                  MCvConnectedComp comp;
-                  CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
-                  image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
+                  channels[2 * i] = originalChannles[i];
+                  channels[2 * i + 1] = originalChannles[i].Not();
                }
+            } else
+            {
+               channels = image.Split();
             }
-            //UI.ImageViewer.Show(image.ConcateHorizontal( mask ));
+
+            VectorOfERStat[] regionVecs = new VectorOfERStat[channels.Length];
+            for (int i = 0; i < regionVecs.Length; i++)
+               regionVecs[i] = new VectorOfERStat();
+
+            try
+            {
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  er1.Run(channels[i], regionVecs[i]);
+                  er2.Run(channels[i], regionVecs[i]);
+               }
+               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs);
+
+               foreach (Rectangle rect in regions)
+                  image.Draw(rect, new Gray(0), 2);
+               Emgu.CV.UI.ImageViewer.Show(image);
+
+               /*
+               MCvERStat[] regions = regionVec.ToArray();
+               Size size = image.Size;
+               foreach (MCvERStat region in regions)
+               {
+                  if (region.ParentPtr != IntPtr.Zero)
+                  {
+                     Point p = region.GetCenter(size.Width);
+                     int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
+                     MCvConnectedComp comp;
+                     CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
+                     image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
+                  }
+               }*/
+               //UI.ImageViewer.Show(image.ConcateHorizontal(mask));
+               //}
+            }
+            finally
+            {
+               foreach (Image<Gray, byte> tmp in channels)
+                  if (tmp != null)
+                     tmp.Dispose();
+               foreach (VectorOfERStat tmp in regionVecs)
+                  if (tmp != null)
+                     tmp.Dispose();
+            }
          }
-        
+
       }
    }
 }

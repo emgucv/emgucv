@@ -116,17 +116,17 @@ void CvSURFDetectorComputeDescriptors(cv::SURF* detector, IplImage* image, std::
 //  VIBE GPU
 //
 //----------------------------------------------------------------------------
-cv::gpu::VIBE_GPU* gpuVibeCreate(unsigned long rngSeed, cv::gpu::GpuMat* firstFrame, cv::gpu::Stream* stream)
+cv::cuda::VIBE_GPU* gpuVibeCreate(unsigned long rngSeed, cv::cuda::GpuMat* firstFrame, cv::cuda::Stream* stream)
 {
-   cv::gpu::VIBE_GPU* vibe = new cv::gpu::VIBE_GPU(rngSeed);
-   vibe->initialize(*firstFrame, stream ? *stream : cv::gpu::Stream::Null());
+   cv::cuda::VIBE_GPU* vibe = new cv::cuda::VIBE_GPU(rngSeed);
+   vibe->initialize(*firstFrame, stream ? *stream : cv::cuda::Stream::Null());
    return vibe;
 }
-void gpuVibeCompute(cv::gpu::VIBE_GPU* vibe, cv::gpu::GpuMat* frame, cv::gpu::GpuMat* fgMask, cv::gpu::Stream* stream)
+void gpuVibeCompute(cv::cuda::VIBE_GPU* vibe, cv::cuda::GpuMat* frame, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream)
 {
-   (*vibe)(*frame, *fgMask, stream ? *stream : cv::gpu::Stream::Null());
+   (*vibe)(*frame, *fgMask, stream ? *stream : cv::cuda::Stream::Null());
 }
-void gpuVibeRelease(cv::gpu::VIBE_GPU** vibe)
+void gpuVibeRelease(cv::cuda::VIBE_GPU** vibe)
 {
    (*vibe)->release();
    delete *vibe;

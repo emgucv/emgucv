@@ -226,13 +226,13 @@ ENDIF(${target_type} STREQUAL "library")
 	FOREACH(TMP_NAME ${proper_file_list})
 	  SET(TMP "${TMP} \"${TMP_NAME}\"")
 	ENDFOREACH()
-	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/cscSourceList.rsp  ${TMP})
+	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/${target}_SourceList.rsp  ${TMP})
 	
     	
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       ${CS_PREBUILD_COMMAND}	   
-      COMMAND ${CSC_EXECUTABLE} ${NETFX_EXTRA_FLAGS} @cscSourceList.rsp
+      COMMAND ${CSC_EXECUTABLE} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
 	  ${CS_POSTBUILD_COMMAND}
       DEPENDS ${source}
       COMMENT "Building ${relative_path}")

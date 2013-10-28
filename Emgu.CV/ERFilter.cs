@@ -8,6 +8,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using System.Diagnostics;
 
 namespace Emgu.CV.Structure
 {
@@ -239,34 +240,81 @@ namespace Emgu.CV
       {
          CvInvoke.CvERFilterRun(_ptr, image, regions);
       }
+
+      public static System.Drawing.Rectangle[] ERGrouping(Image<Gray, Byte>[] channels, VectorOfERStat[] erstats)
+      {
+         Debug.Assert(channels.Length == erstats.Length, "Length of channels do not match length of erstats");
+         IntPtr[] channelPtrs = new IntPtr[channels.Length];
+         IntPtr[] erstatPtrs = new IntPtr[erstats.Length];
+
+         for (int i = 0; i < channelPtrs.Length; i++)
+         {
+            channelPtrs[i] = channels[i].Ptr;
+            erstatPtrs[i] = erstats[i].Ptr;
+         }
+         
+         GCHandle channelsHandle = GCHandle.Alloc(channelPtrs, GCHandleType.Pinned);
+         GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
+         using (VectorOfRect regions = new VectorOfRect())
+         {
+            CvInvoke.CvERGrouping(channelsHandle.AddrOfPinnedObject(), erstatsHandle.AddrOfPinnedObject(), channelPtrs.Length, regions);
+            channelsHandle.Free();
+            erstatsHandle.Free();
+            return regions.ToArray();
+         }
+
+      }
    }
 
    public class ERFilterNM1 : ERFilter
    {
-      public ERFilterNM1()
+      public ERFilterNM1(
+         String classifierFileName,
+         int thresholdDelta,
+         float minArea,
+         float maxArea,
+         float minProbability,
+         bool nonMaxSuppression,
+         float minProbabilityDiff)
       {
-         _ptr = CvInvoke.CvERFilterNM1Create();
+         _ptr = CvInvoke.CvERFilterNM1Create(classifierFileName, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
       }
    }
 
    public class ERFilterNM2 : ERFilter
    {
-      public ERFilterNM2()
+      public ERFilterNM2(String classifierFileName, float minProbability)
       {
-         _ptr = CvInvoke.CvERFilterNM2Create();
+         _ptr = CvInvoke.CvERFilterNM2Create(classifierFileName, minProbability);
       }
    }
 
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvERFilterNM1Create();
+      internal static extern IntPtr CvERFilterNM1Create(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String classifier,
+         int thresholdDelta,
+         float minArea,
+         float maxArea,
+         float minProbability,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool nonMaxSuppression,
+         float minProbabilityDiff);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvERFilterNM2Create();
+      internal static extern IntPtr CvERFilterNM2Create(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String classifier,
+         float minProbability);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERFilterRelease(ref IntPtr filter);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvERGrouping(IntPtr channels, IntPtr regions, int count, IntPtr groups);
+
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfERStatCreate();

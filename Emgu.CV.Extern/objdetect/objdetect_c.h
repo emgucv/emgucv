@@ -85,10 +85,19 @@ CVAPI(void) CvCascadeClassifierDetectMultiScale(
    CvSize maxSize); 
 
 //ERFilter
-CVAPI(cv::ERFilter*) CvERFilterNM1Create();
-CVAPI(cv::ERFilter*) CvERFilterNM2Create();
+CVAPI(cv::ERFilter*) CvERFilterNM1Create(
+   const char* classifier,
+   int thresholdDelta,
+   float minArea,
+   float maxArea,
+   float minProbability,
+   bool nonMaxSuppression,
+   float minProbabilityDiff);
+CVAPI(cv::ERFilter*) CvERFilterNM2Create(const char* classifier, float minProbability);
 CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
 CVAPI(void) CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* regions);
+
+CVAPI(void) CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, std::vector<cv::Rect>* groups);
 
 //----------------------------------------------------------------------------
 //
